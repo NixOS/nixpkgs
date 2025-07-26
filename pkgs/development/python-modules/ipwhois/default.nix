@@ -8,7 +8,6 @@
   iana-etc,
   libredirect,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

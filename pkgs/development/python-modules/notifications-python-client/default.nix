@@ -8,7 +8,6 @@
   pyjwt,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,

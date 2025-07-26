@@ -14,7 +14,6 @@
   pytest-socket,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   requests-mock,
   rich,

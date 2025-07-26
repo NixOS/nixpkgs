@@ -5,7 +5,6 @@
   openpyxl,
   charset-normalizer,
   fetchPypi,
-  pythonOlder,
   pandas,
   tabulate,
   click,

@@ -7,7 +7,6 @@
   hypothesis,
   lib,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,

@@ -5,7 +5,6 @@
   requests,
   simplejson,
   fake-useragent,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

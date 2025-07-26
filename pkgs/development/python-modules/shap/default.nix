@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   writeText,
   catboost,
   cloudpickle,

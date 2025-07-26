@@ -5,7 +5,6 @@
   grandalf,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

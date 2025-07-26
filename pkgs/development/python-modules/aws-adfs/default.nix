@@ -11,7 +11,6 @@
   poetry-core,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-kerberos,
   toml,

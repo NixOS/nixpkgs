@@ -11,7 +11,6 @@
   pydantic,
   pydateinfer,
   python-dateutil,
-  pythonOlder,
   scipy,
   symlinkJoin,
   type-infer,

@@ -7,7 +7,6 @@
   sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   pyqt6,
   python,
   mesa,

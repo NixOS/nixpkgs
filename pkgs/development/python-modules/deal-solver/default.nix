@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   z3-solver,
 }:
 

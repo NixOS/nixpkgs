@@ -12,7 +12,6 @@
   setuptools,
   cudaPackages,
   addDriverRunpath,
-  pythonOlder,
   symlinkJoin,
 }:
 

@@ -10,7 +10,6 @@
   fontmath,
   fonttools,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   skia-pathops,
   syrupy,

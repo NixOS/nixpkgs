@@ -10,7 +10,6 @@
   pandas,
   pathvalidate,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools-scm,
   simplejson,

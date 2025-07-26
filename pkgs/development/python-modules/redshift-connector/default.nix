@@ -8,7 +8,6 @@
   packaging,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   scramp,

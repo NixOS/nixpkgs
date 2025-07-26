@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   voluptuous,

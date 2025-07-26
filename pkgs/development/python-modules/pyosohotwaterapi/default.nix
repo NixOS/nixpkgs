@@ -5,7 +5,6 @@
   fetchFromGitHub,
   loguru,
   numpy,
-  pythonOlder,
   setuptools,
   unasync,
   urllib3,

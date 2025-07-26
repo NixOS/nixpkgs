@@ -6,7 +6,6 @@
   fetchPypi,
   frozendict,
   pystache,
-  pythonOlder,
   pyyaml,
 }:
 

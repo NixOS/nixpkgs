@@ -15,7 +15,6 @@
   pygments,
   python,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools-scm,

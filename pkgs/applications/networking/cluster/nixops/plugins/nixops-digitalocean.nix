@@ -6,7 +6,6 @@
   poetry-core,
   nixops,
   python-digitalocean,
-  pythonOlder,
 }:
 
 buildPythonPackage {

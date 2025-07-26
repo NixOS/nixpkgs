@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
-  pythonOlder,
   requests,
   setuptools,
 }:

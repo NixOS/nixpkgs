@@ -7,7 +7,6 @@
   numba,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   xarray,
 }:

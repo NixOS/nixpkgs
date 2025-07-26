@@ -3,7 +3,6 @@
   buildPythonPackage,
   distutils,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   yasm,

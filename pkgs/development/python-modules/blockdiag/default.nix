@@ -9,7 +9,6 @@
   funcparserlib,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   reportlab,
   setuptools,
   webcolors,

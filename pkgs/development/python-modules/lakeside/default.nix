@@ -4,7 +4,6 @@
   fetchFromGitHub,
   protobuf,
   pycryptodome,
-  pythonOlder,
   requests,
 }:
 

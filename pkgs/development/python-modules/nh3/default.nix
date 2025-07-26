@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   rustPlatform,
   libiconv,
   fetchFromGitHub,

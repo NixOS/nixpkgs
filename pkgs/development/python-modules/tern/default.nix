@@ -11,7 +11,6 @@
   packageurl-python,
   pbr,
   prettytable,
-  pythonOlder,
   pyyaml,
   regex,
   requests,

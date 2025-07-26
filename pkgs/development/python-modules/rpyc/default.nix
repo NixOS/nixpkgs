@@ -6,7 +6,6 @@
   hatchling,
   plumbum,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

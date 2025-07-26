@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

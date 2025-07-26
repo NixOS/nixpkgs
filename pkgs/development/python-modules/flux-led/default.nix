@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   webcolors,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,

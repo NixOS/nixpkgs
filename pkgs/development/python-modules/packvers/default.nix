@@ -5,7 +5,6 @@
   pretend,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

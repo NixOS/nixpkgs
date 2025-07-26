@@ -5,7 +5,6 @@
   fetchFromGitHub,
   georss-client,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

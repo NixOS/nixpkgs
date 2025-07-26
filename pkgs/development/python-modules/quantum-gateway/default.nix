@@ -4,7 +4,6 @@
   esprima,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   urllib3,

@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   shortuuid,
 }:

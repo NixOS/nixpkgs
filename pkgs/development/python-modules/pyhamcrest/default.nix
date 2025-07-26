@@ -7,7 +7,6 @@
   numpy,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

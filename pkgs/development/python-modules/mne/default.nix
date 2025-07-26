@@ -18,7 +18,6 @@
   lazy-loader,
   h5io,
   pymatreader,
-  pythonOlder,
   procps,
   optipng,
 }:

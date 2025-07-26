@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   devtools,
   fastapi,

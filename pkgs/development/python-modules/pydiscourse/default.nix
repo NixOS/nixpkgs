@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:

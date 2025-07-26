@@ -13,7 +13,6 @@
   numpy,
   oldest-supported-numpy,
   packaging,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,

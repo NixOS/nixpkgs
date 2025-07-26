@@ -8,7 +8,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlalchemy,
 }:

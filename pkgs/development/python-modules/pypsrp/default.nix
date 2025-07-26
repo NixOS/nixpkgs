@@ -11,7 +11,6 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   requests-credssp,

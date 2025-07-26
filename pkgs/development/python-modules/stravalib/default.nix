@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pint,
   pydantic,
-  pythonOlder,
   pytz,
   requests,
   responses,

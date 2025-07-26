@@ -6,7 +6,6 @@
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   twisted,

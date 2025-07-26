@@ -7,7 +7,6 @@
 let
   inherit (python3.pkgs)
     buildPythonApplication
-    pythonOlder
     ;
 in
 buildPythonApplication rec {

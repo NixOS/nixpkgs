@@ -7,7 +7,6 @@
   wrapt,
   redis,
   opentelemetry-test-utils,
-  pythonOlder,
   pytestCheckHook,
   fakeredis,
 }:

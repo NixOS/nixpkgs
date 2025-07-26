@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   click,
   click-default-group,
   python-dateutil,

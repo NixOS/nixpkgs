@@ -10,7 +10,6 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   typing-extensions,

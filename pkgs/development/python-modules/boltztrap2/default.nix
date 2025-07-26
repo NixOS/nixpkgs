@@ -8,7 +8,6 @@
   matplotlib,
   ase,
   netcdf4,
-  pythonOlder,
   cython,
   cmake,
   setuptools,

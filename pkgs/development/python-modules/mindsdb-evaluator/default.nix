@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   dataprep-ml,
   numpy,

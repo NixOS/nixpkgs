@@ -7,7 +7,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests,
   requests-mock,
 }:

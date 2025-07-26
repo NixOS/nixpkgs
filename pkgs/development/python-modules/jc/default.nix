@@ -9,7 +9,6 @@
   xmltodict,
   pygments,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

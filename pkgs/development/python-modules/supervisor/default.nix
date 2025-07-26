@@ -6,7 +6,6 @@
   fetchpatch,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

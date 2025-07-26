@@ -4,7 +4,6 @@
   dvc,
   fetchFromGitHub,
   pydrive2,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

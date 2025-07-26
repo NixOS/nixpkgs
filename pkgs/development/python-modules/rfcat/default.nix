@@ -9,7 +9,6 @@
   pyserial,
   pyusb,
   pytestCheckHook,
-  pythonOlder,
   udevCheckHook,
 }:
 

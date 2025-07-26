@@ -5,7 +5,6 @@
   mypy-extensions,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   schema-salad,
   setuptools,

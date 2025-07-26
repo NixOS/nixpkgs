@@ -9,7 +9,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   tqdm,
   typer,

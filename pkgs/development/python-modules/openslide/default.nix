@@ -6,7 +6,6 @@
   openslide,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   aenum,
-  pythonOlder,
   python,
 }:
 

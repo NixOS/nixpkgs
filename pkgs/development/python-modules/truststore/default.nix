@@ -6,7 +6,6 @@
   flit-core,
   httpx,
   pyopenssl,
-  pythonOlder,
   requests,
   trustme,
 }:

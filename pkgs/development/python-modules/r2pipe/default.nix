@@ -6,7 +6,6 @@
   fetchPypi,
   radare2,
   coreutils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

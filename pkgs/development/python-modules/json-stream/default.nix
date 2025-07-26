@@ -6,7 +6,6 @@
   httpx,
   iconv,
   pytestCheckHook,
-  pythonOlder,
   requests,
   json-stream-rs-tokenizer,
   setuptools,

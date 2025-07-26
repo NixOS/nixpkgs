@@ -7,7 +7,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typeguard,
   websockets,
 }:

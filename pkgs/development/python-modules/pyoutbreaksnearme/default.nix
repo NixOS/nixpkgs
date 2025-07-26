@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   ujson,
   yarl,
 }:

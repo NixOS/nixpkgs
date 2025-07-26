@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python-memcached,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

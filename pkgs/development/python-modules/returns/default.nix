@@ -10,7 +10,6 @@
   pytest-aio,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
   typing-extensions,

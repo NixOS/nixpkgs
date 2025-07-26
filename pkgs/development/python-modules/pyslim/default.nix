@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  pythonOlder,
   msprime,
   numpy,
   tskit,

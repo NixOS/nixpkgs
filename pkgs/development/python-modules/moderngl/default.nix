@@ -6,7 +6,6 @@
   libX11,
   setuptools,
   glcontext,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,6 @@
   scipy,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {

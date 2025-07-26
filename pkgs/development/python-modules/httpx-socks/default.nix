@@ -11,7 +11,6 @@
   pytest-trio,
   pytestCheckHook,
   python-socks,
-  pythonOlder,
   setuptools,
   starlette,
   tiny-proxy,

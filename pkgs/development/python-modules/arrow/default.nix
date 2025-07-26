@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   python-dateutil,
   types-python-dateutil,

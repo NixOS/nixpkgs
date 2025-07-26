@@ -9,7 +9,6 @@
   levenshtein,
   pytestCheckHook,
   termcolor,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

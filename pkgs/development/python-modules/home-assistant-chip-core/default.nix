@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   aenum,
   home-assistant-chip-wheels,
   coloredlogs,

@@ -6,7 +6,6 @@
   pyparsing,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -10,7 +10,6 @@
   testscenarios,
   testtools,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

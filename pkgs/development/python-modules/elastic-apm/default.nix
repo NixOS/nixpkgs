@@ -19,7 +19,6 @@
   pytest-mock,
   pytest-random-order,
   pytestCheckHook,
-  pythonOlder,
   sanic,
   sanic-testing,
   setuptools,

@@ -7,7 +7,6 @@
   frelatage,
   libiconv,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:

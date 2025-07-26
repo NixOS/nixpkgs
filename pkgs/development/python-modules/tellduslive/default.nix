@@ -5,7 +5,6 @@
   fetchFromGitHub,
   requests,
   requests-oauthlib,
-  pythonOlder,
   setuptools,
 }:
 

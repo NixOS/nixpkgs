@@ -29,7 +29,6 @@
   python,
   python-dotenv,
   python-multipart,
-  pythonOlder,
   pyyaml,
   requests,
   resend,

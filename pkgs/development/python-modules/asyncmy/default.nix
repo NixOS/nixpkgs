@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   setuptools,
 }:
 

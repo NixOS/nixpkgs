@@ -6,7 +6,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

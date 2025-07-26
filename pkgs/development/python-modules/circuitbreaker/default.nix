@@ -5,7 +5,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

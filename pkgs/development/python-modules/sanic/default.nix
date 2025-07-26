@@ -12,7 +12,6 @@
   multidict,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sanic-ext,
   sanic-routing,
   sanic-testing,

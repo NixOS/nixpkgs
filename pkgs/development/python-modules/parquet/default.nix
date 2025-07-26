@@ -5,7 +5,6 @@
   fetchpatch,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   setuptools,
   thriftpy2,
 }:

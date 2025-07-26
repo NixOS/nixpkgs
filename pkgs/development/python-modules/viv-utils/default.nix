@@ -8,7 +8,6 @@
   pytest-sugar,
   pytestCheckHook,
   python-flirt,
-  pythonOlder,
   setuptools-scm,
   typing-extensions,
   vivisect,

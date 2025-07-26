@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   oldest-supported-numpy,
   setuptools,
   ansitable,

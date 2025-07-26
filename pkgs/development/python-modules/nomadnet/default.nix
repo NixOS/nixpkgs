@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxmf,
-  pythonOlder,
   qrcode,
   rns,
   setuptools,

@@ -11,7 +11,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   urllib3,
 }:

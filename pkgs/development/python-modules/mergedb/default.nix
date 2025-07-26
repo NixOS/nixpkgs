@@ -5,7 +5,6 @@
   fetchPypi,
   jinja2,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   setuptools-scm,

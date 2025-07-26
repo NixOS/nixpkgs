@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   deprecated,
   googleapis-common-protos,
   hatchling,

@@ -7,7 +7,6 @@
   proto-plus,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
   setuptools,
 }:
 

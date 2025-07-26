@@ -6,7 +6,6 @@
   legacy-cgi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 
   # for passthru.tests
   pyramid,

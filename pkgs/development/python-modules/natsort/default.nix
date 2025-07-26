@@ -8,7 +8,6 @@
   pyicu,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

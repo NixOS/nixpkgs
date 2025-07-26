@@ -8,7 +8,6 @@
   pillow,
   prettytable,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   simplejson,

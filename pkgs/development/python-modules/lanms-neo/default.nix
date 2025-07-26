@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
   pybind11,
   numpy,
 }:

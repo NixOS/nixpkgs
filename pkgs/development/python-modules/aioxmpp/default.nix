@@ -13,7 +13,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcollections,

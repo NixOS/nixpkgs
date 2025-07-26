@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   hatchling,
-  pythonOlder,
   pytest,
   tappy,
   pytestCheckHook,

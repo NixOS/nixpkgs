@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paho-mqtt,
   pycryptodome,
-  pythonOlder,
   requests,
   websocket-client,
 }:

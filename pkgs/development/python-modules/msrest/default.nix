@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,

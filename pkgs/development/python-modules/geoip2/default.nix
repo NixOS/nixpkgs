@@ -7,7 +7,6 @@
   maxminddb,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests-mock,
   pytest-httpserver,
   requests,

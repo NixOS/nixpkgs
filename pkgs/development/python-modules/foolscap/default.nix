@@ -5,7 +5,6 @@
   mock,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   twisted,

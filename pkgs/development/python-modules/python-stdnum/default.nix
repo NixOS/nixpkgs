@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   zeep,
 }:

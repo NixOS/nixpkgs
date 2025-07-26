@@ -10,7 +10,6 @@
   pypdf,
   pytestCheckHook,
   python-bidi,
-  pythonOlder,
   reportlab,
   setuptools,
   svglib,

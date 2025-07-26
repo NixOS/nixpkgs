@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,

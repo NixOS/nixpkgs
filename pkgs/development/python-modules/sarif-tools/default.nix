@@ -11,7 +11,6 @@
   matplotlib,
   pyyaml,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

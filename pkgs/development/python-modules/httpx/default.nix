@@ -18,7 +18,6 @@
   multipart,
   pygments,
   python,
-  pythonOlder,
   rich,
   socksio,
   pytestCheckHook,

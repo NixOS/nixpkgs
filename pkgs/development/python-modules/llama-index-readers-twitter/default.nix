@@ -4,7 +4,6 @@
   fetchPypi,
   llama-index-core,
   poetry-core,
-  pythonOlder,
   tweepy,
 }:
 

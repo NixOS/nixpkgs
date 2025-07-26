@@ -4,7 +4,6 @@
   fetchPypi,
   isPy3k,
   pygccxml,
-  pythonOlder,
   setuptools-scm,
 }:
 

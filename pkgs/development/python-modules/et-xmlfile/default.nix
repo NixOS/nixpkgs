@@ -4,7 +4,6 @@
   fetchFromGitLab,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

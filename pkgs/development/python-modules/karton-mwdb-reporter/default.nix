@@ -4,7 +4,6 @@
   fetchFromGitHub,
   karton-core,
   mwdblib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

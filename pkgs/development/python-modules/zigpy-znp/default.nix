@@ -11,7 +11,6 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   voluptuous,
   zigpy,

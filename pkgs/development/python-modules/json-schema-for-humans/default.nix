@@ -11,7 +11,6 @@
   poetry-core,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,

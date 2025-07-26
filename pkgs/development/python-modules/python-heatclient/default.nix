@@ -13,7 +13,6 @@
   pbr,
   prettytable,
   python-swiftclient,
-  pythonOlder,
   pyyaml,
   requests,
   requests-mock,

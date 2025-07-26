@@ -12,7 +12,6 @@
   pytestCheckHook,
   python-dateutil,
   python-jose,
-  pythonOlder,
   pyyaml,
   requests,
   rich,

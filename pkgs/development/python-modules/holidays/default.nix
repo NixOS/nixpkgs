@@ -8,7 +8,6 @@
   polib,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
 }:
 

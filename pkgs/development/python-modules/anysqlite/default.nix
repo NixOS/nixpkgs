@@ -6,7 +6,6 @@
   hatch-fancy-pypi-readme,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   trio,
 }:
 

@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-rapidjson,
-  pythonOlder,
   pyzmq,
   ruamel-yaml,
   setuptools,

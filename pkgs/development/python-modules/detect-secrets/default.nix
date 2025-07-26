@@ -7,7 +7,6 @@
   pkgs,
   pyahocorasick,
   pytest7CheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,

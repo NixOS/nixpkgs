@@ -6,7 +6,6 @@
   fetchFromGitHub,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

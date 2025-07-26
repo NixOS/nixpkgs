@@ -4,7 +4,6 @@
   click,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:

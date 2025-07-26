@@ -7,7 +7,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 

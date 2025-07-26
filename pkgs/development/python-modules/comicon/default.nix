@@ -9,7 +9,6 @@
   poetry-core,
   pypdf,
   python-slugify,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

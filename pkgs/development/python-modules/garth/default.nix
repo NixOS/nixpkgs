@@ -6,7 +6,6 @@
   pydantic,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:

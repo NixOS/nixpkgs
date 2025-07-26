@@ -12,7 +12,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   rich,
   setuptools,

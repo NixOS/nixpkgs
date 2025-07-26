@@ -7,7 +7,6 @@
   django-phonenumber-field,
   fetchFromGitHub,
   mercadopago,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

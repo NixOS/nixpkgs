@@ -7,7 +7,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

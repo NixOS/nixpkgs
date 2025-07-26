@@ -11,7 +11,6 @@
   pycryptodome,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

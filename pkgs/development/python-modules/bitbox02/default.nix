@@ -7,7 +7,6 @@
   hidapi,
   noiseprotocol,
   protobuf,
-  pythonOlder,
   semver,
   setuptools,
   typing-extensions,

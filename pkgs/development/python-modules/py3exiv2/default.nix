@@ -5,7 +5,6 @@
   buildPythonPackage,
   exiv2,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

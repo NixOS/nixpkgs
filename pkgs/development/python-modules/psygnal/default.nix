@@ -8,7 +8,6 @@
   numpy,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   toolz,
   typing-extensions,
   wrapt,

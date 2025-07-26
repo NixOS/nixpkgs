@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyusb,
   pyserial,
   prompt-toolkit,

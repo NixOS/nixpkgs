@@ -8,7 +8,6 @@
   fetchFromGitHub,
   phonenumbers,
   pydantic,
-  pythonOlder,
   qrcode,
   setuptools-scm,
   twilio,

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   six,
 }:

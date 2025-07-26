@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
-  pythonOlder,
   fetchpatch,
   stdenv,
   libnotify,

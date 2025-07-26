@@ -6,7 +6,6 @@
   pandas,
   py4j,
   pyarrow,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

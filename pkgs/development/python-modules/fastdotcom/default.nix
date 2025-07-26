@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   icmplib,
-  pythonOlder,
   requests,
   setuptools,
 }:

@@ -5,7 +5,6 @@
   sphinx,
   actdiag,
   blockdiag,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

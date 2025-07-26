@@ -6,7 +6,6 @@
   hatchling,
   paho-mqtt,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

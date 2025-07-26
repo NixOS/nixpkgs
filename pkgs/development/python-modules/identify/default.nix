@@ -4,7 +4,6 @@
   editdistance-s,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   ukkonen,
 }:

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   setuptools,

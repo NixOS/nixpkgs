@@ -8,7 +8,6 @@
   lxml,
   nodejs,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   testers,

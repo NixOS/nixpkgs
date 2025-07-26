@@ -18,7 +18,6 @@
   patsy,
   plotnine,
   pytestCheckHook,
-  pythonOlder,
   rlax,
   scikit-image,
   scipy,

@@ -6,7 +6,6 @@
   google-cloud-core,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -1,8 +1,6 @@
 {
-  nodejs,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   # install_requires

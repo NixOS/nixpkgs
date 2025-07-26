@@ -9,7 +9,6 @@
   packaging,
   psutil,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests-cache,
   requests-toolbelt,

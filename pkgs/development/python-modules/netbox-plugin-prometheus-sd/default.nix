@@ -6,7 +6,6 @@
   netaddr,
   netbox,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   # python dependencies
   click,
   python-dateutil,
@@ -36,7 +35,6 @@
   # causes Python packaging conflict with any package requiring rdflib,
   # so use the unpatched rdflib by default (disables Nipype provenance tracking);
   # see https://github.com/nipy/nipype/issues/2888:
-  useNeurdflib ? false,
 }:
 
 buildPythonPackage rec {

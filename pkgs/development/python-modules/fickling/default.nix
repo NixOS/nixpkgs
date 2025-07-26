@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   torch,
   torchvision,
 }:

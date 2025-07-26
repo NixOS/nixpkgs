@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   dahlia,
   ixia,
 }:

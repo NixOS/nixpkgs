@@ -5,7 +5,6 @@
   defusedxml,
   django,
   pysaml2,
-  pythonOlder,
   setuptools,
 }:
 

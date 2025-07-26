@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pandas,
   typing-extensions,
   pytestCheckHook,

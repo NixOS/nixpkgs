@@ -6,7 +6,6 @@
   mypy-protobuf,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testers,
   types-protobuf,

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
-  pythonOlder,
   rfc3987,
   ruamel-yaml,
   setuptools-scm,

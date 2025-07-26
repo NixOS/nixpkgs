@@ -8,7 +8,6 @@
   faust-cchardet,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   pytz,
   related,
   uonet-request-signer-hebe,

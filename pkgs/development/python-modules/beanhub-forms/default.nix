@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   jinja2,
   multidict,

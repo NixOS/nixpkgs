@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytest-console-scripts,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,

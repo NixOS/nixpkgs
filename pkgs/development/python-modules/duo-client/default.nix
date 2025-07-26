@@ -5,7 +5,6 @@
   freezegun,
   mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   six,

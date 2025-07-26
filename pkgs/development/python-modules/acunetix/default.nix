@@ -3,7 +3,6 @@
   aiofiles,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
 }:
 

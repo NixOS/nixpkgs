@@ -6,7 +6,6 @@
   hatchling,
   hatch-vcs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

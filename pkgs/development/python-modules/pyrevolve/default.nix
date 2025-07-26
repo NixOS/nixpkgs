@@ -8,7 +8,6 @@
   cython_0,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

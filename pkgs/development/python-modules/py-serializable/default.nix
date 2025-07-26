@@ -6,7 +6,6 @@
   lxml,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   xmldiff,
 }:
 

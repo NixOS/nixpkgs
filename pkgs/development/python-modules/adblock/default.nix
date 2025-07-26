@@ -8,7 +8,6 @@
   pkg-config,
   openssl,
   publicsuffix-list,
-  pythonOlder,
   libiconv,
   pytestCheckHook,
   toml,

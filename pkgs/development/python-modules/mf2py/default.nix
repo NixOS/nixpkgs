@@ -8,7 +8,6 @@
   mock,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

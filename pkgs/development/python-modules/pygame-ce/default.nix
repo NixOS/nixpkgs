@@ -4,7 +4,6 @@
   replaceVars,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   python,
   pkg-config,
   setuptools,

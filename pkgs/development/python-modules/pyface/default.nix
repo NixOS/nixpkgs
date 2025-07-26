@@ -6,7 +6,6 @@
   importlib-resources,
   setuptools,
   traits,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

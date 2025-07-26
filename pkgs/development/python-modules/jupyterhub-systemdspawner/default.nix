@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jupyterhub,
-  pythonOlder,
   setuptools,
   tornado,
 }:

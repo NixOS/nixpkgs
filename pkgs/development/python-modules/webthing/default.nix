@@ -5,7 +5,6 @@
   ifaddr,
   jsonschema,
   pyee,
-  pythonOlder,
   tornado,
   zeroconf,
 }:

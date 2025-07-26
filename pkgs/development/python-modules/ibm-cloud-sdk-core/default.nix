@@ -5,8 +5,6 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
-  pythonOlder,
   requests,
   responses,
   setuptools,

@@ -6,7 +6,6 @@
   freezegun,
   pytestCheckHook,
   python-utils,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

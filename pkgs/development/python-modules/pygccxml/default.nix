@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   llvmPackages,
-  pythonOlder,
   setuptools,
 }:
 

@@ -10,7 +10,6 @@
   marisa-trie,
   mwparserfromhell,
   numpy,
-  pythonOlder,
   scipy,
   setuptools,
   tqdm,

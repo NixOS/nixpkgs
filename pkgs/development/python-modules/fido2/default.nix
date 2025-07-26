@@ -5,7 +5,6 @@
   fetchPypi,
   poetry-core,
   pyscard,
-  pythonOlder,
   pytestCheckHook,
 }:
 

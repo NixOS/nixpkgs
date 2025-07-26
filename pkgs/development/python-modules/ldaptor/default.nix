@@ -7,7 +7,6 @@
   pyparsing,
   six,
   zope-interface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   icontract,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
   setuptools,
   typing-extensions,

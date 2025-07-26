@@ -8,7 +8,6 @@
   networkx,
   pydot,
   pygithub,
-  pythonOlder,
   pyyaml,
   toml,
   tqdm,

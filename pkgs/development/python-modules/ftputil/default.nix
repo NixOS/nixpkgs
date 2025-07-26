@@ -4,7 +4,6 @@
   fetchPypi,
   freezegun,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -10,7 +10,6 @@
   psutil,
   pynput,
   pyperclip,
-  pythonOlder,
   regex,
   requests,
   setuptools,

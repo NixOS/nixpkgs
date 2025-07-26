@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   buildPythonPackage,
   cython,

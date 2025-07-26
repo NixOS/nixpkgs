@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   typing-extensions,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

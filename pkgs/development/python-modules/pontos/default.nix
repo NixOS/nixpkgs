@@ -10,7 +10,6 @@
   poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   semver,
   shtab,
   rich,

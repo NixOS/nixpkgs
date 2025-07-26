@@ -11,7 +11,6 @@
   mysql-connector,
   withPostgres ? false,
   psycopg2,
-  pythonOlder,
   setuptools,
 }:
 

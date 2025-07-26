@@ -7,7 +7,6 @@
   krb5-c, # C krb5 library, not PyPI krb5
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

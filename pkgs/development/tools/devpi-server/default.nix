@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonApplication,
   gitUpdater,
-  pythonOlder,
   aiohttp,
   appdirs,
   beautifulsoup4,

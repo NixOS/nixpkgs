@@ -4,7 +4,6 @@
   buildPythonPackage,
   docopt,
   fetchPypi,
-  pythonOlder,
   pyyaml,
 }:
 

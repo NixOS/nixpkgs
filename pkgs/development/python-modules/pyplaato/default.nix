@@ -4,7 +4,6 @@
   fetchPypi,
   aiohttp,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -7,10 +7,8 @@
   setuptools,
   numpy,
   psutil,
-  pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   trio,
   untangle,
 }:

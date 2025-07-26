@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pytest-asyncio,
   pytest-benchmark,
   pytest-cov-stub,

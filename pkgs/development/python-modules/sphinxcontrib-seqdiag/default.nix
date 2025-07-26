@@ -3,7 +3,6 @@
   blockdiag,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   seqdiag,
   sphinx,
 }:

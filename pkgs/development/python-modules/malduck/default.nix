@@ -9,7 +9,6 @@
   pefile,
   pycryptodomex,
   pyelftools,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   typing-extensions,

@@ -5,7 +5,6 @@
   fetchPypi,
   pylint,
   pylint-plugin-utils,
-  pythonOlder,
   setuptools,
 }:
 

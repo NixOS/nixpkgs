@@ -5,7 +5,6 @@
   pytestCheckHook,
   setuptools,
   ward,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

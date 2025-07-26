@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   psutil,
-  pythonOlder,
   typing-extensions,
 }:
 

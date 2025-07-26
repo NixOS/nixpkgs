@@ -8,7 +8,6 @@
   python,
   pybind11,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

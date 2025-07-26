@@ -8,7 +8,6 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

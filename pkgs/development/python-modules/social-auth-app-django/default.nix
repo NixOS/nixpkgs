@@ -5,7 +5,6 @@
   social-auth-core,
   django,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -9,7 +9,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:

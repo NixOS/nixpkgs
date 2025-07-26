@@ -12,7 +12,6 @@
   pytestCheckHook,
   python-lzo,
   python,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   wheel,

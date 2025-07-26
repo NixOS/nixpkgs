@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   iso4217,
   pyserial,
   pyserial-asyncio-fast,

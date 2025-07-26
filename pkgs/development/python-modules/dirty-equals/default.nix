@@ -6,7 +6,6 @@
   pydantic,
   pytest-examples,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 

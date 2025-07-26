@@ -5,7 +5,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

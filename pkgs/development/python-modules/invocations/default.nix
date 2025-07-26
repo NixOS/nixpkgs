@@ -4,7 +4,6 @@
   blessed,
   fetchFromGitHub,
   invoke,
-  pythonOlder,
   releases,
   semantic-version,
   tabulate,

@@ -6,7 +6,6 @@
   flask,
   pytestCheckHook,
   python-socketio,
-  pythonOlder,
   redis,
 }:
 

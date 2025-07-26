@@ -8,7 +8,6 @@
   poetry-core,
   python-engineio-v3,
   python-socketio-v4,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

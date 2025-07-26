@@ -6,7 +6,6 @@
   cryptography,
   fetchFromGitHub,
   msgpack,
-  pythonOlder,
   redis,
   setuptools,
 }:

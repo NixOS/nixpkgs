@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-flakes,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tatsu,
 }:

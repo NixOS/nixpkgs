@@ -8,7 +8,6 @@
   geopandas,
   kml2geojson,
   pyshp,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools-scm,

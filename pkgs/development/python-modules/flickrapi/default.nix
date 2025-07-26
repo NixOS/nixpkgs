@@ -8,7 +8,6 @@
   six,
   pytestCheckHook,
   responses,
-  pythonOlder,
   setuptools,
 }:
 

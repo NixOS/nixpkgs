@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   fetchPypi,
   pandas,
   poetry-core,
-  pythonOlder,
   requests,
   zeep,
 }:

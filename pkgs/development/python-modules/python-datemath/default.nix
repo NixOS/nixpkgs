@@ -5,7 +5,6 @@
   fetchFromGitHub,
   freezegun,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:

@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytestCheckHook,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

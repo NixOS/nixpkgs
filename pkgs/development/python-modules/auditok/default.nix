@@ -6,7 +6,6 @@
   numpy,
   pyaudio,
   pydub,
-  pythonOlder,
   unittestCheckHook,
 }:
 

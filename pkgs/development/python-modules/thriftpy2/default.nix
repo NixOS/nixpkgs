@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   ply,
-  pythonOlder,
   six,
   setuptools,
   tornado,

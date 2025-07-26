@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchPypi,
 
-  pythonOlder,
-
   poetry-core,
 }:
 

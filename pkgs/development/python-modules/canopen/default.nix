@@ -6,7 +6,6 @@
   python-can,
   canmatrix,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

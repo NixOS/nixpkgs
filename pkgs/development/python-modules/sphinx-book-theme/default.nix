@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   pydata-sphinx-theme,

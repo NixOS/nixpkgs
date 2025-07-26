@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   reactivex,
   setuptools,
   pandas,

@@ -8,7 +8,6 @@
   libcst,
   moreorless,
   pygls,
-  pythonOlder,
   tomlkit,
   trailrunner,
   ruff-api,

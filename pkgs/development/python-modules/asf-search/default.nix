@@ -8,7 +8,6 @@
   numpy,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   remotezip,
   requests-mock,

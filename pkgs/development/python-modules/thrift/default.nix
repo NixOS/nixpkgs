@@ -3,7 +3,6 @@
   buildPythonPackage,
   distutils,
   fetchPypi,
-  pythonOlder,
   setuptools,
   six,
 }:

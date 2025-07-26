@@ -5,7 +5,6 @@
   oauthlib,
   requests,
   requests-oauthlib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

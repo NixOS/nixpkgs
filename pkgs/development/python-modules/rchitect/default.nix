@@ -6,7 +6,6 @@
   packaging,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   R,
   rPackages,
   setuptools,

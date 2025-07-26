@@ -10,7 +10,6 @@
   pytz,
   sqlparse,
   tzdata,
-  pythonOlder,
   withGdal ? false,
 }:
 

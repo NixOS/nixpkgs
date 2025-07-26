@@ -5,7 +5,6 @@
   setuptools,
   httpx,
   pyjwt,
-  pythonOlder,
   websockets,
   yarl,
 }:

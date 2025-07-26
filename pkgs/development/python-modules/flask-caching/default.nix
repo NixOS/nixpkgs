@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   cachelib,
   flask,

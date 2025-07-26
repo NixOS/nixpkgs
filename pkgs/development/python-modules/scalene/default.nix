@@ -12,7 +12,6 @@
   psutil,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,

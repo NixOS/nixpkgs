@@ -4,7 +4,6 @@
   fetchPypi,
   aiohttp,
   prometheus-client,
-  pythonOlder,
   setuptools,
 }:
 

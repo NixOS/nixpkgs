@@ -27,7 +27,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   responses,

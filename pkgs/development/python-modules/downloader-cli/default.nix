@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   urllib3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

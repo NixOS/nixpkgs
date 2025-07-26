@@ -5,7 +5,6 @@
   fetchFromGitHub,
   http-sfv,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   requests,
 }:

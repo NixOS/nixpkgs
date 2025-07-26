@@ -6,7 +6,6 @@
   jinja2,
   poetry-core,
   pytest,
-  pythonOlder,
   requests,
   setuptools,
 }:

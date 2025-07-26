@@ -9,7 +9,6 @@
   transitions,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

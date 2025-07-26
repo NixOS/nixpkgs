@@ -12,7 +12,6 @@
   poetry-core,
   puremagic,
   pydub,
-  pythonOlder,
   pytz,
   requests,
   setuptools,

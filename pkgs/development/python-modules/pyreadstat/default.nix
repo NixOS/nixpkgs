@@ -7,7 +7,6 @@
   libiconv,
   pandas,
   python,
-  pythonOlder,
   readstat,
   setuptools,
   zlib,

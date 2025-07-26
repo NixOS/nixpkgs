@@ -5,7 +5,6 @@
   hatchling,
   llama-index-core,
   llama-index-llms-openai,
-  pythonOlder,
   transformers,
 }:
 

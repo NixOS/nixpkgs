@@ -8,7 +8,6 @@
   packaging,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   webargs,
 }:

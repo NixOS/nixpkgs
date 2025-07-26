@@ -10,7 +10,6 @@
   pillow,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   ujson,

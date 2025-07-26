@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pydantic,
-  pythonOlder,
   scrapy,
   setuptools,
 }:

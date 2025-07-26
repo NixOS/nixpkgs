@@ -9,7 +9,6 @@
   pydantic,
   pydantic-compat,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

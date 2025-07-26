@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchPypi,
-  pythonOlder,
 
   certifi,
   charset-normalizer,

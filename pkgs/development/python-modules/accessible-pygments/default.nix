@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   hatch-vcs,
   hatch-fancy-pypi-readme,

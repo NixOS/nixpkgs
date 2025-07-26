@@ -5,7 +5,6 @@
   argparse-addons,
   humanfriendly,
   pyelftools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

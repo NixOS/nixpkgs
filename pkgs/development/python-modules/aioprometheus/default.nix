@@ -12,7 +12,6 @@
   httpx,
   fastapi,
   uvicorn,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

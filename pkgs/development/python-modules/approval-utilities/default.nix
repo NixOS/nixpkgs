@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   approvaltests,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

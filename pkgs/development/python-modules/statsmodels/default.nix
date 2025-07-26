@@ -7,7 +7,6 @@
   packaging,
   pandas,
   patsy,
-  pythonOlder,
   scipy,
   setuptools,
   setuptools-scm,

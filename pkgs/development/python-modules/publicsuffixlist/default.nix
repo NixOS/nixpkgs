@@ -4,7 +4,6 @@
   fetchPypi,
   pandoc,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

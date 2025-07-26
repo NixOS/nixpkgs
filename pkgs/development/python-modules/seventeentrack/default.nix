@@ -9,7 +9,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 

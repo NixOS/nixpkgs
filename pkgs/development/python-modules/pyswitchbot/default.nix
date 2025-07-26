@@ -7,7 +7,6 @@
   cryptography,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   requests,

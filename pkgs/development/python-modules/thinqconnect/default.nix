@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   setuptools,
 }:
 

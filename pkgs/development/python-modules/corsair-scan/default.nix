@@ -5,7 +5,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   tldextract,
   urllib3,

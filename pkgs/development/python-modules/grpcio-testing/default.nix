@@ -4,7 +4,6 @@
   fetchPypi,
   grpcio,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 

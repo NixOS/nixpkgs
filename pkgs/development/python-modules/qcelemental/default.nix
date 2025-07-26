@@ -11,7 +11,6 @@
   pint,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   scipy,
 }:
 

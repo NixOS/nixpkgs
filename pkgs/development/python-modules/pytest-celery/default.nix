@@ -1,17 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  celery,
   debugpy,
   docker,
   fetchFromGitHub,
   poetry-core,
   psutil,
-  pytest-cov-stub,
   pytest-docker-tools,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
   tenacity,
 }:

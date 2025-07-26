@@ -4,7 +4,6 @@
   django,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 }:
 

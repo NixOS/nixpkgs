@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   lz4,
   keyring,

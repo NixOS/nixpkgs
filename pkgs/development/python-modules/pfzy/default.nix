@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

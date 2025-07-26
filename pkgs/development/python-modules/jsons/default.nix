@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   typish,
   tzdata,
 }:

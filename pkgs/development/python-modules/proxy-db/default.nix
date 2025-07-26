@@ -5,7 +5,6 @@
   click,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   six,

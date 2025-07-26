@@ -5,7 +5,6 @@
   poetry-core,
   rapidfuzz,
   click,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

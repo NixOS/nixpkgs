@@ -5,7 +5,6 @@
   fetchPypi,
   lib,
   poetry-core,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "django-encrypted-model-fields";

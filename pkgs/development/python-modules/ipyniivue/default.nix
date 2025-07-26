@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchNpmDeps,
-  pythonOlder,
   nodejs,
   npmHooks,
   hatchling,

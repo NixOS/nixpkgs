@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pandas,
   pyarrow,
-  pythonOlder,
   setuptools,
   versioneer,
 }:

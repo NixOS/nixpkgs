@@ -5,7 +5,6 @@
   numpy,
   packaging,
   quantities,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pillow,

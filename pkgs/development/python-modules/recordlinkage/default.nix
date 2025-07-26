@@ -11,7 +11,6 @@
   pandas,
   pyarrow,
   pytest,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,

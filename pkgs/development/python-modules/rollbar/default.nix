@@ -10,7 +10,6 @@
   pytestCheckHook,
   requests,
   six,
-  pythonOlder,
   webob,
 }:
 

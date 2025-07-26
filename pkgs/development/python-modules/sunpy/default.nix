@@ -21,7 +21,6 @@
   pytestCheckHook,
   pytest-mock,
   python-dateutil,
-  pythonOlder,
   scikit-image,
   scipy,
   setuptools-scm,

@@ -6,7 +6,6 @@
   docopt,
   pillow,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

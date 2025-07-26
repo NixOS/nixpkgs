@@ -6,7 +6,6 @@
   py,
   pytestCheckHook,
   pytest-html,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

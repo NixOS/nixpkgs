@@ -8,7 +8,6 @@
   poetry-core,
   prometheus-client,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

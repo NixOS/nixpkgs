@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   mock,
-  pythonOlder,
   setuptools,
   unittestCheckHook,
 }:

@@ -16,7 +16,6 @@
   pyopenssl,
   pysnmp,
   pysqlcipher3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

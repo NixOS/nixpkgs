@@ -6,7 +6,6 @@
   loguru,
   pydantic,
   poetry-core,
-  pythonOlder,
   requests,
 }:
 

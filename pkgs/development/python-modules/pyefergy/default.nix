@@ -6,7 +6,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   iso4217,
-  pythonOlder,
   pytz,
 }:
 

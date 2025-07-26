@@ -5,7 +5,6 @@
   nulltype,
   python-dateutil,
   urllib3,
-  pythonOlder,
   setuptools,
 }:
 

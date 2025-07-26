@@ -5,7 +5,6 @@
   fetchFromGitHub,
   bats,
   buildPythonApplication,
-  pythonOlder,
   callPackage,
   kicad,
   numpy,

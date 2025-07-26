@@ -6,7 +6,6 @@
   fetchFromGitHub,
   scspell,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
   rustfmt,
   toml,

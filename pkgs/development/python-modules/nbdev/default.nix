@@ -10,7 +10,6 @@
   execnb,
   ghapi,
   pyyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

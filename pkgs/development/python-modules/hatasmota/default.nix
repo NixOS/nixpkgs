@@ -4,7 +4,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   voluptuous,
 }:

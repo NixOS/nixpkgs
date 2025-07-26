@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   flaky,
   hatchling,
   opentelemetry-api,

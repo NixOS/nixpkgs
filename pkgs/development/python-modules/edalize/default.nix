@@ -9,7 +9,6 @@
   pandas,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   which,
   yosys,
 }:

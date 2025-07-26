@@ -8,7 +8,6 @@
   nats-server,
   nkeys,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   uvloop,
 }:

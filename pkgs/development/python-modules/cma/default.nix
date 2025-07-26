@@ -4,7 +4,6 @@
   fetchFromGitHub,
   numpy,
   python,
-  pythonOlder,
   setuptools,
 }:
 

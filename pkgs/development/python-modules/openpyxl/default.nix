@@ -8,7 +8,6 @@
   pillow,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

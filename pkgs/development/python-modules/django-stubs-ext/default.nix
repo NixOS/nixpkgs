@@ -5,7 +5,6 @@
   fetchPypi,
   oracledb,
   pytestCheckHook,
-  pythonOlder,
   redis,
   setuptools,
   typing-extensions,

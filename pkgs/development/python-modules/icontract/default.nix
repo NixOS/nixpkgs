@@ -9,7 +9,6 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

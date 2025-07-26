@@ -7,7 +7,6 @@
   fetchFromGitHub,
   lxml,
   pyjwt,
-  pythonOlder,
   setuptools-scm,
   xmltodict,
 }:

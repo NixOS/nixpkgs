@@ -5,7 +5,6 @@
   pyserial,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   standard-telnetlib,
 }:

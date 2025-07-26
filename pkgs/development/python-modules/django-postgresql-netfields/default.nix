@@ -6,7 +6,6 @@
   netaddr,
   six,
   fetchFromGitHub,
-  pythonOlder,
   djangorestframework,
   # required for tests
   postgresql,

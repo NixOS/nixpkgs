@@ -7,7 +7,6 @@
   pysigma-backend-elasticsearch,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
