@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       fetchFromGitHub {
         owner = "clibs";
         repo = "cmocka";
-        rev = "f5e2cd7";
+        rev = "f5e2cd77c88d9f792562888d2b70c5a396bfbf7a";
         hash = "sha256-Oq0nFsZhl8IF7kQN/LgUq8VBy+P7gO98ep/siy5A7Js=";
       }
     } dependencies/.cache/cmocka
