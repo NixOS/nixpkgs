@@ -15,10 +15,6 @@ buildPythonPackage rec {
   version = "0.5.2";
   format = "setuptools";
 
-  # https://github.com/Martiusweb/asynctest/issues/152
-  # broken by upstream python bug with asynctest and
-  # is used exclusively by home-assistant with python 3.8
-
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cc";

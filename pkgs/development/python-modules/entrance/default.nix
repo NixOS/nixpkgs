@@ -43,8 +43,6 @@ buildPythonPackage rec {
     hash = "sha256-PvsP6HXCllW102h3o7abz9uC2AZTwvg5qIqP+rdkk6Y=";
   };
 
-  # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
-
   # No useful tests
   doCheck = false;
 
