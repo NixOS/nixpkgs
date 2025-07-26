@@ -27466,6 +27466,12 @@
     github = "xanderio";
     githubId = 6298052;
   };
+  Xano-verse = {
+    name = "Xano-verse";
+    email = "alexcdelg@gmail.com";
+    github = "Xano-verse";
+    githubId = 76977807;
+  };
   xaverdh = {
     email = "hoe.dom@gmx.de";
     github = "xaverdh";
