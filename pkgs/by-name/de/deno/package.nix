@@ -43,9 +43,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-ZEWSnath9v04wU1VyFDAx3LANnVhfE5s93jX4QW3XlI=";
 
   patches = [
-    ./tests-replace-hardcoded-paths.patch
-    ./tests-darwin-differences.patch
-    ./tests-no-chown.patch
+    # Patch out the remote upgrade (deno update) check.
+    # Not a blocker in the build sandbox, since implementation and tests are
+    # considerately written for no external networking, but removing brings
+    # in-line with common nixpkgs practice.
+    ./patches/0000-remove-deno-upgrade-check.patch
+    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
+    # deno from nixpkgs.
+    ./patches/0001-remove-deno-upgrade.patch
+    ./patches/0002-tests-replace-hardcoded-paths.patch
+    ./patches/0003-tests-linux-no-chown.patch
+    ./patches/0004-tests-darwin-fixes.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
@@ -204,13 +212,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
-
-    ${lib.optionalString canExecute ''
-      installShellCompletion --cmd deno \
-        --bash <($out/bin/deno completions bash) \
-        --fish <($out/bin/deno completions fish) \
-        --zsh <($out/bin/deno completions zsh)
-    ''}
+  ''
+  + lib.optionalString canExecute ''
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
   '';
 
   doInstallCheck = canExecute;
