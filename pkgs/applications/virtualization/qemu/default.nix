@@ -144,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.0.2";
+  version = "10.0.3";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-73hvI5jLUYRgD2mu9NXWke/URXajz/QSbTjUxv7Id1k=";
+    hash = "sha256-XIkSZ7FTSndEZduLGg38sMXm1+y29xNFYlrfTgiJlFs=";
   };
 
   depsBuildBuild = [
