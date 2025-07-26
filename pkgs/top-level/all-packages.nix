@@ -685,7 +685,9 @@ with pkgs;
 
   fetchFromGitHub = callPackage ../build-support/fetchgithub { };
 
-  fetchFromBitbucket = callPackage ../build-support/fetchbitbucket { };
+  fetchFromBitbucket = callPackage ../build-support/fetchbitbucket { } // {
+    tests = pkgs.tests.fetchFromBitbucket;
+  };
 
   fetchFromSavannah = callPackage ../build-support/fetchsavannah { };
 
