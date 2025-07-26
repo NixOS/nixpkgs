@@ -36,6 +36,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile \
       --replace-fail "-Wno-unknown-warning" ""
 
+    substituteInPlace futility/misc.c --replace-fail "/bin/cp" "cp"
+
     patchShebangs scripts
   '';
 
