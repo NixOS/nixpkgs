@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "relative-motions.yazi";
-  version = "25.5.28-unstable-2025-06-05";
+  version = "25.5.28-unstable-2025-07-09";
 
   src = fetchFromGitHub {
     owner = "dedukun";
     repo = "relative-motions.yazi";
-    rev = "2e3b6172e6226e0db96aea12d09dea2d2e443fea";
-    hash = "sha256-v0e06ieBKNmt9DATdL7R4AyVFa9DlNBwpfME3LHozLA=";
+    rev = "a603d9ea924dfc0610bcf9d3129e7cba605d4501";
+    hash = "sha256-9i6x/VxGOA3bB3FPieB7mQ1zGaMK5wnMhYqsq4CvaM4=";
   };
 
   meta = {

@@ -4288,8 +4288,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.9.29";
-          hash = "sha256-jxgEB8juWRZmBAmmBBDHu3sOKylsqSuSrnWsfOYPBmI=";
+          version = "0.9.30";
+          hash = "sha256-3V6So2ulRTk1Ityd4ajzx/Vd+qzvqZMzUyTFMgWNztA=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
@@ -4576,8 +4576,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "109.9.0";
-          hash = "sha256-OgcFFYoJOtFVlOM12gYBG0AkliniawG6GdRtrFsjDIg=";
+          version = "109.10.0";
+          hash = "sha256-Rpzcf0ioM7faDWG1xcEuz6GNzU1lHZsGxGgaKwC8SKk=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

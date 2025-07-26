@@ -347,9 +347,9 @@ stdenv.mkDerivation {
     (buildPackages.mesa.cross_tools or null)
   ];
 
-  disallowedRequisites = lib.optionals needNativeCLC [
-    (buildPackages.mesa.cross_tools or null)
-  ];
+  disallowedRequisites = lib.optional (
+    needNativeCLC && buildPackages.mesa ? cross_tools
+  ) buildPackages.mesa.cross_tools;
 
   doCheck = false;
 

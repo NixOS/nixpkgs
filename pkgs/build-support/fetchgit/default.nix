@@ -157,6 +157,19 @@ lib.makeOverridable (
             "GIT_PROXY_COMMAND"
             "NIX_GIT_SSL_CAINFO"
             "SOCKS_SERVER"
+
+            # This is a parameter intended to be set by setup hooks or preFetch
+            # scripts that want per-URL control over HTTP proxies used by Git
+            # (if per-URL control isn't needed, `http_proxy` etc. will
+            # suffice). It must be a whitespace-separated (with backslash as an
+            # escape character) list of pairs like this:
+            #
+            #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
+            #
+            # where the URLs are as documented in the `git-config` manual page
+            # under `http.<url>.*`, and the proxies are as documented on the
+            # same page under `http.proxy`.
+            "FETCHGIT_HTTP_PROXIES"
           ];
 
         inherit preferLocalBuild meta allowedRequisites;

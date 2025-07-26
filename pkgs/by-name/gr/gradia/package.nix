@@ -5,6 +5,7 @@
   meson,
   ninja,
   appstream,
+  gtksourceview5,
   desktop-file-utils,
   gobject-introspection,
   wrapGAppsHook4,
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    gtksourceview5
     libadwaita
     libportal-gtk4
     libsoup_3
