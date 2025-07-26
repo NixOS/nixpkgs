@@ -16134,6 +16134,8 @@ with pkgs;
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
+  revbank = perlPackages.RevBank;
+
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
   pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
