@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   flex,
-  gitUpdater,
   libusb1,
   meson,
   ninja,
+  nix-update-script,
   pcsclite,
   perl,
   pkg-config,
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
   pname = "ccid";
   version = "1.6.2";
 
-  src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.xz";
-    hash = "sha256-QZWEEJUBV+Yi+dkcnnjHtwjbdOIvcRkMWB0k0gVk1Ek=";
+  src = fetchFromGitHub {
+    owner = "LudovicRousseau";
+    repo = "CCID";
+    tag = version;
+    hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
   };
 
   postPatch = ''
@@ -65,9 +67,7 @@ stdenv.mkDerivation rec {
   # usually getting stripped.
   stripDebugList = [ "pcsc" ];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://salsa.debian.org/rousseau/CCID.git";
-  };
+  passthru.updateScript = nix-update-script { };
 
   installCheckPhase =
     let
