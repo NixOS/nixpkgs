@@ -88,3 +88,8 @@ we include the hook by default for packages in `cudaPackages` (by adding it as a
 inputs in `genericManifestBuilder`). We also make sure it's included after
 `addOpenGLRunpathHook`, so that it appears _before_ in the `DT_RUNPATH` and
 takes precedence.
+
+## Cross-compilation
+
+For an explanation of the challenges facing cross-compilation, see
+[ON-CROSS-COMPILATION.md](./ON-CROSS-COMPILATION.md).
