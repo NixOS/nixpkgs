@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "0.9.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";

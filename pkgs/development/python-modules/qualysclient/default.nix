@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.0.4.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "woodtechie1428";
     repo = "qualysclient";

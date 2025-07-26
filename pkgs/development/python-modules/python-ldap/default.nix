@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "3.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";

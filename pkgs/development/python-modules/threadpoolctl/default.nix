@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "threadpoolctl";
   version = "3.6.0";
 
-  disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {

@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "0.7.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   # Pypi's tarball doesn't contain tests
   src = fetchFromGitHub {
     owner = "Qiskit";

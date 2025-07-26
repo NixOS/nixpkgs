@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.59.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "ImagingDataCommons";
     repo = "dicomweb-client";

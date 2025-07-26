@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "2024.07.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";

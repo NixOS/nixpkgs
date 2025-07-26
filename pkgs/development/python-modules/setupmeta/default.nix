@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "codrsquad";
     repo = "setupmeta";

@@ -44,8 +44,6 @@ buildPythonPackage rec {
   version = "0.20.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;

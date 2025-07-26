@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.10.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "smarie";
     repo = "python-pytest-harvest";

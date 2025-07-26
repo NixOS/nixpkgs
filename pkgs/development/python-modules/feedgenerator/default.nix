@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "feedgenerator";
   version = "2.1.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

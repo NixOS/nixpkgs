@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "cldf";
     repo = "csvw";

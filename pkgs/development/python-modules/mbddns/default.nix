@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "thinkl33t";
     repo = "mb-ddns";

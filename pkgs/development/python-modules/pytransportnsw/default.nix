@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "PyTransportNSW";
     inherit version;

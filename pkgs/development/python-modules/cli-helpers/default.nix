@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;

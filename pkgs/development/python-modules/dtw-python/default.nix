@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.5.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";

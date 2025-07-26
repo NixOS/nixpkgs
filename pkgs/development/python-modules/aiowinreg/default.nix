@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.0.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aiowinreg";

@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";

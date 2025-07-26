@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.7.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "qwj";
     repo = "python-proxy";

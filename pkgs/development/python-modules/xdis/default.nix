@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "6.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";

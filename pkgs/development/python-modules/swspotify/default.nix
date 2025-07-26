@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.2.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "SwagLyrics";
     repo = "SwSpotify";

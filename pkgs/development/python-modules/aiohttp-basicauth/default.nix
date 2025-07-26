@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "aiohttp-basicauth";

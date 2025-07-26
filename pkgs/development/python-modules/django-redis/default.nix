@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "6.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-redis";

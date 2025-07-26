@@ -10,8 +10,6 @@ buildPythonPackage rec {
   version = "1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "pySDCP";
     inherit version;

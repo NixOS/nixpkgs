@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "3.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "imaplib2";

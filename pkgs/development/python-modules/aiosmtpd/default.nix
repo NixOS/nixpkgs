@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosmtpd";

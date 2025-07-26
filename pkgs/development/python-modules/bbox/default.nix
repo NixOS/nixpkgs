@@ -17,8 +17,6 @@ buildPythonPackage {
   version = "0.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "varunagrawal";
     repo = "bbox";

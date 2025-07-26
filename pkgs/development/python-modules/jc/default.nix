@@ -16,7 +16,6 @@ buildPythonPackage rec {
   pname = "jc";
   version = "1.25.5";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";

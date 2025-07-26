@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.5.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "snjoetw";
     repo = "py-canary";

@@ -20,8 +20,6 @@ buildPythonPackage rec {
     sha256 = "sha256-CXDzjg5yVABJbINKNopn7lUdw7WtCiV+Ey9bRvLnd3A=";
   };
 
-  disabled = pythonOlder "3.6";
-
   propagatedBuildInputs = [ typing-extensions ];
 
   nativeCheckInputs = [

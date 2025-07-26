@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "JeromeHXP";
     repo = "ondilo";

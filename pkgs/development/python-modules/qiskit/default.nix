@@ -36,8 +36,6 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";

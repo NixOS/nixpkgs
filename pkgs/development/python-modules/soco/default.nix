@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.30.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";

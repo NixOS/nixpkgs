@@ -16,7 +16,6 @@ buildPythonPackage rec {
   pname = "bqscales";
   version = "0.3.3";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

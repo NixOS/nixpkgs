@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "c4urself";
     repo = "bump2version";

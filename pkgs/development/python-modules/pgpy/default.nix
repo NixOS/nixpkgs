@@ -13,8 +13,6 @@ buildPythonPackage rec {
   pname = "pgpy";
   version = "0.6.0";
 
-  disabled = pythonOlder "3.6";
-
   pyproject = true;
 
   src = fetchFromGitHub {
