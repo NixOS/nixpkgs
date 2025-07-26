@@ -12,14 +12,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "z-library";
-  version = "2.4.3";
+  version = "2.4.3-unstable-2025-07-26";
 
   src = fetchurl {
     url = "https://s3proxy.cdn-zlib.sk/te_public_files/soft/linux/zlibrary-setup-latest.deb";
     hash = "sha256-OywGJdVUAGxK+C14akbLzhkt/5QE6+lchPHteksOLLY=";
   };
-
-  unpackCmd = "dpkg -x $curSrc source";
 
   nativeBuildInputs = [
     dpkg
@@ -54,8 +52,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Z-library desktop app";
     homepage = "https://1lib.sk/";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.Techtix0 ];
-    mainProgram = "$out/bin/z-library";
+    mainProgram = "z-library";
   };
 }
