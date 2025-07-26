@@ -22,8 +22,6 @@ buildPythonPackage {
   version = "unstable-2019-08-10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   outputs = [
     "out"
     "doc"

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.33";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "stefankoegl";
     repo = "python-json-patch";

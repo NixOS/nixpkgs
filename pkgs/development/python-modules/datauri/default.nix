@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";

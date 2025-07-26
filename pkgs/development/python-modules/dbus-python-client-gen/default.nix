@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.8.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "dbus-python-client-gen";

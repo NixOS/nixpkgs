@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "fst_pso";
     inherit version;

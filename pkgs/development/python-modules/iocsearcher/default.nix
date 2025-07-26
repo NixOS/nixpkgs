@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "2.4.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "malicialab";
     repo = "iocsearcher";

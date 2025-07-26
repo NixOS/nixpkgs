@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "google_cloud_network_connectivity";

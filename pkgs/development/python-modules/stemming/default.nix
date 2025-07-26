@@ -20,8 +20,6 @@ buildPythonPackage {
     hash = "sha256-wnmBCbxnCZ9mN1J7sLcN7OynMcvqgAnhEgpAwW2/xz4=";
   };
 
-  disabled = pythonOlder "3.7";
-
   pythonImportsCheck = [ "stemming" ];
 
   meta = with lib; {

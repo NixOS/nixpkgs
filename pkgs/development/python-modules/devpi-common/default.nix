@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "4.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "devpi_common";
     inherit version;

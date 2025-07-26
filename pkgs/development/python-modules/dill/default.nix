@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = "dill";

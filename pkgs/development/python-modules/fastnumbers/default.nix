@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "5.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "SethMMorton";
     repo = "fastnumbers";

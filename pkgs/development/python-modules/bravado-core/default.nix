@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "6.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "bravado-core";

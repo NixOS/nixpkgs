@@ -23,8 +23,6 @@ buildPythonPackage {
   inherit pname version src;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook

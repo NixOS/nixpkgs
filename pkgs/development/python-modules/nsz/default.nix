@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "4.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "nicoboss";
     repo = "nsz";

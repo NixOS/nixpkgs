@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";

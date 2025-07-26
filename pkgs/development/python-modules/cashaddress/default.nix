@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.6-unstable-2019-05-15";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "oskyk";
     repo = "cashaddress";

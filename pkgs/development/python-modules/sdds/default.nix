@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.4.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pylhc";
     repo = "sdds";

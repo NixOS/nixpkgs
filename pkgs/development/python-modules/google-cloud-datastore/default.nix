@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.21.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_datastore";
     inherit version;

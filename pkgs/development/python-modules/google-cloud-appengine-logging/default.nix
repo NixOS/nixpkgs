@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_appengine_logging";
     inherit version;

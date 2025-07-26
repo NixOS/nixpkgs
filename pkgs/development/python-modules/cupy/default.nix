@@ -61,8 +61,6 @@ buildPythonPackage rec {
   version = "13.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   stdenv = cudaPackages.backendStdenv;
 
   src = fetchFromGitHub {

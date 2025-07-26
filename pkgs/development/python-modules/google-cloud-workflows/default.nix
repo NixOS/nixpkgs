@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.18.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_workflows";
     inherit version;

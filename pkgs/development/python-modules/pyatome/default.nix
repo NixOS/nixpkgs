@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "pyAtome";
     inherit version;

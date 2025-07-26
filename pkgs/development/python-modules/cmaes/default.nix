@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.11.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
     repo = "cmaes";

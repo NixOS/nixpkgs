@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.0.0-unstable-2021-04-17";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "gtaylor";
     repo = "python-colormath";

@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2.11.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "venth";
     repo = "aws-adfs";

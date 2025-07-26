@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Z4kSec";
     repo = "Masky";

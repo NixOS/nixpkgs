@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "kumaraditya303";
     repo = "aioshutil";

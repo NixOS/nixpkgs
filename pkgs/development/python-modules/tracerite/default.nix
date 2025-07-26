@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.1.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";

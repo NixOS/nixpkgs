@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "23.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "hpc-container-maker";

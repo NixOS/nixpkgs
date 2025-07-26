@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.3.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "al45tair";
     repo = "ds_store";

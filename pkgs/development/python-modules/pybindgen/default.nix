@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.22.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "PyBindGen";
     inherit version;

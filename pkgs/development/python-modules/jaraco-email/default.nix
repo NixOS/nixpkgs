@@ -16,8 +16,6 @@ buildPythonPackage rec {
   pname = "jaraco-email";
   version = "3.1.1";
 
-  disabled = pythonOlder "3.7";
-
   format = "pyproject";
 
   src = fetchFromGitHub {

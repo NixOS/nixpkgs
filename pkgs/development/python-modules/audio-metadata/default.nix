@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "thebigmunch";
     repo = "audio-metadata";

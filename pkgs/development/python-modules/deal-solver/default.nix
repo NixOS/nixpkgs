@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "life4";
     repo = "deal-solver";

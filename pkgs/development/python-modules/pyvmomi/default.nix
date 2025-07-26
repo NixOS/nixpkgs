@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "8.0.3.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "pyvmomi";

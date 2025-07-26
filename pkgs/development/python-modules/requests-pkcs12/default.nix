@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.25";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "m-click";
     repo = "requests_pkcs12";

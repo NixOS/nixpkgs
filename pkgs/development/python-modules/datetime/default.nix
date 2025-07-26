@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "5.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "datetime";

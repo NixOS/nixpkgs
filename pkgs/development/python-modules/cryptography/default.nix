@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "45.0.4"; # Also update the hash in vectors.nix
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";

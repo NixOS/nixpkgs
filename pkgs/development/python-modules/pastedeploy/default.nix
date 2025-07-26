@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "pastedeploy";

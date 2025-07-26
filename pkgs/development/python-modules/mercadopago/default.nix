@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mercadopago";
     repo = "sdk-python";

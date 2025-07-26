@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sensein";
     repo = "etelemetry-client";

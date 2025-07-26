@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.10.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "pyramid_jinja2";
     inherit version;

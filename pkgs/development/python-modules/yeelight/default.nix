@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.7.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "stavros";
     repo = "python-yeelight";

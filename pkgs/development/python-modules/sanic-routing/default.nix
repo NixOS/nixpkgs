@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "23.12.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-routing";

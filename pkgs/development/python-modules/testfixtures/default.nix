@@ -22,8 +22,6 @@ buildPythonPackage rec {
   # https://github.com/simplistix/testfixtures/issues/169
   # https://github.com/simplistix/testfixtures/issues/168
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-1MC4SvLyZ2EPkIAJtQ1vmDpOWK3iLGe6tnh7WkAtWcA=";

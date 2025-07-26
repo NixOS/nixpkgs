@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "batchgenerators";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "5.0.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "DiffSK";
     repo = "configobj";

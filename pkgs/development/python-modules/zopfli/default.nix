@@ -12,8 +12,6 @@ buildPythonPackage rec {
   pname = "zopfli";
   version = "0.2.3";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";

@@ -24,8 +24,6 @@ buildPythonPackage rec {
   pname = "dateparser";
   version = "1.2.1";
 
-  disabled = pythonOlder "3.7";
-
   pyproject = true;
 
   src = fetchFromGitHub {

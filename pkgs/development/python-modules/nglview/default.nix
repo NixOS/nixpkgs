@@ -36,8 +36,6 @@ buildPythonPackage rec {
   version = "3.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "nglviewer";
     repo = "nglview";

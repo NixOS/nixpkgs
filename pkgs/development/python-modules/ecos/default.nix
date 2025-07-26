@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.0.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos-python";

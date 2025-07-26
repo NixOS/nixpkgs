@@ -17,8 +17,6 @@ buildPythonPackage {
   version = "1.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   # PyPi tarball is corrupted
   src = fetchFromGitHub {
     owner = "alecxe";

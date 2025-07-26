@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiomysql";

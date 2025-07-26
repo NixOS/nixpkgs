@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2025.04.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jrfonseca";
     repo = "gprof2dot";

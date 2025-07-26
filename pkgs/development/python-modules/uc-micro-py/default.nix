@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tsutsu3";
     repo = "uc.micro-py";

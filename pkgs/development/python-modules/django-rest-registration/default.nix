@@ -18,8 +18,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "apragacz";
     repo = "django-rest-registration";

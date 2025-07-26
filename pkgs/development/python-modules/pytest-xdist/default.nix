@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "3.6.1";
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 

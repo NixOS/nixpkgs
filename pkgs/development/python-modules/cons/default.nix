@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.4.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "python-cons";

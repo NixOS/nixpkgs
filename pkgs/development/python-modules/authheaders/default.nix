@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.16.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ValiMail";
     repo = "authentication-headers";

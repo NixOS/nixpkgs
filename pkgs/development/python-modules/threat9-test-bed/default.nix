@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "threat9";
     repo = "threat9-test-bed";

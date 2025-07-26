@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.38.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_securitycenter";
     inherit version;

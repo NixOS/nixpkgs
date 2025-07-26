@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mhe";
     repo = "pynrrd";

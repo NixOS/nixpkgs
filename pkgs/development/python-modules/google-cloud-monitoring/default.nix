@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.27.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_monitoring";
     inherit version;

@@ -15,8 +15,6 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "pyre_extensions"; # changed pname on 0.0.31?

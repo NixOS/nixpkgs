@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "8.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";

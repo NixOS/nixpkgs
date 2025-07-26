@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.4.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";

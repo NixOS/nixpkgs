@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "pytest-httpbin";

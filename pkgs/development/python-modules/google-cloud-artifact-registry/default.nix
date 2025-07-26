@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_artifact_registry";
     inherit version;

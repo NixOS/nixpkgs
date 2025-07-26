@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "gradient_statsd";
     inherit version;

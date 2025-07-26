@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = "emoji";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.8.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "PyTransportNSWv2";
     inherit version;

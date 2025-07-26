@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.17.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mverleg";
     repo = "pyjson_tricks";

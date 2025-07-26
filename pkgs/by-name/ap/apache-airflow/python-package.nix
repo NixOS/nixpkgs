@@ -150,8 +150,6 @@ buildPythonPackage rec {
   format = "setuptools";
   src = airflow-src;
 
-  disabled = pythonOlder "3.7";
-
   propagatedBuildInputs = [
     alembic
     argcomplete

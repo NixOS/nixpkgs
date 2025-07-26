@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "3.7.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";

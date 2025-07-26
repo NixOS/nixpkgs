@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.54.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";

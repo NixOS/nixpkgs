@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "3.2.13";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";

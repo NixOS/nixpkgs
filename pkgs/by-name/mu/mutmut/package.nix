@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace requirements.txt --replace-fail 'junit-xml==1.8' 'junit-xml==1.9'
   '';
 
-  disabled = python3Packages.pythonOlder "3.7";
-
   doCheck = false;
 
   build-system = with python3Packages; [ setuptools ];
