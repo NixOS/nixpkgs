@@ -597,6 +597,7 @@
   ./services/development/lorri.nix
   ./services/development/nixseparatedebuginfod2.nix
   ./services/development/nixseparatedebuginfod.nix
+  ./services/development/opengist.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
