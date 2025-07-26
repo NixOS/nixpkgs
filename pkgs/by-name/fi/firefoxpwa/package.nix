@@ -1,5 +1,6 @@
 {
   extraLibs ? [ ],
+  firefoxRuntime ? firefox-unwrapped,
 
   lib,
   fetchFromGitHub,
@@ -84,8 +85,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     # Runtime
     mkdir -p $out/share/firefoxpwa
-    cp -Lr ${firefox-unwrapped}/lib/firefox $out/share/firefoxpwa/runtime
+    cp -Lr ${firefoxRuntime}/lib/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime
     chmod -R +w $out/share/firefoxpwa
+
+    if [ "${firefoxRuntime.binaryName}" != "firefox" ]; then
+      ln $out/share/firefoxpwa/runtime/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime/firefox
+    fi
 
     # UserChrome
     cp -r userchrome $out/share/firefoxpwa
