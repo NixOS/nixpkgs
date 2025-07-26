@@ -241,6 +241,26 @@ in
   boolToString = b: if b then "true" else "false";
 
   /**
+    Convert a boolean to a string.
+
+    This function uses the strings "yes" and "no" to represent
+    boolean values.
+
+    # Inputs
+
+    `b`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    boolToYesNo :: bool -> string
+    ```
+  */
+  boolToYesNo = b: if b then "yes" else "no";
+
+  /**
     Merge two attribute sets shallowly, right side trumps left
 
     mergeAttrs :: attrs -> attrs -> attrs
