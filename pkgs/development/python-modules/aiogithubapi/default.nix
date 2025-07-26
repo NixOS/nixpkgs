@@ -9,16 +9,12 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  sigstore,
 }:
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
   version = "25.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hypothesis,
-  pythonOlder,
   mock,
   nose2,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "dpath";
   version = "2.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

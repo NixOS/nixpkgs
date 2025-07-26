@@ -5,7 +5,6 @@
   fetchPypi,
   poetry-core,
   pyscard,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "fido2";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

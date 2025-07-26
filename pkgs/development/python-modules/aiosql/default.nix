@@ -5,7 +5,6 @@
   pg8000,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   sphinx-rtd-theme,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "aiosql";
   version = "13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   outputs = [
     "doc"

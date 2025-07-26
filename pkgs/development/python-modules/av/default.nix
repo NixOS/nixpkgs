@@ -11,7 +11,6 @@
   pillow,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "av";
   version = "14.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";

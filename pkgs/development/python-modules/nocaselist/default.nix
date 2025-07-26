@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "nocaselist";
   version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

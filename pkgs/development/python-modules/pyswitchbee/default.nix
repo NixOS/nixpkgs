@@ -5,7 +5,6 @@
   aiohttp,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   packaging,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyswitchbee";
   version = "1.8.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jafar-atili";

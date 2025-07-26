@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   dask,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "multiscale-spatial-image";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spatial-image";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
   markdown-it-py,
   pytest-regressions,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "mdit-py-plugins";
   version = "0.4.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

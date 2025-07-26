@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   gql,
-  pythonOlder,
   pyyaml,
   requests-toolbelt,
   requests,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "python-gitlab";
   version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "python_gitlab";

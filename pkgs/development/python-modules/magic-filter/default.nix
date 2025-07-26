@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   hatchling,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "magic-filter";
   version = "1.0.12";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aiogram";

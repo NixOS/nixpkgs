@@ -12,7 +12,6 @@
   pyjwt,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   rich,
   nix-update-script,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "sigstore-python";
   version = "3.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sigstore";

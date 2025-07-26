@@ -5,7 +5,6 @@
   expandvars,
   fetchPypi,
   libssh,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   toml,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ansible-pylibssh";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

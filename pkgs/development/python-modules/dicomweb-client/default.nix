@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pytest-localserver,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "dicomweb-client";
   version = "0.59.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ImagingDataCommons";

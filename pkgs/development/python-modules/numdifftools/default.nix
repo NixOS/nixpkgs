@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
   scipy,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "numdifftools";
   version = "0.9.41";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pbrod";

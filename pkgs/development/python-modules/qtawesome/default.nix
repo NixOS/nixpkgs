@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "qtawesome";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";

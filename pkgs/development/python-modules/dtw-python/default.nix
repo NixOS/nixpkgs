@@ -9,15 +9,12 @@
   scipy,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dtw-python";
   version = "1.5.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";

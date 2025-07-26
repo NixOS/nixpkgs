@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   vcrpy,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "libpyvivotek";
   version = "0.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "HarlemSquirrel";

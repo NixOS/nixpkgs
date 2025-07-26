@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   approvaltests,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -10,7 +9,6 @@
 buildPythonPackage {
   pname = "approval-utilities";
   inherit (approvaltests) version src;
-  disabled = pythonOlder "3.7";
   pyproject = true;
 
   postPatch = ''

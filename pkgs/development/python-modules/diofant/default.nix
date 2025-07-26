@@ -9,9 +9,7 @@
   mpmath,
   numpy,
   pexpect,
-  pythonOlder,
   pytest-cov-stub,
-  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   scipy,
@@ -22,8 +20,6 @@ buildPythonPackage rec {
   pname = "diofant";
   version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "diofant";

@@ -58,8 +58,6 @@ buildPythonPackage rec {
   version = "24.11.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";

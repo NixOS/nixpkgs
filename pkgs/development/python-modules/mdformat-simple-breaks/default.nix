@@ -4,15 +4,12 @@
   fetchFromGitHub,
   flit-core,
   mdformat,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-simple-breaks";
   version = "0.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csala";

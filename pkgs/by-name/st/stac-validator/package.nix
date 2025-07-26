@@ -8,7 +8,6 @@ python3Packages.buildPythonPackage rec {
   pname = "stac-validator";
   version = "3.6.0";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stac-utils";

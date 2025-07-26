@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   unittestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "cpufeature";
   version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "robbmcleod";

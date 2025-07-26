@@ -5,15 +5,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   async-timeout,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adax-local";
   version = "0.1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

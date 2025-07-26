@@ -8,7 +8,6 @@
   pandas,
   pyannote-core,
   pyannote-database,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pyannote-metrics";
   version = "3.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyannote";

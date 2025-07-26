@@ -6,7 +6,6 @@
   cryptography,
   fetchFromGitHub,
   msgpack,
-  pythonOlder,
   redis,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "channels-redis";
   version = "4.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django";

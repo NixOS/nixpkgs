@@ -6,15 +6,12 @@
   cmake,
   perl,
   stdenv,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
   version = "0.27.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

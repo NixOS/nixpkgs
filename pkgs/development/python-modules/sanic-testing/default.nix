@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   httpx,
-  pythonOlder,
   sanic,
   setuptools,
   websockets,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "sanic-testing";
   version = "24.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";

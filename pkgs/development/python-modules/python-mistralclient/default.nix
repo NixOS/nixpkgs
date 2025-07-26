@@ -13,7 +13,6 @@
   oslotest,
   osprofiler,
   pbr,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "python-mistralclient";
   version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitea {
     domain = "opendev.org";

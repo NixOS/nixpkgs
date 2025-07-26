@@ -5,7 +5,6 @@
   garth,
   lxml,
   python-dotenv,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "withings-sync";
   version = "4.2.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jaroslawhartman";

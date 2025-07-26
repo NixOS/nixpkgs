@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication rec {
   version = "0.4.1";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "GearKite";
     repo = "MatrixZulipBridge";

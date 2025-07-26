@@ -4,7 +4,6 @@
   nix-update-script,
   buildPythonPackage,
   unittestCheckHook,
-  pythonOlder,
   cargo,
   rustc,
   rustPlatform,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aiotarfile";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rhelmot";

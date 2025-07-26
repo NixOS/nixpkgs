@@ -11,7 +11,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-vcr,
-  pythonOlder,
   requests-toolbelt,
   update-checker,
   vcrpy,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "asyncpraw";
   version = "7.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "praw-dev";

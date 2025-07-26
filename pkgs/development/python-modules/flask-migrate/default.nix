@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   alembic,
   flask,
   flask-script,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "flask-migrate";
   version = "4.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";

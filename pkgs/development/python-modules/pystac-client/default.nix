@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   pystac,
   pytest-benchmark,
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   pname = "pystac-client";
   version = "0.8.6";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";

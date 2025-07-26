@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   sphinx,
   mscgen,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-mscgen";
   version = "0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

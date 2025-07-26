@@ -11,7 +11,6 @@
   pytest-order,
   pytestCheckHook,
   python,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "tabcmd";
   version = "2.0.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

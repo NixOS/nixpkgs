@@ -4,7 +4,6 @@
   fetchFromGitHub,
   requests,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyvesync";
   version = "2.1.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "webdjoe";

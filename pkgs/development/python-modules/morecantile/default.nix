@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   attrs,
   click,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "morecantile";
   version = "6.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "developmentseed";

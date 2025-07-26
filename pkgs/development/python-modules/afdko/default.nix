@@ -17,7 +17,6 @@
   mutatormath,
   ninja,
   pytestCheckHook,
-  pythonOlder,
   runAllTests ? false,
   scikit-build,
   setuptools-scm,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "afdko";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";

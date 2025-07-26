@@ -8,7 +8,6 @@
   minidump,
   minikerberos,
   msldap,
-  pythonOlder,
   winsspi,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pypykatz";
   version = "0.6.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -5,15 +5,12 @@
   setuptools,
   traits,
   pyface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "traitsui";
   version = "8.0.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

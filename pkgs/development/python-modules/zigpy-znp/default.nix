@@ -11,7 +11,6 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   voluptuous,
   zigpy,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "zigpy-znp";
   version = "0.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";

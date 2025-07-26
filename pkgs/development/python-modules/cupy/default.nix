@@ -12,7 +12,6 @@
   setuptools,
   cudaPackages,
   addDriverRunpath,
-  pythonOlder,
   symlinkJoin,
 }:
 
@@ -60,8 +59,6 @@ buildPythonPackage rec {
   pname = "cupy";
   version = "13.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   stdenv = cudaPackages.backendStdenv;
 

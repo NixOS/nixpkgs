@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   gitpython,
   pbr,
   pyyaml,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "bandit";
   version = "1.8.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

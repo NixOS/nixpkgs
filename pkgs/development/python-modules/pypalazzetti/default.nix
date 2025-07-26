@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pypalazzetti";
   version = "0.1.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dotvav";

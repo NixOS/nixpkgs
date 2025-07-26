@@ -12,7 +12,6 @@
   pytest-param-files,
   pytest-regressions,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   sphinx-pytest,
   sphinx,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "myst-docutils";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

@@ -4,7 +4,6 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   sphinx,
   pytestCheckHook,
 }:
@@ -17,8 +16,6 @@ in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";

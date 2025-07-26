@@ -9,7 +9,6 @@
   keyring,
   unittestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "mwdblib";
   version = "4.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

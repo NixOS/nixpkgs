@@ -10,7 +10,6 @@
   importlib-metadata,
   packaging,
   pycryptodome,
-  pythonOlder,
   recommonmark,
   setuptools-scm,
   sphinx,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "vyper";
   version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyinstrument";
   version = "5.0.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joerick";

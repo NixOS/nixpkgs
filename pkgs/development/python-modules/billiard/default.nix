@@ -5,15 +5,12 @@
   setuptools,
   pytestCheckHook,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "billiard";
   version = "4.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "celery";

@@ -5,15 +5,12 @@
   hatchling,
   llama-index-core,
   llama-index-llms-openai,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-agent-openai";
   version = "0.4.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_agent_openai";

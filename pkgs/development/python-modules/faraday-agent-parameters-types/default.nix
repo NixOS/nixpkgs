@@ -5,7 +5,6 @@
   marshmallow,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validators,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";

@@ -12,15 +12,12 @@
   pytest-vcr,
   pytestCheckHook,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "freenub";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";

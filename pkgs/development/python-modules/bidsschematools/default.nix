@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   pdm-backend,
   acres,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "bidsschematools";
   version = "1.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "bidsschematools";

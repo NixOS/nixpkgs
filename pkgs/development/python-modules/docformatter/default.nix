@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   charset-normalizer,
@@ -14,8 +13,6 @@
 buildPythonPackage rec {
   pname = "docformatter";
   version = "1.7.7";
-
-  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 

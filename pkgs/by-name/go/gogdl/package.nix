@@ -18,8 +18,6 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-pK6JeTJeBq9qVfflNSYs3s4HuD0Kz6k9DDUVHL81FV0=";
   };
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   propagatedBuildInputs = with python3Packages; [
     setuptools
     requests

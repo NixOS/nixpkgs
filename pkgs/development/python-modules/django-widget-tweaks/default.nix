@@ -5,16 +5,12 @@
   setuptools-scm,
   django,
   python,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";

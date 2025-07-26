@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lark,
   pytestCheckHook,
   setuptools-scm,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-+qPTRm068x09MxRNUx+oo2qd8NsLorXtdN3mEX4CxPE=";
   };
-
-  disabled = pythonOlder "3.7";
 
   build-system = [
     setuptools

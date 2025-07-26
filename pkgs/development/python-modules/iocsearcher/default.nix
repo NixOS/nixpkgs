@@ -15,7 +15,6 @@
   pdfminer-six,
   phonenumbers,
   python-magic,
-  pythonOlder,
   readabilipy,
   setuptools,
 }:
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "iocsearcher";
   version = "2.4.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "malicialab";

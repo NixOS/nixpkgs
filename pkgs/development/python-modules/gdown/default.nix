@@ -11,15 +11,12 @@
   tqdm,
   setuptools,
   six,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gdown";
   version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

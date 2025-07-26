@@ -10,15 +10,12 @@
   nox,
   pyhamcrest,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "lsprotocol";
   version = "2023.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";

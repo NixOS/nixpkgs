@@ -5,7 +5,6 @@
   flit-core,
   pillow,
   python,
-  pythonOlder,
 }:
 
 # Note: this package is used to build LLVM’s documentation, which is part of the Darwin stdenv.
@@ -16,8 +15,6 @@ let
     pname = "docutils";
     version = "0.21.2";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchFromRepoOrCz {
       repo = "docutils";

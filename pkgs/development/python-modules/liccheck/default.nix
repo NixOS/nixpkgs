@@ -7,7 +7,6 @@
   pytest-mock,
   pytestCheckHook,
   python3-openid,
-  pythonOlder,
   semantic-version,
   toml,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "liccheck";
   version = "0.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dhatim";

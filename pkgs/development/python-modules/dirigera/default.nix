@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   websocket-client,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "dirigera";
   version = "1.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Leggin";

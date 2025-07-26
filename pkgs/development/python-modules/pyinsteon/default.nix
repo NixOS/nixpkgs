@@ -11,7 +11,6 @@
   pyserial-asyncio,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   voluptuous,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pyinsteon";
   version = "1.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyinsteon";

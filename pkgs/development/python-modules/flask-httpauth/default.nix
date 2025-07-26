@@ -5,15 +5,12 @@
   pytestCheckHook,
   setuptools,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
   version = "4.8.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";

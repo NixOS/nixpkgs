@@ -9,7 +9,6 @@
   oscrypto,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   uritools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
   version = "0.26.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";

@@ -8,7 +8,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "bleak";
   version = "0.22.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hbldh";

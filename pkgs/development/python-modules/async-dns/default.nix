@@ -4,13 +4,11 @@
   fetchFromGitHub,
   poetry-core,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "async-dns";
   version = "2.0.0";
-  disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {

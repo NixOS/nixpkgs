@@ -4,15 +4,12 @@
   click,
   pyyaml,
   buildPythonPackage,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "panflute";
   version = "2.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

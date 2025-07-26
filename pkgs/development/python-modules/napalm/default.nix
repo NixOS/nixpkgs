@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -37,8 +36,6 @@ buildPythonPackage rec {
   pname = "napalm";
   version = "5.0.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "napalm-automation";

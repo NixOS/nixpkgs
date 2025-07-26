@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 
   packaging,
@@ -31,8 +29,6 @@ buildPythonPackage rec {
   pname = "geopandas";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
@@ -63,13 +59,13 @@ buildPythonPackage rec {
   optional-dependencies = {
     all = [
       # prevent infinite recursion
-      (folium.overridePythonAttrs (prevAttrs: {
+      (folium.overridePythonAttrs (_prevAttrs: {
         doCheck = false;
       }))
       geoalchemy2
       geopy
       # prevent infinite recursion
-      (mapclassify.overridePythonAttrs (prevAttrs: {
+      (mapclassify.overridePythonAttrs (_prevAttrs: {
         doCheck = false;
       }))
       matplotlib

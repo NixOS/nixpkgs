@@ -6,15 +6,12 @@
   pycryptodomex,
   pysnmp-pyasn1,
   pysnmp-pysmi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmplib";
   version = "5.0.24";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pysnmp";

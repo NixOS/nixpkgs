@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "8.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;

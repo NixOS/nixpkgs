@@ -6,7 +6,6 @@
   fetchPypi,
   hatchling,
   orjson,
-  pythonOlder,
   requests,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "elasticsearch8";
   version = "8.17.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

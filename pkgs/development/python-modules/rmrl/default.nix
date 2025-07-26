@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pdfrw,
@@ -15,8 +14,6 @@
 buildPythonPackage {
   pname = "rmrl";
   version = "0.2.1-unstable-2023-06-1";
-
-  disabled = pythonOlder "3.10";
 
   pyproject = true;
 

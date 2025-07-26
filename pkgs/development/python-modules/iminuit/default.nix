@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "iminuit";
   version = "2.31.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

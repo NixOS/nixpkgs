@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   sphinx,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sphinx-multitoc-numbering";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

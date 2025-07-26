@@ -8,7 +8,6 @@
   poetry-core,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   urllib3,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pywemo";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pywemo";

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   unzip,
-  pythonOlder,
   libGL,
   libGLU,
   xorg,
@@ -18,7 +17,6 @@
   openal,
   libpulseaudio,
   harfbuzz,
-  mesa,
   apple-sdk,
 }:
 
@@ -26,7 +24,6 @@ buildPythonPackage rec {
   version = "2.0.10";
   format = "setuptools";
   pname = "pyglet";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

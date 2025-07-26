@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "funcparserlib";
   version = "1.0.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vlasovskikh";

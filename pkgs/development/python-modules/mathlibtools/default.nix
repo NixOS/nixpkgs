@@ -8,7 +8,6 @@
   networkx,
   pydot,
   pygithub,
-  pythonOlder,
   pyyaml,
   toml,
   tqdm,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "mathlibtools";
   version = "1.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

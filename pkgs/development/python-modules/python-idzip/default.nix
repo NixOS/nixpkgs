@@ -4,8 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
 
-  pythonOlder,
-
   setuptools,
 
   pytestCheckHook,
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-idzip";
   version = "0.3.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bauman";

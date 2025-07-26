@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   version = "3.8.1";
   pname = "asgiref";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django";

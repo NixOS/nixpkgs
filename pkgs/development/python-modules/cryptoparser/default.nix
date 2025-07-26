@@ -6,7 +6,6 @@
   cryptodatahub,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   urllib3,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "cryptoparser";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

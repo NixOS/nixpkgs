@@ -15,7 +15,6 @@
   pygments,
   python,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools-scm,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "django-silk";
   version = "5.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";

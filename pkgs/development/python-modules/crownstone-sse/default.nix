@@ -4,7 +4,6 @@
   buildPythonPackage,
   certifi,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "crownstone-sse";
   version = "2.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "crownstone_sse";

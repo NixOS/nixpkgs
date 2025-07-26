@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   beautifulsoup4,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "furo";
   version = "2024.8.6";
   format = "wheel";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version format;

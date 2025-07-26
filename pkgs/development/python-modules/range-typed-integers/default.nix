@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
@@ -10,8 +9,6 @@
 buildPythonPackage rec {
   pname = "range-typed-integers";
   version = "1.0.1";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "theCapypara";

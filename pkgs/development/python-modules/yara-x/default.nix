@@ -3,7 +3,6 @@
   buildPythonPackage,
   rustPlatform,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pkgs,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "yara-x";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";

@@ -11,7 +11,6 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   ujson,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "typical";
   version = "2.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "seandstewart";

@@ -10,7 +10,6 @@
   pytz,
   sqlparse,
   tzdata,
-  pythonOlder,
   withGdal ? false,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "django";
   version = "3.2.25";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Django";

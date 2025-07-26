@@ -8,7 +8,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   tzlocal,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "gardena-bluetooth";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "elupus";

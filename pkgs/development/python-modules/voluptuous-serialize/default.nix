@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   voluptuous,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "voluptuous-serialize";
   version = "2.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

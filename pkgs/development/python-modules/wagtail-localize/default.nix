@@ -10,7 +10,6 @@
   google-cloud-translate,
   polib,
   python,
-  pythonOlder,
   typing-extensions,
   wagtail,
   wagtail-modeladmin,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "wagtail-localize";
   version = "1.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";

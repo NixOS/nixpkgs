@@ -4,7 +4,6 @@
   fetchPypi,
   pycryptodome,
   python-kasa,
-  pythonOlder,
   requests,
   rtp,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytapo";
   version = "3.3.48";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

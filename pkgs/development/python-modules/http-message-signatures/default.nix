@@ -5,7 +5,6 @@
   fetchFromGitHub,
   http-sfv,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   requests,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "http-message-signatures";
   version = "0.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyauth";

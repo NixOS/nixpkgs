@@ -11,7 +11,6 @@
   pystache,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   requests,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "cement";
   version = "3.0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "datafolklabs";

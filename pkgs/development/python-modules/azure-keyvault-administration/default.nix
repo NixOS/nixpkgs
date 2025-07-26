@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-keyvault-administration";
   version = "4.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_keyvault_administration";

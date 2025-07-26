@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitea,
-  pythonOlder,
   python,
 
   # build-system
@@ -43,8 +42,6 @@ buildPythonPackage rec {
   pname = "django-allauth";
   version = "65.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitea {
     domain = "codeberg.org";

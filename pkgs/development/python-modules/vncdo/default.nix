@@ -6,7 +6,6 @@
   pillow,
   pycryptodomex,
   pytestCheckHook,
-  pythonOlder,
   pyvirtualdisplay,
   setuptools,
   twisted,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "vncdo";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sibson";

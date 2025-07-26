@@ -4,7 +4,6 @@
   poetry-core,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   click,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "kml2geojson";
   version = "5.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mrcagney";

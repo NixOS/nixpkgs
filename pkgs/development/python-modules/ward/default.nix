@@ -9,7 +9,6 @@
   pluggy,
   poetry-core,
   pprintpp,
-  pythonOlder,
   rich,
   tomli,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "ward";
   version = "0.68.0b0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "darrenburns";

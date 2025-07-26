@@ -5,7 +5,6 @@
   attrs,
   flake8,
   pytestCheckHook,
-  pythonOlder,
   hypothesis,
   hypothesmith,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "flake8-bugbear";
   version = "24.12.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";

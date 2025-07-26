@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lxml,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "webdavclient3";
   version = "3.14.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ezhov-evgeny";

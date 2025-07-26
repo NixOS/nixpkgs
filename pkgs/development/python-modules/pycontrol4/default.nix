@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -13,8 +12,6 @@
 buildPythonPackage rec {
   pname = "pycontrol4";
   version = "1.2.1";
-
-  disabled = pythonOlder "3.6";
 
   pyproject = true;
 

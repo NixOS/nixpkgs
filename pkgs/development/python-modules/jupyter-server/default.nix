@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   stdenv,
   buildPythonPackage,
   fetchPypi,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   pname = "jupyter-server";
   version = "2.16.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";

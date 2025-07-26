@@ -15,7 +15,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   zeroconf,
 }:
 
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "aiohomekit";
   version = "3.2.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Jc2k";

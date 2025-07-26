@@ -7,15 +7,12 @@
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "kasa-crypt";
   version = "0.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";

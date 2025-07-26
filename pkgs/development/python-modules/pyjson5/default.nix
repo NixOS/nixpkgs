@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyjson5";
   version = "1.6.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Kijewski";

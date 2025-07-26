@@ -9,7 +9,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   tqdm,
   typer,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "coinmetrics-api-client";
   version = "2025.5.6.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   __darwinAllowLocalNetworking = true;
 

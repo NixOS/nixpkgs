@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pydantic,
-  pythonOlder,
   scrapy,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "itemadapter";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

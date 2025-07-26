@@ -8,7 +8,6 @@
   hypothesis,
   pytest-check,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "craft-platforms";
   version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "canonical";

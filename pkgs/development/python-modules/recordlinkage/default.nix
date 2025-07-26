@@ -11,7 +11,6 @@
   pandas,
   pyarrow,
   pytest,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "recordlinkage";
   version = "0.16";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

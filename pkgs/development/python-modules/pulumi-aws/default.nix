@@ -4,7 +4,6 @@
   fetchFromGitHub,
   parver,
   pulumi,
-  pythonOlder,
   semver,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   # Version is independent of pulumi's.
   version = "6.66.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pulumi";

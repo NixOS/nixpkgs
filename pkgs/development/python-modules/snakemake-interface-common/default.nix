@@ -5,7 +5,6 @@
   configargparse,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "snakemake-interface-common";
   version = "1.17.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "snakemake";

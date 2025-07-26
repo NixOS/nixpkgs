@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   hypothesis,
   numpy,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cmaes";
   version = "0.11.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";

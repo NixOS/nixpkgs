@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
 
   # build-system
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "werkzeug";
   version = "3.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

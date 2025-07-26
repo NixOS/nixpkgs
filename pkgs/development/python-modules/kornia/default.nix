@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   packaging,
   setuptools,
   torch,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "kornia";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "kornia";

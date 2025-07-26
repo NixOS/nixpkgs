@@ -3,15 +3,12 @@
   buildPythonPackage,
   cython,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "murmurhash";
   version = "1.0.13";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

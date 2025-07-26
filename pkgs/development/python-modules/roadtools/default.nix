@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   roadrecon,
   roadlib,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "roadtools";
   version = "0.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

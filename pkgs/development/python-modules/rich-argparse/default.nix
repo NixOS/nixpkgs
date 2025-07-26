@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "rich-argparse";
   version = "1.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hamdanal";

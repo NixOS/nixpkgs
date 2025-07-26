@@ -4,7 +4,6 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   yarl,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "toonapi";
   version = "0.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   darkdetect,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyqtdarktheme";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "5yutan5";

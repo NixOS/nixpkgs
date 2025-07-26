@@ -13,7 +13,6 @@
   pyannote-metrics,
   pyannote-pipeline,
   pyscaffold,
-  pythonOlder,
   pytorch-lightning,
   pytorch-metric-learning,
   rich,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "pyannote-audio";
   version = "3.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyannote";

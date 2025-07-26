@@ -8,7 +8,6 @@
   packaging,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   w3lib,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "parsel";
   version = "1.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -12,7 +12,6 @@
   beautifulsoup4,
   bokeh,
   buildPythonPackage,
-  cache,
   cryptography,
   deprecated,
   dnspython,
@@ -26,7 +25,6 @@
   ipywidgets,
   keyring,
   lxml,
-  markdown,
   msal-extensions,
   msal,
   msrest,
@@ -39,7 +37,6 @@
   pydantic,
   pygments,
   pyjwt,
-  pythonOlder,
   pyyaml,
   setuptools,
   tldextract,
@@ -52,8 +49,6 @@ buildPythonPackage rec {
   pname = "msticpy";
   version = "2.16.2.post";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";

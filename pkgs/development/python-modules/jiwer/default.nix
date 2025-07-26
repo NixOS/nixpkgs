@@ -5,15 +5,12 @@
   poetry-core,
   rapidfuzz,
   click,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jiwer";
   version = "3.04";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jitsi";

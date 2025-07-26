@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   tornado,
   typeguard,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "tenacity";
   version = "9.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

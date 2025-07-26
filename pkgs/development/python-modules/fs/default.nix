@@ -8,7 +8,6 @@
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "fs";
   version = "2.4.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

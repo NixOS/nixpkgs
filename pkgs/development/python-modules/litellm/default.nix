@@ -29,7 +29,6 @@
   python,
   python-dotenv,
   python-multipart,
-  pythonOlder,
   pyyaml,
   requests,
   resend,
@@ -48,8 +47,6 @@ buildPythonPackage rec {
   pname = "litellm";
   version = "1.74.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "BerriAI";

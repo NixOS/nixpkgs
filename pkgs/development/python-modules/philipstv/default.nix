@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   poetry-core,
   poetry-dynamic-versioning,
   installShellFiles,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "philipstv";
   version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bcyran";

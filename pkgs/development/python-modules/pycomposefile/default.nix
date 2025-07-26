@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pyyaml,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pycomposefile";
   version = "0.0.32";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
