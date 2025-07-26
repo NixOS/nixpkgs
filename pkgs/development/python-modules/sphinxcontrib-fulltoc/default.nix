@@ -14,7 +14,6 @@ buildPythonPackage rec {
 
   # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
   # directories). But python2 is EOL, so not supporting it, should be ok.
-  disabled = pythonOlder "3";
 
   src = fetchPypi {
     inherit pname version;
