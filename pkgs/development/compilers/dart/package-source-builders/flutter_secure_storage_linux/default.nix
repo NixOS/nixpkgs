@@ -1,26 +1,25 @@
 {
   stdenv,
-  libsecret,
   jsoncpp,
+  libsecret,
 }:
 
 { version, src, ... }:
 
 stdenv.mkDerivation {
-  pname = "flutter-secure-storage-linux";
+  pname = "flutter_secure_storage_linux";
   inherit version src;
   inherit (src) passthru;
 
   propagatedBuildInputs = [
-    libsecret
     jsoncpp
+    libsecret
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"
-    ln -s '${src}'/* "$out"
+    cp -r . "$out"
 
     runHook postInstall
   '';
