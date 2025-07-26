@@ -64,6 +64,16 @@ in
         '';
       };
 
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.terraria-server;
+        defaultText = lib.literalExpression "pkgs.terraria-server";
+        example = lib.literalExpression "pkgs.tshock";
+        description = ''
+          Specifies the package that should be run as a Terraria server.
+        '';
+      };
+
       port = lib.mkOption {
         type = lib.types.port;
         default = 7777;
@@ -178,7 +188,9 @@ in
         Type = "forking";
         GuessMainPID = true;
         UMask = 7;
-        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${lib.concatStringsSep " " flags}";
+        # TShock writes ServerLog.txt to $PWD
+        WorkingDirectory = cfg.dataDir;
+        ExecStart = "${tmuxCmd} new -d ${lib.getExe cfg.package} ${lib.concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
     };
