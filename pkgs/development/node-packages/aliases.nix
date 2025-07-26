@@ -118,6 +118,7 @@ mapAliases {
   inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
+  inherit (pkgs) graphql-inspector; # added 2024-12-03
   gtop = pkgs.gtop; # added 2023-07-31
   hs-client = pkgs.hsd; # added 2023-08-20
   inherit (pkgs) hsd; # added 2023-08-19
