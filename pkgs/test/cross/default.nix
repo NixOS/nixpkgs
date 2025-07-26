@@ -222,5 +222,10 @@ in
     lib.mapAttrs (_: mapMultiPlatformTest (system: system // { useLLVM = true; })) tests
   );
 
-  inherit mbuffer sanity;
+  sanity = pkgs.buildEnv {
+    name = "sanity";
+    paths = sanity;
+    ignoreCollisions = true;
+  };
+  inherit mbuffer;
 }
