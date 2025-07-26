@@ -818,6 +818,24 @@ let
       '';
     };
 
+    mktxp = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          default = {
+            enabled = true;
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mktxp-exporter.service")
+        wait_for_open_port(49090)
+        succeed(
+            "curl -sSf http://localhost:49090/metrics | grep '^python_info'"
+        )
+      '';
+    };
+
     modemmanager = {
       exporterConfig = {
         enable = true;
