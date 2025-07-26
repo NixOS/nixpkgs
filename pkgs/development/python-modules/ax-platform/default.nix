@@ -66,10 +66,6 @@ buildPythonPackage rec {
     sqlalchemy
     tabulate
   ];
-  pytestFlagsArray = [
-    # Hangs forever
-    "--deselect=ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
-  ];
 
   disabledTestPaths = [
     "ax/benchmark"
@@ -80,6 +76,9 @@ buildPythonPackage rec {
     "ax/service/tests/test_ax_client.py"
     "ax/service/tests/test_scheduler.py"
     "ax/service/tests/test_with_db_settings_base.py"
+
+    # Hangs forever
+    "ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
   ];
 
   disabledTests = [

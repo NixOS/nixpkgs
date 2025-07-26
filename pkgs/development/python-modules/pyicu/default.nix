@@ -38,11 +38,11 @@ buildPythonPackage rec {
     six
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # AssertionError: '$' != 'US Dollar'
-    "--deselect=test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
+    "test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
     # AssertionError: Lists differ: ['a', 'b', 'c', 'd'] != ['a', 'b', 'c', 'd', ...
-    "--deselect=test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
+    "test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
   ];
 
   pythonImportsCheck = [ "icu" ];

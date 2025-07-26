@@ -185,10 +185,9 @@ buildPythonPackage rec {
   ]
   ++ moto.optional-dependencies.server;
 
-  pytestFlagsArray = [
-    "-W"
+  pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
-    "ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTestPaths = [

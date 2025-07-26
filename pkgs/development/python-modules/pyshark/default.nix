@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyshark" ];
 
-  pytestFlagsArray = [ "../tests/" ];
+  enabledTestPaths = [ "../tests/" ];
 
   meta = with lib; {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";

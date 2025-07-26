@@ -116,6 +116,10 @@ buildPythonApplication rec {
       --fish <(_PIO_COMPLETE=fish_source $out/bin/pio)
   '';
 
+  enabledTestPaths = [
+    "tests"
+  ];
+
   disabledTestPaths = [
     "tests/commands/pkg/test_install.py"
     "tests/commands/pkg/test_list.py"
@@ -130,21 +134,10 @@ buildPythonApplication rec {
     "tests/commands/test_run.py"
     "tests/commands/test_test.py"
     "tests/misc/test_maintenance.py"
+
     # requires internet connection
     "tests/misc/ino2cpp/test_ino2cpp.py"
-  ];
 
-  disabledTests = [
-    # requires internet connection
-    "test_api_cache"
-    "test_ping_internet_ips"
-    "test_metadata_dump"
-  ];
-
-  pytestFlagsArray = [
-    "tests"
-  ]
-  ++ (map (e: "--deselect tests/${e}") [
     "commands/pkg/test_exec.py::test_pkg_specified"
     "commands/pkg/test_exec.py::test_unrecognized_options"
     "commands/test_ci.py::test_ci_boards"
@@ -201,7 +194,14 @@ buildPythonApplication rec {
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
-  ]);
+  ];
+
+  disabledTests = [
+    # requires internet connection
+    "test_api_cache"
+    "test_ping_internet_ips"
+    "test_metadata_dump"
+  ];
 
   passthru = {
     python = python3Packages.python;

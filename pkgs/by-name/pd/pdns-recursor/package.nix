@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-reproducible"
     "--enable-systemd"
     "--enable-dns-over-tls"
+    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns-recursor"
   ];
 

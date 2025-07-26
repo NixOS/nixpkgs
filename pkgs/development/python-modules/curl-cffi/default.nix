@@ -74,10 +74,13 @@ buildPythonPackage rec {
     rm -r curl_cffi
   '';
 
-  pytestFlags = [
+  enabledTestPaths = [
     "tests/unittest"
+  ];
+
+  disabledTestPaths = [
     # test accesses network
-    "--deselect tests/unittest/test_smoke.py::test_async"
+    "tests/unittest/test_smoke.py::test_async"
   ];
 
   disabledTests = [

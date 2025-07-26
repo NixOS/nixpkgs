@@ -151,8 +151,8 @@ buildPythonPackage rec {
     "test_find_all"
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
+  disabledTestMarks = [
+    "network"
   ];
 
   # Allow for package to use pep420's native namespaces

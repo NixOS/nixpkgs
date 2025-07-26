@@ -130,9 +130,8 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/numpy/numpy/blob/a277f6210739c11028f281b8495faf7da298dbef/numpy/_pytesttester.py#L180
-  pytestFlagsArray = [
-    "-m"
-    "not\\ slow" # fast test suite
+  disabledTestMarks = [
+    "slow" # fast test suite
   ];
 
   disabledTests = [

@@ -76,7 +76,10 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "-m 'not onlycluster and not ssl'" ];
+  disabledTestMarks = [
+    "onlycluster"
+    "ssl"
+  ];
 
   disabledTests = [
     # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'

@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  configureFlags = [
+    "--with-boost=${boost.dev}"
+  ];
+
   preCheck = ''
     patchShebangs test/python
   ''

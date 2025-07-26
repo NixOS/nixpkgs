@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.12.13";
+  version = "3.12.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-/lzbGnF3+ufs+GPtm+avjQ+lGVCsiE2E64NkRHS3wCM=";
+    hash = "sha256-KPPxP6x/3sz2mDJNswh/xPatcMtVdYv3aArg//7tSao=";
   };
 
   patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [

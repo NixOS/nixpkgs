@@ -83,11 +83,10 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [
-    "-W"
+  pytestFlags = [
     # DeprecationWarning: Triggering of __jax_array__() during abstractification is deprecated.
     # To avoid this error, either explicitly convert your object using jax.numpy.array(), or register your object as a pytree.
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

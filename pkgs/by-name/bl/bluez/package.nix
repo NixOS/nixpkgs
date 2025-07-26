@@ -2,6 +2,7 @@
   lib,
   stdenv,
   alsa-lib,
+  autoreconfHook,
   dbus,
   docutils,
   ell,
@@ -34,6 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-EIUi2QnSIFgTmb/sk9qrYgNVOc7vPdo+eZcHhcY70kw=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "static.patch";
+      url = "https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw";
+      hash = "sha256-4Yz3ljsn2emJf+uTcJO4hG/YXvjERtitce71TZx5Hak=";
+    })
+  ];
+
   buildInputs = [
     alsa-lib
     dbus
@@ -47,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     docutils
     pkg-config
     python3Packages.pygments
@@ -101,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "nfc")
     (lib.enableFeature true "pie")
     (lib.enableFeature true "sixaxis")
+    (lib.enableFeature (lib.elem "libsystemd" udev.meta.pkgConfigModules) "systemd")
     # Set "deprecated" to provide ciptool, sdptool, and rfcomm (unmaintained);
     # superseded by new D-Bus APIs
     (lib.enableFeature true "deprecated")

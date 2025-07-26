@@ -111,7 +111,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = lib.optionals (!doFullCheck) [
+  enabledTestPaths = lib.optionals (!doFullCheck) [
     # These are the most basic tests. Running all tests is too expensive, and
     # some of them fail (also differently on different platforms), so it will
     # be too hard to maintain such a `disabledTests` list.

@@ -1154,19 +1154,13 @@ self: super:
   );
 
   # xvfb is used by a bunch of things to run tests
-  # and doesn't support hardware accelerated rendering
-  # so remove it from the rebuild heavy path for mesa
+  # so try to reduce its reverse closure
   xvfb = super.xorgserver.overrideAttrs (old: {
     configureFlags = [
       "--enable-xvfb"
       "--disable-xorg"
       "--disable-xquartz"
       "--disable-xwayland"
-      "--disable-glamor"
-      "--disable-glx"
-      "--disable-dri"
-      "--disable-dri2"
-      "--disable-dri3"
       "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
       "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
       "--with-xkb-output=$out/share/X11/xkb/compiled"
@@ -1176,10 +1170,15 @@ self: super:
     ];
 
     buildInputs = old.buildInputs ++ [
+      dri-pkgconfig-stub
+      libdrm
+      libGL
+      mesa-gl-headers
       xorg.pixman
       xorg.libXfont2
       xorg.xtrans
       xorg.libxcvt
+      xorg.libxshmfence
     ];
   });
 

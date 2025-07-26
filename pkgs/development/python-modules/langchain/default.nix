@@ -102,10 +102,13 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    "--only-core"
+  ];
+
+  enabledTestPaths = [
     # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
-    "--only-core"
   ];
 
   disabledTests = [

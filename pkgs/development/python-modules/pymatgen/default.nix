@@ -120,11 +120,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymatgen" ];
 
-  pytestFlagsArray = [
-    # We have not packaged moyopy yet.
-    "--deselect=tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
-  ];
-
   nativeCheckInputs = [
     addBinToPathHook
     pytestCheckHook
@@ -175,6 +170,9 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # We have not packaged moyopy yet.
+    "tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
+
     # Crash when running the pmg command
     # Critical error: required built-in appearance SystemAppearance not found
     "tests/cli/test_pmg_plot.py"

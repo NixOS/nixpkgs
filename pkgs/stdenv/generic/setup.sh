@@ -1386,6 +1386,9 @@ patchPhase() {
     local -a patchesArray
     concatTo patchesArray patches
 
+    local -a flagsArray
+    concatTo flagsArray patchFlags=-p1
+
     for i in "${patchesArray[@]}"; do
         echo "applying patch $i"
         local uncompress=cat
@@ -1404,8 +1407,6 @@ patchPhase() {
                 ;;
         esac
 
-        local -a flagsArray
-        concatTo flagsArray patchFlags=-p1
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"

@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "--ignore=docs" ];
+  disabledTestPaths = [ "docs" ];
 
   meta = with lib; {
     description = "Integration of factory_boy into the pytest runner";
