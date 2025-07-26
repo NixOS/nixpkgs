@@ -11,7 +11,7 @@
 
 buildGoModule {
   pname = "phantomsocks";
-  version = "unstable-2023-11-30";
+  version = "0-unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "macronut";

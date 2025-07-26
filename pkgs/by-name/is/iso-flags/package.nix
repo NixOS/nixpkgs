@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "iso-flags";
-  version = "unstable-18012020";
+  version = "0-unstable-18012020";
 
   src = fetchFromGitHub {
     owner = "joielechong";

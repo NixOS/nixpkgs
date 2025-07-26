@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unpfs";
-  version = "unstable-2021-04-23";
+  version = "0-unstable-2021-04-23";
 
   src = fetchFromGitHub {
     owner = "pfpacket";

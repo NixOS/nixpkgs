@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "pgf-umlcd";
-  version = "unstable-2020-05-28";
+  version = "0-unstable-2020-05-28";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";

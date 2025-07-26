@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aseq2json";
-  version = "unstable-2018-04-28";
+  version = "0-unstable-2018-04-28";
   src = fetchFromGitHub {
     owner = "google";
     repo = "midi-dump-tools";

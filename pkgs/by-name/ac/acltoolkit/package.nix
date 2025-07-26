@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonPackage {
   pname = "acltoolkit";
-  version = "unstable-2023-02-03";
+  version = "0-unstable-2023-02-03";
   format = "setuptools";
 
   src = fetchFromGitHub {

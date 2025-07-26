@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "apfs-fuse";
-  version = "unstable-2023-03-12";
+  version = "0-unstable-2023-03-12";
 
   src = fetchFromGitHub {
     owner = "sgan81";

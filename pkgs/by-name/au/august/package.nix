@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "august";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "yoav-lavi";

@@ -10,7 +10,7 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cargo-vibe";
-  version = "unstable-2022-12-29";
+  version = "0-unstable-2022-12-29";
 
   src = fetchFromGitHub {
     owner = "Shadlock0133";
