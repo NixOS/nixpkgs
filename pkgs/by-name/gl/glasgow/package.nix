@@ -100,7 +100,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [
+      flokli
+      thoughtpolice
+    ];
     mainProgram = "glasgow";
   };
 }
