@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchurl {
     url = "https://github.com/NixOS/${pname}/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-9ANtPuTY4ijewb7/8PbkbYpA6eVw4AaOOdd+YuLIvcI=";
+    sha256 = "sha256-GVKyp4K6V2J5whHulC40F0j9tEmX9wTdU970bNBVRws=";
   };
 
   strictDeps = true;
