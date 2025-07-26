@@ -63,6 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm build
+
+    runHook postBuild
+  '';
+
+
   #passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
   #  ${lib.getExe finalAttrs.finalPackage} --help > $out
   #'';
