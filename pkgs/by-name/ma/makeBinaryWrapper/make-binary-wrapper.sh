@@ -208,6 +208,31 @@ makeCWrapper() {
     [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
     [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
+    printf '%s' '
+#ifdef _WIN32
+#include <windows.h>
+
+int setenv(const char *name, const char *value, int overwrite) {
+    if (!name || !*name || strchr(name, '\''='\'')) {
+        return -1;
+    }
+
+    if (!overwrite && GetEnvironmentVariable(name, NULL, 0)) {
+        return 0;
+    }
+
+    if (SetEnvironmentVariable(name, value) == 0) {
+        return -1;
+    }
+
+    return 0;
+}
+
+int unsetenv(const char *name) {
+    return setenv(name, NULL, 1);
+}
+#endif
+'
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     [ -z "$resolve_argv0" ] || printf '\n%s\n' "$(resolveArgv0Fn)"
