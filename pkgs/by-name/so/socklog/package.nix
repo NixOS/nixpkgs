@@ -27,8 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     echo "$NIX_CC/bin/cc $NIX_CFLAGS_COMPILE"   >src/conf-cc
     echo "$NIX_CC/bin/cc -s"                    >src/conf-ld
+
+    runHook postConfigure
   '';
 
   buildPhase = "package/compile";

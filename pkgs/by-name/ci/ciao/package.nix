@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./ciao-boot.sh configure --instype=global --prefix=$prefix
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

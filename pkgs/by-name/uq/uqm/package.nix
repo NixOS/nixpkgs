@@ -113,11 +113,15 @@ stdenv.mkDerivation rec {
   # uqm has a 'unique' build system with a root script incidentally called
   # 'build.sh'.
   configurePhase = ''
+    runHook preConfigure
+
     echo "INPUT_install_prefix_VALUE='$out'" >> config.state
     echo "INPUT_install_bindir_VALUE='$out/bin'" >> config.state
     echo "INPUT_install_libdir_VALUE='$out/lib'" >> config.state
     echo "INPUT_install_sharedir_VALUE='$out/share'" >> config.state
     PREFIX=$out ./build.sh uqm config
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

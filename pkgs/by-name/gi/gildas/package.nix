@@ -68,11 +68,15 @@ stdenv.mkDerivation rec {
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
 
   configurePhase = ''
+    runHook preConfigure
+
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
+
+    runHook postConfigure
   '';
 
   userExec = "astro class greg mapping sic";
