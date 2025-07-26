@@ -10,7 +10,6 @@
   gdb,
   glib,
   lttng-ust,
-  mesa,
   perl,
   pkg-config,
   python3,
@@ -27,7 +26,7 @@
   suru-icon-theme,
   validatePkgConfig,
   wrapQtAppsHook,
-  xvfb-run,
+  headlessDisplayHook,
 }:
 
 let
@@ -148,8 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     dpkg # `dpkg-architecture -qDEB_HOST_ARCH` response decides how tests are run
     gdb
-    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
-    xvfb-run
+    headlessDisplayHook
   ];
 
   qmakeFlags = [
@@ -178,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${qtPluginPaths}
     export XDG_DATA_DIRS=${suru-icon-theme}/share
 
-    tests/xvfb.sh make check ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
+    make check ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
 
     runHook postCheck
   '';
