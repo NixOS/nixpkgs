@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "n2";
-  version = "unstable-2025-03-14";
+  version = "0-unstable-2025-03-14";
 
   src = fetchFromGitHub {
     owner = "evmar";

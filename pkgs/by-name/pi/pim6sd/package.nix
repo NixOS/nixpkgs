@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "pim6sd";
-  version = "unstable-2019-05-31";
+  version = "0-unstable-2019-05-31";
 
   src = fetchFromGitHub {
     owner = "troglobit";

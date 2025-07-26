@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "taizen";
-  version = "unstable-2023-06-05";
+  version = "0-unstable-2023-06-05";
 
   src = fetchFromGitHub {
     owner = "NerdyPepper";

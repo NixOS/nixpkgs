@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "cotton";
-  version = "unstable-2023-09-13";
+  version = "0-unstable-2023-09-13";
 
   src = fetchFromGitHub {
     owner = "danielhuang";
