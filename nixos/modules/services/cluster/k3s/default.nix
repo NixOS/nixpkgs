@@ -40,7 +40,7 @@ let
     with builtins;
     fromJSON (
       readFile (
-        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ yq-go ]; } ''
+        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
           yq --no-colors --output-format json ${path} > $out
         ''
       )
