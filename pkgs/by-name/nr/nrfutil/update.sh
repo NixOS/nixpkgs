@@ -14,6 +14,7 @@ declare -A versions
 declare -A hashes
 
 architectures["x86_64-linux"]="x86_64-unknown-linux-gnu"
+architectures["aarch64-linux"]="aarch64-unknown-linux-gnu"
 architectures["x86_64-darwin"]="x86_64-apple-darwin"
 architectures["aarch64-darwin"]="aarch64-apple-darwin"
 
