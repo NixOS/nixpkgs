@@ -5,32 +5,52 @@
   cmake,
   pkg-config,
   makeWrapper,
-  SDL,
-  SDL_mixer,
-  SDL_net,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
   wxGTK32,
+  zlib,
+  fltk,
+  curl,
+  cairo,
+  pango,
+  glfw,
+  glm,
+  alsa-lib,
+  deutex,
+  portmidi,
 }:
 
 stdenv.mkDerivation rec {
   pname = "odamex";
-  version = "0.9.5";
+  version = "11.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.bz2";
-    sha256 = "sha256-WBqO5fWzemw1kYlY192v0nnZkbIEVuWmjWYMy+1ODPQ=";
+    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.gz";
+    hash = "sha256-fk6DrAhUa3eOqeCNWjSoKg9X81Bb3jrUq6JloTwfE4c=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     makeWrapper
+    deutex
   ];
 
   buildInputs = [
-    SDL
-    SDL_mixer
-    SDL_net
+    glm
+    glfw
+    fltk
+    zlib
+    SDL2
+    SDL2_mixer
+    SDL2_net
     wxGTK32
+    curl
+    cairo
+    pango
+    alsa-lib
+    portmidi
   ];
 
   installPhase = ''
