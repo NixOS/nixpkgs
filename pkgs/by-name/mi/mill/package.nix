@@ -2,20 +2,16 @@
   lib,
   stdenv,
   fetchurl,
-  jre,
-  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mill";
-  version = "0.12.14";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${finalAttrs.version}/mill-dist-${finalAttrs.version}.exe";
-    hash = "sha256-2MyufFcgKH/bxVB83qXNESByAdgbzhyIHqAr36Bb9o0=";
+    hash = "sha256-pgkwME2xs4ezfWS1HGFS2uPIqqvECTOAILWmCqci2Aw=";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -26,19 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 "$src" "$out/bin/.mill-wrapped"
-    # can't use wrapProgram because it sets --argv0
-    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
-      --prefix PATH : "${jre}/bin" \
-      --set JAVA_HOME "${jre}"
+    install -Dm555 "$src" "$out/bin/mill"
     runHook postInstall
-  '';
-
-  doInstallCheck = true;
-  # The default release is a script which will do an impure download
-  # just ensure that the application can run without network
-  installCheckPhase = ''
-    $out/bin/mill --help > /dev/null
   '';
 
   meta = with lib; {
