@@ -22,15 +22,15 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "akira";
   version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    tag = "v${version}";
-    sha256 = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
   };
 
   nativeBuildInputs = [
@@ -64,16 +64,16 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       neonfuz
     ];
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    teams = with lib.teams; [ pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.akiraux.akira";
   };
-}
+})
