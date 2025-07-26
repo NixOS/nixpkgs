@@ -5562,12 +5562,6 @@
     matrix = "@dan:matrix.org";
     name = "Daniel Theriault";
   };
-  dan4ik605743 = {
-    email = "6057430gu@gmail.com";
-    github = "dan4ik605743";
-    githubId = 86075850;
-    name = "Danil Danevich";
-  };
   danbst = {
     email = "abcz2.uprola@gmail.com";
     github = "danbst";
