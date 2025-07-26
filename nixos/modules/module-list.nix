@@ -1099,6 +1099,7 @@
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/clatd.nix
+  ./services/networking/cloud-ddns.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cloudflare-warp.nix
   ./services/networking/cloudflared.nix
