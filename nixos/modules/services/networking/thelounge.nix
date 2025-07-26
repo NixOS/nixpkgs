@@ -11,7 +11,35 @@ let
   cfg = config.services.thelounge;
   dataDir = "/var/lib/thelounge";
   configJsData =
-    "module.exports = " + builtins.toJSON ({ inherit (cfg) public port; } // cfg.extraConfig);
+    let
+      configObj = {
+        inherit (cfg) public port;
+      } // cfg.extraConfig;
+    in
+    ''
+      module.exports = (() => {
+        const config = ${builtins.toJSON configObj};
+
+        // Helper function to process environment variable references
+        const processEnvVars = (obj) => {
+          if (typeof obj !== 'object' || obj === null) return obj;
+
+          Object.keys(obj).forEach(key => {
+            if (typeof obj[key] === 'string') {
+              // Replace $${VARIABLE_NAME} with the environment variable value
+              obj[key] = obj[key].replace(/\$\$\{([A-Za-z0-9_]+)\}/g, (match, envVar) => {
+                return process.env[envVar] || "";
+              });
+            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+              processEnvVars(obj[key]);
+            }
+          });
+          return obj;
+        };
+
+        return processEnvVars(config);
+      })();
+    '';
   pluginManifest = {
     dependencies = builtins.listToAttrs (
       builtins.map (pkg: {
@@ -85,7 +113,18 @@ in
         The options defined here will be merged to the default configuration file.
         Note: In case of duplicate configuration, options from {option}`extraConfig` have priority.
 
+        You can read Environment Variables from your config by using `$${MY_ENV_VAR}`.
+
         Documentation: <https://thelounge.chat/docs/server/configuration>
+      '';
+    };
+    envFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/etc/thelounge/env";
+      description = ''
+        Path to file containing environment variables for The Lounge.
+        Useful for sensitive configuration like LDAP passwords.
       '';
     };
 
@@ -118,6 +157,7 @@ in
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;
         ExecStart = "${getExe cfg.package} start";
+        EnvironmentFile = mkIf (cfg.envFile != null) cfg.envFile;
       };
     };
 
