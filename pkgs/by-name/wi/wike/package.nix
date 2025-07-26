@@ -50,9 +50,13 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-    pygobject3
+  propagatedBuildInputs = [
+    (python3.withPackages (
+      pkgs: with pkgs; [
+        pygobject3
+        requests
+      ]
+    ))
   ];
 
   # prevent double wrapping
@@ -61,6 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
 
     patchShebangs --update $out/share/wike/wike-sp
+    wrapPythonProgramsIn "$out/share/wike" "$out $pythonPath"
   '';
 
   passthru = {
