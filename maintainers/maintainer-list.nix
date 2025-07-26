@@ -24351,6 +24351,13 @@
     githubId = 7258858;
     name = "Sandro Jäckel";
   };
+  superherointj = {
+    email = "sergiomarcelo@yandex.com";
+    github = "superherointj";
+    githubId = 5861043;
+    matrix = "@superherointj:matrix.org";
+    name = "Sérgio Marcelo";
+  };
   supinie = {
     name = "supinie";
     email = "nix@supinie.com";
