@@ -13528,6 +13528,8 @@ self: super: with self; {
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
+  pyppeteer-stealth = callPackage ../development/python-modules/pyppeteer-stealth { };
+
   pyppmd = callPackage ../development/python-modules/pyppmd { };
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
