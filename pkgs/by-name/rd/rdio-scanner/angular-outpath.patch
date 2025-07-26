@@ -1,0 +1,20 @@
+diff --git a/client/angular.json b/client/angular.json
+index 076f5e5..7e9f716 100644
+--- a/angular.json
++++ b/angular.json
+@@ -20,7 +20,7 @@
+         "build": {
+           "builder": "@angular-devkit/build-angular:browser",
+           "options": {
+-            "outputPath": "../server/webapp",
++            "outputPath": "/build/webapp",
+             "index": "src/index.html",
+             "main": "src/main.ts",
+             "polyfills": "src/polyfills.ts",
+@@ -113,4 +113,4 @@
+     }
+   },
+   "defaultProject": "rdio-scanner"
+-}
+\ No newline at end of file
++}
