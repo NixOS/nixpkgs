@@ -30,13 +30,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.4.13";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-srXX49sXJnxa/7GQzP1pdJ77qeZbK1Ge8OPfrq3s5m8=";
+    hash = "sha256-8XEmjouHGg7P8Sk2g0y0QwfB9ISfUgE1vm1xkNkeu1c=";
     leaveDotGit = true;
     fetchSubmodules = true;
     postFetch = ''
@@ -77,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cacheRoot = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-PhjMY4bAt+Prx8tmgGCZ7fhAyKhOUudrJO9K8yr7F18=";
+    hash = "sha256-mrg82l8UEObGqI74CdRkFaztuHJ73RRRZW76n75CiQc=";
   };
 
   cacheApp = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/app/yarn.lock";
-    hash = "sha256-eW3G4saTbjRUexgg+n0z4EU1YtAgvSoW+uU0rNZZ1l0=";
+    hash = "sha256-FTKqpay0ysConZ0LoAAgSxiNJqO1te7G20XHRzQj0WE=";
   };
 
   dontYarnInstallDeps = true;
