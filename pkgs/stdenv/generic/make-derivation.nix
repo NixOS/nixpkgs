@@ -874,6 +874,8 @@ let
 
         inherit passthru overrideAttrs;
         inherit meta;
+        devShell = stdenv.buildShellEnv { drvAttrs = derivationArg; };
+
       }
       //
         # Pass through extra attributes that are not inputs, but
