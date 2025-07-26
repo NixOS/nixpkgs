@@ -230,7 +230,7 @@ in
             type = types.str;
             default = if cfg.enableNginx then "localhost,127.0.0.1,${cfg.domain}" else "";
             defaultText = lib.literalExpression ''
-              if cfg.enableNginx then "localhost,127.0.0.1,$${cfg.domain}" else ""
+              if cfg.enableNginx then "localhost,127.0.0.1,''${cfg.domain}" else ""
             '';
             description = "Comma-separated list of hosts that are able to connect to the server";
           };
@@ -328,16 +328,10 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ln -sfT ${cfg.backendPackage}/share/static /var/lib/lasuite-meet/static
-
         if [ ! -f .version ]; then
           touch .version
         fi
 
-        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
-          echo -n "${cfg.backendPackage.version}" > .version
-        fi
         ${optionalString (cfg.secretKeyPath == null) ''
           if [[ ! -f /var/lib/lasuite-meet/django_secret_key ]]; then
             (
@@ -346,11 +340,17 @@ in
             )
           fi
         ''}
+        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
+          ${getExe cfg.backendPackage} migrate
+          echo -n "${cfg.backendPackage.version}" > .version
+        fi
       '';
 
       environment = pythonEnvironment;
 
       serviceConfig = {
+        BindReadOnlyPaths = "${cfg.backendPackage}/share/static:/var/lib/lasuite-meet/static";
+
         ExecStart = utils.escapeSystemdExecArgs (
           [
             (lib.getExe' cfg.backendPackage "gunicorn")
