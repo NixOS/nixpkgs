@@ -57,10 +57,14 @@ stdenvNoCC.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ${unpack}/bin/unpack
     dd bs=1 skip=${firmwareOffset} count=${firmwareSize} if=${firmwareIn} of=${firmwareOut}.gz &> /dev/null
     mkdir -p $out/lib/firmware/facetimehd
     gunzip -c ${firmwareOut}.gz > $out/lib/firmware/facetimehd/${firmwareOut}
+
+    runHook postBuild
   '';
 
   meta = with lib; {

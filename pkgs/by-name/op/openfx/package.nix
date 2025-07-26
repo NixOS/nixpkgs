@@ -23,8 +23,12 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir $dev
     mkdir $out
+
+    runHook postBuild
   '';
 
   installPhase = ''

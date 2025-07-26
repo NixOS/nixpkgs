@@ -84,8 +84,12 @@ let
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       substituteInPlace usr/share/applications/vk.desktop \
         --replace /usr/share/pixmaps/vk.png vk
+
+      runHook postBuild
     '';
 
     installPhase = ''

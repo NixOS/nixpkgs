@@ -28,6 +28,8 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     # convert bdf fonts to psf
     build=$(pwd)
     mkdir psf
@@ -53,6 +55,8 @@ stdenv.mkDerivation {
         faketime -f "1970-01-01 00:00:01" \
         fonttosfnt -v -o "$name.otb" "$i"
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''

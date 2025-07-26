@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir rkboot
     for i in $(ls ./RKBOOT/*.ini)
     do
@@ -22,6 +24,8 @@ stdenv.mkDerivation {
       # x86_64 only. Though we use box64 to emulate if building on aarch64-linux
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "${qemu}/bin/qemu-x86_64"} ./tools/boot_merger "$i" || true
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''

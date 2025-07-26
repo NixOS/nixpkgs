@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib ];
 
   buildPhase = ''
+    runHook preBuild
+
     cd source
     make PREFIX="$out"
 
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     CXXFLAGS+=" -I../source" \
     LDFLAGS+=" -L../source" \
     make PREFIX="$out"
+
+    runHook postBuild
   '';
 
   installPhase = ''

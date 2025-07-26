@@ -14,7 +14,11 @@ stdenv.mkDerivation {
     cp $src jpegexiforient.c
   '';
   buildPhase = ''
+    runHook preBuild
+
     $CC -o jpegexiforient jpegexiforient.c
+
+    runHook postBuild
   '';
   installPhase = ''
     install -Dt $out/bin jpegexiforient

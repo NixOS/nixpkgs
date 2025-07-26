@@ -47,6 +47,8 @@ stdenv.mkDerivation {
   # Note that the drivers attempt to dlopen
   # $out/lib/cups/filter/libcnbpcnclapicom2.so
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/lib
     cp com/libs_bin_x86_64/* $out/lib
     mkdir -p $out/lib/cups/filter
@@ -108,6 +110,8 @@ stdenv.mkDerivation {
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin
       make
     )
+
+    runHook postBuild
   '';
 
   installPhase = ''

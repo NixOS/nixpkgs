@@ -34,7 +34,11 @@ let
     ];
 
     buildPhase = ''
+      runHook preBuild
+
       python checker.py dldeps
+
+      runHook postBuild
     '';
 
     installPhase = ''
@@ -64,8 +68,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ln -s '${deps}/dependencies' '${deps}/extras' .
     JAVA_HOME='${jdk_headless}' python checker.py build
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -21,9 +21,13 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cd Marlin/src
     c++ module/planner.cpp module/calc.cpp feature/fwretract.cpp \
       -O2 -Wall -std=gnu++11 -o marlin-calc
+
+    runHook postBuild
   '';
 
   installPhase = ''

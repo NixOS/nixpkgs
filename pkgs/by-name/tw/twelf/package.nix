@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     export SMLNJ_HOME=${smlnj}
     make smlnj
+
+    runHook postBuild
   '';
 
   installPhase = ''

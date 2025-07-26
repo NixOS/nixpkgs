@@ -26,8 +26,12 @@ stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     faust2jaqt -time -vec -t 0 mooSpace.dsp
     faust2lv2  -time -vec -t 0 -gui mooSpace.dsp
+
+    runHook postBuild
   '';
 
   installPhase = ''
