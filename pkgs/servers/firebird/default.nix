@@ -46,6 +46,8 @@ let
     ]
     ++ (lib.optional superServer "--enable-superserver");
 
+    enableParallelBuilding = true;
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out
