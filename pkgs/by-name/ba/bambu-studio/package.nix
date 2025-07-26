@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.10.02.76";
+  version = "02.02.00.60";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
+    hash = "sha256-irr6Stw8g0aADCcPPtlR2rip1l7IS+JiKOKtmBQuL5w=";
   };
 
   nativeBuildInputs = [
@@ -117,12 +117,6 @@ stdenv.mkDerivation rec {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
-    # Fix the build with newer Boost versions. All but one commit is
-    # from <https://github.com/bambulab/BambuStudio/pull/3968>.
-    ./0001-Replace-deprecated-boost-filesystem-string_file.hpp-.patch
-    ./0002-Replace-deprecated-Boost-methods-options.patch
-    ./0003-Fix-additional-Boost-upgrade-issues.patch
-    ./0004-Remove-deprecated-Boost-filesystem-header.patch
   ];
 
   doCheck = true;
