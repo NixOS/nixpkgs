@@ -5,6 +5,14 @@ source @phpScriptUtils@
 
 declare -g out
 declare -g composerLock
+declare -g composerNoDev
+declare -g composerNoPlugins
+declare -g composerNoScripts
+
+declare -ga composerFlags=()
+[[ -n "$composerNoDev" ]] && composerFlags+=(--no-dev)
+[[ -n "$composerNoPlugins" ]] && composerFlags+=(--no-plugins)
+[[ -n "$composerNoScripts" ]] && composerFlags+=(--no-scripts)
 
 preConfigureHooks+=(composerVendorConfigureHook)
 preBuildHooks+=(composerVendorBuildHook)
@@ -32,9 +40,7 @@ composerVendorConfigureHook() {
       --no-interaction \
       --no-progress \
       --optimize-autoloader \
-      ${composerNoDev:+--no-dev} \
-      ${composerNoPlugins:+--no-plugins} \
-      ${composerNoScripts:+--no-scripts} \
+      "${composerFlags[@]}" \
       update
 
     if [[ -f "composer.lock" ]]; then
@@ -76,9 +82,7 @@ composerVendorBuildHook() {
     --no-interaction \
     --no-progress \
     --optimize-autoloader \
-    ${composerNoDev:+--no-dev} \
-    ${composerNoPlugins:+--no-plugins} \
-    ${composerNoScripts:+--no-scripts} \
+    "${composerFlags[@]}" \
     install
 
   echo "Finished composerVendorBuildHook"
