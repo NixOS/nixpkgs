@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cmake,
@@ -27,15 +28,24 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.22.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     tag = "v${version}";
-    hash = "sha256-xof6lFb0DhmWVmYuBNslcGZs82NRkcgZgt+SX9gsrBY=";
+    hash = "sha256-mrEZOSHdUmD2Rtv0tUDFaDSgxrdwjK1fc5PHlNJ2G+k=";
   };
+
+  patches = [
+    (fetchpatch {
+      # to be removed after next release
+      name = "libheif-1.20.1-support.patch";
+      url = "https://github.com/bigcat88/pillow_heif/commit/8bca08b1481800ea94ab6ca08b05a889835887ca.patch";
+      hash = "sha256-dV1syNzhYgLdKgaFLNV5NJoiU3Z1r8Hookcs/ULlSVI=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
