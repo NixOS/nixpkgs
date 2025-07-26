@@ -6,6 +6,7 @@
   node-gyp,
   vips,
   nix-update-script,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
@@ -60,6 +61,9 @@ buildNpmPackage rec {
         "--version-regex"
         "^v(\\d+\\.\\d+\\.\\d+)$"
       ];
+    };
+    tests = {
+      inherit (nixosTests) librechat;
     };
   };
 
