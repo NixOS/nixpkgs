@@ -82,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     # Version hasn't changed in 17 years, if it suddenly does these tests deserve to break
     $out/bin/audit2allow --version | grep -Fm1 'audit2allow .1'
     $out/bin/audit2why --version | grep -Fm1 'audit2allow .1'
@@ -96,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Should at least run, even if we can't provide it a policy file and need to provide /dev/zero
     { $out/bin/sepolgen-ifgen-attr-helper test /dev/null 2>&1 || true; } | grep -Fm1 'error(s) encountered' >/dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

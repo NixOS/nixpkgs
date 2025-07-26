@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     ant runalltests
+
+    runHook postCheck
   '';
 
   meta = with lib; {

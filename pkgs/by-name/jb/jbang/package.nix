@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
   '';
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/jbang --version 2>&1 | grep -q "${version}"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

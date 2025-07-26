@@ -61,10 +61,14 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     patchShebangs tests/
     cd tests
     rm gpos_diff_test.py # needs ttxn?
     ./run_tests
+
+    runHook postCheck
   '';
 
   postInstall = ''

@@ -61,7 +61,11 @@ rustPlatform.buildRustPackage rec {
   # Make sure the final binary actually runs
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/electrs --version
+
+    runHook postInstallCheck
   '';
 
   meta = {

@@ -65,7 +65,11 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/ecppack $out/share/trellis/misc/basecfgs/empty_lfe5u-85f.config /tmp/test.bin
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -28,7 +28,11 @@ rustPlatform.buildRustPackage {
   doCheck = false;
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/catfs --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -44,7 +44,11 @@ buildGoModule rec {
   );
 
   checkPhase = ''
+    runHook preCheck
+
     go test -v $(go list ./.../ | grep -v 'vendor')
+
+    runHook postCheck
   '';
 
   doInstallCheck = true;

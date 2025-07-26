@@ -26,9 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     runHook preCheck
     make test
     runHook postCheck
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

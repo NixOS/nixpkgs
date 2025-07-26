@@ -91,12 +91,16 @@ python3Packages.buildPythonApplication rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     output="$($out/bin/electron-cash help 2>&1)"
     if [[ "$output" == *"failed to load"* ]]; then
       echo "$output"
       echo "Forbidden text detected: failed to load"
       exit 1
     fi
+
+    runHook postInstallCheck
   '';
 
   meta = {

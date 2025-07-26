@@ -21,7 +21,11 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/hackertyper -v
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

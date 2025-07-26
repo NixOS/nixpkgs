@@ -29,7 +29,11 @@ rustPlatform.buildRustPackage rec {
 
   # Sanity check.
   checkPhase = ''
+    runHook preCheck
+
     $releaseDir/ptags --help > /dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {

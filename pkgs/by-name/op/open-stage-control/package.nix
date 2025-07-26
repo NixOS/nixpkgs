@@ -68,7 +68,11 @@ buildNpmPackage rec {
   '';
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     XDG_CONFIG_HOME="$(mktemp -d)" $out/bin/open-stage-control --help
+
+    runHook postInstallCheck
   '';
 
   desktopItems = [

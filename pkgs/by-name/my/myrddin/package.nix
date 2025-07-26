@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     make check
+
+    runHook postCheck
   '';
 
   doCheck = true;

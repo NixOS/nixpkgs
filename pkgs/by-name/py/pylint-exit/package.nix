@@ -30,7 +30,11 @@ buildPythonApplication rec {
   TRAVIS_TAG = version;
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -m doctest pylint_exit.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

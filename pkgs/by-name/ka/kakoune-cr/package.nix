@@ -44,7 +44,11 @@ crystal.buildCrystalPackage rec {
   '';
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/kcr --help
+
+    runHook postInstallCheck
   '';
 
   dontCheckForBrokenSymlinks = true;

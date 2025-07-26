@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     echo "***Muparserx self-test***"
     echo "quit" | ./example > test_result.log
     cat test_result.log
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
     else
       echo -e "\nmuparserx tests succeeded"
     fi
+
+    runHook postCheck
   '';
 
   meta = with lib; {

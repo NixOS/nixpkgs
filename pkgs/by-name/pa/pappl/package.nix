@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/pappl-makeresheader --help
+
+    runHook postInstallCheck
   '';
 
   enableParallelBuilding = true;

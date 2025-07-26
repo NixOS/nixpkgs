@@ -143,6 +143,8 @@ stdenv.mkDerivation rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
     TEST_ROOT="$(pwd)/../${regression_src.name}"
@@ -163,6 +165,8 @@ stdenv.mkDerivation rec {
       --resultfile="$(pwd)/test_results" \
       --excludelist="$EXCLUDE_TESTS_FILE" \
       "''${EXECSTRING}"
+
+    runHook postCheck
   '';
 
   outputs = [

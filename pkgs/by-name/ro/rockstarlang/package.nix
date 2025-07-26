@@ -27,10 +27,14 @@ buildDotnetModule (finalAttrs: {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     {
       echo 'Shout "it seems to work"'
       echo 'exit'
     } | $out/bin/rockstar | grep '« "it seems to work"'
+
+    runHook postInstallCheck
   '';
 
   meta = {

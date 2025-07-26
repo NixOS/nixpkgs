@@ -47,11 +47,15 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ coreutils ];
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/jmeter --version 2>&1 | grep -q "${version}"
     $out/bin/jmeter-heapdump.sh > /dev/null
     $out/bin/jmeter-shutdown.sh > /dev/null
     $out/bin/jmeter-stoptest.sh > /dev/null
     timeout --kill=1s 1s $out/bin/jmeter-mirror-server.sh || test "$?" = "124"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -30,7 +30,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/tfk8s --version | grep ${tag} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   passthru.tests = {

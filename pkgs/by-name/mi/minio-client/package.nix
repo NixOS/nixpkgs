@@ -28,7 +28,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/mc --version | grep ${version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   passthru.tests.minio = nixosTests.minio;

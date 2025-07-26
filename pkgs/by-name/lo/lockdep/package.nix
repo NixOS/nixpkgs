@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ valgrind ];
   checkPhase = ''
+    runHook preCheck
+
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do
       substituteInPlace $f \
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
     done
 
     ./run_tests.sh
+
+    runHook postCheck
   '';
 
   installPhase = ''

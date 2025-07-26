@@ -45,6 +45,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     orig_dir="$(pwd)"
     darcs_repos="$(pwd)/darcs_test_repos"
     git_repos="$(pwd)/git_test_repos"
@@ -84,6 +86,8 @@ stdenv.mkDerivation {
     echo "All checks passed." >&2
     cd "$orig_dir"
     rm -rf "$darcs_repos" "$git_repos" "$test_home"
+
+    runHook postCheck
   '';
 
   meta = {

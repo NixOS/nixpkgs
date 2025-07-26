@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/dump-pe ../tests/assets/example.exe
+
+    runHook postInstallCheck
   '';
 
   meta = {

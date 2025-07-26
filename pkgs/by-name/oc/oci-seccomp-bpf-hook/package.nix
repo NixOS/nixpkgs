@@ -35,7 +35,11 @@ buildGoModule rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     go test -v ./...
+
+    runHook postCheck
   '';
 
   buildPhase = ''

@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     export JAVA_HOME=${jre}
     bin/jbake | grep -q "${version}" || (echo "jbake did not return correct version"; exit 1)
+
+    runHook postCheck
   '';
   doCheck = true;
 

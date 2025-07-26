@@ -31,7 +31,11 @@ buildNpmPackage rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/hypershell --help
+
+    runHook postInstallCheck
   '';
 
   meta = {
