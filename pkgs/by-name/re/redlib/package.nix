@@ -6,19 +6,20 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage {
   pname = "redlib";
-  version = "0.36.0";
+  version = "0.36.0-unstable-2025-06-29";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    tag = "v${version}";
-    hash = "sha256-a+FFQqKXYws8b/iGr49eZMVmKBqacQGvW8P51ybtBSc=";
+    rev = "628fbf86cc4edc41cfa54e710b2434edbed97b75";
+    hash = "sha256-FCrK58Dee4hZvRL+YMQNm3bzzfVN5Mu3Od3eN3rJ9Z0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1zPLnkNZvuZS5z9AEJvhyIv+8/y+YhqFcj5Mu7RSqnE=";
+  cargoHash = "sha256-FDeENHY6bwwCq6leSoIuCqPI6PCHpEod7KN2grS2gFw=";
 
   postInstall = ''
     install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
@@ -68,7 +69,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/redlib-org/redlib/releases/tag/v${version}";
     description = "Private front-end for Reddit (Continued fork of Libreddit)";
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;
