@@ -5849,6 +5849,8 @@ self: super: with self; {
 
   giturlparse = callPackage ../development/python-modules/giturlparse { };
 
+  gkeepapi = callPackage ../development/python-modules/gkeepapi { };
+
   glad = callPackage ../development/python-modules/glad { };
 
   glad2 = callPackage ../development/python-modules/glad2 { };
