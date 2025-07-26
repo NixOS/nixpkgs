@@ -28,6 +28,8 @@
   pybind11,
   pooch,
   xsimd,
+  boost188,
+  qhull,
 
   # dependencies
   numpy,
@@ -130,6 +132,8 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
+    boost188
+    qhull
   ];
 
   dependencies = [ numpy ];
@@ -185,6 +189,7 @@ buildPythonPackage {
     # meson the proper cross compilation related arguments. See also:
     # https://docs.scipy.org/doc/scipy/building/cross_compilation.html
     "--cross-file=${crossFileScipy}"
+    "-Duse-system-libraries=all"
   ];
 
   # disable stackprotector on aarch64-darwin for now
