@@ -27,17 +27,19 @@
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
+  cacheRootHash = "sha256-mR5geiPPAv+oK1efT3pMfnUT1keOxB8Ge1yiq4hLtj0=";
+  cacheAppHash = "sha256-y8brlXwBur2RqJD8xlpA9ivg09xIDBuAtolhyzYkRx4=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.4.13";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-srXX49sXJnxa/7GQzP1pdJ77qeZbK1Ge8OPfrq3s5m8=";
+    hash = "sha256-H6FPMp+Y3PmRtuaOVX+8Yd3a5JA+zvLeGeLp99X1+y0=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -75,13 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
   cacheRoot = fetchYarnDeps {
     name = "${finalAttrs.pname}-cache-root";
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-PhjMY4bAt+Prx8tmgGCZ7fhAyKhOUudrJO9K8yr7F18=";
+    hash = cacheRootHash;
   };
 
   cacheApp = fetchYarnDeps {
     name = "${finalAttrs.pname}-cache-app";
     yarnLock = finalAttrs.src + "/app/yarn.lock";
-    hash = "sha256-eW3G4saTbjRUexgg+n0z4EU1YtAgvSoW+uU0rNZZ1l0=";
+    hash = cacheAppHash;
   };
 
   dontYarnInstallDeps = true;
@@ -100,9 +102,26 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ git-lfs ]}
 
 
-    for native in fs-admin keytar desktop-trampoline windows-argv-parser; do
-      yarn --offline --cwd app/node_modules/$native build
+    # exception: printenvz needs `node-gyp` configure first for some reason
+    pushd node_modules/printenvz
+    node node_modules/.bin/node-gyp configure
+    popd
+
+    declare -a natives=(
+      app/node_modules/fs-admin
+      app/node_modules/keytar
+      app/node_modules/desktop-trampoline
+      app/node_modules/windows-argv-parser
+      node_modules/printenvz
+    )
+    for native in "''${natives[@]}"; do
+      yarn --offline --cwd $native build
     done
+
+    # exception: desktop-trampoline doesn't include `node-gyp rebuild` in its build script anymore
+    pushd app/node_modules/desktop-trampoline
+    node-gyp rebuild
+    popd
 
     yarn compile:script
 
