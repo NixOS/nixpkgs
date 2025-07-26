@@ -241,12 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
-      # from some reason.
-      moveToOutput "bin/pcc" "''${!outputDev}"
 
       # Handle informative binaries about the compilation
-      for i in {prte,ompi,oshmem}_info; do
+      for i in {ompi,oshmem}_info; do
         moveToOutput "bin/$i" "''${!outputDev}"
       done
     '';
