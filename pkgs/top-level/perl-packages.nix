@@ -3358,7 +3358,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
     ];
@@ -3779,7 +3778,6 @@ with self;
     buildInputs = [
       CatalystRuntime
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
     ];
@@ -4153,7 +4151,6 @@ with self;
     buildInputs = [
       CatalystRuntime
       TestLongString
-      TestSimple13
       TestWWWMechanize
       TestWWWMechanizeCatalyst
       TextCSV
@@ -6414,7 +6411,6 @@ with self;
     };
     buildInputs = [
       TestException
-      TestSimple13
     ];
     meta = {
       description = "Run code after a subroutine call, preserving the context the subroutine would have seen if it were the last statement in the caller";
@@ -7293,7 +7289,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       CaptureTiny
@@ -10027,7 +10022,6 @@ with self;
     };
     buildInputs = [
       DBIxClass
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DBDSQLite
@@ -10647,7 +10641,6 @@ with self;
       namespaceclean
     ];
     buildInputs = [
-      TestSimple13
       TestWarnings
     ];
     meta = {
@@ -15563,7 +15556,6 @@ with self;
       hash = "sha256-vJpKo47JjwqYKJ41q/mhfC8qMjmiIJoymADglwqi4MU=";
     };
     propagatedBuildInputs = [ HashMerge ];
-    buildInputs = [ TestSimple13 ];
 
     meta = {
       description = "Return difference between two hashes as a hash";
@@ -17445,7 +17437,6 @@ with self;
     ];
     buildInputs = [
       ModuleBuildTiny
-      TestSimple13
     ];
     meta = {
       description = "Functions for working with IO::Handle like objects";
@@ -24084,7 +24075,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
       TestTableDriven
     ];
     propagatedBuildInputs = [
@@ -24237,7 +24227,6 @@ with self;
       MooseXRoleParameterized
       TestFatal
       TestRequires
-      TestSimple13
     ];
     propagatedBuildInputs = [
       Moose
@@ -24336,7 +24325,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DateTime
@@ -24362,7 +24350,6 @@ with self;
     buildInputs = [
       ModuleBuildTiny
       TestFatal
-      TestSimple13
     ];
     propagatedBuildInputs = [
       DateTimeXEasy
@@ -31788,7 +31775,6 @@ with self;
     };
     buildInputs = [
       TestException
-      TestSimple13
       TestTableDriven
     ];
     propagatedBuildInputs = [
@@ -33290,7 +33276,6 @@ with self;
       IPCRun3
       Test2Suite
     ];
-    propagatedBuildInputs = [ TestSimple13 ];
     meta = {
       description = "Fail if tests warn";
       homepage = "https://metacpan.org/release/Test2-Plugin-NoWarnings";
@@ -33310,7 +33295,6 @@ with self;
       ScopeGuard
       SubInfo
       TermTable
-      TestSimple13
     ];
     meta = {
       description = "Distribution with a rich set of tools built upon the Test2 framework";
@@ -35168,21 +35152,6 @@ with self;
     };
   };
 
-  TestSimple13 = buildPerlPackage {
-    pname = "Test-Simple";
-    version = "1.302195";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302195.tar.gz";
-      hash = "sha256-s5C7I1kuC5Rsla27PDCxG8Y0ooayhHvmEa2SnFfjmmw=";
-    };
-    meta = {
-      description = "Basic utilities for writing tests";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
 
   TestSnapshot = buildPerlPackage {
     pname = "Test-Snapshot";
@@ -38969,7 +38938,6 @@ with self;
     buildInputs = [
       ExtUtilsDepends
       TestFatal
-      TestSimple13
     ];
     meta = {
       description = "Opaque, extensible XS pointer backed objects using sv_magic";
