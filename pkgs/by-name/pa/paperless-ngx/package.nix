@@ -149,6 +149,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "pathvalidate"
     "redis"
   ];
 

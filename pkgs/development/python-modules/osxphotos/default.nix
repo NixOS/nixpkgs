@@ -25,6 +25,7 @@
   tenacity,
   textx,
   toml,
+  tzdata,
   wrapt,
   wurlitzer,
   xdg-base-dirs,
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     tenacity
     textx
     toml
+    tzdata
     wrapt
     wurlitzer
     xdg-base-dirs
@@ -108,6 +110,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    broken = stdenv.hostPlatform.isDarwin;
+    # missing utitools dependency
+    broken = true && stdenv.hostPlatform.isDarwin;
   };
 }
