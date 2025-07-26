@@ -244,6 +244,23 @@ lib.makeOverridable (
           # Required for deterministic builds along with some postPatch magic.
           ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
           ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
+          # Starting with Linux 6.16, LoongArch uses the generic script/install.sh
+          # to perform the make install operation.
+          # We backport the relevant commit to earlier versions so that
+          # we don't have to maintain some postInstall logic for LoongArch.
+          ++
+            optional
+              (
+                lib.versionAtLeast version "5.19"
+                && lib.versionOlder version "6.16"
+                && stdenv.hostPlatform.isLoongArch64
+              )
+              (
+                (fetchpatch {
+                  url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=75cffd392bfabc30ee88836887ea5439ec3b8089";
+                  hash = "sha256-CtalygmqI9yk4JnXdSTqUBjA//7vTgKTHQ/64Ylb1RQ=";
+                })
+              )
           # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
           # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
           # https://github.com/openzfs/zfs/pull/13367
