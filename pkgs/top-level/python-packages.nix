@@ -1635,6 +1635,8 @@ self: super: with self; {
 
   backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
 
+  backrefs = callPackage ../development/python-modules/backrefs { };
+
   backtesting = callPackage ../development/python-modules/backtesting { };
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
@@ -9272,6 +9274,8 @@ self: super: with self; {
   mkdocs-awesome-nav = callPackage ../development/python-modules/mkdocs-awesome-nav { };
 
   mkdocs-backlinks = callPackage ../development/python-modules/mkdocs-backlinks { };
+
+  mkdocs-build-plantuml = callPackage ../development/python-modules/mkdocs-build-plantuml { };
 
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
 
