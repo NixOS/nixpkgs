@@ -68,12 +68,11 @@ for user in "${!users[@]}"; do
     fi
 done
 
-if [[ "${#users[@]}" -gt 10 ]]; then
-    log "Too many reviewers (${!users[*]}), skipping review requests"
-    exit 0
+if [[ "${#users[@]}" -gt 15 ]]; then
+    log "Too many reviewers (${!users[*]}), will assign only first 15 for review"
 fi
 
-for user in "${!users[@]}"; do
+for user in "${!users[@]:0:15}"; do
     log "Requesting review from: $user"
 
     if ! response=$(jq -n --arg user "$user" '{ reviewers: [ $user ] }' | \
