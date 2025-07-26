@@ -87,11 +87,11 @@ let
             pname
             src
             version
+            vendorHash
             ;
           inherit
             php
             composer
-            vendorHash
             composerLock
             composerNoDev
             composerNoPlugins
