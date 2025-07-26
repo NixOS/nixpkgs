@@ -50,6 +50,7 @@ let
       runHook preInstall
       mkdir -p $out
       cp -r gen/Release/firebird/* $out
+      rm $out/lib/*.a  # they were just symlinks to /build/source/...
       runHook postInstall
     '';
 
