@@ -35,7 +35,10 @@
   A derivation that runs a derivation's `unpackPhase` and `patchPhase`, and then copies the result to the output path.
 */
 
-attrs:
+{
+  noSuffix ? false,
+  ...
+}@attrs:
 let
   args = attrs.drvAttrs or attrs;
   name = args.name or "${args.pname}-${args.version}";
@@ -43,7 +46,7 @@ let
   drv = stdenv.mkDerivation (
     args
     // {
-      name = "${name}-source";
+      name = if noSuffix then name else "${name}-source";
 
       outputs = [ "out" ];
 
