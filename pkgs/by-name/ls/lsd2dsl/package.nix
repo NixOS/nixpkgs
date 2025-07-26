@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   makeDesktopItem,
   copyDesktopItems,
   cmake,
@@ -25,6 +26,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-0UsxDNpuWpBrfjh4q3JhZnOyXhHatSa3t/cApiG2JzM=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/nongeneric/lsd2dsl/commit/bbda5be1b76a4a44804483d00c07d79783eceb6b.patch";
+      hash = "sha256-7is83D1cMBArXVLe5TP7D7lUcwnTMeXjkJ+cbaH5JQk=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace "-Werror" ""
