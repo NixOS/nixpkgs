@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ puredata ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip $src
+
+    runHook postUnpack
   '';
 
   installPhase = ''

@@ -80,7 +80,11 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       rpmextract $src
+
+      runHook postUnpack
     '';
 
     buildPhase = ''

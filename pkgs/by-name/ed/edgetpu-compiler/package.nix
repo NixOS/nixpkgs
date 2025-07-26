@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir bin pkg
 
     dpkg -x $src pkg
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     cp -r pkg/usr/share .
 
     rm -r pkg
+
+    runHook postUnpack
   '';
 
   dontConfigure = true;

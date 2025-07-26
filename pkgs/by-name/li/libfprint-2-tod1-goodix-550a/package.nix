@@ -18,10 +18,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip $src/libfprint-tod-goodix-550a-0.0.9.zip
     cd libfprint-tod-goodix-550a-0.0.9
     ar x libfprint-2-tod-goodix_amd64.deb
     tar xf data.tar.xz
+
+    runHook postUnpack
   '';
 
   buildPhase = ''

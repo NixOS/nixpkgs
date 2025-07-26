@@ -32,9 +32,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ avahi ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unpackFile $src
     echo y | ./${installerName}.sh
     sourceRoot="NDI SDK for Linux";
+
+    runHook postUnpack
   '';
 
   installPhase = ''

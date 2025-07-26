@@ -47,9 +47,13 @@ stdenv.mkDerivation rec {
   # Don't remove this. The default fails with 'do not know how to unpack source archive'
   # every now and then on Hydra. No idea why.
   unpackPhase = ''
+    runHook preUnpack
+
     tar xf $src
     sourceRoot=$(echo x42-plugins-*)
     chmod -R u+w $sourceRoot
+
+    runHook postUnpack
   '';
 
   makeFlags = [

@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir build
     cd build
     unzip ${src}
+
+    runHook postUnpack
   '';
 
   postPatch = ''

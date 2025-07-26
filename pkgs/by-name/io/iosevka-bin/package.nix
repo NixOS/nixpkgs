@@ -33,8 +33,12 @@ stdenv.mkDerivation rec {
   dontInstall = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p $out/share/fonts
     unzip -d $out/share/fonts/truetype $src
+
+    runHook postUnpack
   '';
 
   meta = {

@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ tnt ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir "${pname}-${version}"
     unzip "$src"
+
+    runHook postUnpack
   '';
   installPhase = ''
     mkdir -p $out/include

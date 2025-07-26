@@ -27,7 +27,11 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ rpmextract ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     rpmextract $src/perccli-00${version}00.0000-1.noarch.rpm
+
+    runHook postUnpack
   '';
 
   dontPatch = true;

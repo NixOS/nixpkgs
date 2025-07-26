@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip ${src}
+
+    runHook postUnpack
   '';
 
   installPhase = ''

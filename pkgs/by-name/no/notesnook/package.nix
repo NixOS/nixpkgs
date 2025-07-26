@@ -97,7 +97,11 @@ let
 
     # 7zz did not unpack in setup hook for some reason, done manually here
     unpackPhase = ''
+      runHook preUnpack
+
       7zz x $src
+
+      runHook postUnpack
     '';
 
     installPhase = ''

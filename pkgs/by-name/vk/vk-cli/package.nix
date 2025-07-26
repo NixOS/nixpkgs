@@ -29,8 +29,12 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p $TMP/
     7z x $src -o$TMP/
+
+    runHook postUnpack
   '';
 
   installPhase = ''

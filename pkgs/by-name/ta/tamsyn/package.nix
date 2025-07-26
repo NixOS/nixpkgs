@@ -24,7 +24,11 @@ stdenv.mkDerivation {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     tar -xzf $src --strip-components=1
+
+    runHook postUnpack
   '';
 
   postBuild = ''

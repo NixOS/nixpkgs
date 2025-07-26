@@ -11,7 +11,11 @@ stdenv.mkDerivation {
     sha256 = "1v0f42cvs0397g9v46p294ldgxwbp285npg6npgnlnvapk6nzh5s";
   };
   unpackPhase = ''
+    runHook preUnpack
+
     cp $src jpegexiforient.c
+
+    runHook postUnpack
   '';
   buildPhase = ''
     $CC -o jpegexiforient jpegexiforient.c

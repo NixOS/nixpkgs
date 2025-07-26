@@ -52,8 +52,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg-deb -x $src .
     dpkg-deb -x $lpr_src .
+
+    runHook postUnpack
   '';
 
   patches = [

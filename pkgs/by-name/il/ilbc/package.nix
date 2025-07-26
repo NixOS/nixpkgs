@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -v ${name}
     cd ${name}
     ${gawk}/bin/gawk -f ${script} ${rfc3951}
     cp -v ${./CMakeLists.txt} CMakeLists.txt
+
+    runHook postUnpack
   '';
 
   meta = {
