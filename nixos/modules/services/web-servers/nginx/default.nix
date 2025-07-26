@@ -207,6 +207,7 @@ let
             ${optionalString cfg.recommendedTlsSettings ''
               # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
+              ssl_ecdh_curve X25519:prime256v1:secp384r1;
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -214,10 +215,6 @@ let
               # We don't enable insecure ciphers by default, so this allows
               # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
-
-              # OCSP stapling
-              ssl_stapling on;
-              ssl_stapling_verify on;
             ''}
 
             ${optionalString cfg.recommendedBrotliSettings ''
