@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.13.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "HBNetwork";
     repo = "python-decouple";

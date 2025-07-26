@@ -34,8 +34,6 @@ let
     version = "1.3.2";
     format = "pyproject";
 
-    disabled = pythonOlder "3.8";
-
     src = fetchFromGitHub {
       owner = "contourpy";
       repo = "contourpy";

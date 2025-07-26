@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "3.21.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";

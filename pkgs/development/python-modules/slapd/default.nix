@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   # Pypi tarball doesn't include tests/
   src = fetchFromGitHub {
     owner = "python-ldap";

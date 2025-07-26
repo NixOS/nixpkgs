@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "2.7.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";

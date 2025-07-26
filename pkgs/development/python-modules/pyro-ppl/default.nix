@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "1.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "pyro";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "crownstone";
     repo = "crownstone-lib-python-core";

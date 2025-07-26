@@ -17,8 +17,6 @@ buildPythonPackage {
   version = "0.0.15";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "wez";
     repo = "govee-py";

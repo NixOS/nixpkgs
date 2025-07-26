@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   # PyPI dist missing test configuration files:
   src = fetchFromGitHub {
     owner = "pyxnat";

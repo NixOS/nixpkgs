@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.1.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "adubkov";
     repo = "py-zabbix";

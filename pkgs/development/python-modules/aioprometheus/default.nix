@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "unstable-2023-03-14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "claws";
     repo = "aioprometheus";

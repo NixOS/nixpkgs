@@ -16,8 +16,6 @@ let
     pname = "opentelemetry-sdk";
     pyproject = true;
 
-    disabled = pythonOlder "3.8";
-
     sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-sdk";
 
     build-system = [ hatchling ];

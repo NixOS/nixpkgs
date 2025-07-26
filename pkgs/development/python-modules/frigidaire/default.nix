@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.18.24";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "bm1549";
     repo = "frigidaire";

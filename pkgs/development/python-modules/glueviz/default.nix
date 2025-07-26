@@ -29,8 +29,6 @@ buildPythonPackage rec {
   version = "1.22.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";

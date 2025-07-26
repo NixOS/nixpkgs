@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.2.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "xhtml2pdf";
     repo = "xhtml2pdf";

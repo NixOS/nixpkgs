@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_graph_stores_neo4j";
     inherit version;

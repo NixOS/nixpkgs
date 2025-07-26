@@ -12,8 +12,6 @@ buildPythonPackage rec {
   pname = "siobrultech-protocols";
   version = "0.14.0";
 
-  disabled = pythonOlder "3.8";
-
   format = "setuptools";
 
   src = fetchFromGitHub {

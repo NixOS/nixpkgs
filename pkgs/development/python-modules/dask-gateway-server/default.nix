@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2023.9.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";

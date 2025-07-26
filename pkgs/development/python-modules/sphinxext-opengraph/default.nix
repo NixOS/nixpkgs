@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.9.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.3.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nNipsx-Sec";
     repo = "pySigma-backend-qradar";

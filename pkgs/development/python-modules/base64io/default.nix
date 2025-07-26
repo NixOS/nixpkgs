@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.0.3-unstable-2025-01-09";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "aws";
     repo = "base64io-python";

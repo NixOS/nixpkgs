@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mjumbewu";
     repo = "django-rest-framework-csv";

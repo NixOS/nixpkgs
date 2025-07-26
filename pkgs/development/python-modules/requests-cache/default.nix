@@ -35,8 +35,6 @@ buildPythonPackage rec {
   version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";

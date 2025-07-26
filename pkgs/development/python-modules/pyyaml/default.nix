@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "6.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";

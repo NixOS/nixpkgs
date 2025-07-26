@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pyasn1";
     repo = "pyasn1-modules";

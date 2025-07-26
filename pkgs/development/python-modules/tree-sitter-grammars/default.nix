@@ -160,8 +160,6 @@ buildPythonPackage {
     rm -r ${snakeCaseName}
   '';
 
-  disabled = pythonOlder "3.8";
-
   nativeCheckInputs = [
     tree-sitter
     pytestCheckHook

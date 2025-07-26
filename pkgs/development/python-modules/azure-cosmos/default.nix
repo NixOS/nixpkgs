@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "4.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "azure_cosmos";
     inherit version;

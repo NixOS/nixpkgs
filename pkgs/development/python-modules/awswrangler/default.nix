@@ -29,8 +29,6 @@ buildPythonPackage rec {
   version = "3.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";

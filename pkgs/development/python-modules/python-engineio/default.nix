@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "4.12.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";

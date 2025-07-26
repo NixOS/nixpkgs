@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     owner = "doctormo";
     repo = "python-crontab";

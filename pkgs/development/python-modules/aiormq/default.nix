@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "6.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiormq";

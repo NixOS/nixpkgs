@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";

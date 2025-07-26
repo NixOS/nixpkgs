@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.16.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "rytilahti";
     repo = "python-songpal";

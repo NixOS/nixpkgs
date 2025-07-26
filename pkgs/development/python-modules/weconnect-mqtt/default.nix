@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.49.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";

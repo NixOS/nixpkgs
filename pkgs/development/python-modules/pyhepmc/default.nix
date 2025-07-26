@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.14.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "pyhepmc";

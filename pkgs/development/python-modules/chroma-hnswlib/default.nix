@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.7.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "hnswlib";

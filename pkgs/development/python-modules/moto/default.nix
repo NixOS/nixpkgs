@@ -41,8 +41,6 @@ buildPythonPackage rec {
   version = "5.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";

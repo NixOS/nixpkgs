@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "4.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";

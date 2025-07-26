@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.15.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "malwarefrank";
     repo = "dnfile";

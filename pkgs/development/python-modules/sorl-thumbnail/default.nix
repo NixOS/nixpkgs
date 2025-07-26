@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "12.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "sorl_thumbnail";
     inherit version;

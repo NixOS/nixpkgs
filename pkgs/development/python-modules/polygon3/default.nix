@@ -10,8 +10,6 @@ buildPythonPackage {
   version = "3.0.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jraedler";
     repo = "Polygon3";

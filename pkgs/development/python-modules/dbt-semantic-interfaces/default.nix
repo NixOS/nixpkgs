@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.8.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";

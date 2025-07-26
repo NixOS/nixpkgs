@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_graph_stores_neptune";
     inherit version;

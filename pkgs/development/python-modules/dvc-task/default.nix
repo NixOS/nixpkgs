@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.40.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-task";

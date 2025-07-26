@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "tago-io";
     repo = "tago-sdk-python";

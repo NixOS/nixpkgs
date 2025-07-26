@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-dingz";

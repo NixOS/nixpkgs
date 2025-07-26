@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "mkdocs-autolinks-plugin";
   version = "071";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zachhannum";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "PyVISA-sim";
     inherit version;

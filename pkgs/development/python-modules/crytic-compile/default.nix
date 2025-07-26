@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.3.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "crytic-compile";

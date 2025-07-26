@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.0.0a4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "martyanov";
     repo = "aetcd";

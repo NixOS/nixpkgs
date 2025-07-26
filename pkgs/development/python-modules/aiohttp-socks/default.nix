@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";

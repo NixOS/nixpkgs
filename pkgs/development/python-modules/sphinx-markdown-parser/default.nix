@@ -20,8 +20,6 @@ buildPythonPackage {
   version = "0.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "clayrisser";
     repo = "sphinx-markdown-parser";

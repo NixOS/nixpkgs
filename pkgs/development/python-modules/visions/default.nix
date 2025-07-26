@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "dylan-profiler";
     repo = "visions";

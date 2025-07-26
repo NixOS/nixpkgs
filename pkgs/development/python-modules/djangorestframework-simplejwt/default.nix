@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "5.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";
     inherit version;

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "allisson";
     repo = "python-simple-rest-client";

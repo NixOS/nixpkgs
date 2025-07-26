@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2024.8.6";
   format = "wheel";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";

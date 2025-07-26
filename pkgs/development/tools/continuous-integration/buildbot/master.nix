@@ -78,8 +78,6 @@ buildPythonApplication rec {
   version = "4.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "buildbot";
     repo = "buildbot";

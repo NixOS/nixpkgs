@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "0.1.26";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version;
     pname = "outlines_core";

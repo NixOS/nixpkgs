@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.9.48.post4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_legacy";
     inherit version;

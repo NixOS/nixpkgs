@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.7.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "gabrielcnr";
     repo = "pytest-datadir";

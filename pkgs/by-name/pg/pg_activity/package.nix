@@ -8,7 +8,6 @@ python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
   version = "3.6.1";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";

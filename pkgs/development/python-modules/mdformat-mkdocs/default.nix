@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "4.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
