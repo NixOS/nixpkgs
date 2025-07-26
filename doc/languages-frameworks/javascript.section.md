@@ -97,6 +97,10 @@ Then when building the frontend you can just symlink the node_modules directory.
 
 ## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
+:::{.warning}
+`nodePackages` is deprecated and no new packages should be added to it. Use `buildNpmPackage` instead.
+:::
+
 The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [npm packages](https://npmjs.com/) that can be installed with the Nix package manager.
 
 As a rule of thumb, the package set should only provide _end user_ software packages, such as command-line utilities.
@@ -133,6 +137,10 @@ For example, `dat` requires `node-gyp-build`, so we override its expression in [
 ```
 
 ### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
+
+:::{.warning}
+`nodePackages` is deprecated and no new packages should be added to it. Use `buildNpmPackage` instead.
+:::
 
 To add a package from npm to nixpkgs:
 
