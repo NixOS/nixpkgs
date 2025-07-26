@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitiles,
   pkg-config,
+  coreutils,
   libuuid,
   openssl,
   libyaml,
@@ -43,6 +44,8 @@ stdenv.mkDerivation {
     # Drop flag unrecognized by GCC 9 (for e.g. aarch64-linux)
     substituteInPlace Makefile \
       --replace "-Wno-unknown-warning" ""
+
+    substituteInPlace futility/misc.c --replace-fail "/bin/cp" "${coreutils}/bin/cp"
   '';
 
   preBuild = ''
