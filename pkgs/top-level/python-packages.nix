@@ -2156,6 +2156,8 @@ self: super: with self; {
 
   btsocket = callPackage ../development/python-modules/btsocket { };
 
+  bubblejail = callPackage ../development/python-modules/bubblejail { };
+
   bubop = callPackage ../development/python-modules/bubop { };
 
   bucketstore = callPackage ../development/python-modules/bucketstore { };
@@ -8711,6 +8713,8 @@ self: super: with self; {
   lxml-html-clean = callPackage ../development/python-modules/lxml-html-clean { };
 
   lxml-stubs = callPackage ../development/python-modules/lxml-stubs { };
+
+  lxns = callPackage ../development/python-modules/lxns { };
 
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
