@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mrtrix";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
     rev = finalAttrs.version;
-    hash = "sha256-5GcQVZaRV7A6aA/ES6qR0dNBrToJiUXt/LyLYmnpvlQ=";
+    hash = "sha256-cPI6Ac1Yp5yb07zv9r5O7ZbsHpjrv5BkzbAW1qgj3gQ=";
     fetchSubmodules = true;
   };
 
