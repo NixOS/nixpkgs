@@ -59,14 +59,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  pytestFlags = [
+    "tests/unit_tests"
+  ];
 
-  disabledTests =
-    lib.optionals (stdenvNoCC.hostPlatform.isLinux && stdenvNoCC.hostPlatform.isAarch64)
-      [
-        # Compares a diff to a string literal and misses platform differences
-        "test_serdes"
-      ];
+  disabledTests = [
+    # Compares a diff to a string literal, but breaks on protocol change
+    # AssertionError: assert [+ received] == [- snapshot]
+    # https://github.com/langchain-ai/langchain/issues/32173
+    "test_serdes"
+  ];
 
   pythonImportsCheck = [ "langchain_xai" ];
 

@@ -4,15 +4,17 @@
   fetchFromGitHub,
 
   # build system
-  poetry-core,
+  hatchling,
 
   # dependencies
   aiosqlite,
   langgraph-checkpoint,
+  sqlite-vec,
 
   # testing
   pytest-asyncio,
   pytestCheckHook,
+  sqlite,
 
   # passthru
   gitUpdater,
@@ -20,27 +22,32 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.6";
+  version = "2.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointsqlite==${version}";
-    hash = "sha256-UUlrhQS0C2rPp//+LwU2rgR4R3AM5fM9X3CYvi/DAy8=";
+    hash = "sha256-570rXAxS4p2b7fc1aqSNArXHTz7G2GjZQDqMlqK7Jso=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiosqlite
     langgraph-checkpoint
+    sqlite-vec
   ];
 
   pythonRelaxDeps = [
     "aiosqlite"
+
+    # Bug: version is showing up as 0.0.0
+    # https://github.com/NixOS/nixpkgs/issues/427197
+    "sqlite-vec"
 
     # Checkpoint clients are lagging behind langgraph-checkpoint
     "langgraph-checkpoint"
@@ -51,6 +58,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    sqlite
+  ];
+
+  disabledTestPaths = [
+    # Failed: 'flaky' not found in `markers` configuration option
+    "tests/test_ttl.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: (fails object comparison due to extra runtime fields)
+    # https://github.com/langchain-ai/langgraph/issues/5604
+    "test_combined_metadata"
+    "test_asearch"
+    "test_search"
   ];
 
   passthru.updateScript = gitUpdater {

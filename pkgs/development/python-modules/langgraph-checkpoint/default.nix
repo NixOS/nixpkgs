@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -13,6 +13,8 @@
 
   # testing
   dataclasses-json,
+  numpy,
+  pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -23,19 +25,19 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.26";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-DSkjaxUfpsOg2ex0dgfO/UJ7WiQb5wQsAGgHPTckF6o=";
+    hash = "sha256-UY3AChShKfOrtOQzOm5vi3Yy3rlBc+TAje9L2L6My/U=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -48,6 +50,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dataclasses-json
+    numpy
+    pandas
     pytest-asyncio
     pytest-mock
     pytestCheckHook
