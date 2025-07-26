@@ -103,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  patches = [ ./0001-Silence-flood-of-deprecation-warnings.patch ];
+
   configureFlags = [
     # specify delegates explicitly otherwise `convert` will invoke the build
     # coreutils for filetypes it doesn't natively support.
