@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     # compress pcf fonts
     gzip -n -9 pcf/*
 
@@ -33,6 +35,8 @@ stdenv.mkDerivation {
         faketime -f "1970-01-01 00:00:01" \
         fonttosfnt -v -o "$name.otb" "$i"
     done
+
+    runHook postBuild
   '';
 
   postInstall = ''

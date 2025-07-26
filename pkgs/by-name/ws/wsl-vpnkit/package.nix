@@ -19,7 +19,11 @@ let
   version = "0.4.1";
   gvproxyWin = gvproxy.overrideAttrs (_: {
     buildPhase = ''
+      runHook preBuild
+
       GOARCH=amd64 GOOS=windows go build -ldflags '-s -w' -o bin/gvproxy-windows.exe ./cmd/gvproxy
+
+      runHook postBuild
     '';
   });
 in

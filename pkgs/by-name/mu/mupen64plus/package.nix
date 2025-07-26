@@ -46,7 +46,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     dash m64p_build.sh PREFIX="$out" COREDIR="$out/lib/" PLUGINDIR="$out/lib/mupen64plus" SHAREDIR="$out/share/mupen64plus"
+
+    runHook postBuild
   '';
   installPhase = ''
     dash m64p_install.sh DESTDIR="$out" PREFIX=""

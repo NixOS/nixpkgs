@@ -131,9 +131,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ninjaBuildPhase
     cd ../..
     tauriBuildHook
+
+    runHook postBuild
   '';
 
   postInstall = ''

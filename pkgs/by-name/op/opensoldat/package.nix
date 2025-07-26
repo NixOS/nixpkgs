@@ -31,7 +31,11 @@ let
     nativeBuildInputs = [ zip ];
 
     buildPhase = ''
+      runHook preBuild
+
       sh create_smod.sh
+
+      runHook postBuild
     '';
 
     installPhase = ''

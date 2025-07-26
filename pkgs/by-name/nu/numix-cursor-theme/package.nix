@@ -23,8 +23,12 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs .
     HOME=$TMP ./build.sh
+
+    runHook postBuild
   '';
 
   installPhase = ''

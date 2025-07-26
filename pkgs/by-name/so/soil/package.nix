@@ -21,9 +21,13 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     cd src
     $CC $NIX_CFLAGS_COMPILE -c *.c
     $AR rcs libSOIL.a *.o
+
+    runHook postBuild
   '';
   installPhase = ''
     mkdir -p $out/lib $out/include/SOIL

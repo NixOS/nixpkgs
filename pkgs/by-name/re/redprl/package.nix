@@ -24,7 +24,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ./script/mlton.sh
+
+    runHook postBuild
   '';
 
   installPhase = ''

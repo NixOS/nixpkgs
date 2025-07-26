@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
+    runHook preBuild
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi
+
+    runHook postBuild
   '';
 
   installPhase = ''

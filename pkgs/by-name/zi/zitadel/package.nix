@@ -37,7 +37,11 @@ let
       vendorHash = goModulesHash;
 
       buildPhase = ''
+        runHook preBuild
+
         go install internal/protoc/protoc-gen-${name}/main.go
+
+        runHook postBuild
       '';
 
       postInstall = ''
@@ -75,8 +79,12 @@ let
       ];
 
       buildPhase = ''
+        runHook preBuild
+
         cd ${workDir}
         HOME=$TMPDIR buf generate ${bufArgs}
+
+        runHook postBuild
       '';
 
       installPhase = ''

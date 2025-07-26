@@ -14,9 +14,13 @@ stdenv.mkDerivation {
     sha256 = "0lnscljgbw0s90sfcahwvnxakml0f4d8jxi5ikm4ak8qgnvw6rql";
   };
   buildPhase = ''
+    runHook preBuild
+
     mcs ConvChain.cs -out:convchain.exe -r:System.Drawing
     mcs ConvChainFast.cs -out:convchainfast.exe -r:System.Drawing
     grep -m1 -B999 '^[*][/]' ConvChainFast.cs > COPYING.MIT
+
+    runHook postBuild
   '';
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/convchain,share/convchain}

@@ -20,7 +20,11 @@ stdenv.mkDerivation {
     fpc
   ];
   buildPhase = ''
+    runHook preBuild
+
     fpc DolbyBi64.PP
+
+    runHook postBuild
   '';
   installPhase = ''
     mkdir -p $out/bin

@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     inconsolata=${google-fonts} migu=${migu} ./ricty_generator.sh auto
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -24,7 +24,11 @@ let
     nativeBuildInputs = [ bun ];
     dontConfigure = true;
     buildPhase = ''
+      runHook preBuild
+
       bun install --no-progress --frozen-lockfile
+
+      runHook postBuild
     '';
     installPhase = ''
       mkdir -p $out/node_modules

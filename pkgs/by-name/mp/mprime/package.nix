@@ -62,8 +62,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
+
     make -C gwnum -f ${gwnum}
     make -C ${srcDir}
+
+    runHook postBuild
   '';
 
   installPhase = ''

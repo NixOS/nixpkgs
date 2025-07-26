@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   postPatch = "patchShebangs .";
 
   buildPhase = ''
+    runHook preBuild
+
     # convert font to compressed pcf
     bdftopcf u_vga16.bdf | gzip -c -9 -n  > u_vga16.pcf.gz
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
     ./bdf2psf.pl -s UniCyrX.sfm u_vga16.bdf \
       | psfaddtable - UniCyrX.sfm - \
       | gzip -c -9 -n > u_vga16.psf.gz
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/scripts";
 
   buildPhase = ''
+    runHook preBuild
+
     $CC nad2bin.c -o nad2bin
+
+    runHook postBuild
   '';
 
   installPhase = ''

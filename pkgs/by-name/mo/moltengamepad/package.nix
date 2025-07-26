@@ -21,7 +21,11 @@ stdenv.mkDerivation {
   buildInputs = [ udev ];
 
   buildPhase = ''
+    runHook preBuild
+
     make
+
+    runHook postBuild
   '';
 
   installPhase = ''

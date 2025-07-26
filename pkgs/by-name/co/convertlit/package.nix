@@ -29,10 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cd lib
     make
     cd ../clit18
     make
+
+    runHook postBuild
   '';
 
   installPhase = ''

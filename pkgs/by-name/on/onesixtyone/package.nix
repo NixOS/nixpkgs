@@ -16,7 +16,11 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     $CC -o onesixtyone onesixtyone.c
+
+    runHook postBuild
   '';
 
   installPhase = ''

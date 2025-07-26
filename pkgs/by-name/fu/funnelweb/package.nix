@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     cd source
     ${stdenv.cc}/bin/cc -D__linux__ -o fw *.c
+
+    runHook postBuild
   '';
 
   installPhase = ''

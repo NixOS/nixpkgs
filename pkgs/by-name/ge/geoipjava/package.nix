@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   buildInputs = [ jdk ];
   buildPhase = ''
+    runHook preBuild
+
     cd source
     javac $(find . -name \*.java)
     jar cfv maxmindgeoip.jar $(find . -name \*.class)
+
+    runHook postBuild
   '';
   installPhase = ''
     mkdir -p $out/share/java

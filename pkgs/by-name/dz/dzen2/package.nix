@@ -37,10 +37,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin $out/man/man1
     make clean install
     cd gadgets
     make clean install
+
+    runHook postBuild
   '';
 
   meta = {

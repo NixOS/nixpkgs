@@ -19,7 +19,11 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ scdoc ];
 
   buildPhase = ''
+    runHook preBuild
+
     scdoc < app2unit.1.scd > app2unit.1
+
+    runHook postBuild
   '';
 
   installPhase = ''

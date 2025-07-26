@@ -42,6 +42,8 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     # build the brickd binary
     mkdir src/daemonlib
     cp -r ${daemonlib}/* src/daemonlib
@@ -57,6 +59,8 @@ stdenv.mkDerivation {
       echo "running unit test $i:"
       ./$i
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''
