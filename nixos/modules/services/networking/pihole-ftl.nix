@@ -260,7 +260,7 @@ in
         files = {
           database = "${cfg.stateDirectory}/pihole-FTL.db";
           gravity = "${cfg.stateDirectory}/gravity.db";
-          macvendor = "${cfg.stateDirectory}/gravity.db";
+          macvendor = "${cfg.stateDirectory}/macvendor.db";
           log.ftl = "${cfg.logDirectory}/FTL.log";
           log.dnsmasq = "${cfg.logDirectory}/pihole.log";
           log.webserver = "${cfg.logDirectory}/webserver.log";
