@@ -11,6 +11,7 @@
   which,
   autoAddDriverRunpath,
   makeWrapper,
+  nix-update-script,
 
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
   coreMLSupport ? stdenv.hostPlatform.isDarwin && false, # FIXME currently broken
@@ -169,6 +170,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "$out/bin/whisper-cli" --help >/dev/null
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Port of OpenAI's Whisper model in C/C++";
