@@ -10366,6 +10366,8 @@ self: super: with self; {
 
   nipype = callPackage ../development/python-modules/nipype { inherit (pkgs) which; };
 
+  niquests = callPackage ../development/python-modules/niquests { };
+
   nitime = callPackage ../development/python-modules/nitime { };
 
   nitpick = callPackage ../applications/version-management/nitpick { };
@@ -15179,6 +15181,10 @@ self: super: with self; {
 
   qgrid = callPackage ../development/python-modules/qgrid { };
 
+  qh3 = callPackage ../development/python-modules/qh3 {
+    inherit (pkgs) cmake;
+  };
+
   qiling = callPackage ../development/python-modules/qiling { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
@@ -19139,6 +19145,8 @@ self: super: with self; {
 
   urllib3 = callPackage ../development/python-modules/urllib3 { };
 
+  urllib3-future = callPackage ../development/python-modules/urllib3-future { };
+
   urlman = callPackage ../development/python-modules/urlman { };
 
   urlmatch = callPackage ../development/python-modules/urlmatch { };
@@ -19462,6 +19470,8 @@ self: super: with self; {
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
+
+  wassima = callPackage ../development/python-modules/wassima { };
 
   wat = callPackage ../development/python-modules/wat { };
 
