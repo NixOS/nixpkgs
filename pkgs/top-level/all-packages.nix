@@ -5580,6 +5580,7 @@ with pkgs;
 
   mlir_16 = llvmPackages_16.mlir;
   mlir_17 = llvmPackages_17.mlir;
+  flang = llvmPackages_20.flang;
 
   libclc = llvmPackages.libclc;
   libllvm = llvmPackages.libllvm;
@@ -5617,6 +5618,7 @@ with pkgs;
       lldb_20 = llvmPackages_20.lldb;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
+      flang_20 = llvmPackages_20.flang;
 
       llvmPackages_21 = llvmPackagesSet."21";
       clang_21 = llvmPackages_21.clang;
@@ -5624,6 +5626,7 @@ with pkgs;
       lldb_21 = llvmPackages_21.lldb;
       llvm_21 = llvmPackages_21.llvm;
       bolt_21 = llvmPackages_21.bolt;
+      flang_21 = llvmPackages_21.flang;
 
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
@@ -5650,12 +5653,14 @@ with pkgs;
     lldb_20
     llvm_20
     bolt_20
+    flang_20
     llvmPackages_21
     clang_21
     lld_21
     lldb_21
     llvm_21
     bolt_21
+    flang_21
     mkLLVMPackages
     ;
 
