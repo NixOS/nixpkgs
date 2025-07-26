@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "snis_assets";
@@ -24,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r share $out
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Assets for Space Nerds In Space, a multi-player spaceship bridge simulator";
