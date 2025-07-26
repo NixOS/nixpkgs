@@ -6,6 +6,7 @@
   pkg-config,
   qt5,
   cmake,
+  ninja,
   avahi,
   boost,
   libopus,
@@ -51,6 +52,7 @@ let
 
         nativeBuildInputs = [
           cmake
+          ninja
           pkg-config
           python3
           qt5.wrapQtAppsHook
