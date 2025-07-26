@@ -119,5 +119,6 @@ rec {
     locale = "en_UK";
   };
   wordnet = callPackage ./dictd-wordnet.nix { };
+  gcide = callPackage ./gcide { };
   wiktionary = callPackage ./wiktionary { };
 }
