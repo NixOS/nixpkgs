@@ -22,8 +22,10 @@ in
   pihole="${lib.getExe pihole}"
   jq="${lib.getExe pkgs.jq}"
 
+  ${lib.getExe pkgs.curl} "${lib.strings.escapeShellArg cfg.macvendorURL}" -o "${cfg.settings.files.macvendor}"
+
   # If the database doesn't exist, it needs to be created with gravity.sh
-  if [ ! -f '${cfg.stateDirectory}'/gravity.db ]; then
+  if [ ! -f '${cfg.settings.files.gravity}' ]; then
     $pihole -g
     # Send SIGRTMIN to FTL, which makes it reload the database, opening the newly created one
     ${lib.getExe' pkgs.procps "kill"} -s SIGRTMIN $(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})
