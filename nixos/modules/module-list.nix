@@ -1335,6 +1335,7 @@
   ./services/networking/soju.nix
   ./services/networking/solanum.nix
   ./services/networking/spacecookie.nix
+  ./services/networking/speedify.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
   ./services/networking/ssh/sshd.nix
