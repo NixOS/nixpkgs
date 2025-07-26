@@ -1246,9 +1246,9 @@ self: super:
             xorg.xorgproto
           ];
         postFixup = ''
-          substituteInPlace $out/bin/startx \
-            --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc \
-            --replace $out/etc/X11/xinit/xinitrc /etc/X11/xinit/xinitrc
+          sed -i $out/bin/startx \
+            -e '/^sysserverrc=/ s:=.*:=/etc/X11/xinit/xserverrc:' \
+            -e '/^sysclientrc=/ s:=.*:=/etc/X11/xinit/xinitrc:'
         '';
         meta = attrs.meta // {
           mainProgram = "xinit";
