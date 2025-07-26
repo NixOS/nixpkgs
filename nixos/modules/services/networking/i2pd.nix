@@ -184,6 +184,13 @@ let
         (boolOpt "enabled" cfg.ntcp2.enable)
         (boolOpt "published" cfg.ntcp2.published)
         (intOpt "port" cfg.ntcp2.port)
+        (optionalNullString "addressv6" cfg.ntcp2.addressv6)
+        (optionalNullString "proxy" cfg.ntcp2.proxy)
+        (sec "ssu2")
+        (boolOpt "enabled" cfg.ssu2.enable)
+        (boolOpt "published" cfg.ssu2.published)
+        (intOpt "port" cfg.ssu2.port)
+        (optionalNullString "proxy" cfg.ssu2.proxy)
         (sec "addressbook")
         (strOpt "defaulturl" cfg.addressbook.defaulturl)
       ]
@@ -530,14 +537,59 @@ in
       exploratory.inbound = i2cpOpts "exploratory";
       exploratory.outbound = i2cpOpts "exploratory";
 
-      ntcp2.enable = mkEnableTrueOption "NTCP2";
-      ntcp2.published = mkEnableOption "NTCP2 publication";
-      ntcp2.port = mkOption {
-        type = types.port;
-        default = 0;
-        description = ''
-          Port to listen for incoming NTCP2 connections (0=auto).
-        '';
+      ntcp2 = {
+        enable = mkEnableTrueOption "NTCP2";
+        published = mkEnableOption "NTCP2 publication";
+        port = mkOption {
+          type = types.port;
+          default = 0;
+          description = ''
+            Port to listen for incoming NTCP2 connections (0=auto).
+          '';
+        };
+        addressv6 = mkOption {
+          type = nullOr str;
+          default = null;
+          description = ''
+            External IPv6 for incoming connections
+          '';
+        };
+        proxy = mkOption {
+          type = nullOr str;
+          default = null;
+          example = "http://address:port or socks://address:port";
+          description = ''
+            Specify proxy server for NTCP2.
+          '';
+        };
+      };
+
+      ssu2 = {
+        enable = mkEnableTrueOption "SSU2";
+        published = mkEnableOption "SSU2 publication";
+        port = mkOption {
+          type = types.port;
+          default = 0;
+          description = ''
+            Port to listen for incoming SSU2 connections (0=auto).
+          '';
+        };
+        proxy = mkOption {
+          type = nullOr str;
+          default = null;
+          example = "socks://address:port";
+          description = ''
+            Specify UDP socks5 proxy server for SSU2.
+          '';
+        };
+        mtu4 = mkOption {
+          type = nullOr str;
+          default = null;
+          example = "socks://address:port";
+          description = ''
+            Specify UDP socks5 proxy server for SSU2.
+          '';
+        };
       };
 
       limits.transittunnels = mkOption {
