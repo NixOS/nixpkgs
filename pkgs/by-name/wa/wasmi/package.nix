@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmi";
-  version = "0.47.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "wasmi";
     tag = "v${version}";
-    hash = "sha256-N2zEc+++286FBJl6cGh8ibOvHHwMnh4PcOLaRhB/rC0=";
+    hash = "sha256-PY7xKfx4Ly/mXWLJG21dZR60S3yleREq4x276tJ4rzo=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-asl8saHlZ5A05QFs2pSs6jMM6AI29c4DTPu4zw+FMug=";
+  cargoHash = "sha256-D06oWo7QjJVh7xHEz1F4ozbgE6jousTjH4gU2uDOBDo=";
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
