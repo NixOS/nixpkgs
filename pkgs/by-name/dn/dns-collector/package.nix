@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
   meta = {
     changelog = "https://github.com/dmachart/dns-collector/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/dmachart/dns-collector";
-    description = "Ingesting, pipelining, and enhancing your DNS logs with usage indicators, security analysis, and additional metadata. ";
+    description = "Ingesting, pipelining, and enhancing your DNS logs with usage indicators, security analysis, and additional metadata.";
     license = lib.licenses.mit;
     mainProgram = "go-dnscollector";
     maintainers = with lib.maintainers; [ paepcke ];

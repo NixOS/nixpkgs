@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-y20vVO714WPcB2aYzo0LBuJhy224bsHA7O9Dj00ViWE=";
 
   meta = {
-    description = "Public Key Addressable Resource Records (sovereign TLDs) ";
+    description = "Public Key Addressable Resource Records (sovereign TLDs)";
     homepage = "https://github.com/pubky/pkarr";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ dpc ];
