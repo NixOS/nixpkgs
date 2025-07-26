@@ -8,6 +8,7 @@
   jq,
   git,
   writableTmpDirAsHomeHook,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -76,6 +77,9 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) frontend;
+    tests = {
+      inherit (nixosTests) opengist;
+    };
     updateScript = ./update.sh;
   };
 
