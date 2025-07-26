@@ -1,18 +1,24 @@
 { lib, ... }:
 {
-  name = "qtile";
+  name = "qtile-extras";
 
   meta = {
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      gurjaka
+    ];
   };
 
   nodes.machine =
-    { pkgs, lib, ... }:
+    {
+      pkgs,
+      lib,
+      ...
+    }:
     let
       # We create a custom Qtile configuration file that adds a widget from
       # qtile-extras to the bar. This ensure that the qtile-extras package
       # also works, and that extraPackages behave as expected.
-
       config-deriv = pkgs.callPackage ./config.nix { };
     in
     {
