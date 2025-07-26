@@ -9,7 +9,7 @@
 
 buildMozillaMach rec {
   pname = "firefox-devedition";
-  binaryName = "firefox-devedition";
+  binaryName = pname;
   version = "144.0b4";
   applicationName = "Firefox Developer Edition";
   requireSigning = false;

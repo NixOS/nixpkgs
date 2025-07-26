@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shapelib";
-  version = "1.6.2";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://download.osgeo.org/shapelib/shapelib-${version}.tar.gz";
-    hash = "sha256-S3SjbO2U6ae+pAEVfmZK3cxb4lHn33+I1GdDYdoBLCE=";
+    hash = "sha256-XakKYOJUQPEI9OjpVzK/qD7eE8jgwrz4CuQQBsyOvCA=";
   };
 
   doCheck = true;
