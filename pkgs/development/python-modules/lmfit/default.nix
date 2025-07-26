@@ -63,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://lmfit.github.io/lmfit-py/";
     changelog = "https://github.com/lmfit/lmfit-py/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nomeata ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
