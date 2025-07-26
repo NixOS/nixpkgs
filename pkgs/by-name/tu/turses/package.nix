@@ -86,10 +86,14 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     TMP_TURSES=`echo turses-$RANDOM`
     mkdir $TMP_TURSES
     PYTHONPATH=tests:$PYTHONPATH HOME=$TMP_TURSES py.test tests/
     rm -rf $TMP_TURSES
+
+    runHook postCheck
   '';
 
   meta = {

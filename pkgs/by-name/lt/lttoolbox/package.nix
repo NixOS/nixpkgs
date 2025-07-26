@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ python3 ];
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     python3 tests/run_tests.py
+
+    runHook postCheck
   '';
 
   meta = {

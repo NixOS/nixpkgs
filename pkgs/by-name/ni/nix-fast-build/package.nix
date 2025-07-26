@@ -39,7 +39,11 @@ python3Packages.buildPythonApplication rec {
   # Don't run integration tests as they try to run nix
   # to build stuff, which we cannot do inside the sandbox.
   checkPhase = ''
+    runHook preCheck
+
     PYTHONPATH= $out/bin/nix-fast-build --help
+
+    runHook postCheck
   '';
 
   passthru = {

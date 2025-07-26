@@ -142,10 +142,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     # Need to build libs first, Makefile deps not fully defined
     make libs      $makeFlags
     make testsuite $makeFlags
     make -k test   $makeFlags
+
+    runHook postCheck
   '';
 
   short_rev = builtins.substring 0 7 finalAttrs.src.rev;

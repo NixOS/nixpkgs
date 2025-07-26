@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     ./gtests/itpp_gtests
+
+    runHook postCheck
   '';
 
   meta = with lib; {

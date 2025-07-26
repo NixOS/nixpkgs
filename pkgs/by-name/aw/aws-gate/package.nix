@@ -52,7 +52,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/aws-gate --version
+
+    runHook postCheck
   '';
 
   meta = with lib; {

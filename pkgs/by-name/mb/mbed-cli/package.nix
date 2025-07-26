@@ -25,10 +25,14 @@ buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     export GIT_COMMITTER_NAME=nixbld
     export EMAIL=nixbld@localhost
     export GIT_COMMITTER_DATE=$SOURCE_DATE_EPOCH
     pytest test
+
+    runHook postCheck
   '';
 
   meta = with lib; {

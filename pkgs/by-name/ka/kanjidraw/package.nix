@@ -25,7 +25,11 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     make test
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "kanjidraw" ];

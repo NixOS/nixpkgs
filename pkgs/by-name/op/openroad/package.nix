@@ -120,8 +120,12 @@ stdenv.mkDerivation rec {
   # to see if there are any breaking changes in unstable that should be vendored as well.
   doCheck = !stdenv.hostPlatform.isDarwin; # it seems to hang on darwin
   checkPhase = ''
+    runHook preCheck
+
     make test
     ../test/regression
+
+    runHook postCheck
   '';
 
   doInstallCheck = true;

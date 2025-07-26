@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   # copying files so that we dont need to patch the test.sh
   checkPhase = ''
+    runHook preCheck
+
     (
     cp AtomicParsley ../tests
     cd ../tests
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     mv *.mp4 tests
     ./test.sh
     )
+
+    runHook postCheck
   '';
 
   meta = with lib; {

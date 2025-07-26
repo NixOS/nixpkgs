@@ -50,12 +50,16 @@ stdenv.mkDerivation rec {
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   checkPhase = ''
+    runHook preCheck
+
     mv ../spectre-cli-tests ../spectre_tests.xml ./
     patchShebangs spectre-cli-tests
     export HOME=$(mktemp -d)
 
     ./spectre-tests
     ./spectre-cli-tests
+
+    runHook postCheck
   '';
 
   installPhase = ''

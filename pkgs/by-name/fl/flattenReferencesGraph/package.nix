@@ -28,7 +28,11 @@ pythonPackages.buildPythonApplication {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     ${helpers.unittest}/bin/unittest
+
+    runHook postCheck
   '';
 
   passthru = {

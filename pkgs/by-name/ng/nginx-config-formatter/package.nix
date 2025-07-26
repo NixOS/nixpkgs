@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     python3 $src/test_nginxfmt.py
+
+    runHook postCheck
   '';
 
   installPhase = ''

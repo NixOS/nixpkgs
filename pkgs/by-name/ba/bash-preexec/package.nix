@@ -35,7 +35,11 @@ stdenvNoCC.mkDerivation {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     bats test
+
+    runHook postCheck
   '';
 
   installPhase = ''
