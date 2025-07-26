@@ -6,7 +6,14 @@ import re
 import requests
 import sys
 
+if len(sys.argv) < 2:
+    print("Pass a GitHub token as the first parameter to this script to avoid rate limits")
+    GITHUB_TOKEN = None
+else:
+    GITHUB_TOKEN = sys.argv[1]
+
 feature_versions = (8, 11, 17, 21, 23, 24)
+ea_feature_versions = (25,)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot",)
@@ -54,12 +61,9 @@ def generate_sources(assets, feature_version, out):
                 "build": build,
             }
 
-    return out
-
-
 out = {}
 for feature_version in feature_versions:
-    # Default user-agenet is blocked by Azure WAF.
+    # Default user-agent is blocked by Azure WAF.
     headers = {'user-agent': 'nixpkgs-temurin-generate-sources/1.0.0'}
     resp = requests.get(f"https://api.adoptium.net/v3/assets/latest/{feature_version}/hotspot", headers=headers)
 
@@ -67,6 +71,46 @@ for feature_version in feature_versions:
         print("error: could not fetch data for release {} (code {}) {}".format(feature_version, resp.status_code, resp.content), file=sys.stderr)
         sys.exit(1)
     generate_sources(resp.json(), f"openjdk{feature_version}", out)
+
+# these are not found in the API yet
+for feature_version in ea_feature_versions:
+    github_headers = {}
+    if GITHUB_TOKEN:
+        github_headers['Authorization'] = f"token {GITHUB_TOKEN}"
+    resp = requests.get(f"https://api.github.com/repos/adoptium/temurin{feature_version}-binaries/releases", headers = github_headers)
+    if resp.status_code != 200:
+        print("error: could not fetch data for release {} (code {}) {}".format(feature_version, resp.status_code, resp.content), file=sys.stderr)
+        sys.exit(1)
+
+    asset_descriptions = []
+    newest = sorted(resp.json(), key=lambda x: x['published_at'], reverse=True)[0]
+    for asset in newest['assets']:
+        name = asset['name']
+        if (name.startswith('OpenJDK-jre_') or name.startswith('OpenJDK-jdk_')) and name.endswith('json'):
+            # This allows the Temurin admins to steal your GitHub token...
+            # but you didn't give this script access to a privileged token
+            # anyway, right?
+            resp = requests.get(asset['browser_download_url'], headers = github_headers)
+            if resp.status_code != 200:
+                print("error: could not fetch data for release {} asset {} (code {}) {}".format(feature_version, asset['name'], resp.status_code, resp.content), file=sys.stderr)
+                sys.exit(1)
+            a = resp.json()
+            asset_descriptions.append({
+                "binary": {
+                    "os": a["os"],
+                    "image_type": name[8:11],
+                    "jvm_impl": "hotspot",
+                    "heap_size": "normal",
+                    "architecture": a["arch"],
+                    "package": {
+                        "link": asset['browser_download_url'][:-5],
+                        "checksum": a["sha256"]
+                    },
+                },
+                "version": a["version"],
+            })
+
+    generate_sources(asset_descriptions, f"openjdk{feature_version}", out)
 
 with open("sources.json", "w") as f:
     json.dump(out, f, indent=2, sort_keys=True)
