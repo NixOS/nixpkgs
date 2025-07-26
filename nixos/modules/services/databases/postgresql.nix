@@ -769,7 +769,7 @@ in
     systemd.targets.postgresql = {
       description = "PostgreSQL";
       wantedBy = [ "multi-user.target" ];
-      bindsTo = [
+      requires = [
         "postgresql.service"
         "postgresql-setup.service"
       ];
@@ -780,8 +780,13 @@ in
 
       after = [ "network.target" ];
 
-      # To trigger the .target also on "systemctl start postgresql".
-      bindsTo = [ "postgresql.target" ];
+      # To trigger the .target also on "systemctl start postgresql" as well as on
+      # restarts & stops.
+      # Please note that postgresql.service & postgresql.target binding to
+      # each other makes the Restart=always rule racy and results
+      # in sometimes the service not being restarted.
+      wants = [ "postgresql.target" ];
+      partOf = [ "postgresql.target" ];
 
       environment.PGDATA = cfg.dataDir;
 
