@@ -19,7 +19,7 @@
 }:
 
 stdenv.mkDerivation (rec {
-  pname = "CopyQ";
+  pname = "copyq";
   version = "10.0.0";
 
   src = fetchFromGitHub {

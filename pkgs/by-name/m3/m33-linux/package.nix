@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "M33-Linux";
+  pname = "m33-linux";
   version = "unstable-2016-06-23";
 
   src = fetchFromGitHub {

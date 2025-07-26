@@ -6,7 +6,7 @@
 }:
 
 buildGoModule rec {
-  pname = "MailHog";
+  pname = "mailhog";
   version = "1.0.1";
 
   src = fetchFromGitHub {

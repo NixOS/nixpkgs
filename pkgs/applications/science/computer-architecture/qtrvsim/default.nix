@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "QtRVSim";
+  pname = "qtrvsim";
   version = "0.9.8";
 
   src = fetchFromGitHub {
