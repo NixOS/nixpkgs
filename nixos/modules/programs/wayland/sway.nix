@@ -7,8 +7,6 @@
 
 let
   cfg = config.programs.sway;
-
-  wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
   options.programs.sway = {
@@ -38,7 +36,7 @@ in
           if p == null then
             null
           else
-            wayland-lib.genFinalPackage p {
+            lib.overridePossibleArgs p {
               extraSessionCommands = cfg.extraSessionCommands;
               extraOptions = cfg.extraOptions;
               withBaseWrapper = cfg.wrapperFeatures.base;
