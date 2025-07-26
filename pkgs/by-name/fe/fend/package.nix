@@ -52,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     [[ "$($out/bin/fend "1 km to m")" = "1000 m" ]]
+
+    runHook postInstallCheck
   '';
 
   postInstall = ''

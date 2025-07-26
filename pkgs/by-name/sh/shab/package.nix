@@ -39,7 +39,11 @@ let
     '';
 
     installCheckPhase = ''
+      runHook preInstallCheck
+
       [[ "$(echo 'Hello $entity' | entity=world $out/bin/shab)" == 'Hello world' ]]
+
+      runHook postInstallCheck
     '';
 
     passthru = {

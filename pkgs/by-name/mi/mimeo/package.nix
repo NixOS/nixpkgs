@@ -33,7 +33,11 @@ python3Packages.buildPythonApplication {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/mimeo --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

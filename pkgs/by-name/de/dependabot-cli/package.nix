@@ -63,7 +63,11 @@ buildGoModule {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/dependabot --help
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = ./update.sh;

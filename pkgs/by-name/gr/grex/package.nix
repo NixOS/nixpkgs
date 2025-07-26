@@ -19,7 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/grex --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = {

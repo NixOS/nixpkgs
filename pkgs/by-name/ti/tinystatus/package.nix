@@ -50,6 +50,8 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     runHook preCheck
 
     cat <<EOF >test.csv
@@ -59,6 +61,8 @@ stdenvNoCC.mkDerivation rec {
     $out/bin/tinystatus test.csv | grep Disrupted
 
     runHook postCheck
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

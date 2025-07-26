@@ -77,9 +77,13 @@ stdenv.mkDerivation rec {
   # Test if eli starts
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     export HOME="$TMP/home"
     mkdir -p "$HOME"
     $out/bin/eli "!ls"
+
+    runHook postInstallCheck
   '';
 
   meta = {

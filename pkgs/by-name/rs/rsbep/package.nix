@@ -41,11 +41,15 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     cd $TMP
     echo hello > input
     $out/bin/freeze.sh input > packed
     $out/bin/melt.sh packed > output
     diff -u input output
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

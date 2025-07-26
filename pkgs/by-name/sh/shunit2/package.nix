@@ -29,7 +29,11 @@ resholve.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/shunit2
+
+    runHook postInstallCheck
   '';
 
   solutions = {
