@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-OnvRiQ5H/Vsmfu+F1i68TowjrDwQLQtV1sC6Jrp4xA4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-k/8crmGkFOLcakL5roYrSBVoYyGMELh1Mu/X6SlUeds=";
 
   # this test parses command line arguments

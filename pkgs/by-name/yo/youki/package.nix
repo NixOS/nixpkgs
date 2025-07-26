@@ -53,7 +53,6 @@ rustPlatform.buildRustPackage rec {
     "youki"
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YM4D2DDXc9o4ak2DT36IeXpYykA/9R7PPqmIXkZ9aDs=";
 
   meta = {

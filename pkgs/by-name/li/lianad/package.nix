@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-trP6jnhMPASPkV7VwSHCl7gUhmx4F+68YK/QK+SPPZg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Zmxb4ZxuIyyKWrGaX3/1UHgkmo/XtqIHuP9luAnzgm4=";
 
   buildInputs = [ udev ];
