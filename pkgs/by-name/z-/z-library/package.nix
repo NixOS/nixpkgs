@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "z-library";
-  version = "2.4.3-unstable-2025-07-26";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://s3proxy.cdn-zlib.sk/te_public_files/soft/linux/zlibrary-setup-latest.deb";
