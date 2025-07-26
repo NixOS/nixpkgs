@@ -2,13 +2,14 @@
   fetchFromGitLab,
   lib,
   libxkbcommon,
+  makeWrapper,
   meson,
   ninja,
+  nix-update-script,
   pixman,
   pkg-config,
   scdoc,
   stdenv,
-  unstableGitUpdater,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -16,16 +17,16 @@
   xwayland,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayback";
-  version = "0-unstable-2025-07-20";
+  version = "0.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wayback";
     repo = "wayback";
-    rev = "4b1b4c59f67a2639e960d6b19e1282cf03fc3660";
-    hash = "sha256-+4fPMVVPoUAYbt0jgfl+dmt0ZNyGGWF7xuF1UzZ2uiU=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-8pfW1tu7OI6dLSR9iiVuJDdK76fRgpQmesW5wJUVN/0=";
   };
 
   strictDeps = true;
@@ -35,6 +36,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -51,14 +53,20 @@ stdenv.mkDerivation {
     xwayland
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  postInstall = ''
+    wrapProgram "$out/bin/wayback-session" \
+      --set XWAYBACK_PATH "$out/bin/Xwayback"
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "X11 compatibility layer leveraging wlroots and Xwayland";
     homepage = "https://wayback.freedesktop.org";
+    changelog = "https://gitlab.freedesktop.org/wayback/wayback/-/releases/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    mainProgram = "wayback-session";
+    mainProgram = "Xwayback";
     maintainers = with lib.maintainers; [ dramforever ];
   };
-}
+})
