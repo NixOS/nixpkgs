@@ -826,6 +826,8 @@ in
 
           ExecStart = "${cfg.finalPackage}/bin/postgres";
 
+          Restart = "always";
+
           # Hardening
           CapabilityBoundingSet = [ "" ];
           DevicePolicy = "closed";
@@ -877,7 +879,20 @@ in
         })
       ];
 
-      unitConfig.RequiresMountsFor = "${cfg.dataDir}";
+      unitConfig =
+        let
+          inherit (config.systemd.services.postgresql.serviceConfig) TimeoutSec;
+          maxTries = 5;
+          bufferSec = 5;
+        in
+        {
+          RequiresMountsFor = "${cfg.dataDir}";
+
+          # The max. time needed to perform `maxTries` start attempts of systemd
+          # plus a bit of buffer time (bufferSec) on top.
+          StartLimitIntervalSec = TimeoutSec * maxTries + bufferSec;
+          StartLimitBurst = maxTries;
+        };
     };
 
     systemd.services.postgresql-setup = {
