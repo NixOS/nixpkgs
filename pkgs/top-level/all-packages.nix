@@ -11903,6 +11903,12 @@ with pkgs;
 
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
+  copyparty-min = copyparty.override { edition = "min"; };
+  copyparty-im = copyparty.override { edition = "im"; };
+  copyparty-ac = copyparty.override { edition = "ac"; };
+  copyparty-iv = copyparty.override { edition = "iv"; };
+  copyparty-dj = copyparty.override { edition = "dj"; };
+
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
   cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
