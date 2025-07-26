@@ -330,7 +330,8 @@ in
 
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
-      after = [ "network.target" ];
+      requires = lib.mkIf cfg.database.enable [ "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg) environment;
       path = [
@@ -357,7 +358,8 @@ in
 
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
-      after = [ "network.target" ];
+      requires = lib.mkIf cfg.database.enable [ "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
