@@ -1144,6 +1144,18 @@ builtins.intersectAttrs super {
     ];
   }) super.relocant;
 
+  # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
+  haskell-pgmq = overrideCabal (drv: {
+    env = drv.env or { } // {
+      postgresqlEnableTCP = toString true;
+    };
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      # otherwise .dev gets selected?!
+      (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
+      pkgs.postgresqlTestHook
+    ];
+  }) super.haskell-pgmq;
+
   retrie = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_1_1;
