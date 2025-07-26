@@ -22,7 +22,6 @@ let
 
     sourceRoot = "${src.name}/generator";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-tg4BO4tPzHhJTowL7RiAuBo4i440FehpGmnz9stTxfI=";
 
     nativeBuildInputs = [

@@ -5657,7 +5657,8 @@
       ];
     "supla" =
       ps: with ps; [
-      ]; # missing inputs: asyncpysupla
+        asyncpysupla
+      ];
     "surepetcare" =
       ps: with ps; [
         surepy

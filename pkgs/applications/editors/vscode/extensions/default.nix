@@ -1501,8 +1501,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "17.3.1";
-          hash = "sha256-qZBctE3R39WeU3Fc3pajrUSS6ncni7O+/oAOyZK2EnY=";
+          version = "17.3.2";
+          hash = "sha256-z93AKGwgW5ySgb+5iCEXb/N9sWu3S3aS6PqKt8LXZjY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -2430,8 +2430,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.26.3";
-          hash = "sha256-xbMPx7FO7MplFO0SDpWhmctEZdHft2UPdlss3J0Bj10=";
+          version = "7.26.5";
+          hash = "sha256-h652UK81MxEhwyJKlWLnueQmhpl2pHByvhPrfH+4WXk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -3765,6 +3765,8 @@ let
           maintainers = [ lib.maintainers.imgabe ];
         };
       };
+
+      oliver-ni.scheme-fmt = callPackage ./oliver-ni.scheme-fmt { };
 
       oops418.nix-env-picker = callPackage ./oops418.nix-env-picker { };
 

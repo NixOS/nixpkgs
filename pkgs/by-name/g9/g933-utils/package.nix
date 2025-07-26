@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "g933-utils";
-  version = "unstable-2021-11-19";
+  version = "0-unstable-2021-11-19";
 
   src = fetchFromGitHub {
     owner = "ashkitten";
@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-kGLMRqZHzRuXQNTjIuLz8JPC1c/ZK38msfkTIVnaomg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xjn9EHYa8LJnj3GCZuug4IznxNCLzb9dtEnoQHRcdh8=";
 
   nativeBuildInputs = [ pkg-config ];

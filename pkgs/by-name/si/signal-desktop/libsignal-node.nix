@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-8V+q28hv7LDsS3SdH27PVHtnAneB55xYqFkhRapkcOI=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-z8PbpE+kID+kOmlimuvxTrzoWpbWTKpP6HHnhZDATWM=";
 
   npmRoot = "node";

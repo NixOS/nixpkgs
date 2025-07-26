@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "viw";
-  version = "unstable-20171029";
+  version = "0-unstable-20171029";
 
   src = fetchFromGitHub {
     owner = "lpan";

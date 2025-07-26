@@ -50,7 +50,6 @@ buildPgrxExtension (finalAttrs: {
     rust-jemalloc-sys'
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8NwfsJn5dnvog3fexzLmO3v7/3+L7xtv+PHWfCCWoHY=";
 
   # Include upgrade scripts in the final package

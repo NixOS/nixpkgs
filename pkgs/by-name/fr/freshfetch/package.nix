@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1l9zngr5l12g71j85iyph4jjri3crxc2pi9q0gczrrzvs03439mn";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LKltHVig33zUSWoRgCb1BgeKiJsDnlYEuPfQfrnhafI=";
 
   # freshfetch depends on rust nightly features

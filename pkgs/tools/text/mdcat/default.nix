@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8A0RLbFkh3fruZAbjJzipQvuFLchqIRovPcc6MSKdOc=";
 
   nativeCheckInputs = [ ansi2html ];

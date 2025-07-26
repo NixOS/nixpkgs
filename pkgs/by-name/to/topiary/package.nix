@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EqalIF1wx3F/5CiD21IaYsPdks6Mv1VfwL8OTRWsWaU=";
 
   # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786

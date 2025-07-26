@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "adbfs-rootless";
-  version = "unstable-2023-03-21";
+  version = "0-unstable-2023-03-21";
 
   src = fetchFromGitHub {
     owner = "spion";

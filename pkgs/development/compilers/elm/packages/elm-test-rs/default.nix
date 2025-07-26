@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-F3/v4zYGZRv1PRVl/Tas+e0pc/dTM6ina+/c63KVuZY=";
 
   # Tests perform networking and therefore can't work in sandbox

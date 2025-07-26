@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8ltuI94yIhff7JxIfe1mog4bDJ/7VFgLooMWOnSTREs=";
 
   strictDeps = true;

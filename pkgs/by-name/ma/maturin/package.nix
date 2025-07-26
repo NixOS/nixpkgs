@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nqi3t1rK2ZTIwFra1avnnhJSMbRI64t5/wP3dCyCY3A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZszmCXvPRpt6+cTDU1GD3K81Qw4UVFMDKLOlb1R6KiE=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

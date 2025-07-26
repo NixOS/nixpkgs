@@ -27,8 +27,6 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-vjvSOhyEQPW8sw1SjVWGvtnpzHGbyah1ufhLBUq7Qcw=";
 
   postPatch = ''
