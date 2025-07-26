@@ -1,42 +1,28 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 }:
-
-let
-  # Original manifest file at https://spacenerdsinspace.com/snis-assets/manifest.txt transformed using
-  # awk '{print $2}' manifest.txt | grep -v -E '\.stl$' | xargs cksum -a sha256 --base64 --untagged
-  manifest = ./manifest.txt;
-  assets = lib.lists.init (lib.strings.splitString "\n" (builtins.readFile manifest));
-  ASSET_URL = "https://spacenerdsinspace.com/snis-assets";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snis_assets";
-  version = "2024-08-02";
+  version = "2025-07-26";
 
-  srcs = map (
-    line:
-    let
-      asset = lib.strings.splitString "  " line;
-    in
-    fetchurl {
-      url = "${ASSET_URL}/${builtins.elemAt asset 1}";
-      hash = "sha256-${builtins.elemAt asset 0}";
-    }
-  ) assets;
+  src = fetchFromGitHub {
+    owner = "marcin-serwin";
+    repo = "snis-assets-snapshotter";
+    tag = finalAttrs.version;
+    hash = "sha256-K/X66txXKpGtWPRtWXvKiVMYb6vGJtrv2CdHVuXbT8M=";
+  };
 
-  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
-    read -r -a store_paths <<< "$srcs"
-    mapfile -t out_paths < <(awk '{print $2}' ${manifest})
-
-    for i in ''${!store_paths[@]}
-    do
-      install -m 444 -D ''${store_paths[$i]} $out/''${out_paths[$i]}
-    done
+    cp -r share $out
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -52,4 +38,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})
