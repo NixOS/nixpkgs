@@ -176,43 +176,43 @@ let
   # so we can ask @ofborg to check it, yet should have good examples
   # of things that often break.  So, no buckshot `mapTestOnCross`
   # calls here.
-  sanity = [
-    mbuffer
-    #pkgs.pkgsCross.gnu64.bash # https://github.com/NixOS/nixpkgs/issues/243164
-    pkgs.gcc_multi.cc
-    pkgs.pkgsMusl.stdenv
-    pkgs.pkgsLLVM.stdenv
-    pkgs.pkgsStatic.bash
-    #pkgs.pkgsCross.gnu64_simplekernel.bash   # https://github.com/NixOS/nixpkgs/issues/264989
-    pkgs.pkgsCross.arm-embedded.stdenv
-    pkgs.pkgsCross.sheevaplug.stdenv # for armv5tel
-    pkgs.pkgsCross.raspberryPi.stdenv # for armv6l
-    pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv
-    pkgs.pkgsCross.m68k.stdenv
-    pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
-    pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
-    pkgs.pkgsCross.s390.stdenv
-    pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
-    pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
-    pkgs.pkgsCross.mingwW64.stdenv
-    # Uses the expression that is used by the most cross-compil_ed_ GHCs
-    pkgs.pkgsCross.riscv64.haskell.compiler.native-bignum.ghc948
+  sanity = lib.recurseIntoAttrs (
+    {
+      inherit mbuffer;
+      # gnu64-bash = pkgs.pkgsCross.gnu64.bash; # https://github.com/NixOS/nixpkgs/issues/243164
+      gcc_multi-cc = pkgs.gcc_multi.cc;
+      musl-stdenv = pkgs.pkgsMusl.stdenv;
+      llvm-stdenv = pkgs.pkgsLLVM.stdenv;
+      static-bash = pkgs.pkgsStatic.bash;
+      # gnu64_simplekernel-bash = pkgs.pkgsCross.gnu64_simplekernel.bash;   # https://github.com/NixOS/nixpkgs/issues/264989
+      arm-embedded-stdenv = pkgs.pkgsCross.arm-embedded.stdenv;
+      sheevaplug-stdenv = pkgs.pkgsCross.sheevaplug.stdenv; # for armv5tel
+      raspberrypi-stdenv = pkgs.pkgsCross.raspberryPi.stdenv; # for armv6l
+      armv7l-hf-multiplatform-stdenv = pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv;
+      m68k-stdenv = pkgs.pkgsCross.m68k.stdenv;
+      aarch64-multiplatform-build-target-gcc = pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc;
+      powernv-build-target-gcc = pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc;
+      s390-stdenv = pkgs.pkgsCross.s390.stdenv;
+      mips64el-linux-gnuabi64-stdenv = pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv;
+      mips64el-linux-gnuabin32-stdenv = pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv;
+      mingwW64-stdenv = pkgs.pkgsCross.mingwW64.stdenv;
+      # Uses the expression that is used by the most cross-compil_ed_ GHCs
+      riscv64-ghc = pkgs.pkgsCross.riscv64.haskell.compiler.native-bignum.ghc948;
+    }
+    // lib.optionalAttrs (with pkgs.stdenv.buildPlatform; isx86_64 && isLinux) {
+      # Musl-to-glibc cross on the same architecture tends to turn up
+      # lots of interesting corner cases.  Only expected to work for
+      # x86_64-linux buildPlatform.
+      musl-gnu64-hello = pkgs.pkgsMusl.pkgsCross.gnu64.hello;
 
-  ]
-  ++ lib.optionals (with pkgs.stdenv.buildPlatform; isx86_64 && isLinux) [
-    # Musl-to-glibc cross on the same architecture tends to turn up
-    # lots of interesting corner cases.  Only expected to work for
-    # x86_64-linux buildPlatform.
-    pkgs.pkgsMusl.pkgsCross.gnu64.hello
+      # Two web browsers -- exercises almost the entire packageset
+      aarch64-multiplatform-qutebrowser-qt5 = pkgs.pkgsCross.aarch64-multiplatform.qutebrowser-qt5;
+      aarch64-multiplatform-firefox = pkgs.pkgsCross.aarch64-multiplatform.firefox;
 
-    # Two web browsers -- exercises almost the entire packageset
-    pkgs.pkgsCross.aarch64-multiplatform.qutebrowser-qt5
-    pkgs.pkgsCross.aarch64-multiplatform.firefox
-
-    # Uses pkgsCross.riscv64-embedded; see https://github.com/NixOS/nixpkgs/issues/267859
-    pkgs.spike
-  ];
-
+      # Uses pkgsCross.riscv64-embedded; see https://github.com/NixOS/nixpkgs/issues/267859
+      inherit (pkgs) spike;
+    }
+  );
 in
 {
   gcc = lib.recurseIntoAttrs (
