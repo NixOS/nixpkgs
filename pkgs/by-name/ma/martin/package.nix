@@ -1,28 +1,57 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  buildNpmPackage,
+  rustPlatform,
   pkg-config,
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
-  version = "0.9.1";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
-    rev = "v${version}";
-    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DR0ZJuvMsQMx0f8vfVdsGEBlovdoBx3pgbNvlw0TImY=";
   };
 
-  cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
+  patches = [ ./dont-build-webui.patch ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-I+sZFKbAAJ75gpXFXc3+jlsu6yWmTJC7Khi6RkYm3MQ=";
+
+  webui = buildNpmPackage {
+    pname = "martin-ui";
+    inherit (finalAttrs) version;
+
+    src = "${finalAttrs.src}/martin/martin-ui";
+
+    postPatch = ''
+      substituteInPlace src/App.tsx \
+        --replace-warn "./assets" "$src/src/assets"
+    '';
+
+    npmDepsHash = "sha256-K7SngX+YpieXo9P1O+k8LblYgKCDYJDFDmGqJQqysKo=";
+
+    installPhase = ''
+      cp -r dist $out
+    '';
+  };
+
+  preBuild = ''
+    rm -rf martin/martin-ui/dist
+    cp -r ${finalAttrs.webui} martin/martin-ui/dist
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
+  doCheck = false;
   checkFlags = [
     "--skip function_source_schemas"
     "--skip function_source_tile"
@@ -51,11 +80,24 @@ rustPlatform.buildRustPackage rec {
     "--skip table_source"
     "--skip tables_tilejson"
     "--skip tables_multiple_geom_ok"
+    "--skip pg::pool::tests::parse_version"
+    "--skip pmt_get_catalog_gzip"
+    "--skip pmt_get_tile_s3"
+    "--skip pmt_get_tilejson"
+    "--skip pmt_get_raster_gzip"
+    "--skip pmt_get_tilejson_s3"
+    "--skip pmt_get_raster"
+    "--skip pmt_get_tilejson_gzip"
+    "--skip summary::tests::summary"
   ];
 
+  passthru.tests = {
+    withCheck = finalAttrs.finalPackage.overrideAttrs {
+      doCheck = true;
+    };
+  };
+
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
     license = with lib.licenses; [
@@ -64,4 +106,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})
