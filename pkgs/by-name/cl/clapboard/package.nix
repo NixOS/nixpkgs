@@ -1,8 +1,4 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-}:
+{ lib, rustPlatform, fetchFromGitHub, }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clapboard";
@@ -21,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     description = "Wayland clipboard manager that will make you clap";
     homepage = "https://github.com/bjesus/clapboard";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya bjesus ];
     platforms = platforms.linux;
     mainProgram = "clapboard";
   };
