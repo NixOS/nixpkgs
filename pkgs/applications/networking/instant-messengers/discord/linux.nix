@@ -5,12 +5,11 @@
   meta,
   binaryName,
   desktopName,
-  autoPatchelfHook,
+  buildFHSEnv,
   makeDesktopItem,
   lib,
   stdenv,
-  wrapGAppsHook3,
-  makeShellWrapper,
+  writeScript,
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -44,18 +43,20 @@
   libxcb,
   libxshmfence,
   libgbm,
+  libxkbcommon,
+  mesa,
   nspr,
   nss,
   pango,
   systemd,
   libappindicator-gtk3,
   libdbusmenu,
-  writeScript,
   pipewire,
   python3,
   runCommand,
   speechd-minimal,
   wayland,
+  xorg,
   branch,
   withOpenASAR ? false,
   openasar,
@@ -88,132 +89,158 @@ let
         substituteAllInPlace $out/bin/disable-breaking-updates.py
         chmod +x $out/bin/disable-breaking-updates.py
       '';
-in
-stdenv.mkDerivation rec {
-  inherit
-    pname
-    version
-    src
-    meta
-    ;
 
-  nativeBuildInputs = [
-    alsa-lib
-    autoPatchelfHook
-    cups
-    libdrm
-    libuuid
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
-    libxcb
-    libxshmfence
-    libgbm
-    nss
-    wrapGAppsHook3
-    makeShellWrapper
-  ];
+  # Create the Discord application directory
+  discordDir = stdenv.mkDerivation {
+    name = "${pname}-${version}-dir";
+    inherit src;
+    
+    # Disable automatic patching that could modify binaries
+    dontPatchELF = true;
+    dontStrip = true;
+    dontPatchShebangs = true;
+    
+    dontBuild = true;
+    dontConfigure = true;
+    
+    installPhase = ''
+      runHook preInstall
+      
+      mkdir -p $out/opt/${binaryName}
+      mv * $out/opt/${binaryName}
+      cd $out/opt
 
-  dontWrapGApps = true;
+      # Apply modifications (do NOT chmod the binary - it breaks Krisp checksum validation)
+      ${lib.optionalString withOpenASAR ''
+        cp -f ${openasar} resources/app.asar
+      ''}
+      ${lib.optionalString withVencord ''
+        mv resources/app.asar resources/_app.asar
+        mkdir resources/app.asar
+        echo '{"name":"discord","main":"index.js"}' > resources/app.asar/package.json
+        echo 'require("${vencord}/patcher.js")' > resources/app.asar/index.js
+      ''}
+      ${lib.optionalString withMoonlight ''
+        mv resources/app.asar resources/_app.asar
+        mkdir resources/app
+        echo '{"name":"discord","main":"injector.js","private": true}' > resources/app/package.json
+        echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > resources/app/injector.js
+      ''}
+      
+      runHook postInstall
+    '';
+  };
 
-  libPath = lib.makeLibraryPath (
-    [
-      libcxx
-      systemd
-      libpulseaudio
+  # FHS Environment with all necessary libraries
+  fhsEnv = buildFHSEnv {
+    name = "${pname}-fhs";
+    
+    targetPkgs = pkgs: with pkgs; [
+      # Core system libraries
+      stdenv.cc.cc.lib
+      glibc
+      
+      # Graphics and display
+      libglvnd
+      mesa
       libdrm
       libgbm
-      stdenv.cc.cc
-      alsa-lib
+      wayland
+      
+      # X11 libraries
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libXScrnSaver
+      xorg.libxcb
+      xorg.libxshmfence
+      
+      # GTK and desktop integration
+      gtk3
+      glib
+      cairo
+      pango
+      gdk-pixbuf
       atk
       at-spi2-atk
       at-spi2-core
-      cairo
-      cups
-      dbus
-      expat
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gtk3
-      libglvnd
-      libnotify
-      libX11
-      libXcomposite
-      libuuid
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      nspr
-      libxcb
-      pango
-      pipewire
-      libXScrnSaver
       libappindicator-gtk3
       libdbusmenu
-      wayland
-    ]
-    ++ lib.optional withTTS speechd-minimal
-  );
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
-    mv * $out/opt/${binaryName}
-
-    chmod +x $out/opt/${binaryName}/${binaryName}
-    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        $out/opt/${binaryName}/${binaryName}
-
-    wrapProgramShell $out/opt/${binaryName}/${binaryName} \
-        "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        ${lib.strings.optionalString withTTS ''
-          --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
-          --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
-        ''} \
-        ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
-        ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
-
-    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
-    # Without || true the install would fail on case-insensitive filesystems
-    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
-
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
-    ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
-
-    ln -s "$desktopItem/share/applications" $out/share/
-
-    runHook postInstall
-  '';
-
-  postInstall =
-    lib.strings.optionalString withOpenASAR ''
-      cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
-    ''
-    + lib.strings.optionalString withVencord ''
-      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
-      mkdir $out/opt/${binaryName}/resources/app.asar
-      echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
-      echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
-    ''
-    + lib.strings.optionalString withMoonlight ''
-      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
-      mkdir $out/opt/${binaryName}/resources/app
-      echo '{"name":"discord","main":"injector.js","private": true}' > $out/opt/${binaryName}/resources/app/package.json
-      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/opt/${binaryName}/resources/app/injector.js
+      
+      # Audio
+      alsa-lib
+      libpulseaudio
+      pipewire
+      
+      # Other system libraries
+      dbus
+      systemd
+      fontconfig
+      freetype
+      expat
+      libuuid
+      cups
+      nspr
+      nss
+      libnotify
+      libcxx
+      libxkbcommon
+    ] ++ lib.optional withTTS pkgs.speechd-minimal;
+    
+    multiPkgs = pkgs: [
+      # Additional 32-bit libraries if needed
+      pkgs.alsa-lib
+      pkgs.libpulseaudio
+    ];
+    
+    # Set up the runtime environment
+    runScript = writeScript "${pname}-wrapper" ''
+      #!/bin/bash
+      
+      # Run the disable updates script if enabled
+      ${lib.optionalString disableUpdates ''
+        ${lib.getExe disableBreakingUpdates}
+      ''}
+      
+      # Set up environment variables
+      export XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}/:$XDG_DATA_DIRS"
+      
+      # Handle Wayland
+      if [[ -n "$NIXOS_OZONE_WL" && -n "$WAYLAND_DISPLAY" ]]; then
+        WAYLAND_FLAGS="--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true"
+      fi
+      
+      # Handle TTS
+      ${lib.optionalString withTTS ''
+        if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then
+          export NIXOS_SPEECH=True
+          TTS_FLAGS="--enable-speech-dispatcher"
+        fi
+      ''}
+      
+      # Handle autoscroll
+      ${lib.optionalString enableAutoscroll ''
+        AUTOSCROLL_FLAGS="--enable-blink-features=MiddleClickAutoscroll"
+      ''}
+      
+      # Execute Discord
+      exec ${discordDir}/opt/${binaryName}/${binaryName} \
+        --no-sandbox \
+        --disable-gpu-sandbox \
+        $WAYLAND_FLAGS \
+        $TTS_FLAGS \
+        $AUTOSCROLL_FLAGS \
+        ${lib.escapeShellArg commandLineArgs} \
+        "$@"
     '';
+  };
 
   desktopItem = makeDesktopItem {
     name = pname;
@@ -228,7 +255,36 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "x-scheme-handler/discord" ];
     startupWMClass = "discord";
   };
-
+in
+stdenv.mkDerivation {
+  inherit pname version meta;
+  
+  dontUnpack = true;
+  dontBuild = true;
+  dontConfigure = true;
+  
+  installPhase = ''
+    runHook preInstall
+    
+    mkdir -p $out/bin
+    mkdir -p $out/share/applications
+    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    
+    # Install the FHS wrapper
+    ln -s ${fhsEnv}/bin/${pname}-fhs $out/bin/${binaryName}
+    ln -s ${fhsEnv}/bin/${pname}-fhs $out/bin/${lib.strings.toLower binaryName}
+    
+    # Install icons
+    ln -s ${discordDir}/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
+    ln -s ${discordDir}/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
+    
+    # Install desktop file
+    ln -s ${desktopItem}/share/applications/${pname}.desktop $out/share/applications/
+    
+    runHook postInstall
+  '';
+  
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
