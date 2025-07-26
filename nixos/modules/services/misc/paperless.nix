@@ -645,9 +645,7 @@ in
           enableStrictShellChecks = true;
           path = [ manage ];
           script = ''
-            paperless-manage document_exporter ${cfg.exporter.directory} ${
-              lib.cli.toGNUCommandLineShell { } cfg.exporter.settings
-            }
+            paperless-manage document_exporter ${cfg.exporter.directory} ${lib.cli.toCommandLineShell lib.cli.gnuOptionFormat cfg.exporter.settings}
           '';
         };
       })
