@@ -11557,6 +11557,7 @@ with pkgs;
     ubootQemuX86
     ubootQemuX86_64
     ubootQuartz64B
+    ubootRadxaZero3W
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
