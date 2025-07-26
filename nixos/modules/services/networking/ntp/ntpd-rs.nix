@@ -85,11 +85,56 @@ in
       serviceConfig = {
         User = "";
         Group = "";
-        DynamicUser = true;
         ExecStart = [
           ""
           "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${validateConfig configFile}"
         ];
+
+        # required to run, without these ntpd-rs reports an error
+        # "Insufficient permissions to interact with the clock"
+        PrivateUsers = false;
+        ProtectClock = false;
+
+        # hardening
+        DynamicUser = true;
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE" # required to bind port 123
+          "CAP_SYS_TIME" # required to set system clock
+        ];
+        AmbientCapabilities = [ "CAP_SYS_TIME" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        NoNewPrivileges = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectKernelLogs = true;
+        PrivateDevices = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "@clock"
+        ];
+        SystemCallErrorNumber = "EPERM";
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        UMask = "0077";
       };
     };
 
