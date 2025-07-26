@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtgreet";
-  version = "2.0.3.95";
+  version = "2.0.4";
 
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
