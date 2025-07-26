@@ -60,16 +60,17 @@ stdenv.mkDerivation rec {
   ];
   strictDeps = true;
 
+  enableParallelBuilding = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
     chmod -R u+w ./craftos2-lua
-    make -C craftos2-lua linux
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    make
-    runHook postBuild
+    make $makeFlags -C craftos2-lua linux
   '';
 
   patches = [
@@ -81,11 +82,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/share/craftos $out/include
+    mkdir -p $out/bin $out/lib $out/share/craftos $dev/include
     DESTDIR=$out/bin make install
     cp ./craftos2-lua/src/liblua.so $out/lib
     patchelf --replace-needed craftos2-lua/src/liblua.so liblua.so $out/bin/craftos
-    cp -R api $out/include/CraftOS-PC
+    cp -R api $dev/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
 
     mkdir -p resources/linux-icons
@@ -100,9 +101,12 @@ stdenv.mkDerivation rec {
     cp resources/linux-icons/CraftOS-PC.desktop $out/share/applications/CraftOS-PC.desktop
   '';
 
-  passthru.tests = {
-    eval-hello-world = callPackage ./test-eval-hello-world { };
-    eval-periphemu = callPackage ./test-eval-periphemu { };
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      eval-hello-world = callPackage ./test-eval-hello-world { };
+      eval-periphemu = callPackage ./test-eval-periphemu { };
+    };
   };
 
   meta = with lib; {
