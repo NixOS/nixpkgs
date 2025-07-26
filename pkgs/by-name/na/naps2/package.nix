@@ -60,6 +60,7 @@ buildDotnetModule rec {
     install -D NAPS2.Lib/Icons/scanner-64-rev2.png $out/share/icons/hicolor/64x64/apps/com.naps2.Naps2.png
     install -D NAPS2.Lib/Icons/scanner-72-rev1.png $out/share/icons/hicolor/72x72/apps/com.naps2.Naps2.png
     install -D NAPS2.Lib/Icons/scanner-128.png $out/share/icons/hicolor/128x128/apps/com.naps2.Naps2.png
+    chmod +x $out/lib/naps2/_linux/tesseract
   '';
 
   meta = {
