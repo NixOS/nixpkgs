@@ -65,8 +65,10 @@ do
 done
 
 # If unset, assume the default hardening flags.
-: ${NIX_HARDENING_ENABLE="@default_hardening_flags_str@"}
-export NIX_HARDENING_ENABLE
+if [[ ! -v NIX_HARDENING_ENABLE${role_post} ]]; then
+    declare NIX_HARDENING_ENABLE${role_post}="@default_hardening_flags_str@"
+fi
+export NIX_HARDENING_ENABLE${role_post}
 
 # No local scope in sourced file
 unset -v role_post cmd upper_case
