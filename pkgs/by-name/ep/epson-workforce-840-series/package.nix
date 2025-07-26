@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Proprietary CUPS drivers for Epson inkjet printers";
     longDescription = ''
       This software is a filter program used with the Common UNIX Printing
@@ -109,11 +109,11 @@ stdenv.mkDerivation rec {
         };
     '';
     downloadPage = "http://download.ebz.epson.net/dsc/du/02/DriverDownloadInfo.do?LG2=EN&CN2=&DSCMI=16839&DSCCHK=3d7bc6bdfca08006abfb859fb1967183156a7252";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       epson
     ];
-    maintainers = with maintainers; [ heichro ];
+    maintainers = with lib.maintainers; [ heichro ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
