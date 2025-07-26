@@ -165,5 +165,11 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ jackr ];
+  meta = {
+    doc = ./newt.md;
+    maintainers = with lib.maintainers; [
+      jackr
+      sigmasquadron
+    ];
+  };
 }
