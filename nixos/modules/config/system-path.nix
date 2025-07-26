@@ -9,7 +9,13 @@
 let
 
   requiredPackages =
-    map (pkg: lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
+    map
+      (
+        pkg:
+        lib.setPrio (
+          (pkg.meta.priority or lib.meta.defaultPriority) + config.environment.requiredPackagesPriorityOffset
+        ) pkg
+      )
       [
         pkgs.acl
         pkgs.attr
@@ -77,6 +83,34 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           {file}`/nix/var/nix/profiles/default`.
+        '';
+      };
+
+      ignoreCollisions = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          There can be collisions when installing outputs of two packages.
+          An example is a collision between the `''${pkg}/bin/cat` binary
+          provided by the `coreutils` and the `uutils-coreutils-noprefix`
+          packages. This option controls whether those collisions are
+          ignored (treated as warnings) or not (treated as errors, build
+          failure). This allows you to figure out which packages have
+          collisions and set a higher priority for package(s) you prefer.
+        '';
+      };
+
+      requiredPackagesPriorityOffset = lib.mkOption {
+        type = lib.types.int;
+        default = 3;
+        example = lib.literalExpression "-5";
+        description = ''
+          Override the priority of base system packages that are
+          required in a NixOS System by setting an offset.
+
+          The priority is inverse to the value. Meaning, a lower
+          offset (-5) results in a higher priority for package. And
+          a higher offset (5) results in a lower priority for package.
         '';
       };
 
@@ -176,7 +210,7 @@ in
       name = "system-path";
       paths = config.environment.systemPackages;
       inherit (config.environment) pathsToLink extraOutputsToInstall;
-      ignoreCollisions = true;
+      ignoreCollisions = config.environment.ignoreCollisions;
       # !!! Hacky, should modularise.
       # outputs TODO: note that the tools will often not be linked by default
       postBuild = ''
