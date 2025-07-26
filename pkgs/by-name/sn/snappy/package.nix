@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  fetchpatch,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./revert-PUBLIC.patch
+    # Re-enable RTTI, without which other applications can't subclass
+    # snappy::Source (this breaks Ceph, as one example)
+    # https://tracker.ceph.com/issues/53060
+    # https://build.opensuse.org/package/show/openSUSE:Factory/snappy
+    (fetchpatch {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/snappy/reenable-rtti.patch?rev=e3449869b466869fc6b8a03a1a528fa6";
+      sha256 = "sha256-RMuM5yd6zP1eekN/+vfS54EyY4cFbGDVor1E1vj3134=";
+    })
   ];
 
   outputs = [
