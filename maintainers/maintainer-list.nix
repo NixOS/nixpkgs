@@ -13744,6 +13744,11 @@
     github = "krzaczek";
     githubId = 5773701;
   };
+  kshlm = {
+    name = "kshlm";
+    github = "kshlm";
+    githubId = 362086;
+  };
   KSJ2000 = {
     email = "katsho123@outlook.com";
     name = "KSJ2000";
@@ -24092,6 +24097,12 @@
     github = "fehrenbach";
     githubId = 203168;
     name = "Stefan Fehrenbach";
+  };
+  stefankeidel = {
+    email = "stefan@keidel.me";
+    github = "stefankeidel";
+    githubId = 1188614;
+    name = "Stefan Keidel";
   };
   stehessel = {
     email = "stephan@stehessel.de";
