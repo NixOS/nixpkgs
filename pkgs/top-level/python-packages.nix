@@ -17044,6 +17044,8 @@ self: super: with self; {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spox = callPackage ../development/python-modules/spox { };
+
   spsdk = callPackage ../development/python-modules/spsdk { };
 
   spsdk-mcu-link = callPackage ../development/python-modules/spsdk-mcu-link { };
