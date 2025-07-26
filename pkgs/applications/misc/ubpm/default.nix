@@ -10,27 +10,21 @@
   qtcharts,
   wrapQtAppsHook,
   fetchpatch,
+  udev,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubpm";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "LazyT";
     repo = "ubpm";
     rev = finalAttrs.version;
-    hash = "sha256-BUUn1WyLT7nm4I+2SpO1ZtIf8isGDy8Za15SiO7sXL8=";
+    hash = "sha256-XymrRkN7dBc0174D3wigRj682kI4SQNy+d7TCuGcRbE=";
   };
-
-  patches = [
-    # fixes qmake for nix
-    (fetchpatch {
-      url = "https://codeberg.org/LazyT/ubpm/commit/f18841d6473cab9aa2a9d4c02392b8e103245ef6.diff";
-      hash = "sha256-lgXWu8PUUCt66btj6hVgOFXz3U1BJM3ataSo1MpHkfU=";
-    })
-  ];
 
   preConfigure = ''
     cd ./sources/
@@ -44,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     qmake
     qttools
     wrapQtAppsHook
+    pkg-config
   ];
 
   # *.so plugins are being wrapped automatically which breaks them
@@ -54,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtserialport
     qtconnectivity
     qtcharts
+    udev
   ];
 
   meta = with lib; {
