@@ -210,7 +210,7 @@ impl ToString for HOCONValue {
                 let content = (if includes.is_empty() {
                     items
                 } else {
-                    format!("{}{}", includes, items)
+                    format!("{}\n{}", includes, items)
                 })
                 .split('\n')
                 .map(|s| format!("  {}", s))
