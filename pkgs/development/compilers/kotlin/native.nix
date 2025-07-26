@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src =
     let
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
         {
           "macos-aarch64" = "sha256-FHXR5XA7B/fqox2GTIkCJ6BIaSKoufLY0yMLe2ZmoqM=";
           "macos-x86_64" = "sha256-qXAnTdF9dkojOzb+vV08fZYYJUnQ43y8Yo0SxL6n2Ac=";
-          "linux-x86_64" = "sha256-5aAqD/ru6OGWitm+QGouXMNIc4xV8o4ltLWPc29t8P4=";
+          "linux-x86_64" = "sha256-b72aG8KYdN0Obrd65r8NLScDPeDgSExE9wuLXV3UJY4=";
         }
         .${arch};
     in
