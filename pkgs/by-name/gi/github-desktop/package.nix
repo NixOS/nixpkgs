@@ -32,13 +32,13 @@ in
 # partly my own figma-linux package
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.4.13";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Ctgjeuc7FKyRfJlzaErmw1+aJJ5PrxMG7EI0nf4rkG8=";
+    hash = "sha256-pJNtQZFZ0OWL7Pg/NQlAoSyORGVt8NPYef4cH4qFsfg=";
     fetchSubmodules = true;
   };
 
@@ -78,12 +78,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cacheRoot = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-PhjMY4bAt+Prx8tmgGCZ7fhAyKhOUudrJO9K8yr7F18=";
+    hash = "sha256-mrg82l8UEObGqI74CdRkFaztuHJ73RRRZW76n75CiQc=";
   };
 
   cacheApp = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/app/yarn.lock";
-    hash = "sha256-eW3G4saTbjRUexgg+n0z4EU1YtAgvSoW+uU0rNZZ1l0=";
+    hash = "sha256-FTKqpay0ysConZ0LoAAgSxiNJqO1te7G20XHRzQj0WE=";
+  };
+
+  cacheDesktopNotifications = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/vendor/desktop-notifications/yarn.lock";
+    hash = "sha256-2Hd8baxxoseWVTSChP6AKIODOlOAHK0ALAGQr2gpoQM=";
   };
 
   dontYarnInstallDeps = true;
@@ -93,6 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd app
     yarnOfflineCache="$cacheApp" yarnConfigHook
+    popd
+
+    # This is insanely hacky, I don't even really understand why this has to be
+    # the way it is...
+    pushd app/node_modules/desktop-notifications
+    yarnOfflineCache="$cacheDesktopNotifications" yarnConfigHook
+    npm_config_nodedir="${nodejs}" yarn --offline install
     popd
 
     patchShebangs node_modules
@@ -110,10 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     for native in fs-admin keytar desktop-trampoline; do
       npm_config_nodedir="${nodejs}" yarn --offline --cwd app/node_modules/$native build
     done
-
-    pushd app/node_modules/desktop-notifications
-    npm_config_nodedir="${nodejs}" node-gyp rebuild
-    popd
 
     yarn compile:script
 
