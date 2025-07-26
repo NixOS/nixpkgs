@@ -11,46 +11,54 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "0-unstable-2025-01-26";
+  version = "0-unstable-2025-07-17";
   # from `pdm show`
   realVersion =
     let
       tag = builtins.elemAt (lib.splitString "-" version) 0;
       rev = lib.substring 0 7 src.rev;
     in
-    "${tag}.1.dev2085+g${rev}";
+    "${tag}.1.dev2588+g${rev}";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "2a67f79d6025a06e98277956cbb036c4237960f1";
-    sha256 = "sha256-THunn3Oz+eldjQ72TGuq4Egnn6fiMiGG/UtYVRc/tfU=";
+    rev = "42327220a33f70b061c9103309364b6ecc1c507f";
+    sha256 = "sha256-wXq5i5f6NEM/5kjqmBNXEvRqaN6B+/qHAZ9jhNhmG58=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.pdm-backend
     sdcc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    typing-extensions
+  build-system = [
+    python3.pkgs.pdm-backend
+  ];
+
+  dependencies = with python3.pkgs; [
+    aiohttp
     amaranth
+    cobs
+    fx2
+    importlib-resources
+    libusb1
     packaging
     platformdirs
-    fx2
-    libusb1
     pyvcd
-    aiohttp
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    # pytestCheckHook discovers way less tests
     python3.pkgs.unittestCheckHook
-    yosys
     icestorm
     nextpnr
+    yosys
   ];
+
+  unittestFlags = [ "-v" ];
 
   enableParallelBuilding = true;
 
@@ -100,7 +108,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [
+      flokli
+      thoughtpolice
+    ];
     mainProgram = "glasgow";
   };
 }
