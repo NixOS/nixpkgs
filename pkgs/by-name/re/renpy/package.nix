@@ -11,7 +11,6 @@
   libGLU,
   libpng,
   makeWrapper,
-  nix-update-script,
   pkg-config,
   python3,
   SDL2,
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = 'Tomorrowland'
+    version_name = "Tomorrowland"
     EOF
   '';
 
@@ -131,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Visual Novel Engine";
