@@ -18,7 +18,7 @@ in
         type = with lib.types; nullOr str;
         default = null;
         description = ''
-          The Newt Id that will be used to communicate to Pangolin. This is generated on site creation in the dashboard.
+          The Newt ID that will be used to communicate to Pangolin. This is generated on site creation in the dashboard.
         '';
       };
       endpoint = lib.mkOption {
@@ -46,9 +46,13 @@ in
         description = ''
           Path to a file containing sensitive environment variables for Newt. See https://docs.fossorial.io/Newt/overview#cli-args
           These will overwrite anything defined in the config.
-          The file should contain environment-variable assignments like:
+
+          The file should contain environment variable assignments similar to the following:
+
+          ```
           NEWT_ID=2ix2t8xk22ubpfy
           NEWT_SECRET=nnisrfsdfc7prqsp9ewo1dvtvci50j5uiqotez00dgap0ii2
+          ```
         '';
       };
     };
@@ -161,5 +165,11 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ jackr ];
+  meta = {
+    doc = ./newt.md;
+    maintainers = with lib.maintainers; [
+      jackr
+      sigmasquadron
+    ];
+  };
 }
