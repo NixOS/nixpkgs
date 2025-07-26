@@ -1156,6 +1156,13 @@ builtins.intersectAttrs super {
     ];
   }) super.haskell-pgmq;
 
+  # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
+  haskell-bee-redis = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.redisTestHook
+    ];
+  }) super.haskell-bee-redis;
+
   retrie = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_1_1;
