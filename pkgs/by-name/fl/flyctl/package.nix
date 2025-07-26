@@ -22,6 +22,8 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  hardeningDisable = [ "pie" ];
+
   ldflags = [
     "-s"
     "-w"

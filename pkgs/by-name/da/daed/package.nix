@@ -70,7 +70,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ clang ];
 
-  hardeningDisable = [ "zerocallusedregs" ];
+  hardeningDisable = [
+    "pie"
+    "zerocallusedregs"
+  ];
 
   prePatch = ''
     substituteInPlace Makefile \

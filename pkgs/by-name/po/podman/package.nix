@@ -95,6 +95,8 @@ buildGoModule rec {
 
   doCheck = false;
 
+  hardeningDisable = [ "pie" ];
+
   outputs = [
     "out"
     "man"

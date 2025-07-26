@@ -35,6 +35,8 @@ buildGoModule (finalAttrs: {
 
   doCheck = false;
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [
     makeWrapper
     which
