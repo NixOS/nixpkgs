@@ -18,8 +18,7 @@
           inherit system;
         }
       );
-    in
-    {
+
       /**
         `nixpkgs.lib` is a combination of the [Nixpkgs library](https://nixos.org/manual/nixpkgs/unstable/#id-1.4), and other attributes
         that are _not_ part of the Nixpkgs library, but part of the Nixpkgs flake:
@@ -30,71 +29,92 @@
       */
       # DON'T USE lib.extend TO ADD NEW FUNCTIONALITY.
       # THIS WAS A MISTAKE. See the warning in lib/default.nix.
-      lib = lib.extend (
-        final: prev: {
+      legacyFlakeLib = lib.extend (final: prev: makeFlakeLib final);
 
-          /**
-            Other NixOS-provided functionality, such as [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos).
-            See also `lib.nixosSystem`.
-          */
-          nixos = import ./nixos/lib { lib = final; };
+      # TODO (@roberth): After 25.05, start deprecation of `makeFlakeLib final` behaviors, favoring `makeFlakeLib lib` behaviors.
+      makeFlakeLib = final: {
 
-          /**
-            Create a NixOS system configuration.
+        /**
+          Other NixOS-provided functionality, such as [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos).
+          See also `lib.nixosSystem`.
+        */
+        nixos = import ./nixos/lib { lib = final; };
 
-            Example:
+        /**
+          Create a NixOS system configuration.
 
-                lib.nixosSystem {
-                  modules = [ ./configuration.nix ];
-                }
+          Example:
 
-            Inputs:
-
-            - `modules` (list of paths or inline modules): The NixOS modules to include in the system configuration.
-
-            - `specialArgs` (attribute set): Extra arguments to pass to all modules, that are available in `imports` but can not be extended or overridden by the `modules`.
-
-            - `modulesLocation` (path): A default location for modules that aren't passed by path, used for error messages.
-
-            Legacy inputs:
-
-            - `system`: Legacy alias for `nixpkgs.hostPlatform`, but this is already set in the generated `hardware-configuration.nix`, included by `configuration.nix`.
-            - `pkgs`: Legacy alias for `nixpkgs.pkgs`; use `nixpkgs.pkgs` and `nixosModules.readOnlyPkgs` instead.
-          */
-          nixosSystem =
-            args:
-            import ./nixos/lib/eval-config.nix (
-              {
-                lib = final;
-                # Allow system to be set modularly in nixpkgs.system.
-                # We set it to null, to remove the "legacy" entrypoint's
-                # non-hermetic default.
-                system = null;
-
-                modules = args.modules ++ [
-                  # This module is injected here since it exposes the nixpkgs self-path in as
-                  # constrained of contexts as possible to avoid more things depending on it and
-                  # introducing unnecessary potential fragility to changes in flakes itself.
-                  #
-                  # See: failed attempt to make pkgs.path not copy when using flakes:
-                  # https://github.com/NixOS/nixpkgs/pull/153594#issuecomment-1023287913
-                  (
-                    {
-                      config,
-                      pkgs,
-                      lib,
-                      ...
-                    }:
-                    {
-                      config.nixpkgs.flake.source = self.outPath;
-                    }
-                  )
-                ];
+              lib.nixosSystem {
+                modules = [ ./configuration.nix ];
               }
-              // builtins.removeAttrs args [ "modules" ]
-            );
-        }
-      );
+
+          Inputs:
+
+          - `modules` (list of paths or inline modules): The NixOS modules to include in the system configuration.
+
+          - `specialArgs` (attribute set): Extra arguments to pass to all modules, that are available in `imports` but can not be extended or overridden by the `modules`.
+
+          - `modulesLocation` (path): A default location for modules that aren't passed by path, used for error messages.
+
+          Legacy inputs:
+
+          - `system`: Legacy alias for `nixpkgs.hostPlatform`, but this is already set in the generated `hardware-configuration.nix`, included by `configuration.nix`.
+          - `pkgs`: Legacy alias for `nixpkgs.pkgs`; use `nixpkgs.pkgs` and `nixosModules.readOnlyPkgs` instead.
+        */
+        nixosSystem =
+          args:
+          import ./nixos/lib/eval-config.nix (
+            {
+              lib = final;
+              # Allow system to be set modularly in nixpkgs.system.
+              # We set it to null, to remove the "legacy" entrypoint's
+              # non-hermetic default.
+              system = null;
+
+              modules = args.modules ++ [
+                # This module is injected here since it exposes the nixpkgs self-path in as
+                # constrained of contexts as possible to avoid more things depending on it and
+                # introducing unnecessary potential fragility to changes in flakes itself.
+                #
+                # See: failed attempt to make pkgs.path not copy when using flakes:
+                # https://github.com/NixOS/nixpkgs/pull/153594#issuecomment-1023287913
+                (
+                  {
+                    config,
+                    pkgs,
+                    lib,
+                    ...
+                  }:
+                  {
+                    config.nixpkgs.flake.source = self.outPath;
+                  }
+                )
+              ];
+            }
+            // builtins.removeAttrs args [ "modules" ]
+          );
+      };
+
+      # The `lib` flake output attribute which isn't an unsound merger of the flake `lib` and the Nixpkgs standard library.
+      newFlakeLib = {
+        inherit lib;
+      };
+
+    in
+    {
+
+      /**
+        `lib` is the standard flake attribute for libraries. The nixpkgs flake
+        includes libraries for
+        - The Nixpkgs standard library, also known as `lib` or (here) `nixpkgsFlake.lib.lib`
+        - NixOS: `nixpkgsFlake.lib.nixos` and `nixpkgsFlake.lib.nixosSystem`
+
+        Before Nixpkgs 25.05, `lib` was a combination of the Nixpkgs standard library *and* the NixOS library.
+        In Nixpkgs 25.05, this continues to be the case, while making available `nixpkgsFlake.lib.lib` to clear the way
+        for an ecosystem-wide migration.
+      */
+      lib = legacyFlakeLib // newFlakeLib;
 
       checks = forAllSystems (
         system:
