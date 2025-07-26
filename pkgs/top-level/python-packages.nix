@@ -2731,6 +2731,8 @@ self: super: with self; {
 
   coiled = callPackage ../development/python-modules/coiled { };
 
+  coinbase-advanced-py = callPackage ../development/python-modules/coinbase-advanced-py { };
+
   coincurve = callPackage ../development/python-modules/coincurve { inherit (pkgs) secp256k1; };
 
   coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
