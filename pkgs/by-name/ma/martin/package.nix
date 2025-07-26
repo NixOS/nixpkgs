@@ -6,19 +6,19 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
-  version = "0.9.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
-    rev = "v${version}";
-    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rbdHa9J2puQySBJpDKIx+3N7aolv+OIYouTCh+VkABM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
+  cargoHash = "sha256-e9ljRfYWx0OC9D9ziVkkwPs/oiyacZaFntmvcBFGN1U=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -54,13 +54,13 @@ rustPlatform.buildRustPackage rec {
     "--skip tables_multiple_geom_ok"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
   };
-}
+})
