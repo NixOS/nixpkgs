@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
   ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
-  buildFeatures = additionalFeatures [ ];
+  buildFeatures = additionalFeatures [ "system-clipboard" ];
 
   preCheck = ''
     export NU_TEST_LOCALE_OVERRIDE="en_US.UTF-8"
