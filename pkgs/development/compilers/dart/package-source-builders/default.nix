@@ -20,8 +20,8 @@
   sqlcipher_flutter_libs = callPackage ./sqlcipher_flutter_libs { };
   sqlite3 = callPackage ./sqlite3 { };
   sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { };
-  system_tray = callPackage ./system-tray { };
   super_native_extensions = callPackage ./super_native_extensions { };
+  system_tray = callPackage ./system_tray { };
   volume_controller = callPackage ./volume_controller { };
   xdg_directories = callPackage ./xdg_directories { };
 }
