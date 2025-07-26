@@ -3461,7 +3461,6 @@ with pkgs;
   };
 
   libcryptui = callPackage ../development/libraries/libcryptui {
-    autoreconfHook = buildPackages.autoreconfHook269;
     gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
   };
 

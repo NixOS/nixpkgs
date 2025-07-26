@@ -114,7 +114,6 @@ buildFHSEnv {
       libpulseaudio
       libselinux
       libsndfile
-      libsoup_2_4
       libtheora
       libtiff
       libunwind
