@@ -187,6 +187,12 @@ in
         // {
           default = true;
         };
+      enableVectors =
+        mkEnableOption "pgvecto.rs in the database. You may disable this, if you have migrated to VectorChord and deleted the `vectors` schema."
+        // {
+          default = lib.versionOlder config.system.stateVersion "25.11";
+          defaultText = lib.literalExpression "lib.versionOlder config.system.stateVersion \"25.11\"";
+        };
       createDB = mkEnableOption "the automatic creation of the database for immich." // {
         default = true;
       };
@@ -238,7 +244,9 @@ in
       }
       {
         # When removing this assertion, please adjust the nixosTests accordingly.
-        assertion = cfg.database.enable -> lib.versionOlder config.services.postgresql.package.version "17";
+        assertion =
+          (cfg.database.enable && cfg.database.enableVectors)
+          -> lib.versionOlder config.services.postgresql.package.version "17";
         message = "Immich doesn't support PostgreSQL 17+, yet.";
       }
     ];
@@ -255,16 +263,17 @@ in
       ];
       extensions =
         ps:
-        [ ps.pgvecto-rs ]
+        lib.optionals cfg.database.enableVectors [ ps.pgvecto-rs ]
         ++ lib.optionals cfg.database.enableVectorChord [
-          ps.vectors
+          ps.pgvector
           ps.vectorchord
         ];
       settings = {
-        shared_preload_libraries = [
-          "vectors.so"
-        ]
-        ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
+        shared_preload_libraries =
+          lib.optionals cfg.database.enableVectors [
+            "vectors.so"
+          ]
+          ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
         search_path = "\"$user\", public, vectors";
       };
     };
@@ -273,28 +282,31 @@ in
         createExtensions = [
           "unaccent"
           "uuid-ossp"
-          "vectors"
           "cube"
           "earthdistance"
           "pg_trgm"
+        ]
+        ++ lib.optionals cfg.database.enableVectors [
+          "vectors"
         ]
         ++ lib.optionals cfg.database.enableVectorChord [
           "vector"
           "vchord"
         ];
         # Should we just update all extensions?
-        updateExtensions = [
-          "vectors"
-        ]
-        ++ lib.optionals cfg.database.enableVectorChord [
-          "vector"
-          "vchord"
-        ];
+        updateExtensions =
+          lib.optionals cfg.database.enableVectors [
+            "vectors"
+          ]
+          ++ lib.optionals cfg.database.enableVectorChord [
+            "vector"
+            "vchord"
+          ];
         sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
           ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") createExtensions}
 
           ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
+          ${lib.optionalString cfg.database.enableVectors "ALTER SCHEMA vectors OWNER TO ${cfg.database.user};"}
           GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
 
           ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") updateExtensions}
