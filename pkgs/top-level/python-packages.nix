@@ -5891,7 +5891,7 @@ self: super: with self; {
 
   gmsh = toPythonModule (
     pkgs.gmsh.override {
-      inherit (self) python;
+      python3Packages = self;
       enablePython = true;
     }
   );
