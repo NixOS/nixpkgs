@@ -8,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "ocsipersist-lib";
-  version = "1.1.0";
+  version = "2.0.0";
 
   duneVersion = "3";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "ocsipersist";
     rev = version;
-    sha256 = "sha256:1d6kdcfjvrz0dl764mnyxc477aa57rvmzkg154qc915w2y1nbz9a";
+    sha256 = "sha256-bSxlcnbEBar88yLoUTKAue7iz/EuJfbcyFGeDFitnSs=";
   };
 
   buildInputs = [ lwt_ppx ];
