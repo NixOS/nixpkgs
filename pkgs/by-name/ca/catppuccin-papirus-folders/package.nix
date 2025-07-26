@@ -2,7 +2,9 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  fetchurl,
   gtk3,
+  getent,
   papirus-icon-theme,
   flavor ? "mocha",
   accent ? "blue",
@@ -31,27 +33,42 @@ let
     "mocha"
   ];
   pname = "catppuccin-papirus-folders";
+
+  # Note(sewer56):
+  # Fetch the papirus-folders script from upstream
+  # Per instructions in the papirus-folders project.
+  papirus-folders-script = fetchurl {
+    url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-folders/0f838ee5679229e3a3e97e3b333c222c9e9615b4/papirus-folders";
+    sha256 = "sha256-swpoSKAGkDAqzP/AUFSSGLCxFNMXiyi9OhaJGBeCGwY=";
+  };
 in
 lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkListOfEnum
   "${pname}: flavors"
   validFlavors
   [ flavor ]
-
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2023-08-02";
+    version = "unstable-2024-08-06";
 
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "papirus-folders";
-      rev = "fcf96737fffc343a1bf129732c37d19f2d77fa5c";
-      sha256 = "sha256-3yjIGzN+/moP2OVGDIAy4zPqUroSjx3c2mJjdZGhTsY=";
+      rev = "f83671d17ea67e335b34f8028a7e6d78bca735d7";
+      sha256 = "sha256-FiZdwzsaMhS+5EYTcVU1LVax2H1FidQw97xZklNH2R4=";
     };
 
-    nativeBuildInputs = [ gtk3 ];
+    # This gets stuck on fixup for some reason. Please help.
+    dontFixup = true;
+    nativeBuildInputs = [
+      gtk3
+      getent
+    ];
 
     postPatch = ''
+      # Copy the upstream papirus-folders script (pinned), per papirus-folders documentation
+      cp ${papirus-folders-script} ./papirus-folders
+      chmod +x ./papirus-folders
       patchShebangs ./papirus-folders
     '';
 
