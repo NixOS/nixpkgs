@@ -10587,6 +10587,8 @@ self: super: with self; {
 
   ocrmypdf = callPackage ../development/python-modules/ocrmypdf { tesseract = pkgs.tesseract5; };
 
+  octave-kernel = callPackage ../development/python-modules/octave-kernel {};
+
   od = callPackage ../development/python-modules/od { };
 
   odc-geo = callPackage ../development/python-modules/odc-geo { };
