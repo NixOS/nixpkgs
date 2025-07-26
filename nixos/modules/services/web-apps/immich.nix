@@ -182,6 +182,11 @@ in
         // {
           default = true;
         };
+      enableVectorChord =
+        mkEnableOption "the new VectorChord extension for full-text search in Postgres"
+        // {
+          default = true;
+        };
       createDB = mkEnableOption "the automatic creation of the database for immich." // {
         default = true;
       };
@@ -248,27 +253,43 @@ in
           ensureClauses.login = true;
         }
       ];
-      extensions = ps: with ps; [ pgvecto-rs ];
+      extensions =
+        ps:
+        [ ps.pgvecto-rs ]
+        ++ lib.optionals cfg.database.enableVectorChord [
+          ps.vectors
+          ps.vectorchord
+        ];
       settings = {
-        shared_preload_libraries = [ "vectors.so" ];
+        shared_preload_libraries = [
+          "vectors.so"
+        ]
+        ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
         search_path = "\"$user\", public, vectors";
       };
     };
     systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
       let
+        extensions = [
+          "unaccent"
+          "uuid-ossp"
+          "vectors"
+          "cube"
+          "earthdistance"
+          "pg_trgm"
+        ]
+        ++ lib.optionals cfg.database.enableVectorChord [
+          "vector"
+          "vchord"
+        ];
         sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          CREATE EXTENSION IF NOT EXISTS unaccent;
-          CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-          CREATE EXTENSION IF NOT EXISTS vectors;
-          CREATE EXTENSION IF NOT EXISTS cube;
-          CREATE EXTENSION IF NOT EXISTS earthdistance;
-          CREATE EXTENSION IF NOT EXISTS pg_trgm;
+          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
 
           ALTER SCHEMA public OWNER TO ${cfg.database.user};
           ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
           GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
 
-          ALTER EXTENSION vectors UPDATE;
+          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
         '';
       in
       [
