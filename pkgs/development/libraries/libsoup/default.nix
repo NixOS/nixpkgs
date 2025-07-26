@@ -139,5 +139,31 @@ stdenv.mkDerivation rec {
       "libsoup-2.4"
       "libsoup-gnome-2.4"
     ];
+    knownVulnerabilities = [
+      ''
+        libsoup 2 is EOL, with many known unfixed CVEs.
+        The last release happened 2023-10-11,
+        with few security backports since and no stable release.
+
+        Vulnerabilities likely include (incomplete list):
+        - CVE-2025-4948: https://gitlab.gnome.org/GNOME/libsoup/-/issues/449
+        - CVE-2025-46421: https://gitlab.gnome.org/GNOME/libsoup/-/issues/439
+        - CVE-2025-32914: https://gitlab.gnome.org/GNOME/libsoup/-/issues/436
+        - CVE-2025-32913: https://gitlab.gnome.org/GNOME/libsoup/-/issues/435
+        - CVE-2025-32912: https://gitlab.gnome.org/GNOME/libsoup/-/issues/434
+        - CVE-2025-32911: https://gitlab.gnome.org/GNOME/libsoup/-/issues/433
+        - CVE-2025-32910: https://gitlab.gnome.org/GNOME/libsoup/-/issues/432
+        - CVE-2025-32909: https://gitlab.gnome.org/GNOME/libsoup/-/issues/431
+        - CVE-2025-32907: https://gitlab.gnome.org/GNOME/libsoup/-/issues/428
+        - CVE-2025-32053: https://gitlab.gnome.org/GNOME/libsoup/-/issues/426
+        - CVE-2025-32052: https://gitlab.gnome.org/GNOME/libsoup/-/issues/425
+        - CVE-2025-32050: https://gitlab.gnome.org/GNOME/libsoup/-/issues/424
+        - CVE-2024-52531: https://gitlab.gnome.org/GNOME/libsoup/-/issues/423
+        - CVE-2025-2784: https://gitlab.gnome.org/GNOME/libsoup/-/issues/422
+
+        These vulnerabilities were fixed in libsoup 3,
+        with the vulnerable code present in libsoup 2 versions.
+      ''
+    ];
   };
 }

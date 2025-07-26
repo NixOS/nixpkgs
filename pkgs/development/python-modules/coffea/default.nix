@@ -16,7 +16,6 @@
   dask,
   dask-awkward,
   dask-histogram,
-  fsspec-xrootd,
   hist,
   lz4,
   matplotlib,
@@ -42,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.7.1";
+  version = "2025.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-GtofpITO9QcwFcKyVTz7clquJy2tBTlkf3IR1cXlklM=";
+    hash = "sha256-MSCJRjw4bbQQAA39fOQAJ9qfRXO/hUrLeXZMRVGd2Zc=";
   };
 
   build-system = [
@@ -70,7 +69,6 @@ buildPythonPackage rec {
     dask
     dask-awkward
     dask-histogram
-    fsspec-xrootd
     hist
     lz4
     matplotlib

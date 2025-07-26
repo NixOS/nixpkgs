@@ -766,6 +766,7 @@ in
         restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
 
         serviceConfig = {
+          Type = "notify-reload";
           Restart = "always";
           ExecStart = lib.concatStringsSep " " [
             (lib.getExe' cfg.package "sshd")
