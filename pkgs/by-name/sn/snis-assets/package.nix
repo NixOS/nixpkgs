@@ -25,17 +25,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assets for Space Nerds In Space, a multi-player spaceship bridge simulator";
     homepage = "https://smcameron.github.io/space-nerds-in-space/";
-    license = [
-      licenses.cc-by-sa-30
-      licenses.cc-by-30
-      licenses.cc0
-      licenses.publicDomain
+    downloadPage = "https://github.com/marcin-serwin/snis-assets-snapshotter";
+    license = with lib.licenses; [
+      gpl2Plus
+      cc-by-sa-30
+      cc-by-40
+      cc-by-30
+      cc0
+      publicDomain
+      free
     ];
-    maintainers = with maintainers; [ pentane ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pentane ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
 })
