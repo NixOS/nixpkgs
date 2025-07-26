@@ -18,18 +18,26 @@ from requests.adapters import HTTPAdapter, Retry
 eprint = functools.partial(print, file=sys.stderr)
 
 
-def load_toml(path: Path) -> dict[str, Any]:
+def load_lockfile(path: Path) -> (dict[str, Any], int):
     with open(path, "rb") as f:
-        return tomllib.load(f)
+        cargo_lock_toml = tomllib.load(f)
 
+    # lockfile v1 and v2 didn't have the version key
+    # we'll assume it's v2 if the key is missing
+    # but we'll detect if it's actually v1 down below
+    lockfile_version = cargo_lock_toml.get("version", 2)
 
-def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
-    # lockfile v1 and v2 don't have the `version` key, so assume v2
-    version = cargo_lock_toml.get("version", 2)
+    # lockfile v1 had the checksums under the metadata key instead of inside the main package array
+    # in case a checksum is missing for a registry package we fill it in from the metadata
+    for pkg in cargo_lock_toml["package"]:
+        if "source" not in pkg or not pkg["source"].startswith("registry+") or "checksum" in pkg:
+            continue
+        lockfile_version = 1
+        checksum_key = f"checksum {pkg["name"]} {pkg["version"]} ({pkg["source"]})"
+        checksum = cargo_lock_toml["metadata"][checksum_key]
+        pkg["checksum"] = checksum
 
-    # TODO: add logic for differentiating between v1 and v2
-
-    return version
+    return (cargo_lock_toml["package"], lockfile_version)
 
 
 def create_http_session() -> requests.Session:
@@ -123,13 +131,12 @@ def parse_git_source(source: str, lockfile_version: int) -> GitSourceInfo:
 
 
 def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
-    cargo_lock_toml = load_toml(lockfile_path)
-    lockfile_version = get_lockfile_version(cargo_lock_toml)
+    (packages, lockfile_version) = load_lockfile(lockfile_path)
 
     git_packages: list[dict[str, Any]] = []
     registry_packages: list[dict[str, Any]] = []
 
-    for pkg in cargo_lock_toml["package"]:
+    for pkg in packages:
         # ignore local dependenices
         if "source" not in pkg.keys():
             eprint(f"Skipping local dependency: {pkg["name"]}")
@@ -261,8 +268,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
-    cargo_lock_toml = load_toml(lockfile_path)
-    lockfile_version = get_lockfile_version(cargo_lock_toml)
+    (packages, lockfile_version) = load_lockfile(lockfile_path)
 
     config_lines = [
         '[source.vendored-sources]',
@@ -272,7 +278,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     ]
 
     seen_source_keys = set()
-    for pkg in cargo_lock_toml["package"]:
+    for pkg in packages:
 
         # ignore local dependenices
         if "source" not in pkg.keys():
