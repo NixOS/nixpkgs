@@ -48,17 +48,19 @@ in
         };
         description = "Settings for Newt module, see [Newt CLI docs](https://github.com/fosrl/newt?tab=readme-ov-file#cli-args) for more information.";
       };
-
-      # provide path to file to keep secrets out of the nix store
       environmentFile = lib.mkOption {
         type = with lib.types; nullOr path;
         default = null;
         description = ''
           Path to a file containing sensitive environment variables for Newt. See <https://docs.fossorial.io/Newt/overview#cli-args>
           These will overwrite anything defined in the config.
-          The file should contain environment-variable assignments like:
+
+          The file should contain environment variable assignments similar to the following:
+
+          ```
           NEWT_ID=2ix2t8xk22ubpfy
           NEWT_SECRET=nnisrfsdfc7prqsp9ewo1dvtvci50j5uiqotez00dgap0ii2
+          ```
         '';
       };
     };
