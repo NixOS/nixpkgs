@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "ICRAR";
     repo = "crc32c";

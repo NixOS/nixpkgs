@@ -10,8 +10,6 @@ buildPythonPackage rec {
   version = "1.0.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "bendews";
     repo = "somfy-mylink-synergy";

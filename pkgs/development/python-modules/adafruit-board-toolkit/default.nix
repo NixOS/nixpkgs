@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_Board_Toolkit";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "forlilab";
     repo = "Meeko";

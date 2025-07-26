@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "0.1.45";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "mmatl";
     repo = "pyrender";

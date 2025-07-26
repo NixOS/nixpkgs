@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "mediacloud";
     repo = "sentence-splitter";

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "3.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";

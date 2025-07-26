@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-cid";
   version = "1.1.2";
   format = "pyproject";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ntninja";

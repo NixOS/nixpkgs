@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "liblarch";

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.6.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "sdkmanager";
