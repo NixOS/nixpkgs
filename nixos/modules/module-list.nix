@@ -638,6 +638,7 @@
   ./services/hardware/brltty.nix
   ./services/hardware/buffyboard.nix
   ./services/hardware/ddccontrol.nix
+  ./services/hardware/deepcool-digital-linux.nix
   ./services/hardware/display.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
