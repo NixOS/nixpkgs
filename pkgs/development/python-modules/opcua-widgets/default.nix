@@ -19,8 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-ABJlKYN5H/1k8ynvSTSoJBX12vTTyavuNUAmTJ84mn0=";
   };
 
-  disabled = pythonOlder "3.10";
-
   propagatedBuildInputs = [
     pyqt5
     asyncua

@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "1.29.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitLab {
     owner = "keatontaylor";
     repo = "alexapy";

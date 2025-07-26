@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "meraki";
     repo = "dashboard-api-python";

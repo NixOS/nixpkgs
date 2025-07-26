@@ -43,8 +43,6 @@ buildPythonPackage rec {
   version = "7.14.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";

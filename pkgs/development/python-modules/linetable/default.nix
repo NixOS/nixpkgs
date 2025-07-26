@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.0.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "linetable";

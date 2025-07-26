@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.0.27";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = "socid-extractor";

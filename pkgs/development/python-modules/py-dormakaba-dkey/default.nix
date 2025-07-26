@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.0.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "emontnemery";
     repo = "py-dormakaba-dkey";

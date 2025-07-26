@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";

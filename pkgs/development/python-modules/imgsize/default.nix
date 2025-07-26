@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "ojii";
     repo = "imgsize";

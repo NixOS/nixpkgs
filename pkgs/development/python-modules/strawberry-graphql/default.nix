@@ -47,8 +47,6 @@ buildPythonPackage rec {
   version = "0.275.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";

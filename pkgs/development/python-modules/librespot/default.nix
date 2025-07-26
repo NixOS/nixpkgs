@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.0.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "kokarare1212";
     repo = "librespot-python";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "zorn96";
     repo = "ms_active_directory";

@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "1.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";

@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "MyST-Parser";

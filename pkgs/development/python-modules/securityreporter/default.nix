@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";

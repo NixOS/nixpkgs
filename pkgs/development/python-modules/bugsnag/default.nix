@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "4.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "bugsnag";
     repo = "bugsnag-python";

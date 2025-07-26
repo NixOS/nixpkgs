@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "23.0.post0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "di";
     repo = "packaging_legacy";

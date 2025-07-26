@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "truststore";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "012.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";

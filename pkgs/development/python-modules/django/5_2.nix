@@ -46,8 +46,6 @@ buildPythonPackage rec {
   version = "5.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";

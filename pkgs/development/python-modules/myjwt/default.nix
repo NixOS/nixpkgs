@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
