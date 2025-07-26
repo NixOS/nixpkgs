@@ -95,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "LLVM-based Fortran frontend";
     license = lib.licenses.ncsa;
     mainProgram = "flang";
+    maintainers = with lib.maintainers; [ acture ];
   };
 })
