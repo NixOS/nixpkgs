@@ -120,4 +120,5 @@ rec {
   };
   wordnet = callPackage ./dictd-wordnet.nix { };
   wiktionary = callPackage ./wiktionary { };
+  gcide = callPackage ./gcide { };
 }
