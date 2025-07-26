@@ -13,8 +13,6 @@ buildPythonApplication rec {
   version = "0.9.1";
   pyproject = true;
 
-  # it needs `secrets` which was introduced in 3.6
-
   # GH is newer than Pypi and contains both library *and* the actual program
   # whereas Pypi only has the library
   src = fetchFromGitHub {
