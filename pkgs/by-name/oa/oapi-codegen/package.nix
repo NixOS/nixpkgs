@@ -22,7 +22,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/oapi-codegen" ];
 
-  ldflags = [ "-X main.noVCSVersionOverride=${version}" ];
+  ldflags = [ "-X main.noVCSVersionOverride=v${version}" ];
 
   meta = {
     description = "Go client and server OpenAPI 3 generator";
