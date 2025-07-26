@@ -46,6 +46,13 @@ rustPlatform.buildRustPackage {
   CFG_RELEASE = rustc.version;
   CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+    # error: install_name_tool: changing install names or rpaths can't be redone for: /nix/store/.../bin/rustfmt
+    # (for architecture x86_64) because larger updated load commands do not fit (the program must
+    # be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
+
   postInstall = ''
     wrapProgram $out/bin/cargo-fmt \
       --suffix PATH : ${lib.makeBinPath [ cargo ]}
