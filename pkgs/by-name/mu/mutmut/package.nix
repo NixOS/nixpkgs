@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "mutmut" ];
 
   meta = {
-    description = "mutation testing system for Python, with a strong focus on ease of use";
+    description = "Mutation testing system for Python, with a strong focus on ease of use";
     mainProgram = "mutmut";
     homepage = "https://github.com/boxed/mutmut";
     changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";

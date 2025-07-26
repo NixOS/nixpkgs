@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://libvirt.org/python.html";
-    description = "libvirt Python bindings";
+    description = "Libvirt Python bindings";
     license = licenses.lgpl2;
     maintainers = [ maintainers.fpletz ];
   };

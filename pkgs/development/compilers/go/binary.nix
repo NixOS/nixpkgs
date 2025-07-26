@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
-    description = "The Go Programming language";
+    description = "Go Programming language";
     homepage = "https://go.dev/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.golang ];

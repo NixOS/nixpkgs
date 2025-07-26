@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "high-performance, open-source SQL database for applications in financial services, IoT, machine learning, DevOps and observability";
+    description = "High-performance, open-source SQL database for applications in financial services, IoT, machine learning, DevOps and observability";
     homepage = "https://questdb.io/";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.asl20;

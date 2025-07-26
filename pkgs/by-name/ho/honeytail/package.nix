@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "agent for ingesting log file data into honeycomb.io and making it available for exploration";
+    description = "Agent for ingesting log file data into honeycomb.io and making it available for exploration";
     homepage = "https://honeycomb.io/";
     license = licenses.asl20;
     maintainers = [ maintainers.iand675 ];

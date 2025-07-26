@@ -80,7 +80,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://victoriametrics.com/";
-    description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
+    description = "Fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp

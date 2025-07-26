@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "A Home Assistant Card indicating today's date/time, along with an iOS inspired weather forecast for the next days with animated icons";
+    description = "Home Assistant Card indicating today's date/time, along with an iOS inspired weather forecast for the next days with animated icons";
     homepage = "https://github.com/pkissling/clock-weather-card";
     changelog = "https://github.com/pkissling/clock-weather-card/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libusb.info/";
-    description = "cross-platform user-mode USB device library";
+    description = "Cross-platform user-mode USB device library";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
     '';

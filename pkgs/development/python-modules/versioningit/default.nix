@@ -60,7 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "versioningit" ];
 
   meta = with lib; {
-    description = "setuptools plugin for determining package version from VCS";
+    description = "Setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";

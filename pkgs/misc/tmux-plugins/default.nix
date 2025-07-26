@@ -96,7 +96,7 @@ in
     rtpFilePath = "scroll_copy_mode.tmux";
     meta = {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
-      description = "better mouse support for tmux";
+      description = "Better mouse support for tmux";
       longDescription = ''
         Features:
 
@@ -142,7 +142,7 @@ in
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
-      description = "continuous saving of tmux environment";
+      description = "Continuous saving of tmux environment";
       longDescription = ''
         Features:
         * continuous saving of tmux environment
@@ -1091,7 +1091,7 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/o0th/tmux-nova";
-      description = "tmux-nova theme";
+      description = "Tmux-nova theme";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ o0th ];

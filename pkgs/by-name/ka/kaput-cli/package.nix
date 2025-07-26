@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/davidchalifoux/kaput-cli/releases/tag/v${version}";
-    description = "unofficial CLI client for Put.io";
+    description = "Unofficial CLI client for Put.io";
     homepage = "https://kaput.sh/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];

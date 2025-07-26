@@ -32,7 +32,7 @@ buildTopkgPackage rec {
   ];
 
   meta = {
-    description = "composable, memory efficient, byte stream readers and writers compatible with effect-based concurrency";
+    description = "Composable, memory efficient, byte stream readers and writers compatible with effect-based concurrency";
     longDescription = ''
       Bytesrw extends the OCaml Bytes module with composable, memory efficient,
       byte stream readers and writers compatible with effect-based concurrency.

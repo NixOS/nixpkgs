@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hid" ];
 
   meta = with lib; {
-    description = "hidapi bindings in ctypes";
+    description = "Hidapi bindings in ctypes";
     homepage = "https://github.com/apmorton/pyhidapi";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];

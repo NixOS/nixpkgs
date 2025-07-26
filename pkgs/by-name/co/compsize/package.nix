@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "btrfs: Find compression type/ratio on a file or set of files";
+    description = "Btrfs: Find compression type/ratio on a file or set of files";
     mainProgram = "compsize";
     homepage = "https://github.com/kilobyte/compsize";
     license = licenses.gpl2Plus;

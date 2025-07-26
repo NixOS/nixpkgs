@@ -180,7 +180,7 @@ self: super: {
     '';
 
     meta = with lib; {
-      description = "hinting brought to Kakoune selections";
+      description = "Hinting brought to Kakoune selections";
       homepage = "https://git.sr.ht/~hadronized/hop.kak/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ oleina ];

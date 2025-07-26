@@ -618,7 +618,7 @@ let
           hash = "sha256-7pbl5OgvJ6S0mtZWsEyUzlg+lkUhdq3rkCCpLsvTm4g=";
         };
         meta = {
-          description = "A VSCode extension that changes the markdown preview to support GitHub markdown features";
+          description = "VSCode extension that changes the markdown preview to support GitHub markdown features";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.github-markdown-preview";
           homepage = "https://github.com/mjbvz/vscode-github-markdown-preview";
           license = lib.licenses.mit;
@@ -1919,7 +1919,7 @@ let
           hash = "sha256-YAMH5smLyBuoTdlxSCTPyMIKOWTSIdf2MQVZuOO2V1w=";
         };
         meta = {
-          description = "A VSCode extension that adds syntax highlighting for Pandoc-flavored Markdown";
+          description = "VSCode extension that adds syntax highlighting for Pandoc-flavored Markdown";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=garlicbreadcleric.pandoc-markdown-syntax";
           homepage = "https://github.com/garlicbreadcleric/vscode-pandoc-markdown";
           license = lib.licenses.mit;
@@ -2667,7 +2667,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/wayou.vscode-todo-highlight/changelog";
-          description = "highlight TODOs, FIXMEs, and any keywords, annotations...";
+          description = "Highlight TODOs, FIXMEs, and any keywords, annotations...";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jgclark.vscode-todo-highlight";
           homepage = "https://github.com/jgclark/vscode-todo-highlight";
           license = lib.licenses.mit;
@@ -3523,7 +3523,7 @@ let
           hash = "sha256-yeX6RAJl07d+SuYyGQFLZNcUzVKAsmPFyTKEn+y3GuM=";
         };
         meta = {
-          description = "A Visual Studio Code extension that complements the Remote SSH extension with syntax colorization, keyword intellisense, and simple snippets when editing SSH configuration files";
+          description = "Visual Studio Code extension that complements the Remote SSH extension with syntax colorization, keyword intellisense, and simple snippets when editing SSH configuration files";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit";
           homepage = "https://code.visualstudio.com/docs/remote/ssh";
           license = lib.licenses.unfree;
@@ -4207,7 +4207,7 @@ let
           changelog = "https://github.com/sdras/night-owl-vscode-theme/blob/main/CHANGELOG.md#${
             builtins.replaceStrings [ "." ] [ "" ] mktplcRef.version
           }";
-          description = "A Visual Studio Code theme named Light Owl for daytime usage";
+          description = "Visual Studio Code theme named Light Owl for daytime usage";
           longDescription = ''
             A VS Code theme for the night owls out there. Now introducing
             Light Owl theme for daytime usage. Decisions were based

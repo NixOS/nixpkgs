@@ -23,7 +23,7 @@ buildGoModule rec {
   buildInputs = [ sqlite ] ++ (lib.optional withTensorflow libtensorflow);
 
   meta = {
-    description = "passwordless, anonymous SSH-powered pastebin with a human-friendly TUI and web UI";
+    description = "Passwordless, anonymous SSH-powered pastebin with a human-friendly TUI and web UI";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     homepage = "https://snips.sh";

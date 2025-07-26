@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/trummerschlunk/master_me";
-    description = "automatic mastering plugin for live streaming, podcasts and internet radio";
+    description = "Automatic mastering plugin for live streaming, podcasts and internet radio";
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # error: no type or protocol named 'NSPasteboardType'

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "faster shell navigation of projects";
+    description = "Faster shell navigation of projects";
     homepage = "https://github.com/zimbatm/h";
     license = licenses.mit;
     maintainers = [ maintainers.zimbatm ];

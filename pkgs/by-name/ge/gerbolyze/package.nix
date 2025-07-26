@@ -30,7 +30,7 @@ let
     installFlags = [ "PREFIX=$(out)" ];
 
     meta = with lib; {
-      description = "svg-flatten SVG downconverter";
+      description = "SVG-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
       license = with licenses; [ agpl3Plus ];
       maintainers = with maintainers; [ wulfsta ];
