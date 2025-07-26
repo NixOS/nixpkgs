@@ -3,6 +3,10 @@
   python3,
   fetchFromGitHub,
   nixosTests,
+  perl,
+  radicale,
+  which,
+  xandikos,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,6 +20,13 @@ python3.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
   };
+
+  postPatch = ''
+    patchShebangs tests
+    substituteInPlace tests/test_calendar-cli.sh \
+      --replace-fail "../bin/calendar-cli.py" "$out/bin/calendar-cli" \
+      --replace-fail "../bin/calendar-cli" "$out/bin/calendar-cli"
+  '';
 
   build-system = with python3.pkgs; [
     setuptools
@@ -31,8 +42,22 @@ python3.pkgs.buildPythonApplication rec {
     six
   ];
 
-  # tests require networking
-  doCheck = false;
+  nativeCheckInputs = [
+    perl
+    (python3.pkgs.toPythonModule (radicale.override { inherit python3; }))
+    which
+    xandikos
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pushd tests
+    ./test_calendar-cli.sh
+    popd
+
+    runHook postCheck
+  '';
 
   passthru.tests = {
     inherit (nixosTests) radicale;
