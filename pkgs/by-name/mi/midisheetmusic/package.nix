@@ -47,12 +47,16 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     for i in Classes/MidiPlayer.cs Classes/MidiSheetMusic.cs
     do
       substituteInPlace $i --replace-fail "/usr/bin/timidity" "${timidity}/bin/timidity"
     done
 
     ./build.sh
+
+    runHook postBuild
   '';
 
   doCheck = true;

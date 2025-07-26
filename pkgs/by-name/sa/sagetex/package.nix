@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     make sagetex.sty
+
+    runHook postBuild
   '';
 
   installPhase = ''

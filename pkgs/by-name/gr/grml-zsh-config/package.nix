@@ -23,9 +23,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     cd doc
     make
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''

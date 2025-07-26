@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   */
 
   buildPhase = ''
+    runHook preBuild
+
     # only keep /bin/tr
     ls -1 bin/* | grep -ve  'bin/tr''$' | xargs rm
     # don't keep the other .exe file either
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     exec $out/nix-support/tr-files/bin/tr "$@"
     EOF
     chmod +x $out/bin/thinkingrock
+
+    runHook postBuild
   '';
 
   dontInstall = true;

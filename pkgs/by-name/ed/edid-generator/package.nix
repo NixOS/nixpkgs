@@ -59,7 +59,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make all
+
+    runHook postBuild
   '';
 
   doCheck = true;

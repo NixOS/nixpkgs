@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     make XSL_BASE_PATH=${docbook_xsl}/share/xml/docbook-xsl html-dist
+
+    runHook postBuild
   '';
 
   installPhase = ''

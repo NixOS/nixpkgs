@@ -33,7 +33,11 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ./autogen.sh --prefix=$out
+
+    runHook postBuild
   '';
 
   meta = with lib; {

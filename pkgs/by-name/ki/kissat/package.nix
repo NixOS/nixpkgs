@@ -63,7 +63,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make -j$NIX_BUILD_CORES
+
+    runHook postBuild
   '';
 
   installPhase = ''

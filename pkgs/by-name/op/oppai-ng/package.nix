@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     ./build
     ./libbuild
+
+    runHook postBuild
   '';
 
   installPhase = ''

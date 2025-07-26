@@ -21,10 +21,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     sed -e "s,profileDB = .*,profileDB = \"$out/share/ITSx_db/HMMs\";," -i ITSx
     sed "3 a \$ENV{\'PATH\'}='${hmmer}/bin:'.\"\$ENV{\'PATH\'}\";" -i ITSx
     mkdir bin
     mv ITSx bin
+
+    runHook postBuild
   '';
 
   installPhase = ''

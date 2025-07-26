@@ -46,6 +46,8 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     runHook preConfigure
 
     for f in SuiteSparse_config Mongoose; do
@@ -53,6 +55,8 @@ stdenv.mkDerivation {
     done
 
     runHook postConfigure
+
+    runHook postBuild
   '';
 
   installPhase = ''

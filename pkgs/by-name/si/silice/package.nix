@@ -80,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
           src = "${silice.src}/projects";
           sourceRoot = "projects/${project}";
           buildPhase = ''
+            runHook preBuild
+
             targets=()
             for target in $(cat configs | tr -d '\r') ; do
               [[ $target != Makefile* ]] || continue
@@ -90,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
               >&2 echo "ERROR: no target found!"
               false
             fi
+
+            runHook postBuild
           '';
           installPhase = ''
             mkdir $out

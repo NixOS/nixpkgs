@@ -28,7 +28,11 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-fallow-argument-mismatch";
 
   buildPhase = ''
+    runHook preBuild
+
     make dlpoly
+
+    runHook postBuild
   '';
 
   installPhase = ''

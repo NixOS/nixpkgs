@@ -36,6 +36,8 @@ let
     nativeBuildInputs = [ go ];
 
     buildPhase = ''
+      runHook preBuild
+
       # Put in our own lockfiles
       cp ${./x509-go.mod} go.mod
       cp ${./x509-go.sum} go.sum
@@ -47,6 +49,8 @@ let
       # (see https://github.com/namecoin/x509-compressed/pull/4)
       sed -e '/import "internal/d' \
           -e 's/goos.IsAndroid/0/g' -i x509/*.go
+
+      runHook postBuild
     '';
 
     installPhase = ''
