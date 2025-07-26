@@ -1,0 +1,22 @@
+diff --git a/src/PixiEditor/Helpers/VersionHelpers.cs b/src/PixiEditor/Helpers/VersionHelpers.cs
+index 73ddfb374..c7fe55784 100644
+--- a/src/PixiEditor/Helpers/VersionHelpers.cs
++++ b/src/PixiEditor/Helpers/VersionHelpers.cs
+@@ -13,6 +13,9 @@ internal static class VersionHelpers
+     {
+         StringBuilder builder = new($"{GetCurrentAssemblyVersion().ToString()} Beta");
+ 
++        builder.Append(" NixOS Build");
++        return builder.ToString();
++
+         // TODO: Dev Build removed for closed beta
+ #if MSIX_DEBUG
+         builder.Append(" MSIX Debug Build");
+@@ -38,6 +41,7 @@ internal static class VersionHelpers
+     // BuildId should not contain spaces
+     public static string GetBuildId()
+     {
++        return "BetaNixOS";
+ #if DEBUG
+         return "BetaDebug";
+ #elif DEVRELEASE

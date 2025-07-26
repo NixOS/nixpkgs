@@ -1,0 +1,40 @@
+diff --git a/src/PixiEditor.Extensions.CommonApi/PixiEditor.Extensions.CommonApi.csproj b/src/PixiEditor.Extensions.CommonApi/PixiEditor.Extensions.CommonApi.csproj
+index 239d96cf9..f89c9125b 100644
+--- a/src/PixiEditor.Extensions.CommonApi/PixiEditor.Extensions.CommonApi.csproj
++++ b/src/PixiEditor.Extensions.CommonApi/PixiEditor.Extensions.CommonApi.csproj
+@@ -18,34 +18,10 @@
+     <ProtogenVersion>3.2.42</ProtogenVersion>
+   </PropertyGroup>
+   
+-  <Target Name="ProtogenCheck" BeforeTargets="GenerateProtoContracts">
+-    <PropertyGroup>
+-      <ProtogenExists>false</ProtogenExists>
+-    </PropertyGroup>
+-    <Exec Command="dotnet tool run protogen --version" IgnoreExitCode="true">
+-      <Output TaskParameter="ExitCode" PropertyName="ProtogenExitCode"/>
+-    </Exec>
+-    <PropertyGroup>
+-      <ProtogenExists Condition="'$(ProtogenExitCode)' == '0'">true</ProtogenExists>
+-    </PropertyGroup>
+-  </Target>
+-  
+-  <Target Name="InstallProtogen" BeforeTargets="GenerateProtoContracts"
+-          Condition="'$(ProtogenExists)' != 'true'">
+-    <Message Text="Downloading protogen v$(ProtogenVersion)..." Importance="high"/>
+-    <Exec Command="dotnet tool install --local protobuf-net.Protogen --version $(ProtogenVersion)"/>
+-    <PropertyGroup>
+-      <ProtogenExists>true</ProtogenExists>
+-    </PropertyGroup>
+-    
+-    <Message Text="protogen installed successfully." Importance="high"/>
+-  </Target>
+-    
+-  
+   <Target Name="GenerateProtoContracts" BeforeTargets="BeforeCompile"
+           Inputs="$(MSBuildProjectDirectory)\DataContracts\*.proto"
+           Outputs="$(MSBuildProjectDirectory)\ProtoAutogen\*.cs">
+-    <Exec Command="dotnet tool run protogen --csharp_out=ProtoAutogen --proto_path=DataContracts +listset=yes *.proto"/>
++    <Exec Command="protogen --csharp_out=ProtoAutogen --proto_path=DataContracts +listset=yes *.proto"/>
+ 
+     <ItemGroup>
+       <Compile Include="ProtoAutogen\*.cs" KeepDuplicates="false"/>
