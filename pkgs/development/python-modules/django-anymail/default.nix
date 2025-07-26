@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "13.0";
+  version = "13.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "anymail";
     repo = "django-anymail";
     tag = "v${version}";
-    hash = "sha256-0KqpgS71QwTfLp4I8p1An6sCnGcvxTNB4xy4LaFFl8E=";
+    hash = "sha256-ozaukE6W2tq+RBVL10GV9epUMb5W6Yn4s2oeB14Skp8=";
   };
 
   build-system = [ hatchling ];
