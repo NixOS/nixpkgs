@@ -4160,6 +4160,13 @@
     github = "CaptainJawZ";
     githubId = 43111068;
   };
+  # TODO: Figure out handles?
+  cardboardcpu = {
+    name = "Lucas Carratalá";
+    email = "lcarratal7@alumno.uned.es";
+    github = "cardboardcpu";
+    githubId = 185692243;
+  };
   CardboardTurkey = {
     name = "Kiran Ostrolenk";
     email = "kiran@ostrolenk.co.uk";
