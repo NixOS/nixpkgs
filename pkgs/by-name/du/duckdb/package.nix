@@ -136,16 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable SQL OLAP Database Management System";
     homepage = "https://duckdb.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "duckdb";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       costrouc
       cpcloud
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })
