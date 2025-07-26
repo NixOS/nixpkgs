@@ -254,6 +254,14 @@ let
       "--enable-lto"
     ];
 
+    env.CXXFLAGS = toString (
+      lib.optionals (lib.versionAtLeast lowdown.version "1.4.0") [
+        # Autotools based build system wasn't updated with the backport of
+        # https://github.com/NixOS/nix/pull/12115, so set the define explicitly.
+        "-DHAVE_LOWDOWN_1_4"
+      ]
+    );
+
     makeFlags = [
       # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
       # of make jobserver. until gcc adds support for this we have to instruct make to use this
