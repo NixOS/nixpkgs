@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.7";
+  version = "1.5.7-kernel";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
+    hash = "sha256-Fq0ZDvg2/XQq+7KJvlxVgnm4Umnb/APzbfg5HANfOMU=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
