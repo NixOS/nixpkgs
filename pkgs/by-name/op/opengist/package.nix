@@ -85,7 +85,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Only;
     changelog = "https://github.com/thomiceli/opengist/blob/v${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    maintainers = with lib.maintainers; [
+      phanirithvij
+      newam
+    ];
     mainProgram = "opengist";
   };
 })
