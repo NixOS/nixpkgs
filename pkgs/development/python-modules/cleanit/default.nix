@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "0.4.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "cleanit";

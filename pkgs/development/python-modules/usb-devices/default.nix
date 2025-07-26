@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "usb-devices";

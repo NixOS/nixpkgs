@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";

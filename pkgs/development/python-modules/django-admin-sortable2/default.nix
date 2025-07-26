@@ -37,8 +37,6 @@ buildPythonPackage rec {
   inherit pname version src;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   build-system = [ setuptools ];
 
   dependencies = [ django ];

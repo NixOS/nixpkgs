@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "ebroecker";
     repo = "canmatrix";

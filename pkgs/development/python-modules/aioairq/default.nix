@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "CorantGmbH";
     repo = "aioairq";

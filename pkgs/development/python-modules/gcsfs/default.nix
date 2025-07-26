@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "2025.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "gcsfs";

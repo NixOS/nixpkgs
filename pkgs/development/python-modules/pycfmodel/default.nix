@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";

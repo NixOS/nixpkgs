@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "2.29.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";

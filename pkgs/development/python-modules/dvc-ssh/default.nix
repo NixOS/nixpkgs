@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "4.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "dvc_ssh";
     inherit version;

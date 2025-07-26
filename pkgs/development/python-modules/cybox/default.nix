@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.1.0.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "CybOXProject";
     repo = "python-cybox";

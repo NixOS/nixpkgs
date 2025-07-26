@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "8.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";

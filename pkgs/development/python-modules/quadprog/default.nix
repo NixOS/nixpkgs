@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.1.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "quadprog";
     repo = "quadprog";

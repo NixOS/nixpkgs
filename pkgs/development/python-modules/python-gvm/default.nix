@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "26.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "python-gvm";

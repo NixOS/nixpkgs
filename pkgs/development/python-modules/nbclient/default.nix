@@ -23,8 +23,6 @@ let
     version = "0.10.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.9";
-
     src = fetchFromGitHub {
       owner = "jupyter";
       repo = "nbclient";

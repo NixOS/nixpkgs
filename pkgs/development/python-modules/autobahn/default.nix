@@ -35,8 +35,6 @@ buildPythonPackage rec {
   version = "24.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "crossbario";
     repo = "autobahn-python";

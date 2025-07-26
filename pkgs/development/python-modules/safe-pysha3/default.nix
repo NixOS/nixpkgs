@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "safe_pysha3";
     inherit version;

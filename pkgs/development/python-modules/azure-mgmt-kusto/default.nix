@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "azure_mgmt_kusto";
     inherit version;

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";

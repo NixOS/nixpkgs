@@ -38,8 +38,6 @@ buildPythonPackage {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   build-system = [ hatchling ];
 
   dependencies = [

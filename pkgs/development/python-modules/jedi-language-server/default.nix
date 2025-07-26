@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "0.45.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = "jedi-language-server";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.10.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "floret";

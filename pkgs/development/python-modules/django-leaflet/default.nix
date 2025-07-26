@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.32.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "django_leaflet";
     inherit version;

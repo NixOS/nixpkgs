@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "8.1.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.6.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "identify";

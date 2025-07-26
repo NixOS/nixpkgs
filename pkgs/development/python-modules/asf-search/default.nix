@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "9.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";

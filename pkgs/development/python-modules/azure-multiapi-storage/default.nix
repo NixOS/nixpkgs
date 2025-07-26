@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "azure_multiapi_storage";
     inherit version;

@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "9.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = "python-homewizard-energy";

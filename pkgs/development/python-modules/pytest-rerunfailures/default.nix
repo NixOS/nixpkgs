@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "15.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-rerunfailures";

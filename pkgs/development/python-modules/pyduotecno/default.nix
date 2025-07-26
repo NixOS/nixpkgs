@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2024.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "pyDuotecno";

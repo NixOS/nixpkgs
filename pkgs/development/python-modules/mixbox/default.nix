@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "CybOXProject";
     repo = "mixbox";

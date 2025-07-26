@@ -14,8 +14,6 @@ buildPythonPackage {
   version = "4.35.0-unstable-2025-01-16";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "breathe-doc";
     repo = "breathe";

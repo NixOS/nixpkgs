@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "15.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";

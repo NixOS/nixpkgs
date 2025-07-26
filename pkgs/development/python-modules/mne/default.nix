@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "1.9.0-unstable-2025-05-01";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";

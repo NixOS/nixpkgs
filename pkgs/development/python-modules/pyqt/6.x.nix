@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "6.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   # It looks like a stable release, but is it? Who knows.
   # It's not on PyPI proper yet, at least, and the current
   # actually-released version does not build with Qt 6.9,

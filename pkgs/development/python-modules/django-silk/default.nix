@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "5.3.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";

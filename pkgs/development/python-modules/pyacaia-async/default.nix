@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "pyacaia_async";
     inherit version;

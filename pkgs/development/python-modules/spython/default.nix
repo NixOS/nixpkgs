@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.3.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "singularityhub";
     repo = "singularity-cli";

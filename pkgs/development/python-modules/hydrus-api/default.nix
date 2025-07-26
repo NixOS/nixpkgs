@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "5.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "hydrus_api";
     inherit version;

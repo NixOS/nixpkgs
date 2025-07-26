@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "3.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";

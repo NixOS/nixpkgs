@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "25.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
