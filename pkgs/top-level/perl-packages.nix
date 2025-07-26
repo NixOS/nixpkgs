@@ -27726,18 +27726,18 @@ with self;
 
   PerlCriticCommunity = buildPerlModule {
     pname = "Perl-Critic-Community";
-    version = "1.0.3";
+    version = "1.0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.3.tar.gz";
-      hash = "sha256-Ed3bt5F5/mIp8zPKOS+U/firXNmJzJfZk1IaidXEetU=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.4.tar.gz";
+      hash = "sha256-OzFiTqDPQ5K49Dl6UpUVJIgUohZml/GkU9WKtvES0gk=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [
       PPI
       PathTiny
       PerlCritic
+      PerlCriticPolicyPliceaseProhibitArrayAssignAref
       PerlCriticPolicyVariablesProhibitLoopOnHash
-      PerlCriticPulp
     ];
     meta = {
       description = "Community-inspired Perl::Critic policies";
@@ -27762,6 +27762,21 @@ with self;
       description = "Policies for Perl::Critic concerned with using Moose";
       homepage = "https://metacpan.org/release/Perl-Critic-Moose";
       license = with lib.licenses; [ artistic1 ];
+    };
+  };
+
+  PerlCriticPolicyPliceaseProhibitArrayAssignAref = buildPerlPackage {
+    pname = "Perl-Critic-Policy-Plicease-ProhibitArrayAssignAref";
+    version = "100.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Perl-Critic-Policy-Plicease-ProhibitArrayAssignAref-100.00.tar.gz";
+      hash = "sha256-2LcyMNK4vyuAEE/Ap1jHSLn/N7CL+Buqc/jXCeIM/r4=";
+    };
+    propagatedBuildInputs = [ PerlCritic ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Perl::Critic::Policy::Plicease::ProhibitArrayAssignAref";
+      description = "Don't assign an anonymous arrayref to an array";
+      license = lib.licenses.gpl3Plus;
     };
   };
 
