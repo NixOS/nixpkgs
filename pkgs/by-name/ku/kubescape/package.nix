@@ -1,45 +1,48 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
+  writableTmpDirAsHomeHook,
   installShellFiles,
   versionCheckHook,
+  buildPackages,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "3.0.25";
+  version = "3.0.35";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
-    tag = "v${version}";
-    hash = "sha256-1KwFa0FixlzgRd2hSUj/ODf0SJKxZ496/xg374uV4fI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-in+IURIUpHx5U0FeO0nCYF2/rsroHszUzXb/TThoFEI=";
     fetchSubmodules = true;
   };
-
+  patches = [
+    ./no_remote_version_check.patch
+  ];
   proxyVendor = true;
-  vendorHash = "sha256-GL5V3f2hiTzNDhBKyvyT8BlbRCaPSJXLy/+xiYjhsvw=";
+  vendorHash = "sha256-HDiSkj6GYDzQoLZWLQHH64GmYr9k9SSTaGNHJBNaeGU=";
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${version}"
+    "-X=github.com/kubescape/kubescape/v${lib.versions.major finalAttrs.version}/core/cautils.BuildNumber=v${finalAttrs.version}"
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Remove tests that use networking
     rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
@@ -57,21 +60,29 @@ buildGoModule rec {
       --replace-fail "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd kubescape \
-      --bash <($out/bin/kubescape completion bash) \
-      --fish <($out/bin/kubescape completion fish) \
-      --zsh <($out/bin/kubescape completion zsh)
-  '';
+  postInstall =
+    let
+      kubescape =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.kubescape;
+    in
+    ''
+      installShellCompletion --cmd kubescape \
+        --bash <(${kubescape}/bin/kubescape completion bash) \
+        --fish <(${kubescape}/bin/kubescape completion fish) \
+        --zsh <(${kubescape}/bin/kubescape completion zsh)
+    '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
   versionCheckProgramArg = "version";
 
   meta = {
     description = "Tool for testing if Kubernetes is deployed securely";
     homepage = "https://github.com/kubescape/kubescape";
-    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized
@@ -90,4 +101,4 @@ buildGoModule rec {
     ];
     mainProgram = "kubescape";
   };
-}
+})
