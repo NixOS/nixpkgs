@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "2.6.2"; # only even minor versions are stable
+  version = "2.6.3"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-ilC2MQNzS1nDuGGczWdm0t/uPwLjpfnzq8HNVfcPpCQ=";
+    hash = "sha256-ACQaWVX/09IVosCYxFJ/nX9LIDGIsnb5o2JQ3T2d1hI=";
   };
 
   patches = [
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
+    substituteInPlace ./src/bin/keactrl/Makefile.am --replace-fail '@sysconfdir@' "$out/etc"
     # darwin special-casing just causes trouble
-    substituteInPlace ./m4macros/ax_crypto.m4 --replace 'apple-darwin' 'nope'
+    substituteInPlace ./m4macros/ax_crypto.m4 --replace-fail 'apple-darwin' 'nope'
   '';
 
   outputs = [
