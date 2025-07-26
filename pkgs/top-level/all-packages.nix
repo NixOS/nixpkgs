@@ -6585,6 +6585,9 @@ with pkgs;
     pypy311
     ;
 
+  python310_regc = callPackage ./../development/interpreters/python/regcpython/3-10.nix { };
+  python3_regc = python310_regc;
+
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
 
