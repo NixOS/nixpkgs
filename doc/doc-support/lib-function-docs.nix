@@ -88,6 +88,10 @@
       name = "derivations";
       description = "miscellaneous derivation-specific functions";
     }
+    {
+      name = "platform";
+      description = "platform constraint algebra";
+    }
   ],
 }:
 

@@ -516,6 +516,28 @@ rec {
       : If this option is true, the output is indented with newlines for attribute sets and lists
     : indent
       : Initial indentation level
+    : customPrinters
+      : A set of custom pretty printers. Using these you can add pretty printers
+        for your own custom abstract data types or override existing
+        pretty-prints.
+
+        ```
+        {
+          myCustomThing = {
+            # A function that determines whether the current value should be printed using this printer
+            check = _: false;
+            # A function that returns the current value as a pretty string
+            print =
+              {
+                v, # The current value
+                indent, # The current indent
+                go, # The recursive function taking indent and value as parameters
+                ...
+              }:
+              "";
+          };
+        }
+        ```
 
     Value
     : The value to be pretty printed
@@ -525,6 +547,7 @@ rec {
       allowPrettyValues ? false,
       multiline ? true,
       indent ? "",
+      customPrinters ? { },
     }:
     let
       go =
@@ -532,8 +555,14 @@ rec {
         let
           introSpace = if multiline then "\n${indent}  " else " ";
           outroSpace = if multiline then "\n${indent}" else " ";
+          customMatches = lib.pipe customPrinters [
+            lib.attrValues
+            (lib.filter (it: it.check v))
+          ];
         in
-        if isInt v then
+        if lib.length customMatches >= 1 then
+          (lib.head customMatches).print { inherit indent v go; }
+        else if isInt v then
           toString v
         # toString loses precision on floats, so we use toJSON instead. This isn't perfect
         # as the resulting string may not parse back as a float (e.g. 42, 1e-06), but for
