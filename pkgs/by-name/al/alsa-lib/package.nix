@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   alsa-topology-conf,
   alsa-ucm-conf,
+  python3,
   testers,
   directoryListingUpdater,
 }:
@@ -15,6 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
     hash = "sha256-vpyIoLNgQ2fddBZ6K3VKNeFC9nApKuR6L97yei7pejI=";
+  };
+
+  alsa-tests = fetchFromGitHub {
+    owner = "alsa-project";
+    repo = "alsa-tests";
+    rev = "53d34b67078540273899e15544e01c6d996f5240";
+    hash = "sha256-eclBmTsPtUJ0kuVf5pCn20zgDz87Ne/V6g9KHTQxu1E=";
   };
 
   patches = [
@@ -30,6 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -s ${alsa-ucm-conf}/share/alsa/{ucm,ucm2} $out/share/alsa
     ln -s ${alsa-topology-conf}/share/alsa/topology $out/share/alsa
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ python3 ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # validate UCM configuration
+    pushd ${finalAttrs.alsa-tests}/python/ucm-validator2
+    LD_LIBRARY_PATH="$out/lib" \
+      python3 ucm.py configs --ucmdir="$out/share/alsa/ucm2"
+    popd
+
+    runHook postInstallCheck
   '';
 
   outputs = [
