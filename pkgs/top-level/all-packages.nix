@@ -8433,8 +8433,6 @@ with pkgs;
   };
   libkrb5 = krb5; # TODO(de11n) Try to make krb5 reuse libkrb5 as a dependency
 
-  ktextaddons = libsForQt5.callPackage ../development/libraries/ktextaddons { };
-
   l-smash = callPackage ../development/libraries/l-smash {
     stdenv = gccStdenv;
   };
