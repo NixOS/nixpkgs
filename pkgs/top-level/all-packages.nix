@@ -12742,6 +12742,8 @@ with pkgs;
   jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
+  jack-link = callPackage ../tools/audio/jack-link { };
+
   jalv-qt = jalv.override { useQt = true; };
 
   js8call = qt5.callPackage ../applications/radio/js8call { };
