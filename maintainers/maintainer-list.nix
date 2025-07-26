@@ -10925,6 +10925,11 @@
     githubId = 7348004;
     name = "Benjamin Levy";
   };
+  iofq = {
+    github = "iofq";
+    githubId = 38452426;
+    name = "iofq";
+  };
   iogamaster = {
     email = "iogamastercode+nixpkgs@gmail.com";
     name = "IogaMaster";
