@@ -113,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
           # fails with incorrect result
           # Upstream issue https://github.com/duckdb/duckdb/issues/14294
           "test/sql/copy/file_size_bytes.test"
+          # https://github.com/duckdb/duckdb/issues/17757#issuecomment-3032080432
+          "test/issues/general/test_17757.test"
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "test/sql/aggregate/aggregates/test_kurtosis.test"
