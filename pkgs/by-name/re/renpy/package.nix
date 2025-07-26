@@ -1,4 +1,5 @@
 {
+  assimp,
   fetchFromGitHub,
   ffmpeg,
   freetype,
@@ -25,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  version = "8.3.7.25031702";
+  version = "8.4.1.25072401";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     tag = finalAttrs.version;
-    hash = "sha256-QY6MMiagPVV+pCDM0FRD++r2fY3tD8qWmHj7fJKIxUQ=";
+    hash = "sha256-wJnMqUrRGWcsuZWdqbiUI/BD2sSRjJKEzsCOzSngoZM=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    assimp
     ffmpeg
     freetype
     fribidi
@@ -86,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./shutup-erofs-errors.patch
-    ./5687.patch
   ]
   ++ lib.optional withoutSteam ./noSteam.patch;
 
@@ -98,20 +99,20 @@ stdenv.mkDerivation (finalAttrs: {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = '64bit Sensation'
+    version_name = 'Tomorrowland'
     EOF
   '';
 
   buildPhase = ''
     runHook preBuild
-    ${python.pythonOnBuildForHost.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
+    ${python.pythonOnBuildForHost.interpreter} setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    ${python.pythonOnBuildForHost.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
+    ${python.pythonOnBuildForHost.interpreter} setup.py install_lib -d $out/${python.sitePackages}
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
