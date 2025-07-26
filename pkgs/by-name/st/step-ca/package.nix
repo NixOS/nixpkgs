@@ -18,7 +18,12 @@ buildGoModule rec {
     owner = "smallstep";
     repo = "certificates";
     tag = "v${version}";
-    hash = "sha256-pN+zvLZuBfw40KCegh7J5RzDOXgbLHNhhFJRFSKhlYc=";
+    # Source uses git export-subst and isn't reproducible when fetching as git archive,
+    # see https://github.com/smallstep/certificates/blob/6a1250131284dce4aa66c0e0e3f7a3202dd56ad0/.gitattributes.
+    # Use forceFetchGit to fetch the source as git repo, as fetchGit isn't effected,
+    # see https://github.com/NixOS/nixpkgs/issues/84312#issuecomment-2475948960.
+    forceFetchGit = true;
+    hash = "sha256-ZIpsSNdQVkelo5b3H03N8qToHU7z+lalAE7Ur6m2YwY=";
   };
 
   vendorHash = "sha256-gGPrrl5J8UrjUpof2DaSs1fAQsMSsyAMlC67h5V75+k=";
