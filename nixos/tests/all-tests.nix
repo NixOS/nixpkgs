@@ -1498,6 +1498,7 @@ in
   txredisapi = runTest ./txredisapi.nix;
   tuptime = runTest ./tuptime.nix;
   turbovnc-headless-server = runTest ./turbovnc-headless-server.nix;
+  turborepo-remote-cache = runTest ./turborepo-remote-cache.nix;
   turn-rs = runTest ./turn-rs.nix;
   tusd = runTest ./tusd/default.nix;
   tuxguitar = runTest ./tuxguitar.nix;
