@@ -42,6 +42,13 @@ in
                 }
               ];
             };
+            folders.baz = {
+              path = "/var/lib/syncthing/baz";
+              devices = [
+                "b"
+                "c"
+              ];
+            };
           };
         };
       };
@@ -70,6 +77,16 @@ in
                 }
               ];
             };
+            folders.baz = {
+              path = "/var/lib/syncthing/baz";
+              devices = [
+                "a"
+                "c"
+              ];
+              ignorePatterns = [
+                "notB"
+              ];
+            };
           };
         };
       };
@@ -89,6 +106,16 @@ in
               "b"
             ];
             type = "receiveencrypted";
+          };
+          folders.baz = {
+            path = "/var/lib/syncthing/baz";
+            devices = [
+              "a"
+              "b"
+            ];
+            ignorePatterns = [
+              "notC"
+            ];
           };
         };
       };
@@ -131,5 +158,29 @@ in
 
     # Bar on C is untrusted, check that content is not in cleartext
     c.fail("grep -R plaincontent /var/lib/syncthing/bar")
+
+    # Test baz
+
+    a.wait_for_file("/var/lib/syncthing/baz")
+    b.wait_for_file("/var/lib/syncthing/baz")
+    c.wait_for_file("/var/lib/syncthing/baz")
+
+    # A creates the file notB, C should get it, B should ignore it
+    a.succeed("echo notB > /var/lib/syncthing/baz/notB")
+    a.succeed("echo controlA > /var/lib/syncthing/baz/controlA")
+    c.wait_for_file("/var/lib/syncthing/baz/notB")
+    c.wait_for_file("/var/lib/syncthing/baz/controlA")
+    b.wait_for_file("/var/lib/syncthing/baz/controlA")
+
+    # B creates the file notC, A should get it, C should ignore it
+    b.succeed("echo notC > /var/lib/syncthing/baz/notC")
+    b.succeed("echo controlB > /var/lib/syncthing/baz/controlB")
+    a.wait_for_file("/var/lib/syncthing/baz/notC")
+    a.wait_for_file("/var/lib/syncthing/baz/controlB")
+    c.wait_for_file("/var/lib/syncthing/baz/controlB")
+
+    # Check that files have been correctly ignored
+    b.fail("cat /var/lib/syncthing/baz/notB")
+    c.fail("cat /var/lib/syncthing/baz/notC")
   '';
 }
