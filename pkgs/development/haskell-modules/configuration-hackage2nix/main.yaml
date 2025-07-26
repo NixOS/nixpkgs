@@ -31,6 +31,8 @@ default-package-overrides:
   - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
+  # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
+  - hiedb < 0.7
   # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
   - hnix-store-remote < 0.7
   # 2025-01-17: need to match stackage version of hosc
