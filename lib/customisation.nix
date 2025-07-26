@@ -151,8 +151,13 @@ rec {
 
     :::
   */
-  makeOverridable =
-    f:
+  makeOverridable = f: makeOverridable' { inherit f; };
+
+  makeOverridable' =
+    {
+      f,
+      untouchedArgs ? { },
+    }:
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
@@ -166,7 +171,13 @@ rec {
         overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
 
         # Re-call the function but with different arguments
-        overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
+        overrideArgs = mirrorArgs (
+          newArgs:
+          makeOverridable' {
+            inherit f;
+            untouchedArgs = newArgs;
+          } (overrideWith newArgs)
+        );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
       in
@@ -177,12 +188,16 @@ rec {
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
             fdrv: overrideResult (x: x.overrideAttrs fdrv);
+          origF = f;
+          inherit untouchedArgs;
         }
       else if isFunction result then
         # Transform the result into a functor while propagating its arguments
         setFunctionArgs result (functionArgs result)
         // {
           override = overrideArgs;
+          origF = f;
+          inherit untouchedArgs;
         }
       else
         result
@@ -303,7 +318,10 @@ rec {
 
     in
     if missingArgs == { } then
-      makeOverridable f allArgs
+      makeOverridable' {
+        inherit f;
+        untouchedArgs = args;
+      } allArgs
     # This needs to be an abort so it can't be caught with `builtins.tryEval`,
     # which is used by nix-env and ofborg to filter out packages that don't evaluate.
     # This way we're forced to fix such errors in Nixpkgs,
