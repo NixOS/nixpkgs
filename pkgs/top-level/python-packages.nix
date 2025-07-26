@@ -15753,6 +15753,8 @@ self: super: with self; {
     callPackage ../development/python-modules/robotframework-databaselibrary
       { };
 
+  robotframework-datadriver = callPackage ../development/python-modules/robotframework-datadriver { };
+
   robotframework-excellib = callPackage ../development/python-modules/robotframework-excellib { };
 
   robotframework-pythonlibcore =
