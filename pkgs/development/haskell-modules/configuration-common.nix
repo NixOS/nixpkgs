@@ -3204,6 +3204,12 @@ with haskellLib;
   # and therefore aren't uploaded to hackage
   # Needs to be fixed upstream
   haskore = dontCheck (doJailbreak super.haskore);
+
+  # Requires wrapGAppsHook otherwise we get: https://github.com/haskell/ThreadScope/issues/143
+  threadscope = overrideCabal (drv: {
+    buildDepends = [ pkgs.wrapGAppsHook3 ];
+  }) super.threadscope;
+
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
