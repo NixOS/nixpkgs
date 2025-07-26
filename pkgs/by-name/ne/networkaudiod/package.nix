@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     .${system} or throwSystem;
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg -x $src .
+
+    runHook postUnpack
   '';
 
   nativeBuildInputs = [

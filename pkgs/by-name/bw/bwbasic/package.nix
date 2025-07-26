@@ -21,7 +21,11 @@ gccStdenv.mkDerivation (finalAttrs: {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip $src
+
+    runHook postUnpack
   '';
 
   postPatch = ''

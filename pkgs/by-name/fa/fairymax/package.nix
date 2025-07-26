@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     cp ${src} fairymax.c
     cp ${ini} fmax.ini
+
+    runHook postUnpack
   '';
 
   buildPhase = ''

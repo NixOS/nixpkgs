@@ -72,8 +72,12 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     ar x $src
     tar xfvz data.tar.gz
+
+    runHook postUnpack
   '';
 
   nativeBuildInputs = [ makeWrapper ];

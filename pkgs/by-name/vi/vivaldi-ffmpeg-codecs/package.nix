@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ squashfsTools ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unsquashfs -dest . $src
+
+    runHook postUnpack
   '';
 
   installPhase = ''

@@ -23,10 +23,14 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p "$name"
     cd "$name"
     unpackFile "$src"
     unpackFile source.zip
+
+    runHook postUnpack
   '';
 
   buildPhase = "c++ -o objconv -O2 *.cpp";

@@ -95,9 +95,13 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     ostree init --repo=pteid --mode=archive-z2
     ostree static-delta apply-offline --repo=pteid ${src}
     ostree checkout --repo=pteid -U $(cd pteid/objects && echo */*.commit | sed -E "s/\/|\.commit$//g") pteid_out
+
+    runHook postUnpack
   '';
 
   desktopItems = [

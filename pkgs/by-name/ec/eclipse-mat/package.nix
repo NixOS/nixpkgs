@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip $src
+
+    runHook postUnpack
   '';
 
   buildCommand = ''

@@ -68,7 +68,11 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     ar p $src data.tar.xz | tar xJ ./opt/ ./usr/
+
+    runHook postUnpack
   '';
 
   installPhase = ''

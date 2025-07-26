@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     7z x $src
     bsdtar -xf Payload~
+
+    runHook postUnpack
   '';
 
   installPhase = ''

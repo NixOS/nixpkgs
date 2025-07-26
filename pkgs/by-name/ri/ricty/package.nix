@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     install -m 0770 $src ricty_generator.sh
+
+    runHook postUnpack
   '';
 
   patchPhase = ''

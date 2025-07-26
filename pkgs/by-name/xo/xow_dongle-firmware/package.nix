@@ -29,6 +29,8 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ cabextract ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     sources=($srcs)
 
     cabextract -F FW_ACC_00U.bin ''${sources[0]}
@@ -36,6 +38,8 @@ stdenvNoCC.mkDerivation rec {
 
     cabextract -F FW_ACC_00U.bin ''${sources[1]}
     mv FW_ACC_00U.bin xow_dongle_045e_02e6.bin
+
+    runHook postUnpack
   '';
 
   installPhase = ''

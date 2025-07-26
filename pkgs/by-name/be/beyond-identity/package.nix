@@ -53,7 +53,11 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       dpkg -x $src .
+
+      runHook postUnpack
     '';
 
     installPhase = ''

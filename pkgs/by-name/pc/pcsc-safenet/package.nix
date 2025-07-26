@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg-deb -x "$src/$debName" .
+
+    runHook postUnpack
   '';
 
   buildInputs = [
