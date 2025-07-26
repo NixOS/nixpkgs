@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-tikD8efc3Q3xIQnaC3SSBaCRQxMI1HzXxeupvYeNnE4=";
   };
 
-  postPatch = ''
-    # tests have a typo in one of the assertions
-    substituteInPlace tests/test_paranoid.py --replace "01-Jan-1970" "01 Jan 1970"
-  '';
-
   propagatedBuildInputs = [ flask ];
 
   nativeCheckInputs = [ pytestCheckHook ];

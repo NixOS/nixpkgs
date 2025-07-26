@@ -22,12 +22,6 @@ buildPythonPackage {
     hash = "sha256-dhAB0VbBGsSrgYGUlZEYaKA6sQB/f9Bb3alsRuQ8opo=";
   };
 
-  postPatch = ''
-    # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
-    substituteInPlace setup.py \
-      --replace '>=3.6.*' '>=3.6'
-  '';
-
   pythonImportsCheck = [ "boilerpy3" ];
 
   meta = with lib; {

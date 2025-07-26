@@ -62,11 +62,11 @@ buildPythonPackage rec {
   # Disable checking the code coverage
   prePatch = ''
     substituteInPlace social_core/tests/requirements.txt \
-      --replace "coverage>=3.6" "" \
-      --replace "pytest-cov>=2.7.1" ""
+      --replace-fail "coverage>=3.6" "" \
+      --replace-fail "pytest-cov>=2.7.1" ""
 
     substituteInPlace tox.ini \
-      --replace "{posargs:-v --cov=social_core}" "{posargs:-v}"
+      --replace-fail "{posargs:-v --cov=social_core}" "{posargs:-v}"
   '';
 
   pythonImportsCheck = [ "social_core" ];

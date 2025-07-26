@@ -29,7 +29,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream is creating GitHub releases without version
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
   build-system = [ poetry-core ];

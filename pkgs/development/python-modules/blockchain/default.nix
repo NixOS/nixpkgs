@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "enum-compat" ""
+    substituteInPlace setup.py --replace-fail "enum-compat" ""
   '';
 
   propagatedBuildInputs = [ future ];

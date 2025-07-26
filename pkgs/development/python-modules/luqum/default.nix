@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '--doctest-modules --doctest-glob="test_*.rst"' ""
+      --replace-fail '--doctest-modules --doctest-glob="test_*.rst"' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

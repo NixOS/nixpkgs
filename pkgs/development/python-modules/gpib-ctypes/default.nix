@@ -24,9 +24,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace gpib_ctypes/gpib/gpib.py \
-      --replace "libgpib.so.0" "${linux-gpib}/lib/libgpib.so.0"
+      --replace-fail "libgpib.so.0" "${linux-gpib}/lib/libgpib.so.0"
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
   pythonImportsCheck = [ "gpib_ctypes.gpib" ];

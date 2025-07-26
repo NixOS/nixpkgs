@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace git/cmd.py \
-      --replace 'git_exec_name = "git"' 'git_exec_name = "${pkgs.gitMinimal}/bin/git"'
+      --replace-fail 'git_exec_name = "git"' 'git_exec_name = "${pkgs.gitMinimal}/bin/git"'
   '';
 
   # Tests require a git repo

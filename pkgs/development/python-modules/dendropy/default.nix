@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '["pytest-runner"],' '[],'
+      --replace-fail '["pytest-runner"],' '[],'
 
     substituteInPlace src/dendropy/interop/paup.py \
-      --replace 'PAUP_PATH = os.environ.get(metavar.DENDROPY_PAUP_PATH_ENVAR, "paup")' 'PAUP_PATH = os.environ.get(metavar.DENDROPY_PAUP_PATH_ENVAR, "${paupPath}")'
+      --replace-fail 'PAUP_PATH = os.environ.get(metavar.DENDROPY_PAUP_PATH_ENVAR, "paup")' 'PAUP_PATH = os.environ.get(metavar.DENDROPY_PAUP_PATH_ENVAR, "${paupPath}")'
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

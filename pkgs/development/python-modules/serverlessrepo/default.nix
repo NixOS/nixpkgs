@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyyaml~=5.1" "pyyaml" \
-      --replace "boto3~=1.9, >=1.9.56" "boto3"
+      --replace-fail "pyyaml~=5.1" "pyyaml" \
+      --replace-fail "boto3~=1.9, >=1.9.56" "boto3"
   '';
 
   enabledTestPaths = [ "tests/unit" ];

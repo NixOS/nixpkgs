@@ -87,8 +87,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --durations=20" "" \
-      --replace " --junit-xml=junit-results.xml" ""
+      --replace-fail " --durations=20" "" \
+      --replace-fail " --junit-xml=junit-results.xml" ""
 
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py

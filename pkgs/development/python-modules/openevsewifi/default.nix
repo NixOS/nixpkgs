@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'pytest-cov = "^2.8.1"' ""
+      --replace-fail 'pytest-cov = "^2.8.1"' ""
   '';
 
   pythonImportsCheck = [ "openevsewifi" ];

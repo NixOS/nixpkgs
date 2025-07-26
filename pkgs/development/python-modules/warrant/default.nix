@@ -34,7 +34,7 @@ buildPythonPackage {
   # this needs to go when 0.6.2 or later is released
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "python-jose-cryptodome>=1.3.2" "python-jose>=2.0.0"
+      --replace-fail "python-jose-cryptodome>=1.3.2" "python-jose>=2.0.0"
   '';
 
   nativeCheckInputs = [ mock ];

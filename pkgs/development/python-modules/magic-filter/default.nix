@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace magic_filter/__init__.py \
-      --replace '"1"' '"${version}"'
+      --replace-fail '"1"' '"${version}"'
   '';
 
   nativeBuildInputs = [ hatchling ];

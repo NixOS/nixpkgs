@@ -29,12 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-D0p2tL/VvkouXrXfRhMuCq8wMtzeoBTppWEG5vM1qCo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "numpy==1.19.*" "numpy" \
-      --replace "scipy==1.5.*" "scipy"
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [

@@ -33,8 +33,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
-      --replace 'Events = "^0.4"' 'Events = ">=0.4"'
+      --replace-fail 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
+      --replace-fail 'Events = "^0.4"' 'Events = ">=0.4"'
   '';
 
   nativeBuildInputs = [ poetry-core ];

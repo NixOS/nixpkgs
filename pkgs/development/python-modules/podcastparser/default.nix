@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=podcastparser --cov-report html --doctest-modules" ""
+      --replace-fail "--cov=podcastparser --cov-report html --doctest-modules" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

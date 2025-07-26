@@ -47,7 +47,7 @@ buildPythonPackage rec {
   # removing optional dependency needing pyobjc
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--flake8 --black --cov" ""
+      --replace-fail "--flake8 --black --cov" ""
   '';
 
   pythonRemoveDeps = [

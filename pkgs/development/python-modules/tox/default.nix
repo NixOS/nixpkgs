@@ -34,11 +34,6 @@ buildPythonPackage rec {
     hash = "sha256-VySdeZDC71vi2mOtjdFJ4iCSpWbFEW3nzrVucPUz/oc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "packaging>=22" "packaging"
-  '';
-
   nativeBuildInputs = [
     hatchling
     hatch-vcs

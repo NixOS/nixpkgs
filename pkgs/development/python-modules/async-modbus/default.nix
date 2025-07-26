@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"--durations=2", "--verbose"' ""
+      --replace-fail '"--durations=2", "--verbose"' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

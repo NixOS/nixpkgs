@@ -25,7 +25,7 @@ buildPythonPackage {
 
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file
-    substituteInPlace setup.py --replace "get_version()" "'${version}'"
+    substituteInPlace setup.py --replace-fail "get_version()" "'${version}'"
   '';
 
   propagatedBuildInputs = [ numpy ];

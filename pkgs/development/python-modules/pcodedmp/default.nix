@@ -22,7 +22,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Circular dependency
     substituteInPlace setup.py \
-      --replace "'oletools>=0.54'," ""
+      --replace-fail "'oletools>=0.54'," ""
   '';
 
   # Module doesn't have tests

@@ -44,8 +44,8 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
-    substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
-      --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
+    substituteInPlace skein/core.py --replace-fail "'yarn'" "'${hadoop}/bin/yarn'" \
+      --replace-fail "else 'java'" "else '${hadoop.jdk}/bin/java'"
     # Remove vendorized versioneer
     rm versioneer.py
   ''

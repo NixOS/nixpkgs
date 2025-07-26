@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "lark-parser>=0.7.1,<0.8.0" "lark"
+      --replace-fail "lark-parser>=0.7.1,<0.8.0" "lark"
 
     # NixOS is missing test.test_json module
     rm -r commentjson/tests/test_json

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "license=license" "license='MIT'"
+    substituteInPlace setup.py --replace-fail "license=license" "license='MIT'"
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

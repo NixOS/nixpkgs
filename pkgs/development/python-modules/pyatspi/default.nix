@@ -32,7 +32,7 @@ buildPythonPackage rec {
   postPatch = ''
     # useless python existence check for us
     substituteInPlace configure \
-      --replace '&& ! which' '&& false'
+      --replace-fail '&& ! which' '&& false'
   '';
 
   disabled = !isPy3k;

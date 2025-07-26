@@ -39,8 +39,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "wheel~=0.40.0"' "" \
-      --replace "setuptools~=68.0" "setuptools"
+      --replace-fail ', "wheel~=0.40.0"' "" \
+      --replace-fail "setuptools~=68.0" "setuptools"
   '';
 
   nativeBuildInputs = [ setuptools ];

@@ -145,7 +145,7 @@ buildPythonPackage rec {
     shopt -s extglob
     rm -r pyarrow/!(conftest.py|tests)
     mv pyarrow/conftest.py pyarrow/tests/parent_conftest.py
-    substituteInPlace pyarrow/tests/conftest.py --replace ..conftest .parent_conftest
+    substituteInPlace pyarrow/tests/conftest.py --replace-fail ..conftest .parent_conftest
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # OSError: [Errno 24] Too many open files

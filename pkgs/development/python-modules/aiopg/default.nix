@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "psycopg2-binary" "psycopg2"
+      --replace-fail "psycopg2-binary" "psycopg2"
   '';
 
   # Tests requires a PostgreSQL Docker instance

@@ -30,8 +30,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace riscv_isac/requirements.txt \
-      --replace "pyelftools==0.26" "pyelftools" \
-      --replace "pytest" ""
+      --replace-fail "pyelftools==0.26" "pyelftools" \
+      --replace-fail "pytest" ""
   '';
 
   propagatedBuildInputs = [

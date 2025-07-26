@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace protonvpn_nm_lib/core/dbus/dbus_reconnect.py \
-      --replace "exec_start = python_interpreter_path + \" \" + python_service_path" "exec_start = \"$out/bin/protonvpn_reconnector.py\""
+      --replace-fail "exec_start = python_interpreter_path + \" \" + python_service_path" "exec_start = \"$out/bin/protonvpn_reconnector.py\""
   '';
 
   postInstall = ''

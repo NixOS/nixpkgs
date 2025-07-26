@@ -34,7 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Patch the shebang of a script generated during test.
     substituteInPlace tests/test_run_scripts.py \
-      --replace "#!/usr/bin/env python" "#!${python.interpreter}"
+      --replace-fail "#!/usr/bin/env python" "#!${python.interpreter}"
   '';
 
   pythonImportsCheck = [ "pytest_console_scripts" ];
