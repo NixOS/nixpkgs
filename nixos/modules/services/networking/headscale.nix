@@ -624,6 +624,11 @@ in
         exec ${lib.getExe cfg.package} serve --config ${configFile}
       '';
 
+      unitConfig = {
+        StartLimitIntervalSec = 100;
+        StartLimitBurst = 10;
+      };
+
       serviceConfig =
         let
           capabilityBoundingSet = [ "CAP_CHOWN" ] ++ lib.optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
