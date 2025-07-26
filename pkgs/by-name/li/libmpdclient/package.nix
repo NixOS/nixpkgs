@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = lib.optional finalAttrs.doCheck (lib.strings.mesonBool "test" true);
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = {
     description = "Client library for MPD (music player daemon)";
