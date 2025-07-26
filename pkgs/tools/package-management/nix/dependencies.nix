@@ -66,6 +66,13 @@ regular@{
 
           # only a stripped down version is build which takes a lot less resources to build
           requiredSystemFeatures = [ ];
+          meta = args.meta // {
+            description = "C++ interface for Amazon Web Services (Old version)";
+            # The aws packages got updated and are no longer compatible with this old version.
+            # If someone wants to fix it then start with the patch here
+            # https://github.com/NixOS/nixpkgs/pull/428410#issuecomment-3121681782
+            broken = true;
+          };
         });
 
     aws-sdk-cpp =
