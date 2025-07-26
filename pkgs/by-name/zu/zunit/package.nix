@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zunit-zsh";
     repo = "zunit";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-GkBewb795piCaniZJZpGEZFhKaNs8p8swV5z34OegPY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qU40/eGzuYZZ/oaSFN5pCF2v2cGKEr4t0rnVrEz2d3A=";
     deepClone = true; # Needed in order to get "tests" folder
   };
 

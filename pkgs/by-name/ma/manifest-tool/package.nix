@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tEUsqrJGRhyirI8TEgG6r9crHX58webHO5v7JLLRQ30=";
     leaveDotGit = true;
     postFetch = ''

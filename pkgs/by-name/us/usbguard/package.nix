@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "USBGuard";
     repo = "usbguard";
-    rev = "usbguard-${version}";
+    tag = "usbguard-${version}";
     hash = "sha256-8y8zaKJfoIXc9AvG1wi3EzZA7BR2wVFLuOyD+zpBY0s=";
     fetchSubmodules = true;
   };

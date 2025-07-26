@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mavlink";
     repo = "qgroundcontrol";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wjrfwE97J+UzBPIARQ6cPadN6xIdqR8i+ZKbtiDproM=";
     fetchSubmodules = true;
   };

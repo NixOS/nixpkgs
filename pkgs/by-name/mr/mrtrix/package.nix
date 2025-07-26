@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-5GcQVZaRV7A6aA/ES6qR0dNBrToJiUXt/LyLYmnpvlQ=";
     fetchSubmodules = true;
   };
