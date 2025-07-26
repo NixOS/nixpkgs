@@ -118,6 +118,14 @@ in
       '';
     };
 
+    macvendorURL = mkOption {
+      type = types.str;
+      default = "https://ftl.pi-hole.net/macvendor.db";
+      description = ''
+        URL from which to download the macvendor.db file.
+      '';
+    };
+
     pihole = mkOption {
       type = types.package;
       default = piholeScript;
