@@ -241,9 +241,12 @@ stdenv.mkDerivation (finalAttrs: {
       ]}
 
       # Handle informative binaries about the compilation
-      for i in {ompi,oshmem}_info; do
-        moveToOutput "bin/$i" "''${!outputDev}"
-      done
+      ${lib.pipe wrapperDataFileNames.part1 [
+        (map (name: ''
+          moveToOutput "bin/o${name}_info" "''${!outputDev}"
+        ''))
+        (lib.concatStringsSep "\n")
+      ]}
     '';
 
   postFixup = ''
