@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    (replaceVars ./printing.patch {
+    (replaceVars ./remove-pdfium-download.patch {
       inherit pdfium-binaries;
     })
   ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    cp -r . $out
+    cp -r . "$out"
 
     runHook postInstall
   '';

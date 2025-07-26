@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   writeScript,
   openssl,
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   inherit version src;
   inherit (src) passthru;
 
-  setupHook = writeScript "${pname}-setup-hook" ''
+  setupHook = writeScript "matrix-setup-hook" ''
     matrixFixupHook() {
       runtimeDependencies+=('${lib.getLib openssl}')
     }
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"
-    ln -s '${src}'/* "$out"
+    cp -r . "$out"
 
     runHook postInstall
   '';

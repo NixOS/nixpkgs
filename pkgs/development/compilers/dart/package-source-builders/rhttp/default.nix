@@ -1,8 +1,8 @@
 {
   lib,
-  rustPlatform,
   stdenv,
-  replaceVars,
+  rustPlatform,
+  writeText,
 }:
 
 { version, src, ... }:
@@ -47,30 +47,29 @@ let
     passthru.libraryPath = "lib/librhttp.so";
   };
 
+  fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+    function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+      set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
+    endfunction()
+  '';
 in
 stdenv.mkDerivation {
   pname = "rhttp";
   inherit version src;
   inherit (src) passthru;
 
-  prePatch = ''
-    if [ -d rhttp ]; then pushd rhttp; fi
-  '';
-
-  patches = [
-    (replaceVars ./cargokit.patch {
-      output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
-    })
-  ];
-
   postPatch = ''
-    popd || true
+    if [ -d rhttp ]; then
+      cp ${fakeCargokitCmake} rhttp/cargokit/cmake/cargokit.cmake
+    else
+      cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+    fi
   '';
 
   installPhase = ''
     runHook preInstall
 
-    cp -r . $out
+    cp -r . "$out"
 
     runHook postInstall
   '';

@@ -1,5 +1,5 @@
---- old/linux/CMakeLists.txt	2024-11-30 12:48:42.346266052 +0000
-+++ new/linux/CMakeLists.txt	2024-11-30 12:50:45.495928529 +0000
+--- a/linux/CMakeLists.txt
++++ b/linux/CMakeLists.txt
 @@ -9,29 +9,10 @@
  set(PROJECT_NAME "metadata_god")
  project(${PROJECT_NAME} LANGUAGES CXX)
