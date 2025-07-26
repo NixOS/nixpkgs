@@ -10396,6 +10396,8 @@ self: super: with self; {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
+  nncf = callPackage ../development/python-modules/nncf { };
+
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
 
   noaa-coops = callPackage ../development/python-modules/noaa-coops { };
@@ -10932,6 +10934,8 @@ self: super: with self; {
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override { python3Packages = self; };
   };
+
+  openvino-telemetry = callPackage ../development/python-modules/openvino-telemetry { };
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
