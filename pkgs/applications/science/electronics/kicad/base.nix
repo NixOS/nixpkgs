@@ -69,7 +69,7 @@ assert testing -> !stable -> throw "testing implies stable and cannot be used wi
 
 let
   opencascade-occt = opencascade-occt_7_6;
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString optionalAttrs;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
