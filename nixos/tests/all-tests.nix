@@ -688,6 +688,7 @@ in
   iosched = runTest ./iosched.nix;
   isolate = runTest ./isolate.nix;
   livebook-service = runTest ./livebook-service.nix;
+  jaq = runTest ./jaq.nix;
   pyload = runTest ./pyload.nix;
   oci-containers = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./oci-containers.nix { };
   odoo = runTest ./odoo.nix;
