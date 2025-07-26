@@ -3,12 +3,10 @@
   chatterino2,
   fetchFromGitHub,
   gitUpdater,
-  boost186,
 }:
 
 (chatterino2.buildChatterino {
   enableAvifSupport = true;
-  boost = boost186;
 }).overrideAttrs
   (
     finalAttrs: _: {
