@@ -408,6 +408,7 @@ in
   darling-dmg = runTest ./darling-dmg.nix;
   dae = runTest ./dae.nix;
   davis = runTest ./davis.nix;
+  dawarich = runTest ./web-apps/dawarich.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
