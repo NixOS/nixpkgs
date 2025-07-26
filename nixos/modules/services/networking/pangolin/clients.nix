@@ -222,8 +222,11 @@ in
       }
     );
   };
-  meta.maintainers = with maintainers; [
-    jackr
-    sigmasquadron
-  ];
+  meta = {
+    doc = ./clients.md;
+    maintainers = with maintainers; [
+      jackr
+      sigmasquadron
+    ];
+  };
 }
