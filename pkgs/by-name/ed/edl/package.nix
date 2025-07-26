@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  python3,
   python3Packages,
   unstableGitUpdater,
 }:
@@ -29,6 +30,9 @@ python3Packages.buildPythonPackage {
     colorama
     capstone
     keystone-engine
+    exscript
+    passlib
+    requests
   ];
 
   # No tests set up
@@ -43,8 +47,9 @@ python3Packages.buildPythonPackage {
   '';
 
   postInstall = ''
-    mkdir -p $out/etc/udev/rules.d
+    mkdir -p $out/etc/udev/rules.d $out/bin/edlclient/Config
     cp $src/Drivers/51-edl.rules $out/etc/udev/rules.d/51-edl.rules
+    ln -s $out/${python3.sitePackages}/edlclient/Config/nvitems.xml $out/bin/edlclient/Config
   '';
 
   passthru.updateScript = unstableGitUpdater { };
