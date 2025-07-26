@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bashunit";
-  version = "0.19.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "TypedDevs";
     repo = "bashunit";
     tag = finalAttrs.version;
-    hash = "sha256-LoPtWf4Vo7hodWa0WJmqYDW7p7xJDrRZ5/qwUy/rB3U=";
+    hash = "sha256-neQ7/euCGn0u9ph4Z3vGsptayZ47cY0iG6FFRkwBFG0=";
     forceFetchGit = true; # needed to include the tests directory for the check phase
   };
 
