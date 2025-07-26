@@ -52,6 +52,7 @@ let
     fix
     fold
     foldAttrs
+    foldAttrs'
     foldl
     foldl'
     foldlAttrs
@@ -1629,6 +1630,34 @@ runTests {
       ];
       b = [ 7 ];
       c = [ 8 ];
+    };
+  };
+
+  testFoldAttrs' = {
+    expr =
+      foldAttrs'
+        (
+          name: n: a:
+          [ "${name}${toString n}" ] ++ a
+        )
+        [ ]
+        [
+          {
+            a = 2;
+            b = 7;
+          }
+          {
+            a = 3;
+            c = 8;
+          }
+        ];
+    expected = {
+      a = [
+        "a2"
+        "a3"
+      ];
+      b = [ "b7" ];
+      c = [ "c8" ];
     };
   };
 
