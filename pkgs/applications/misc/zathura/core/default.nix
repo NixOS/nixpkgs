@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
     extraLoaders = [
-      libheif.out
+      libheif.lib
       libjxl
       librsvg
       webp-pixbuf-loader
