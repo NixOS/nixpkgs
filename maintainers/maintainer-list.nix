@@ -12415,6 +12415,13 @@
     githubId = 34899572;
     name = "jopejoe1";
   };
+  jordan-bravo = {
+    name = "Jordan Bravo";
+    email = "jordan@bravo.cc";
+    github = "jordan-bravo";
+    githubId = 62706808;
+    keys = [ { fingerprint = "9C7B 45CD CF53 B483 9BB8  000E C6E3 AECE B5E1 0B1E"; } ];
+  };
   jordanisaacs = {
     name = "Jordan Isaacs";
     email = "nix@jdisaacs.com";
@@ -24549,6 +24556,12 @@
     github = "t4sm5n";
     githubId = 28858039;
     name = "Tuomas Mäkinen";
+  };
+  taciturnaxolotl = {
+    email = "me@dunkirk.sh";
+    github = "taciturnaxolotl";
+    githubId = 92754843;
+    name = "Kieran Klukas";
   };
   tadfisher = {
     email = "tadfisher@gmail.com";

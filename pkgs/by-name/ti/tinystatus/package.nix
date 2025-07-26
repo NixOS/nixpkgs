@@ -16,7 +16,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tinystatus";
-  version = "unstable-2021-07-09";
+  version = "0-unstable-2021-07-09";
 
   src = fetchFromGitHub {
     owner = "bderenzo";

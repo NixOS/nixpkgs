@@ -1047,6 +1047,8 @@ self: super: with self; {
 
   asyncprawcore = callPackage ../development/python-modules/asyncprawcore { };
 
+  asyncpysupla = callPackage ../development/python-modules/asyncpysupla { };
+
   asyncserial = callPackage ../development/python-modules/asyncserial { };
 
   asyncsleepiq = callPackage ../development/python-modules/asyncsleepiq { };

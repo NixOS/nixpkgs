@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "tdfgo";
-  version = "unstable-2022-08-25";
+  version = "0-unstable-2022-08-25";
 
   src = fetchFromGitHub {
     owner = "digitallyserviced";

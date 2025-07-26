@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    hash = "sha256-+mA8b1PEfp151hks4T/I+dMYlJa6yYz1wWnafe+w9y8=";
+    hash = "sha256-8sSn/EXLs7UC4M6cNKtVUNwrHeV4dt3mvUCxQQQRaj0=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     (python3.withPackages (
       p: with p; [
         pygobject3
-        magic
         setproctitle
         unidecode
       ]

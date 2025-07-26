@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-t0REXcsy9XIIARiI7lkOc5lO/ZSL50KOUK+SMsXpjdM=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-nFWF1ER3vk1G/MBw8to+lDJAv6HJNobhdPXV0hVERFE=";
 
   cargoRoot = "src-tauri";

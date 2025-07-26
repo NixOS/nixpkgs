@@ -31,7 +31,7 @@ let
       src = fetchFromGitHub {
         owner = "OpenSmalltalk";
         repo = "opensmalltalk-vm";
-        rev = "202206021410";
+        tag = "202206021410";
         hash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
       };
     in

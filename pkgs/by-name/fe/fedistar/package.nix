@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
 
   pnpmDeps = pnpm.fetchDeps {

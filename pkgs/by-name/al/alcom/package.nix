@@ -77,7 +77,6 @@ rustPlatform.buildRustPackage {
   ++ dotnetSdk.packages
   ++ dotnetBuild.nugetDeps;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Ph6QZW21JYQJgrUecN+MklWuY51iKC2glPEdgxw+3r8=";
   buildAndTestSubdir = subdir;
 
