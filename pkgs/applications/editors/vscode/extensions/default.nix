@@ -4851,8 +4851,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.73.0";
-          hash = "sha256-Fs/rGa6F9Jm4pvD+IIzEsG0TwHy88KkNCkD7I56IL4U=";
+          version = "0.74.0";
+          hash = "sha256-kK4+zTe91b54BxefoUiFgKc0SgHBQ74Y44ivSFkk1/A=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
