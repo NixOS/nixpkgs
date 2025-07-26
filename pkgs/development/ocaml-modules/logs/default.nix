@@ -55,11 +55,11 @@ else
 
   stdenv.mkDerivation rec {
     name = "ocaml${ocaml.version}-${pname}-${version}";
-    version = "0.8.0";
+    version = "0.9.0";
 
     src = fetchurl {
       url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
+      hash = "sha256-7pcGW6Qc4o8Z3qlFPGvsTg7yYWWtc5TEEx6gxlwPBtU=";
     };
 
     nativeBuildInputs = [
