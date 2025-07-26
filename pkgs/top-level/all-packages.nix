@@ -5762,6 +5762,7 @@ with pkgs;
 
   mlir_16 = llvmPackages_16.mlir;
   mlir_17 = llvmPackages_17.mlir;
+  flang = llvmPackages.flang;
 
   libclc = llvmPackages.libclc;
   libllvm = llvmPackages.libllvm;
@@ -5778,13 +5779,16 @@ with pkgs;
       llvmPackages_14 = llvmPackagesSet."14";
       llvmPackages_15 = llvmPackagesSet."15";
       llvmPackages_16 = llvmPackagesSet."16";
+      flang_16 = llvmPackages_16.flang;
       llvmPackages_17 = llvmPackagesSet."17";
+      flang_17 = llvmPackages_17.flang;
 
       llvmPackages_18 = llvmPackagesSet."18";
       clang_18 = llvmPackages_18.clang;
       lld_18 = llvmPackages_18.lld;
       lldb_18 = llvmPackages_18.lldb;
       llvm_18 = llvmPackages_18.llvm;
+      flang_18 = llvmPackages_18.flang;
 
       llvmPackages_19 = llvmPackagesSet."19";
       clang_19 = llvmPackages_19.clang;
@@ -5792,6 +5796,7 @@ with pkgs;
       lldb_19 = llvmPackages_19.lldb;
       llvm_19 = llvmPackages_19.llvm;
       bolt_19 = llvmPackages_19.bolt;
+      flang_19 = llvmPackages_19.flang;
 
       llvmPackages_20 = llvmPackagesSet."20";
       clang_20 = llvmPackages_20.clang;
@@ -5799,6 +5804,7 @@ with pkgs;
       lldb_20 = llvmPackages_20.lldb;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
+      flang_20 = llvmPackages_20.flang;
 
       llvmPackages_21 = llvmPackagesSet."21";
       clang_21 = llvmPackages_21.clang;
@@ -5806,6 +5812,7 @@ with pkgs;
       lldb_21 = llvmPackages_21.lldb;
       llvm_21 = llvmPackages_21.llvm;
       bolt_21 = llvmPackages_21.bolt;
+      flang_21 = llvmPackages_21.flang;
 
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
@@ -5814,8 +5821,11 @@ with pkgs;
     llvmPackages_14
     llvmPackages_15
     llvmPackages_16
+    flang_16
     llvmPackages_17
+    flang_17
     llvmPackages_18
+    flang_18
     clang_18
     lld_18
     lldb_18
@@ -5826,18 +5836,21 @@ with pkgs;
     lldb_19
     llvm_19
     bolt_19
+    flang_19
     llvmPackages_20
     clang_20
     lld_20
     lldb_20
     llvm_20
     bolt_20
+    flang_20
     llvmPackages_21
     clang_21
     lld_21
     lldb_21
     llvm_21
     bolt_21
+    flang_21
     mkLLVMPackages
     ;
 
