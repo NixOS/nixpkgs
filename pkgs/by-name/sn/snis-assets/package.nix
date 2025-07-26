@@ -41,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
       free
     ];
-    maintainers = with lib.maintainers; [ pentane ];
+    maintainers = with lib.maintainers; [
+      pentane
+      marcin-serwin
+    ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
