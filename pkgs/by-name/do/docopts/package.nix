@@ -23,6 +23,11 @@ buildGoModule rec {
     })
   ];
 
+  postInstall = ''
+    cp ${src}/docopts.sh $out/bin/docopts.sh
+    chmod +x $out/bin/docopts.sh
+  '';
+
   vendorHash = "sha256-+pMgaHB69itbQ+BDM7/oaJg3HrT1UN+joJL7BO/2vxE=";
 
   meta = {
