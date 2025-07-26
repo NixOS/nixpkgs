@@ -67,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cp Make.inc/Makefile.${profile} ./Makefile.inc
+
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;

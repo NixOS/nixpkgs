@@ -37,9 +37,13 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     mkdir Build
     cd Build;
     cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$out ..
+
+    runHook postConfigure
   '';
 
   meta = with lib; {
