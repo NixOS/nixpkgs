@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  autoconf-archive,
   autoreconfHook,
   cppunit,
   curl,
@@ -17,15 +16,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-rtorrent";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "68fdb86c723a0ae67ebaffec416af99fec41dcbc";
-    hash = "sha256-/GWC28LsY7GcUH+SBzi01sOWVfA1lyM0r9OdUDTYbT8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5ewAeoHvKcZ+5HTMlXLTu63JE3plKATvZToFEDZ9vOs=";
   };
 
   outputs = [
@@ -38,7 +37,6 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoconf-archive
     autoreconfHook
     installShellFiles
     pkg-config
@@ -85,4 +83,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "rtorrent";
   };
-}
+})
