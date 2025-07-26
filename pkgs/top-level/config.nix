@@ -254,6 +254,42 @@ let
       '';
     };
 
+    mirrors = mkOption {
+      type = types.attrsOf (types.listOf types.str);
+      description = ''
+        The set of mirror URLs used by `fetchurl`.
+
+        The default set of mirror lists are found in
+        [/pkgs/build-support/fetchurl/mirrors.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/fetchurl/mirrors.nix).
+
+        You can modify these mirrors using the [module system](https://nix.dev/tutorials/module-system/), as shown in the example below.
+      '';
+      example = literalExpression ''
+        let
+          default_mirrors = import <nixpkgs/pkgs/build-support/fetchurl/mirrors.nix>;
+          lib = import <nixpkgs/lib>;
+        in
+        {
+          mirrors = {
+            # Override ALSA mirrors with our own list:
+            alsa = lib.modules.mkForce [
+              "https://mirror1.myserver.com/"
+              "https://mirror2.myserver.com/"
+            ];
+
+            # Prepend my own mirror to the default Apache mirrors:
+            apache = lib.modules.mkBefore ["https://my.apache.mirror/"];
+
+            # Append my own mirror to the default KDE mirrors
+            kde = lib.modules.mkAfter ["https://my.kde.mirror/"];
+
+            # Remove FTP mirrors from the default GCC mirrors
+            gcc = lib.modules.mkForce (lib.filter (x: ! lib.hasPrefix "ftp://" x) default_mirrors.gcc);
+          };
+        }
+      '';
+    };
+
     rewriteURL = mkOption {
       type = types.functionTo (types.nullOr types.str);
       description = ''
@@ -299,6 +335,8 @@ in
     warnings = optionals config.warnUndeclaredOptions (
       mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
     );
+
+    mirrors = import ../build-support/fetchurl/mirrors.nix;
   };
 
 }
