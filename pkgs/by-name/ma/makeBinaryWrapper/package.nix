@@ -5,7 +5,7 @@
   dieHook,
   writeShellScript,
   tests,
-  cc ? targetPackages.stdenv.cc,
+  cc,
   sanitizers ? [ ],
 }:
 
