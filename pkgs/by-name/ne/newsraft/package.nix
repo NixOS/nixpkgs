@@ -33,8 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
   installTargets = "install install-desktop";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
