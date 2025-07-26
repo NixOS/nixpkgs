@@ -1343,6 +1343,13 @@ builtins.intersectAttrs super {
     (self.generateOptparseApplicativeCompletions [ "cloudy" ])
   ];
 
+  # We don't have multiple GHC versions to test against in PATH
+  ghc-hie = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "--skip=/GHC.Iface.Ext.Binary/readHieFile"
+    ];
+  }) super.ghc-hie;
+
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
