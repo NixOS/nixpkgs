@@ -1,0 +1,27 @@
+diff --git a/bin/nexus b/bin/nexus
+index 1a128c50a366..e0d9c7678f08
+--- a/bin/nexus
++++ b/bin/nexus
+@@ -11,8 +11,12 @@
+ ### END INIT INFO
+ 
+ original_dir=`pwd`
++scriptname=$0
+ 
+-actualfile=$(realpath "$0")
++if [ -z "$ALTERNATIVE_NAME" ]; then
++  scriptname=`dirname $0`"/"$ALTERNATIVE_NAME
++fi
++actualfile=$(realpath "$scriptname")
+ progname=`basename "$actualfile"`
+ linkdir=`dirname "$actualfile"`
+ HOME="$linkdir"
+@@ -217,7 +221,7 @@ case "$1" in
+     cd "$original_dir" || exit 1
+   ;;
+   *)
+-    echo "Usage: $0 {start|stop|run|run-redirect|status|restart|force-reload}"
++    echo "Usage: $scriptname {start|stop|run|run-redirect|status|restart|force-reload}"
+     exit 1
+   ;;
+ esac
