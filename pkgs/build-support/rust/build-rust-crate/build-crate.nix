@@ -23,6 +23,7 @@
   verbose,
   colors,
   buildTests,
+  testedCrate,
   codegenUnits,
 }:
 
@@ -87,6 +88,13 @@ in
   fi
 
 
+  ${lib.optionalString (testedCrate != null) ''
+    for exe in ${testedCrate}/bin/*; do
+      # if $exe contains a dash we cannot use export
+      # hence the indirection through EXTRA_ENV
+      EXTRA_ENV+=("CARGO_BIN_EXE_$(basename $exe)=$exe")
+    done
+  ''}
 
   ${lib.optionalString (lib.length crateBin > 0) (
     lib.concatMapStringsSep "\n" (
