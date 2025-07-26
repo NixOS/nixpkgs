@@ -11,8 +11,8 @@
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   metadata_god = callPackage ./metadata_god { };
-  olm = callPackage ./olm { };
   objectbox_flutter_libs = callPackage ./objectbox_flutter_libs { };
+  olm = callPackage ./olm { };
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };
   rhttp = callPackage ./rhttp { };
