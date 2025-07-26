@@ -45,6 +45,17 @@ let
       hash = "sha256-fqDoOeyDRSd90Z0HJQtEJhNNxdZoL/iAqGorCbTjjs0=";
     };
 
+    # fix cross-compile of Rust library
+    postPatch = lib.optionalString rustSupport ''
+      substituteInPlace setup.py \
+        --replace-fail "cargocmd = ['cargo', 'rustc', '--release']" \
+        "cargocmd = ['cargo', 'rustc', '--target', '${stdenv.hostPlatform.rust.rustcTarget}', '--release']" \
+        --replace-fail "rusttargetdir = os.path.join('rust', 'target', 'release')" \
+        "rusttargetdir = os.path.join('rust', 'target', '${stdenv.hostPlatform.rust.rustcTarget}', 'release')"
+      substituteInPlace Makefile \
+        --replace-fail 'rust/target/release' 'rust/target/${stdenv.hostPlatform.rust.rustcTarget}/release'
+    '';
+
     format = "other";
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
