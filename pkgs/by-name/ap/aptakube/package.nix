@@ -6,7 +6,7 @@
 }:
 let
   pname = "aptakube";
-  version = "1.11.10";
+  version = "1.12.2";
   meta = {
     homepage = "https://aptakube.com/";
     description = "Modern, lightweight and multi-cluster Kubernetes GUI";
