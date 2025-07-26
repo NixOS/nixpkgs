@@ -4,17 +4,17 @@ Date: Thu, 1 Aug 2024 16:00:43 -0400
 Subject: [PATCH] Adds unfree qml to packagechooserq
 
 ---
- .../packagechooserq/packagechooserq.qrc       |  1 +
+ .../packagechooserq/packagechooserq-qt6.qrc   |  1 +
  .../packagechooserq@unfree.qml                | 75 +++++++++++++++++++
  src/modules/packagechooserq/unfree.conf       | 11 +++
  3 files changed, 87 insertions(+)
  create mode 100644 src/modules/packagechooserq/packagechooserq@unfree.qml
  create mode 100644 src/modules/packagechooserq/unfree.conf
 
-diff --git a/src/modules/packagechooserq/packagechooserq.qrc b/src/modules/packagechooserq/packagechooserq.qrc
+diff --git a/src/modules/packagechooserq/packagechooserq-qt6.qrc b/src/modules/packagechooserq/packagechooserq-qt6.qrc
 index 1b892dce1..ee80a934b 100644
---- a/src/modules/packagechooserq/packagechooserq.qrc
-+++ b/src/modules/packagechooserq/packagechooserq.qrc
+--- a/src/modules/packagechooserq/packagechooserq-qt6.qrc
++++ b/src/modules/packagechooserq/packagechooserq-qt6.qrc
 @@ -4,5 +4,6 @@
          <file>images/libreoffice.jpg</file>
          <file>images/no-selection.png</file>
