@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.97.0";
+  version = "1.97.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-q+GUEHducm71Zqh7ZfRF217awFKQIsOSEWoe04M3DFM=";
+    hash = "sha256-ANY74P3tM8VVPh9m6hOdZSkMhcQphi72bKNcLrsLEq8=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
