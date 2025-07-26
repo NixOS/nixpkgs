@@ -8321,6 +8321,8 @@ self: super: with self; {
 
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
+  linearmodels = callPackage ../development/python-modules/linearmodels { };
+
   lineax = callPackage ../development/python-modules/lineax { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
@@ -12922,6 +12924,8 @@ self: super: with self; {
   pyhaversion = callPackage ../development/python-modules/pyhaversion { };
 
   pyhcl = callPackage ../development/python-modules/pyhcl { };
+
+  pyhdfe = callPackage ../development/python-modules/pyhdfe { };
 
   pyheck = callPackage ../development/python-modules/pyheck { };
 
