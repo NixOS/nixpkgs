@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       stesie
       matthewbauer
       marcin-serwin
+      emilylange
     ];
   };
 })
