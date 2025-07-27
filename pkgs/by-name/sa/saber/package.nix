@@ -26,10 +26,7 @@ flutter332.buildFlutterApplication rec {
     hash = "sha256-5N4HojdDysLgCPq614ZzJXx/dx3s4F++W35fjYdevRk=";
   };
 
-  gitHashes = {
-    receive_sharing_intent = "sha256-8D5ZENARPZ7FGrdIErxOoV3Ao35/XoQ2tleegI42ZUY=";
-    flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -75,6 +72,10 @@ flutter332.buildFlutterApplication rec {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       (_experimental-update-script-combinators.copyAttrOutputToFile "saber.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [ ./update-gitHashes.py ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
   };
 
