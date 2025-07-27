@@ -12,8 +12,9 @@
         "hash": "sha256-UouvzNFStYScnyfIJcz1Om7cDhC7EyShZQ/Icu73BPo="
       },
       "gn": {
+        "version": "0-unstable-2025-06-19",
         "rev": "97b68a0bb62b7528bc3491c7949d6804223c2b82",
-        "hash": "sha256-m+z10s40Q/iYcoMw3o/+tmhIdqHMsYJjdGabHrK/aqo="
+        "hash": "sha256-gwptzuirIdPAV9XCaAT09aM/fY7d6xgBU7oSu9C4tmE="
       },
       "npmHash": "sha256-R2gOpfPOUAmnsnUTIvzDPHuHNzL/b2fwlyyfTrywEcI="
     },
@@ -809,8 +810,9 @@
         "hash": "sha256-UouvzNFStYScnyfIJcz1Om7cDhC7EyShZQ/Icu73BPo="
       },
       "gn": {
+        "version": "0-unstable-2025-06-19",
         "rev": "97b68a0bb62b7528bc3491c7949d6804223c2b82",
-        "hash": "sha256-m+z10s40Q/iYcoMw3o/+tmhIdqHMsYJjdGabHrK/aqo="
+        "hash": "sha256-gwptzuirIdPAV9XCaAT09aM/fY7d6xgBU7oSu9C4tmE="
       },
       "ungoogled-patches": {
         "rev": "139.0.7258.66-1",
