@@ -478,6 +478,9 @@ let
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "16") {
       mlir = callPackage ./mlir { };
       libclc = callPackage ./libclc { };
+      flang = callPackage ./flang {
+        mlir = tools.mlir;
+      };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt {
