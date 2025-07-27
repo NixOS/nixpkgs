@@ -3693,7 +3693,8 @@
       ];
     "monoprice" =
       ps: with ps; [
-      ]; # missing inputs: pymonoprice
+        pymonoprice
+      ];
     "monzo" =
       ps: with ps; [
         monzopy
@@ -7318,6 +7319,7 @@
     "modem_callerid"
     "modern_forms"
     "mold_indicator"
+    "monoprice"
     "monzo"
     "moon"
     "mopeka"
