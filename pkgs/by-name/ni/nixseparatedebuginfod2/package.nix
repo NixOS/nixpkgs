@@ -8,6 +8,7 @@
   bubblewrap,
   elfutils,
   nix,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,7 +39,9 @@ rustPlatform.buildRustPackage rec {
 
   env.OPENSSL_NO_VENDOR = "1";
 
-  meta = with lib; {
+  passthru.tests = { inherit (nixosTests) nixseparatedebuginfod2; };
+
+  meta = {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";
     homepage = "https://github.com/symphorien/nixseparatedebuginfod2";
     license = lib.licenses.gpl3Only;
