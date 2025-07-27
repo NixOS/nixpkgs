@@ -8,8 +8,7 @@
   glib,
   lazarus,
   libX11,
-  libqtpas,
-  wrapQtAppsHook,
+  libsForQt5,
   writableTmpDirAsHomeHook,
 }:
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     fpc
     getopt
     lazarus
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     writableTmpDirAsHomeHook
   ];
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
     libX11
-    libqtpas
+    libsForQt5.libqtpas
   ];
 
   env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
