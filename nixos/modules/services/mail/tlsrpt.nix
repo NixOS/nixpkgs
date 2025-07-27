@@ -229,9 +229,16 @@ in
 
             sendmail_script = mkOption {
               type = with types; nullOr str;
-              default = if config.services.postfix.enable then "sendmail" else null;
+              default =
+                if config.services.postfix.enable && config.services.postfix.setSendmail then
+                  "/run/wrappers/bin/sendmail -i -t"
+                else
+                  null;
               defaultText = lib.literalExpression ''
-                if any [ config.services.postfix.enable ] then "sendmail" else null
+                if config.services.postfix.enable && config.services.postfix.setSendmail then
+                  "/run/wrappers/bin/sendmail -i -t"
+                else
+                  null
               '';
               description = ''
                 Path to a sendmail-compatible executable for delivery reports.
