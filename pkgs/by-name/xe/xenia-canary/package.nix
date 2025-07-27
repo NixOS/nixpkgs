@@ -19,14 +19,14 @@
 }:
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-07-07";
+  version = "0-unstable-2025-07-21";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "0aeac841b8354806f1c455402edb0815dfe9729e";
-    hash = "sha256-KgFwQSXj5s5WuFboFyKqQRHrzH3ENatqWp0WeHEJgRg=";
+    rev = "5e820b09c31339392c0d03affe7e302251eb073e";
+    hash = "sha256-4RfPX/xVbW0s70ch0GsUsaLrv0khQo4661Q8wJrw9jU=";
   };
 
   dontConfigure = true;
@@ -55,7 +55,7 @@ llvmPackages_20.stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
     python3 xenia-build setup
-    python3 xenia-build build --config=release -j $NIX_BUILD_CORES
+    python3 xenia-build build --config=release
     runHook postBuild
   '';
 
