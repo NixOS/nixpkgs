@@ -157,8 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
           "shmem"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
           "osh"
         ];
         s = [
@@ -241,14 +239,14 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
-      # from some reason.
-      moveToOutput "bin/pcc" "''${!outputDev}"
 
       # Handle informative binaries about the compilation
-      for i in {prte,ompi,oshmem}_info; do
-        moveToOutput "bin/$i" "''${!outputDev}"
-      done
+      ${lib.pipe wrapperDataFileNames.part1 [
+        (map (name: ''
+          moveToOutput "bin/o${name}_info" "''${!outputDev}"
+        ''))
+        (lib.concatStringsSep "\n")
+      ]}
     '';
 
   postFixup = ''
