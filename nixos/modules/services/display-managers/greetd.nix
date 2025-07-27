@@ -116,7 +116,9 @@ in
       wantedBy = [ "graphical.target" ];
     };
 
-    systemd.defaultUnit = "graphical.target";
+    # Set up environment to run whatever greeter is chosen
+    # See https://github.com/NixOS/nixpkgs/pull/428803#issuecomment-3124443850
+    services.displayManager.enable = true;
 
     # Create directories potentially required by supported greeters
     # See https://github.com/NixOS/nixpkgs/issues/248323
