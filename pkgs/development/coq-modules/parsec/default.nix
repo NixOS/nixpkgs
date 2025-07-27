@@ -21,24 +21,15 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.version [
-      {
-        case = range "8.14" "9.0";
-        out = "0.2.0";
-      }
-      {
-        case = range "8.14" "8.20";
-        out = "0.1.2";
-      }
-      {
-        case = range "8.12" "8.16";
-        out = "0.1.1";
-      }
-      {
-        case = range "8.12" "8.13";
-        out = "0.1.0";
-      }
+      (case (range "8.14" "9.1") "0.2.0")
+      (case (range "8.14" "8.20") "0.1.2")
+      (case (range "8.12" "8.16") "0.1.1")
+      (case (range "8.12" "8.13") "0.1.0")
     ] null;
   release."0.2.0".sha256 = "sha256-hM6LVFQ2VQ42QeHu8Ex+oz1VvJUr+g8/nZN+bYHEljQ=";
   release."0.1.2".sha256 = "sha256-QN0h1CsX86DQBDsluXLtNUvMh3r60/0iDSbYam67AhA=";

@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "golangci-lint";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c71Oe1PrH2PfbvOb0/gw9q/BxqC8zoxN+31FWV8rcsU=";
+    hash = "sha256-Kr4nkoqlCGyuaa4X1BLqe/WZA+ofYkWPizPMzcZQDQg=";
   };
 
-  vendorHash = "sha256-iYfgvY2hboawbdzMvuSYeHeKN5E00hevk/kRz5jNlkw=";
+  vendorHash = "sha256-SsKypfsr1woHah9rIyFnUNdp0mTde7k++E2CfE22LK4=";
 
   subPackages = [ "cmd/golangci-lint" ];
 

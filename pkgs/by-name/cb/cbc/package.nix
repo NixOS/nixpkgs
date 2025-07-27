@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "-C"
     "--enable-static"
-  ] ++ lib.optionals stdenv.cc.isClang [ "CXXFLAGS=-std=c++14" ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ "CXXFLAGS=-std=c++14" ];
 
   enableParallelBuilding = true;
 

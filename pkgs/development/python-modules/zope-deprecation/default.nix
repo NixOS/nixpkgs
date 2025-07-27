@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/zope/deprecation/tests.py" ];
+  enabledTestPaths = [ "src/zope/deprecation/tests.py" ];
 
   pythonImportsCheck = [ "zope.deprecation" ];
 

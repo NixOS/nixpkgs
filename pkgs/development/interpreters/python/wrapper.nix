@@ -35,30 +35,29 @@ let
 
       nativeBuildInputs = [ makeBinaryWrapper ];
 
-      postBuild =
-        ''
-          if [ -L "$out/bin" ]; then
-              unlink "$out/bin"
-          fi
-          mkdir -p "$out/bin"
+      postBuild = ''
+        if [ -L "$out/bin" ]; then
+            unlink "$out/bin"
+        fi
+        mkdir -p "$out/bin"
 
-          for path in ${lib.concatStringsSep " " paths}; do
-            if [ -d "$path/bin" ]; then
-              cd "$path/bin"
-              for prg in *; do
-                if [ -f "$prg" ]; then
-                  rm -f "$out/bin/$prg"
-                  if [ -x "$prg" ]; then
-                    makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${
-                      lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''
-                    } ${lib.concatStringsSep " " makeWrapperArgs}
-                  fi
+        for path in ${lib.concatStringsSep " " paths}; do
+          if [ -d "$path/bin" ]; then
+            cd "$path/bin"
+            for prg in *; do
+              if [ -f "$prg" ]; then
+                rm -f "$out/bin/$prg"
+                if [ -x "$prg" ]; then
+                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${
+                    lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''
+                  } ${lib.concatStringsSep " " makeWrapperArgs}
                 fi
-              done
-            fi
-          done
-        ''
-        + postBuild;
+              fi
+            done
+          fi
+        done
+      ''
+      + postBuild;
 
       inherit (python) meta;
 

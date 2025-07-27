@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     # touches network

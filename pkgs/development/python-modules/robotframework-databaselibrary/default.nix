@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "robotframework-databaselibrary";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "Robotframework-Database-Library";
     tag = "v.${version}";
-    hash = "sha256-XsRXQU31Q2iGUMJgDvIIcSsT8guALZO5tnIjwGLR8+Q=";
+    hash = "sha256-ZZOhGZTJGWYCHyvJXDYGn9BMuPioCVIu0KONGkXsRmk=";
   };
 
   nativeBuildInputs = [

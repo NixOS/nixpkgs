@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   # errors (with GCC 9.2):
   cmakeFlags = [
     "-DRANGES_ENABLE_WERROR=OFF"
-  ] ++ lib.optional stdenv.hostPlatform.isAarch64 "-DRANGE_V3_TESTS=OFF";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "-DRANGE_V3_TESTS=OFF";
 
   doCheck = !stdenv.hostPlatform.isAarch64;
   checkTarget = "test";

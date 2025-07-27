@@ -35,14 +35,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
   };
 
-  buildInputs =
-    [ perl' ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
-    ++ lib.optional withAbook abook
-    ++ lib.optional withGnupg gnupg
-    ++ lib.optional withGoobook goobook
-    ++ lib.optional withKhard khard
-    ++ lib.optional withMu mu;
+  buildInputs = [
+    perl'
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
+  ++ lib.optional withAbook abook
+  ++ lib.optional withGnupg gnupg
+  ++ lib.optional withGoobook goobook
+  ++ lib.optional withKhard khard
+  ++ lib.optional withMu mu;
 
   configureFlags =
     [ ]

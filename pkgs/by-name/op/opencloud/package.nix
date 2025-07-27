@@ -28,13 +28,13 @@ let
 in
 buildGoModule rec {
   pname = "opencloud";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
     tag = "v${version}";
-    hash = "sha256-hWd/x+HRuU39j4F2bC0RbhFJEyjlKIknAYGArcdGEoM=";
+    hash = "sha256-/kQH7a+ddKnHAF/ra2oGbX15lcaEknS5hwLWFWCeLeI=";
   };
 
   postPatch = ''
@@ -106,7 +106,7 @@ buildGoModule rec {
   versionCheckProgramArg = [ "version" ];
 
   meta = {
-    description = "OpenCloud gives you a secure and private way to store, access, and share your files.";
+    description = "OpenCloud gives you a secure and private way to store, access, and share your files";
     homepage = "https://github.com/opencloud-eu/opencloud";
     changelog = "https://github.com/opencloud-eu/opencloud/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

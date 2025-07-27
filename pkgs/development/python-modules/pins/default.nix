@@ -71,11 +71,12 @@ buildPythonPackage rec {
     pytest-cases
     pytest-parallel
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pins" ];
 
-  pytestFlagsArray = [ "pins/tests/" ];
+  enabledTestPaths = [ "pins/tests/" ];
 
   disabledTestPaths = [
     # Tests require network access

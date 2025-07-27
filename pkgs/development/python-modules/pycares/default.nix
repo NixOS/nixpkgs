@@ -7,24 +7,27 @@
   fetchPypi,
   idna,
   pythonOlder,
+  setuptools,
   tornado,
 }:
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "4.8.0";
-  format = "setuptools";
+  version = "4.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L8Lr+rlg9lSz488IpzJIaVDamTk6ZX+LRGGK0+0tOcE=";
+    hash = "sha256-juSE3bI9vsTYjRTtW21ZLBlg0uk8OF1eUrb61WTYI5U=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ c-ares ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     idna
   ];
@@ -43,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for c-ares";
     homepage = "https://github.com/saghul/pycares";
-    changelog = "https://github.com/saghul/pycares/releases/tag/pycares-${version}";
+    changelog = "https://github.com/saghul/pycares/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

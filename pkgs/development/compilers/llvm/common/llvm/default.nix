@@ -296,31 +296,31 @@ stdenv.mkDerivation (
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
           (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
 
-    nativeBuildInputs =
-      [
-        cmake
-        # while this is not an autotools build, it still includes a config.guess
-        # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
-        updateAutotoolsGnuConfigScriptsHook
-        python
-      ]
-      ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-      ++ optionals enableManpages [
-        # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-        # splicing does *not* work with the latter. (TODO: fix)
-        python3Packages.sphinx
-      ]
-      ++ optionals (lib.versionOlder version "18" && enableManpages) [
-        python3Packages.recommonmark
-      ]
-      ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
-        python3Packages.myst-parser
-      ];
+    nativeBuildInputs = [
+      cmake
+      # while this is not an autotools build, it still includes a config.guess
+      # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
+      updateAutotoolsGnuConfigScriptsHook
+      python
+    ]
+    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
+    ++ optionals enableManpages [
+      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+      # splicing does *not* work with the latter. (TODO: fix)
+      python3Packages.sphinx
+    ]
+    ++ optionals (lib.versionOlder version "18" && enableManpages) [
+      python3Packages.recommonmark
+    ]
+    ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
+      python3Packages.myst-parser
+    ];
 
     buildInputs = [
       libxml2
       libffi
-    ] ++ optional enablePFM libpfm; # exegesis
+    ]
+    ++ optional enablePFM libpfm; # exegesis
 
     propagatedBuildInputs =
       (lib.optional (
@@ -682,41 +682,40 @@ stdenv.mkDerivation (
           ]
       ++ devExtraCmakeFlags;
 
-    postInstall =
-      ''
-        mkdir -p $python/share
-        mv $out/share/opt-viewer $python/share/opt-viewer
-        moveToOutput "bin/llvm-config*" "$dev"
-        substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
-          --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
-      ''
-      + (
-        if lib.versionOlder release_version "15" then
-          ''
-            substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-              --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
-          ''
-        else
-          ''
-            substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-              --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
-          ''
-      )
-      + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
-        ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
-          if lib.versionOlder release_version "18" then "$shortVersion" else release_version
-        }.dylib
-      ''
-      + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          ''
-            ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
-          ''
-        else
-          ''
-            cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
-          ''
-      );
+    postInstall = ''
+      mkdir -p $python/share
+      mv $out/share/opt-viewer $python/share/opt-viewer
+      moveToOutput "bin/llvm-config*" "$dev"
+      substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
+        --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
+    ''
+    + (
+      if lib.versionOlder release_version "15" then
+        ''
+          substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+            --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
+        ''
+      else
+        ''
+          substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+            --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
+        ''
+    )
+    + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
+        if lib.versionOlder release_version "18" then "$shortVersion" else release_version
+      }.dylib
+    ''
+    + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
+      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+        ''
+          ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
+        ''
+      else
+        ''
+          cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
+        ''
+    );
 
     doCheck =
       !isDarwinBootstrap
@@ -795,7 +794,8 @@ stdenv.mkDerivation (
   // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
     nativeCheckInputs = [
       which
-    ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
   }
   // lib.optionalAttrs (lib.versionOlder release_version "15") {
     # hacky fix: created binaries need to be run before installation

@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "1.4.1-44-g41bcdca7f";
+  version = "1.4.1-45-g34eb666c0";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
     tag = finalAttrs.version;
-    hash = "sha256-LyYbcr0d0DI5nqNor6sXg7Hc/kYlORU9s8UJnQvSnZs=";
+    hash = "sha256-5qZpQW8ZsyKpIww51sqghcrkhhh78TcpmMoctHgcoQo=";
   };
 
   nativeBuildInputs = [
@@ -70,41 +70,40 @@ stdenv.mkDerivation (finalAttrs: {
     orc
   ];
 
-  buildInputs =
-    [
-      boost
-      chromaprint
-      fftw
-      gettext
-      glew
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gstreamer
-      gvfs
-      liblastfm
-      libpulseaudio
-      pcre
-      projectm_3
-      protobuf
-      qca-qt5
-      qjson
-      qtbase
-      qtx11extras
-      qttools
-      sqlite
-      taglib_1
-      alsa-lib
-    ]
-    # gst_plugins needed for setup-hooks
-    ++ gst_plugins
-    ++ lib.optionals (withIpod) [
-      libgpod
-      libplist
-      usbmuxd
-    ]
-    ++ lib.optionals (withMTP) [ libmtp ]
-    ++ lib.optionals (withCD) [ libcdio ]
-    ++ lib.optionals (withCloud) [ sparsehash ];
+  buildInputs = [
+    boost
+    chromaprint
+    fftw
+    gettext
+    glew
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gstreamer
+    gvfs
+    liblastfm
+    libpulseaudio
+    pcre
+    projectm_3
+    protobuf
+    qca-qt5
+    qjson
+    qtbase
+    qtx11extras
+    qttools
+    sqlite
+    taglib_1
+    alsa-lib
+  ]
+  # gst_plugins needed for setup-hooks
+  ++ gst_plugins
+  ++ lib.optionals (withIpod) [
+    libgpod
+    libplist
+    usbmuxd
+  ]
+  ++ lib.optionals (withMTP) [ libmtp ]
+  ++ lib.optionals (withCD) [ libcdio ]
+  ++ lib.optionals (withCloud) [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \

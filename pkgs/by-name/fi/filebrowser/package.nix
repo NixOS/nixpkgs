@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildGo123Module,
-
   nodejs_22,
   pnpm_9,
 
@@ -11,7 +10,7 @@
 }:
 
 let
-  version = "2.32.0";
+  version = "2.40.1";
 
   pnpm = pnpm_9;
   nodejs = nodejs_22;
@@ -20,7 +19,7 @@ let
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-jckwk45pIRrlzZaG3jH8aLq08L5xnrbt4OdwKNS6+nI=";
+    hash = "sha256-UsY5pJU0eVeYQVi7Wqf4RrBfPLQv78zHi96mTLJJS1o=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -36,8 +35,9 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
+      fetcherVersion = 2;
       sourceRoot = "${src.name}/frontend";
-      hash = "sha256-L3cKAp0vvLW5QPz6vYTtZwzuIN70EObU3SyJOlA0Ehc=";
+      hash = "sha256-AwjMQ9LDJ72x5JYdtLF4V3nxJTYiCb8e/RVyK3IwPY4=";
     };
 
     installPhase = ''
@@ -58,7 +58,7 @@ buildGo123Module {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-Jce90mvNzjElCtEMQSSU3IQPz+WLhyEol1ktW4FG7yk=";
+  vendorHash = "sha256-FY5rPzWAzkrDaFktTM7VxO/hMk17/x21PL1sKq0zlxg=";
 
   excludedPackages = [ "tools" ];
 

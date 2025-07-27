@@ -7,15 +7,17 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "wpm";
   version = "1.51.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-swT9E5Tto4yWnm0voowcJXtY3cIY3MNqAdfrTnuGbdg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    setuptools
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
+    setuptools # pkg_resources is imported during runtime
   ];
 
   pythonImportsCheck = [ "wpm" ];

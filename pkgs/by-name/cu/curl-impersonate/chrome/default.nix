@@ -127,36 +127,35 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--with-libnssckbi=$out/lib")
   '';
 
-  postInstall =
-    ''
-      # Remove vestigial *-config script
-      rm $out/bin/curl-impersonate-chrome-config
+  postInstall = ''
+    # Remove vestigial *-config script
+    rm $out/bin/curl-impersonate-chrome-config
 
-      # Patch all shebangs of installed scripts
-      patchShebangs $out/bin
+    # Patch all shebangs of installed scripts
+    patchShebangs $out/bin
 
-      # Install headers
-      make -C curl-*/include install
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      # Build and install completions for each curl binary
+    # Install headers
+    make -C curl-*/include install
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # Build and install completions for each curl binary
 
-      # Patch in correct binary name and alias it to all scripts
-      perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-chrome --shell zsh >$TMPDIR/curl-impersonate-chrome.zsh
-      substituteInPlace $TMPDIR/curl-impersonate-chrome.zsh \
-        --replace-fail \
-          '#compdef curl' \
-          "#compdef curl-impersonate-chrome$(find $out/bin -name 'curl_*' -printf ' %f=curl-impersonate-chrome')"
+    # Patch in correct binary name and alias it to all scripts
+    perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-chrome --shell zsh >$TMPDIR/curl-impersonate-chrome.zsh
+    substituteInPlace $TMPDIR/curl-impersonate-chrome.zsh \
+      --replace-fail \
+        '#compdef curl' \
+        "#compdef curl-impersonate-chrome$(find $out/bin -name 'curl_*' -printf ' %f=curl-impersonate-chrome')"
 
-      perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-chrome --shell fish >$TMPDIR/curl-impersonate-chrome.fish
-      substituteInPlace $TMPDIR/curl-impersonate-chrome.fish \
-        --replace-fail \
-          '--command curl' \
-          "--command curl-impersonate-chrome$(find $out/bin -name 'curl_*' -printf ' --command %f')"
+    perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-chrome --shell fish >$TMPDIR/curl-impersonate-chrome.fish
+    substituteInPlace $TMPDIR/curl-impersonate-chrome.fish \
+      --replace-fail \
+        '--command curl' \
+        "--command curl-impersonate-chrome$(find $out/bin -name 'curl_*' -printf ' --command %f')"
 
-      # Install zsh and fish completions
-      installShellCompletion $TMPDIR/curl-impersonate-chrome.{zsh,fish}
-    '';
+    # Install zsh and fish completions
+    installShellCompletion $TMPDIR/curl-impersonate-chrome.{zsh,fish}
+  '';
 
   preFixup =
     let

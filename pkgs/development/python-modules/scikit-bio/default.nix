@@ -56,7 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # only the $out dir contains the built cython extensions, so we run the tests inside there
-  pytestFlagsArray = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
+  enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
 
   disabledTestPaths = [
     # don't know why, but this segfaults

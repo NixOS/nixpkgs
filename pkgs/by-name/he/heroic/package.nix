@@ -28,7 +28,7 @@ buildFHSEnv {
       zenity
       kdePackages.kdialog
       mangohud
-      nettools
+      net-tools
       opencl-headers
       p7zip
       pciutils
@@ -114,7 +114,6 @@ buildFHSEnv {
       libpulseaudio
       libselinux
       libsndfile
-      libsoup_2_4
       libtheora
       libtiff
       libunwind

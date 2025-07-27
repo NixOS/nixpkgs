@@ -52,15 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build config/run_test.sh.in
   '';
 
-  cmakeFlags =
-    [
-      "-DWITH_OPENEXR=1"
-      "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-      "-DCMAKE_CXX_FLAGS=-fPIC"
-      "-DCMAKE_C_FLAGS=-fPIC"
-    ];
+  cmakeFlags = [
+    "-DWITH_OPENEXR=1"
+    "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+    "-DCMAKE_CXX_FLAGS=-fPIC"
+    "-DCMAKE_C_FLAGS=-fPIC"
+  ];
 
   enableParallelBuilding = true;
 

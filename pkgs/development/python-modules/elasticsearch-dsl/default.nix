@@ -48,6 +48,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
     changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${version}/Changelog.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
   };
 }

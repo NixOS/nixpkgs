@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "config-visualizer";
   version = "unstable-2022-02-23";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "precice";
@@ -16,7 +16,9 @@ python3Packages.buildPythonApplication {
     hash = "sha256-2dnpkec9hN4oAqwu+1WmDJrfeu+JbfqZ6guv3bC4H1c=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     lxml
     pydot
   ];

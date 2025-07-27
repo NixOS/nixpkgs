@@ -782,7 +782,7 @@ in
       ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node")
       ++ (lib.optional (
         cfg.role == "agent" && cfg.configPath == null && cfg.serverAddr == ""
-      ) "k3s: ServerAddr or configPath (with 'server' key) should be set if role is 'agent'")
+      ) "k3s: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
       ++ (lib.optional
         (cfg.role == "agent" && cfg.configPath == null && cfg.tokenFile == null && cfg.token == "")
         "k3s: Token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"

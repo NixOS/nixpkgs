@@ -38,11 +38,11 @@ linkFarm "writeShellApplication-tests" {
       script = writeShellApplication {
         name = "test-meta";
         text = "";
-        meta.description = "A test for the `writeShellApplication` `meta` argument.";
+        meta.description = "A test for the `writeShellApplication` `meta` argument";
       };
     in
     assert script.meta.mainProgram == "test-meta";
-    assert script.meta.description == "A test for the `writeShellApplication` `meta` argument.";
+    assert script.meta.description == "A test for the `writeShellApplication` `meta` argument";
     script;
 
   test-runtime-inputs = checkShellApplication {
@@ -101,7 +101,7 @@ linkFarm "writeShellApplication-tests" {
         exit 1
       fi
     '';
-    meta.description = "A test checking that `writeShellApplication` forwards extra arguments to `stdenv.mkDerivation`.";
+    meta.description = "A test checking that `writeShellApplication` forwards extra arguments to `stdenv.mkDerivation`";
     expected = "";
   };
 

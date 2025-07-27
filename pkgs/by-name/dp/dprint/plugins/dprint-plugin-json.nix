@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "JSON/JSONC code formatter.";
+  description = "JSON/JSONC code formatter";
   hash = "sha256-uFcFLi9aYsBrAqkhFmg9GI+LKiV19LxdNjxQ85EH9To=";
   initConfig = {
     configExcludes = [ "**/*-lock.json" ];

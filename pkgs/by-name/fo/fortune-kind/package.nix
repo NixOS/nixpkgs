@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Tpg0Jq2EhkwQuz5ZOtv6Rb5YESSlmzLoJPTxYJNNgac=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Kp3pv9amEz9oFMDhz0IZDmhpsok5VgrvJZfwSPyz2X0=";
 
   nativeBuildInputs = [
@@ -49,14 +48,13 @@ rustPlatform.buildRustPackage rec {
     cp -r $src/fortunes $out/fortunes;
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/fortune-kind \
-        --set-default FORTUNE_DIR "$out/fortunes"
-    ''
-    + lib.optionalString fortuneAlias ''
-      ln -s fortune-kind $out/bin/fortune
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/fortune-kind \
+      --set-default FORTUNE_DIR "$out/fortunes"
+  ''
+  + lib.optionalString fortuneAlias ''
+    ln -s fortune-kind $out/bin/fortune
+  '';
 
   meta = {
     description = "Kinder, curated fortune, written in rust";

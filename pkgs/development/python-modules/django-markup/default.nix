@@ -61,7 +61,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-django
     pytestCheckHook
-  ] ++ optional-dependencies.all_filter_dependencies;
+  ]
+  ++ optional-dependencies.all_filter_dependencies;
 
   disabledTests = [
     # pygments compat issue

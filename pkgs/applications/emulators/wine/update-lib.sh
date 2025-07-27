@@ -20,7 +20,7 @@ set_version_and_hash() {
 }
 
 get_latest_wine_version() {
-    list-directory-versions --pname=wine --url="$wine_url_base/source/$1" | grep -v 'diff\|rc\|tar' | sort --reverse --version-sort -u | head -n 1
+    list-directory-versions --pname=wine --url="$wine_url_base/source/$1/" | grep -v 'diff\|rc\|tar' | sort --reverse --version-sort -u | head -n 1
 }
 
 get_latest_lib_version() {

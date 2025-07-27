@@ -38,15 +38,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = unwrapped;
   dontUnpack = true;
 
-  setupHooks =
-    [
-      ./dotnet-setup-hook.sh
-    ]
-    ++ lib.optional (type == "sdk") (
-      replaceVars ./dotnet-sdk-setup-hook.sh {
-        inherit lndir xmlstarlet;
-      }
-    );
+  setupHooks = [
+    ./dotnet-setup-hook.sh
+  ]
+  ++ lib.optional (type == "sdk") (
+    replaceVars ./dotnet-sdk-setup-hook.sh {
+      inherit lndir xmlstarlet;
+    }
+  );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
@@ -111,12 +110,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
               unpackPhase =
                 let
-                  unpackArgs =
-                    [ template ]
-                    ++ lib.optionals (lang != null) [
-                      "-lang"
-                      lang
-                    ];
+                  unpackArgs = [
+                    template
+                  ]
+                  ++ lib.optionals (lang != null) [
+                    "-lang"
+                    lang
+                  ];
                 in
                 ''
                   mkdir test
@@ -218,14 +218,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               name = "aot";
               stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
               usePackageSource = true;
-              buildInputs =
-                [
-                  zlib
-                ]
-                ++ lib.optional stdenv.hostPlatform.isDarwin [
-                  swiftPackages.swift
-                  darwin.ICU
-                ];
+              buildInputs = [
+                zlib
+              ]
+              ++ lib.optional stdenv.hostPlatform.isDarwin [
+                swiftPackages.swift
+                darwin.ICU
+              ];
               build = ''
                 dotnet restore -p:PublishAot=true
                 dotnet publish -p:PublishAot=true -o $out/bin

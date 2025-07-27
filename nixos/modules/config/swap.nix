@@ -121,7 +121,7 @@ let
           description = ''
             If this option is set, ‘device’ is interpreted as the
             path of a swapfile that will be created automatically
-            with the indicated size (in megabytes).
+            with the indicated size in MiB (1024×1024 bytes).
           '';
         };
 
@@ -286,7 +286,8 @@ in
             path = [
               pkgs.util-linux
               pkgs.e2fsprogs
-            ] ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
+            ]
+            ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             environment.DEVICE = sw.device;
 

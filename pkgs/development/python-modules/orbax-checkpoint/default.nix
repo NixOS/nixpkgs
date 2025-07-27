@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.18";
+  version = "0.11.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-Uosd2TfC3KJMp46SnNnodPBc+G1nNdqFOwPQA+aVyrQ=";
+    hash = "sha256-j15E4jGvxIjEdWG6Lwr9mvPXr9WifrD1zFF6Vj+7wik=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -85,19 +85,18 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests =
-    [
-      # Flaky
-      # AssertionError: 2 not greater than 2.0046136379241943
-      "test_async_mkdir_parallel"
-      "test_async_mkdir_sequential"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Probably failing because of a filesystem impurity
-      # self.assertFalse(os.path.exists(dst_dir))
-      # AssertionError: True is not false
-      "test_create_snapshot"
-    ];
+  disabledTests = [
+    # Flaky
+    # AssertionError: 2 not greater than 2.0046136379241943
+    "test_async_mkdir_parallel"
+    "test_async_mkdir_sequential"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Probably failing because of a filesystem impurity
+    # self.assertFalse(os.path.exists(dst_dir))
+    # AssertionError: True is not false
+    "test_create_snapshot"
+  ];
 
   disabledTestPaths = [
     # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.

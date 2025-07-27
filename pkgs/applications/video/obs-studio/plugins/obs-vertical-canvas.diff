@@ -1,0 +1,17 @@
+diff --color -urpN obs-vertical-canvas.bak/file-updater.c obs-vertical-canvas/file-updater.c
+--- obs-vertical-canvas.bak/file-updater.c	2025-07-18 18:32:13.239718611 -0400
++++ obs-vertical-canvas/file-updater.c	2025-07-18 18:32:30.732020377 -0400
+@@ -67,10 +67,10 @@ static bool do_http_request(struct updat
+ 	curl_easy_setopt(info->curl, CURLOPT_ERRORBUFFER, info->error);
+ 	curl_easy_setopt(info->curl, CURLOPT_WRITEFUNCTION, http_write);
+ 	curl_easy_setopt(info->curl, CURLOPT_WRITEDATA, info);
+-	curl_easy_setopt(info->curl, CURLOPT_FAILONERROR, true);
+-	curl_easy_setopt(info->curl, CURLOPT_NOSIGNAL, 1);
++	curl_easy_setopt(info->curl, CURLOPT_FAILONERROR, 1L);
++	curl_easy_setopt(info->curl, CURLOPT_NOSIGNAL, 1L);
+ 	curl_easy_setopt(info->curl, CURLOPT_ACCEPT_ENCODING, "");
+-	curl_easy_setopt(info->curl, CURLOPT_SSL_OPTIONS, CURLSSLOPT_REVOKE_BEST_EFFORT);
++	curl_easy_setopt(info->curl, CURLOPT_SSL_OPTIONS, (long)CURLSSLOPT_REVOKE_BEST_EFFORT);
+ 
+ 	code = curl_easy_perform(info->curl);
+ 	if (code != CURLE_OK) {

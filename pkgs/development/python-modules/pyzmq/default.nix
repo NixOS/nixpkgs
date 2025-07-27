@@ -40,7 +40,8 @@ buildPythonPackage rec {
     packaging
     pathspec
     scikit-build-core
-  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+  ]
+  ++ (if isPyPy then [ cffi ] else [ cython ]);
 
   dontUseCmakeConfigure = true;
 
@@ -63,9 +64,8 @@ buildPythonPackage rec {
     rm -r zmq
   '';
 
-  pytestFlagsArray = [
-    "-m"
-    "'not flaky'"
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [

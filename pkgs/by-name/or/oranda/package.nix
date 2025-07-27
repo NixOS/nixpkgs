@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FVd8NQVtzlZsDY40ZMJDdaX+6Q5jUxZHUq2v+kDFVOk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wPYgAbaoUVJoZT1nRCBsPziszkAubImZEKGrC2RAkEA=";
 
   nativeBuildInputs = [
@@ -37,15 +36,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=integration"
   ];
 
-  env =
-    {
-      RUSTONIG_SYSTEM_LIBONIG = true;
-      ORANDA_USE_TAILWIND_BINARY = true;
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # without this, tailwindcss fails with OpenSSL configuration error
-      OPENSSL_CONF = "";
-    };
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+    ORANDA_USE_TAILWIND_BINARY = true;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # without this, tailwindcss fails with OpenSSL configuration error
+    OPENSSL_CONF = "";
+  };
 
   meta = with lib; {
     description = "Generate beautiful landing pages for your developer tools";

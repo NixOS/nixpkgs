@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.14.0";
+  version = "6.15.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ptI1iBUAllkcPQD8J6MkqC7nHXoanup4313xetm4Rh8=";
+    hash = "sha256-gEGFSoglg61SY0ZnNsnIxox0saNXVKt3DSM0P5R1KPs=";
   };
 
   patches = [
@@ -52,21 +52,20 @@ stdenv.mkDerivation rec {
     "auto"
   ];
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "SBINDIR=$(out)/sbin"
-      "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
-      "HDRDIR=$(dev)/include/iproute2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "SHARED_LIBS=n"
-      # all build .so plugins:
-      "TC_CONFIG_NO_XT=y"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "HOSTCC=$(CC_FOR_BUILD)"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+    "HDRDIR=$(dev)/include/iproute2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "SHARED_LIBS=n"
+    # all build .so plugins:
+    "TC_CONFIG_NO_XT=y"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
+  ];
 
   buildFlags = [
     "CONFDIR=/etc/iproute2"
@@ -82,17 +81,16 @@ stdenv.mkDerivation rec {
     flex
     pkg-config
   ];
-  buildInputs =
-    [
-      db
-      iptables
-      libmnl
-    ]
-    # needed to uploaded bpf programs
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-      elfutils
-      libbpf
-    ];
+  buildInputs = [
+    db
+    iptables
+    libmnl
+  ]
+  # needed to uploaded bpf programs
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    elfutils
+    libbpf
+  ];
 
   enableParallelBuilding = true;
 

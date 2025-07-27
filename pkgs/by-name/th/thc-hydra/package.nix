@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
     libmysqlclient
     libpq
     samba
-  ] ++ lib.optional withGUI gtk2;
+  ]
+  ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;
 

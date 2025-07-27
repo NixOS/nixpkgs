@@ -17,7 +17,7 @@ buildGhidraExtension (finalAttrs: {
     cd lightkeeper
   '';
   meta = {
-    description = "A port of the Lighthouse plugin to GHIDRA.";
+    description = "A port of the Lighthouse plugin to GHIDRA";
     homepage = "https://github.com/WorksButNotTested/lightkeeper";
     license = lib.licenses.asl20;
   };

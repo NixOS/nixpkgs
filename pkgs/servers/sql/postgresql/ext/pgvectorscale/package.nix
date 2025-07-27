@@ -7,13 +7,7 @@
   postgresqlTestExtension,
 }:
 
-let
-  buildPgrxExtension' = buildPgrxExtension.override {
-    # Upstream only works with a fixed minor version of cargo-pgrx for each release.
-    cargo-pgrx = cargo-pgrx_0_12_6;
-  };
-in
-buildPgrxExtension' (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   pname = "pgvectorscale";
   version = "0.7.0";
 
@@ -26,7 +20,6 @@ buildPgrxExtension' (finalAttrs: {
 
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CeRyDn9VhxfjWFJ1/Z/XvOUQOSnDoHHZAqgfYTeKU0o=";
   cargoPatches = [
     ./add-Cargo.lock.patch
@@ -38,6 +31,7 @@ buildPgrxExtension' (finalAttrs: {
   ];
 
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;

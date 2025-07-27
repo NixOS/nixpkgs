@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "pngtools";
-  version = "unstable-2022-03-14";
+  version = "0-unstable-2022-03-14";
 
   src = fetchFromGitHub {
     owner = "mikalstill";

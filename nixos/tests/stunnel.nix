@@ -1,11 +1,4 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+{ runTest }:
 
 let
   stunnelCommon = {
@@ -20,7 +13,12 @@ let
     };
   };
   makeCert =
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       systemd.services.create-test-cert = {
         wantedBy = [ "sysinit.target" ];
@@ -32,14 +30,14 @@ let
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
         script = ''
-          ${pkgs.openssl}/bin/openssl req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
+          ${lib.getExe pkgs.openssl} req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
           ( umask 077; cat /test-key.pem /test-cert.pem > /test-key-and-cert.pem )
           chown stunnel /test-key.pem /test-key-and-cert.pem
         '';
       };
     };
   serverCommon =
-    { pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       networking.firewall.allowedTCPPorts = [ 443 ];
       services.stunnel.servers.https = {
@@ -51,7 +49,7 @@ let
         wantedBy = [ "multi-user.target" ];
         script = ''
           cd /etc/webroot
-          ${pkgs.python3}/bin/python -m http.server 80
+          ${lib.getExe' pkgs.python3 "python"} -m http.server 80
         '';
       };
     };
@@ -61,10 +59,9 @@ let
     server_cert = ${src}.succeed("cat /test-cert.pem")
     ${dest}.succeed("echo %s > ${filename}" % quote(server_cert))
   '';
-
 in
 {
-  basicServer = makeTest {
+  basicServer = runTest {
     name = "basicServer";
 
     nodes = {
@@ -92,7 +89,7 @@ in
     '';
   };
 
-  serverAndClient = makeTest {
+  serverAndClient = runTest {
     name = "serverAndClient";
 
     nodes = {
@@ -150,7 +147,7 @@ in
     '';
   };
 
-  mutualAuth = makeTest {
+  mutualAuth = runTest {
     name = "mutualAuth";
 
     nodes = rec {

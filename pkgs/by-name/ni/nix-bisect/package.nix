@@ -10,7 +10,7 @@ let
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timokau";
@@ -19,13 +19,17 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-zyeE1jYo/9NEG8fB4gQBAR01siP4tyLvjjHN1yUS4Ug=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     appdirs
     numpy
     pexpect
   ];
 
   doCheck = false;
+
+  pythonImportsCheck = [ "nix_bisect" ];
 
   meta = with lib; {
     description = "Bisect nix builds";

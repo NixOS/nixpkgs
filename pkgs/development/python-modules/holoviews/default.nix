@@ -58,9 +58,8 @@ buildPythonPackage rec {
     flaky
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::FutureWarning"
+  pytestFlags = [
+    "-Wignore::FutureWarning"
   ];
 
   disabledTests = [

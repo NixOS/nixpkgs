@@ -7,22 +7,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.12.2";
+  version = "1.12.6";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli-autocomplete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TIKG1nzpmjiHE+EjTJR+/GklQNJQeUzmDXaPEiRT80Y=";
+    hash = "sha256-IjM9eFoFfy/WV6lPJB1mnRZYoXLIiVozjzmnXEnU2MA=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-lJbHPqQ3eybo03oZY2VyKlsxcTdbdrc8q8AjV+IahEY=";
+  cargoHash = "sha256-XZX8EisHQ1vqbrV8VnXrah3o1h3iKCxzPsKk6Z+aKzU=";
 
   cargoBuildFlags = [
     "-p"

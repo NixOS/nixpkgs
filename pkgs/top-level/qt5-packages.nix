@@ -174,7 +174,7 @@ makeScopeWithSplicing' {
 
         kreport = callPackage ../development/libraries/kreport { };
 
-        kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+        kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 

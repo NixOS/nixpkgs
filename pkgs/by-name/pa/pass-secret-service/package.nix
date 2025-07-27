@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication {
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
   version = "0-unstable-2023-12-16";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdellweg";
@@ -28,14 +28,13 @@ python3.pkgs.buildPythonApplication {
   # /etc/ in check phase.
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
-      --replace '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)' \
-      --replace 'pytest-3' 'pytest'
+      --replace-fail "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
+      --replace-fail '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)'
 
     substituteInPlace systemd/org.freedesktop.secrets.service \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
     substituteInPlace systemd/dbus-org.freedesktop.secrets.service \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''
@@ -44,7 +43,11 @@ python3.pkgs.buildPythonApplication {
     cp systemd/dbus-org.freedesktop.secrets.service "$out/lib/systemd/user/"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     cryptography
     dbus-next
@@ -66,6 +69,8 @@ python3.pkgs.buildPythonApplication {
     ];
 
   checkTarget = "test";
+
+  pythonImportsCheck = [ "pass_secret_service" ];
 
   passthru = {
     updateScript = nix-update-script {

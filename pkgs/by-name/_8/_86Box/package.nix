@@ -54,42 +54,40 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAllInPlace src/qt/qt_platform.cpp
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      makeWrapper
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals enableWayland [
-      extra-cmake-modules
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      freetype
-      fluidsynth
-      SDL2
-      glib
-      openal
-      rtmidi
-      pcre2
-      jack2
-      libpcap
-      libslirp
-      qt5.qtbase
-      qt5.qttools
-      libsndfile
-      flac.dev
-      libogg.dev
-      libvorbis.dev
-      libopus.dev
-      libmpg123.dev
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optional enableWayland wayland
-    ++ lib.optional enableVncRenderer libvncserver;
+  buildInputs = [
+    freetype
+    fluidsynth
+    SDL2
+    glib
+    openal
+    rtmidi
+    pcre2
+    jack2
+    libpcap
+    libslirp
+    qt5.qtbase
+    qt5.qttools
+    libsndfile
+    flac.dev
+    libogg.dev
+    libvorbis.dev
+    libopus.dev
+    libmpg123.dev
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optional enableWayland wayland
+  ++ lib.optional enableVncRenderer libvncserver;
 
   cmakeFlags =
     lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"

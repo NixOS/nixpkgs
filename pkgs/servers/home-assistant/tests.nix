@@ -56,9 +56,43 @@ let
   };
 
   extraDisabledTestPaths = {
+    backup = [
+      # outdated snapshot
+      "tests/components/backup/test_sensors.py::test_sensors"
+    ];
+    bmw_connected_drive = [
+      # outdated snapshot
+      "tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
+    ];
+    dnsip = [
+      # Tries to resolve DNS entries
+      "tests/components/dnsip/test_config_flow.py::test_options_flow"
+    ];
+    jellyfin = [
+      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
+      "tests/components/jellyfin/test_media_source.py::test_resolve"
+      "tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
+      "tests/components/jellyfin/test_media_source.py::test_music_library"
+    ];
+    matter = [
+      # outdated snapshot in eve_weather_sensor variant
+      "tests/components/matter/test_number.py::test_numbers"
+    ];
+    modem_callerid = [
+      # aioserial mock produces wrong state
+      "tests/components/modem_callerid/test_init.py::test_setup_entry"
+    ];
+    openai_conversation = [
+      # outdated snapshot
+      "tests/components/openai_conversation/test_conversation.py::test_function_call"
+    ];
     overseerr = [
       # imports broken future module
       "tests/components/overseerr/test_event.py"
+    ];
+    technove = [
+      # outdated snapshot
+      "tests/components/technove/test_switch.py::test_switches"
     ];
   };
 
@@ -99,43 +133,6 @@ let
       "test_subscribe_discovery"
     ];
   };
-
-  extraPytestFlagsArray = {
-    backup = [
-      # outdated snapshot
-      "--deselect tests/components/backup/test_sensors.py::test_sensors"
-    ];
-    bmw_connected_drive = [
-      # outdated snapshot
-      "--deselect tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
-    ];
-    dnsip = [
-      # Tries to resolve DNS entries
-      "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
-    ];
-    jellyfin = [
-      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
-      "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
-      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
-      "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
-    ];
-    matter = [
-      # outdated snapshot in eve_weather_sensor variant
-      "--deselect tests/components/matter/test_number.py::test_numbers"
-    ];
-    modem_callerid = [
-      # aioserial mock produces wrong state
-      "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
-    ];
-    openai_conversation = [
-      # outdated snapshot
-      "--deselect tests/components/openai_conversation/test_conversation.py::test_function_call"
-    ];
-    technove = [
-      # outdated snapshot
-      "--deselect tests/components/technove/test_switch.py::test_switches"
-    ];
-  };
 in
 lib.listToAttrs (
   map (
@@ -160,10 +157,7 @@ lib.listToAttrs (
         # components are more often racy than the core
         dontUsePytestXdist = true;
 
-        pytestFlagsArray =
-          lib.remove "tests" old.pytestFlagsArray
-          ++ extraPytestFlagsArray.${component} or [ ]
-          ++ [ "tests/components/${component}" ];
+        enabledTestPaths = [ "tests/components/${component}" ];
 
         meta = old.meta // {
           broken = lib.elem component [ ];

@@ -315,10 +315,11 @@ in
   config = mkIf cfg.enable {
     systemd.services.lasuite-meet = {
       description = "Meet from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-meet.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.service")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-meet.service");
 
       wants =
         (optional cfg.postgresql.createLocally "postgresql.service")
@@ -358,15 +359,17 @@ in
           ++ cfg.gunicorn.extraArgs
           ++ [ "meet.wsgi:application" ]
         );
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-meet-celery = {
       description = "Meet Celery broker from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-meet.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.service")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-meet.service");
 
       wants =
         (optional cfg.postgresql.createLocally "postgresql.service")
@@ -385,7 +388,8 @@ in
             "worker"
           ]
         );
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     services.postgresql = mkIf cfg.postgresql.createLocally {

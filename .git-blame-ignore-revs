@@ -193,6 +193,9 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
 
+# fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
+34a5b1eb23129f8fb62c677e3760903f6d43228f
+
 # fetchurl: nixfmt-rfc-style
 ce21e97a1f20dee15da85c084f9d1148d84f853b
 
@@ -275,3 +278,10 @@ d7f1102f04c58b2edfc74c9a1d577e3aebfca775
 60e35e4ded6e91524364a74b3b4ec233ed9321f2
 99f2e655d9db009ee0b4ede3edced5f6c882c7f4
 b4532efe93882ae2e3fc579929a42a5a56544146
+
+# emacs: keep elpa/nongnu/melpa package overrides sorted
+9f2faf683ed48704aa17f693208a13aa64e22181
+
+# nixfmt 1.0.0
+62fe01651911043bd3db0add920af3d2935d9869 # !autorebase nix-shell --run treefmt
+5a0711127cd8b916c3d3128f473388c8c79df0da # !autorebase nix-shell --run treefmt

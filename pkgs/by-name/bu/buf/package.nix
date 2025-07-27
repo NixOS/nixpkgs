@@ -90,7 +90,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       lrewega
-      aaronjheng
     ];
     mainProgram = "buf";
   };

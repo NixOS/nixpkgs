@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Your-editor (yed) is a small and simple terminal editor core that is meant to be extended through a powerful plugin architecture";
+    description = "Small and simple terminal editor core that is meant to be extended through a powerful plugin architecture";
     homepage = "https://your-editor.org/";
     changelog = "https://github.com/your-editor/yed/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];

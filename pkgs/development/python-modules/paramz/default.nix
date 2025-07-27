@@ -41,7 +41,7 @@ buildPythonPackage rec {
       --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "paramz/tests/array_core_tests.py"
     "paramz/tests/cacher_tests.py"
     "paramz/tests/examples_tests.py"

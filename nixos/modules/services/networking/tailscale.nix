@@ -143,18 +143,18 @@ in
         pkgs.procps # for collecting running services (opt-in feature)
         pkgs.getent # for `getent` to look up user shells
         pkgs.kmod # required to pass tailscale's v6nat check
-      ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
-      serviceConfig.Environment =
-        [
-          "PORT=${toString cfg.port}"
-          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
-        ]
-        ++ (lib.optionals (cfg.permitCertUid != null) [
-          "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-        ])
-        ++ (lib.optionals (cfg.disableTaildrop) [
-          "TS_DISABLE_TAILDROP=true"
-        ]);
+      ]
+      ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
+      serviceConfig.Environment = [
+        "PORT=${toString cfg.port}"
+        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
+      ]
+      ++ (lib.optionals (cfg.permitCertUid != null) [
+        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+      ])
+      ++ (lib.optionals (cfg.disableTaildrop) [
+        "TS_DISABLE_TAILDROP=true"
+      ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of

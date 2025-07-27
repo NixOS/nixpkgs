@@ -33,7 +33,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
   pythonImportsCheck = [ "bagit" ];
 
   meta = with lib; {

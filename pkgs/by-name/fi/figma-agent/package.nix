@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-Cq+ivyrj6wt7DEUM730BG44sMkpOMt4qxb+J3itVar4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QdEs1zaQ2CQT50nIhKxtp7zpJfa64xQgOy3sTOUGmxk=";
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ rustPlatform.buildRustPackage {
     description = "Figma Agent for Linux with a focus on performance";
     homepage = "https://github.com/neetly/figma-agent-linux";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ercao ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "figma-agent";
     platforms = lib.platforms.linux;
   };

@@ -40,7 +40,8 @@ buildPythonPackage rec {
     ftfy
     httpx
     netifaces
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio

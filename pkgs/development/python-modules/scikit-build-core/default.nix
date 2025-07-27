@@ -50,15 +50,14 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      packaging
-      pathspec
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
-    ];
+  dependencies = [
+    packaging
+    pathspec
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+    tomli
+  ];
 
   nativeCheckInputs = [
     build
@@ -77,7 +76,10 @@ buildPythonPackage rec {
   # cmake is only used for tests
   dontUseCmakeConfigure = true;
 
-  pytestFlagsArray = [ "-m 'not isolated and not network'" ];
+  disabledTestMarks = [
+    "isolated"
+    "network"
+  ];
 
   disabledTestPaths = [
     # store permissions issue in Nix:

@@ -7,15 +7,18 @@
 python3Packages.buildPythonPackage rec {
   pname = "easyeda2kicad";
   version = "0.8.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-p4G+bRB29uBohqQpI3PrkwyZId5McJ1t2Ru26hBPSks=";
   };
 
-  dependencies = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pydantic
     requests
   ];

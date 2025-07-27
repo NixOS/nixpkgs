@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication {
   version = "0.2";
-  format = "setuptools";
+  format = "pyproject";
   pname = "curseradio";
 
   src = fetchFromGitHub {
@@ -18,7 +18,11 @@ python3Packages.buildPythonApplication {
     sha256 = "11bf0jnj8h2fxhpdp498189r4s6b47vy4wripv0z4nx7lxajl88i";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     requests
     lxml
     pyxdg

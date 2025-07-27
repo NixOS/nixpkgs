@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tMs5DRuWuMXIpj5YU4bR4mAlzv7nWycmzDOqMuihj7M=";
 
   meta = with lib; {

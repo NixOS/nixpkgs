@@ -67,14 +67,13 @@ resholve.mkDerivation rec {
         procps
       ];
       fake = {
-        external =
-          [
-            "greadlink"
-            "shlock"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            "pkill" # procps doesn't supply this on darwin
-          ];
+        external = [
+          "greadlink"
+          "shlock"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "pkill" # procps doesn't supply this on darwin
+        ];
       };
       fix = {
         "$BATS_ROOT" = [ "${placeholder "out"}" ];
@@ -106,28 +105,29 @@ resholve.mkDerivation rec {
         "$parallel_binary_name" = "${parallel}/bin/parallel";
         "${placeholder "out"}/libexec/bats-core/bats-preprocess" = true;
       };
-      execer =
-        [
-          /*
-            both blatant lies for expedience; these can certainly exec args
-            they may be safe here, because they may always run things that
-            are ultimately in libexec?
-            TODO: handle parallel and flock in binlore/resholve
-          */
-          "cannot:${parallel}/bin/parallel"
-          "cannot:${flock}/bin/flock"
+      execer = [
+        /*
+          both blatant lies for expedience; these can certainly exec args
+          they may be safe here, because they may always run things that
+          are ultimately in libexec?
+          TODO: handle parallel and flock in binlore/resholve
+        */
+        "cannot:${parallel}/bin/parallel"
+        "cannot:${flock}/bin/flock"
 
-          "cannot:libexec/bats-core/bats-preprocess"
+        "cannot:libexec/bats-core/bats-preprocess"
 
-          # these do exec, but other internal files
-          "cannot:libexec/bats-core/bats-exec-file"
-          "cannot:libexec/bats-core/bats-exec-suite"
-          "cannot:libexec/bats-core/bats-gather-tests"
-        ]
-        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-          # checked invocations for exec
-          "cannot:${procps}/bin/pkill"
-        ];
+        # these do exec, but other internal files
+        "cannot:libexec/bats-core/bats-exec-file"
+        "cannot:libexec/bats-core/bats-exec-suite"
+        "cannot:libexec/bats-core/bats-gather-tests"
+
+        "cannot:${procps}/bin/ps"
+      ]
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+        # checked invocations for exec
+        "cannot:${procps}/bin/pkill"
+      ];
     };
   };
 
@@ -140,7 +140,8 @@ resholve.mkDerivation rec {
 
       paths = [
         bats
-      ] ++ selector bats.libraries;
+      ]
+      ++ selector bats.libraries;
 
       nativeBuildInputs = [
         makeWrapper
@@ -152,105 +153,104 @@ resholve.mkDerivation rec {
       '';
     };
 
-  passthru.tests =
-    {
-      libraries =
-        runCommand "${bats.name}-with-libraries-test"
-          {
-            testScript = ''
-              setup() {
-                bats_load_library bats-support
-                bats_load_library bats-assert
-                bats_load_library bats-file
-                bats_load_library bats-detik/detik.bash
+  passthru.tests = {
+    libraries =
+      runCommand "${bats.name}-with-libraries-test"
+        {
+          testScript = ''
+            setup() {
+              bats_load_library bats-support
+              bats_load_library bats-assert
+              bats_load_library bats-file
+              bats_load_library bats-detik/detik.bash
 
-                bats_require_minimum_version 1.5.0
+              bats_require_minimum_version 1.5.0
 
-                TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
-              }
+              TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
+            }
 
-              teardown() {
-                temp_del "$TEST_TEMP_DIR"
-              }
+            teardown() {
+              temp_del "$TEST_TEMP_DIR"
+            }
 
-              @test echo_hi {
-                run -0 echo hi
-                assert_output "hi"
-              }
+            @test echo_hi {
+              run -0 echo hi
+              assert_output "hi"
+            }
 
-              @test cp_failure {
-                run ! cp
-                assert_line --index 0 "cp: missing file operand"
-                assert_line --index 1 "Try 'cp --help' for more information."
-              }
+            @test cp_failure {
+              run ! cp
+              assert_line --index 0 "cp: missing file operand"
+              assert_line --index 1 "Try 'cp --help' for more information."
+            }
 
-              @test file_exists {
-                echo "hi" > "$TEST_TEMP_DIR/hello.txt"
-                assert_file_exist "$TEST_TEMP_DIR/hello.txt"
-                run cat "$TEST_TEMP_DIR/hello.txt"
-                assert_output "hi"
-              }
-            '';
-            passAsFile = [ "testScript" ];
-          }
-          ''
-            ${
-              bats.withLibraries (p: [
-                p.bats-support
-                p.bats-assert
-                p.bats-file
-                p.bats-detik
-              ])
-            }/bin/bats "$testScriptPath"
-            touch "$out"
+            @test file_exists {
+              echo "hi" > "$TEST_TEMP_DIR/hello.txt"
+              assert_file_exist "$TEST_TEMP_DIR/hello.txt"
+              run cat "$TEST_TEMP_DIR/hello.txt"
+              assert_output "hi"
+            }
           '';
+          passAsFile = [ "testScript" ];
+        }
+        ''
+          ${
+            bats.withLibraries (p: [
+              p.bats-support
+              p.bats-assert
+              p.bats-file
+              p.bats-detik
+            ])
+          }/bin/bats "$testScriptPath"
+          touch "$out"
+        '';
 
-      upstream = bats.unresholved.overrideAttrs (old: {
-        name = "${bats.name}-tests";
-        dontInstall = true; # just need the build directory
-        nativeInstallCheckInputs = [
-          ncurses
-          parallel # skips some tests if it can't detect
-          flock # skips some tests if it can't detect
-          procps
-        ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lsof ];
-        inherit doInstallCheck;
-        installCheckPhase =
-          ''
-            # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
-            sed -i '/test works even if PATH is reset/a skip "disabled for nix build"' test/bats.bats
+    upstream = bats.unresholved.overrideAttrs (old: {
+      name = "${bats.name}-tests";
+      dontInstall = true; # just need the build directory
+      nativeInstallCheckInputs = [
+        ncurses
+        parallel # skips some tests if it can't detect
+        flock # skips some tests if it can't detect
+        procps
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ lsof ];
+      inherit doInstallCheck;
+      installCheckPhase = ''
+        # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
+        sed -i '/test works even if PATH is reset/a skip "disabled for nix build"' test/bats.bats
 
-            # skip tests that assume bats `install.sh` will be in BATS_ROOT
-            rm test/root.bats
+        # skip tests that assume bats `install.sh` will be in BATS_ROOT
+        rm test/root.bats
 
-          ''
-          + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-            # skip new timeout tests which are failing on macOS for unclear reasons
-            # This might relate to procps not having a pkill?
-            rm test/timeout.bats
-          '')
-          + ''
+      ''
+      + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+        # skip new timeout tests which are failing on macOS for unclear reasons
+        # This might relate to procps not having a pkill?
+        rm test/timeout.bats
+      '')
+      + ''
 
-            # test generates file with absolute shebang dynamically
-            substituteInPlace test/install.bats --replace \
-              "/usr/bin/env bash" "${bash}/bin/bash"
+        # test generates file with absolute shebang dynamically
+        substituteInPlace test/install.bats --replace \
+          "/usr/bin/env bash" "${bash}/bin/bash"
 
-            ${bats}/bin/bats test
-            touch $out
-          '';
-      });
+        ${bats}/bin/bats test
+        touch $out
+      '';
+    });
 
-      # to see when updates would break things, include packages
-      # that use nixpkgs' bats for testing (as long as they
-      # aren't massive builds)
-      inherit bash-preexec locate-dominating-file packcc;
-      resholve = resholve.tests.cli;
-    }
-    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      # TODO: kikit's kicad dependency is marked broken on darwin atm
-      # may be able to fold this up if that resolves.
-      inherit kikit;
-    };
+    # to see when updates would break things, include packages
+    # that use nixpkgs' bats for testing (as long as they
+    # aren't massive builds)
+    inherit bash-preexec locate-dominating-file packcc;
+    resholve = resholve.tests.cli;
+  }
+  // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    # TODO: kikit's kicad dependency is marked broken on darwin atm
+    # may be able to fold this up if that resolves.
+    inherit kikit;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/bats-core/bats-core";

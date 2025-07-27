@@ -4,7 +4,6 @@
   config,
   db,
   lib,
-  libffiBoot,
   makeScopeWithSplicing',
   pythonPackagesExtensions,
   stdenv,
@@ -21,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "4";
+          patch = "5";
           suffix = "";
         };
-        hash = "sha256-J7FaeXViopcdzj/+MbshYELOC5lbOddozxX3hMx1c2U=";
+        hash = "sha256-k+WD8kNFTm6eRYjKLCZiIGrZYWWYYyd6/NuWgBZH1kA=";
       };
     };
 
@@ -93,9 +92,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "b3";
+        suffix = "rc1";
       };
-      hash = "sha256-xvSL9R8B9Q2HAHpEXdev5KTHqHq0glcL6STB3f0NNoI=";
+      hash = "sha256-hwd4CunxnFv1ufJ4JxgboRza17spLqScrVQkMx5A7os=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
@@ -117,7 +116,7 @@
           libxcrypt = null;
           xz = null;
           zlib = null;
-          libffi = libffiBoot; # without test suite
+          libffi = null;
           stripConfig = true;
           stripIdlelib = true;
           stripTests = true;
@@ -136,7 +135,6 @@
           */
           allowedReferenceNames = [
             "bashNonInteractive"
-            "libffi"
           ];
         }
         // sources.python313

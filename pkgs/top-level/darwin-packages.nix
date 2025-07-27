@@ -170,6 +170,7 @@ makeScopeWithSplicing' {
         xcode_16_1
         xcode_16_2
         xcode_16_3
+        xcode_16_4
         xcode
         requireXcode
         ;
@@ -189,7 +190,8 @@ makeScopeWithSplicing' {
             configuration = {
               imports = [
                 ../../nixos/modules/profiles/nix-builder-vm.nix
-              ] ++ modules;
+              ]
+              ++ modules;
 
               # If you need to override this, consider starting with the right Nixpkgs
               # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.

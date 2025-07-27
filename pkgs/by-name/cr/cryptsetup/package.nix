@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   lvm2,
   json_c,
   asciidoctor,
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.5";
+  version = "2.8.0";
 
   outputs = [
     "bin"
@@ -38,20 +37,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-0r5Dlbj1A7Dr9LLYHbkMNalwUKNY7iH+YqDftm5dVSI=";
+    hash = "sha256-zJ4tN8JahxzqN1ILKNUyIHsMFnD7EPxU1oBx9j9SQ6I=";
   };
 
   patches = [
     # Allow reading tokens from a relative path, see #167994
     ./relative-token-path.patch
-
-    # Do not use pagesize as fallback for block size.
-    # Remove when https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/782 is in the latest stable release
-    # Fixes https://gitlab.com/cryptsetup/cryptsetup/-/issues/943
-    (fetchpatch {
-      url = "https://gitlab.com/cryptsetup/cryptsetup/-/commit/a39a0d00e504ad7a89442874f72cf0561d6089c4.diff";
-      hash = "sha256-teQ/uFYrKuS0ksMEv7rP+d9EUuOl3sINsNhDC88P0xw=";
-    })
   ];
 
   postPatch = ''
@@ -65,26 +56,25 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
-  configureFlags =
-    [
-      "--with-crypto_backend=openssl"
-      "--disable-ssh-token"
-      "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-    ]
-    ++ lib.optionals (!rebuildMan) [
-      "--disable-asciidoc"
-    ]
-    ++ lib.optionals (!withInternalArgon2) [
-      "--enable-libargon2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "--disable-external-tokens"
-      # We have to override this even though we're removing token
-      # support, because the path still gets included in the binary even
-      # though it isn't used.
-      "--with-luks2-external-tokens-path=/"
-    ]
-    ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
+  configureFlags = [
+    "--with-crypto_backend=openssl"
+    "--disable-ssh-token"
+    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+  ]
+  ++ lib.optionals (!rebuildMan) [
+    "--disable-asciidoc"
+  ]
+  ++ lib.optionals (!withInternalArgon2) [
+    "--enable-libargon2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--disable-external-tokens"
+    # We have to override this even though we're removing token
+    # support, because the path still gets included in the binary even
+    # though it isn't used.
+    "--with-luks2-external-tokens-path=/"
+  ]
+  ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   propagatedBuildInputs = [
@@ -93,7 +83,10 @@ stdenv.mkDerivation rec {
     openssl
     libuuid
     popt
-  ] ++ lib.optional (!withInternalArgon2) libargon2;
+  ]
+  ++ lib.optional (!withInternalArgon2) libargon2;
+
+  enableParallelBuilding = true;
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.

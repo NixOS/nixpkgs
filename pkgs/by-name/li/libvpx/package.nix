@@ -131,13 +131,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.15.0";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
     rev = "v${version}";
-    hash = "sha256-ewkx1okhpa05jn4DyN8pkl6UJoz4Ymw4jRe6GN1lWuA=";
+    hash = "sha256-1F5Zlue2DY1yJXwfDfGeh3KcFTQVo9voHcGkgItKgh0=";
   };
 
   postPatch = ''
@@ -164,74 +164,73 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   configurePlatforms = [ ];
-  configureFlags =
-    [
-      (enableFeature (vp8EncoderSupport || vp8DecoderSupport) "vp8")
-      (enableFeature vp8EncoderSupport "vp8-encoder")
-      (enableFeature vp8DecoderSupport "vp8-decoder")
-      (enableFeature (vp9EncoderSupport || vp9DecoderSupport) "vp9")
-      (enableFeature vp9EncoderSupport "vp9-encoder")
-      (enableFeature vp9DecoderSupport "vp9-decoder")
-      (enableFeature extraWarningsSupport "extra-warnings")
-      (enableFeature werrorSupport "werror")
-      "--disable-install-docs"
-      (enableFeature examplesSupport "install-bins")
-      "--enable-install-libs"
-      "--disable-install-srcs"
-      (enableFeature debugSupport "debug")
-      (enableFeature gprofSupport "gprof")
-      (enableFeature gcovSupport "gcov")
-      # Required to build shared libraries
-      (enableFeature (!isCygwin) "pic")
-      (enableFeature optimizationsSupport "optimizations")
-      (enableFeature runtimeCpuDetectSupport "runtime-cpu-detect")
-      (enableFeature thumbSupport "thumb")
-      "--enable-libs"
-      (enableFeature examplesSupport "examples")
-      "--disable-docs"
-      "--as=yasm"
-      # Limit default decoder max to WHXGA
-      (if sizeLimitSupport then "--size-limit=5120x3200" else null)
-      "--disable-codec-srcs"
-      (enableFeature debugLibsSupport "debug-libs")
-      (enableFeature isMips "dequant-tokens")
-      (enableFeature isMips "dc-recon")
-      (enableFeature postprocSupport "postproc")
-      (enableFeature (postprocSupport && (vp9DecoderSupport || vp9EncoderSupport)) "vp9-postproc")
-      (enableFeature multithreadSupport "multithread")
-      (enableFeature internalStatsSupport "internal-stats")
-      (enableFeature spatialResamplingSupport "spatial-resampling")
-      (enableFeature realtimeOnlySupport "realtime-only")
-      (enableFeature ontheflyBitpackingSupport "onthefly-bitpacking")
-      (enableFeature errorConcealmentSupport "error-concealment")
-      # Shared libraries are only supported on ELF platforms
-      (if isDarwin || isCygwin then "--enable-static --disable-shared" else "--enable-shared")
-      (enableFeature smallSupport "small")
-      (enableFeature postprocVisualizerSupport "postproc-visualizer")
-      (enableFeature unitTestsSupport "unit-tests")
-      (enableFeature webmIOSupport "webm-io")
-      (enableFeature libyuvSupport "libyuv")
-      (enableFeature decodePerfTestsSupport "decode-perf-tests")
-      (enableFeature encodePerfTestsSupport "encode-perf-tests")
-      (enableFeature multiResEncodingSupport "multi-res-encoding")
-      (enableFeature temporalDenoisingSupport "temporal-denoising")
-      (enableFeature (
-        temporalDenoisingSupport && (vp9DecoderSupport || vp9EncoderSupport)
-      ) "vp9-temporal-denoising")
-      (enableFeature coefficientRangeCheckingSupport "coefficient-range-checking")
-      (enableFeature (vp9HighbitdepthSupport && is64bit) "vp9-highbitdepth")
-      (enableFeature (
-        experimentalSpatialSvcSupport || experimentalFpMbStatsSupport || experimentalEmulateHardwareSupport
-      ) "experimental")
-    ]
-    ++ optionals (target != null) [
-      "--target=${target}"
-      (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
-    ]
-    # Experimental features
-    ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
-    ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
-    ++ optional experimentalEmulateHardwareSupport "--enable-emulate-hardware";
+  configureFlags = [
+    (enableFeature (vp8EncoderSupport || vp8DecoderSupport) "vp8")
+    (enableFeature vp8EncoderSupport "vp8-encoder")
+    (enableFeature vp8DecoderSupport "vp8-decoder")
+    (enableFeature (vp9EncoderSupport || vp9DecoderSupport) "vp9")
+    (enableFeature vp9EncoderSupport "vp9-encoder")
+    (enableFeature vp9DecoderSupport "vp9-decoder")
+    (enableFeature extraWarningsSupport "extra-warnings")
+    (enableFeature werrorSupport "werror")
+    "--disable-install-docs"
+    (enableFeature examplesSupport "install-bins")
+    "--enable-install-libs"
+    "--disable-install-srcs"
+    (enableFeature debugSupport "debug")
+    (enableFeature gprofSupport "gprof")
+    (enableFeature gcovSupport "gcov")
+    # Required to build shared libraries
+    (enableFeature (!isCygwin) "pic")
+    (enableFeature optimizationsSupport "optimizations")
+    (enableFeature runtimeCpuDetectSupport "runtime-cpu-detect")
+    (enableFeature thumbSupport "thumb")
+    "--enable-libs"
+    (enableFeature examplesSupport "examples")
+    "--disable-docs"
+    "--as=yasm"
+    # Limit default decoder max to WHXGA
+    (if sizeLimitSupport then "--size-limit=5120x3200" else null)
+    "--disable-codec-srcs"
+    (enableFeature debugLibsSupport "debug-libs")
+    (enableFeature isMips "dequant-tokens")
+    (enableFeature isMips "dc-recon")
+    (enableFeature postprocSupport "postproc")
+    (enableFeature (postprocSupport && (vp9DecoderSupport || vp9EncoderSupport)) "vp9-postproc")
+    (enableFeature multithreadSupport "multithread")
+    (enableFeature internalStatsSupport "internal-stats")
+    (enableFeature spatialResamplingSupport "spatial-resampling")
+    (enableFeature realtimeOnlySupport "realtime-only")
+    (enableFeature ontheflyBitpackingSupport "onthefly-bitpacking")
+    (enableFeature errorConcealmentSupport "error-concealment")
+    # Shared libraries are only supported on ELF platforms
+    (if isDarwin || isCygwin then "--enable-static --disable-shared" else "--enable-shared")
+    (enableFeature smallSupport "small")
+    (enableFeature postprocVisualizerSupport "postproc-visualizer")
+    (enableFeature unitTestsSupport "unit-tests")
+    (enableFeature webmIOSupport "webm-io")
+    (enableFeature libyuvSupport "libyuv")
+    (enableFeature decodePerfTestsSupport "decode-perf-tests")
+    (enableFeature encodePerfTestsSupport "encode-perf-tests")
+    (enableFeature multiResEncodingSupport "multi-res-encoding")
+    (enableFeature temporalDenoisingSupport "temporal-denoising")
+    (enableFeature (
+      temporalDenoisingSupport && (vp9DecoderSupport || vp9EncoderSupport)
+    ) "vp9-temporal-denoising")
+    (enableFeature coefficientRangeCheckingSupport "coefficient-range-checking")
+    (enableFeature (vp9HighbitdepthSupport && is64bit) "vp9-highbitdepth")
+    (enableFeature (
+      experimentalSpatialSvcSupport || experimentalFpMbStatsSupport || experimentalEmulateHardwareSupport
+    ) "experimental")
+  ]
+  ++ optionals (target != null) [
+    "--target=${target}"
+    (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
+  ]
+  # Experimental features
+  ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
+  ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
+  ++ optional experimentalEmulateHardwareSupport "--enable-emulate-hardware";
 
   nativeBuildInputs = [
     perl

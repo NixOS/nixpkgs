@@ -6,7 +6,7 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
+  sanitiseHeaderPathsHook,
 
   glog,
   gflags,
@@ -35,19 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WlLQb4O4rGhXp+bQrJA12CvrwcIS6vzO4W6bX04vKMM=";
   };
 
-  patches =
-    [
-      ./glog-0.7.patch
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
-      ./increase-test-discovery-timeout.patch
-    ];
+  patches = [
+    ./glog-0.7.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
+    ./increase-test-discovery-timeout.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
+    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [
@@ -96,18 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2 py)' \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2)'
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
   '';
 
   passthru.updateScript = nix-update-script { };

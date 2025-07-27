@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkeyboard-config";
-  version = "2.44";
+  version = "2.45";
 
   src = fetchurl {
     url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VNLDPu67Ax1I+lkMVD5Uyby9DwA4brxkibL0eg2kNCo=";
+    hash = "sha256-Fp4HWpLZV6V3h8GZ6E41nfKTG3GWwcW0o9V27mI1qHw=";
   };
 
   strictDeps = true;

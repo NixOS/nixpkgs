@@ -12,12 +12,12 @@
   git,
   gnused,
   nix,
-  nixfmt-rfc-style,
+  nixfmt,
   rebar3-nix,
 }:
 
 let
-  version = "3.25.0";
+  version = "3.25.1";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "uiKgB+YuqKnfs9TZbnudp6TZd6ZGXfpF9c8jJffCs/U=";
+      sha256 = "Wpg8MDVwum/cBpwbcY3Cjt2JkuQHEp7wxbZKgyP6crc=";
     };
 
     buildInputs = [ erlang ];
@@ -95,7 +95,7 @@ let
           git
           gnused
           nix
-          nixfmt-rfc-style
+          nixfmt
           (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }

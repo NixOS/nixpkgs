@@ -310,19 +310,21 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.server;
+  ]
+  ++ optional-dependencies.server;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
   env.AWS_SECRET_ACCESS_KEY = "sk";
 
-  pytestFlagsArray = [
-    "-m"
-    "'not network and not requires_docker'"
-
+  pytestFlags = [
     # Matches upstream configuration, presumably due to expensive setup/teardown.
-    "--dist"
-    "loadscope"
+    "--dist=loadscope"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "requires_docker"
   ];
 
   disabledTests = [

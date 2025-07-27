@@ -83,14 +83,13 @@ python3Packages.buildPythonApplication rec {
     tor
   ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+  ]);
 
   disabledTests =
     lib.optionals stdenv.hostPlatform.isLinux [

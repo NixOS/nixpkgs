@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = with lib; {
-    description = "FAST Kubernetes manifests validator, with support for Custom Resources!";
+    description = "FAST Kubernetes manifests validator, with support for Custom Resources";
     mainProgram = "kubeconform";
     homepage = "https://github.com/yannh/kubeconform/";
     license = licenses.asl20;

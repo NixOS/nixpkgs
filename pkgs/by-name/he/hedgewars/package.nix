@@ -81,7 +81,8 @@ stdenv.mkDerivation {
     libglut
     physfs
     qtbase
-  ] ++ lib.optional withServer ghc;
+  ]
+  ++ lib.optional withServer ghc;
 
   cmakeFlags = [
     "-DNOVERSIONINFOUPDATE=ON"
@@ -114,7 +115,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Funny turn-based artillery game, featuring fighting hedgehogs!";
+    description = "Funny turn-based artillery game, featuring fighting hedgehogs";
     homepage = "https://hedgewars.org/";
     license = with lib.licenses; [
       gpl2Only

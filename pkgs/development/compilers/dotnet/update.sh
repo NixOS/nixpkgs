@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused nixfmt-rfc-style
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
 set -Eeuo pipefail

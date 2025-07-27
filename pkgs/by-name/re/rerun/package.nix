@@ -34,13 +34,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.23.4";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-4+vx4BMGJpdN6k+UxAx2unO4maxoUd9uP9Q3mYjpyF4=";
+    hash = "sha256-OMSLCS1j55MYsC3pv4qPQjqO9nRgGj+AUOlcyESFXek=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -49,8 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lmIe/QH8+/2LgaObbEvRgThP82AAnmGzf2SPfHExHks=";
+  cargoHash = "sha256-8XmOtB1U2SAOBchrpKMAv5I8mFvJniVVcmFPugtD4RI=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -107,7 +106,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.getDev openssl)
     libxkbcommon
     vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [

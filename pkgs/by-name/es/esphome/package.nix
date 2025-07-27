@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -8,7 +9,7 @@
   esptool,
   git,
   inetutils,
-  stdenv,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -33,19 +34,18 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.6.3";
+  version = "2025.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-3Xcxn12QKQg0jxdOPP7y01YaikvxmPPX9JL2JBvdsUM=";
+    hash = "sha256-njhcH/C55i1Xkclt2bp+z9OXhR7gsewWUgW3bn/1yig=";
   };
 
-  build-systems = with python.pkgs; [
+  build-system = with python.pkgs; [
     setuptools
-    argcomplete
   ];
 
   nativeBuildInputs = [
@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
     esphome-glyphsets
     freetype-py
     icmplib
+    jinja2
     kconfiglib
     packaging
     paho-mqtt
@@ -123,42 +124,25 @@ python.pkgs.buildPythonApplication rec {
   # Needed for tests
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      hypothesis
+      mock
+      pytest-asyncio
+      pytest-cov-stub
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [ versionCheckHook ];
 
-  disabledTests = [
-    # race condition, also visible in upstream tests
-    # tests/dashboard/test_web_server.py:78: IndexError
-    "test_devices_page"
-
+  disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
-    "test_api_message_size_batching"
-    "test_host_mode_basic"
-    "test_host_mode_batch_delay"
-    "test_host_mode_empty_string_options"
-    "test_host_mode_entity_fields"
-    "test_host_mode_fan_preset"
-    "test_host_mode_many_entities"
-    "test_host_mode_many_entities_multiple_connections"
-    "test_host_mode_noise_encryption"
-    "test_host_mode_noise_encryption_wrong_key"
-    "test_host_mode_reconnect"
-    "test_host_mode_with_sensor"
-    "test_large_message_batching"
+    "tests/integration"
   ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin
-  '';
-
-  postCheck = ''
-    $out/bin/esphome --help > /dev/null
   '';
 
   postInstall =
@@ -171,6 +155,10 @@ python.pkgs.buildPythonApplication rec {
         --zsh <(${argcomplete} --shell zsh esphome) \
         --fish <(${argcomplete} --shell fish esphome)
     '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
 
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;

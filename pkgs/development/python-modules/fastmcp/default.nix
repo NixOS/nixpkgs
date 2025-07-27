@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 
   # build-system
   hatchling,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-UQV/hIu96ukpJxUhOux0mos0o6j4kvsFp2NJHa47tbw=";
+    hash = "sha256-FleJkqdUIhGsV+DVYv/Nf5IORntH/aFq9abKn2r/6Is=";
   };
 
   postPatch = ''
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     fastapi
     pytest-httpx
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [

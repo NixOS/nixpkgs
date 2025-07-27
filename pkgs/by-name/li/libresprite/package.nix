@@ -46,27 +46,26 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  buildInputs =
-    [
-      curl
-      freetype
-      giflib
-      libjpeg
-      libpng
-      libwebp
-      libarchive
-      libX11
-      pixman
-      tinyxml-2
-      zlib
-      SDL2
-      SDL2_image
-      lua
-      # no v8 due to missing libplatform and libbase
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      xorg.libXi
-    ];
+  buildInputs = [
+    curl
+    freetype
+    giflib
+    libjpeg
+    libpng
+    libwebp
+    libarchive
+    libX11
+    pixman
+    tinyxml-2
+    zlib
+    SDL2
+    SDL2_image
+    lua
+    # no v8 due to missing libplatform and libbase
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    xorg.libXi
+  ];
 
   cmakeFlags = [
     "-DWITH_DESKTOP_INTEGRATION=ON"

@@ -32,15 +32,17 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   buildInputs = [
     boostPython
     openssl
-    zlib
-    python3
-    ncurses
   ];
+
+  strictDeps = true;
 
   patches = [
     # provide distutils alternative for python 3.12
@@ -50,11 +52,11 @@ stdenv.mkDerivation {
   # https://github.com/arvidn/libtorrent/issues/6865
   postPatch = ''
     substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
-      --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
-                'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
-                 set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+      --replace-fail 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
+                     'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
+                      set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
     substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
-      --replace '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''
@@ -64,7 +66,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
   '';
 
   outputs = [

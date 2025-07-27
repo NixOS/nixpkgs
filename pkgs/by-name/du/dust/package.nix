@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1pKk41dQlcrPzJ01uvo87G9iTDiBq9XHGOoZ0OH4Mls=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -60,7 +59,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/bootandy/dust/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      aaronjheng
       defelo
     ];
     mainProgram = "dust";

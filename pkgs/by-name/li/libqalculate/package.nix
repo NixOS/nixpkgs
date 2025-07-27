@@ -75,12 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"gnuplot - ' '"${gnuplotBinary} - '
   '';
 
-  preBuild = ''
-    pushd docs/reference
-    doxygen Doxyfile
-    popd
-  '';
-
   meta = {
     description = "Advanced calculator library";
     homepage = "http://qalculate.github.io";

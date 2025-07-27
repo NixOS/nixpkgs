@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "polyphonic additive synthesizer";
+    description = "Polyphonic additive synthesizer";
     mainProgram = "padthv1_jack";
     homepage = "http://padthv1.sourceforge.net/";
     license = lib.licenses.gpl2Plus;

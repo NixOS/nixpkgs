@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DiA7SEXPJTScdoFeGzH45wZP6gZRU8t/fvJLOufuNmU=";
+    hash = "sha256-n0hyAT6XuNJTpjLlYiiDER1xrz8nwT+Q2kSkg28Y8zE=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
+    changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ];

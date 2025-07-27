@@ -124,7 +124,7 @@ in
     '';
     meta = with lib; {
       homepage = "https://github.com/catppuccin/tmux";
-      description = "Soothing pastel theme for Tmux!";
+      description = "Soothing pastel theme for Tmux";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ jnsgruk ];
@@ -230,11 +230,31 @@ in
     meta = {
       homepage = "https://draculatheme.com/tmux";
       downloadPage = "https://github.com/dracula/tmux";
-      description = "Feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux";
       changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ethancedwards8 ];
+    };
+  };
+
+  dotbar = mkTmuxPlugin rec {
+    pluginName = "dotbar";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "vaaleyard";
+      repo = "tmux-dotbar";
+      tag = version;
+      hash = "sha256-n9k18pJnd5mnp9a7VsMBmEHDwo3j06K6/G6p7/DTyIY=";
+    };
+    meta = {
+      homepage = "https://github.com/vaaleyard/tmux-dotbar";
+      downloadPage = "https://github.com/vaaleyard/tmux-dotbar";
+      description = "Simple and minimalist status bar for tmux";
+      changelog = "https://github.com/vaaleyard/tmux-dotbar/releases/tag/${version}";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
     };
   };
 
@@ -338,7 +358,7 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/wfxr/tmux-fzf-url";
-      description = "Quickly open urls on your terminal screen!";
+      description = "Quickly open urls on your terminal screen";
       license = licenses.mit;
       platforms = platforms.unix;
     };
@@ -353,6 +373,26 @@ in
       repo = "tmux-gruvbox";
       rev = "3f9e38d7243179730b419b5bfafb4e22b0a969ad";
       hash = "sha256-jvGCrV94vJroembKZLmvGO8NknV1Hbgz2IuNmc/BE9A=";
+    };
+  };
+
+  harpoon = mkTmuxPlugin {
+    pluginName = "harpoon";
+    rtpFilePath = "harpoon.tmux";
+    version = "0.4.0";
+    src = fetchFromGitHub {
+      owner = "chaitanyabsprip";
+      repo = "tmux-harpoon";
+      rev = "v0.4.0";
+      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+    };
+    meta = {
+      homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      downloadPage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      description = "Tool to bookmark session supporting auto create for sessions";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
     };
   };
 
@@ -390,7 +430,7 @@ in
     meta = {
       homepage = "https://github.com/Nybkox/tmux-kanagawa";
       downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
-      description = "Feature packed kanagawa theme for tmux!";
+      description = "Feature packed kanagawa theme for tmux";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ FKouhai ];
@@ -775,7 +815,7 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
-      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night.";
+      description = "Clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ redyf ];
@@ -860,7 +900,7 @@ in
     rtpFilePath = "main.tmux";
     meta = {
       homepage = "https://github.com/erikw/tmux-powerline";
-      description = "Empowering your tmux (status bar) experience!";
+      description = "Empowering your tmux (status bar) experience";
       longDescription = "A tmux plugin giving you a hackable status bar consisting of dynamic & beautiful looking powerline segments, written purely in bash.";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.unix;

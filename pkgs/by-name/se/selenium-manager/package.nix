@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     ./disable-telemetry.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MgnmEJif4Z4CcmBFkC5BJR67DMGm1ttObtl4LhAFw4g=";
 
   # TODO: enable tests

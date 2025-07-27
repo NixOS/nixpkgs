@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   callPackage,
   pkg-config,
@@ -28,12 +29,12 @@ let
     { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
     { hyprfocus = import ./hyprfocus.nix; }
     { hyprgrass = import ./hyprgrass.nix; }
-    {
-      hyprscroller = throw "hyprlandPlugins.hyprscroller has been removed as the upstream project is deprecated. Consider using `hyprlandPlugins.hyprscrolling`.";
-    } # Added 2025-05-09
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
     (import ./hyprland-plugins.nix)
+    (lib.optionalAttrs config.allowAliases {
+      hyprscroller = throw "hyprlandPlugins.hyprscroller has been removed as the upstream project is deprecated. Consider using `hyprlandPlugins.hyprscrolling`."; # Added 2025-05-09
+    })
   ];
 in
 (lib.mapAttrs (name: plugin: callPackage plugin { inherit mkHyprlandPlugin; }) plugins)

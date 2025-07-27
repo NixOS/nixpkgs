@@ -83,6 +83,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "celery"
+    "css-inline"
     "django-bootstrap3"
     "django-localflavor"
     "django-phonenumber-field"
@@ -248,9 +249,8 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "--reruns"
-    "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [

@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "138.0.7204.92",
+    "version": "138.0.7204.168",
     "chromedriver": {
-      "version": "138.0.7204.93",
-      "hash_darwin": "sha256-Fo5N9rAgHSSnYxrcWMHRezLh8DKi+etZQNjwUKJn7dI=",
-      "hash_darwin_aarch64": "sha256-A46qZtWNli5IuR043RzrEQlNIyeddkyU+5/UJgg5SgU="
+      "version": "138.0.7204.169",
+      "hash_darwin": "sha256-I87LWl+F8nmxpIUXUT+InLFf2nZ1Sh1nAtYVLCq9r5M=",
+      "hash_darwin_aarch64": "sha256-6DoMi5gy68tuauNGvFl0QKPZnh5lY9S73+S+FNltDow="
     },
     "deps": {
       "depot_tools": {
@@ -20,8 +20,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "f079b9bc781e3c2adb1496ea1d72812deb0ddb3d",
-        "hash": "sha256-OiDdGapC/sjDZXItnFcCvOtA7TKzeHPK4EsYFMCMQJs=",
+        "rev": "3e8d82e86e9f508e88ed406c2a24657a6c691d30",
+        "hash": "sha256-6s9mkfckhibpb+L74oPZsgvOZZT58BeSo362t/s92UI=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -96,8 +96,8 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "df15136b959fc60c230265f75ee7fc75c96e8250",
-        "hash": "sha256-b4bGxhtrsfmVdJo/5QT4/mtQ6hqxmfpmcrieqaT9/ls="
+        "rev": "e1dc0a7ab5d1f1f2edaa7e41447d873895e083bf",
+        "hash": "sha256-tkHvTkqbm4JtWnh41iu0aJ9Jo34hYc7aOKuuMQmST4c="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
@@ -131,8 +131,8 @@
       },
       "src/third_party/dawn": {
         "url": "https://dawn.googlesource.com/dawn.git",
-        "rev": "86772f20cca54b46f62b65ece1ef61224aef09db",
-        "hash": "sha256-N9DVbQE56WWBmJ/PJlYhU+pr8I+PFf/7FzMLCNqx3hg="
+        "rev": "1fde167ae683982d77b9ca7e1308bf9f498291e8",
+        "hash": "sha256-PbDTKSU19jn2hLDoazceYB/Rd6/qu6npPSrjOdeXFuU="
       },
       "src/third_party/dawn/third_party/glfw": {
         "url": "https://chromium.googlesource.com/external/github.com/glfw/glfw",
@@ -246,8 +246,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "f8dfe8b36e516cef8a5a169e88d16480d8abdc68",
-        "hash": "sha256-7ygnGBAeiLxwbTx5s7LRs9+ZOe06tr8VFcSY5cVHnS4="
+        "rev": "a718e86b3dc6f1ba3c8cc8092cd79b401d428cfc",
+        "hash": "sha256-50KQk54JwwRS3ENUjB0QedQYFuwmkv9oxytfuNDTVPo="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -796,13 +796,13 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "e5b4c78b54e8b033b2701db3df0bf67d3030e4c1",
-        "hash": "sha256-5y/yNZopnwtDrG+BBU6fMEi0yJJoYvsygQR+fl6vS/Y="
+        "rev": "f5036f509b5e147cccb298a069c40827f3d5edd6",
+        "hash": "sha256-n4/Lf5ZawqUY0QHF2jYl3JPPx9Br/wzVmtqnMvq3Vzk="
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "138.0.7204.96",
+    "version": "138.0.7204.168",
     "deps": {
       "depot_tools": {
         "rev": "a8900cc0f023d6a662eb66b317e8ddceeb113490",
@@ -813,16 +813,16 @@
         "hash": "sha256-UB9a7Fr1W0yYld6WbXyRR8dFqWsj/zx4KumDZ5JQKSM="
       },
       "ungoogled-patches": {
-        "rev": "138.0.7204.96-1",
-        "hash": "sha256-tOQSvdwK3lMN/7l23rbw7txJ/ovRguSXe9oMeol63Cs="
+        "rev": "138.0.7204.168-1",
+        "hash": "sha256-QmHw0sLnVvMwVu/r4L2XS0S31vl+6NJb0zV63iihhkk="
       },
       "npmHash": "sha256-8d5VTHutv51libabhxv7SqPRcHfhVmGDSOvTSv013rE="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "f01343ee86bdb55cc999f82381f038cdbf20db62",
-        "hash": "sha256-9Ryxv2DvnIKVk4ZvjXegubFDUNzJ3YXGPuYHlntC3RU=",
+        "rev": "3e8d82e86e9f508e88ed406c2a24657a6c691d30",
+        "hash": "sha256-6s9mkfckhibpb+L74oPZsgvOZZT58BeSo362t/s92UI=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -897,8 +897,8 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "df15136b959fc60c230265f75ee7fc75c96e8250",
-        "hash": "sha256-b4bGxhtrsfmVdJo/5QT4/mtQ6hqxmfpmcrieqaT9/ls="
+        "rev": "e1dc0a7ab5d1f1f2edaa7e41447d873895e083bf",
+        "hash": "sha256-tkHvTkqbm4JtWnh41iu0aJ9Jo34hYc7aOKuuMQmST4c="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
@@ -932,8 +932,8 @@
       },
       "src/third_party/dawn": {
         "url": "https://dawn.googlesource.com/dawn.git",
-        "rev": "86772f20cca54b46f62b65ece1ef61224aef09db",
-        "hash": "sha256-N9DVbQE56WWBmJ/PJlYhU+pr8I+PFf/7FzMLCNqx3hg="
+        "rev": "1fde167ae683982d77b9ca7e1308bf9f498291e8",
+        "hash": "sha256-PbDTKSU19jn2hLDoazceYB/Rd6/qu6npPSrjOdeXFuU="
       },
       "src/third_party/dawn/third_party/glfw": {
         "url": "https://chromium.googlesource.com/external/github.com/glfw/glfw",
@@ -1047,8 +1047,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "f8dfe8b36e516cef8a5a169e88d16480d8abdc68",
-        "hash": "sha256-7ygnGBAeiLxwbTx5s7LRs9+ZOe06tr8VFcSY5cVHnS4="
+        "rev": "a718e86b3dc6f1ba3c8cc8092cd79b401d428cfc",
+        "hash": "sha256-50KQk54JwwRS3ENUjB0QedQYFuwmkv9oxytfuNDTVPo="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1597,8 +1597,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "e5b4c78b54e8b033b2701db3df0bf67d3030e4c1",
-        "hash": "sha256-5y/yNZopnwtDrG+BBU6fMEi0yJJoYvsygQR+fl6vS/Y="
+        "rev": "f5036f509b5e147cccb298a069c40827f3d5edd6",
+        "hash": "sha256-n4/Lf5ZawqUY0QHF2jYl3JPPx9Br/wzVmtqnMvq3Vzk="
       }
     }
   }

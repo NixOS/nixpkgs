@@ -14,7 +14,7 @@
 
 python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.10.0";
+  version = "8.10.2";
 
   pyproject = true;
 
@@ -22,10 +22,16 @@ python312Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-k48OgHg0Pm3WfjPex27UvMZBOq9708vGJy/rZvCZdbg=";
+    hash = "sha256-klG+cT2vXo9v9tIJhJNCeGTiuV5C+oed0Vi9310PnqQ=";
   };
 
   patches = [
+    # We're using a later version of `craft-cli` than expected, which
+    # adds an extra deprecation warning to the CLI output, meaning that
+    # an expected error message looks slightly different. This patch corrects
+    # that by checking for the updated error message and can be dropped in a
+    # later release of snapcraft.
+    ./esm-test.patch
     # Snapcraft is only officially distributed as a snap, as is LXD. The socket
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
@@ -142,7 +148,7 @@ python312Packages.buildPythonApplication rec {
       squashfsTools
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_bin_echo"
@@ -169,7 +175,8 @@ python312Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

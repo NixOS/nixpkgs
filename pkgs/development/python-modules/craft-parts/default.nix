@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.15.0";
+  version = "2.18.0";
 
   pyproject = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-UW4VdJvEG4w7CM5aj1OKK91nsywQgsguJ+tnhEbqwYA=";
+    hash = "sha256-mjmWB6kgQNY++aAb9Ql/1cISGqX1mivz62y0Sa65FwM=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)
@@ -92,26 +92,25 @@ buildPythonPackage rec {
     "test_java_plugin_jre_not_17"
   ];
 
-  disabledTestPaths =
-    [
-      # Relies upon filesystem extended attributes, and suid/guid bits
-      "tests/unit/sources/test_base.py"
-      "tests/unit/packages/test_base.py"
-      "tests/unit/state_manager"
-      "tests/unit/test_xattrs.py"
-      "tests/unit/packages/test_normalize.py"
-      # Relies upon presence of apt/dpkg.
-      "tests/unit/packages/test_apt_cache.py"
-      "tests/unit/packages/test_deb.py"
-      "tests/unit/packages/test_chisel.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # These tests have hardcoded "amd64" strings which fail on aarch64
-      "tests/unit/executor/test_environment.py"
-      "tests/unit/features/overlay/test_executor_environment.py"
-      # Hard-coded assumptions about arguments relating to 'x86_64'
-      "tests/unit/plugins/test_dotnet_v2_plugin.py"
-    ];
+  disabledTestPaths = [
+    # Relies upon filesystem extended attributes, and suid/guid bits
+    "tests/unit/sources/test_base.py"
+    "tests/unit/packages/test_base.py"
+    "tests/unit/state_manager"
+    "tests/unit/test_xattrs.py"
+    "tests/unit/packages/test_normalize.py"
+    # Relies upon presence of apt/dpkg.
+    "tests/unit/packages/test_apt_cache.py"
+    "tests/unit/packages/test_deb.py"
+    "tests/unit/packages/test_chisel.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # These tests have hardcoded "amd64" strings which fail on aarch64
+    "tests/unit/executor/test_environment.py"
+    "tests/unit/features/overlay/test_executor_environment.py"
+    # Hard-coded assumptions about arguments relating to 'x86_64'
+    "tests/unit/plugins/test_dotnet_v2_plugin.py"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

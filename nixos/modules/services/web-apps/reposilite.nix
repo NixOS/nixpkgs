@@ -395,10 +395,11 @@ in
     systemd.services.reposilite = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "network.target" ]
-        ++ (lib.optional useMySQL "mysql.service")
-        ++ (lib.optional usePostgres "postgresql.target");
+      after = [
+        "network.target"
+      ]
+      ++ (lib.optional useMySQL "mysql.service")
+      ++ (lib.optional usePostgres "postgresql.target");
 
       script =
         lib.optionalString (cfg.keyPasswordFile != null && cfg.settings.keyPassword == null) ''

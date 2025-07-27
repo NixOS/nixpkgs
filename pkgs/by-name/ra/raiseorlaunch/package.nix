@@ -7,14 +7,15 @@
 python3Packages.buildPythonApplication rec {
   pname = "raiseorlaunch";
   version = "2.3.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-L/hu0mYCAxHkp5me96a6HlEY6QsuJDESpTNhlzVRHWs=";
   };
 
-  nativeBuildInputs = [ python3Packages.setuptools-scm ];
+  build-system = with python3Packages; [ setuptools ];
+
   pythonPath = with python3Packages; [ i3ipc ];
 
   # no tests

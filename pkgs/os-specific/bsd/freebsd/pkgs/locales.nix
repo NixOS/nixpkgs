@@ -30,7 +30,8 @@ let
         lorder
         mandoc
         groff
-      ] ++ lib.optional needsLocaledef localedef;
+      ]
+      ++ lib.optional needsLocaledef localedef;
     };
   directories = {
     colldef = true;

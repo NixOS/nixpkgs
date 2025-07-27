@@ -436,11 +436,6 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "8.0.0",
-    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
-  },
-  {
-    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
     "version": "9.0.2",
     "hash": "sha256-WoTLgw/OlXhgN54Szip0Zpne7i/YTXwZ1ZLCPcHV6QM="
   },
@@ -458,11 +453,6 @@
     "pname": "Microsoft.Extensions.Logging",
     "version": "9.0.2",
     "hash": "sha256-vPCb4ZoiwZUSGJIOhYiLwcZLnsd0ZZhny6KQkT88nI0="
-  },
-  {
-    "pname": "Microsoft.Extensions.Logging.Abstractions",
-    "version": "8.0.0",
-    "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
@@ -581,8 +571,8 @@
   },
   {
     "pname": "NuGet.Versioning",
-    "version": "6.12.1",
-    "hash": "sha256-f/ejCuzCAwKs4N4Ec6yf2RovrhBT0nj0hRDP+03/Iy4="
+    "version": "6.14.0",
+    "hash": "sha256-DqdOJgsphKxSvqB8b60zNPCaiLfbiu3WnUJ/90feLrY="
   },
   {
     "pname": "NUnit",
@@ -651,8 +641,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2025.604.1",
-    "hash": "sha256-TnxNneBVR6YYuaUbU1sHewwVzy15qmCpudSopHol1tM="
+    "version": "2025.710.0",
+    "hash": "sha256-p1AFltuRloCm/krTzGzhI5A89NT5yU2nK6ILwhgzLnc="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -666,8 +656,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2025.605.0",
-    "hash": "sha256-t9uNvlimF81LNECTBnhLidSmN8cOXi3Sn0rqI3na3zQ="
+    "version": "2025.708.0",
+    "hash": "sha256-lgGl/jLHMlguuPbQ7MW8uTUk+ZibmMiqtMZnE3xWEr4="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -701,8 +691,8 @@
   },
   {
     "pname": "ppy.Veldrid.SPIRV",
-    "version": "1.0.15-gfbb03d21c2",
-    "hash": "sha256-rnl6+U4E3BJVYTWtEjOx7fDVcJJNBP8MOisoGVLT7vA="
+    "version": "1.0.15-gb66ebf81d2",
+    "hash": "sha256-+0dUQTBEU0pPjRhZXvBkWTUpmMFfM9E6FWWT6yHS/9I="
   },
   {
     "pname": "ppy.Vk",
@@ -1616,8 +1606,8 @@
   },
   {
     "pname": "Velopack",
-    "version": "0.0.1053",
-    "hash": "sha256-YAOvvHDyazxqxQoZ7rDB3szkYnTq/zrzS9mXnpI+2jI="
+    "version": "0.0.1298",
+    "hash": "sha256-oaejrsFMKymGY8/irvB1LEQdIe8NYtZbc+/RWUaL4hk="
   },
   {
     "pname": "Vortice.D3DCompiler",

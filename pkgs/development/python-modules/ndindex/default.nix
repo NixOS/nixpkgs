@@ -66,11 +66,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     sympy
-  ] ++ optional-dependencies.arrays;
+  ]
+  ++ optional-dependencies.arrays;
 
-  pytestFlagsArray = [
-    "--hypothesis-profile"
-    "ci"
+  pytestFlags = [
+    "--hypothesis-profile=ci"
   ];
 
   meta = with lib; {

@@ -16,14 +16,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gurobi";
-  version = "12.0.2";
+  version = "12.0.3";
 
   src = fetchurl {
     url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_${platform}.tar.gz";
     hash =
       {
-        aarch64-linux = "sha256-vlhF3OIMCVyS9Y31RS4eVhs4wQ4CUDGQZlNkf98Uji0=";
-        x86_64-linux = "sha256-DMSmk41YzGoonHdX2xLsioU9RTBLn4kQy4v6HgVa08U=";
+        aarch64-linux = "sha256-NrHyudaioPE34qulwQNe3RFk4KnjFTGmLRj8B9jGRu4=";
+        x86_64-linux = "sha256-Ib2ruq+Dzi2kKk8T7N56H9F7buxNdMl7rYoFGIfRECE=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };

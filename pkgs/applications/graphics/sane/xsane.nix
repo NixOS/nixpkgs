@@ -123,7 +123,8 @@ stdenv.mkDerivation rec {
     sane-frontends
     libX11
     gtk2
-  ] ++ lib.optional gimpSupport gimp;
+  ]
+  ++ lib.optional gimpSupport gimp;
 
   passthru.updateScript = nix-update-script { };
 

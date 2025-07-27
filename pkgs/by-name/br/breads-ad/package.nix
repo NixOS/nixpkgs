@@ -16,9 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-U1q15D59N55qBf4NVOpe5RpQjlE1ye2TNNIZf2IZV3U=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "ldap3" ];
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     impacket

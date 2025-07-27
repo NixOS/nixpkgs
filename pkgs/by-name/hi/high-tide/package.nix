@@ -9,6 +9,7 @@
   blueprint-compiler,
   desktop-file-utils,
   libadwaita,
+  glib-networking,
   gst_all_1,
   libsecret,
   libportal,
@@ -36,17 +37,17 @@ python313Packages.buildPythonApplication rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libportal
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      libsecret
-    ]);
+  buildInputs = [
+    glib-networking
+    libadwaita
+    libportal
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    libsecret
+  ]);
 
   dependencies = with python313Packages; [
     pygobject3

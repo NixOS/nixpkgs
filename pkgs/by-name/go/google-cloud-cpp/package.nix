@@ -14,8 +14,7 @@
   nlohmann_json,
   openssl,
   pkg-config,
-  # upstream PR to update: https://github.com/googleapis/google-cloud-cpp/pull/14974
-  protobuf_29,
+  protobuf_31,
   pkgsBuildHost,
   # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
   apis ? [ "*" ],
@@ -23,24 +22,24 @@
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake
-  googleapisRev = "6a474b31c53cc1797710206824a17b364a835d2d";
+  googleapisRev = "f01a17a560b4fbc888fd552c978f4e1f8614100b";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-t5oX6Gc1WSMSBDftXA9RZulckUenxOEHBYeq2qf8jnY=";
+    hash = "sha256-eJA3KM/CZMKTR3l6omPJkxqIBt75mSNsxHnoC+1T4gw=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "2.29.0";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-gCq8Uc+s/rnJWsGlI7f+tvAZHH8K69+H/leUOKE2GCY=";
+    sha256 = "sha256-TF3MLBmjUbKJkZVcaPXbagXrAs3eEhlNQBjYQf0VtT8=";
   };
 
   patches = [
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
     grpc
     nlohmann_json
     openssl
-    protobuf_29
+    protobuf_31
     gbenchmark
     gtest
   ];
@@ -120,20 +119,19 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
-      # unconditionally build tests to catch linker errors as early as possible
-      # this adds a good chunk of time to the build
-      "-DBUILD_TESTING:BOOL=ON"
-      "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
-    ]
-    ++ lib.optionals (apis != [ "*" ]) [
-      "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
+    # unconditionally build tests to catch linker errors as early as possible
+    # this adds a good chunk of time to the build
+    "-DBUILD_TESTING:BOOL=ON"
+    "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+  ]
+  ++ lib.optionals (apis != [ "*" ]) [
+    "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
+  ];
 
   requiredSystemFeatures = [ "big-parallel" ];
 

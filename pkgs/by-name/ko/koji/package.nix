@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-+xtq4btFbOfiyFMDHXo6riSBMhAwTLQFuE91MUHtg5Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WiFXDXLJc2ictv29UoRFRpIpAqeJlEBEOvThXhLXLJA=";
 
   OPENSSL_NO_VENDOR = 1;
@@ -37,7 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   nativeCheckInputs = [
     gitMinimal

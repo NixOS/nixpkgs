@@ -8,12 +8,10 @@
   desktopToDarwinBundle,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "thonny";
   version = "4.1.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thonny";
@@ -24,7 +22,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   desktopItems = [
     (makeDesktopItem {
@@ -39,6 +38,8 @@ buildPythonApplication rec {
       ];
     })
   ];
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies =
     with python3.pkgs;
@@ -70,6 +71,8 @@ buildPythonApplication rec {
 
   # Tests need a DISPLAY
   doCheck = false;
+
+  pythonImportsCheck = [ "thonny" ];
 
   meta = {
     description = "Python IDE for beginners";

@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-nxBZIs7s/v465iV3m//I7otYr9Fk/+YjtXFXcYnEpRw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DDlHSSZiVbAGnowiuewgG1KwfyhfL7wnMjhEsrVMvvY=";
 
   cargoBuildFlags = [
@@ -31,14 +30,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p nickel-lang-lsp"
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-      gitMinimal
-    ]
-    ++ lib.optionals enableNixImport [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    python3
+    gitMinimal
+  ]
+  ++ lib.optionals enableNixImport [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals enableNixImport [
     nixVersions.nix_2_24
