@@ -3347,6 +3347,12 @@
     githubId = 10164833;
     name = "Birk Bohne";
   };
+  bizmyth = {
+    email = "andrew.p.council@gmail.com";
+    github = "bizmythy";
+    githubId = 45700916;
+    name = "Drew Council";
+  };
   bjesus = {
     email = "nixpkgs@yoavmoshe.com";
     github = "bjesus";
