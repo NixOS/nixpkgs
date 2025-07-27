@@ -14,7 +14,7 @@
 let
   tweetnacl = stdenv.mkDerivation {
     pname = "tweetnacl";
-    version = "0-unstable-12-02-2020";
+    version = "0-unstable-2020-02-12";
 
     src = fetchFromGitHub {
       owner = "ianopolous";

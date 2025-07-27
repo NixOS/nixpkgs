@@ -7,7 +7,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-quakec";
-  version = "0-unstable-2024-10-12-12-03-59";
+  version = "0-unstable-2024-10-12";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
