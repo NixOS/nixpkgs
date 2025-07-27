@@ -8,6 +8,7 @@
   coreutils,
   libuuid,
   libaio,
+  bash,
   replaceVars,
   enableCmdlib ? false,
   enableDmeventd ? false,
@@ -47,9 +48,12 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals udevSupport [ udevCheckHook ];
   buildInputs = [
     libaio
+    bash
   ]
   ++ lib.optionals udevSupport [
     udev
@@ -177,10 +181,16 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!onlyLib && !enableCmdlib) [
     "bin"
     "lib"
+    "scripts"
   ];
 
   postInstall = lib.optionalString (enableCmdlib != true) ''
     moveToOutput lib/libdevmapper.so $lib
+    moveToOutput libexec/lvresize_fs_helper $scripts/lib
+    moveToOutput bin/lvmdump $scripts
+    moveToOutput bin/fsadm $scripts
+    moveToOutput bin/blkdeactivate $scripts
+    moveToOutput bin/lvm_import_vdo $scripts
   '';
 
   passthru.tests = {
