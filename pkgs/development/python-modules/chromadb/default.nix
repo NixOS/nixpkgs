@@ -33,7 +33,6 @@
   orjson,
   overrides,
   posthog,
-  pulsar-client,
   pydantic,
   pypika,
   pyyaml,
@@ -139,7 +138,6 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pulsar-client
     pydantic
     pypika
     pyyaml
