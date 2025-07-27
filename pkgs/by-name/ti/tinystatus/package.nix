@@ -27,30 +27,32 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  runtimeInputs = [
-    curl
-    netcat
-    unixtools.ping
-    coreutils
-    mktemp
-    findutils
-    gnugrep
-    gawk
-    gnused
-  ];
-
   installPhase = ''
     runHook preInstall
-    install -Dm555 tinystatus $out/bin/tinystatus
+
+    install -Dm755 tinystatus $out/bin/tinystatus
     wrapProgram $out/bin/tinystatus \
-      --set PATH "${lib.makeBinPath finalAttrs.runtimeInputs}"
+      --set PATH "${
+        lib.makeBinPath [
+          curl
+          netcat
+          unixtools.ping
+          coreutils
+          mktemp
+          findutils
+          gnugrep
+          gawk
+          gnused
+        ]
+      }"
+
     runHook postInstall
   '';
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
 
     cat <<EOF >test.csv
     ping, 0, testing, this.should.fail.example.com
@@ -58,7 +60,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     $out/bin/tinystatus test.csv | grep Disrupted
 
-    runHook postCheck
+    runHook postInstallCheck
   '';
 
   meta = {
