@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   coreutils,
   curl,
   findutils,
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-nPrABKKIDP1n1rhcojFJJ15kqa5b4s7F/wMAgD/eVBw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall
