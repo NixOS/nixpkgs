@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  pname = "artim-dark";
+  pname = "aritim-dark";
   version = "unstable-2021-12-29";
 
   src = fetchFromGitHub {
