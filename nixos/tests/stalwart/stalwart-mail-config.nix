@@ -50,7 +50,7 @@ in
       storage.lookup = "rocksdb";
 
       session.rcpt.directory = "'in-memory'";
-      queue.outbound.next-hop = "'local'";
+      queue.strategy.route = "'local'";
 
       store."rocksdb" = {
         type = "rocksdb";
