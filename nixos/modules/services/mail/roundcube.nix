@@ -16,6 +16,14 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "roundcube" "database" "postgresql" "password" ] ''
+      Use `services.roundcube.database.passwordFile` instead.
+
+      As with all `password` options, it was insecure: the value was stored as world readable in the Nix store.
+    '')
+  ];
+
   options.services.roundcube = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -57,11 +65,6 @@ in
           postgresql user and database yourself, with appropriate
           permissions.
         '';
-      };
-      password = lib.mkOption {
-        type = lib.types.str;
-        description = "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use `passwordFile` instead.";
-        default = "";
       };
       passwordFile = lib.mkOption {
         type = lib.types.path;
@@ -132,14 +135,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # backward compatibility: if password is set but not passwordFile, make one.
-    services.roundcube.database.passwordFile = lib.mkIf (!localDB && cfg.database.password != "") (
-      lib.mkDefault "${pkgs.writeText "roundcube-password" cfg.database.password}"
-    );
-    warnings =
-      lib.optional (!localDB && cfg.database.password != "")
-        "services.roundcube.database.password is deprecated and insecure; use services.roundcube.database.passwordFile instead";
-
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 

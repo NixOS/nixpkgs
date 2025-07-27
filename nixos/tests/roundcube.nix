@@ -12,7 +12,7 @@
         services.roundcube = {
           enable = true;
           hostName = "roundcube";
-          database.password = "not production";
+          database.passwordFile = pkgs.writeText "roundcube-test-password.txt" "not production";
           package = pkgs.roundcube.withPlugins (plugins: [ plugins.persistent_login ]);
           plugins = [ "persistent_login" ];
           dicts = with pkgs.aspellDicts; [
