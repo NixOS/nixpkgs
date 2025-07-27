@@ -9,6 +9,8 @@
 }:
 let
 
+  inherit (lib) all filterAttrs isList;
+
   cfg = config.environment;
 
   exportedEnvVars =
@@ -27,7 +29,7 @@ let
 
       exportVariables = lib.mapAttrsToList (
         n: v: ''export ${n}="${lib.concatStringsSep ":" v}"''
-      ) allVariables;
+      ) (filterAttrs (_n: v: v != null && (isList v -> ! all isNull v)) allVariables);
     in
     lib.concatStringsSep "\n" exportVariables;
 in
@@ -55,7 +57,8 @@ in
       '';
       type =
         with lib.types;
-        attrsOf (
+        # *lazy*-AttrsOf to support self-references https://nixos.org/manual/nixos/unstable/#sec-option-types-composed
+        lazyAttrsOf (
           nullOr (oneOf [
             (listOf (oneOf [
               int
@@ -72,9 +75,15 @@ in
           toStr = v: if lib.isPath v then "${v}" else toString v;
         in
         attrs:
-        lib.mapAttrs (n: v: if lib.isList v then lib.concatMapStringsSep ":" toStr v else toStr v) (
-          lib.filterAttrs (n: v: v != null) attrs
-        );
+        lib.mapAttrs (
+          n: v:
+          if v == null then
+            null
+          else if lib.isList v then
+            lib.concatMapStringsSep ":" toStr v
+          else
+            toStr v
+        ) attrs;
     };
 
     environment.profiles = lib.mkOption {
