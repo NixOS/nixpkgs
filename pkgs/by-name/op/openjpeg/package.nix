@@ -28,16 +28,6 @@
   vips,
 }:
 
-let
-  # may need to get updated with package
-  # https://github.com/uclouvain/openjpeg-data
-  test-data = fetchFromGitHub {
-    owner = "uclouvain";
-    repo = "openjpeg-data";
-    rev = "39524bd3a601d90ed8e0177559400d23945f96a9";
-    hash = "sha256-ckZHCZV5UJicVUoi/mZDwvCJneXC3X+NA8Byp6GLE0w=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openjpeg";
   version = "2.5.4";
@@ -64,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_JAVA=OFF"
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
   ]
-  ++ lib.optional finalAttrs.doCheck "-DOPJ_DATA_ROOT=${test-data}";
+  ++ lib.optional finalAttrs.doCheck "-DOPJ_DATA_ROOT=${finalAttrs.passthru.test-data}";
 
   nativeBuildInputs = [
     cmake
@@ -95,6 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     incDir = "openjpeg-${lib.versions.majorMinor finalAttrs.version}";
+
+    # may need to get updated with package
+    # https://github.com/uclouvain/openjpeg-data
+    test-data = fetchFromGitHub {
+      owner = "uclouvain";
+      repo = "openjpeg-data";
+      rev = "39524bd3a601d90ed8e0177559400d23945f96a9";
+      hash = "sha256-ckZHCZV5UJicVUoi/mZDwvCJneXC3X+NA8Byp6GLE0w=";
+    };
+
     tests = {
       ffmpeg = ffmpeg.override { withOpenjpeg = true; };
       imagemagick = imagemagick.override { openjpegSupport = true; };
