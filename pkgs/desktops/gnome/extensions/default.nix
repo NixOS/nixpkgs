@@ -93,7 +93,6 @@ rec {
       // lib.optionalAttrs config.allowAliases {
         unite-shell = gnomeExtensions.unite; # added 2021-01-19
         arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
-        disable-unredirect = gnomeExtensions.disable-unredirect-fullscreen-windows; # added 2021-11-20
 
         icon-hider = throw "gnomeExtensions.icon-hider was removed on 2024-03-15. The extension has not received any updates since 2020/3.34.";
         nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
