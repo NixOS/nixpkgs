@@ -9595,6 +9595,8 @@ self: super: with self; {
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
 
+  msrplib = callPackage ../development/python-modules/msrplib { };
+
   mss = callPackage ../development/python-modules/mss { };
 
   msticpy = callPackage ../development/python-modules/msticpy { };
