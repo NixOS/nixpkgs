@@ -43,6 +43,8 @@ struct PriorityKey {
     root_index: usize,
 }
 
+const FHSENV_MARKER_FILE: &str = "nix-support/is-fhsenv";
+
 fn build_reference_map(refs: Vec<RefGraphNode>) -> HashMap<PathBuf, Vec<PathBuf>> {
     refs.into_iter()
         .map(|mut gn| {
@@ -119,6 +121,11 @@ fn collect_candidate_paths(
     let mut candidates: HashMap<_, Vec<_>> = HashMap::new();
 
     for (path, priority) in paths {
+        if path.join(FHSENV_MARKER_FILE).exists() {
+            // is another fhsenv, skip it
+            continue;
+        }
+
         for entry in WalkDir::new(&path).follow_links(true) {
             let entry: PathBuf = match entry {
                 Ok(ent) => {
@@ -263,6 +270,14 @@ fn build_env(out: &Path, plan: HashMap<PathBuf, PathBuf>) -> anyhow::Result<()> 
         ufs::symlink(&src, &full_dest)
             .with_context(|| format!("When symlinking {src:?} to {full_dest:?}"))?;
     }
+
+    let marker = out.join(FHSENV_MARKER_FILE);
+    fs::create_dir_all(
+        marker
+            .parent()
+            .ok_or(anyhow!("marker file is in root, this should never happen"))?,
+    )?;
+    fs::write(marker, [])?;
 
     Ok(())
 }
