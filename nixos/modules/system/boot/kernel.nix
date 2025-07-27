@@ -414,7 +414,9 @@ in
 
           ln -s ${initrdPath} $out/initrd
 
-          ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ${optionalString (config.boot.initrd.secrets != { }) ''
+            ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ''}
 
           ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
         '';
