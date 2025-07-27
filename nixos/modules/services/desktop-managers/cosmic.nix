@@ -99,9 +99,6 @@ in
       )
     ) config.environment.cosmic.excludePackages;
 
-    # Distro-wide defaults for graphical sessions
-    services.graphical-desktop.enable = true;
-
     xdg = {
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
 
