@@ -51,8 +51,12 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     ./bootstrap --gnulib-srcdir=${gnulib}
     ./configure --prefix="$out"
+
+    runHook postConfigure
   '';
 
   buildInputs = [
