@@ -11962,8 +11962,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
-
   welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
 
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
