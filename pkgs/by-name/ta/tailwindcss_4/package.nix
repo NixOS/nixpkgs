@@ -14,6 +14,8 @@
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
+
+  lld,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      #cargoRoot
       ;
     hash = "sha256-MnNcndDbdqJNEISYCXy6TsN4+uk6/ahImAXX6XdBMWs=";
   };
@@ -55,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_9.configHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
+
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+    lld
   ];
 
   buildInputs = [
@@ -71,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  cargoBuildFlags = [
+    "--target=wasm32-wasip1-threads"
+  ];
 
   #passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
   #  ${lib.getExe finalAttrs.finalPackage} --help > $out
