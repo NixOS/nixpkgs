@@ -16,14 +16,11 @@
   libqb,
   libseccomp,
   polkit,
-  protobuf_29,
+  protobuf,
   audit,
   libsodium,
 }:
 
-let
-  protobuf = protobuf_29;
-in
 stdenv.mkDerivation rec {
   version = "1.1.4";
   pname = "usbguard";
