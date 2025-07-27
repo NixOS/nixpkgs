@@ -5,19 +5,22 @@
   cctools,
   ninja,
   python3,
+
+  # Note: Please use the recommended version for Chromium stable, i.e. from
+  # <nixpkgs>/pkgs/applications/networking/browsers/chromium/info.json
+  version ? "0-unstable-2025-04-28",
+  rev ? "85cc21e94af590a267c1c7a47020d9b420f8a033",
+  hash ? "sha256-nc0ls1xKYq80mwPeOQpUI62x7ClBhaXaDGazoXdKFbg=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gn";
-  version = "0-unstable-2025-04-28";
+  inherit version;
 
   src = fetchgit {
     # Note: The TAR-Archives (+archive/${rev}.tar.gz) are not deterministic!
     url = "https://gn.googlesource.com/gn";
-    # Note: Please use the recommended version for Chromium stable, i.e. from
-    # <nixpkgs>/pkgs/applications/networking/browsers/chromium/info.json
-    rev = "85cc21e94af590a267c1c7a47020d9b420f8a033";
-    hash = "sha256-nc0ls1xKYq80mwPeOQpUI62x7ClBhaXaDGazoXdKFbg=";
+    inherit rev hash;
     leaveDotGit = true;
     deepClone = true;
     postFetch = ''
