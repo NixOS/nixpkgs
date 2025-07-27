@@ -5,6 +5,13 @@
   callPackage,
   makeDesktopItem,
   copyDesktopItems,
+
+  # Needed for update script.
+  _experimental-update-script-combinators,
+  gitUpdater,
+  runCommand,
+  sideswap,
+  yq,
 }:
 
 let
@@ -62,6 +69,40 @@ flutter332.buildFlutterApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
   ];
+
+  passthru = {
+    # Expose lib to access it via sideswap.lib from the update script.
+    lib = libsideswap-client;
+
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (sideswap) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+
+    # Usage: nix-shell maintainers/scripts/update.nix --argstr package sideswap
+    updateScript = _experimental-update-script-combinators.sequence [
+      # Update sideswap to new release.
+      (gitUpdater { rev-prefix = "v"; })
+
+      # Update pubspec.lock.json file and related gitHashes attribute.
+      (_experimental-update-script-combinators.copyAttrOutputToFile "sideswap.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [ ./update-gitHashes.py ];
+        supportedFeatures = [ "silent" ];
+      }
+
+      # Update libsideswap-client sub-package.
+      {
+        command = [ ./update-libsideswap-client.sh ];
+        supportedFeatures = [ "silent" ];
+      }
+    ];
+  };
 
   meta = {
     description = "Cross‑platform, non‑custodial wallet and atomic swap marketplace for the Liquid Network";
