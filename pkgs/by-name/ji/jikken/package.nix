@@ -25,7 +25,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(v\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = with lib; {
     description = "Powerful, source control friendly REST API testing toolkit";
