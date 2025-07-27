@@ -6,14 +6,15 @@
   nixosTests,
   nix-update-script,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "dae";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RpbWZEoGrCq3Py0hu6YDie6ErDTLS3oabqScPzhCtm0=";
     fetchSubmodules = true;
   };
@@ -33,7 +34,7 @@ buildGoModule rec {
 
     make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
     NOSTRIP=y \
-    VERSION=${version} \
+    VERSION=${finalAttrs.version} \
     OUTPUT=$out/bin/dae
 
     runHook postBuild
@@ -66,4 +67,4 @@ buildGoModule rec {
     platforms = platforms.linux;
     mainProgram = "dae";
   };
-}
+})
