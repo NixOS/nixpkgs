@@ -125,9 +125,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$lib"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}}
   '';
 
-  # not via outputBin, due to reference from libkrb5.so
   postInstall = ''
+    # not via outputBin, due to reference from libkrb5.so
     moveToOutput bin/krb5-config "$dev"
+    moveToOutput sbin/krb5-send-pr "$out"
+    moveToOutput bin/compile_et "$out"
   '';
 
   # Disable _multioutDocs in stdenv by overriding it to be a no-op.
