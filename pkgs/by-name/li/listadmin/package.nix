@@ -43,7 +43,11 @@ stdenvNoCC.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/listadmin --help 2> /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

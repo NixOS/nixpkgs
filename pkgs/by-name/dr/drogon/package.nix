@@ -66,10 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
+    runHook preInstallCheck
+
     (
       cd ..
       PATH=$PATH:$out/bin $SHELL test.sh
     )
+
+    runHook postInstallCheck
   '';
 
   # this excludes you, pkgsStatic (cmake wants to run built binaries

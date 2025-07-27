@@ -83,11 +83,15 @@ let
     # the output logic
     doInstallCheck = true;
     installCheckPhase = ''
+      runHook preInstallCheck
+
       rmdir bin/plugins || {
         echo "Not all plugins were extracted"
         echo "Please move the following to their related output: $(ls bin/plugins)"
         exit 1
       }
+
+      runHook postInstallCheck
     '';
 
     passthru = {

@@ -97,7 +97,11 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     HOME=$(mktemp -d) $out/bin/ja2 -unittests
+
+    runHook postInstallCheck
   '';
 
   meta = {

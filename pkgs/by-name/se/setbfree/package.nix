@@ -50,10 +50,14 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     (
       set -x;
       test -e $out/bin/setBfreeUI
     )
+
+    runHook postInstallCheck
   '';
 
   enableParallelBuilding = true;

@@ -43,7 +43,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/sunpaper --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = {

@@ -36,12 +36,16 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     if [[ "$(${expect}/bin/unbuffer "$out/bin/${pname}" --help 2> /dev/null | strings | grep ${version} | tr -d '\n')" == " ${version}" ]]; then
       echo '${pname} smoke check passed'
     else
       echo '${pname} smoke check failed'
       return 1
     fi
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

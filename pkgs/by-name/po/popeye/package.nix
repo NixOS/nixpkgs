@@ -36,7 +36,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/popeye version | grep ${version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = {
