@@ -228,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462
-    lib.optionalString (!enableStatic) ''
+    lib.optionalString (lib.versionOlder version "2.91" && !enableStatic) ''
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
@@ -298,7 +298,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString (lib.versionOlder version "2.91" && stdenv.hostPlatform.isDarwin) ''
       for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \
