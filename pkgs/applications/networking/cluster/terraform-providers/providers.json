@@ -9,11 +9,11 @@
     "vendorHash": "sha256-nHaBNYCKfTvaDnz2SeexM2cyNVK5ThPYn4rnGEw7Wi0="
   },
   "aci": {
-    "hash": "sha256-NS5q6ElCGEGSceOCIVudKE6m6EzXMV/3HGHHXwYopOA=",
+    "hash": "sha256-+aD4M07xXMTbvp69IuGlO3rSkVEi5NVe5fqEPkWNeM0=",
     "homepage": "https://registry.terraform.io/providers/CiscoDevNet/aci",
     "owner": "CiscoDevNet",
     "repo": "terraform-provider-aci",
-    "rev": "v2.16.0",
+    "rev": "v2.17.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -363,11 +363,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "digitalocean": {
-    "hash": "sha256-+JX1EJBRJee6nvn5srwGWSE++LagHw+n1bgfZTBXzKU=",
+    "hash": "sha256-tR4qN0N+tJu1fmiFIwTTIQyOTsqrVi2DSWJjU6oVdwE=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.60.0",
+    "rev": "v2.61.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -732,11 +732,11 @@
     "vendorHash": "sha256-FcxAh8EOvnT8r1GHu0Oj2C5Jgbr2WPwD7/vY4/qIvTA="
   },
   "kubernetes": {
-    "hash": "sha256-JUlthPqYTYlsKyPAjyN9N0A0i8aMJh3tAtwH1vHjzJs=",
+    "hash": "sha256-QVHLGLTzr39liRcM5AKJ0unYoc/DW2elcJWisiHC2pw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/kubernetes",
     "owner": "hashicorp",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.37.1",
+    "rev": "v2.38.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-LeMFN4pOJotTTqakEbVelHSTEb4p7CQIuKzeuX3SZUM="
   },
@@ -922,11 +922,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-4Clqd/WO2nmKHQkIf33BROnQveKAvogWdiIabYfU390=",
+    "hash": "sha256-xdVHJWEvap6Bp/r5hz/113kJF6SexsCROFkQgRTJgYA=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.10.0",
+    "rev": "v7.11.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1156,13 +1156,13 @@
     "vendorHash": "sha256-HKmIl/GjGJZmhWLrK3lMjYo1F5nmo+U9ZpvBo5hDH/0="
   },
   "scaleway": {
-    "hash": "sha256-rSchMweT5Hxz2tpX6V7cBzntJzIeFB46bjV9lkaIWAQ=",
+    "hash": "sha256-/LyxYC+x6e5SQ12iZLxtbgFkF9MvotUlBYdK3/BiiAo=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.57.0",
+    "rev": "v2.58.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-p9rESR1A1SEYlvjf8du2j2yAlI39LsMRcPvyyJIwWdg="
+    "vendorHash": "sha256-Fsa4I8aYHiK9V8arwd64piASA8qAPmGZRqDPK5ec3uk="
   },
   "secret": {
     "hash": "sha256-MmAnA/4SAPqLY/gYcJSTnEttQTsDd2kEdkQjQj6Bb+A=",
