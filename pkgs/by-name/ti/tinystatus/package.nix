@@ -1,17 +1,17 @@
 {
   lib,
   stdenvNoCC,
-  makeWrapper,
-  netcat,
-  curl,
-  unixtools,
-  coreutils,
-  mktemp,
-  findutils,
-  gnugrep,
   fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  curl,
+  findutils,
   gawk,
+  gnugrep,
   gnused,
+  mktemp,
+  netcat,
+  unixtools,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -34,15 +34,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/tinystatus \
       --set PATH "${
         lib.makeBinPath [
+          coreutils
           curl
+          findutils
+          gawk
+          gnugrep
+          gnused
+          mktemp
           netcat
           unixtools.ping
-          coreutils
-          mktemp
-          findutils
-          gnugrep
-          gawk
-          gnused
         ]
       }"
 
