@@ -1,6 +1,6 @@
 import ./generic.nix {
-  version = "12.0.0";
-  hash = "sha256-8cokjK9fbxd9lm+5oDoMll9f7ejiVzMNuDgC0Pk1pbM=";
+  version = "12.0.1";
+  hash = "sha256-MBk5QHjnyMXmQDIbMuehjcGN/PUN1ViRtIi1pJGHlW0=";
   npmDepsHash = "sha256-kq2AV1D0xA4Csm8XUTU5D0iCmyuajcnwlLdPjJ/mj1g=";
   vendorHash = "sha256-B9menPCDUOYHPCS0B5KpxuE03FdFXmA8XqkiYEAxs5Y=";
   lts = false;
