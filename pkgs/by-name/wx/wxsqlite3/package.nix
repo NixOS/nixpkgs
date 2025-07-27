@@ -9,14 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wxsqlite3";
-  version = "4.10.9";
+  version = "4.10.10";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
-    hash = "sha256-vxRbCImGEb9Y5lpiGgkMsOpgjcwMlDLs2LNmS3liy4A=";
+    hash = "sha256-IiqzbkfxuOi1I++26vtxK3BNIzYU1AEKOaaMHRh1qWw=";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -26,6 +28,16 @@ stdenv.mkDerivation rec {
     sqlite
     wxGTK32
   ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./samples/minimal -t -s ./samples
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "https://utelle.github.io/wxsqlite3/";
