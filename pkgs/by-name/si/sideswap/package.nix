@@ -24,12 +24,7 @@ flutter332.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  gitHashes = {
-    sideswap_logger = "sha256-cTJfSODRmIJXctLQ++BfvJ6OKflau94AjQdXg7j95B0=";
-    sideswap_websocket = "sha256-vsG5eUFu/WJvY3y6jaWD/5GfULwpqh3bO4EZmmBSkbs=";
-    window_size = "sha256-+lqY46ZURT0qcqPvHFXUnd83Uvfq79Xr+rw1AHqrpak=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   # Provide OpenGL and libsideswap_client.so for the Flutter application.
   extraWrapProgramArgs = ''
