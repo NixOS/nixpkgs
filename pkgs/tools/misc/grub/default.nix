@@ -60,9 +60,11 @@ let
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) efiSystemsBuild
-  );
+  xenSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+  };
+
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (
     lib.mapAttrsToList (name: _: name) pcSystems
   );
@@ -88,6 +90,10 @@ let
     hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
   };
 in
+
+assert zfsSupport -> zfs != null;
+assert !(efiSupport && xenSupport);
+
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
@@ -605,7 +611,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
-    "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+    "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
   ];
 
   # save target that grub is compiled for
@@ -653,16 +659,13 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms =
-      if xenSupport then
-        [
-          "x86_64-linux"
-          "i686-linux"
-        ]
+      if efiSupport then
+        (lib.mapAttrsToList (name: _: name) efiSystemsBuild)
+      else if xenSupport then
+        (lib.mapAttrsToList (name: _: name) xenSystemsBuild)
       else
         platforms.gnu ++ platforms.linux;
 
     maintainers = [ ];
-
-    broken = !(efiSupport -> canEfi) || !(zfsSupport -> zfs != null) || (efiSupport && xenSupport);
   };
 }
