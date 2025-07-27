@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "stac-validator";
-  version = "3.10.0";
+  version = "3.10.1";
   pyproject = true;
   disabled = python3Packages.pythonOlder "3.8";
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
     owner = "stac-utils";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-diaiF2wJyS/1DuUwPkdMyqpMfvKWvTnRo2H4O7FxYBM=";
+    hash = "sha256-tqguaptVRo6k6QALOOOL8dysMGDZx07eRJoHG24JirQ=";
   };
 
   build-system = [ python3Packages.setuptools ];
