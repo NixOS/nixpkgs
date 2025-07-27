@@ -3,6 +3,7 @@
   clang,
   fetchFromGitHub,
   buildGoModule,
+  versionCheckHook,
   nixosTests,
   nix-update-script,
 }:
@@ -48,6 +49,12 @@ buildGoModule (finalAttrs: {
     substituteInPlace $out/lib/systemd/system/dae.service \
       --replace-fail "/usr/bin/dae" "$out/bin/dae"
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
 
   passthru.tests = {
     inherit (nixosTests) dae;
