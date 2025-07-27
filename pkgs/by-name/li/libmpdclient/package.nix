@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     check
   ];
 
-  mesonFlags = lib.optional finalAttrs.doCheck (lib.strings.mesonBool "test" true);
+  mesonFlags = [ (lib.strings.mesonBool "test" finalAttrs.finalPackage.doCheck) ];
 
   doCheck = true;
 
