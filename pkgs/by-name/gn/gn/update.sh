@@ -18,4 +18,4 @@ commit_time=$(
 commit_date=$(TZ= date --date "$commit_time" --iso-8601)
 version="0-unstable-$commit_date"
 
-update-source-version --rev="$rev" --version-key="version" "gn" "$version"
+update-source-version --rev="$rev" --version-key="_version" "gn" "$version"
