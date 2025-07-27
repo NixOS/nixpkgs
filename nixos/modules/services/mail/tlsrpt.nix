@@ -50,6 +50,15 @@ let
     ];
   };
 
+  collectdConfigFile = format.generate "tlsrpt-collectd.cfg" {
+    tlsrpt_collectd = dropNullValues cfg.collectd.settings;
+  };
+  fetcherConfigFile = format.generate "tlsrpt-fetcher.cfg" {
+    tlsrpt_fetcher = dropNullValues cfg.fetcher.settings;
+  };
+  reportdConfigFile = format.generate "tlsrpt-reportd.cfg" {
+    tlsrpt_reportd = dropNullValues cfg.reportd.settings;
+  };
 in
 
 {
@@ -266,15 +275,9 @@ in
 
   config = mkIf cfg.enable {
     environment.etc = {
-      "tlsrpt/collectd.cfg".source = format.generate "tlsrpt-collectd.cfg" {
-        tlsrpt_collectd = dropNullValues cfg.collectd.settings;
-      };
-      "tlsrpt/fetcher.cfg".source = format.generate "tlsrpt-fetcher.cfg" {
-        tlsrpt_fetcher = dropNullValues cfg.fetcher.settings;
-      };
-      "tlsrpt/reportd.cfg".source = format.generate "tlsrpt-reportd.cfg" {
-        tlsrpt_reportd = dropNullValues cfg.reportd.settings;
-      };
+      "tlsrpt/collectd.cfg".source = collectdConfigFile;
+      "tlsrpt/fetcher.cfg".source = fetcherConfigFile;
+      "tlsrpt/reportd.cfg".source = reportdConfigFile;
     };
 
     users.users.tlsrpt = {
@@ -295,7 +298,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = [ "/etc/tlsrpt/collectd.cfg" ];
+      restartTriggers = [ collectdConfigFile ];
 
       serviceConfig = commonServiceSettings // {
         ExecStart = toString (
@@ -319,7 +322,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = [ "/etc/tlsrpt/reportd.cfg" ];
+      restartTriggers = [ reportdConfigFile ];
 
       serviceConfig = commonServiceSettings // {
         ExecStart = toString (
