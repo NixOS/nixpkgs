@@ -89,12 +89,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
 
-  env = {
-    # Fixes an issue where "fprintf" is being called with a format string that isn't a string literal
-    NIX_CFLAGS_COMPILE = lib.optionalString vulkanSupport "-Wno-error=format-security";
-    NIX_CXXFLAGS_COMPILE = lib.optionalString vulkanSupport "-Wno-error=format-security";
-  };
-
   installPhase = ''
     runHook preInstall
 
