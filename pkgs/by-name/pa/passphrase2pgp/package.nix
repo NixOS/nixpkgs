@@ -24,11 +24,15 @@ buildGoModule rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     output=$(echo NONE | ../go/bin/passphrase2pgp -a -u NONE -i /dev/stdin | sha256sum)
     if [[ "$output" != "23f59f4346f35e2feca6ef703ea64973524dec365ea672f23e7afe79be1049dd  -" ]] ; then
       echo "passphrase2pgp introduced backward-incompatible change"
       exit 1
     fi
+
+    runHook postCheck
   '';
 
   passthru.updateScript = nix-update-script { };

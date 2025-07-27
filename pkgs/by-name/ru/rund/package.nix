@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     $NIX_BUILD_TOP/rund make.d test
+
+    runHook postCheck
   '';
 
   installPhase = ''

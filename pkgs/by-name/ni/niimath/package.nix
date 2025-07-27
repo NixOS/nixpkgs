@@ -44,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     PATH=bin:$PATH ../niimath_tests/canonical_test.sh
+
+    runHook postCheck
   '';
   nativeCheckInputs = [ coreutils ];
 

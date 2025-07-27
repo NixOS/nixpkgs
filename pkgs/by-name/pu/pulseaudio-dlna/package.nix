@@ -66,7 +66,11 @@ python3Packages.buildPythonApplication {
 
   # upstream has no tests
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/pulseaudio-dlna --help > /dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {

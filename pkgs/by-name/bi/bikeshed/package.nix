@@ -54,7 +54,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/bikeshed test
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "bikeshed" ];

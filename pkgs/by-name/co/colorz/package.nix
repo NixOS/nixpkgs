@@ -24,7 +24,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/colorz --help > /dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {

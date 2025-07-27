@@ -30,9 +30,13 @@ stdenv.mkDerivation {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     mkdir func_tests
     cp $src/func_tests/* ./func_tests/
     bash ./func_tests/runtests.sh
+
+    runHook postCheck
   '';
 
   passthru.updateScript = nix-update-script { };

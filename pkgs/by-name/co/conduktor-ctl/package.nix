@@ -24,7 +24,11 @@ buildGoModule rec {
   ldflags = [ "-X github.com/conduktor/ctl/utils.version=${version}" ];
 
   checkPhase = ''
+    runHook preCheck
+
     go test ./...
+
+    runHook postCheck
   '';
 
   postInstall = ''

@@ -26,7 +26,11 @@ python3.pkgs.buildPythonApplication rec {
 
   # no tests are packaged
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/pew > /dev/null
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "pew" ];

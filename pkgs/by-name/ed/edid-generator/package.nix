@@ -68,10 +68,14 @@ stdenv.mkDerivation {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     for file in *.bin ; do
       echo "validating $file"
       edid-decode <"$file"
     done
+
+    runHook postCheck
   '';
 
   installPhase = ''
