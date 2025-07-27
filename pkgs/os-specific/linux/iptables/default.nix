@@ -12,6 +12,7 @@
   libnfnetlink,
   libnftnl,
   libpcap,
+  bash,
   nftablesCompat ? true,
   gitUpdater,
 }:
@@ -27,9 +28,12 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "lib"
     "dev"
     "man"
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,6 +49,7 @@ stdenv.mkDerivation rec {
     libnfnetlink
     libnftnl
     libpcap
+    bash
   ];
 
   configureFlags = [
