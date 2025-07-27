@@ -19768,6 +19768,8 @@ self: super: with self; {
 
   xboxapi = callPackage ../development/python-modules/xboxapi { };
 
+  xcaplib = callPackage ../development/python-modules/xcaplib { };
+
   xcffib = callPackage ../development/python-modules/xcffib { };
 
   xdg = callPackage ../development/python-modules/xdg { };
