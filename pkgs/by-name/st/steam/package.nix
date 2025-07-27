@@ -13,21 +13,14 @@
   privateTmp ? true, # if the steam bubblewrap should isolate /tmp
 }:
 let
-  steamEnv =
+  makeSteamEnv =
     {
-      name,
-      runScript,
-      passthru ? { },
-      meta ? { },
-    }:
-    buildFHSEnv {
-      inherit
-        name
-        runScript
-        passthru
-        meta
-        privateTmp
-        ;
+      package ? null,
+      ...
+    }@args:
+    buildFHSEnv (
+      (builtins.removeAttrs args ["package"]) // {
+      inherit privateTmp;
 
       multiArch = true;
       includeClosures = true;
@@ -37,7 +30,7 @@ let
         pkgs:
         with pkgs;
         [
-          steam-unwrapped
+          package
 
           bash
           coreutils
@@ -86,10 +79,6 @@ let
         ]
         ++ extraLibraries pkgs;
 
-      extraInstallCommands = lib.optionalString (steam-unwrapped != null) ''
-        ln -s ${steam-unwrapped}/share $out/share
-      '';
-
       profile = ''
         # prevents log spam from SteamRT GTK trying to load host GIO modules
         unset GIO_EXTRA_MODULES
@@ -135,39 +124,42 @@ let
         "--bind-try /tmp/dumps /tmp/dumps"
       ]
       ++ extraBwrapArgs;
-    };
+    });
 in
-steamEnv {
-  name = "steam";
+makeSteamEnv {
+  pname = "steam";
+  inherit (steam-unwrapped) version meta;
+  package = steam-unwrapped;
 
   runScript = writeShellScript "steam-wrapped" ''
     exec steam ${extraArgs} "$@"
   '';
 
-  passthru.run = steamEnv {
-    name = "steam-run";
+  extraInstallCommands = ''
+    ln -s ${steam-unwrapped}/share $out/share
+  '';
 
-    runScript = writeShellScript "steam-run" ''
-      if [ $# -eq 0 ]; then
-        echo "Usage: steam-run command-to-run args..." >&2
-        exit 1
-      fi
+  passthru = {
+    inherit makeSteamEnv;
 
-      exec "$@"
-    '';
-
-    meta = (steam-unwrapped.meta or { }) // {
-      description = "Run commands in the same FHS environment that is used for Steam";
-      mainProgram = "steam-run";
+    run = makeSteamEnv {
       name = "steam-run";
-      # steam-run itself is just a script that lives in nixpkgs (which is licensed under MIT).
-      # steam is a dependency and already unfree, so normal steam-run will not install without
-      # allowing unfree packages or appropriate `allowUnfreePredicate` rules.
-      license = lib.licenses.mit;
-    };
-  };
 
-  meta = (steam-unwrapped.meta or { }) // {
-    description = "Steam dependencies (dummy package, do not use)";
+      runScript = writeShellScript "steam-run" ''
+        if [ $# -eq 0 ]; then
+          echo "Usage: steam-run command-to-run args..." >&2
+          exit 1
+        fi
+
+        exec "$@"
+      '';
+
+      meta = {
+        description = "Run commands in the same FHS environment that is used for Steam";
+        mainProgram = "steam-run";
+        name = "steam-run";
+        license = lib.licenses.mit;
+      };
+    };
   };
 }
