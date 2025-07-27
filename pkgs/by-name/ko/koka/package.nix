@@ -56,16 +56,16 @@ haskellPackages.mkDerivation {
   ];
 
   executableHaskellDepends = with haskellPackages; [
+    FloatingHex
     aeson
     array
     async
     base
     bytestring
     co-log-core
-    cond
     containers
     directory
-    FloatingHex
+    hashable
     isocline
     lens
     lsp
@@ -74,6 +74,7 @@ haskellPackages.mkDerivation {
     network-simple
     parsec
     process
+    stm
     text
     text-rope
     time
