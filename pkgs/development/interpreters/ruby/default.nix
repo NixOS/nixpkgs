@@ -4,7 +4,6 @@
   lib,
   fetchurl,
   fetchpatch,
-  fetchFromSavannah,
   zlib,
   gdbm,
   ncurses,
@@ -38,7 +37,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems {
     inherit
       stdenv
@@ -74,7 +72,6 @@ let
           lib,
           fetchurl,
           fetchpatch,
-          fetchFromSavannah,
           rubygemsSupport ? true,
           zlib,
           zlibSupport ? true,
@@ -229,10 +226,10 @@ let
             cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           '';
 
+          # Ruby >= 2.1.0 tries to download config.{guess,sub}; copy it from autoconf instead.
           postPatch = ''
             sed -i configure.ac -e '/config.guess/d'
-            cp --remove-destination ${config}/config.guess tool/
-            cp --remove-destination ${config}/config.sub tool/
+            cp --remove-destination ${autoconf}/share/autoconf/build-aux/config.{guess,sub} tool/
           '';
 
           configureFlags = [
