@@ -87,6 +87,30 @@ stdenv'.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = # remove upstream dependency on systemd and udev
+  ''
+    substituteInPlace cmake/packaging/linux.cmake \
+      --replace-fail 'find_package(Systemd)' "" \
+      --replace-fail 'find_package(Udev)' ""
+  ''
+  # don't look for npm since we build webui separately
+  + ''
+    substituteInPlace cmake/targets/common.cmake \
+      --replace-fail 'find_program(NPM npm REQUIRED)' ""
+
+    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
+      --subst-var-by PROJECT_NAME 'Sunshine' \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
+      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
+      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+
+    substituteInPlace packaging/linux/sunshine.service.in \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -95,7 +119,6 @@ stdenv'.mkDerivation (finalAttrs: {
     wayland-scanner
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
-    udevCheckHook
   ]
   ++ lib.optionals cudaSupport [
     autoAddDriverRunpath
@@ -181,30 +204,6 @@ stdenv'.mkDerivation (finalAttrs: {
     COMMIT = "";
   };
 
-  postPatch = # remove upstream dependency on systemd and udev
-  ''
-    substituteInPlace cmake/packaging/linux.cmake \
-      --replace-fail 'find_package(Systemd)' "" \
-      --replace-fail 'find_package(Udev)' ""
-  ''
-  # don't look for npm since we build webui separately
-  + ''
-    substituteInPlace cmake/targets/common.cmake \
-      --replace-fail 'find_program(NPM npm REQUIRED)' ""
-
-    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
-      --subst-var-by PROJECT_NAME 'Sunshine' \
-      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
-      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
-      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
-
-    substituteInPlace packaging/linux/sunshine.service.in \
-      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
-      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
-  '';
-
   # copy webui where it can be picked up by build
   preBuild = ''
     cp -r ${finalAttrs.ui}/build ../
@@ -213,12 +212,6 @@ stdenv'.mkDerivation (finalAttrs: {
   buildFlags = [
     "sunshine"
   ];
-
-  # allow Sunshine to find libvulkan
-  postFixup = lib.optionalString cudaSupport ''
-    wrapProgram $out/bin/sunshine \
-      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
-  '';
 
   # redefine installPhase to avoid attempt to build webui
   installPhase = ''
@@ -233,7 +226,15 @@ stdenv'.mkDerivation (finalAttrs: {
     install -Dm644 ../packaging/linux/dev.lizardbyte.app.Sunshine.desktop $out/share/applications/dev.lizardbyte.app.Sunshine.desktop
   '';
 
+  # allow Sunshine to find libvulkan
+  postFixup = lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/sunshine \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   passthru = {
     tests.sunshine = nixosTests.sunshine;
