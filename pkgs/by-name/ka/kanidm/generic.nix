@@ -39,7 +39,7 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
   inherit version cargoHash;
-  useFetchCargoVendor = true;
+
   cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {

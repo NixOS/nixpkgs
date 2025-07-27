@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "mdslides";
-  version = "unstable-2022-12-15";
+  version = "0-unstable-2022-12-15";
   pyproject = true;
 
   src = fetchFromGitHub {

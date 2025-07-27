@@ -16,10 +16,10 @@
 }:
 
 let
-  upstreamPatches = import ./bash-5.2-patches.nix (
+  upstreamPatches = import ./bash-5.3-patches.nix (
     nr: sha256:
     fetchurl {
-      url = "mirror://gnu/bash/bash-5.2-patches/bash52-${nr}";
+      url = "mirror://gnu/bash/bash-5.3-patches/bash53-${nr}";
       inherit sha256;
     }
   );
@@ -31,12 +31,12 @@ lib.warnIf (withDocs != null)
   stdenv.mkDerivation
   rec {
     pname = "bash${lib.optionalString interactive "-interactive"}";
-    version = "5.2${patch_suffix}";
+    version = "5.3${patch_suffix}";
     patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
     src = fetchurl {
       url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
-      sha256 = "sha256-oTnBZt9/9EccXgczBRZC7lVWwcyKSnjxRVg8XIGrMvs=";
+      hash = "sha256-Yt1JxEw5ntGz9/cx6Hp4IzTYNPCOCYo18sh1R9Xbsmk=";
     };
 
     hardeningDisable = [
@@ -80,12 +80,6 @@ lib.warnIf (withDocs != null)
       # Some related discussion can be found in
       # https://lists.gnu.org/archive/html/bug-bash/2015-05/msg00071.html
       ./pgrp-pipe-5.patch
-      # Apply parallel build fix pending upstream inclusion:
-      #   https://savannah.gnu.org/patch/index.php?10373
-      # Had to fetch manually to workaround -p0 default.
-      ./parallel.patch
-      # Fix `pop_var_context: head of shell_variables not a function context`.
-      ./fix-pop-var-context-error.patch
     ];
 
     configureFlags = [

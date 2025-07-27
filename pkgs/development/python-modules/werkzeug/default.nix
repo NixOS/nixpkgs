@@ -71,10 +71,10 @@ buildPythonPackage rec {
     "tests/test_serving.py"
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # don't run tests that are marked with filterwarnings, they fail with
     # warnings._OptionError: unknown warning category: 'pytest.PytestUnraisableExceptionWarning'
-    "-m 'not filterwarnings'"
+    "filterwarnings"
   ];
 
   passthru.tests = {

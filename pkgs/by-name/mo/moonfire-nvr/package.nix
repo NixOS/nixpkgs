@@ -49,8 +49,6 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/server";
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
 
   env.VERSION = "v${version}";

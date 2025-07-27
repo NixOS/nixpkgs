@@ -838,7 +838,11 @@ in
     # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
     # enabled, run0 will fail before it even tries to run the command.
     security.pam.services = mkIf config.security.polkit.enable {
-      systemd-run0 = { };
+      systemd-run0 = {
+        # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
+        setLoginUid = true;
+        pamMount = false;
+      };
     };
   };
 

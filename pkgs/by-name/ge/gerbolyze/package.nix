@@ -81,7 +81,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH: ${
+    "--prefix PATH : ${
       lib.makeBinPath [
         resvg
         svg-flatten

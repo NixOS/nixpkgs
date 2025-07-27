@@ -134,29 +134,27 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kserve" ];
 
-  pytestFlagsArray = [
-    # AssertionError
-    "--deselect=test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # RuntimeError: Failed to start GCS
-    "--deselect=test/test_dataplane.py::TestDataPlane::test_explain"
-    "--deselect=test/test_dataplane.py::TestDataPlane::test_infer"
-    "--deselect=test/test_dataplane.py::TestDataPlane::test_model_metadata"
-    "--deselect=test/test_dataplane.py::TestDataPlane::test_server_readiness"
-    "--deselect=test/test_server.py::TestRayServer::test_explain"
-    "--deselect=test/test_server.py::TestRayServer::test_health_handler"
-    "--deselect=test/test_server.py::TestRayServer::test_infer"
-    "--deselect=test/test_server.py::TestRayServer::test_list_handler"
-    "--deselect=test/test_server.py::TestRayServer::test_liveness_handler"
-    "--deselect=test/test_server.py::TestRayServer::test_predict"
-    # Permission Error
-    "--deselect=test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
-  ];
-
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
     "test/test_inference_service_client.py"
+
+    # AssertionError
+    "test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: Failed to start GCS
+    "test/test_dataplane.py::TestDataPlane::test_explain"
+    "test/test_dataplane.py::TestDataPlane::test_infer"
+    "test/test_dataplane.py::TestDataPlane::test_model_metadata"
+    "test/test_dataplane.py::TestDataPlane::test_server_readiness"
+    "test/test_server.py::TestRayServer::test_explain"
+    "test/test_server.py::TestRayServer::test_health_handler"
+    "test/test_server.py::TestRayServer::test_infer"
+    "test/test_server.py::TestRayServer::test_list_handler"
+    "test/test_server.py::TestRayServer::test_liveness_handler"
+    "test/test_server.py::TestRayServer::test_predict"
+    # Permission Error
+    "test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
   ];
 
   disabledTests = [

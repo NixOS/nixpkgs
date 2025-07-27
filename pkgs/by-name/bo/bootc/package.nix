@@ -14,7 +14,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "bootc";
   version = "1.5.1";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-+FxydTK0Dmcj+doHMSoTgiues7Rrwxv/D+BOq4siKCk=";
   doInstallCheck = true;
 

@@ -2,15 +2,18 @@
   lib,
   buildPythonApplication,
   fetchPypi,
+  setuptools,
 }:
 buildPythonApplication rec {
-  version = "0.0.42";
-  format = "setuptools";
   pname = "dazel";
+  version = "0.0.43";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JE7+GS7DpuFoC2LK3dvYvjtOdzRxFMHzgZRfvrGBDtQ=";
+    hash = "sha256-2enQRKg4CAPGHte02io+EfiW9AmuP3Qi41vNQeChg+8=";
   };
 
   meta = {

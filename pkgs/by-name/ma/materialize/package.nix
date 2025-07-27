@@ -120,7 +120,6 @@ rustPlatform.buildRustPackage rec {
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+OREisZ/vw3Oi5MNCYn7u06pZKtf+2trlGyn//uAGws=";
 
   nativeBuildInputs = [

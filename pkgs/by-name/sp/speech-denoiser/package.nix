@@ -19,7 +19,7 @@ let
 
   rnnoise-nu = stdenv.mkDerivation {
     pname = "rnnoise-nu";
-    version = "unstable-07-10-2019";
+    version = "0-unstable-07-10-2019";
     src = speech-denoiser-src;
     sourceRoot = "${speech-denoiser-src.name}/rnnoise";
     nativeBuildInputs = [ autoreconfHook ];

@@ -121,18 +121,16 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.all;
 
-  pytestFlagsArray = [
-    # KeyError: 'dask'
-    "--deselect=tests/dask/test_dask.py::test_series_schema"
-    "--deselect=tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
-  ];
-
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
     "tests/pandas/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
     "tests/modin" # requires modin, not in nixpkgs
     "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
     "tests/pyspark" # requires spark
+
+    # KeyError: 'dask'
+    "tests/dask/test_dask.py::test_series_schema"
+    "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
   ];
 
   disabledTests =

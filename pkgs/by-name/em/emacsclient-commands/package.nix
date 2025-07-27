@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "emacsclient-commands";
-  version = "unstable-2023-09-22";
+  version = "0-unstable-2023-09-22";
 
   src = fetchFromGitHub {
     owner = "szermatt";

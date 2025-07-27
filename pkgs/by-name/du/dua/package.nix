@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LOtZyH6eO8IgHrZfyBInEeXI9CxkjLrMfMWuTUMF+FU=";
 
   checkFlags = [

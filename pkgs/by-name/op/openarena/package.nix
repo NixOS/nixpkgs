@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openarena";
-  version = "unstable-2023-03-02";
+  version = "0-unstable-2023-03-02";
 
   src = fetchFromGitHub {
     name = "openarena-source";

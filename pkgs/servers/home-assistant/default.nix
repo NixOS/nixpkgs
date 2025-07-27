@@ -517,14 +517,17 @@ python.pkgs.buildPythonApplication rec {
       "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
   ];
 
-  enabledTestPaths = [ "tests" ];
+  enabledTestPaths = [
+    # tests are located in tests/
+    "tests"
+  ];
 
   disabledTestPaths = [
     # we neither run nor distribute hassfest

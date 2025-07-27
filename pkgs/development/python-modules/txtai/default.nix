@@ -289,23 +289,26 @@ buildPythonPackage {
   ++ optional-dependencies.api
   ++ optional-dependencies.similarity;
 
+  enabledTestPaths = [
+    "test/python/test*.py"
+  ];
+
   # The deselected paths depend on the huggingface hub and should be run as a passthru test
   # disabledTestPaths won't work as the problem is with the classes containing the tests
   # (in other words, it fails on __init__)
-  pytestFlagsArray = [
-    "test/python/test*.py"
-    "--deselect=test/python/testagent.py"
-    "--deselect=test/python/testcloud.py"
-    "--deselect=test/python/testconsole.py"
-    "--deselect=test/python/testembeddings.py"
-    "--deselect=test/python/testgraph.py"
-    "--deselect=test/python/testapi/testapiembeddings.py"
-    "--deselect=test/python/testapi/testapipipelines.py"
-    "--deselect=test/python/testapi/testapiworkflow.py"
-    "--deselect=test/python/testdatabase/testclient.py"
-    "--deselect=test/python/testdatabase/testduckdb.py"
-    "--deselect=test/python/testdatabase/testencoder.py"
-    "--deselect=test/python/testworkflow.py"
+  disabledTestPaths = [
+    "test/python/testagent.py"
+    "test/python/testcloud.py"
+    "test/python/testconsole.py"
+    "test/python/testembeddings.py"
+    "test/python/testgraph.py"
+    "test/python/testapi/testapiembeddings.py"
+    "test/python/testapi/testapipipelines.py"
+    "test/python/testapi/testapiworkflow.py"
+    "test/python/testdatabase/testclient.py"
+    "test/python/testdatabase/testduckdb.py"
+    "test/python/testdatabase/testencoder.py"
+    "test/python/testworkflow.py"
   ];
 
   disabledTests = [

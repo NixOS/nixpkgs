@@ -210,14 +210,19 @@ let
 
     __darwinAllowLocalNetworking = true;
 
-    pytestFlagsArray = [
-      # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
-      "-m"
-      "'not single_cpu and not slow and not network and not db and not slow_arm'"
+    pytestFlags = [
       # https://github.com/pandas-dev/pandas/issues/54907
       "--no-strict-data-files"
-      "--numprocesses"
-      "4"
+      "--numprocesses=4"
+    ];
+
+    disabledTestMarks = [
+      # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
+      "single_cpu"
+      "slow"
+      "network"
+      "db"
+      "slow_arm"
     ];
 
     disabledTests = [

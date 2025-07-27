@@ -72,12 +72,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
-    "--deselect=tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
-  ];
-
   disabledTestPaths = [
+    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+    "tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
+
     # Test fails with ConnectionError trying to connect to api.softlayer.com
     "tests/transports/soap_tests.py.unstable"
   ];

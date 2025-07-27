@@ -68,9 +68,8 @@ buildPythonPackage rec {
   # https://github.com/jazzband/django-redis/issues/777
   dontUsePytestXdist = true;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

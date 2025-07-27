@@ -13,19 +13,28 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-16";
-    format = "setuptools";
+    version = "0-unstable-2025-07-18";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "62fac1c6a9db94682f8ef686f0424a482663b288";
-      hash = "sha256-3Ma16EdQdqnXyz+ipH5qq9TF0+DwpNU2kq2RTgK5b/A=";
+      rev = "ff2e0ea2788a04ae5a13fc90b3725828a1ebc026";
+      hash = "sha256-Pxpozg3ecqGzwUCXL9zYsCivr9VpCVSYc/kjZn+V4xk=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRemoveDeps = [
+      "typer-slim" # we use typer instead
+    ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "httpx-socks"
+      "lxml"
+      "pygments"
+    ];
 
     preBuild =
       let
@@ -45,6 +54,8 @@ python.pkgs.toPythonModule (
         GIT_BRANCH="master"
         EOF
       '';
+
+    build-system = with python.pkgs; [ setuptools ];
 
     dependencies =
       with python.pkgs;

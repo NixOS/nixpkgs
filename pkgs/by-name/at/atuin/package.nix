@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-KHATm505ysJAIGCd2UvkMEIFhp7huPYW5ly+jq1HLdc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZzMNU3FqD4bD96gEXaTphuM7MqRBBSYZTxIJSNtw+EI=";
 
   # atuin's default features include 'check-updates', which do not make sense

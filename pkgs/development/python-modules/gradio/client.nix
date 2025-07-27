@@ -86,10 +86,16 @@ buildPythonPackage rec {
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    #"-x" "-Wignore" # uncomment for debugging help
+  ];
+
+  enabledTestPaths = [
     "test/"
-    "-m 'not flaky'"
-    #"-x" "-W" "ignore" # uncomment for debugging help
+  ];
+
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

@@ -45,8 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmRoot = "../..";
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-ReRCzKbdmjPr9rQwCI7mLEs/MjV2yCp7FFZAlib1xIs=";
 
   cargoRoot = "../..";

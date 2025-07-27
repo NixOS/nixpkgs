@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   lua,
   jemalloc,
   pkg-config,
@@ -23,16 +24,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.1.2";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-5wSUDNFQ6GWT9aGO3Msm+GFSXpNcty8L8UdGw4R0GDw=";
+    hash = "sha256-JFtStE1avSWGptgj9KtfAr55+J1FydEzD5plvSe2mjM=";
   };
 
-  patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
+  patches = [
+    # Fix tests on 8.1.3
+    # FIXME: remove for next release
+    (fetchpatch {
+      url = "https://github.com/valkey-io/valkey/commit/02d7ee08489fe34f853ffccce9057dea6f03d957.diff";
+      hash = "sha256-/5U6HqgK4m1XQGTZchSmzl7hOBxCwL4XZVjE5QIZVjc=";
+    })
+  ]
+  ++ lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 

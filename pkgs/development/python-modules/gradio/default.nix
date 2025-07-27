@@ -329,10 +329,13 @@ buildPythonPackage rec {
     "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
+    "flaky"
+  ];
+
+  pytestFlags = [
     "-x" # abort on first failure
-    "-m 'not flaky'"
-    #"-W" "ignore" # uncomment for debugging help
+    #"-Wignore" # uncomment for debugging help
   ];
 
   # check the binary works outside the build env

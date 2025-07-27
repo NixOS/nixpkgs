@@ -72,44 +72,49 @@ buildPythonPackage {
     torchvision
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    "tests/"
+  ];
 
+  enabledTestPaths = [
+    "tests/"
+  ];
+
+  disabledTestPaths = [
     # -- tests/metrics/audio/test_fad.py --
     # Touch filesystem and require network access.
     # torchaudio.utils.download_asset("models/vggish.pt") -> PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
-    "--deselect=tests/metrics/audio/test_fad.py::TestFAD::test_vggish_fad"
-    "--deselect=tests/metrics/audio/test_fad.py::TestFAD::test_vggish_fad_merge"
+    "tests/metrics/audio/test_fad.py::TestFAD::test_vggish_fad"
+    "tests/metrics/audio/test_fad.py::TestFAD::test_vggish_fad_merge"
 
     # -- tests/metrics/image/test_fid.py --
     # Touch filesystem and require network access.
     # models.inception_v3(weights=weights) -> PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
-    "--deselect=tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_invalid_input"
-    "--deselect=tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_random_data_custom_model"
-    "--deselect=tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_random_data_default_model"
-    "--deselect=tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_with_dissimilar_inputs"
-    "--deselect=tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_with_similar_inputs"
+    "tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_invalid_input"
+    "tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_random_data_custom_model"
+    "tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_random_data_default_model"
+    "tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_with_dissimilar_inputs"
+    "tests/metrics/image/test_fid.py::TestFrechetInceptionDistance::test_fid_with_similar_inputs"
 
     # -- tests/metrics/functional/text/test_perplexity.py --
     # AssertionError: Scalars are not close!
     # Expected 3.537154912949 but got 3.53715443611145
-    "--deselect=tests/metrics/functional/text/test_perplexity.py::Perplexity::test_perplexity_with_ignore_index"
+    "tests/metrics/functional/text/test_perplexity.py::Perplexity::test_perplexity_with_ignore_index"
 
     # -- tests/metrics/image/test_psnr.py --
     # AssertionError: Scalars are not close!
     # Expected 7.781850814819336 but got 7.781772613525391
-    "--deselect=tests/metrics/image/test_psnr.py::TestPeakSignalNoiseRatio::test_psnr_with_random_data"
+    "tests/metrics/image/test_psnr.py::TestPeakSignalNoiseRatio::test_psnr_with_random_data"
 
     # -- tests/metrics/regression/test_mean_squared_error.py --
     # AssertionError: Scalars are not close!
     # Expected -640.4547729492188 but got -640.4707641601562
-    "--deselect=tests/metrics/regression/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
+    "tests/metrics/regression/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
 
     # -- tests/metrics/window/test_mean_squared_error.py --
     # AssertionError: Scalars are not close!
     # Expected 0.0009198983898386359 but got 0.0009198188781738281
-    "--deselect=tests/metrics/window/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
+    "tests/metrics/window/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
   ]
 
   # These tests error on darwin platforms.
@@ -121,16 +126,16 @@ buildPythonPackage {
   # Expected TensorOptions(dtype=float, device=cpu, ...), got TensorOptions(dtype=float, device=mps:0, ...)
   ++ lib.optional stdenv.hostPlatform.isDarwin [
     # -- tests/metrics/test_synclib.py --
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_complex_mixed_state_sync"
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_complex_mixed_state_sync"
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_empty_tensor_list_sync_state"
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_sync_dtype_and_shape"
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_tensor_list_sync_states"
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_tensor_dict_sync_states"
-    "--deselect=tests/metrics/test_synclib.py::SynclibTest::test_tensor_sync_states"
+    "tests/metrics/test_synclib.py::SynclibTest::test_complex_mixed_state_sync"
+    "tests/metrics/test_synclib.py::SynclibTest::test_complex_mixed_state_sync"
+    "tests/metrics/test_synclib.py::SynclibTest::test_empty_tensor_list_sync_state"
+    "tests/metrics/test_synclib.py::SynclibTest::test_sync_dtype_and_shape"
+    "tests/metrics/test_synclib.py::SynclibTest::test_tensor_list_sync_states"
+    "tests/metrics/test_synclib.py::SynclibTest::test_tensor_dict_sync_states"
+    "tests/metrics/test_synclib.py::SynclibTest::test_tensor_sync_states"
     # -- tests/metrics/test_toolkit.py --
-    "--deselect=tests/metrics/test_toolkit.py::MetricToolkitTest::test_metric_sync"
-    "--deselect=tests/metrics/test_toolkit.py::MetricCollectionToolkitTest::test_metric_collection_sync"
+    "tests/metrics/test_toolkit.py::MetricToolkitTest::test_metric_sync"
+    "tests/metrics/test_toolkit.py::MetricCollectionToolkitTest::test_metric_collection_sync"
   ];
 
   meta = {

@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail ', "vendored_curl"' ""
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Vo3bshaHjy2F2WFGgaIDEFFAh0e5VPp2G4fETgIH484=";
 
   env.OPENSSL_NO_VENDOR = 1;
