@@ -9,6 +9,7 @@
   gettext,
   audit,
   libxcrypt,
+  bash,
   nixosTests,
   autoreconfHook269,
   pkg-config-unwrapped,
@@ -45,8 +46,11 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "doc"
+    "scripts"
     "man" # "modules"
   ];
+
+  strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.
@@ -61,6 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     db4
     libxcrypt
+    bash
   ]
   ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
@@ -77,6 +82,11 @@ stdenv.mkDerivation rec {
   installFlags = [
     "SCONFIGDIR=${placeholder "out"}/etc/security"
   ];
+
+  postInstall = ''
+    moveToOutput sbin/pam_namespace_helper $scripts
+    moveToOutput etc/security/namespace.init $scripts
+  '';
 
   doCheck = false; # fails
 
