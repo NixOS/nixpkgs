@@ -107,7 +107,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
   version = "302";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
@@ -134,6 +134,8 @@ python.pkgs.buildPythonApplication rec {
     help2man
     installShellFiles
   ];
+
+  build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
