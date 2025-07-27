@@ -54,21 +54,21 @@
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
   version = "2025.628.4510";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xNWFo6a4YrJ+tBFTSReoAEi1oZ4DSguBEusizWeWKYY=";
     fetchSubmodules = true;
   };
 
   # build webui
   ui = buildNpmPackage {
-    inherit src version;
+    inherit (finalAttrs) src version;
     pname = "sunshine-ui";
     npmDepsHash = "sha256-kUixeLf8prsWQolg1v+vJ5rvwKZOsU+88+0hVOgTZ0A=";
 
@@ -172,7 +172,7 @@ stdenv'.mkDerivation rec {
 
   env = {
     # needed to trigger CMake version configuration
-    BUILD_VERSION = "${version}";
+    BUILD_VERSION = "${finalAttrs.version}";
     BRANCH = "master";
     COMMIT = "";
   };
@@ -202,7 +202,7 @@ stdenv'.mkDerivation rec {
 
   preBuild = ''
     # copy webui where it can be picked up by build
-    cp -r ${ui}/build ../
+    cp -r ${finalAttrs.ui}/build ../
   '';
 
   buildFlags = [
@@ -241,4 +241,4 @@ stdenv'.mkDerivation rec {
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;
   };
-}
+})
