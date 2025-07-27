@@ -10484,6 +10484,8 @@ self: super: with self; {
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
+  nsw-fuel-api-client = callPackage ../development/python-modules/nsw-fuel-api-client { };
+
   nsz = callPackage ../development/python-modules/nsz { };
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
