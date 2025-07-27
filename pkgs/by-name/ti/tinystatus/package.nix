@@ -16,13 +16,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tinystatus";
-  version = "0-unstable-2021-07-09";
+  version = "0-unstable-2025-03-27";
 
   src = fetchFromGitHub {
     owner = "bderenzo";
     repo = "tinystatus";
-    rev = "fc128adf240261ac99ea3e3be8d65a92eda52a73";
-    hash = "sha256-FvQwibm6F10l9/U3RnNTGu+C2JjHOwbv62VxXAfI7/s=";
+    rev = "169ee0bb2efe4531080936d1e2a46e451feebe3e";
+    hash = "sha256-nPrABKKIDP1n1rhcojFJJ15kqa5b4s7F/wMAgD/eVBw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
