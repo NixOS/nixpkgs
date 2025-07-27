@@ -19,11 +19,13 @@
   qt6,
   rsync,
   rustPlatform,
+  uv,
   writeShellScriptBin,
   yarn,
   yarn-berry_4,
 
   swift,
+  fetchgit,
 
   mesa,
 }:
@@ -32,12 +34,13 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.02.5";
-  rev = "29192d156ae60d6ce35e80ccf815a8331c9db724";
+  version = "25.07.2";
+  rev = "3adcf05ca6d00b32938f439b3e5fc71786b21c26";
 
-  srcHash = "sha256-lx3tK57gcQpwmiqUzO6iU7sE31LPFp6s80prYaB2jHE=";
-  cargoHash = "sha256-BPCfeUiZ23FdZaF+zDUrRZchauNZWQ3gSO+Uo9WRPes=";
-  yarnHash = "sha256-3G+9N3xOzog3XDCKDQJCY/6CB3i6oXixRgxEyv7OG3U=";
+  srcHash = "sha256-DVQiKiMZ/lM/YDaPtBRVkG7Lcu+1p3BMFq6mD6eBKSg=";
+  cargoHash = "sha256-H/xwPPL6VupSZGLPEThhoeMcg12FvAX3fmNM6zYfqRQ=";
+  yarnHash = "sha256-Hb3HGIB0HPM6LXkfLIbPONFBTqWPdTrvYP2CeUsIVTE=";
+  uvHash = "sha256-mHgA4hlJVoGvudhXo9iJNLG9k4ckgmeR694w+22a7w8=";
 
   src = fetchFromGitHub {
     owner = "ankitects";
@@ -104,6 +107,41 @@ python3.pkgs.buildPythonApplication rec {
     inherit missingHashes;
     yarnLock = "${src}/yarn.lock";
     hash = yarnHash;
+  };
+
+  uvOfflineCache = stdenv.mkDerivation {
+    pname = "anki-uv-deps";
+    inherit version src;
+
+    UV_NO_MANAGED_PYTHON = true;
+    UV_SYSTEM_PYTHON = true;
+
+    nativeBuildInputs = [
+      python3
+      uv
+    ];
+
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = uvHash;
+
+    dontBuild = true;
+
+    # sync each platform that came from the error message when I tried to sync more:
+    # error: Distribution `pyqt6-qt6==6.9.1 @ registry+https://pypi.org/simple` can't be installed because it doesn't have a source distribution or wheel for the current platform
+    # hint: You're on Linux (`manylinux_2_17_x86_64`), but `pyqt6-qt6` (v6.9.1) only has wheels for the following platforms: `manylinux_2_28_x86_64`, `manylinux_2_39_aarch64`, `macosx_10_14_x86_64`, `macosx_11_0_arm64`, `win_amd64`, `win_arm64`; consider adding your platform to `tool.>
+    # Skip windows of course, but otherwise, if that's what pyqt6 can handle, I guess that's what anki supports too.
+    installPhase = ''
+      for platform in x86_64-manylinux_2_28 aarch64-manylinux_2_39 aarch64-apple-darwin x86_64-apple-darwin; do
+        uv sync \
+          --locked --reinstall --cache-dir $out --python python3 \
+          --all-packages \
+          --python-platform $platform
+      done
+      # don't cache the interpreter, that leads to a store reference to python,
+      # which we don't want
+      rm -rf $out/interpreter-v4
+    '';
   };
 
   nativeBuildInputs = [
@@ -207,6 +245,11 @@ python3.pkgs.buildPythonApplication rec {
     NODE_BINARY = lib.getExe nodejs;
     PROTOC_BINARY = lib.getExe protobuf;
     PYTHON_BINARY = lib.getExe python3;
+    UV_BINARY = lib.getExe uv;
+    UV_NO_MANAGED_PYTHON = "1";
+    UV_SYSTEM_PYTHON = true;
+    UV_PYTHON_DOWNLOADS = "never";
+    UV_OFFLINE = "1";
   };
 
   buildPhase = ''
@@ -216,8 +259,18 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p out/pylib/anki .git
 
     echo ${builtins.substring 0 8 rev} > out/buildhash
+    echo ${python3.version} > .python-version
 
-    ln -vsf ${pyEnv} ./out/pyenv
+    mkdir ./out/pyenv
+    rsync -av "${pyEnv}/" ./out/pyenv
+    chmod +w ./out/pyenv
+
+    # put the uv cache dir in a writeable location because for some reason uv
+    # tries to write to it???
+    mkdir ./out/uv
+    rsync -av "${uvOfflineCache}/" ./out/uv
+    export UV_CACHE_DIR=$PWD/out/uv
+    chmod -R +w ./out/uv
 
     mv node_modules out
 
@@ -260,11 +313,11 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    install -D -t $out/share/applications qt/bundle/lin/anki.desktop
+    install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
-    install -D -t $out/share/mime/packages qt/bundle/lin/anki.xml
-    install -D -t $out/share/pixmaps qt/bundle/lin/anki.{png,xpm}
-    installManPage qt/bundle/lin/anki.1
+    install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
+    install -D -t $out/share/pixmaps qt/launcher/lin/anki.{png,xpm}
+    installManPage qt/launcher/lin/anki.1
   '';
 
   preFixup = ''
