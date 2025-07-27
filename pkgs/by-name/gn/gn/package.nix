@@ -69,7 +69,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    ninja -j $NIX_BUILD_CORES -C out gn
+    ninja -v -j $NIX_BUILD_CORES -C out gn
 
     runHook postBuild
   '';
