@@ -96,6 +96,7 @@ stdenv.mkDerivation {
       stesie
       matthewbauer
       marcin-serwin
+      emilylange
     ];
   };
 }
