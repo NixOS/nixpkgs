@@ -17,6 +17,7 @@
   sse-starlette,
   starlette,
   uvicorn,
+  jsonschema,
 
   # optional-dependencies
   # cli
@@ -34,18 +35,19 @@
   pytest-xdist,
   pytestCheckHook,
   requests,
+  dirty-equals,
 }:
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.9.4";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-VXbu/wHbXGS+cISJVUgCVEpTmZc0VfckNRoMj3GDi/A=";
+    hash = "sha256-K3S+2Z4yuo8eAOo8gDhrI8OOfV6ADH4dAb1h8PqYntc=";
   };
 
   postPatch = ''
@@ -70,6 +72,7 @@ buildPythonPackage rec {
     sse-starlette
     starlette
     uvicorn
+    jsonschema
   ];
 
   optional-dependencies = {
@@ -94,6 +97,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     requests
+    dirty-equals
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
@@ -116,6 +120,9 @@ buildPythonPackage rec {
 
     # inline_snapshot._exceptions.UsageError: snapshot value should not change. Use Is(...) for dynamic snapshot parts
     "test_build_metadata"
+
+    # Writes a Python script to a file, which I believe doesn't use the correct Python, and fails to import MCP
+    "test_1027_win_unreachable_cleanup"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
