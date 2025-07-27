@@ -146,8 +146,6 @@ let
     ];
 
     patches = [
-      ./fix-tree-sitter.patch
-
       (replaceVars ./fix-flake8-invoke.patch {
         flake8 = lib.getExe python3Packages.flake8;
       })

@@ -2731,6 +2731,8 @@ self: super: with self; {
 
   coiled = callPackage ../development/python-modules/coiled { };
 
+  coinbase-advanced-py = callPackage ../development/python-modules/coinbase-advanced-py { };
+
   coincurve = callPackage ../development/python-modules/coincurve { inherit (pkgs) secp256k1; };
 
   coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
@@ -10629,6 +10631,8 @@ self: super: with self; {
 
   oldest-supported-numpy = callPackage ../development/python-modules/oldest-supported-numpy { };
 
+  oldmemo = callPackage ../development/python-modules/oldmemo { };
+
   olefile = callPackage ../development/python-modules/olefile { };
 
   oletools = callPackage ../development/python-modules/oletools { };
@@ -10638,6 +10642,8 @@ self: super: with self; {
   ome-zarr = callPackage ../development/python-modules/ome-zarr { };
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
+
+  omemo = callPackage ../development/python-modules/omemo { };
 
   omemo-dr = callPackage ../development/python-modules/omemo-dr { };
 
@@ -13374,6 +13380,8 @@ self: super: with self; {
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
   pynzb = callPackage ../development/python-modules/pynzb { };
+
+  pynzbgetapi = callPackage ../development/python-modules/pynzbgetapi { };
 
   pyobihai = callPackage ../development/python-modules/pyobihai { };
 
@@ -18414,6 +18422,8 @@ self: super: with self; {
   twitterapi = callPackage ../development/python-modules/twitterapi { };
 
   twofish = callPackage ../development/python-modules/twofish { };
+
+  twomemo = callPackage ../development/python-modules/twomemo { };
 
   twscrape = callPackage ../development/python-modules/twscrape { };
 
