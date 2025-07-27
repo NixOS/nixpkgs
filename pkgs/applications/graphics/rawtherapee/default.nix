@@ -50,7 +50,15 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    echo "set(HG_VERSION ${version})" > ReleaseInfo.cmake
+    cat <<EOF > ReleaseInfo.cmake
+    set(GIT_DESCRIBE ${version})
+    set(GIT_BRANCH ${version})
+    set(GIT_VERSION ${version})
+    # Missing GIT_COMMIT and GIT_COMMIT_DATE, which are not easy to obtain.
+    set(GIT_COMMITS_SINCE_TAG 0)
+    set(GIT_COMMITS_SINCE_BRANCH 0)
+    set(GIT_VERSION_NUMERIC_BS ${version})
+    EOF
     substituteInPlace tools/osx/Info.plist.in rtgui/config.h.in \
       --replace "/Applications" "${placeholder "out"}/Applications"
   '';
