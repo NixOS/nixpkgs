@@ -4,6 +4,7 @@
   fetchurl,
   flex,
   bison,
+  bash,
   bluez,
   libnl,
   libxcrypt,
@@ -31,8 +32,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
   };
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libnl ] ++ lib.optionals withRemote [ libxcrypt ];
+  outputs = [
+    "out"
+    "lib"
+  ];
+
+  strictDeps = true;
+
+  buildInputs = [
+    bash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+  ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [
     flex
