@@ -49,6 +49,10 @@ buildGoModule (finalAttrs: {
         "TestInterQueryCache_ClientError"
         "TestIntraQueryCache_ClientError"
         "TestSSOCredentialService"
+
+        # This test depends on the metrics available in go not changing. This is a bit
+        # too unstable for us updating go independently.
+        "TestJSONSerialization"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Skip tests that require network, not available in the darwin sandbox
