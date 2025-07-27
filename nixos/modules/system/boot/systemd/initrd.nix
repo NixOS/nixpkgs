@@ -563,6 +563,8 @@ in
 
         # Resolving sysroot symlinks without code exec
         "${pkgs.chroot-realpath}/bin/chroot-realpath"
+        # Find the etc paths
+        "${config.system.nixos-init.package}/bin/find-etc"
       ]
       ++ lib.optionals config.system.nixos-init.enable [
         "${config.system.nixos-init.package}/bin/initrd-init"
