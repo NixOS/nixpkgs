@@ -1,13 +1,12 @@
 {
   "url": "https://github.com/nvim-treesitter/tree-sitter-query",
-  "rev": "892ebd701a79be0412ff1478177030a725d0c7b7",
-  "date": "2025-05-16T18:22:36+02:00",
-  "path": "/nix/store/rivlmbcc3gn7fqwljgk3z7zhk2s1ivzh-tree-sitter-query",
-  "sha256": "0is8lzj13zz6sq36wrfmhv7mjbgfvlrqnxf5dxzqa2vncj45v0bv",
-  "hash": "sha256-e4FdiGR2C4V/b8V1izPd7i1Zz4bVZW4G1ub/EeSnSEc=",
+  "rev": "0555ac0da902abff06076e40501102cee3ba68bd",
+  "date": "2025-02-02T17:30:49+01:00",
+  "path": "/nix/store/ab5v1pf3vckwhnix7r0c1l5g8x30v4zl-tree-sitter-query",
+  "sha256": "0dqy7i2jdd9dqf1ppqzcmkzd9yndb11r78l0pv1zyl7dm7h5g76q",
+  "hash": "sha256-2JxX4KntUP/DvoCik0NYzfrU/qzs43uDwy21JkU8Hjc=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "fetchTags": false,
   "leaveDotGit": false
 }

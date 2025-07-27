@@ -52,19 +52,17 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.18.0";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-pRpogmVes8ZX19GZff+HmGdykvMnBJ7hGsoYsUGVOSY=";
+    hash = "sha256-ING+C2MACKFto+1FON5OGFgzLf8SM99ViTdADzNzQLw=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "pillow" ];
 
   dependencies = [
     huggingface-hub
@@ -136,6 +134,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Missing dependencies
+    "test_cleanup"
     "test_ddgs_with_kwargs"
     "test_e2b_executor_instantiation"
     "test_flatten_messages_as_text_for_all_models"

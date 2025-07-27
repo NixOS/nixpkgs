@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
   bison,
   fetchFromGitHub,
   flex,
@@ -33,6 +35,10 @@ stdenv.mkDerivation {
     substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
   '';
 
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
@@ -47,7 +53,9 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
+    libtool
     bison
     flex
     pkg-config
