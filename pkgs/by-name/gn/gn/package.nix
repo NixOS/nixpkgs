@@ -23,7 +23,6 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchgit {
-    # Note: The TAR-Archives (+archive/${rev}.tar.gz) are not deterministic!
     url = "https://gn.googlesource.com/gn";
     inherit rev hash;
     leaveDotGit = true;
