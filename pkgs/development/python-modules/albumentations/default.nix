@@ -43,9 +43,10 @@ buildPythonPackage rec {
     hash = "sha256-8vUipdkIelRtKwMw63oUBDN/GUI0gegMGQaqDyXAOTQ=";
   };
 
-  patches = [
-    ./dont-check-for-updates.patch
-  ];
+  postPatch = ''
+    substituteInPlace albumentations/__init__.py \
+      --replace-fail 'os.getenv("NO_ALBUMENTATIONS_UPDATE", "")' 'os.getenv("NO_ALBUMENTATIONS_UPDATE", "1")'
+  '';
 
   pythonRelaxDeps = [ "opencv-python" ];
 
