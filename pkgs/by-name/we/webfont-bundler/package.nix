@@ -21,7 +21,7 @@
   wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "webfont-kit-generator";
+  pname = "webfont-bundler";
   version = "1.3.0";
 
   src = fetchFromGitHub {
