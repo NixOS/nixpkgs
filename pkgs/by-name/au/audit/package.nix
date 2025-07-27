@@ -84,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     (if enablePython then "--with-python" else "--without-python")
   ];
 
+  postInstall = ''
+    moveToOutput libexec REMOVE
+  '';
+
   enableParallelBuilding = true;
 
   passthru = {
