@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.8";
+  version = "8.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-pAAqf8jZbDfVZUoltwIFpov/1ys6HSYMyw3WV2qcE/M=";
+    hash = "sha256-cBvibVZKCppFJiRS8MNc3YT1JxmlXhRci7LHsrd4JGs=";
   };
 
   build-system = [ flit-core ];
@@ -37,6 +37,10 @@ buildPythonPackage rec {
   disabledTests = [
     # test fails with filename normalization on zfs
     "test_file_surrogates"
+
+    # AssertionError: Unexpected pager output in test case
+    # https://github.com/pallets/click/issues/2899
+    "test_echo_via_pager"
   ];
 
   passthru.tests = {
