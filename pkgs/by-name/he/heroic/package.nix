@@ -15,6 +15,7 @@
   legendary-heroic,
   nile,
   comet-gog,
+  umu-launcher,
 }:
 
 let
@@ -89,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
+      --suffix PATH ":" "${umu-launcher}/bin" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
