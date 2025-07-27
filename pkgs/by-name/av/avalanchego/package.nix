@@ -7,19 +7,19 @@
 
 buildGo123Module (finalAttrs: {
   pname = "avalanchego";
-  version = "1.13.2";
+  version = "1.13.4-measure-bloom-misses";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XGRGjoZyhvcQFhfZIYdljT77SUxrWhD46F6ckxD602Q=";
+    hash = "sha256-F+jz/D1LxScBecivyp3pgrlqX8f0Gz+cVzKGzCt09Ls=";
   };
 
   # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  vendorHash = "sha256-mff3Hlkp6gfq8HS7ypz9QikbDo98SwHF3g3Bq3i9RMY=";
+  vendorHash = "sha256-0MkGXN0k/CYOk5cgj6DBErDXWX7NaMvnUbLYLr7Q8g8=";
 
   subPackages = [ "main" ];
 
