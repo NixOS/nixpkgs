@@ -56,11 +56,12 @@ buildGoModule (finalAttrs: {
 
   versionCheckProgramArg = "--version";
 
-  passthru.tests = {
-    inherit (nixosTests) dae;
+  passthru = {
+    tests = {
+      inherit (nixosTests) dae;
+    };
+    updateScript = nix-update-script { };
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linux high-performance transparent proxy solution based on eBPF";
