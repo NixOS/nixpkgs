@@ -1788,6 +1788,7 @@ mapAliases {
   rustic-rs = rustic; # Added 2024-08-02
   rxvt_unicode = throw "'rxvt_unicode' has been renamed to/replaced by 'rxvt-unicode-unwrapped'"; # Converted to throw 2024-10-17
   rxvt_unicode-with-plugins = throw "'rxvt_unicode-with-plugins' has been renamed to/replaced by 'rxvt-unicode'"; # Converted to throw 2024-10-17
+  ryubing = throw "'ryubing' has been removed due to legal issues."; # Added 2025-07-18
   ryujinx = throw "'ryujinx' has been removed due to legal issues and absence of upstream."; # Added 2025-07-18
   ryujinx-greemdev = ryubing; # Added 2025-01-20
 
