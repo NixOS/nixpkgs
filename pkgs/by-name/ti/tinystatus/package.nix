@@ -14,7 +14,7 @@
   gnused,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tinystatus";
   version = "0-unstable-2021-07-09";
 
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     install -Dm555 tinystatus $out/bin/tinystatus
     wrapProgram $out/bin/tinystatus \
-      --set PATH "${lib.makeBinPath runtimeInputs}"
+      --set PATH "${lib.makeBinPath finalAttrs.runtimeInputs}"
     runHook postInstall
   '';
 
@@ -69,4 +69,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewcroughan ];
   };
-}
+})
