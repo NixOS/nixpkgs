@@ -1,7 +1,7 @@
 {
   pkgs,
   lib,
-  getPackage ? pkgs: pkgs.cassandra_4,
+  getPackage ? pkgs: pkgs.cassandra,
   ...
 }:
 let
