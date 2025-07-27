@@ -10,13 +10,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-checksums";
   # nixpkgs-update: no auto update
-  version = "0.2.2";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-checksums";
     rev = "v${version}";
-    sha256 = "sha256-hiqV6FrOZ19YIxL3UKBuexLJwoC2mY7lqysnV7ze0gg=";
+    sha256 = "sha256-dYDTDWZJJ0JlvkMfLS376uUt5QzSmbV0UNRC4aq35TY=";
   };
 
   nativeBuildInputs = [ cmake ];
