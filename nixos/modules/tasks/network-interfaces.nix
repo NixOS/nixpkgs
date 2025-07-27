@@ -1767,7 +1767,7 @@ in
       text = cfg.hostName + "\n";
     };
 
-    environment.systemPackages = [
+    environment.corePackages = [
       pkgs.host
       pkgs.hostname-debian
       pkgs.iproute2
