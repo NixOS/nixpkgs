@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "bounty";
-  version = "0.1.0-unstable-25-01-29";
+  version = "0.1.0-unstable-2025-02-15";
 
   src = fetchFromGitHub {
     owner = "ghbountybot";
