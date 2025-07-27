@@ -24991,6 +24991,12 @@ with self;
       url = "mirror://cpan/authors/id/B/BA/BARNEY/Net-Amazon-S3-0.991.tar.gz";
       hash = "sha256-+3r4umSUjRo/MdgJ13EFImiA8GmYrH8Rn4JITmijI9M=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/rustyconover/net-amazon-s3/commit/233cb0f2812c4f71b4fecd4058dbf34fe8d6824d.patch";
+        hash = "sha256-lVx1CoAFY37KIkDdl2Inqb16aZ9D0lXt475/7LyjOLM=";
+      })
+    ];
     buildInputs = [
       TestDeep
       TestException
