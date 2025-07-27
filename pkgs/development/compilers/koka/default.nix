@@ -20,7 +20,7 @@
   FloatingHex,
   isocline,
   lens,
-  lsp_2_4_0_0,
+  lsp,
   mtl,
   network,
   network-simple,
@@ -32,12 +32,12 @@
 }:
 
 let
-  version = "3.1.2";
+  version = "3.2.2";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    hash = "sha256-BNkMtYf5maWtKEZzob+218ke1SIkrP7/nboQ2sZKkxI=";
+    hash = "sha256-k1N085NoAlxewAhg5UDMo7IUf2A6gCTc9k5MWMbU0d0=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
@@ -81,7 +81,7 @@ mkDerivation rec {
     FloatingHex
     isocline
     lens
-    lsp_2_4_0_0
+    lsp
     mtl
     network
     network-simple
