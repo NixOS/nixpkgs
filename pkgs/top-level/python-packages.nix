@@ -10380,8 +10380,6 @@ self: super: with self; {
 
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
-  nixpkgs = callPackage ../development/python-modules/nixpkgs { };
-
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
   nixpkgs-updaters-library = callPackage ../development/python-modules/nixpkgs-updaters-library { };
@@ -14885,11 +14883,6 @@ self: super: with self; {
   pythonegardia = callPackage ../development/python-modules/pythonegardia { };
 
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
-
-  pythonix = callPackage ../development/python-modules/pythonix {
-    nix = pkgs.nixVersions.nix_2_3;
-    meson = pkgs.meson.override { python3 = self.python; };
-  };
 
   pythonnet = callPackage ../development/python-modules/pythonnet { };
 
