@@ -6,15 +6,15 @@
 }:
 let
   pname = "nosql-booster";
-  version = "8.1.9";
+  version = "10.0.0";
   src = fetchurl {
-    url = "https://s3.nosqlbooster.com/download/releasesv8/nosqlbooster4mongo-${version}.AppImage";
-    sha256 = "sha256-ZJdCHOodJel7Apb//s96vrf1Ruml/NLUMQ9eFFR9tfU=";
+    url = "https://s3.nosqlbooster.com/download/releasesv${lib.versions.major version}/nosqlbooster4mongo-${version}.AppImage";
+    hash = "sha256-HjQgcg7tG8J7bizvEy32N3/e6ybBQO0XISUdCuGi6SM=";
   };
   meta = {
     homepage = "https://nosqlbooster.com/";
     description = "GUI tool for MongoDB Server";
-    changelog = "https://nosqlbooster.com/blog/announcing-nosqlbooster-81/#version-819";
+    changelog = "https://nosqlbooster.com/blog/announcing-nosqlbooster-10";
     maintainers = with lib.maintainers; [ guillaumematheron ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
