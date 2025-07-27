@@ -78,8 +78,12 @@ stdenv'.mkDerivation (finalAttrs: {
     '';
 
     installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
+      runHook preInstall
+
+      mkdir -p "$out"
+      cp -a . "$out"/
+
+      runHook postInstall
     '';
   };
 
@@ -177,13 +181,14 @@ stdenv'.mkDerivation (finalAttrs: {
     COMMIT = "";
   };
 
-  postPatch = ''
-    # remove upstream dependency on systemd and udev
+  postPatch = # remove upstream dependency on systemd and udev
+  ''
     substituteInPlace cmake/packaging/linux.cmake \
       --replace-fail 'find_package(Systemd)' "" \
       --replace-fail 'find_package(Udev)' ""
-
-    # don't look for npm since we build webui separately
+  ''
+  # don't look for npm since we build webui separately
+  + ''
     substituteInPlace cmake/targets/common.cmake \
       --replace-fail 'find_program(NPM npm REQUIRED)' ""
 
@@ -200,8 +205,8 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
+  # copy webui where it can be picked up by build
   preBuild = ''
-    # copy webui where it can be picked up by build
     cp -r ${finalAttrs.ui}/build ../
   '';
 
@@ -218,7 +223,9 @@ stdenv'.mkDerivation (finalAttrs: {
   # redefine installPhase to avoid attempt to build webui
   installPhase = ''
     runHook preInstall
+
     cmake --install .
+
     runHook postInstall
   '';
 
@@ -234,7 +241,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Sunshine is a Game stream host for Moonlight";
+    description = "Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
     license = lib.licenses.gpl3Only;
     mainProgram = "sunshine";
