@@ -44,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  postPatch = lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
+    # Fix OPENJPEG_INSTALL_PACKAGE_DIR, the directory to install OpenJPEG cmake modules.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        ${lib.escapeShellArg ''set(OPENJPEG_INSTALL_PACKAGE_DIR "''${CMAKE_INSTALL_LIBDIR}/cmake/''${OPENJPEG_INSTALL_SUBDIR}")''} \
+        ${lib.escapeShellArg ''set(OPENJPEG_INSTALL_PACKAGE_DIR "${placeholder "dev"}/lib/cmake/''${OPENJPEG_INSTALL_SUBDIR}")''}
+  '';
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     "-DBUILD_CODEC=ON"
