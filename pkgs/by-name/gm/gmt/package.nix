@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmt";
-  version = "6.5.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "gmt";
     tag = finalAttrs.version;
-    hash = "sha256-KKIYhljCtk9t9CuvTLsSGvUkUwazWTm9ymBB3wLwSoI=";
+    hash = "sha256-ODJwnjZjWpR5Dg0gNimtrOCCgseJ8INfKEBKP7/bYIc=";
   };
 
   nativeBuildInputs = [ cmake ];
