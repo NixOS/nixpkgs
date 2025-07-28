@@ -134,6 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
      --replace-fail "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
      --replace-fail "/bin/mount" "${util-linux}/bin/mount"
+
+    substituteInPlace lib/guestStoreClientHelper/guestStoreClient.c \
+      --replace-fail "libguestStoreClient.so.0" "$out/lib/libguestStoreClient.so.0"
   '';
 
   configureFlags = [
