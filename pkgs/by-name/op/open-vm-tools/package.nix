@@ -107,26 +107,29 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    sed -i Makefile.am \
-      -e 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,'
-    sed -i scripts/Makefile.am \
-      -e 's,^confdir = ,confdir = ''${prefix},' \
-      -e 's,usr/bin,''${prefix}/usr/bin,'
-    sed -i services/vmtoolsd/Makefile.am \
-      -e 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' \
-      -e 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),'
-    sed -i vgauth/service/Makefile.am \
-      -e 's,/etc/vmware-tools/vgauth/schemas,''${prefix}/etc/vmware-tools/vgauth/schemas,' \
-      -e 's,$(DESTDIR)/etc/vmware-tools/vgauth.conf,''${prefix}/etc/vmware-tools/vgauth.conf,'
+    substituteInPlace Makefile.am \
+      --replace-fail "etc/vmware-tools" "''${prefix}/etc/vmware-tools"
+    substituteInPlace scripts/Makefile.am \
+      --replace-fail "confdir = /etc/vmware-tools" "confdir = ''${prefix}/etc/vmware-tools" \
+      --replace-fail "/usr/bin" "''${prefix}/usr/bin"
+    substituteInPlace services/vmtoolsd/Makefile.am \
+      --replace-fail "etc/vmware-tools" "''${prefix}/etc/vmware-tools" \
+      --replace-fail "\$(PAM_PREFIX)" "''${prefix}/\$(PAM_PREFIX)"
+    substituteInPlace vgauth/service/Makefile.am \
+      --replace-fail "/etc/vmware-tools/vgauth/schemas" "''${prefix}/etc/vmware-tools/vgauth/schemas" \
+      --replace-fail "\$(DESTDIR)/etc/vmware-tools/vgauth.conf" "''${prefix}/etc/vmware-tools/vgauth.conf"
 
     # don't abort on any warning
-    sed -i 's,CFLAGS="$CFLAGS -Werror",,' configure.ac
+    substituteInPlace configure.ac \
+      --replace-fail 'CFLAGS="$CFLAGS -Werror"' ""
 
     # Make reboot work, shutdown is not in /sbin on NixOS
-    sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+    substituteInPlace lib/system/systemLinux.c \
+      --replace-fail "/sbin/shutdown" "shutdown"
 
     # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
-    sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
+    substituteInPlace vmhgfs-fuse/config.c \
+      --replace-fail "/bin/fusermount3" "${fuse3}/bin/fusermount3"
 
     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
      --replace-fail "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
