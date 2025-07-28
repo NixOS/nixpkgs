@@ -11,6 +11,7 @@
   anyio,
   httpx,
   httpx-sse,
+  jsonschema,
   pydantic,
   pydantic-settings,
   python-multipart,
@@ -28,6 +29,7 @@
   websockets,
 
   # tests
+  dirty-equals,
   inline-snapshot,
   pytest-asyncio,
   pytest-examples,
@@ -38,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.9.4";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-VXbu/wHbXGS+cISJVUgCVEpTmZc0VfckNRoMj3GDi/A=";
+    hash = "sha256-K3S+2Z4yuo8eAOo8gDhrI8OOfV6ADH4dAb1h8PqYntc=";
   };
 
   postPatch = ''
@@ -64,6 +66,7 @@ buildPythonPackage rec {
     anyio
     httpx
     httpx-sse
+    jsonschema
     pydantic
     pydantic-settings
     python-multipart
@@ -88,6 +91,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mcp" ];
 
   nativeCheckInputs = [
+    dirty-equals
     inline-snapshot
     pytest-asyncio
     pytest-examples
@@ -110,12 +114,16 @@ buildPythonPackage rec {
 
     # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
     "test_client_session_version_negotiation_failure"
+    "test_lifespan_cleanup_executed"
 
     # AttributeError: 'coroutine' object has no attribute 'client_metadata'
     "TestOAuthClientProvider"
 
     # inline_snapshot._exceptions.UsageError: snapshot value should not change. Use Is(...) for dynamic snapshot parts
     "test_build_metadata"
+
+    # ModuleNotFoundError: No module named 'mcp'
+    "test_func_metadata"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
