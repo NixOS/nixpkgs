@@ -7,12 +7,14 @@
 let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
+
   localDB = lib.hasPrefix "/" cfg.database.host;
+  localPgsql = localDB && cfg.database.type == "pgsql";
 
   user = cfg.database.username;
   phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 
-  env = {
+  commonEnv = {
     ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
   };
 in
@@ -49,6 +51,19 @@ in
     };
 
     database = {
+      # TODO: support more DB types. The module started off as highly pgsql specific, and more work needs to be done
+      #       to ensure other DB types work properly.
+      type = lib.mkOption {
+        type = lib.types.enum [
+          "pgsql"
+          "sqlite"
+        ];
+        default = "pgsql";
+        description = ''
+          The type of database to use.
+        '';
+      };
+
       username = lib.mkOption {
         type = lib.types.str;
         default = "roundcube";
@@ -63,9 +78,9 @@ in
         type = lib.types.str;
         default = "localhost";
         description = ''
-          Host of the database server.
+          Host of the database server, or database file path when using SQLite.
 
-          If the value starts with a `/`, it is interpreted as a UNIX domain socket.
+          If using PostgreSQL and the value starts with a `/`, it is interpreted as a UNIX domain socket.
 
           See https://github.com/roundcube/roundcubemail/wiki/Configuration#database-connection
         '';
@@ -91,6 +106,17 @@ in
         type = lib.types.str;
         default = "roundcube";
         description = "Name of the postgresql database";
+      };
+
+      mode = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "0640";
+        example = "0660";
+        description = ''
+          Mode of the database file.
+
+          Ignored if not using an SQLite database.
+        '';
       };
     };
 
@@ -149,13 +175,14 @@ in
 
   config = lib.mkIf cfg.enable {
     services.roundcube.database = lib.mkIf cfg.configurePgsql {
+      type = "pgsql";
       host = "/run/postgresql";
     };
 
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
-      ${lib.optionalString (!cfg.configurePgsql) ''
+      ${lib.optionalString (cfg.database.type != "sqlite" && !cfg.configurePgsql) ''
         $password = file('${cfg.database.passwordFile}')[0];
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
         $password = rtrim(end($password));
@@ -165,10 +192,15 @@ in
 
       $config = array();
 
-      $config['db_dsnw'] = '${let
-          host = if localDB then "unix(${cfg.database.host})" else cfg.database.host;
-          pass = lib.optionalString (!cfg.configurePgsql) ":' . $password . '";
-        in
+      $config['db_dsnw'] = '${
+        # https://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
+        if cfg.database.type == "sqlite" then
+          "sqlite:///${cfg.database.host}?mode=${cfg.database.mode}"
+        else
+          let
+            host = if localDB then "unix(${cfg.database.host})" else cfg.database.host;
+            pass = lib.optionalString (!cfg.configurePgsql) ":' . $password . '";
+          in
           "pgsql://${cfg.database.username}${pass}@${host}/${cfg.database.dbname}"
       }';
 
@@ -251,6 +283,18 @@ in
           equal!
         '';
       }
+      {
+        assertion = cfg.database.type != "pgsql" -> !cfg.configurePgsql;
+        message = ''
+          When using `${cfg.database.type}` as database, you must also set disable `services.roundcube.configurePgsql`.
+        '';
+      }
+      {
+        assertion = cfg.database.type == "sqlite" -> cfg.database.host != "localhost";
+        message = ''
+          When using SQLite as database, you must also set `services.roundcube.database.host` to the DB file path.
+        '';
+      }
     ];
 
     services.postgresql = lib.mkIf cfg.configurePgsql {
@@ -272,7 +316,7 @@ in
     users.groups.${user} = lib.mkIf cfg.configurePgsql { };
 
     services.phpfpm.pools.roundcube = {
-      user = if localDB then user else "nginx";
+      user = if cfg.configurePgsql then user else "nginx";
       phpOptions = ''
         error_log = '/dev/stderr'
         log_errors = on
@@ -292,9 +336,12 @@ in
         "catch_workers_output" = true;
       };
       phpPackage = phpWithPspell;
-      phpEnv = env;
+      phpEnv = commonEnv;
     };
-    systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
+    systemd.services.phpfpm-roundcube = {
+      requires = [ "roundcube-setup.service" ];
+      after = [ "roundcube-setup.service" ];
+    };
 
     # Restart on config changes.
     systemd.services.phpfpm-roundcube.restartTriggers = [
@@ -302,7 +349,7 @@ in
     ];
 
     systemd.services.roundcube-setup = lib.mkMerge [
-      (lib.mkIf localDB {
+      (lib.mkIf localPgsql {
         requires = [ "postgresql.target" ];
         after = [ "postgresql.target" ];
       })
@@ -311,49 +358,72 @@ in
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        environment = env;
+        environment = commonEnv // {
+          PGPASSFILE = lib.mkIf (
+            cfg.database.type == "pgsql" && !cfg.configurePgsql
+          ) cfg.database.passwordFile;
+        };
 
-        path = [
-          (if localDB then config.services.postgresql.package else pkgs.postgresql)
-        ];
         script =
           let
-            psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile} "}${
-              lib.escapeShellArgs (
-                [
-                  "psql"
-                  "-h"
-                  cfg.database.host # interprets a / prefix as UNIX sock path
-                ]
-                ++ lib.optionals (!localDB) [
-                  "-U"
-                  cfg.database.username
-                ]
-                ++ [
-                  cfg.database.dbname
-                ]
-              )
-            }";
+            dbCmd =
+              {
+                pgsql = lib.escapeShellArgs (
+                  [
+                    "${if localDB then config.services.postgresql.package else pkgs.postgresql}/bin/psql"
+                    "-h"
+                    cfg.database.host # interprets a / prefix as UNIX sock path
+                  ]
+                  ++ lib.optionals (!localDB) [
+                    "-U"
+                    cfg.database.username
+                  ]
+                  ++ [
+                    cfg.database.dbname
+                  ]
+                );
+
+                sqlite = lib.escapeShellArgs [
+                  "${pkgs.sqlite}/bin/sqlite3"
+                  cfg.database.host
+                ];
+              }
+              .${cfg.database.type};
+
+            initSqlFilePrefix =
+              {
+                pgsql = "postgres";
+              }
+              .${cfg.database.type} or cfg.database.type;
+
+            truncSql =
+              {
+                pgsql = "TRUNCATE TABLE";
+                sqlite = "DELETE FROM";
+              }
+              .${cfg.database.type};
           in
           ''
-            version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
+            version="$(${dbCmd} <<< "SELECT value FROM system WHERE name = 'roundcube-version';" || true)"
             if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
-              ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
+              ${dbCmd} < ${cfg.package}/SQL/${initSqlFilePrefix}.initial.sql
             fi
 
             if [ ! -f /var/lib/roundcube/des_key ]; then
               base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
+
               # we need to log out everyone in case change the des_key
               # from the default when upgrading from nixos 19.09
-              ${psql} <<< 'TRUNCATE TABLE session;'
+              ${dbCmd} <<< '${truncSql} session;'
             fi
 
             ${phpWithPspell}/bin/php ${cfg.package}/bin/update.sh
           '';
+
         serviceConfig = {
           Type = "oneshot";
           StateDirectory = "roundcube";
-          User = if localDB then user else "nginx";
+          User = config.services.phpfpm.pools.roundcube.user;
           # so that the des_key is not world readable
           StateDirectoryMode = "0700";
         };
