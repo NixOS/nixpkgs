@@ -57,12 +57,12 @@ python3.pkgs.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "GUI for Legendary, an Epic Games Launcher open source alternative";
+  meta = {
+    description = "Alternative for Epic Games Launcher, using Legendary";
     homepage = "https://github.com/RareDevs/Rare";
     maintainers = [ ];
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     mainProgram = "rare";
   };
 }
