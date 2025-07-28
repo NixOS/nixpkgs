@@ -7,29 +7,39 @@
   ninja,
   pkg-config,
   python3,
-  json-fortran,
+  toml-f,
+  jonquil,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mctc-lib";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
     rev = "v${version}";
-    hash = "sha256-AMRHvzL6CUPItCs07LLOB6Al3yfs8WgrPKRhuNbXiGw=";
+    hash = "sha256-Qd7mpNE23Z+LuiUwhUzfVzVZEQ+sdnkxMm+W7Hlrss4=";
   };
+
+  patches = [
+    # Allow dynamically linked jonquil as dependency. That then additionally
+    # requires linking in toml-f
+    ./meson.patch
+  ];
 
   nativeBuildInputs = [
     gfortran
-    meson
-    ninja
     pkg-config
     python3
+    meson
+    ninja
   ];
 
-  buildInputs = [ json-fortran ];
+  buildInputs = [
+    toml-f
+    jonquil
+  ];
 
   outputs = [
     "out"
