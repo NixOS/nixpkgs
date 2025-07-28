@@ -5,29 +5,12 @@
   nushell,
   libnotify,
   systemd,
-  writeShellScript,
+  writers,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "journald-notify-nu";
   version = "0.1.0";
-
-  wrapperScripts = {
-    journald-notify-nu = writeShellScript "journald-notify-nu" ''
-      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod main"
-    '';
-
-    journald-notify-monitor = writeShellScript "journald-notify-monitor" ''
-      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod start-monitoring ''${1:-}"
-    '';
-
-    journald-notify-test = writeShellScript "journald-notify-test" ''
-      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod test-notification"
-    '';
-  };
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wvhulle";
@@ -48,10 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
     # Install the Nu module
     install -Dm644 mod.nu $out/share/journald-notify-nu/mod.nu
 
-    # Create simple shell script wrappers
-    install -Dm755 ${wrapperScripts.journald-notify-nu} $out/bin/journald-notify-nu
-    install -Dm755 ${wrapperScripts.journald-notify-monitor} $out/bin/journald-notify-monitor
-    install -Dm755 ${wrapperScripts.journald-notify-test} $out/bin/journald-notify-test
+    # Create Nu script wrappers by copying and substituting path
+    mkdir -p $out/bin
+
+    cp ${writers.writeNuBin "journald-notify-nu" ''use PLACEHOLDER/share/journald-notify-nu/mod.nu; mod main''}/bin/journald-notify-nu $out/bin/journald-notify-nu
+    sed -i "s|PLACEHOLDER|$out|g" $out/bin/journald-notify-nu
+    chmod +x $out/bin/journald-notify-nu
+
+    cp ${writers.writeNuBin "journald-notify-monitor" ''
+      use PLACEHOLDER/share/journald-notify-nu/mod.nu
+      mod start-monitoring
+    ''}/bin/journald-notify-monitor $out/bin/journald-notify-monitor
+    sed -i "s|PLACEHOLDER|$out|g" $out/bin/journald-notify-monitor
+    chmod +x $out/bin/journald-notify-monitor
+
+    cp ${writers.writeNuBin "journald-notify-test" ''use PLACEHOLDER/share/journald-notify-nu/mod.nu; mod test-notification''}/bin/journald-notify-test $out/bin/journald-notify-test
+    sed -i "s|PLACEHOLDER|$out|g" $out/bin/journald-notify-test
+    chmod +x $out/bin/journald-notify-test
 
     runHook postInstall
   '';
