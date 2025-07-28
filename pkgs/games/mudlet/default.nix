@@ -10,17 +10,17 @@
   which,
   wrapQtAppsHook,
   boost,
+  discord-rpc,
   hunspell,
   libGLU,
-  libsForQt5,
   libsecret,
+  libsForQt5,
   libzip,
   lua,
   pcre,
   pugixml,
   qtbase,
   qtmultimedia,
-  discord-rpc,
   yajl,
 }:
 
@@ -46,23 +46,23 @@ let
 
   luaEnv = overrideLua.withPackages (
     ps: with ps; [
-      luazip
-      luafilesystem
-      lrexlib-pcre
-      luasql-sqlite3
       lua-yajl
+      luafilesystem
+      luasql-sqlite3
       luautf8
+      luazip
+      lrexlib-pcre
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mudlet";
   version = "4.17.2";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
-    tag = "Mudlet-${version}";
+    tag = "Mudlet-${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-K75frptePKfHeGQNXaX4lKsLwO6Rs6AAka6hvP8MA+k=";
   };
@@ -87,27 +87,29 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
+    discord-rpc
     hunspell
     libGLU
-    libsForQt5.qtkeychain
     libsecret
     libzip
+    libsForQt5.qtkeychain
     luaEnv
     pcre
     pugixml
     qtbase
     qtmultimedia
     yajl
-    discord-rpc
   ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
-  WITH_FONTS = "NO";
-  WITH_UPDATER = "NO";
+  env = {
+    WITH_FONTS = "NO";
+    WITH_UPDATER = "NO";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -125,10 +127,8 @@ stdenv.mkDerivation rec {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r src/mudlet.app/ $out/Applications/mudlet.app
-    mv $out/Applications/mudlet.app/Contents/MacOS/mudlet $out/Applications/mudlet.app/Contents/MacOS/mudlet-unwrapped
-    makeQtWrapper $out/Applications/Mudlet.app/Contents/MacOS/mudlet-unwrapped $out/Applications/Mudlet.app/Contents/MacOS/mudlet \
+    wrapQtApp $out/Applications/Mudlet.app/Contents/MacOS/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix DYLD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libsForQt5.qtkeychain
@@ -138,12 +138,10 @@ stdenv.mkDerivation rec {
       --chdir "$out";
 
   ''
-  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -pv $out/bin
-    cp src/mudlet $out/bin/mudlet-unwrapped
-    makeQtWrapper $out/bin/mudlet-unwrapped $out/bin/mudlet \
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm 0755 src/mudlet $out/bin/mudlet
+    wrapQtApp $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libsForQt5.qtkeychain
@@ -158,6 +156,8 @@ stdenv.mkDerivation rec {
   + ''
     runHook postInstall
   '';
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "Crossplatform mud client";
@@ -174,4 +174,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "mudlet";
   };
-}
+})
