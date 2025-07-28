@@ -15150,6 +15150,8 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
+
   marvin = callPackage ../applications/science/chemistry/marvin { };
 
   molbar = with python3Packages; toPythonApplication molbar;
