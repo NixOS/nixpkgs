@@ -468,8 +468,8 @@ let
                 ;
             };
 
-            haskell.packages.native-bignum.ghc984 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc984)
+            haskell.packages.native-bignum.ghc9102 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9102)
                 hello
                 random
                 QuickCheck
@@ -514,8 +514,8 @@ let
                   ;
               };
 
-              haskell.packages.ghc98 = {
-                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
+              haskell.packages.gh910 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc910)
                   ghc
                   hello
                   microlens
@@ -743,7 +743,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc984
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9102
         ];
       };
     }

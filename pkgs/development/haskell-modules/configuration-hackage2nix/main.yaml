@@ -54,11 +54,13 @@ extra-packages:
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal == 3.10.*
-  - Cabal == 3.12.*                     # version required for cabal-install and other packages
+  - Cabal == 3.12.*
+  - Cabal == 3.14.*                     # version required for cabal-install and other packages
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.0
   - Cabal-syntax == 3.10.*
-  - Cabal-syntax == 3.12.*              # version required for cabal-install and other packages
+  - Cabal-syntax == 3.12.*
+  - Cabal-syntax == 3.14.*              # version required for cabal-install and other packages
   - commonmark-pandoc < 0.2.3           # 2025-04-06: Needed for pandoc 3.6
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat

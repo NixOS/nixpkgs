@@ -5461,21 +5461,17 @@ with pkgs;
 
   haskellPackages =
     dontRecurseIntoAttrs
-      # Prefer native-bignum to avoid linking issues with gmp
-      # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
-      # until 9.8 is ready
       (
+        # Prefer native-bignum to avoid linking issues with gmp;
+        # TemplateHaskell doesn't work with hadrian built GHCs yet
+        # https://github.com/NixOS/nixpkgs/issues/275304
         if stdenv.hostPlatform.isStatic then
           haskell.packages.native-bignum.ghc94
         # JS backend can't use gmp
         else if stdenv.hostPlatform.isGhcjs then
-          haskell.packages.native-bignum.ghc98
-        # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
-        # FIXME: remove when fixed
-        else if stdenv.hostPlatform.isi686 then
-          haskell.packages.ghc96
+          haskell.packages.native-bignum.ghc910
         else
-          haskell.packages.ghc98
+          haskell.packages.ghc910
       )
     // {
       __recurseIntoDerivationForReleaseJobs = true;
@@ -5491,20 +5487,17 @@ with pkgs;
   # plain, cross-compiled compiler (which is only theoretical at the moment).
   ghc =
     targetPackages.haskellPackages.ghc or
-    # Prefer native-bignum to avoid linking issues with gmp
-    # Use 9.4 for static over broken 9.6
     (
+      # Prefer native-bignum to avoid linking issues with gmp;
+      # TemplateHaskell doesn't work with hadrian built GHCs yet
+      # https://github.com/NixOS/nixpkgs/issues/275304
       if stdenv.targetPlatform.isStatic then
         haskell.compiler.native-bignum.ghc94
       # JS backend can't use GMP
       else if stdenv.targetPlatform.isGhcjs then
-        haskell.compiler.native-bignum.ghc98
-      # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
-      # FIXME: remove when fixed
-      else if stdenv.hostPlatform.isi686 then
-        haskell.compiler.ghc96
+        haskell.compiler.native-bignum.ghc910
       else
-        haskell.compiler.ghc98
+        haskell.compiler.ghc910
     );
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
