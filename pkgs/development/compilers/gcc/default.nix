@@ -49,7 +49,6 @@
     !enablePlugin
     || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
   nukeReferences,
-  sanitiseHeaderPathsHook,
   callPackage,
   majorMinorVersion,
   apple-sdk,
@@ -184,7 +183,6 @@ let
       pkgsBuildTarget
       profiledCompiler
       reproducibleBuild
-      sanitiseHeaderPathsHook
       staticCompiler
       stdenv
       targetPackages
