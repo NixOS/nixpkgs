@@ -77,6 +77,15 @@ let
   # TODO (lib): Dedup with run.nix, add to lib/options.nix
   mkOneUp = opt: f: lib.mkOverride (opt.highestPrio - 1) (f opt.value);
 
+  machineType = types.submoduleWith {
+    modules = [
+      ./machine/options.nix
+      {
+        osType = lib.mkOptionDefault baseOS.type;
+      }
+    ];
+  };
+
 in
 
 {
@@ -107,14 +116,18 @@ in
       };
     };
 
-    node.type = mkOption {
+    node.type_ = mkOption {
       type = types.raw;
       default = baseOS.type;
       internal = true;
+      description = "Deprecated. Use `machines` instead.";
     };
 
     nodes = mkOption {
-      type = types.lazyAttrsOf config.node.type;
+      type = types.attrsWith { getElemType = name:
+        if config.machines ? ${name}
+          then config.machines.${name}.osType
+          else config.node.type_; };
       visible = "shallow";
       description = ''
         An attribute set of NixOS configuration modules.
@@ -125,6 +138,16 @@ in
 
         A few special options are available, that aren't in a plain NixOS configuration. See [Configuring the nodes](#sec-nixos-test-nodes)
       '';
+    };
+
+    machines = mkOption {
+      type = types.lazyAttrsOf machineType;
+      description = ''
+        An attribute set of machine configurations.
+
+        This generalizes the [`nodes`](#test-opt-nodes) option to allow for more than just NixOS nodes, e.g. Docker containers or VMs with other operating systems.
+      '';
+      default = { };
     };
 
     defaults = mkOption {

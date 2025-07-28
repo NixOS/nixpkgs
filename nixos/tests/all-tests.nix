@@ -175,6 +175,7 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    multi-os = runTest ./nixos-test-driver/multi-os.nix;
   };
 
   # NixOS vm tests and non-vm unit tests

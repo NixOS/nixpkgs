@@ -39,7 +39,7 @@ rec {
         powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
         riscv32-linux = "${qemuPkg}/bin/qemu-system-riscv32 -machine virt";
         riscv64-linux = "${qemuPkg}/bin/qemu-system-riscv64 -machine virt";
-        x86_64-darwin = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=kvm:tcg -cpu max";
+        x86_64-darwin = "${qemuPkg}/bin/qemu-system-x86_64";
       };
       otherHostGuestMatrix = {
         aarch64-darwin = {
