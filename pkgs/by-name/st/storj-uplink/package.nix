@@ -24,6 +24,9 @@ buildGoModule rec {
     "-w"
   ];
 
+  # Tests fail with 'listen tcp 127.0.0.1:0: bind: operation not permitted'.
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Command-line tool for Storj";
     homepage = "https://storj.io";
