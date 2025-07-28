@@ -8,6 +8,7 @@ self:
   qt6,
   python3,
   python3Packages,
+  jq,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -77,6 +78,14 @@ let
     };
 
   moveOutputsHook = makeSetupHook { name = "kf6-move-outputs-hook"; } ./move-outputs-hook.sh;
+
+  qmllintHook = makeSetupHook {
+    name = "qmllint-validate-hook";
+    substitutions = {
+      qmllint = "${qt6.qtdeclarative}/bin/qmllint";
+      jq = lib.getExe jq;
+    };
+  } ./qmllint-hook.sh;
 in
 {
   pname,
@@ -131,6 +140,7 @@ let
       ninja
       qt6.wrapQtAppsHook
       moveOutputsHook
+      qmllintHook
     ]
     ++ lib.optionals hasPythonBindings [
       python3Packages.shiboken6
@@ -155,6 +165,8 @@ let
 
     dontFixCmake = true;
     cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ extraCmakeFlags;
+
+    doInstallCheck = true;
 
     separateDebugInfo = true;
 
