@@ -142,7 +142,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";
   };
 }
