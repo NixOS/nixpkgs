@@ -153,7 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
     "io.sockets.secure.unix"
   ];
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
+
     export HOME=$TMPDIR
     $out/bin/factor -e='USING: tools.test tools.test.private
       zealot.factor sequences namespaces formatting ;
@@ -162,7 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
       "compiler" suffix
       [ test-vocab ] each :test-failures
       test-failures get length "Number of failed tests: %d\n" printf'
-    runHook postCheck
+
+    runHook postInstallCheck
   '';
 
   passthru = {

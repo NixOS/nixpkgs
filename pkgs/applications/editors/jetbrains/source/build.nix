@@ -162,11 +162,11 @@ let
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
-      runHook preInstall
+      runHook preBuild
 
       ant -Duser.home=${jpsRepo} -Dbuild.dir=/build/out -f jps-bootstrap-classpath.xml
 
-      runHook postInstall
+      runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
