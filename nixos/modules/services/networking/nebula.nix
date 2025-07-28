@@ -60,6 +60,16 @@ in
                 example = "/etc/nebula/host.key";
               };
 
+              enableReload = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Enable automatic config reload on config change.
+                  This setting is not enabled by default as nix cannot determine if the config change is reloadable.
+                  Please refer to the [config reference](https://nebula.defined.net/docs/config/) for documentation on reloadable changes.
+                '';
+              };
+
               staticHostMap = lib.mkOption {
                 type = lib.types.attrsOf (lib.types.listOf (lib.types.str));
                 default = { };
@@ -278,6 +288,8 @@ in
             ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
+            restartTriggers = lib.optional (!netCfg.enableReload) configFile;
+            reloadTriggers = lib.optional netCfg.enableReload configFile;
             serviceConfig = {
               Type = "notify";
               Restart = "always";
