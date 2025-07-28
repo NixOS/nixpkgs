@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
-    rev = "Mudlet-${version}";
+    tag = "Mudlet-${version}";
     fetchSubmodules = true;
     hash = "sha256-K75frptePKfHeGQNXaX4lKsLwO6Rs6AAka6hvP8MA+k=";
   };
@@ -117,8 +117,7 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/share/mudlet
     cp -r ../src/mudlet-lua/lua $out/share/mudlet/
 
-    mkdir -pv $out/share/pixmaps
-    cp -r ../mudlet.png $out/share/pixmaps/
+    install -Dm 0644 ../mudlet.png -t $out/share/icons/hicolor/512x512/apps/
 
     cp -r ../translations $out/share/
 
@@ -153,8 +152,7 @@ stdenv.mkDerivation rec {
       }" \
       --chdir "$out";
 
-    mkdir -pv $out/share/applications
-    cp ../mudlet.desktop $out/share/applications/
+    install -Dm 0644 ../mudlet.desktop -t $out/share/applications/
 
   ''
   + ''
