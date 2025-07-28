@@ -5,6 +5,7 @@
   fixDarwinDylibNames,
   which,
   dieHook,
+  bmake,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableDarwinSandbox ? true,
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
-  version = "1.3.2";
+  version = "2.0.2";
 
   outputs = [
     "out"
@@ -27,12 +28,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-IQmgPm2zE+B82Zdg+ldjtU/XI+qab9YRAzwzRMYv32KKjql0YLDEgc/m6DbgyCiNBkulD0dVExCtrTM+nBFHzw==";
+    hash = "sha512-cfzhuF4EnGmLJf5EGSIbWqJItY3npbRSALm+GarZ7SMU7Hr1xw0gtBFMpOdi5PBar4TgtvbnG4oRPh+COINGlA==";
   };
 
   nativeBuildInputs = [
     which
     dieHook
+    bmake # Uses FreeBSD's dialect
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
@@ -74,7 +76,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      soVersion = "1";
+      soVersion = "2";
     in
 
     # Check that soVersion is up to date even if we are not on darwin
