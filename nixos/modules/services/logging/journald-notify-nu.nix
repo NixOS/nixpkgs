@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.journald-notify-nu;
-in {
+in
+{
   options.services.journald-notify-nu = {
     enable = mkEnableOption "journald-notify-nu service for converting systemd journal entries to desktop notifications";
 
@@ -29,7 +35,10 @@ in {
       example = {
         filters = {
           priority = "warning";
-          units = [ "sshd.service" "systemd-logind.service" ];
+          units = [
+            "sshd.service"
+            "systemd-logind.service"
+          ];
         };
       };
     };
@@ -57,7 +66,7 @@ in {
         ExecStart = "${cfg.package}/bin/journald-notify-nu";
         Restart = "always";
         RestartSec = 5;
-        
+
         # Security settings
         NoNewPrivileges = true;
         PrivateTmp = true;
@@ -69,14 +78,15 @@ in {
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RemoveIPC = true;
-        
+
         # Journal access
         SupplementaryGroups = [ "systemd-journal" ];
       };
 
       environment = {
         # Pass configuration as environment variables if needed
-      } // (optionalAttrs (cfg.settings != { }) {
+      }
+      // (optionalAttrs (cfg.settings != { }) {
         JOURNALD_NOTIFY_CONFIG = builtins.toJSON cfg.settings;
       });
     };

@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   nushell,
-  makeWrapper,
   libnotify,
   systemd,
+  writers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "journald-notify-nu";
   version = "0.1.0";
 
@@ -19,12 +19,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-aUn5nnPZq06Q11MxUsGw6076vGDmIW2PPMf9u1x+F8s=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  propagatedBuildInputs = [ nushell ];
-
   buildInputs = [
     libnotify
+    nushell
     systemd
   ];
 
@@ -32,50 +29,37 @@ stdenv.mkDerivation rec {
         runHook preInstall
 
         # Install the nushell module
-        mkdir -p $out/share/journald-notify-nu
-        cp mod.nu $out/share/journald-notify-nu/
+        install -Dm644 mod.nu $out/share/journald-notify-nu/mod.nu
 
-        # Install NixOS module
-        mkdir -p $out/share/nixos/modules
-        cp ${./nixos-module.nix} $out/share/nixos/modules/journald-notify-nu.nix
-
-        # Create wrapper scripts for command-line usage
+        # Create wrapper scripts
         mkdir -p $out/bin
-
-        # Main monitoring script
         cat > $out/bin/journald-notify-nu << EOF
-    #!/usr/bin/env bash
-    exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod main"
+    #!/usr/bin/env -S nu --no-config-file
+    use $out/share/journald-notify-nu/mod.nu; mod main
     EOF
         chmod +x $out/bin/journald-notify-nu
 
-        # Custom monitoring script
         cat > $out/bin/journald-notify-monitor << EOF
-    #!/usr/bin/env bash
-    exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod start-monitoring \$1"
+    #!/usr/bin/env -S nu --no-config-file
+    use $out/share/journald-notify-nu/mod.nu; mod start-monitoring \$env.1?
     EOF
         chmod +x $out/bin/journald-notify-monitor
 
-        # Test notification script
         cat > $out/bin/journald-notify-test << EOF
-    #!/usr/bin/env bash
-    exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod test-notification"
+    #!/usr/bin/env -S nu --no-config-file
+    use $out/share/journald-notify-nu/mod.nu; mod test-notification
     EOF
         chmod +x $out/bin/journald-notify-test
 
         runHook postInstall
   '';
 
-  passthru = {
-    nixosModules.journald-notify-nu = import "${placeholder "out"}/share/nixos/modules/journald-notify-nu.nix";
-  };
-
   meta = {
-    description = "A nushell package for converting systemd journal entries to desktop notifications";
+    description = "Nushell package for converting systemd journal entries to desktop notifications";
     homepage = "https://github.com/wvhulle/journald-notify-nu";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.wvhulle ];
     platforms = lib.platforms.linux;
     mainProgram = "journald-notify-nu";
   };
-}
+})

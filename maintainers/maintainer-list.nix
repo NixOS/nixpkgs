@@ -26951,12 +26951,6 @@
     githubId = 93639059;
     name = "wattmto";
   };
-  wvhulle = {
-    email = "wvanhulle@gmail.com";
-    github = "wvhulle";
-    githubId = 7688680;
-    name = "William Van Hulle";
-  };
   waynr = {
     name = "Wayne Warren";
     email = "wayne.warren.s@gmail.com";
@@ -27422,6 +27416,12 @@
     email = "wuyoli@tilde.team";
     github = "wuyoli";
     githubId = 104238274;
+  };
+  wvhulle = {
+    email = "wvanhulle@gmail.com";
+    github = "wvhulle";
+    githubId = 7688680;
+    name = "William Van Hulle";
   };
   wykurz = {
     email = "wykurz@gmail.com";
