@@ -144,7 +144,7 @@ in
           PrivateTmp = true;
           ProtectProc = "invisible";
           ProtectClock = true;
-          ProcSubset = "pid";
+          ProcSubset = "all";
           PrivateUsers = true;
           PrivateDevices = true;
           ProtectHostname = true;
