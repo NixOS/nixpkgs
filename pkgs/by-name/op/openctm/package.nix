@@ -29,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libglut
     libGLU
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''

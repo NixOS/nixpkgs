@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       X11 tool xev.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rewine ];
     platforms = platforms.linux;
     mainProgram = "wev";
   };

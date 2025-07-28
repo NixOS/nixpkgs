@@ -73,7 +73,8 @@ rec {
 
         meta = {
           sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        } // meta;
+        }
+        // meta;
       }
       // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
     );
@@ -121,6 +122,7 @@ rec {
         xorg.xrandr
         which
         perl
+        xdg-user-dirs # flutter desktop apps
         xdg-utils
         iana-etc
         krb5

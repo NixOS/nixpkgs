@@ -224,32 +224,31 @@ in
 
         restartTriggers = lib.optional (!cfg.mutableConfig) [ printerConfig ];
 
-        serviceConfig =
-          {
-            ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${cfg.configDir}/printer.cfg";
-            RuntimeDirectory = "klipper";
-            StateDirectory = "klipper";
-            SupplementaryGroups = [ "dialout" ];
-            WorkingDirectory = "${cfg.package}/lib";
-            OOMScoreAdjust = "-999";
-            CPUSchedulingPolicy = "rr";
-            CPUSchedulingPriority = 99;
-            IOSchedulingClass = "realtime";
-            IOSchedulingPriority = 0;
-            UMask = "0002";
-          }
-          // (
-            if cfg.user != null then
-              {
-                Group = cfg.group;
-                User = cfg.user;
-              }
-            else
-              {
-                DynamicUser = true;
-                User = "klipper";
-              }
-          );
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${cfg.configDir}/printer.cfg";
+          RuntimeDirectory = "klipper";
+          StateDirectory = "klipper";
+          SupplementaryGroups = [ "dialout" ];
+          WorkingDirectory = "${cfg.package}/lib";
+          OOMScoreAdjust = "-999";
+          CPUSchedulingPolicy = "rr";
+          CPUSchedulingPriority = 99;
+          IOSchedulingClass = "realtime";
+          IOSchedulingPriority = 0;
+          UMask = "0002";
+        }
+        // (
+          if cfg.user != null then
+            {
+              Group = cfg.group;
+              User = cfg.user;
+            }
+          else
+            {
+              DynamicUser = true;
+              User = "klipper";
+            }
+        );
       };
 
     environment.systemPackages =

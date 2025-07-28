@@ -33,8 +33,8 @@ buildGoModule rec {
         src
         sourceRoot
         ;
-      hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
       fetcherVersion = 1;
+      hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
     };
 
     nativeBuildInputs = [

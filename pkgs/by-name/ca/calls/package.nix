@@ -52,23 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      desktop-file-utils
-      appstream-glib
-      vala
-      wrapGAppsHook4
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      docutils
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    appstream-glib
+    vala
+    wrapGAppsHook4
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    docutils
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     modemmanager

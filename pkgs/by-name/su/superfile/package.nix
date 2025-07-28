@@ -6,7 +6,7 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "1.3.1";
+  version = "1.3.2";
   tag = "v${version}";
 in
 buildGoModule {
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "yorukot";
     repo = "superfile";
     inherit tag;
-    hash = "sha256-GlPePeINZ6KL3RRqfQQFYsEdd+70bRJcMqMVnUmgo/I=";
+    hash = "sha256-IzdaOJcwi7+8d8QpTLPJwEhffEz4h0Rdv7APOMcnTHw=";
   };
 
-  vendorHash = "sha256-ArsB0B67ymuzxTXfaUuWiRrgVCrZhmGMbJUl2u+thUw=";
+  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
 
   ldflags = [
     "-s"

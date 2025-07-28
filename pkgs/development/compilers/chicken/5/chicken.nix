@@ -41,31 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
-  makeFlags =
-    [
-      "PLATFORM=${platform}"
-      "PREFIX=$(out)"
-      "C_COMPILER=$(CC)"
-      "CXX_COMPILER=$(CXX)"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
-      "LINKER_OPTIONS=-headerpad_max_install_names"
-      "POSTINSTALL_PROGRAM=install_name_tool"
-    ])
-    ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "HOSTSYSTEM=${stdenv.hostPlatform.config}"
-      "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-      "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
-    ]);
+  makeFlags = [
+    "PLATFORM=${platform}"
+    "PREFIX=$(out)"
+    "C_COMPILER=$(CC)"
+    "CXX_COMPILER=$(CXX)"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+    "LINKER_OPTIONS=-headerpad_max_install_names"
+    "POSTINSTALL_PROGRAM=install_name_tool"
+  ])
+  ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "HOSTSYSTEM=${stdenv.hostPlatform.config}"
+    "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
+  ]);
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   buildInputs = lib.optionals (bootstrap-chicken != null) [
     bootstrap-chicken

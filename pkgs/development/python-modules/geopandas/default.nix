@@ -83,7 +83,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   preCheck = ''
     export HOME=$(mktemp -d);

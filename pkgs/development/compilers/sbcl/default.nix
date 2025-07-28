@@ -83,22 +83,21 @@ stdenv.mkDerivation (self: {
     inherit (versionMap.${version}) sha256;
   };
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    texinfo
+  ]
+  ++ lib.optionals self.doCheck (
     [
-      texinfo
+      which
+      writableTmpDirAsHomeHook
     ]
-    ++ lib.optionals self.doCheck (
-      [
-        which
-        writableTmpDirAsHomeHook
-      ]
-      ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
-        strace
-      ]
-      ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
-        ps
-      ]
-    );
+    ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
+      strace
+    ]
+    ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
+      ps
+    ]
+  );
   buildInputs = lib.optionals self.coreCompression (
     # Declare at the point of actual use in case the caller wants to override
     # buildInputs to sidestep this.
@@ -215,16 +214,15 @@ stdenv.mkDerivation (self: {
       "compact-instance-header"
     ];
 
-  buildArgs =
-    [
-      "--prefix=$out"
-      "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
-    ]
-    ++ builtins.map (x: "--with-${x}") self.enableFeatures
-    ++ builtins.map (x: "--without-${x}") self.disableFeatures
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
-      "--arch=arm64"
-    ];
+  buildArgs = [
+    "--prefix=$out"
+    "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
+  ]
+  ++ builtins.map (x: "--with-${x}") self.enableFeatures
+  ++ builtins.map (x: "--without-${x}") self.disableFeatures
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    "--arch=arm64"
+  ];
 
   # Fails to find `O_LARGEFILE` otherwise.
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
@@ -254,25 +252,24 @@ stdenv.mkDerivation (self: {
     runHook postCheck
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      sh install.sh
+    sh install.sh
 
-    ''
-    + lib.optionalString (!self.purgeNixReferences) ''
-      cp -r src $out/lib/sbcl
-      cp -r contrib $out/lib/sbcl
-      cat >$out/lib/sbcl/sbclrc <<EOF
-       (setf (logical-pathname-translations "SYS")
-         '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
-           ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
-      EOF
-    ''
-    + ''
-      runHook postInstall
-    '';
+  ''
+  + lib.optionalString (!self.purgeNixReferences) ''
+    cp -r src $out/lib/sbcl
+    cp -r contrib $out/lib/sbcl
+    cat >$out/lib/sbcl/sbclrc <<EOF
+     (setf (logical-pathname-translations "SYS")
+       '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
+         ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
+    EOF
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   setupHook = lib.optional self.purgeNixReferences (
     writeText "setupHook.sh" ''

@@ -33,29 +33,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4zeBTi1WBy9tXowsehUo4qou6bhznWPeCXFg+R3akho=";
+    hash = "sha256-FSMQv2443oPQjMSv68ppfI2ZTUG79b+GcXmHNAmjPZk=";
   };
 
-  cargoHash = "sha256-c16qw2khbMXTA8IbYQnMKqivO63DwyAWKfV2P1aD7dU=";
+  cargoHash = "sha256-Qjsn3U9KZr5qZliJ/vbudfkH1uOng1N5c8dAyH+Y5vQ=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isLinux openssl
-    ++ lib.optional (withALSA || withRodio) alsa-lib
-    ++ lib.optional withClipboard libxcb
-    ++ lib.optional withCover ueberzug
-    ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional withNcurses ncurses
-    ++ lib.optional withPortAudio portaudio
-    ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux openssl
+  ++ lib.optional (withALSA || withRodio) alsa-lib
+  ++ lib.optional withClipboard libxcb
+  ++ lib.optional withCover ueberzug
+  ++ lib.optional (withMPRIS || withNotify) dbus
+  ++ lib.optional withNcurses ncurses
+  ++ lib.optional withPortAudio portaudio
+  ++ lib.optional withPulseAudio libpulseaudio;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 

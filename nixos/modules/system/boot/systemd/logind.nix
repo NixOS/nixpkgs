@@ -167,26 +167,25 @@ in
   };
 
   config = {
-    systemd.additionalUpstreamSystemUnits =
-      [
-        "systemd-logind.service"
-        "autovt@.service"
-        "systemd-user-sessions.service"
-      ]
-      ++ lib.optionals config.systemd.package.withImportd [
-        "dbus-org.freedesktop.import1.service"
-      ]
-      ++ lib.optionals config.systemd.package.withMachined [
-        "dbus-org.freedesktop.machine1.service"
-      ]
-      ++ lib.optionals config.systemd.package.withPortabled [
-        "dbus-org.freedesktop.portable1.service"
-      ]
-      ++ [
-        "dbus-org.freedesktop.login1.service"
-        "user@.service"
-        "user-runtime-dir@.service"
-      ];
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-logind.service"
+      "autovt@.service"
+      "systemd-user-sessions.service"
+    ]
+    ++ lib.optionals config.systemd.package.withImportd [
+      "dbus-org.freedesktop.import1.service"
+    ]
+    ++ lib.optionals config.systemd.package.withMachined [
+      "dbus-org.freedesktop.machine1.service"
+    ]
+    ++ lib.optionals config.systemd.package.withPortabled [
+      "dbus-org.freedesktop.portable1.service"
+    ]
+    ++ [
+      "dbus-org.freedesktop.login1.service"
+      "user@.service"
+      "user-runtime-dir@.service"
+    ];
 
     environment.etc = {
       "systemd/logind.conf".text = ''

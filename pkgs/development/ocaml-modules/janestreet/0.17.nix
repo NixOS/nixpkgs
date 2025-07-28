@@ -951,7 +951,7 @@ with self;
   ocaml_openapi_generator = janePackage {
     pname = "ocaml_openapi_generator";
     hash = "sha256-HCq9fylcVjBMs8L6E860nw+EonWEQadlyEKpQI6mynU=";
-    meta.description = " An OpenAPI 3 to OCaml client generator";
+    meta.description = "OpenAPI 3 to OCaml client generator";
     buildInputs = [
       async
       core

@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchurl,
+  fetchzip,
   libX11,
   libXt,
   autoreconfHook,
+  quilt,
 
   libjpeg ? null,
   libpng ? null,
@@ -20,38 +22,44 @@ assert withPngSupport -> libpng != null;
 assert withTiffSupport -> libtiff != null;
 
 let
+  version = "4.1";
   deb_patch = "25";
+  debian_patches = fetchzip {
+    url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${version}-${deb_patch}.debian.tar.xz";
+    hash = "sha256-5FbkiYjI8ASUyi1DTFiAcJ9y2z1sEKrNNyKoqnca30I=";
+  };
 in
 stdenv.mkDerivation rec {
-  version = "4.1";
   pname = "xloadimage";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${version}.orig.tar.gz";
     sha256 = "1i7miyvk5ydhi6yi8593vapavhwxcwciir8wg9d2dcyg9pccf2s0";
   };
 
-  patches = fetchurl {
-    url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${version}-${deb_patch}.debian.tar.xz";
-    sha256 = "17k518vrdrya5c9dqhpmm4g0h2vlkq1iy87sg2ngzygypbli1xvn";
-  };
+  postPatch = ''
+    QUILT_PATCHES=${debian_patches}/patches quilt push -a
+  '';
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    quilt
+  ];
 
-  buildInputs =
-    [
-      libX11
-      libXt
-    ]
-    ++ lib.optionals withJpegSupport [
-      libjpeg
-    ]
-    ++ lib.optionals withPngSupport [
-      libpng
-    ]
-    ++ lib.optionals withTiffSupport [
-      libtiff
-    ];
+  buildInputs = [
+    libX11
+    libXt
+  ]
+  ++ lib.optionals withJpegSupport [
+    libjpeg
+  ]
+  ++ lib.optionals withPngSupport [
+    libpng
+  ]
+  ++ lib.optionals withTiffSupport [
+    libtiff
+  ];
 
   # NOTE: we patch the build-info script so that it never detects the utilities
   # it's trying to find; one of the Debian patches adds support for

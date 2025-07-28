@@ -32,7 +32,8 @@ buildPythonPackage rec {
   dependencies = [
     jaconv
     deprecated
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [
     py-cpuinfo

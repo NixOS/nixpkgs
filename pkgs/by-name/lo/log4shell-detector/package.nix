@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "log4shell-detector";
-  version = "unstable-2021-12-16";
+  version = "0-unstable-2021-12-16";
   format = "pyproject";
 
   src = fetchFromGitHub {

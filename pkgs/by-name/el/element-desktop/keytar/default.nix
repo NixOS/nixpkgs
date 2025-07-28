@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     npmHooks.npmConfigHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 

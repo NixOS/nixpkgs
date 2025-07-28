@@ -56,46 +56,44 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.gtk4
   ];
 
-  buildInputs =
-    [
-      gcr_4
-      gdk-pixbuf
-      glib
-      glib-networking
-      gnome-desktop
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gstreamer
-      gtk4
-      icu
-      isocodes
-      json-glib
-      libadwaita
-      libportal-gtk4
-      libarchive
-      libsecret
-      libsoup_3
-      libxml2
-      nettle
-      p11-kit
-      sqlite
-      webkitgtk_6_0
-    ]
-    ++ lib.optionals withPantheon [
-      pantheon.granite7
-    ];
+  buildInputs = [
+    gcr_4
+    gdk-pixbuf
+    glib
+    glib-networking
+    gnome-desktop
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gstreamer
+    gtk4
+    icu
+    isocodes
+    json-glib
+    libadwaita
+    libportal-gtk4
+    libarchive
+    libsecret
+    libsoup_3
+    libxml2
+    nettle
+    p11-kit
+    sqlite
+    webkitgtk_6_0
+  ]
+  ++ lib.optionals withPantheon [
+    pantheon.granite7
+  ];
 
   # Tests need an X display
-  mesonFlags =
-    [
-      "-Dunit_tests=disabled"
-    ]
-    ++ lib.optionals withPantheon [
-      "-Dgranite=enabled"
-    ];
+  mesonFlags = [
+    "-Dunit_tests=disabled"
+  ]
+  ++ lib.optionals withPantheon [
+    "-Dgranite=enabled"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

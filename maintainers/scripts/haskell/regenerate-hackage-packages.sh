@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable git nixfmt-rfc-style -I nixpkgs=.
+#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable git -I nixpkgs=.
 
 set -euo pipefail
 

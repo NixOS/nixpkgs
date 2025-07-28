@@ -116,68 +116,67 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  buildInputs =
-    [
-      dbus
-      ffmpeg
-      fftwFloat
-      glib
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      libebur128
-      libjack2
-      libmysofa
-      libopus
-      libpulseaudio
-      libusb1
-      libsndfile
-      lilv
-      ncurses
-      readline
-    ]
-    ++ (
-      if enableSystemd then
-        [ systemd ]
-      else if stdenv.hostPlatform.isLinux then
-        [
-          elogind
-          udev
-        ]
-      else
-        [ ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      libinotify-kqueue
-      epoll-shim
-      freebsd.libstdthreads
-    ]
-    ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
-    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optional ldacbtSupport ldacbt
-    ++ lib.optional libcameraSupport libcamera
-    ++ lib.optional zeroconfSupport avahi
-    ++ lib.optional raopSupport openssl
-    ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals vulkanSupport [
-      libdrm
-      vulkan-headers
-      vulkan-loader
-    ]
-    ++ lib.optionals x11Support [
-      libcanberra
-      xorg.libX11
-      xorg.libXfixes
-    ]
-    ++ lib.optionals bluezSupport [
-      bluez
-      libfreeaptx
-      liblc3
-      sbc
-      fdk_aac
-    ]
-    ++ lib.optional ffadoSupport ffado
-    ++ lib.optional stdenv.hostPlatform.isLinux libselinux
-    ++ lib.optional modemmanagerSupport modemmanager;
+  buildInputs = [
+    dbus
+    ffmpeg
+    fftwFloat
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libebur128
+    libjack2
+    libmysofa
+    libopus
+    libpulseaudio
+    libusb1
+    libsndfile
+    lilv
+    ncurses
+    readline
+  ]
+  ++ (
+    if enableSystemd then
+      [ systemd ]
+    else if stdenv.hostPlatform.isLinux then
+      [
+        elogind
+        udev
+      ]
+    else
+      [ ]
+  )
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    libinotify-kqueue
+    epoll-shim
+    freebsd.libstdthreads
+  ]
+  ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optional ldacbtSupport ldacbt
+  ++ lib.optional libcameraSupport libcamera
+  ++ lib.optional zeroconfSupport avahi
+  ++ lib.optional raopSupport openssl
+  ++ lib.optional rocSupport roc-toolkit
+  ++ lib.optionals vulkanSupport [
+    libdrm
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optionals x11Support [
+    libcanberra
+    xorg.libX11
+    xorg.libXfixes
+  ]
+  ++ lib.optionals bluezSupport [
+    bluez
+    libfreeaptx
+    liblc3
+    sbc
+    fdk_aac
+  ]
+  ++ lib.optional ffadoSupport ffado
+  ++ lib.optional stdenv.hostPlatform.isLinux libselinux
+  ++ lib.optional modemmanagerSupport modemmanager;
 
   # Valgrind binary is required for running one optional test.
   nativeCheckInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform valgrind) valgrind;

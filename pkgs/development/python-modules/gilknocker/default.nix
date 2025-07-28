@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-rerunfailures
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   meta = {
     description = "Knock on the Python GIL, determine how busy it is";

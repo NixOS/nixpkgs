@@ -31,26 +31,25 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/Makefile.in --replace 04755 0755
   '';
 
-  configureFlags =
-    [
-      "--with-env-editor"
-      "--with-editor=/run/current-system/sw/bin/nano"
-      "--with-rundir=/run/sudo"
-      "--with-vardir=/var/db/sudo"
-      "--with-logpath=/var/log/sudo.log"
-      "--with-iologdir=/var/log/sudo-io"
-      "--with-sendmail=${sendmailPath}"
-      "--enable-tmpfiles.d=no"
-      "--with-passprompt=[sudo] password for %p: " # intentional trailing space
-    ]
-    ++ lib.optionals withInsults [
-      "--with-insults"
-      "--with-all-insults"
-    ]
-    ++ lib.optionals withSssd [
-      "--with-sssd"
-      "--with-sssd-lib=${sssd}/lib"
-    ];
+  configureFlags = [
+    "--with-env-editor"
+    "--with-editor=/run/current-system/sw/bin/nano"
+    "--with-rundir=/run/sudo"
+    "--with-vardir=/var/db/sudo"
+    "--with-logpath=/var/log/sudo.log"
+    "--with-iologdir=/var/log/sudo-io"
+    "--with-sendmail=${sendmailPath}"
+    "--enable-tmpfiles.d=no"
+    "--with-passprompt=[sudo] password for %p: " # intentional trailing space
+  ]
+  ++ lib.optionals withInsults [
+    "--with-insults"
+    "--with-all-insults"
+  ]
+  ++ lib.optionals withSssd [
+    "--with-sssd"
+    "--with-sssd-lib=${sssd}/lib"
+  ];
 
   postConfigure = ''
     cat >> pathnames.h <<'EOF'

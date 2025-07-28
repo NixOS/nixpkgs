@@ -36,43 +36,42 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      pkg-config
-      scdoc
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin makeWrapper
-    ++ lib.optional waylandSupport wayland-scanner;
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeWrapper
+  ++ lib.optional waylandSupport wayland-scanner;
 
-  buildInputs =
-    [
-      cairo
-      fribidi
-      harfbuzz
-      libxkbcommon
-      pango
-    ]
-    ++ lib.optional ncursesSupport ncurses
-    ++ lib.optionals waylandSupport [
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals x11Support [
-      xorg.libX11
-      xorg.libXinerama
-      xorg.libXft
-      xorg.libXdmcp
-      xorg.libpthreadstubs
-      xorg.libxcb
-    ];
+  buildInputs = [
+    cairo
+    fribidi
+    harfbuzz
+    libxkbcommon
+    pango
+  ]
+  ++ lib.optional ncursesSupport ncurses
+  ++ lib.optionals waylandSupport [
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals x11Support [
+    xorg.libX11
+    xorg.libXinerama
+    xorg.libXft
+    xorg.libXdmcp
+    xorg.libpthreadstubs
+    xorg.libxcb
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags =
-    [ "clients" ]
-    ++ lib.optional ncursesSupport "curses"
-    ++ lib.optional waylandSupport "wayland"
-    ++ lib.optional x11Support "x11";
+  buildFlags = [
+    "clients"
+  ]
+  ++ lib.optional ncursesSupport "curses"
+  ++ lib.optional waylandSupport "wayland"
+  ++ lib.optional x11Support "x11";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     so="$(find "$out/lib" -name "libbemenu.so.[0-9]" -print -quit)"

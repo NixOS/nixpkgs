@@ -163,6 +163,8 @@ Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automaticall
 
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
 
+To use a temporary Tor instance as a proxy for fetching from `.onion` addresses, add `nativeBuildInputs = [ tor.proxyHook ];` to the fetcher parameters.
+
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 

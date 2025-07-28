@@ -35,16 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    [
-      glib
-      libsndfile
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-    ];
+  buildInputs = [
+    glib
+    libsndfile
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+  ];
 
   cmakeFlags = [
     "-Denable-framework=off"

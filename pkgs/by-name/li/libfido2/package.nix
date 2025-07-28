@@ -30,14 +30,13 @@ stdenv.mkDerivation rec {
     udevCheckHook
   ];
 
-  buildInputs =
-    [
-      libcbor
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hidapi ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [ pcsclite ];
+  buildInputs = [
+    libcbor
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ hidapi ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [ pcsclite ];
 
   propagatedBuildInputs = [ openssl ];
 
@@ -49,20 +48,19 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  cmakeFlags =
-    [
-      "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DUSE_HIDAPI=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DNFC_LINUX=1"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [
-      "-DUSE_PCSC=1"
-    ];
+  cmakeFlags = [
+    "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DUSE_HIDAPI=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DNFC_LINUX=1"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [
+    "-DUSE_PCSC=1"
+  ];
 
   # causes possible redefinition of _FORTIFY_SOURCE?
   hardeningDisable = [ "fortify3" ];

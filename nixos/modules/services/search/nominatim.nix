@@ -216,7 +216,8 @@ in
         environment = {
           NOMINATIM_DATABASE_DSN = nominatimSuperUserDsn;
           NOMINATIM_DATABASE_WEBUSER = cfg.database.apiUser;
-        } // cfg.settings;
+        }
+        // cfg.settings;
       };
 
       # Web API service
@@ -259,7 +260,8 @@ in
             ];
           NOMINATIM_DATABASE_DSN = nominatimApiDsn;
           NOMINATIM_DATABASE_WEBUSER = cfg.database.apiUser;
-        } // cfg.settings;
+        }
+        // cfg.settings;
       };
 
       systemd.sockets.nominatim = {

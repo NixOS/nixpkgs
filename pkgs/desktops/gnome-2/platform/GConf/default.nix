@@ -29,14 +29,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs =
-    [
-      ORBit2
-      libxml2
-    ]
-    # polkit requires pam, which requires shadow.h, which is not available on
-    # darwin
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) polkit;
+  buildInputs = [
+    ORBit2
+    libxml2
+  ]
+  # polkit requires pam, which requires shadow.h, which is not available on
+  # darwin
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) polkit;
 
   propagatedBuildInputs = [
     glib

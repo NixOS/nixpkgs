@@ -30,40 +30,38 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      perl
-      openldap
-      db
-      cyrus_sasl
-      expat
-      libxml2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      pam
-      systemd
-    ];
+  buildInputs = [
+    perl
+    openldap
+    db
+    cyrus_sasl
+    expat
+    libxml2
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    pam
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--disable-strict-error-checking"
-      "--disable-arch-native"
-      "--with-openssl"
-      "--enable-ssl-crtd"
-      "--enable-storeio=ufs,aufs,diskd,rock"
-      "--enable-removal-policies=lru,heap"
-      "--enable-delay-pools"
-      "--enable-x-accelerator-vary"
-      "--enable-htcp"
-    ]
-    ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
-    ++ lib.optional (
-      stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
-    ) "--enable-linux-netfilter";
+  configureFlags = [
+    "--disable-strict-error-checking"
+    "--disable-arch-native"
+    "--with-openssl"
+    "--enable-ssl-crtd"
+    "--enable-storeio=ufs,aufs,diskd,rock"
+    "--enable-removal-policies=lru,heap"
+    "--enable-delay-pools"
+    "--enable-x-accelerator-vary"
+    "--enable-htcp"
+  ]
+  ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
+  ++ lib.optional (
+    stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
+  ) "--enable-linux-netfilter";
 
   doCheck = true;
   nativeCheckInputs = [ cppunit ];

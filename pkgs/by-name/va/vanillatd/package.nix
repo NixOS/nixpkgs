@@ -51,19 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
     openal
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_VANILLATD" (appName == "vanillatd"))

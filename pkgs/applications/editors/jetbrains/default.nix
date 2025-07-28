@@ -327,20 +327,19 @@ rec {
   rider =
     (mkJetBrainsProduct {
       pname = "rider";
-      extraBuildInputs =
-        [
-          fontconfig
-          stdenv.cc.cc
-          openssl
-          libxcrypt
-          lttng-ust_2_12
-          musl
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-          expat
-          libxml2
-          xz
-        ];
+      extraBuildInputs = [
+        fontconfig
+        stdenv.cc.cc
+        openssl
+        libxcrypt
+        lttng-ust_2_12
+        musl
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        expat
+        libxml2
+        xz
+      ];
       extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
         # Avalonia dependencies needed for dotMemory
         libICE
@@ -431,8 +430,6 @@ rec {
     ];
   };
 
-  plugins = callPackage ./plugins { } // {
-    __attrsFailEvaluation = true;
-  };
+  plugins = callPackage ./plugins { };
 
 }

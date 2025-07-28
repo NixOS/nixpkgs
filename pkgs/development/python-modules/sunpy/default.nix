@@ -84,18 +84,17 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      hypothesis
-      pytest-astropy
-      pytest-mock
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.asdf
-    ++ optional-dependencies.database
-    ++ optional-dependencies.image
-    ++ optional-dependencies.net
-    ++ optional-dependencies.timeseries;
+  nativeCheckInputs = [
+    hypothesis
+    pytest-astropy
+    pytest-mock
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.asdf
+  ++ optional-dependencies.database
+  ++ optional-dependencies.image
+  ++ optional-dependencies.net
+  ++ optional-dependencies.timeseries;
 
   postPatch = ''
     substituteInPlace setup.cfg \

@@ -43,7 +43,8 @@ stdenv.mkDerivation {
     gtk3
     ibus
     python3
-  ] ++ pythonModules;
+  ]
+  ++ pythonModules;
 
   nativeBuildInputs = [
     autoreconfHook

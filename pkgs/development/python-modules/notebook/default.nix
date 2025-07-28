@@ -42,14 +42,13 @@ buildPythonPackage rec {
       --replace-fail "timeout = 300" ""
   '';
 
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn-berry_3.yarnBerryConfigHook
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      distutils
-    ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    distutils
+  ];
 
   missingHashes = ./missing-hashes.json;
 

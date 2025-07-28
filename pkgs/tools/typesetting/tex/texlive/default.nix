@@ -43,7 +43,7 @@
   makeFontsConf,
   useFixedHashes ? true,
   recurseIntoAttrs,
-  nixfmt-rfc-style,
+  nixfmt,
 }:
 let
   stdenv = gcc12Stdenv;
@@ -151,7 +151,7 @@ let
         tl2nix = ./tl2nix.sed;
       }
       ''
-        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt-rfc-style} > "$out"
+        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt} > "$out"
       '';
 
   # map: name -> fixed-output hash

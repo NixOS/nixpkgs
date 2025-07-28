@@ -39,13 +39,12 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "--version";
 
   meta = {

@@ -103,20 +103,18 @@
             );
             requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
-            requires =
-              [
-                config.boot.initrd.systemd.services.initrd-find-etc.name
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                config.boot.initrd.systemd.services."rw-etc".name
-              ];
-            after =
-              [
-                config.boot.initrd.systemd.services.initrd-find-etc.name
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                config.boot.initrd.systemd.services."rw-etc".name
-              ];
+            requires = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ]
+            ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
+            after = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ]
+            ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
             unitConfig = {
               RequiresMountsFor = [
                 "/sysroot/nix/store"

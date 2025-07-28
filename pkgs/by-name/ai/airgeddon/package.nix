@@ -58,60 +58,59 @@
   supportX11 ? false, # Allow using xterm instead of tmux, hard to test
 }:
 let
-  deps =
-    [
-      aircrack-ng
-      bash
-      coreutils-full
-      curl
-      gawk
-      glibc
-      gnugrep
-      gnused
-      iproute2
-      iw
-      networkmanager
-      ncurses
-      pciutils
-      procps
-      tmux
-      usbutils
-      wget
-      ethtool
-      util-linux
-      ccze
-      systemd
-    ]
-    ++ lib.optionals supportWpaWps [
-      bully
-      pixiewps
-      reaverwps-t6x
-    ]
-    ++ lib.optionals supportHashCracking [
-      asleap
-      crunch
-      hashcat
-      hcxdumptool
-      hcxtools
-      john
-      wireshark-cli
-    ]
-    ++ lib.optionals supportEvilTwin [
-      bettercap
-      dnsmasq
-      ettercap
-      hostapd
-      lighttpd
-      openssl
-      mdk4
-      nftables
-      apparmor-bin-utils
-    ]
-    ++ lib.optionals supportX11 [
-      xterm
-      xorg.xset
-      xorg.xdpyinfo
-    ];
+  deps = [
+    aircrack-ng
+    bash
+    coreutils-full
+    curl
+    gawk
+    glibc
+    gnugrep
+    gnused
+    iproute2
+    iw
+    networkmanager
+    ncurses
+    pciutils
+    procps
+    tmux
+    usbutils
+    wget
+    ethtool
+    util-linux
+    ccze
+    systemd
+  ]
+  ++ lib.optionals supportWpaWps [
+    bully
+    pixiewps
+    reaverwps-t6x
+  ]
+  ++ lib.optionals supportHashCracking [
+    asleap
+    crunch
+    hashcat
+    hcxdumptool
+    hcxtools
+    john
+    wireshark-cli
+  ]
+  ++ lib.optionals supportEvilTwin [
+    bettercap
+    dnsmasq
+    ettercap
+    hostapd
+    lighttpd
+    openssl
+    mdk4
+    nftables
+    apparmor-bin-utils
+  ]
+  ++ lib.optionals supportX11 [
+    xterm
+    xorg.xset
+    xorg.xdpyinfo
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "airgeddon";

@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-oRcqaXWa/eh5QQtTk0NQr90aL/Q0zgxQbPIoMLMtHe8=";
 
   nativeBuildInputs = [ installShellFiles ];

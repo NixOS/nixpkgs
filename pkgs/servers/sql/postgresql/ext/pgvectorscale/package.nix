@@ -20,7 +20,6 @@ buildPgrxExtension (finalAttrs: {
 
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CeRyDn9VhxfjWFJ1/Z/XvOUQOSnDoHHZAqgfYTeKU0o=";
   cargoPatches = [
     ./add-Cargo.lock.patch

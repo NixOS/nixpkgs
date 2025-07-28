@@ -68,14 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "Release";
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
-      (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
-    ]
-    ++ lib.optionals enableVST2 [
-      (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst2-sdk}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
+    (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
+  ]
+  ++ lib.optionals enableVST2 [
+    (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst2-sdk}")
+  ];
 
   strictDeps = true;
 
@@ -87,45 +86,44 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      # library & headers
-      (python3.withPackages (
-        ps: with ps; [
-          pybind11
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-      libXScrnSaver
-      curl
-      gtk3
-      webkitgtk_4_1
-      freetype
-      libGL
-      libusb1
-      alsa-lib
-      libjack2
-      zenity
-      alsa-tools
-      libxcb
-      xcbutil
-      libxkbcommon
-      xcbutilkeysyms
-      xcb-util-cursor
-      pcre
-      mount
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    jsoncpp
+    # library & headers
+    (python3.withPackages (
+      ps: with ps; [
+        pybind11
+      ]
+    ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    libXScrnSaver
+    curl
+    gtk3
+    webkitgtk_4_1
+    freetype
+    libGL
+    libusb1
+    alsa-lib
+    libjack2
+    zenity
+    alsa-tools
+    libxcb
+    xcbutil
+    libxkbcommon
+    xcbutilkeysyms
+    xcb-util-cursor
+    pcre
+    mount
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+  ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then

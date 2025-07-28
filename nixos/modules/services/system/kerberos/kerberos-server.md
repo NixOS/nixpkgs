@@ -24,13 +24,21 @@ To enable a Kerberos server:
         admin_server = "kerberos.example.com";
       };
     };
-  }
+  };
 
   services.kerberos-server = {
     enable = true;
     settings = {
       realms."EXAMPLE.COM" = {
-        acl = [{ principal = "adminuser"; access=  ["add" "cpw"]; }];
+        acl = [
+          {
+            principal = "adminuser";
+            access = [
+              "add"
+              "cpw"
+            ];
+          }
+        ];
       };
     };
   };

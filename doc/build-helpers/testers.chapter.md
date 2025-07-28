@@ -15,9 +15,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 ```nix
 {
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta.pkgConfigModules = [ "libfoo" ];
 }
@@ -74,9 +72,7 @@ If you have a static site that can be built with Nix, you can use `lycheeLinkChe
 # Check hyperlinks in the `nix` documentation
 
 ```nix
-testers.lycheeLinkCheck {
-  site = nix.doc + "/share/doc/nix/manual";
-}
+testers.lycheeLinkCheck { site = nix.doc + "/share/doc/nix/manual"; }
 ```
 
 :::
@@ -269,9 +265,7 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-{
-  passthru.tests.version = testers.testVersion { package = hello; };
-}
+{ passthru.tests.version = testers.testVersion { package = hello; }; }
 ```
 
 :::

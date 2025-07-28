@@ -37,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     libev
     nghttp3
     quictls
-  ] ++ lib.optional withJemalloc jemalloc;
+  ]
+  ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC_LIB" false)

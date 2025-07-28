@@ -593,10 +593,7 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [
-      akhilmhdh
-      mahyarmirrashed
-    ];
+    members = [ akhilmhdh ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };
@@ -1256,7 +1253,6 @@ with lib.maintainers;
   wdz = {
     members = [
       n0emis
-      vidister
       johannwagner
       yuka
     ];

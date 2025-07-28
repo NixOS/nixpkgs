@@ -31,7 +31,8 @@ buildPythonPackage rec {
   build-system = [
     cython
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   # required for build time dependency check
   nativeBuildInputs = [

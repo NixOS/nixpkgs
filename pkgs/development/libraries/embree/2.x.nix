@@ -7,7 +7,7 @@
   ispc,
   tbb_2020,
   glfw,
-  openimageio_2,
+  openimageio,
   libjpeg,
   libpng,
   libpthreadstubs,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     # tbb_2021 is not backward compatible
     tbb_2020
     glfw
-    openimageio_2
+    openimageio
     libjpeg
     libpng
     libX11

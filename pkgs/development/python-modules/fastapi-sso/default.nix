@@ -38,7 +38,8 @@ buildPythonPackage rec {
     oauthlib
     pydantic
     pyjwt
-  ] ++ pydantic.optional-dependencies.email;
+  ]
+  ++ pydantic.optional-dependencies.email;
 
   nativeCheckInputs = [
     email-validator

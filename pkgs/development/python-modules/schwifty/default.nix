@@ -42,7 +42,8 @@ buildPythonPackage rec {
     iso3166
     pycountry
     rstr
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     pydantic = [ pydantic ];
@@ -50,7 +51,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "schwifty" ];
 

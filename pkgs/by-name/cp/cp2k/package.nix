@@ -84,47 +84,47 @@ stdenv.mkDerivation rec {
     which
     makeWrapper
     pkg-config
-  ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ]
+  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
-  buildInputs =
-    [
-      gfortran
-      fftw
-      gsl
-      libint
-      libvori
-      libxc
-      dftd4
-      mctc-lib
-      mstore
-      multicharge
-      libxsmm
-      mpi
-      spglib
-      scalapack
-      blas
-      lapack
-      plumed
-      zlib
-      hdf5-fortran
-      sirius
-      spla
-      spfft
-      libvdwxc
-    ]
-    ++ lib.optional enableElpa elpa
-    ++ lib.optionals (gpuBackend == "cuda") [
-      cudaPackages.cuda_cudart
-      cudaPackages.libcublas
-      cudaPackages.cuda_nvrtc
-    ]
-    ++ lib.optionals (gpuBackend == "rocm") [
-      rocmPackages.clr
-      rocmPackages.rocm-core
-      rocmPackages.hipblas
-      rocmPackages.hipfft
-      rocmPackages.rocblas
-    ];
+  buildInputs = [
+    gfortran
+    fftw
+    gsl
+    libint
+    libvori
+    libxc
+    dftd4
+    mctc-lib
+    mstore
+    multicharge
+    libxsmm
+    mpi
+    spglib
+    scalapack
+    blas
+    lapack
+    plumed
+    zlib
+    hdf5-fortran
+    sirius
+    spla
+    spfft
+    libvdwxc
+  ]
+  ++ lib.optional enableElpa elpa
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvrtc
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocm-core
+    rocmPackages.hipblas
+    rocmPackages.hipfft
+    rocmPackages.rocblas
+  ];
 
   propagatedBuildInputs = [ (lib.getBin mpi) ];
   propagatedUserEnvPkgs = [ mpi ];

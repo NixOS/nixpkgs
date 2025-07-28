@@ -30,7 +30,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-  ] ++ optional-dependencies.images;
+  ]
+  ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 

@@ -44,7 +44,8 @@ let
   staticBuildInputs = [
     boost
     zlib
-  ] ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+  ]
+  ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
@@ -129,19 +130,18 @@ stdenv.mkDerivation rec {
   # load ("Status: Available" or "Status: Failed to load dynamic library...").
   dontPatchELF = true;
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 bin/linux/release/xtractor -t $out/bin
-      install -Dm755 bin/linux/release/zxtune123 -t $out/bin
-    ''
-    + lib.optionalString withQt ''
-      install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
-      install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 bin/linux/release/xtractor -t $out/bin
+    install -Dm755 bin/linux/release/zxtune123 -t $out/bin
+  ''
+  + lib.optionalString withQt ''
+    install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   # Only wrap the gui
   dontWrapQtApps = true;

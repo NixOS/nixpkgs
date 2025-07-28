@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "pyenphase";
     repo = "pyenphase";
     tag = "v${version}";
-    hash = "sha256-rIGPkeEh36Au2F+zx/4vR79212BWMdnG5yz+vJ2sxfU=";
+    hash = "sha256-1RF1U4hMsGRa2OJJY2Plvuow3P+R7wbwd4ouo7QQ4n0=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];

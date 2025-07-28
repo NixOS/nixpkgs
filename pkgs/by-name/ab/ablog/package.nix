@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    description = "ABlog for blogging with Sphinx";
+    description = "Sphinx extension that converts any documentation or personal website project into a full-fledged blog";
     mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
     license = lib.licenses.mit;

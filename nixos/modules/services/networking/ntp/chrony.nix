@@ -36,16 +36,15 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags =
-    [
-      "-n"
-      "-u"
-      "chrony"
-      "-f"
-      "${configFile}"
-    ]
-    ++ optional cfg.enableMemoryLocking "-m"
-    ++ cfg.extraFlags;
+  chronyFlags = [
+    "-n"
+    "-u"
+    "chrony"
+    "-f"
+    "${configFile}"
+  ]
+  ++ optional cfg.enableMemoryLocking "-m"
+  ++ cfg.extraFlags;
 in
 {
   options = {
@@ -208,15 +207,14 @@ in
       SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service";
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d ${stateDir} 0750 chrony chrony - -"
-        "f ${driftFile} 0640 chrony chrony - -"
-        "f ${keyFile} 0640 chrony chrony - -"
-      ]
-      ++ lib.optionals cfg.enableRTCTrimming [
-        "f ${rtcFile} 0640 chrony chrony - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d ${stateDir} 0750 chrony chrony - -"
+      "f ${driftFile} 0640 chrony chrony - -"
+      "f ${keyFile} 0640 chrony chrony - -"
+    ]
+    ++ lib.optionals cfg.enableRTCTrimming [
+      "f ${rtcFile} 0640 chrony chrony - -"
+    ];
 
     systemd.services.chronyd = {
       description = "chrony NTP daemon";

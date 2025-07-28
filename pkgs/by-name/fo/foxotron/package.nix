@@ -57,19 +57,20 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXext
-      alsa-lib
-      fontconfig
-      libGLU
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libXi
+    libXext
+    alsa-lib
+    fontconfig
+    libGLU
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12

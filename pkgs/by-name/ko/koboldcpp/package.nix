@@ -41,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.95.1";
+  version = "1.96";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aoVOEPK3hPuzkrHIFvDrnAw2D/OxXlRLXXP0CZJghx4=";
+    hash = "sha256-/kHx2v9g0o5eh38d9hlhc724vQNTXVpaX1GeQouJPhk=";
   };
 
   enableParallelBuilding = true;
@@ -59,24 +59,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
-  buildInputs =
-    [ tk ]
-    ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals cublasSupport [
-      cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ]
-    ++ lib.optionals clblastSupport [
-      clblast
-      ocl-icd
-    ]
-    ++ lib.optionals vulkanSupport [
-      vulkan-loader
-      shaderc
-    ];
+  buildInputs = [
+    tk
+  ]
+  ++ finalAttrs.pythonInputs
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+  ++ lib.optionals cublasSupport [
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ]
+  ++ lib.optionals clblastSupport [
+    clblast
+    ocl-icd
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
+    shaderc
+  ];
 
   pythonPath = finalAttrs.pythonInputs;
 
@@ -87,6 +88,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_METAL" metalSupport)
     (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
+
+  env = {
+    # Fixes an issue where "fprintf" is being called with a format string that isn't a string literal
+    NIX_CFLAGS_COMPILE = lib.optionalString vulkanSupport "-Wno-error=format-security";
+    NIX_CXXFLAGS_COMPILE = lib.optionalString vulkanSupport "-Wno-error=format-security";
+  };
 
   installPhase = ''
     runHook preInstall

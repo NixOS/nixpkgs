@@ -75,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (lib.optional sse42Support "-DFORCE_SSE42=1")
     "-DFAIL_ON_WARNINGS=NO"
-  ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
+  ]
+  ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
@@ -95,17 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
       sed -e '1i #include <system_error>' -i third-party/folly/folly/synchronization/detail/ProxyLockable-inl.h
     '';
 
-  preInstall =
-    ''
-      mkdir -p $tools/bin
-      cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
-      ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib {}
-    '';
+  preInstall = ''
+    mkdir -p $tools/bin
+    cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib {}
+  '';
 
   # Old version doesn't ship the .pc file, new version puts wrong paths in there.
   postFixup = ''

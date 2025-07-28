@@ -69,29 +69,27 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
         fetcherVersion = 1;
+        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
-      nativeBuildInputs =
-        [
-          node-gyp
-          nodejs_20
-          pkg-config
-          pnpm.configHook
-          python3
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          xcbuild
-        ];
+      nativeBuildInputs = [
+        node-gyp
+        nodejs_20
+        pkg-config
+        pnpm.configHook
+        python3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
-      buildInputs =
-        [
-          pango
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          giflib
-        ];
+      buildInputs = [
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        giflib
+      ];
 
       CYPRESS_INSTALL_BINARY = "0";
       NG_CLI_ANALYTICS = "false";

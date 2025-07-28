@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "norminette";
-  version = "3.3.58";
+  version = "3.3.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "42School";
     repo = "norminette";
     tag = version;
-    hash = "sha256-6hBBbfW2PQFb8rcDihvtWK0df7WcvOk0il1E82GOxaU=";
+    hash = "sha256-XPaMQCziL9/h+AHx6I6MIRAlzscWvOTkxUP9dMI4y0o=";
   };
 
   build-system = with python3Packages; [

@@ -82,29 +82,28 @@ mkDerivation rec {
     hash = "sha256-FbDXknumjktcikOfAe4FKtPmggJGGHasq8dpD+8mNzE=";
   };
 
-  mesonFlags =
-    [
-      "-Drecollq=true"
-      "-Dwebkit=false"
-      "-Dsystemd=false"
+  mesonFlags = [
+    "-Drecollq=true"
+    "-Dwebkit=false"
+    "-Dsystemd=false"
 
-      # this leaks into the final `librecoll-*.so` binary, so we need
-      # to be sure it is taken from `pkgs.file` rather than `stdenv`,
-      # especially when cross-compiling
-      "-Dfile-command=${file}/bin/file"
+    # this leaks into the final `librecoll-*.so` binary, so we need
+    # to be sure it is taken from `pkgs.file` rather than `stdenv`,
+    # especially when cross-compiling
+    "-Dfile-command=${file}/bin/file"
 
-    ]
-    ++ lib.optionals (!withPython) [
-      "-Dpython-module=false"
-      "-Dpython-chm=false"
-    ]
-    ++ lib.optionals (!withGui) [
-      "-Dqtgui=false"
-      "-Dx11mon=false"
-    ]
-    ++ [
-      "-Dinotify=${useInotify}"
-    ];
+  ]
+  ++ lib.optionals (!withPython) [
+    "-Dpython-module=false"
+    "-Dpython-chm=false"
+  ]
+  ++ lib.optionals (!withGui) [
+    "-Dqtgui=false"
+    "-Dx11mon=false"
+  ]
+  ++ [
+    "-Dinotify=${useInotify}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-fpermissive" # libxml2-2.12 changed const qualifiers
@@ -115,43 +114,41 @@ mkDerivation rec {
     ./0001-no-qtgui-darwin-bundle.patch
   ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      meson
-      ninja
-      pkg-config
-      which
-    ]
-    ++ lib.optionals withGui [
-      qtbase
-      qttools
-    ]
-    ++ lib.optionals withPython [
-      python3Packages.setuptools
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+    which
+  ]
+  ++ lib.optionals withGui [
+    qtbase
+    qttools
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.setuptools
+  ];
 
-  buildInputs =
-    [
-      aspell
-      bison
-      chmlib
-    ]
-    ++ lib.optionals withPython [
-      python3Packages.python
-      python3Packages.mutagen
-    ]
-    ++ [
-      xapian
-      zlib
-      file
-    ]
-    ++ lib.optionals withGui [
-      qtbase
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    aspell
+    bison
+    chmlib
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.python
+    python3Packages.mutagen
+  ]
+  ++ [
+    xapian
+    zlib
+    file
+  ]
+  ++ lib.optionals withGui [
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   qtWrapperArgs = [
     "--prefix PATH : ${filterPath}"
@@ -160,39 +157,38 @@ mkDerivation rec {
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
   # the absolute path to the filtering command.
-  postInstall =
-    ''
-      substituteInPlace $out/lib/*/site-packages/recoll/rclconfig.py --replace /usr/share/recoll $out/share/recoll
-      substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
-      for f in $out/share/recoll/filters/* ; do
-        if [[ ! "$f" =~ \.zip$ ]]; then
-    ''
-    + lib.concatStrings (
-      lib.mapAttrsToList (k: v: (''
-        substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-      '')) filters
-    )
-    + ''
-          substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
-          substituteInPlace $f --replace /usr/bin/perl   ${
-            lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))
-          }/bin/perl
-        fi
-      done
-      wrapProgram $out/share/recoll/filters/rclaudio.py \
-        --prefix PYTHONPATH : $PYTHONPATH
-      wrapProgram $out/share/recoll/filters/rcljoplin.py \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
-      wrapProgram $out/share/recoll/filters/rclimg \
-        --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
-      mkdir $out/Applications
-      mv $out/bin/recoll.app $out/Applications
-    '';
+  postInstall = ''
+    substituteInPlace $out/lib/*/site-packages/recoll/rclconfig.py --replace /usr/share/recoll $out/share/recoll
+    substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
+    for f in $out/share/recoll/filters/* ; do
+      if [[ ! "$f" =~ \.zip$ ]]; then
+  ''
+  + lib.concatStrings (
+    lib.mapAttrsToList (k: v: (''
+      substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
+    '')) filters
+  )
+  + ''
+        substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
+        substituteInPlace $f --replace /usr/bin/perl   ${
+          lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))
+        }/bin/perl
+      fi
+    done
+    wrapProgram $out/share/recoll/filters/rclaudio.py \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rcljoplin.py \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+    wrapProgram $out/share/recoll/filters/rclimg \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
+    mkdir $out/Applications
+    mv $out/bin/recoll.app $out/Applications
+  '';
 
   # create symlink after fixup to prevent double wrapping of recoll
   postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''

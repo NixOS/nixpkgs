@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-magf19hA5PVAZafRcQXFaAD50qGofztpiluVc2aCeOk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5wSxa8jgto+v+tJHbenc2nvGlLaOBYyRrCqFyCPnncc=";
 
   npmDeps = fetchNpmDeps {
@@ -33,17 +32,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U82hVPfVd12vBeDT3PHexwmc9OitkuxTugYRe4Z/3eo=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
+  nativeBuildInputs = [
+    cargo-tauri_1.hook
 
-      nodejs
-      npmHooks.npmConfigHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      wrapGAppsHook3
-    ];
+    nodejs
+    npmHooks.npmConfigHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_0

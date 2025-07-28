@@ -13,7 +13,8 @@ let
     PHOTOPRISM_IMPORT_PATH = cfg.importPath;
     PHOTOPRISM_HTTP_HOST = cfg.address;
     PHOTOPRISM_HTTP_PORT = toString cfg.port;
-  } // (lib.mapAttrs (_: toString) cfg.settings);
+  }
+  // (lib.mapAttrs (_: toString) cfg.settings);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars

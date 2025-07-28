@@ -7,6 +7,7 @@
   gnustep-libobjc,
   libbsd,
   libffi_3_3,
+  libxml2,
   ncurses6,
 }:
 
@@ -59,6 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "Exec=/opt/hopper-${finalAttrs.rev}/bin/Hopper" "Exec=hopper"
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
   '';
 
   meta = {

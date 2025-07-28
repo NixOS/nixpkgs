@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "trino" ];
 
@@ -58,7 +59,7 @@ buildPythonPackage rec {
     "tests/integration/test_sqlalchemy_integration.py"
   ];
 
-  pytestFlagsArray = [ "-k 'not auth'" ];
+  disabledTestMarks = [ "auth" ];
 
   meta = with lib; {
     changelog = "https://github.com/trinodb/trino-python-client/blob/${version}/CHANGES.md";

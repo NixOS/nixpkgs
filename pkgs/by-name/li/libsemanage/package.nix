@@ -28,27 +28,28 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
-  ] ++ lib.optional enablePython "py";
+  ]
+  ++ lib.optional enablePython "py";
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      bison
-      flex
-      pkg-config
-    ]
-    ++ lib.optionals enablePython [
-      python3
-      swig
-    ];
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+  ]
+  ++ lib.optionals enablePython [
+    python3
+    swig
+  ];
 
   buildInputs = [
     libsepol
     libselinux
     bzip2
     audit
-  ] ++ lib.optional enablePython python3;
+  ]
+  ++ lib.optional enablePython python3;
 
   makeFlags = [
     "PREFIX=$(out)"

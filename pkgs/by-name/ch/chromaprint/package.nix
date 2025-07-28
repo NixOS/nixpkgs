@@ -54,11 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs =
-    [ ffmpeg-headless ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [
+    ffmpeg-headless
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   # with trivialautovarinit enabled can produce an empty .pc file
   hardeningDisable = [ "trivialautovarinit" ];
@@ -93,16 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postCheck
     '';
 
-  meta =
-    {
-      changelog = "https://github.com/acoustid/chromaprint/releases/tag/v${finalAttrs.version}";
-      homepage = "https://acoustid.org/chromaprint";
-      description = "AcoustID audio fingerprinting library";
-      license = lib.licenses.lgpl21Plus;
-      platforms = lib.platforms.unix;
-      pkgConfigModules = [ "libchromaprint" ];
-    }
-    // lib.attrsets.optionalAttrs withTools {
-      mainProgram = "fpcalc";
-    };
+  meta = {
+    changelog = "https://github.com/acoustid/chromaprint/releases/tag/v${finalAttrs.version}";
+    homepage = "https://acoustid.org/chromaprint";
+    description = "AcoustID audio fingerprinting library";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    pkgConfigModules = [ "libchromaprint" ];
+  }
+  // lib.attrsets.optionalAttrs withTools {
+    mainProgram = "fpcalc";
+  };
 })

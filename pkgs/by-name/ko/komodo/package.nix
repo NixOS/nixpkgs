@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-allGKoeI3mlMWbF9WsDbX/4eGdBT/eoF71uAk5iK0e4=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-nlCGrPlH+AZNz7BYDcoU0WBHBft4DnO4WfqGD5wVLmQ=";
 
   # disable for check. document generation is fail

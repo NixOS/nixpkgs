@@ -46,44 +46,41 @@ stdenv.mkDerivation rec {
     hash = "sha256-UpxRzn24v1vigMFlofVU+YOzKrkxCu2Pk5iktqFgNO8=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-      imagemagick
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+    imagemagick
+  ];
 
-  buildInputs =
-    [
-      libcbor
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xterm
-      udev
-      pcsclite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libuv
-      libsolv
-      libcouchbase
-    ];
+  buildInputs = [
+    libcbor
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xterm
+    udev
+    pcsclite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libuv
+    libsolv
+    libcouchbase
+  ];
 
   cmakeFlags = [ "-USE_PCSC=ON" ];
 
-  postPatch =
-    ''
-      substituteInPlace ./src/libfido2.pc.in \
-        --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace ./CMakeLists.txt \
-        --replace-fail "/\''${CMAKE_INSTALL_LIBDIR}" "/lib"
-    '';
+  postPatch = ''
+    substituteInPlace ./src/libfido2.pc.in \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ./CMakeLists.txt \
+      --replace-fail "/\''${CMAKE_INSTALL_LIBDIR}" "/lib"
+  '';
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -109,29 +106,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postFixup =
-    ''
-      substituteInPlace $out/bin/fido2-manage \
-        --replace-fail "/usr/local/bin/" "$out/bin/" \
-        --replace-fail "./fido2-manage.sh" "fido2-manage" \
-        --replace-fail "awk" "${gawk}/bin/awk"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $out/bin/fido2-manage-gui \
-        --replace-fail "./fido2-manage.sh" "$out/bin/fido2-manage" \
-        --replace-fail "x-terminal-emulator" "${xterm}/bin/xterm" \
-        --replace-fail "tk.Tk()" "tk.Tk(className='fido2-manage')" \
-        --replace-fail 'root.title("FIDO2.1 Manager - Python version 0.1 - (c) Token2")' "root.title('Fido2 Manager')"
+  postFixup = ''
+    substituteInPlace $out/bin/fido2-manage \
+      --replace-fail "/usr/local/bin/" "$out/bin/" \
+      --replace-fail "./fido2-manage.sh" "fido2-manage" \
+      --replace-fail "awk" "${gawk}/bin/awk"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $out/bin/fido2-manage-gui \
+      --replace-fail "./fido2-manage.sh" "$out/bin/fido2-manage" \
+      --replace-fail "x-terminal-emulator" "${xterm}/bin/xterm" \
+      --replace-fail "tk.Tk()" "tk.Tk(className='fido2-manage')" \
+      --replace-fail 'root.title("FIDO2.1 Manager - Python version 0.1 - (c) Token2")' "root.title('Fido2 Manager')"
 
-      substituteInPlace $out/bin/fido2-manage \
-        --replace-fail "grep" "${gnugrep}/bin/grep"
+    substituteInPlace $out/bin/fido2-manage \
+      --replace-fail "grep" "${gnugrep}/bin/grep"
 
-      sed -i '1i #!${pythonEnv.interpreter}' $out/bin/fido2-manage-gui
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace $out/bin/fido2-manage \
-        --replace-fail "ggrep" "${gnugrep}/bin/grep"
-    '';
+    sed -i '1i #!${pythonEnv.interpreter}' $out/bin/fido2-manage-gui
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace $out/bin/fido2-manage \
+      --replace-fail "ggrep" "${gnugrep}/bin/grep"
+  '';
 
   meta = {
     description = "Manage FIDO2.1 devices over USB or NFC, including Passkeys";

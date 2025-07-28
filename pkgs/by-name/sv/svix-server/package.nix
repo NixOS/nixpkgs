@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/server";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-IJvGDMEI4bmJGsX5mM3xJ5eg/jqCoR/13s6KBrkFH/E=";
 
   nativeBuildInputs = [ pkg-config ];

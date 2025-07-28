@@ -34,7 +34,6 @@ in
     "doc"
   ];
 
-  useFetchCargoVendor = true;
   inherit cargoHash;
   doCheck = false;
 

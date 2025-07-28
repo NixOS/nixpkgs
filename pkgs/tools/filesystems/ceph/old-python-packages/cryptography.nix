@@ -80,14 +80,16 @@ buildPythonPackage rec {
     cargo
     rustc
     pkg-config
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
@@ -104,16 +106,15 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--disable-pytest-warnings" ];
 
-  disabledTestPaths =
-    [
-      # save compute time by not running benchmarks
-      "tests/bench"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # aarch64-darwin forbids W+X memory, but this tests depends on it:
-      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-      "tests/hazmat/backends/test_openssl_memleak.py"
-    ];
+  disabledTestPaths = [
+    # save compute time by not running benchmarks
+    "tests/bench"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # aarch64-darwin forbids W+X memory, but this tests depends on it:
+    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "tests/hazmat/backends/test_openssl_memleak.py"
+  ];
 
   meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";

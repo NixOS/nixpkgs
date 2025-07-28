@@ -54,13 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-jLMXwW5q4MyCblw28tmheKGPAIn3BLuceyAtoS4J7bc=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-xBonUzA4+1zbViEsKap6CaG6ZRldW1LjNYIB+FmVRFs=";
     fetcherVersion = 1;
+    hash = "sha256-xBonUzA4+1zbViEsKap6CaG6ZRldW1LjNYIB+FmVRFs=";
   };
 
   # CMake (webkit extension)
@@ -123,8 +122,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cmakeConfigurePhase
     pnpmConfigHook
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

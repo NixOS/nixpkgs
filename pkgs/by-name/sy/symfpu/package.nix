@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "symfpu";
-  version = "unstable-2019-05-17";
+  version = "0-unstable-2019-05-17";
 
   src = fetchFromGitHub {
     owner = "martin-cs";

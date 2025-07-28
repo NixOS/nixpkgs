@@ -57,7 +57,8 @@ stdenv.mkDerivation (
       jq
       yarn
       typescript
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
 

@@ -317,47 +317,46 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  postPatch =
-    ''
-      patchShebangs src/etc
+  postPatch = ''
+    patchShebangs src/etc
 
-      # rust-lld is the name rustup uses for its bundled lld, so that it
-      # doesn't conflict with any system lld.  This is not an
-      # appropriate default for Nixpkgs, where there is no rust-lld.
-      substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
-        --replace-quiet '"rust-lld"' '"lld"'
+    # rust-lld is the name rustup uses for its bundled lld, so that it
+    # doesn't conflict with any system lld.  This is not an
+    # appropriate default for Nixpkgs, where there is no rust-lld.
+    substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
+      --replace-quiet '"rust-lld"' '"lld"'
 
-      ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
+    ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
-      # Useful debugging parameter
-      # export VERBOSE=1
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.targetPlatform.isDarwin) ''
-      # Replace hardcoded path to strip with llvm-strip
-      # https://github.com/NixOS/nixpkgs/issues/299606
-      substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
-        --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # See https://github.com/jemalloc/jemalloc/issues/1997
-      # Using a value of 48 should work on both emulated and native x86_64-darwin.
-      export JEMALLOC_SYS_WITH_LG_VADDR=48
-    ''
-    + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
-      mkdir .cargo
-      cat > .cargo/config.toml <<\EOF
-      [source.crates-io]
-      replace-with = "vendored-sources"
-      [source.vendored-sources]
-      directory = "vendor"
-      EOF
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
-      # lzma-sys bundles an old version of xz that doesn't build
-      # on modern FreeBSD, use the system one instead
-      substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
-          --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
-    '';
+    # Useful debugging parameter
+    # export VERBOSE=1
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.targetPlatform.isDarwin) ''
+    # Replace hardcoded path to strip with llvm-strip
+    # https://github.com/NixOS/nixpkgs/issues/299606
+    substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
+      --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    export JEMALLOC_SYS_WITH_LG_VADDR=48
+  ''
+  + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
+    mkdir .cargo
+    cat > .cargo/config.toml <<\EOF
+    [source.crates-io]
+    replace-with = "vendored-sources"
+    [source.vendored-sources]
+    directory = "vendor"
+    EOF
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
+    # lzma-sys bundles an old version of xz that doesn't build
+    # on modern FreeBSD, use the system one instead
+    substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
+        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
+  '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
   # use it for the normal build. This disables cmake in Nix.
@@ -369,38 +368,38 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   depsBuildTarget = lib.optionals stdenv.targetPlatform.isMinGW [ bintools ];
 
-  nativeBuildInputs =
-    [
-      file
-      python3
-      rustc
-      cmake
-      which
-      libffi
-      removeReferencesTo
-      pkg-config
-      xz
-    ]
-    ++ optionals fastCross [
-      lndir
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    file
+    python3
+    rustc
+    cmake
+    which
+    libffi
+    removeReferencesTo
+    pkg-config
+    xz
+  ]
+  ++ optionals fastCross [
+    lndir
+    makeWrapper
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ]
-    ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
-      llvmPackages.libunwind
-      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
-      (runCommandLocal "libunwind-libgcc" { } ''
-        mkdir -p $out/lib
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
-      '')
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ]
+  ++ optional (!withBundledLLVM) llvmShared.lib
+  ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
+    llvmPackages.libunwind
+    # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
+    (runCommandLocal "libunwind-libgcc" { } ''
+      mkdir -p $out/lib
+      ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
+      ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
+    '')
+  ];
 
   outputs = [
     "out"
@@ -445,7 +444,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
   meta = with lib; {

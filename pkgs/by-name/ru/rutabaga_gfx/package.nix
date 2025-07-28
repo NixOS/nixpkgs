@@ -34,17 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
   ];
-  buildInputs =
-    [ libiconv ]
-    ++ lib.optionals withGfxstream (
-      [
-        aemu
-        gfxstream
-      ]
-      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
-        libdrm
-      ]
-    );
+  buildInputs = [
+    libiconv
+  ]
+  ++ lib.optionals withGfxstream (
+    [
+      aemu
+      gfxstream
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
+      libdrm
+    ]
+  );
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;

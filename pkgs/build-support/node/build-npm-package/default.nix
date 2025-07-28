@@ -111,7 +111,8 @@ lib.extendMkDerivation {
           }
           .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
         npm_config_platform = stdenv.hostPlatform.parsed.kernel.name;
-      } // (args.env or { });
+      }
+      // (args.env or { });
 
       meta = (args.meta or { }) // {
         platforms = args.meta.platforms or nodejs.meta.platforms;

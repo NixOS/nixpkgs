@@ -73,35 +73,34 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  postInstall =
-    ''
-      sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
-      substituteInPlace $out/etc/luarocks/* \
-       --replace-quiet '${lua.luaOnBuild}' '${lua}'
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd luarocks \
-        --bash <($out/bin/luarocks completion bash) \
-        --fish <($out/bin/luarocks completion fish) \
-        --zsh <($out/bin/luarocks completion zsh)
+  postInstall = ''
+    sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
+    substituteInPlace $out/etc/luarocks/* \
+     --replace-quiet '${lua.luaOnBuild}' '${lua}'
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd luarocks \
+      --bash <($out/bin/luarocks completion bash) \
+      --fish <($out/bin/luarocks completion fish) \
+      --zsh <($out/bin/luarocks completion zsh)
 
-      installShellCompletion --cmd luarocks-admin \
-        --bash <($out/bin/luarocks-admin completion bash) \
-        --fish <($out/bin/luarocks-admin completion fish) \
-        --zsh <($out/bin/luarocks-admin completion zsh)
-    ''
-    + ''
-      for i in "$out"/bin/*; do
-          test -L "$i" || {
-              wrapProgram "$i" \
-                --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
-                --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-                --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
-                --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-                --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
-          }
-      done
-    '';
+    installShellCompletion --cmd luarocks-admin \
+      --bash <($out/bin/luarocks-admin completion bash) \
+      --fish <($out/bin/luarocks-admin completion fish) \
+      --zsh <($out/bin/luarocks-admin completion zsh)
+  ''
+  + ''
+    for i in "$out"/bin/*; do
+        test -L "$i" || {
+            wrapProgram "$i" \
+              --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
+              --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+              --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
+              --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
+        }
+    done
+  '';
 
   propagatedNativeBuildInputs = [
     zip

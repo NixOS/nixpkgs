@@ -30,7 +30,8 @@ buildPythonPackage rec {
     psutil
     dask
     tqdm
-  ] ++ dask.optional-dependencies.dataframe;
+  ]
+  ++ dask.optional-dependencies.dataframe;
 
   optional-dependencies = {
     groupby = [ ray ];

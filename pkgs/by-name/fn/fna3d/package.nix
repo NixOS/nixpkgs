@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fna-xna.github.io/";
     license = lib.licenses.mspl;
     platforms = lib.platforms.linux;
-    mainProgram = pname;
+    mainProgram = "fna3d";
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
 }

@@ -59,44 +59,41 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      makeWrapper
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      libffi
-      boost
-      python3
-      llvmPackages.openmp
-      llvmPackages.libclang.dev
-      llvmPackages.llvm
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      (lib.getOutput "stubs" cudaPackages.cuda_cudart)
-    ];
+  buildInputs = [
+    libxml2
+    libffi
+    boost
+    python3
+    llvmPackages.openmp
+    llvmPackages.libclang.dev
+    llvmPackages.llvm
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    (lib.getOutput "stubs" cudaPackages.cuda_cudart)
+  ];
 
   # adaptivecpp makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CLANG_INCLUDE_PATH" "${llvmPackages.libclang.dev}/include")
-      (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
-      (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
-      (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
-      (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
-    ]
-    ++ lib.optionals rocmSupport [
-      (lib.cmakeFeature "HIPCC_COMPILER" "${finalAttrs.rocmMerged}/bin/hipcc")
-      (lib.cmakeFeature "ROCM_PATH" "${finalAttrs.rocmMerged}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CLANG_INCLUDE_PATH" "${llvmPackages.libclang.dev}/include")
+    (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
+    (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
+    (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
+    (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
+  ]
+  ++ lib.optionals rocmSupport [
+    (lib.cmakeFeature "HIPCC_COMPILER" "${finalAttrs.rocmMerged}/bin/hipcc")
+    (lib.cmakeFeature "ROCM_PATH" "${finalAttrs.rocmMerged}")
+  ];
 
   # this hardening option breaks rocm builds
   hardeningDisable = [ "zerocallusedregs" ];

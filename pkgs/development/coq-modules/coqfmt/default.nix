@@ -47,7 +47,7 @@ mkCoqDerivation rec {
   ];
 
   meta = {
-    description = "A command line tool to format your Coq source code.";
+    description = "CLI tool to format your Coq source code";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ DieracDelta ];
   };

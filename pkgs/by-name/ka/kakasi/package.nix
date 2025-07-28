@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/kakasi/raw/4756771/f/kakasi-configure-c99.patch";
       hash = "sha256-XPIp/+AR6K84lv606aRHPQwia/1K3rt/7KSo0V0ZQ5o=";
     })
+    ./gettext-0.25.patch
   ];
 
   postPatch = ''

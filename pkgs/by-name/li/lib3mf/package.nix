@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     openssl
     zlib
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
 
   postPatch = ''
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@

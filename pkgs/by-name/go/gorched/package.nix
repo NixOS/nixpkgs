@@ -6,15 +6,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gorched";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "zladovan";
     repo = "gorched";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cT6wkWUlz3ixv7Mu5143I5NxjfwhKQ6bLwrW3BwTtTQ=";
+    hash = "sha256-n4MKZqhgAIsgK9XPv2pF8mK0I4suSN02JkqY7Aj+LG0=";
   };
-  vendorHash = "sha256-9fucarQKltIxV8j8L+yQ6Fa7IRIhoQCNxcG21KYOpuw=";
+  vendorHash = "sha256-ohFj0jEHt0SV3pC9+mz+XAjOJ6MIBFY7CJf+G++r72U=";
 
   postPatch = ''
     mkdir ./cmd/gorched

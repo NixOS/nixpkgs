@@ -1,34 +1,38 @@
 {
     "testing": {
-        "version": "6.16-rc6",
-        "hash": "sha256:03sz5gbnz1s763nlq2sbqk3bmjca24hq2n9wrpqhy6gyrd11s22f"
+        "version": "6.16-rc7",
+        "hash": "sha256:071xwskg7rpa6j09khdxzzccqp8a2fk68l0p2bn7ycr51pyywxz9"
     },
     "6.1": {
-        "version": "6.1.145",
-        "hash": "sha256:0qrkcrqb0migsrq6xl1idyz8n6vjbdk74z4sc9na97b6n5vp0r9i"
+        "version": "6.1.147",
+        "hash": "sha256:1xv6whvxjcdmvv0cil7nnac4hs2hxjnc98agx08xiqs179k2b3r1"
     },
     "5.15": {
-        "version": "5.15.188",
-        "hash": "sha256:1nfcrdwa2mgih57ch9kh8gc6jl950a7vpqgr56xk1b02303km5f4"
+        "version": "5.15.189",
+        "hash": "sha256:1hshd26ahn6dbw6jnqi0v5afpk672w7p09mk7iri93i7hxdh5l73"
     },
     "5.10": {
-        "version": "5.10.239",
-        "hash": "sha256:1nzhl1y6avfl77fyqwjwy3qc6679gp92k0d3aarscrdydcml5yid"
+        "version": "5.10.240",
+        "hash": "sha256:04sdcf4aqsqchii38anzmk9f9x65wv8q1x3m9dandmi6fabw724d"
     },
     "5.4": {
-        "version": "5.4.295",
-        "hash": "sha256:1adn0pbk8y1zp1yrz83ch6h4wypm2qvbnx4xig3sls2nfgvmi0f4"
+        "version": "5.4.296",
+        "hash": "sha256:0fm73yqzbzclh2achcj8arpg428d412k2wgmlfmyy6xzb1762qrx"
     },
     "6.6": {
-        "version": "6.6.98",
-        "hash": "sha256:1raxyhvv0yay3k1izwcqdbq9322nflflfzcn9d1jrhmb032k8si9"
+        "version": "6.6.100",
+        "hash": "sha256:1flpvypy88rmp2sbz3z4fxlgdylm5lxb5832bgsi8j5iam6yrh6n"
     },
     "6.12": {
-        "version": "6.12.38",
-        "hash": "sha256:1k0gcwavn5iws3z1as39227i2hnc62qnfddjfqy7k7ymhf6zldgh"
+        "version": "6.12.40",
+        "hash": "sha256:0cr9hi0m7p9jf0rdblign1ya40rckab9axiwxb62r3gr2w9sy4a8"
     },
     "6.15": {
-        "version": "6.15.6",
-        "hash": "sha256:1z5l0b59q56qj6s56cxzv43lhfx9z9sp4vfziw60fz97ak4qdd9b"
+        "version": "6.15.8",
+        "hash": "sha256:19i87zpq3zhpg09sdirnzys2s2yrv9xn8mpibl1a6qmr2sy94znk"
+    },
+    "6.16": {
+        "version": "6.16",
+        "hash": "sha256:10ydzfzc3g0nhns6md08gpfshhjcyd58lylqr15alijjdgzf4jqs"
     }
 }

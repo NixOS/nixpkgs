@@ -17,7 +17,8 @@ symlinkJoin {
     aw-notify.out
     aw-watcher-afk.out
     aw-watcher-window.out
-  ] ++ (lib.forEach extraWatchers (p: p.out));
+  ]
+  ++ (lib.forEach extraWatchers (p: p.out));
 
   meta = with lib; {
     description = "The best free and open-source automated time tracker";

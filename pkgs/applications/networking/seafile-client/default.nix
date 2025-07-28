@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     seafile-shared
     jansson
     libsearpc
-  ] ++ lib.optional withShibboleth qtwebengine;
+  ]
+  ++ lib.optional withShibboleth qtwebengine;
 
   cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 

@@ -41,7 +41,8 @@ let
         "-DCMAKE_INSTALL_LIBDIR=lib"
 
         "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
-      ] ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
+      ]
+      ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
       # The autoconf build is broken as of 2.9.1, resulting in the following error:
       # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
@@ -56,11 +57,10 @@ let
 
       inherit patches;
 
-      postPatch =
-        ''
-          patchShebangs tests/
-        ''
-        + postPatch;
+      postPatch = ''
+        patchShebangs tests/
+      ''
+      + postPatch;
 
       doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
       preCheck = ''

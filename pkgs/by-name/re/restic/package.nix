@@ -45,19 +45,18 @@ buildGoModule rec {
     rm cmd/restic/cmd_mount_integration_test.go
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
-    ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      $out/bin/restic generate \
-        --bash-completion restic.bash \
-        --fish-completion restic.fish \
-        --zsh-completion restic.zsh \
-        --man .
-      installShellCompletion restic.{bash,fish,zsh}
-      installManPage *.1
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
+  ''
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    $out/bin/restic generate \
+      --bash-completion restic.bash \
+      --fish-completion restic.fish \
+      --zsh-completion restic.zsh \
+      --man .
+    installShellCompletion restic.{bash,fish,zsh}
+    installManPage *.1
+  '';
 
   meta = with lib; {
     homepage = "https://restic.net";

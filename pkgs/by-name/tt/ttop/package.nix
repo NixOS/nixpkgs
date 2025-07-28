@@ -7,13 +7,13 @@
 
 buildNimPackage (finalAttrs: {
   pname = "ttop";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-e3c7ovFxQN/pJ18Qg8+DdLqfhgmrHSTNM5zDZ2Jaapw=";
+    hash = "sha256-bBwSeB4azLjDTsfi9NFxoVphwUhHGFeJ/AYicYgk0as=";
   };
 
   lockFile = ./lock.json;

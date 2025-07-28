@@ -41,7 +41,8 @@ buildPythonPackage rec {
     jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-fbuh/SMfOygnuvG9zTZqem4oLaS+5uXScXPhU3aVDjM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+dPIujaxDJ7JrtNvX4VjGHFmgtCb1BJpFQL4c3E1/GY=";
 
   nativeBuildInputs = [
@@ -33,16 +32,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  postInstall =
-    ''
-      ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd yr \
-        --bash <($out/bin/yr completion bash) \
-        --fish <($out/bin/yr completion fish) \
-        --zsh <($out/bin/yr completion zsh)
-    '';
+  postInstall = ''
+    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd yr \
+      --bash <($out/bin/yr completion bash) \
+      --fish <($out/bin/yr completion fish) \
+      --zsh <($out/bin/yr completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = yara-x;

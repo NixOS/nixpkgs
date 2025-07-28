@@ -53,31 +53,30 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      gtk4
-      pango
-      glib
-      libmediaart
-      gnome-online-accounts
-      gdk-pixbuf
-      python3
-      grilo
-      grilo-plugins
-      libnotify
-      libsoup_3
-      libadwaita
-      gsettings-desktop-schemas
-      tinysparql
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    gtk4
+    pango
+    glib
+    libmediaart
+    gnome-online-accounts
+    gdk-pixbuf
+    python3
+    grilo
+    grilo-plugins
+    libnotify
+    libsoup_3
+    libadwaita
+    gsettings-desktop-schemas
+    tinysparql
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   pythonPath = with python3.pkgs; [
     pycairo

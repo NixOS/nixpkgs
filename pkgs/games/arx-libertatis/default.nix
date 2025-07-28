@@ -48,24 +48,24 @@ stdenv.mkDerivation rec {
     inkscape
     imagemagick
     optipng
-  ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
+  ]
+  ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      zlib
-      boost
-      openal
-      glm
-      freetype
-      libGLU
-      SDL2
-      libepoxy
-    ]
-    ++ optionals withCrashReporter [
-      qtbase
-      curl
-    ]
-    ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
+  buildInputs = [
+    zlib
+    boost
+    openal
+    glm
+    freetype
+    libGLU
+    SDL2
+    libepoxy
+  ]
+  ++ optionals withCrashReporter [
+    qtbase
+    curl
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"
@@ -75,15 +75,14 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  postInstall =
-    ''
-      ln -sf \
-        ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
-        $out/share/games/arx/misc/dejavusansmono.ttf
-    ''
-    + optionalString withCrashReporter ''
-      wrapQtApp "$out/libexec/arxcrashreporter"
-    '';
+  postInstall = ''
+    ln -sf \
+      ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
+      $out/share/games/arx/misc/dejavusansmono.ttf
+  ''
+  + optionalString withCrashReporter ''
+    wrapQtApp "$out/libexec/arxcrashreporter"
+  '';
 
   meta = {
     description = ''

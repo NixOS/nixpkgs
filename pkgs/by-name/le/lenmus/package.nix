@@ -41,14 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/fixup_bundle.*")/")/g' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
   buildInputs = [
     boost

@@ -567,7 +567,12 @@ If you have any problems with formatting, please ping the [formatting team](http
   That is, write
 
   ```nix
-  { stdenv, fetchurl, perl }: <...>
+  {
+    stdenv,
+    fetchurl,
+    perl,
+  }:
+  <...>
   ```
 
   instead of
@@ -579,17 +584,25 @@ If you have any problems with formatting, please ping the [formatting team](http
   or
 
   ```nix
-  { stdenv, fetchurl, perl, ... }: <...>
+  {
+    stdenv,
+    fetchurl,
+    perl,
+    ...
+  }:
+  <...>
   ```
 
   For functions that are truly generic in the number of arguments, but have some required arguments, you should write them using an `@`-pattern:
 
   ```nix
-  { stdenv, doCoverageAnalysis ? false, ... } @ args:
+  {
+    stdenv,
+    doCoverageAnalysis ? false,
+    ...
+  }@args:
 
-  stdenv.mkDerivation (args // {
-    foo = if doCoverageAnalysis then "bla" else "";
-  })
+  stdenv.mkDerivation (args // { foo = if doCoverageAnalysis then "bla" else ""; })
   ```
 
   instead of
@@ -597,42 +610,37 @@ If you have any problems with formatting, please ping the [formatting team](http
   ```nix
   args:
 
-  args.stdenv.mkDerivation (args // {
-    foo = if args ? doCoverageAnalysis && args.doCoverageAnalysis then "bla" else "";
-  })
+  args.stdenv.mkDerivation (
+    args
+    // {
+      foo = if args ? doCoverageAnalysis && args.doCoverageAnalysis then "bla" else "";
+    }
+  )
   ```
 
 - Unnecessary string conversions should be avoided.
   Do
 
   ```nix
-  {
-    rev = version;
-  }
+  { rev = version; }
   ```
 
   instead of
 
   ```nix
-  {
-    rev = "${version}";
-  }
+  { rev = "${version}"; }
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
 
   ```nix
-  {
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin iconv;
-  }
+  { buildInputs = lib.optional stdenv.hostPlatform.isDarwin iconv; }
   ```
 
   instead of
 
   ```nix
-  {
-    buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null;
-  }
+  { buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null; }
   ```
 
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.

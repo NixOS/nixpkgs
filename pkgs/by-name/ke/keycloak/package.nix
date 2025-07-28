@@ -1,8 +1,8 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchzip,
-  makeWrapper,
+  makeBinaryWrapper,
   jre_headless,
   nixosTests,
   callPackage,
@@ -22,17 +22,17 @@ let
     ) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keycloak";
-  version = "26.2.5";
+  version = "26.3.1";
 
   src = fetchzip {
-    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-yXbHdznZlrz4T2+154cM+eAmPO/TR5kRCVVi26H66ok=";
+    url = "https://github.com/keycloak/keycloak/releases/download/${finalAttrs.version}/keycloak-${finalAttrs.version}.zip";
+    hash = "sha256-M3YbS/aK9y4N2kZrm1wNT1ZaWAaUwaRn9QQ8fMdOV5g=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     jre_headless
   ];
 
@@ -42,31 +42,30 @@ stdenv.mkDerivation rec {
     ./config_vars.patch
   ];
 
-  buildPhase =
-    ''
-      runHook preBuild
-    ''
-    + lib.optionalString (confFile != null) ''
-      install -m 0600 ${confFile} conf/keycloak.conf
-    ''
-    + ''
-      install_plugin() {
-        if [ -d "$1" ]; then
-          find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -p -m 0500 "{}" "providers/" \;
-        else
-          install -p -m 0500 "$1" "providers/"
-        fi
-      }
-      ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
-    ''
-    + ''
-      patchShebangs bin/kc.sh
-      export KC_HOME_DIR=$(pwd)
-      export KC_CONF_DIR=$(pwd)/conf
-      bin/kc.sh build ${featuresSubcommand}
+  buildPhase = ''
+    runHook preBuild
+  ''
+  + lib.optionalString (confFile != null) ''
+    install -m 0600 ${confFile} conf/keycloak.conf
+  ''
+  + ''
+    install_plugin() {
+      if [ -d "$1" ]; then
+        find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -p -m 0500 "{}" "providers/" \;
+      else
+        install -p -m 0500 "$1" "providers/"
+      fi
+    }
+    ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
+  ''
+  + ''
+    patchShebangs bin/kc.sh
+    export KC_HOME_DIR=$(pwd)
+    export KC_CONF_DIR=$(pwd)/conf
+    bin/kc.sh build ${featuresSubcommand}
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -104,5 +103,4 @@ stdenv.mkDerivation rec {
       leona
     ];
   };
-
-}
+})

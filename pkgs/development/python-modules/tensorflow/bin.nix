@@ -46,9 +46,6 @@
 # - the source build is currently brittle and not easy to maintain
 # - the source build doesn't work on NVIDIA Jetson platforms
 
-# unsupported combination
-assert !(stdenv.hostPlatform.isDarwin && cudaSupport);
-
 let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
@@ -99,7 +96,8 @@ buildPythonPackage rec {
     termcolor
     typing-extensions
     wrapt
-  ] ++ lib.optional (!isPy3k) mock;
+  ]
+  ++ lib.optional (!isPy3k) mock;
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -233,5 +231,7 @@ buildPythonPackage rec {
       abbradar
     ];
     badPlatforms = [ "x86_64-darwin" ];
+    # unsupported combination
+    broken = stdenv.hostPlatform.isDarwin && cudaSupport;
   };
 }

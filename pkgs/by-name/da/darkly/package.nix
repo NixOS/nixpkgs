@@ -57,16 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta =
-    {
-      description = "Modern style for Qt applications (fork of Lightly)";
-      homepage = "https://github.com/Bali10050/Darkly";
-      changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
-      platforms = lib.platforms.linux;
-      license = with lib.licenses; [ gpl2Plus ];
-      maintainers = with lib.maintainers; [ pluiedev ];
-    }
-    // lib.optionalAttrs (qtMajorVersion == "6") {
-      mainProgram = "darkly-settings6";
-    };
+  meta = {
+    description = "Modern style for Qt applications (fork of Lightly)";
+    homepage = "https://github.com/Bali10050/Darkly";
+    changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ pluiedev ];
+  }
+  // lib.optionalAttrs (qtMajorVersion == "6") {
+    mainProgram = "darkly-settings6";
+  };
 })

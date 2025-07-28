@@ -5,9 +5,7 @@
 The absolute minimal configuration for the Netbird client daemon looks like this:
 
 ```nix
-{
-  services.netbird.enable = true;
-}
+{ services.netbird.enable = true; }
 ```
 
 This will set up a netbird service listening on the port `51820` associated to the

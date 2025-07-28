@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/radicle-httpd";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-wSz0kM2XU717A0+mU+3eOHJWlRGdG9KjvfUkUq5bv14=";
 
   nativeBuildInputs = [

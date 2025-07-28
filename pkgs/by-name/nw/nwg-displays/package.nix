@@ -34,19 +34,18 @@ python3Packages.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs =
-    [
-      atk
-      gdk-pixbuf
-      gtk-layer-shell
-      pango
-      python3Packages.gst-python
-      python3Packages.i3ipc
-      python3Packages.pygobject3
-    ]
-    ++ lib.optionals hyprlandSupport [
-      wlr-randr
-    ];
+  propagatedBuildInputs = [
+    atk
+    gdk-pixbuf
+    gtk-layer-shell
+    pango
+    python3Packages.gst-python
+    python3Packages.i3ipc
+    python3Packages.pygobject3
+  ]
+  ++ lib.optionals hyprlandSupport [
+    wlr-randr
+  ];
 
   dontWrapGApps = true;
 

@@ -33,10 +33,11 @@ stdenv.mkDerivation rec {
   '';
   makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";
 
-  configureFlags =
-    [ "--with-htslib=${htslib}" ]
-    ++ lib.optional (ncurses == null) "--without-curses"
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ "--without-curses" ];
+  configureFlags = [
+    "--with-htslib=${htslib}"
+  ]
+  ++ lib.optional (ncurses == null) "--without-curses"
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ "--without-curses" ];
 
   preCheck = ''
     patchShebangs test/

@@ -153,6 +153,6 @@ stdenvNoCC.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ crschnick ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = pname;
+    mainProgram = "xpipe";
   };
 }

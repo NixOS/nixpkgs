@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     install -D ${pname}.jar -t $out/share/java/
       makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}.jar" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd'
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     cat << EOF > $out/share/mime/packages/structorizer.xml
     <?xml version="1.0" encoding="UTF-8"?>

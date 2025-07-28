@@ -73,70 +73,66 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mxYnxbdoFqxeQFKgP1tgW6QLRc8GsCyt0EeWILSZqzg=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals (!minimal) [
-      glib # for glib-mkenums
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals (!minimal) [
+    glib # for glib-mkenums
+  ];
 
-  buildInputs =
-    [
-      boost
-      libiconv
-      libintl
-    ]
-    ++ lib.optionals withData [
-      poppler_data
-    ];
+  buildInputs = [
+    boost
+    libiconv
+    libintl
+  ]
+  ++ lib.optionals withData [
+    poppler_data
+  ];
 
   # TODO: reduce propagation to necessary libs
-  propagatedBuildInputs =
-    [
-      zlib
-      freetype
-      fontconfig
-      libjpeg
-      openjpeg
-    ]
-    ++ lib.optionals (!minimal) [
-      cairo
-      lcms
-      libtiff
-      curl
-      nss
-    ]
-    ++ lib.optionals (qt5Support || qt6Support) [
-      qtbase
-    ]
-    ++ lib.optionals introspectionSupport [
-      gobject-introspection
-    ]
-    ++ lib.optionals gpgmeSupport [
-      gpgme
-    ];
+  propagatedBuildInputs = [
+    zlib
+    freetype
+    fontconfig
+    libjpeg
+    openjpeg
+  ]
+  ++ lib.optionals (!minimal) [
+    cairo
+    lcms
+    libtiff
+    curl
+    nss
+  ]
+  ++ lib.optionals (qt5Support || qt6Support) [
+    qtbase
+  ]
+  ++ lib.optionals introspectionSupport [
+    gobject-introspection
+  ]
+  ++ lib.optionals gpgmeSupport [
+    gpgme
+  ];
 
-  cmakeFlags =
-    [
-      (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
-      (mkFlag (!minimal) "GLIB")
-      (mkFlag (!minimal) "CPP")
-      (mkFlag (!minimal) "LIBCURL")
-      (mkFlag (!minimal) "LCMS")
-      (mkFlag (!minimal) "LIBTIFF")
-      (mkFlag (!minimal) "NSS3")
-      (mkFlag utils "UTILS")
-      (mkFlag qt5Support "QT5")
-      (mkFlag qt6Support "QT6")
-      (mkFlag gpgmeSupport "GPGME")
-    ]
-    ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      "-DTESTDATADIR=${testData}"
-    ];
+  cmakeFlags = [
+    (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
+    (mkFlag (!minimal) "GLIB")
+    (mkFlag (!minimal) "CPP")
+    (mkFlag (!minimal) "LIBCURL")
+    (mkFlag (!minimal) "LCMS")
+    (mkFlag (!minimal) "LIBTIFF")
+    (mkFlag (!minimal) "NSS3")
+    (mkFlag utils "UTILS")
+    (mkFlag qt5Support "QT5")
+    (mkFlag qt6Support "QT6")
+    (mkFlag gpgmeSupport "GPGME")
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    "-DTESTDATADIR=${testData}"
+  ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;

@@ -30,14 +30,13 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [ ];
 
-  configureFlags =
-    [
-      "--with-system-zlib"
-      "--with-system-libpng"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      #"-prefix=$out"
-    ];
+  configureFlags = [
+    "--with-system-zlib"
+    "--with-system-libpng"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    #"-prefix=$out"
+  ];
 
   postInstall =
     if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then

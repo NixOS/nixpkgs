@@ -54,33 +54,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      curl
-      expat
-      flac
-      fltk
-      fmt
-      gtk3
-      jack2
-      libGL
-      libXpm
-      libXrandr
-      libogg
-      libopus
-      libpulseaudio
-      libsamplerate
-      libsndfile
-      libvorbis
-      libmpg123
-      nlohmann_json
-      rtmidi
-      webkitgtk_4_1
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
-      fontconfig
-    ];
+  buildInputs = [
+    alsa-lib
+    curl
+    expat
+    flac
+    fltk
+    fmt
+    gtk3
+    jack2
+    libGL
+    libXpm
+    libXrandr
+    libogg
+    libopus
+    libpulseaudio
+    libsamplerate
+    libsndfile
+    libvorbis
+    libmpg123
+    nlohmann_json
+    rtmidi
+    webkitgtk_4_1
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
+    fontconfig
+  ];
 
   meta = {
     description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";

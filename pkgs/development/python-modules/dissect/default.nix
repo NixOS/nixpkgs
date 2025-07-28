@@ -85,7 +85,8 @@ buildPythonPackage rec {
     dissect-vmfs
     dissect-volume
     dissect-xfs
-  ] ++ dissect-target.optional-dependencies.full;
+  ]
+  ++ dissect-target.optional-dependencies.full;
 
   # Module has no tests
   doCheck = false;

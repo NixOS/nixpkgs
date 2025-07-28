@@ -28,8 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
     fetcherVersion = 1;
+    hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     find node_modules server/node_modules -xtype l -delete
 
     # remove non-deterministic files
-    rm node_modules/{.modules.yaml,.pnpm-workspace-state.json}
+    rm node_modules/.modules.yaml
   '';
 
   installPhase = ''

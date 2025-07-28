@@ -393,17 +393,16 @@ in
     # These usually implicitly set by cc-wrapper around clang (pkgs/build-support/cc-wrapper).
     # The linked ruby code shows generates the required '.clang_complete' for cmake based projects
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
-    preFixup =
-      ''
-        substituteInPlace "$out"/plugin/clang_complete.vim \
-          --replace-fail "let g:clang_library_path = ''
-      + "''"
-      + ''
-        " "let g:clang_library_path='${lib.getLib llvmPackages.libclang}/lib/libclang.so'"
+    preFixup = ''
+      substituteInPlace "$out"/plugin/clang_complete.vim \
+        --replace-fail "let g:clang_library_path = ''
+    + "''"
+    + ''
+      " "let g:clang_library_path='${lib.getLib llvmPackages.libclang}/lib/libclang.so'"
 
-              substituteInPlace "$out"/plugin/libclang.py \
-                --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
-      '';
+            substituteInPlace "$out"/plugin/libclang.py \
+              --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
+    '';
   };
 
   claude-code-nvim = super.claude-code-nvim.overrideAttrs {
@@ -1081,13 +1080,11 @@ in
   };
 
   direnv-vim = super.direnv-vim.overrideAttrs (old: {
-    preFixup =
-      old.preFixup or ""
-      + ''
-        substituteInPlace $out/autoload/direnv.vim \
-          --replace-fail "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
-            "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
-      '';
+    preFixup = old.preFixup or "" + ''
+      substituteInPlace $out/autoload/direnv.vim \
+        --replace-fail "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
+    '';
   });
 
   dotnet-nvim = super.dotnet-nvim.overrideAttrs {
@@ -1245,6 +1242,15 @@ in
     ];
   };
 
+  fyler-nvim = super.fyler-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires setup call
+      "fyler.views.explorer.init"
+      "fyler.views.explorer.actions"
+      "fyler.views.explorer.ui"
+    ];
+  };
+
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs {
     # The plugin has a makefile which tries to run tests in a docker container.
     # This prevents it.
@@ -1278,6 +1284,8 @@ in
     nvimSkipModules = [
       "fzf-lua.shell_helper"
       "fzf-lua.spawn"
+      "fzf-lua.rpc"
+      "fzf-lua.types"
     ];
   };
 
@@ -1509,7 +1517,7 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
-  jdd-nvim = super.lazyjj-nvim.overrideAttrs {
+  jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
 
@@ -2817,6 +2825,13 @@ in
 
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
+    nvimSkipModules = [
+      # requires config setup
+      "otter.keeper"
+      "otter.lsp.handlers"
+      "otter.lsp.init"
+      "otter.diagnostics"
+    ];
   };
 
   outline-nvim = super.outline-nvim.overrideAttrs {
@@ -2943,6 +2958,15 @@ in
     ];
   };
 
+  python-mode = super.python-mode.overrideAttrs {
+    postPatch = ''
+      # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/
+      # https://github.com/python-mode/python-mode/pull/1189#issuecomment-3109528360
+      rm -f pymode/libs/pytoolconfig
+      ln -sf ../../submodules/pytoolconfig/src/pytoolconfig pymode/libs/pytoolconfig
+    '';
+  };
+
   pywal-nvim = super.pywal-nvim.overrideAttrs {
     # Optional feline integration
     nvimSkipModules = "pywal.feline";
@@ -2971,9 +2995,9 @@ in
       nvim-lspconfig
       otter-nvim
     ];
-  };
-
-  quicker-nvim = super.quicker-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "quarto.runner.init"
+    ];
   };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
@@ -3935,13 +3959,11 @@ in
   };
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
-    postPatch =
-      old.postPatch or ""
-      + ''
-        substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace-fail \
-          'g:stylish_haskell_command = "stylish-haskell"' \
-          'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
-      '';
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace-fail \
+        'g:stylish_haskell_command = "stylish-haskell"' \
+        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+    '';
   });
 
   vim-surround = super.vim-surround.overrideAttrs {

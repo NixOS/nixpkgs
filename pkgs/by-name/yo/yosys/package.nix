@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   bison,
@@ -80,18 +81,19 @@ let
   allPlugins = {
     bluespec = yosys-bluespec;
     ghdl = yosys-ghdl;
-  } // (yosys-symbiflow);
+  }
+  // (yosys-symbiflow);
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.54";
+  version = "0.55";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yEAZvdBc+923a0OTtaCpTbrl33kcmvgwFlL5VEssHkQ=";
+    hash = "sha256-GddNbAtH5SPm7KTa5kCm/vGq4xOczx+jCnOSQl55gUI=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -115,25 +117,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  propagatedBuildInputs =
-    [
-      libffi
-      readline
-      tcl
-      zlib
-      (python3.withPackages (
-        pp: with pp; [
-          click
-        ]
-      ))
-    ]
-    ++ lib.optionals enablePython [
-      python3.pkgs.boost
-    ];
+  propagatedBuildInputs = [
+    libffi
+    readline
+    tcl
+    zlib
+    (python3.withPackages (
+      pp: with pp; [
+        click
+      ]
+    ))
+  ]
+  ++ lib.optionals enablePython [
+    python3.pkgs.boost
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
+    # Backport fix amaranth code compilation
+    # TODO remove when updating to 0.56
+    # https://github.com/YosysHQ/yosys/pull/5182
+    (fetchpatch2 {
+      name = "treat-zero-width-constant-as-zero.patch";
+      url = "https://github.com/YosysHQ/yosys/commit/478b6a2b3fbab0fd4097b841914cbe8bb9f67268.patch";
+      hash = "sha256-KeLoZfkXMk2KIPN9XBQdqWqohywQONlWUIvrGwgphKs=";
+    })
     ./plugin-search-dirs.patch
     ./fix-clang-build.patch
   ];
@@ -145,21 +154,20 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild =
-    ''
-      chmod -R u+w .
-      make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
+  preBuild = ''
+    chmod -R u+w .
+    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
 
-      if ! grep -q "YOSYS_VER := $version" Makefile; then
-        echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
-        exit 1
-      fi
-    ''
-    + lib.optionalString enablePython ''
-      echo "ENABLE_PYOSYS := 1" >> Makefile.conf
-      echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
-      echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
-    '';
+    if ! grep -q "YOSYS_VER := $version" Makefile; then
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
+      exit 1
+    fi
+  ''
+  + lib.optionalString enablePython ''
+    echo "ENABLE_PYOSYS := 1" >> Makefile.conf
+    echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
+    echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
+  '';
 
   preCheck = ''
     # autotest.sh automatically compiles a utility during startup if it's out of date.

@@ -42,17 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     sourceRoot=$(echo */gui-wx)
   '';
 
-  postPatch =
-    ''
-      substituteInPlace wxprefs.cpp \
-        --replace-fail 'PYTHON_SHLIB' '${python3}/lib/libpython3.so'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace makefile-gtk \
-        --replace-fail '-Wl,--as-needed' "" \
-        --replace-fail '-lGL ' "" \
-        --replace-fail '-lGLU' ""
-    '';
+  postPatch = ''
+    substituteInPlace wxprefs.cpp \
+      --replace-fail 'PYTHON_SHLIB' '${python3}/lib/libpython3.so'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace makefile-gtk \
+      --replace-fail '-Wl,--as-needed' "" \
+      --replace-fail '-lGL ' "" \
+      --replace-fail '-lGLU' ""
+  '';
 
   makeFlags = [
     "-f"

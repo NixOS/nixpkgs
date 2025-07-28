@@ -79,7 +79,8 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optional (pythonOlder "3.11") async-timeout;
+  ]
+  ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];
@@ -101,10 +102,13 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    "--only-core"
+  ];
+
+  enabledTestPaths = [
     # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
-    "--only-core"
   ];
 
   disabledTests = [

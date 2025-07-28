@@ -61,18 +61,17 @@ stdenv.mkDerivation rec {
     libpq.pg_config
   ];
 
-  buildInputs =
-    [
-      gtk3
-      openssl
-      libgee
-    ]
-    ++ lib.optionals mysqlSupport [
-      libmysqlclient
-    ]
-    ++ lib.optionals postgresSupport [
-      libpq
-    ];
+  buildInputs = [
+    gtk3
+    openssl
+    libgee
+  ]
+  ++ lib.optionals mysqlSupport [
+    libmysqlclient
+  ]
+  ++ lib.optionals postgresSupport [
+    libpq
+  ];
 
   propagatedBuildInputs = [
     libxml2

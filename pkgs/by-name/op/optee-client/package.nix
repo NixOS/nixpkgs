@@ -35,15 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ libuuid ];
 
-  makeFlags =
-    [
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      "DESTDIR=$(out)"
-      "SBINDIR=/bin"
-      "INCLUDEDIR=/include"
-      "LIBDIR=/lib"
-    ]
-    ++
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "DESTDIR=$(out)"
+    "SBINDIR=/bin"
+    "INCLUDEDIR=/include"
+    "LIBDIR=/lib"
+  ]
+  ++
     # If we are building for NixOS, change default optee config to use paths
     # that will work well with NixOS.
     lib.optionals isNixOS [

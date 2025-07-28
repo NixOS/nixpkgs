@@ -40,21 +40,19 @@ let
         {
           inherit name;
 
-          postFixup =
-            previousAttrs.postFixup
-            + ''
-              declare -p wrapperName
-              echo "env.wrapperName = $wrapperName"
-              [[ $wrapperName == "CC_WRAPPER" ]] || (echo "'\$wrapperName' was not 'CC_WRAPPER'" && false)
-              declare -p suffixSalt
-              echo "env.suffixSalt = $suffixSalt"
-              [[ $suffixSalt == "${stdenv'.cc.suffixSalt}" ]] || (echo "'\$suffxSalt' was not '${stdenv'.cc.suffixSalt}'" && false)
+          postFixup = previousAttrs.postFixup + ''
+            declare -p wrapperName
+            echo "env.wrapperName = $wrapperName"
+            [[ $wrapperName == "CC_WRAPPER" ]] || (echo "'\$wrapperName' was not 'CC_WRAPPER'" && false)
+            declare -p suffixSalt
+            echo "env.suffixSalt = $suffixSalt"
+            [[ $suffixSalt == "${stdenv'.cc.suffixSalt}" ]] || (echo "'\$suffxSalt' was not '${stdenv'.cc.suffixSalt}'" && false)
 
-              grep -q "@out@" $out/bin/cc || echo "@out@ in $out/bin/cc was substituted"
-              grep -q "@suffixSalt@" $out/bin/cc && (echo "$out/bin/cc contains unsubstituted variables" && false)
+            grep -q "@out@" $out/bin/cc || echo "@out@ in $out/bin/cc was substituted"
+            grep -q "@suffixSalt@" $out/bin/cc && (echo "$out/bin/cc contains unsubstituted variables" && false)
 
-              touch $out
-            '';
+            touch $out
+          '';
         }
         // extraAttrs
       )
@@ -256,25 +254,6 @@ in
   test-env-attrset = testEnvAttrset {
     name = "test-env-attrset";
     stdenv' = bootStdenv;
-  };
-
-  # Test compatibility with derivations using `env` as a regular variable.
-  test-env-derivation = bootStdenv.mkDerivation rec {
-    name = "test-env-derivation";
-    env = bootStdenv.mkDerivation {
-      name = "foo";
-      buildCommand = ''
-        mkdir "$out"
-        touch "$out/bar"
-      '';
-    };
-
-    passAsFile = [ "buildCommand" ];
-    buildCommand = ''
-      declare -p env
-      [[ $env == "${env}" ]]
-      touch "$out"
-    '';
   };
 
   # Check that mkDerivation rejects MD5 hashes

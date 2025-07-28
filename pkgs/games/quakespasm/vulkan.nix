@@ -41,22 +41,21 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      SDL2
-      flac
-      gzip
-      libmpg123
-      libopus
-      libvorbis
-      libX11
-      opusfile
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-      vulkan-headers
-    ];
+  buildInputs = [
+    SDL2
+    flac
+    gzip
+    libmpg123
+    libopus
+    libvorbis
+    libX11
+    opusfile
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+    vulkan-headers
+  ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 

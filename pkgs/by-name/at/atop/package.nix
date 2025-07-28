@@ -23,23 +23,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-DQnsyQwU5u9Bwi48V8FCw+T7nPPJQ3kHejPJYdU0MIY=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals withAtopgpu [
-      python3.pkgs.wrapPython
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals withAtopgpu [
+    python3.pkgs.wrapPython
+  ];
 
-  buildInputs =
-    [
-      glib
-      zlib
-      ncurses
-    ]
-    ++ lib.optionals withAtopgpu [
-      python3
-    ];
+  buildInputs = [
+    glib
+    zlib
+    ncurses
+  ]
+  ++ lib.optionals withAtopgpu [
+    python3
+  ];
 
   pythonPath = lib.optionals withAtopgpu [
     python3.pkgs.pynvml
@@ -77,21 +75,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  postInstall =
-    ''
-      # Remove extra files we don't need
-      rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
-    ''
-    + (
-      if withAtopgpu then
-        ''
-          wrapPythonPrograms
-        ''
-      else
-        ''
-          rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
-        ''
-    );
+  postInstall = ''
+    # Remove extra files we don't need
+    rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
+  ''
+  + (
+    if withAtopgpu then
+      ''
+        wrapPythonPrograms
+      ''
+    else
+      ''
+        rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
+      ''
+  );
 
   passthru.tests = { inherit (nixosTests) atop; };
 

@@ -49,18 +49,17 @@ stdenv'.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      curl
-      libarchive
-      libpkgconf
-      nlohmann_json
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libossp_uuid
-      pkgsStatic.fmt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
+  buildInputs = [
+    curl
+    libarchive
+    libpkgconf
+    nlohmann_json
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libossp_uuid
+    pkgsStatic.fmt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
 
   mesonFlags = [ "-Dbenchmarks=false" ];
 

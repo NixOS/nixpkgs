@@ -94,7 +94,8 @@ in
         HF_HOME = ".";
         SENTENCE_TRANSFORMERS_HOME = ".";
         WEBUI_URL = "http://localhost:${toString cfg.port}";
-      } // cfg.environment;
+      }
+      // cfg.environment;
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} serve --host \"${cfg.host}\" --port ${toString cfg.port}";

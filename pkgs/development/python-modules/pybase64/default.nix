@@ -27,7 +27,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   pythonImportsCheck = [ "pybase64" ];
 

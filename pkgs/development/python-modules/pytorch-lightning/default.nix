@@ -50,7 +50,8 @@ buildPythonPackage rec {
     torchmetrics
     tqdm
     traitlets
-  ] ++ fsspec.optional-dependencies.http;
+  ]
+  ++ fsspec.optional-dependencies.http;
 
   nativeCheckInputs = [
     psutil

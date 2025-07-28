@@ -55,16 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'add_test(NAME includetest COMMAND' '# add_test(NAME includetest COMMAND'
   '';
 
-  buildInputs =
-    [
-      libjpeg
-      openssl
-      libgcrypt
-      libpng
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    libjpeg
+    openssl
+    libgcrypt
+    libpng
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   propagatedBuildInputs = [
     zlib

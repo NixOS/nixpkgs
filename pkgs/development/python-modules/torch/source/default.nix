@@ -291,91 +291,89 @@ buildPythonPackage rec {
       ;
   };
 
-  patches =
-    [
-      ./clang19-template-warning.patch
-    ]
-    ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Propagate CUPTI to Kineto by overriding the search path with environment variables.
-      # https://github.com/pytorch/pytorch/pull/108847
-      ./pytorch-pr-108847.patch
-    ]
-    ++ lib.optionals (lib.getName blas.provider == "mkl") [
-      # The CMake install tries to add some hardcoded rpaths, incompatible
-      # with the Nix store, which fails. Simply remove this step to get
-      # rpaths that point to the Nix store.
-      ./disable-cmake-mkl-rpath.patch
-    ];
+  patches = [
+    ./clang19-template-warning.patch
+  ]
+  ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Propagate CUPTI to Kineto by overriding the search path with environment variables.
+    # https://github.com/pytorch/pytorch/pull/108847
+    ./pytorch-pr-108847.patch
+  ]
+  ++ lib.optionals (lib.getName blas.provider == "mkl") [
+    # The CMake install tries to add some hardcoded rpaths, incompatible
+    # with the Nix store, which fails. Simply remove this step to get
+    # rpaths that point to the Nix store.
+    ./disable-cmake-mkl-rpath.patch
+  ];
 
-  postPatch =
-    ''
-      # Prevent NCCL from being cloned during the configure phase
-      # TODO: remove when updating to the next release as it will not be needed anymore
-      substituteInPlace tools/build_pytorch_libs.py \
-        --replace-fail "  checkout_nccl()" "  "
+  postPatch = ''
+    # Prevent NCCL from being cloned during the configure phase
+    # TODO: remove when updating to the next release as it will not be needed anymore
+    substituteInPlace tools/build_pytorch_libs.py \
+      --replace-fail "  checkout_nccl()" "  "
 
-      substituteInPlace cmake/public/cuda.cmake \
-        --replace-fail \
-          'message(FATAL_ERROR "Found two conflicting CUDA' \
-          'message(WARNING "Found two conflicting CUDA' \
-        --replace-warn \
-          "set(CUDAToolkit_ROOT" \
-          "# Upstream: set(CUDAToolkit_ROOT"
-      substituteInPlace third_party/gloo/cmake/Cuda.cmake \
-        --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
+    substituteInPlace cmake/public/cuda.cmake \
+      --replace-fail \
+        'message(FATAL_ERROR "Found two conflicting CUDA' \
+        'message(WARNING "Found two conflicting CUDA' \
+      --replace-warn \
+        "set(CUDAToolkit_ROOT" \
+        "# Upstream: set(CUDAToolkit_ROOT"
+    substituteInPlace third_party/gloo/cmake/Cuda.cmake \
+      --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
 
-      # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
-      sed -i -e "/from __future__ import/d" **.py
-      substituteInPlace third_party/NNPACK/CMakeLists.txt \
-        --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
-      # flag from cmakeFlags doesn't work, not clear why
-      # setting it at the top of NNPACK's own CMakeLists does
-      sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
+    # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
+    sed -i -e "/from __future__ import/d" **.py
+    substituteInPlace third_party/NNPACK/CMakeLists.txt \
+      --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
+    # flag from cmakeFlags doesn't work, not clear why
+    # setting it at the top of NNPACK's own CMakeLists does
+    sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
 
-      # Ensure that torch profiler unwind uses addr2line from nix
-      substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
-        --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
-    ''
-    + lib.optionalString rocmSupport ''
-      # https://github.com/facebookincubator/gloo/pull/297
-      substituteInPlace third_party/gloo/cmake/Hipify.cmake \
-        --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
+    # Ensure that torch profiler unwind uses addr2line from nix
+    substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
+      --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
+  ''
+  + lib.optionalString rocmSupport ''
+    # https://github.com/facebookincubator/gloo/pull/297
+    substituteInPlace third_party/gloo/cmake/Hipify.cmake \
+      --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
 
-      # Replace hard-coded rocm paths
-      substituteInPlace caffe2/CMakeLists.txt \
-        --replace-fail "hcc/include" "hip/include" \
-        --replace-fail "rocblas/include" "include/rocblas" \
-        --replace-fail "hipsparse/include" "include/hipsparse"
+    # Replace hard-coded rocm paths
+    substituteInPlace caffe2/CMakeLists.txt \
+      --replace-fail "hcc/include" "hip/include" \
+      --replace-fail "rocblas/include" "include/rocblas" \
+      --replace-fail "hipsparse/include" "include/hipsparse"
 
-      # Doesn't pick up the environment variable?
-      substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
+    # Doesn't pick up the environment variable?
+    substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
+      --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
 
-      # Strangely, this is never set in cmake
-      substituteInPlace cmake/public/LoadHIP.cmake \
-        --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
-          "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
+    # Strangely, this is never set in cmake
+    substituteInPlace cmake/public/LoadHIP.cmake \
+      --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
+        "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
 
-      # Use composable kernel as dependency, rather than built-in third-party
-      substituteInPlace aten/src/ATen/CMakeLists.txt \
-        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
-        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
-    ''
-    # Detection of NCCL version doesn't work particularly well when using the static binary.
-    + lib.optionalString cudaSupport ''
-      substituteInPlace cmake/Modules/FindNCCL.cmake \
-        --replace-fail \
-          'message(FATAL_ERROR "Found NCCL header version and library version' \
-          'message(WARNING "Found NCCL header version and library version'
-    ''
-    # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
-    # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
-    # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
-    # until https://github.com/pytorch/pytorch/issues/76082 is addressed
-    + lib.optionalString cudaSupport ''
-      rm cmake/Modules/FindCUDAToolkit.cmake
-    '';
+    # Use composable kernel as dependency, rather than built-in third-party
+    substituteInPlace aten/src/ATen/CMakeLists.txt \
+      --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
+      --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
+  ''
+  # Detection of NCCL version doesn't work particularly well when using the static binary.
+  + lib.optionalString cudaSupport ''
+    substituteInPlace cmake/Modules/FindNCCL.cmake \
+      --replace-fail \
+        'message(FATAL_ERROR "Found NCCL header version and library version' \
+        'message(WARNING "Found NCCL header version and library version'
+  ''
+  # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
+  # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
+  # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
+  # until https://github.com/pytorch/pytorch/issues/76082 is addressed
+  + lib.optionalString cudaSupport ''
+    rm cmake/Modules/FindCUDAToolkit.cmake
+  '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
   # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
@@ -435,17 +433,16 @@ buildPythonPackage rec {
   # https://pytorch.org/docs/stable/distributed.html#torch.distributed.is_available
   USE_DISTRIBUTED = setBool true;
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
-      # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
-      (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaMajorMinorVersion)
-    ]
-    ++ lib.optionals cudaSupport [
-      # Unbreaks version discovery in enable_language(CUDA) when wrapping nvcc with ccache
-      # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/26363
-      (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaMajorMinorVersion)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
+    # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
+    (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaMajorMinorVersion)
+  ]
+  ++ lib.optionals cudaSupport [
+    # Unbreaks version discovery in enable_language(CUDA) when wrapping nvcc with ccache
+    # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/26363
+    (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaMajorMinorVersion)
+  ];
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -484,133 +481,129 @@ buildPythonPackage rec {
   # https://github.com/pytorch/pytorch/commit/3d617333e
   PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
 
-  env =
-    {
-      # disable warnings as errors as they break the build on every compiler
-      # bump, among other things.
-      # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
-      # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-      NIX_CFLAGS_COMPILE = toString (
-        [
-          "-Wno-error"
-        ]
-        # fix build aarch64-linux build failure with GCC14
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-          "-Wno-error=incompatible-pointer-types"
-        ]
-      );
-      USE_VULKAN = setBool vulkanSupport;
-    }
-    // lib.optionalAttrs vulkanSupport {
-      VULKAN_SDK = shaderc.bin;
-    }
-    // lib.optionalAttrs rocmSupport {
-      AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
-    };
-
-  nativeBuildInputs =
-    [
-      cmake
-      which
-      ninja
-      pybind11
-      pkg-config
-      removeReferencesTo
-    ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
+  env = {
+    # disable warnings as errors as they break the build on every compiler
+    # bump, among other things.
+    # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
+    # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
+    NIX_CFLAGS_COMPILE = toString (
       [
-        autoAddDriverRunpath
-        cuda_nvcc
+        "-Wno-error"
       ]
-    )
-    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
-    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+      # fix build aarch64-linux build failure with GCC14
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        "-Wno-error=incompatible-pointer-types"
+      ]
+    );
+    USE_VULKAN = setBool vulkanSupport;
+  }
+  // lib.optionalAttrs vulkanSupport {
+    VULKAN_SDK = shaderc.bin;
+  }
+  // lib.optionalAttrs rocmSupport {
+    AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
+  };
 
-  buildInputs =
+  nativeBuildInputs = [
+    cmake
+    which
+    ninja
+    pybind11
+    pkg-config
+    removeReferencesTo
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      blas
-      blas.provider
+      autoAddDriverRunpath
+      cuda_nvcc
     ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl # <thrust/*>
-        cuda_cudart # cuda_runtime.h and libraries
-        cuda_cupti # For kineto
-        cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
-        cuda_nvml_dev # <nvml.h>
-        cuda_nvrtc
-        cuda_nvtx # -llibNVToolsExt
-        cusparselt
-        libcublas
-        libcufft
-        libcufile
-        libcurand
-        libcusolver
-        libcusparse
-      ]
-      ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
-      ++ lists.optionals useSystemNccl [
-        # Some platforms do not support NCCL (i.e., Jetson)
-        nccl # Provides nccl.h AND a static copy of NCCL!
-      ]
-      ++ lists.optionals (cudaOlder "11.8") [
-        cuda_nvprof # <cuda_profiler_api.h>
-      ]
-      ++ lists.optionals (cudaAtLeast "11.8") [
-        cuda_profiler_api # <cuda_profiler_api.h>
-      ]
-    )
-    ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_13
+  )
+  ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
+  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+
+  buildInputs = [
+    blas
+    blas.provider
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cuda_cccl # <thrust/*>
+      cuda_cudart # cuda_runtime.h and libraries
+      cuda_cupti # For kineto
+      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
+      cuda_nvml_dev # <nvml.h>
+      cuda_nvrtc
+      cuda_nvtx # -llibNVToolsExt
+      cusparselt
+      libcublas
+      libcufft
+      libcufile
+      libcurand
+      libcusolver
+      libcusparse
     ]
-    ++ lib.optionals tritonSupport [ _tritonEffective ]
-    ++ lib.optionals MPISupport [ mpi ]
-    ++ lib.optionals rocmSupport [
-      rocmtoolkit_joined
-      rocmPackages.clr # Added separately so setup hook applies
-    ];
+    ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
+    ++ lists.optionals useSystemNccl [
+      # Some platforms do not support NCCL (i.e., Jetson)
+      nccl # Provides nccl.h AND a static copy of NCCL!
+    ]
+    ++ lists.optionals (cudaOlder "11.8") [
+      cuda_nvprof # <cuda_profiler_api.h>
+    ]
+    ++ lists.optionals (cudaAtLeast "11.8") [
+      cuda_profiler_api # <cuda_profiler_api.h>
+    ]
+  )
+  ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
+  ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_13
+  ]
+  ++ lib.optionals tritonSupport [ _tritonEffective ]
+  ++ lib.optionals MPISupport [ mpi ]
+  ++ lib.optionals rocmSupport [
+    rocmtoolkit_joined
+    rocmPackages.clr # Added separately so setup hook applies
+  ];
 
   pythonRelaxDeps = [
     "sympy"
   ];
-  dependencies =
-    [
-      astunparse
-      expecttest
-      filelock
-      fsspec
-      hypothesis
-      jinja2
-      networkx
-      ninja
-      packaging
-      psutil
-      pyyaml
-      requests
-      sympy
-      types-dataclasses
-      typing-extensions
+  dependencies = [
+    astunparse
+    expecttest
+    filelock
+    fsspec
+    hypothesis
+    jinja2
+    networkx
+    ninja
+    packaging
+    psutil
+    pyyaml
+    requests
+    sympy
+    types-dataclasses
+    typing-extensions
 
-      # the following are required for tensorboard support
-      pillow
-      six
-      tensorboard
-      protobuf
+    # the following are required for tensorboard support
+    pillow
+    six
+    tensorboard
+    protobuf
 
-      # torch/csrc requires `pybind11` at runtime
-      pybind11
-    ]
-    ++ lib.optionals tritonSupport [ _tritonEffective ]
-    ++ lib.optionals vulkanSupport [
-      vulkan-headers
-      vulkan-loader
-    ];
+    # torch/csrc requires `pybind11` at runtime
+    pybind11
+  ]
+  ++ lib.optionals tritonSupport [ _tritonEffective ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ];
 
   propagatedCxxBuildInputs =
     [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
@@ -650,61 +643,59 @@ buildPythonPackage rec {
     "pytorch-triton-rocm"
   ];
 
-  postInstall =
-    ''
-      find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+  postInstall = ''
+    find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
 
-      mkdir $dev
+    mkdir $dev
 
-      # CppExtension requires that include files are packaged with the main
-      # python library output; which is why they are copied here.
-      cp -r $out/${python.sitePackages}/torch/include $dev/include
+    # CppExtension requires that include files are packaged with the main
+    # python library output; which is why they are copied here.
+    cp -r $out/${python.sitePackages}/torch/include $dev/include
 
-      # Cmake files under /share are different and can be safely moved. This
-      # avoids unnecessary closure blow-up due to apple sdk references when
-      # USE_DISTRIBUTED is enabled.
-      mv $out/${python.sitePackages}/torch/share $dev/share
+    # Cmake files under /share are different and can be safely moved. This
+    # avoids unnecessary closure blow-up due to apple sdk references when
+    # USE_DISTRIBUTED is enabled.
+    mv $out/${python.sitePackages}/torch/share $dev/share
 
-      # Fix up library paths for split outputs
-      substituteInPlace \
-        $dev/share/cmake/Torch/TorchConfig.cmake \
-        --replace-fail \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
+    # Fix up library paths for split outputs
+    substituteInPlace \
+      $dev/share/cmake/Torch/TorchConfig.cmake \
+      --replace-fail \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
 
-      substituteInPlace \
-        $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
-        --replace-fail \''${_IMPORT_PREFIX}/lib "$lib/lib"
+    substituteInPlace \
+      $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
+      --replace-fail \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
-      mkdir $lib
-      mv $out/${python.sitePackages}/torch/lib $lib/lib
-      ln -s $lib/lib $out/${python.sitePackages}/torch/lib
-    ''
-    + lib.optionalString rocmSupport ''
-      substituteInPlace $dev/share/cmake/Tensorpipe/TensorpipeTargets-release.cmake \
-        --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
+    mkdir $lib
+    mv $out/${python.sitePackages}/torch/lib $lib/lib
+    ln -s $lib/lib $out/${python.sitePackages}/torch/lib
+  ''
+  + lib.optionalString rocmSupport ''
+    substituteInPlace $dev/share/cmake/Tensorpipe/TensorpipeTargets-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
 
-      substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-        --replace-fail "/build/${src.name}/torch/include" "$dev/include"
-    '';
+    substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
+      --replace-fail "/build/${src.name}/torch/include" "$dev/include"
+  '';
 
-  postFixup =
-    ''
-      mkdir -p "$cxxdev/nix-support"
-      printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for f in $(ls $lib/lib/*.dylib); do
-          install_name_tool -id $lib/lib/$(basename $f) $f || true
-      done
+  postFixup = ''
+    mkdir -p "$cxxdev/nix-support"
+    printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for f in $(ls $lib/lib/*.dylib); do
+        install_name_tool -id $lib/lib/$(basename $f) $f || true
+    done
 
-      install_name_tool -change @rpath/libshm.dylib $lib/lib/libshm.dylib $lib/lib/libtorch_python.dylib
-      install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libtorch_python.dylib
-      install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libshm.dylib $lib/lib/libshm.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch_python.dylib
 
-      install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch.dylib
 
-      install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
-      install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
-    '';
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
+  '';
 
   # See https://github.com/NixOS/nixpkgs/issues/296179
   #
@@ -755,8 +746,7 @@ buildPythonPackage rec {
       tscholak
     ]; # tscholak esp. for darwin-related builds
     platforms =
-      lib.platforms.linux
-      ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
+      lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
   };
 }

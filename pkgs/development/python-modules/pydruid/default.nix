@@ -41,7 +41,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pycurl
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pydruid" ];
 

@@ -97,54 +97,53 @@ stdenvNoCC.mkDerivation rec {
       "!defined(BIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD)" "0"
   '';
 
-  installPhase =
-    ''
-      # copy the bionic headers
-      mkdir -p $out/include/support $out/include/android
-      cp -vr libc/include/* $out/include
-      # copy the kernel headers
-      cp -vr ${kernelHeaders}/include/*  $out/include/
+  installPhase = ''
+    # copy the bionic headers
+    mkdir -p $out/include/support $out/include/android
+    cp -vr libc/include/* $out/include
+    # copy the kernel headers
+    cp -vr ${kernelHeaders}/include/*  $out/include/
 
-      chmod -R +w $out/include/linux
+    chmod -R +w $out/include/linux
 
-      # fix a bunch of kernel headers so that things can actually be found
-      sed -i 's,struct epoll_event {,#include <bits/epoll_event.h>\nstruct Xepoll_event {,' $out/include/linux/eventpoll.h
-      sed -i 's,struct in_addr {,typedef unsigned int in_addr_t;\nstruct in_addr {,' $out/include/linux/in.h
-      sed -i 's,struct udphdr {,struct Xudphdr {,' $out/include/linux/udp.h
-      sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
-      sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
-      sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
-      substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
-      substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
-      substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
+    # fix a bunch of kernel headers so that things can actually be found
+    sed -i 's,struct epoll_event {,#include <bits/epoll_event.h>\nstruct Xepoll_event {,' $out/include/linux/eventpoll.h
+    sed -i 's,struct in_addr {,typedef unsigned int in_addr_t;\nstruct in_addr {,' $out/include/linux/in.h
+    sed -i 's,struct udphdr {,struct Xudphdr {,' $out/include/linux/udp.h
+    sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
+    sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
+    sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
+    substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
+    substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
+    substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
 
-      # what could possibly live in <linux/compiler.h>
-      touch $out/include/linux/compiler.h
+    # what could possibly live in <linux/compiler.h>
+    touch $out/include/linux/compiler.h
 
-      # copy the support headers
-      cp -vr ${ndk_support_headers}* $out/include/support/
+    # copy the support headers
+    cp -vr ${ndk_support_headers}* $out/include/support/
 
-      mkdir $out/lib
-      cp -v ${prebuilt_crt.out}/*.o $out/lib/
-      cp -v ${prebuilt_crt.out}/libgcc.a $out/lib/
-      cp -v ${prebuilt_ndk_crt.out}/*.o $out/lib/
-    ''
-    + lib.optionalString enableShared ''
-      for i in libc.so libm.so libdl.so liblog.so; do
-        cp -v ${prebuilt_libs.out}/$i $out/lib/
-      done
-    ''
-    + lib.optionalString enableStatic ''
-      # no liblog.a; while it's also part of the base libraries,
-      # it's only available as shared object in the prebuilts.
-      for i in libc.a libm.a libdl.a; do
-        cp -v ${prebuilt_ndk_crt.out}/$i $out/lib/
-      done
-    ''
-    + ''
-      mkdir -p $dev/include
-      cp -v $out/include/*.h $dev/include/
-    '';
+    mkdir $out/lib
+    cp -v ${prebuilt_crt.out}/*.o $out/lib/
+    cp -v ${prebuilt_crt.out}/libgcc.a $out/lib/
+    cp -v ${prebuilt_ndk_crt.out}/*.o $out/lib/
+  ''
+  + lib.optionalString enableShared ''
+    for i in libc.so libm.so libdl.so liblog.so; do
+      cp -v ${prebuilt_libs.out}/$i $out/lib/
+    done
+  ''
+  + lib.optionalString enableStatic ''
+    # no liblog.a; while it's also part of the base libraries,
+    # it's only available as shared object in the prebuilts.
+    for i in libc.a libm.a libdl.a; do
+      cp -v ${prebuilt_ndk_crt.out}/$i $out/lib/
+    done
+  ''
+  + ''
+    mkdir -p $dev/include
+    cp -v $out/include/*.h $dev/include/
+  '';
 
   outputs = [
     "out"

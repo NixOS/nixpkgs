@@ -17,7 +17,7 @@ let
   botScript = "$out/bin/wpcleaner-bot";
   runTaskScript = "$out/bin/wpcleaner-run-task";
   extraJavaArgs = [
-    "-Dawt.useSystemAAFontSettings=lcd"
+    "-Dawt.useSystemAAFontSettings=gasp"
     "-Xms1g"
     "-Xmx8g"
   ];

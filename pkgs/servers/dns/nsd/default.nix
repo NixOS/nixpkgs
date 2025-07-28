@@ -36,15 +36,14 @@ stdenv.mkDerivation rec {
     substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
   '';
 
-  buildInputs =
-    [
-      libevent
-      openssl
-    ]
-    ++ lib.optionals withSystemd [
-      systemdMinimal
-      pkg-config
-    ];
+  buildInputs = [
+    libevent
+    openssl
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 

@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   # Remove when updating to next version
   configurePhase = ''
+    runHook preConfigure
+
     ./configure --prefix=$out --with-lisp='sbcl --dynamic-space-size 3072'
+
+    runHook postConfigure
   '';
 
   dontStrip = true;

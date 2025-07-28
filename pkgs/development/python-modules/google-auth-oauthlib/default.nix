@@ -37,17 +37,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.tool;
+  ]
+  ++ optional-dependencies.tool;
 
-  disabledTests =
-    [
-      # Flaky test. See https://github.com/NixOS/nixpkgs/issues/288424#issuecomment-1941609973.
-      "test_run_local_server_occupied_port"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
-      "test_run_local_server_bind_addr"
-    ];
+  disabledTests = [
+    # Flaky test. See https://github.com/NixOS/nixpkgs/issues/288424#issuecomment-1941609973.
+    "test_run_local_server_occupied_port"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
+    "test_run_local_server_bind_addr"
+  ];
 
   pythonImportsCheck = [ "google_auth_oauthlib" ];
 

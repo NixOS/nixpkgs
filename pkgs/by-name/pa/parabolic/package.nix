@@ -54,41 +54,39 @@ stdenv.mkDerivation (finalAttrs: {
                      "@CMAKE_INSTALL_FULL_BINDIR@/@PROJECT_NAME@"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      gettext
-      ninja
-      pkg-config
-      itstool
-      yelp-tools
-      desktop-file-utils
-    ]
-    ++ lib.optionals (uiPlatform == "gnome") [
-      wrapGAppsHook4
-      blueprint-compiler
-      glib
-      shared-mime-info
-    ]
-    ++ lib.optional (uiPlatform == "qt") qt6.wrapQtAppsHook;
+  nativeBuildInputs = [
+    cmake
+    gettext
+    ninja
+    pkg-config
+    itstool
+    yelp-tools
+    desktop-file-utils
+  ]
+  ++ lib.optionals (uiPlatform == "gnome") [
+    wrapGAppsHook4
+    blueprint-compiler
+    glib
+    shared-mime-info
+  ]
+  ++ lib.optional (uiPlatform == "qt") qt6.wrapQtAppsHook;
 
-  buildInputs =
-    [
-      libnick
-      boost
-    ]
-    ++ lib.optionals (uiPlatform == "qt") [
-      qt6.qtbase
-      qt6.qtsvg
-      qlementine
-      qlementine-icons
-    ]
-    ++ lib.optionals (uiPlatform == "gnome") [
-      glib
-      gtk4
-      libadwaita
-      libxmlxx5
-    ];
+  buildInputs = [
+    libnick
+    boost
+  ]
+  ++ lib.optionals (uiPlatform == "qt") [
+    qt6.qtbase
+    qt6.qtsvg
+    qlementine
+    qlementine-icons
+  ]
+  ++ lib.optionals (uiPlatform == "gnome") [
+    glib
+    gtk4
+    libadwaita
+    libxmlxx5
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "UI_PLATFORM" uiPlatform)

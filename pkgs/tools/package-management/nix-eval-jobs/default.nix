@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
-    rev = "v${version}";
+    repo = "nix-eval-jobs";
+    tag = "v${version}";
     hash = "sha256-AJ22q6yWc1hPkqssXMxQqD6QUeJ6hbx52xWHhKsmuP0=";
   };
 
@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   # Since this package is intimately tied to a specific Nix release, we

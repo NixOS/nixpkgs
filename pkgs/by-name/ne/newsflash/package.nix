@@ -27,18 +27,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "4.0.3";
+  version = "4.1.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-TVQZq+Akb7EFUazAgUqvlwC7htVpUf7Hck8p7vY0o3M=";
+    hash = "sha256-yNO9ju5AQzMeZlQN1f3FRiFA6hq89mSuQClrJkoM+xE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-fjb/AVvWbSq+Mc+5D7wCncLQ8OPjnTqHMzFFYgmCCjY=";
+    hash = "sha256-gF1wHLM5t0jYm/nWQQeAbDlExsPYNV0/YYH0yfQuetM=";
   };
 
   postPatch = ''
@@ -65,29 +65,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   ];
 
-  buildInputs =
-    [
-      clapper-unwrapped
-      gtk4
-      libadwaita
-      libxml2
-      openssl
-      sqlite
-      webkitgtk_6_0
+  buildInputs = [
+    clapper-unwrapped
+    gtk4
+    libadwaita
+    libxml2
+    openssl
+    sqlite
+    webkitgtk_6_0
 
-      # TLS support for loading external content in webkitgtk WebView
-      glib-networking
+    # TLS support for loading external content in webkitgtk WebView
+    glib-networking
 
-      # SVG support for gdk-pixbuf
-      librsvg
-    ]
-    ++ (with gst_all_1; [
-      # Audio & video support for webkitgtk WebView
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # SVG support for gdk-pixbuf
+    librsvg
+  ]
+  ++ (with gst_all_1; [
+    # Audio & video support for webkitgtk WebView
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v.";

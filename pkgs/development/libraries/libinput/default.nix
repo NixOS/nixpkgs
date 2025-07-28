@@ -70,40 +70,38 @@ stdenv.mkDerivation rec {
     ./udev-absolute-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      udevCheckHook
-    ]
-    ++ lib.optionals documentationSupport [
-      doxygen
-      graphviz
-      sphinx-build
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    udevCheckHook
+  ]
+  ++ lib.optionals documentationSupport [
+    doxygen
+    graphviz
+    sphinx-build
+  ];
 
-  buildInputs =
-    [
-      libevdev
-      mtdev
-      libwacom
-      (python3.withPackages (
-        pp: with pp; [
-          pp.libevdev # already in scope
-          pyudev
-          pyyaml
-          setuptools
-        ]
-      ))
-    ]
-    ++ lib.optionals eventGUISupport [
-      # GUI event viewer
-      cairo
-      glib
-      gtk3
-      wayland-scanner
-    ];
+  buildInputs = [
+    libevdev
+    mtdev
+    libwacom
+    (python3.withPackages (
+      pp: with pp; [
+        pp.libevdev # already in scope
+        pyudev
+        pyyaml
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals eventGUISupport [
+    # GUI event viewer
+    cairo
+    glib
+    gtk3
+    wayland-scanner
+  ];
 
   propagatedBuildInputs = [
     udev
@@ -154,5 +152,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ codyopel ];
     teams = [ teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

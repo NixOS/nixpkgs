@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vulkan-loader
     wayland
-  ] ++ lib.lists.optionals x11Support [ qtx11extras ];
+  ]
+  ++ lib.lists.optionals x11Support [ qtx11extras ];
 
   patchPhase = ''
     substituteInPlace vulkanCapsViewer.pro \

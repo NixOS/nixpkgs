@@ -25,7 +25,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     six
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "txredisapi" ];
 

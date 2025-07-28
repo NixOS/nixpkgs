@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
       ps.setuptools
       ps.psycopg2
     ]))
-  ] ++ runtimeProgDeps;
+  ]
+  ++ runtimeProgDeps;
 
   installPhase = ''
     runHook preInstall
@@ -66,7 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bazarr.media/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ d-xo ];
     mainProgram = "bazarr";
     platforms = platforms.all;
   };

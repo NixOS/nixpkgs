@@ -71,43 +71,41 @@ let
         unzip
       ];
 
-      buildInputs =
-        [
-          SDL2
-          boost
-          freetype
-          libpng
-          ois
-          pugixml
-          zziplib
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          libglut
-          libGL
-          libGLU
-          libICE
-          libSM
-          libX11
-          libXaw
-          libXmu
-          libXrandr
-          libXrender
-          libXt
-          libXxf86vm
-          xorgproto
-        ]
-        ++ lib.optionals withNvidiaCg [
-          nvidia_cg_toolkit
-        ];
+      buildInputs = [
+        SDL2
+        boost
+        freetype
+        libpng
+        ois
+        pugixml
+        zziplib
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libglut
+        libGL
+        libGLU
+        libICE
+        libSM
+        libX11
+        libXaw
+        libXmu
+        libXrandr
+        libXrender
+        libXt
+        libXxf86vm
+        xorgproto
+      ]
+      ++ lib.optionals withNvidiaCg [
+        nvidia_cg_toolkit
+      ];
 
-      cmakeFlags =
-        [
-          (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
-          (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
-        ];
+      cmakeFlags = [
+        (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
+        (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
+      ];
 
       meta = {
         description = "3D Object-Oriented Graphics Rendering Engine";

@@ -46,7 +46,6 @@ let
       ./update-flutter-dev-path.patch
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-4khuq/DK4sP98AMHyr/lEo1OJdqLujOIi8IgbKBY60Y=";
     cargoBuildFlags = [
       "--package"

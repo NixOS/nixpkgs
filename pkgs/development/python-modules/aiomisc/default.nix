@@ -34,10 +34,11 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [ colorlog ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
+  dependencies = [
+    colorlog
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
 
   nativeCheckInputs = [
     aiocontextvars
@@ -45,7 +46,8 @@ buildPythonPackage rec {
     fastapi
     pytestCheckHook
     setproctitle
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];

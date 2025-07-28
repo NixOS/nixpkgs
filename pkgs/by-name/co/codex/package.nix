@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QIZ3V4NUo1VxJN3cwdQf3S0zwePnwdKKfch0jlIJacU=";
 
   nativeBuildInputs = [

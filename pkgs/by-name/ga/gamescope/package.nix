@@ -106,69 +106,67 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      pkg-config
-      ninja
-      wayland-scanner
-      # For `libdisplay-info`
-      python3
-      hwdata
-      v4l-utils
-      # For OpenVR
-      cmake
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    wayland-scanner
+    # For `libdisplay-info`
+    python3
+    hwdata
+    v4l-utils
+    # For OpenVR
+    cmake
 
-      # calls git describe to encode its own version into the build
-      (buildPackages.writeShellScriptBin "git" "echo ${finalAttrs.version}")
-    ]
-    ++ lib.optionals enableExecutable [
-      makeBinaryWrapper
-      glslang
-    ];
+    # calls git describe to encode its own version into the build
+    (buildPackages.writeShellScriptBin "git" "echo ${finalAttrs.version}")
+  ]
+  ++ lib.optionals enableExecutable [
+    makeBinaryWrapper
+    glslang
+  ];
 
-  buildInputs =
-    [
-      pipewire
-      hwdata
-      xorg.libX11
-      wayland
-      wayland-protocols
-      vulkan-loader
-      glm
-      luajit
+  buildInputs = [
+    pipewire
+    hwdata
+    xorg.libX11
+    wayland
+    wayland-protocols
+    vulkan-loader
+    glm
+    luajit
+  ]
+  ++ lib.optionals enableWsi [
+    vulkan-headers
+  ]
+  ++ lib.optionals enableExecutable (
+    wlroots.buildInputs
+    ++ [
+      # gamescope uses a custom wlroots branch
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXi
+      xorg.libXmu
+      xorg.libXrender
+      xorg.libXres
+      xorg.libXtst
+      xorg.libXxf86vm
+      libavif
+      libdrm
+      libei
+      SDL2
+      libdecor
+      libinput
+      libxkbcommon
+      gbenchmark
+      pixman
+      libcap
+      stb
+      lcms
     ]
-    ++ lib.optionals enableWsi [
-      vulkan-headers
-    ]
-    ++ lib.optionals enableExecutable (
-      wlroots.buildInputs
-      ++ [
-        # gamescope uses a custom wlroots branch
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXi
-        xorg.libXmu
-        xorg.libXrender
-        xorg.libXres
-        xorg.libXtst
-        xorg.libXxf86vm
-        libavif
-        libdrm
-        libei
-        SDL2
-        libdecor
-        libinput
-        libxkbcommon
-        gbenchmark
-        pixman
-        libcap
-        stb
-        lcms
-      ]
-    );
+  );
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary

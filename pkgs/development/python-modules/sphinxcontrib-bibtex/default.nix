@@ -30,17 +30,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      docutils
-      oset
-      pybtex
-      pybtex-docutils
-      sphinx
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ];
+  dependencies = [
+    docutils
+    oset
+    pybtex
+    pybtex-docutils
+    sphinx
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

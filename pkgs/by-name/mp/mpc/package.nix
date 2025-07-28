@@ -24,7 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmpdclient
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles

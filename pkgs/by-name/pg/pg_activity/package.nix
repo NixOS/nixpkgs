@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
-  version = "3.6.0";
+  version = "3.6.1";
   pyproject = true;
   disabled = python3Packages.pythonOlder "3.8";
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "dalibo";
     repo = "pg_activity";
     tag = "v${version}";
-    sha256 = "sha256-7nHtJl/b2pZqiJbpWArMS5jh7B8dv8V1esic6uFPV/0=";
+    sha256 = "sha256-TzY+3RE06TxIrhl75wol9CvZDIz25GfgOx11vkREw2c=";
   };
 
   build-system = with python3Packages; [ setuptools ];

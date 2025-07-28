@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gitolite";
-  version = "3.6.13";
+  version = "3.6.14";
 
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
     rev = "v${version}";
-    hash = "sha256-/VBu+aepIrxWc2padPa/WoXbIdKfIwqmA/M8d1GE5FI=";
+    hash = "sha256-BwpqvjpHzoypV91W/QReAgiNrmpxZ0IE3W/bpCVO1GE=";
   };
 
   buildInputs = [

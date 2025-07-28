@@ -164,33 +164,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = [
     "-I${finalAttrs.toolchain}/include"
-  ] ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
+  ]
+  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
     openbox
   ];
 
-  nativeBuildInputs =
-    [
-      (python3.withPackages (
-        ps: with ps; [
-          pyyaml
-        ]
-      ))
-      (tools.vpython python3)
-      gitMinimal
-      pkg-config
-      ninja
-      dart
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ patchelf ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      darwin.system_cmds
-      darwin.xcode
-      tools.xcode-select
-    ]
-    ++ lib.optionals (stdenv.cc.libc ? bin) [ stdenv.cc.libc.bin ];
+  nativeBuildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        pyyaml
+      ]
+    ))
+    (tools.vpython python3)
+    gitMinimal
+    pkg-config
+    ninja
+    dart
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ patchelf ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    darwin.system_cmds
+    darwin.xcode
+    tools.xcode-select
+  ]
+  ++ lib.optionals (stdenv.cc.libc ? bin) [ stdenv.cc.libc.bin ];
 
   buildInputs = [ gtk3 ];
 
@@ -202,7 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
     dartPath
     "flutter"
     "."
-  ] ++ lib.optional (lib.versionAtLeast flutterVersion "3.21") "flutter/third_party/skia";
+  ]
+  ++ lib.optional (lib.versionAtLeast flutterVersion "3.21") "flutter/third_party/skia";
 
   postUnpack = ''
     pushd ${src.name}
@@ -256,42 +257,40 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  configureFlags =
-    [
-      "--no-prebuilt-dart-sdk"
-      "--embedder-for-target"
-      "--no-goma"
-    ]
-    ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
-      "--linux"
-      "--linux-cpu ${constants.alt-arch}"
-    ]
-    ++ lib.optional (!isOptimized) "--unoptimized"
-    ++ lib.optional (runtimeMode == "debug") "--no-stripped"
-    ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-unittests"
-    ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--no-enable-unittests";
+  configureFlags = [
+    "--no-prebuilt-dart-sdk"
+    "--embedder-for-target"
+    "--no-goma"
+  ]
+  ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
+    "--linux"
+    "--linux-cpu ${constants.alt-arch}"
+  ]
+  ++ lib.optional (!isOptimized) "--unoptimized"
+  ++ lib.optional (runtimeMode == "debug") "--no-stripped"
+  ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-unittests"
+  ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
-  configurePhase =
-    ''
-      runHook preConfigure
+  configurePhase = ''
+    runHook preConfigure
 
-      export PYTHONPATH=$src/src/build
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export PATH=${darwin.xcode}/Contents/Developer/usr/bin/:$PATH
-    ''
-    + ''
-      python3 ./src/flutter/tools/gn $configureFlags \
-        --runtime-mode $runtimeMode \
-        --out-dir $out \
-        --target-sysroot $toolchain \
-        --target-dir $outName \
-        --target-triple ${stdenv.targetPlatform.config} \
-        --enable-fontconfig
+    export PYTHONPATH=$src/src/build
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PATH=${darwin.xcode}/Contents/Developer/usr/bin/:$PATH
+  ''
+  + ''
+    python3 ./src/flutter/tools/gn $configureFlags \
+      --runtime-mode $runtimeMode \
+      --out-dir $out \
+      --target-sysroot $toolchain \
+      --target-dir $outName \
+      --target-triple ${stdenv.targetPlatform.config} \
+      --enable-fontconfig
 
-      runHook postConfigure
-    '';
+    runHook postConfigure
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -318,21 +317,20 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/out/run_tests.log
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
-      rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
-      find $out/out/$outName -name '*_unittests' -delete
-      find $out/out/$outName -name '*_benchmarks' -delete
-    ''
-    + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
-      rm $out/out/$outName/{display_list_rendertests,flutter_tester}
-    ''
-    + ''
-      runHook postInstall
-    '';
+    rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
+    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
+    find $out/out/$outName -name '*_unittests' -delete
+    find $out/out/$outName -name '*_benchmarks' -delete
+  ''
+  + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru = {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };

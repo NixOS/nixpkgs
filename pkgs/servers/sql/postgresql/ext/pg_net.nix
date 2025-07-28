@@ -8,20 +8,16 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_net";
-  version = "0.18.0";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "pg_net";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MXZewz6vb1ZEGMzbk/x0VtBDH2GxnwYWsy3EjJnas2U=";
+    hash = "sha256-PZYIwkXp1rOzRCDZivJFMuEQBYJaaibUN/WkL+6crSg=";
   };
 
   buildInputs = [ curl ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional (lib.versionAtLeast postgresql.version "18") "-Wno-error=missing-variable-declarations"
-  );
 
   meta = {
     description = "Async networking for Postgres";

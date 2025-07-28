@@ -63,21 +63,21 @@ buildPythonPackage rec {
     tomli-w
     polars
     pandas
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests =
-    [
-      # not compatible with pydantic 2.x
-      "test_pydantic1"
-      "test_pydantic2"
-      # Require pytest-benchmark
-      "test_cache_deeply_nested_a1"
-      "test_lfu"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Times out on darwin in Hydra
-      "test_repeated_timer"
-    ];
+  disabledTests = [
+    # not compatible with pydantic 2.x
+    "test_pydantic1"
+    "test_pydantic2"
+    # Require pytest-benchmark
+    "test_cache_deeply_nested_a1"
+    "test_lfu"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Times out on darwin in Hydra
+    "test_repeated_timer"
+  ];
 
   pythonImportsCheck = [ "deepdiff" ];
 

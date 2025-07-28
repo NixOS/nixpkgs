@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "wdomirror";
-  version = "unstable-2021-01-08";
+  version = "0-unstable-2021-01-08";
 
   src = fetchFromGitHub {
     owner = "progandy";

@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";
     description = "Off-line and private journal and note taking application";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "lifeograph";
     platforms = lib.platforms.linux;
   };

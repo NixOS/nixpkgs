@@ -38,7 +38,8 @@ let
           linus
           toastal
         ];
-      } // meta;
+      }
+      // meta;
     });
 in
 lib.mapAttrs mkOpenRelayTypeface {

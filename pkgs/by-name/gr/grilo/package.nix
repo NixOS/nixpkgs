@@ -45,22 +45,21 @@ stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      python3
-      gettext
-      gobject-introspection
-      vala
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    gettext
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib

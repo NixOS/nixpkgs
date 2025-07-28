@@ -55,7 +55,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     typeguard
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "renault_api" ];
 

@@ -8,7 +8,7 @@
   git,
   cmake,
   nixosTests,
-  nixfmt-rfc-style,
+  nixfmt,
   mobilizon-frontend,
   ...
 }:
@@ -145,7 +145,7 @@ mixRelease rec {
       set -eou pipefail
 
       ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
-      ${lib.getExe nixfmt-rfc-style} pkgs/servers/mobilizon/mix.nix
+      ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
   };

@@ -36,43 +36,42 @@ stdenvNoCC.mkDerivation rec {
 
   _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
-  installPhase =
-    ''
-      # We check availability in order of variable -> otf -> ttf
-      # unhinted -- the hinted versions use autohint
-      # maintaining maximum coverage.
-      #
-      # We have a mix of otf and ttf fonts
-      local out_font=$out/share/fonts/noto
+  installPhase = ''
+    # We check availability in order of variable -> otf -> ttf
+    # unhinted -- the hinted versions use autohint
+    # maintaining maximum coverage.
+    #
+    # We have a mix of otf and ttf fonts
+    local out_font=$out/share/fonts/noto
 
-      install -m444 -Dt $megamerge/share/fonts/truetype/ megamerge/*.ttf
-    ''
-    + (
-      if _variants == [ ] then
-        ''
-          for folder in $(ls -d fonts/*/); do
-            if [[ -d "$folder"unhinted/variable-ttf ]]; then
-              install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
-            elif [[ -d "$folder"unhinted/otf ]]; then
-              install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
-            else
-              install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
-            fi
-          done
-        ''
-      else
-        ''
-          for variant in $_variants; do
-            if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
-              install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
-            elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
-              install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
-            else
-              install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
-            fi
-          done
-        ''
-    );
+    install -m444 -Dt $megamerge/share/fonts/truetype/ megamerge/*.ttf
+  ''
+  + (
+    if _variants == [ ] then
+      ''
+        for folder in $(ls -d fonts/*/); do
+          if [[ -d "$folder"unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
+          elif [[ -d "$folder"unhinted/otf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
+          fi
+        done
+      ''
+    else
+      ''
+        for variant in $_variants; do
+          if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
+          elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
+          fi
+        done
+      ''
+  );
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "noto-monthly-release-";

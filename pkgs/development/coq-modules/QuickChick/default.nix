@@ -68,12 +68,13 @@ in
 
   mlPlugin = true;
   nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
-  propagatedBuildInputs =
-    [ mathcomp-boot ]
-    ++ lib.optionals recent [
-      ExtLib
-      simple-io
-    ];
+  propagatedBuildInputs = [
+    mathcomp-boot
+  ]
+  ++ lib.optionals recent [
+    ExtLib
+    simple-io
+  ];
   extraInstallFlags = [ "-f Makefile.coq" ];
 
   enableParallelBuilding = false;

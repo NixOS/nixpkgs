@@ -136,22 +136,21 @@ buildDotnetModule (finalAttrs: {
     "RequiresNetworking!=True"
   ];
 
-  disabledTests =
-    [
-      # Fails attempting to download game hashes DB from github:
-      # HttpRequestException : Resource temporarily unavailable (github.com:443)
-      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
+  disabledTests = [
+    # Fails attempting to download game hashes DB from github:
+    # HttpRequestException : Resource temporarily unavailable (github.com:443)
+    "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
+    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
+    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
+    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
 
-      # Fails attempting to fetch SMAPI version data from github:
-      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
-      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
-    ]
-    ++ lib.optionals (!_7zz.meta.unfree) [
-      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-    ];
+    # Fails attempting to fetch SMAPI version data from github:
+    # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+    "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
+  ]
+  ++ lib.optionals (!_7zz.meta.unfree) [
+    "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+  ];
 
   doInstallCheck = true;
 

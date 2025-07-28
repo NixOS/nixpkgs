@@ -63,7 +63,8 @@ buildPythonPackage rec {
     gitpython
     pydeck
     tornado
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;

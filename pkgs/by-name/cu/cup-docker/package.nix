@@ -62,13 +62,12 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-L9zugOwlPwpdtjV87dT1PH7FAMJYHYFuvfyOfPe5b2k=";
 
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    [
-      "cli"
-    ]
-    ++ lib.optional withServer [
-      "server"
-    ];
+  buildFeatures = [
+    "cli"
+  ]
+  ++ lib.optional withServer [
+    "server"
+  ];
 
   preConfigure = lib.optionalString withServer ''
     cp -r ${web}/dist src/static

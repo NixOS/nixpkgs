@@ -62,6 +62,11 @@ buildPerlPackage rec {
       url = "https://github.com/mquinson/po4a/commit/28fe52651eb8096d97d6bd3a97b3168522ba5306.patch";
       hash = "sha256-QUXxkSzcnwRvU+2y2KoBXmtfE8qTZ2BV0StkJHqZehQ=";
     })
+    (fetchpatch {
+      name = "gettext-0.25.patch";
+      url = "https://github.com/mquinson/po4a/commit/7d88a5e59606a9a29ffe73325fff4a5ddb865d5c.patch";
+      hash = "sha256-5x+EX++v7DxOHOZgRM2tv5eNN1Gy28f+qaqH27emZhk=";
+    })
   ];
 
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
@@ -100,9 +105,7 @@ buildPerlPackage rec {
   # https://git.alpinelinux.org/aports/tree/main/po4a/APKBUILD#n11
   #
   # Disabling tests on Darwin until https://github.com/NixOS/nixpkgs/issues/236560 is resolved.
-  #
-  # Disabling tests on linux (gettext-0.25): https://github.com/mquinson/po4a/issues/580
-  doCheck = false;
+  doCheck = (!stdenv.hostPlatform.isMusl) && (!stdenv.hostPlatform.isDarwin);
 
   checkPhase = ''
     export SGML_CATALOG_FILES=${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat

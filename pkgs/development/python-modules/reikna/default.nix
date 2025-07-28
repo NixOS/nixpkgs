@@ -30,14 +30,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs =
-    [
-      mako
-      numpy
-      funcsigs
-    ]
-    ++ lib.optional withCuda pycuda
-    ++ lib.optional withOpenCL pyopencl;
+  propagatedBuildInputs = [
+    mako
+    numpy
+    funcsigs
+  ]
+  ++ lib.optional withCuda pycuda
+  ++ lib.optional withOpenCL pyopencl;
 
   # Requires device
   doCheck = false;

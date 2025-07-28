@@ -65,16 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -83,23 +82,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h9cTbrMwHeRGVJS/uHQnCXplNcrBqxbhwz2AcAEso0M=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      rocm-cmake
-      clr
-      python3Packages.python
-    ]
-    ++ lib.optionals buildDocs [
-      latex
-      doxygen
-      sphinx
-      docutils
-      ghostscript
-      python3Packages.sphinx-rtd-theme
-      python3Packages.breathe
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rocm-cmake
+    clr
+    python3Packages.python
+  ]
+  ++ lib.optionals buildDocs [
+    latex
+    doxygen
+    sphinx
+    docutils
+    ghostscript
+    python3Packages.sphinx-rtd-theme
+    python3Packages.breathe
+  ];
 
   buildInputs = [
     openmp
@@ -149,23 +147,22 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
-  postPatch =
-    ''
-      export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${abseil-cpp}/include -I${hipblas-common}/include"
-      patchShebangs tools
+  postPatch = ''
+    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${abseil-cpp}/include -I${hipblas-common}/include"
+    patchShebangs tools
 
-      # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
-      substituteInPlace CMakeLists.txt \
-        --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
-    ''
-    + lib.optionalString (!buildDocs) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(doc)" ""
-    ''
-    + lib.optionalString (!buildTests) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(test)" ""
-    '';
+    # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
+    substituteInPlace CMakeLists.txt \
+      --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
+  ''
+  + lib.optionalString (!buildDocs) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(doc)" ""
+  ''
+  + lib.optionalString (!buildTests) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(test)" ""
+  '';
 
   # Unfortunately, it seems like we have to call make on this manually
   preInstall = lib.optionalString buildDocs ''

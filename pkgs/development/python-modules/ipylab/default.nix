@@ -38,7 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Control JupyterLab from Python notebooks.";
+    description = "Control JupyterLab from Python notebooks";
     homepage = "https://github.com/jtpio/ipylab";
     changelog = "https://github.com/jtpio/ipylab/releases/tag/v${version}";
     license = lib.licenses.bsd3;

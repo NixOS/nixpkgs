@@ -52,7 +52,8 @@ buildPythonPackage rec {
     requests
     tabulate
     python-dateutil
-  ] ++ python-jose.optional-dependencies.cryptography;
+  ]
+  ++ python-jose.optional-dependencies.cryptography;
 
   pythonImportsCheck = [ "localstack" ];
 

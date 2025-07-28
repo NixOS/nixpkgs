@@ -56,13 +56,12 @@ buildBazelPackage rec {
     "//tensorflow/lite/tools/benchmark:benchmark_model_performance_options"
   ];
 
-  bazelFlags =
-    [
-      "--config=opt"
-    ]
-    ++ lib.optionals (hostPlatform.system != buildPlatform.system) [
-      "--config=${bazelHostConfigName.${hostPlatform.system}}"
-    ];
+  bazelFlags = [
+    "--config=opt"
+  ]
+  ++ lib.optionals (hostPlatform.system != buildPlatform.system) [
+    "--config=${bazelHostConfigName.${hostPlatform.system}}"
+  ];
 
   bazelBuildFlags = [ "--cxxopt=--std=c++17" ];
 

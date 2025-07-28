@@ -24,17 +24,16 @@ in
       name = "factorio-mod-directory";
 
       preferLocalBuild = true;
-      buildCommand =
-        ''
-          mkdir -p $out
-          for modDrv in ${toString modDrvs}; do
-            # NB: there will only ever be a single zip file in each mod derivation's output dir
-            ln -s $modDrv/*.zip $out
-          done
-        ''
-        + (optionalString (modsDatFile != null) ''
-          cp ${modsDatFile} $out/mod-settings.dat
-        '');
+      buildCommand = ''
+        mkdir -p $out
+        for modDrv in ${toString modDrvs}; do
+          # NB: there will only ever be a single zip file in each mod derivation's output dir
+          ln -s $modDrv/*.zip $out
+        done
+      ''
+      + (optionalString (modsDatFile != null) ''
+        cp ${modsDatFile} $out/mod-settings.dat
+      '');
     };
 
   modDrv =

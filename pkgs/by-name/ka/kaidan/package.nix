@@ -6,6 +6,7 @@
   extra-cmake-modules,
   pkg-config,
   kdePackages,
+  kdsingleapplication,
   zxing-cpp,
   qxmpp,
   gst_all_1,
@@ -14,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.11.0";
+  version = "0.12.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8pC4vINeKSYY+LlVgCXUtBq9UjraPdTikBOwLBLeQ3Y=";
+    hash = "sha256-+9L1NuyHnyX7yThC3LGqKJd9XU8Mo7NAdnGoJSdq4TM=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtlocation
     kdePackages.qqc2-desktop-style
     kdePackages.sonnet
+    kdsingleapplication
     zxing-cpp
     qxmpp
     gst_all_1.gstreamer

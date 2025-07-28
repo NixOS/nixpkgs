@@ -1,0 +1,26 @@
+From 08208a1193d10903bd291c4993bdcd4203c20780 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 16 Jul 2025 20:34:38 +0200
+Subject: [PATCH] configure: GLib gettext is deprecated, use regular gettext
+
+---
+ configure.ac | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 0a50ed8..8e30d7b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -90,7 +90,8 @@ GETTEXT_PACKAGE=librda
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
+ 		   [The gettext translation domain])
+ AC_SUBST(GETTEXT_PACKAGE)
+-AM_GLIB_GNU_GETTEXT
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.21])
+ 
+ AC_CONFIG_FILES([
+ Makefile
+-- 
+2.49.0
+

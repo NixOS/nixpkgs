@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with libsForQt5; [
-      qmake
-      qttools
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
   preConfigure = ''
     mkdir build

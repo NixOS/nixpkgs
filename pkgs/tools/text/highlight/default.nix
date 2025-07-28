@@ -30,7 +30,8 @@ let
       pkg-config
       swig
       perl
-    ] ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
     buildInputs = [
       getopt
@@ -39,17 +40,16 @@ let
       libxcrypt
     ];
 
-    postPatch =
-      ''
-        substituteInPlace src/makefile \
-          --replace "shell pkg-config" "shell $PKG_CONFIG"
-        substituteInPlace makefile \
-          --replace 'gzip' 'gzip -n'
-      ''
-      + lib.optionalString stdenv.cc.isClang ''
-        substituteInPlace src/makefile \
-            --replace 'CXX=g++' 'CXX=clang++'
-      '';
+    postPatch = ''
+      substituteInPlace src/makefile \
+        --replace "shell pkg-config" "shell $PKG_CONFIG"
+      substituteInPlace makefile \
+        --replace 'gzip' 'gzip -n'
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace src/makefile \
+          --replace 'CXX=g++' 'CXX=clang++'
+    '';
 
     preConfigure = ''
       makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"

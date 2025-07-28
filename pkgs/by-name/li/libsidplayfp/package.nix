@@ -37,17 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      perl
-      pkg-config
-      xa
-    ]
-    ++ lib.optionals docSupport [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    xa
+  ]
+  ++ lib.optionals docSupport [
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     libexsid

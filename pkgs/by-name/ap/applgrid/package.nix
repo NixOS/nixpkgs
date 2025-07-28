@@ -5,18 +5,22 @@
   gfortran,
   hoppet,
   lhapdf,
-  root5,
+  root,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "applgrid";
-  version = "1.4.70";
+  version = "1.6.27";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/applgrid/${pname}-${version}.tgz";
-    sha256 = "1yw9wrk3vjv84kd3j4s1scfhinirknwk6xq0hvj7x2srx3h93q9p";
+    hash = "sha256-h+ZNGj33FIwg4fOCyfGJrUKM2vDDQl76JcLhtboAOtc=";
   };
+
+  postPatch = ''
+    sed -i appl_grid/serialise_base.h -e '1i#include <cstdint>'
+  '';
 
   nativeBuildInputs = [ gfortran ];
 
@@ -24,23 +28,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     hoppet
     lhapdf
-    root5
+    root
     zlib
   ];
 
-  patches = [
-    ./bad_code.patch
-  ];
-
-  preConfigure =
-    ''
-      substituteInPlace src/Makefile.in \
-        --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
-    ''
-    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/Makefile.in \
-        --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
-    '');
+  preConfigure = ''
+    substituteInPlace src/Makefile.in \
+      --replace-fail "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/Makefile.in \
+      --replace-fail "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
+  '');
 
   enableParallelBuilding = false; # broken
 
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
+    description = "Fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
     license = licenses.gpl3;
     homepage = "http://applgrid.hepforge.org";
     platforms = platforms.unix;

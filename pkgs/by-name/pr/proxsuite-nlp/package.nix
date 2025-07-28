@@ -37,21 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  ]
+  ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
   checkInputs = [ eigenrand ] ++ lib.optional pythonSupport python3Packages.pytest;
-  propagatedBuildInputs =
-    [
-      example-robot-data
-      fmt
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.pinocchio
-      python3Packages.proxsuite
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      pinocchio
-      proxsuite
-    ];
+  propagatedBuildInputs = [
+    example-robot-data
+    fmt
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.pinocchio
+    python3Packages.proxsuite
+  ]
+  ++ lib.optionals (!pythonSupport) [
+    pinocchio
+    proxsuite
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)

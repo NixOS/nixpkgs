@@ -46,7 +46,8 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     pytest-mock
-  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
+  ]
+  ++ lib.optional (pythonAtLeast "3.12") distutils;
 
   enabledTestPaths = [ "ipi_tests/unit_tests" ];
   disabledTests = [

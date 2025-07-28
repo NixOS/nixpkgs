@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "plugp100";
-  version = "5.1.4";
+  version = "5.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "petretiandrea";
     repo = "plugp100";
     tag = version;
-    sha256 = "sha256-a/Rv5imVJOJNaLzPozK8+XMZZsR5HyIXbCmq2Flkd+I=";
+    sha256 = "sha256-bPjgyScHxiUke/M5S6BOw7df7wbNuSy5ouVIK5guWxw=";
   };
 
   propagatedBuildInputs = [

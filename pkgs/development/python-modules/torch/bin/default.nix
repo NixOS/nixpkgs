@@ -94,7 +94,8 @@ buildPythonPackage {
     setuptools
     sympy
     typing-extensions
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
 
   postInstall = ''
     # ONNX conversion

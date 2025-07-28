@@ -83,69 +83,67 @@ stdenv'.mkDerivation rec {
     '';
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      python3
-      makeWrapper
-      wayland-scanner
-      # Avoid fighting upstream's usage of vendored ffmpeg libraries
-      autoPatchelfHook
-      udevCheckHook
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-      cudaPackages.cuda_nvcc
-      (lib.getDev cudaPackages.cuda_cudart)
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    makeWrapper
+    wayland-scanner
+    # Avoid fighting upstream's usage of vendored ffmpeg libraries
+    autoPatchelfHook
+    udevCheckHook
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
+    (lib.getDev cudaPackages.cuda_cudart)
+  ];
 
-  buildInputs =
-    [
-      avahi
-      libevdev
-      libpulseaudio
-      xorg.libX11
-      libxcb
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libXtst
-      xorg.libXi
-      openssl
-      libopus
-      boost
-      libdrm
-      wayland
-      libffi
-      libevdev
-      libcap
-      libdrm
-      curl
-      pcre
-      pcre2
-      libuuid
-      libselinux
-      libsepol
-      libthai
-      libdatrie
-      xorg.libXdmcp
-      libxkbcommon
-      libepoxy
-      libva
-      libvdpau
-      numactl
-      libgbm
-      amf-headers
-      svt-av1
-      libappindicator
-      libnotify
-      miniupnpc
-      nlohmann_json
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cudatoolkit
-      cudaPackages.cuda_cudart
-    ];
+  buildInputs = [
+    avahi
+    libevdev
+    libpulseaudio
+    xorg.libX11
+    libxcb
+    xorg.libXfixes
+    xorg.libXrandr
+    xorg.libXtst
+    xorg.libXi
+    openssl
+    libopus
+    boost
+    libdrm
+    wayland
+    libffi
+    libevdev
+    libcap
+    libdrm
+    curl
+    pcre
+    pcre2
+    libuuid
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    xorg.libXdmcp
+    libxkbcommon
+    libepoxy
+    libva
+    libvdpau
+    numactl
+    libgbm
+    amf-headers
+    svt-av1
+    libappindicator
+    libnotify
+    miniupnpc
+    nlohmann_json
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cudart
+  ];
 
   runtimeDependencies = [
     avahi
@@ -155,23 +153,22 @@ stdenv'.mkDerivation rec {
     libglvnd
   ];
 
-  cmakeFlags =
-    [
-      "-Wno-dev"
-      # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
-      (lib.cmakeBool "UDEV_FOUND" true)
-      (lib.cmakeBool "SYSTEMD_FOUND" true)
-      (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
-      (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
-      (lib.cmakeBool "BOOST_USE_STATIC" false)
-      (lib.cmakeBool "BUILD_DOCS" false)
-      (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
-      (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
-      (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
-    ]
-    ++ lib.optionals (!cudaSupport) [
-      (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
-    ];
+  cmakeFlags = [
+    "-Wno-dev"
+    # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
+    (lib.cmakeBool "UDEV_FOUND" true)
+    (lib.cmakeBool "SYSTEMD_FOUND" true)
+    (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
+    (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
+    (lib.cmakeBool "BOOST_USE_STATIC" false)
+    (lib.cmakeBool "BUILD_DOCS" false)
+    (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
+    (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
+    (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
+  ]
+  ++ lib.optionals (!cudaSupport) [
+    (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
+  ];
 
   env = {
     # needed to trigger CMake version configuration

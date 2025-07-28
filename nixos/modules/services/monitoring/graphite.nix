@@ -34,7 +34,8 @@ let
     SEYREN_URL = cfg.seyren.seyrenUrl;
     MONGO_URL = cfg.seyren.mongoUrl;
     GRAPHITE_URL = cfg.seyren.graphiteUrl;
-  } // cfg.seyren.extraConfig;
+  }
+  // cfg.seyren.extraConfig;
 
   configDir = pkgs.buildEnv {
     name = "graphite-config";

@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
     "TAR=${gnutar}/bin/tar"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-linker-optimisations";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-linker-optimisations";
 
   enableParallelBuilding = true;
 
@@ -55,28 +56,27 @@ stdenv.mkDerivation rec {
       --replace-fail 'as_fn_error $? "cannot find a GNU tar program"' "#"
   '';
 
-  postPatch =
-    ''
-      patchShebangs --host .
+  postPatch = ''
+    patchShebangs --host .
 
-      # Dpkg commands sometimes calls out to shell commands
-      substituteInPlace lib/dpkg/dpkg.h \
-         --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
-         --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
-         --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
-         --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
-         --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
-         --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
-         --replace '"dpkg"' \"$out/bin/dpkg\" \
-         --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
-         --replace '"rm"' \"${coreutils}/bin/rm\" \
-         --replace '"cat"' \"${coreutils}/bin/cat\" \
-         --replace '"diff"' \"${diffutils}/bin/diff\"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      substituteInPlace src/main/help.c \
-         --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
-    '';
+    # Dpkg commands sometimes calls out to shell commands
+    substituteInPlace lib/dpkg/dpkg.h \
+       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+       --replace '"dpkg"' \"$out/bin/dpkg\" \
+       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+       --replace '"rm"' \"${coreutils}/bin/rm\" \
+       --replace '"cat"' \"${coreutils}/bin/cat\" \
+       --replace '"diff"' \"${diffutils}/bin/diff\"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace src/main/help.c \
+       --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
+  '';
 
   buildInputs = [
     perl

@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
     # needed to patch shebangs
     python3
     bash
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
 
   prePatch = ''
     # Replace wget with curl to save a dependency

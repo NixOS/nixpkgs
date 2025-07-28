@@ -27,20 +27,20 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      llvmPackages.llvm
-      llvmPackages.libclang
-      python.pkgs.qt6.qtbase
-      python.pkgs.ninja
-      python.pkgs.packaging
-      python.pkgs.setuptools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      python.pkgs.qt6.darwinVersionInputs
-    ];
+  buildInputs = [
+    llvmPackages.llvm
+    llvmPackages.libclang
+    python.pkgs.qt6.qtbase
+    python.pkgs.ninja
+    python.pkgs.packaging
+    python.pkgs.setuptools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    python.pkgs.qt6.darwinVersionInputs
+  ];
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 

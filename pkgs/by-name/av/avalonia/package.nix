@@ -71,58 +71,57 @@ stdenvNoCC.mkDerivation (
         stripRoot = false;
       };
 
-      postPatch =
-        ''
-          patchShebangs build.sh
+      postPatch = ''
+        patchShebangs build.sh
 
-          substituteInPlace src/Avalonia.X11/ICELib.cs \
-            --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
-          substituteInPlace src/Avalonia.X11/SMLib.cs \
-            --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
-          substituteInPlace src/Avalonia.X11/XLib.cs \
-            --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
-            --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
-            --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
-            --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
-            --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
+        substituteInPlace src/Avalonia.X11/ICELib.cs \
+          --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
+        substituteInPlace src/Avalonia.X11/SMLib.cs \
+          --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
+        substituteInPlace src/Avalonia.X11/XLib.cs \
+          --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
+          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
+          --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
+          --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
+          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
 
-          # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
-          dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json
+        # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
+        dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json
 
-          # Tricky way to run npmConfigHook multiple times (borrowed from pagefind)
-          (
-            local postPatchHooks=() # written to by npmConfigHook
-            source ${npmHooks.npmConfigHook}/nix-support/setup-hook
-        ''
-        +
-          # TODO: implement updateScript
-          lib.concatMapStrings (
-            { path, hash }:
-            let
-              deps = fetchNpmDeps {
-                src = "${src}/${path}";
-                inherit hash;
-              };
-            in
-            ''
-              npmRoot=${path} npmDeps="${deps}" npmConfigHook
-              rm -rf "$TMPDIR/cache"
-            ''
-          ) (import npmDepsFile)
-        + ''
-          )
-          # Avalonia.Native is normally only packed on darwin.
-          substituteInPlace src/Avalonia.Native/Avalonia.Native.csproj \
-            --replace-fail \
-              '<IsPackable>$(PackAvaloniaNative)</IsPackable>' \
-              '<IsPackable>true</IsPackable>'
+        # Tricky way to run npmConfigHook multiple times (borrowed from pagefind)
+        (
+          local postPatchHooks=() # written to by npmConfigHook
+          source ${npmHooks.npmConfigHook}/nix-support/setup-hook
+      ''
+      +
+        # TODO: implement updateScript
+        lib.concatMapStrings (
+          { path, hash }:
+          let
+            deps = fetchNpmDeps {
+              src = "${src}/${path}";
+              inherit hash;
+            };
+          in
+          ''
+            npmRoot=${path} npmDeps="${deps}" npmConfigHook
+            rm -rf "$TMPDIR/cache"
+          ''
+        ) (import npmDepsFile)
+      + ''
+        )
+        # Avalonia.Native is normally only packed on darwin.
+        substituteInPlace src/Avalonia.Native/Avalonia.Native.csproj \
+          --replace-fail \
+            '<IsPackable>$(PackAvaloniaNative)</IsPackable>' \
+            '<IsPackable>true</IsPackable>'
 
-          # stop 'Clean' target from removing node_modules
-          substituteInPlace nukebuild/Build.cs \
-            --replace-fail \
-              'Parameters.BuildDirs.ForEach(DeleteDirectory);' \
-              ""
-        '';
+        # stop 'Clean' target from removing node_modules
+        substituteInPlace nukebuild/Build.cs \
+          --replace-fail \
+            'Parameters.BuildDirs.ForEach(DeleteDirectory);' \
+            ""
+      '';
 
       makeCacheWritable = true;
 

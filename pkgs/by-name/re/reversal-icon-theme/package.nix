@@ -33,7 +33,7 @@ lib.checkListOfEnum "${pname}: color variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "unstable-2023-05-13";
+    version = "0-unstable-2023-05-13";
 
     src = fetchFromGitHub {
       owner = "yeyushengfan258";

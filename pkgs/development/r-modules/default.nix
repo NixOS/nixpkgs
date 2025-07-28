@@ -358,14 +358,13 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self =
-    {
-      inherit buildRPackage;
-    }
-    // mkPackageSet deriveBioc biocPackagesGenerated
-    // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
-    // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
-    // mkPackageSet deriveCran cranPackagesGenerated;
+  _self = {
+    inherit buildRPackage;
+  }
+  // mkPackageSet deriveBioc biocPackagesGenerated
+  // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
+  // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
+  // mkPackageSet deriveCran cranPackagesGenerated;
 
   # Takes in a generated JSON file's imported contents
   # and transforms it by swapping each element of the depends array with the dependency's derivation
@@ -2504,7 +2503,8 @@ let
           icu
           which
           zstd.dev
-        ] ++ attrs.buildInputs;
+        ]
+        ++ attrs.buildInputs;
         postInstall = ''
           install -d $out/bin $out/share/man/man1
           ln -s ../library/littler/bin/r $out/bin/r

@@ -18,14 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     "SUFFIX="
   ];
 
-  postPatch =
-    ''
-      cd source
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace Makefile \
-        --replace-fail '-DENABLE_SSE2' ""
-    '';
+  postPatch = ''
+    cd source
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    substituteInPlace Makefile \
+      --replace-fail '-DENABLE_SSE2' ""
+  '';
 
   meta = {
     description = "Resample library by Fons Adriaensen";

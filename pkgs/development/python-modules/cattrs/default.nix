@@ -59,12 +59,13 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies =
-    [ attrs ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      typing-extensions
-    ];
+  dependencies = [
+    attrs
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     cbor2
@@ -99,18 +100,17 @@ buildPythonPackage rec {
     "bench"
   ];
 
-  disabledTests =
-    [
-      # orjson is not available as it requires Rust nightly features to compile its requirements
-      "test_orjson"
-      # msgspec causes a segmentation fault for some reason
-      "test_simple_classes"
-      "test_msgspec_json_converter"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/python-attrs/cattrs/pull/543
-      "test_unstructure_deeply_nested_generics_list"
-    ];
+  disabledTests = [
+    # orjson is not available as it requires Rust nightly features to compile its requirements
+    "test_orjson"
+    # msgspec causes a segmentation fault for some reason
+    "test_simple_classes"
+    "test_msgspec_json_converter"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/python-attrs/cattrs/pull/543
+    "test_unstructure_deeply_nested_generics_list"
+  ];
 
   pythonImportsCheck = [ "cattr" ];
 

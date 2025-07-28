@@ -76,45 +76,43 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IYcrVcGH4yZDkFZeNOJPfG0qsPS/WiH0fTSUSdo1BH4=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      # no ninja, it buffers console output and nix times out long periods of no output
-      rocm-cmake
-      clr
-      git
-    ]
-    ++ lib.optionals buildTensile [
-      tensile
-    ];
+  nativeBuildInputs = [
+    cmake
+    # no ninja, it buffers console output and nix times out long periods of no output
+    rocm-cmake
+    clr
+    git
+  ]
+  ++ lib.optionals buildTensile [
+    tensile
+  ];
 
-  buildInputs =
-    [
-      python3
-      hipblas-common
-    ]
-    ++ lib.optionals withHipBlasLt [
-      hipblaslt
-    ]
-    ++ lib.optionals buildTensile [
-      zstd
-      msgpack
-      libxml2
-      python3Packages.msgpack
-      python3Packages.zstandard
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      gfortran
-      openmp
-      amd-blis
-      rocm-smi
-    ]
-    ++ lib.optionals (buildTensile || buildTests || buildBenchmarks) [
-      python3Packages.pyyaml
-    ];
+  buildInputs = [
+    python3
+    hipblas-common
+  ]
+  ++ lib.optionals withHipBlasLt [
+    hipblaslt
+  ]
+  ++ lib.optionals buildTensile [
+    zstd
+    msgpack
+    libxml2
+    python3Packages.msgpack
+    python3Packages.zstandard
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    gfortran
+    openmp
+    amd-blis
+    rocm-smi
+  ]
+  ++ lib.optionals (buildTensile || buildTests || buildBenchmarks) [
+    python3Packages.pyyaml
+  ];
 
   dontStrip = true;
   env.CXXFLAGS =
@@ -126,42 +124,41 @@ stdenv.mkDerivation (finalAttrs: {
   ) "-Wl,--as-needed -L${amd-blis}/lib -lblis-mt -lcblas";
   env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-      (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
-      (lib.cmakeFeature "CMAKE_EXECUTE_PROCESS_COMMAND_ECHO" "STDERR")
-      (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getBin gfortran}/bin/gfortran")
-      (lib.cmakeFeature "CMAKE_Fortran_COMPILER_AR" "${lib.getBin gfortran}/bin/ar")
-      (lib.cmakeFeature "CMAKE_Fortran_COMPILER_RANLIB" "${lib.getBin gfortran}/bin/ranlib")
-      (lib.cmakeFeature "python" "python3")
-      (lib.cmakeFeature "SUPPORTED_TARGETS" gpuTargets')
-      (lib.cmakeFeature "AMDGPU_TARGETS" gpuTargets')
-      (lib.cmakeFeature "GPU_TARGETS" gpuTargets')
-      (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
-      (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)
-      (lib.cmakeFeature "ROCBLAS_TENSILE_LIBRARY_DIR" "lib/rocblas")
-      (lib.cmakeBool "BUILD_WITH_HIPBLASLT" withHipBlasLt)
-      (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
-      (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
-      (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildBenchmarks)
-      (lib.cmakeBool "BUILD_OFFLOAD_COMPRESS" true)
-      # Temporarily set variables to work around upstream CMakeLists issue
-      # Can be removed once https://github.com/ROCm/rocm-cmake/issues/121 is fixed
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-    ]
-    ++ lib.optionals buildTensile [
-      "-DCPACK_SET_DESTDIR=OFF"
-      "-DLINK_BLIS=ON"
-      "-DTensile_CODE_OBJECT_VERSION=default"
-      "-DTensile_LOGIC=asm_full"
-      "-DTensile_LIBRARY_FORMAT=msgpack"
-      (lib.cmakeBool "BUILD_WITH_PIP" false)
-      (lib.cmakeBool "Tensile_SEPARATE_ARCHITECTURES" tensileSepArch)
-      (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
+    (lib.cmakeFeature "CMAKE_EXECUTE_PROCESS_COMMAND_ECHO" "STDERR")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getBin gfortran}/bin/gfortran")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER_AR" "${lib.getBin gfortran}/bin/ar")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER_RANLIB" "${lib.getBin gfortran}/bin/ranlib")
+    (lib.cmakeFeature "python" "python3")
+    (lib.cmakeFeature "SUPPORTED_TARGETS" gpuTargets')
+    (lib.cmakeFeature "AMDGPU_TARGETS" gpuTargets')
+    (lib.cmakeFeature "GPU_TARGETS" gpuTargets')
+    (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
+    (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)
+    (lib.cmakeFeature "ROCBLAS_TENSILE_LIBRARY_DIR" "lib/rocblas")
+    (lib.cmakeBool "BUILD_WITH_HIPBLASLT" withHipBlasLt)
+    (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
+    (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
+    (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildBenchmarks)
+    (lib.cmakeBool "BUILD_OFFLOAD_COMPRESS" true)
+    # Temporarily set variables to work around upstream CMakeLists issue
+    # Can be removed once https://github.com/ROCm/rocm-cmake/issues/121 is fixed
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ]
+  ++ lib.optionals buildTensile [
+    "-DCPACK_SET_DESTDIR=OFF"
+    "-DLINK_BLIS=ON"
+    "-DTensile_CODE_OBJECT_VERSION=default"
+    "-DTensile_LOGIC=asm_full"
+    "-DTensile_LIBRARY_FORMAT=msgpack"
+    (lib.cmakeBool "BUILD_WITH_PIP" false)
+    (lib.cmakeBool "Tensile_SEPARATE_ARCHITECTURES" tensileSepArch)
+    (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
+  ];
 
   passthru.amdgpu_targets = gpuTargets';
 

@@ -595,35 +595,34 @@ in
       ];
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
 
-        # If we have a folder or symlink with Forgejo locales, remove it
-        # And symlink the current Forgejo locales in place
-        "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
+      # If we have a folder or symlink with Forgejo locales, remove it
+      # And symlink the current Forgejo locales in place
+      "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
 
-      ]
-      ++ optionals cfg.lfs.enable [
-        "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      ];
+    ]
+    ++ optionals cfg.lfs.enable [
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.forgejo-secrets = mkIf (!cfg.useWizard) {
       description = "Forgejo secret bootstrap helper";
@@ -658,19 +657,18 @@ in
 
     systemd.services.forgejo = {
       description = "Forgejo (Beyond coding. We forge.)";
-      after =
-        [
-          "network.target"
-        ]
-        ++ optionals usePostgresql [
-          "postgresql.target"
-        ]
-        ++ optionals useMysql [
-          "mysql.service"
-        ]
-        ++ optionals (!cfg.useWizard) [
-          "forgejo-secrets.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ optionals usePostgresql [
+        "postgresql.target"
+      ]
+      ++ optionals useMysql [
+        "mysql.service"
+      ]
+      ++ optionals (!cfg.useWizard) [
+        "forgejo-secrets.service"
+      ];
       requires =
         optionals (cfg.database.createDatabase && usePostgresql) [
           "postgresql.target"
@@ -786,7 +784,8 @@ in
         HOME = cfg.stateDir;
         FORGEJO_WORK_DIR = cfg.stateDir;
         FORGEJO_CUSTOM = cfg.customDir;
-      } // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
+      }
+      // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
     services.openssh.settings.AcceptEnv = mkIf (

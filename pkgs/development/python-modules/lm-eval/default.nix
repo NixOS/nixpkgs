@@ -122,7 +122,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.api;
+  ]
+  ++ optional-dependencies.api;
 
   preCheck = ''
     export HOME=$TMP

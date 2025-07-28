@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
         "tinydns"
       ]
     ))
+    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns"
   ];
 

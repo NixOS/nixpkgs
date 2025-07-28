@@ -89,7 +89,8 @@ buildPythonPackage rec {
     statsmodels
     which
     xarray
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -105,34 +106,33 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths =
-    [
-      # Broken imports
-      "plotly/matplotlylib/mplexporter/tests"
-      # Fails to catch error when serializing document
-      "tests/test_optional/test_kaleido/test_kaleido.py::test_defaults"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fails to launch kaleido subprocess
-      "tests/test_optional/test_kaleido"
-      # numpy2 related error, RecursionError
-      # See: https://github.com/plotly/plotly.py/issues/4852
-      "tests/test_plotly_utils/validators/test_angle_validator.py"
-      "tests/test_plotly_utils/validators/test_any_validator.py"
-      "tests/test_plotly_utils/validators/test_color_validator.py"
-      "tests/test_plotly_utils/validators/test_colorlist_validator.py"
-      "tests/test_plotly_utils/validators/test_colorscale_validator.py"
-      "tests/test_plotly_utils/validators/test_dataarray_validator.py"
-      "tests/test_plotly_utils/validators/test_enumerated_validator.py"
-      "tests/test_plotly_utils/validators/test_fig_deepcopy.py"
-      "tests/test_plotly_utils/validators/test_flaglist_validator.py"
-      "tests/test_plotly_utils/validators/test_infoarray_validator.py"
-      "tests/test_plotly_utils/validators/test_integer_validator.py"
-      "tests/test_plotly_utils/validators/test_number_validator.py"
-      "tests/test_plotly_utils/validators/test_pandas_series_input.py"
-      "tests/test_plotly_utils/validators/test_string_validator.py"
-      "tests/test_plotly_utils/validators/test_xarray_input.py"
-    ];
+  disabledTestPaths = [
+    # Broken imports
+    "plotly/matplotlylib/mplexporter/tests"
+    # Fails to catch error when serializing document
+    "tests/test_optional/test_kaleido/test_kaleido.py::test_defaults"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails to launch kaleido subprocess
+    "tests/test_optional/test_kaleido"
+    # numpy2 related error, RecursionError
+    # See: https://github.com/plotly/plotly.py/issues/4852
+    "tests/test_plotly_utils/validators/test_angle_validator.py"
+    "tests/test_plotly_utils/validators/test_any_validator.py"
+    "tests/test_plotly_utils/validators/test_color_validator.py"
+    "tests/test_plotly_utils/validators/test_colorlist_validator.py"
+    "tests/test_plotly_utils/validators/test_colorscale_validator.py"
+    "tests/test_plotly_utils/validators/test_dataarray_validator.py"
+    "tests/test_plotly_utils/validators/test_enumerated_validator.py"
+    "tests/test_plotly_utils/validators/test_fig_deepcopy.py"
+    "tests/test_plotly_utils/validators/test_flaglist_validator.py"
+    "tests/test_plotly_utils/validators/test_infoarray_validator.py"
+    "tests/test_plotly_utils/validators/test_integer_validator.py"
+    "tests/test_plotly_utils/validators/test_number_validator.py"
+    "tests/test_plotly_utils/validators/test_pandas_series_input.py"
+    "tests/test_plotly_utils/validators/test_string_validator.py"
+    "tests/test_plotly_utils/validators/test_xarray_input.py"
+  ];
 
   pythonImportsCheck = [ "plotly" ];
 

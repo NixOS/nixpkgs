@@ -94,8 +94,8 @@ buildPythonPackage rec {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
     fetcherVersion = 1;
+    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
   };
 
   postBuild = ''
@@ -125,13 +125,12 @@ buildPythonPackage rec {
     "test_document_viewer"
   ];
 
-  preCheck =
-    ''
-      export DJANGO_SETTINGS_MODULE="test_project.settings"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="test_project.settings"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 

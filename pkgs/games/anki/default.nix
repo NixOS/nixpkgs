@@ -117,12 +117,14 @@ python3.pkgs.buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:

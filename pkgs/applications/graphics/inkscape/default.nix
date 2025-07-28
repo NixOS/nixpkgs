@@ -116,63 +116,61 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -u globstar
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      python3Env
-      glib # for setup hook
-      gdk-pixbuf # for setup hook
-      wrapGAppsHook3
-      gobject-introspection
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3Env
+    glib # for setup hook
+    gdk-pixbuf # for setup hook
+    wrapGAppsHook3
+    gobject-introspection
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ])
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      boehmgc
-      boost
-      gettext
-      glib
-      glibmm
-      gsl
-      gtkmm3
-      imagemagick
-      lcms
-      lib2geom
-      libcdr
-      libexif
-      libpng
-      librevenge
-      librsvg # for loading icons
-      libsigcxx
-      libvisio
-      libwpg
-      libXft
-      libxml2
-      libxslt
-      perlPackages.perl
-      poppler
-      popt
-      potrace
-      python3Env
-      zlib
-      libepoxy
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gspell
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cairo
-      gtk-mac-integration
-    ];
+  buildInputs = [
+    boehmgc
+    boost
+    gettext
+    glib
+    glibmm
+    gsl
+    gtkmm3
+    imagemagick
+    lcms
+    lib2geom
+    libcdr
+    libexif
+    libpng
+    librevenge
+    librsvg # for loading icons
+    libsigcxx
+    libvisio
+    libwpg
+    libXft
+    libxml2
+    libxslt
+    perlPackages.perl
+    poppler
+    popt
+    potrace
+    python3Env
+    zlib
+    libepoxy
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gspell
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cairo
+    gtk-mac-integration
+  ];
 
   # Make sure PyXML modules can be found at run-time.
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

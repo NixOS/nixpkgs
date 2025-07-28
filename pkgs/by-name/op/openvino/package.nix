@@ -76,22 +76,21 @@ stdenv.mkDerivation rec {
     "python"
   ];
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      autoPatchelfHook
-      cmake
-      git
-      libarchive
-      patchelf
-      pkg-config
-      python
-      scons'
-      shellcheck
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    addDriverRunpath
+    autoPatchelfHook
+    cmake
+    git
+    libarchive
+    patchelf
+    pkg-config
+    python
+    scons'
+    shellcheck
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   postPatch = ''
     mkdir -p temp/tbbbind_${tbbbind_version}
@@ -147,22 +146,21 @@ stdenv.mkDerivation rec {
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
   env.NIX_CFLAGS_COMPILE = "-Wno-odr";
 
-  buildInputs =
-    [
-      flatbuffers
-      gflags
-      level-zero
-      libusb1
-      libxml2
-      ocl-icd
-      opencv
-      pugixml
-      snappy
-      tbb_2022
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ];
+  buildInputs = [
+    flatbuffers
+    gflags
+    level-zero
+    libusb1
+    libxml2
+    ocl-icd
+    opencv
+    pugixml
+    snappy
+    tbb_2022
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
   enableParallelBuilding = true;
 

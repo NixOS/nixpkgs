@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "loxodo";
-  version = "unstable-2021-02-08";
+  version = "0-unstable-2021-02-08";
   format = "pyproject";
 
   src = fetchFromGitHub {

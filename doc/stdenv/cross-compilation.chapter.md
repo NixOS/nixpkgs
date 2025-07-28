@@ -135,9 +135,7 @@ Some frequently encountered problems when packaging for cross-compilation should
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
 
 ```nix
-{
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-}
+{ makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; }
 ```
 
 #### How do I avoid compiling a GCC cross-compiler from source? {#cross-qa-avoid-compiling-gcc-cross-compiler}
@@ -152,9 +150,7 @@ $ nix-build '<nixpkgs>' -A pkgsCross.raspberryPi.hello
 Add the following to your `mkDerivation` invocation.
 
 ```nix
-{
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-}
+{ depsBuildBuild = [ buildPackages.stdenv.cc ]; }
 ```
 
 #### My package’s testsuite needs to run host platform code. {#cross-testsuite-runs-host-code}
@@ -162,9 +158,7 @@ Add the following to your `mkDerivation` invocation.
 Add the following to your `mkDerivation` invocation.
 
 ```nix
-{
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-}
+{ doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform; }
 ```
 
 #### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
@@ -175,13 +169,10 @@ e.g.
 
 ```nix
 {
-  nativeBuildInputs =
-    [
-      meson
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 }
 ```
 

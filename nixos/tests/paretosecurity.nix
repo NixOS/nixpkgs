@@ -15,13 +15,11 @@
         # Create a patched version of the package that points to the local dashboard
         # for easier testing
         package = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
-          postPatch =
-            oldAttrs.postPatch or ""
-            + ''
-              substituteInPlace team/report.go \
-                --replace-warn 'const reportURL = "https://cloud.paretosecurity.com"' \
-                               'const reportURL = "http://cloud"'
-            '';
+          postPatch = oldAttrs.postPatch or "" + ''
+            substituteInPlace team/report.go \
+              --replace-warn 'const reportURL = "https://cloud.paretosecurity.com"' \
+                             'const reportURL = "http://cloud"'
+          '';
         });
       };
 

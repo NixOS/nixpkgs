@@ -107,23 +107,22 @@ buildPythonPackage {
       --replace-fail "numpy>=2.0.0,<2.6" numpy
   '';
 
-  build-system =
-    [
-      cython
-      gfortran
-      meson-python
-      nukeReferences
-      pythran
-      pkg-config
-      setuptools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Minimal version required according to:
-      # https://github.com/scipy/scipy/blob/v1.16.0/scipy/meson.build#L238-L244
-      (xcbuild.override {
-        sdkVer = "13.3";
-      })
-    ];
+  build-system = [
+    cython
+    gfortran
+    meson-python
+    nukeReferences
+    pythran
+    pkg-config
+    setuptools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Minimal version required according to:
+    # https://github.com/scipy/scipy/blob/v1.16.0/scipy/meson.build#L238-L244
+    (xcbuild.override {
+      sdkVer = "13.3";
+    })
+  ];
 
   buildInputs = [
     blas
@@ -143,37 +142,41 @@ buildPythonPackage {
     pytest-xdist
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # The following tests are broken on aarch64-darwin with newer compilers and library versions.
-    # See https://github.com/scipy/scipy/issues/18308
-    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
-    "test_dst4_definition_ortho"
-    "test_load_mat4_le"
-    "hyp2f1_test_case47"
-    "hyp2f1_test_case3"
-    "test_uint64_max"
-    "test_large_m4" # https://github.com/scipy/scipy/issues/22466
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+      # See https://github.com/scipy/scipy/issues/18308
+      "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+      "test_dst4_definition_ortho"
+      "test_load_mat4_le"
+      "hyp2f1_test_case47"
+      "hyp2f1_test_case3"
+      "test_uint64_max"
+      "test_large_m4" # https://github.com/scipy/scipy/issues/22466
+    ]
+    ++ lib.optionals (python.isPy311) [
+      # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
+      "test_funcs"
+    ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  preConfigure =
-    ''
-      # Helps parallelization a bit
-      export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
-      # We download manually the datasets and this variable tells the pooch
-      # library where these files are cached. See also:
-      # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
-      # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
-      export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
-    ''
-    + (lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        d: dpath:
-        # Actually copy the datasets
-        "cp ${dpath} scipy-data/${d}.dat"
-      ) datasets
-    ));
+  preConfigure = ''
+    # Helps parallelization a bit
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    # We download manually the datasets and this variable tells the pooch
+    # library where these files are cached. See also:
+    # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
+    # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
+    export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
+  ''
+  + (lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      d: dpath:
+      # Actually copy the datasets
+      "cp ${dpath} scipy-data/${d}.dat"
+    ) datasets
+  ));
 
   mesonFlags = [
     "-Dblas=${blas.pname}"
@@ -211,14 +214,13 @@ buildPythonPackage {
 
   passthru = {
     inherit blas;
-    updateScript =
-      [
-        ./update.sh
-        # Pass it this file name as argument
-        (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
-      ]
-      # Pass it the names of the datasets to update their hashes
-      ++ (builtins.attrNames datasetsHashes);
+    updateScript = [
+      ./update.sh
+      # Pass it this file name as argument
+      (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
+    ]
+    # Pass it the names of the datasets to update their hashes
+    ++ (builtins.attrNames datasetsHashes);
     tests = {
       inherit sage;
     };

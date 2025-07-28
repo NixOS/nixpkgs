@@ -59,14 +59,16 @@ stdenv.mkDerivation rec {
     gts
     pango
     bash
-  ] ++ optionals withXorg (with xorg; [ libXrender ]);
+  ]
+  ++ optionals withXorg (with xorg; [ libXrender ]);
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ optional (xorg == null) "--without-x";
+  ]
+  ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 

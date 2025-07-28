@@ -41,7 +41,8 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.requests
     pythonPackages.ytmusicapi
     pythonPackages.yt-dlp
-  ] ++ extraPkgs pkgs; # should we remove this? If we do, don't forget to also change the docs!
+  ]
+  ++ extraPkgs pkgs; # should we remove this? If we do, don't forget to also change the docs!
 
   nativeCheckInputs = with pythonPackages; [
     vcrpy

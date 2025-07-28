@@ -39,14 +39,14 @@ let
 in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
-  version = "0.3.12";
+  version = "0.3.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-TTGweGfav1uI2+87iUYc1Esmuor9sEZdZqSU2YVPCdQ=";
+    hash = "sha256-RJP2QkelqxZuEoxI3CHyenqUJdjw2MsZKUKM+UUxJB8=";
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;

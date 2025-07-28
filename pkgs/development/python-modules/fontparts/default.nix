@@ -36,17 +36,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      booleanoperations
-      defcon
-      fontmath
-      fonttools
-    ]
-    ++ defcon.optional-dependencies.pens
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.unicode;
+  dependencies = [
+    booleanoperations
+    defcon
+    fontmath
+    fonttools
+  ]
+  ++ defcon.optional-dependencies.pens
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.unicode;
 
   checkPhase = ''
     runHook preCheck

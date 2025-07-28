@@ -43,36 +43,35 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost
-      cmark
-      coeurl
-      curl
-      kdsingleapplication
-      libevent
-      libsecret
-      lmdb
-      mtxclient
-      nlohmann_json
-      olm
-      qt6Packages.qtbase
-      qt6Packages.qtimageformats
-      qt6Packages.qtkeychain
-      qt6Packages.qtmultimedia
-      qt6Packages.qttools
-      qt6Packages.qtwayland
-      qt6Packages.qt-jdenticon
-      re2
-      spdlog
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      (gst-plugins-good.override { qt6Support = true; })
-      gst-plugins-bad
-      libnice
-    ]);
+  buildInputs = [
+    boost
+    cmark
+    coeurl
+    curl
+    kdsingleapplication
+    libevent
+    libsecret
+    lmdb
+    mtxclient
+    nlohmann_json
+    olm
+    qt6Packages.qtbase
+    qt6Packages.qtimageformats
+    qt6Packages.qtkeychain
+    qt6Packages.qtmultimedia
+    qt6Packages.qttools
+    qt6Packages.qtwayland
+    qt6Packages.qt-jdenticon
+    re2
+    spdlog
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { qt6Support = true; })
+    gst-plugins-bad
+    libnice
+  ]);
 
   cmakeFlags = [
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389

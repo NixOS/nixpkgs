@@ -96,30 +96,29 @@ in
     stname = "syncthing";
     target = "syncthing";
 
-    postInstall =
-      ''
-        # This installs man pages in the correct directory according to the suffix
-        # on the filename
-        for mf in man/*.[1-9]; do
-          mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
-          mandir="$out/share/man/man$mantype"
-          install -Dm644 "$mf" "$mandir/$(basename "$mf")"
-        done
+    postInstall = ''
+      # This installs man pages in the correct directory according to the suffix
+      # on the filename
+      for mf in man/*.[1-9]; do
+        mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
+        mandir="$out/share/man/man$mantype"
+        install -Dm644 "$mf" "$mandir/$(basename "$mf")"
+      done
 
-        install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
 
-      ''
-      + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-        mkdir -p $out/lib/systemd/{system,user}
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      mkdir -p $out/lib/systemd/{system,user}
 
-        substitute etc/linux-systemd/system/syncthing@.service \
-                   $out/lib/systemd/system/syncthing@.service \
-                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
+      substitute etc/linux-systemd/system/syncthing@.service \
+                 $out/lib/systemd/system/syncthing@.service \
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
 
-        substitute etc/linux-systemd/user/syncthing.service \
-                   $out/lib/systemd/user/syncthing.service \
-                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
-      '';
+      substitute etc/linux-systemd/user/syncthing.service \
+                 $out/lib/systemd/user/syncthing.service \
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
+    '';
   };
 
   syncthing-discovery = common {

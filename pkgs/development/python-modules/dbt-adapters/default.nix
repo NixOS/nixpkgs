@@ -38,7 +38,8 @@ buildPythonPackage rec {
     protobuf
     pytz
     typing-extensions
-  ] ++ mashumaro.optional-dependencies.msgpack;
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
 
   pythonImportsCheck = [ "dbt.adapters" ];
 

@@ -15,13 +15,24 @@
   src = nix-gitignore.gitignoreSource [ ] ./source;
   # Simplest version
 
-  src = nix-gitignore.gitignoreSource "supplemental-ignores\n" ./source;
+  src = nix-gitignore.gitignoreSource ''
+    supplemental-ignores
+  '' ./source;
   # This one reads the ./source/.gitignore and concats the auxiliary ignores
 
-  src = nix-gitignore.gitignoreSourcePure "ignore-this\nignore-that\n" ./source;
+  src = nix-gitignore.gitignoreSourcePure ''
+    ignore-this
+    ignore-that
+  '' ./source;
   # Use this string as gitignore, don't read ./source/.gitignore.
 
-  src = nix-gitignore.gitignoreSourcePure [ "ignore-this\nignore-that\n" ~/.gitignore ] ./source;
+  src = nix-gitignore.gitignoreSourcePure [
+    ''
+      ignore-this
+      ignore-that
+    ''
+    ~/.gitignore
+  ] ./source;
   # It also accepts a list (of strings and paths) that will be concatenated
   # once the paths are turned to strings via readFile.
 }
@@ -41,9 +52,7 @@ Those filter functions accept the same arguments the `builtins.filterSource` fun
 If you want to make your own filter from scratch, you may use
 
 ```nix
-{
-  gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root;
-}
+{ gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root; }
 ```
 
 ## gitignore files in subdirectories {#sec-pkgs-nix-gitignore-usage-recursive}

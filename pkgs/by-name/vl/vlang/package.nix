@@ -67,20 +67,20 @@ stdenv.mkDerivation {
     glfw
     freetype
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isUnix upx;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs =
-    [
-      binaryen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libX11
-      xorg.libXau
-      xorg.libXdmcp
-      xorg.xorgproto
-    ];
+  buildInputs = [
+    binaryen
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libX11
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xorgproto
+  ];
 
   makeFlags = [
     "local=1"

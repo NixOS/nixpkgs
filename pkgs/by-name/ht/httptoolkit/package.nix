@@ -6,10 +6,12 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron,
+  electron_35,
   httptoolkit-server,
 }:
-
+let
+  electron = electron_35;
+in
 buildNpmPackage rec {
   pname = "httptoolkit";
   version = "1.20.1";
@@ -33,7 +35,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 

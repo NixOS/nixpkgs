@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     opencascade-occt
     tbb
     vtkWithQt5
-  ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  ]
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   preConfigure = ''
     patchShebangs ./

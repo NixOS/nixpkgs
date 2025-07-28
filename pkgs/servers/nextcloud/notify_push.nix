@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mHoVNKvE4Hszi1wg9fIHjRMJp5+CIBCgUPzreJ6Jnew=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-PkRWyz4Gd2gGg9n4yChtR96QNOjEK5HNVhBwkkVjVPE=";
 
   passthru = rec {
@@ -42,7 +41,6 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-PkRWyz4Gd2gGg9n4yChtR96QNOjEK5HNVhBwkkVjVPE=";
 
       meta = meta // {

@@ -44,28 +44,26 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '<local dev build>' '<nixpkgs build>'
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withQtUI [
-      qt5.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withQtUI [
+    qt5.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      zsync2
-      libcpr
-      libgcrypt
-      libappimage
-      argagg
-      nlohmann_json
-      gpgme
-    ]
-    ++ lib.optionals withQtUI [
-      qt5.qtbase
-    ];
+  buildInputs = [
+    zsync2
+    libcpr
+    libgcrypt
+    libappimage
+    argagg
+    nlohmann_json
+    gpgme
+  ]
+  ++ lib.optionals withQtUI [
+    qt5.qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_ZSYNC2" true)

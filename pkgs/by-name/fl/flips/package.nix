@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional withGTK3 wrapGAppsHook3;
+  ]
+  ++ lib.optional withGTK3 wrapGAppsHook3;
 
-  buildInputs =
-    [
-      libdivsufsort
-    ]
-    ++ lib.optional withGTK3 gtk3
-    ++ lib.optional (withGTK3 && stdenv.hostPlatform.isDarwin) llvmPackages.openmp;
+  buildInputs = [
+    libdivsufsort
+  ]
+  ++ lib.optional withGTK3 gtk3
+  ++ lib.optional (withGTK3 && stdenv.hostPlatform.isDarwin) llvmPackages.openmp;
 
   patches = [ ./use-system-libdivsufsort.patch ];
 

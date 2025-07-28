@@ -21,7 +21,6 @@ buildPgrxExtension (finalAttrs: {
     hash = "sha256-VdLWwkUA0sVs5Z/Lyf5oTRhcHVzPmhgnYQhIM8MWJ0c=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OyrfwLMHn2aihfijHxE5oaz+XQC1HFlYbTp8Sw8RcK0=";
 
   postInstall = ''

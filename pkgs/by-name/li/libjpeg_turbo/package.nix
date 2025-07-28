@@ -55,34 +55,32 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      nasm
-    ]
-    ++ lib.optionals enableJava [
-      openjdk
-    ];
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ]
+  ++ lib.optionals enableJava [
+    openjdk
+  ];
 
-  cmakeFlags =
-    [
-      "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
-      "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
-    ]
-    ++ lib.optionals enableJava [
-      "-DWITH_JAVA=1"
-    ]
-    ++ lib.optionals enableJpeg7 [
-      "-DWITH_JPEG7=1"
-    ]
-    ++ lib.optionals enableJpeg8 [
-      "-DWITH_JPEG8=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isRiscV [
-      # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
-      # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
-      "-DFLOATTEST=fp-contract"
-    ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
+    "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
+  ]
+  ++ lib.optionals enableJava [
+    "-DWITH_JAVA=1"
+  ]
+  ++ lib.optionals enableJpeg7 [
+    "-DWITH_JPEG7=1"
+  ]
+  ++ lib.optionals enableJpeg8 [
+    "-DWITH_JPEG8=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
+    "-DFLOATTEST=fp-contract"
+  ];
 
   doInstallCheck = true;
   installCheckTarget = "test";

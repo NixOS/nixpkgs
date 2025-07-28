@@ -43,53 +43,54 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ python3.pkgs.python ];
 
-  pythonPath =
-    [ libtorrent ]
-    ++ (with python3.pkgs; [
-      # requirements-core.txt
-      aiohttp
-      aiohttp-apispec
-      anyio
-      chardet
-      configobj
-      cryptography
-      decorator
-      faker
-      libnacl
-      lz4
-      marshmallow
-      netifaces
-      networkx
-      pony
-      psutil
-      pyasn1
-      pydantic_1
-      pyopenssl
-      pyyaml
-      sentry-sdk
-      service-identity
-      yappi
-      yarl
-      bitarray
-      filelock
-      (pyipv8.overrideAttrs (p: rec {
-        version = "2.10.0";
-        src = fetchPypi {
-          inherit (p) pname;
-          inherit version;
-          hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
-        };
-      }))
-      file-read-backwards
-      brotli
-      human-readable
-      # requirements.txt
-      pillow
-      pyqt5
-      pyqt5-sip
-      pyqtgraph
-      pyqtwebengine
-    ]);
+  pythonPath = [
+    libtorrent
+  ]
+  ++ (with python3.pkgs; [
+    # requirements-core.txt
+    aiohttp
+    aiohttp-apispec
+    anyio
+    chardet
+    configobj
+    cryptography
+    decorator
+    faker
+    libnacl
+    lz4
+    marshmallow
+    netifaces
+    networkx
+    pony
+    psutil
+    pyasn1
+    pydantic_1
+    pyopenssl
+    pyyaml
+    sentry-sdk
+    service-identity
+    yappi
+    yarl
+    bitarray
+    filelock
+    (pyipv8.overrideAttrs (p: rec {
+      version = "2.10.0";
+      src = fetchPypi {
+        inherit (p) pname;
+        inherit version;
+        hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
+      };
+    }))
+    file-read-backwards
+    brotli
+    human-readable
+    # requirements.txt
+    pillow
+    pyqt5
+    pyqt5-sip
+    pyqtgraph
+    pyqtwebengine
+  ]);
 
   installPhase = ''
     mkdir -pv $out

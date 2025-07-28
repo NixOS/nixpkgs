@@ -281,3 +281,7 @@ b4532efe93882ae2e3fc579929a42a5a56544146
 
 # emacs: keep elpa/nongnu/melpa package overrides sorted
 9f2faf683ed48704aa17f693208a13aa64e22181
+
+# nixfmt 1.0.0
+62fe01651911043bd3db0add920af3d2935d9869 # !autorebase nix-shell --run treefmt
+5a0711127cd8b916c3d3128f473388c8c79df0da # !autorebase nix-shell --run treefmt

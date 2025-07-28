@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "0.9.6";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-mealie";
     tag = "v${version}";
-    hash = "sha256-jjqukg8x5CDatEcmEAEdWtRrIa/6+iaiFYGRYUg40Dg=";
+    hash = "sha256-PpmgXiKJ8qQKHt7FVWpNgt3XKwqZ2caIcm7EO7UsfbI=";
   };
 
   build-system = [ poetry-core ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Mealie";
     homepage = "https://github.com/joostlek/python-mealie";
-    changelog = "https://github.com/joostlek/python-mealie/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-mealie/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

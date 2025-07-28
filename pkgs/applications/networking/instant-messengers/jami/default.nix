@@ -68,14 +68,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20250613.0";
+  version = "20250718.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-+6DTbYq50UPSQ+KipXhWje1bZs64wZrS37z2Na1RtN8=";
+    hash = "sha256-EEiuymfu28bJ6pfBKwlsCGDq7XlKGZYK+2WjPJ+tcxw=";
     fetchSubmodules = true;
   };
 
@@ -111,7 +111,8 @@ stdenv.mkDerivation rec {
       "--disable-resample"
       "--disable-libwebrtc"
       "--with-gnutls=yes"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
 
     buildInputs = old.buildInputs ++ [ gnutls ];
   });
@@ -275,7 +276,8 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtsvg
     qtwebchannel
-  ] ++ lib.optionals withWebengine [ qtwebengine ];
+  ]
+  ++ lib.optionals withWebengine [ qtwebengine ];
 
   cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
 

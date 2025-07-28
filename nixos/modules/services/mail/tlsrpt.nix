@@ -270,9 +270,17 @@ in
       };
     };
 
-    systemd.services.postfix.serviceConfig.SupplementaryGroups = mkIf (
-      config.services.postfix.enable && cfg.collectd.configurePostfix
-    ) [ "tlsrpt" ];
+    users.users.tlsrpt = {
+      isSystemUser = true;
+      group = "tlsrpt";
+    };
+    users.groups.tlsrpt = { };
+
+    users.users.postfix.extraGroups =
+      lib.mkIf (config.services.postfix.enable && cfg.collectd.configurePostfix)
+        [
+          "tlsrpt"
+        ];
 
     systemd.services.tlsrpt-collectd = {
       description = "TLSRPT datagram collector";

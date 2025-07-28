@@ -57,19 +57,18 @@ let
     name = "podman-helper-binary-wrapper";
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths =
-      [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+    paths = [
+      gvproxy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      aardvark-dns
+      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      netavark
+      passt
+      conmon
+      crun
+    ]
+    ++ extraRuntimes;
   };
 in
 buildGoModule rec {
@@ -165,21 +164,20 @@ buildGoModule rec {
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
   '';
 
-  passthru.tests =
-    {
-      version = testers.testVersion {
-        package = podman;
-        command = "HOME=$TMPDIR podman --version";
-      };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) podman;
-      # related modules
-      inherit (nixosTests)
-        podman-tls-ghostunnel
-        ;
-      oci-containers-podman = nixosTests.oci-containers.podman;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = podman;
+      command = "HOME=$TMPDIR podman --version";
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) podman;
+    # related modules
+    inherit (nixosTests)
+      podman-tls-ghostunnel
+      ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
+  };
 
   meta = {
     homepage = "https://podman.io/";

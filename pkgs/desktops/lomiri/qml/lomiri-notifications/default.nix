@@ -23,19 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-d3fJiYGAYF5e6XPuZ26Lrjj8tUiquunMLDLs9PdAYcA=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-      # Need to replace prefix to not try to install into lomiri-api prefix
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail '--variable=plugindir' '--define-variable=prefix=''${CMAKE_INSTALL_PREFIX} --variable=plugindir'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(test)' ""
-    '';
+    # Need to replace prefix to not try to install into lomiri-api prefix
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail '--variable=plugindir' '--define-variable=prefix=''${CMAKE_INSTALL_PREFIX} --variable=plugindir'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(test)' ""
+  '';
 
   strictDeps = true;
 

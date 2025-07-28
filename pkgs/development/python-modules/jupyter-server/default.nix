@@ -99,28 +99,27 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests =
-    [
-      "test_cull_idle"
-      "test_server_extension_list"
-      "test_subscribe_websocket"
-      # test is presumable broken in sandbox
-      "test_authorized_requests"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # attempts to use trashcan, build env doesn't allow this
-      "test_delete"
-      # Insufficient access privileges for operation
-      "test_regression_is_hidden"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
-      "test_copy_big_dir"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # TypeError: the JSON object must be str, bytes or bytearray, not NoneType
-      "test_terminal_create_with_cwd"
-    ];
+  disabledTests = [
+    "test_cull_idle"
+    "test_server_extension_list"
+    "test_subscribe_websocket"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # attempts to use trashcan, build env doesn't allow this
+    "test_delete"
+    # Insufficient access privileges for operation
+    "test_regression_is_hidden"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
+    "test_copy_big_dir"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+    "test_terminal_create_with_cwd"
+  ];
 
   disabledTestPaths = [
     "tests/services/kernels/test_api.py"

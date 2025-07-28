@@ -16,49 +16,48 @@ let
   databaseActuallyCreateLocally =
     cfg.database.createLocally && cfg.database.host == "/run/postgresql";
 
-  env =
-    {
-      RAILS_ENV = "production";
-      NODE_ENV = "production";
+  env = {
+    RAILS_ENV = "production";
+    NODE_ENV = "production";
 
-      BOOTSNAP_CACHE_DIR = "/var/cache/mastodon/precompile";
-      LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+    BOOTSNAP_CACHE_DIR = "/var/cache/mastodon/precompile";
+    LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
 
-      # Concurrency mastodon-web
-      WEB_CONCURRENCY = toString cfg.webProcesses;
-      MAX_THREADS = toString cfg.webThreads;
+    # Concurrency mastodon-web
+    WEB_CONCURRENCY = toString cfg.webProcesses;
+    MAX_THREADS = toString cfg.webThreads;
 
-      DB_USER = cfg.database.user;
+    DB_USER = cfg.database.user;
 
-      DB_HOST = cfg.database.host;
-      DB_NAME = cfg.database.name;
-      LOCAL_DOMAIN = cfg.localDomain;
-      SMTP_SERVER = cfg.smtp.host;
-      SMTP_PORT = toString cfg.smtp.port;
-      SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
-      PAPERCLIP_ROOT_PATH = "/var/lib/mastodon/public-system";
-      PAPERCLIP_ROOT_URL = "/system";
-      ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
+    DB_HOST = cfg.database.host;
+    DB_NAME = cfg.database.name;
+    LOCAL_DOMAIN = cfg.localDomain;
+    SMTP_SERVER = cfg.smtp.host;
+    SMTP_PORT = toString cfg.smtp.port;
+    SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
+    PAPERCLIP_ROOT_PATH = "/var/lib/mastodon/public-system";
+    PAPERCLIP_ROOT_URL = "/system";
+    ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
 
-      TRUSTED_PROXY_IP = cfg.trustedProxy;
-    }
-    // lib.optionalAttrs (cfg.redis.host != null) { REDIS_HOST = cfg.redis.host; }
-    // lib.optionalAttrs (cfg.redis.port != null) { REDIS_PORT = toString cfg.redis.port; }
-    // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {
-      REDIS_URL = "unix://${config.services.redis.servers.mastodon.unixSocket}";
-    }
-    // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) {
-      DB_PORT = toString cfg.database.port;
-    }
-    // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN = cfg.smtp.user; }
-    // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
-    // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PORT = toString cfg.elasticsearch.port; }
-    // lib.optionalAttrs (cfg.elasticsearch.host != null && cfg.elasticsearch.prefix != null) {
-      ES_PREFIX = cfg.elasticsearch.prefix;
-    }
-    // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PRESET = cfg.elasticsearch.preset; }
-    // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; }
-    // cfg.extraConfig;
+    TRUSTED_PROXY_IP = cfg.trustedProxy;
+  }
+  // lib.optionalAttrs (cfg.redis.host != null) { REDIS_HOST = cfg.redis.host; }
+  // lib.optionalAttrs (cfg.redis.port != null) { REDIS_PORT = toString cfg.redis.port; }
+  // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {
+    REDIS_URL = "unix://${config.services.redis.servers.mastodon.unixSocket}";
+  }
+  // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) {
+    DB_PORT = toString cfg.database.port;
+  }
+  // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN = cfg.smtp.user; }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PORT = toString cfg.elasticsearch.port; }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null && cfg.elasticsearch.prefix != null) {
+    ES_PREFIX = cfg.elasticsearch.prefix;
+  }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PRESET = cfg.elasticsearch.preset; }
+  // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; }
+  // cfg.extraConfig;
 
   systemCallsList = [
     "@cpu-emulation"
@@ -168,7 +167,8 @@ let
         after = [
           "network.target"
           "mastodon-init-dirs.service"
-        ] ++ commonUnits;
+        ]
+        ++ commonUnits;
         requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
         description = "Mastodon sidekiq${jobClassLabel}";
         wantedBy = [ "mastodon.target" ];
@@ -190,7 +190,8 @@ let
             "pipe"
             "pipe2"
           ];
-        } // cfgService;
+        }
+        // cfgService;
         path = with pkgs; [
           ffmpeg-headless
           file
@@ -206,7 +207,8 @@ let
         after = [
           "network.target"
           "mastodon-init-dirs.service"
-        ] ++ commonUnits;
+        ]
+        ++ commonUnits;
         requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
         wantedBy = [
           "mastodon.target"
@@ -240,7 +242,8 @@ let
             "pipe"
             "pipe2"
           ];
-        } // cfgService;
+        }
+        // cfgService;
       };
     }) (lib.range 1 cfg.streamingProcesses)
   );
@@ -859,59 +862,58 @@ in
         };
 
         systemd.services.mastodon-init-dirs = {
-          script =
-            ''
-              umask 077
+          script = ''
+            umask 077
 
-              if ! test -d /var/cache/mastodon/precompile; then
-                ${cfg.package}/bin/bundle exec bootsnap precompile --gemfile ${cfg.package}/app ${cfg.package}/lib
-              fi
-              if ! test -f ${cfg.activeRecordEncryptionDeterministicKeyFile}; then
-                mkdir -p $(dirname ${cfg.activeRecordEncryptionDeterministicKeyFile})
-                bin/rails db:encryption:init | grep --only-matching "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=[^ ]\+" | sed 's/^ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=//' > ${cfg.activeRecordEncryptionDeterministicKeyFile}
-              fi
-              if ! test -f ${cfg.activeRecordEncryptionKeyDerivationSaltFile}; then
-                mkdir -p $(dirname ${cfg.activeRecordEncryptionKeyDerivationSaltFile})
-                bin/rails db:encryption:init | grep --only-matching "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=[^ ]\+" | sed 's/^ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=//' > ${cfg.activeRecordEncryptionKeyDerivationSaltFile}
-              fi
-              if ! test -f ${cfg.activeRecordEncryptionPrimaryKeyFile}; then
-                mkdir -p $(dirname ${cfg.activeRecordEncryptionPrimaryKeyFile})
-                bin/rails db:encryption:init | grep --only-matching "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=[^ ]\+" | sed 's/^ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=//' > ${cfg.activeRecordEncryptionPrimaryKeyFile}
-              fi
-              if ! test -f ${cfg.secretKeyBaseFile}; then
-                mkdir -p $(dirname ${cfg.secretKeyBaseFile})
-                bin/bundle exec rails secret > ${cfg.secretKeyBaseFile}
-              fi
-              if ! test -f ${cfg.vapidPrivateKeyFile}; then
-                mkdir -p $(dirname ${cfg.vapidPrivateKeyFile}) $(dirname ${cfg.vapidPublicKeyFile})
-                keypair=$(bin/rake webpush:generate_keys)
-                echo $keypair | grep --only-matching "Private -> [^ ]\+" | sed 's/^Private -> //' > ${cfg.vapidPrivateKeyFile}
-                echo $keypair | grep --only-matching "Public -> [^ ]\+" | sed 's/^Public -> //' > ${cfg.vapidPublicKeyFile}
-              fi
+            if ! test -d /var/cache/mastodon/precompile; then
+              ${cfg.package}/bin/bundle exec bootsnap precompile --gemfile ${cfg.package}/app ${cfg.package}/lib
+            fi
+            if ! test -f ${cfg.activeRecordEncryptionDeterministicKeyFile}; then
+              mkdir -p $(dirname ${cfg.activeRecordEncryptionDeterministicKeyFile})
+              bin/rails db:encryption:init | grep --only-matching "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=[^ ]\+" | sed 's/^ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=//' > ${cfg.activeRecordEncryptionDeterministicKeyFile}
+            fi
+            if ! test -f ${cfg.activeRecordEncryptionKeyDerivationSaltFile}; then
+              mkdir -p $(dirname ${cfg.activeRecordEncryptionKeyDerivationSaltFile})
+              bin/rails db:encryption:init | grep --only-matching "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=[^ ]\+" | sed 's/^ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=//' > ${cfg.activeRecordEncryptionKeyDerivationSaltFile}
+            fi
+            if ! test -f ${cfg.activeRecordEncryptionPrimaryKeyFile}; then
+              mkdir -p $(dirname ${cfg.activeRecordEncryptionPrimaryKeyFile})
+              bin/rails db:encryption:init | grep --only-matching "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=[^ ]\+" | sed 's/^ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=//' > ${cfg.activeRecordEncryptionPrimaryKeyFile}
+            fi
+            if ! test -f ${cfg.secretKeyBaseFile}; then
+              mkdir -p $(dirname ${cfg.secretKeyBaseFile})
+              bin/bundle exec rails secret > ${cfg.secretKeyBaseFile}
+            fi
+            if ! test -f ${cfg.vapidPrivateKeyFile}; then
+              mkdir -p $(dirname ${cfg.vapidPrivateKeyFile}) $(dirname ${cfg.vapidPublicKeyFile})
+              keypair=$(bin/rake webpush:generate_keys)
+              echo $keypair | grep --only-matching "Private -> [^ ]\+" | sed 's/^Private -> //' > ${cfg.vapidPrivateKeyFile}
+              echo $keypair | grep --only-matching "Public -> [^ ]\+" | sed 's/^Public -> //' > ${cfg.vapidPublicKeyFile}
+            fi
 
-              cat > /var/lib/mastodon/.secrets_env <<EOF
-              ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="$(cat ${cfg.activeRecordEncryptionDeterministicKeyFile})"
-              ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="$(cat ${cfg.activeRecordEncryptionKeyDerivationSaltFile})"
-              ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY="$(cat ${cfg.activeRecordEncryptionPrimaryKeyFile})"
-              SECRET_KEY_BASE="$(cat ${cfg.secretKeyBaseFile})"
-              VAPID_PRIVATE_KEY="$(cat ${cfg.vapidPrivateKeyFile})"
-              VAPID_PUBLIC_KEY="$(cat ${cfg.vapidPublicKeyFile})"
-            ''
-            + lib.optionalString (cfg.redis.passwordFile != null) ''
-              REDIS_PASSWORD="$(cat ${cfg.redis.passwordFile})"
-            ''
-            + lib.optionalString (cfg.database.passwordFile != null) ''
-              DB_PASS="$(cat ${cfg.database.passwordFile})"
-            ''
-            + lib.optionalString cfg.smtp.authenticate ''
-              SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
-            ''
-            + lib.optionalString (cfg.elasticsearch.passwordFile != null) ''
-              ES_PASS="$(cat ${cfg.elasticsearch.passwordFile})"
-            ''
-            + ''
-              EOF
-            '';
+            cat > /var/lib/mastodon/.secrets_env <<EOF
+            ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="$(cat ${cfg.activeRecordEncryptionDeterministicKeyFile})"
+            ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="$(cat ${cfg.activeRecordEncryptionKeyDerivationSaltFile})"
+            ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY="$(cat ${cfg.activeRecordEncryptionPrimaryKeyFile})"
+            SECRET_KEY_BASE="$(cat ${cfg.secretKeyBaseFile})"
+            VAPID_PRIVATE_KEY="$(cat ${cfg.vapidPrivateKeyFile})"
+            VAPID_PUBLIC_KEY="$(cat ${cfg.vapidPublicKeyFile})"
+          ''
+          + lib.optionalString (cfg.redis.passwordFile != null) ''
+            REDIS_PASSWORD="$(cat ${cfg.redis.passwordFile})"
+          ''
+          + lib.optionalString (cfg.database.passwordFile != null) ''
+            DB_PASS="$(cat ${cfg.database.passwordFile})"
+          ''
+          + lib.optionalString cfg.smtp.authenticate ''
+            SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
+          ''
+          + lib.optionalString (cfg.elasticsearch.passwordFile != null) ''
+            ES_PASS="$(cat ${cfg.elasticsearch.passwordFile})"
+          ''
+          + ''
+            EOF
+          '';
           environment = env;
           serviceConfig = {
             Type = "oneshot";
@@ -923,7 +925,8 @@ in
               "pipe"
               "pipe2"
             ];
-          } // cfgService;
+          }
+          // cfgService;
 
           after = [ "network.target" ];
         };
@@ -979,21 +982,25 @@ in
               "pipe"
               "pipe2"
             ];
-          } // cfgService;
+          }
+          // cfgService;
           after = [
             "network.target"
             "mastodon-init-dirs.service"
-          ] ++ lib.optional databaseActuallyCreateLocally "postgresql.target";
+          ]
+          ++ lib.optional databaseActuallyCreateLocally "postgresql.target";
           requires = [
             "mastodon-init-dirs.service"
-          ] ++ lib.optional databaseActuallyCreateLocally "postgresql.target";
+          ]
+          ++ lib.optional databaseActuallyCreateLocally "postgresql.target";
         };
 
         systemd.services.mastodon-web = {
           after = [
             "network.target"
             "mastodon-init-dirs.service"
-          ] ++ commonUnits;
+          ]
+          ++ commonUnits;
           requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
           wantedBy = [ "mastodon.target" ];
           description = "Mastodon web";
@@ -1021,7 +1028,8 @@ in
               "pipe"
               "pipe2"
             ];
-          } // cfgService;
+          }
+          // cfgService;
           path = with pkgs; [
             ffmpeg-headless
             file
@@ -1034,7 +1042,8 @@ in
           serviceConfig = {
             Type = "oneshot";
             EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
-          } // cfgService;
+          }
+          // cfgService;
           script =
             let
               olderThanDays = toString cfg.mediaAutoRemove.olderThanDays;

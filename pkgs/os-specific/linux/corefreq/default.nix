@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
-  ] ++ extraFlags;
+  ]
+  ++ extraFlags;
 
   preInstall = ''
     mkdir -p $out/bin

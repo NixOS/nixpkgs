@@ -34,19 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K+cR+0a/zRpOvMsX1ZljjJYYOXbHkyDGE9Q9vY1qJBg=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      rustc
-      cargo
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals withIntrospection [
-      vala
-      gi-docgen
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals withIntrospection [
+    vala
+    gi-docgen
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
@@ -57,7 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
     lcms2
     gtk4
-  ] ++ lib.optionals withIntrospection [ gobject-introspection ];
+  ]
+  ++ lib.optionals withIntrospection [ gobject-introspection ];
 
   propagatedBuildInputs = [
     libseccomp

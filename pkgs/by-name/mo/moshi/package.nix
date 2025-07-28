@@ -55,40 +55,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-BxV8oZlN+6cVb3GwhY7TKWxHEpY3WVEhN6A6+5NMOyU=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Unable to find libclang: "couldn't find any valid shared libraries matching: ['libclang.dylib']
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals config.cudaSupport [
-      # WARNING: autoAddDriverRunpath must run AFTER autoPatchelfHook
-      # Otherwise, autoPatchelfHook removes driverLink from RUNPATH
-      autoPatchelfHook
-      autoAddDriverRunpath
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Unable to find libclang: "couldn't find any valid shared libraries matching: ['libclang.dylib']
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals config.cudaSupport [
+    # WARNING: autoAddDriverRunpath must run AFTER autoPatchelfHook
+    # Otherwise, autoPatchelfHook removes driverLink from RUNPATH
+    autoPatchelfHook
+    autoAddDriverRunpath
 
-      cudaPackages.cuda_nvcc
-    ];
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs =
-    [
-      libopus
-      openssl
-      sentencepiece
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals config.cudaSupport [
-      cudaPackages.cuda_cccl
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_nvrtc
-      cudaPackages.libcublas
-      cudaPackages.libcurand
-    ];
+  buildInputs = [
+    libopus
+    openssl
+    sentencepiece
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals config.cudaSupport [
+    cudaPackages.cuda_cccl
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvrtc
+    cudaPackages.libcublas
+    cudaPackages.libcurand
+  ];
 
   buildFeatures =
     lib.optionals stdenv.hostPlatform.isDarwin [ "metal" ]

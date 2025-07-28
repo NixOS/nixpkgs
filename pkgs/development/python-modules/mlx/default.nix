@@ -111,7 +111,7 @@ let
       pytestCheckHook
     ];
 
-    pytestFlagsArray = [
+    enabledTestPaths = [
       "python/tests/"
     ];
 

@@ -9,18 +9,14 @@ may be overridden on a per-interface basis by
 IPv6 support globally by setting:
 
 ```nix
-{
-  networking.enableIPv6 = false;
-}
+{ networking.enableIPv6 = false; }
 ```
 
 You can disable IPv6 on a single interface using a normal sysctl (in
 this example, we use interface `eth0`):
 
 ```nix
-{
-  boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true;
-}
+{ boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true; }
 ```
 
 As with IPv4 networking interfaces are automatically configured via
@@ -28,10 +24,12 @@ DHCPv6. You can configure an interface manually:
 
 ```nix
 {
-  networking.interfaces.eth0.ipv6.addresses = [ {
-    address = "fe00:aa:bb:cc::2";
-    prefixLength = 64;
-  } ];
+  networking.interfaces.eth0.ipv6.addresses = [
+    {
+      address = "fe00:aa:bb:cc::2";
+      prefixLength = 64;
+    }
+  ];
 }
 ```
 

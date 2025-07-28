@@ -50,12 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
     luajit
     libsodium
     curl
-  ] ++ lib.optional enableProtoBuf protobuf;
+  ]
+  ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"
     "--enable-systemd"
     "--enable-dns-over-tls"
+    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns-recursor"
   ];
 

@@ -80,19 +80,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit makefile;
 
-  makeFlags =
-    [
-      "CC=${stdenv.cc.targetPrefix}cc"
-      "CXX=${stdenv.cc.targetPrefix}c++"
-    ]
-    ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
-    ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
-    # it's the compression code with the restriction, see DOC/License.txt
-    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
-      "IS_MINGW=1"
-      "MSYSTEM=1"
-    ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ]
+  ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
+  ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
+  # it's the compression code with the restriction, see DOC/License.txt
+  ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
+  ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+    "IS_MINGW=1"
+    "MSYSTEM=1"
+  ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 

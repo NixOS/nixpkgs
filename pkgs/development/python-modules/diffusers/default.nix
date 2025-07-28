@@ -103,7 +103,8 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck =
     let
@@ -135,28 +136,27 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
-  disabledTests =
-    [
-      # depends on current working directory
-      "test_deprecate_stacklevel"
-      # fails due to precision of floating point numbers
-      "test_full_loop_no_noise"
-      "test_model_cpu_offload_forward_pass"
-      # tries to run ruff which we have intentionally removed from nativeCheckInputs
-      "test_is_copy_consistent"
+  disabledTests = [
+    # depends on current working directory
+    "test_deprecate_stacklevel"
+    # fails due to precision of floating point numbers
+    "test_full_loop_no_noise"
+    "test_model_cpu_offload_forward_pass"
+    # tries to run ruff which we have intentionally removed from nativeCheckInputs
+    "test_is_copy_consistent"
 
-      # Require unpackaged torchao:
-      # importlib.metadata.PackageNotFoundError: No package metadata was found for torchao
-      "test_load_attn_procs_raise_warning"
-      "test_save_attn_procs_raise_warning"
-      "test_save_load_lora_adapter_0"
-      "test_save_load_lora_adapter_1"
-      "test_wrong_adapter_name_raises_error"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeError: Dynamo is not supported on Python 3.12+
-      "test_from_save_pretrained_dynamo"
-    ];
+    # Require unpackaged torchao:
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for torchao
+    "test_load_attn_procs_raise_warning"
+    "test_save_attn_procs_raise_warning"
+    "test_save_load_lora_adapter_0"
+    "test_save_load_lora_adapter_1"
+    "test_wrong_adapter_name_raises_error"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Dynamo is not supported on Python 3.12+
+    "test_from_save_pretrained_dynamo"
+  ];
 
   passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
 

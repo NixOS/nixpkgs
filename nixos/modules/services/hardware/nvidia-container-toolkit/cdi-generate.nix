@@ -39,7 +39,7 @@ writeScriptBin "nvidia-cdi-generator" ''
       --device-name-strategy ${device-name-strategy} \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
-      --nvidia-cdi-hook-path ${lib.getExe' nvidia-container-toolkit.tools "nvidia-cdi-hook"} \
+      --nvidia-cdi-hook-path ${lib.getOutput "tools" nvidia-container-toolkit}/bin/nvidia-cdi-hook \
       ${lib.escapeShellArgs extraArgs}
   }
 

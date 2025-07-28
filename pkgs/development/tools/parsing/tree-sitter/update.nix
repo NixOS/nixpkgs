@@ -144,7 +144,7 @@ let
       repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
-      orga = "cstrahan";
+      orga = "nix-community";
       repo = "tree-sitter-nix";
     };
     "tree-sitter-latex" = {
@@ -494,6 +494,21 @@ let
     };
   };
 
+  pinnedGrammars = [
+    "tree-sitter-bash"
+    "tree-sitter-bibtex"
+    "tree-sitter-c"
+    "tree-sitter-comment"
+    "tree-sitter-fortran"
+    "tree-sitter-hcl"
+    "tree-sitter-hyprlang"
+    "tree-sitter-llvm"
+    "tree-sitter-markdown"
+    "tree-sitter-query"
+    "tree-sitter-rust"
+  ];
+  pinnedGrammarsJson = jsonFile pinnedGrammars;
+
   allGrammars =
     let
       treeSitterOrgaGrammars = lib.listToAttrs (
@@ -523,6 +538,7 @@ let
         inherit
           knownTreeSitterOrgGrammarRepos
           ignoredTreeSitterOrgRepos
+          pinnedGrammars
           ;
       }
       (

@@ -194,6 +194,7 @@ let
           -L ${nixStoreFilesystemLabel} \
           -U eb176051-bd15-49b7-9e6b-462e0b467019 \
           -T 0 \
+          --hard-dereference \
           --tar=f \
           "$TMPDIR"/store.img
 
@@ -1185,8 +1186,7 @@ in
     '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
-      ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1337,7 +1337,8 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
-          ] ++ lib.optional (tag == "nix-store") "cache=loose";
+          ]
+          ++ lib.optional (tag == "nix-store") "cache=loose";
         };
       in
       lib.mkMerge [

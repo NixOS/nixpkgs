@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';

@@ -1,0 +1,43 @@
+From d9e7361a174f0f491c49fe78cd96a823c65e97dd Mon Sep 17 00:00:00 2001
+From: qr243vbi <uiguruigurovich@gmail.com>
+Date: Sat, 7 Jun 2025 01:18:03 +0300
+Subject: [PATCH 1/2] Update CMakeLists.txt
+
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 54051a4ef2..531c46abbe 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,6 +16,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/externals/cmake-modules")
+ include(DownloadExternals)
+ include(CMakeDependentOption)
++include(FindPkgConfig)
+ 
+ project(citra LANGUAGES C CXX ASM)
+ 
+
+From 679a4036e2fbb96d1d6a803f3f59ae8f01f9e691 Mon Sep 17 00:00:00 2001
+From: qr243vbi <uiguruigurovich@gmail.com>
+Date: Sat, 7 Jun 2025 12:49:07 +0300
+Subject: [PATCH 2/2] Add missing find_package directive
+
+---
+ src/citra_qt/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/citra_qt/CMakeLists.txt b/src/citra_qt/CMakeLists.txt
+index 1b78605a0a..de00dc4609 100644
+--- a/src/citra_qt/CMakeLists.txt
++++ b/src/citra_qt/CMakeLists.txt
+@@ -273,6 +273,7 @@ if (ENABLE_VULKAN)
+ endif()
+ 
+ if (NOT WIN32)
++    find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+     target_include_directories(citra_qt PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
+ endif()
+ 

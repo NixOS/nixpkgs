@@ -41,17 +41,16 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      # needed for gstreamer https
-      glib-networking
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ]);
+  buildInputs = [
+    libadwaita
+    # needed for gstreamer https
+    glib-networking
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   pythonRelaxDeps = [ "mpris_server" ];
 
