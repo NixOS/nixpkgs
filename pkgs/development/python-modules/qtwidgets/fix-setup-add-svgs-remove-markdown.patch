@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 8d0cf6d..9cda286 100644
+--- a/setup.py
++++ b/setup.py
+@@ -16,9 +16,7 @@ setup(
+     url='http://github.com/learnpyqt/python-qtwidgets',
+     license='MIT',
+     packages=find_packages(),
+-    install_requires=[
+-        'markdown',
+-    ],
++    package_data={'': ['**/*.svg']},
+     include_package_data=True,
+     classifiers=[
+         'Development Status :: 2 - Pre-Alpha',
