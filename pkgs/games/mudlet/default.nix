@@ -161,17 +161,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crossplatform mud client";
     homepage = "https://www.mudlet.org/";
-    maintainers = with maintainers; [
-      wyvie
-      pstn
-      cpu
-      felixalbrigtsen
-    ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2Plus;
+    maintainers = builtins.attrValues {
+      inherit (lib.maintainers)
+        wyvie
+        pstn
+        cpu
+        felixalbrigtsen
+        ;
+    };
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mudlet";
   };
 }
