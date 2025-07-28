@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gbchzf0f4xzb6zjc56dk74hqrmdgyirmgxvvsqp9vqn9wb5kkx4";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   postPatch = ''
     pushd tests
     cp ${hsts_list} transport_security_state_static.json
