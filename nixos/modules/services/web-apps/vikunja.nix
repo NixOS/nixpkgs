@@ -55,10 +55,16 @@ in
       type = format.type;
       default = { };
       description = ''
-        Vikunja configuration. Refer to
-        <https://vikunja.io/docs/config-options/>
+        Vikunja configuration, as a Nix attribute set. 
+        Refer to <https://vikunja.io/docs/config-options/>
         for details on supported values.
       '';
+      example = lib.literalExpression
+        "{
+          service.timezone = "GMT";
+          service.enablecaldav = true;
+          sentry.enable = true;
+        }";
     };
     database = {
       type = mkOption {
