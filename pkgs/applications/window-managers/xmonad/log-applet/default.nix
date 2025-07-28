@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     broken = desktopSupport == "gnomeflashback" || desktopSupport == "xfce4";
     description = "Applet that will display XMonad log information (${desktopSupport} version)";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

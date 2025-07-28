@@ -199,7 +199,6 @@ effectiveStdenv.mkDerivation rec {
     mainProgram = "xgboost";
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      abbradar
       nviets
     ];
   };

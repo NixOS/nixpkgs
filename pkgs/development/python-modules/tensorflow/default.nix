@@ -581,7 +581,7 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ abbradar ];
+      maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
       broken =
         stdenv.hostPlatform.isDarwin

@@ -185,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      abbradar
       schneefux
       globin
     ];

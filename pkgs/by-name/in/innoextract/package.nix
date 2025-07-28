@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "innoextract";
   };

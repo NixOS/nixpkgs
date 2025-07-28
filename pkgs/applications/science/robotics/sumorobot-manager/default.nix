@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     mainProgram = "sumorobot-manager";
     homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

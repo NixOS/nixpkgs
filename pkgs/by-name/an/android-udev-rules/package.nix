@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Android udev rules list aimed to be the most comprehensive on the net";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     teams = [ lib.teams.android ];
   };
 }

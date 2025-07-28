@@ -168,7 +168,6 @@ mkDerivation rec {
     description = "Free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with lib.maintainers; [
-      abbradar
       sifmelcara
       nek0
     ];
