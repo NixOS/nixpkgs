@@ -171,7 +171,4 @@ with haskellLib;
       })
     ];
   }) (dontCheck (doJailbreak super.doctest-parallel)); # Cabal >=2.4 && <3.13
-
-  # Allow Cabal 3.14
-  hpack = doDistribute self.hpack_0_38_1;
 }

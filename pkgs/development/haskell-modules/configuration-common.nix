@@ -102,9 +102,6 @@ with haskellLib;
         cabalInstallOverlay = cself: csuper: {
           Cabal = cself.Cabal_3_14_2_0;
           Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
-
-          # Only needed for cabal2nix, hpack < 0.37 forbids Cabal >= 3.14
-          hpack = cself.hpack_0_38_1;
         };
       in
       {
@@ -2094,14 +2091,6 @@ with haskellLib;
         ShellCheck = self.ShellCheck_0_9_0;
       }
     )
-  );
-
-  stack = super.stack.overrideScope (
-    self: super: {
-      # stack needs to be built with the same hpack version that the upstream releases use.
-      # https://github.com/NixOS/nixpkgs/issues/223390
-      hpack = self.hpack_0_38_1;
-    }
   );
 
   # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
