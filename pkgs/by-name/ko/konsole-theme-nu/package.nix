@@ -3,12 +3,29 @@
   stdenv,
   fetchFromGitHub,
   nushell,
-  writers,
+  writeShellScript,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
   pname = "konsole-theme-nu";
   version = "0.1.0";
+
+  wrapperScripts = {
+    konsole-theme-nu = writeShellScript "konsole-theme-nu" ''
+      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod set-konsole-profile ''${1:-}"
+    '';
+
+    list-konsole-profiles = writeShellScript "list-konsole-profiles" ''
+      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod list-konsole-profiles"
+    '';
+
+    get-konsole-profile = writeShellScript "get-konsole-profile" ''
+      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod get-konsole-profile"
+    '';
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wvhulle";
@@ -20,32 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ nushell ];
 
   installPhase = ''
-        runHook preInstall
+    runHook preInstall
 
-        # Install the nushell module
-        install -Dm644 mod.nu $out/share/konsole-theme-nu/mod.nu
+    # Install the Nu module
+    install -Dm644 mod.nu $out/share/konsole-theme-nu/mod.nu
 
-        # Create wrapper scripts
-        mkdir -p $out/bin
-        cat > $out/bin/konsole-theme-nu << EOF
-    #!/usr/bin/env -S nu --no-config-file
-    use $out/share/konsole-theme-nu/mod.nu; mod set-konsole-profile \$env.1?
-    EOF
-        chmod +x $out/bin/konsole-theme-nu
+    # Create simple shell script wrappers
+    install -Dm755 ${wrapperScripts.konsole-theme-nu} $out/bin/konsole-theme-nu
+    install -Dm755 ${wrapperScripts.list-konsole-profiles} $out/bin/list-konsole-profiles
+    install -Dm755 ${wrapperScripts.get-konsole-profile} $out/bin/get-konsole-profile
 
-        cat > $out/bin/list-konsole-profiles << EOF
-    #!/usr/bin/env -S nu --no-config-file
-    use $out/share/konsole-theme-nu/mod.nu; mod list-konsole-profiles
-    EOF
-        chmod +x $out/bin/list-konsole-profiles
-
-        cat > $out/bin/get-konsole-profile << EOF
-    #!/usr/bin/env -S nu --no-config-file
-    use $out/share/konsole-theme-nu/mod.nu; mod get-konsole-profile
-    EOF
-        chmod +x $out/bin/get-konsole-profile
-
-        runHook postInstall
+    runHook postInstall
   '';
 
   meta = {
