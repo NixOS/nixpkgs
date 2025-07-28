@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

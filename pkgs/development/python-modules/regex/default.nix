@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Alternative regular expression module, to replace re";
     homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
     license = licenses.psfl;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }
