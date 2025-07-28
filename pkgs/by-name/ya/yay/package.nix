@@ -67,6 +67,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "yay";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

@@ -38,7 +38,7 @@ llvmPackages.stdenv.mkDerivation rec {
     mainProgram = "conec";
     homepage = "https://cone.jondgoodwin.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

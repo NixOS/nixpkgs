@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       unicode-dfs-2015
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     teams = [ teams.android ];
   };
 }

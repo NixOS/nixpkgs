@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
     description = "Directory service to resolve wallet mailboxes by messenger addresses";
     teams = with lib.teams; [ ngi ];
     # themadbit will maintain after being added to maintainers
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.agpl3Plus;
   };
 })

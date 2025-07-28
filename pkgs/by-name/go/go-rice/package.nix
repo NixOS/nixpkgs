@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Go package that makes working with resources such as html, js, css, images, templates very easy";
     homepage = "https://github.com/GeertJohan/go.rice";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "rice";
   };
 }

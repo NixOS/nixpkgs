@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
     mainProgram = "greetd";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
