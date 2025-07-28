@@ -10,6 +10,7 @@
   libGLU,
   libGL,
   makeDesktopItem,
+  pkgsi686Linux,
 }:
 
 let
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
     owner = "emillon";
     repo = "zsnes";
     rev = "fc160b2538738995f600f8405d23a66b070dac02";
-    sha256 = "1gy79d5wdaacph0cc1amw7mqm7i0716n6mvav16p1svi26iz193v";
+    hash = "sha256-e6TwoxFx63BN2GpXY004IJ6K6+FVBcYAvEypxktLx78=";
   };
 
   patches = [
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
     ./fortify3.patch
   ];
 
-  buildInputs = [
+  buildInputs = with pkgsi686Linux; [
     nasm
     SDL
     zlib
