@@ -12,13 +12,13 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
   version = "0-unstable-2025-07-28";
-  # from `pdm show`
-  realVersion =
+  # Similar to `pdm show`, but without the commit counter
+  pdmVersion =
     let
       tag = builtins.elemAt (lib.splitString "-" version) 0;
       rev = lib.substring 0 7 src.rev;
     in
-    "${tag}.1.dev2611+g${rev}";
+    "${tag}.1.dev0+g${rev}";
   # the latest commit ID touching the `firmware` directory, can differ from rev!
   firmwareGitRev = "4fe35360";
 
@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex
 
     cd software
-    export PDM_BUILD_SCM_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${pdmVersion}"
   '';
 
   # installCheck tries to build_ext again
