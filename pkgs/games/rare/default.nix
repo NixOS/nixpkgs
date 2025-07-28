@@ -1,14 +1,17 @@
 {
   lib,
   fetchFromGitHub,
-  qt5,
+  libsForQt5,
   python3,
   legendary-gl,
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  pname = "rare";
+let
   version = "1.10.11";
+in
+python3.pkgs.buildPythonApplication {
+  pname = "rare";
+  inherit version;
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -26,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
       ;
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ libsForQt5.qt5.wrapQtAppsHook ];
 
   dependencies = builtins.attrValues {
     inherit (python3.pkgs)
@@ -40,12 +43,12 @@ python3.pkgs.buildPythonApplication rec {
     inherit legendary-gl;
   };
 
-  dontWrapQtApps = true;
-
   postInstall = ''
     install -Dm644 misc/rare.desktop -t $out/share/applications/
     install -Dm644 $out/${python3.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
   '';
+
+  dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
