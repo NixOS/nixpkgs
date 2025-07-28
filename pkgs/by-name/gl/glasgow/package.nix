@@ -6,7 +6,6 @@
   yosys,
   icestorm,
   nextpnr,
-  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -108,10 +107,6 @@ python3.pkgs.buildPythonApplication rec {
     "NEXTPNR_ICE40"
     "${nextpnr}/bin/nextpnr-ice40"
   ];
-
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
