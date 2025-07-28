@@ -30,7 +30,7 @@ let
         __intentionallyOverridingVersion = true;
       });
 
-  version = "1.8";
+  version = "1.8.1";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-Cg4DxHCZiXiSlbwveJpyCFzWIblWi467I2/pmsAWiAw=";
+    hash = "sha256-YsSFlVWUu4RSYnObqcBJ4Mr3bJVVhuFhaQAktHytBAI=";
   };
 
-  cargoHash = "sha256-uUI0O60x8AVG85MJYzEbNdsO818yFu4w66WuozboWso=";
+  cargoHash = "sha256-zJorGAsp5k5oBuXogYqEPVexcNsYCeiTmrQqySd1AGs=";
 
   buildAndTestSubdir = "devenv";
 
