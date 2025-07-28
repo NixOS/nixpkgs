@@ -22,6 +22,6 @@ melpaBuild {
     homepage = "http://emacswiki.org/emacs/RectangleMark";
     description = "Mark a rectangle of text with highlighting";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

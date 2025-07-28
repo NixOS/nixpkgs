@@ -145,7 +145,7 @@
     hash = "sha256-DOuH7BG4WrhP7SQH3GInFh7DHT0qN3JhSG76EXmNn24=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = [ ];
   };
 }
 // lib.optionalAttrs config.allowAliases {

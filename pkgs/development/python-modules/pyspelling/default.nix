@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Spell checker";
     homepage = "https://pypi.org/project/pyspelling";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

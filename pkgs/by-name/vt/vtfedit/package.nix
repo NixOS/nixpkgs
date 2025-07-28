@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.lgpl21Plus;
     inherit (wine.meta) platforms;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

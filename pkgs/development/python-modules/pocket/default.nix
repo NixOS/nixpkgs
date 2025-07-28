@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Wrapper for the pocket API";
     homepage = "https://github.com/tapanpandita/pocket";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

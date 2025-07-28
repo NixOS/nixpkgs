@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Simple wifi shell script for linux";
     mainProgram = "wifish";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

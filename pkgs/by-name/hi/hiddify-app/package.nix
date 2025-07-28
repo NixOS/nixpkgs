@@ -16,7 +16,7 @@ let
       unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   libcore = buildGoModule rec {

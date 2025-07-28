@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
     description = "Sleek notification daemon for Wayland";
     homepage = "https://gitlab.com/snakedye/salut/-/wikis/Home";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "salut";
     platforms = lib.platforms.linux;
   };

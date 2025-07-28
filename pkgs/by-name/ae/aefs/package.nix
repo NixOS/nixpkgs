@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/edolstra/aefs";
     description = "Cryptographic filesystem implemented in userspace using FUSE";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

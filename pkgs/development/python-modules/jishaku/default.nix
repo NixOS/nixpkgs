@@ -65,7 +65,7 @@ buildPythonPackage rec {
     description = "Debugging and testing cog for discord.py bots";
     homepage = "https://jishaku.readthedocs.io/en/latest";
     changelog = "https://github.com/Gorialis/jishaku/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "jishaku";
     license = lib.licenses.mit;
   };

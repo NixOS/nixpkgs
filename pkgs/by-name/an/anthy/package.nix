@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
     homepage = "https://anthy.osdn.jp/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 

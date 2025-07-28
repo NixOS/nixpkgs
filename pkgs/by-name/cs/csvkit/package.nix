@@ -38,6 +38,6 @@ python3Packages.buildPythonApplication rec {
     description = "Suite of command-line tools for converting to and working with CSV";
     changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

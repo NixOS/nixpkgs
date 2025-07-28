@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nix based static site generator";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     homepage = "https://styx-static.github.io/styx-site/";
     downloadPage = "https://github.com/styx-static/styx/";
     platforms = platforms.all;

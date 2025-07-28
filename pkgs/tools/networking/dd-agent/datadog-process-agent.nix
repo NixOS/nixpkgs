@@ -7,7 +7,7 @@ datadog-agent.overrideAttrs (attrs: {
     // {
       description = "Live process collector for the DataDog Agent v7";
       mainProgram = "process-agent";
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   subPackages = [ "cmd/process-agent" ];
   postInstall = null;

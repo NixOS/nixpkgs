@@ -39,6 +39,6 @@ buildPythonPackage rec {
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

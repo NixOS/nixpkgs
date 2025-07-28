@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "stockpile";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

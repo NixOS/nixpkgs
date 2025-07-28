@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neetly/figma-agent-linux";
     description = "Figma Agent for Linux (a.k.a. Font Helper)";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "figma-agent";
   };
 }

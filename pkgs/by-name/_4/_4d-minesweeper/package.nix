@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     description = "4D Minesweeper game written in Godot";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "4d-minesweeper";
   };
 }

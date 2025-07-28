@@ -44,7 +44,7 @@ perlPackages.buildPerlPackage rec {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
     changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = [
       lib.licenses.postgresql
       lib.licenses.artistic2

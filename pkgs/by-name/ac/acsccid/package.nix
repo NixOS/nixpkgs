@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = src.meta.homepage;
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

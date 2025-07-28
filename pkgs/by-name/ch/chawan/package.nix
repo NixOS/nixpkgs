@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cha";
   };
 })

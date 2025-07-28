@@ -21,7 +21,7 @@ let
     description = "Modern download manager that supports all platforms";
     homepage = "https://github.com/GopeedLab/gopeed";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 

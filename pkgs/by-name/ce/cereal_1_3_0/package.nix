@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Header-only C++11 serialization library";
     changelog = "https://github.com/USCiLab/cereal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

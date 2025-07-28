@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       systems.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "teapot";
     homepage = "https://github.com/museoa/teapot";

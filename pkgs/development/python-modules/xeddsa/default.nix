@@ -47,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Syndace/python-xeddsa/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

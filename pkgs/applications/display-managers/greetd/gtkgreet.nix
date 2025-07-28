@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "GTK based greeter for greetd, to be run under cage or similar";
     homepage = "https://git.sr.ht/~kennylevinsen/gtkgreet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "gtkgreet";
   };

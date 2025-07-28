@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/google/fscryptctl/blob/master/NEWS.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

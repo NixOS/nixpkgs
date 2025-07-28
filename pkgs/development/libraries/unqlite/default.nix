@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       freely copy a database between 32-bit and 64-bit systems or between
       big-endian and little-endian architectures.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd2;
   };
 }

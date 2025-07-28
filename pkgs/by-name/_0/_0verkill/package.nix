@@ -37,7 +37,7 @@ gccStdenv.mkDerivation {
     homepage = "https://github.com/hackndev/0verkill";
     description = "ASCII-ART bloody 2D action deathmatch-like game";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

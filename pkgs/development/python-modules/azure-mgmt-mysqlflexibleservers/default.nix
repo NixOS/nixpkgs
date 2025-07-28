@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Mysqlflexibleservers Management Client Library for Python";
     homepage = "https://pypi.org/project/azure-mgmt-mysqlflexibleservers/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

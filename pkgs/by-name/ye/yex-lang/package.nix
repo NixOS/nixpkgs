@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/nonamescm/yex-lang";
     description = "Functional scripting language written in rust";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "yex";
     platforms = platforms.unix;
   };

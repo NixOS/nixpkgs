@@ -68,6 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "musicus";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

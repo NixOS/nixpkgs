@@ -36,6 +36,6 @@ buildPythonPackage rec {
       bsd3
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

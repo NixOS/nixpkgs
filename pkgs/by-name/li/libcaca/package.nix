@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       Libcaca was written by Sam Hocevar and Jean-Yves Lamoureux.
     '';
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/enkore/j4-dmenu-desktop";
     license = licenses.gpl3Only;
     mainProgram = "j4-dmenu-desktop";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

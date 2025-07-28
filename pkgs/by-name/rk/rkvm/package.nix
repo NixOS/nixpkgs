@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/htrefil/rkvm/releases/tag/${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

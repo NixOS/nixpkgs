@@ -130,7 +130,7 @@ buildPythonPackage {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = lib.versionAtLeast protobuf.version "26";
   };
 }

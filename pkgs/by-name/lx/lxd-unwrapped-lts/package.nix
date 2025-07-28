@@ -108,7 +108,7 @@ buildGoModule rec {
       asl20
       agpl3Plus
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     mainProgram = "metis";
     homepage = "https://www.gilith.com/research/metis/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

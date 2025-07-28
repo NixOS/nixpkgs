@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       replacement for NCURSES on existing systems.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (ncurses.meta) platforms;
   };
 }

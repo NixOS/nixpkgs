@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       is specified by a long string of numbers - a genetic code of sorts.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

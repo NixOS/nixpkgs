@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalPackages: {
       terminal emulator.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })
