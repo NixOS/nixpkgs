@@ -3,14 +3,6 @@
   fetchFromGitHub,
   installShellFiles,
   php,
-  phpRuntime ? php.withExtensions (
-    { all, ... }:
-    with all;
-    [
-      mbstring
-      tokenizer
-    ]
-  ),
   versionCheckHook,
 }:
 
@@ -29,7 +21,14 @@ php.buildComposerProject2 (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  php = phpRuntime;
+  php = php.withExtensions (
+    { all, enabled, ... }:
+    with all;
+    enabled ++ [
+      mbstring
+      tokenizer
+    ]
+  );
 
   postInstall = ''
     installShellCompletion --cmd phpactor \
