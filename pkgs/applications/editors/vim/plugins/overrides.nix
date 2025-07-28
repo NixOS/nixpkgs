@@ -3298,6 +3298,11 @@ in
     meta.maintainers = with lib.maintainers; [ callumio ];
   };
 
+  tardis-nvim = super.tardis-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    meta.maintainers = with lib.maintainers; [ fredeb ];
+  };
+
   taskwarrior2 = buildVimPlugin {
     inherit (taskwarrior2) version pname;
     src = "${taskwarrior2.src}/scripts/vim";
