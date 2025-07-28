@@ -46,20 +46,23 @@ buildPythonPackage rec {
   # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
 
+  enabledTestPaths = [
+    "tests/"
+  ];
+
   # Some packages are not in NixPkgs; other tests try to build distributed
   # models, which doesn't work in the sandbox.
   # avoid tests which need special packages
-  pytestFlagsArray = [
-    "--ignore=tests/ignite/contrib/handlers/test_clearml_logger.py"
-    "--ignore=tests/ignite/contrib/handlers/test_lr_finder.py"
-    "--ignore=tests/ignite/contrib/handlers/test_trains_logger.py"
-    "--ignore=tests/ignite/metrics/nlp/test_bleu.py"
-    "--ignore=tests/ignite/metrics/nlp/test_rouge.py"
-    "--ignore=tests/ignite/metrics/gan" # requires pytorch_fid; tries to download model to $HOME
-    "--ignore=tests/ignite/metrics/test_dill.py"
-    "--ignore=tests/ignite/metrics/test_psnr.py"
-    "--ignore=tests/ignite/metrics/test_ssim.py"
-    "tests/"
+  disabledTestPaths = [
+    "tests/ignite/contrib/handlers/test_clearml_logger.py"
+    "tests/ignite/contrib/handlers/test_lr_finder.py"
+    "tests/ignite/contrib/handlers/test_trains_logger.py"
+    "tests/ignite/metrics/nlp/test_bleu.py"
+    "tests/ignite/metrics/nlp/test_rouge.py"
+    "tests/ignite/metrics/gan" # requires pytorch_fid; tries to download model to $HOME
+    "tests/ignite/metrics/test_dill.py"
+    "tests/ignite/metrics/test_psnr.py"
+    "tests/ignite/metrics/test_ssim.py"
   ];
 
   # disable tests which need specific packages

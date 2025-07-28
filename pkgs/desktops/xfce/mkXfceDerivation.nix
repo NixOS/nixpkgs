@@ -72,7 +72,8 @@ let
       updateScript = gitUpdater {
         inherit rev-prefix odd-unstable patchlevel-unstable;
       };
-    } // passthru;
+    }
+    // passthru;
 
     meta =
       with lib;

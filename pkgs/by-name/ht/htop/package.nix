@@ -41,26 +41,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libnl
-    ]
-    ++ lib.optional sensorsSupport lm_sensors
-    ++ lib.optional systemdSupport systemd;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libnl
+  ]
+  ++ lib.optional sensorsSupport lm_sensors
+  ++ lib.optional systemdSupport systemd;
 
-  configureFlags =
-    [
-      "--enable-unicode"
-      "--sysconfdir=/etc"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-affinity"
-      "--enable-capabilities"
-      "--enable-delayacct"
-    ]
-    ++ lib.optional sensorsSupport "--enable-sensors";
+  configureFlags = [
+    "--enable-unicode"
+    "--sysconfdir=/etc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-affinity"
+    "--enable-capabilities"
+    "--enable-delayacct"
+  ]
+  ++ lib.optional sensorsSupport "--enable-sensors";
 
   postFixup =
     let

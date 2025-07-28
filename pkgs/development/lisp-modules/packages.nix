@@ -266,12 +266,10 @@ let
             #+sb-core-compression t
             :toplevel #'clfswm:main)
         '';
-        installPhase =
-          o.installPhase
-          + ''
-            mkdir -p $out/bin
-            mv $out/clfswm $out/bin
-          '';
+        installPhase = o.installPhase + ''
+          mkdir -p $out/bin
+          mv $out/clfswm $out/bin
+        '';
       });
 
       magicl = build-with-compile-into-pwd {

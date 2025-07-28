@@ -26,22 +26,21 @@
   withGraphics ? false,
 }:
 let
-  rpathLibs =
-    [
-      expat
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXxf86vm
-      xorg.libxcb
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    expat
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXxf86vm
+    xorg.libxcb
+    libxkbcommon
+    wayland
+  ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
@@ -65,7 +64,6 @@ rustPlatform.buildRustPackage rec {
         hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
       };
 
-  useFetchCargoVendor = true;
   cargoHash =
     if !withGraphics then
       "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M="

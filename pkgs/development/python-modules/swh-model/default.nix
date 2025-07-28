@@ -68,11 +68,11 @@ buildPythonPackage rec {
     types-deprecated
   ];
 
-  pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isDarwin) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin) [
     # OSError: [Errno 92] Illegal byte sequence
-    "--deselect swh/model/tests/test_cli.py::TestIdentify::test_exclude"
-    "--deselect swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude"
-    "--deselect swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude_trailing"
+    "swh/model/tests/test_cli.py::TestIdentify::test_exclude"
+    "swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude"
+    "swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude_trailing"
   ];
 
   meta = {

@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperscan" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   nativeCheckInputs = [
     pytestCheckHook

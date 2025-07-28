@@ -6,6 +6,7 @@
   rustPlatform,
   systemdMinimal,
   versionCheckHook,
+  nixosTests,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lemurs";
@@ -18,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dtAmgzsUhn3AfafWbCaaog0S1teIy+8eYtaHBhvLfLI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XoGtIHYCGXNuwnpDTU7NbZAs6rCO+69CAG89VCv9aAc=";
 
   buildInputs = [
@@ -29,6 +29,16 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.tests = {
+    inherit (nixosTests)
+      lemurs
+      lemurs-wayland
+      lemurs-wayland-script
+      lemurs-xorg
+      lemurs-xorg-script
+      ;
+  };
 
   meta = {
     description = "Customizable TUI display/login manager written in Rust";

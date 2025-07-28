@@ -92,22 +92,21 @@ buildPythonPackage rec {
     "test_api"
   ];
 
-  disabledTestPaths =
-    [
-      # odmantic is not packaged
-      "tests/odmantic"
-      # beanie is not packaged
-      "tests/beanie"
-      # needs mongodb running on port 27017
-      "tests/mongoengine"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # very flaky, sandbox issues?
-      # libcloud.storage.types.ContainerDoesNotExistError
-      # sqlite3.OperationalError: attempt to write a readonly database
-      "tests/sqla/test_sync_engine.py"
-      "tests/sqla/test_async_engine.py"
-    ];
+  disabledTestPaths = [
+    # odmantic is not packaged
+    "tests/odmantic"
+    # beanie is not packaged
+    "tests/beanie"
+    # needs mongodb running on port 27017
+    "tests/mongoengine"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # very flaky, sandbox issues?
+    # libcloud.storage.types.ContainerDoesNotExistError
+    # sqlite3.OperationalError: attempt to write a readonly database
+    "tests/sqla/test_sync_engine.py"
+    "tests/sqla/test_async_engine.py"
+  ];
 
   pythonImportsCheck = [
     "starlette_admin"

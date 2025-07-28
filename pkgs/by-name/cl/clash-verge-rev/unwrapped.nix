@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = vendor-hash;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = pnpm-hash;
   };
 
@@ -48,6 +48,10 @@ rustPlatform.buildRustPackage {
     # We disable the option to try to use the bleeding-edge version of mihomo
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
+
+    # See service.nix for reasons
+    substituteInPlace src-tauri/src/core/service_ipc.rs \
+      --replace-fail "/tmp/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
 
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"

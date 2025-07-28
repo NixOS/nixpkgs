@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
   # Additionally cargo-credential will also not be built here
   buildAndTestSubdir = "cli";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-VNgbdvX5ttW+/V2Zzkd3rGIjVe1ENRE6WLg7M48ij7o=";
 
   nativeBuildInputs = [ pkg-config ];

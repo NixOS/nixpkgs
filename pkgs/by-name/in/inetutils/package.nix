@@ -50,16 +50,17 @@ stdenv.mkDerivation rec {
       export HELP2MAN=true
     '';
 
-  configureFlags =
-    [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      # Musl doesn't define rcmd
-      "--disable-rcp"
-      "--disable-rsh"
-      "--disable-rlogin"
-      "--disable-rexec"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
+  configureFlags = [
+    "--with-ncurses-include-dir=${ncurses.dev}/include"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # Musl doesn't define rcmd
+    "--disable-rcp"
+    "--disable-rsh"
+    "--disable-rlogin"
+    "--disable-rexec"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
 
   doCheck = true;
 

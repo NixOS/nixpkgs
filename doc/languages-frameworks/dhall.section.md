@@ -94,9 +94,7 @@ let
     hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
-  dhallOverlay = self: super: {
-    true = self.callPackage ./true.nix { };
-  };
+  dhallOverlay = self: super: { true = self.callPackage ./true.nix { }; };
 
   overlay = self: super: {
     dhallPackages = super.dhallPackages.override (old: {

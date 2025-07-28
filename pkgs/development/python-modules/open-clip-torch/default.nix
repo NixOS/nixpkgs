@@ -70,23 +70,22 @@ buildPythonPackage rec {
   # KeyError: Caught KeyError in DataLoader worker process 0
   disabledTestPaths = [ "tests/test_wds.py" ];
 
-  disabledTests =
-    [
-      # requires network
-      "test_download_pretrained_from_hfh"
-      "test_inference_simple"
-      "test_inference_with_data"
-      "test_pretrained_text_encoder"
-      "test_training_mt5"
-      # fails due to type errors
-      "test_num_shards"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-      "test_training"
-      "test_training_coca"
-      "test_training_unfreezing_vit"
-      "test_training_clip_with_jit"
-    ];
+  disabledTests = [
+    # requires network
+    "test_download_pretrained_from_hfh"
+    "test_inference_simple"
+    "test_inference_with_data"
+    "test_pretrained_text_encoder"
+    "test_training_mt5"
+    # fails due to type errors
+    "test_num_shards"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    "test_training"
+    "test_training_coca"
+    "test_training_unfreezing_vit"
+    "test_training_clip_with_jit"
+  ];
 
   meta = {
     description = "Open source implementation of CLIP";

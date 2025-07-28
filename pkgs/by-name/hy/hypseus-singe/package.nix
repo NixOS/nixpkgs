@@ -39,20 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bash
-      SDL2
-      SDL2_image
-      SDL2_ttf
-      SDL2_mixer
-      libmpeg2
-      libvorbis
-      libzip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-    ];
+  buildInputs = [
+    bash
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    SDL2_mixer
+    libmpeg2
+    libvorbis
+    libzip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev SDL2_image}/include/SDL2"

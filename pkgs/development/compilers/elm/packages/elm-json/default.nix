@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-BnL//AHaSnsugtMEnSTynpMyeNt5N7L6PG2wdWDw1y4=";
 
   # Tests perform networking and therefore can't work in sandbox

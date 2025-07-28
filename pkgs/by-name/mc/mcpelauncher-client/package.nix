@@ -52,38 +52,36 @@ clangStdenv.mkDerivation (finalAttrs: {
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile
   hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-      libpng
-      libglvnd
-      xorg.libX11
-      xorg.libXi
-      xorg.libXtst
-      libevdev
-      curl
-      pulseaudio
-      glfw
-      sdl3
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.qtbase
-      qt6.qttools
-      qt6.qtwayland
-    ]
-    ++ lib.optionals withQtWebview [
-      qt6.qtwebengine
-    ];
+  buildInputs = [
+    openssl
+    zlib
+    libpng
+    libglvnd
+    xorg.libX11
+    xorg.libXi
+    xorg.libXtst
+    libevdev
+    curl
+    pulseaudio
+    glfw
+    sdl3
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwayland
+  ]
+  ++ lib.optionals withQtWebview [
+    qt6.qtwebengine
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)

@@ -145,17 +145,13 @@ There are three distinct ways of changing a Coq package by overriding one of its
 For example, assuming you have a special `mathcomp` dependency you want to use, here is how you could override the `mathcomp` dependency:
 
 ```nix
-multinomials.override {
-  mathcomp = my-special-mathcomp;
-}
+multinomials.override { mathcomp = my-special-mathcomp; }
 ```
 
 In Nixpkgs, all Coq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
 
 ```nix
-coqPackages.multinomials.override {
-  version = "1.5.1";
-}
+coqPackages.multinomials.override { version = "1.5.1"; }
 ```
 
 Refer to [](#coq-packages-attribute-sets-coqpackages) for all the different formats that you can potentially pass to `version`, as well as the restrictions.
@@ -181,10 +177,8 @@ For instance, here is how you could add some code to be performed in the derivat
 
 ```nix
 coqPackages.multinomials.overrideAttrs (oldAttrs: {
-  postInstall =
-    oldAttrs.postInstall or ""
-    + ''
-      echo "you can do anything you want here"
-    '';
+  postInstall = oldAttrs.postInstall or "" + ''
+    echo "you can do anything you want here"
+  '';
 })
 ```

@@ -51,16 +51,15 @@ buildPythonPackage rec {
 
   sphinxBuilders = [ "man" ];
 
-  dependencies =
-    [
-      osc-lib
-      pbr
-      python-cinderclient
-      python-keystoneclient
-      requests
-    ]
-    # to support proxy envs like ALL_PROXY in requests
-    ++ requests.optional-dependencies.socks;
+  dependencies = [
+    osc-lib
+    pbr
+    python-cinderclient
+    python-keystoneclient
+    requests
+  ]
+  # to support proxy envs like ALL_PROXY in requests
+  ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = [
     ddt

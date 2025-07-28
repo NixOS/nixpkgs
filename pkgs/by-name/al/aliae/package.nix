@@ -34,16 +34,15 @@ buildGoModule rec {
     "osusergo"
   ];
 
-  postInstall =
-    ''
-      mv $out/bin/{src,aliae}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd aliae \
-        --bash <($out/bin/aliae completion bash) \
-        --fish <($out/bin/aliae completion fish) \
-        --zsh <($out/bin/aliae completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/{src,aliae}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd aliae \
+      --bash <($out/bin/aliae completion bash) \
+      --fish <($out/bin/aliae completion fish) \
+      --zsh <($out/bin/aliae completion zsh)
+  '';
 
   meta = {
     description = "Cross shell and platform alias management";

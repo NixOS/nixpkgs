@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.NIXF_TIDY_PATH = lib.getExe nixf;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nrr2/lTWPyH7MsG2hSMJjbFCpHsKWINEP8jwSYPhocg=";
 
   meta = {

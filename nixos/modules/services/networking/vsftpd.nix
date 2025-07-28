@@ -265,7 +265,8 @@ in
         description = "Extra configuration to add at the bottom of the generated configuration file.";
       };
 
-    } // (listToAttrs (catAttrs "nixosOption" optionDescription));
+    }
+    // (listToAttrs (catAttrs "nixosOption" optionDescription));
 
   };
 
@@ -287,28 +288,27 @@ in
       }
     ];
 
-    users.users =
-      {
-        "vsftpd" = {
-          group = "vsftpd";
-          isSystemUser = true;
-          description = "VSFTPD user";
-          home =
-            if cfg.localRoot != null then
-              cfg.localRoot # <= Necessary for virtual users.
-            else
-              "/homeless-shelter";
-        };
-      }
-      // optionalAttrs cfg.anonymousUser {
-        "ftp" = {
-          name = "ftp";
-          uid = config.ids.uids.ftp;
-          group = "ftp";
-          description = "Anonymous FTP user";
-          home = cfg.anonymousUserHome;
-        };
+    users.users = {
+      "vsftpd" = {
+        group = "vsftpd";
+        isSystemUser = true;
+        description = "VSFTPD user";
+        home =
+          if cfg.localRoot != null then
+            cfg.localRoot # <= Necessary for virtual users.
+          else
+            "/homeless-shelter";
       };
+    }
+    // optionalAttrs cfg.anonymousUser {
+      "ftp" = {
+        name = "ftp";
+        uid = config.ids.uids.ftp;
+        group = "ftp";
+        description = "Anonymous FTP user";
+        home = cfg.anonymousUserHome;
+      };
+    };
 
     users.groups.vsftpd = { };
     users.groups.ftp.gid = config.ids.gids.ftp;

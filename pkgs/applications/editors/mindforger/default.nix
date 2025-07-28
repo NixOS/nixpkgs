@@ -59,13 +59,12 @@ stdenv.mkDerivation {
   # build MindForger's internal fork of cmark-gfm ahead of MindForger itself.
   #
   # Moreover unpack the docs that are needed for the MacOS build.
-  postUnpack =
-    ''
-      cp -TR ${srcs.cmark-gfm} $sourceRoot/deps/cmark-gfm
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -TR ${srcs.mindforger-repository} $sourceRoot/doc
-    '';
+  postUnpack = ''
+    cp -TR ${srcs.cmark-gfm} $sourceRoot/deps/cmark-gfm
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -TR ${srcs.mindforger-repository} $sourceRoot/doc
+  '';
   dontUseCmakeConfigure = true;
   preBuild = ''
     (

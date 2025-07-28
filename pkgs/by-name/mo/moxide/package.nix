@@ -5,15 +5,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "moxide";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nHp5KSU1mzsr3t8diREhs5fbxrJcJaEpciZNKCkmp5A=";
+  cargoHash = "sha256-j4yV86Hr6QZTZ/0Dy9y+2egxGqf1Z930Zg6dsKs5bxg=";
   src = fetchFromGitHub {
     owner = "dlurak";
     repo = "moxide";
     tag = "v${version}";
-    hash = "sha256-f3suE8Gz7V62+O1J3W+Ps2HhVCAhRmxRFfrB2Lc1Tz4=";
+    hash = "sha256-BTg1z3pU9mGnexlXBdJ5ZqJeykpzGmhCbEKtvVxGEKo=";
   };
 
   meta = {

@@ -111,31 +111,30 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      cmake-extras
-      gdk-pixbuf
-      libapparmor
-      libexif
-      librsvg
-      lomiri-api
-      persistent-cache-cpp
-      qtbase
-      qtdeclarative
-      shared-mime-info
-      taglib
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      # Something seems borked with bad's h264 decoder, add libav as a workaround
-      # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
-      gst-libav
-      # maybe add ugly to cover all kinds of formats?
-    ]);
+  buildInputs = [
+    boost
+    cmake-extras
+    gdk-pixbuf
+    libapparmor
+    libexif
+    librsvg
+    lomiri-api
+    persistent-cache-cpp
+    qtbase
+    qtdeclarative
+    shared-mime-info
+    taglib
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    # Something seems borked with bad's h264 decoder, add libav as a workaround
+    # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
+    gst-libav
+    # maybe add ugly to cover all kinds of formats?
+  ]);
 
   nativeCheckInputs = [
     shared-mime-info

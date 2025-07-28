@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libz;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-E/yF42Vx9tv8Ik1j23El3+fI19ZGzq6nikVMATY7m3E=";
 
   # `test_data` is explicitly excluded from the package published to crates.io, so tests cannot be run

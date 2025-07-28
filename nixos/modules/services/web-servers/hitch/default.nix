@@ -93,14 +93,13 @@ with lib;
       description = "Hitch";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart =
-        ''
-          ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
-        ''
-        + (optionalString cfg.ocsp-stapling.enabled ''
-          mkdir -p ${ocspDir}
-          chown -R hitch:hitch ${ocspDir}
-        '');
+      preStart = ''
+        ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
+      ''
+      + (optionalString cfg.ocsp-stapling.enabled ''
+        mkdir -p ${ocspDir}
+        chown -R hitch:hitch ${ocspDir}
+      '');
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.hitch}/sbin/hitch --daemon --config ${hitchConfig}";

@@ -131,7 +131,8 @@ in
         group = cfg.group;
         extraGroups = [
           "audio"
-        ] ++ optional (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) "pulse";
+        ]
+        ++ optional (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) "pulse";
       };
       groups.${cfg.group} = { };
     };

@@ -10,6 +10,7 @@
 buildPythonApplication rec {
   pname = "mpy-utils";
   version = "0.1.13";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

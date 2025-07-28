@@ -93,43 +93,42 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      gettext
-      freetype
-      sqlite
-      curl
-      bzip2
-      ncurses
-      gmp
-      libspatialindex
-    ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals buildClient [
-      libpng
-      libjpeg
-      libGLU
-      openal
-      libogg
-      libvorbis
-    ]
-    ++ lib.optionals (buildClient && useSDL2) [
-      SDL2
-    ]
-    ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
-      xorg.libX11
-      xorg.libXi
-    ]
-    ++ lib.optionals buildServer [
-      leveldb
-      libpq
-      hiredis
-      prometheus-cpp
-    ];
+  buildInputs = [
+    jsoncpp
+    gettext
+    freetype
+    sqlite
+    curl
+    bzip2
+    ncurses
+    gmp
+    libspatialindex
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals buildClient [
+    libpng
+    libjpeg
+    libGLU
+    openal
+    libogg
+    libvorbis
+  ]
+  ++ lib.optionals (buildClient && useSDL2) [
+    SDL2
+  ]
+  ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
+    xorg.libX11
+    xorg.libXi
+  ]
+  ++ lib.optionals buildServer [
+    leveldb
+    libpq
+    hiredis
+    prometheus-cpp
+  ];
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''

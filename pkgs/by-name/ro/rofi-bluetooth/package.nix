@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "rofi-bluetooth";
-  version = "unstable-2023-02-03";
+  version = "0-unstable-2023-02-03";
 
   src = fetchFromGitHub {
     owner = "nickclyde";

@@ -18,7 +18,8 @@ mkDerivation {
   extraPaths = [
     "lib/Makefile.inc"
     "lib/libc/include/libc_private.h"
-  ] ++ lib.optionals (versionData.major >= 14) [ "sys/sys/param.h" ];
+  ]
+  ++ lib.optionals (versionData.major >= 14) [ "sys/sys/param.h" ];
   nativeBuildInputs = [
     bsdSetupHook
     freebsdSetupHook

@@ -53,29 +53,28 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      attrs
-      duet
-      matplotlib
-      networkx
-      numpy
-      pandas
-      requests
-      scipy
-      sortedcontainers
-      sympy
-      tqdm
-      typing-extensions
-    ]
-    ++ lib.optionals withContribRequires [
-      autoray
-      opt-einsum
-      ply
-      pylatex
-      pyquil
-      quimb
-    ];
+  dependencies = [
+    attrs
+    duet
+    matplotlib
+    networkx
+    numpy
+    pandas
+    requests
+    scipy
+    sortedcontainers
+    sympy
+    tqdm
+    typing-extensions
+  ]
+  ++ lib.optionals withContribRequires [
+    autoray
+    opt-einsum
+    ply
+    pylatex
+    pyquil
+    quimb
+  ];
 
   nativeCheckInputs = [
     freezegun
@@ -90,19 +89,18 @@ buildPythonPackage rec {
     "cirq/_version_test.py"
   ];
 
-  disabledTests =
-    [
-      # Assertion error
-      "test_parameterized_cphase"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # https://github.com/quantumlib/Cirq/issues/5924
-      "test_prepare_two_qubit_state_using_sqrt_iswap"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # test_scalar_division[scalar9-terms9-terms_expected9] result differs in the final digit
-      "test_scalar_division"
-    ];
+  disabledTests = [
+    # Assertion error
+    "test_parameterized_cphase"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # https://github.com/quantumlib/Cirq/issues/5924
+    "test_prepare_two_qubit_state_using_sqrt_iswap"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # test_scalar_division[scalar9-terms9-terms_expected9] result differs in the final digit
+    "test_scalar_division"
+  ];
 
   meta = {
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";

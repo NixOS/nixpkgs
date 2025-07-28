@@ -32,14 +32,13 @@ buildPythonPackage rec {
     hash = "sha256-CDUyH08s96xUy0VhK+4ym0w9IgAq9P1UjUipVjlpl9c=";
   };
 
-  nativeBuildInputs =
-    [
-      setuptools-rust
-    ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    setuptools-rust
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
   buildAndTestSubdir = "synapse";
 

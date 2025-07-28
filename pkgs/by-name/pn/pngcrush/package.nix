@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   ]; # gcc and/or clang compat
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -i s,/usr,$out, Makefile
+
+    runHook postConfigure
   '';
 
   buildInputs = [ libpng ];

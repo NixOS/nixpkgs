@@ -21,11 +21,9 @@ let
     nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
       removeReferencesTo
     ];
-    postFixup =
-      (oldAttrs.postFixup or "")
-      + ''
-        remove-references-to -t ${dotnet-runtime} "$out/bin/Application"
-      '';
+    postFixup = (oldAttrs.postFixup or "") + ''
+      remove-references-to -t ${dotnet-runtime} "$out/bin/Application"
+    '';
   });
 
   runtimeVersion = lib.getVersion dotnet-runtime;

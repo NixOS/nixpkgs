@@ -23,9 +23,13 @@ stdenv.mkDerivation {
   buildInputs = [ mpi ];
 
   configurePhase = ''
+    runHook preConfigure
+
     tar xf ${metis.src}
     mv metis-* metis
     make config metis_path=metis gklib_path=metis/GKlib prefix=$out
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

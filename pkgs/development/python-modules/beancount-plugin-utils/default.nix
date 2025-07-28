@@ -31,7 +31,11 @@ buildPythonPackage rec {
     regex
   ];
 
-  pytestFlagsArray = [ "--fixtures tests/" ];
+  pytestFlags = [ "--fixtures" ];
+
+  enabledTestPaths = [
+    "tests/"
+  ];
 
   pythonImportsCheck = [ "beancount" ];
 

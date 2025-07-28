@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # Needed for tests
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "System and kernel logging services";
     homepage = "https://smarden.org/socklog/";

@@ -48,18 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ToDo: optional libgda, introspection?
   # TODO: fix Perl plugin when cross-compiling
-  buildInputs =
-    [
-      goffice
-      gtk3
-      adwaita-icon-theme
-      python
-      pygobject3
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ]);
+  buildInputs = [
+    goffice
+    gtk3
+    adwaita-icon-theme
+    python
+    pygobject3
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
 
   enableParallelBuilding = true;
 

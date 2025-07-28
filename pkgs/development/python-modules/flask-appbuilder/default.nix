@@ -59,7 +59,8 @@ buildPythonPackage rec {
     pyjwt
     pyyaml
     sqlalchemy-utils
-  ] ++ apispec.optional-dependencies.yaml;
+  ]
+  ++ apispec.optional-dependencies.yaml;
 
   postPatch = ''
     substituteInPlace setup.py \

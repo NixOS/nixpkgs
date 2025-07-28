@@ -47,12 +47,13 @@ buildPythonPackage rec {
     hash = "sha256-vMuqqUfaYFZ1wC3SZBVF7Wq2OUKd7UkdC8GB93QBq8Y=";
   };
 
-  nativeBuildInputs =
-    [ cffi ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    cffi
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 

@@ -104,12 +104,11 @@ in
     warnings =
       lib.optional (cfg.enabled != null)
         "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
-    environment.systemPackages =
-      [
-        cfg.package
-      ]
-      ++ lib.optional cfg.enableGtk2 gtk2_cache
-      ++ lib.optional cfg.enableGtk3 gtk3_cache;
+    environment.systemPackages = [
+      cfg.package
+    ]
+    ++ lib.optional cfg.enableGtk2 gtk2_cache
+    ++ lib.optional cfg.enableGtk3 gtk3_cache;
   };
 
   meta = {

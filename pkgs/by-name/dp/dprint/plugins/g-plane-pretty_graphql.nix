@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "GraphQL formatter.";
+  description = "GraphQL formatter";
   hash = "sha256-PlQwpR0tMsghMrOX7is+anN57t9xa9weNtoWpc0E9ec=";
   initConfig = {
     configExcludes = [ ];

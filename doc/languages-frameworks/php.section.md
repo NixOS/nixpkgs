@@ -267,13 +267,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   # PHP version containing the `ast` extension enabled
   php = php.buildEnv {
-    extensions = (
-      { enabled, all }:
-      enabled
-      ++ (with all; [
-        ast
-      ])
-    );
+    extensions = ({ enabled, all }: enabled ++ (with all; [ ast ]));
   };
 
   # The composer vendor hash

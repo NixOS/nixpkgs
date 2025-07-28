@@ -53,7 +53,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-httpx
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiohomeconnect" ];
 

@@ -259,15 +259,14 @@ in
             PrivateUsers = false;
 
             # Hardening
-            DeviceAllow =
-              [
-                # ubridge needs access to tun/tap devices
-                "/dev/net/tap rw"
-                "/dev/net/tun rw"
-              ]
-              ++ lib.optionals flags.enableLibvirtd [
-                "/dev/kvm"
-              ];
+            DeviceAllow = [
+              # ubridge needs access to tun/tap devices
+              "/dev/net/tap rw"
+              "/dev/net/tun rw"
+            ]
+            ++ lib.optionals flags.enableLibvirtd [
+              "/dev/kvm"
+            ];
             DevicePolicy = "closed";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;

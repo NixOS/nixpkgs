@@ -3,53 +3,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  unittestCheckHook,
-  setuptools,
+  flit-core,
   django,
+  pytest-unmagic,
 }:
 
 buildPythonPackage rec {
   pname = "django-cte";
-  version = "1.3.3";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "django-cte";
     tag = "v${version}";
-    hash = "sha256-OCENg94xHBeeE4A2838Cu3q2am2im2X4SkFSjc6DuhE=";
+    hash = "sha256-DPbvmxTh24gTGvqzBg1VVN1LHxhGc+r81RITCuyccfw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    flit-core
+  ];
 
   dependencies = [ django ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # Require Database connection
-    "test_cte_queryset"
-    "test_experimental_left_outer_join"
-    "test_explain"
-    "test_left_outer_join_on_empty_result_set_cte"
-    "test_named_ctes"
-    "test_named_simple_ctes"
-    "test_non_cte_subquery"
-    "test_outerref_in_cte_query"
-    "test_simple_cte_query"
-    "test_update_cte_query"
-    "test_update_with_subquery"
-    "test_heterogeneous_filter_in_cte"
-    "test_raw_cte_sql"
-    "test_alias_as_subquery"
-    "test_alias_change_in_annotation"
-    "test_attname_should_not_mask_col_name"
-    "test_pickle_recursive_cte_queryset"
-    "test_recursive_cte_query"
-    "test_recursive_cte_reference_in_condition"
-    "test_union_with_first"
-    "test_union_with_select_related_and_first"
-    "test_union_with_select_related_and_order"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-unmagic
   ];
 
   pythonImportsCheck = [ "django_cte" ];

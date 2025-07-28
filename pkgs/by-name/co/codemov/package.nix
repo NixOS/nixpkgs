@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemov";
-  version = "unstable-2023-08-08";
+  version = "0-unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "sloganking";
@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-nOqh8kXS5mx0AM4NvIcwvC0lAZRHsQwrxI0c+9PeroU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lelmkdbqKRjSkJIkF5TWJ6LyCTo2j11hZf9QxIPBoOo=";
 
   cargoPatches = [

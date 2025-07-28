@@ -25,16 +25,21 @@ overrides the module definition, this won't use postgresql from
 nixos-unstable unless explicitly configured to do so.
 
 ```nix
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   disabledModules = [ "services/databases/postgresql.nix" ];
 
-  imports =
-    [ # Use postgresql service from nixos-unstable channel.
-      # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
-      <nixos-unstable/nixos/modules/services/databases/postgresql.nix>
-    ];
+  imports = [
+    # Use postgresql service from nixos-unstable channel.
+    # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+    <nixos-unstable/nixos/modules/services/databases/postgresql.nix>
+  ];
 
   services.postgresql.enable = true;
 }
@@ -45,13 +50,18 @@ existing module. Importing this module will disable the original module
 without having to know its implementation details.
 
 ```nix
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf mkOption types;
   cfg = config.programs.man;
-in
 
+in
 {
   disabledModules = [ "services/programs/man.nix" ];
 

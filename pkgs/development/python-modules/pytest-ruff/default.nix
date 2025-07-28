@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-ruff";
-  version = "0.4.1";
+  version = "0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "businho";
     repo = "pytest-ruff";
     tag = "v${version}";
-    hash = "sha256-Ol+W5mDGMCwptuBa0b+Plkm64UUBf9bmr9YBo8g93Ok=";
+    hash = "sha256-fwtubbTRvPMSGhylP3H5zhIwHdeWeTbvxZY5doM+tvw=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "A pytest plugin to run ruff";
     homepage = "https://github.com/businho/pytest-ruff";
-    changelog = "https://github.com/businho/pytest-ruff/releases/tag/v${version}";
+    changelog = "https://github.com/businho/pytest-ruff/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baloo ];
   };

@@ -234,7 +234,8 @@ in
             after = [
               "network.target"
               "systemd-tmpfiles-setup.service"
-            ] ++ lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.target";
+            ]
+            ++ lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.target";
             requires = lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.target";
             wantedBy = [ "multi-user.target" ];
             preStart = lib.optionalString (cfg.settings.auth.default_backend == defaultAuthBackend) ''
@@ -276,7 +277,8 @@ in
             after = [
               "network.target"
               "systemd-tmpfiles-setup.service"
-            ] ++ lib.optional cfg.nipapd.enable "nipapd.service";
+            ]
+            ++ lib.optional cfg.nipapd.enable "nipapd.service";
             wantedBy = [ "multi-user.target" ];
             environment = {
               PYTHONPATH = pkg.pythonPath;

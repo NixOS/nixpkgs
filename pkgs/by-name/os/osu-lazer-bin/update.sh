@@ -1,30 +1,26 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p unzip curl jq common-updater-scripts
-set -eo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+#!nix-shell -I nixpkgs=./. --pure -i bash -p bash cacert curl jq nix unzip common-updater-scripts
+set -euo pipefail
 
-bin_file="$(realpath ./package.nix)"
+new_tag_name="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
+new_version="${new_tag_name%-lazer}"
+old_version="$(nix eval --raw -f . osu-lazer-bin.version)"
 
-new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
-old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
     echo "Already up to date."
     exit 0
 fi
 
-cd ../../../..
-
 echo "Updating osu-lazer-bin from $old_version to $new_version..."
-sed -Ei.bak '/ *version = "/s/".+"/"'"$new_version"'"/' "$bin_file"
-rm "$bin_file.bak"
 
 for pair in \
     'aarch64-darwin osu.app.Apple.Silicon.zip' \
     'x86_64-darwin osu.app.Intel.zip' \
-    'x86_64-linux osu.AppImage'; do
+    'x86_64-linux osu.AppImage'
+do
     set -- $pair
     echo "Prefetching binary for $1..."
-    prefetch_output=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://github.com/ppy/osu/releases/download/$new_version/$2")
+    prefetch_output=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://github.com/ppy/osu/releases/download/$new_tag_name/$2")
     if [[ "$1" == *"darwin"* ]]; then
         store_path=$(jq -r '.storePath' <<<"$prefetch_output")
         tmpdir=$(mktemp -d)
@@ -35,6 +31,5 @@ for pair in \
         hash=$(jq -r '.hash' <<<"$prefetch_output")
     fi
     echo "$1 ($2): hash = $hash"
-    sed -Ei.bak '/ *'"$1"' = /{N;N; s@("sha256-)[^;"]+@"'"$hash"'@}' "$bin_file"
-    rm "$bin_file.bak"
+    update-source-version osu-lazer-bin "$new_version" "$hash" --system="$1" --ignore-same-version
 done

@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "veusz";
   version = "4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -37,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     makeBinaryWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;

@@ -127,18 +127,17 @@ in
             BindPaths =
               optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
               ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder;
-            BindReadOnlyPaths =
-              [
-                # navidrome uses online services to download additional album metadata / covers
-                "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
-                builtins.storeDir
-                "/etc"
-              ]
-              ++ optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
-              ++ lib.optionals config.services.resolved.enable [
-                "/run/systemd/resolve/stub-resolv.conf"
-                "/run/systemd/resolve/resolv.conf"
-              ];
+            BindReadOnlyPaths = [
+              # navidrome uses online services to download additional album metadata / covers
+              "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+              builtins.storeDir
+              "/etc"
+            ]
+            ++ optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
+            ++ lib.optionals config.services.resolved.enable [
+              "/run/systemd/resolve/stub-resolv.conf"
+              "/run/systemd/resolve/resolv.conf"
+            ];
             CapabilityBoundingSet = "";
             RestrictAddressFamilies = [
               "AF_UNIX"

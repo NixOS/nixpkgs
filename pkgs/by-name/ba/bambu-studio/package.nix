@@ -72,44 +72,43 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      binutils
-      boost186
-      cereal
-      cgal
-      curl
-      dbus
-      eigen
-      expat
-      ffmpeg
-      gcc-unwrapped
-      glew
-      glfw
-      glib
-      glib-networking
-      gmp
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-good
-      gtk3
-      hicolor-icon-theme
-      ilmbase
-      libpng
-      mpfr
-      nlopt
-      opencascade-occt_7_6
-      openvdb
-      pcre
-      tbb_2021
-      webkitgtk_4_0
-      wxGTK'
-      xorg.libX11
-      opencv.cxxdev
-    ]
-    ++ lib.optionals withSystemd [ systemd ]
-    ++ checkInputs;
+  buildInputs = [
+    binutils
+    boost186
+    cereal
+    cgal
+    curl
+    dbus
+    eigen
+    expat
+    ffmpeg
+    gcc-unwrapped
+    glew
+    glfw
+    glib
+    glib-networking
+    gmp
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+    gtk3
+    hicolor-icon-theme
+    ilmbase
+    libpng
+    mpfr
+    nlopt
+    opencascade-occt_7_6
+    openvdb
+    pcre
+    tbb_2021
+    webkitgtk_4_0
+    wxGTK'
+    xorg.libX11
+    opencv.cxxdev
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking

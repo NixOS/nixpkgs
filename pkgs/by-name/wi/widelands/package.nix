@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
     asio
     libSM # XXX: these should be propagated by SDL2?
     libICE
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libXext;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libXext;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -75,6 +75,7 @@ let
       llm-gemini ? false,
       llm-gguf ? false,
       llm-git ? false,
+      llm-github-copilot ? false,
       llm-grok ? false,
       llm-groq ? false,
       llm-hacker-news ? false,
@@ -85,6 +86,7 @@ let
       llm-openai-plugin ? false,
       llm-openrouter ? false,
       llm-pdf-to-images ? false,
+      llm-perplexity ? false,
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,
@@ -218,8 +220,11 @@ let
       cp ${llm-echo.src}/llm_echo.py llm_echo.py
     '';
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "-svv"
+    ];
+
+    enabledTestPaths = [
       "tests/"
     ];
 

@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.7.1";
+  version = "0.7.2";
 in
 buildGoModule {
   pname = "vault-unseal";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "lrstanley";
     repo = "vault-unseal";
     rev = "v${version}";
-    hash = "sha256-6beLN+Qw1rXGTEAjUco7xkMzQTFUniJ6pwucDTLKei8=";
+    hash = "sha256-xv33wx/JjvpL9ryyWeZde+a6UPWqYXQcsAxOzmHFAyo=";
   };
 
   vendorHash = "sha256-hhTJB1g35vB5dLOEY7V7V5ma7Zzyq2bo9kk3gpEcEsY=";

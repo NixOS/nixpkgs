@@ -110,94 +110,92 @@ clangStdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      gettext
-      gobject-introspection
-      gperf
-      ninja
-      perl
-      perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
-      pkg-config
-      python3
-      ruby
-      gi-docgen
-      glib # for gdbus-codegen
-      unifdef
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    gettext
+    gobject-introspection
+    gperf
+    ninja
+    perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
+    pkg-config
+    python3
+    ruby
+    gi-docgen
+    glib # for gdbus-codegen
+    unifdef
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      cairo # required even when using skia
-      enchant2
-      flite
-      libavif
-      libepoxy
-      libjxl
-      gnutls
-      gst-plugins-bad
-      gst-plugins-base
-      harfbuzz
-      hyphen
-      icu
-      libGL
-      libGLU
-      libgbm
-      libgcrypt
-      libgpg-error
-      libidn
-      libintl
-      lcms2
-      libpthreadstubs
-      libsysprof-capture
-      libtasn1
-      libwebp
-      libxkbcommon
-      libxml2
-      libxslt
-      libbacktrace
-      nettle
-      p11-kit
-      sqlite
-      woff2
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
-      # https://bugs.webkit.org/show_bug.cgi?id=274032
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
-      libedit
-      readline
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      libseccomp
-      libmanette
-      wayland
-      xorg.libX11
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableExperimental [
-      # For ENABLE_WEB_RTC
-      openssl
-    ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-      wayland-protocols
-    ];
+  buildInputs = [
+    at-spi2-core
+    cairo # required even when using skia
+    enchant2
+    flite
+    libavif
+    libepoxy
+    libjxl
+    gnutls
+    gst-plugins-bad
+    gst-plugins-base
+    harfbuzz
+    hyphen
+    icu
+    libGL
+    libGLU
+    libgbm
+    libgcrypt
+    libgpg-error
+    libidn
+    libintl
+    lcms2
+    libpthreadstubs
+    libsysprof-capture
+    libtasn1
+    libwebp
+    libxkbcommon
+    libxml2
+    libxslt
+    libbacktrace
+    nettle
+    p11-kit
+    sqlite
+    woff2
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libedit
+    readline
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libseccomp
+    libmanette
+    wayland
+    xorg.libX11
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableExperimental [
+    # For ENABLE_WEB_RTC
+    openssl
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    wayland-protocols
+  ];
 
   propagatedBuildInputs = [
     gtk3

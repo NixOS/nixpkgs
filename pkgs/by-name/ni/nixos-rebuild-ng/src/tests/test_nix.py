@@ -295,9 +295,21 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
-    # Flake
-    flake = m.Flake.parse(f"{tmpdir}#attr")
-    n.edit(flake, {"commit_lock_file": True})
+    with monkeypatch.context() as mp:
+        default_nix = tmpdir / "default.nix"
+        default_nix.write_text("{}", encoding="utf-8")
+
+        mp.setenv("NIXOS_CONFIG", str(tmpdir))
+        mp.setenv("EDITOR", "editor")
+
+        n.edit()
+        mock_run.assert_called_with(["editor", default_nix], check=False)
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_edit_flake(mock_run: Mock) -> None:
+    flake = m.Flake.parse(".#attr")
+    n.edit_flake(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
             "nix",
@@ -306,21 +318,10 @@ def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
             "edit",
             "--commit-lock-file",
             "--",
-            f'{tmpdir}#nixosConfigurations."attr"',
+            '.#nixosConfigurations."attr"',
         ],
         check=False,
     )
-
-    # Classic
-    with monkeypatch.context() as mp:
-        default_nix = tmpdir / "default.nix"
-        default_nix.write_text("{}", encoding="utf-8")
-
-        mp.setenv("NIXOS_CONFIG", str(tmpdir))
-        mp.setenv("EDITOR", "editor")
-
-        n.edit(None)
-        mock_run.assert_called_with(["editor", default_nix], check=False)
 
 
 @patch(
@@ -835,17 +836,34 @@ def test_switch_to_configuration_with_systemd_run(
     ],
 )
 @patch("pathlib.Path.is_dir", autospec=True, return_value=True)
-def test_upgrade_channels(mock_is_dir: Mock, mock_glob: Mock) -> None:
-    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(False)
-    mock_run.assert_called_once_with(["nix-channel", "--update", "nixos"], check=False)
+@patch("os.geteuid", autospec=True, return_value=1000)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_upgrade_channels(
+    mock_run: Mock,
+    mock_geteuid: Mock,
+    mock_is_dir: Mock,
+    mock_glob: Mock,
+) -> None:
+    with pytest.raises(m.NixOSRebuildError) as e:
+        n.upgrade_channels(all_channels=False, sudo=False)
+    assert str(e.value) == (
+        "error: if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+        "also pass '--sudo' or run the command as root (e.g., with sudo)"
+    )
 
-    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(True)
+    n.upgrade_channels(all_channels=False, sudo=True)
+    mock_run.assert_called_once_with(
+        ["nix-channel", "--update", "nixos"], check=False, sudo=True
+    )
+
+    mock_geteuid.return_value = 0
+    n.upgrade_channels(all_channels=True, sudo=False)
     mock_run.assert_has_calls(
         [
-            call(["nix-channel", "--update", "nixos"], check=False),
-            call(["nix-channel", "--update", "nixos-hardware"], check=False),
-            call(["nix-channel", "--update", "home-manager"], check=False),
+            call(["nix-channel", "--update", "nixos"], check=False, sudo=False),
+            call(
+                ["nix-channel", "--update", "nixos-hardware"], check=False, sudo=False
+            ),
+            call(["nix-channel", "--update", "home-manager"], check=False, sudo=False),
         ]
     )

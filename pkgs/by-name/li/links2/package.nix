@@ -32,38 +32,38 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xGMca1oRUnzcPLeHL8I7fyslwrAh1Za+QQ2ttAMV8WY=";
   };
 
-  buildInputs =
-    [
-      libev
-      librsvg
-      libpng
-      libjpeg
-      libtiff
-      libavif
-      openssl
-      xz
-      bzip2
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
-    ++ lib.optionals enableX11 [
-      libX11
-      libXau
-      libXt
-    ]
-    ++ lib.optionals enableDirectFB [ directfb ];
+  buildInputs = [
+    libev
+    librsvg
+    libpng
+    libjpeg
+    libtiff
+    libavif
+    openssl
+    xz
+    bzip2
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
+  ++ lib.optionals enableX11 [
+    libX11
+    libXau
+    libXt
+  ]
+  ++ lib.optionals enableDirectFB [ directfb ];
 
   nativeBuildInputs = [
     pkg-config
     bzip2
   ];
 
-  configureFlags =
-    [ "--with-ssl" ]
-    ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
-    ++ lib.optional enableX11 "--with-x"
-    ++ lib.optional enableFB "--with-fb"
-    ++ lib.optional enableDirectFB "--with-directfb";
+  configureFlags = [
+    "--with-ssl"
+  ]
+  ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
+  ++ lib.optional enableX11 "--with-x"
+  ++ lib.optional enableFB "--with-fb"
+  ++ lib.optional enableDirectFB "--with-directfb";
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";

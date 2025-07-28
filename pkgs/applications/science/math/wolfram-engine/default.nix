@@ -43,42 +43,41 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true;
 
-  buildInputs =
-    [
-      alsa-lib
-      dbus
-      fontconfig
-      freetype
-      gcc.cc
-      gcc.libc
-      glib
-      libssh2
-      ncurses
-      opencv4
-      openssl
-      (lib.getLib stdenv.cc.cc)
-      unixODBC
-      xkeyboard_config
-      libxml2
-      libuuid
-      zlib
-      libGL
-      libGLU
-    ]
-    ++ (with xorg; [
-      libX11
-      libXext
-      libXtst
-      libXi
-      libXmu
-      libXrender
-      libxcb
-      libXcursor
-      libXfixes
-      libXrandr
-      libICE
-      libSM
-    ]);
+  buildInputs = [
+    alsa-lib
+    dbus
+    fontconfig
+    freetype
+    gcc.cc
+    gcc.libc
+    glib
+    libssh2
+    ncurses
+    opencv4
+    openssl
+    (lib.getLib stdenv.cc.cc)
+    unixODBC
+    xkeyboard_config
+    libxml2
+    libuuid
+    zlib
+    libGL
+    libGLU
+  ]
+  ++ (with xorg; [
+    libX11
+    libXext
+    libXtst
+    libXi
+    libXmu
+    libXrender
+    libxcb
+    libXcursor
+    libXfixes
+    libXrandr
+    libICE
+    libSM
+  ]);
 
   # some bundled libs are found through LD_LIBRARY_PATH
   autoPatchelfIgnoreMissingDeps = true;

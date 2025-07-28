@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
       --replace '"/usr/share/doc/kernel-doc-*/Documentation/*",' '"${linux-doc}/share/doc/linux-doc/*",'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KopbqiQKHzz40SYJXexIAUCoF7224JtmQ0jkhFSTr4c=";
 
   buildInputs = [

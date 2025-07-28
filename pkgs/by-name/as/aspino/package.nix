@@ -16,7 +16,7 @@ in
 
 stdenv.mkDerivation {
   pname = "aspino";
-  version = "unstable-2018-03-24";
+  version = "0-unstable-2018-03-24";
 
   src = fetchFromGitHub {
     owner = "alviano";

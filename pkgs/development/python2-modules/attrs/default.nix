@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "attrs";
   version = "21.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

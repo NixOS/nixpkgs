@@ -27,15 +27,14 @@ stdenv.mkDerivation rec {
     ./darwin-fixes.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.sigtool
-      libicns
-      imagemagick
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    libicns
+    imagemagick
+  ];
 
   buildInputs = [
     SDL2

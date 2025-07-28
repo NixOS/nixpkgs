@@ -617,26 +617,25 @@ in
         cfg.httpd.virtualHost
         {
           documentRoot = mkForce "${pkg}/share/mediawiki";
-          extraConfig =
-            ''
-              <Directory "${pkg}/share/mediawiki">
-                <FilesMatch "\.php$">
-                  <If "-f %{REQUEST_FILENAME}">
-                    SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                  </If>
-                </FilesMatch>
+          extraConfig = ''
+            <Directory "${pkg}/share/mediawiki">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-                Require all granted
-                DirectoryIndex index.php
-                AllowOverride All
-              </Directory>
-            ''
-            + optionalString (cfg.uploadsDir != null) ''
-              Alias "/images" "${cfg.uploadsDir}"
-              <Directory "${cfg.uploadsDir}">
-                Require all granted
-              </Directory>
-            '';
+              Require all granted
+              DirectoryIndex index.php
+              AllowOverride All
+            </Directory>
+          ''
+          + optionalString (cfg.uploadsDir != null) ''
+            Alias "/images" "${cfg.uploadsDir}"
+            <Directory "${cfg.uploadsDir}">
+              Require all granted
+            </Directory>
+          '';
         }
       ];
     };
@@ -692,15 +691,14 @@ in
       };
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d '${stateDir}' 0750 ${user} ${group} - -"
-        "d '${cacheDir}' 0750 ${user} ${group} - -"
-      ]
-      ++ optionals (cfg.uploadsDir != null) [
-        "d '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
-        "Z '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d '${stateDir}' 0750 ${user} ${group} - -"
+      "d '${cacheDir}' 0750 ${user} ${group} - -"
+    ]
+    ++ optionals (cfg.uploadsDir != null) [
+      "d '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
+      "Z '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
+    ];
 
     systemd.services.mediawiki-init = {
       wantedBy = [ "multi-user.target" ];

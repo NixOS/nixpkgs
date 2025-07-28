@@ -81,7 +81,7 @@ in
           '';
         };
         systemd.services.postgresql-setup.postStart = lib.mkAfter ''
-          $PSQL -tAd miniflux -c 'CREATE EXTENSION hstore;'
+          psql -tAd miniflux -c 'CREATE EXTENSION hstore;'
         '';
         networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
       };

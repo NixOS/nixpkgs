@@ -38,49 +38,48 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs =
-    [
-      which
-      highlight
-    ]
-    ++ (with perlPackages; [
-      perl
-      TextMarkdown
-      URI
-      HTMLParser
-      HTMLScrubber
-      HTMLTemplate
-      TimeDate
-      gettext
-      DBFile
-      CGISession
-      CGIFormBuilder
-      LocaleGettext
-      RpcXML
-      XMLSimple
-      ImageMagick
-      YAML
-      YAMLLibYAML
-      HTMLTree
-      AuthenPassphrase
-      NetOpenIDConsumer
-      LWPxParanoidAgent
-      CryptSSLeay
-    ])
-    ++ lib.optionals docutilsSupport [
-      (python3.withPackages (pp: with pp; [ pygments ]))
-      docutils
-    ]
-    ++ lib.optionals gitSupport [ git ]
-    ++ lib.optionals monotoneSupport [ monotone ]
-    ++ lib.optionals bazaarSupport [ breezy ]
-    ++ lib.optionals cvsSupport [
-      cvs
-      cvsps
-      perlPackages.Filechdir
-    ]
-    ++ lib.optionals subversionSupport [ subversion ]
-    ++ lib.optionals mercurialSupport [ mercurial ];
+  buildInputs = [
+    which
+    highlight
+  ]
+  ++ (with perlPackages; [
+    perl
+    TextMarkdown
+    URI
+    HTMLParser
+    HTMLScrubber
+    HTMLTemplate
+    TimeDate
+    gettext
+    DBFile
+    CGISession
+    CGIFormBuilder
+    LocaleGettext
+    RpcXML
+    XMLSimple
+    ImageMagick
+    YAML
+    YAMLLibYAML
+    HTMLTree
+    AuthenPassphrase
+    NetOpenIDConsumer
+    LWPxParanoidAgent
+    CryptSSLeay
+  ])
+  ++ lib.optionals docutilsSupport [
+    (python3.withPackages (pp: with pp; [ pygments ]))
+    docutils
+  ]
+  ++ lib.optionals gitSupport [ git ]
+  ++ lib.optionals monotoneSupport [ monotone ]
+  ++ lib.optionals bazaarSupport [ breezy ]
+  ++ lib.optionals cvsSupport [
+    cvs
+    cvsps
+    perlPackages.Filechdir
+  ]
+  ++ lib.optionals subversionSupport [ subversion ]
+  ++ lib.optionals mercurialSupport [ mercurial ];
 
   patches = [
     # A few markdown tests fail, but this is expected when using Text::Markdown

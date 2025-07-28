@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-cli";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_cli";
     inherit version;
-    hash = "sha256-2ugYOhBVG72JaGuU7SlKbPRGM8PdYoXE+ZHIUDG3pV8=";
+    hash = "sha256-w68M8eKn5e9E0Lrlqo6IcrVMXda3Ma+66fE//rSZe+A=";
   };
 
   build-system = [ hatchling ];

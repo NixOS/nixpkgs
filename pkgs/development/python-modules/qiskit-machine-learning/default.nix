@@ -58,11 +58,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_machine_learning" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--durations=10"
     "--showlocals"
     "-vv"
-    "--ignore=test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
+  ];
+  disabledTestPaths = [
+    "test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
   ];
   disabledTests = [
     # Slow tests >10 s

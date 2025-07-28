@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-  ] ++ optional-dependencies.htseq-qa;
+  ]
+  ++ optional-dependencies.htseq-qa;
 
   preCheck = ''
     rm -r src HTSeq

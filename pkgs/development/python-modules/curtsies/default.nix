@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Curses-like terminal wrapper, with colored strings!";
+    description = "Curses-like terminal wrapper, with colored strings";
     homepage = "https://github.com/bpython/curtsies";
     changelog = "https://github.com/bpython/curtsies/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

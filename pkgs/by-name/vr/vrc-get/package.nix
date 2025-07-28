@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cG6fcSIQ0E1htEM4H914SSKDNRGM5fj52SUoLqRYzoc=";
 
   # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.

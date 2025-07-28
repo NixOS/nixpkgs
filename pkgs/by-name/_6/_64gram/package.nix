@@ -4,6 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   telegram-desktop,
+  alsa-lib,
+  jemalloc,
+  libopus,
+  libpulseaudio,
   withWebkit ? true,
 }:
 
@@ -30,6 +34,13 @@ telegram-desktop.override {
         stripLen = 1;
         hash = "sha256-xiq8WLAiSZwpvdyK5JbRAdQ9us93+9oMmeMBqVb1TbI=";
       })
+    ];
+
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      alsa-lib
+      jemalloc
+      libopus
+      libpulseaudio
     ];
 
     cmakeFlags = (old.cmakeFlags or [ ]) ++ [

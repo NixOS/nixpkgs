@@ -45,13 +45,12 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      gtk3
-      pango
-    ]
-    ++ lib.optional notifySupport libnotify
-    ++ lib.optional networkSupport networkmanager;
+  buildInputs = [
+    gtk3
+    pango
+  ]
+  ++ lib.optional notifySupport libnotify
+  ++ lib.optional networkSupport networkmanager;
 
   propagatedBuildInputs =
     with python3.pkgs;

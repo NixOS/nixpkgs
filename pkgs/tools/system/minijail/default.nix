@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "2024.05.22";
+  version = "2025.07.02";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/minijail";
     rev = "linux-v${version}";
-    sha256 = "sha256-1NNjNEC0pNb0WW0PG5smltT1/dGYNRfhNxJtW0hngI8=";
+    sha256 = "sha256-GRnr2O6ZpWtRDGJ6Am0XPT426Xh7wxTJsoEqyTUECYY=";
   };
 
   buildInputs = [ libcap ];

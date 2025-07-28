@@ -56,31 +56,30 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
-      # Install headers as well
-      (lib.cmakeBool "LLVM_INSTALL_TOOLCHAIN_ONLY" false)
-      (lib.cmakeFeature "MLIR_TOOLS_INSTALL_DIR" "${placeholder "out"}/bin/")
-      (lib.cmakeBool "LLVM_ENABLE_IDE" false)
-      (lib.cmakeFeature "MLIR_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
-      (lib.cmakeFeature "MLIR_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
-      (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-      (lib.cmakeBool "LLVM_ENABLE_FFI" true)
-      (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
-      (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
-      (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-      (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/mlir-tblgen")
-      (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      # Disables building of shared libs, -fPIC is still injected by cc-wrapper
-      (lib.cmakeBool "LLVM_ENABLE_PIC" false)
-      (lib.cmakeBool "LLVM_BUILD_STATIC" true)
-      (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
+    # Install headers as well
+    (lib.cmakeBool "LLVM_INSTALL_TOOLCHAIN_ONLY" false)
+    (lib.cmakeFeature "MLIR_TOOLS_INSTALL_DIR" "${placeholder "out"}/bin/")
+    (lib.cmakeBool "LLVM_ENABLE_IDE" false)
+    (lib.cmakeFeature "MLIR_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+    (lib.cmakeFeature "MLIR_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+    (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "LLVM_ENABLE_FFI" true)
+    (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
+    (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
+    (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/mlir-tblgen")
+    (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # Disables building of shared libs, -fPIC is still injected by cc-wrapper
+    (lib.cmakeBool "LLVM_ENABLE_PIC" false)
+    (lib.cmakeBool "LLVM_BUILD_STATIC" true)
+    (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
+  ]
+  ++ devExtraCmakeFlags;
 
   outputs = [
     "out"

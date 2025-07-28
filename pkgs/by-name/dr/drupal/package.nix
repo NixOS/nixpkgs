@@ -3,6 +3,7 @@
   fetchFromGitLab,
   php,
   nixosTests,
+  writeScript,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -24,6 +25,13 @@ php.buildComposerProject2 (finalAttrs: {
     tests = {
       inherit (nixosTests) drupal;
     };
+    updateScript = writeScript "update.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts xmlstarlet
+      set -eu -o pipefail
+      version=$(curl -k --silent --globoff "https://updates.drupal.org/release-history/drupal/current" | xmlstarlet sel -t -v "project/releases/release[1]/tag")
+      update-source-version drupal $version --file=./pkgs/by-name/dr/drupal/package.nix
+    '';
   };
 
   meta = {

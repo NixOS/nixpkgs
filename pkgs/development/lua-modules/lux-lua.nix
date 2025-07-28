@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ luaFeature ];
 
-  useFetchCargoVendor = true;
   cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [

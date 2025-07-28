@@ -37,22 +37,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-izCl3pE15ocEGYOYCUR1iTR+82nDB06Ed4YOGRGByfI=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri.hook
-      nodejs
-      npmHooks.npmConfigHook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cargo-tauri.hook
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+  ];
 
   env.OPENSSL_NO_VENDOR = true;
 

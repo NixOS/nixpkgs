@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "xstatic-asciinema-player";
   version = "2.6.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-asciinema-player";

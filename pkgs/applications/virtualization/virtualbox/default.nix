@@ -35,7 +35,7 @@
   alsa-lib,
   curl,
   libvpx,
-  nettools,
+  net-tools,
   dbus,
   replaceVars,
   gsoap,
@@ -73,9 +73,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.10";
+  virtualboxVersion = "7.1.12";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "7d60010a4c9102613554b46f61d17b825c30ee59d8be071e52d8aac664ca9869";
+  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
 
   kvmPatchVersion = "20250207";
   kvmPatchHash = "sha256-GzRLIXhzWL1NLvaGKcWVBCdvay1IxgJUE4koLX1ze7Y=";
@@ -132,54 +132,54 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     yasm
     glslang
-  ] ++ optional (!headless) wrapQtAppsHook;
+  ]
+  ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
 
-  buildInputs =
-    [
-      acpica-tools
-      dev86
-      libxslt
-      libxml2
-      xorgproto
-      libX11
-      libXext
-      libXcursor
-      libcap
-      glib
-      lvm2
-      alsa-lib
-      curl
-      libvpx
-      pam
-      makeself
-      perl
-      libXmu
-      libXrandr
-      libpng
-      libopus
-      libtpms
-      python3
-      xz
-    ]
-    ++ optional javaBindings jdk
-    ++ optional pythonBindings python3 # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libGL ]
-    ++ optionals (!headless) [
-      qtbase
-      qttools
-      qtscxml
-      libXinerama
-      SDL2
-      libGLU
-    ]
-    ++ optionals enableWebService [
-      gsoap
-      zlib
-    ];
+  buildInputs = [
+    acpica-tools
+    dev86
+    libxslt
+    libxml2
+    xorgproto
+    libX11
+    libXext
+    libXcursor
+    libcap
+    glib
+    lvm2
+    alsa-lib
+    curl
+    libvpx
+    pam
+    makeself
+    perl
+    libXmu
+    libXrandr
+    libpng
+    libopus
+    libtpms
+    python3
+    xz
+  ]
+  ++ optional javaBindings jdk
+  ++ optional pythonBindings python3 # Python is needed even when not building bindings
+  ++ optional pulseSupport libpulseaudio
+  ++ optionals headless [ libGL ]
+  ++ optionals (!headless) [
+    qtbase
+    qttools
+    qtscxml
+    libXinerama
+    SDL2
+    libGLU
+  ]
+  ++ optionals enableWebService [
+    gsoap
+    zlib
+  ];
 
   hardeningDisable = [
     "format"
@@ -247,8 +247,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableKvm (
       let
         patchVboxVersion =
-          # There is no updated patch for 7.1.10 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.1.10" then "7.1.6" else finalAttrs.virtualboxVersion;
+          # There is no updated patch for 7.1.12 yet, but the older one still applies.
+          if finalAttrs.virtualboxVersion == "7.1.12" then "7.1.6" else finalAttrs.virtualboxVersion;
       in
       fetchpatch {
         name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
@@ -263,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = ''
-    sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
+    sed -i -e 's|/sbin/ifconfig|${net-tools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 

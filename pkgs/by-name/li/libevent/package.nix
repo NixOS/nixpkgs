@@ -46,17 +46,18 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional sslSupport "openssl";
+  ]
+  ++ lib.optional sslSupport "openssl";
   outputBin = "dev";
   propagatedBuildOutputs = [ "out" ] ++ lib.optional sslSupport "openssl";
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs =
-    lib.optional sslSupport openssl
-    ++ lib.optional stdenv.hostPlatform.isCygwin findutils;
+    lib.optional sslSupport openssl ++ lib.optional stdenv.hostPlatform.isCygwin findutils;
 
   doCheck = false; # needs the net
 

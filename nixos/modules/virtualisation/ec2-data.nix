@@ -34,7 +34,7 @@ with lib;
         ${optionalString (config.networking.hostName == "") ''
           echo "setting host name..."
           if [ -s /etc/ec2-metadata/hostname ]; then
-              ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
+              ${lib.getExe pkgs.hostname-debian} -F /etc/ec2-metadata/hostname
           fi
         ''}
 

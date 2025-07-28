@@ -39,11 +39,23 @@ let
           defaultGateway = {
             address = "192.168.1.1";
             interface = "enp1s0";
+            source = "192.168.1.3";
           };
           defaultGateway6 = {
             address = "fd00:1234:5678:1::1";
             interface = "enp1s0";
+            source = "fd00:1234:5678:1::3";
           };
+          interfaces.enp1s0.ipv6.addresses = [
+            {
+              address = "fd00:1234:5678:1::2";
+              prefixLength = 64;
+            }
+            {
+              address = "fd00:1234:5678:1::3";
+              prefixLength = 128;
+            }
+          ];
           interfaces.enp1s0.ipv4.addresses = [
             {
               address = "192.168.1.2";
@@ -89,7 +101,11 @@ let
 
         with subtest("Test default gateway"):
             client.wait_until_succeeds("ping -c 1 192.168.3.1")
-            client.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
+            client.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::1")
+
+        with subtest("Test default addresses"):
+            client.succeed("ip -4 route show default | grep -q 'src 192.168.1.3'")
+            client.succeed("ip -6 route show default | grep -q 'src fd00:1234:5678:1::3'")
       '';
     };
     routeType = {
@@ -456,32 +472,97 @@ let
           fou3-fou-encap.after = lib.optional (!networkd) "network-addresses-enp1s0.service";
         };
       };
-      testScript =
-        ''
-          import json
+      testScript = ''
+        import json
 
-          machine.wait_for_unit("network.target")
-          fous = json.loads(machine.succeed("ip -json fou show"))
-          assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
-          assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"
-        ''
-        + lib.optionalString (!networkd) ''
-          assert {
-              "port": 9003,
-              "gue": None,
-              "family": "inet",
-              "local": "192.168.1.1",
-          } in fous, "fou3 exists"
-          assert {
-              "port": 9004,
-              "gue": None,
-              "family": "inet",
-              "local": "192.168.1.1",
-              "dev": "enp1s0",
-          } in fous, "fou4 exists"
-        '';
+        machine.wait_for_unit("network.target")
+        fous = json.loads(machine.succeed("ip -json fou show"))
+        assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
+        assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"
+      ''
+      + lib.optionalString (!networkd) ''
+        assert {
+            "port": 9003,
+            "gue": None,
+            "family": "inet",
+            "local": "192.168.1.1",
+        } in fous, "fou3 exists"
+        assert {
+            "port": 9004,
+            "gue": None,
+            "family": "inet",
+            "local": "192.168.1.1",
+            "dev": "enp1s0",
+        } in fous, "fou4 exists"
+      '';
     };
-    sit =
+    sit-6in4 =
+      let
+        node =
+          {
+            address4,
+            remote,
+            address6,
+          }:
+          {
+            virtualisation.interfaces.enp1s0.vlan = 1;
+            networking = {
+              useNetworkd = networkd;
+              useDHCP = false;
+              sits.sit = {
+                inherit remote;
+                local = address4;
+                dev = "enp1s0";
+              };
+              nftables.enable = true;
+              firewall.extraInputRules = "meta l4proto 41 accept";
+              interfaces.enp1s0.ipv4.addresses = lib.mkOverride 0 [
+                {
+                  address = address4;
+                  prefixLength = 24;
+                }
+              ];
+              interfaces.sit.ipv6.addresses = lib.mkOverride 0 [
+                {
+                  address = address6;
+                  prefixLength = 64;
+                }
+              ];
+            };
+          };
+      in
+      {
+        name = "Sit-6in4";
+        nodes.client1 = node {
+          address4 = "192.168.1.1";
+          remote = "192.168.1.2";
+          address6 = "fc00::1";
+        };
+        nodes.client2 = node {
+          address4 = "192.168.1.2";
+          remote = "192.168.1.1";
+          address6 = "fc00::2";
+        };
+        testScript = ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test ipv6"):
+              client1.wait_until_succeeds("ping -c 1 fc00::1")
+              client1.wait_until_succeeds("ping -c 1 fc00::2")
+
+              client2.wait_until_succeeds("ping -c 1 fc00::1")
+              client2.wait_until_succeeds("ping -c 1 fc00::2")
+        '';
+      };
+    sit-fou =
       let
         node =
           {
@@ -516,7 +597,7 @@ let
           };
       in
       {
-        name = "Sit";
+        name = "Sit-fou";
         # note on firewalling: the two nodes are explicitly asymmetric.
         # client1 sends SIT packets in UDP, but accepts only proto-41 incoming.
         # client2 does the reverse, sending in proto-41 and accepting only UDP incoming.
@@ -531,7 +612,8 @@ let
             } args)
             {
               networking = {
-                firewall.extraCommands = "iptables -A INPUT -p 41 -j ACCEPT";
+                nftables.enable = true;
+                firewall.extraInputRules = "meta l4proto 41 accept";
                 sits.sit.encapsulation = {
                   type = "fou";
                   port = 9001;
@@ -574,6 +656,140 @@ let
 
               client2.wait_until_succeeds("ping -c 1 fc00::1")
               client2.wait_until_succeeds("ping -c 1 fc00::2")
+        '';
+      };
+    ipip-4in6 =
+      let
+        node =
+          {
+            address4,
+            remote,
+            address6,
+          }:
+          {
+            virtualisation.interfaces.enp1s0.vlan = 1;
+            networking = {
+              useNetworkd = networkd;
+              useDHCP = false;
+              ipips."4in6" = {
+                inherit remote;
+                local = address6;
+                dev = "enp1s0";
+                encapsulation.type = "4in6";
+              };
+              firewall.enable = false;
+              nftables.enable = true;
+              firewall.extraInputRules = "meta l4proto ipip accept";
+              interfaces.enp1s0.ipv6.addresses = lib.mkOverride 0 [
+                {
+                  address = address6;
+                  prefixLength = 64;
+                }
+              ];
+              interfaces."4in6".ipv4.addresses = lib.mkOverride 0 [
+                {
+                  address = address4;
+                  prefixLength = 24;
+                }
+              ];
+            };
+          };
+      in
+      {
+        name = "ipip-4in6";
+        nodes.client1 = node {
+          address6 = "fc00::1";
+          address4 = "192.168.1.1";
+          remote = "fc00::2";
+        };
+        nodes.client2 = node {
+          address6 = "fc00::2";
+          address4 = "192.168.1.2";
+          remote = "fc00::1";
+        };
+        testScript = ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test ipv6"):
+              client1.wait_until_succeeds("ping -c 1 192.168.1.1")
+              client1.wait_until_succeeds("ping -c 1 192.168.1.2")
+
+              client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+              client2.wait_until_succeeds("ping -c 1 192.168.1.2")
+        '';
+      };
+    ipip =
+      let
+        node =
+          {
+            local,
+            remote,
+            address,
+          }:
+          {
+            virtualisation.interfaces.enp1s0.vlan = 1;
+            networking = {
+              useNetworkd = networkd;
+              useDHCP = false;
+              ipips.ipip = {
+                inherit local remote;
+                dev = "enp1s0";
+                encapsulation.type = "ipip";
+              };
+              nftables.enable = true;
+              firewall.extraInputRules = "meta l4proto 4 accept";
+              interfaces.enp1s0.ipv4.addresses = lib.mkOverride 0 [
+                {
+                  address = local;
+                  prefixLength = 24;
+                }
+              ];
+              interfaces.ipip.ipv4.addresses = lib.mkOverride 0 [
+                {
+                  inherit address;
+                  prefixLength = 24;
+                }
+              ];
+            };
+          };
+      in
+      {
+        name = "ipip";
+        nodes.client1 = node {
+          local = "192.168.1.1";
+          remote = "192.168.1.2";
+          address = "192.168.10.1";
+        };
+        nodes.client2 = node {
+          local = "192.168.1.2";
+          remote = "192.168.1.1";
+          address = "192.168.10.2";
+        };
+        testScript = ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test IPIP tunnel"):
+              client1.wait_until_succeeds("ping -c 1 192.168.10.1")
+              client1.wait_until_succeeds("ping -c 1 192.168.10.2")
+
+              client2.wait_until_succeeds("ping -c 1 192.168.10.1")
+              client2.wait_until_succeeds("ping -c 1 192.168.10.2")
         '';
       };
     gre =
@@ -858,58 +1074,57 @@ let
         };
       };
 
-      testScript =
-        ''
-          targetList = """
-          tap0: tap persist user 0
-          tun0: tun persist user 0
-          """.strip()
+      testScript = ''
+        targetList = """
+        tap0: tap persist user 0
+        tun0: tun persist user 0
+        """.strip()
 
-          with subtest("Wait for networking to come up"):
-              machine.start()
-              machine.wait_for_unit("network.target")
+        with subtest("Wait for networking to come up"):
+            machine.start()
+            machine.wait_for_unit("network.target")
 
-          with subtest("Test interfaces set up"):
-              list = machine.succeed("ip tuntap list | sort").strip()
-              assert (
-                  list == targetList
-              ), """
-              The list of virtual interfaces does not match the expected one:
-              Result:
-                {}
-              Expected:
-                {}
-              """.format(
-                  list, targetList
-              )
-          with subtest("Test MTU and MAC Address are configured"):
-              machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
-              machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
-              assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
-        '' # network-addresses-* only exist in scripted networking
-        + lib.optionalString (!networkd) ''
-          with subtest("Test interfaces' addresses clean up"):
-              machine.succeed("systemctl stop network-addresses-tap0")
-              machine.sleep(10)
-              machine.succeed("systemctl stop network-addresses-tun0")
-              machine.sleep(10)
-              residue = machine.succeed("ip tuntap list | sort").strip()
-              assert (
-                  residue == targetList
-              ), "Some virtual interface has been removed:\n{}".format(residue)
-              assert "192.168.1.1" not in machine.succeed("ip address show dev tap0"), "tap0 interface address has not been removed"
-              assert "192.168.1.2" not in machine.succeed("ip address show dev tun0"), "tun0 interface address has not been removed"
+        with subtest("Test interfaces set up"):
+            list = machine.succeed("ip tuntap list | sort").strip()
+            assert (
+                list == targetList
+            ), """
+            The list of virtual interfaces does not match the expected one:
+            Result:
+              {}
+            Expected:
+              {}
+            """.format(
+                list, targetList
+            )
+        with subtest("Test MTU and MAC Address are configured"):
+            machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
+            machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
+            assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
+      '' # network-addresses-* only exist in scripted networking
+      + lib.optionalString (!networkd) ''
+        with subtest("Test interfaces' addresses clean up"):
+            machine.succeed("systemctl stop network-addresses-tap0")
+            machine.sleep(10)
+            machine.succeed("systemctl stop network-addresses-tun0")
+            machine.sleep(10)
+            residue = machine.succeed("ip tuntap list | sort").strip()
+            assert (
+                residue == targetList
+            ), "Some virtual interface has been removed:\n{}".format(residue)
+            assert "192.168.1.1" not in machine.succeed("ip address show dev tap0"), "tap0 interface address has not been removed"
+            assert "192.168.1.2" not in machine.succeed("ip address show dev tun0"), "tun0 interface address has not been removed"
 
-          with subtest("Test interfaces clean up"):
-              machine.succeed("systemctl stop tap0-netdev")
-              machine.sleep(10)
-              machine.succeed("systemctl stop tun0-netdev")
-              machine.sleep(10)
-              residue = machine.succeed("ip tuntap list")
-              assert (
-                  residue == ""
-              ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
-        '';
+        with subtest("Test interfaces clean up"):
+            machine.succeed("systemctl stop tap0-netdev")
+            machine.sleep(10)
+            machine.succeed("systemctl stop tun0-netdev")
+            machine.sleep(10)
+            residue = machine.succeed("ip tuntap list")
+            assert (
+                residue == ""
+            ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
+      '';
     };
     privacy = {
       name = "Privacy";
@@ -1046,62 +1261,61 @@ let
         virtualisation.vlans = [ ];
       };
 
-      testScript =
-        ''
-          targetIPv4Table = [
-              "10.0.0.0/16 proto static scope link mtu 1500",
-              "192.168.1.0/24 proto kernel scope link src 192.168.1.2",
-              "192.168.2.0/24 via 192.168.1.1 proto static",
-          ]
+      testScript = ''
+        targetIPv4Table = [
+            "10.0.0.0/16 proto static scope link mtu 1500",
+            "192.168.1.0/24 proto kernel scope link src 192.168.1.2",
+            "192.168.2.0/24 via 192.168.1.1 proto static",
+        ]
 
-          targetIPv6Table = [
-              "2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium",
-              "2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium",
-              "fdfd:b3f0::/48 proto static metric 1024 pref medium",
-          ]
+        targetIPv6Table = [
+            "2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium",
+            "2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium",
+            "fdfd:b3f0::/48 proto static metric 1024 pref medium",
+        ]
 
-          machine.start()
-          machine.wait_for_unit("network.target")
+        machine.start()
+        machine.wait_for_unit("network.target")
 
-          with subtest("test routing tables"):
-              ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n3").strip()
-              ipv6Table = machine.succeed("ip -6 route list dev eth0 | head -n3").strip()
-              assert [
-                  l.strip() for l in ipv4Table.splitlines()
-              ] == targetIPv4Table, """
-                The IPv4 routing table does not match the expected one:
-                  Result:
-                    {}
-                  Expected:
-                    {}
-                """.format(
-                  ipv4Table, targetIPv4Table
-              )
-              assert [
-                  l.strip() for l in ipv6Table.splitlines()
-              ] == targetIPv6Table, """
-                The IPv6 routing table does not match the expected one:
-                  Result:
-                    {}
-                  Expected:
-                    {}
-                """.format(
-                  ipv6Table, targetIPv6Table
-              )
+        with subtest("test routing tables"):
+            ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n3").strip()
+            ipv6Table = machine.succeed("ip -6 route list dev eth0 | head -n3").strip()
+            assert [
+                l.strip() for l in ipv4Table.splitlines()
+            ] == targetIPv4Table, """
+              The IPv4 routing table does not match the expected one:
+                Result:
+                  {}
+                Expected:
+                  {}
+              """.format(
+                ipv4Table, targetIPv4Table
+            )
+            assert [
+                l.strip() for l in ipv6Table.splitlines()
+            ] == targetIPv6Table, """
+              The IPv6 routing table does not match the expected one:
+                Result:
+                  {}
+                Expected:
+                  {}
+              """.format(
+                ipv6Table, targetIPv6Table
+            )
 
-        ''
-        + lib.optionalString (!networkd) ''
-          with subtest("test clean-up of the tables"):
-              machine.succeed("systemctl stop network-addresses-eth0")
-              ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
-              ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
-              assert (
-                  ipv4Residue == ""
-              ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
-              assert (
-                  ipv6Residue == ""
-              ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
-        '';
+      ''
+      + lib.optionalString (!networkd) ''
+        with subtest("test clean-up of the tables"):
+            machine.succeed("systemctl stop network-addresses-eth0")
+            ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
+            ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
+            assert (
+                ipv4Residue == ""
+            ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
+            assert (
+                ipv6Residue == ""
+            ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
+      '';
     };
     rename =
       if networkd then
@@ -1241,6 +1455,7 @@ lib.mapAttrs (lib.const (
     attrs
     // {
       name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
+      meta.maintainers = with lib.maintainers; [ rnhmjoj ];
     }
   )
 )) testCases

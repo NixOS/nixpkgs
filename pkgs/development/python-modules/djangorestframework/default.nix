@@ -43,28 +43,29 @@ buildPythonPackage rec {
   dependencies = [
     django
     pygments
-  ] ++ (lib.optional (lib.versionOlder django.version "5.0.0") pytz);
+  ]
+  ++ (lib.optional (lib.versionOlder django.version "5.0.0") pytz);
 
   optional-dependencies = {
-    complete =
-      [
-        coreschema
-        django-guardian
-        inflection
-        psycopg2
-        pygments
-        pyyaml
-      ]
-      ++ lib.optionals (pythonOlder "3.13") [
-        # broken on 3.13
-        coreapi
-      ];
+    complete = [
+      coreschema
+      django-guardian
+      inflection
+      psycopg2
+      pygments
+      pyyaml
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      # broken on 3.13
+      coreapi
+    ];
   };
 
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-  ] ++ optional-dependencies.complete;
+  ]
+  ++ optional-dependencies.complete;
 
   disabledTests = [
     # https://github.com/encode/django-rest-framework/issues/9422
@@ -77,7 +78,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/encode/django-rest-framework/releases/tag/3.15.1";
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    maintainers = with maintainers; [ desiderius ];
     license = licenses.bsd2;
   };
 }

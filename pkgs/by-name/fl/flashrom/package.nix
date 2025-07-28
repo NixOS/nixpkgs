@@ -41,15 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     sphinx
     bash-completion
   ];
-  buildInputs =
-    [
-      openssl
-      cmocka
-      libftdi1
-      libusb1
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
-    ++ lib.optional jlinkSupport libjaylink;
+  buildInputs = [
+    openssl
+    cmocka
+    libftdi1
+    libusb1
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
+  ++ lib.optional jlinkSupport libjaylink;
 
   postPatch = ''
     substituteInPlace util/flashrom_udev.rules \

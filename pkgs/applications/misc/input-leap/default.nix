@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
 
-  withLibei ? true,
+  withLibei ? !stdenv.hostPlatform.isDarwin,
 
   avahi,
   curl,
@@ -19,6 +19,7 @@
   libei,
   libportal,
   openssl,
+  pkgsStatic,
   pkg-config,
   qtbase,
   qttools,
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./macos-no-dmg.patch ];
+
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -45,28 +48,32 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     qttools
   ];
-  buildInputs =
-    [
-      curl
-      qtbase
-      avahi
-      libX11
-      libXext
-      libXtst
-      libXinerama
-      libXrandr
-      libXdmcp
-      libICE
-      libSM
-    ]
-    ++ lib.optionals withLibei [
-      libei
-      libportal
-    ];
+
+  buildInputs = [
+    curl
+    qtbase
+    avahi
+    libX11
+    libXext
+    libXtst
+    libXinerama
+    libXrandr
+    libXdmcp
+    libICE
+    libSM
+  ]
+  ++ lib.optionals withLibei [
+    libei
+    libportal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkgsStatic.openssl
+  ];
 
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
-  ] ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
+  ]
+  ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
 
   dontWrapGApps = true;
   preFixup = ''
@@ -94,6 +101,6 @@ stdenv.mkDerivation rec {
       twey
       shymega
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

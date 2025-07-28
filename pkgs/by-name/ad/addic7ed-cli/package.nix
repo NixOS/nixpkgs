@@ -7,13 +7,18 @@
 python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
   version = "1.4.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     requests
     pyquery
   ];

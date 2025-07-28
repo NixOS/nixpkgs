@@ -62,33 +62,32 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
+  buildInputs = [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    bash-completion
+    glib
+    gsettings-desktop-schemas
+    gtk-vnc
+    gtk3
+    libvirt
+    libvirt-glib
+    libxml2
+    vte
+  ]
+  ++ lib.optionals ovirtSupport [
+    libgovirt
+  ]
+  ++ lib.optionals spiceSupport (
     [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      bash-completion
-      glib
-      gsettings-desktop-schemas
-      gtk-vnc
-      gtk3
-      libvirt
-      libvirt-glib
-      libxml2
-      vte
+      gdbm
+      spice-gtk
+      spice-protocol
     ]
-    ++ lib.optionals ovirtSupport [
-      libgovirt
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
     ]
-    ++ lib.optionals spiceSupport (
-      [
-        gdbm
-        spice-gtk
-        spice-protocol
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libcap
-      ]
-    );
+  );
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = lib.optional spiceSupport spice-gtk;
@@ -111,6 +110,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
+    mainProgram = "virt-viewer";
   };
   passthru = {
     updateInfo = {

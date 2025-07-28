@@ -93,25 +93,24 @@ buildPythonPackage rec {
     numba
   ];
   # Select some lightweight tests
-  pytestFlagsArray = [ "-m 'not long'" ];
-  disabledTests =
-    [
-      # ModuleNotFoundError: No module named 'pymoo.cython.non_dominated_sorting'
-      "test_fast_non_dominated_sorting"
-      "test_efficient_non_dominated_sort"
-      "test_dominance_degree_non_dominated_sort"
+  disabledTestMarks = [ "long" ];
+  disabledTests = [
+    # ModuleNotFoundError: No module named 'pymoo.cython.non_dominated_sorting'
+    "test_fast_non_dominated_sorting"
+    "test_efficient_non_dominated_sort"
+    "test_dominance_degree_non_dominated_sort"
 
-      # sensitive to float precision
-      "test_cd_and_pcd"
+    # sensitive to float precision
+    "test_cd_and_pcd"
 
-      # TypeError: 'NoneType' object is not subscriptable
-      "test_dascomp"
-      "test_mw"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AttributeError: 'ZDT3' object has no attribute 'elementwise'
-      "test_kktpm_correctness"
-    ];
+    # TypeError: 'NoneType' object is not subscriptable
+    "test_dascomp"
+    "test_mw"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AttributeError: 'ZDT3' object has no attribute 'elementwise'
+    "test_kktpm_correctness"
+  ];
   disabledTestPaths = [
     # sensitive to float precision
     "tests/algorithms/test_no_modfication.py"

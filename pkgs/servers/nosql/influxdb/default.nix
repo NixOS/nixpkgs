@@ -32,7 +32,7 @@ let
         --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
     '';
     sourceRoot = "${src.name}/libflux";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -44,16 +44,15 @@ let
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall =
-      ''
-        mkdir -p $out/include $out/pkgconfig
-        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-          --replace-fail /out $out
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-      '';
+    postInstall = ''
+      mkdir -p $out/include $out/pkgconfig
+      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+        --replace-fail /out $out
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+    '';
   };
 in
 buildGoModule rec {

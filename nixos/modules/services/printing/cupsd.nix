@@ -53,7 +53,8 @@ let
       libcupsfilters
       cups-filters
       pkgs.ghostscript
-    ] ++ cfg.drivers;
+    ]
+    ++ cfg.drivers;
     pathsToLink = [
       "/lib"
       "/share/cups"
@@ -71,7 +72,7 @@ let
     };
 
   cupsFilesFile = writeConf "cups-files.conf" ''
-    SystemGroup root wheel
+    SystemGroup root wheel lpadmin
 
     ServerBin ${bindir}/lib/cups
     DataDir ${bindir}/share/cups
@@ -116,15 +117,14 @@ let
 
   rootdir = pkgs.buildEnv {
     name = "cups-progs";
-    paths =
-      [
-        cupsFilesFile
-        cupsdFile
-        (writeConf "client.conf" cfg.clientConf)
-        (writeConf "snmp.conf" cfg.snmpConf)
-      ]
-      ++ optional cfg.browsed.enable browsedFile
-      ++ cfg.drivers;
+    paths = [
+      cupsFilesFile
+      cupsdFile
+      (writeConf "client.conf" cfg.clientConf)
+      (writeConf "snmp.conf" cfg.snmpConf)
+    ]
+    ++ optional cfg.browsed.enable browsedFile
+    ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
     ignoreCollisions = true;
   };
@@ -361,10 +361,15 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.users.cups = {
-      uid = config.ids.uids.cups;
-      group = "lp";
-      description = "CUPS printing services";
+    users = {
+      users.cups = {
+        uid = config.ids.uids.cups;
+        group = "lp";
+        description = "CUPS printing services";
+      };
+
+      # It seems that groups provided for `SystemGroup` must exist
+      groups.lpadmin = { };
     };
 
     # We need xdg-open (part of xdg-utils) for the desktop-file to proper open the users default-browser when opening "Manage Printing"
@@ -372,7 +377,8 @@ in
     environment.systemPackages = [
       cups.out
       xdg-utils
-    ] ++ optional polkitEnabled cups-pk-helper;
+    ]
+    ++ optional polkitEnabled cups-pk-helper;
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
@@ -401,14 +407,13 @@ in
 
     systemd.sockets.cups = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
-      listenStreams =
-        [
-          ""
-          "/run/cups/cups.sock"
-        ]
-        ++ map (
-          x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)
-        ) cfg.listenAddresses;
+      listenStreams = [
+        ""
+        "/run/cups/cups.sock"
+      ]
+      ++ map (
+        x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)
+      ) cfg.listenAddresses;
     };
 
     systemd.services.cups = {

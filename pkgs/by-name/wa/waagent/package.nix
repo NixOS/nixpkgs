@@ -16,6 +16,8 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
   version = "2.14.0.0";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
@@ -46,7 +48,9 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl'
   '';
 
-  propagatedBuildInputs = [ python.pkgs.distro ];
+  build-system = with python.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [ distro ];
 
   # The udev rules are placed to the wrong place.
   # Move them to their default location.

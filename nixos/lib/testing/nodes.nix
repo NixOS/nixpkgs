@@ -3,6 +3,7 @@ testModuleArgs@{
   lib,
   hostPkgs,
   nodes,
+  options,
   ...
 }:
 
@@ -73,6 +74,9 @@ let
     ];
   };
 
+  # TODO (lib): Dedup with run.nix, add to lib/options.nix
+  mkOneUp = opt: f: lib.mkOverride (opt.highestPrio - 1) (f opt.value);
+
 in
 
 {
@@ -80,7 +84,8 @@ in
   options = {
     sshBackdoor = {
       enable = mkOption {
-        default = false;
+        default = config.enableDebugHook;
+        defaultText = lib.literalExpression "config.enableDebugHook";
         type = types.bool;
         description = "Whether to turn on the VSOCK-based access to all VMs. This provides an unauthenticated access intended for debugging.";
       };
@@ -232,6 +237,24 @@ in
         }
       ))
     ];
+
+    # Docs: nixos/doc/manual/development/writing-nixos-tests.section.md
+    /**
+      See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test
+    */
+    passthru.extendNixOS =
+      {
+        module,
+        specialArgs ? { },
+      }:
+      config.passthru.extend {
+        modules = [
+          {
+            extraBaseModules = module;
+            node.specialArgs = mkOneUp options.node.specialArgs (_: specialArgs);
+          }
+        ];
+      };
 
   };
 }

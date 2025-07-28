@@ -15,13 +15,11 @@ rustPlatform.buildRustPackage {
   pname = "scx_rustscheds";
   inherit (scx-common) version src;
 
-  useFetchCargoVendor = true;
   inherit (scx-common.versionInfo.scx) cargoHash;
 
   # Copy compiled headers and libs from scx.cscheds
   postPatch = ''
-    mkdir bpftool libbpf
-    cp -r ${scx.cscheds.dev}/bpftool/* bpftool/
+    mkdir libbpf
     cp -r ${scx.cscheds.dev}/libbpf/* libbpf/
   '';
 

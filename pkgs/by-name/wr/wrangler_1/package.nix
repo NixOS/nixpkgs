@@ -20,17 +20,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-GfuU+g4tPU3TorzymEa9q8n4uKYsG0ZTz8rJirGOLfQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MJFXcmRzvzDJ8cd0WdcNiHr3Wxgp/hKO1xKRfmbxRLA=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+    libiconv
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 

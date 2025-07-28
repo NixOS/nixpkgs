@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
-  version = "unstable-2022-05-21";
+  version = "0-unstable-2022-05-21";
 
   src = fetchFromGitHub {
     owner = "dracula";

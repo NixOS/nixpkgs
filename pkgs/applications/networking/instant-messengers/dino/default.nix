@@ -32,7 +32,7 @@
   gst-plugins-good,
   gst-plugins-bad,
   gst-vaapi,
-  webrtc-audio-processing_1,
+  webrtc-audio-processing,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good # contains rtpbin, required for VP9
     gst-plugins-bad # required for H264, MSDK
     gst-vaapi # required for VAAPI
-    webrtc-audio-processing_1
+    webrtc-audio-processing
   ];
 
   doCheck = true;

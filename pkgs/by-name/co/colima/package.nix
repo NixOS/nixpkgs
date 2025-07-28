@@ -32,7 +32,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   vendorHash = "sha256-rqCPpO/Va31U++sfELcN1X6oDtDiCXoGj0RHKZUM6rY=";
 
@@ -51,7 +52,10 @@ buildGoModule rec {
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
         lib.makeBinPath [
-          lima
+          # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+          (lima.override {
+            withAdditionalGuestAgents = true;
+          })
           qemu
         ]
       }

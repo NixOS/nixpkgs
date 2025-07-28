@@ -7,49 +7,34 @@
 }:
 let
   python = python3.override {
-    packageOverrides = final: prev: {
-      httpx = prev.httpx.overridePythonAttrs (old: rec {
-        version = "0.27.2";
-        src = old.src.override {
-          tag = version;
-          hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
-        };
-      });
-
-      httpx-socks = prev.httpx-socks.overridePythonAttrs (old: rec {
-        version = "0.9.2";
-        src = old.src.override {
-          tag = "v${version}";
-          hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
-        };
-      });
-
-      starlette = prev.starlette.overridePythonAttrs (old: {
-        disabledTests = old.disabledTests or [ ] ++ [
-          # fails in assertion with spacing issue
-          "test_request_body"
-          "test_request_stream"
-          "test_wsgi_post"
-        ];
-      });
-    };
+    packageOverrides = final: prev: { };
   };
 in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-06-14";
+    version = "0-unstable-2025-07-18";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "e52e9bb4b699e39d9ce51874ea339d4773717389";
-      hash = "sha256-azSFD1Uxa8RTbX3xllxkZuLCahpQdh/8F1TiUx2irhA=";
+      rev = "ff2e0ea2788a04ae5a13fc90b3725828a1ebc026";
+      hash = "sha256-Pxpozg3ecqGzwUCXL9zYsCivr9VpCVSYc/kjZn+V4xk=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRemoveDeps = [
+      "typer-slim" # we use typer instead
+    ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "httpx-socks"
+      "lxml"
+      "pygments"
+    ];
 
     preBuild =
       let
@@ -70,29 +55,32 @@ python.pkgs.toPythonModule (
         EOF
       '';
 
+    build-system = with python.pkgs; [ setuptools ];
+
     dependencies =
       with python.pkgs;
       [
         babel
         brotli
         certifi
+        cryptography
         fasttext-predict
         flask
         flask-babel
+        httpx
+        httpx-socks
         isodate
         jinja2
         lxml
+        markdown-it-py
         msgspec
         pygments
         python-dateutil
         pyyaml
-        redis
+        setproctitle
         typer
         uvloop
-        setproctitle
-        httpx
-        httpx-socks
-        markdown-it-py
+        valkey
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;

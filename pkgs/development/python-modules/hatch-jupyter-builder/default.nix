@@ -30,7 +30,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     twine
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   disabledTests = [
     # tests pip install, which unsurprisingly fails

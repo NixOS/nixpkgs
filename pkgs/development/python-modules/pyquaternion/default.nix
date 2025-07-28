@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "pyquaternion/test/" ];
+  enabledTestPaths = [ "pyquaternion/test/" ];
 
   pythonImportsCheck = [ "pyquaternion" ];
 

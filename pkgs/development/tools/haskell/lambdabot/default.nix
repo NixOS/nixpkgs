@@ -33,21 +33,17 @@ let
 in
 haskellLib.overrideCabal (self: {
   patches = (self.patches or [ ]) ++ [ ./custom-config.patch ];
-  postPatch =
-    (self.postPatch or "")
-    + ''
-      substituteInPlace src/Main.hs \
-        --replace '@config@' '${configStr}'
-      substituteInPlace src/Modules.hs \
-        --replace '@modules@' '${modulesStr}'
-    '';
+  postPatch = (self.postPatch or "") + ''
+    substituteInPlace src/Main.hs \
+      --replace '@config@' '${configStr}'
+    substituteInPlace src/Modules.hs \
+      --replace '@modules@' '${modulesStr}'
+  '';
 
   buildTools = (self.buildTools or [ ]) ++ [ makeWrapper ];
 
-  postInstall =
-    (self.postInstall or "")
-    + ''
-      wrapProgram $out/bin/lambdabot \
-        --prefix PATH ":" '${bins}'
-    '';
+  postInstall = (self.postInstall or "") + ''
+    wrapProgram $out/bin/lambdabot \
+      --prefix PATH ":" '${bins}'
+  '';
 }) haskellPackages.lambdabot

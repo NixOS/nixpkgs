@@ -43,8 +43,14 @@ def replace_key(
             if merged_features:
                 final["features"] = merged_features
 
-            local_default_features = local_dep.pop("default-features", None)
-            workspace_default_features = workspace_dep.get("default-features")
+            local_default_features = local_dep.pop(
+                "default-features",
+                local_dep.pop("default_features", None)
+            )
+            workspace_default_features = workspace_dep.get(
+                "default-features",
+                workspace_dep.get("default_features")
+            )
 
             if not workspace_default_features and local_default_features:
                 final["default-features"] = True

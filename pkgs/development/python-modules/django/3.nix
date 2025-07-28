@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "django";
   version = "3.2.25";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -26,19 +27,18 @@ buildPythonPackage rec {
     hash = "sha256-fKOKeGVK7nI3hZTWPlFjbAS44oV09VBd/2MIlbVHJ3c=";
   };
 
-  patches =
-    [
-      (replaceVars ./django_3_set_zoneinfo_dir.patch {
-        zoneinfo = tzdata + "/share/zoneinfo";
-      })
-    ]
-    ++ lib.optional withGdal (
-      replaceVars ./django_3_set_geos_gdal_lib.patch {
-        inherit geos_3_9;
-        inherit gdal;
-        extension = stdenv.hostPlatform.extensions.sharedLibrary;
-      }
-    );
+  patches = [
+    (replaceVars ./django_3_set_zoneinfo_dir.patch {
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+  ]
+  ++ lib.optional withGdal (
+    replaceVars ./django_3_set_geos_gdal_lib.patch {
+      inherit geos_3_9;
+      inherit gdal;
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    }
+  );
 
   propagatedBuildInputs = [
     asgiref

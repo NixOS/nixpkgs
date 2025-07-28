@@ -25,6 +25,7 @@ let
         });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
+          format = "setuptools";
           pyproject = null;
           src = prev.src.override {
             inherit version;
@@ -64,14 +65,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.31"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.50"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-0d7VdlX3xZkw1SVjbKErFhhoC2owI/JfBQOJ/GfIWyg=";
+    hash = "sha256-ITiZ144YFhwuRcfhulLF0jxpp1OgznEE8frx4Yn4V+A=";
   };
 
   postPatch = ''
@@ -125,15 +126,14 @@ py.pkgs.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd aws \
-        --bash <(echo "complete -C $out/bin/aws_completer aws") \
-        --zsh $out/bin/aws_zsh_completer.sh
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      rm $out/bin/aws.cmd
-    '';
+  postInstall = ''
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/aws.cmd
+  '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.
@@ -144,7 +144,7 @@ py.pkgs.buildPythonApplication rec {
   # tests/unit/customizations/sso/test_utils.py uses sockets
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-Wignore::DeprecationWarning"
   ];
 

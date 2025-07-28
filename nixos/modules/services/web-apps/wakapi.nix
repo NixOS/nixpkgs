@@ -135,10 +135,12 @@ in
       description = "Wakapi (self-hosted WakaTime-compatible backend)";
       wants = [
         "network-online.target"
-      ] ++ optional (cfg.database.dialect == "postgres") "postgresql.target";
+      ]
+      ++ optional (cfg.database.dialect == "postgres") "postgresql.target";
       after = [
         "network-online.target"
-      ] ++ optional (cfg.database.dialect == "postgres") "postgresql.target";
+      ]
+      ++ optional (cfg.database.dialect == "postgres") "postgresql.target";
       wantedBy = [ "multi-user.target" ];
 
       script = ''

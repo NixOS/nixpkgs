@@ -61,7 +61,8 @@ lib.makeOverridable (
           license = lib.licenses.apple-psl20;
           teams = [ lib.teams.darwin ];
           platforms = lib.platforms.darwin;
-        } // super.meta or { };
+        }
+        // super.meta or { };
       }
       // lib.optionalAttrs (super ? xcodeHash) {
         postUnpack =

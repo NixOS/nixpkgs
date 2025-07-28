@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqalculate";
-  version = "5.5.2";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sjVvsgDQbKXU+N7JrA36zezDfAGcDbyQ0fn1zMThYXQ=";
+    hash = "sha256-VYnJPXbWxfWtcIiTYGDO3ULtKTNtdBviFUUrXywxDcw=";
   };
 
   outputs = [
@@ -73,12 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace libqalculate/Calculator-plot.cc \
       --replace-fail 'commandline = "gnuplot"' 'commandline = "${gnuplotBinary}"' \
       --replace-fail '"gnuplot - ' '"${gnuplotBinary} - '
-  '';
-
-  preBuild = ''
-    pushd docs/reference
-    doxygen Doxyfile
-    popd
   '';
 
   meta = {

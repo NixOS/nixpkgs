@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "2.1.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "sarugaku";
     repo = "pythonfinder";
     tag = version;
-    hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
+    hash = "sha256-Qym/t+IejBMFHvBfIm+G5+J3GBC9O3RFrwSqHLuxwcg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,7 +38,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pythonfinder" ];
 
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     description = "Cross platform search tool for finding Python";
     mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
-    changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/sarugaku/pythonfinder/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

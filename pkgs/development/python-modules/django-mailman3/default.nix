@@ -34,15 +34,14 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies =
-    [
-      django-allauth
-      django-gravatar2
-      mailmanclient
-      pytz
-    ]
-    ++ django-allauth.optional-dependencies.openid
-    ++ django-allauth.optional-dependencies.socialaccount;
+  dependencies = [
+    django-allauth
+    django-gravatar2
+    mailmanclient
+    pytz
+  ]
+  ++ django-allauth.optional-dependencies.openid
+  ++ django-allauth.optional-dependencies.socialaccount;
 
   nativeCheckInputs = [
     django

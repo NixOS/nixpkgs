@@ -58,7 +58,8 @@ buildPythonPackage rec {
     requests
     scipy
     tqdm
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "mlcroissant" ];
 

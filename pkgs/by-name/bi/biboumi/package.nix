@@ -48,18 +48,17 @@ stdenv.mkDerivation rec {
     pkg-config
     python3Packages.sphinx
   ];
-  buildInputs =
-    [
-      libuuid
-      expat
-      libiconv
-      systemd
-      botan2
-    ]
-    ++ lib.optional withIDN libidn
-    ++ lib.optional withPostgreSQL libpq
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withUDNS udns;
+  buildInputs = [
+    libuuid
+    expat
+    libiconv
+    systemd
+    botan2
+  ]
+  ++ lib.optional withIDN libidn
+  ++ lib.optional withPostgreSQL libpq
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withUDNS udns;
 
   buildFlags = [
     "all"

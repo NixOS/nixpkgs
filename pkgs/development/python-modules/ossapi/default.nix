@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ossapi";
-  version = "5.2.1";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tybug";
     repo = "ossapi";
     tag = "v${version}";
-    hash = "sha256-eCq+NbDYoJ5y1ZC4RfVJUTYcT9AOLU1mtgpZkcSYZG8=";
+    hash = "sha256-5a2kSdOHF0BM/ZjhtPc9O/BiZXeLuZFlXwVOJHnKYLI=";
   };
 
   build-system = [ setuptools ];

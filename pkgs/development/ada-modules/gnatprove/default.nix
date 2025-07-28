@@ -85,38 +85,36 @@ stdenv.mkDerivation {
 
   patches = thisSpark.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      gnat
-      gprbuild
-      python3
-      makeWrapper
-    ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      menhir
-    ]);
+  nativeBuildInputs = [
+    gnat
+    gprbuild
+    python3
+    makeWrapper
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
-  buildInputs =
-    [
-      gnatcoll-core
-    ]
-    ++ (with ocamlPackages; [
-      ocamlgraph
-      zarith
-      ppx_deriving
-      ppx_sexp_conv
-      camlzip
-      menhirLib
-      num
-      re
-      sexplib
-      yojson
-    ])
-    ++ (lib.optionals (gnat_version == "14") [
-      gpr2_24_2_next
-    ]);
+  buildInputs = [
+    gnatcoll-core
+  ]
+  ++ (with ocamlPackages; [
+    ocamlgraph
+    zarith
+    ppx_deriving
+    ppx_sexp_conv
+    camlzip
+    menhirLib
+    num
+    re
+    sexplib
+    yojson
+  ])
+  ++ (lib.optionals (gnat_version == "14") [
+    gpr2_24_2_next
+  ]);
 
   propagatedBuildInputs = [
     gprbuild

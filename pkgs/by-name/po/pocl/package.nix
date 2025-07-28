@@ -56,25 +56,24 @@ stdenv.mkDerivation (finalAttrs: {
       "static_cast<size_t>(Dev.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>())"
   '';
 
-  cmakeFlags =
-    [
-      # avoid the runtime linker pulling in a different llvm e.g. from graphics drivers
-      (lib.cmakeBool "STATIC_LLVM" true)
-      (lib.cmakeBool "ENABLE_POCL_BUILDING" false)
-      (lib.cmakeBool "POCL_ICD_ABSOLUTE_PATH" true)
-      (lib.cmakeBool "ENABLE_ICD" true)
-      (lib.cmakeBool "ENABLE_REMOTE_CLIENT" true)
-      (lib.cmakeBool "ENABLE_REMOTE_SERVER" true)
-      (lib.cmakeFeature "CLANG" "${clangWrapped}/bin/clang")
-      (lib.cmakeFeature "CLANGXX" "${clangWrapped}/bin/clang++")
-    ]
-    # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      (lib.cmakeFeature "KERNELLIB_HOST_CPU_VARIANTS" "distro")
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      (lib.cmakeFeature "LLC_HOST_CPU" "generic")
-    ];
+  cmakeFlags = [
+    # avoid the runtime linker pulling in a different llvm e.g. from graphics drivers
+    (lib.cmakeBool "STATIC_LLVM" true)
+    (lib.cmakeBool "ENABLE_POCL_BUILDING" false)
+    (lib.cmakeBool "POCL_ICD_ABSOLUTE_PATH" true)
+    (lib.cmakeBool "ENABLE_ICD" true)
+    (lib.cmakeBool "ENABLE_REMOTE_CLIENT" true)
+    (lib.cmakeBool "ENABLE_REMOTE_SERVER" true)
+    (lib.cmakeFeature "CLANG" "${clangWrapped}/bin/clang")
+    (lib.cmakeFeature "CLANGXX" "${clangWrapped}/bin/clang++")
+  ]
+  # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    (lib.cmakeFeature "KERNELLIB_HOST_CPU_VARIANTS" "distro")
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    (lib.cmakeFeature "LLC_HOST_CPU" "generic")
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -83,20 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      hwloc
-      libxml2
-      llvmPackages.llvm
-      llvmPackages.libclang
-      opencl-headers
-      ocl-icd
-      spirv-tools
-      spirv-llvm-translator
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lttng-ust
-    ];
+  buildInputs = [
+    hwloc
+    libxml2
+    llvmPackages.llvm
+    llvmPackages.libclang
+    opencl-headers
+    ocl-icd
+    spirv-tools
+    spirv-llvm-translator
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lttng-ust
+  ];
 
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook

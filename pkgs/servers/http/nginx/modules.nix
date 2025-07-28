@@ -268,7 +268,7 @@ let
       };
 
       meta = with lib; {
-        description = " Fancy indexes module";
+        description = "Fancy indexes module";
         homepage = "https://github.com/aperezdc/ngx-fancyindex";
         license = with licenses; [ bsd2 ];
         maintainers = with maintainers; [ aneeshusa ];
@@ -340,7 +340,7 @@ let
       inputs = [ libbsd ];
 
       meta = with lib; {
-        description = " IP address anonymizer";
+        description = "IP address anonymizer";
         homepage = "https://github.com/masonicboom/ipscrub";
         license = with licenses; [ bsd3 ];
         maintainers = [ ];

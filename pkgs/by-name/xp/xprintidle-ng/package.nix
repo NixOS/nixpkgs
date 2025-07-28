@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xprintidle-ng";
-  version = "unstable-2015-09-01";
+  version = "0-unstable-2015-09-01";
 
   src = fetchFromGitHub {
     owner = "taktoa";
@@ -51,8 +51,12 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     ./bootstrap --gnulib-srcdir=${gnulib}
     ./configure --prefix="$out"
+
+    runHook postConfigure
   '';
 
   buildInputs = [

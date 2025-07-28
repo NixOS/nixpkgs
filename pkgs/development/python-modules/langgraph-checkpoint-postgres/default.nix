@@ -58,7 +58,10 @@ buildPythonPackage rec {
     "psycopg-pool"
   ];
 
-  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
+  # Temporarily disabled until the following is solved:
+  # https://github.com/NixOS/nixpkgs/pull/425384
+  doCheck = false;
+  # doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     pytest-asyncio

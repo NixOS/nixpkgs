@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "overpush";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "mrusme";
     repo = "overpush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bs5Mlpod7bIQxekadU6xBhgC8nchli+BvxEH6NeMOKw=";
+    hash = "sha256-6tSptrvlaljKMUawGD3Bk1LBwge/Awvvudpr+juuuQQ=";
   };
 
-  vendorHash = "sha256-wsuztFwEfluUxL2RjMP7Y+JtxQHr5oLwHkAL8UIHyVQ=";
+  vendorHash = "sha256-KUfGc4vFfw59mwqR840cbL4ubBH1i+sIniHU0CDCKTg=";
 
   env.CGO_ENABLED = "0";
 

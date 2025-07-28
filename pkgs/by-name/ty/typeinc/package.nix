@@ -8,26 +8,20 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "typeinc";
-  version = "1.0.1";
+  version = "1.0.3";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AnirudhG07";
     repo = "Typeinc";
     tag = "v${version}";
-    hash = "sha256-p549vz4PoZgFybu/X/6BZfEnQAeQEA1jZAgqB5nD5UM=";
+    hash = "sha256-/R3mNxZE4Pt4UlCljsQphHBCoA2JIZrTorqU4Adcdp0=";
   };
 
-  pyproject = true;
   build-system = [ python3Packages.hatchling ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  dependencies = with python3Packages; [
-    setuptools
-    pyttsx3
-    pyperclip
-    keyboard
-  ];
 
   postInstall = ''
     installManPage docs/man/typeinc.1

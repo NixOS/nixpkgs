@@ -174,7 +174,7 @@ makeScopeWithSplicing' {
 
         kreport = callPackage ../development/libraries/kreport { };
 
-        kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+        kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
@@ -201,8 +201,6 @@ makeScopeWithSplicing' {
         libqofono = callPackage ../development/libraries/libqofono { };
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
-
-        libquotient = callPackage ../development/libraries/libquotient { };
 
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 

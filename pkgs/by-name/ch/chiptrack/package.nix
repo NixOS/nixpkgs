@@ -61,10 +61,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     harfbuzz
     icu
     libjpeg
-  ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ alsa-lib ];
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [ alsa-lib ];
 
   # Has git dependencies
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-3LRyAY5NmXiJRrN+jwaUX65ArBCl8BiFoaWU2fVRMA8=";
 
   env = {

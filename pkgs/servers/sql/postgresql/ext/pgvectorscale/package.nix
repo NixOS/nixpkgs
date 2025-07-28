@@ -1,5 +1,6 @@
 {
   buildPgrxExtension,
+  cargo-pgrx_0_12_6,
   postgresql,
   fetchFromGitHub,
   lib,
@@ -19,7 +20,6 @@ buildPgrxExtension (finalAttrs: {
 
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CeRyDn9VhxfjWFJ1/Z/XvOUQOSnDoHHZAqgfYTeKU0o=";
   cargoPatches = [
     ./add-Cargo.lock.patch
@@ -31,6 +31,7 @@ buildPgrxExtension (finalAttrs: {
   ];
 
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;

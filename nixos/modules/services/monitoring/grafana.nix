@@ -430,6 +430,12 @@ in
       type = types.path;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open the ports in the firewall for the server.";
+    };
+
     settings = mkOption {
       description = ''
         Grafana settings. See <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/>
@@ -2018,10 +2024,11 @@ in
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "networking.target" ]
-        ++ lib.optional usePostgresql "postgresql.target"
-        ++ lib.optional useMysql "mysql.service";
+      after = [
+        "networking.target"
+      ]
+      ++ lib.optional usePostgresql "postgresql.target"
+      ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
@@ -2067,7 +2074,8 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
+        ]
+        ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''
@@ -2075,6 +2083,8 @@ in
         ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
       '';
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.http_port ];
 
     users.users.grafana = {
       uid = config.ids.uids.grafana;

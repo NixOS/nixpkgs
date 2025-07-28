@@ -29,16 +29,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ hiredis ];
 
-  cmakeFlags =
-    [
-      "-DREDIS_PLUS_PLUS_BUILD_TEST=OFF"
-    ]
-    ++ lib.optionals (!enableShared) [
-      "-DREDIS_PLUS_PLUS_BUILD_SHARED=OFF"
-    ]
-    ++ lib.optionals (!enableStatic) [
-      "-DREDIS_PLUS_PLUS_BUILD_STATIC=OFF"
-    ];
+  cmakeFlags = [
+    "-DREDIS_PLUS_PLUS_BUILD_TEST=OFF"
+  ]
+  ++ lib.optionals (!enableShared) [
+    "-DREDIS_PLUS_PLUS_BUILD_SHARED=OFF"
+  ]
+  ++ lib.optionals (!enableStatic) [
+    "-DREDIS_PLUS_PLUS_BUILD_STATIC=OFF"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/sewenew/redis-plus-plus";

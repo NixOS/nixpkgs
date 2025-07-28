@@ -60,13 +60,12 @@ stdenv.mkDerivation {
   pname = "segger-jlink";
   inherit src version;
 
-  nativeBuildInputs =
-    [
-      autoPatchelfHook
-    ]
-    ++ lib.optionals (!headless) [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ]
+  ++ lib.optionals (!headless) [
+    copyDesktopItems
+  ];
 
   buildInputs = lib.optionals (!headless) [
     qt4-bundled

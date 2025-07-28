@@ -35,20 +35,19 @@ stdenv.mkDerivation rec {
       --replace-fail "sqlite3mc_amalgamation.h" "sqlite3.h"
   '';
 
-  nativeBuildInputs =
-    [
-      appstream # for appstreamcli
-      cmake
-      gettext
-      git
-      makeWrapper
-      pkg-config
-      wrapGAppsHook3
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ];
+  nativeBuildInputs = [
+    appstream # for appstreamcli
+    cmake
+    gettext
+    git
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ];
 
   buildInputs = [
     curl

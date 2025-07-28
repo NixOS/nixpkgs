@@ -55,7 +55,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # stuck in epoll

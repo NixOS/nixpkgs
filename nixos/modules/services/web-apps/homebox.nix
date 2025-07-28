@@ -32,7 +32,7 @@ in
       '';
       description = ''
         The homebox configuration as Environment variables. For definitions and available options see the upstream
-        [documentation](https://homebox.software/en/configure-homebox.html).
+        [documentation](https://homebox.software/en/configure/#configure-homebox).
       '';
     };
     database = {

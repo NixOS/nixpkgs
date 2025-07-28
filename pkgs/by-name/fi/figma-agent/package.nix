@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4OAce76XCLlngC7BrX8eiQlHo+Mi2Tfrb9t1Rc/gSFA=";
 
   nativeBuildInputs = [
@@ -38,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neetly/figma-agent-linux";
     description = "Figma Agent for Linux (a.k.a. Font Helper)";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ercao ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "figma-agent";
   };
 }

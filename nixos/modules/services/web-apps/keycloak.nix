@@ -714,15 +714,14 @@ in
             openssl
             replace-secret
           ];
-          environment =
-            {
-              KC_HOME_DIR = "/run/keycloak";
-              KC_CONF_DIR = "/run/keycloak/conf";
-            }
-            // lib.optionalAttrs (cfg.initialAdminPassword != null) {
-              KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
-              KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
-            };
+          environment = {
+            KC_HOME_DIR = "/run/keycloak";
+            KC_CONF_DIR = "/run/keycloak/conf";
+          }
+          // lib.optionalAttrs (cfg.initialAdminPassword != null) {
+            KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
+            KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
+          };
           serviceConfig = {
             LoadCredential =
               map (p: "${baseNameOf p}:${p}") secretPaths
@@ -739,34 +738,33 @@ in
             Type = "notify"; # Requires quarkus-systemd-notify plugin
             NotifyAccess = "all";
           };
-          script =
-            ''
-              set -o errexit -o pipefail -o nounset -o errtrace
-              shopt -s inherit_errexit
+          script = ''
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
 
-              umask u=rwx,g=,o=
+            umask u=rwx,g=,o=
 
-              ln -s ${themesBundle} /run/keycloak/themes
-              ln -s ${keycloakBuild}/providers /run/keycloak/
-              ln -s ${keycloakBuild}/lib /run/keycloak/
+            ln -s ${themesBundle} /run/keycloak/themes
+            ln -s ${keycloakBuild}/providers /run/keycloak/
+            ln -s ${keycloakBuild}/lib /run/keycloak/
 
-              install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
+            install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
 
-              ${secretReplacements}
+            ${secretReplacements}
 
-              # Escape any backslashes in the db parameters, since
-              # they're otherwise unexpectedly read as escape
-              # sequences.
-              sed -i '/db-/ s|\\|\\\\|g' /run/keycloak/conf/keycloak.conf
+            # Escape any backslashes in the db parameters, since
+            # they're otherwise unexpectedly read as escape
+            # sequences.
+            sed -i '/db-/ s|\\|\\\\|g' /run/keycloak/conf/keycloak.conf
 
-            ''
-            + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
-              mkdir -p /run/keycloak/ssl
-              cp "$CREDENTIALS_DIRECTORY"/ssl_{cert,key} /run/keycloak/ssl/
-            ''
-            + ''
-              kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
-            '';
+          ''
+          + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+            mkdir -p /run/keycloak/ssl
+            cp "$CREDENTIALS_DIRECTORY"/ssl_{cert,key} /run/keycloak/ssl/
+          ''
+          + ''
+            kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
+          '';
           enableStrictShellChecks = true;
         };
 

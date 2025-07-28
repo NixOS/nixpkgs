@@ -23,7 +23,7 @@ If the build fails and Nix is run with the `-K/--keep-failed` option, a script `
 ### Attributes {#vm-tools-runInLinuxVM-attributes}
 
 * `preVM` (optional). Shell command to be evaluated *before* the VM is started (i.e., on the host).
-* `memSize` (optional, default `512`). The memory size of the VM in MiB.
+* `memSize` (optional, default `512`). The memory size of the VM in MiB (1024×1024 bytes).
 * `diskImage` (optional). A file system image to be attached to `/dev/sda`.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
 

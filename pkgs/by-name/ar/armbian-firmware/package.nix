@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "armbian-firmware";
-  version = "unstable-2023-09-16";
+  version = "0-unstable-2023-09-16";
 
   src = fetchFromGitHub {
     owner = "armbian";

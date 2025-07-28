@@ -69,18 +69,17 @@ buildGoModule rec {
   buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
-  tags =
-    [
-      "ec2"
-      "python"
-      "process"
-      "log"
-      "secrets"
-      "zlib"
-    ]
-    ++ lib.optionals withSystemd [ "systemd" ]
-    ++ lib.optionals withDocker [ "docker" ]
-    ++ extraTags;
+  tags = [
+    "ec2"
+    "python"
+    "process"
+    "log"
+    "secrets"
+    "zlib"
+  ]
+  ++ lib.optionals withSystemd [ "systemd" ]
+  ++ lib.optionals withDocker [ "docker" ]
+  ++ extraTags;
 
   ldflags = [
     "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
@@ -105,21 +104,20 @@ buildGoModule rec {
 
   # Install the config files and python modules from the "dist" dir
   # into standard paths.
-  postInstall =
-    ''
-      mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
-      cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
-      rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d,agentcrashdetect.d,myapp.d}
-      cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
+  postInstall = ''
+    mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
+    cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d,agentcrashdetect.d,myapp.d}
+    cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
-      wrapProgram "$out/bin/agent" \
-        --set PYTHONPATH "$out/${python.sitePackages}"''
-    + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
-       lib.makeLibraryPath [
-         (lib.getLib systemd)
-         rtloader
-       ]
-     }";
+    wrapProgram "$out/bin/agent" \
+      --set PYTHONPATH "$out/${python.sitePackages}"''
+  + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
+     lib.makeLibraryPath [
+       (lib.getLib systemd)
+       rtloader
+     ]
+   }";
 
   passthru.tests.version = testers.testVersion {
     package = datadog-agent;

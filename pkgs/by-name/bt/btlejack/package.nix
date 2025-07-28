@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "btlejack";
   version = "2.1.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "virtualabs";
@@ -19,7 +20,11 @@ python3Packages.buildPythonApplication rec {
     sed -i "s|^.*'argparse',$||" setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
     python3Packages.pyserial
     python3Packages.halo
   ];

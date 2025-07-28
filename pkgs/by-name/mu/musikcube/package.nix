@@ -53,29 +53,28 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      asio
-      curl
-      ffmpeg
-      gnutls
-      lame
-      libev
-      game-music-emu
-      libmicrohttpd
-      libopenmpt
-      mpg123
-      ncurses
-      portaudio
-      taglib
-    ]
-    ++ lib.optionals systemdSupport [ systemd ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      pulseaudio
-    ]
-    ++ lib.optionals sndioSupport [ sndio ]
-    ++ lib.optionals pipewireSupport [ pipewire ];
+  buildInputs = [
+    asio
+    curl
+    ffmpeg
+    gnutls
+    lame
+    libev
+    game-music-emu
+    libmicrohttpd
+    libopenmpt
+    mpg123
+    ncurses
+    portaudio
+    taglib
+  ]
+  ++ lib.optionals systemdSupport [ systemd ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    pulseaudio
+  ]
+  ++ lib.optionals sndioSupport [ sndio ]
+  ++ lib.optionals pipewireSupport [ pipewire ];
 
   cmakeFlags = [ "-DDISABLE_STRIP=true" ];
 

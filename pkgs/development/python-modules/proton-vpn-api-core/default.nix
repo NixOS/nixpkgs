@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.42.4";
+  version = "0.42.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-WzyxBeIiOXDxyv0/guPWO16pN41ZVXnxd6iiiZ+bLR4=";
+    hash = "sha256-sSLBo2nTn7rvtSZqCWZLwca5DRIgqSkImRM6U6/xJ70=";
   };
 
   build-system = [

@@ -1,60 +1,49 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "1.2.5";
-  format = "setuptools";
+  version = "1.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudsmith-io";
     repo = "cloudsmith-cli";
     tag = "v${version}";
-    hash = "sha256-UzyfOmjJzYEJYA6c4kn5XCvRVIMuiIpiq0kH9UhBwmo=";
+    hash = "sha256-PYqOj6nHjJrG7Ndc5vm//E8mjk4xZFVQopFqiWtH5ZQ=";
   };
 
-  patches = [
-    # Fix compatibility with urllib3 2.0
-    (fetchpatch {
-      url = "https://github.com/cloudsmith-io/cloudsmith-cli/commit/1a8d2d91c01320537b26778003735d6b694141c2.patch";
-      revert = true;
-      includes = [
-        "cloudsmith_cli/core/rest.py"
-      ];
-      hash = "sha256-Rf3MMJuLr8fzkRqSftIJ1eUbgNdfrng2V609jYvpogc=";
-    })
-  ];
+  postPatch = ''
+    # Fix compatibility with urllib3 >= 2.0 - method_whitelist renamed to allowed_methods
+    # https://github.com/cloudsmith-io/cloudsmith-cli/pull/148
+    substituteInPlace cloudsmith_cli/core/rest.py \
+      --replace-fail 'method_whitelist=False' 'allowed_methods=False'
+    substituteInPlace setup.py \
+      --replace-fail 'urllib3<2.0' 'urllib3'
+  '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    pip
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     click-configfile
     click-didyoumean
     click-spinner
     cloudsmith-api
-    colorama
-    future
+    keyring
     requests
     requests-toolbelt
     semver
-    simplejson
-    six
-    setuptools # needs pkg_resources
+    urllib3
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-cov-stub
-  ];
-
-  checkInputs = with python3.pkgs; [
+    freezegun
     httpretty
   ];
 
@@ -62,21 +51,11 @@ python3.pkgs.buildPythonApplication rec {
     "cloudsmith_cli"
   ];
 
-  postPatch = ''
-    # Permit urllib3 2.0
-    substituteInPlace setup.py \
-      --replace-fail 'urllib3<2.0' 'urllib3'
-  '';
-
   preCheck = ''
-    # E   _pytest.pathlib.ImportPathMismatchError: ('cloudsmith_cli.cli.tests.conftest', '/build/source/build/lib/cloudsmith_cli/cli/tests/conftest.py', PosixPath('/build/source/cloudsmith_cli/cli/tests/conftest.py'))
-    # ___________ ERROR collecting cloudsmith_cli/core/tests/test_init.py ____________
-    # import file mismatch:
-    # imported module 'cloudsmith_cli.core.tests.test_init' has this __file__ attribute:
-    #   /build/source/build/lib/cloudsmith_cli/core/tests/test_init.py
-    # which is not the same as the test file we want to collect:
-    #   /build/source/cloudsmith_cli/core/tests/test_init.py
-    # HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+    # When test_implicit_retry_for_status_codes calls initialise_api(),
+    # and no user strings like LOGNAME or USER is set, getpass will call
+    # getpwuid() which will then fail when we enable auto-allocate-uids.
+    export USER=nixbld
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd "$out"
   '';
@@ -86,8 +65,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Cloudsmith Command Line Interface";
     mainProgram = "cloudsmith";
     changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ usertam ];
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; unix;
+    platforms = lib.platforms.unix;
   };
 }

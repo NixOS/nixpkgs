@@ -55,7 +55,8 @@ lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_v
     propagatedBuildInputs = [
       astring
       result
-    ] ++ lib.optional (lib.versionAtLeast version "1.0.1") camlp-streams;
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.0.1") camlp-streams;
 
     meta = {
       description = "Parser for Ocaml documentation comments";

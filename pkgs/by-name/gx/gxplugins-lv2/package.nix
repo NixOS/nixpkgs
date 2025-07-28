@@ -32,9 +32,13 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];
 
   configurePhase = ''
+    runHook preConfigure
+
     for i in GxBoobTube GxValveCaster; do
       substituteInPlace $i.lv2/Makefile --replace "\$(shell which echo) -e" "echo -e"
     done
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

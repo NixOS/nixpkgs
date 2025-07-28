@@ -22,12 +22,12 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "openterface-qt";
-  version = "0.3.15";
+  version = "0.3.17";
   src = fetchFromGitHub {
     owner = "TechxArtisanStudio";
     repo = "Openterface_QT";
     rev = "${final.version}";
-    hash = "sha256-wU30m8dQirrLcYNFs4lTKIrng7B4HapHeVsyLR619PY=";
+    hash = "sha256-kXDiQINbP7D2qUqKUAZXEW2iJqKEH/AqMSE2zU+jRHg=";
   };
   nativeBuildInputs = [
     copyDesktopItems

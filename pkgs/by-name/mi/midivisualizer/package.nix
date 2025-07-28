@@ -31,18 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      glfw
-      ffmpeg-full
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      gtk3
-    ];
+  buildInputs = [
+    glfw
+    ffmpeg-full
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    gtk3
+  ];
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

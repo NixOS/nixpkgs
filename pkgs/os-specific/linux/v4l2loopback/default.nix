@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.15.0";
+  version = "0.15.1";
 
 in
 stdenv.mkDerivation {
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "v${version}";
-    hash = "sha256-fa3f8GDoQTkPppAysrkA7kHuU5z2P2pqI8dKhuKYh04=";
+    tag = "v${version}";
+    hash = "sha256-uokj0MB6bw4I8q5dVmSO9XMDvh4T7YODBoCCHvEf4v4=";
   };
 
   hardeningDisable = [
@@ -48,13 +48,16 @@ stdenv.mkDerivation {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module to create V4L2 loopback devices";
     mainProgram = "v4l2loopback-ctl";
     homepage = "https://github.com/umlaeute/v4l2loopback";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ moni ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      moni
+      bot-wxt1221
+    ];
+    platforms = lib.platforms.linux;
     outputsToInstall = [ "out" ];
   };
 }

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-duospace";
-  version = "unstable-2018-07-21";
+  version = "0-unstable-2018-07-21";
 
   src = fetchFromGitHub {
     owner = "iaolo";

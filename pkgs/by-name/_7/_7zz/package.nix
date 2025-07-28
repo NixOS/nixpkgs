@@ -28,14 +28,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "24.09";
+  version = "25.00";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-iQJ2m2OZrdkzf2sDIbKuyu0wIUktfvySTpsGFSLDZOM=";
-        unfree = "sha256-HVSu5GvdCY3lVXLUkHxaXco22WO52J2ldkGgfsyMVVg=";
+        free = "sha256-YY2Nw1aeQjXay9IEd4SwuhgqzeK95nH4nlZGwAlud6o=";
+        unfree = "sha256-gwC/5OkIAHp0OHJWhwD7JpJVSx06oCFs1Ndf+iG5qB8=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
@@ -80,19 +80,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit makefile;
 
-  makeFlags =
-    [
-      "CC=${stdenv.cc.targetPrefix}cc"
-      "CXX=${stdenv.cc.targetPrefix}c++"
-    ]
-    ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
-    ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
-    # it's the compression code with the restriction, see DOC/License.txt
-    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
-      "IS_MINGW=1"
-      "MSYSTEM=1"
-    ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ]
+  ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
+  ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
+  # it's the compression code with the restriction, see DOC/License.txt
+  ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
+  ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+    "IS_MINGW=1"
+    "MSYSTEM=1"
+  ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 

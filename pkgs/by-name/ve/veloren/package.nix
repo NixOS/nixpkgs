@@ -35,7 +35,6 @@ rustPlatform.buildRustPackage {
     ./fix-assets-path.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3XHuAgue0Id1oxCJ8NLZ4wYjMfND+C1iIW+AnMKXd54=";
 
   postPatch = ''

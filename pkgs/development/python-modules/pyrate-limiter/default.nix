@@ -48,7 +48,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-xdist
     redisTestHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 

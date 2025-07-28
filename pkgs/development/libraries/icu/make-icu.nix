@@ -53,27 +53,27 @@ let
 
     inherit patchFlags patches;
 
-    preConfigure =
-      ''
-        sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
+    preConfigure = ''
+      sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
 
-        # $(includedir) is different from $(prefix)/include due to multiple outputs
-        sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
-      ''
-      + lib.optionalString stdenv.hostPlatform.isAarch32 ''
-        # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
-        sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
-      '';
+      # $(includedir) is different from $(prefix)/include due to multiple outputs
+      sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch32 ''
+      # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
+      sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
+    '';
 
     dontDisableStatic = withStatic;
 
-    configureFlags =
-      [ "--disable-debug" ]
-      ++ lib.optional (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) "--enable-rpath"
-      ++ lib.optional (
-        stdenv.buildPlatform != stdenv.hostPlatform
-      ) "--with-cross-build=${nativeBuildRoot}"
-      ++ lib.optional withStatic "--enable-static";
+    configureFlags = [
+      "--disable-debug"
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) "--enable-rpath"
+    ++ lib.optional (
+      stdenv.buildPlatform != stdenv.hostPlatform
+    ) "--with-cross-build=${nativeBuildRoot}"
+    ++ lib.optional withStatic "--enable-static";
 
     enableParallelBuilding = true;
 
@@ -96,12 +96,14 @@ let
     outputs = [
       "out"
       "dev"
-    ] ++ lib.optional withStatic "static";
+    ]
+    ++ lib.optional withStatic "static";
     outputBin = "dev";
 
-    nativeBuildInputs =
-      [ updateAutotoolsGnuConfigScriptsHook ]
-      ++
+    nativeBuildInputs = [
+      updateAutotoolsGnuConfigScriptsHook
+    ]
+    ++
       # FIXME: This fixes dylib references in the dylibs themselves, but
       # not in the programs in $out/bin.
       lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -147,13 +149,11 @@ let
     pname = pname + "-build-root";
     inherit version;
 
-    preConfigure =
-      baseAttrs.preConfigure
-      + ''
-        mkdir build
-        cd build
-        configureScript=../configure
-      '';
+    preConfigure = baseAttrs.preConfigure + ''
+      mkdir build
+      cd build
+      configureScript=../configure
+    '';
 
     postBuild = ''
       cd ..

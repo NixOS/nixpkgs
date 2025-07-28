@@ -44,19 +44,18 @@ buildPythonPackage rec {
       --replace-fail '["poetry>=1.2"]' '["poetry-core>=1.0.0"]'
   '';
 
-  dependencies =
-    [
-      numpy
-      deprecation
-      hightime
-      tzlocal
-      python-decouple
-      click
-      requests
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      distro
-    ];
+  dependencies = [
+    numpy
+    deprecation
+    hightime
+    tzlocal
+    python-decouple
+    click
+    requests
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    distro
+  ];
 
   passthru.optional-dependencies = {
     docs = [

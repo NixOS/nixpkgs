@@ -39,7 +39,6 @@
   libglvnd,
   numactl,
   amf-headers,
-  intel-media-sdk,
   svt-av1,
   vulkan-loader,
   libappindicator,
@@ -57,13 +56,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "2025.122.141614";
+  version = "2025.628.4510";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${version}";
-    hash = "sha256-rHf+lj5dycXA//fu3RPuimYz2hrJnoVt7GA2xuHGXJk=";
+    hash = "sha256-xNWFo6a4YrJ+tBFTSReoAEi1oZ4DSguBEusizWeWKYY=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +70,7 @@ stdenv'.mkDerivation rec {
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-sWCmx1dMEyRyuYeeuqAjHZLVnckskgQO4saFM64s4Y4=";
+    npmDepsHash = "sha256-kUixeLf8prsWQolg1v+vJ5rvwKZOsU+88+0hVOgTZ0A=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -84,72 +83,67 @@ stdenv'.mkDerivation rec {
     '';
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      python3
-      makeWrapper
-      wayland-scanner
-      # Avoid fighting upstream's usage of vendored ffmpeg libraries
-      autoPatchelfHook
-      udevCheckHook
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-      cudaPackages.cuda_nvcc
-      (lib.getDev cudaPackages.cuda_cudart)
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    makeWrapper
+    wayland-scanner
+    # Avoid fighting upstream's usage of vendored ffmpeg libraries
+    autoPatchelfHook
+    udevCheckHook
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
+    (lib.getDev cudaPackages.cuda_cudart)
+  ];
 
-  buildInputs =
-    [
-      avahi
-      libevdev
-      libpulseaudio
-      xorg.libX11
-      libxcb
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libXtst
-      xorg.libXi
-      openssl
-      libopus
-      boost
-      libdrm
-      wayland
-      libffi
-      libevdev
-      libcap
-      libdrm
-      curl
-      pcre
-      pcre2
-      libuuid
-      libselinux
-      libsepol
-      libthai
-      libdatrie
-      xorg.libXdmcp
-      libxkbcommon
-      libepoxy
-      libva
-      libvdpau
-      numactl
-      libgbm
-      amf-headers
-      svt-av1
-      libappindicator
-      libnotify
-      miniupnpc
-      nlohmann_json
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cudatoolkit
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      intel-media-sdk
-    ];
+  buildInputs = [
+    avahi
+    libevdev
+    libpulseaudio
+    xorg.libX11
+    libxcb
+    xorg.libXfixes
+    xorg.libXrandr
+    xorg.libXtst
+    xorg.libXi
+    openssl
+    libopus
+    boost
+    libdrm
+    wayland
+    libffi
+    libevdev
+    libcap
+    libdrm
+    curl
+    pcre
+    pcre2
+    libuuid
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    xorg.libXdmcp
+    libxkbcommon
+    libepoxy
+    libva
+    libvdpau
+    numactl
+    libgbm
+    amf-headers
+    svt-av1
+    libappindicator
+    libnotify
+    miniupnpc
+    nlohmann_json
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cudart
+  ];
 
   runtimeDependencies = [
     avahi
@@ -159,23 +153,22 @@ stdenv'.mkDerivation rec {
     libglvnd
   ];
 
-  cmakeFlags =
-    [
-      "-Wno-dev"
-      # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
-      (lib.cmakeBool "UDEV_FOUND" true)
-      (lib.cmakeBool "SYSTEMD_FOUND" true)
-      (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
-      (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
-      (lib.cmakeBool "BOOST_USE_STATIC" false)
-      (lib.cmakeBool "BUILD_DOCS" false)
-      (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
-      (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
-      (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
-    ]
-    ++ lib.optionals (!cudaSupport) [
-      (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
-    ];
+  cmakeFlags = [
+    "-Wno-dev"
+    # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
+    (lib.cmakeBool "UDEV_FOUND" true)
+    (lib.cmakeBool "SYSTEMD_FOUND" true)
+    (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
+    (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
+    (lib.cmakeBool "BOOST_USE_STATIC" false)
+    (lib.cmakeBool "BUILD_DOCS" false)
+    (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
+    (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
+    (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
+  ]
+  ++ lib.optionals (!cudaSupport) [
+    (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
+  ];
 
   env = {
     # needed to trigger CMake version configuration
@@ -194,7 +187,7 @@ stdenv'.mkDerivation rec {
     substituteInPlace cmake/targets/common.cmake \
       --replace-fail 'find_program(NPM npm REQUIRED)' ""
 
-    substituteInPlace packaging/linux/sunshine.desktop \
+    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
@@ -230,7 +223,7 @@ stdenv'.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+    install -Dm644 ../packaging/linux/dev.lizardbyte.app.Sunshine.desktop $out/share/applications/dev.lizardbyte.app.Sunshine.desktop
   '';
 
   doInstallCheck = true;

@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WjBrv4GApT7LTnexLDhY7Zni5kLtvUzaGs2YuA3UiHE=";
 
   nativeInstallCheckInputs = [

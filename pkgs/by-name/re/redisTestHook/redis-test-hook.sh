@@ -7,7 +7,7 @@ redisStart() {
     redisTestPort=6379
   fi
 
-  mkdir "$NIX_BUILD_TOP/run"
+  mkdir -p "$NIX_BUILD_TOP/run"
 
   if [[ "${REDIS_SOCKET:-}" == "" ]]; then
     REDIS_SOCKET="$NIX_BUILD_TOP/run/redis.sock"

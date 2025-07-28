@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight evaluation system based on Lemon + LemonPlus for OI competitions";
     homepage = "https://github.com/Project-LemonLime/Project_LemonLime";
     changelog = "https://github.com/Project-LemonLime/Project_LemonLime/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       sigmanificient
       bot-wxt1221

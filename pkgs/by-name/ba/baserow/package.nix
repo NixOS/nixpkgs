@@ -106,7 +106,8 @@ buildPythonApplication rec {
     uvicorn
     watchgod
     zipp
-  ] ++ uvicorn.optional-dependencies.standard;
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   postInstall = ''
     wrapProgram $out/bin/baserow \

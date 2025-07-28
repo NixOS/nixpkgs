@@ -50,70 +50,67 @@ let
     ${cfg.stopScript}
   '';
 
-  defaultConfig =
-    {
-      General =
-        {
-          HaltCommand = "/run/current-system/systemd/bin/systemctl poweroff";
-          RebootCommand = "/run/current-system/systemd/bin/systemctl reboot";
-          Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
+  defaultConfig = {
+    General = {
+      HaltCommand = "/run/current-system/systemd/bin/systemctl poweroff";
+      RebootCommand = "/run/current-system/systemd/bin/systemctl reboot";
+      Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
 
-          # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-          DefaultSession = optionalString (
-            config.services.displayManager.defaultSession != null
-          ) "${config.services.displayManager.defaultSession}.desktop";
+      # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
+      DefaultSession = optionalString (
+        config.services.displayManager.defaultSession != null
+      ) "${config.services.displayManager.defaultSession}.desktop";
 
-          DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
-        }
-        // optionalAttrs (cfg.wayland.enable && cfg.wayland.compositor == "kwin") {
-          GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-          InputMethod = ""; # needed if we are using --inputmethod with kwin
-        };
-
-      Theme =
-        {
-          Current = cfg.theme;
-          ThemeDir = "/run/current-system/sw/share/sddm/themes";
-          FacesDir = "/run/current-system/sw/share/sddm/faces";
-        }
-        // optionalAttrs (cfg.theme == "breeze") {
-          CursorTheme = "breeze_cursors";
-          CursorSize = 24;
-        };
-
-      Users = {
-        MaximumUid = config.ids.uids.nixbld;
-        HideUsers = concatStringsSep "," dmcfg.hiddenUsers;
-        HideShells = "/run/current-system/sw/bin/nologin";
-      };
-
-      Wayland = {
-        EnableHiDPI = cfg.enableHidpi;
-        SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
-        CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
-      };
-
+      DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     }
-    // optionalAttrs xcfg.enable {
-      X11 = {
-        MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
-        ServerPath = toString xserverWrapper;
-        XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
-        SessionCommand = toString dmcfg.sessionData.wrapper;
-        SessionDir = "${dmcfg.sessionData.desktops}/share/xsessions";
-        XauthPath = "${pkgs.xorg.xauth}/bin/xauth";
-        DisplayCommand = toString Xsetup;
-        DisplayStopCommand = toString Xstop;
-        EnableHiDPI = cfg.enableHidpi;
-      };
-    }
-    // optionalAttrs dmcfg.autoLogin.enable {
-      Autologin = {
-        User = dmcfg.autoLogin.user;
-        Session = autoLoginSessionName;
-        Relogin = cfg.autoLogin.relogin;
-      };
+    // optionalAttrs (cfg.wayland.enable && cfg.wayland.compositor == "kwin") {
+      GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
+      InputMethod = ""; # needed if we are using --inputmethod with kwin
     };
+
+    Theme = {
+      Current = cfg.theme;
+      ThemeDir = "/run/current-system/sw/share/sddm/themes";
+      FacesDir = "/run/current-system/sw/share/sddm/faces";
+    }
+    // optionalAttrs (cfg.theme == "breeze") {
+      CursorTheme = "breeze_cursors";
+      CursorSize = 24;
+    };
+
+    Users = {
+      MaximumUid = config.ids.uids.nixbld;
+      HideUsers = concatStringsSep "," dmcfg.hiddenUsers;
+      HideShells = "/run/current-system/sw/bin/nologin";
+    };
+
+    Wayland = {
+      EnableHiDPI = cfg.enableHidpi;
+      SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
+    };
+
+  }
+  // optionalAttrs xcfg.enable {
+    X11 = {
+      MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
+      ServerPath = toString xserverWrapper;
+      XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
+      SessionCommand = toString dmcfg.sessionData.wrapper;
+      SessionDir = "${dmcfg.sessionData.desktops}/share/xsessions";
+      XauthPath = "${pkgs.xorg.xauth}/bin/xauth";
+      DisplayCommand = toString Xsetup;
+      DisplayStopCommand = toString Xstop;
+      EnableHiDPI = cfg.enableHidpi;
+    };
+  }
+  // optionalAttrs dmcfg.autoLogin.enable {
+    Autologin = {
+      User = dmcfg.autoLogin.user;
+      Session = autoLoginSessionName;
+      Relogin = cfg.autoLogin.relogin;
+    };
+  };
 
   cfgFile = iniFmt.generate "sddm.conf" (lib.recursiveUpdate defaultConfig cfg.settings);
 

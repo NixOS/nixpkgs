@@ -64,21 +64,20 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      libxml2
-      json-glib
-      sqlite
-      gsettings-desktop-schemas # for font settings
-      gtk4
-      adwaita-icon-theme
-      libarchive
-    ]
-    ++ lib.optionals withWebkit [
-      glib-networking # for SSL so that Google Fonts can load
-      libsoup_3
-      webkitgtk_6_0
-    ];
+  buildInputs = [
+    libxml2
+    json-glib
+    sqlite
+    gsettings-desktop-schemas # for font settings
+    gtk4
+    adwaita-icon-theme
+    libarchive
+  ]
+  ++ lib.optionals withWebkit [
+    glib-networking # for SSL so that Google Fonts can load
+    libsoup_3
+    webkitgtk_6_0
+  ];
 
   mesonFlags = [
     "-Dreproducible=true" # Do not hardcode build directory…

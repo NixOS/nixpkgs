@@ -1,0 +1,28 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 38b3b262..3be9bfee 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -146,21 +146,16 @@ if(APPLE)
+         TARGET FreeDV
+         POST_BUILD
+         COMMAND rm -rf dist_tmp FreeDV.dmg || true
+-        COMMAND DYLD_LIBRARY_PATH=${CODEC2_BUILD_DIR}/src:${portaudio_BINARY_DIR}:${samplerate_BINARY_DIR}/src:${Python3_ROOT_DIR}:${DYLD_LIBRARY_PATH} ${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler ARGS -od -b -x FreeDV.app/Contents/MacOS/FreeDV -d FreeDV.app/Contents/libs -p @loader_path/../libs/ -i /usr/lib -s ${CODEC2_BUILD_DIR}/src -s ${CMAKE_BINARY_DIR}/codec2_build/src ${PORTAUDIO_BUNDLE_ARG} -s ${samplerate_BINARY_DIR}/src -s ${rade_BINARY_DIR}/src -s ${Python3_ROOT_DIR}
++        COMMAND DYLD_LIBRARY_PATH=${CODEC2_BUILD_DIR}/src:${portaudio_BINARY_DIR}:${samplerate_BINARY_DIR}/src:${DYLD_LIBRARY_PATH} ${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler ARGS -od -b -x FreeDV.app/Contents/MacOS/FreeDV -d FreeDV.app/Contents/libs -p @loader_path/../libs/ -i /usr/lib -s ${CODEC2_BUILD_DIR}/src -s ${CMAKE_BINARY_DIR}/codec2_build/src ${PORTAUDIO_BUNDLE_ARG} -s ${samplerate_BINARY_DIR}/src -s ${rade_BINARY_DIR}/src
+         COMMAND cp ARGS ${CMAKE_CURRENT_SOURCE_DIR}/freedv.icns FreeDV.app/Contents/Resources
+         COMMAND rm ARGS -rf FreeDV.app/Contents/Frameworks
+         COMMAND mkdir ARGS FreeDV.app/Contents/Frameworks
+-        COMMAND cp ARGS -a ${Python3_ROOT_DIR}/../../../Python.framework FreeDV.app/Contents/Frameworks
+-        COMMAND install_name_tool ARGS -add_rpath @loader_path/../Frameworks/Python.framework FreeDV.app/Contents/libs/librade*.dylib
+         COMMAND cp ARGS ../rade_src/radae_*e.py FreeDV.app/Contents/Resources
+         COMMAND cp ARGS -a ../rade_src/radae FreeDV.app/Contents/Resources
+         COMMAND cp ARGS -a ../rade_src/model19_check3 FreeDV.app/Contents/Resources
+         
+-        # Precompile Python code to improve startup time
+-        COMMAND cd FreeDV.app/Contents/Resources && ../Frameworks/Python.framework/Versions/Current/bin/python3 -c "import radae_txe\; import radae_rxe\;" && cd ../../..
+-        
+         # Codesign binary so that it can execute
+-        COMMAND codesign --force --options runtime --timestamp --entitlements ${CMAKE_CURRENT_SOURCE_DIR}/entitlements.plist --sign ${MACOS_CODESIGN_IDENTITY} ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app `find ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app -name '*.so' -o -name '*.dylib'` `find ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app/Contents/Frameworks/Python.framework/Versions/3.12/bin -name 'Python' -o -name 'python3.12*'` `find ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app/Contents/Frameworks/Python.framework/ -name 'Python'` ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app/Contents/MacOS/FreeDV ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app/Contents/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/torch/bin/* ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app/Contents/Frameworks/Python.framework/Versions/3.12/Python
++        COMMAND codesign --force --options runtime --timestamp --entitlements ${CMAKE_CURRENT_SOURCE_DIR}/entitlements.plist --sign ${MACOS_CODESIGN_IDENTITY} ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app `find ${CMAKE_CURRENT_BINARY_DIR}/FreeDV.app -name '*.so' -o -name '*.dylib'`
+     )
+ 
+     if (MACOS_CODESIGN_KEYCHAIN_PROFILE)

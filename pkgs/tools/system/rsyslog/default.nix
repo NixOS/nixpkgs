@@ -75,37 +75,36 @@ stdenv.mkDerivation rec {
     docutils
   ];
 
-  buildInputs =
-    [
-      fastJson
-      libestr
-      json_c
-      zlib
-    ]
-    ++ lib.optional withKrb5 libkrb5
-    ++ lib.optional withJemalloc jemalloc
-    ++ lib.optional withPostgres libpq
-    ++ lib.optional withDbi libdbi
-    ++ lib.optional withNetSnmp net-snmp
-    ++ lib.optional withUuid libuuid
-    ++ lib.optional withCurl curl
-    ++ lib.optional withGnutls gnutls
-    ++ lib.optional withGcrypt libgcrypt
-    ++ lib.optional withLognorm liblognorm
-    ++ lib.optional withOpenssl openssl
-    ++ lib.optional withRelp librelp
-    ++ lib.optional withKsi libksi
-    ++ lib.optional withLogging liblogging
-    ++ lib.optional withNet libnet
-    ++ lib.optional withHadoop hadoop
-    ++ lib.optional withRdkafka rdkafka
-    ++ lib.optionals withMongo [ mongoc ]
-    ++ lib.optional withCzmq czmq
-    ++ lib.optional withRabbitmq rabbitmq-c
-    ++ lib.optional withHiredis hiredis
-    ++ lib.optional withMaxminddb libmaxminddb
-    ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [
+    fastJson
+    libestr
+    json_c
+    zlib
+  ]
+  ++ lib.optional withKrb5 libkrb5
+  ++ lib.optional withJemalloc jemalloc
+  ++ lib.optional withPostgres libpq
+  ++ lib.optional withDbi libdbi
+  ++ lib.optional withNetSnmp net-snmp
+  ++ lib.optional withUuid libuuid
+  ++ lib.optional withCurl curl
+  ++ lib.optional withGnutls gnutls
+  ++ lib.optional withGcrypt libgcrypt
+  ++ lib.optional withLognorm liblognorm
+  ++ lib.optional withOpenssl openssl
+  ++ lib.optional withRelp librelp
+  ++ lib.optional withKsi libksi
+  ++ lib.optional withLogging liblogging
+  ++ lib.optional withNet libnet
+  ++ lib.optional withHadoop hadoop
+  ++ lib.optional withRdkafka rdkafka
+  ++ lib.optionals withMongo [ mongoc ]
+  ++ lib.optional withCzmq czmq
+  ++ lib.optional withRabbitmq rabbitmq-c
+  ++ lib.optional withHiredis hiredis
+  ++ lib.optional withMaxminddb libmaxminddb
+  ++ lib.optional withMysql libmysqlclient
+  ++ lib.optional withSystemd systemd;
 
   configureFlags = [
     "--sysconfdir=/etc"

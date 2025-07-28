@@ -32,7 +32,8 @@ buildPythonPackage rec {
     mbstrdecoder
     typepy
     tcolorpy
-  ] ++ typepy.optional-dependencies.datetime;
+  ]
+  ++ typepy.optional-dependencies.datetime;
 
   optional-dependencies = {
     logging = [ loguru ];

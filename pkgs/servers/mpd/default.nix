@@ -176,8 +176,7 @@ let
         ];
 
       knownFeatures =
-        builtins.attrNames featureDependencies
-        ++ builtins.attrNames nativeFeatureDependencies;
+        builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
 
       features_ =
@@ -219,13 +218,15 @@ let
         #    Run-time dependency GTest found: YES 1.10.0
         gtest
         libupnp
-      ] ++ concatAttrVals features_ featureDependencies;
+      ]
+      ++ concatAttrVals features_ featureDependencies;
 
       nativeBuildInputs = [
         meson
         ninja
         pkg-config
-      ] ++ concatAttrVals features_ nativeFeatureDependencies;
+      ]
+      ++ concatAttrVals features_ nativeFeatureDependencies;
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -250,25 +251,25 @@ let
       outputs = [
         "out"
         "doc"
-      ] ++ lib.optional (builtins.elem "documentation" features_) "man";
+      ]
+      ++ lib.optional (builtins.elem "documentation" features_) "man";
 
       CXXFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
         "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
       ];
 
-      mesonFlags =
-        [
-          "-Dtest=true"
-          "-Dmanpages=true"
-          "-Dhtml_manual=true"
-        ]
-        ++ map (x: "-D${x}=enabled") features_
-        ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
-        ++ lib.optional (builtins.elem "zeroconf" features_) (
-          "-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
-        )
-        ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
-        ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
+      mesonFlags = [
+        "-Dtest=true"
+        "-Dmanpages=true"
+        "-Dhtml_manual=true"
+      ]
+      ++ map (x: "-D${x}=enabled") features_
+      ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
+      ++ lib.optional (builtins.elem "zeroconf" features_) (
+        "-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
+      )
+      ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
+      ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
 
       passthru.tests.nixos = nixosTests.mpd;
 
@@ -293,42 +294,41 @@ in
 {
   mpd = run { };
   mpd-small = run {
-    features =
-      [
-        "webdav"
-        "curl"
-        "mms"
-        "bzip2"
-        "zzip"
-        "nfs"
-        "audiofile"
-        "faad"
-        "flac"
-        "gme"
-        "mpg123"
-        "opus"
-        "vorbis"
-        "vorbisenc"
-        "lame"
-        "libsamplerate"
-        "shout"
-        "libmpdclient"
-        "id3tag"
-        "expat"
-        "pcre"
-        "sqlite"
-        "qobuz"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        "alsa"
-        "systemd"
-        "syslog"
-        "io_uring"
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        "mad"
-        "jack"
-      ];
+    features = [
+      "webdav"
+      "curl"
+      "mms"
+      "bzip2"
+      "zzip"
+      "nfs"
+      "audiofile"
+      "faad"
+      "flac"
+      "gme"
+      "mpg123"
+      "opus"
+      "vorbis"
+      "vorbisenc"
+      "lame"
+      "libsamplerate"
+      "shout"
+      "libmpdclient"
+      "id3tag"
+      "expat"
+      "pcre"
+      "sqlite"
+      "qobuz"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "alsa"
+      "systemd"
+      "syslog"
+      "io_uring"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      "mad"
+      "jack"
+    ];
   };
   mpdWithFeatures = run;
 }

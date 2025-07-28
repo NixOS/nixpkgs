@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "checkdmarc" ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   disabledTests = [
     # Tests require network access

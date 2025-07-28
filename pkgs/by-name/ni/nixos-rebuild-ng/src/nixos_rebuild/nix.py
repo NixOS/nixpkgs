@@ -242,33 +242,33 @@ def copy_closure(
                 nix_copy_closure(to_host, to=True)
 
 
-def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
+def edit() -> None:
     "Try to find and open NixOS configuration file in editor."
-    if flake:
-        run_wrapper(
-            [
-                "nix",
-                *FLAKE_FLAGS,
-                "edit",
-                *dict_to_flags(flake_flags),
-                "--",
-                str(flake),
-            ],
-            check=False,
-        )
-    else:
-        if flake_flags:
-            raise NixOSRebuildError("'edit' does not support extra Nix flags")
-        nixos_config = Path(
-            os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
-        )
-        if nixos_config.is_dir():
-            nixos_config /= "default.nix"
+    nixos_config = Path(
+        os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
+    )
+    if nixos_config.is_dir():
+        nixos_config /= "default.nix"
 
-        if nixos_config.exists():
-            run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
-        else:
-            raise NixOSRebuildError("cannot find NixOS config file")
+    if nixos_config.exists():
+        run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
+    else:
+        raise NixOSRebuildError("cannot find NixOS config file")
+
+
+def edit_flake(flake: Flake | None, flake_flags: Args | None = None) -> None:
+    "Try to find and open NixOS configuration file in editor for Flake config."
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "edit",
+            *dict_to_flags(flake_flags),
+            "--",
+            str(flake),
+        ],
+        check=False,
+    )
 
 
 def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
@@ -693,16 +693,26 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all_channels: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
+    if not sudo and os.geteuid() != 0:
+        raise NixOSRebuildError(
+            "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+        )
+
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
             all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):
-            run_wrapper(["nix-channel", "--update", channel_path.name], check=False)
+            run_wrapper(
+                ["nix-channel", "--update", channel_path.name],
+                check=False,
+                sudo=sudo,
+            )

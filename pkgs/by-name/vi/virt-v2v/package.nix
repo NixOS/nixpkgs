@@ -43,54 +43,51 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      autoreconfHook
-      makeWrapper
-      bash-completion
-      perl
-      libguestfs-with-appliance
-      qemu
-      cpio
-      cdrkit
-      getopt
-    ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    makeWrapper
+    bash-completion
+    perl
+    libguestfs-with-appliance
+    qemu
+    cpio
+    cdrkit
+    getopt
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+  ]);
 
-  buildInputs =
-    [
-      libosinfo
-      pcre2
-      libxml2
-      jansson
-      glib
-    ]
-    ++ (with ocamlPackages; [
-      ocaml_libvirt
-      nbd
-    ]);
+  buildInputs = [
+    libosinfo
+    pcre2
+    libxml2
+    jansson
+    glib
+  ]
+  ++ (with ocamlPackages; [
+    ocaml_libvirt
+    nbd
+  ]);
 
-  postInstall =
-    ''
-      for bin in $out/bin/*; do
-      wrapProgram "$bin" \
-        --prefix PATH : "$out/bin:${
-          lib.makeBinPath [
-            nbdkit
-            ocamlPackages.nbd
-            qemu
-          ]
-        }"
-      done
-    ''
-    + lib.optionalString withWindowsGuestSupport ''
-      ln -s "${virtio-win}" $out/share/virtio-win
-      ln -s "${pkgsCross.mingwW64.rhsrvany}/bin/" $out/share/virt-tools
-    '';
+  postInstall = ''
+    for bin in $out/bin/*; do
+    wrapProgram "$bin" \
+      --prefix PATH : "$out/bin:${
+        lib.makeBinPath [
+          nbdkit
+          ocamlPackages.nbd
+          qemu
+        ]
+      }"
+    done
+  ''
+  + lib.optionalString withWindowsGuestSupport ''
+    ln -s "${virtio-win}" $out/share/virtio-win
+    ln -s "${pkgsCross.mingwW64.rhsrvany}/bin/" $out/share/virt-tools
+  '';
 
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 

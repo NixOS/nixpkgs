@@ -51,14 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
   version = "2.60.0";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withIntrospection [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
@@ -78,38 +77,36 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      pkg-config
-      meson
-      ninja
-      rustc
-      cargo-c
-      cargo-auditable-cargo-wrapper
-      python3Packages.docutils
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gi-docgen
-      vala # vala bindings require GObject introspection
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    meson
+    ninja
+    rustc
+    cargo-c
+    cargo-auditable-cargo-wrapper
+    python3Packages.docutils
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+    vala # vala bindings require GObject introspection
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      bzip2
-      dav1d
-      pango
-      freetype
-    ]
-    ++ lib.optionals withIntrospection [
-      vala # for share/vala/Makefile.vapigen
-    ];
+  buildInputs = [
+    libxml2
+    bzip2
+    dav1d
+    pango
+    freetype
+  ]
+  ++ lib.optionals withIntrospection [
+    vala # for share/vala/Makefile.vapigen
+  ];
 
   propagatedBuildInputs = [
     glib

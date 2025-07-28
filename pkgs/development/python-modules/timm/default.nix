@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.16";
+  version = "1.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${version}";
-    hash = "sha256-8z23KQvb+wAlM/IXDC9j6OV8ioZE1dx0xhITSzdHoeY=";
+    hash = "sha256-IHppBCjyEZRdnPpPqL5VKIMov5lbHe9Wu9m9K9+am7o=";
   };
 
   build-system = [ pdm-backend ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:

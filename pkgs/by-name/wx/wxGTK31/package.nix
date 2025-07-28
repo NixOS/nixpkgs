@@ -44,48 +44,46 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gtk3
-      libSM
-      libXinerama
-      libXtst
-      libXxf86vm
-      xorgproto
-    ]
-    ++ lib.optional withCurl curl
-    ++ lib.optional withMesa libGLU
-    ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpng
-    ];
+  buildInputs = [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gtk3
+    libSM
+    libXinerama
+    libXtst
+    libXxf86vm
+    xorgproto
+  ]
+  ++ lib.optional withCurl curl
+  ++ lib.optional withMesa libGLU
+  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng
+  ];
 
-  configureFlags =
-    [
-      "--disable-precomp-headers"
-      # This is the default option, but be explicit
-      "--disable-monolithic"
-      "--enable-mediactrl"
-      (if compat28 then "--enable-compat28" else "--disable-compat28")
-      (if compat30 then "--enable-compat30" else "--disable-compat30")
-    ]
-    ++ lib.optional (!withEGL) "--disable-glcanvasegl"
-    ++ lib.optional unicode "--enable-unicode"
-    ++ lib.optional withCurl "--enable-webrequest"
-    ++ lib.optional withPrivateFonts "--enable-privatefonts"
-    ++ lib.optional withMesa "--with-opengl"
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--with-osx_cocoa"
-      "--with-libiconv"
-    ]
-    ++ lib.optionals withWebKit [
-      "--enable-webview"
-      "--enable-webviewwebkit"
-    ];
+  configureFlags = [
+    "--disable-precomp-headers"
+    # This is the default option, but be explicit
+    "--disable-monolithic"
+    "--enable-mediactrl"
+    (if compat28 then "--enable-compat28" else "--disable-compat28")
+    (if compat30 then "--enable-compat30" else "--disable-compat30")
+  ]
+  ++ lib.optional (!withEGL) "--disable-glcanvasegl"
+  ++ lib.optional unicode "--enable-unicode"
+  ++ lib.optional withCurl "--enable-webrequest"
+  ++ lib.optional withPrivateFonts "--enable-privatefonts"
+  ++ lib.optional withMesa "--with-opengl"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-osx_cocoa"
+    "--with-libiconv"
+  ]
+  ++ lib.optionals withWebKit [
+    "--enable-webview"
+    "--enable-webviewwebkit"
+  ];
 
   SEARCH_LIB = lib.optionalString (
     !stdenv.hostPlatform.isDarwin

@@ -59,7 +59,8 @@ let
     libGL
     vulkan-loader
     curlWithGnuTls
-  ] ++ xorgDeps;
+  ]
+  ++ xorgDeps;
 
   libPath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binPath = lib.makeBinPath deps;

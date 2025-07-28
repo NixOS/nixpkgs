@@ -84,7 +84,11 @@ let
     attrs
     // {
       neovimRcContent = customRC;
-      luaRcContent = customLuaRC;
+      luaRcContent =
+        if attrs ? luaRcContent then
+          lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
+        else
+          customLuaRC;
       wrapperArgs = lib.optionals (luaEnv != null) [
         "--prefix"
         "LUA_PATH"
@@ -267,7 +271,8 @@ let
 
         meta = {
           platforms = lib.platforms.all;
-        } // grammar.meta;
+        }
+        // grammar.meta;
       }
     ));
 

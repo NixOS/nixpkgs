@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Dom's tools for Tom's Obvious, Minimal Language.";
+    description = "Dom's tools for Tom's Obvious, Minimal Language";
     homepage = "https://github.com/domdfcoding/dom_toml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

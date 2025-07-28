@@ -113,28 +113,28 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    ninja
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals rocmSupport (
+    with rocmPackages;
     [
-      cmake
-      pkg-config
-      ninja
+      clr
+      rocblas
+      hipblas
     ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
-    ++ lib.optionals rocmSupport (
-      with rocmPackages;
-      [
-        clr
-        rocblas
-        hipblas
-      ]
-    );
+  );
 
   buildInputs = [
     ffmpeg_6-full
     pybind11
     sox
     torch.cxxdev
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [ torch ];
 
@@ -160,8 +160,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     platforms =
-      lib.platforms.linux
-      ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
+      lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       GaetanLepage
       junjihashimoto

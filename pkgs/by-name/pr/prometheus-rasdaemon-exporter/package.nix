@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "prometheus-rasdaemon-exporter";
-  version = "unstable-2023-03-15";
+  version = "0-unstable-2023-03-15";
   pyproject = true;
 
   src = fetchFromGitHub {

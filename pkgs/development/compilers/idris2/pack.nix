@@ -54,7 +54,8 @@ let
       gmp
       clang
       chez
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
 
     postInstall = ''
       wrapProgram $out/bin/pack \

@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     which
     dieHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   # The Darwin sandbox calls fail inside Nix builds, presumably due to
   # being nested inside another sandbox.
@@ -61,16 +62,15 @@ stdenv.mkDerivation rec {
     "bins" # prevents shared object from being built unnecessarily
   ];
 
-  installTargets =
-    [
-      "install"
-    ]
-    ++ lib.optionals enableShared [
-      "install_shared"
-    ]
-    ++ lib.optionals enableStatic [
-      "install_static"
-    ];
+  installTargets = [
+    "install"
+  ]
+  ++ lib.optionals enableShared [
+    "install_shared"
+  ]
+  ++ lib.optionals enableStatic [
+    "install_static"
+  ];
 
   postInstall =
     let

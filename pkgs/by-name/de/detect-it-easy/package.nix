@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Program for determining types of files for Windows, Linux and MacOS.";
+    description = "Program for determining types of files for Windows, Linux and MacOS";
     mainProgram = "die";
     homepage = "https://github.com/horsicq/Detect-It-Easy";
     changelog = "https://github.com/horsicq/Detect-It-Easy/blob/master/changelog.txt";

@@ -421,12 +421,13 @@ in
 
       # Implement consoleLogLevel both in early boot and using sysctl
       # (so you don't need to reboot to have changes take effect).
-      boot.kernelParams =
-        [ "loglevel=${toString config.boot.consoleLogLevel}" ]
-        ++ optionals config.boot.vesa [
-          "vga=0x317"
-          "nomodeset"
-        ];
+      boot.kernelParams = [
+        "loglevel=${toString config.boot.consoleLogLevel}"
+      ]
+      ++ optionals config.boot.vesa [
+        "vga=0x317"
+        "nomodeset"
+      ];
 
       boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 

@@ -263,13 +263,12 @@ in
         inherit StateDirectory;
         StateDirectoryMode = "0700";
         SystemCallArchitectures = "native";
-        SystemCallFilter =
-          [
-            "@system-service"
-          ]
-          ++ lib.optionals (!useSendmail) [
-            "~@privileged"
-          ];
+        SystemCallFilter = [
+          "@system-service"
+        ]
+        ++ lib.optionals (!useSendmail) [
+          "~@privileged"
+        ];
         Restart = "always";
         UMask = "0077";
       };

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_simpleeval.py" ];
+  enabledTestPaths = [ "test_simpleeval.py" ];
 
   pythonImportsCheck = [ "simpleeval" ];
 

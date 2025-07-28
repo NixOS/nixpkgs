@@ -26,26 +26,25 @@ stdenv.mkDerivation {
     cd armstubs
   '';
 
-  makeFlags =
-    [
-      "CC8=${stdenv.cc.targetPrefix}cc"
-      "LD8=${stdenv.cc.targetPrefix}ld"
-      "OBJCOPY8=${stdenv.cc.targetPrefix}objcopy"
-      "OBJDUMP8=${stdenv.cc.targetPrefix}objdump"
-      "CC7=${stdenv.cc.targetPrefix}cc"
-      "LD7=${stdenv.cc.targetPrefix}ld"
-      "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
-      "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
-    ]
-    ++ optionals (stdenv.hostPlatform.isAarch64) [
-      "armstub8.bin"
-      "armstub8-gic.bin"
-    ]
-    ++ optionals (stdenv.hostPlatform.isAarch32) [
-      "armstub7.bin"
-      "armstub8-32.bin"
-      "armstub8-32-gic.bin"
-    ];
+  makeFlags = [
+    "CC8=${stdenv.cc.targetPrefix}cc"
+    "LD8=${stdenv.cc.targetPrefix}ld"
+    "OBJCOPY8=${stdenv.cc.targetPrefix}objcopy"
+    "OBJDUMP8=${stdenv.cc.targetPrefix}objdump"
+    "CC7=${stdenv.cc.targetPrefix}cc"
+    "LD7=${stdenv.cc.targetPrefix}ld"
+    "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
+    "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
+  ]
+  ++ optionals (stdenv.hostPlatform.isAarch64) [
+    "armstub8.bin"
+    "armstub8-gic.bin"
+  ]
+  ++ optionals (stdenv.hostPlatform.isAarch32) [
+    "armstub7.bin"
+    "armstub8-32.bin"
+    "armstub8-32-gic.bin"
+  ];
 
   installPhase = ''
     runHook preInstall

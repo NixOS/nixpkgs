@@ -85,28 +85,27 @@ python.pkgs.buildPythonApplication rec {
     yt-dlp
   ];
 
-  makeWrapperArgs =
-    [
-      "--set USE_NODE True" # used through dependencies, not needed explicitly
-      "--set READABILITY_BINARY ${lib.meta.getExe readability-extractor}"
-      "--set MERCURY_BINARY ${lib.meta.getExe postlight-parser}"
-      "--set CURL_BINARY ${lib.meta.getExe curl}"
-      "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
-      "--set WGET_BINARY ${lib.meta.getExe wget}"
-      "--set GIT_BINARY ${lib.meta.getExe git}"
-      "--set YOUTUBEDL_BINARY ${lib.meta.getExe python.pkgs.yt-dlp}"
-      "--set SINGLEFILE_BINARY ${lib.meta.getExe single-file-cli}"
-    ]
-    ++ (
-      if (lib.meta.availableOn stdenv.hostPlatform chromium) then
-        [
-          "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
-        ]
-      else
-        [
-          "--set-default USE_CHROME False"
-        ]
-    );
+  makeWrapperArgs = [
+    "--set USE_NODE True" # used through dependencies, not needed explicitly
+    "--set READABILITY_BINARY ${lib.meta.getExe readability-extractor}"
+    "--set MERCURY_BINARY ${lib.meta.getExe postlight-parser}"
+    "--set CURL_BINARY ${lib.meta.getExe curl}"
+    "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
+    "--set WGET_BINARY ${lib.meta.getExe wget}"
+    "--set GIT_BINARY ${lib.meta.getExe git}"
+    "--set YOUTUBEDL_BINARY ${lib.meta.getExe python.pkgs.yt-dlp}"
+    "--set SINGLEFILE_BINARY ${lib.meta.getExe single-file-cli}"
+  ]
+  ++ (
+    if (lib.meta.availableOn stdenv.hostPlatform chromium) then
+      [
+        "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
+      ]
+    else
+      [
+        "--set-default USE_CHROME False"
+      ]
+  );
 
   meta = with lib; {
     description = "Open source self-hosted web archiving";

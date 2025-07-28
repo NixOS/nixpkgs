@@ -388,30 +388,28 @@ in
               };
             };
 
-            config.environment =
-              {
-                NB_STATE_DIR = client.dir.state;
-                NB_CONFIG = "${client.dir.state}/config.json";
-                NB_DAEMON_ADDR = "unix://${client.dir.runtime}/sock";
-                NB_INTERFACE_NAME = client.interface;
-                NB_LOG_FILE = mkOptionDefault "console";
-                NB_LOG_LEVEL = client.logLevel;
-                NB_SERVICE = client.service.name;
-                NB_WIREGUARD_PORT = toString client.port;
-              }
-              // optionalAttrs (client.dns-resolver.address != null) {
-                NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
-              };
+            config.environment = {
+              NB_STATE_DIR = client.dir.state;
+              NB_CONFIG = "${client.dir.state}/config.json";
+              NB_DAEMON_ADDR = "unix://${client.dir.runtime}/sock";
+              NB_INTERFACE_NAME = client.interface;
+              NB_LOG_FILE = mkOptionDefault "console";
+              NB_LOG_LEVEL = client.logLevel;
+              NB_SERVICE = client.service.name;
+              NB_WIREGUARD_PORT = toString client.port;
+            }
+            // optionalAttrs (client.dns-resolver.address != null) {
+              NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
+            };
 
-            config.config =
-              {
-                DisableAutoConnect = !client.autoStart;
-                WgIface = client.interface;
-                WgPort = client.port;
-              }
-              // optionalAttrs (client.dns-resolver.address != null) {
-                CustomDNSAddress = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
-              };
+            config.config = {
+              DisableAutoConnect = !client.autoStart;
+              WgIface = client.interface;
+              WgPort = client.port;
+            }
+            // optionalAttrs (client.dns-resolver.address != null) {
+              CustomDNSAddress = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
+            };
           }
         )
       );
@@ -576,26 +574,25 @@ in
               ProtectSystem = "strict";
               ProtectHome = "yes";
 
-              AmbientCapabilities =
-                [
-                  # see https://man7.org/linux/man-pages/man7/capabilities.7.html
-                  # see https://docs.netbird.io/how-to/installation#running-net-bird-in-docker
-                  #
-                  # seems to work fine without CAP_SYS_ADMIN and CAP_SYS_RESOURCE
-                  # CAP_NET_BIND_SERVICE could be added to allow binding on low ports, but is not required,
-                  #  see https://github.com/netbirdio/netbird/pull/1513
+              AmbientCapabilities = [
+                # see https://man7.org/linux/man-pages/man7/capabilities.7.html
+                # see https://docs.netbird.io/how-to/installation#running-net-bird-in-docker
+                #
+                # seems to work fine without CAP_SYS_ADMIN and CAP_SYS_RESOURCE
+                # CAP_NET_BIND_SERVICE could be added to allow binding on low ports, but is not required,
+                #  see https://github.com/netbirdio/netbird/pull/1513
 
-                  # failed creating tunnel interface wt-priv: [operation not permitted
-                  "CAP_NET_ADMIN"
-                  # failed to pull up wgInterface [wt-priv]: failed to create ipv4 raw socket: socket: operation not permitted
-                  "CAP_NET_RAW"
-                ]
-                # required for eBPF filter, used to be subset of CAP_SYS_ADMIN
-                ++ optional (versionAtLeast kernel.version "5.8") "CAP_BPF"
-                ++ optional (versionOlder kernel.version "5.8") "CAP_SYS_ADMIN"
-                ++ optional (
-                  client.dns-resolver.address != null && client.dns-resolver.port < 1024
-                ) "CAP_NET_BIND_SERVICE";
+                # failed creating tunnel interface wt-priv: [operation not permitted
+                "CAP_NET_ADMIN"
+                # failed to pull up wgInterface [wt-priv]: failed to create ipv4 raw socket: socket: operation not permitted
+                "CAP_NET_RAW"
+              ]
+              # required for eBPF filter, used to be subset of CAP_SYS_ADMIN
+              ++ optional (versionAtLeast kernel.version "5.8") "CAP_BPF"
+              ++ optional (versionOlder kernel.version "5.8") "CAP_SYS_ADMIN"
+              ++ optional (
+                client.dns-resolver.address != null && client.dns-resolver.port < 1024
+              ) "CAP_NET_BIND_SERVICE";
             };
           }
         )

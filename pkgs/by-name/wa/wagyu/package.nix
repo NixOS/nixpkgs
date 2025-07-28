@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-rustc-serialize-version.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-vtNxRW/b8kvy21YQezCUiZNtLnlMSkdTRr/OkGy6UAw=";
 
   meta = with lib; {

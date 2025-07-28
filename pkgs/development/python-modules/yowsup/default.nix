@@ -49,7 +49,8 @@ buildPythonPackage rec {
     protobuf
     python-axolotl
     six
-  ] ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
 
   meta = {
     homepage = "https://github.com/tgalal/yowsup";

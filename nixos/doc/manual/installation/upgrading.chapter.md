@@ -118,7 +118,5 @@ the new generation contains a different kernel, initrd or kernel
 modules. You can also specify a channel explicitly, e.g.
 
 ```nix
-{
-  system.autoUpgrade.channel = "https://channels.nixos.org/nixos-25.05";
-}
+{ system.autoUpgrade.channel = "https://channels.nixos.org/nixos-25.05"; }
 ```

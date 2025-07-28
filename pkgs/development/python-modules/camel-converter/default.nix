@@ -32,7 +32,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-  ] ++ optional-dependencies.pydantic;
+  ]
+  ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "camel_converter" ];
 

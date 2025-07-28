@@ -33,7 +33,6 @@
   orjson,
   overrides,
   posthog,
-  pulsar-client,
   pydantic,
   pypika,
   pyyaml,
@@ -139,7 +138,6 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pulsar-client
     pydantic
     pypika
     pyyaml
@@ -181,13 +179,11 @@ buildPythonPackage rec {
     SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
   };
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x" # these are slow tests, so stop on the first failure
     "-v"
-    "-W"
-    "ignore:DeprecationWarning"
-    "-W"
-    "ignore:PytestCollectionWarning"
+    "-Wignore:DeprecationWarning"
+    "-Wignore:PytestCollectionWarning"
   ];
 
   preCheck = ''

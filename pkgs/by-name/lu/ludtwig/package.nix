@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-00JHtrDffFl3h3IOH+h491qGOSfXIJH9NBmaqqUtQ6k=";
 
   meta = with lib; {

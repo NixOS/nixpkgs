@@ -60,37 +60,35 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      arrow-glib
-      c-ares
-      jemalloc
-      libbacktrace
-      libpq
-      libyaml
-      luajit
-      msgpack-c
-      nghttp2.dev
-      openssl
-      rdkafka
-      sqlite.dev
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # libbpf doesn't build for Darwin yet.
-      libbpf
-      systemd
-    ];
+  buildInputs = [
+    arrow-glib
+    c-ares
+    jemalloc
+    libbacktrace
+    libpq
+    libyaml
+    luajit
+    msgpack-c
+    nghttp2.dev
+    openssl
+    rdkafka
+    sqlite.dev
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # libbpf doesn't build for Darwin yet.
+    libbpf
+    systemd
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "FLB_RELEASE" true)
-      (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      # `FLB_SECURITY` causes bad linker options for Clang to be set.
-      (lib.cmakeBool "FLB_SECURITY" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "FLB_RELEASE" true)
+    (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # `FLB_SECURITY` causes bad linker options for Clang to be set.
+    (lib.cmakeBool "FLB_SECURITY" false)
+  ];
 
   # `src/CMakeLists.txt` installs fluent-bit's systemd unit files at the path in the `SYSTEMD_UNITDIR` CMake variable.
   #

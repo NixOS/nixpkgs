@@ -13,6 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pysolfc";
   version = "3.4.0";
+  format = "setuptools";
 
   src = fetchzip {
     url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";

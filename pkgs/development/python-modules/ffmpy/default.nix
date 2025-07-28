@@ -24,22 +24,29 @@ buildPythonPackage rec {
     hash = "sha256-U20mBg+428kkka6NY9qc7X8jH8A5bKa++g2+PTn/MYg=";
   };
 
-  postPatch = ''
-    # default to store ffmpeg
-    substituteInPlace ffmpy/ffmpy.py \
-      --replace-fail \
-        'executable: str = "ffmpeg",' \
-        'executable: str = "${ffmpeg-headless}/bin/ffmpeg",'
-
-    #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
-    for fname in tests/*.py; do
-      echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
-    done
-  '';
+  postPatch =
+    # Default to store ffmpeg.
+    ''
+      substituteInPlace ffmpy/ffmpy.py \
+        --replace-fail \
+          'executable: str = "ffmpeg",' \
+          'executable: str = "${lib.getExe ffmpeg-headless}",'
+    ''
+    # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+    + ''
+      for fname in tests/*.py; do
+        echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
+      done
+    ''
+    # uv-build in nixpkgs is now at 0.8.0, which otherwise breaks the constraint set by the package.
+    + ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'requires = ["uv_build>=0.7.9,<0.8.0"]' 'requires = ["uv_build>=0.7.9,<0.9.0"]'
+    '';
 
   pythonImportsCheck = [ "ffmpy" ];
 
-  nativeBuildInputs = [ uv-build ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [
     pytestCheckHook

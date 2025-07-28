@@ -142,19 +142,17 @@ stdenv.mkDerivation (
 
         nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [ ] ++ [ bazel ];
 
-        preHook =
-          fFetchAttrs.preHook or ""
-          + ''
-            export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
-            export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
-            export HOME="$NIX_BUILD_TOP"
-            export USER="nix"
-            # This is needed for git_repository with https remotes
-            export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
-            # This is needed for Bazel fetchers that are themselves programs (e.g.
-            # rules_go using the go toolchain)
-            export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-          '';
+        preHook = fFetchAttrs.preHook or "" + ''
+          export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
+          export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
+          export HOME="$NIX_BUILD_TOP"
+          export USER="nix"
+          # This is needed for git_repository with https remotes
+          export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+          # This is needed for Bazel fetchers that are themselves programs (e.g.
+          # rules_go using the go toolchain)
+          export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+        '';
 
         buildPhase =
           fFetchAttrs.buildPhase or ''
@@ -162,22 +160,21 @@ stdenv.mkDerivation (
 
             ${bazelCmd {
               cmd = if fetchConfigured then "build --nobuild" else "fetch";
-              additionalFlags =
-                [
-                  # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
-                  # https://github.com/bazelbuild/bazel/issues/6502
-                  "--loading_phase_threads=1"
-                  "$bazelFetchFlags"
-                ]
-                ++ (
-                  if fetchConfigured then
-                    [
-                      "--jobs"
-                      "$NIX_BUILD_CORES"
-                    ]
-                  else
-                    [ ]
-                );
+              additionalFlags = [
+                # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
+                # https://github.com/bazelbuild/bazel/issues/6502
+                "--loading_phase_threads=1"
+                "$bazelFetchFlags"
+              ]
+              ++ (
+                if fetchConfigured then
+                  [
+                    "--jobs"
+                    "$NIX_BUILD_CORES"
+                  ]
+                else
+                  [ ]
+              );
               targets = fFetchAttrs.bazelTargets ++ fFetchAttrs.bazelTestTargets;
             }}
 
@@ -255,35 +252,32 @@ stdenv.mkDerivation (
       (bazel.override { enableNixHacks = true; })
     ];
 
-    preHook =
-      fBuildAttrs.preHook or ""
-      + ''
-        export bazelOut="$NIX_BUILD_TOP/output"
-        export bazelUserRoot="$NIX_BUILD_TOP/tmp"
-        export HOME="$NIX_BUILD_TOP"
-      '';
+    preHook = fBuildAttrs.preHook or "" + ''
+      export bazelOut="$NIX_BUILD_TOP/output"
+      export bazelUserRoot="$NIX_BUILD_TOP/tmp"
+      export HOME="$NIX_BUILD_TOP"
+    '';
 
-    preConfigure =
-      ''
-        mkdir -p "$bazelOut"
+    preConfigure = ''
+      mkdir -p "$bazelOut"
 
-        (cd $bazelOut && tar xfz $deps)
+      (cd $bazelOut && tar xfz $deps)
 
-        test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
-          echo "fixed output derivation was built for a different bazel version" >&2
-          echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
-          echo "expected: ${bazel.name}" >&2
-          exit 1
-        }
+      test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
+        echo "fixed output derivation was built for a different bazel version" >&2
+        echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
+        echo "expected: ${bazel.name}" >&2
+        exit 1
+      }
 
-        chmod -R +w $bazelOut
-        find $bazelOut -type l | while read symlink; do
-          if [[ $(readlink "$symlink") == *NIX_BUILD_TOP* ]]; then
-            ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
-          fi
-        done
-      ''
-      + fBuildAttrs.preConfigure or "";
+      chmod -R +w $bazelOut
+      find $bazelOut -type l | while read symlink; do
+        if [[ $(readlink "$symlink") == *NIX_BUILD_TOP* ]]; then
+          ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
+        fi
+      done
+    ''
+    + fBuildAttrs.preConfigure or "";
 
     buildPhase =
       fBuildAttrs.buildPhase or ''
@@ -316,13 +310,14 @@ stdenv.mkDerivation (
 
         ${bazelCmd {
           cmd = "test";
-          additionalFlags =
-            [ "--test_output=errors" ]
-            ++ fBuildAttrs.bazelTestFlags
-            ++ [
-              "--jobs"
-              "$NIX_BUILD_CORES"
-            ];
+          additionalFlags = [
+            "--test_output=errors"
+          ]
+          ++ fBuildAttrs.bazelTestFlags
+          ++ [
+            "--jobs"
+            "$NIX_BUILD_CORES"
+          ];
           targets = fBuildAttrs.bazelTestTargets;
         }}
         ${bazelCmd {

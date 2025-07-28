@@ -41,39 +41,37 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      cairo
-      freetype
-      ghostscript
-      gsl
-      libjpeg
-      libpng
-      libspiro
-      lua5
-      qtbase
-      qtsvg
-      zlib
-    ]
-    ++ (lib.optionals withTeXLive [
-      texliveSmall
-    ])
-    ++ (lib.optionals withQVoronoi [
-      qhull
-    ]);
+  buildInputs = [
+    cairo
+    freetype
+    ghostscript
+    gsl
+    libjpeg
+    libpng
+    libspiro
+    lua5
+    qtbase
+    qtsvg
+    zlib
+  ]
+  ++ (lib.optionals withTeXLive [
+    texliveSmall
+  ])
+  ++ (lib.optionals withQVoronoi [
+    qhull
+  ]);
 
-  makeFlags =
-    [
-      "-C src"
-      "IPEPREFIX=${placeholder "out"}"
-      "LUA_PACKAGE=lua"
-      "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
-      "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
-    ]
-    ++ (lib.optionals withQVoronoi [
-      "IPEQVORONOI=1"
-      "QHULL_CFLAGS=-I${qhull}/include/libqhull_r"
-    ]);
+  makeFlags = [
+    "-C src"
+    "IPEPREFIX=${placeholder "out"}"
+    "LUA_PACKAGE=lua"
+    "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
+    "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
+  ]
+  ++ (lib.optionals withQVoronoi [
+    "IPEQVORONOI=1"
+    "QHULL_CFLAGS=-I${qhull}/include/libqhull_r"
+  ]);
 
   qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
 

@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
   LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
   LIBPCAP_VER = libpcap.version;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WGwtRMARwRvcUflN3JYL32aib+IG1Q0j0D9BEfaiME4=";
 
   meta = {

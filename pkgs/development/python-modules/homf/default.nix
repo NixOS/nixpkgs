@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   # There are currently no checks which do not require network access, which breaks the check hook somehow?
   # nativeCheckInputs = [ pytestCheckHook ];
-  # pytestFlagsArray = [ "-m 'not network'" ];
+  # disabledTestMarks = [ "network" ];
 
   nativeBuildInputs = [ versionCheckHook ];
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
-    description = "Asset download tool for GitHub Releases, PyPi, etc.";
+    description = "Asset download tool for GitHub Releases, PyPi, etc";
     mainProgram = "homf";
     homepage = "https://github.com/duckinator/homf";
     license = licenses.mit;

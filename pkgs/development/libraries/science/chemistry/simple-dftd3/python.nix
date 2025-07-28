@@ -11,6 +11,7 @@
 }:
 
 buildPythonPackage {
+  format = "setuptools";
   inherit (simple-dftd3)
     pname
     version

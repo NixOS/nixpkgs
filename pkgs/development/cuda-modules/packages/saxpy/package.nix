@@ -28,13 +28,12 @@ backendStdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      autoAddDriverRunpath
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+    autoAddDriverRunpath
+  ]
+  ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
+  ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
 
   buildInputs =
     lib.optionals (cudaOlder "11.4") [ cudatoolkit ]

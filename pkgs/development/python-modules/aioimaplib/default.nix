@@ -35,15 +35,14 @@ buildPythonPackage rec {
     pytz
   ];
 
-  disabledTests =
-    [
-      # TimeoutError
-      "test_idle_start__exits_queue_get_without_timeout_error"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Comparison to magic strings
-      "test_idle_loop"
-    ];
+  disabledTests = [
+    # TimeoutError
+    "test_idle_start__exits_queue_get_without_timeout_error"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Comparison to magic strings
+    "test_idle_loop"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

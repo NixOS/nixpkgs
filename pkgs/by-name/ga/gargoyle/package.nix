@@ -50,23 +50,22 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      fluidsynth
-      fmt
-      freetype
-      libjpeg
-      libopenmpt
-      libpng
-      libsndfile
-      libvorbis
-      mpg123
-      qt6.qtbase
-      qt6.qtmultimedia
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    fluidsynth
+    fmt
+    freetype
+    libjpeg
+    libopenmpt
+    libpng
+    libsndfile
+    libvorbis
+    mpg123
+    qt6.qtbase
+    qt6.qtmultimedia
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    qt6.qtwayland
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "INTERFACE" "QT")

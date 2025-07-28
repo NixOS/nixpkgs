@@ -66,7 +66,8 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
-  ] ++ optional-dependencies.http3;
+  ]
+  ++ optional-dependencies.http3;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

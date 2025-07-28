@@ -33,7 +33,8 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "setuptools_git_versioning" ];
 
@@ -52,8 +53,7 @@ buildPythonPackage rec {
   '';
 
   # limit tests because the full suite takes several minutes to run
-  pytestFlagsArray = [
-    "-m"
+  enabledTestMarks = [
     "important"
   ];
 

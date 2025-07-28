@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "08mg5kmkjrmqrd8j5rkzw9vdqlvibhb1ynp6bmfxnzq5rcq1l197";
   };
 
+  patches = [
+    # https://git.libreoffice.org/libzmf/+/48f94abff2fcc4943626a62c6180c60862288b08%5E%21
+    ./doxygen.patch
+  ];
+
   buildInputs = [
     boost
     icu

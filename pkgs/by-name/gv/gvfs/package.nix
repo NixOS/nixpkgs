@@ -43,8 +43,10 @@
   libmsgraph,
   python3,
   gsettings-desktop-schemas,
+  googleSupport ? false, # dependency on vulnerable libsoup versions
 }:
 
+assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
   version = "1.57.2";
@@ -76,72 +78,74 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
   ];
 
-  buildInputs =
-    [
-      glib
-      libgcrypt
-      dbus
-      libgphoto2
-      avahi
-      libarchive
-      libimobiledevice
-      libbluray
-      libnfs
-      libxml2
-      gsettings-desktop-schemas
-      libsoup_3
-    ]
-    ++ lib.optionals udevSupport [
-      libgudev
-      udisks2
-      fuse3
-      libcdio
-      samba
-      libmtp
-      libcap
-      polkit
-      libcdio-paranoia
-    ]
-    ++ lib.optionals gnomeSupport [
-      gcr_4
-      glib-networking # TLS support
-      gnome-online-accounts
-      libsecret
-      libgdata
-      libmsgraph
-    ];
+  buildInputs = [
+    glib
+    libgcrypt
+    dbus
+    libgphoto2
+    avahi
+    libarchive
+    libimobiledevice
+    libbluray
+    libnfs
+    libxml2
+    gsettings-desktop-schemas
+    libsoup_3
+  ]
+  ++ lib.optionals udevSupport [
+    libgudev
+    udisks2
+    fuse3
+    libcdio
+    samba
+    libmtp
+    libcap
+    polkit
+    libcdio-paranoia
+  ]
+  ++ lib.optionals gnomeSupport [
+    gcr_4
+    glib-networking # TLS support
+    gnome-online-accounts
+    libsecret
+    libmsgraph
+  ]
+  ++ lib.optionals googleSupport [
+    libgdata
+  ];
 
-  mesonFlags =
-    [
-      "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-      "-Dtmpfilesdir=no"
-    ]
-    ++ lib.optionals (!udevSupport) [
-      "-Dgudev=false"
-      "-Dudisks2=false"
-      "-Dfuse=false"
-      "-Dcdda=false"
-      "-Dsmb=false"
-      "-Dmtp=false"
-      "-Dadmin=false"
-      "-Dgphoto2=false"
-      "-Dlibusb=false"
-      "-Dlogind=false"
-    ]
-    ++ lib.optionals (!gnomeSupport) [
-      "-Dgcr=false"
-      "-Dgoa=false"
-      "-Dkeyring=false"
-      "-Dgoogle=false"
-      "-Donedrive=false"
-    ]
-    ++ lib.optionals (avahi == null) [
-      "-Ddnssd=false"
-    ]
-    ++ lib.optionals (samba == null) [
-      # Xfce don't want samba
-      "-Dsmb=false"
-    ];
+  mesonFlags = [
+    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    "-Dtmpfilesdir=no"
+  ]
+  ++ lib.optionals (!udevSupport) [
+    "-Dgudev=false"
+    "-Dudisks2=false"
+    "-Dfuse=false"
+    "-Dcdda=false"
+    "-Dsmb=false"
+    "-Dmtp=false"
+    "-Dadmin=false"
+    "-Dgphoto2=false"
+    "-Dlibusb=false"
+    "-Dlogind=false"
+  ]
+  ++ lib.optionals (!gnomeSupport) [
+    "-Dgcr=false"
+    "-Dgoa=false"
+    "-Dkeyring=false"
+    "-Donedrive=false"
+  ]
+  ++ lib.optionals (!googleSupport) [
+    "-Dgoogle=false"
+  ]
+  ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
+  ]
+  ++ lib.optionals (samba == null) [
+    # Xfce don't want samba
+    "-Dsmb=false"
+  ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = finalAttrs.finalPackage.doCheck;

@@ -66,8 +66,7 @@ stdenvNoCC.mkDerivation rec {
   methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
   methods_color = builtins.filter (m: builtins.elem m fontFormats) methods.color;
   saturations =
-    lib.optional (methods_black != [ ]) "black"
-    ++ lib.optional (methods_color != [ ]) "color";
+    lib.optional (methods_black != [ ]) "black" ++ lib.optional (methods_color != [ ]) "color";
   maximumColorVersions = lib.optionals (buildMaximumColorFonts != "none") (
     lib.optional (builtins.elem "glyf_colr_0" fontFormats) "0"
     ++ lib.optional (builtins.elem "glyf_colr_1" fontFormats) "1"

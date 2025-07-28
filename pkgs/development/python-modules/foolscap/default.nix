@@ -40,7 +40,8 @@ buildPythonPackage rec {
     six
     twisted
     pyopenssl
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     i2p = [ txi2p-tahoe ];
@@ -50,7 +51,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "foolscap" ];
 

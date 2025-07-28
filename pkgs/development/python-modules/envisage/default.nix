@@ -31,7 +31,8 @@ buildPythonPackage rec {
     setuptools
     traits
     traitsui
-  ] ++ apptools.optional-dependencies.preferences;
+  ]
+  ++ apptools.optional-dependencies.preferences;
 
   preCheck = ''
     export HOME=$PWD/HOME

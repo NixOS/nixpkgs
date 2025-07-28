@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     rev = "nix-web-v${version}";
     hash = "sha256-lAk2VfhclHswsctA0RQgEj5oEX1fowh8TCaKykGEioY=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-PfbDod1vQDnWqbhRgXbOvidxGWIXIe7XIgqiLVbovh0=";
 
   nativeBuildInputs = [ pkg-config ];

@@ -8,13 +8,13 @@
 
 let
   pname = "mendeley";
-  version = "2.135.0";
+  version = "2.136.0";
 
   executableName = "${pname}-reference-manager";
 
   src = fetchurl {
     url = "https://static.mendeley.com/bin/desktop/mendeley-reference-manager-${version}-x86_64.AppImage";
-    hash = "sha256-fJ2rW3VKN4TqwDCCDlPpSFckoBjBtmMOvXanqqMS7AM=";
+    hash = "sha256-NAH4BwWEdI1WFWgPJIPbWkpkN/qxR2+8NwGtdCeohbA=";
   };
 
   appimageContents = appimageTools.extractType2 {

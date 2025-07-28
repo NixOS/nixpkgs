@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     hash = "sha256-oilSWF3dCbJIPtkxwj76qReh5Rp8ZRiH2nVriK6d3fk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-k5cRj66OSXsCXUPWrBYrOFq8aohaB/afd8IGj0QqvuE=";
 
   buildInputs = [

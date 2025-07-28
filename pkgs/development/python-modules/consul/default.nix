@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "python-consul";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,5 @@ buildPythonPackage rec {
     description = "Python client for Consul (https://www.consul.io/)";
     homepage = "https://github.com/cablehead/python-consul";
     license = licenses.mit;
-    maintainers = with maintainers; [ desiderius ];
   };
 }

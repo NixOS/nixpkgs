@@ -260,16 +260,16 @@ rec {
         bits = 64;
       };
     };
-    isILP32 =
-      [
-        {
-          cpu = {
-            family = "wasm";
-            bits = 32;
-          };
-        }
-      ]
-      ++ map
+    isILP32 = [
+      {
+        cpu = {
+          family = "wasm";
+          bits = 32;
+        };
+      }
+    ]
+    ++
+      map
         (a: {
           abi = {
             abi = a;

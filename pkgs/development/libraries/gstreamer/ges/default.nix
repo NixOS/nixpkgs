@@ -35,30 +35,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r1sn9ck2MCc3IQDKwLrxkFUoBynfHMWN1ORU72mOsf8=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      gobject-introspection
-      python3
-      flex
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    python3
+    flex
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-      libxml2
-      gst-devtools
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    bash-completion
+    libxml2
+    gst-devtools
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     gst-plugins-base

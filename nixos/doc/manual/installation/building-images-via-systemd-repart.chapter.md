@@ -9,7 +9,8 @@ images and exposes it's entire interface via the `repartConfig` option.
 An example of how to build an image:
 
 ```nix
-{ config, modulesPath, ... }: {
+{ config, modulesPath, ... }:
+{
 
   imports = [ "${modulesPath}/image/repart.nix" ];
 
@@ -88,43 +89,52 @@ let
   efiArch = pkgs.stdenv.hostPlatform.efiArch;
 in
 (pkgs.nixos [
-  ({ config, lib, pkgs, modulesPath, ... }: {
+  (
+    {
+      config,
+      lib,
+      pkgs,
+      modulesPath,
+      ...
+    }:
+    {
 
-    imports = [ "${modulesPath}/image/repart.nix" ];
+      imports = [ "${modulesPath}/image/repart.nix" ];
 
-    boot.loader.grub.enable = false;
+      boot.loader.grub.enable = false;
 
-    fileSystems."/".device = "/dev/disk/by-label/nixos";
+      fileSystems."/".device = "/dev/disk/by-label/nixos";
 
-    image.repart = {
-      name = "image";
-      partitions = {
-        "esp" = {
-          contents = {
-            "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-              "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
+      image.repart = {
+        name = "image";
+        partitions = {
+          "esp" = {
+            contents = {
+              "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
+                "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
-            "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
-              "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+              "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
+                "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+            };
+            repartConfig = {
+              Type = "esp";
+              Format = "vfat";
+              SizeMinBytes = "96M";
+            };
           };
-          repartConfig = {
-            Type = "esp";
-            Format = "vfat";
-            SizeMinBytes = "96M";
-          };
-        };
-        "root" = {
-          storePaths = [ config.system.build.toplevel ];
-          repartConfig = {
-            Type = "root";
-            Format = "ext4";
-            Label = "nixos";
-            Minimize = "guess";
+          "root" = {
+            storePaths = [ config.system.build.toplevel ];
+            repartConfig = {
+              Type = "root";
+              Format = "ext4";
+              Label = "nixos";
+              Minimize = "guess";
+            };
           };
         };
       };
-    };
 
-  })
+    }
+  )
 ]).image
 ```

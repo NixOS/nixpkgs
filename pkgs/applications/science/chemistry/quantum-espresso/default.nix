@@ -99,26 +99,26 @@ stdenv.mkDerivation rec {
     libmbd
     libxc
     hdf5
-  ] ++ lib.optional enableMpi scalapack;
+  ]
+  ++ lib.optional enableMpi scalapack;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DWANNIER90_ROOT=${wannier90}"
-      "-DMBD_ROOT=${libmbd}"
-      "-DQE_ENABLE_OPENMP=ON"
-      "-DQE_ENABLE_LIBXC=ON"
-      "-DQE_ENABLE_HDF5=ON"
-      "-DQE_ENABLE_PLUGINS=pw2qmcpack"
-    ]
-    ++ lib.optionals enableMpi [
-      "-DQE_ENABLE_MPI=ON"
-      "-DQE_ENABLE_MPI_MODULE=ON"
-      "-DQE_ENABLE_SCALAPACK=ON"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DWANNIER90_ROOT=${wannier90}"
+    "-DMBD_ROOT=${libmbd}"
+    "-DQE_ENABLE_OPENMP=ON"
+    "-DQE_ENABLE_LIBXC=ON"
+    "-DQE_ENABLE_HDF5=ON"
+    "-DQE_ENABLE_PLUGINS=pw2qmcpack"
+  ]
+  ++ lib.optionals enableMpi [
+    "-DQE_ENABLE_MPI=ON"
+    "-DQE_ENABLE_MPI_MODULE=ON"
+    "-DQE_ENABLE_SCALAPACK=ON"
+  ];
 
   meta = with lib; {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";

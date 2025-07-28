@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-c9+79zrIU/M1Rh+DiaLJzbrNSa4IKrYk1gP0dsabUiw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-aw3p0Lr/gWC1yDpVCXVibj4eU7ZFCQDy8kHtE6d6Yjg=";
 
   # Tests do not work in the package published on crates.io, since the folder

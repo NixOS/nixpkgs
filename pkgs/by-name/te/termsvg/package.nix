@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "termsvg";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "mrmarble";
     repo = "termsvg";
     rev = "v${version}";
-    hash = "sha256-q6xjsoxQTIQwPYkBTGwLfTt1VQ8GJPdsiP5dvTyEBIw=";
+    hash = "sha256-ejrg1UywPQDCeaymkGzU+xZoPXME6XEP/SBe3Yxf4YU=";
   };
 
-  vendorHash = "sha256-HhJcf+NwM1h0Hh76LU/cddaLoCaQdyuKLSvDFmiKEEg=";
+  vendorHash = "sha256-BoXRLWhQmfvMIN658MiXGCFMbnvuXfv/H/jCE6h4aWk=";
 
   ldflags = [
     "-s"

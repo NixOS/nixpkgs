@@ -46,7 +46,8 @@ buildPythonPackage rec {
     opentelemetry-api
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     django

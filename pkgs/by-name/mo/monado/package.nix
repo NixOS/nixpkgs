@@ -98,53 +98,52 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
-  buildInputs =
-    [
-      bluez
-      cjson
-      dbus
-      eigen
-      elfutils
-      gst-plugins-base
-      gstreamer
-      hidapi
-      libbsd
-      libdrm
-      libffi
-      libGL
-      libjpeg
-      librealsense
-      libsurvive
-      libunwind
-      libusb1
-      libuv
-      libuvc
-      libv4l
-      libXau
-      libxcb
-      libXdmcp
-      libXext
-      libXrandr
-      onnxruntime
-      opencv4
-      openhmd
-      openvr
-      orc
-      pcre2
-      SDL2
-      shaderc
-      udev
-      vulkan-headers
-      vulkan-loader
-      wayland
-      wayland-protocols
-      wayland-scanner
-      zlib
-      zstd
-    ]
-    ++ lib.optionals tracingSupport [
-      tracy
-    ];
+  buildInputs = [
+    bluez
+    cjson
+    dbus
+    eigen
+    elfutils
+    gst-plugins-base
+    gstreamer
+    hidapi
+    libbsd
+    libdrm
+    libffi
+    libGL
+    libjpeg
+    librealsense
+    libsurvive
+    libunwind
+    libusb1
+    libuv
+    libuvc
+    libv4l
+    libXau
+    libxcb
+    libXdmcp
+    libXext
+    libXrandr
+    onnxruntime
+    opencv4
+    openhmd
+    openvr
+    orc
+    pcre2
+    SDL2
+    shaderc
+    udev
+    vulkan-headers
+    vulkan-loader
+    wayland
+    wayland-protocols
+    wayland-scanner
+    zlib
+    zstd
+  ]
+  ++ lib.optionals tracingSupport [
+    tracy
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)

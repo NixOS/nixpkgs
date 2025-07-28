@@ -38,16 +38,15 @@ stdenv.mkDerivation rec {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libxml2
-      libportal-gtk4
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-    ]);
+  buildInputs = [
+    libadwaita
+    libxml2
+    libportal-gtk4
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
   meta = with lib; {
     description = "Get what motivates you done, without losing concentration";

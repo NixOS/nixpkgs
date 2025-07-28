@@ -133,7 +133,8 @@ in
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/dgraph zero --my ${cfg.zero.host}:${toString cfg.zero.port}";
         Restart = "on-failure";
-      } // securityOptions;
+      }
+      // securityOptions;
     };
 
     systemd.services.dgraph-alpha = {
@@ -157,7 +158,8 @@ in
               http://localhost:8080/admin
         '';
         Restart = "on-failure";
-      } // securityOptions;
+      }
+      // securityOptions;
     };
   };
 

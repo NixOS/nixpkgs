@@ -23,35 +23,34 @@ stdenv.mkDerivation rec {
     hash = "sha256-nGu1MYI3uaQ/3rc5LlixF6YEUU+pUsB6rn/yjFDGYf0=";
   };
 
-  nativeBuildInputs =
-    [ copyDesktopItems ]
-    ++ (with libsForQt5.qt5; [
-      qmake
-      qttools
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ (with libsForQt5.qt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
-      readline
-      tcl
-      python3
-    ]
-    ++ (with libsForQt5.qt5; [
-      qtbase
-      qtsvg
-      qtdeclarative
-      qtscript
-    ]);
+  buildInputs = [
+    readline
+    tcl
+    python3
+  ]
+  ++ (with libsForQt5.qt5; [
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtscript
+  ]);
 
-  qmakeFlags =
-    [
-      "./SQLiteStudio3"
-      "DEFINES+=NO_AUTO_UPDATES"
-    ]
-    ++ lib.optionals includeOfficialPlugins [
-      "DEFINES+=PLUGINS_DIR=${sqlitestudio-plugins}/lib/sqlitestudio"
-    ];
+  qmakeFlags = [
+    "./SQLiteStudio3"
+    "DEFINES+=NO_AUTO_UPDATES"
+  ]
+  ++ lib.optionals includeOfficialPlugins [
+    "DEFINES+=PLUGINS_DIR=${sqlitestudio-plugins}/lib/sqlitestudio"
+  ];
 
   desktopItems = [
     (makeDesktopItem {

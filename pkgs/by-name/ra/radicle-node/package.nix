@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
       rm -rf $out/.git
     '';
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
 
   nativeBuildInputs = [

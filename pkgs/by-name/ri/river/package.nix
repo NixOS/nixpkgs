@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.10";
+  version = "0.3.11";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "river";
     repo = "river";
-    hash = "sha256-mTS62HT/v/5af/PTsNcDIrl7GUczP55+VCumQIii6y4=";
+    hash = "sha256-7LC5nxan9jmjjt29afkps9H/sfhfIqpvBxvCKb0zvNM=";
     tag = "v${finalAttrs.version}";
   };
 
@@ -43,7 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     xwayland
     zig_0_14.hook
-  ] ++ lib.optional withManpages scdoc;
+  ]
+  ++ lib.optional withManpages scdoc;
 
   buildInputs = [
     libGL
@@ -55,17 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_19
-  ] ++ lib.optional xwaylandSupport libX11;
+  ]
+  ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
 
-  zigBuildFlags =
-    [
-      "--system"
-      "${finalAttrs.deps}"
-    ]
-    ++ lib.optional withManpages "-Dman-pages"
-    ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ]
+  ++ lib.optional withManpages "-Dman-pages"
+  ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions

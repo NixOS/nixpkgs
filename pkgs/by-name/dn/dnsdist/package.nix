@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     "--disable-dependency-tracking"
     "--enable-unit-tests"
     "--enable-systemd"
+    "--with-boost=${boost.dev}"
   ];
 
   doCheck = true;

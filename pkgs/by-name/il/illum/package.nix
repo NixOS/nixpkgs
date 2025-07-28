@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     bash ./configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''

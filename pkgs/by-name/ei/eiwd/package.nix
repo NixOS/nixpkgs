@@ -22,43 +22,40 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  outputs =
-    [
-      "out"
-      "doc"
-    ]
-    ++ lib.optionals enableManpages [
-      "man"
-    ]
-    ++ lib.optionals finalAttrs.doCheck [
-      "test"
-    ];
+  outputs = [
+    "out"
+    "doc"
+  ]
+  ++ lib.optionals enableManpages [
+    "man"
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
+    "test"
+  ];
 
   postUnpack = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-    ]
-    ++ lib.optionals enableManpages [
-      docutils # only for the man pages
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ]
+  ++ lib.optionals enableManpages [
+    docutils # only for the man pages
+  ];
 
   checkInputs = [
     python3Packages.python
     (lib.getBin openssl)
   ];
 
-  configureFlags =
-    [
-      "--disable-dbus"
-    ]
-    ++ lib.optionals (!enableManpages) [
-      "--disable-manual-pages"
-    ];
+  configureFlags = [
+    "--disable-dbus"
+  ]
+  ++ lib.optionals (!enableManpages) [
+    "--disable-manual-pages"
+  ];
 
   enableParallelBuilding = true;
 
@@ -74,16 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
       'true'
   '';
 
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc
-      cp -a doc $doc/share/doc/iwd
-      cp -a README AUTHORS TODO $doc/share/doc/iwd
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      mkdir -p $test/bin
-      cp -a test/* $test/bin/
-    '';
+  postInstall = ''
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/illiliti/eiwd/";

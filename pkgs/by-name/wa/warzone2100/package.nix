@@ -54,27 +54,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B/YbrnIWh+3rYtpId+hQMKA6BTpZPWRRlPxld44EgP8=";
   };
 
-  buildInputs =
-    [
-      SDL2
-      libtheora
-      libvorbis
-      libopus
-      openal
-      openalSoft
-      physfs
-      miniupnpc
-      libsodium
-      curl
-      libpng
-      freetype
-      harfbuzz
-      sqlite
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      vulkan-headers
-      vulkan-loader
-    ];
+  buildInputs = [
+    SDL2
+    libtheora
+    libvorbis
+    libopus
+    openal
+    openalSoft
+    physfs
+    miniupnpc
+    libsodium
+    curl
+    libpng
+    freetype
+    harfbuzz
+    sqlite
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    vulkan-headers
+    vulkan-loader
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -105,7 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz

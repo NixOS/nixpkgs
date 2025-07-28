@@ -55,26 +55,25 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  dependencies =
-    [
-      aiohttp
-      eth-abi
-      eth-account
-      eth-hash
-    ]
-    ++ eth-hash.optional-dependencies.pycryptodome
-    ++ [
-      eth-typing
-      eth-utils
-      hexbytes
-      jsonschema
-      lru-dict
-      protobuf
-      pydantic
-      requests
-      types-requests
-      websockets
-    ];
+  dependencies = [
+    aiohttp
+    eth-abi
+    eth-account
+    eth-hash
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome
+  ++ [
+    eth-typing
+    eth-utils
+    hexbytes
+    jsonschema
+    lru-dict
+    protobuf
+    pydantic
+    requests
+    types-requests
+    websockets
+  ];
 
   # Note: to reflect the extra_requires in main/setup.py.
   optional-dependencies = {

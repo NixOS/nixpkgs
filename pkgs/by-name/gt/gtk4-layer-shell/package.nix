@@ -51,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     vala
     wayland-scanner
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     gtk4

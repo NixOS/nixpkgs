@@ -25,22 +25,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NIg8heytWUshpoUbaH+RFIvwPBQGXL6yaGKvUuGnxg8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kLuiNfrxc3Z8UeDQ2Mb6N78TST6c2f4N7mt4X0zv1Zk=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ] ++ lib.optional wrapWithMono makeWrapper;
+  ]
+  ++ lib.optional wrapWithMono makeWrapper;
 
-  buildInputs =
-    [
-      zstd
-      libsoup_3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ];
+  buildInputs = [
+    zstd
+    libsoup_3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -48,16 +47,15 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "owmods_cli";
 
-  postInstall =
-    ''
-      cargo xtask dist_cli
-      installManPage dist/cli/man/*
-      installShellCompletion --cmd owmods \
-      dist/cli/completions/owmods.{bash,fish,zsh}
-    ''
-    + lib.optionalString wrapWithMono ''
-      wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
-    '';
+  postInstall = ''
+    cargo xtask dist_cli
+    installManPage dist/cli/man/*
+    installShellCompletion --cmd owmods \
+    dist/cli/completions/owmods.{bash,fish,zsh}
+  ''
+  + lib.optionalString wrapWithMono ''
+    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
+  '';
 
   passthru.updateScript = nix-update-script { };
 

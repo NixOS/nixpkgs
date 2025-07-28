@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "joycond-cemuhook";
   pyproject = true;
-  version = "unstable-2023-08-09";
+  version = "0-unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "joaorb64";
