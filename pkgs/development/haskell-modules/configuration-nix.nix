@@ -1801,18 +1801,16 @@ builtins.intersectAttrs super {
   xmobar = enableSeparateBinOutput super.xmobar;
 
   # These test cases access the network
-  hpack_0_38_1 = doDistribute (
-    overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "--skip"
-        "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
-        "--skip"
-        "/Hpack.Defaults/ensureFile/downloads file if missing/"
-        "--skip"
-        "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
-      ];
-    }) super.hpack_0_38_1
-  );
+  hpack = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "--skip"
+      "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+      "--skip"
+      "/Hpack.Defaults/ensureFile/downloads file if missing/"
+      "--skip"
+      "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+    ];
+  }) super.hpack;
 
   # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
   inherit

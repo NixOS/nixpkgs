@@ -134,7 +134,7 @@ self: super: {
   hlint = self.hlint_3_4_1;
 
   # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
-  hpack_0_38_1 = dontCheck super.hpack_0_38_1;
+  hpack = dontCheck super.hpack;
 
   mime-string = disableOptimization super.mime-string;
 

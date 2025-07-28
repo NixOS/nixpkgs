@@ -118,7 +118,7 @@ self: super: {
       (markBroken super.haskell-language-server);
 
   # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
-  hpack_0_38_1 = dontCheck super.hpack_0_38_1;
+  hpack = dontCheck super.hpack;
 
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute self.ghc-tags_1_5;
