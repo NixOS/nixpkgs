@@ -59,6 +59,7 @@
   zziplib,
   writableTmpDirAsHomeHook,
   gitMinimal,
+  getopt,
 }:
 
 final: prev:
@@ -157,6 +158,7 @@ in
     checkInputs = [
       fd
       fzf
+      getopt
       ripgrep
     ];
     nativeCheckInputs = [
@@ -174,18 +176,14 @@ in
 
       # TODO: remove with new nvim-web-devicons release
       # Disabled devicons test because we have old version as dep and fzf-lua checks for a new icon
-      substituteInPlace tests/file/ui_spec.lua \
+      substituteInPlace tests/files_spec.lua \
         --replace-fail \
-          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
-          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
+          "T[\"files\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
+          "T[\"files\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
 
       # TODO: Figure out why 2 files extra
-      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "112" "114"
-
-      # TODO: Figure out why 2 files extra
-      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
-        --replace-fail "111" "113"
+      substituteInPlace tests/screenshots/tests-files_spec.lua---files---executable---1-+-args-{-\'fd\'-} \
+        --replace-fail "96" "98"
 
       make test
 
@@ -1060,7 +1058,7 @@ in
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       src = oa.src;
-      hash = "sha256-sO2q4cmkJc6T4iyJUWpBfr2ISycS1cXAIO0ibMfzyIE=";
+      hash = "sha256-egmb4BTbORpTpVO50IcqbZU1Y0hioXLMkxxUAo05TIA=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo
