@@ -3,8 +3,10 @@
   lib,
   fetchFromGitHub,
   gfortran,
+  buildType ? "meson",
   meson,
   ninja,
+  cmake,
   pkg-config,
   blas,
   lapack,
@@ -17,6 +19,12 @@
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "tblite";
@@ -29,11 +37,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-KV2fxB+SF4LilN/87YCvxUt4wsY4YyIV4tqnn+3/0oI=";
   };
 
+  patches = [
+    ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
+
+    # Fix wrong paths in pkg-config file
+    ./pkgconfig.patch
+  ];
+
   nativeBuildInputs = [
     gfortran
+    pkg-config
+  ]
+  ++ lib.optionals (buildType == "meson") [
     meson
     ninja
-    pkg-config
+  ]
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
   ];
 
   buildInputs = [
@@ -52,7 +72,16 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  doCheck = true;
+  checkInputs = [
+    python3
+  ];
+
+  checkFlags = [
+    "-j1" # Tests hang when multiple are run in parallel
+  ];
+
+  doCheck = buildType == "meson";
+
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';
