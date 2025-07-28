@@ -23,44 +23,47 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nushell ];
 
-  buildInputs = [ libnotify systemd ];
+  buildInputs = [
+    libnotify
+    systemd
+  ];
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    # Install the nushell module
-    mkdir -p $out/share/journald-notify-nu
-    cp mod.nu $out/share/journald-notify-nu/
+        # Install the nushell module
+        mkdir -p $out/share/journald-notify-nu
+        cp mod.nu $out/share/journald-notify-nu/
 
-    # Install NixOS module
-    mkdir -p $out/share/nixos/modules
-    cp nixos-module.nix $out/share/nixos/modules/journald-notify-nu.nix
+        # Install NixOS module
+        mkdir -p $out/share/nixos/modules
+        cp nixos-module.nix $out/share/nixos/modules/journald-notify-nu.nix
 
-    # Create wrapper scripts for command-line usage
-    mkdir -p $out/bin
+        # Create wrapper scripts for command-line usage
+        mkdir -p $out/bin
 
-    # Main monitoring script
-    cat > $out/bin/journald-notify-nu << EOF
-#!/usr/bin/env bash
-exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod main"
-EOF
-    chmod +x $out/bin/journald-notify-nu
+        # Main monitoring script
+        cat > $out/bin/journald-notify-nu << EOF
+    #!/usr/bin/env bash
+    exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod main"
+    EOF
+        chmod +x $out/bin/journald-notify-nu
 
-    # Custom monitoring script
-    cat > $out/bin/journald-notify-monitor << EOF
-#!/usr/bin/env bash
-exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod start-monitoring \$1"
-EOF
-    chmod +x $out/bin/journald-notify-monitor
+        # Custom monitoring script
+        cat > $out/bin/journald-notify-monitor << EOF
+    #!/usr/bin/env bash
+    exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod start-monitoring \$1"
+    EOF
+        chmod +x $out/bin/journald-notify-monitor
 
-    # Test notification script
-    cat > $out/bin/journald-notify-test << EOF
-#!/usr/bin/env bash
-exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod test-notification"
-EOF
-    chmod +x $out/bin/journald-notify-test
+        # Test notification script
+        cat > $out/bin/journald-notify-test << EOF
+    #!/usr/bin/env bash
+    exec ${nushell}/bin/nu -c "use $out/share/journald-notify-nu/mod.nu; mod test-notification"
+    EOF
+        chmod +x $out/bin/journald-notify-test
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   passthru = {

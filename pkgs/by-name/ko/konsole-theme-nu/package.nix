@@ -24,37 +24,37 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    # Install the nushell module
-    mkdir -p $out/share/konsole-theme-nu
-    cp mod.nu $out/share/konsole-theme-nu/
+        # Install the nushell module
+        mkdir -p $out/share/konsole-theme-nu
+        cp mod.nu $out/share/konsole-theme-nu/
 
-    # Create wrapper scripts for command-line usage
-    mkdir -p $out/bin
+        # Create wrapper scripts for command-line usage
+        mkdir -p $out/bin
 
-    # Main script
-    cat > $out/bin/konsole-theme-nu << EOF
-#!/usr/bin/env bash
-exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod set-konsole-profile '\$1'"
-EOF
-    chmod +x $out/bin/konsole-theme-nu
+        # Main script
+        cat > $out/bin/konsole-theme-nu << EOF
+    #!/usr/bin/env bash
+    exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod set-konsole-profile '\$1'"
+    EOF
+        chmod +x $out/bin/konsole-theme-nu
 
-    # List profiles script
-    cat > $out/bin/list-konsole-profiles << EOF
-#!/usr/bin/env bash
-exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod list-konsole-profiles"
-EOF
-    chmod +x $out/bin/list-konsole-profiles
+        # List profiles script
+        cat > $out/bin/list-konsole-profiles << EOF
+    #!/usr/bin/env bash
+    exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod list-konsole-profiles"
+    EOF
+        chmod +x $out/bin/list-konsole-profiles
 
-    # Get current profile script
-    cat > $out/bin/get-konsole-profile << EOF
-#!/usr/bin/env bash
-exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod get-konsole-profile"
-EOF
-    chmod +x $out/bin/get-konsole-profile
+        # Get current profile script
+        cat > $out/bin/get-konsole-profile << EOF
+    #!/usr/bin/env bash
+    exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod get-konsole-profile"
+    EOF
+        chmod +x $out/bin/get-konsole-profile
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   meta = {
