@@ -1,0 +1,13 @@
+diff --git a/config/template.cmake b/config/template.cmake
+index c4f831d..3b4262a 100644
+--- a/config/template.cmake
++++ b/config/template.cmake
+@@ -13,7 +13,7 @@ if(NOT TARGET "@PROJECT_NAME@::@PROJECT_NAME@")
+   endif()
+ 
+   if(NOT TARGET "LAPACK::LAPACK")
+-    find_dependency("custom-lapack")
++    find_dependency("LAPACK")
+   endif()
+ 
+   if(NOT TARGET "mctc-lib::mctc-lib")
