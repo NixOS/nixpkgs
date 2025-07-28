@@ -9,8 +9,8 @@
   stdenv,
   installShellFiles,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  git,
-  makeWrapper,
+  gitMinimal,
+  makeBinWrapper,
   python3,
   xdg-utils,
 }:
@@ -33,14 +33,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-    makeWrapper
+    makeBinWrapper
   ];
   buildInputs = [
     openssl
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
   checkFlags = [
     "--skip=keeps_previous_response_id_between_tasks" # Requires network access
