@@ -3,13 +3,22 @@
   lib,
   fetchFromGitHub,
   gfortran,
+  buildType ? "meson",
   meson,
   ninja,
+  cmake,
   pkg-config,
   python3,
   toml-f,
   jonquil,
 }:
+
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "mctc-lib";
@@ -26,18 +35,23 @@ stdenv.mkDerivation rec {
     # Allow dynamically linked jonquil as dependency. That then additionally
     # requires linking in toml-f
     ./meson.patch
+
+    # Fix wrong generation of package config include paths
+    ./cmake.patch
   ];
 
   nativeBuildInputs = [
     gfortran
     pkg-config
     python3
+  ]
+  ++ lib.optionals (buildType == "meson") [
     meson
     ninja
-  ];
+  ]
+  ++ lib.optional (buildType == "cmake") cmake;
 
   buildInputs = [
-    toml-f
     jonquil
   ];
 
