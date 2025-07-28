@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
