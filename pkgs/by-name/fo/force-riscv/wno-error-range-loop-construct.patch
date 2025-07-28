@@ -1,0 +1,13 @@
+diff --git a/utils/make/Makefile.common b/utils/make/Makefile.common
+index d0c96d3..422f6eb 100644
+--- a/utils/make/Makefile.common
++++ b/utils/make/Makefile.common
+@@ -60,7 +60,7 @@ else
+     PYTHON_LIB_TYPE=
+ endif
+
+-CFLAGS = -Wall -std=c++11 -gdwarf-3 -m64 -Werror $(OPTIMIZATION) $(PICKY_FLAGS) $(VISIBILITY) -D $(ARCH_ENUM_HEADER)
++CFLAGS = -Wall -std=c++11 -gdwarf-3 -m64 -Werror $(OPTIMIZATION) $(PICKY_FLAGS) $(VISIBILITY) -D $(ARCH_ENUM_HEADER) -Wno-error=range-loop-construct
+ LFLAGS = -lpthread -static-libstdc++ -static-libgcc -L$(PYTHON_LIB) -lpython$(PYTHON_VER)$(PYTHON_LIB_TYPE) -lutil -ldl -rdynamic
+
+ ALL_OBJS := $(ALL_SRCS:%.cc=$(OBJ_DIR)/%.o)
