@@ -1,20 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
   qt5,
+  python3,
   legendary-gl,
-  orjson,
-  pypresence,
-  pyqt5,
-  python,
-  qtawesome,
-  requests,
-  setuptools,
-  typing-extensions,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "rare";
   version = "1.10.11";
   pyproject = true;
@@ -26,26 +18,33 @@ buildPythonApplication rec {
     hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    qt5.wrapQtAppsHook
-  ];
+  build-system = builtins.attrValues {
+    inherit (python3.pkgs)
+      poetry-core
+      setuptools-scm
+      wheel
+      ;
+  };
 
-  propagatedBuildInputs = [
-    legendary-gl
-    orjson
-    pypresence
-    pyqt5
-    qtawesome
-    requests
-    typing-extensions
-  ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+  dependencies = builtins.attrValues {
+    inherit (python3.pkgs)
+      orjson
+      pypresence
+      pyqt5
+      qtawesome
+      requests
+      typing-extensions
+      ;
+    inherit legendary-gl;
+  };
 
   dontWrapQtApps = true;
 
   postInstall = ''
     install -Dm644 misc/rare.desktop -t $out/share/applications/
-    install -Dm644 $out/${python.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
+    install -Dm644 $out/${python3.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
   '';
 
   preFixup = ''
