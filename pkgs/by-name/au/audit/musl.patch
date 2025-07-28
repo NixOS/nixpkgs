@@ -1,0 +1,76 @@
+From 87c782153deb10bd8c3345723a8bcee343826e78 Mon Sep 17 00:00:00 2001
+From: Grimmauld <Grimmauld@grimmauld.de>
+Date: Thu, 10 Jul 2025 18:58:31 +0200
+Subject: [PATCH 1/2] lib/audit_logging.h: fix includes for musl
+
+`sys/types.h` is indirectly included with `glibc`,
+but needs to be specified explicitly on musl.
+---
+ lib/audit_logging.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/audit_logging.h b/lib/audit_logging.h
+index 9082a2720..c58861b1e 100644
+--- a/lib/audit_logging.h
++++ b/lib/audit_logging.h
+@@ -25,6 +25,7 @@
+ 
+ // Next include is to pick up the function attribute macros
+ #include <features.h>
++#include <sys/types.h>
+ #include <audit-records.h>
+ 
+ #ifdef __cplusplus
+
+From 98adfcc4bfa66ac25db0b609d7172d7d40c4f85f Mon Sep 17 00:00:00 2001
+From: Grimmauld <Grimmauld@grimmauld.de>
+Date: Fri, 11 Jul 2025 08:11:21 +0200
+Subject: [PATCH 2/2] Guard __attr_dealloc_free seperately from __attr_dealloc
+
+Otherwise, header include order matters when building against a libc that
+does not itself define __attr_dealloc_free, such as musl.
+---
+ auparse/auparse.h   | 2 ++
+ lib/audit_logging.h | 2 ++
+ lib/libaudit.h      | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/auparse/auparse.h b/auparse/auparse.h
+index 48375e2c7..ba5139625 100644
+--- a/auparse/auparse.h
++++ b/auparse/auparse.h
+@@ -31,6 +31,8 @@
+ #endif
+ #ifndef __attr_dealloc
+ # define __attr_dealloc(dealloc, argno)
++#endif
++#ifndef __attr_dealloc_free
+ # define __attr_dealloc_free
+ #endif
+ #ifndef __attribute_malloc__
+diff --git a/lib/audit_logging.h b/lib/audit_logging.h
+index c58861b1e..fab7e75d1 100644
+--- a/lib/audit_logging.h
++++ b/lib/audit_logging.h
+@@ -40,6 +40,8 @@ extern "C" {
+ #endif
+ #ifndef __attr_dealloc
+ # define __attr_dealloc(dealloc, argno)
++#endif
++#ifndef __attr_dealloc_free
+ # define __attr_dealloc_free
+ #endif
+ // Warn unused result
+diff --git a/lib/libaudit.h b/lib/libaudit.h
+index 2c51853b7..cce5dc493 100644
+--- a/lib/libaudit.h
++++ b/lib/libaudit.h
+@@ -43,6 +43,8 @@
+ // malloc and free assignments
+ #ifndef __attr_dealloc
+ # define __attr_dealloc(dealloc, argno)
++#endif
++#ifndef __attr_dealloc_free
+ # define __attr_dealloc_free
+ #endif
+ #ifndef __attribute_malloc__
