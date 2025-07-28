@@ -27417,6 +27417,12 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  wvhulle = {
+    email = "willemvanhulle@protonmail.com";
+    github = "wvhulle";
+    githubId = 7688680;
+    name = "Willem Vanhulle";
+  };
   wykurz = {
     email = "wykurz@gmail.com";
     github = "wykurz";
