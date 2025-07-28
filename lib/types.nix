@@ -69,6 +69,7 @@ let
   inherit (lib.fileset)
     isFileset
     unions
+    empty
     ;
 
   inAttrPosSuffix =
@@ -615,7 +616,7 @@ let
         descriptionClass = "noun";
         check = isFileset;
         merge = loc: defs: unions (map (x: x.value) defs);
-        emptyValue.value = fileset.empty;
+        emptyValue.value = empty;
       };
 
       # A package is a top-level store path (/nix/store/hash-name). This includes:
