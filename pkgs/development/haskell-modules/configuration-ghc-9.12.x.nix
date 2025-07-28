@@ -102,7 +102,6 @@ with haskellLib;
       sed -i 's/time >=1.5 \&\& <1.13/time >=1.5 \&\& <=1.14/g' cpphs.cabal
     '';
   }) super.cpphs;
-  vector = doJailbreak super.vector; # doctest >=0.15 && <0.24
   cabal-install-parsers = doJailbreak super.cabal-install-parsers; # base, Cabal-syntax, etc.
   ghc-exactprint_1_12_0_0 = addBuildDepends [
     # somehow buildDepends was missing

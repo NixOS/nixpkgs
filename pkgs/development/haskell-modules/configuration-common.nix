@@ -258,6 +258,9 @@ with haskellLib;
       "vector-tests-O0"
       "vector-tests-O2"
     ];
+    # Ironically, we still need to build the doctest suite.
+    # vector-0.13.2.0 has a doctest < 0.24 constraint
+    jailbreak = true;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
