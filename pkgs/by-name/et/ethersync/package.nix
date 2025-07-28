@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     downloadPage = "https://github.com/ethersync/ethersync";
     changelog = "https://github.com/ethersync/ethersync/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
+    teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
       prince213
       ethancedwards8
