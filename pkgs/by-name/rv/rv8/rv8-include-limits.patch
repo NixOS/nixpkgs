@@ -1,0 +1,24 @@
+diff --git a/src/gen/gen-cc.cc b/src/gen/gen-cc.cc
+index fd9f948..44c8bf7 100644
+--- a/src/gen/gen-cc.cc
++++ b/src/gen/gen-cc.cc
+@@ -12,6 +12,7 @@
+ #include <deque>
+ #include <map>
+ #include <set>
++#include <limits>
+
+ #include "util.h"
+ #include "cmdline.h"
+diff --git a/src/gen/gen-fpu-test.cc b/src/gen/gen-fpu-test.cc
+index f1b8f84..d0a2f32 100644
+--- a/src/gen/gen-fpu-test.cc
++++ b/src/gen/gen-fpu-test.cc
+@@ -12,6 +12,7 @@
+ #include <deque>
+ #include <map>
+ #include <set>
++#include <limits>
+
+ #include "util.h"
+ #include "cmdline.h"
