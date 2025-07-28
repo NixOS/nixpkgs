@@ -348,7 +348,9 @@ in
       The signald project is unmaintained and has long been incompatible with the
       official Signal servers.
     '')
-
+    (mkRemovedOptionModule [ "services" "private-gpt" ] ''
+      The private-gpt package and the corresponding module have been removed due to being broken and unmaintained.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
