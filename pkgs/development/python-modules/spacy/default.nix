@@ -113,6 +113,11 @@ buildPythonPackage rec {
     "test_download_compatibility"
     "test_validate_compatibility_table"
     "test_project_assets"
+    "test_find_available_port"
+
+    # Tests for presence of outdated (and thus missing) spacy models
+    # https://github.com/explosion/spaCy/issues/13856
+    "test_registry_entries"
   ];
 
   pythonImportsCheck = [ "spacy" ];
