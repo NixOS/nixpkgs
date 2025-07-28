@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  gettext,
   guile,
   pkg-config,
   texinfo,
@@ -33,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     guile
     curl
   ];
+
+  # error: possibly undefined macro: AC_LIB_LINKFLAGS_FROM_LIBS
+  preAutoreconf = ''
+    cp ${gettext}/share/gettext/m4/lib-{ld,link,prefix}.m4 m4
+  '';
 
   meta = {
     description = "Bindings to cURL for GNU Guile";
