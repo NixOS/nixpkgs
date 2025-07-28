@@ -14,9 +14,9 @@
 let
   # Note: use this to get the release metadata
   # https://gitlab.com/api/v4/projects/10174980/repository/tags/v{version}
-  version = "0.16.0";
-  date = "2023-03-30-03:28";
-  rev = "80fe5ca64b40fbf3e0e393a44f8880a79a6a5380";
+  version = "0.17.0";
+  date = "2024-12-28-12:49";
+  rev = "a1be5a7bece7af43ebd76910eb0020c1cf3c0798";
 in
 
 rustPlatform.buildRustPackage {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
     owner = "veloren";
     repo = "veloren";
     inherit rev;
-    hash = "sha256-h2hLO227aeK2oEFfdGMgmtMkA9cn9AgQ9w6myb+8W8c=";
+    hash = "sha256-AnmXn4GWzxu27FUyQIIVnANtu3sr0NIi7seN7buAtL8=";
   };
 
   cargoPatches = [
@@ -35,8 +35,7 @@ rustPlatform.buildRustPackage {
     ./fix-assets-path.patch
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3XHuAgue0Id1oxCJ8NLZ4wYjMfND+C1iIW+AnMKXd54=";
+  cargoHash = "sha256-Uj0gFcStWhIS+GbM/Hn/vD2PrA0ftzEnMnCwV0n0g7g=";
 
   postPatch = ''
     # Force vek to build in unstable mode
@@ -62,10 +61,11 @@ rustPlatform.buildRustPackage {
   env = {
     # Enable unstable features, see https://gitlab.com/veloren/veloren/-/issues/264
     RUSTC_BOOTSTRAP = true;
+    RUSTC_BREAK_ON_ICE = true;
 
     # Set version info, required by veloren-common
     NIX_GIT_TAG = "v${version}";
-    NIX_GIT_HASH = "${lib.substring 0 7 rev}/${date}";
+    NIX_GIT_HASH = "${lib.substring 0 8 rev}/${date}";
 
     # Save game data under user's home directory,
     # otherwise it defaults to $out/bin/../userdata
@@ -101,7 +101,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "An open world, open source voxel RPG";
+    description = "Open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
     license = licenses.gpl3;
     mainProgram = "veloren-voxygen";
