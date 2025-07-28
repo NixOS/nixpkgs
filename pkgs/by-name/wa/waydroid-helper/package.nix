@@ -16,8 +16,10 @@
   dbus,
   systemd,
   bash,
+  e2fsprogs,
   fakeroot,
   gobject-introspection,
+  unzip,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -82,7 +84,11 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ fakeroot ]}"
+    "--prefix PATH : ${lib.makeBinPath [
+      e2fsprogs
+      fakeroot
+      unzip
+    ]}"
   ];
 
   postInstallCheck = ''
