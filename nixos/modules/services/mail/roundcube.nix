@@ -7,7 +7,8 @@
 let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
-  localDB = cfg.database.host == "localhost";
+  localDB = lib.hasPrefix "/" cfg.database.host;
+
   user = cfg.database.username;
   phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 
@@ -53,19 +54,23 @@ in
         default = "roundcube";
         description = ''
           Username for the postgresql connection.
-          If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
+
+          If `configurePgsql` is true, a unix user and group of the same name will be created as well.
         '';
       };
+
       host = lib.mkOption {
         type = lib.types.str;
         default = "localhost";
         description = ''
-          Host of the postgresql server. If this is not set to
-          `localhost`, you have to create the
-          postgresql user and database yourself, with appropriate
-          permissions.
+          Host of the database server.
+
+          If the value starts with a `/`, it is interpreted as a UNIX domain socket.
+
+          See https://github.com/roundcube/roundcubemail/wiki/Configuration#database-connection
         '';
       };
+
       passwordFile = lib.mkOption {
         type = lib.types.path;
         example = lib.literalExpression ''
@@ -77,9 +82,11 @@ in
           Password file for the postgresql connection.
           Must be formatted according to PostgreSQL .pgpass standard (see <https://www.postgresql.org/docs/current/libpq-pgpass.html>)
           but only one line, no comments and readable by user `nginx`.
-          Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
+
+          Ignored if `configurePgsql` is true as peer authentication will be used.
         '';
       };
+
       dbname = lib.mkOption {
         type = lib.types.str;
         default = "roundcube";
@@ -127,6 +134,12 @@ in
       description = "Configure nginx as a reverse proxy for roundcube.";
     };
 
+    configurePgsql = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Configure the PostgreSQL service and use it to store Roundcube's data.";
+    };
+
     extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -135,10 +148,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.roundcube.database = lib.mkIf cfg.configurePgsql {
+      host = "/run/postgresql";
+    };
+
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
-      ${lib.optionalString (!localDB) ''
+      ${lib.optionalString (!cfg.configurePgsql) ''
         $password = file('${cfg.database.passwordFile}')[0];
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
         $password = rtrim(end($password));
@@ -147,16 +164,29 @@ in
       ''}
 
       $config = array();
-      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${
-        lib.optionalString (!localDB) ":' . $password . '"
-      }@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
+
+      $config['db_dsnw'] = '${let
+          host = if localDB then "unix(${cfg.database.host})" else cfg.database.host;
+          pass = lib.optionalString (!cfg.configurePgsql) ":' . $password . '";
+        in
+          "pgsql://${cfg.database.username}${pass}@${host}/${cfg.database.dbname}"
+      }';
+
       $config['log_driver'] = 'syslog';
+
       $config['max_message_size'] =  '${cfg.maxAttachmentSize}';
+
       $config['plugins'] = [${lib.concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
+
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
-      $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
+
+      ${lib.optionalString (cfg.configureNginx or config.services.nginx.enable) ''
+        $config['mime_types'] = '${config.services.nginx.package}/conf/mime.types';
+      ''}
+
       # Roundcube uses PHP-FPM which has `PrivateTmp = true;`
       $config['temp_dir'] = '/tmp';
+
       $config['enable_spellcheck'] = ${if cfg.dicts == [ ] then "false" else "true"};
       # by default, spellchecking uses a third-party cloud services
       $config['spellcheck_engine'] = 'pspell';
@@ -215,7 +245,7 @@ in
 
     assertions = [
       {
-        assertion = localDB -> cfg.database.username == cfg.database.dbname;
+        assertion = cfg.configurePgsql -> cfg.database.username == cfg.database.dbname;
         message = ''
           When setting up a DB and its owner user, the owner and the DB name must be
           equal!
@@ -223,7 +253,7 @@ in
       }
     ];
 
-    services.postgresql = lib.mkIf localDB {
+    services.postgresql = lib.mkIf cfg.configurePgsql {
       enable = true;
       ensureDatabases = [ cfg.database.dbname ];
       ensureUsers = [
@@ -234,12 +264,12 @@ in
       ];
     };
 
-    users.users.${user} = lib.mkIf localDB {
+    users.users.${user} = lib.mkIf cfg.configurePgsql {
       group = user;
       isSystemUser = true;
       createHome = false;
     };
-    users.groups.${user} = lib.mkIf localDB { };
+    users.groups.${user} = lib.mkIf cfg.configurePgsql { };
 
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
@@ -288,9 +318,22 @@ in
         ];
         script =
           let
-            psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${
-              lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "
-            } ${cfg.database.dbname}";
+            psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile} "}${
+              lib.escapeShellArgs (
+                [
+                  "psql"
+                  "-h"
+                  cfg.database.host # interprets a / prefix as UNIX sock path
+                ]
+                ++ lib.optionals (!localDB) [
+                  "-U"
+                  cfg.database.username
+                ]
+                ++ [
+                  cfg.database.dbname
+                ]
+              )
+            }";
           in
           ''
             version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
