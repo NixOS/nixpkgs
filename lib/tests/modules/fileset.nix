@@ -7,12 +7,12 @@ let
     types
     mapAttrs
     length
-  ;
+    ;
   inherit (lib.fileset)
     empty
     unions
     toList
-  ;
+    ;
 in
 
 {
@@ -28,7 +28,10 @@ in
   config = {
     fileset.ok1 = empty;
     fileset.ok2 = ./fileset;
-    fileset.ok3 = unions [ empty ./fileset ];
+    fileset.ok3 = unions [
+      empty
+      ./fileset
+    ];
     # fileset.ok4: see imports below
     fileset.ok5 = mkIf false ./fileset;
 
