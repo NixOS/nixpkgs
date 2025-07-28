@@ -25786,6 +25786,12 @@
     githubId = 90456;
     name = "Rebecca (Bex) Kelly";
   };
+  toyboot4e = {
+    email = "toyboot4e@gmail.com";
+    github = "toyboot4e";
+    githubId = 47905926;
+    name = "toyboot4e";
+  };
   tpw_rules = {
     name = "Thomas Watson";
     email = "twatson52@icloud.com";
