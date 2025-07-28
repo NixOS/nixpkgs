@@ -40,12 +40,13 @@ python3.pkgs.buildPythonApplication {
       requests
       typing-extensions
       ;
-    inherit legendary-gl;
   };
 
+  propagatedBuildInputs = [ legendary-gl ];
+
   postInstall = ''
-    install -Dm644 misc/rare.desktop -t $out/share/applications/
-    install -Dm644 $out/${python3.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
+    install -Dm 0644 misc/rare.desktop -t $out/share/applications/
+    install -Dm 0644 rare/resources/images/Rare.png $out/share/icons/hicolor/512x512/apps/rare.png
   '';
 
   dontWrapQtApps = true;
