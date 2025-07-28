@@ -17,18 +17,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.9.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbJ/jR/LrOIn4R4In21Rj5QNr3GrPwPp+6Wy/GPlAM4=";
+    hash = "sha256-yjd8nqrypgdS2UtAANv1TtuGtZPaWm7LhVrHPghf5hg=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-rQ4zJQSlIUC63a4UdkA6+Y63vvkZ7TyXV0EWXzXmjPM=";
+  cargoHash = "sha256-iKZ4FJ0IL1lnKuYTmFvx8umoB0z8M8xnvgb/GMfGKkI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
