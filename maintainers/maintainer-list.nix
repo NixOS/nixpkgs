@@ -9684,7 +9684,6 @@
     name = "guserav";
   };
   guyonvarch = {
-    email = "joris@guyonvarch.me";
     github = "guyonvarch";
     githubId = 6768842;
     name = "Joris Guyonvarch";
@@ -25786,6 +25785,12 @@
     github = "ToxicFrog";
     githubId = 90456;
     name = "Rebecca (Bex) Kelly";
+  };
+  toyboot4e = {
+    email = "toyboot4e@gmail.com";
+    github = "toyboot4e";
+    githubId = 47905926;
+    name = "toyboot4e";
   };
   tpw_rules = {
     name = "Thomas Watson";
