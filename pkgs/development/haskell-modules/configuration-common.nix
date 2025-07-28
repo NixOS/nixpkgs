@@ -1759,6 +1759,25 @@ with haskellLib;
   # Break infinite recursion via optparse-applicative (alternatively, dontCheck syb)
   prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
 
+  # Released version prohibits QuickCheck >= 2.15 at the moment
+  optparse-applicative =
+    appendPatches
+      [
+        (pkgs.fetchpatch2 {
+          name = "optparse-applicative-0.18.1-allow-QuickCheck-2.15.patch";
+          url = "https://github.com/pcapriotti/optparse-applicative/commit/2c2a39ed53e6339d8dc717efeb7d44f4c2b69cab.patch";
+          hash = "sha256-198TfBUR3ygPpvKPvtH69UmbMmoRagmzr9UURPr6Kj4=";
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          prePatch = ''
+            ${drv.prePatch or ""}
+            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
+          '';
+        }) super.optparse-applicative
+      );
+
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
   # So let's not go there and just disable the tests altogether.
