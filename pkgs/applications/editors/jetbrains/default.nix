@@ -82,15 +82,22 @@ let
     mkJetBrainsProductCore {
       inherit
         pname
+        extraLdPath
         jdk
-        extraBuildInputs
         ;
+      extraBuildInputs =
+        extraBuildInputs
+        ++ [ stdenv.cc.cc ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          fontconfig
+          libGL
+          libX11
+        ];
       extraWrapperArgs =
         extraWrapperArgs
         ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
           ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
         ];
-      extraLdPath = extraLdPath ++ lib.optionals stdenv.hostPlatform.isLinux [ libGL ];
       src =
         if fromSource then
           communitySources."${pname}"
@@ -175,7 +182,6 @@ rec {
   aqua = mkJetBrainsProduct {
     pname = "aqua";
     extraBuildInputs = [
-      stdenv.cc.cc
       lldb
     ];
   };
@@ -185,9 +191,7 @@ rec {
       pname = "clion";
       extraBuildInputs =
         lib.optionals stdenv.hostPlatform.isLinux [
-          fontconfig
           python3
-          stdenv.cc.cc
           openssl
           libxcrypt-legacy
           lttng-ust_2_12
@@ -217,7 +221,6 @@ rec {
 
   datagrip = mkJetBrainsProduct {
     pname = "datagrip";
-    extraBuildInputs = [ stdenv.cc.cc ];
   };
 
   dataspell =
@@ -232,7 +235,6 @@ rec {
       extraBuildInputs = [
         libgcc
         libr
-        stdenv.cc.cc
       ];
     };
 
@@ -250,7 +252,6 @@ rec {
       ];
       extraBuildInputs = [
         libgcc
-        stdenv.cc.cc
       ];
     }).overrideAttrs
       (attrs: {
@@ -265,12 +266,10 @@ rec {
 
   idea-community-bin = buildIdea {
     pname = "idea-community";
-    extraBuildInputs = [ stdenv.cc.cc ];
   };
 
   idea-community-src = buildIdea {
     pname = "idea-community";
-    extraBuildInputs = [ stdenv.cc.cc ];
     fromSource = true;
   };
 
@@ -283,7 +282,6 @@ rec {
   idea-ultimate = buildIdea {
     pname = "idea-ultimate";
     extraBuildInputs = [
-      stdenv.cc.cc
       lldb
       musl
     ];
@@ -294,7 +292,6 @@ rec {
   phpstorm = mkJetBrainsProduct {
     pname = "phpstorm";
     extraBuildInputs = [
-      stdenv.cc.cc
       musl
     ];
   };
@@ -318,8 +315,6 @@ rec {
     (mkJetBrainsProduct {
       pname = "rider";
       extraBuildInputs = [
-        fontconfig
-        stdenv.cc.cc
         openssl
         libxcrypt
         lttng-ust_2_12
@@ -353,7 +348,6 @@ rec {
   ruby-mine = mkJetBrainsProduct {
     pname = "ruby-mine";
     extraBuildInputs = [
-      stdenv.cc.cc
       musl
     ];
   };
@@ -366,8 +360,6 @@ rec {
           python3
           openssl
           libxcrypt-legacy
-          fontconfig
-          xorg.libX11
         ]
         ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
           expat
@@ -385,7 +377,6 @@ rec {
   webstorm = mkJetBrainsProduct {
     pname = "webstorm";
     extraBuildInputs = [
-      stdenv.cc.cc
       musl
     ];
   };
@@ -393,7 +384,6 @@ rec {
   writerside = mkJetBrainsProduct {
     pname = "writerside";
     extraBuildInputs = [
-      stdenv.cc.cc
       musl
     ];
   };
