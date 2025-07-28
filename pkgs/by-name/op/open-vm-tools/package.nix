@@ -137,6 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace lib/guestStoreClientHelper/guestStoreClient.c \
       --replace-fail "libguestStoreClient.so.0" "$out/lib/libguestStoreClient.so.0"
+
+    substituteInPlace udev/99-vmware-scsi-udev.rules \
+      --replace-fail "/bin/sh" "${bash}/bin/sh"
   '';
 
   configureFlags = [
@@ -164,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
           which
         ]
       }"
-    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace-fail "/bin/sh" "${bash}/bin/sh"
+
   '';
 
   meta = {
