@@ -3,12 +3,15 @@
   stdenv,
   bison,
   bluez,
+  dbus,
   fetchurl,
   flex,
   libnl,
   libxcrypt,
   pkg-config,
+  rdma-core,
   withBluez ? lib.meta.availableOn stdenv.hostPlatform bluez,
+  withRdma ? lib.meta.availableOn stdenv.hostPlatform rdma-core,
   # `withRemote` disabled by default because:
   # > configure: WARNING: Remote packet capture may expose libpcap-based
   # > applications to attacks by malicious remote capture servers!
@@ -34,10 +37,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
   };
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-    ++ lib.optionals withBluez [ bluez.dev ]
-    ++ lib.optionals withRemote [ libxcrypt ];
+  buildInputs = [
+    dbus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+  ++ lib.optionals withBluez [ bluez.dev ]
+  ++ lib.optionals withRdma [ rdma-core ]
+  ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [
     bison
@@ -48,8 +54,10 @@ stdenv.mkDerivation rec {
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
   configureFlags = [
+    "--enable-dbus"
     "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
     (lib.enableFeature withBluez "bluetooth")
+    (lib.enableFeature withRdma "rdma")
     (lib.enableFeature withRemote "remote")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
