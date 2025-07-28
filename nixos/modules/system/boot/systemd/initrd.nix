@@ -475,6 +475,10 @@ in
       };
 
       managerEnvironment.PATH = "/bin:/sbin";
+      settings.Manager.ManagerEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+      );
+      settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
       contents = {
         "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
@@ -483,13 +487,7 @@ in
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
           ${attrsToSection cfg.settings.Manager}
-          ManagerEnvironment=${
-            lib.concatStringsSep " " (
-              lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-            )
-          }
         '';
 
         "/lib".source = "${config.system.build.modulesClosure}/lib";
