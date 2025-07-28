@@ -55,6 +55,9 @@ rustPlatform.buildRustPackage rec {
       --bash completions/inlyne.bash \
       --fish completions/inlyne.fish \
       --zsh completions/_inlyne
+
+    mkdir -p $out/share/applications
+    cp assets/inlyne.desktop $out/share/applications
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
