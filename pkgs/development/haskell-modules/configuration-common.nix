@@ -502,6 +502,15 @@ with haskellLib;
     })
   ] super.gitit;
 
+  # Cut off infinite recursion via test suites:
+  #
+  #   tasty-quickcheck-0.11.1 (test) -> regex-tdfa-1.3.2.4 (test) -> doctest-parallel-0.4
+  #   -> ghc-exactprint-1.10.0.0 -> extra-1.8 -> quickcheck-instances-0.3.33 (test)
+  #   -> uuid-types-1.0.6 (test) -> tasty-quickcheck-0.11.1
+  #
+  # tasty-quickcheck is probably the least risky test suite to disable.
+  tasty-quickcheck = dontCheck super.tasty-quickcheck;
+
   # https://github.com/schuelermine/ret/issues/3
   ret = doJailbreak super.ret; # base < 4.19
 
