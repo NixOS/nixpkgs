@@ -15,6 +15,7 @@
   legendary-heroic,
   nile,
   comet-gog,
+  umu-launcher,
 }:
 
 let
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --suffix PATH ":" "${umu-launcher}/bin" \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
