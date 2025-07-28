@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  flex,
   bison,
   bluez,
+  fetchurl,
+  flex,
   libnl,
   libxcrypt,
   pkg-config,
@@ -16,13 +16,13 @@
 
   # for passthru.tests
   ettercap,
+  haskellPackages,
   nmap,
   ostinato,
+  python3,
   tcpreplay,
   vde2,
   wireshark,
-  python3,
-  haskellPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [
-    flex
     bison
+    flex
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -49,15 +49,11 @@ stdenv.mkDerivation rec {
   # work in pure build environments.
   configureFlags = [
     "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
+    (lib.enableFeature withBluez "bluetooth")
+    (lib.enableFeature withRemote "remote")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-universal"
-  ]
-  ++ lib.optionals withBluez [
-    "--enable-bluetooth"
-  ]
-  ++ lib.optionals withRemote [
-    "--enable-remote"
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
 
@@ -68,6 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru.tests = {
     inherit
