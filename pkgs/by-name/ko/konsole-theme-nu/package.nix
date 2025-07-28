@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   nushell,
-  makeWrapper,
+  writers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "konsole-theme-nu";
   version = "0.1.0";
 
@@ -17,40 +17,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-71FEdtavLny5o5YIF0d47U8ovdal8L3TK+XSfdORWj0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  propagatedBuildInputs = [ nushell ];
-
-  dontWrapQtApps = true;
+  buildInputs = [ nushell ];
 
   installPhase = ''
         runHook preInstall
 
         # Install the nushell module
-        mkdir -p $out/share/konsole-theme-nu
-        cp mod.nu $out/share/konsole-theme-nu/
+        install -Dm644 mod.nu $out/share/konsole-theme-nu/mod.nu
 
-        # Create wrapper scripts for command-line usage
+        # Create wrapper scripts
         mkdir -p $out/bin
-
-        # Main script
         cat > $out/bin/konsole-theme-nu << EOF
-    #!/usr/bin/env bash
-    exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod set-konsole-profile '\$1'"
+    #!/usr/bin/env -S nu --no-config-file
+    use $out/share/konsole-theme-nu/mod.nu; mod set-konsole-profile \$env.1?
     EOF
         chmod +x $out/bin/konsole-theme-nu
 
-        # List profiles script
         cat > $out/bin/list-konsole-profiles << EOF
-    #!/usr/bin/env bash
-    exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod list-konsole-profiles"
+    #!/usr/bin/env -S nu --no-config-file
+    use $out/share/konsole-theme-nu/mod.nu; mod list-konsole-profiles
     EOF
         chmod +x $out/bin/list-konsole-profiles
 
-        # Get current profile script
         cat > $out/bin/get-konsole-profile << EOF
-    #!/usr/bin/env bash
-    exec ${nushell}/bin/nu -c "use $out/share/konsole-theme-nu/mod.nu; mod get-konsole-profile"
+    #!/usr/bin/env -S nu --no-config-file
+    use $out/share/konsole-theme-nu/mod.nu; mod get-konsole-profile
     EOF
         chmod +x $out/bin/get-konsole-profile
 
@@ -58,11 +49,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A nushell package for switching Konsole color profiles";
+    description = "Nushell package for switching Konsole color profiles";
     homepage = "https://github.com/wvhulle/konsole-theme-nu";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.wvhulle ];
     platforms = lib.platforms.linux;
     mainProgram = "konsole-theme-nu";
   };
-}
+})
