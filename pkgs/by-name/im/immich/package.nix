@@ -218,7 +218,16 @@ buildNpmPackage' {
     imagemagick
     libraw
     libheif
-    vips' # Required for sharp
+    # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
+    cairo
+    giflib
+    libjpeg
+    libpng
+    librsvg
+    pango
+    pixman
+    # Required for sharp
+    vips'
   ];
 
   # Required because vips tries to write to the cache dir
