@@ -2047,6 +2047,14 @@ in
     ];
   };
 
+  neotest-ctest = super.neotest-ctest.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
+  };
+
   neotest-dart = super.neotest-dart.overrideAttrs {
     dependencies = with self; [
       neotest

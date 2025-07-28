@@ -9370,6 +9370,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neotest-ctest = buildVimPlugin {
+    pname = "neotest-ctest";
+    version = "2025-07-02";
+    src = fetchFromGitHub {
+      owner = "orjangj";
+      repo = "neotest-ctest";
+      rev = "124e8834a07aa522c6e9fa96f03e8ab0b7f2fa05";
+      sha256 = "0rml2m0v14v7ikllya6d55gwm75lfkf2ip11cm8x4n7x2pw17d04";
+    };
+    meta.homepage = "https://github.com/orjangj/neotest-ctest/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neotest-dart = buildVimPlugin {
     pname = "neotest-dart";
     version = "2025-06-03";
