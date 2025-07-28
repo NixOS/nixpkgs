@@ -5,9 +5,9 @@
   buildPythonPackage,
   pythonAtLeast,
   fetchFromGitHub,
-  fetchpatch,
   symlinkJoin,
   autoAddDriverRunpath,
+  fetchpatch2,
 
   # build system
   cmake,
@@ -45,6 +45,8 @@
   lm-format-enforcer,
   prometheus-fastapi-instrumentator,
   cupy,
+  cbor2,
+  pybase64,
   gguf,
   einops,
   importlib-metadata,
@@ -97,8 +99,8 @@ let
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.2";
-    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
+    tag = "v4.0.0";
+    hash = "sha256-HJY+Go1viPkSVZPEs/NyMtYJzas4mMLiIZF3kNX+WgA=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -138,8 +140,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "8798f27777fb57f447070301bf33a9f9c607f491";
-      hash = "sha256-UTUvATGN1NU/Bc8qo078q6bEgILLmlrjL7Yk2iAJhg4=";
+      rev = "1c2624e53c078854e0637ee566c72fe2107e75f4";
+      hash = "sha256-WWFhHEUSAlsXr2yR4rGlTQQnSafXKg8gO5PQA8HPYGE=";
     };
 
     dontConfigure = true;
@@ -161,7 +163,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
+  # https://github.com/pytorch/pytorch/blob/v2.7.1/torch/utils/cpp_extension.py#L2343-L2345
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -247,7 +249,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   # https://github.com/vllm-project/vllm/issues/12083
@@ -259,23 +261,20 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-sp7rDpewTPXTVRBJHJMj+8pJDS6wAu0/OTJZwbPPqKc=";
+    hash = "sha256-R9arpFz+wkDGmB3lW+H8d/37EoAQDyCWjLHJW1VTutk=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "remove-unused-opentelemetry-semantic-conventions-ai-dep.patch";
-      url = "https://github.com/vllm-project/vllm/commit/6a5d7e45f52c3a13de43b8b4fa9033e3b342ebd2.patch";
-      hash = "sha256-KYthqu+6XwsYYd80PtfrMMjuRV9+ionccr7EbjE4jJE=";
-    })
-    (fetchpatch {
-      name = "fall-back-to-gloo-when-nccl-unavailable.patch";
-      url = "https://github.com/vllm-project/vllm/commit/aa131a94410683b0a02e74fed2ce95e6c2b6b030.patch";
-      hash = "sha256-jNlQZQ8xiW85JWyBjsPZ6FoRQsiG1J8bwzmQjnaWFBg=";
+    # error: ‘BF16Vec16’ in namespace ‘vec_op’ does not name a type; did you mean ‘FP16Vec16’?
+    # Reported: https://github.com/vllm-project/vllm/issues/21714
+    # Fix from https://github.com/vllm-project/vllm/pull/21848
+    (fetchpatch2 {
+      name = "build-fix-for-arm-without-bf16";
+      url = "https://github.com/vllm-project/vllm/commit/b876860c6214d03279e79e0babb7eb4e3e286cbd.patch";
+      hash = "sha256-tdBAObFxliVUNTWeSggaLtS4K9f8zEVu22nSgRmMsDs=";
     })
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
-    ./0004-drop-lsmod.patch
     ./0005-drop-intel-reqs.patch
   ];
 
@@ -354,6 +353,7 @@ buildPythonPackage rec {
     aioprometheus
     blake3
     cachetools
+    cbor2
     depyf
     fastapi
     llguidance
@@ -366,6 +366,7 @@ buildPythonPackage rec {
     prometheus-fastapi-instrumentator
     py-cpuinfo
     pyarrow
+    pybase64
     pydantic
     python-json-logger
     python-multipart
