@@ -1,0 +1,11 @@
+{
+   Rust 1.88 standard library (NixOS)
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:_ZN3std6thread7current12init_current*.llvm.*
+   fun:_ZN3std4sync4mpmc7context7Context3new*
+   fun:_ZN3std3sys12thread_local6native4lazy20Storage$LT$T$C$D$GT$10initialize*
+   fun:_ZN3std4sync4mpmc4list16Channel$LT$T$GT$4recv*
+   fun:_ZN3std4sync4mpmc17Receiver$LT$T$GT$12recv_timeout*
+}
