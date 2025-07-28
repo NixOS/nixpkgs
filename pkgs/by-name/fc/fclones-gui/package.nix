@@ -9,14 +9,14 @@
   libadwaita,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fclones-gui";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = "fclones-gui";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ad7wyoCjSQ8i6c+4IorImqAY2Q6pwBtI2JkkbkGa46U=";
   };
 
@@ -35,18 +35,17 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     substituteInPlace snap/gui/fclones-gui.desktop \
-      --replace 'Icon=''${SNAP}/meta/gui/fclones-gui.png' Icon=fclones-gui
-
+      --replace-fail "Icon=''${SNAP}/meta/gui/fclones-gui.png" "Icon=fclones-gui"
     install -Dm444 snap/gui/fclones-gui.desktop -t $out/share/applications
     install -Dm444 snap/gui/fclones-gui.png -t $out/share/pixmaps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive duplicate file remover";
     mainProgram = "fclones-gui";
     homepage = "https://github.com/pkolaczk/fclones-gui";
-    changelog = "https://github.com/pkolaczk/fclones-gui/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/pkolaczk/fclones-gui/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = builtins.attrValues { inherit (lib.maintainers) figsoda; };
   };
-}
+})
