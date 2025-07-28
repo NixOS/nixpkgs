@@ -1793,33 +1793,14 @@ builtins.intersectAttrs super {
     ];
   }) super.hpack;
 
-  # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
-  inherit
-    (lib.mapAttrs (
-      _: doctest:
-      lib.pipe doctest [
-        (overrideCabal (drv: {
-          patches = drv.patches or [ ] ++ [
-            (pkgs.fetchpatch {
-              name = "doctest-0.23.0-ghc-9.12.patch";
-              url = "https://github.com/sol/doctest/commit/77373c5d84cd5e59ea86ec30b9ada874f50fad9e.patch";
-              sha256 = "07dx99lna17fni1ccbklijx1ckkf2p4kk9wvkwib0ihmra70zpn2";
-              includes = [ "test/**" ];
-            })
-          ];
-          testFlags = drv.testFlags or [ ] ++ [
-            # These tests require cabal-install (would cause infinite recursion)
-            "--skip=/Cabal.Options"
-            "--skip=/Cabal.Paths/paths"
-            "--skip=/Cabal.ReplOptions" # >= 0.23
-          ];
-        }))
-        doDistribute
-      ]
-    ) { inherit (super) doctest doctest_0_23_0; })
-    doctest
-    doctest_0_23_0
-    ;
+  doctest = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      # These tests require cabal-install (would cause infinite recursion)
+      "--skip=/Cabal.Options"
+      "--skip=/Cabal.Paths/paths"
+      "--skip=/Cabal.ReplOptions" # >= 0.23
+    ];
+  }) super.doctest;
 
   # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
   # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
