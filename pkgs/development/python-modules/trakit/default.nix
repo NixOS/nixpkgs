@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "trakit";
-  version = "0.2.2";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "ratoaq2";
     repo = "trakit";
     rev = version;
-    hash = "sha256-VV+pdsQ5WEALYZgu4AmvNce1rCTLSYPZtTMjh+aExsU=";
+    hash = "sha256-2BOFrFpPtJx8diOoXEftj5d9/byzkNZOyaxwGkzAjfg=";
   };
 
   build-system = [ poetry-core ];
