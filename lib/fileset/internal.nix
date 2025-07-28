@@ -173,8 +173,14 @@ rec {
   # Type: String -> (fileset | Path) -> { success :: Bool, value :: fileset } ] -> { success :: Bool, message :: String }
   _coerceResult =
     let
-      ok = value: { success = true; inherit value; };
-      error = message: { success = false; inherit message; };
+      ok = value: {
+        success = true;
+        inherit value;
+      };
+      error = message: {
+        success = false;
+        inherit message;
+      };
     in
     context: value:
     if value._type or "" == "fileset" then
@@ -218,7 +224,9 @@ rec {
   # Type: String -> (fileset | Path) -> fileset
   _coerce =
     context: value:
-    let result = _coerceResult context value; in
+    let
+      result = _coerceResult context value;
+    in
     if result.success then result.value else throw result.message;
 
   # Coerce many values to filesets, erroring when any value cannot be coerced,
