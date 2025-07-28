@@ -142,6 +142,8 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
+  __darwinAllowLocalNetworking = true; # needed for test_find_available_port
+
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
