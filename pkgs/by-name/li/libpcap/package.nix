@@ -8,7 +8,10 @@
   libnl,
   libxcrypt,
   pkg-config,
-  withBluez ? false,
+  withBluez ? lib.meta.availableOn stdenv.hostPlatform bluez,
+  # `withRemote` disabled by default because:
+  # > configure: WARNING: Remote packet capture may expose libpcap-based
+  # > applications to attacks by malicious remote capture servers!
   withRemote ? false,
 
   # for passthru.tests
@@ -32,14 +35,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libnl ] ++ lib.optionals withRemote [ libxcrypt ];
+    lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+    ++ lib.optionals withBluez [ bluez.dev ]
+    ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [
     flex
     bison
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-  ++ lib.optionals withBluez [ bluez.dev ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
@@ -48,6 +52,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-universal"
+  ]
+  ++ lib.optionals withBluez [
+    "--enable-bluetooth"
   ]
   ++ lib.optionals withRemote [
     "--enable-remote"

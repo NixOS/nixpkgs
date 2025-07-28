@@ -207,7 +207,10 @@ let
       darwin = pkgs.darwin.shell_cmds;
     };
     sysctl = {
-      linux = pkgs.procps;
+      linux = pkgs.procps.override {
+        # bypass sysctl -> systemd -> sysctl dependency loop
+        withSystemd = false;
+      };
       darwin = pkgs.darwin.system_cmds;
       freebsd = pkgs.freebsd.sysctl;
       openbsd = pkgs.openbsd.sysctl;
