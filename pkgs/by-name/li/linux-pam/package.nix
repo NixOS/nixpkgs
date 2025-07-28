@@ -13,6 +13,12 @@
   meson,
   pkg-config,
   systemdLibs,
+  docbook5,
+  libxslt,
+  libxml2,
+  w3m-batch,
+  findXMLCatalogs,
+  docbook_xsl_ns,
   nix-update-script,
 }:
 
@@ -35,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-    # "doc"
-    # "man"
+    "doc"
+    "man"
     # "modules"
   ];
 
@@ -47,6 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
+
+    libxslt
+    libxml2
+    w3m-batch
+    findXMLCatalogs
+    docbook_xsl_ns
+    docbook5
   ];
 
   buildInputs = [
@@ -60,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  mesonAutoFeatures = "auto";
   mesonFlags = [
     (lib.mesonEnable "logind" stdenv.buildPlatform.isLinux)
     (lib.mesonEnable "audit" stdenv.buildPlatform.isLinux)
@@ -71,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "econf" false)
     (lib.mesonEnable "selinux" false)
     (lib.mesonEnable "nis" false)
-    (lib.mesonEnable "docs" false)
     (lib.mesonBool "xtests" false)
     (lib.mesonBool "examples" false)
   ];
