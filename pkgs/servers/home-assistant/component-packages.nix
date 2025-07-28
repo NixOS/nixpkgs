@@ -2852,7 +2852,8 @@
       ++ hdate.optional-dependencies.astral;
     "joaoapps_join" =
       ps: with ps; [
-      ]; # missing inputs: python-join-api
+        python-join-api
+      ];
     "juicenet" =
       ps: with ps; [
       ];

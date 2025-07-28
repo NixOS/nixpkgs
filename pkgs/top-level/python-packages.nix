@@ -14580,6 +14580,8 @@ self: super: with self; {
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
 
+  python-join-api = callPackage ../development/python-modules/python-join-api { };
+
   python-jose = callPackage ../development/python-modules/python-jose { };
 
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
