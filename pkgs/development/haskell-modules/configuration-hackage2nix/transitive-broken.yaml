@@ -721,7 +721,6 @@ dont-distribute-packages:
  - dhall-secret
  - dia-functions
  - diagrams-html5
- - diagrams-reflex
  - diagrams-wx
  - dialog
  - diff
@@ -1932,6 +1931,7 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
+ - knead
  - knit-haskell
  - koji-install
  - koji-tool
@@ -2007,7 +2007,6 @@ dont-distribute-packages:
  - legion-discovery
  - legion-discovery-client
  - legion-extra
- - leksah
  - leksah-server
  - lens-utils
  - lenz
@@ -2069,6 +2068,7 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
+ - llvm-dsl
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
@@ -2276,6 +2276,7 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
+ - mptcpanalyzer
  - msgpack-arbitrary
  - msgpack-binary
  - msgpack-idl
@@ -2523,6 +2524,7 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
+ - patch-image
  - pathfindingcore
  - patterns
  - paypal-rest-client
@@ -2607,6 +2609,16 @@ dont-distribute-packages:
  - Plot-ho-matic
  - PlslTools
  - plugins-auto
+ - pms-application-service
+ - pms-domain-service
+ - pms-infra-cmdrun
+ - pms-infra-procspawn
+ - pms-infra-socket
+ - pms-infra-watch
+ - pms-infrastructure
+ - pms-ui-notification
+ - pms-ui-request
+ - pms-ui-response
  - png-file
  - pngload
  - pointless-lenses
@@ -2708,6 +2720,7 @@ dont-distribute-packages:
  - psql
  - ptera
  - ptera-th
+ - pty-mcp-server
  - publicsuffixlist
  - puffytools
  - Pugs
@@ -2829,12 +2842,10 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-dom-colonnade
  - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
- - reflex-localize-dom
  - reflex-monad-auth
  - reflex-process
  - reform-blaze
@@ -3246,7 +3257,6 @@ dont-distribute-packages:
  - spelling-suggest
  - sphero
  - spice
- - spike
  - SpinCounter
  - splines
  - sprinkles
@@ -3480,7 +3490,6 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
- - trasa-reflex
  - trasa-server
  - trasa-th
  - traversal-template
