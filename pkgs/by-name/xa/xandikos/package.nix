@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   python3Packages,
+  withSystemd ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,17 +24,22 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = with python3Packages; [
-    aiohttp
-    aiohttp-openmetrics
-    dulwich
-    defusedxml
-    icalendar
-    jinja2
-    multidict
-    pytz
-    vobject
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      aiohttp
+      aiohttp-openmetrics
+      dulwich
+      defusedxml
+      icalendar
+      jinja2
+      multidict
+      pytz
+      vobject
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ];
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
