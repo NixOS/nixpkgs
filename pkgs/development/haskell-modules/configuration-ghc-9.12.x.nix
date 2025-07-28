@@ -78,7 +78,6 @@ with haskellLib;
   tagged = doDistribute self.tagged_0_8_9;
   time-compat = doDistribute self.time-compat_1_9_8;
   extensions = doDistribute self.extensions_0_1_0_3;
-  doctest = doDistribute self.doctest_0_24_2; # see :/doctest_0_24_2 =/ below
   ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
   ghc-lib = doDistribute self.ghc-lib_9_12_2_20250421;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
@@ -127,15 +126,6 @@ with haskellLib;
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
 
   relude = dontCheck super.relude;
-
-  doctest_0_24_2 = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      # These tests require cabal-install (would cause infinite recursion)
-      "--skip=/Cabal.Options"
-      "--skip=/Cabal.Paths/paths"
-      "--skip=/Cabal.ReplOptions" # >= 0.23
-    ];
-  }) super.doctest_0_24_2;
 
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
   generic-lens = dontCheck super.generic-lens;
