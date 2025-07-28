@@ -21,11 +21,16 @@ stdenv.mkDerivation rec {
   pname = "libhsts";
   version = "0.1.0";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitLab {
     owner = "rockdaboot";
     repo = "libhsts";
-    rev = "libhsts-${version}";
-    sha256 = "0gbchzf0f4xzb6zjc56dk74hqrmdgyirmgxvvsqp9vqn9wb5kkx4";
+    tag = "libhsts-${version}";
+    hash = "sha256-pM9ZFk8W73Sx3ru/mqN/rWYMyZnNFCa/Wb8TB9yHbD0=";
   };
 
   patches = [
@@ -35,6 +40,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     pushd tests
     cp ${hsts_list} transport_security_state_static.json
+    # strip comments from json
     sed 's/^ *\/\/.*$//g' transport_security_state_static.json >hsts.json
     popd
     patchShebangs src/hsts-make-dafsa
@@ -47,19 +53,14 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library to easily check a domain against the Chromium HSTS Preload list";
     mainProgram = "hsts";
     homepage = "https://gitlab.com/rockdaboot/libhsts";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }
