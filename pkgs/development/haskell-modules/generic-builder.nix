@@ -88,7 +88,7 @@ in
   enableSharedLibraries ?
     !stdenv.hostPlatform.isStatic
     && (ghc.enableShared or false)
-    && !stdenv.hostPlatform.useAndroidPrebuilt,
+    && !stdenv.hostPlatform.useAndroidPrebuilt, # TODO: figure out why /build leaks into RPATH
   enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin), # TODO: use -dead_strip for darwin
   # Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
   enableStaticLibraries ?

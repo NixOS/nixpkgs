@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
-  ghc,
 }:
 
 mkDerivation rec {
@@ -16,13 +15,10 @@ mkDerivation rec {
     hash = "sha256-KwwN2g2naEo4/rKTz2L/0Guh5LxymEYP53XQzJ6eMjM=";
   };
 
-  # The cubical library has several `Everything.agda` files, which are
-  # compiled through the make file they provide.
-  nativeBuildInputs = [ ghc ];
-  buildPhase = ''
-    runHook preBuild
-    make
-    runHook postBuild
+  postPatch = ''
+    # This imports the Everything files, which we don't generate.
+    # TODO: remove for the next release
+    rm -rf Cubical/README.agda Cubical/Talks/EPA2020.agda
   '';
 
   meta = with lib; {

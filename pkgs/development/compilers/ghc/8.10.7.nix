@@ -69,6 +69,10 @@ in
       || (stdenv.hostPlatform != stdenv.targetPlatform)
     ),
 
+  # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
+  numactl,
+
   # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
@@ -265,7 +269,7 @@ let
       basePackageSet = if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget;
     in
     {
-      inherit (basePackageSet) gmp ncurses;
+      inherit (basePackageSet) gmp ncurses numactl;
       # dynamic inherits are not possible in Nix
       libffi = basePackageSet.${libffi_name};
     };
@@ -363,6 +367,12 @@ stdenv.mkDerivation (
         sha256 = "1rmv3132xhxbka97v0rx7r6larx5f5nnvs4mgm9q3rmgpjyd1vf9";
         includes = [ "libraries/ghci/ghci.cabal.in" ];
       })
+
+      # Correctly record libnuma's library and include directories in the
+      # package db. This fixes linking whenever stdenv and propagation won't
+      # quite pass the correct -L flags to the linker, e.g. when using GHC
+      # outside of stdenv/nixpkgs or build->build compilation in pkgsStatic.
+      ./ghc-8.10-9.2-rts-package-db-libnuma-dirs.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Make Block.h compile with c++ compilers. Remove with the next release
@@ -511,6 +521,11 @@ stdenv.mkDerivation (
     ++ lib.optionals (disableLargeAddressSpace) [
       "--disable-large-address-space"
     ]
+    ++ lib.optionals enableNuma [
+      "--enable-numa"
+      "--with-libnuma-includes=${lib.getDev targetLibs.numactl}/include"
+      "--with-libnuma-libraries=${lib.getLib targetLibs.numactl}/lib"
+    ]
     ++ lib.optionals enableUnregisterised [
       "--enable-unregisterised"
     ];
@@ -562,8 +577,13 @@ stdenv.mkDerivation (
 
     buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
-    depsTargetTarget = map lib.getDev (libDeps targetPlatform);
-    depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
+    # stage1 GHC doesn't need to link against libnuma, so it's target specific
+    depsTargetTarget = map lib.getDev (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
+    depsTargetTargetPropagated = map (lib.getOutput "out") (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
 
     # required, because otherwise all symbols from HSffi.o are stripped, and
     # that in turn causes GHCi to abort
