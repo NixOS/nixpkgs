@@ -6,6 +6,7 @@
   libxkbcommon,
   wayland,
   libGL,
+  dav1d,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,6 +30,11 @@ rustPlatform.buildRustPackage rec {
     wayland
     libGL
     libxkbcommon
+    dav1d
+  ];
+
+  buildFeatures = [
+    "avif"
   ];
 
   meta = with lib; {
