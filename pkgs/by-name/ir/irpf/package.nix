@@ -78,7 +78,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     update-source-version irpf "$version"
   '';
 
-  meta = with lib; {
+  meta = {
+    inherit (jdk11.meta) platforms;
     description = "Brazillian government application for reporting income tax";
     longDescription = ''
       Brazillian government application for reporting income tax.
@@ -86,13 +87,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
     '';
     homepage = "https://www.gov.br/receitafederal/pt-br";
-    license = licenses.unfree;
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [
-      atila
-      bryanasdev000
-    ];
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    maintainers = builtins.attrValues {
+      inherit (lib.maintainers)
+        atila
+        bryanasdev000
+        ;
+    };
     mainProgram = "irpf";
   };
 })
