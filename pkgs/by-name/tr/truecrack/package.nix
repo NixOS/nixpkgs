@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     echo "Cracking test volumes"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -c test/tes -m 4 | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/whirlpool_aes.test.tc -w test/passwords.txt -k whirlpool | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/sha512_aes.test.tc -w test/passwords.txt -k sha512 | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_serpent.test.tc -w test/passwords.txt -e serpent | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_twofish.test.tc -w test/passwords.txt -e twofish | grep -aF "Found password"
+    $out/bin/truecrack -t test/ripemd160_aes.test.tc -w test/passwords.txt
+    $out/bin/truecrack -t test/ripemd160_aes.test.tc -c test/tes -m 4
+    $out/bin/truecrack -t test/ripemd160_aes.test.tc -w test/passwords.txt
+    $out/bin/truecrack -t test/whirlpool_aes.test.tc -w test/passwords.txt -k whirlpool
+    $out/bin/truecrack -t test/sha512_aes.test.tc -w test/passwords.txt -k sha512
+    $out/bin/truecrack -t test/ripemd160_aes.test.tc -w test/passwords.txt
+    $out/bin/truecrack -t test/ripemd160_serpent.test.tc -w test/passwords.txt -e serpent
+    $out/bin/truecrack -t test/ripemd160_twofish.test.tc -w test/passwords.txt -e twofish
     echo "Finished cracking test volumes"
 
     runHook postInstallCheck
