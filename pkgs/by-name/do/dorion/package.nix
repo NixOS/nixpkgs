@@ -122,8 +122,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cmakeConfigurePhase
     pnpmConfigHook
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

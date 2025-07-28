@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   configurePhase = ''
+    runHook preConfigure
+
     ${lib.getExe' buildPackages.stdenv.cc "cc"} setup/tool.c -o setup_t
     ./setup_t -t lx64 > setup.sh
 
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     substituteInPlace setup.sh --replace 'strip --strip-unneeded' '${stdenv.cc.targetPrefix}strip --strip-unneeded'
 
     sh < ./setup.sh
+
+    runHook postConfigure
   '';
 
   installPhase = ''

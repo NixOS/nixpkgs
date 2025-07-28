@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "haven";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "bitvora";
     repo = "haven";
     tag = "v${version}";
-    hash = "sha256-rSycrHW53TgqbsfgaRn3492EWtpu440GtbegozqnzMQ=";
+    hash = "sha256-ddOZydweF3wVH81Bm8LIuP2HHGrGooIDeAH/Ro5LKu4=";
   };
 
-  vendorHash = "sha256-5d6C2sNG8aCaC+z+hyLgOiEPWP/NmAcRRbRVC4KuCEw=";
+  vendorHash = "sha256-JJ5kcTgjMB9d5JdMg2FiOOoAFeDhcEAsxWynd1aGNfs=";
 
   postInstall = ''
     mkdir -p $out/share/haven

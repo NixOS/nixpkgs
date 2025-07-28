@@ -3625,6 +3625,8 @@ self: super: with self; {
 
   discogs-client = callPackage ../development/python-modules/discogs-client { };
 
+  discord-webhook = callPackage ../development/python-modules/discord-webhook { };
+
   discordpy = callPackage ../development/python-modules/discordpy { };
 
   discovery30303 = callPackage ../development/python-modules/discovery30303 { };
@@ -5895,7 +5897,7 @@ self: super: with self; {
 
   gmsh = toPythonModule (
     pkgs.gmsh.override {
-      inherit (self) python;
+      python3Packages = self;
       enablePython = true;
     }
   );
@@ -12246,6 +12248,8 @@ self: super: with self; {
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
   py-rust-stemmers = callPackage ../development/python-modules/py-rust-stemmers { };
+
+  py-schluter = callPackage ../development/python-modules/py-schluter { };
 
   py-scrypt = callPackage ../development/python-modules/py-scrypt { };
 

@@ -11,20 +11,19 @@
   wrapGAppsHook4,
   gnome-settings-daemon,
   gtk4,
-  libgee,
   pango,
   pantheon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = "pantheon-tweaks";
     rev = version;
-    hash = "sha256-+dkjmeY4WJfXwgNR8HlRaVfvS/2icbi8eSAkiB9x7uI=";
+    hash = "sha256-/fHhVErLIQMSRkri6vqc11yZr0YaLeQTUh986If8mVg=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
     gtk4
-    libgee
     pango
   ]
   ++ (with pantheon; [

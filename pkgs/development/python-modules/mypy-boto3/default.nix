@@ -230,8 +230,8 @@ rec {
       "sha256-c0qUMt2dvFgmJCTabQSkliysaBDBepkz5kOBgNIlQSk=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.39.8"
-      "sha256-N1QVZiMkTf9AS9I2nm+2foIozWGhuLtauNZHvDvA1nk=";
+    buildMypyBoto3Package "cloudfront" "1.39.10"
+      "sha256-2v3ZBFKuD2bfjTaZpW4gpaKKSJ4FhpTnOyFbeBInkOo=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.39.0"
@@ -446,16 +446,16 @@ rec {
       "sha256-uYeekAsfyETYQYWR3L8S+uzlp6EQpvYEWsqiX+60b/Y=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.39.8"
-      "sha256-jdFnyTA5Po3XaVWVCwEtY10JeyiIC453jw8cTZ6xjFs=";
+    buildMypyBoto3Package "ec2" "1.39.10"
+      "sha256-8fxtJZJnC0UDtEqRMdOzU92mht0oAg4zjxcS1kb6biw=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.39.0"
       "sha256-VbEhzVf9uNm1DmyEvAUBEkHawITLiArgya5kwotuYbI=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.39.0"
-      "sha256-fsGs0xUocXqkO2ANby3RuluJizT9HGgo6GhdeG5SMJg=";
+    buildMypyBoto3Package "ecr" "1.39.11"
+      "sha256-1tIxouuj5FmgUyz+W5vfbVYRMH5FkCYBR5oechO9tXo=";
 
   mypy-boto3-ecr-public =
     buildMypyBoto3Package "ecr-public" "1.39.0"
@@ -498,8 +498,8 @@ rec {
       "sha256-WK1TbY46qCD6V+lRv2hqEG8xtjF37xJO6K2t5gj2xLU=";
 
   mypy-boto3-emr =
-    buildMypyBoto3Package "emr" "1.39.0"
-      "sha256-Nxu4G4ww6yTBukU9TwhO7jVGL57cEFdsNadDUCDvQKI=";
+    buildMypyBoto3Package "emr" "1.39.11"
+      "sha256-C/Ui2pSoYCB2sCFR53UAEj17YPvW8Z8vtV7tmJTz0iA=";
 
   mypy-boto3-emr-containers =
     buildMypyBoto3Package "emr-containers" "1.39.0"
@@ -770,8 +770,8 @@ rec {
       "sha256-UMrR80IPpkYrz4iBsArrjWbt+n58KmNOIFUUlp05eNk=";
 
   mypy-boto3-lambda =
-    buildMypyBoto3Package "lambda" "1.39.0"
-      "sha256-ZDoMZQQn6ElClTDZtXDm1XPecnSYQZPxggM8y/ylXQw=";
+    buildMypyBoto3Package "lambda" "1.39.11"
+      "sha256-qYZ7pUztjP0el3r67gU9EmTI1k7yFf6NEyuaOkc2/gc=";
 
   mypy-boto3-lex-models =
     buildMypyBoto3Package "lex-models" "1.39.0"
@@ -946,8 +946,8 @@ rec {
       "sha256-q8NsWE/syMihH6TE1b1nBFgHhNavOBaFdwgQnDQXrXs=";
 
   mypy-boto3-neptunedata =
-    buildMypyBoto3Package "neptunedata" "1.39.0"
-      "sha256-Jrgjn7fXiMBZ87VKHcknDlexLfHmDYuN4TIyGQA4fAw=";
+    buildMypyBoto3Package "neptunedata" "1.39.11"
+      "sha256-KdPpWb+esR94Abnfs1K09qf2MWfTkj28yLRSg/1QCFI=";
 
   mypy-boto3-network-firewall =
     buildMypyBoto3Package "network-firewall" "1.39.0"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-vW033S6oYNQN+iCLiDEGbgaNOxjDM0FK0P/SrSHEprA=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.39.5"
-      "sha256-mEYdxdkrTwbl8ByvLIfqJnZw12+xstzevnFMqC2uWFY=";
+    buildMypyBoto3Package "sagemaker" "1.39.10"
+      "sha256-jqLHNFIZ4P03QO0NgXzU9V0RdLbR/i0er6VPk4QDbks=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.39.0"

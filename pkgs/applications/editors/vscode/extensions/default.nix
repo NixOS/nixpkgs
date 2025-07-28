@@ -2033,8 +2033,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.114.2";
-          hash = "sha256-TLsvewvmqwKEBPsuzrlMhlsjdi3jbA7E1xz9B8aU1LA=";
+          version = "0.114.3";
+          hash = "sha256-ZrutAYL0HphkSDh2BRA4wZUA/s1Uf6IvPWs4dfqfEDk=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2365,8 +2365,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.58";
-          hash = "sha256-oBm2j7fZBYALkstk1WMgC+o1sq2HY7tX+zLfo5PBMiM=";
+          version = "1.1.59";
+          hash = "sha256-ClzUxKdiYZqAlmXJ3W54kJddLRov5XKo0t8PPWA/Qq8=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
