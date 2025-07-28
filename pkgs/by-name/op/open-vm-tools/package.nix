@@ -12,6 +12,7 @@
   xercesc,
   icu,
   libdnet,
+  pciutils,
   procps,
   libtirpc,
   rpcsvc-proto,
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "etc/vmware-tools" "''${prefix}/etc/vmware-tools"
     substituteInPlace scripts/Makefile.am \
       --replace-fail "confdir = /etc/vmware-tools" "confdir = ''${prefix}/etc/vmware-tools" \
-      --replace-fail "/usr/bin" "''${prefix}/usr/bin"
+      --replace-fail "/usr/bin" "''${prefix}/bin"
     substituteInPlace services/vmtoolsd/Makefile.am \
       --replace-fail "etc/vmware-tools" "''${prefix}/etc/vmware-tools" \
       --replace-fail "\$(PAM_PREFIX)" "''${prefix}/\$(PAM_PREFIX)"
@@ -130,6 +131,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
     substituteInPlace vmhgfs-fuse/config.c \
       --replace-fail "/bin/fusermount3" "${fuse3}/bin/fusermount3"
+
+    # do not break the PATHs set by makeWrapper, sudo resets PATH anyway.
+    substituteInPlace scripts/common/vm-support \
+      --replace-fail "export PATH=/bin:/sbin:/usr/bin:/usr/sbin" "" \
+      --replace-fail ". /etc/profile" ":" \
+      --replace-fail "/sbin/lsmod" "lsmod"
 
     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
      --replace-fail "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
@@ -158,6 +165,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
+    wrapProgram "$out/bin/vm-support" \
+      --prefix PATH ':' "${
+        makeBinPath [
+          iproute2
+          pciutils # for lspci
+          systemd
+          which
+        ]
+      }"
+
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
       --prefix PATH ':' "${
         makeBinPath [
@@ -167,7 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
           which
         ]
       }"
-
   '';
 
   meta = {
