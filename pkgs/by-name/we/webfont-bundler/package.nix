@@ -21,14 +21,14 @@
   wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "webfont-kit-generator";
-  version = "1.2.0";
+  pname = "webfont-bundler";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "webfont-kit-generator";
-    rev = finalAttrs.version;
-    hash = "sha256-ZfyF1Didce88/HaLeMNTw0nGzj3EZnC7V9OzsN21L40=";
+    tag = finalAttrs.version;
+    hash = "sha256-5TFsUSY6pJc/OwOklw5YocrleL9nzxKMVS1Bt6LPI/Q=";
   };
 
   nativeBuildInputs = [
@@ -69,9 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Webfont Kit Generator is a simple utility that allows you to generate woff, woff2 and the necessary CSS boilerplate from non-web font formats (otf & ttf)";
+    description = "Create @font-face kits easily";
+    longDescription = "Webfont Bundler is a simple utility that allows you to generate woff, woff2 and the necessary CSS boilerplate from non-web font formats (otf and ttf).";
+    changelog = "https://github.com/rafaelmardojai/webfont-kit-generator/releases/tag/${finalAttrs.version}";
     mainProgram = "webfontkitgenerator";
-    homepage = "https://apps.gnome.org/app/com.rafaelmardojai.WebfontKitGenerator";
+    homepage = "https://apps.gnome.org/WebfontKitGenerator/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ benediktbroich ];
     teams = [ teams.gnome-circle ];
