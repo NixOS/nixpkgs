@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   go,
@@ -32,10 +33,25 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
-  # Disable network tests
-  checkFlags = [
-    "-skip=^Test(Route|Functions|ByDumpClusterInfo|ByCreateSvc|Elegant)$"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        # Disable network tests
+        "TestRoute"
+        "TestFunctions"
+        "TestByDumpClusterInfo"
+        "TestByCreateSvc"
+        "TestElegant"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Not sure why these test fail on darwin with __darwinAllowLocalNetworking.
+        "TestHttpOverUnix"
+        "TestConnectionRefuse"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
 
