@@ -5,12 +5,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "terraform_local";
-  version = "0.24.0";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w+Jd8OPA5XjLw5zp8AEwHlPT5Or4z+elaW9pFKMR9OA=";
+    hash = "sha256-LPrrKDoXUwg/P1m+Gi4I0iUoaRNjNpTWlbBLupkTrpE=";
   };
 
   build-system = with python3Packages; [ setuptools ];
