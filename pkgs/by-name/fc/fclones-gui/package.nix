@@ -35,9 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     substituteInPlace snap/gui/fclones-gui.desktop \
-      --replace-fail "Icon=''${SNAP}/meta/gui/fclones-gui.png" "Icon=fclones-gui"
-    install -Dm444 snap/gui/fclones-gui.desktop -t $out/share/applications
-    install -Dm444 snap/gui/fclones-gui.png -t $out/share/pixmaps
+      --replace-fail 'Icon=''${SNAP}/meta/gui/fclones-gui.png' "Icon=fclones-gui"
+    install -Dm 0644 snap/gui/fclones-gui.desktop -t $out/share/applications
+    install -Dm 0644 snap/gui/fclones-gui.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
   meta = {
