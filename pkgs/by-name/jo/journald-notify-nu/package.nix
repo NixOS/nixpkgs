@@ -5,12 +5,29 @@
   nushell,
   libnotify,
   systemd,
-  writers,
+  writeShellScript,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
   pname = "journald-notify-nu";
   version = "0.1.0";
+
+  wrapperScripts = {
+    journald-notify-nu = writeShellScript "journald-notify-nu" ''
+      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod main"
+    '';
+
+    journald-notify-monitor = writeShellScript "journald-notify-monitor" ''
+      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod start-monitoring ''${1:-}"
+    '';
+
+    journald-notify-test = writeShellScript "journald-notify-test" ''
+      exec ${nushell}/bin/nu -c "use ${placeholder "out"}/share/${pname}/mod.nu; mod test-notification"
+    '';
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wvhulle";
@@ -26,32 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-        runHook preInstall
+    runHook preInstall
 
-        # Install the nushell module
-        install -Dm644 mod.nu $out/share/journald-notify-nu/mod.nu
+    # Install the Nu module
+    install -Dm644 mod.nu $out/share/journald-notify-nu/mod.nu
 
-        # Create wrapper scripts
-        mkdir -p $out/bin
-        cat > $out/bin/journald-notify-nu << EOF
-    #!/usr/bin/env -S nu --no-config-file
-    use $out/share/journald-notify-nu/mod.nu; mod main
-    EOF
-        chmod +x $out/bin/journald-notify-nu
+    # Create simple shell script wrappers
+    install -Dm755 ${wrapperScripts.journald-notify-nu} $out/bin/journald-notify-nu
+    install -Dm755 ${wrapperScripts.journald-notify-monitor} $out/bin/journald-notify-monitor
+    install -Dm755 ${wrapperScripts.journald-notify-test} $out/bin/journald-notify-test
 
-        cat > $out/bin/journald-notify-monitor << EOF
-    #!/usr/bin/env -S nu --no-config-file
-    use $out/share/journald-notify-nu/mod.nu; mod start-monitoring \$env.1?
-    EOF
-        chmod +x $out/bin/journald-notify-monitor
-
-        cat > $out/bin/journald-notify-test << EOF
-    #!/usr/bin/env -S nu --no-config-file
-    use $out/share/journald-notify-nu/mod.nu; mod test-notification
-    EOF
-        chmod +x $out/bin/journald-notify-test
-
-        runHook postInstall
+    runHook postInstall
   '';
 
   meta = {
