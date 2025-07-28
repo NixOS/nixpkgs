@@ -1284,6 +1284,8 @@ in
     nvimSkipModules = [
       "fzf-lua.shell_helper"
       "fzf-lua.spawn"
+      "fzf-lua.rpc"
+      "fzf-lua.types"
     ];
   };
 
