@@ -899,6 +899,8 @@ self: super: with self; {
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
 
+  arro3-core = callPackage ../development/python-modules/arro3-core { };
+
   arrow = callPackage ../development/python-modules/arrow { };
 
   arsenic = callPackage ../development/python-modules/arsenic { };
