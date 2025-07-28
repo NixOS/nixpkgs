@@ -14385,6 +14385,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tardis-nvim = buildVimPlugin {
+    pname = "tardis.nvim";
+    version = "2025-07-28";
+    src = fetchFromGitHub {
+      owner = "fredehoey";
+      repo = "tardis.nvim";
+      rev = "951f0903dd52eab69a240a89e514c62d4ea0260f";
+      sha256 = "0bdb7bw4f0gidwibs7n6l5gz2a23pm868i9ksh7kkafhl7qf4vz3";
+    };
+    meta.homepage = "https://github.com/fredehoey/tardis.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   targets-vim = buildVimPlugin {
     pname = "targets.vim";
     version = "2024-07-10";
