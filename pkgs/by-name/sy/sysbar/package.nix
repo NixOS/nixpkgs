@@ -15,6 +15,8 @@
   playerctl,
   libnl,
   wayland-scanner,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = [ "-I${libnl.dev}/include/libnl3" ];
 
+  enableParallelBuilding = true;
+
   installFlags = [ "PREFIX=$(out)" ];
+
+  # Fix hardcoded /usr dir
+  postPatch = ''
+    for file in $(find . -name '*.cpp'); do
+      substituteInPlace $file \
+        --replace '"/usr/' "\"$out/"
+    done
+  '';
 
   # Wrap the sysbar binary to include its own lib directory in
   # LD_LIBRARY_PATH.  Please see:
@@ -56,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/sysbar \
       --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath finalAttrs.buildInputs}"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modular status bar for wayland";
