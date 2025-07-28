@@ -3,12 +3,12 @@
   stdenvNoCC,
   fetchzip,
   copyDesktopItems,
-  jdk11,
-  makeDesktopItem,
   makeWrapper,
   unzip,
-  xdg-utils,
+  jdk11,
+  makeDesktopItem,
   writeScript,
+  xdg-utils,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -26,20 +26,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       hash = "sha256-U2HweRi6acrmMT+9B1263mhGIn/84Z6JeqKP6XvTeXE=";
     };
 
-  passthru.updateScript = writeScript "update-irpf" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pup common-updater-scripts
-
-    set -eu -o pipefail
-    #parses the html with the install links for the containers that contain the instalation files of type 'file archive, gets the version number of each version, and sorts to get the latest one on the website
-    version="$(curl -s https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf | pup '.rfb_container .rfb_ositem:parent-of(.fa-file-archive) attr{href}' | grep -oP "IRPF\K(\d+)-[\d.]+\d" | sort -r |  head -1)"
-    update-source-version irpf "$version"
-  '';
-
   nativeBuildInputs = [
-    unzip
-    makeWrapper
     copyDesktopItems
+    makeWrapper
+    unzip
   ];
 
   desktopItems = [
@@ -76,6 +66,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     unzip -j lib/ppgd-icones-4.0.jar icones/rfb64.png -d $out/share/pixmaps
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeScript "update-irpf" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pup common-updater-scripts
+
+    set -eu -o pipefail
+    #parses the html with the install links for the containers that contain the instalation files of type 'file archive, gets the version number of each version, and sorts to get the latest one on the website
+    version="$(curl -s https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf | pup '.rfb_container .rfb_ositem:parent-of(.fa-file-archive) attr{href}' | grep -oP "IRPF\K(\d+)-[\d.]+\d" | sort -r |  head -1)"
+    update-source-version irpf "$version"
   '';
 
   meta = with lib; {
