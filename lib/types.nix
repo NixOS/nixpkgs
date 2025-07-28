@@ -612,8 +612,10 @@ let
       fileset = mkOptionType {
         name = "fileset";
         description = "fileset";
+        descriptionClass = "noun";
         check = isFileset;
         merge = loc: defs: unions (map (x: x.value) defs);
+        emptyValue.value = fileset.empty;
       };
 
       # A package is a top-level store path (/nix/store/hash-name). This includes:
