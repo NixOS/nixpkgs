@@ -9,6 +9,7 @@
   installShellFiles,
   pkg-config,
   python3,
+  writableTmpDirAsHomeHook,
 
   # buildInputs
   libgpg-error,
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     python3
     rustPlatform.bindgenHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -53,10 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     xorg.libxcb
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in the darwin sandbox with:
