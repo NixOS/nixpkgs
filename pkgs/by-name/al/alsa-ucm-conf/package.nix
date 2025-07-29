@@ -4,11 +4,13 @@
   lib,
   stdenvNoCC,
   coreutils,
-  kmod,
+  kmod ? null,
   alsa-lib,
-}:
+}@attrs:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "alsa-ucm-conf";
   version = "1.2.14-unstable-2025-06-24";
 
@@ -22,21 +24,53 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   doInstallCheck = true;
 
+  executablePkgs = {
+    # circular dependency
+    # alsa-utils = [ "nhlt-dmic-info" ];
+
+    coreutils = [
+      "mkdir"
+      "rm"
+    ];
+
+    kmod = [ "modprobe" ];
+  };
+
+  postPatch = ''
+    # substitute executable paths in exec directives with absolute store paths
+    find . -type f -name \*.conf -print0 | xargs -0 -r -- sed -E -i \
+    ${
+      lib.concatStringsSep " \\\n" (
+        lib.mapAttrsToList (
+          name: exes:
+          let
+            pkg = attrs.${name};
+          in
+          "  -e "
+          + lib.escapeShellArg (
+            # matches exec directives with opening quote and executable names,
+            # optionally prefixed with ‘-’ and ‘/bin/’ or ‘/sbin/’, capturing
+            # the directive with opening quote and optional ‘-’ (\1), the path
+            # prefix (\2) and the executable name (\3)
+            ''s:(\<exec\>\s+"-?)(/s?bin/)?\<(${lib.concatStringsSep "|" exes})\>:\1${
+              if pkg != null && lib.meta.availableOn stdenvNoCC.hostPlatform pkg then
+                lib.getBin pkg + "/bin/\\3"
+              else
+                # fall back to ‘false’ for unavailable packages
+                lib.getExe' coreutils "false"
+            }:''
+          )
+        ) finalAttrs.executablePkgs
+      )
+    } \
+      --
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    substituteInPlace ucm2/lib/card-init.conf \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
-      --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
-  ''
-  + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    substituteInPlace ucm2/common/ctl/led.conf \
-      --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
-  ''
-  + ''
-
-    mkdir -p $out/share/alsa
-    cp -r ucm ucm2 $out/share/alsa
+    mkdir -p "$out/share/alsa"
+    cp -r ucm ucm2 "$out/share/alsa"
 
     runHook postInstall
   '';
