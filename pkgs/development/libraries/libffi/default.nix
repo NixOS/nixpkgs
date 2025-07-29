@@ -2,10 +2,15 @@
   lib,
   stdenv,
   fetchurl,
-
-  # test suite depends on dejagnu which cannot be used during bootstrapping
-  # dejagnu also requires tcl which can't be built statically at the moment
-  doCheck ? !(stdenv.hostPlatform.isStatic),
+  doCheck ?
+    !(
+      # test suite depends on dejagnu which cannot be used during bootstrapping
+      # dejagnu also requires tcl which can't be built statically at the moment
+      stdenv.hostPlatform.isStatic
+      ||
+        # checks fail on freebsd since v3.5
+        stdenv.hostPlatform.isFreeBSD
+    ),
   dejagnu,
   nix-update-script,
   testers,
