@@ -30,5 +30,9 @@
     "6.15": {
         "version": "6.15.8",
         "hash": "sha256:19i87zpq3zhpg09sdirnzys2s2yrv9xn8mpibl1a6qmr2sy94znk"
+    },
+    "6.16": {
+        "version": "6.16",
+        "hash": "sha256:10ydzfzc3g0nhns6md08gpfshhjcyd58lylqr15alijjdgzf4jqs"
     }
 }
