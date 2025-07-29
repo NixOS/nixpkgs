@@ -1509,6 +1509,7 @@ in
   ucarp = runTest ./ucarp.nix;
   udisks2 = runTest ./udisks2.nix;
   ulogd = runTest ./ulogd/ulogd.nix;
+  umami = runTest ./web-apps/umami.nix;
   umurmur = runTest ./umurmur.nix;
   unbound = runTest ./unbound.nix;
   unifi = runTest ./unifi.nix;
