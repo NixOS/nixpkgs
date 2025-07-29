@@ -20,13 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isRiscV [
-      "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
+  ];
 
   # aws-c-common misuses cmake modules, so we need
   # to manually add a MODULE_PATH to its consumers
@@ -56,6 +55,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-common";
     license = licenses.asl20;
     platforms = platforms.unix;
+    # https://github.com/awslabs/aws-c-common/issues/1175
+    badPlatforms = platforms.bigEndian;
     maintainers = with maintainers; [
       orivej
       r-burns

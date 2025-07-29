@@ -6,6 +6,7 @@
 }:
 
 buildPythonPackage {
+  format = "setuptools";
   pname = "buildbot_pkg";
   inherit (buildbot) src version;
 

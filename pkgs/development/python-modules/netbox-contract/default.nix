@@ -1,19 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
+  python,
   fetchFromGitHub,
   setuptools,
   python-dateutil,
   drf-yasg,
   netbox,
+  netaddr,
 }:
 buildPythonPackage rec {
   pname = "netbox-contract";
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "mlebreuil";
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   # running tests requires initialized django project
   nativeCheckInputs = [
     netbox
+    netaddr
   ];
 
   preFixup = ''
@@ -43,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Contract plugin for netbox";
     homepage = "https://github.com/mlebreuil/netbox-contract";
-    changelog = "https://github.com/mlebreuil/netbox-contract/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlebreuil/netbox-contract/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];

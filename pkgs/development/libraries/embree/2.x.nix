@@ -5,9 +5,9 @@
   cmake,
   pkg-config,
   ispc,
-  tbb_2020_3,
+  tbb_2020,
   glfw,
-  openimageio_2,
+  openimageio,
   libjpeg,
   libpng,
   libpthreadstubs,
@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     ispc
-    # tbb_2021_0 is not backward compatible
-    tbb_2020_3
+    # tbb_2021 is not backward compatible
+    tbb_2020
     glfw
-    openimageio_2
+    openimageio
     libjpeg
     libpng
     libX11
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
         "v(2.*)"
       ];
     };
-    tbb = tbb_2020_3;
+    tbb = tbb_2020;
     tests = {
       inherit (python3Packages) embreex;
     };

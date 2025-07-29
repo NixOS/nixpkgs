@@ -19,9 +19,9 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.5\\.[0-9]+)$";
-    version = "10.5.7";
-    srcHash = "sha256-HPQmN6GXDTEmloIcU0k+sYx/Qeh1j6T2yCT/W1/aWz4=";
-    vendorHash = "sha256-9Jl+lxvSoxUReziTqkDRyeNrijGWcBDbqoywJRIeD2k=";
+    version = "10.5.9";
+    srcHash = "sha256-Jnm6M9d5vkYGX357QiOvCRDPGFpvRrsWqk8+SV0PtBs=";
+    vendorHash = "sha256-uryErnXPVd/gmiAk0F2DVaqz368H6j97nBn0eNW7DFk=";
     npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
@@ -192,15 +192,14 @@ buildMattermost rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--version-regex"
+        versionInfo.regex
+      ]
+      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+        "--override-filename"
+        versionInfo.autoUpdate
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
 

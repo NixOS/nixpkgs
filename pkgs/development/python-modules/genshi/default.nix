@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "genshi";
   version = "0.7.9";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Genshi";

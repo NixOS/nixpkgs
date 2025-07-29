@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.79.0";
+  version = "0.80.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-4bvVn9Pv37zngsiwy54g+z05uej5Bfwpt3mC9cxF2hk=";
+    hash = "sha256-OHwX2bwM6XYPGs2n7X5OQ3lW1lsD0RaaPNSFXOX+C/Q=";
   };
 
   postPatch = ''
@@ -54,7 +54,8 @@ buildPythonPackage rec {
     pyserial-asyncio
     typing-extensions
     voluptuous
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses
@@ -64,18 +65,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-      "test_quirks_v2"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      "test_periodic_scan_priority"
-    ];
+  disabledTests = [
+    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+    "test_quirks_v2"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    "test_periodic_scan_priority"
+  ];
 
   disabledTestPaths = [
     # Tests require network access
     "tests/ota/test_ota_providers.py"
+    # All tests fail to shutdown thread during teardown
+    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [

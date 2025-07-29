@@ -15,7 +15,7 @@ let
     src = fetchFromGitHub {
       owner = "awslabs";
       repo = "amazon-qldb-shell";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
@@ -24,7 +24,6 @@ let
       rustPlatform.bindgenHook
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-tD35Py81QLDVlBahYzgskOQK5lQW03xuCnUwVUi4oLU=";
 
     passthru.tests.version = testers.testVersion { inherit package; };

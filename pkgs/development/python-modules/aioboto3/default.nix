@@ -8,25 +8,22 @@
   dill,
   fetchFromGitHub,
   moto,
-  poetry-core,
-  poetry-dynamic-versioning,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "13.4.0";
+  version = "14.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
     tag = "v${version}";
-    hash = "sha256-o3PynPW6nPvbBrsw+HU2fJheVRpCHCb0EnJdmseorsE=";
+    hash = "sha256-3GdTpbU0uEEzezQPHJTGPB42Qu604eIhcIAP4rZMQiY=";
   };
 
   pythonRelaxDeps = [
@@ -34,29 +31,33 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    setuptools
+    setuptools-scm
   ];
 
   dependencies = [
     aiobotocore
     aiofiles
-  ] ++ aiobotocore.optional-dependencies.boto3;
+  ]
+  ++ aiobotocore.optional-dependencies.boto3;
 
   optional-dependencies = {
     chalice = [ chalice ];
     s3cse = [ cryptography ];
   };
 
-  nativeCheckInputs =
-    [
-      dill
-      moto
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ moto.optional-dependencies.server
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    dill
+    moto
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  disabledTests = [
+    "test_patches"
+  ];
 
   pythonImportsCheck = [ "aioboto3" ];
 

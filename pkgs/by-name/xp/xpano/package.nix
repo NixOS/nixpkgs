@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     "-DXPANO_INSTALL_DESKTOP_FILES=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Panorama stitching tool";
     mainProgram = "Xpano";
     homepage = "https://krupkat.github.io/xpano/";
     changelog = "https://github.com/krupkat/xpano/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ krupkat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ krupkat ];
+    platforms = lib.platforms.linux;
   };
 }

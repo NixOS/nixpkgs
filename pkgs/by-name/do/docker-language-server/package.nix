@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "docker-language-server";
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-language-server";
     tag = "v${version}";
-    hash = "sha256-d3lGCIssrQqZNYyQ0RlXfjp1/z5tNtNTy6LkCC77qpA=";
+    hash = "sha256-ht63NilujpbDhBjkzCNpY95AAuwqya37qchgqKLlTw8=";
   };
 
-  vendorHash = "sha256-6wngmwVtHSTPfsJQJ+swGM9H+yCbXDPLGCcTys1Zb4A=";
+  vendorHash = "sha256-w7CDl27178oe/DpfqSbNbyOsR3D34EpcCMZNQ7i3JE4=";
 
   nativeCheckInputs = [
     docker

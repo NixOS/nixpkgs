@@ -7,6 +7,7 @@
   groff,
   system-sendmail,
   udev,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,19 +38,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags =
-    [
-      "NIXOS=1"
-      "INSTALL=install"
-      "BINDIR=$(out)/sbin"
-      "SYSTEMD_DIR=$(out)/lib/systemd/system"
-      "MANDIR=$(out)/share/man"
-      "RUN_DIR=/dev/.mdadm"
-      "STRIP="
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ];
+  makeFlags = [
+    "NIXOS=1"
+    "INSTALL=install"
+    "BINDIR=$(out)/sbin"
+    "SYSTEMD_DIR=$(out)/lib/systemd/system"
+    "MANDIR=$(out)/share/man"
+    "RUN_DIR=/dev/.mdadm"
+    "STRIP="
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   installFlags = [ "install-systemd" ];
 
@@ -57,7 +57,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ udev ];
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [
+    groff
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \

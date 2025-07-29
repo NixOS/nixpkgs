@@ -40,7 +40,7 @@ lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkL
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2023-08-02";
+    version = "0-unstable-2023-08-02";
 
     src = fetchFromGitHub {
       owner = "catppuccin";

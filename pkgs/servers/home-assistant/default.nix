@@ -117,17 +117,6 @@ let
         };
       });
 
-      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = fetchFromGitHub {
-          owner = "EuleMitKeule";
-          repo = "eq3btsmart";
-          tag = version;
-          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
-        };
-        build-system = with self; [ poetry-core ];
-      });
-
       google-genai = super.google-genai.overridePythonAttrs (old: rec {
         version = "1.7.0";
         src = fetchFromGitHub {
@@ -149,18 +138,6 @@ let
         dependencies = with self; [
           requests
         ];
-      });
-
-      # Pinned due to home-assistant still needing 1.10.0 version
-      # Remove this when home-assistant updates the jellyfin-apiclient-python version
-      jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
-        version = "1.10.0";
-        src = fetchFromGitHub {
-          owner = "jellyfin";
-          repo = "jellyfin-apiclient-python";
-          tag = "v${version}";
-          hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
-        };
       });
 
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
@@ -326,15 +303,6 @@ let
         doCheck = false;
       });
 
-      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -386,7 +354,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.3";
+  hassVersion = "2025.7.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -407,13 +375,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-qqPO7dr+Sb1RKYoOV7MhT2E1FcW7lAKTTB0T+UzLwzk=";
+    hash = "sha256-FT77obtb081QOgw+nqbQvvW+3x/L2WUr3DLT8X1Wpwg=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-8WusUfZEyoBPltVrDpDQVkbIFEHn1GGdA4Pt0Zb1+Fo=";
+    hash = "sha256-jO+rNIzEvtQ1vhSD1Xbq/SKV5XvBOb4MmkkczoeD1Kc=";
   };
 
   build-system = with python.pkgs; [
@@ -432,6 +400,9 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -448,6 +419,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -545,19 +517,14 @@ python.pkgs.buildPythonApplication rec {
       "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
-    # AssertionError: assert 1 == 0
-    "--deselect tests/test_config.py::test_merge"
-    # checks whether pip is installed
-    "--deselect=tests/util/test_package.py::test_check_package_fragment"
-    # flaky
-    "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
-    "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
+  ];
+
+  enabledTestPaths = [
     # tests are located in tests/
     "tests"
   ];
@@ -571,6 +538,18 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
+    # AssertionError: assert 1 == 0
+    "tests/test_config.py::test_merge"
+    # checks whether pip is installed
+    "tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "tests/test_test_fixtures.py::test_evict_faked_translations"
+    "tests/helpers/test_backup.py::test_async_get_manager"
+    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
+    "tests/helpers/test_event.py::test_track_time_interval_name"
+    # (2025.7.2) Exception string mismatch (non-blocking vs non blocking)
+    "tests/test_core.py::test_services_call_return_response_requires_blocking"
   ];
 
   preCheck = ''

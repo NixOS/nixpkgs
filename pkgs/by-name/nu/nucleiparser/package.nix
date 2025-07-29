@@ -28,12 +28,12 @@ python3.pkgs.buildPythonApplication rec {
     "nucleiparser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Nuclei output parser for CLI";
     homepage = "https://github.com/sinkmanu/nucleiparser";
     changelog = "https://github.com/Sinkmanu/nucleiparser/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nparser";
   };
 }

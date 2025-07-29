@@ -46,32 +46,31 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =
+  buildInputs = [
+    boost
+    discord-rpc
+    freetype
+    hidapi
+    libpng
+    libsamplerate
+    minizip
+    SDL2
+    SDL2_net
+    speexdsp
+    vulkan-headers
+    vulkan-loader
+    xdg-user-dirs
+    zlib
+  ]
+  ++ (
+    with qt6Packages;
     [
-      boost
-      discord-rpc
-      freetype
-      hidapi
-      libpng
-      libsamplerate
-      minizip
-      SDL2
-      SDL2_net
-      speexdsp
-      vulkan-headers
-      vulkan-loader
-      xdg-user-dirs
-      zlib
+      qtbase
+      qtsvg
+      qtwebsockets
     ]
-    ++ (
-      with qt6Packages;
-      [
-        qtbase
-        qtsvg
-        qtwebsockets
-      ]
-      ++ lib.optional withWayland qtwayland
-    );
+    ++ lib.optional withWayland qtwayland
+  );
 
   cmakeFlags = [
     (lib.cmakeBool "PORTABLE_INSTALL" false)

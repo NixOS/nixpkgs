@@ -30,21 +30,22 @@ in
 # See: https://gerrit.lix.systems/c/lix/+/1874
 clangStdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "1.1.0";
+  version = "1.2.0";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    hash = "sha256-gxkko7LFyJNlxpTS+CWOd/p9x/778/kNIXfpDGiKM2A=";
+    hash = "sha256-aDcn4bLZGq8915/NPPQsN5Jv8FRWd8cAspkG3078psc=";
   };
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [
     openssl
     zlib
-  ] ++ lib.optional (clangStdenv.cc.isClang && clangStdenv.targetPlatform.isStatic) empty-libgcc_eh;
+  ]
+  ++ lib.optional (clangStdenv.cc.isClang && clangStdenv.targetPlatform.isStatic) empty-libgcc_eh;
 
   # FIXME: separate the binaries from the stuff that user systems actually use
   # This runs into a terrible UX issue in Lix and I just don't want to debug it

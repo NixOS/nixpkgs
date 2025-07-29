@@ -196,7 +196,7 @@ in
       description = "Matrix-IRC bridge";
       before = [ "matrix-synapse.service" ]; # So the registration can be used by Synapse
       after = lib.optionals (cfg.settings.database.engine == "postgres") [
-        "postgresql.service"
+        "postgresql.target"
       ];
       wantedBy = [ "multi-user.target" ];
 

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.5.4";
+  version = "0.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "scikit-hep-testdata";
     tag = "v${version}";
-    hash = "sha256-LDOBd+0Aw/x9qW30Tb0B9AlhckOkJhY+Mx4ERkvDbJc=";
+    hash = "sha256-NAb+2AwU6BwPkgYr0WQn47hdeS+cRLgYckcDT2/dHpU=";
   };
 
   build-system = [ setuptools-scm ];
@@ -30,7 +30,8 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     requests
-  ] ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
 
   SKHEP_DATA = 1; # install the actual root files
 

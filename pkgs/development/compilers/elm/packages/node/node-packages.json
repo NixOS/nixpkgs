@@ -1,6 +1,5 @@
 [
   "elm-analyse",
-  "elm-coverage",
   "elm-doc-preview",
   "@elm-tooling/elm-language-server",
   "elm-live",

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gojo";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = "gojo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DMFTB5CgJTWf+P9ntgBgzdmcF2qjS9t3iUQ1Rer+Ab4=";
+    hash = "sha256-jHSvNxTnecusIIdyNvZsPVw34QKIm9kEvBUESG37PDY=";
   };
 
-  vendorHash = "sha256-iVAPuc+83WZCs5WAAZIKEExDdwXQqswgso2XRVJB/bE=";
+  vendorHash = "sha256-XTrKbOXKxUjCC505ZVHbTaEvdxD4Zv0BFQhby3VwS4M=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

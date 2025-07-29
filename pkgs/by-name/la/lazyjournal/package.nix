@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "0.7.8";
+  version = "0.7.9";
 in
 buildGoModule {
   pname = "lazyjournal";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "Lifailon";
     repo = "lazyjournal";
     tag = version;
-    hash = "sha256-d+wiq6q5lxE17nCKZvl75xBsLMKz1AjxhLFH6GYX7Y0=";
+    hash = "sha256-ohMcTu4sK5M11FY2QkJcHnNxx6pmscdH3S2MbWorUVM=";
   };
 
   vendorHash = "sha256-faMGgTJuD/6CqR+OfGknE0dGdDOSwoODySNcb3kBLv8=";

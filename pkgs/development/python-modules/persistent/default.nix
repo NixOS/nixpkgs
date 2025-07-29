@@ -36,7 +36,8 @@ buildPythonPackage rec {
   dependencies = [
     zope-interface
     zope-deferredimport
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   pythonImportsCheck = [ "persistent" ];
 

@@ -184,20 +184,18 @@ let
       # Nix/nixpkgs doesn't really have any infra to tell it that this build is unusually memory hungry
       # So, bodge. Otherwise you end up having to build all of ROCm with a low core limit when
       # it's only this package that has trouble.
-      preConfigure =
-        old.preConfigure or ""
-        + ''
-          MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
-          MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
-          APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
-          MAX_CORES=$((1 + APPX_GB/3))
-          MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/3 ? NIX_BUILD_CORES/3 : MAX_CORES))
-          export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
-          echo "Picked new core limit NIX_BUILD_CORES=$NIX_BUILD_CORES based on available mem: $APPX_GB GB"
-          cmakeFlagsArray+=(
-            "-DCK_PARALLEL_COMPILE_JOBS=$NIX_BUILD_CORES"
-          )
-        '';
+      preConfigure = old.preConfigure or "" + ''
+        MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
+        MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
+        APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
+        MAX_CORES=$((1 + APPX_GB/3))
+        MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/3 ? NIX_BUILD_CORES/3 : MAX_CORES))
+        export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
+        echo "Picked new core limit NIX_BUILD_CORES=$NIX_BUILD_CORES based on available mem: $APPX_GB GB"
+        cmakeFlagsArray+=(
+          "-DCK_PARALLEL_COMPILE_JOBS=$NIX_BUILD_CORES"
+        )
+      '';
       cmakeFlags = old.cmakeFlags ++ extraCmakeFlags;
       # Early exit after build phase with success, skips fixups etc
       # Will get copied back into /build of the final CK

@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "brotli";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -19,12 +20,14 @@ buildPythonPackage rec {
     forceFetchGit = true;
   };
 
+  build-system = [ setuptools ];
+
   # only returns information how to really build
   dontConfigure = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "python/tests" ];
+  enabledTestPaths = [ "python/tests" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/brotli";

@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.8.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "xkbcommon";
     repo = "libxkbcommon";
     tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-MnegPisAtev69pNV6cR4a/oLIQhijG2e6ed6mpKr5js=";
+    hash = "sha256-rLh5BD9a0bI0nHtWX+n0LqmdIO5ykd98rNc5hAN3ndE=";
   };
 
   patches = [
@@ -51,18 +51,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bison
     doxygen
-    xorg.xvfb
-  ] ++ lib.optional withWaylandTools wayland-scanner;
-  buildInputs =
-    [
-      xkeyboard_config
-      libxcb
-      libxml2
-    ]
-    ++ lib.optionals withWaylandTools [
-      wayland
-      wayland-protocols
-    ];
+  ]
+  ++ lib.optional stdenv.isLinux xorg.xvfb
+  ++ lib.optional withWaylandTools wayland-scanner;
+
+  buildInputs = [
+    xkeyboard_config
+    libxcb
+    libxml2
+  ]
+  ++ lib.optionals withWaylandTools [
+    wayland
+    wayland-protocols
+  ];
   nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.isLinux; # TODO: disable just a part of the tests
   preCheck = ''
     patchShebangs ../test/
   '';
@@ -93,10 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
       and dead keys.
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
-    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      primeos
       ttuegel
     ];
     mainProgram = "xkbcli";

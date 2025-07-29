@@ -35,7 +35,6 @@ rustPlatform.buildRustPackage {
     ./fix-assets-path.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3XHuAgue0Id1oxCJ8NLZ4wYjMfND+C1iIW+AnMKXd54=";
 
   postPatch = ''
@@ -101,7 +100,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "An open world, open source voxel RPG";
+    description = "Open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
     license = licenses.gpl3;
     mainProgram = "veloren-voxygen";

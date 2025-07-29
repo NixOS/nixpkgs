@@ -17,6 +17,7 @@
   pango,
   webkitgtk_4_1,
   openssl,
+  sqlite,
   gstreamer,
   gst-libav,
   gst-plugins-base,
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     webkitgtk_4_1
     openssl
+    sqlite
     libfixposix
   ];
 

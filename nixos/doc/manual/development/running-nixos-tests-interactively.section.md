@@ -70,7 +70,9 @@ An SSH-based backdoor to log into machines can be enabled with
 ```nix
 {
   name = "…";
-  nodes.machines = { /* … */ };
+  nodes.machines = {
+    # …
+  };
   interactive.sshBackdoor.enable = true;
 }
 ```

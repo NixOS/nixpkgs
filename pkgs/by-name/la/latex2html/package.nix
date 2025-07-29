@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   configurePhase = ''
+    runHook preConfigure
+
     ./configure \
       --prefix="$out" \
       --without-mktexlsr \
       --with-texpath=$out/share/texmf/tex/latex/html
+
+    runHook postConfigure
   '';
 
   postInstall = ''

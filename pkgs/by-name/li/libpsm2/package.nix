@@ -4,6 +4,7 @@
   fetchFromGitHub,
   numactl,
   pkg-config,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ numactl ];
 
   makeFlags = [
@@ -25,6 +29,8 @@ stdenv.mkDerivation rec {
     # on fresh toolchains like gcc-11.
     "WERROR="
   ];
+
+  doInstallCheck = true;
 
   installFlags = [
     "DESTDIR=$(out)"

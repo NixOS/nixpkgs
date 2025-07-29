@@ -358,14 +358,13 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self =
-    {
-      inherit buildRPackage;
-    }
-    // mkPackageSet deriveBioc biocPackagesGenerated
-    // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
-    // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
-    // mkPackageSet deriveCran cranPackagesGenerated;
+  _self = {
+    inherit buildRPackage;
+  }
+  // mkPackageSet deriveBioc biocPackagesGenerated
+  // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
+  // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
+  // mkPackageSet deriveCran cranPackagesGenerated;
 
   # Takes in a generated JSON file's imported contents
   # and transforms it by swapping each element of the depends array with the dependency's derivation
@@ -967,6 +966,7 @@ let
       cargo
       rustc
     ];
+    gglinedensity = [ pkgs.cargo ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     Rsymphony = [ pkgs.pkg-config ];
@@ -1084,6 +1084,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
@@ -1567,6 +1568,7 @@ let
     "PCRA"
     "PSCBS"
     "iemisc"
+    "red"
     "repmis"
     "R_cache"
     "R_filesets"
@@ -1577,11 +1579,13 @@ let
     "SpatialDecon"
     "stepR"
     "styler"
+    "tabs"
     "teal_code"
     "TreeTools"
     "TreeSearch"
     "ACNE"
     "APAlyzer"
+    "BAT"
     "EstMix"
     "Patterns"
     "PECA"
@@ -1762,6 +1766,14 @@ let
       enableParallelBuilding = false;
     });
 
+    orbweaver = old.orbweaver.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
@@ -1939,6 +1951,10 @@ let
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
+      patchPhase = "patchShebangs configure";
+    });
+
+    tergo = old.tergo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
 
@@ -2487,7 +2503,8 @@ let
           icu
           which
           zstd.dev
-        ] ++ attrs.buildInputs;
+        ]
+        ++ attrs.buildInputs;
         postInstall = ''
           install -d $out/bin $out/share/man/man1
           ln -s ../library/littler/bin/r $out/bin/r
@@ -2523,7 +2540,7 @@ let
 
     Rhtslib = old.Rhtslib.overrideAttrs (attrs: {
       preConfigure = ''
-        substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
+        substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
     });
 
@@ -2534,7 +2551,7 @@ let
 
         # during runtime the package directory is not writable as it's in the
         # nix store, so store the jar in the user's cache directory instead
-        substituteInPlace R/connection.R --replace \
+        substituteInPlace R/connection.R --replace-fail \
           'dest_file <- file.path(dest_folder, "h2o.jar")' \
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
       '';
@@ -2572,18 +2589,17 @@ let
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
       # Pyspark's spark is full featured and better maintained than pkgs.spark
       preConfigure = ''
-        substituteInPlace R/zzz.R \
-          --replace ".onLoad <- function(...) {" \
-            ".onLoad <- function(...) {
-          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark\"))
-          Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
-      '';
-    });
+        if grep "onLoad" R/zzz.R; then
+          echo "onLoad is already present, patch needs to be updated!"
+          exit 1
+        fi
 
-    proj4 = old.proj4.overrideAttrs (attrs: {
-      preConfigure = ''
-        substituteInPlace configure \
-          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
+        cat >> R/zzz.R <<EOF
+        .onLoad <- function(...) {
+          Sys.setenv("SPARK_HOME" = Sys.getenv("SPARK_HOME", unset = "${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark"))
+          Sys.setenv("JAVA_HOME" = Sys.getenv("JAVA_HOME", unset = "${pkgs.jdk}"))
+        }
+        EOF
       '';
     });
 
@@ -2674,7 +2690,7 @@ let
     rmarkdown = old.rmarkdown.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace R/pandoc.R \
-          --replace '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
+          --replace-fail '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
       '';
     });
 
@@ -2700,7 +2716,7 @@ let
     tesseract = old.tesseract.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace configure \
-          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
+          --replace-fail 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
       '';
     });
 
@@ -2720,6 +2736,7 @@ let
       preConfigure = ''
         patchShebangs configure
         patchShebangs src/library/curl/configure
+        patchShebangs src/library/keyring/configure
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
       '';

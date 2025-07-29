@@ -16,23 +16,20 @@
   libqb,
   libseccomp,
   polkit,
-  protobuf_29,
+  protobuf,
   audit,
   libsodium,
 }:
 
-let
-  protobuf = protobuf_29;
-in
-stdenv.mkDerivation rec {
-  version = "1.1.3";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.1.4";
   pname = "usbguard";
 
   src = fetchFromGitHub {
     owner = "USBGuard";
     repo = "usbguard";
-    rev = "usbguard-${version}";
-    hash = "sha256-8y8zaKJfoIXc9AvG1wi3EzZA7BR2wVFLuOyD+zpBY0s=";
+    tag = "usbguard-${finalAttrs.version}";
+    hash = "sha256-PDuYszdG6BK4fkAHWWBct1d7tnwwe+5XOw+xmSPoPCY=";
     fetchSubmodules = true;
   };
 
@@ -77,17 +74,17 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.usbguard;
 
-  meta = with lib; {
-    description = "USBGuard software framework helps to protect your computer against BadUSB";
+  meta = {
+    description = "Protect your computer against rogue USB devices (a.k.a. BadUSB)";
     longDescription = ''
       USBGuard is a software framework for implementing USB device authorization
       policies (what kind of USB devices are authorized) as well as method of
       use policies (how a USB device may interact with the system). Simply put,
-      it is a USB device whitelisting tool.
+      it is a USB device allowlisting tool.
     '';
     homepage = "https://usbguard.github.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.tnias ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.tnias ];
   };
-}
+})

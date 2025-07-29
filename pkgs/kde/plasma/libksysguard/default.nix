@@ -10,6 +10,10 @@
 mkKdeDerivation {
   pname = "libksysguard";
 
+  patches = [
+    ./helper-path.patch
+  ];
+
   extraBuildInputs = [
     qtwebchannel
     qtwebengine

@@ -41,11 +41,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.loguru;
+  ]
+  ++ optional-dependencies.loguru;
 
   pythonImportsCheck = [ "python_utils" ];
 
-  pytestFlagsArray = [ "_python_utils_tests" ];
+  enabledTestPaths = [ "_python_utils_tests" ];
 
   disabledTests = [
     # Flaky tests

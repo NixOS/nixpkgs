@@ -29,15 +29,14 @@ backendStdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  nativeBuildInputs =
-    [
-      autoAddDriverRunpath
-      pkg-config
-    ]
-    # CMake has to run as a native, build-time dependency for libNVVM samples.
-    # However, it's not the primary build tool -- that's still make.
-    # As such, we disable CMake's build system.
-    ++ lists.optionals (strings.versionAtLeast finalAttrs.version "12.2") [ cmake ];
+  nativeBuildInputs = [
+    autoAddDriverRunpath
+    pkg-config
+  ]
+  # CMake has to run as a native, build-time dependency for libNVVM samples.
+  # However, it's not the primary build tool -- that's still make.
+  # As such, we disable CMake's build system.
+  ++ lists.optionals (strings.versionAtLeast finalAttrs.version "12.2") [ cmake ];
 
   dontUseCmakeConfigure = true;
 

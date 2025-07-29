@@ -257,10 +257,21 @@ in
         dmConf = config.services.xserver.displayManager;
         noDmUsed =
           !(
-            cfg.gdm.enable || cfg.sddm.enable || dmConf.xpra.enable || dmConf.lightdm.enable || cfg.ly.enable
+            cfg.gdm.enable
+            || cfg.sddm.enable
+            || dmConf.xpra.enable
+            || dmConf.lightdm.enable
+            || cfg.ly.enable
+            || cfg.lemurs.enable
           );
       in
       lib.mkIf noDmUsed (lib.mkDefault false);
+
+    # We can't just rely on 'Conflicts=autovt@tty1.service' because
+    # 'switch-to-configuration switch' will start 'autovt@tty1.service'
+    # and kill us.
+    systemd.services."autovt@tty1".enable =
+      lib.mkIf config.systemd.services.display-manager.enable false;
 
     systemd.services.display-manager = {
       description = "Display Manager";
@@ -268,6 +279,10 @@ in
         "acpid.service"
         "systemd-logind.service"
         "systemd-user-sessions.service"
+        "autovt@tty1.service"
+      ];
+      conflicts = [
+        "autovt@tty1.service"
       ];
       restartIfChanged = false;
 

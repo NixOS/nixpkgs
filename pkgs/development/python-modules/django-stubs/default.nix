@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "5.1.3";
+  version = "5.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_stubs";
     inherit version;
-    hash = "sha256-jCMLxb6+5tooK6iietFQPISgxM0vRuY9FJ520qY+Y5o=";
+    hash = "sha256-B+JcLTy/9b5UAif/N3GcyJ8hXfqqpesDinWwG7+7JyI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<79.0.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 
@@ -35,7 +40,8 @@ buildPythonPackage rec {
     types-pytz
     types-pyyaml
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];
@@ -43,7 +49,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "django-stubs" ];
 

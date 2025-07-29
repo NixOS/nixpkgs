@@ -4,7 +4,7 @@
   lib,
   pkg-config,
   jansson,
-  pcre,
+  pcre2,
   libxcrypt,
   expat,
   zlib,
@@ -61,7 +61,8 @@ let
         php-embed.extensions.session
         php-embed.extensions.session.dev
         php-embed.unwrapped.dev
-      ] ++ php-embed.unwrapped.buildInputs;
+      ]
+      ++ php-embed.unwrapped.buildInputs;
     })
   ];
 
@@ -80,13 +81,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.29";
+  version = "2.0.30";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     tag = finalAttrs.version;
-    hash = "sha256-WlbvvAu+A0anPItnG8RnWrXm450/xbOloPzUd2L9TuU=";
+    hash = "sha256-I03AshxZyxrRmtYUH1Q+B6ISykjYRMGG+ZQSHRS7vDs=";
   };
 
   patches = [
@@ -100,20 +101,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      jansson
-      pcre
-      libxcrypt
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      expat
-      zlib
-    ]
-    ++ lib.optional withPAM pam
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional withCap libcap
-    ++ lib.concatMap (x: x.inputs) needed;
+  buildInputs = [
+    jansson
+    pcre2
+    libxcrypt
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    expat
+    zlib
+  ]
+  ++ lib.optional withPAM pam
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withCap libcap
+  ++ lib.concatMap (x: x.inputs) needed;
 
   basePlugins = lib.concatStringsSep "," (
     lib.optional withPAM "pam" ++ lib.optional withSystemd "systemd_logger"

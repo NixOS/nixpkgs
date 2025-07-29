@@ -40,22 +40,21 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  installPhase =
-    ''
-      dpkg-deb -x ./Resources/pantum_${version}-1_${architecture}.deb .
+  installPhase = ''
+    dpkg-deb -x ./Resources/pantum_${version}-1_${architecture}.deb .
 
-      mkdir -p $out $out/lib
-      cp -r etc $out/
-      cp -r usr/lib/cups $out/lib/
-      cp -r usr/local/lib/* $out/lib/
-      cp -r usr/share $out/
-      cp Resources/locale/en_US.UTF-8/* $out/share/doc/pantum/
-    ''
-    + lib.optionalString enablePtqpdf ''
-      cp -r opt/pantum/* $out/
-      ln -s $out/lib/libqpdf.so* $out/lib/libqpdf.so
-      ln -s $out/lib/libqpdf.so $out/lib/libqpdf.so.21
-    '';
+    mkdir -p $out $out/lib
+    cp -r etc $out/
+    cp -r usr/lib/cups $out/lib/
+    cp -r usr/local/lib/* $out/lib/
+    cp -r usr/share $out/
+    cp Resources/locale/en_US.UTF-8/* $out/share/doc/pantum/
+  ''
+  + lib.optionalString enablePtqpdf ''
+    cp -r opt/pantum/* $out/
+    ln -s $out/lib/libqpdf.so* $out/lib/libqpdf.so
+    ln -s $out/lib/libqpdf.so $out/lib/libqpdf.so.21
+  '';
 
   meta = with lib; {
     description = "Pantum universal driver";

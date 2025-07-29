@@ -49,9 +49,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mv ./output/release/simulator/linux/{epsilon.bin,epsilon}
     mkdir -p $out/bin
-    cp -r ./output/release/simulator/linux/* $out/bin/
+    cp ./output/release/simulator/linux/epsilon.bin $out/bin/epsilon
 
     # Build the logo
     assets="$src/ion/src/simulator/assets"

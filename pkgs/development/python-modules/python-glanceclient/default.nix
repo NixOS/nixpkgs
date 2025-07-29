@@ -13,7 +13,6 @@
   oslo-i18n,
   wrapt,
   pyopenssl,
-  pythonOlder,
   stestr,
   testscenarios,
   ddt,
@@ -22,10 +21,10 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.8.0";
+  version = "4.9.0";
 
-  # Skip tests which require networking.
   disabledTests = [
+    # Skip tests which require networking.
     "test_http_chunked_response"
     "test_v1_download_has_no_stray_output_to_stdout"
     "test_v2_requests_valid_cert_verification"
@@ -40,18 +39,19 @@ let
     "test_v2_requests_valid_cert_no_key"
     "test_v2_requests_valid_cert_verification_no_compression"
     "test_log_request_id_once"
+    # asserts exact amount of mock calls
+    "test_cache_schemas_gets_when_forced"
+    "test_cache_schemas_gets_when_not_exists"
   ];
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "python_glanceclient";
     inherit version;
-    hash = "sha256-+FtvyB8ns02hyHSEswl2WdsFKavRxnWV0vD+fLFZA2w=";
+    hash = "sha256-+PANkCIO8wtLFgV64MfELMKdhHIcBntoVNU50sXdsVQ=";
   };
 
   postPatch = ''

@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.263.1";
+  version = "0.275.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = version;
-    hash = "sha256-w36KY1zl/OguRFs6sM6K4F17bYQcA+bA6XS62VhRgA8=";
+    hash = "sha256-bgKxZuk0cp43oyPbgTdx5aG5l1HSCz0JOVNeaCJRhdo=";
   };
 
   postPatch = ''
@@ -138,7 +138,8 @@ buildPythonPackage rec {
     pytest-snapshot
     pytestCheckHook
     sanic-testing
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "strawberry" ];
 
@@ -152,6 +153,7 @@ buildPythonPackage rec {
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
+    "tests/sanic/test_file_upload.py"
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"

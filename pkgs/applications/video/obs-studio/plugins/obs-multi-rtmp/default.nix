@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/dist
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sorayuki/obs-multi-rtmp/";
     changelog = "https://github.com/sorayuki/obs-multi-rtmp/releases/tag/${version}";
     description = "Multi-site simultaneous broadcast plugin for OBS Studio";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jk ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

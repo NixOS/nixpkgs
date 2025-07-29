@@ -74,6 +74,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       amarshall
       mbaillie
+      ryan4yin
     ];
   };
 }

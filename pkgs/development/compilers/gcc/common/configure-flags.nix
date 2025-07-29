@@ -69,7 +69,6 @@ let
       "--with-as=${
         if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
       }/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (
       if withoutTargetLibc then
@@ -84,6 +83,11 @@ let
           "--disable-libatomic" # requires libc
           "--disable-decimal-float" # requires libc
           "--disable-libmpx" # requires libc
+          "--disable-hosted-libstdcxx" # requires libc
+          "--disable-libstdcxx-backtrace"
+          "--disable-linux-futex"
+          "--disable-libvtv"
+          "--disable-libitm"
         ]
         ++ lib.optionals crossMingw [
           "--with-headers=${lib.getDev libcCross}/include"

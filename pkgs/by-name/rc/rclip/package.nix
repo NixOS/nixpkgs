@@ -43,7 +43,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     versionCheckHook
-  ] ++ (with python3Packages; [ pytestCheckHook ]);
+  ]
+  ++ (with python3Packages; [ pytestCheckHook ]);
   versionCheckProgramArg = "--version";
 
   disabledTestPaths = [

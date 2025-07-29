@@ -7,8 +7,6 @@
   makeWrapper,
   python3,
   runCommand,
-  system,
-  writeText,
   writeTextFile,
 
   # Artifacts dependencies

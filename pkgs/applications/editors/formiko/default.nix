@@ -16,6 +16,7 @@
 buildPythonApplication rec {
   pname = "formiko";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ondratu";

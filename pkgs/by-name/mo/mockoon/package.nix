@@ -29,17 +29,17 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easiest and quickest way to run mock APIs locally";
     longDescription = ''
       Mockoon is the easiest and quickest way to run mock APIs locally.
       No remote deployment, no account required, free and open-source.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://mockoon.com";
     changelog = "https://github.com/mockoon/mockoon/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "mockoon";
     platforms = [ "x86_64-linux" ];
   };

@@ -21,21 +21,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ltxd4n3oo8ZF/G/zmR4FSVtNOkxwCjDv6PdxkmWxZ+8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tCJ7Giyj7Wqowhk0N7CkvAiWvF6DBNw7G7aAnn2+mp8=";
 
   nativeBuildInputs = [
     pkg-config
     (lib.getDev curl)
   ];
-  buildInputs =
-    [
-      openssl
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+    curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";
@@ -51,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     inherit rav1e;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
     longDescription = ''
       Cargo C-ABI helpers. A cargo applet that produces and installs a correct
@@ -60,8 +58,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpu
       matthiasbeyer
     ];

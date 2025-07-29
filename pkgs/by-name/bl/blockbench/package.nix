@@ -12,23 +12,24 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.12.4";
+  version = "4.12.5";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-tg2ICxliTmahO3twKgC4LSVyiX9K2jfA7lCcSCkzcbQ=";
+    hash = "sha256-u8NjwEsy3vimcvwtsUANckEx0Uz4vJLAiuUmN5lm5eQ=";
   };
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      imagemagick # for icon resizing
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    imagemagick # for icon resizing
+    copyDesktopItems
+  ];
 
-  npmDepsHash = "sha256-a5OjCVHPeaBEYTFIUOnc9We677oCGwAvwMv8f1QRk9Q=";
+  npmDepsHash = "sha256-WiBQpd8Qlw5QTXh3kB2dG4dGZ1zfpYst5MgfHoK8UU4=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 

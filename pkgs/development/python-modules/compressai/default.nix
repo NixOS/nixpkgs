@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -91,6 +92,12 @@ buildPythonPackage rec {
 
     # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
     "test_find_close"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cause pytest to hang on Darwin after the tests are done
+    "tests/test_eval_model.py"
+    "tests/test_train.py"
   ];
 
   meta = {

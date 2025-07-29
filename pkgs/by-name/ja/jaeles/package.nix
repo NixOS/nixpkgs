@@ -20,12 +20,12 @@ buildGoModule rec {
   # Tests want to download signatures
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for automated Web application testing";
     mainProgram = "jaeles";
     homepage = "https://github.com/jaeles-project/jaeles";
     changelog = "https://github.com/jaeles-project/jaeles/releases/tag/beta-v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

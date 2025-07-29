@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Parse and create Python distribution metadata.";
+    description = "Parse and create Python distribution metadata";
     homepage = "https://github.com/repo-helper/dist-meta";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

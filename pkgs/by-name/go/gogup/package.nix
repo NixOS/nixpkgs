@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X github.com/nao1215/gup/internal/cmdinfo.Version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Update binaries installed by 'go install' with goroutines";
     changelog = "https://github.com/nao1215/gup/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/nao1215/gup";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ phanirithvij ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gup";
   };
 }

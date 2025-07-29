@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
-    description = "A new Hardware Design Language that keeps you in the driver's seat";
+    description = "New Hardware Design Language that keeps you in the driver's seat";
     homepage = "https://github.com/pc2/sus-compiler";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pbsds ];

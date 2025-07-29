@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "protoc-gen-twirp_swagger";
-  version = "unstable-2021-03-29";
+  version = "0-unstable-2021-03-29";
 
   src = fetchFromGitHub {
     owner = "elliots";

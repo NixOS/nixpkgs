@@ -24,13 +24,13 @@ buildGoModule rec {
     installManPage skrive.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure and sleek dosage logging for the terminal";
     homepage = "https://github.com/VanuPhantom/skrive";
     changelog = "https://github.com/VanuPhantom/skrive/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freyacodes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ freyacodes ];
     mainProgram = "skrive";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

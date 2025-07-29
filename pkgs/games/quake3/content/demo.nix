@@ -26,7 +26,19 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   meta = with lib; {
-    description = "Quake 3 Arena demo content";
+    description = "Demo of Quake 3 Arena, a classic first-person shooter";
+    longDescription = ''
+      Quake III Arena and it's demo don't offer current wide screen resolutions in the menu.
+
+      To switch to such a resolution, you will have to enter something like this in the quake console (invoke with ~ by default)
+
+      r_mode -1; r_customwidth 2560; r_customheight 1440; r_fullscreen 1; vid_restart
+
+      Or call the quake commandline with these parameters
+
+      $ quake3 +set r_mode -1 +set r_customwidth 2560 +set r_customheight 1440 +set r_fullscreen 1
+    '';
+    homepage = "https://www.idsoftware.com/";
     license = licenses.unfreeRedistributable;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

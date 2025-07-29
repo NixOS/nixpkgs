@@ -15,6 +15,7 @@
   legendary-heroic,
   nile,
   comet-gog,
+  umu-launcher,
 }:
 
 let
@@ -22,18 +23,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tjme43vw+aIjyXBIsaNE8+bWrLKpIDJZpQaKb/bJYFQ=";
+    hash = "sha256-DrE1gwer1pozTPWSzc5PpTWacDHhdNk/o6pA62E0uPA=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-cV0+HZb6g65kGu1zOBueY954ol1bLGW8ddCniwAVWcw=";
+    fetcherVersion = 1;
+    hash = "sha256-VaPWB5nUvmnGW6gkW2FwoqcHk/rMfObuhR7RwsyNghk=";
   };
 
   nativeBuildInputs = [
@@ -89,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --suffix PATH ":" "${umu-launcher}/bin" \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

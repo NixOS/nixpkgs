@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://volatilityfoundation.org/";
     mainProgram = "volatility2";
-    description = "An advanced memory forensics framework";
+    description = "Advanced memory forensics framework";
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

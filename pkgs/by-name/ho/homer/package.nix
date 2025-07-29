@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation rec {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash = "sha256-y1R+rlaOtFOHHAgEHPBl40536U10Ft0iUSfGcfXS08Y=";
   };
 
@@ -63,7 +64,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A very simple static homepage for your server.";
+    description = "Very simple static homepage for your server";
     homepage = "https://homer-demo.netlify.app/";
     changelog = "https://github.com/bastienwirtz/homer/releases";
     license = licenses.asl20;

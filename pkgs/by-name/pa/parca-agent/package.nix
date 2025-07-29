@@ -6,28 +6,28 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "parca-agent";
-  version = "0.39.0";
+  version = "0.39.3";
 
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-agent";
-    tag = "v${version}";
-    hash = "sha256-ZdMQ0cyLihMhqXVN98t0Bhg2I4NUxBPcSl2KJU5P0vQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dtDC0TlyYnoYpKiZ9gb9Dm75LA1r8040IUurnalkO4M=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-Qm5ezWjMTYrhulHS5ALs4yrCInhqsxRc9RvCh9vv3GE=";
+  vendorHash = "sha256-10cfmMbNvaX2VksX0WOOHQAMgqfOXbkLXeXAy3b3fhU=";
 
   buildInputs = [
     stdenv.cc.libc.static
   ];
 
   ldflags = [
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
     "-extldflags=-static"
   ];
 
@@ -41,10 +41,10 @@ buildGoModule rec {
   meta = {
     description = "eBPF based, always-on profiling agent";
     homepage = "https://github.com/parca-dev/parca-agent";
-    changelog = "https://github.com/parca-dev/parca-agent/releases/tag/v${version}";
+    changelog = "https://github.com/parca-dev/parca-agent/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;
     mainProgram = "parca-agent";
   };
-}
+})

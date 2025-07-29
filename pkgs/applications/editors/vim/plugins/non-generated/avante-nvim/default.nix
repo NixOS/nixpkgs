@@ -12,19 +12,18 @@
   pkgs,
 }:
 let
-  version = "0.0.23-unstable-2025-05-30";
+  version = "0.0.27-unstable-2025-07-28";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "22418bff8bcac4377ebf975cd48f716823867979";
-    hash = "sha256-qyeiDDjeReOr+TvgCWnKhb8FBN9t1YPFGvVqPvxXr0k=";
+    rev = "5e4eb8652b4776f139282a343f04a3a8c7f23cb0";
+    hash = "sha256-rmpBI2j7zwU5tIUjK7fMhfle5LVksk/kuCnwN9WQkic=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-pmnMoNdaIR0i+4kwW3cf01vDQo39QakTCEG9AXA86ck=";
+    cargoHash = "sha256-8mBpzndz34RrmhJYezd4hLrJyhVL4S4IHK3plaue1k8=";
 
     nativeBuildInputs = [
       pkg-config

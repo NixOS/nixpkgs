@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash common-updater-scripts gnused nixfmt-rfc-style
+#!nix-shell -i bash -p bash common-updater-scripts gnused
 
 latest_tag=$(list-git-tags --url=https://github.com/nmeum/creek | sed 's/^v//' | tail -n 1)
 

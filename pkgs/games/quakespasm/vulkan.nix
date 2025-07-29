@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.32.2";
+  version = "1.32.3.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     tag = finalAttrs.version;
-    hash = "sha256-ImgzfwpgALKsK0NvJr9/NBCaUWDxuINu5vYOCMhbRQg=";
+    hash = "sha256-Hsj6LgxlEICI3MMDMCE1KvslYrsYfQPhShpP5kzLCTI=";
   };
 
   nativeBuildInputs = [
@@ -41,22 +41,21 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      SDL2
-      flac
-      gzip
-      libmpg123
-      libopus
-      libvorbis
-      libX11
-      opusfile
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-      vulkan-headers
-    ];
+  buildInputs = [
+    SDL2
+    flac
+    gzip
+    libmpg123
+    libopus
+    libvorbis
+    libX11
+    opusfile
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+    vulkan-headers
+  ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 

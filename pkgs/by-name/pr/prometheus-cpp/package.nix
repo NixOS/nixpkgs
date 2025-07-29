@@ -27,12 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    curl
     gbenchmark
     gtest
+  ];
+  propagatedBuildInputs = [
+    civetweb
+    curl
     zlib
   ];
-  propagatedBuildInputs = [ civetweb ];
   strictDeps = true;
 
   cmakeFlags = [

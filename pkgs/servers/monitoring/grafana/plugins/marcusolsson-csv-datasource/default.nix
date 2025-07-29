@@ -10,7 +10,7 @@ grafanaPlugin {
     aarch64-darwin = "sha256-gzQRcPeRqLvl27SB18hTTtcHx/namT2V0NOgX5J1mbs=";
   };
   meta = with lib; {
-    description = "The Grafana CSV Datasource plugin is designed to load CSV data into Grafana, expanding your capabilities to visualize and analyze data stored in CSV (Comma-Separated Values) format.";
+    description = "Load CSV data into Grafana, expanding your capabilities to visualize and analyze data stored in CSV (Comma-Separated Values) format";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

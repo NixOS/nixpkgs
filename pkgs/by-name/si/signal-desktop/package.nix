@@ -14,6 +14,10 @@
   replaceVars,
   noto-fonts-color-emoji,
   nixosTests,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs ? "",
+
   withAppleEmojis ? false,
 }:
 let
@@ -48,13 +52,13 @@ let
     '';
   });
 
-  version = "7.56.0";
+  version = "7.62.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-BrgBlDEgb08oX7Mh/P4nuoM+dkSDpB45zOtDNMYeZr0=";
+    hash = "sha256-79Mh5jx7cSr8AVL/oqjuTWQ+DHmyXL19rKlbyNMySt0=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +68,7 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
+      fetcherVersion = 1;
       hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
     };
 
@@ -114,17 +119,18 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-RP3d1t4bbvehdCDSL3bHrlJEnn65TDViI5jVjSiuJw8="
+        "sha256-r+MktwnhmZOUc1NMumrfkTpmUUHUXKB10XKSkxg3GYU="
       else
-        "sha256-KJvc+kVcwRKsUVW3lK7fPXUSqDQlJFPbYAzQjhFtfoU=";
+        "sha256-raCVDqhtTTsdIn1vjbKW+ULrBefD8+kgJkKHls90KNs=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1748456277;
+    SOURCE_DATE_EPOCH = 1752702364;
   };
 
   preBuild = ''
@@ -203,7 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';

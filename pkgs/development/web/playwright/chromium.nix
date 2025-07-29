@@ -41,8 +41,8 @@ let
       url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
       hash =
         {
-          x86_64-linux = "sha256-7oQQCAIt1VJiMNFEJO40K8oENK/L0BICXm2D/3fZ8bA=";
-          aarch64-linux = "sha256-1OmByLX2jNHXAzWdXF8Od7S7pj/jl4wwvOQcsZc5R7o=";
+          x86_64-linux = "sha256-R7nMCVpUqgRwtB0syhfIK81maiTVWr8lYBLp4bR8VBg=";
+          aarch64-linux = "sha256-4fc4X7QwBigktmEeseuqIyEeV70Dy3eO/femXrftMd0=";
         }
         .${system} or throwSystem;
     };
@@ -109,8 +109,8 @@ let
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-IJxCYtHTOtBxQdGbiLz+PODQL4rmBn4WXNJ3QNr0D/I=";
-        aarch64-darwin = "sha256-6QP1OY1krhcfMf5rNzbd55W/Wg02LnbqaU7aKWhJ7qM=";
+        x86_64-darwin = "sha256-0u1AStbUTX+qgUmg2DvL59B4b265WywDaBV+MdSuaNE=";
+        aarch64-darwin = "sha256-4pg4wmNTF8mw+APmdpvYlFxb9zc6OUh11oW5gCRKETY=";
       }
       .${system} or throwSystem;
   };

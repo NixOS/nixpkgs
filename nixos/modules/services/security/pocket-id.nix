@@ -122,25 +122,26 @@ in
     warnings =
       optional (cfg.settings ? MAXMIND_LICENSE_KEY)
         "config.services.pocket-id.settings.MAXMIND_LICENSE_KEY will be stored as plaintext in the Nix store. Use config.services.pocket-id.environmentFile instead."
-      ++ concatMap
-        (
-          # Added 2025-05-27
-          setting:
-          optional (cfg.settings ? "${setting}") ''
-            config.services.pocket-id.settings.${setting} is deprecated.
-            See https://pocket-id.org/docs/setup/migrate-to-v1/ for migration instructions.
-          ''
-        )
-        [
-          "PUBLIC_APP_URL"
-          "PUBLIC_UI_CONFIG_DISABLED"
-          "CADDY_DISABLED"
-          "CADDY_PORT"
-          "BACKEND_PORT"
-          "POSTGRES_CONNECTION_STRING"
-          "SQLITE_DB_PATH"
-          "INTERNAL_BACKEND_URL"
-        ];
+      ++
+        concatMap
+          (
+            # Added 2025-05-27
+            setting:
+            optional (cfg.settings ? "${setting}") ''
+              config.services.pocket-id.settings.${setting} is deprecated.
+              See https://pocket-id.org/docs/setup/migrate-to-v1/ for migration instructions.
+            ''
+          )
+          [
+            "PUBLIC_APP_URL"
+            "PUBLIC_UI_CONFIG_DISABLED"
+            "CADDY_DISABLED"
+            "CADDY_PORT"
+            "BACKEND_PORT"
+            "POSTGRES_CONNECTION_STRING"
+            "SQLITE_DB_PATH"
+            "INTERNAL_BACKEND_URL"
+          ];
 
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir} 0755 ${cfg.user} ${cfg.group}"
@@ -174,12 +175,12 @@ in
           CapabilityBoundingSet = "";
           DeviceAllow = "";
           DevicePolicy = "closed";
-          #IPAddressDeny = "any"; # communicates with the frontend
+          #IPAddressDeny = "any"; # provides the service through network
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
-          PrivateNetwork = false; # communicates with the frontend
+          PrivateNetwork = false; # provides the service through network
           PrivateTmp = true;
           PrivateUsers = true;
           ProcSubset = "pid";
@@ -191,7 +192,8 @@ in
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
           ProtectProc = "invisible";
-          ProtectSystem = "full"; # needs to write in cfg.dataDir
+          ProtectSystem = "strict";
+          ReadWritePaths = [ cfg.dataDir ];
           RemoveIPC = true;
           RestrictAddressFamilies = [
             "AF_INET"
@@ -212,7 +214,7 @@ in
             "@privileged"
             "@raw-io"
             "@reboot"
-            #"@resources" # vm test segfaults
+            "@resources"
             "@swap"
           ];
           UMask = "0077";

@@ -21,7 +21,7 @@ findHash() {
     echo "unzipping to $(pwd)/out..." >&2
     unzip -q -d out download/*.zip
 
-    nix-hash --to-sri --type sha256 $(nix-hash --type sha256 out)
+    nix --extra-experimental-features nix-command hash path --sri out
 
     cd "$oldpwd"
 }

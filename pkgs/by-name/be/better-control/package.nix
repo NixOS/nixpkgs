@@ -9,7 +9,7 @@
   brightnessctl,
   power-profiles-daemon,
   gammastep,
-  libpulseaudio,
+  pulseaudio,
   desktop-file-utils,
   wrapGAppsHook3,
   gobject-introspection,
@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "better-control";
-  version = "6.11.9";
+  version = "6.12.1";
   pyproject = false;
 
   src = fetchFromGitHub {
-    owner = "quantumvoid0";
+    owner = "better-ecosystem";
     repo = "better-control";
     tag = "v${version}";
-    hash = "sha256-74ZcHiQLIYzPnk25NAJzxsdVMYs2fiPDOJHUTLY4LuE=";
+    hash = "sha256-Dt+se8eOmF8Nzm+/bnYBSIyX0XHSXV9iCPF82qXhzug=";
   };
 
   build-system = with python3Packages; [
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
 
   # Check src/utils/dependencies.py
   runtimeDeps = [
-    libpulseaudio
+    pulseaudio
     networkmanager
     bluez
     brightnessctl
@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Simple control panel for linux based on GTK";
-    homepage = "https://github.com/quantumvoid0/better-control";
+    homepage = "https://github.com/better-ecosystem/better-control";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Rishabh5321 ];
     platforms = lib.platforms.linux;

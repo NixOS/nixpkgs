@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  nettools,
+  net-tools,
   iproute2,
   judy,
 }:
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace misc/client-hook.bsd \
-      --replace '/sbin/route' '${nettools}/bin/route' \
-      --replace '/sbin/ifconfig' '${nettools}/bin/ifconfig'
+      --replace '/sbin/route' '${net-tools}/bin/route' \
+      --replace '/sbin/ifconfig' '${net-tools}/bin/ifconfig'
     substituteInPlace misc/client-hook.iproute --replace '/sbin/ip' '${iproute2}/bin/ip'
   '';
 

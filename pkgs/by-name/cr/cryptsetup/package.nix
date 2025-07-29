@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.5";
+  version = "2.8.0";
 
   outputs = [
     "bin"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-0r5Dlbj1A7Dr9LLYHbkMNalwUKNY7iH+YqDftm5dVSI=";
+    hash = "sha256-zJ4tN8JahxzqN1ILKNUyIHsMFnD7EPxU1oBx9j9SQ6I=";
   };
 
   patches = [
@@ -56,26 +56,25 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
-  configureFlags =
-    [
-      "--with-crypto_backend=openssl"
-      "--disable-ssh-token"
-      "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-    ]
-    ++ lib.optionals (!rebuildMan) [
-      "--disable-asciidoc"
-    ]
-    ++ lib.optionals (!withInternalArgon2) [
-      "--enable-libargon2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "--disable-external-tokens"
-      # We have to override this even though we're removing token
-      # support, because the path still gets included in the binary even
-      # though it isn't used.
-      "--with-luks2-external-tokens-path=/"
-    ]
-    ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
+  configureFlags = [
+    "--with-crypto_backend=openssl"
+    "--disable-ssh-token"
+    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+  ]
+  ++ lib.optionals (!rebuildMan) [
+    "--disable-asciidoc"
+  ]
+  ++ lib.optionals (!withInternalArgon2) [
+    "--enable-libargon2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--disable-external-tokens"
+    # We have to override this even though we're removing token
+    # support, because the path still gets included in the binary even
+    # though it isn't used.
+    "--with-luks2-external-tokens-path=/"
+  ]
+  ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   propagatedBuildInputs = [
@@ -84,7 +83,10 @@ stdenv.mkDerivation rec {
     openssl
     libuuid
     popt
-  ] ++ lib.optional (!withInternalArgon2) libargon2;
+  ]
+  ++ lib.optional (!withInternalArgon2) libargon2;
+
+  enableParallelBuilding = true;
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.

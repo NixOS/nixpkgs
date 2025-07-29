@@ -1,33 +1,49 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   cups,
   autoPatchelfHook,
+  detox,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labelife-label-printer";
-  version = "1.2.1";
+  version = "2.0.0";
 
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      "x86_64"
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      "i386"
-    else
-      throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    {
+      aarch64-linux = "aarch64";
+      armv7l-linux = "armhf";
+      i686-linux = "i386";
+      x86_64-linux = "x86_64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  src = fetchurl {
-    url = "https://oss.saas.aimocloud.com/saas/Lablife/bag/LabelPrinter-${finalAttrs.version}.tar.gz";
-    hash = "sha256-twnIFMBMyEM3xGlsuk3763C3emz3mgpEnlfvnL0XRWw=";
+  src = fetchzip {
+    url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
+    hash = "sha256-0ESZ0EqPh9Wz6ogQ6vTsAogujbn4zINtMh62sEpNRs4=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    detox
+  ];
   buildInputs = [ cups ];
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    tar -xzf ${finalAttrs.src}/LabelPrinter-${finalAttrs.version}.001.tar.gz --strip-components=1
+
+    runHook postUnpack
+  '';
 
   installPhase = ''
     runHook preInstall
+    # Remove spaces from PPD filenames
+    detox ppds
+
     # Install the CUPS filter with executable permissions
     install -Dm755 ./${finalAttrs.arch}/rastertolabeltspl $out/lib/cups/filter/rastertolabeltspl
 
@@ -46,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Supported printer models include:
       - D520 & D520BT
-      - PM-201
       - PM-241 & PM-241-BT
-      - PM-246 & PM-246S
 
       Brands using Labelife drivers include:
       - Phomemo
@@ -58,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [ daniel-fahey ];
     platforms = [
+      "aarch64-linux"
+      "armv7l-linux"
       "i686-linux"
       "x86_64-linux"
     ];

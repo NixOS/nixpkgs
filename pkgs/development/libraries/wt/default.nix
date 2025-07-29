@@ -58,16 +58,15 @@ let
       ];
 
       dontWrapQtApps = true;
-      cmakeFlags =
-        [
-          "-DWT_CPP_11_MODE=-std=c++11"
-          "--no-warn-unused-cli"
-        ]
-        ++ lib.optionals (graphicsmagick != null) [
-          "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
-          "-DGM_PREFIX=${graphicsmagick}"
-        ]
-        ++ lib.optional (libmysqlclient != null) "-DMYSQL_PREFIX=${libmysqlclient}";
+      cmakeFlags = [
+        "-DWT_CPP_11_MODE=-std=c++11"
+        "--no-warn-unused-cli"
+      ]
+      ++ lib.optionals (graphicsmagick != null) [
+        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
+        "-DGM_PREFIX=${graphicsmagick}"
+      ]
+      ++ lib.optional (libmysqlclient != null) "-DMYSQL_PREFIX=${libmysqlclient}";
 
       meta = with lib; {
         homepage = "https://www.webtoolkit.eu/wt";

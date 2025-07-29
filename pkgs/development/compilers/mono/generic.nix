@@ -87,16 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
   # Without this, any Mono application attempting to open an SSL connection will throw with
   # The authentication or decryption has failed.
   # ---> Mono.Security.Protocol.Tls.TlsException: Invalid certificate received from server.
-  postInstall =
-    ''
-      echo "Updating Mono key store"
-      $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
-    ''
-    # According to [1], gmcs is just mcs
-    # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
-    + ''
-      ln -s $out/bin/mcs $out/bin/gmcs
-    '';
+  postInstall = ''
+    echo "Updating Mono key store"
+    $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
+  ''
+  # According to [1], gmcs is just mcs
+  # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
+  + ''
+    ln -s $out/bin/mcs $out/bin/gmcs
+  '';
 
   inherit enableParallelBuilding;
 

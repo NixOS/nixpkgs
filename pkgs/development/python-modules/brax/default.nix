@@ -5,17 +5,14 @@
   stdenv,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   absl-py,
-  dm-env,
   etils,
   flask,
   flask-cors,
   flax,
-  grpcio,
-  gym,
   jax,
   jaxlib,
   jaxopt,
@@ -27,12 +24,13 @@
   optax,
   orbax-checkpoint,
   pillow,
-  pytinyrenderer,
   scipy,
   tensorboardx,
-  trimesh,
+  typing-extensions,
 
   # tests
+  dm-env,
+  gym,
   pytestCheckHook,
   pytest-xdist,
   transforms3d,
@@ -40,31 +38,26 @@
 
 buildPythonPackage rec {
   pname = "brax";
-  version = "0.12.1";
+  version = "0.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${version}";
-    hash = "sha256-whkkqTTy5CY6soyS5D7hWtBZuVHc6si1ArqwLgzHDkw=";
+    hash = "sha256-/eb0WjMzHwD1tjTyZ2fb2dzvGrWnyOLcVLOx4BeKvqk=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
     absl-py
-    # TODO: remove dm_env after dropping legacy v1 code
-    dm-env
     etils
     flask
     flask-cors
     flax
-    # TODO: remove grpcio and gym after dropping legacy v1 code
-    grpcio
-    gym
     jax
     jaxlib
     jaxopt
@@ -76,14 +69,14 @@ buildPythonPackage rec {
     optax
     orbax-checkpoint
     pillow
-    # TODO: remove pytinyrenderer after dropping legacy v1 code
-    pytinyrenderer
     scipy
     tensorboardx
-    trimesh
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    dm-env
+    gym
     pytestCheckHook
     pytest-xdist
     transforms3d

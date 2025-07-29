@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-o9ZoRHi+k+HCSGfRz1lQFAeJMCqcTQEHf5rf9wn3qqY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-hUHkyz/avFu9g1FMdC+4vz6xM75CauurrarhouuVZXc=";
 
   env.VERGEN_GIT_COMMIT_DATE = "2025-04-25";

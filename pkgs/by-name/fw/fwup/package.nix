@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.12.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-WYolvHAK7l1HJZuBXsPJ+X6uzWFHBlHELx4zvD/S934=";
+    sha256 = "sha256-s9M734Ohf8kItoOdaxewk4Enbrm2wsT0M4Ak9+q3KA8=";
   };
 
   nativeBuildInputs = [
@@ -44,16 +44,15 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  propagatedBuildInputs =
-    [
-      coreutils
-      unzip
-      zip
-    ]
-    ++ lib.optionals doCheck [
-      mtools
-      dosfstools
-    ];
+  propagatedBuildInputs = [
+    coreutils
+    unzip
+    zip
+  ]
+  ++ lib.optionals doCheck [
+    mtools
+    dosfstools
+  ];
 
   nativeCheckInputs = [
     which

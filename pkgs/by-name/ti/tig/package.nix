@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     git
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
@@ -81,7 +82,6 @@ stdenv.mkDerivation rec {
     description = "Text-mode interface for git";
     maintainers = with maintainers; [
       bjornfor
-      domenkozar
       qknight
       globin
       ma27

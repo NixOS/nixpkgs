@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "An advanced OpenComputers emulator";
+    description = "Advanced OpenComputers emulator";
     homepage = "https://ocelot.fomalhaut.me/desktop";
     changelog = "https://gitlab.com/cc-ru/ocelot/ocelot-desktop/-/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;

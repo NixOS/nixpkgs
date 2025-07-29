@@ -37,6 +37,7 @@ in
   libX11,
 
   vmopts ? null,
+  forceWayland ? false,
 }:
 
 let
@@ -83,9 +84,13 @@ let
       inherit
         pname
         jdk
-        extraWrapperArgs
         extraBuildInputs
         ;
+      extraWrapperArgs =
+        extraWrapperArgs
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
+          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
+        ];
       extraLdPath = extraLdPath ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libGL ];
       src =
         if fromSource then
@@ -322,20 +327,19 @@ rec {
   rider =
     (mkJetBrainsProduct {
       pname = "rider";
-      extraBuildInputs =
-        [
-          fontconfig
-          stdenv.cc.cc
-          openssl
-          libxcrypt
-          lttng-ust_2_12
-          musl
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-          expat
-          libxml2
-          xz
-        ];
+      extraBuildInputs = [
+        fontconfig
+        stdenv.cc.cc
+        openssl
+        libxcrypt
+        lttng-ust_2_12
+        musl
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        expat
+        libxml2
+        xz
+      ];
       extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
         # Avalonia dependencies needed for dotMemory
         libICE
@@ -426,8 +430,6 @@ rec {
     ];
   };
 
-  plugins = callPackage ./plugins { } // {
-    __attrsFailEvaluation = true;
-  };
+  plugins = callPackage ./plugins { };
 
 }

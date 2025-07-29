@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "seedir";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "earnestt1234";
     repo = "seedir";
     tag = "v${version}";
-    hash = "sha256-ilL2KKN5sJclVcStO/kZoacsPoMgcFW1/8M/PQjxw/U=";
+    hash = "sha256-o2CUK00WdoYyLqbDlh+wa30Q23ZkWZC+RvGDCSiCwH4=";
   };
 
   build-system = [ setuptools ];

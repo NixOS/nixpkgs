@@ -32,13 +32,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapparmor";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitLab {
     owner = "apparmor";
     repo = "apparmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oj6mGw/gvoRGpJqw72Lk6LJuurg8efjiV1pvZYbXz6A=";
+    hash = "sha256-f9FgowlV4lZKKuddGCirqbajhIGyTUQc7IFHSvqY6eQ=";
   };
   sourceRoot = "${finalAttrs.src.name}/libraries/libapparmor";
 
@@ -49,29 +49,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoconf-archive
-      autoreconfHook
-      bison
-      flex
-      pkg-config
-      swig
-      ncurses
-      which
-      dejagnu
-      perl # podchecker
-    ]
-    ++ lib.optionals withPython [
-      python3Packages.setuptools
-    ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+    swig
+    ncurses
+    which
+    dejagnu
+    perl # podchecker
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.setuptools
+  ];
 
   nativeCheckInputs = [
     python3Packages.pythonImportsCheckHook
   ];
 
-  buildInputs =
-    [ libxcrypt ] ++ (lib.optional withPerl perl) ++ (lib.optional withPython python3Packages.python);
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ (lib.optional withPerl perl)
+  ++ (lib.optional withPython python3Packages.python);
 
   # required to build apparmor-parser
   dontDisableStatic = true;

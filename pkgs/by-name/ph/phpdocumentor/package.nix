@@ -8,16 +8,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ylwv+tW5Lyx1rooUy7wjinsutGpbLvIvXuLDGWLv24g=";
+    hash = "sha256-5wLfTitHr/6vF4c3o+I+l5ZnJGsjfH82kgml8goqUB4=";
   };
 
-  vendorHash = "sha256-oPhe4yfOdsguXS3dF62mTr0+J1pfphsVJkMKR++c8go=";
+  vendorHash = "sha256-dok1CHFrYVAM5z6k6HvYrHm84khmxDPz1KBUpMQJD/o=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

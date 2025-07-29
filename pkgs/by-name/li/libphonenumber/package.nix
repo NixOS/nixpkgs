@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.5";
+  version = "9.0.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CVT0HBT4WnlTrT8mhapJjyIbd+pp7uxrZxa9ZlXVm3c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b/TQhHG7qPzXcFtiFNXOu1hkFfT9KnZNPa+AB/Fmk0E=";
   };
 
   patches = [
@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
     license = licenses.asl20;
-    maintainers = with maintainers; [ illegalprime ];
+    maintainers = with maintainers; [
+      illegalprime
+      wegank
+    ];
   };
 })

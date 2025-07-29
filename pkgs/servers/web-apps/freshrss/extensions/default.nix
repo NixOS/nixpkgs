@@ -31,7 +31,7 @@ let
           hash = "sha256-OiTiLZ2BjQD1W/BD8EkUt7WB2wOjL6GMGJ+APT4YpwE=";
         };
         meta = {
-          description = "FreshRSS extension for automatic feed refresh TTL based on the average frequency of entries.";
+          description = "FreshRSS extension for automatic feed refresh TTL based on the average frequency of entries";
           homepage = "https://github.com/mgnsk/FreshRSS-AutoTTL";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -49,7 +49,7 @@ let
           hash = "sha256-5fe8TjefSiGMaeZkurxSJjX8qEEa1ArhJxDztp7ZNZc=";
         };
         meta = {
-          description = "FreshRSS Extension for the demo version.";
+          description = "FreshRSS Extension for the demo version";
           homepage = "https://github.com/FreshRSS/xExtension-Demo";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -68,7 +68,7 @@ let
           hash = "sha256-C5cRfaphx4Qz2xg2z+v5qRji8WVSIpvzMbethTdSqsk=";
         };
         meta = {
-          description = "FreshRSS extension adding a reading time estimation next to each article.";
+          description = "FreshRSS extension adding a reading time estimation next to each article";
           homepage = "https://framagit.org/Lapineige/FreshRSS_Extension-ReadingTime";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -86,7 +86,7 @@ let
           hash = "sha256-H/uxt441ygLL0RoUdtTn9Q6Q/Ois8RHlhF8eLpTza4Q=";
         };
         meta = {
-          description = "FreshRSS extension to process Reddit feeds.";
+          description = "FreshRSS extension to process Reddit feeds";
           homepage = "https://github.com/aledeg/xExtension-RedditImage";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -100,7 +100,7 @@ let
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-TitleWrap";
         meta = {
-          description = "FreshRSS extension instead of truncating the title is wrapped.";
+          description = "FreshRSS extension instead of truncating the title is wrapped";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-TitleWrap";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -114,7 +114,7 @@ let
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-YouTube";
         meta = {
-          description = "FreshRSS extension allows you to directly watch YouTube/PeerTube videos from within subscribed channel feeds.";
+          description = "FreshRSS extension allows you to directly watch YouTube/PeerTube videos from within subscribed channel feeds";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-YouTube";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];

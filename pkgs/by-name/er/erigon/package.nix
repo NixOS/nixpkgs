@@ -51,7 +51,13 @@ buildGoModule {
     "nosilkworm"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid testing‐releases
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";
@@ -61,7 +67,6 @@ buildGoModule {
       gpl3Plus
     ];
     maintainers = with maintainers; [
-      d-xo
       happysalada
     ];
   };

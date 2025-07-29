@@ -61,91 +61,88 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-j3rbcUUHXAQmn/7SzpKHvpxGZ3bBhIYrNOFLc7jMPlc=";
+    hash = "sha256-kESKpIke9Xi4A55i3mUu1JkDjp8voBJBixiAK8pUkKA=";
   };
 
-  postPatch =
-    ''
-      mkdir src/private
-      substituteInPlace scripts/build/macOS/fix_bundle.py \
-        --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace libraries/lib-files/FileNames.cpp \
-        --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-    '';
+  postPatch = ''
+    mkdir src/private
+    substituteInPlace scripts/build/macOS/fix_bundle.py \
+      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace libraries/lib-files/FileNames.cpp \
+      --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      gettext
-      pkg-config
-      python3
-      makeWrapper
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      linuxHeaders
-    ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    python3
+    makeWrapper
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    linuxHeaders
+  ];
 
-  buildInputs =
-    [
-      expat
-      ffmpeg
-      file
-      flac
-      gtk3
-      lame
-      libid3tag
-      libjack2
-      libmad
-      libopus
-      libsbsms_2_3_0
-      libsndfile
-      libvorbis
-      lilv
-      lv2
-      mpg123
-      opusfile
-      pcre
-      portmidi
-      rapidjson
-      serd
-      sord
-      soundtouch
-      soxr
-      sqlite
-      sratom
-      suil
-      twolame
-      portaudio
-      wavpack
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib # for portaudio
-      at-spi2-core
-      dbus
-      libepoxy
-      libXdmcp
-      libXtst
-      libpthreadstubs
-      libxkbcommon
-      libselinux
-      libsepol
-      libuuid
-      util-linux
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpng
-      libjpeg
-    ];
+  buildInputs = [
+    expat
+    ffmpeg
+    file
+    flac
+    gtk3
+    lame
+    libid3tag
+    libjack2
+    libmad
+    libopus
+    libsbsms_2_3_0
+    libsndfile
+    libvorbis
+    lilv
+    lv2
+    mpg123
+    opusfile
+    pcre
+    portmidi
+    rapidjson
+    serd
+    sord
+    soundtouch
+    soxr
+    sqlite
+    sratom
+    suil
+    twolame
+    portaudio
+    wavpack
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib # for portaudio
+    at-spi2-core
+    dbus
+    libepoxy
+    libXdmcp
+    libXtst
+    libpthreadstubs
+    libxkbcommon
+    libselinux
+    libsepol
+    libuuid
+    util-linux
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng
+    libjpeg
+  ];
 
   cmakeFlags = [
     "-DAUDACITY_BUILD_LEVEL=2"

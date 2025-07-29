@@ -14,27 +14,26 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.12.1";
+  version = "5.12.2";
 
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sope";
     rev = "SOPE-${version}";
-    hash = "sha256-a7uOFiPnZ++ACV1Ggwh+YtP+NQYS4datQdlPtG+qlg0=";
+    hash = "sha256-GeJ1o8Juw7jm3/pkfuMqVpfMxKewU6hQmBoPmb0HgTc=";
   };
 
-  buildInputs =
-    [
-      gnustep-base
-      libxml2
-      openssl
-    ]
-    ++ lib.optional (openldap != null) openldap
-    ++ lib.optionals (mariadb != null) [
-      libmysqlclient
-      mariadb
-    ]
-    ++ lib.optional (libpq != null) libpq;
+  buildInputs = [
+    gnustep-base
+    libxml2
+    openssl
+  ]
+  ++ lib.optional (openldap != null) openldap
+  ++ lib.optionals (mariadb != null) [
+    libmysqlclient
+    mariadb
+  ]
+  ++ lib.optional (libpq != null) libpq;
 
   # Configure directories where files are installed to. Everything is automatically
   # put into $out (thanks GNUstep) apart from the makefiles location which is where
@@ -48,16 +47,15 @@ clangStdenv.mkDerivation rec {
     EOF
   '';
 
-  configureFlags =
-    [
-      "--prefix="
-      "--disable-debug"
-      "--enable-xml"
-      "--with-ssl=ssl"
-    ]
-    ++ lib.optional (openldap != null) "--enable-openldap"
-    ++ lib.optional (mariadb != null) "--enable-mysql"
-    ++ lib.optional (libpq != null) "--enable-postgresql";
+  configureFlags = [
+    "--prefix="
+    "--disable-debug"
+    "--enable-xml"
+    "--with-ssl=ssl"
+  ]
+  ++ lib.optional (openldap != null) "--enable-openldap"
+  ++ lib.optional (mariadb != null) "--enable-mysql"
+  ++ lib.optional (libpq != null) "--enable-postgresql";
 
   env = {
     GNUSTEP_CONFIG_FILE = "/build/GNUstep.conf";
@@ -76,5 +74,6 @@ clangStdenv.mkDerivation rec {
     homepage = "https://github.com/inverse-inc/sope";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jceb ];
+    knownVulnerabilities = [ "CVE-2025-53603" ];
   };
 }

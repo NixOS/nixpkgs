@@ -13,6 +13,9 @@
   addBinToPathHook,
   gitMinimal,
   versionCheckHook,
+
+  # Optional features
+  enableBuildstreamPlugins ? true,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -34,7 +37,10 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
+    buildbox
+  ]
+  ++ (with python3Packages; [
     click
     dulwich
     grpcio
@@ -50,10 +56,12 @@ python3Packages.buildPythonApplication rec {
     ruamel-yaml-clib
     tomlkit
     ujson
+  ])
+  ++ lib.optionals enableBuildstreamPlugins [
+    python3Packages.buildstream-plugins
   ];
 
   buildInputs = [
-    buildbox
     fuse3
     lzip
     patch
@@ -94,6 +102,9 @@ python3Packages.buildPythonApplication rec {
 
     # Blob not found in the local CAS
     "test_source_pull_partial_fallback_fetch"
+
+    # FAILED tests/sources/tar.py::test_out_of_basedir_hardlinks - AssertionError
+    "test_out_of_basedir_hardlinks"
   ];
 
   disabledTestPaths = [

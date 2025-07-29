@@ -1,12 +1,15 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 
   # build-system
   hatchling,
 
   # dependencies
+  authlib,
   exceptiongroup,
   httpx,
   mcp,
@@ -14,24 +17,24 @@
   python-dotenv,
   rich,
   typer,
-  websockets,
 
   # tests
   dirty-equals,
   fastapi,
+  pytest-httpx,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.4.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-F4lgMm/84svLZo6SZ7AubsC73s4tffqjJcd9gvA7hGA=";
+    hash = "sha256-FleJkqdUIhGsV+DVYv/Nf5IORntH/aFq9abKn2r/6Is=";
   };
 
   postPatch = ''
@@ -45,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    authlib
     exceptiongroup
     httpx
     mcp
@@ -52,7 +56,6 @@ buildPythonPackage rec {
     python-dotenv
     rich
     typer
-    websockets
   ];
 
   pythonImportsCheck = [ "fastmcp" ];
@@ -60,8 +63,28 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dirty-equals
     fastapi
+    pytest-httpx
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  disabledTests = [
+    # AssertionError: assert 'INFO' == 'DEBUG'
+    "test_temporary_settings"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: Server failed to start after 10 attempts
+    "tests/auth/providers/test_bearer.py"
+    "tests/auth/test_oauth_client.py"
+    "tests/client/test_openapi.py"
+    "tests/client/test_sse.py"
+    "tests/client/test_streamable_http.py"
+    "tests/server/http/test_http_dependencies.py"
+    "tests/server/http/test_http_dependencies.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "The fast, Pythonic way to build MCP servers and clients";

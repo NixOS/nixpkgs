@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "397";
+  version = "401";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-Lpt0K5y6ROzsWAdOUTI39s1tWSPxc3yzak5WJfSuhmI=";
+    hash = "sha256-PaK15ky0mwOqEwV9heYuHy5k98dEcZwA0zjRHNPmyho=";
   };
 
   patches = [ ./sixel-256.support.patch ];
@@ -62,17 +62,17 @@ stdenv.mkDerivation rec {
     "--enable-mini-luit"
     "--with-tty-group=tty"
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
-  ] ++ lib.optional enableDecLocator "--enable-dec-locator";
+  ]
+  ++ lib.optional enableDecLocator "--enable-dec-locator";
 
-  env =
-    {
-      # Work around broken "plink.sh".
-      NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isMusl {
-      # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
-      NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
-    };
+  env = {
+    # Work around broken "plink.sh".
+    NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
+    NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  };
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
   # decided by the sysadmin to allow the xterm reporting to /var/run/utmp
@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     echo '#define USE_UTMP_SETGID 1'
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     for bin in $out/bin/*; do

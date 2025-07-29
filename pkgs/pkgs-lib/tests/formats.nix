@@ -143,7 +143,7 @@ runBuildTests {
   };
 
   yaml_1_1Atoms = shouldPass {
-    format = formats.yaml { };
+    format = formats.yaml_1_1 { };
     input = {
       null = null;
       false = false;
@@ -172,6 +172,40 @@ runBuildTests {
       path: ${./testfile}
       str: foo
       time: '22:30:00'
+      'true': true
+    '';
+  };
+
+  yaml_1_2Atoms = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      no = "no";
+      time = "22:30:00";
+    };
+    expected = ''
+      attrs:
+        foo: null
+      'false': false
+      float: 3.141
+      list:
+      - null
+      - null
+      no: no
+      'null': null
+      path: ${./testfile}
+      str: foo
+      time: 22:30:00
       'true': true
     '';
   };
@@ -663,6 +697,7 @@ runBuildTests {
       list = [1, 2]
       str = "foo"
       true = true
+
       [attrs]
       foo = "foo"
 

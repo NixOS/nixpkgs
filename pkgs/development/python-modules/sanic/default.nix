@@ -13,6 +13,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  sanic-ext,
   sanic-routing,
   sanic-testing,
   setuptools,
@@ -54,9 +55,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ext = [
-      # TODO: sanic-ext
-    ];
+    ext = [ sanic-ext ];
     http3 = [ aioquic ];
   };
 
@@ -67,7 +66,8 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
-  ] ++ optional-dependencies.http3;
+  ]
+  ++ optional-dependencies.http3;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

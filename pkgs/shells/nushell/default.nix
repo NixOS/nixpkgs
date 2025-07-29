@@ -20,9 +20,11 @@
 }:
 
 let
-  version = "0.104.1";
+  # NOTE: when updating this to a new non-patch version, please also try to
+  # update the plugins. Plugins only work if they are compiled for the same
+  # major/minor version.
+  version = "0.105.1";
 in
-
 rustPlatform.buildRustPackage {
   pname = "nushell";
   inherit version;
@@ -31,33 +33,33 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-ibQBwcoWzxl7t5q0KpiCiEmAasJJjBg2LMGf28y3sCk=";
+    hash = "sha256-UcIcCzfe2C7qFJKLo3WxwXyGI1rBBrhQHtrglKNp6ck=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8HxLX94i86F9vsnlZFgvVdTCkponlEA51WXCT3zlc2w=";
+  cargoHash = "sha256-v3BtcEd1eMtHlDLsu0Y4i6CWA47G0CMOyVlMchj7EJo=";
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    [
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      nghttp2
-      libgit2
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+    nghttp2
+    libgit2
+  ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
+
+  preCheck = ''
+    export NU_TEST_LOCALE_OVERRIDE="en_US.UTF-8"
+  '';
 
   checkPhase = ''
     runHook preCheck
@@ -75,9 +77,9 @@ rustPlatform.buildRustPackage {
     runHook postCheck
   '';
 
-  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    curlMinimal
-  ];
+  checkInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [ curlMinimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     shellPath = "/bin/nu";
@@ -95,6 +97,7 @@ rustPlatform.buildRustPackage {
       Br1ght0ne
       johntitor
       joaquintrinanes
+      ryan4yin
     ];
     mainProgram = "nu";
   };

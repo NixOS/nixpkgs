@@ -172,7 +172,6 @@ self: super: {
       git
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-cgUBa0rgfJFnosCgD20G1rlOl/nyXJ9bA9SSf4BuqAs=";
 
     postInstall = ''

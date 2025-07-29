@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5kxuALU815dCfqMqFgUTQlsD7U8HdzP3Hx8J/zQPIws=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Show battery status and other ACPI information";
     mainProgram = "acpi";
     longDescription = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/acpiclient/";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/Jordi1990/aioaquacell/releases/tag/v${version}";
-    description = "Asynchronous library to retrieve details of your Aquacell water softener device.";
+    description = "Asynchronous library to retrieve details of your Aquacell water softener device";
     homepage = "https://github.com/Jordi1990/aioaquacell";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pyrox0 ];

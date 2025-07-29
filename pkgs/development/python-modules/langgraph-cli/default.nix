@@ -15,7 +15,7 @@
   docker-compose,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     docker-compose
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langgraph_cli" ];
 
@@ -59,11 +59,8 @@ buildPythonPackage rec {
     "test_dockerfile_command_with_docker_compose"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "cli==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "cli==";
   };
 
   meta = {

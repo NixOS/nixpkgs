@@ -18,7 +18,9 @@ let
 
   pkgs = import nixpkgs' {
     inherit system;
-    config = { };
+    config = {
+      permittedInsecurePackages = [ "nix-2.3.18" ];
+    };
     overlays = [ ];
   };
 
@@ -47,10 +49,25 @@ let
 
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt-rfc-style underneath,
+        # This uses nixfmt underneath,
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
+
+        programs.yamlfmt = {
+          enable = true;
+          settings.formatter = {
+            retain_line_breaks = true;
+          };
+        };
+        settings.formatter.yamlfmt.excludes = [
+          # Breaks helm templating
+          "nixos/tests/k3s/k3s-test-chart/templates/*"
+          # Aligns comments with whitespace
+          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
+          # TODO: Fix formatting for auto-generated file
+          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
+        ];
 
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
@@ -72,11 +89,17 @@ let
     };
 
 in
-{
+rec {
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
-  eval = pkgs.callPackage ./eval { };
+
+  # FIXME(lf-): it might be useful to test other Nix implementations
+  # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
+  # have eval divergence.
+  eval = pkgs.callPackage ./eval {
+    nix = pkgs.nixVersions.latest;
+  };
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
@@ -87,7 +110,22 @@ in
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
+    # TODO: Raise nixVersions.minimum to 2.24 and flip back to it.
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
+  tarball = import ../pkgs/top-level/make-tarball.nix {
+    # Mirrored from top-level release.nix:
+    nixpkgs = {
+      outPath = pkgs.lib.cleanSource ../.;
+      revCount = 1234;
+      shortRev = "abcdef";
+      revision = "0000000000000000000000000000000000000000";
+    };
+    officialRelease = false;
+    inherit pkgs lib-tests;
+    # 2.28 / 2.29 take 9x longer than 2.30 or Lix.
+    # TODO: Switch back to nixVersions.latest
+    nix = pkgs.lix;
+  };
 }

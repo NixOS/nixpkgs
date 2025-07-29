@@ -41,14 +41,13 @@ mkXfceDerivation {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala # vala bindings require GObject introspection
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala # vala bindings require GObject introspection
+  ];
 
   buildInputs = [
     cairo

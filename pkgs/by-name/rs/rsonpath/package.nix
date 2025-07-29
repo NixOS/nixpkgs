@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     tagPrefix = "v";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9pSn0f0VWsBg1z1UYGRtMb1z23htRm7qLmO80zvSjN8=";
 
   cargoBuildFlags = [ "-p=rsonpath" ];

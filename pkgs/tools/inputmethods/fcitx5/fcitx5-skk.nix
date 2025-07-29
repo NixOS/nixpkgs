@@ -32,15 +32,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fcitx5
-      libskk
-    ]
-    ++ lib.optionals enableQt [
-      fcitx5-qt
-      qtbase
-    ];
+  buildInputs = [
+    fcitx5
+    libskk
+  ]
+  ++ lib.optionals enableQt [
+    fcitx5-qt
+    qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" enableQt)

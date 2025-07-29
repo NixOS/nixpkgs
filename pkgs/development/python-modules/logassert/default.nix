@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "logassert";
-  version = "8.2";
+  version = "8.5";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "facundobatista";
     repo = "logassert";
     tag = version;
-    hash = "sha256-wtSX1jAHanHCF58cSNluChWY3lrrsgludnnW+xVJuOo=";
+    hash = "sha256-77oP7NE1fK1pA6baTHoSbfR7kR4URSmSpZSCgFO5Pb4=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "A simple Log Assertion mechanism for Python unittests";
     homepage = "https://github.com/facundobatista/logassert";
-    changelog = "https://github.com/facundobatista/logassert/releases/tag/${version}";
+    changelog = "https://github.com/facundobatista/logassert/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

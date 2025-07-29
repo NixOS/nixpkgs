@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     gd
   ];
 
+  doInstallCheck = true;
+
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 

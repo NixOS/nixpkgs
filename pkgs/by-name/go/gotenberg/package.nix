@@ -24,21 +24,19 @@ let
 in
 buildGoModule rec {
   pname = "gotenberg";
-  version = "8.16.0";
+  version = "8.21.1";
 
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${version}";
-    hash = "sha256-m8aDhfcUa3QFr+7hzlQFL2wPfcx5RE+3dl5RHzWwau0=";
+    hash = "sha256-2uILOK5u+HrdjqN+ZQjGv48QxSCrzSvnF+Ae6iCKCbU=";
   };
 
-  vendorHash = "sha256-EM+Rpo4Zf+aqA56aFeuQ0tbvpTgZhmfv+B7qYI6PXWc=";
+  vendorHash = "sha256-sTcP/tyrCtvgYeOnsbqRFdBC1bbMAbA978t6LOTKFio=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
-    substituteInPlace pkg/gotenberg/fs_test.go \
-      --replace-fail "/tmp" "/build"
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];

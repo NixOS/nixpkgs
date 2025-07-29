@@ -40,7 +40,8 @@ buildPythonPackage rec {
     python-dateutil
     requests
     uritemplate
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   pythonImportsCheck = [ "github3" ];
 

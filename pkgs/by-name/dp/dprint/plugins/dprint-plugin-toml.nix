@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "TOML code formatter.";
+  description = "TOML code formatter";
   hash = "sha256-ASbIESaRVC0wtSpjkHbsyD4Hus6HdjjO58aRX9Nrhik=";
   initConfig = {
     configExcludes = [ ];

@@ -1,19 +1,14 @@
-import ./make-test-python.nix {
+{
   name = "neo4j";
 
-  nodes = {
-    server =
-      { ... }:
+  nodes.server = {
+    virtualisation.memorySize = 4096;
+    virtualisation.diskSize = 1024;
 
-      {
-        virtualisation.memorySize = 4096;
-        virtualisation.diskSize = 1024;
-
-        services.neo4j.enable = true;
-        # require tls certs to be available
-        services.neo4j.https.enable = false;
-        services.neo4j.bolt.enable = false;
-      };
+    services.neo4j.enable = true;
+    # require tls certs to be available
+    services.neo4j.https.enable = false;
+    services.neo4j.bolt.enable = false;
   };
 
   testScript = ''

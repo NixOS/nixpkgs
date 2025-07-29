@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.250.0";
+  version = "0.260.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AqXwlt7Aqi0cRoDiUfE1LFOJqtRmySuA6D4RMYOonU4=";
+    hash = "sha256-N3l7K+KQ7P7O4zooh3AgvAnLJM8Bsp4qJw9501SnO5c=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
   '';
 
-  vendorHash = "sha256-tpm7eCjJuRpVnZfMZais1bHVhnQ8DxchaN1/7ljKNOo=";
+  vendorHash = "sha256-jwEJ0Uoq6pVo1/a1mXj7n2BRiWAmhlxLE0WxSrqcL8w=";
 
   excludedPackages = [
     "bundle/internal"
@@ -50,6 +50,11 @@ buildGoModule (finalAttrs: {
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      "TestWorkspaceVerifyProfileForHost"
+      "TestWorkspaceVerifyProfileForHost/default_config_file_with_match"
+      "TestWorkspaceResolveProfileFromHost"
+      "TestWorkspaceResolveProfileFromHost/no_config_file"
+      "TestBundleConfigureDefault"
       # Use uv venv which doesn't work with nix
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"

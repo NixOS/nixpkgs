@@ -47,6 +47,10 @@ let
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
       hash = "sha256-B+ztN1zsFE0nyQAkHz4zlHjeyVj5L928VR8pXJkgOKM=";
     };
+    "tokenizer-llama3.json" = fetchurl {
+      url = "https://huggingface.co/Narsil/llama-tokenizer/resolve/main/tokenizer.json";
+      hash = "sha256-eePlImNfMXEwCRO7QhRkqH3mIiGCoFcLmyzLoqlksrQ=";
+    };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
       hash = "sha256-+gZsfUDw8gGsQUTmUqpiQw5YprOAXscGUPZ42lgE6Hs=";
@@ -71,32 +75,21 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.1";
+  version = "0.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-3S7ZCaZnnwyNjoZ4Y/q3ngQE2MIm2iyCCjYAkdMVG2A=";
+    hash = "sha256-8z1jgH0Nj7D+joN42AA2ORNSLvcfWiYHn4dpTq1HWB0=";
   };
 
-  # TestUnigram.test_continuing_prefix_trainer_mismatch fails with:
-  # Exception: No such file or directory (os error 2)
-  # Fix submitted upstream: https://github.com/huggingface/tokenizers/pull/1747
   postPatch = ''
-    substituteInPlace tests/bindings/test_trainers.py \
-      --replace-fail '"data/' '"tests/data/'
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      sourceRoot
-      ;
-    hash = "sha256-I7LlBmeVY2rWI0ta6x311iAurQKuutsClrbUgkt9xWk=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
   sourceRoot = "${src.name}/bindings/python";

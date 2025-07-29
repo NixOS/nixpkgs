@@ -35,12 +35,12 @@ buildDotnetModule rec {
     updateScript = ./updater.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to export Discord chat logs to a file (GUI version)";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
-    maintainers = with maintainers; [ willow ];
+    maintainers = with lib.maintainers; [ willow ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "discordchatexporter";
   };

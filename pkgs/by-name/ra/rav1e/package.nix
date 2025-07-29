@@ -13,34 +13,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
+    hash = "sha256-hVeBrfZxqkxzUeuut0XgU4qph1z4gPzV/9mS7X9byto=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-sJO40DN/Zfchg9J/7wTmO/RS88Zb6fIJ7nX4VNGe/eA=";
+  cargoHash = "sha256-EDXzpHrdaHd3FQEuVnkQzqsYAjShsGc4XLhDAfmVXK8=";
 
   nativeBuildInputs = [
     cargo-c
     nasm
   ];
 
-  postPatch =
-    ''
-      # remove feature that requires libgit2 and is only used to print a version string
-      substituteInPlace Cargo.toml --replace-fail '"git_version",' ""
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
-      # and linking it with cctools ld64.
-      substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
+  postPatch = ''
+    # remove feature that requires libgit2 and is only used to print a version string
+    substituteInPlace Cargo.toml --replace-fail '"git_version",' ""
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
+    # and linking it with cctools ld64.
+    substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
 
-      # Thin LTO doesn’t appear to work with Rust 1.79. rav1e fail to build when building fern.
-      substituteInPlace Cargo.toml --replace-fail 'lto = "thin"' 'lto = "fat"'
-    '';
+    # Thin LTO doesn’t appear to work with Rust 1.79. rav1e fail to build when building fern.
+    substituteInPlace Cargo.toml --replace-fail 'lto = "thin"' 'lto = "fat"'
+  '';
 
   checkType = "debug";
 

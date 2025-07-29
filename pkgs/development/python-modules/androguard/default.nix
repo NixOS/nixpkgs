@@ -51,31 +51,30 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
 
-  dependencies =
-    [
-      apkinspector
-      asn1crypto
-      click
-      colorama
-      cryptography
-      dataset
-      frida-python
-      ipython
-      loguru
-      lxml
-      matplotlib
-      mutf8
-      networkx
-      oscrypto
-      pydot
-      pygments
-      pyyaml
-    ]
-    ++ networkx.optional-dependencies.default
-    ++ networkx.optional-dependencies.extra
-    ++ lib.optionals withGui [
-      pyqt5
-    ];
+  dependencies = [
+    apkinspector
+    asn1crypto
+    click
+    colorama
+    cryptography
+    dataset
+    frida-python
+    ipython
+    loguru
+    lxml
+    matplotlib
+    mutf8
+    networkx
+    oscrypto
+    pydot
+    pygments
+    pyyaml
+  ]
+  ++ networkx.optional-dependencies.default
+  ++ networkx.optional-dependencies.extra
+  ++ lib.optionals withGui [
+    pyqt5
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -84,7 +83,7 @@ buildPythonPackage rec {
   ];
 
   # If it won't be verbose, you'll see nothing going on for a long time.
-  pytestFlagsArray = [ "--verbose" ];
+  pytestFlags = [ "--verbose" ];
 
   preFixup = lib.optionalString withGui ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

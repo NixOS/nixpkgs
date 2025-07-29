@@ -31,12 +31,12 @@ buildGoModule rec {
 
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";
     changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudlist";
   };
 }

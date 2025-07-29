@@ -110,9 +110,19 @@ let
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
   hasNoMaintainers =
+    # To get usable output, we want to avoid flagging "internal" derivations.
+    # Because we do not have a way to reliably decide between internal or
+    # external derivation, some heuristics are required to decide.
+    #
+    # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
+    # If `description` is not defined, the derivation is probably not a package.
+    # Simply checking whether `meta` is defined is insufficient,
+    # as some fetchers and trivial builders do define meta.
     attrs:
-    (attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0)
-    && (attrs ? meta.teams && (length attrs.meta.teams) == 0);
+    (!attrs ? outputHash)
+    && (attrs ? meta.description)
+    && (attrs.meta.maintainers or [ ] == [ ])
+    && (attrs.meta.teams or [ ] == [ ]);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -592,7 +602,8 @@ let
           else
             findFirst hasOutput null outputs
         )
-      ] ++ optional (hasOutput "man") "man";
+      ]
+      ++ optional (hasOutput "man") "man";
     }
     // (filterAttrs (_: v: v != null) {
       # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
@@ -610,8 +621,7 @@ let
       # Note that there may be external consumers of this API (repology, for instance) -
       # if you add a new maintainer or team attribute please ensure that this expectation is still met.
       maintainers =
-        attrs.meta.maintainers or [ ]
-        ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
     }
     // {
       # Expose the result of the checks for everyone to see.

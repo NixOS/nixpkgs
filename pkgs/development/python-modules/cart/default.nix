@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "unittests" ];
+  enabledTestPaths = [ "unittests" ];
 
   pythonImportsCheck = [ "cart" ];
 

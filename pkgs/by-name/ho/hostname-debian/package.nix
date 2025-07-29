@@ -1,27 +1,32 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hostname-debian";
-  version = "3.23";
+  version = "3.25";
 
-  src = fetchurl {
-    url = "https://deb.debian.org/debian/pool/main/h/hostname/hostname_${version}.tar.gz";
-    sha256 = "sha256-vG0ZVLIoSYaf+LKmAuOfCLFwL2htS1jdeSfN61tIdu8=";
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "meskes";
+    repo = "hostname";
+    tag = "debian/${version}";
+    hash = "sha256-Yq8P5bF/RRZnWuFW0y2u08oZrydAKfopOtbrwbeIu3w=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile --replace 'install -o root -g root' 'install'
-  '';
   makeFlags = [
-    "BINDIR=$(out)/bin"
-    "MANDIR=$(out)/share/man"
+    "prefix=${placeholder "out"}"
   ];
 
   meta = with lib; {
+    changelog = "https://salsa.debian.org/meskes/hostname/-/blob/${src.tag}/debian/changelog";
     description = "Utility to set/show the host name or domain name";
     longDescription = ''
       This package provides commands which can be used to display the system's
@@ -29,6 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://tracker.debian.org/pkg/hostname";
     license = licenses.gpl2Plus;
+    mainProgram = "hostname";
     maintainers = with maintainers; [ posch ];
     platforms = platforms.gnu;
   };

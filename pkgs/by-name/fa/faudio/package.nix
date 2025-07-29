@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "faudio";
-  version = "25.04";
+  version = "25.07";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
     tag = finalAttrs.version;
-    hash = "sha256-nYpolFizEWCSI/YENViMKDu7ExpFpPivH5RnS7PMfkA=";
+    hash = "sha256-ZMU3ntvnUHbeWQ5k5ZSnSLBABGm/F/rSAUM4blorpts=";
   };
 
   nativeBuildInputs = [ cmake ];

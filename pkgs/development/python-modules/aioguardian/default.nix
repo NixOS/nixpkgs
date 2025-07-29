@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "asyncio_dgram"
+    "frozenlist"
     "typing-extensions"
   ];
 
@@ -64,7 +65,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioguardian" ];
 
   meta = with lib; {
-    description = " Python library to interact with Elexa Guardian devices";
+    description = "Python library to interact with Elexa Guardian devices";
     longDescription = ''
       aioguardian is an asyncio-focused library for interacting with the
       Guardian line of water valves and sensors from Elexa.

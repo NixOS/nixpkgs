@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker-core";
-  version = "1.0.34";
+  version = "1.0.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-core";
     tag = "v${version}";
-    hash = "sha256-ZkV4SfJS+3otrzYFZH7lt/tBsFTbfss9Yt7OKgl3fSQ=";
+    hash = "sha256-/NXSuDQAhRQ5RuYV1Eaat0TjMzqj1IYp3LECmTISoK8=";
   };
 
   build-system = [
@@ -75,7 +75,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # Tries to import deprecated `sklearn`

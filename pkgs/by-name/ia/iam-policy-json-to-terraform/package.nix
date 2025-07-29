@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-6EtOMs+Vba39hOQ029dHpHCJ9ke35PZ/em9Xye3dmvg=";
 
-  meta = with lib; {
+  meta = {
     description = "Small tool to convert an IAM Policy in JSON format into a Terraform aws_iam_policy_document";
     homepage = "https://github.com/flosell/iam-policy-json-to-terraform";
     changelog = "https://github.com/flosell/iam-policy-json-to-terraform/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

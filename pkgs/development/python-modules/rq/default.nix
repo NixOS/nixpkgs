@@ -16,20 +16,19 @@
   psutil,
   pytestCheckHook,
   redisTestHook,
-  sentry-sdk,
   versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.3.3";
+  version = "2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-NUs544J/pC2QNyR2aIlac2P06so7JmB2P6FB/gmR7wI=";
+    hash = "sha256-7aq9JeyM+IjlRPgh4gs1DmkF0hU5EasgTuUPPlf8960=";
   };
 
   build-system = [ hatchling ];
@@ -44,7 +43,6 @@ buildPythonPackage rec {
     psutil
     pytestCheckHook
     redisTestHook
-    sentry-sdk
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";

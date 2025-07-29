@@ -30,7 +30,7 @@ mixRelease rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A protoc plugin to generate Elixir code";
+    description = "Protoc plugin to generate Elixir code";
     mainProgram = "protoc-gen-elixir";
     homepage = "https://github.com/elixir-protobuf/protobuf";
     license = lib.licenses.mit;

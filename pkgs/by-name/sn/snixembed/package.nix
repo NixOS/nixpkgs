@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy StatusNotifierItems as XEmbedded systemtray-spec icons";
     homepage = "https://git.sr.ht/~steef/snixembed";
     changelog = "https://git.sr.ht/~steef/snixembed/refs/${version}";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "snixembed";
   };
 }

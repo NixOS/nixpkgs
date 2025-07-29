@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchurl,
-  fetchDebianPatch,
+  fetchpatch,
   autoreconfHook,
   makeWrapper,
   pkg-config,
@@ -22,16 +22,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "1";
-      patch = "0001-Use-ocamlopt-g-option.patch";
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/ocaml-augeas/-/raw/07c2408a7e5a06cefe5d53a89fecaa8556a39b06/debian/patches/0001-Use-ocamlopt-g-option.patch";
       hash = "sha256-EMd/EfWO2ni0AMonfS7G5FENpVVq0+q3gUPd4My+Upg=";
     })
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "1";
-      patch = "0002-caml_named_value-returns-const-value-pointer-in-OCam.patch";
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/ocaml-augeas/-/raw/07c2408a7e5a06cefe5d53a89fecaa8556a39b06/debian/patches/0002-caml_named_value-returns-const-value-pointer-in-OCam.patch";
       hash = "sha256-Y53UHwrTVeV3hnsvABmWxlPi2Fanm0Iy1OR8Zql5Ub8=";
     })
   ];

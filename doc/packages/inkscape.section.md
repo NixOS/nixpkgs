@@ -8,9 +8,7 @@ To enable them, use an override on `inkscape-with-extensions`:
 
 ```nix
 inkscape-with-extensions.override {
-  inkscapeExtensions = with inkscape-extensions; [
-    inkstitch
-  ];
+  inkscapeExtensions = with inkscape-extensions; [ inkstitch ];
 }
 ```
 

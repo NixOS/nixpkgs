@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.55.0";
+  version = "3.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
     tag = "v${version}";
-    hash = "sha256-0+mTBqgy8SaHjoYhQjCaypipVsJTrN2DdhcfPY3PxSc=";
+    hash = "sha256-yCEFVf/euu48j+0jK5QfjhdJMV4c4mEHFYE+Ukz7Rjo=";
   };
 
   build-system = [ setuptools ];
@@ -78,7 +78,8 @@ buildPythonPackage rec {
     opentelemetry-semantic-conventions
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # prevent google directory from shadowing google imports
@@ -94,6 +95,8 @@ buildPythonPackage rec {
     "test_generate_client_hash"
     # Flaky, compares to execution time
     "test_snapshot_read_concurrent"
+    # Flaky, can retry too quickly and fail
+    "test_retry_helper"
   ];
 
   disabledTestPaths = [

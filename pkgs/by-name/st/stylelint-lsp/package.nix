@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-PVA6sXbiuxqvi9u3sPoeVIJSSpSbFQHQQnTFO3w31WE=";
   };
 
@@ -62,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A stylelint Language Server";
+    description = "Stylelint Language Server";
     homepage = "https://github.com/bmatcuk/stylelint-lsp";
     license = lib.licenses.mit;
     mainProgram = "stylelint-lsp";

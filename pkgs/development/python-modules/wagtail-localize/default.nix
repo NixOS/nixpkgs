@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.11.3";
+  version = "1.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     repo = "wagtail-localize";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-uTZqpitexB5e2/W9HtNo0j4gOW9vDS2BsaVq16BUFM4=";
+    hash = "sha256-DY3owyxJrEPMP4Lfrcyo48gg6be25xSbv87BxW5sPE4=";
   };
 
   build-system = [ flit-core ];

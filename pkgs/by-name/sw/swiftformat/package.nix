@@ -12,13 +12,13 @@
 
 swift.stdenv.mkDerivation rec {
   pname = "swiftformat";
-  version = "0.56.2";
+  version = "0.57.2";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     rev = version;
-    sha256 = "sha256-nG2ZRL1hd+0DZ91ZjYVe2JCF9Q973p3Uy/OHlHti2TM=";
+    sha256 = "sha256-KMSRryaSoAX4zi+AhIEHFMX0UVN8ena27SoJF8gAbzY=";
   };
 
   nativeBuildInputs = [

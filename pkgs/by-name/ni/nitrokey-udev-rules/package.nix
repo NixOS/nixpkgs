@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
+  udevCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,7 +17,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-LKpd6O9suAc2+FFgpuyTClEgL/JiZiokH3DV8P3C7Aw=";
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   buildPhase = ''
     runHook preBuild

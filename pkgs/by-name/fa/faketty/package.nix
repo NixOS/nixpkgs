@@ -13,22 +13,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ntfbwaVZM4wtoDaaFo+Y7RHSft3KZ29DMsNiTvhiaXs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-0pDm/e1xisPLqdTe10kleoejQfuOZoZW6l/83Splz/Y=";
 
   postPatch = ''
     patchShebangs tests/test.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to execute a command in a pty, even if redirecting the output";
     homepage = "https://github.com/dtolnay/faketty";
     changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "faketty";
   };
 }

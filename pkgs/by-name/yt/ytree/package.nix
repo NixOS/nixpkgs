@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytree";
-  version = "2.06";
+  version = "2.10";
 
   src = fetchurl {
     url = "https://han.de/~werner/ytree-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QRqI779ZnnytVUC7A7Zt0zyWexRwBnp+CVQcNvnvWeY=";
+    hash = "sha256-O7u9MvVoza4+A/xzWxeD2MumBaLKYFbRuXEUPX3dUX0=";
   };
 
   patches = [

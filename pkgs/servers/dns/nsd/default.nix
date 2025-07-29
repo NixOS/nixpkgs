@@ -4,6 +4,8 @@
   fetchurl,
   libevent,
   openssl,
+  pkg-config,
+  systemdMinimal,
   nixosTests,
   bind8Stats ? false,
   checking ? false,
@@ -16,6 +18,7 @@
   rootServer ? false,
   rrtypes ? false,
   zoneStats ? false,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 
   configFile ? "/etc/nsd/nsd.conf",
 }:
@@ -36,6 +39,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libevent
     openssl
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+    pkg-config
   ];
 
   enableParallelBuilding = true;
@@ -55,6 +62,7 @@ stdenv.mkDerivation rec {
     ++ edf rootServer "root-server"
     ++ edf rrtypes "draft-rrtypes"
     ++ edf zoneStats "zone-stats"
+    ++ edf withSystemd "systemd"
     ++ [
       "--with-ssl=${openssl.dev}"
       "--with-libevent=${libevent.dev}"
@@ -71,7 +79,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://www.nlnetlabs.nl";
+    homepage = "https://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
     license = licenses.bsd3;
     platforms = platforms.unix;

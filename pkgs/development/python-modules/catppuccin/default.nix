@@ -2,8 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   matplotlib,
   pygments,
   rich,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "2.3.4";
+  version = "2.4.1";
 
   pyproject = true;
 
@@ -20,13 +19,10 @@ buildPythonPackage rec {
     owner = "catppuccin";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-0+sbf2m0vJCf6EOl6DMqgtL35RJh+rehi/p0ylTPJK8=";
+    hash = "sha256-lQsJnzOnyDIUu1mbydiyfRwh0zCRGU35p0Kn2a3H/48=";
   };
 
-  build-system = [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     matplotlib = [ matplotlib ];

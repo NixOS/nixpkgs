@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  abseil-cpp,
+  abseil-cpp_202407, # downgrade, same reason as toplevel protobuf_29
   protobuf_29,
   pybind11,
   zlib,
@@ -31,26 +31,25 @@ buildPythonPackage {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    abseil-cpp
+    abseil-cpp_202407
     protobuf_29
     pybind11
     zlib
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)
-      (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
-      (lib.cmakeBool "USE_SYSTEM_PYBIND" true)
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)
+    (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
+    (lib.cmakeBool "USE_SYSTEM_PYBIND" true)
 
-      # The find_package calls are local to the dependencies subdirectory
-      (lib.cmakeBool "CMAKE_FIND_PACKAGE_TARGETS_GLOBAL" true)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Without it, Cmake prefers using Find-module which is mysteriously broken
-      # But the generated Config works
-      (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
-    ];
+    # The find_package calls are local to the dependencies subdirectory
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_TARGETS_GLOBAL" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Without it, Cmake prefers using Find-module which is mysteriously broken
+    # But the generated Config works
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+  ];
 
   meta = {
     description = "Pybind11 bindings for Google's Protocol Buffers";

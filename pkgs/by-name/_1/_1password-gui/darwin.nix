@@ -30,4 +30,6 @@ stdenv.mkDerivation {
 
   # 1Password is notarized.
   dontFixup = true;
+
+  passthru.updateScript = ./update.sh;
 }

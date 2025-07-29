@@ -96,7 +96,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Follow github CI
     "docs/examples/"
   ];

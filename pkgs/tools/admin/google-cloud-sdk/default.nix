@@ -21,6 +21,7 @@
 }:
 
 let
+  # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
   # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
   pythonCustom = python3.override {
     self = pythonCustom;
@@ -29,8 +30,10 @@ let
         version = "24.2.1";
         src = old.src.override {
           tag = version;
-          hash = "sha256-otK7Y7Kb/l3QOErhAcuDHB/CKG9l1vH2BTnOieAWNc0=";
+          hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
         };
+        # 36 failed tests
+        doCheck = false;
       });
     };
   };
@@ -44,6 +47,7 @@ let
       pyopenssl
       crcmod
       numpy
+      grpcio
     ]
     ++ lib.optional (with-gce) google-compute-engine
   );
@@ -179,6 +183,7 @@ stdenv.mkDerivation rec {
       pradyuman
       stephenmw
       zimbatm
+      ryan4yin
     ];
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";

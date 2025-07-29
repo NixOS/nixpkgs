@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   # Currently most tests have performance issues
-  pytestFlagsArray = [ "coconut/tests/constants_test.py" ];
+  enabledTestPaths = [ "coconut/tests/constants_test.py" ];
 
   pythonImportsCheck = [ "coconut" ];
 

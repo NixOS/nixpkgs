@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      gdal
-      proj
-      protobuf
-      qt5.qtnetworkauth
-      qt5.qtsvg
-      qt5.qtwebengine
-    ]
-    ++ lib.optional withGeoimage exiv2
-    ++ lib.optional withGpsdlib gpsd
-    ++ lib.optional withLibproxy libproxy
-    ++ lib.optional withZbar zbar;
+  buildInputs = [
+    gdal
+    proj
+    protobuf
+    qt5.qtnetworkauth
+    qt5.qtsvg
+    qt5.qtwebengine
+  ]
+  ++ lib.optional withGeoimage exiv2
+  ++ lib.optional withGpsdlib gpsd
+  ++ lib.optional withLibproxy libproxy
+  ++ lib.optional withZbar zbar;
 
   cmakeFlags = [
     (lib.cmakeBool "GEOIMAGE" withGeoimage)
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OpenStreetMap editor";
-    homepage = "http://merkaartor.be/";
+    homepage = "https://merkaartor.be/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "merkaartor";
     maintainers = with lib.maintainers; [ sikmir ];

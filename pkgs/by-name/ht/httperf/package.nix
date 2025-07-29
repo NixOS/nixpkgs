@@ -21,10 +21,14 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ openssl ];
 
   configurePhase = ''
+    runHook preConfigure
+
     autoreconf -i
     mkdir -pv build
     cd build
     ../configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''

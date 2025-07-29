@@ -4,6 +4,7 @@
   fetchurl,
   tcl,
   usb-modeswitch,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,8 @@ stdenv.mkDerivation rec {
     url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
     sha256 = "1ygahl3r26r38ai8yyblq9nhf3v5i6n6r6672p5wf88wg5h9n0rz";
   };
+
+  doInstallCheck = true;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -32,7 +35,10 @@ stdenv.mkDerivation rec {
 
   # we add tcl here so we can patch in support for new devices by dropping config into
   # the usb_modeswitch.d directory
-  nativeBuildInputs = [ tcl ];
+  nativeBuildInputs = [
+    tcl
+    udevCheckHook
+  ];
 
   meta = with lib; {
     description = "Device database and the rules file for 'multi-mode' USB devices";

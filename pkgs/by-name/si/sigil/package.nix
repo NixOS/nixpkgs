@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sigil";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     tag = version;
-    hash = "sha256-1Z+OosEZJEHiUz+62wYuNeAyQXARh14WAtqBVjq1FZw=";
+    hash = "sha256-orOuY+gCh7X24jfnGgCbqRWDbtQqrlopYx9sWN2VawA=";
   };
 
   pythonPath = with python3Packages; [ lxml ];
@@ -57,9 +57,27 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  dontWrapQtApps = true;
+
   preFixup = ''
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
+
+  fixupPhase =
+    let
+      sigil =
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/Sigil.app/Contents/MacOS/Sigil"
+        else
+          "$out/bin/sigil";
+    in
+    ''
+      runHook preFixup
+
+      wrapQtApp "${sigil}"
+
+      runHook postFixup
+    '';
 
   meta = {
     description = "Free, open source, multi-platform ebook (ePub) editor";

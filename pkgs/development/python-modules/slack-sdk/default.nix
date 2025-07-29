@@ -6,9 +6,7 @@
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  flake8,
   moto,
-  psutil,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -20,22 +18,21 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.35.0";
+  version = "3.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     tag = "v${version}";
-    hash = "sha256-yjYpALyHSTLQSuwd6xth7nqfi3m1C9tqnWrrVRmI220=";
+    hash = "sha256-Y6w4osSpirBjxPdZRlODwEAWd4Z+sPHrr7alVl/6mPA=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  optional-dependencies.optional = [
     aiodns
     aiohttp
-    aiosqlite
     boto3
     sqlalchemy
     websocket-client
@@ -45,12 +42,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_sdk" ];
 
   nativeCheckInputs = [
-    flake8
+    aiosqlite
     moto
-    psutil
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.optional;
 
   disabledTests = [
     # Requires internet access (to slack API)

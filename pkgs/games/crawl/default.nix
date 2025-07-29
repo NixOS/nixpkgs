@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
-  version = "0.32.1";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    hash = "sha256-jhjFC8+A2dQomMwKZPSiEViXeQpty2Dk9alDcNsLvq0=";
+    hash = "sha256-GXrYLGoQ1UwDHs+kLLcaBNpJ2BVMv4NhmpyfNFxPmg8=";
   };
 
   # Patch hard-coded paths and remove force library builds
@@ -53,51 +53,48 @@ stdenv.mkDerivation rec {
   ];
 
   # Still unstable with luajit
-  buildInputs =
-    [
-      lua5_1
-      zlib
-      sqlite
-      ncurses
-    ]
-    ++ (with python3.pkgs; [ pyyaml ])
-    ++ lib.optionals tileMode [
-      libpng
-      SDL2
-      SDL2_image
-      freetype
-      libGLU
-      libGL
-    ]
-    ++ lib.optional enableSound SDL2_mixer;
+  buildInputs = [
+    lua5_1
+    zlib
+    sqlite
+    ncurses
+  ]
+  ++ (with python3.pkgs; [ pyyaml ])
+  ++ lib.optionals tileMode [
+    libpng
+    SDL2
+    SDL2_image
+    freetype
+    libGLU
+    libGL
+  ]
+  ++ lib.optional enableSound SDL2_mixer;
 
-  preBuild =
-    ''
-      cd crawl-ref/source
-      echo "${version}" > util/release_ver
-      patchShebangs 'util'
-      patchShebangs util/gen-mi-enum
-      rm -rf contrib
-      mkdir -p $out/xdg-data
-    ''
-    + lib.optionalString tileMode "mv xdg-data/*_tiles.* $out/xdg-data"
-    + lib.optionalString (!tileMode) "mv xdg-data/*_console.* $out/xdg-data";
+  preBuild = ''
+    cd crawl-ref/source
+    echo "${version}" > util/release_ver
+    patchShebangs 'util'
+    patchShebangs util/gen-mi-enum
+    rm -rf contrib
+    mkdir -p $out/xdg-data
+  ''
+  + lib.optionalString tileMode "mv xdg-data/*_tiles.* $out/xdg-data"
+  + lib.optionalString (!tileMode) "mv xdg-data/*_console.* $out/xdg-data";
 
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  makeFlags =
-    [
-      "prefix=${placeholder "out"}"
-      "FORCE_CC=${stdenv.cc.targetPrefix}cc"
-      "FORCE_CXX=${stdenv.cc.targetPrefix}c++"
-      "HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}c++"
-      "FORCE_PKGCONFIG=y"
-      "SAVEDIR=~/.crawl"
-      "sqlite=${sqlite.dev}"
-      "DATADIR=${placeholder "out"}"
-    ]
-    ++ lib.optional tileMode "TILES=y"
-    ++ lib.optional enableSound "SOUND=y";
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "FORCE_CC=${stdenv.cc.targetPrefix}cc"
+    "FORCE_CXX=${stdenv.cc.targetPrefix}c++"
+    "HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}c++"
+    "FORCE_PKGCONFIG=y"
+    "SAVEDIR=~/.crawl"
+    "sqlite=${sqlite.dev}"
+    "DATADIR=${placeholder "out"}"
+  ]
+  ++ lib.optional tileMode "TILES=y"
+  ++ lib.optional enableSound "SOUND=y";
 
   postInstall =
     lib.optionalString tileMode ''

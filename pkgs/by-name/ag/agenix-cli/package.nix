@@ -12,11 +12,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = "agenix-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0+QVY1sDhGF4hAN6m2FdKZgm9V1cuGGjY4aitRBnvKg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xpA9BTA7EK3Pw8EJOjIq1ulBAcX4yNhc4kqhxsoCbv0=";
 
   passthru.updateScript = nix-update-script { };

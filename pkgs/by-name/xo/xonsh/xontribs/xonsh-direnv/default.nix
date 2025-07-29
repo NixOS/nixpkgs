@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "xonsh-direnv";
   version = "1.6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "74th";

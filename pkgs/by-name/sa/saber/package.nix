@@ -1,6 +1,6 @@
 {
   lib,
-  flutter329,
+  flutter332,
   fetchFromGitHub,
   gst_all_1,
   libunwind,
@@ -15,22 +15,18 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.25.6";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-OknqEbWAYLlxSTDWcggM6GP2V8cdKIAksbm7TmKzjKY=";
+    hash = "sha256-5N4HojdDysLgCPq614ZzJXx/dx3s4F++W35fjYdevRk=";
   };
 
-  gitHashes = {
-    receive_sharing_intent = "sha256-8D5ZENARPZ7FGrdIErxOoV3Ao35/XoQ2tleegI42ZUY=";
-    json2yaml = "sha256-Vb0Bt11OHGX5+lDf8KqYZEGoXleGi5iHXVS2k7CEmDw=";
-    workmanager = "sha256-fpB8CwNIn+HCQujyIXciq7Y9yd78Ie0IjkSewv3u5iw=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -45,13 +41,21 @@ flutter329.buildFlutterApplication rec {
     xorg.libXmu
   ];
 
+  postPatch = ''
+    patchShebangs patches/remove_proprietary_dependencies.sh
+    patches/remove_proprietary_dependencies.sh
+  '';
+
+  flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
+
   postInstall = ''
     install -Dm0644 flatpak/com.adilhanney.saber.desktop $out/share/applications/saber.desktop
     install -Dm0644 assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/com.adilhanney.saber.svg
+    install -Dm0644 flatpak/com.adilhanney.saber.metainfo.xml -t $out/share/metainfo
   '';
 
+  # Remove libpdfrx.so's reference to the /build/ directory
   preFixup = ''
-    # Remove libpdfrx.so's reference to the /build/ directory
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/saber/lib/lib*.so
   '';
 
@@ -68,6 +72,10 @@ flutter329.buildFlutterApplication rec {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       (_experimental-update-script-combinators.copyAttrOutputToFile "saber.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [ ./update-gitHashes.py ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
   };
 

@@ -21,14 +21,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # The default max inotify watches is 8192.
-    # Nowadays most apps require a good number of inotify watches,
-    # the value below is used by default on several other distros.
-    boot.kernel.sysctl = {
-      "fs.inotify.max_user_instances" = lib.mkDefault 524288;
-      "fs.inotify.max_user_watches" = lib.mkDefault 524288;
-    };
-
     environment = {
       # localectl looks into 00-keyboard.conf
       etc."X11/xorg.conf.d/00-keyboard.conf".text = ''
@@ -44,11 +36,6 @@ in
       systemPackages = with pkgs; [
         nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
         xdg-utils
-      ];
-      # needed for some display managers to locate desktop manager sessions
-      pathsToLink = [
-        "/share/xsessions"
-        "/share/wayland-sessions"
       ];
     };
 

@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   google-auth,
   mock,
-  nix-update-script,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -34,7 +34,8 @@ buildPythonPackage rec {
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -47,11 +48,8 @@ buildPythonPackage rec {
     "google.cloud.netapp_v1"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-cloud-netapp-v([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-cloud-netapp-v";
   };
 
   meta = {

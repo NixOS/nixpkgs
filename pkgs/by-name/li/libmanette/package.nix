@@ -27,38 +27,41 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libmanette/${lib.versions.majorMinor finalAttrs.version}/libmanette-${finalAttrs.version}.tar.xz";
     hash = "sha256-SLNJJnGA8dw01AWp4ekLoW8FShnOkHkw5nlJPZEeodg=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      glib
-    ]
-    ++ lib.optionals withIntrospection [
-      vala
-      gobject-introspection
-      gi-docgen
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  depsBuildBuild = lib.optionals withIntrospection [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      glib
-      libevdev
-      hidapi
-    ]
-    ++ lib.optionals withIntrospection [
-      libgudev
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    vala
+    gobject-introspection
+    gi-docgen
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    glib
+    libevdev
+    hidapi
+  ]
+  ++ lib.optionals withIntrospection [
+    libgudev
+  ];
 
   mesonFlags = [
     (lib.mesonBool "doc" withIntrospection)
@@ -68,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

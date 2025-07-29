@@ -6,9 +6,10 @@
   file,
   libnsl,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation {
   pname = "re-Isearch";
   version = "2.20220925.4.0a-unstable-2025-03-16";
 
@@ -16,7 +17,7 @@ stdenv.mkDerivation (finalAttr: {
     owner = "re-Isearch";
     repo = "re-Isearch";
     rev = "56e0dfbe7468881b3958ca8e630f41a5354e9873";
-    sha256 = "sha256-tI75D02/sFEkHDQX/BpDlu24WNP6Qh9G0MIfEvs8npM=";
+    hash = "sha256-tI75D02/sFEkHDQX/BpDlu24WNP6Qh9G0MIfEvs8npM=";
   };
 
   # Upstream issue: https://github.com/re-Isearch/re-Isearch/issues/11
@@ -56,10 +57,6 @@ stdenv.mkDerivation (finalAttr: {
     )
   '';
 
-  preInstall = ''
-    mkdir -p $out/{bin,lib}
-  '';
-
   installPhase = ''
     runHook preInstall
 
@@ -71,6 +68,10 @@ stdenv.mkDerivation (finalAttr: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = {
     description = "Novel multimodal search and retrieval engine";
     homepage = "https://nlnet.nl/project/Re-iSearch/";
@@ -79,4 +80,4 @@ stdenv.mkDerivation (finalAttr: {
     maintainers = [ lib.maintainers.astro ];
     teams = [ lib.teams.ngi ];
   };
-})
+}

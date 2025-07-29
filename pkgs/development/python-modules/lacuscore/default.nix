@@ -37,21 +37,20 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      defang
-      dnspython
-      playwrightcapture
-      pydantic
-      redis
-      requests
-      ua-parser
-    ]
-    ++ playwrightcapture.optional-dependencies.recaptcha
-    ++ redis.optional-dependencies.hiredis
-    ++ ua-parser.optional-dependencies.regex
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
+  dependencies = [
+    defang
+    dnspython
+    playwrightcapture
+    pydantic
+    redis
+    requests
+    ua-parser
+  ]
+  ++ playwrightcapture.optional-dependencies.recaptcha
+  ++ redis.optional-dependencies.hiredis
+  ++ ua-parser.optional-dependencies.regex
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
+  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   # Module has no tests
   doCheck = false;

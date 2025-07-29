@@ -61,12 +61,12 @@ python3.pkgs.buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically extract obfuscated strings from malware";
     homepage = "https://github.com/mandiant/flare-floss";
     changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "floss";
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

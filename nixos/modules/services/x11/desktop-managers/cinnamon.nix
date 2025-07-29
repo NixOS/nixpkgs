@@ -98,6 +98,13 @@ in
             export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
           fi
         '') cfg.sessionPath}
+      ''
+      + lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+        # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+        # applies to sessions not managed by systemd.
+        if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+        fi
       '';
 
       # Default services
@@ -116,6 +123,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper

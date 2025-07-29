@@ -36,40 +36,37 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0q3HznYpYehTw+FrURutYVBEktEvPi634w2kovet5a8=";
   };
 
-  nativeBuildInputs =
-    [
-      intltool
-      pkg-config
-      cmake
-    ]
-    ++ lib.optionals useGtk [ wrapGAppsHook3 ]
-    ++ lib.optionals useQt [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    intltool
+    pkg-config
+    cmake
+  ]
+  ++ lib.optionals useGtk [ wrapGAppsHook3 ]
+  ++ lib.optionals useQt [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      SDL2
-      alsa-lib
-      ffmpeg
-      libusb1
-      libv4l
-      portaudio
-      udev
-      gsl
-      libpng
-      sfml_2
-    ]
-    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-    ++ lib.optionals useGtk [ gtk3 ]
-    ++ lib.optionals useQt [
-      qtbase
-    ];
+  buildInputs = [
+    SDL2
+    alsa-lib
+    ffmpeg
+    libusb1
+    libv4l
+    portaudio
+    udev
+    gsl
+    libpng
+    sfml_2
+  ]
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals useGtk [ gtk3 ]
+  ++ lib.optionals useQt [
+    qtbase
+  ];
 
-  configureFlags =
-    [
-      "--enable-sfml"
-    ]
-    ++ lib.optionals useGtk [ "--enable-gtk3" ]
-    ++ lib.optionals useQt [ "--enable-qt5" ];
+  configureFlags = [
+    "--enable-sfml"
+  ]
+  ++ lib.optionals useGtk [ "--enable-gtk3" ]
+  ++ lib.optionals useQt [ "--enable-qt5" ];
 
   meta = {
     description = "Simple interface for devices supported by the linux UVC driver";

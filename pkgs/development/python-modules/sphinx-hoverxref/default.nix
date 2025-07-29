@@ -34,6 +34,10 @@ buildPythonPackage rec {
     hash = "sha256-DJ+mHu9IeEYEyf/SD+nDNtWpTf6z7tQzG0ogaECDpkU=";
   };
 
+  postPatch = ''
+    substituteInPlace docs/conf.py --replace-fail "sphinx-prompt" "sphinx_prompt"
+  '';
+
   nativeBuildInputs = [
     flit-core
 

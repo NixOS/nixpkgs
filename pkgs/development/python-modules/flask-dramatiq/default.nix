@@ -8,6 +8,7 @@
   flask,
   requests,
   pytestCheckHook,
+  pytest-cov-stub,
   flask-migrate,
   periodiq,
   postgresql,
@@ -35,10 +36,6 @@ buildPythonPackage {
       --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
 
     patchShebangs --build ./example.py
-
-    sed -i ./tests/unit/pytest.ini \
-      -e 's:--cov=flask_dramatiq::' \
-      -e 's:--cov-report=term-missing::'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -47,6 +44,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     flask
     requests
     flask-migrate
@@ -54,7 +52,8 @@ buildPythonPackage {
     postgresql
     postgresqlTestHook
     psycopg2
-  ] ++ dramatiq.optional-dependencies.rabbitmq;
+  ]
+  ++ dramatiq.optional-dependencies.rabbitmq;
 
   postgresqlTestSetupPost = ''
     substituteInPlace config.py \
@@ -63,8 +62,11 @@ buildPythonPackage {
     python3 ./example.py db upgrade
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
+  ];
+
+  disabledTestPaths = [
     "tests/func/"
     "tests/unit"
   ];

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "uncertainties";
     tag = version;
-    hash = "sha256-cm0FeJCxyBLN0GCKPnscBCx9p9qCDQdwRfhBRgQIhAo=";
+    hash = "sha256-YapujmwTlmUfTQwHsuh01V+jqsBbTd0Q9adGNiE8Go0=";
   };
 
   build-system = [
@@ -35,14 +35,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.arrays;
+  ]
+  ++ optional-dependencies.arrays;
 
   pythonImportsCheck = [ "uncertainties" ];
 
-  meta = with lib; {
-    homepage = "https://pythonhosted.org/uncertainties/";
+  meta = {
+    homepage = "https://uncertainties.readthedocs.io/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
-    maintainers = with maintainers; [ rnhmjoj ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      rnhmjoj
+      doronbehar
+    ];
+    license = lib.licenses.bsd3;
   };
 }

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kics";
-  version = "2.1.9";
+  version = "2.1.11";
 
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
     tag = "v${version}";
-    hash = "sha256-VEymPj9zX7XidzLBa2ML4hJ4GRmsrpP39sJQp1rteQ4=";
+    hash = "sha256-WtqP+6mMzVT/boKuMVWJadUNQanIQDrh50RqrdMM/FM=";
   };
 
-  vendorHash = "sha256-blzzr7lY0nsvhkNnMe+MesqOc7yUwo4I5BRf5kRwC1E=";
+  vendorHash = "sha256-5Am4iJpAKdU00hP5BBrd57ULXs/h/Ja9sm29HmYVOYw=";
 
   subPackages = [ "cmd/console" ];
 
@@ -37,7 +37,7 @@ buildGoModule rec {
     command = "kics version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check for vulnerabilities and other issues";
     longDescription = ''
       Find security vulnerabilities, compliance issues, and
@@ -46,8 +46,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/Checkmarx/kics";
     changelog = "https://github.com/Checkmarx/kics/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ patryk4815 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ patryk4815 ];
     mainProgram = "kics";
   };
 }

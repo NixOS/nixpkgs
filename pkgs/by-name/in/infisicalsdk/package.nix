@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "infisicalsdk";
-  version = "1.0.8";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Infisical";
     repo = "python-sdk-official";
     tag = "v${version}";
-    hash = "sha256-C8pHypKVPISDGGUlC2LXP4MPoae/ZS7Mb92yN7+VoPM=";
+    hash = "sha256-k4yJ1o3OOt01vXCfWDZ1zUtr/yoMSg43QzKUG9V/NGA=";
   };
 
   build-system = [ python3Packages.setuptools ];

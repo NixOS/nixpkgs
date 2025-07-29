@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2025.5.1";
+  version = "2025.7.1";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-1AXAVXselQKqKsjTRJVN3rBQpSReTH3d0ulIahp9QCc=";
+        hash = "sha256-qyTvvEEiZFtiRvPM8IcuRlzBKOO40Fe9g8l9wrsIY84=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-zX5QJz996WgKvDA6p5dRtmbZTRsgCl0URn302MkhVew=";
+        hash = "sha256-y34WlQtGZNBn1StoWhQh02EHbCVxYMoOQMH4cGbviXg=";
       };
 
   src = fetchurl {
@@ -36,7 +36,7 @@ let
   };
 
   pname = "burpsuite";
-  description = "An integrated platform for performing security testing of web applications";
+  description = "Integrated platform for performing security testing of web applications";
   desktopItem = makeDesktopItem {
     name = "burpsuite";
     exec = pname;

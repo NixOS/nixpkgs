@@ -75,12 +75,12 @@ let
 
         subPackages = [ "." ];
 
-        meta = with lib; {
+        meta = {
           description = "Tool for building, changing, and versioning infrastructure";
           homepage = "https://www.terraform.io/";
           changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
-          license = licenses.bsl11;
-          maintainers = with maintainers; [
+          license = lib.licenses.bsl11;
+          maintainers = with lib.maintainers; [
             Chili-Man
             kalbasit
             timstott
@@ -194,8 +194,8 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.12.1";
-    hash = "sha256-ikpSkcP4zt91Lf9gziytlZ4P27A0IP2qL+H2Lp9Cspg=";
+    version = "1.12.2";
+    hash = "sha256-ilQ1rscGD66OT6lHsBgWELayC24B2D7l6iH6vtvqzFI=";
     vendorHash = "sha256-zWNLIurNP5e/AWr84kQCb2+gZIn6EAsuvr0ZnfSq7Zw=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "1.6.3";
+  version = "1.7.2";
 
   format = "wheel";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-zNKgWHqzgr1VuOoJlwbzG2Sq2saXuKQZI9Oxi57WGNY=";
+    hash = "sha256-5gFBqEupP+v/W+tWe+x9wScejTJcvaplXtt1Gidoazo=";
     dist = "py3";
     python = "py3";
   };

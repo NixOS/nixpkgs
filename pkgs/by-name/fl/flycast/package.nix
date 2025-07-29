@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/flycast --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flyinghead/flycast";
     changelog = "https://github.com/flyinghead/flycast/releases/tag/v${version}";
     description = "Multi-platform Sega Dreamcast, Naomi and Atomiswave emulator";
     mainProgram = "flycast";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ];
   };
 }

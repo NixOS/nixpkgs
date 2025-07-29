@@ -935,6 +935,8 @@ with self;
     meta.description = "A library of intrinsics for OCaml";
     buildInputs = [
       dune-configurator
+    ];
+    propagatedBuildInputs = [
       ocaml_intrinsics_kernel
     ];
     patches = [
@@ -949,7 +951,7 @@ with self;
   ocaml_openapi_generator = janePackage {
     pname = "ocaml_openapi_generator";
     hash = "sha256-HCq9fylcVjBMs8L6E860nw+EonWEQadlyEKpQI6mynU=";
-    meta.description = " An OpenAPI 3 to OCaml client generator";
+    meta.description = "OpenAPI 3 to OCaml client generator";
     buildInputs = [
       async
       core
@@ -1149,6 +1151,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {
@@ -1229,7 +1232,8 @@ with self;
 
   ppx_expect = janePackage {
     pname = "ppx_expect";
-    hash = "sha256-m4Nr48ZET632I6vw5RjpNA0elW3lpN3aPmfA3RzsEn8=";
+    version = "0.17.2";
+    hash = "sha256-na9n/+shkiHIIUQ2ZitybQ6NNsSS9gWFNAFxij+JNVo=";
     meta.description = "Cram like framework for OCaml";
     propagatedBuildInputs = [
       ppx_here

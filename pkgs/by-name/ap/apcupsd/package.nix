@@ -38,20 +38,19 @@ stdenv.mkDerivation rec {
       libusb-compat-0_1
     ];
 
-  prePatch =
-    ''
-      sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
-          -i ./src/apcagent/Makefile ./autoconf/targets.mak
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/apcagent/Makefile \
-        --replace-fail "Applications" "$out/Applications"
-      substituteInPlace include/libusb.h.in \
-        --replace-fail "@LIBUSBH@" "${libusb-compat-0_1.dev}/include/usb.h"
-      substituteInPlace platforms/darwin/Makefile \
-        --replace-fail "/Library/LaunchDaemons" "$out/Library/LaunchDaemons" \
-        --replace-fail "/System/Library/Extensions" "$out/System/Library/Extensions"
-    '';
+  prePatch = ''
+    sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
+        -i ./src/apcagent/Makefile ./autoconf/targets.mak
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/apcagent/Makefile \
+      --replace-fail "Applications" "$out/Applications"
+    substituteInPlace include/libusb.h.in \
+      --replace-fail "@LIBUSBH@" "${libusb-compat-0_1.dev}/include/usb.h"
+    substituteInPlace platforms/darwin/Makefile \
+      --replace-fail "/Library/LaunchDaemons" "$out/Library/LaunchDaemons" \
+      --replace-fail "/System/Library/Extensions" "$out/System/Library/Extensions"
+  '';
 
   preConfigure = ''
     sed -i 's|/bin/cat|${coreutils}/bin/cat|' configure
@@ -59,33 +58,32 @@ stdenv.mkDerivation rec {
 
   # ./configure ignores --prefix, so we must specify some paths manually
   # There is no real reason for a bin/sbin split, so just use bin.
-  configureFlags =
-    [
-      "--bindir=${placeholder "out"}/bin"
-      "--sbindir=${placeholder "out"}/bin"
-      "--sysconfdir=${placeholder "out"}/etc/apcupsd"
-      "--mandir=${placeholder "out"}/share/man"
-      "--with-halpolicydir=${placeholder "out"}/share/halpolicy"
-      "--localstatedir=/var"
-      "--with-nologin=/run"
-      "--with-log-dir=/var/log/apcupsd"
-      "--with-pwrfail-dir=/run/apcupsd"
-      "--with-lock-dir=/run/lock"
-      "--with-pid-dir=/run"
-      "--enable-usb"
-      "ac_cv_path_WALL=${wall}/bin/wall"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "ac_cv_path_SHUTDOWN=/sbin/shutdown"
-      "ac_cv_func_which_gethostbyname_r=no"
-    ]
-    ++ lib.optionals enableCgiScripts [
-      "--enable-cgi"
-      "--with-cgi-bin=${placeholder "out"}/libexec/cgi-bin"
-    ];
+  configureFlags = [
+    "--bindir=${placeholder "out"}/bin"
+    "--sbindir=${placeholder "out"}/bin"
+    "--sysconfdir=${placeholder "out"}/etc/apcupsd"
+    "--mandir=${placeholder "out"}/share/man"
+    "--with-halpolicydir=${placeholder "out"}/share/halpolicy"
+    "--localstatedir=/var"
+    "--with-nologin=/run"
+    "--with-log-dir=/var/log/apcupsd"
+    "--with-pwrfail-dir=/run/apcupsd"
+    "--with-lock-dir=/run/lock"
+    "--with-pid-dir=/run"
+    "--enable-usb"
+    "ac_cv_path_WALL=${wall}/bin/wall"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "ac_cv_path_SHUTDOWN=/sbin/shutdown"
+    "ac_cv_func_which_gethostbyname_r=no"
+  ]
+  ++ lib.optionals enableCgiScripts [
+    "--enable-cgi"
+    "--with-cgi-bin=${placeholder "out"}/libexec/cgi-bin"
+  ];
 
   enableParallelBuilding = true;
 

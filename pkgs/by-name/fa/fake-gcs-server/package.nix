@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fake-gcs-server";
   version = "1.52.2";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "fake-gcs-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sidMCbJAK3bRGJyyFIUn7e5y0z4O72JWCICHf4JL4yo=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     mainProgram = "fake-gcs-server";
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

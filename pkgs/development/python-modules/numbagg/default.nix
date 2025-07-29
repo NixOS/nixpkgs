@@ -54,6 +54,8 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
+  pytestFlags = [ "--benchmark-disable" ];
+
   meta = {
     description = "Fast N-dimensional aggregation functions with Numba";
     homepage = "https://github.com/numbagg/numbagg";

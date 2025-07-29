@@ -296,7 +296,7 @@ let
       with subtest("Test nixos-option"):
           kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
           assert "virtio_console" in kernel_modules
-          assert "List of modules" in kernel_modules
+          assert "list of modules" in kernel_modules
           assert "qemu-guest.nix" in kernel_modules
 
       target.shutdown()
@@ -722,6 +722,10 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
+                  (nixos-rebuild-ng.override {
+                    withNgSuffix = false;
+                    withReexec = true;
+                  })
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -1041,33 +1045,32 @@ let
           boot.supportedFilesystems = [ "zfs" ];
           environment.systemPackages = with pkgs; [ clevis ];
         };
-        createPartitions =
-          ''
-            installer.succeed(
-              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-              + " mkpart primary ext2 1M 100MB"
-              + " mkpart primary linux-swap 100M 1024M"
-              + " mkpart primary 1024M -1s",
-              "udevadm settle",
-              "mkswap /dev/vda2 -L swap",
-              "swapon -L swap",
-          ''
-          + optionalString (!parentDataset) ''
-            "zpool create -O mountpoint=legacy rpool /dev/vda3",
-            "echo -n password | zfs create"
-            + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
-          ''
-          + optionalString (parentDataset) ''
-            "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
-            "zfs create -o mountpoint=legacy rpool/root",
-          ''
-          + ''
-            "mount -t zfs rpool/root /mnt",
-            "mkfs.ext3 -L boot /dev/vda1",
-            "mkdir -p /mnt/boot",
-            "mount LABEL=boot /mnt/boot",
-            "udevadm settle")
-          '';
+        createPartitions = ''
+          installer.succeed(
+            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+            + " mkpart primary ext2 1M 100MB"
+            + " mkpart primary linux-swap 100M 1024M"
+            + " mkpart primary 1024M -1s",
+            "udevadm settle",
+            "mkswap /dev/vda2 -L swap",
+            "swapon -L swap",
+        ''
+        + optionalString (!parentDataset) ''
+          "zpool create -O mountpoint=legacy rpool /dev/vda3",
+          "echo -n password | zfs create"
+          + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
+        ''
+        + optionalString (parentDataset) ''
+          "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
+          "zfs create -o mountpoint=legacy rpool/root",
+        ''
+        + ''
+          "mount -t zfs rpool/root /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+          "udevadm settle")
+        '';
         extraConfig =
           optionalString (!parentDataset) ''
             boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
@@ -1110,7 +1113,7 @@ in
   simple = makeInstallerTest "simple" (
     simple-test-config
     // {
-      passthru.override = args: makeInstallerTest "simple" simple-test-config // args;
+      passthru.override = args: makeInstallerTest "simple" (simple-test-config // args);
     }
   );
 

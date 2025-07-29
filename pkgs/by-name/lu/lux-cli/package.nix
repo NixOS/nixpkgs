@@ -1,11 +1,11 @@
 {
+  fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
   libgit2,
   libgpg-error,
-  luaPackages,
   luajit,
   makeWrapper,
   nix,
@@ -14,21 +14,26 @@
   rustPlatform,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.5.3";
+  version = "0.11.1";
 
-  src = luaPackages.lux-lua.src;
+  src = fetchFromGitHub {
+    owner = "nvim-neorocks";
+    repo = "lux";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yjd8nqrypgdS2UtAANv1TtuGtZPaWm7LhVrHPghf5hg=";
+  };
 
   buildAndTestSubdir = "lux-cli";
-  useFetchCargoVendor = true;
-  cargoHash = luaPackages.lux-lua.cargoHash;
+
+  cargoHash = "sha256-iKZ4FJ0IL1lnKuYTmFvx8umoB0z8M8xnvgb/GMfGKkI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
@@ -73,12 +78,12 @@ rustPlatform.buildRustPackage rec {
       with first-class support for Nix and Neovim.
     '';
     homepage = "https://nvim-neorocks.github.io/";
-    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/nvim-neorocks/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
     ];
     platforms = lib.platforms.all;
     mainProgram = "lx";
   };
-}
+})

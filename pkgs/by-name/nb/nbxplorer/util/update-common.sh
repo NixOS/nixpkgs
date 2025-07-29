@@ -58,7 +58,7 @@ echo
 echo "Verifying commit"
 git -C $repo verify-commit HEAD
 rm -rf $repo/.git
-newHash=$(nix hash-path $repo)
+newHash=$(nix --extra-experimental-features nix-command hash path $repo)
 rm -rf $tmpdir
 echo
 

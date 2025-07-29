@@ -23,6 +23,7 @@ let
       sqlalchemy = final.buildPythonPackage rec {
         pname = "SQLAlchemy";
         version = "1.3.24";
+        format = "setuptools";
 
         src = fetchPypi {
           inherit pname version;
@@ -42,6 +43,7 @@ let
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
     version = "0.5.1";
+    format = "setuptools";
     disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {

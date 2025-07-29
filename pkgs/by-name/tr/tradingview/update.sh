@@ -15,7 +15,7 @@ snap_info=($(
 # "revision" is the actual version identifier; "version" is for human consumption.
 revision="${snap_info[0]}"
 sha512="${snap_info[1]}"
-sri=$(nix hash to-sri --type "sha512" $sha512)
+sri=$(nix --extra-experimental-features nix-command hash to-sri --type "sha512" $sha512)
 upstream_version="${snap_info[2]}"
 last_updated="${snap_info[3]}"
 

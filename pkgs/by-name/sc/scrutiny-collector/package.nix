@@ -51,6 +51,5 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];
     mainProgram = "scrutiny-collector-metrics";
-    platforms = lib.platforms.linux;
   };
 }

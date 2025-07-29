@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   cython,
   ninja,
@@ -26,6 +27,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-vwAqlTq4HIbmCL1HsHcgfVWETImxdqTsnenmX2RGXw8=";
   };
+
+  patches = [
+    # https://github.com/rapidfuzz/RapidFuzz/pull/446
+    (fetchpatch {
+      name = "support-taskflow-3.10.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/bba3281cc61ecc4ab4affe5d2d50389a4f6d7556.patch";
+      hash = "sha256-kAS6xsPY7eUTfKO+EAOW8bktY4cApvLEpRMciJEsPgk=";
+    })
+  ];
 
   build-system = [
     cmake

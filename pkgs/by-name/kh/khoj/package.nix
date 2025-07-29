@@ -134,12 +134,12 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_conversation_utils.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Natural Language Search Assistant for your Org-Mode and Markdown notes, Beancount transactions and Photos";
     homepage = "https://github.com/debanjum/khoj";
     changelog = "https://github.com/debanjum/khoj/releases/tag/${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ dit7ya ];
     broken = true; # last successful build 2024-01-10
   };
 }

@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
+  doInstallCheck = true;
+
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
     description = "Socket daemon to multiplex connections from and to iOS devices";

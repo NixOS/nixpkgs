@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=tilix
+    substituteInPlace source/gx/tilix/{prefeditor/prefdialog.d,terminal/terminal.d} \
+      --replace-fail "(Align." "(GtkAlign."
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.tilix;

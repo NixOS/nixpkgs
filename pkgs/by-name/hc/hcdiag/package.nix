@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "hcdiag";
-  version = "0.5.7";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcdiag";
     tag = "v${version}";
-    hash = "sha256-pX3v4HYzQLvzBADOMDrjgS3M+H4tnJOAkUHs32NxwEg=";
+    hash = "sha256-6qsp74wp8LCBgeQTn4Edms8kzpKx9O4soGRwIFUVIk4=";
   };
 
   vendorHash = "sha256-ZuG++2bItCdnTcSaeBumIS2DqF+U6ZP7UTYM2DC+YGw=";

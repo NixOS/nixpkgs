@@ -31,15 +31,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-rfmWtbPYtkaGemeStMWwA6JllOkDiHMftSfmirtAOEQ=";
   };
 
-  buildInputs =
-    [
-      qt6.qtbase
-      libpwquality
-      hicolor-icon-theme
-      libgcrypt
-    ]
-    ++ lib.optionals withKWallet [ kdePackages.kwallet ]
-    ++ lib.optionals withLibsecret [ libsecret ];
+  buildInputs = [
+    qt6.qtbase
+    libpwquality
+    hicolor-icon-theme
+    libgcrypt
+  ]
+  ++ lib.optionals withKWallet [ kdePackages.kwallet ]
+  ++ lib.optionals withLibsecret [ libsecret ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook

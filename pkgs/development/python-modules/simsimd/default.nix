@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "simsimd";
-  version = "6.4.4";
+  version = "6.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "simsimd";
     tag = "v${version}";
-    hash = "sha256-lOE8ZQlUZ0Y+3Lpm4H/ps4o0YO9k245lADxrfR3oI1E=";
+    hash = "sha256-un3Wyvj1vwhDiai2FSflkEYOpLbeH7aFznDilB7cupU=";
   };
 
   build-system = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "scripts/test.py"
   ];
 

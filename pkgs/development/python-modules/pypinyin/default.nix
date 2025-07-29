@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.54.0";
+  version = "0.55.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,17 +18,15 @@ buildPythonPackage rec {
     owner = "mozillazg";
     repo = "python-pinyin";
     tag = "v${version}";
-    hash = "sha256-kA6h2CPGhoZt8h3KEttegHhmMqVc72IkrkA3PonY3sY=";
+    hash = "sha256-Xd5dxEiaByjtZmlORyK4cBPfNyIcZwbF40SvEKZ24Ks=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini --replace \
-      "--cov-report term-missing" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   meta = with lib; {
     description = "Chinese Characters to Pinyin - 汉字转拼音";

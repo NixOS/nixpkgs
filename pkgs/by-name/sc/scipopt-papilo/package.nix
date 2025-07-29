@@ -6,7 +6,7 @@
   boost,
   blas,
   gmp,
-  tbb_2021_11,
+  tbb_2021,
   gfortran,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     gmp
     gfortran
     boost
-    tbb_2021_11
+    tbb_2021
   ];
 
   cmakeFlags = [

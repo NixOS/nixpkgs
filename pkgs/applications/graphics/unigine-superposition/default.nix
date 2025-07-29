@@ -87,7 +87,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "Superposition";
-    exec = "superposition";
+    exec = "unigine-superposition";
     genericName = "A GPU Stress test tool from the UNIGINE";
     icon = "Superposition";
     desktopName = "Superposition Benchmark";
@@ -145,6 +145,6 @@ buildFHSEnv {
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "Superposition";
+    mainProgram = "unigine-superposition";
   };
 }

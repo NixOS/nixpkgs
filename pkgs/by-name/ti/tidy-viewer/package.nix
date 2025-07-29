@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-OnvRiQ5H/Vsmfu+F1i68TowjrDwQLQtV1sC6Jrp4xA4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-k/8crmGkFOLcakL5roYrSBVoYyGMELh1Mu/X6SlUeds=";
 
   # this test parses command line arguments
@@ -24,12 +23,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=build_reader_can_create_reader_without_file_specified"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
     mainProgram = "tidy-viewer";
     homepage = "https://github.com/alexhallam/tv";
     changelog = "https://github.com/alexhallam/tv/blob/${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

@@ -12,7 +12,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_5_1;
 
       django-extensions = prev.django-extensions.overridePythonAttrs {
         # Compat issues with Django 5.1
@@ -31,15 +31,15 @@ let
     hash = "sha256-BlPmrfHbpsLI8DCldzoRudpf7T4SUpJXQA5h9o4Thek=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/changelog/#${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
-    teams = [ teams.c3d2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    teams = [ lib.teams.c3d2 ];
+    platforms = lib.platforms.linux;
   };
 
   frontend = buildNpmPackage {
@@ -81,8 +81,9 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "bleach"
+    "beautifulsoup4"
     "celery"
-    "css-inline"
+    "css_inline"
     "cssutils"
     "defusedxml"
     "django-compressor"

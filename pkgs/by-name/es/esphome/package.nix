@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -8,7 +9,7 @@
   esptool,
   git,
   inetutils,
-  stdenv,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -33,19 +34,18 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.5.1";
+  version = "2025.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-z4FwymWFjyqNx95r2o7LLCmytRQYkogfCKiUFNyGOuA=";
+    hash = "sha256-njhcH/C55i1Xkclt2bp+z9OXhR7gsewWUgW3bn/1yig=";
   };
 
-  build-systems = with python.pkgs; [
+  build-system = with python.pkgs; [
     setuptools
-    argcomplete
   ];
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.4.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools"
   '';
 
   # Remove esptool and platformio from requirements
@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
     esphome-glyphsets
     freetype-py
     icmplib
+    jinja2
     kconfiglib
     packaging
     paho-mqtt
@@ -123,23 +124,25 @@ python.pkgs.buildPythonApplication rec {
   # Needed for tests
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      hypothesis
+      mock
+      pytest-asyncio
+      pytest-cov-stub
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [ versionCheckHook ];
+
+  disabledTestPaths = [
+    # platformio builds; requires networking for dependency resolution
+    "tests/integration"
   ];
 
-  disabledTests = [
-    # race condition, also visible in upstream tests
-    # tests/dashboard/test_web_server.py:78: IndexError
-    "test_devices_page"
-  ];
-
-  postCheck = ''
-    $out/bin/esphome --help > /dev/null
+  preCheck = ''
+    export PATH=$PATH:$out/bin
   '';
 
   postInstall =
@@ -153,21 +156,25 @@ python.pkgs.buildPythonApplication rec {
         --fish <(${argcomplete} --shell fish esphome)
     '';
 
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
+
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
     tests = { inherit (nixosTests) esphome; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hexa
     ];
     mainProgram = "esphome";

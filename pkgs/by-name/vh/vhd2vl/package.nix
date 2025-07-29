@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "vhd2vl";
-  version = "unstable-2022-12-26";
+  version = "0-unstable-2022-12-26";
 
   src = fetchFromGitHub {
     owner = "ldoolitt";

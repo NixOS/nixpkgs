@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X github.com/reviewdog/reviewdog/commands.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";
     mainProgram = "reviewdog";
     homepage = "https://github.com/reviewdog/reviewdog";
     changelog = "https://github.com/reviewdog/reviewdog/blob/v${version}/CHANGELOG.md";
-    maintainers = [ ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.mit;
   };
 }

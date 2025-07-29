@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-  fetchpatch,
   installShellFiles,
   python3,
   strace,
@@ -19,41 +18,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "shh";
-  version = "2025.4.12";
+  version = "2025.7.13";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "shh";
     tag = "v${version}";
-    hash = "sha256-+JWz0ya6gi8pPERnpAcQIe7zZUzWGxha+9/gizMVtEw=";
+    hash = "sha256-mTBA+NPkeGF1sSnXpOz9xBsKDAihRe+TVcBAlvbBQPc=";
   };
 
-  cargoHash = "sha256-rrOH76LHYSEeuNiMIICpAO7U/sz5V0JRO22mbIICQWw=";
-
-  # needs to be done this way to bypass patch conflicts
-  cargoPatches = [
-    (fetchpatch {
-      # to be removed after next release
-      name = "refactor-man-page-generation-command.patch";
-      url = "https://github.com/desbma/shh/commit/849b9a6646981c83a72a977b6398371e29d3b928.patch";
-      hash = "sha256-LZlUFfPtt2ScTxQbQ9j3Kzvp7T4MCFs92cJiI3YbWns=";
-    })
-    (fetchpatch {
-      # to be removed after next release
-      name = "support-shell-auto-complete.patch";
-      url = "https://github.com/desbma/shh/commit/74914dc8cfd74dbd7e051a090cc4c1f561b8cdde.patch";
-      hash = "sha256-WgKRQAEwSpXdQUnrZC1Bp4RfKg2J9kPkT1k6R2wwgT8=";
-    })
-  ];
+  cargoHash = "sha256-JrtXDercjkPA5WVaq+LyhFmGqMAxQ/sVZQlmtJUTrms=";
 
   patches = [
     ./fix_run_checks.patch
-    (fetchpatch {
-      # to be removed after next release
-      name = "feat-static-strace-path-support-at-compile-time.patch";
-      url = "https://github.com/desbma/shh/commit/da62ceeb227de853be06610721744667c6fe994b.patch";
-      hash = "sha256-p/W7HRZZ4TpIwrWN8wQB/SH3C8x3ZLXzwGV50oK/znQ=";
-    })
   ];
 
   env = {

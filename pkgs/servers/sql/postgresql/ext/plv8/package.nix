@@ -17,13 +17,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "plv8";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ivQZJSNn5giWF351fqZ7mBZoJkGtby5T7beK45g3Zqs=";
+    hash = "sha256-v4r/6qwDwb3+PQPYV3FqmIcDEkSr8F46PVlFnhUWUGc=";
   };
 
   patches = [
@@ -132,7 +132,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
+    changelog = "https://github.com/plv8/plv8/blob/v${finalAttrs.version}/Changes";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;

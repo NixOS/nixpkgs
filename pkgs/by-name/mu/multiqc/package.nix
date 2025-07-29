@@ -11,6 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
   version = "1.29";
+  format = "setuptools";
 
   # Two data sources. One for the code, another for the test data
   srcs = [

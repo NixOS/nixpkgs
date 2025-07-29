@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libglvnd
-  ] ++ runtimeDependencies;
+  ]
+  ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   alsa-lib,
+  autoreconfHook,
   dbus,
   docutils,
   ell,
@@ -13,7 +14,6 @@
   pkg-config,
   python3Packages,
   readline,
-  systemdMinimal,
   udev,
   # Test gobject-introspection instead of pygobject because the latter
   # causes an infinite recursion.
@@ -23,16 +23,25 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gitUpdater,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.80";
+  version = "5.83";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pNC8oymWkfBtW9l3O4VGOCBKUaUCbEKwrX8cbPFrRZo=";
+    hash = "sha256-EIUi2QnSIFgTmb/sk9qrYgNVOc7vPdo+eZcHhcY70kw=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "static.patch";
+      url = "https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw";
+      hash = "sha256-4Yz3ljsn2emJf+uTcJO4hG/YXvjERtitce71TZx5Hak=";
+    })
+  ];
 
   buildInputs = [
     alsa-lib
@@ -47,43 +56,45 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     docutils
     pkg-config
     python3Packages.pygments
     python3Packages.wrapPython
+    udevCheckHook
   ];
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional installTests "test";
+  ]
+  ++ lib.optional installTests "test";
 
-  postPatch =
+  postPatch = ''
+    substituteInPlace tools/hid2hci.rules \
+      --replace-fail /sbin/udevadm ${udev}/bin/udevadm \
+      --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
+  ''
+  +
+    # Disable some tests:
+    # - test-mesh-crypto depends on the following kernel settings:
+    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+    # - test-vcp is flaky (?), see:
+    #     - https://github.com/bluez/bluez/issues/683
+    #     - https://github.com/bluez/bluez/issues/726
     ''
-      substituteInPlace tools/hid2hci.rules \
-        --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
-        --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
-    ''
-    +
-      # Disable some tests:
-      # - test-mesh-crypto depends on the following kernel settings:
-      #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
-      # - test-vcp is flaky (?), see:
-      #     - https://github.com/bluez/bluez/issues/683
-      #     - https://github.com/bluez/bluez/issues/726
-      ''
-        skipTest() {
-          if [[ ! -f unit/$1.c ]]; then
-            echo "unit/$1.c no longer exists"
-            false
-          fi
+      skipTest() {
+        if [[ ! -f unit/$1.c ]]; then
+          echo "unit/$1.c no longer exists"
+          false
+        fi
 
-          echo 'int main() { return 77; }' > unit/$1.c
-        }
+        echo 'int main() { return 77; }' > unit/$1.c
+      }
 
-        skipTest test-mesh-crypto
-        skipTest test-vcp
-      '';
+      skipTest test-mesh-crypto
+      skipTest test-vcp
+    '';
 
   configureFlags = [
     "--localstatedir=/var"
@@ -100,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "nfc")
     (lib.enableFeature true "pie")
     (lib.enableFeature true "sixaxis")
+    (lib.enableFeature (lib.elem "libsystemd" udev.meta.pkgConfigModules) "systemd")
     # Set "deprecated" to provide ciptool, sdptool, and rfcomm (unmaintained);
     # superseded by new D-Bus APIs
     (lib.enableFeature true "deprecated")
@@ -121,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.hostPlatform.isx86_64;
+  doInstallCheck = true;
 
   postInstall =
     let

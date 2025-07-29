@@ -5,6 +5,8 @@
   pkg-config,
   libgit2,
   nix-update-script,
+  zlib,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
@@ -34,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     ./patch-libgit2.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
 
   meta = with lib; {

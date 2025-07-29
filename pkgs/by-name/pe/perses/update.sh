@@ -23,7 +23,7 @@ src="$(nix-build -A "${UPDATE_NIX_ATTR_PATH}".src --no-out-link)"
     echo "    url = \"${url}\";"
 
     hash="$(nix-prefetch-url "${url}" --name "${UPDATE_NIX_PNAME}-${name,,}-${version}.tar.gz")"
-    hash="$(nix hash convert --hash-algo sha256 "${hash}")"
+    hash="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 "${hash}")"
 
     echo "    hash = \"${hash}\";"
 

@@ -6,21 +6,24 @@
 
 stdenv.mkDerivation rec {
   pname = "cctz";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cctz";
     rev = "v${version}";
-    sha256 = "sha256-F4h8nT1karymV16FFHC0ldSbdOOx5AMstqi4Bc5m3UQ=";
+    sha256 = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
   };
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation";
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  installTargets =
-    [ "install_hdrs" ]
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
-    ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
+  installTargets = [
+    "install_hdrs"
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
+  ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libcctz.so $out/lib/libcctz.so

@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
@@ -63,6 +62,10 @@ buildPythonPackage rec {
     hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
   };
 
+  patches = [
+    ./test_z_at_value_numpyvectorize.patch
+  ];
+
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
   };
@@ -95,30 +98,30 @@ buildPythonPackage rec {
       ipykernel
       # ipydatagrid
       pandas
-    ] ++ self.ipython;
-    all =
-      [
-        certifi
-        dask
-        h5py
-        pyarrow
-        beautifulsoup4
-        html5lib
-        sortedcontainers
-        pytz
-        jplephem
-        mpmath
-        asdf
-        asdf-astropy
-        bottleneck
-        fsspec
-        s3fs
-      ]
-      ++ self.recommended
-      ++ self.ipython
-      ++ self.jupyter
-      ++ dask.optional-dependencies.array
-      ++ fsspec.optional-dependencies.http;
+    ]
+    ++ self.ipython;
+    all = [
+      certifi
+      dask
+      h5py
+      pyarrow
+      beautifulsoup4
+      html5lib
+      sortedcontainers
+      pytz
+      jplephem
+      mpmath
+      asdf
+      asdf-astropy
+      bottleneck
+      fsspec
+      s3fs
+    ]
+    ++ self.recommended
+    ++ self.ipython
+    ++ self.jupyter
+    ++ dask.optional-dependencies.array
+    ++ fsspec.optional-dependencies.http;
   });
 
   nativeCheckInputs = [
@@ -127,7 +130,8 @@ buildPythonPackage rec {
     pytest-astropy-header
     pytest-astropy
     threadpoolctl
-  ] ++ optional-dependencies.recommended;
+  ]
+  ++ optional-dependencies.recommended;
 
   pythonImportsCheck = [ "astropy" ];
 
@@ -142,7 +146,7 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd "$out"
   '';
-  pytestFlagsArray = [
+  pytestFlags = [
     "--hypothesis-profile=ci"
   ];
   postCheck = ''

@@ -332,11 +332,6 @@ let
       ldflags = versionldflags;
     }).overrideAttrs
       overrideContainerdAttrs;
-
-  # TODO (#409339): remove this patch. We had to add it to avoid a mass rebuild
-  # for the 25.05 release. Once the staging cycle referenced in the above PR completes,
-  # switch back to plain util-linuxMinimal.
-  k3sUtilLinux = util-linuxMinimal.withPatches;
 in
 buildGoModule rec {
   pname = "k3s";
@@ -383,7 +378,7 @@ buildGoModule rec {
     ipset
     bridge-utils
     ethtool
-    k3sUtilLinux # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
+    util-linuxMinimal # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
     bash
@@ -471,26 +466,25 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  passthru =
-    {
-      inherit airgapImages;
-      k3sCNIPlugins = k3sCNIPlugins;
-      k3sContainerd = k3sContainerd;
-      k3sRepo = k3sRepo;
-      k3sRoot = k3sRoot;
-      k3sBundle = k3sBundle;
-      mkTests =
-        version:
-        let
-          k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-        in
-        lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-      tests = passthru.mkTests k3sVersion;
-      updateScript = updateScript;
-    }
-    // (lib.mapAttrs' (
-      name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
-    ) imagesVersions);
+  passthru = {
+    inherit airgapImages;
+    k3sCNIPlugins = k3sCNIPlugins;
+    k3sContainerd = k3sContainerd;
+    k3sRepo = k3sRepo;
+    k3sRoot = k3sRoot;
+    k3sBundle = k3sBundle;
+    mkTests =
+      version:
+      let
+        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+      in
+      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+    tests = passthru.mkTests k3sVersion;
+    updateScript = updateScript;
+  }
+  // (lib.mapAttrs' (
+    name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
+  ) imagesVersions);
 
   meta = baseMeta;
 }

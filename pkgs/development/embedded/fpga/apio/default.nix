@@ -76,7 +76,7 @@ buildPythonApplication rec {
     "test2"
   ];
 
-  pytestFlagsArray = [ "--offline" ];
+  pytestFlags = [ "--offline" ];
 
   strictDeps = true;
 

@@ -157,8 +157,10 @@ in
         ExecStart = "${cfg.package}/bin/conduit";
         Restart = "on-failure";
         RestartSec = 10;
-        StartLimitBurst = 5;
         UMask = "077";
+      };
+      unitConfig = {
+        StartLimitBurst = 5;
       };
     };
   };

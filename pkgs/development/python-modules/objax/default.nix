@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   disabledTests = [
     # Test requires internet access for prefetching some weights

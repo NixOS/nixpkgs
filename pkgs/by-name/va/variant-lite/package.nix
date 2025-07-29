@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A C++17-like variant, a type-safe union for C++98, C++11 and later in a single-file header-only library";
+    description = "C++17-like variant, a type-safe union for C++98, C++11 and later in a single-file header-only library";
     homepage = "https://github.com/martinmoene/variant-lite";
     changelog = "https://github.com/martinmoene/variant-lite/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.boost;

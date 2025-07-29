@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.19.4";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    hash = "sha256-IF67/aWBUMFjAyC0TloKOJUa3zenk47QaCTBKwOltvw=";
+    hash = "sha256-2583vthe9x2WylLOMJFDBswqT3cF7euHyVc05V887B4=";
   };
 
-  vendorHash = "sha256-tVCSEqAlyogwFSBWtFEzDl5ziteoBexqQ0xaGmk8F+k=";
+  vendorHash = "sha256-re1GZ+B1dKKLrKt8lj0fUuBkcUY/B38Y4o7yJIN7sts=";
 
   proxyVendor = true;
 
@@ -42,20 +42,19 @@ buildGoModule rec {
     "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
-  postInstall =
-    ''
-      echo "complete -C $out/bin/vault vault" > vault.bash
-      installShellCompletion vault.bash
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/vault \
-        --prefix PATH ${
-          lib.makeBinPath [
-            gawk
-            glibc
-          ]
-        }
-    '';
+  postInstall = ''
+    echo "complete -C $out/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${
+        lib.makeBinPath [
+          gawk
+          glibc
+        ]
+      }
+  '';
 
   passthru.tests = {
     inherit (nixosTests)
@@ -66,13 +65,13 @@ buildGoModule rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.vaultproject.io/";
     description = "Tool for managing secrets";
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsl11;
+    license = lib.licenses.bsl11;
     mainProgram = "vault";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rushmorem
       lnl7
       offline

@@ -5,5 +5,7 @@
 mkKdeDerivation {
   pname = "kwidgetsaddons";
 
+  hasPythonBindings = true;
+
   extraNativeBuildInputs = [ qttools ];
 }

@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-0as/tKw0nKkZn+5q5PlKwK+LZK0xWXDAdiD3valVjBs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-krIPfi4SM4uCw7NLauudwh1tgAaB8enDWnMC5X16n48=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
-    license = lib.licenses.mpl20;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       DieracDelta

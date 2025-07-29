@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.6.4";
+  version = "1.6.9";
 
   src =
     let
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/xishang0128/sparkle/releases/download/${finalAttrs.version}/sparkle-linux-${finalAttrs.version}-${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-Q2TWrYNz3BAV8rBflxMuIQOogs+QJmmEidnGSOXaZgQ=";
-        aarch64-linux = "sha256-m/aAnAJpu9ycXECQJNrCpwFN76kWGFKvWfLXiJQbrWE=";
+        x86_64-linux = "sha256-db9YDfh8EA+EDtD/XO9pBaHkKcbqsDAkQF7lXxAo18I=";
+        aarch64-linux = "sha256-CfgcFhsu6G6Mm82paz/9yWwO4OltJZRBV6QffseHcrg=";
       };
     };
 
@@ -86,6 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

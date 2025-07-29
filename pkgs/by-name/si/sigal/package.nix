@@ -36,13 +36,12 @@ python3.pkgs.buildPythonApplication rec {
     cryptography
   ];
 
-  nativeCheckInputs =
-    [
-      ffmpeg
-    ]
-    ++ (with python3.pkgs; [
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    ffmpeg
+  ]
+  ++ (with python3.pkgs; [
+    pytestCheckHook
+  ]);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_nonmedia_files"
@@ -58,7 +57,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://sigal.saimon.org/";
     license = licenses.mit;
     maintainers = with maintainers; [
-      domenkozar
       matthiasbeyer
     ];
   };

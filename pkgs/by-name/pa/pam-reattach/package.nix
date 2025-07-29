@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fabianishere";
-    repo = pname;
+    repo = "pam_reattach";
     rev = "v${version}";
     sha256 = "1k77kxqszdwgrb50w7algj22pb4fy5b9649cjb08zq9fqrzxcbz7";
   };

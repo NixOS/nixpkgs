@@ -25,11 +25,12 @@ buildPythonPackage rec {
   dependencies = [
     dbt-core
     snowflake-connector-python
-  ] ++ snowflake-connector-python.optional-dependencies.secure-local-storage;
+  ]
+  ++ snowflake-connector-python.optional-dependencies.secure-local-storage;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "dbt.adapters.snowflake" ];
 

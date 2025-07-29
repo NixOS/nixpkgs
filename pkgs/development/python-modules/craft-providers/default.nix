@@ -16,11 +16,12 @@
   freezegun,
   pytest-subprocess,
   logassert,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.2.0";
+  version = "2.4.0";
 
   pyproject = true;
 
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-HCt6xdUu8+6CtkLeUrY2KYnULLwLLobDDm4O1DAiZrc=";
+    hash = "sha256-frcRv+19czsZ948SEKfYsMUP6n9MbJv6gxXUAdwFw4Y=";
   };
 
   patches = [
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.2.0" "setuptools"
+      --replace-fail "setuptools==75.9.1" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -75,14 +76,10 @@ buildPythonPackage rec {
     pytest-subprocess
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
-
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # Relies upon "logassert" python package which isn't in nixpkgs

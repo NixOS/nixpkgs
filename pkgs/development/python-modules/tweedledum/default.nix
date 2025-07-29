@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tweedledum" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "python/test" ];
+  enabledTestPaths = [ "python/test" ];
 
   meta = with lib; {
     description = "Library for synthesizing and manipulating quantum circuits";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Dougal-s";
     repo = "aether";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xhih4smjxn87s0f4gaab51d8594qlp0lyypzxl5lm37j1i9zigs";
     fetchSubmodules = true;
   };

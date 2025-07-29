@@ -13,12 +13,12 @@ let
       file = pkgs.writeText "rule" (builtins.toJSON cfg);
     }
   );
-
 in
 {
   options = {
     services.opensnitch = {
       enable = lib.mkEnableOption "Opensnitch application firewall";
+      package = lib.mkPackageOption pkgs "opensnitch" { };
 
       rules = lib.mkOption {
         default = { };
@@ -192,13 +192,13 @@ in
     services.opensnitch.settings = lib.mapAttrs (_: v: lib.mkDefault v) (
       builtins.fromJSON (
         builtins.unsafeDiscardStringContext (
-          builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json"
+          builtins.readFile "${cfg.package}/etc/opensnitchd/default-config.json"
         )
       )
     );
 
     systemd = {
-      packages = [ pkgs.opensnitch ];
+      packages = [ cfg.package ];
       services.opensnitchd = {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -210,7 +210,7 @@ in
             in
             [
               ""
-              "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" preparedSettings}"
+              "${cfg.package}/bin/opensnitchd --config-file ${format.generate "default-config.json" preparedSettings}"
             ];
         };
         preStart = lib.mkIf (cfg.rules != { }) (
@@ -245,7 +245,7 @@ in
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
-        "L+ /etc/opensnitchd/system-fw.json - - - - ${pkgs.opensnitch}/etc/opensnitchd/system-fw.json"
+        "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
       ];
     };
 

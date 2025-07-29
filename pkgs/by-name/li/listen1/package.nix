@@ -6,10 +6,10 @@
 
 let
   pname = "listen1";
-  version = "2.32.0";
+  version = "2.33.0";
   src = fetchurl {
     url = "https://github.com/listen1/listen1_desktop/releases/download/v${version}/listen1_${version}_linux_x86_64.AppImage";
-    hash = "sha256-+whoBVl3pg6pnM1DR7FiBFTU1i9MsauUnnU76mOF6Qk=";
+    hash = "sha256-RMpusz9bNrHpN23HrncjteiIGkLJgsP7FS2t7zD1Ud0=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

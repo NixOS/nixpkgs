@@ -16,8 +16,9 @@
   makeWrapper,
   perl,
   pkg-config,
-  python3,
+  python311,
   taplo,
+  uv,
   which,
   yasm,
   zlib,
@@ -41,9 +42,12 @@
 }:
 
 let
-  customPython = python3.withPackages (
+  # match .python-version
+  customPython = python311.withPackages (
     ps: with ps; [
+      markupsafe
       packaging
+      pygments
     ]
   );
   runtimePaths = lib.makeLibraryPath (
@@ -61,13 +65,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-05-25";
+  version = "0-unstable-2025-07-21";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "3a04f4195eb650f092c44d5a05fee178b9e84fbe";
-    hash = "sha256-7dbt7h4qUPWgsKBt0wo9by6yTB4034SzlzdqMXmw2Xg=";
+    rev = "50603e5074064211cee253b0782cb29ae413d3ee";
+    hash = "sha256-qlIjyvrtCwnUVO12LYm52drsQJqgfOEj7rV4LgubG5E=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -77,8 +81,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XTtM7yU1kpzK2cspnYdgp7yrt4Xk7xeQ98rmBgu46Tg=";
+  cargoHash = "sha256-kKuauc5yK6IOKDL9o+vmNLg4wyZ+24YNT5Yhn+z51jE=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -100,37 +103,38 @@ rustPlatform.buildRustPackage {
     makeWrapper
     perl
     pkg-config
-    python3
     rustPlatform.bindgenHook
     taplo
+    uv
     which
     yasm
     zlib
   ];
 
-  buildInputs =
-    [
-      fontconfig
-      freetype
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      harfbuzz
-      libunwind
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      xorg.libX11
-      xorg.libxcb
-      udev
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ];
+  env.UV_PYTHON = customPython.interpreter;
+
+  buildInputs = [
+    fontconfig
+    freetype
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    harfbuzz
+    libunwind
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    xorg.libX11
+    xorg.libxcb
+    udev
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
@@ -155,7 +159,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
-    description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
+    description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [

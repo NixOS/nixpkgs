@@ -44,74 +44,70 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "882c782c34a3bf2eacd1fae5cdc58b35b869883512f197f7d6dc8f195decfdaa";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals withGui [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      boost
-      libevent
-      zeromq
-      zlib
-    ]
-    ++ lib.optionals enableTracing [ libsystemtap ]
-    ++ lib.optionals withWallet [ sqlite ]
-    # building with db48 (for legacy descriptor wallet support) is broken on Darwin
-    ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
-    ++ lib.optionals withGui [
-      qrencode
-      qtbase
-      qttools
-    ];
+  buildInputs = [
+    boost
+    libevent
+    zeromq
+    zlib
+  ]
+  ++ lib.optionals enableTracing [ libsystemtap ]
+  ++ lib.optionals withWallet [ sqlite ]
+  # building with db48 (for legacy descriptor wallet support) is broken on Darwin
+  ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
+  ++ lib.optionals withGui [
+    qrencode
+    qtbase
+    qttools
+  ];
 
-  postInstall =
-    ''
-      cd ..
-      installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
-      installShellCompletion --bash contrib/completions/bash/bitcoind.bash
-      installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
+  postInstall = ''
+    cd ..
+    installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoind.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
 
-      installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
-      installShellCompletion --fish contrib/completions/fish/bitcoind.fish
-      installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
-      installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
-      installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
-    ''
-    + lib.optionalString withGui ''
-      installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoind.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
+  ''
+  + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
 
-      install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
-      substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
-      install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
-    '';
+    install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
+    substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
+    install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
+  '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_BENCH" false)
-      (lib.cmakeBool "WITH_ZMQ" true)
-      # building with db48 (for legacy wallet support) is broken on Darwin
-      (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
-      (lib.cmakeBool "WITH_USDT" enableTracing)
-    ]
-    ++ lib.optionals (!finalAttrs.doCheck) [
-      (lib.cmakeBool "BUILD_TESTS" false)
-      (lib.cmakeBool "BUILD_FUZZ_BINARY" false)
-      (lib.cmakeBool "BUILD_GUI_TESTS" false)
-    ]
-    ++ lib.optionals (!withWallet) [
-      (lib.cmakeBool "ENABLE_WALLET" false)
-    ]
-    ++ lib.optionals withGui [
-      (lib.cmakeBool "BUILD_GUI" true)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_BENCH" false)
+    (lib.cmakeBool "WITH_ZMQ" true)
+    # building with db48 (for legacy wallet support) is broken on Darwin
+    (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "WITH_USDT" enableTracing)
+  ]
+  ++ lib.optionals (!finalAttrs.doCheck) [
+    (lib.cmakeBool "BUILD_TESTS" false)
+    (lib.cmakeBool "BUILD_FUZZ_BINARY" false)
+    (lib.cmakeBool "BUILD_GUI_TESTS" false)
+  ]
+  ++ lib.optionals (!withWallet) [
+    (lib.cmakeBool "ENABLE_WALLET" false)
+  ]
+  ++ lib.optionals withGui [
+    (lib.cmakeBool "BUILD_GUI" true)
+  ];
 
   NIX_LDFLAGS = lib.optionals (
     stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
@@ -121,11 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkFlags =
-    [ "LC_ALL=en_US.UTF-8" ]
-    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
-    # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  checkFlags = [
+    "LC_ALL=en_US.UTF-8"
+  ]
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

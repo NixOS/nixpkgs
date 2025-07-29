@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "The video game that combines elements of the racing and role-playing genres";
+    description = "Video game that combines elements of the racing and role-playing genres";
     homepage = "https://github.com/KranX/Vangers";
     mainProgram = "vangers";
     platforms = lib.platforms.all;

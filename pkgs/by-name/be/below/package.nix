@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JrSSIwREHSg5YJivSdBIPjOkOtdw8qGCsa4yE7rJz/E=";
 
   prePatch = ''

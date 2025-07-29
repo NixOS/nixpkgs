@@ -39,32 +39,31 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1533";
+  version = "2.0.0.1541";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "bb7ae0615f6e661c217a1c77fdff70122859c3c5";
-    hash = "sha256-R3yCJJMsrD3dkrfkm4q69YkqfjBdZTiB9UXIriyPawA=";
+    rev = "72e1fd8abfa9b2f8e9636f033247526920878718";
+    hash = "sha256-1uzkf7vkzfHdsWvWcXnUv279kgtzrHLU0hAPaTKRWI8=";
   };
 
-  buildInputs =
-    [
-      flac
-      libmad
-      libvorbis
-      mpg123
-    ]
-    ++ optional pulseSupport libpulseaudio
-    ++ optional alsaSupport alsa-lib
-    ++ optional portaudioSupport portaudio
+  buildInputs = [
+    flac
+    libmad
+    libvorbis
+    mpg123
+  ]
+  ++ optional pulseSupport libpulseaudio
+  ++ optional alsaSupport alsa-lib
+  ++ optional portaudioSupport portaudio
 
-    ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional opusSupport opusfile
-    ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl
-    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
+  ++ optional faad2Support faad2
+  ++ optional ffmpegSupport ffmpeg
+  ++ optional opusSupport opusfile
+  ++ optional resampleSupport soxr
+  ++ optional sslSupport openssl
+  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -75,20 +74,19 @@ stdenv.mkDerivation {
 
   EXECUTABLE = binName;
 
-  OPTS =
-    [
-      "-DLINKALL"
-      "-DGPIO"
-    ]
-    ++ optional dsdSupport "-DDSD"
-    ++ optional (!faad2Support) "-DNO_FAAD"
-    ++ optional ffmpegSupport "-DFFMPEG"
-    ++ optional opusSupport "-DOPUS"
-    ++ optional portaudioSupport "-DPORTAUDIO"
-    ++ optional pulseSupport "-DPULSEAUDIO"
-    ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL"
-    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
+  OPTS = [
+    "-DLINKALL"
+    "-DGPIO"
+  ]
+  ++ optional dsdSupport "-DDSD"
+  ++ optional (!faad2Support) "-DNO_FAAD"
+  ++ optional ffmpegSupport "-DFFMPEG"
+  ++ optional opusSupport "-DOPUS"
+  ++ optional portaudioSupport "-DPORTAUDIO"
+  ++ optional pulseSupport "-DPULSEAUDIO"
+  ++ optional resampleSupport "-DRESAMPLE"
+  ++ optional sslSupport "-DUSE_SSL"
+  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
 
