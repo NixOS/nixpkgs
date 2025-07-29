@@ -133,6 +133,8 @@
   # search-and-replace.nvim dependencies
   fd,
   sad,
+  # ethersync vim plugin
+  ethersync,
 }:
 self: super:
 let
@@ -1125,6 +1127,17 @@ in
     fixupPhase = ''
       patchShebangs $(find $out/bin/ -type f -not -name credo-language-server)
     '';
+  };
+
+  ethersync = buildVimPlugin rec {
+    inherit (ethersync)
+      pname
+      version
+      src
+      meta
+      ;
+
+    sourceRoot = "${src.name}/nvim-plugin";
   };
 
   executor-nvim = super.executor-nvim.overrideAttrs {

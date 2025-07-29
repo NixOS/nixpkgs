@@ -412,8 +412,6 @@ in
       });
     };
 
-    systemd.enableCgroupAccounting = true;
-
     security.wrappers = {
       "apps.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/apps.plugin.org";
