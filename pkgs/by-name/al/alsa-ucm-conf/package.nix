@@ -20,6 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   dontBuild = true;
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -38,6 +39,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r ucm ucm2 $out/share/alsa
 
     runHook postInstall
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    if grep -E -r '\<exec\>\s+"-?/s?bin/' "$out"; then
+      echo found at least one unattended exec directive >&2
+      exit 1
+    fi
+
+    runHook postInstallCheck
   '';
 
   passthru = {
