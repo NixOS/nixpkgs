@@ -288,11 +288,6 @@ with haskellLib;
   # https://github.com/lspitzner/data-tree-print/issues/4
   data-tree-print = doJailbreak super.data-tree-print;
 
-  # jacinda needs latest version of alex and happy
-  jacinda = super.jacinda.override {
-    happy = self.happy_2_1_5;
-  };
-
   # Test suite hangs on 32bit. Unclear if this is a bug or not, but if so, then
   # it has been present in past versions as well.
   # https://github.com/haskell-unordered-containers/unordered-containers/issues/491
