@@ -13,7 +13,7 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5o4QliAXgSZekIy0CNWfEuOxNl0uetL8C8RKUJ8HsNA=";
   };
 
