@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zFGFmiPozfBSIYxCu4fHynb2eh9emfVPtj3grPAoZeA=";
   };
 
+  mesonBuildType = "release";
+
   nativeBuildInputs = [
     cargo
     meson
