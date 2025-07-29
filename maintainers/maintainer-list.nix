@@ -771,6 +771,12 @@
     githubId = 4296804;
     name = "Alex Franchuk";
   };
+  afrangio = {
+    email = "angelo@frangione.fr";
+    github = "AngeloFrangione";
+    githubId = 3856645;
+    name = "Angelo Frangione";
+  };
   aftix = {
     name = "Wyatt Campbell";
     email = "aftix@aftix.xyz";
