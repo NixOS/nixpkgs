@@ -1,22 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
-  qtx11extras,
-  kcoreaddons,
-  kguiaddons,
-  kconfig,
-  kdecoration,
-  kconfigwidgets,
-  kwindowsystem,
-  kiconthemes,
-  kwayland,
+  libsForQt5,
   unstableGitUpdater,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "material-kwin-decoration";
   version = "7-unstable-2023-01-15";
 
@@ -24,7 +15,7 @@ mkDerivation {
     owner = "Zren";
     repo = "material-decoration";
     rev = "0e989e5b815b64ee5bca989f983da68fa5556644";
-    sha256 = "sha256-Ncn5jxkuN4ZBWihfycdQwpJ0j4sRpBGMCl6RNiH4mXg=";
+    hash = "sha256-Ncn5jxkuN4ZBWihfycdQwpJ0j4sRpBGMCl6RNiH4mXg=";
   };
 
   # Remove -Werror since it uses deprecated methods
@@ -35,10 +26,13 @@ mkDerivation {
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ (with libsForQt5; [
     extra-cmake-modules
-  ];
+    wrapQtAppsHook
+  ]);
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     qtx11extras
     kcoreaddons
     kguiaddons
@@ -56,10 +50,10 @@ mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Material-ish window decoration theme for KWin";
     homepage = "https://github.com/Zren/material-decoration";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }
