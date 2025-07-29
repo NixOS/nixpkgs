@@ -63,7 +63,6 @@ extra-packages:
   - Cabal-syntax == 3.12.*
   - Cabal-syntax == 3.14.*
   - Cabal-syntax == 3.16.*              # version required for cabal-install and other packages
-  - commonmark-pandoc < 0.2.3           # 2025-04-06: Needed for pandoc 3.6
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - fourmolu == 0.16.0.0                # 2025-01-27: for ghc 9.10 compat

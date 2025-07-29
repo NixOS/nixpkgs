@@ -3010,10 +3010,6 @@ with haskellLib;
   # jailbreak to allow deepseq >= 1.5, https://github.com/jumper149/blucontrol/issues/3
   blucontrol = doJailbreak super.blucontrol;
 
-  # Needs to match pandoc, see:
-  # https://github.com/jgm/pandoc/commit/97b36ecb7703b434ed4325cc128402a9eb32418d
-  commonmark-pandoc = doDistribute self.commonmark-pandoc_0_2_2_3;
-
   pandoc = lib.pipe super.pandoc [
     dontCheck # test errors in "jats-writer" possibly fixed in newer release
     # Test output changes with newer version of texmath
