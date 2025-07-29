@@ -62,6 +62,15 @@ buildPythonPackage rec {
     hash = "sha256-ING+C2MACKFto+1FON5OGFgzLf8SM99ViTdADzNzQLw=";
   };
 
+  # TODO: remove at the next release
+  # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+  # Caused by: https://github.com/huggingface/transformers/commit/1ecd52e50a31e7c344c32564e0484d7e9a0f2256
+  # Fixed in: https://github.com/huggingface/smolagents/pull/1625
+  postPatch = ''
+    substituteInPlace tests/test_types.py \
+      --replace-fail "require_soundfile" "require_torchcodec"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

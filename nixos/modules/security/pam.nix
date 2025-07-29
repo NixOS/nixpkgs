@@ -1663,7 +1663,7 @@ in
         must be that described in {manpage}`limits.conf(5)`.
 
         Note that these limits do not apply to systemd services,
-        whose limits can be changed via {option}`systemd.extraConfig`
+        whose limits can be changed via {option}`systemd.settings.Manager`
         instead.
       '';
     };

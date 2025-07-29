@@ -2852,7 +2852,8 @@
       ++ hdate.optional-dependencies.astral;
     "joaoapps_join" =
       ps: with ps; [
-      ]; # missing inputs: python-join-api
+        python-join-api
+      ];
     "juicenet" =
       ps: with ps; [
       ];
@@ -3693,7 +3694,8 @@
       ];
     "monoprice" =
       ps: with ps; [
-      ]; # missing inputs: pymonoprice
+        pymonoprice
+      ];
     "monzo" =
       ps: with ps; [
         monzopy
@@ -7319,6 +7321,7 @@
     "modem_callerid"
     "modern_forms"
     "mold_indicator"
+    "monoprice"
     "monzo"
     "moon"
     "mopeka"
