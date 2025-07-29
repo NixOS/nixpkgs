@@ -401,6 +401,7 @@
   ./security/sudo.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
+  ./security/vuls.nix
   ./security/wrappers/default.nix
   ./services/accessibility/orca.nix
   ./services/accessibility/speechd.nix
