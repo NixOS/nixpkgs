@@ -37,6 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patsh c99sh \
       --force --store-dir ${builtins.storeDir} --path "$HOST_PATH"
 
+    patchShebangs .
+
     substituteInPlace c99sh \
       --replace-fail -cc -${lib.getExe' cc "cc"} \
       --replace-fail -c++ -${lib.getExe' cc "c++"}
@@ -55,7 +57,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    patchShebangs .
     ./tests
 
     runHook postCheck
