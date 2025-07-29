@@ -133,6 +133,8 @@
   # search-and-replace.nvim dependencies
   fd,
   sad,
+  # ethersync vim plugin
+  ethersync,
 }:
 self: super:
 let
@@ -1127,6 +1129,17 @@ in
     '';
   };
 
+  ethersync = buildVimPlugin rec {
+    inherit (ethersync)
+      pname
+      version
+      src
+      meta
+      ;
+
+    sourceRoot = "${src.name}/nvim-plugin";
+  };
+
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
@@ -1284,6 +1297,8 @@ in
     nvimSkipModules = [
       "fzf-lua.shell_helper"
       "fzf-lua.spawn"
+      "fzf-lua.rpc"
+      "fzf-lua.types"
     ];
   };
 
@@ -2041,6 +2056,14 @@ in
   neotest-bash = super.neotest-bash.overrideAttrs {
     dependencies = with self; [
       neotest
+      plenary-nvim
+    ];
+  };
+
+  neotest-ctest = super.neotest-ctest.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
       plenary-nvim
     ];
   };
@@ -3296,6 +3319,11 @@ in
   syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
     meta.maintainers = with lib.maintainers; [ callumio ];
+  };
+
+  tardis-nvim = super.tardis-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    meta.maintainers = with lib.maintainers; [ fredeb ];
   };
 
   taskwarrior2 = buildVimPlugin {

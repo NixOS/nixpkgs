@@ -272,7 +272,9 @@ let
           jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
         */
       ]
-      ++ collect isDerivation jobs.stdenvBootstrapTools
+      # FIXME: these are just temporarily omitted until fixed
+      # see https://hydra.nixos.org/build/303330677#tabs-constituents
+      #++ collect isDerivation jobs.stdenvBootstrapTools
       ++ optionals supportDarwin.x86_64 [
         jobs.stdenv.x86_64-darwin
         jobs.cargo.x86_64-darwin

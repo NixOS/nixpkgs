@@ -9,6 +9,7 @@
   fetchgit,
   fetchFromGitHub,
   fetchFromGitea,
+  fetchpatch2,
   rustPlatform,
   editline,
   ncurses,
@@ -168,6 +169,15 @@ lib.makeExtensible (self: {
         hash = "sha256-b5d+HnPcyHz0ZJW1+LZl4qm4LGTB/TiaDFQVlVL2xpE=";
       };
 
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-2.91-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/ecff59d77371b21fef229c33ebb629bc49a8fad5.patch";
+          sha256 = "sha256-2M5oId5kObwzpw67rddAPI2RbWPEVlGBrMUXZWqqmEo=";
+        })
+      ];
+
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
         inherit src;
@@ -200,6 +210,15 @@ lib.makeExtensible (self: {
         hash = "sha256-iP2iUDxA99RcgQyZROs7bQw8pqxa1vFudRqjAIHg9Iw=";
       };
 
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+          hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+        })
+      ];
+
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
         inherit src;
@@ -230,6 +249,15 @@ lib.makeExtensible (self: {
         rev = version;
         hash = "sha256-Oqw04eboDM8rrUgAXiT7w5F2uGrQdt8sGX+Mk6mVXZQ=";
       };
+
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+          hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+        })
+      ];
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
