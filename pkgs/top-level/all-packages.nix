@@ -12806,8 +12806,6 @@ with pkgs;
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
-  kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
   kubectl-view-allocations =
