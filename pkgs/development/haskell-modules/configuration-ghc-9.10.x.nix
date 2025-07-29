@@ -103,12 +103,4 @@ in
   fsnotify = dontCheck super.fsnotify; # https://github.com/haskell-fswatch/hfsnotify/issues/115
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
-
-  haskell-language-server = super.haskell-language-server.override {
-    floskell = null;
-    retrie = null;
-    hlint = null;
-    apply-refact = null;
-  };
-
 }

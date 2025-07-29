@@ -172,11 +172,6 @@ with haskellLib;
     ];
   }) (dontCheck (doJailbreak super.doctest-parallel)); # Cabal >=2.4 && <3.13
 
-  haskell-language-server = super.haskell-language-server.override {
-    floskell = null;
-    retrie = null;
-  };
-
   # Allow Cabal 3.14
   hpack = doDistribute self.hpack_0_38_1;
 }
