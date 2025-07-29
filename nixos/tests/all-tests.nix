@@ -226,6 +226,7 @@ in
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
   ax25 = runTest ./ax25.nix;
+  audit = runTest ./audit.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
