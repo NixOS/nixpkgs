@@ -624,6 +624,23 @@ with haskellLib;
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
+  # Allow inspection-testing >= 0.6 in test suite
+  algebraic-graphs =
+    appendPatch
+      (pkgs.fetchpatch2 {
+        name = "algebraic-graphs-0.7-allow-inspection-testing-0.6.patch";
+        url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
+        hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
+      })
+      (
+        overrideCabal (drv: {
+          prePatch = ''
+            ${drv.prePatch or ""}
+            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
+          '';
+        }) super.algebraic-graphs
+      );
+
   # Too strict bounds on hspec
   # https://github.com/illia-shkroba/pfile/issues/2
   pfile = doJailbreak super.pfile;
