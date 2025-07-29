@@ -8433,12 +8433,13 @@ with pkgs;
         "musl"
         "nblibc"
         "wasilibc"
-        "fblibc"
       ]
     then
       libcIconv pkgs.libc
     else if stdenv.hostPlatform.isDarwin then
       darwin.libiconv
+    else if stdenv.hostPlatform.isFreeBSD then
+      libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform then libc else stdenv.cc.libc)
     else
       libiconvReal;
 
