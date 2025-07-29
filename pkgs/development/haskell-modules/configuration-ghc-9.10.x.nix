@@ -94,8 +94,6 @@ in
   large-generics = doJailbreak super.large-generics; # base <4.20
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
 
-  hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
-
   #
   # Test suite issues
   #
