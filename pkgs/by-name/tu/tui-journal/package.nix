@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
-  openssl,
   zlib,
 }:
 
@@ -27,7 +26,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-    openssl
     zlib
   ];
 
