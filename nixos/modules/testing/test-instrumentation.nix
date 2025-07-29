@@ -72,6 +72,14 @@ let
     serviceConfig.KillSignal = "SIGHUP";
   };
 
+  managerSettings = {
+    # Don't clobber the console with duplicate systemd messages.
+    ShowStatus = false;
+    # Allow very slow start
+    DefaultTimeoutStartSec = 300;
+    DefaultDeviceTimeoutSec = 300;
+  };
+
 in
 
 {
@@ -115,7 +123,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        settings.Manager = config.systemd.settings.Manager;
+        settings.Manager = managerSettings;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -210,13 +218,7 @@ in
       MaxLevelConsole=debug
     '';
 
-    systemd.settings.Manager = {
-      # Don't clobber the console with duplicate systemd messages.
-      ShowStatus = false;
-      # Allow very slow start
-      DefaultTimeoutStartSec = 300;
-      DefaultDeviceTimeoutSec = 300;
-    };
+    systemd.settings.Manager = managerSettings;
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300

@@ -86,6 +86,7 @@ buildGoModule (
         arjan-s
         fpletz
       ];
+      mainProgram = "ntfy";
     };
   }
 )

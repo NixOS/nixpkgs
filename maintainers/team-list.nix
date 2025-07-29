@@ -1230,6 +1230,7 @@ with lib.maintainers;
       arianvp
       elvishjerricco
       aanderse
+      grimmauld
     ];
     githubTeams = [ "systemd" ];
     scope = "Maintain systemd for NixOS.";
