@@ -84,11 +84,13 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [
-      e2fsprogs
-      fakeroot
-      unzip
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        e2fsprogs
+        fakeroot
+        unzip
+      ]
+    }"
   ];
 
   postInstallCheck = ''
