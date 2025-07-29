@@ -17,17 +17,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-ORFmCvKFbNQ1MGHifNhPmrPDep+WE603+xkIqMF/w6g=";
+    hash = "sha256-6FTJYs1dqIAHPxMzRNOHHZQv4be9LaR1wxMJsW3t5kg=";
   };
 
-  vendorHash = "sha256-4TX1ol2WwvZ4WYIzLFfVlYkcT5eLduESc+jg4Ysas2o=";
+  vendorHash = "sha256-NykeBR2dnWQaqJuY73i9KLIqehLHniaMqf9oTqUDstQ=";
 
   # See upstream Makefile
   # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
@@ -39,7 +39,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X runner.forgejo.org/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
@@ -49,7 +49,7 @@ buildGoModule rec {
   postInstall = ''
     # fix up go-specific executable naming derived from package name, upstream
     # also calls it `forgejo-runner`
-    mv $out/bin/runner.forgejo.org $out/bin/forgejo-runner
+    mv $out/bin/runner $out/bin/forgejo-runner
     # provide old binary name for compatibility
     ln -s $out/bin/forgejo-runner $out/bin/act_runner
   '';
