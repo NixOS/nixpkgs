@@ -16,8 +16,10 @@
   dbus,
   systemd,
   bash,
+  bindfs,
   e2fsprogs,
   fakeroot,
+  fuse,
   gobject-introspection,
   unzip,
 }:
@@ -86,8 +88,10 @@ python3Packages.buildPythonApplication rec {
     "\${gappsWrapperArgs[@]}"
     "--prefix PATH : ${
       lib.makeBinPath [
+        bindfs
         e2fsprogs
         fakeroot
+        fuse
         unzip
       ]
     }"
