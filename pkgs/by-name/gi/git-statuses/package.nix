@@ -2,10 +2,12 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  installShellFiles,
   pkg-config,
   openssl,
   git,
   versionCheckHook,
+  stdenv,
   nix-update-script,
 }:
 
@@ -26,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
   ];
   buildInputs = [
@@ -36,6 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd git-statuses \
+      --bash <($out/bin/git-statuses --completions bash) \
+      --fish <($out/bin/git-statuses --completions fish) \
+      --zsh <($out/bin/git-statuses --completions zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
