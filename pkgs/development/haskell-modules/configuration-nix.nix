@@ -1301,7 +1301,7 @@ builtins.intersectAttrs super {
               >> "$out"
           '';
     };
-  }) (justStaticExecutables super.cabal2nix-unstable);
+  }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
