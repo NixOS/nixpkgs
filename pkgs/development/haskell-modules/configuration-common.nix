@@ -82,6 +82,12 @@ with haskellLib;
           }
         )
       );
+  # TODO(@sternenseemann): apply unix bound workaround
+  Cabal_3_16_0_0 = doDistribute (
+    super.Cabal_3_16_0_0.override {
+      Cabal-syntax = self.Cabal-syntax_3_16_0_0;
+    }
+  );
 
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
@@ -100,8 +106,8 @@ with haskellLib;
       let
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_14_2_0;
-          Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
+          Cabal = cself.Cabal_3_16_0_0;
+          Cabal-syntax = cself.Cabal-syntax_3_16_0_0;
         };
       in
       {
@@ -142,6 +148,7 @@ with haskellLib;
                       ]
                     )
                     [
+                      # TODO(@sternenseemann): update patch
                       ./patches/cabal-install-3.14.1.1-lift-unix-bound.patch
                     ];
             }
@@ -166,15 +173,30 @@ with haskellLib;
           # May as well…
           (self.generateOptparseApplicativeCompletions [ "guardian" ])
         ];
-
-        cabal2nix-unstable = super.cabal2nix-unstable.overrideScope cabalInstallOverlay;
       }
     )
     cabal-install
     cabal-install-solver
     guardian
-    cabal2nix-unstable
     ;
+
+  # cabal2nix depends on hpack which doesn't support Cabal >= 3.16
+  cabal2nix-unstable = super.cabal2nix-unstable.override (
+    # Manually override the relevant dependencies to reduce rebuild amount
+    let
+      cabalOverride = {
+        Cabal = self.Cabal_3_14_2_0;
+      };
+    in
+    cabalOverride
+    // lib.mapAttrs (_: drv: drv.override cabalOverride) {
+      inherit (self)
+        distribution-nixpkgs
+        hackage-db
+        hpack
+        ;
+    }
+  );
 
   # Expected test output for these accidentally checks the absolute location of the source directory
   # https://github.com/dan-t/cabal-cargs/issues/9
