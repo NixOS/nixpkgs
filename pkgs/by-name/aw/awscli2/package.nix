@@ -65,14 +65,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.50"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.61"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-ITiZ144YFhwuRcfhulLF0jxpp1OgznEE8frx4Yn4V+A=";
+    hash = "sha256-2lcPqNrGAHvPPVZIQaDbI54sQQ7OsOiMxUx6qg6WeNU=";
   };
 
   postPatch = ''
@@ -81,7 +81,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
       --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
 
     substituteInPlace requirements-base.txt \
