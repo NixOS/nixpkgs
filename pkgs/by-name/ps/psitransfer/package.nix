@@ -48,6 +48,8 @@ buildNpmPackage (finalAttrs: {
 
   dontBuild = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Simple open source self-hosted file sharing solution";
     homepage = "https://github.com/psi-4ward/psitransfer";
