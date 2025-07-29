@@ -1688,8 +1688,8 @@ builtins.intersectAttrs super {
     gi-javascriptcore4
     gi-javascriptcore6
     gi-webkit2webextension
-    gi-gtk_4_0_12
-    gi-gdk_4_0_10
+    gi-gtk
+    gi-gdk
     gi-gdk4
     gi-gdkx114
     gi-gtk4

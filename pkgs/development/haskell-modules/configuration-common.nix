@@ -2122,10 +2122,6 @@ with haskellLib;
   );
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # FIXME: These should be removed as gi-gtk4/gi-gdk4 become the standard
-  gi-gtk_4 = self.gi-gtk_4_0_12;
-  gi-gdk_4 = self.gi-gdk_4_0_10;
-
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
   # 2025-03-10: jailbreak, https://github.com/haskell-CI/haskell-ci/issues/771
