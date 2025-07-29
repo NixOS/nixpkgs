@@ -203,6 +203,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       nevivurn
+      ryand56
     ];
     platforms = platforms.unix;
     mainProgram = "gnucash";
