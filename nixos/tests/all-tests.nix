@@ -618,6 +618,7 @@ in
   gnupg = runTest ./gnupg.nix;
   goatcounter = runTest ./goatcounter.nix;
   go-camo = runTest ./go-camo.nix;
+  go-httpbin = runTest ./go-httpbin.nix;
   go-neb = runTest ./go-neb.nix;
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
@@ -1508,6 +1509,7 @@ in
   ucarp = runTest ./ucarp.nix;
   udisks2 = runTest ./udisks2.nix;
   ulogd = runTest ./ulogd/ulogd.nix;
+  umami = runTest ./web-apps/umami.nix;
   umurmur = runTest ./umurmur.nix;
   unbound = runTest ./unbound.nix;
   unifi = runTest ./unifi.nix;

@@ -7,43 +7,21 @@
   openssl,
   versionCheckHook,
   writeShellApplication,
+  common-updater-scripts,
+  gitMinimal,
   jq,
   nix-update,
-  gitMinimal,
   pup,
   nixosTests,
 }:
 
-let
-  version = "8.0.11";
-
-  srcs = version: {
-    "x86_64-linux" = {
-      url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-XErxsovZyMR1UmwClxn5Bm08hoYHArCtn8TSv/8eDYo=";
-    };
-    "aarch64-linux" = {
-      url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-p1eBobdnJ/uPZHScWFs3AOB7/BJn/MZQ8+VpOHonY2A=";
-    };
-    "x86_64-darwin" = {
-      url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-RLq+aFJixSt3EginpgIHWnR4CGk0KX5cmC3QrbW3jJ8=";
-    };
-    "aarch64-darwin" = {
-      url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-kNzByPEXi5T3+vr6t/EJuKIDEfGybrsbBqJ8vaEV5tY=";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  inherit version;
+  version = "8.0.12";
 
-  src = fetchurl (
-    (srcs version).${stdenv.hostPlatform.system}
-      or (throw "unsupported system: ${stdenv.hostPlatform.system}")
-  );
+  src =
+    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported platform for mongodb-ce: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   dontStrip = true;
@@ -59,29 +37,49 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm 755 bin/mongod -t $out/bin
     install -Dm 755 bin/mongos -t $out/bin
+
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/mongod";
-  versionCheckProgramArg = "--version";
   # Only enable the version install check on darwin.
   # On Linux, this would fail as mongod relies on tcmalloc, which
   # requires access to `/sys/devices/system/cpu/possible`.
   # See https://github.com/NixOS/nixpkgs/issues/377016
   doInstallCheck = stdenv.hostPlatform.isDarwin;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
+  versionCheckProgramArg = "--version";
 
   passthru = {
+    sources = {
+      "x86_64-linux" = fetchurl {
+        url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
+        hash = "sha256-dmXt+OxvDaJRXEn3hNoiYZ9ob//tmQp2lsU2XunTNLM=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
+        hash = "sha256-9FdODnUqzquSKk86BN5OL+fEO07hGYg1VAtytp7ehFM=";
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
+        hash = "sha256-LUUhqfgP1tIupe517TdLL97jUvBZsCvzMey3JtMVTmg=";
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
+        hash = "sha256-9SFfRbIWVXPupxvqmQlkacmcthycu840VIupCNBf7Ew=";
+      };
+    };
     updateScript =
       let
         script = writeShellApplication {
           name = "${finalAttrs.pname}-updateScript";
 
           runtimeInputs = [
+            common-updater-scripts
             curl
+            gitMinimal
             jq
             nix-update
-            gitMinimal
             pup
           ];
 
@@ -92,16 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
             # Check if the new version is available for download, if not, exit
             curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
 
-            if [[ "${version}" = "$NEW_VERSION" ]]; then
+            if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
                 echo "The new version same as the old version."
                 exit 0
             fi
-          ''
-          + lib.concatStrings (
-            map (system: ''
-              nix-update --system ${system} --version "$NEW_VERSION" ${finalAttrs.pname}
-            '') finalAttrs.meta.platforms
-          );
+
+            for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+              update-source-version "mongodb-ce" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+            done
+          '';
         };
       in
       {
@@ -125,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       (mongos).
     '';
     maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.attrNames (srcs version);
+    platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

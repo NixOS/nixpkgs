@@ -4079,9 +4079,6 @@ with pkgs;
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
-  piper-train = callPackage ../tools/audio/piper/train.nix { };
-  piper-tts = callPackage ../tools/audio/piper { };
-
   phosh = callPackage ../applications/window-managers/phosh { };
 
   phosh-mobile-settings =
@@ -12806,8 +12803,6 @@ with pkgs;
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
-  kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
   kubectl-view-allocations =

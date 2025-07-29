@@ -1575,6 +1575,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/glance.nix
   ./services/web-apps/glitchtip.nix
+  ./services/web-apps/go-httpbin.nix
   ./services/web-apps/goatcounter.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
@@ -1689,6 +1690,7 @@
   ./services/web-apps/szurubooru.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
+  ./services/web-apps/umami.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
   ./services/web-apps/weblate.nix
