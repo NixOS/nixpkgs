@@ -14,9 +14,7 @@ anki-utils.buildAnkiAddon (finalAttrs: {
   };
   sourceRoot = "${finalAttrs.src.name}/src/puppy_reinforcement";
   meta = {
-    description = ''
-      An add-on for the spaced-repetition flashcard app Anki that encourages learners with pictures of cute puppies, following the principles of intermittent positive reinforcement.
-    '';
+    description = "Anki add-on that encourages learners with pictures of cute puppies";
     homepage = "https://ankiweb.net/shared/info/1722658993";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ lomenzel ];
