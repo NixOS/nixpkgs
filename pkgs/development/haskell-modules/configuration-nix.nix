@@ -1275,7 +1275,7 @@ builtins.intersectAttrs super {
         }"
     '';
 
-    passthru = {
+    passthru = drv.passthru or { } // {
       updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
 
       # This is used by regenerate-hackage-packages.nix to supply the configuration
