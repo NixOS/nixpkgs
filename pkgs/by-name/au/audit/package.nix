@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-zos-remote"
     "--with-arm"
     "--with-aarch64"
+    "--with-io_uring"
     # capability dropping, currently mostly for plugins as those get spawned as root
     # see auditd-plugins(5)
     "--with-libcap-ng=yes"
