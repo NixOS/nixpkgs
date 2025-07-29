@@ -2209,24 +2209,10 @@ with haskellLib;
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
 
-  # Upgrade of unordered-containers in Stackage causes ordering-sensitive test to fail
-  # https://github.com/commercialhaskell/stackage/issues/6366
-  # https://github.com/kapralVV/Unique/issues/9
-  # Too strict bounds on hashable
-  # https://github.com/kapralVV/Unique/pull/10
-  Unique = warnAfterVersion "0.4.7.9" (
-    overrideCabal (drv: {
-      testFlags = [
-        "--skip"
-        "/Data.List.UniqueUnsorted.removeDuplicates/removeDuplicates: simple test/"
-        "--skip"
-        "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/unique: simple test/"
-        "--skip"
-        "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
-      ]
-      ++ drv.testFlags or [ ];
-    }) super.Unique
-  );
+  # Too strict bounds on
+  # QuickCheck (<2.15): https://github.com/kapralVV/Unique/issues/12
+  # hashable (<1.5): https://github.com/kapralVV/Unique/issues/11#issuecomment-3088832168
+  Unique = doJailbreak super.Unique;
 
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
   aeson-casing = warnAfterVersion "0.2.0.0" (
