@@ -3024,35 +3024,12 @@ with haskellLib;
   # jailbreak to allow deepseq >= 1.5, https://github.com/jumper149/blucontrol/issues/3
   blucontrol = doJailbreak super.blucontrol;
 
-  pandoc = lib.pipe super.pandoc [
-    dontCheck # test errors in "jats-writer" possibly fixed in newer release
-    # Test output changes with newer version of texmath
-    (appendPatch (fetchpatch {
-      name = "jats:update-for-texmath";
-      url = "https://github.com/jgm/pandoc/commit/e2a0cc9ddaf9e7d35cbd3c76f37e39737a79c2bf.patch";
-      sha256 = "sha256-qA9mfYS/VhWwYbB9yu7wbHwozz3cqequ361PxkbAt08=";
-      includes = [ "test/*" ];
-    }))
-    (appendPatch (fetchpatch {
-      name = "jats:update-for-mathml";
-      url = "https://github.com/jgm/pandoc/commit/4ba0bac5c118da4da1d44e3bbb38d7c7aef19e3b.patch";
-      sha256 = "sha256-ayRKeCqYKgZVA826xgAXxGhttm0Gx4ZrIRJlFlXPKhw=";
-    }))
-    (appendPatch (fetchpatch {
-      name = "jats:use-texmath-0.12.10.1";
-      url = "https://github.com/jgm/pandoc/commit/d3d5366e5197330e035f9f1700929c9b5a24d532.patch";
-      sha256 = "sha256-skG7LbKl4ypVnEYA9xMtDbUmHrjuXWfuchV8iMn8Yy0=";
-      includes = [ "test/*" ];
-    }))
-  ];
-
   HList = lib.pipe super.HList [
     # Fixes syntax error in tests
     (appendPatch (fetchpatch {
       url = "https://bitbucket.org/HList/hlist/commits/e688f11d7432c812c2b238464401a86f588f81e1/raw";
       sha256 = "sha256-XIBIrR2MFmhKaocZJ4p57CgmAaFmMU5Z5a0rk2CjIcM=";
     }))
-
   ];
 
   # 2025-04-09: jailbreak to allow hedgehog >= 1.5
