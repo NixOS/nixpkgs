@@ -3650,6 +3650,8 @@ let
         };
       };
 
+      ndonfris.fish-lsp = callPackage ./ndonfris.fish-lsp { };
+
       nefrob.vscode-just-syntax = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-just-syntax";
