@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zm2xNhWghg/Pa9LhLzV+AG/tfiSjAiSnGs8OMnC0Tpw=";
+    hash = "sha256-tNI+iiutziSfymNwEJEcR74E9/t817LOIE517hmNy9I=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
