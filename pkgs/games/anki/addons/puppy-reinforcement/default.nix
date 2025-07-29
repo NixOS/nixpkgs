@@ -9,7 +9,7 @@ anki-utils.buildAnkiAddon (finalAttrs: {
   src = fetchFromGitHub {
     owner = "glutanimate";
     repo = "puppy-reinforcement";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y52AjmYrFTcTwd4QAcJzK5R9wwxUSlvnN3C2O/r5cHk=";
   };
   sourceRoot = "${finalAttrs.src.name}/src/puppy_reinforcement";
