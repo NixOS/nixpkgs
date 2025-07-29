@@ -319,6 +319,9 @@ buildStdenv.mkDerivation {
     ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "142") [
       ./139-relax-apple-sdk.patch
     ]
+    ++ lib.optionals (lib.versionAtLeast version "142") [
+      ./142-relax-apple-sdk.patch
+    ]
     ++ lib.optionals (lib.versionOlder version "139") [
       # Fix for missing vector header on macOS
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1959377
