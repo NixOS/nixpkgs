@@ -1437,6 +1437,7 @@ in
   systemd-nspawn-configfile = runTest ./systemd-nspawn-configfile.nix;
   systemd-oomd = runTest ./systemd-oomd.nix;
   systemd-portabled = runTest ./systemd-portabled.nix;
+  systemd-pstore = runTest ./systemd-pstore.nix;
   systemd-repart = handleTest ./systemd-repart.nix { };
   systemd-resolved = runTest ./systemd-resolved.nix;
   systemd-ssh-proxy = runTest ./systemd-ssh-proxy.nix;

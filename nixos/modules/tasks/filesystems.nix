@@ -509,45 +509,6 @@ in
       ];
     };
 
-    systemd.services = {
-      # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
-      # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
-      "mount-pstore" = {
-        serviceConfig = {
-          Type = "oneshot";
-          # skip on kernels without the pstore module
-          ExecCondition = "${pkgs.kmod}/bin/modprobe -b pstore";
-          ExecStart = pkgs.writeShellScript "mount-pstore.sh" ''
-            set -eu
-            # if the pstore module is builtin it will have mounted the persistent store automatically. it may also be already mounted for other reasons.
-            ${pkgs.util-linux}/bin/mountpoint -q /sys/fs/pstore || ${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore
-            # wait up to 1.5 seconds for the backend to be registered and the files to appear. a systemd path unit cannot detect this happening; and succeeding after a restart would not start dependent units.
-            TRIES=15
-            while [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
-              if (( $TRIES )); then
-                sleep 0.1
-                TRIES=$((TRIES-1))
-              else
-                echo "Persistent Storage backend was not registered in time." >&2
-                break
-              fi
-            done
-          '';
-          RemainAfterExit = true;
-        };
-        unitConfig = {
-          ConditionVirtualization = "!container";
-          DefaultDependencies = false; # needed to prevent a cycle
-        };
-        before = [
-          "systemd-pstore.service"
-          "shutdown.target"
-        ];
-        conflicts = [ "shutdown.target" ];
-        wantedBy = [ "systemd-pstore.service" ];
-      };
-    };
-
     systemd.tmpfiles.rules = [
       "d /run/keys 0750 root ${toString config.ids.gids.keys}"
       "z /run/keys 0750 root ${toString config.ids.gids.keys}"
