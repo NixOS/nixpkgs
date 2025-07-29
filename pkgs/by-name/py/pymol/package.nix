@@ -58,21 +58,21 @@ python3Packages.buildPythonApplication rec {
 
   # A script is already created by the `[project.scripts]` directive
   # in `pyproject.toml`.
-  patches = [ 
+  patches = [
     ./script-already-exists.patch
 
     # Fix python3.13 and numpy 2 compatibility
     (fetchpatch {
-      url="https://github.com/schrodinger/pymol-open-source/commit/fef4a026425d195185e84d46ab88b2bbd6d96cf8.patch";
+      url = "https://github.com/schrodinger/pymol-open-source/commit/fef4a026425d195185e84d46ab88b2bbd6d96cf8.patch";
       hash = "sha256-F/5UcYwgHgcMQ+zeigedc1rr3WkN9rhxAxH+gQfWKIY=";
     })
     (fetchpatch {
-      url="https://github.com/schrodinger/pymol-open-source/commit/97cc1797695ee0850621762491e93dc611b04165.patch";
+      url = "https://github.com/schrodinger/pymol-open-source/commit/97cc1797695ee0850621762491e93dc611b04165.patch";
       hash = "sha256-H2PsRFn7brYTtLff/iMvJbZ+RZr7GYElMSINa4RDYdA=";
     })
     # Fixes failing test testLoadPWG
     (fetchpatch {
-      url="https://github.com/schrodinger/pymol-open-source/commit/17c6cbd96d52e9692fd298daec6c9bda273a8aad.patch";
+      url = "https://github.com/schrodinger/pymol-open-source/commit/17c6cbd96d52e9692fd298daec6c9bda273a8aad.patch";
       hash = "sha256-dcYRzUhiaGlR3CjQ0BktA5L+8lFyVdw0+hIz3Li7gDQ=";
     })
   ];
@@ -95,8 +95,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    python3Packages.numpy
-    python3Packages.pyqt5
     qt5.qtbase
     glew
     glm
@@ -108,6 +106,11 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     mmtf-cpp
     msgpack
+  ];
+
+  dependencies = with python3Packages; [
+    numpy
+    pyqt5
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
@@ -173,12 +176,12 @@ python3Packages.buildPythonApplication rec {
     wrapQtApp "$out/bin/pymol"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit description;
     mainProgram = "pymol";
     homepage = "https://www.pymol.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       samlich
     ];
