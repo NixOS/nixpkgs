@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "artichoke";
-  version = "0-unstable-2025-06-18";
+  version = "0-unstable-2025-07-28";
 
   src = fetchFromGitHub {
     owner = "artichoke";
     repo = "artichoke";
-    rev = "94921a493f680381c83465e5c50e5d494a7048f6";
-    hash = "sha256-JdCGCvs7GK/I3yyIl4n9OGtN9VwzmwdDdglwbTHfx0Y=";
+    rev = "148d3bf4bc361fa3214c02219e50e22e4cf2a3cf";
+    hash = "sha256-CKCRFSg8ROMhKwiIDU9iAYY/HfGtYlW1zrtn7thxIzY=";
   };
 
   cargoHash = "sha256-a43awTdhOlu+KO3B6XQ7Vdv4NbZ3iffq4rpmBBgUcZ8=";
