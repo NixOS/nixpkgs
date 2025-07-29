@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.2.6";
+  version = "6.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "softlayer";
     repo = "softlayer-python";
     tag = "v${version}";
-    hash = "sha256-qBhnHFFlP4pqlN/SETXEqYyre/ap60wHe9eCfyiB+kA=";
+    hash = "sha256-mlC4o39Ol1ALguc9KGpxB0M0vhWz4LG2uwhW8CBrVgg=";
   };
 
   build-system = [
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/v${version}";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
