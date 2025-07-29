@@ -16,7 +16,7 @@
   libsForQt5,
   testers,
 
-  enableGui ? true,
+  enableGui ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
