@@ -83,17 +83,6 @@ in
   ormolu = doDistribute self.ormolu_0_7_7_0;
   stylish-haskell = doDistribute self.stylish-haskell_0_15_0_1;
 
-  # A given major version of ghc-exactprint only supports one version of GHC.
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
-  ghc-exactprint_1_9_0_0 = addBuildDepends [
-    self.Diff
-    self.extra
-    self.ghc-paths
-    self.silently
-    self.syb
-    self.HUnit
-  ] super.ghc-exactprint_1_9_0_0;
-
   #
   # Jailbreaks
   #
