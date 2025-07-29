@@ -21,6 +21,7 @@
   libgbm,
   openssl,
   systemd,
+  xcb-util-cursor,
   xorg,
 }:
 
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
+    xcb-util-cursor
     xorg.libX11
     xorg.xcbutilwm
     xorg.xcbutilimage
