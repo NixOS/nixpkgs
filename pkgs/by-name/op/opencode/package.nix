@@ -9,13 +9,12 @@
   testers,
   writableTmpDirAsHomeHook,
 }:
-
 let
   opencode-node-modules-hash = {
     "aarch64-darwin" = "sha256-so+KiAo8C7olbJaCH1rIVxs/tq/g9l5pKPaU8D+Zm28=";
     "aarch64-linux" = "sha256-JNf8g0z6oH2OXJLAmCSP0W4WX+GGyald5DAFOYCBNP0=";
     "x86_64-darwin" = "sha256-jwmH4gEcyRNgeMvYz2SyWRagFkYN1O3ULEQIPPgqhwg=";
-    "x86_64-linux" = "sha256-ZMz7vfndYrpjUvhX8L9qv/lXcWKqXZwvfahGAE5EKYo=";
+    "x86_64-linux" = "sha256-1TQbnvX1bfN1ReAFTlWgHfNLTTt54DRpQm46eyv+Xa8=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -26,12 +25,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.3.58";
+  version = "0.3.80";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zm3ydijaduPcIw5Np1+5CzNMoaASQwOT2R72/pdyUwM=";
+    hash = "sha256-ao/O70ur/b9/tYXWHoHPOzXnrLKKTOeDOemD7+/gnFk=";
   };
 
   tui = buildGoModule {
@@ -39,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
     src = "${finalAttrs.src}/packages/tui";
 
-    vendorHash = "sha256-8OIPFa+bl1If55YZtacyOZOqMLslbMyO9Hx0HOzmrA0=";
+    vendorHash = "sha256-g2IhNOIKuBf4G4PioXhFvKIWds9ZiYfiG9vnyXCaz6o=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -63,6 +62,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "opencode-node_modules";
     inherit (finalAttrs) version src;
 
+    patches = [
+      # Use local models.dev data instead of fetching from network during build
+      ./local-models-dev.patch
+    ];
+
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
       "SOCKS_SERVER"
@@ -83,7 +87,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        bun install \
          --filter=opencode \
          --force \
-         --frozen-lockfile \
          --no-progress
 
       runHook postBuild
@@ -112,8 +115,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `api.json` from the file bundled with `bun build`.
+    # Use local models.dev data instead of fetching from network during build
     ./local-models-dev.patch
   ];
 
