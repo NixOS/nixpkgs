@@ -48,6 +48,8 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "PIC-like markup language for diagrams in technical documentation";
     homepage = "https://pikchr.org";
