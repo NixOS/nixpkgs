@@ -148,6 +148,8 @@ in
       "container-getty@.service"
     ];
 
+    systemd.targets.getty.wants = [ "autovt@tty1.service" ];
+
     systemd.services."getty@" = {
       serviceConfig.ExecStart = [
         # override upstream default with an empty ExecStart
