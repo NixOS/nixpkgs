@@ -3070,9 +3070,6 @@ with haskellLib;
   # 2025-04-09: jailbreak to allow template-haskell >= 2.21, th-abstraction >= 0.7
   kind-generics-th = warnAfterVersion "0.2.3.3" (doJailbreak super.kind-generics-th);
 
-  # 2025-04-09: jailbreak to allow tasty >= 1.5
-  cvss = warnAfterVersion "0.1" (doJailbreak super.cvss);
-
   # 2025-04-09: jailbreak to allow aeson >= 2.2, base >= 4.19, text >= 2.1
   ebird-api = warnAfterVersion "0.2.0.0" (doJailbreak super.ebird-api);
 
