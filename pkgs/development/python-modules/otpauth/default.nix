@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "otpauth";
-  version = "2.2.0";
+  version = "2.2.1";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ev2uZNBmT/v6/a39weyP5XGs0OcaYveSM9072giNOcI=";
+    hash = "sha256-Fpp629cV/KaH9qZtAszb78Ip+0n4pjS5WNKG+QgTTVk=";
   };
 
   build-system = [ hatchling ];

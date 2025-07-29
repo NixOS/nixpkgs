@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = pname;
+    repo = "migra";
     rev = version;
     hash = "sha256-LSCJA5Ym1LuV3EZl6gnl9jTHGc8A1LXmR1fj0ZZc+po=";
   };
@@ -44,9 +44,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_singleschema"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
     "-svv"
+  ];
+
+  enabledTestPaths = [
     "tests"
   ];
 

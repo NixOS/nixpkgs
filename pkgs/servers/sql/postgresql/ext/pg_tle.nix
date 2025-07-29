@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension rec {
   pname = "pg_tle";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "pg_tle";
     tag = "v${version}";
-    hash = "sha256-GuHlmFQjMr9Kv4NqIm9mcVfLc36EQVj5Iy7Kh26k0l4=";
+    hash = "sha256-Z0x+66OmtD4jOdgpjjIj5OfLitcrvAssRBS7Y2dBfOk=";
   };
 
   buildInputs = postgresql.buildInputs;

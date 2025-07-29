@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "autospotting";
-  version = "unstable-2023-07-03";
+  version = "0-unstable-2023-07-03";
 
   src = fetchFromGitHub {
     owner = "LeanerCloud";

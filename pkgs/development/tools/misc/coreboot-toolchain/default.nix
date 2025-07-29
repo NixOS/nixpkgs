@@ -15,8 +15,8 @@ let
         flex,
         getopt,
         git,
-        gnat,
-        gcc,
+        gnat14,
+        gcc14,
         lib,
         perl,
         stdenvNoCC,
@@ -50,7 +50,7 @@ let
         buildInputs = [
           flex
           zlib
-          (if withAda then gnat else gcc)
+          (if withAda then gnat14 else gcc14)
         ];
 
         enableParallelBuilding = true;

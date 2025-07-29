@@ -61,6 +61,16 @@ in
         '';
       };
 
+      upgrade = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Disable adding the `--upgrade` parameter when `channel`
+          is not set, such as when upgrading to the latest version
+          of a flake honouring its lockfile.
+        '';
+      };
+
       flags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
@@ -235,7 +245,7 @@ in
           date = "${pkgs.coreutils}/bin/date";
           readlink = "${pkgs.coreutils}/bin/readlink";
           shutdown = "${config.systemd.package}/bin/shutdown";
-          upgradeFlag = lib.optional (cfg.channel == null) "--upgrade";
+          upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) "--upgrade";
         in
         if cfg.allowReboot then
           ''

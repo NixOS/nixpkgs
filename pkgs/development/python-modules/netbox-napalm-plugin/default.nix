@@ -4,15 +4,16 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  pythonAtLeast,
+  python,
   napalm,
+  django,
 }:
 buildPythonPackage rec {
   pname = "netbox-napalm-plugin";
   version = "0.3.1";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   dependencies = [ napalm ];
 
-  nativeCheckInputs = [ netbox ];
+  nativeCheckInputs = [
+    netbox
+    django
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -1042,7 +1042,7 @@ rec {
 
     :::
   */
-  mapAttrs' = f: set: listToAttrs (map (attr: f attr set.${attr}) (attrNames set));
+  mapAttrs' = f: set: listToAttrs (mapAttrsToList f set);
 
   /**
     Call a function for each attribute in the given set and return
@@ -1076,7 +1076,7 @@ rec {
 
     :::
   */
-  mapAttrsToList = f: attrs: map (name: f name attrs.${name}) (attrNames attrs);
+  mapAttrsToList = f: attrs: attrValues (mapAttrs f attrs);
 
   /**
     Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
@@ -1163,7 +1163,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
+      (path: x: x.name)
       attrs
     ```
     :::
@@ -1747,7 +1747,7 @@ rec {
 
   /**
     Get the first of the `outputs` provided by the package, or the default.
-    This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    This function is aligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
     Like `getOutput`, the function is idempotent.
 
     # Inputs

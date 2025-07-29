@@ -39,57 +39,54 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qGtRyEVKgTEghIyANCHzJ9jAeqvK5GHgWXzEk5jA/N4=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      gst-plugins-base
-      orc
-      libintl
-    ]
-    ++ lib.optionals enableGplPlugins [
-      a52dec
-      libcdio
-      libdvdread
-      libmad
-      libmpeg2
-      x264
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    gst-plugins-base
+    orc
+    libintl
+  ]
+  ++ lib.optionals enableGplPlugins [
+    a52dec
+    libcdio
+    libdvdread
+    libmad
+    libmpeg2
+    x264
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
-  mesonFlags =
-    [
-      "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-      "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
-      (lib.mesonEnable "doc" enableDocumentation)
-    ]
-    ++ (
-      if enableGplPlugins then
-        [
-          "-Dgpl=enabled"
-        ]
-      else
-        [
-          "-Da52dec=disabled"
-          "-Dcdio=disabled"
-          "-Ddvdread=disabled"
-          "-Dmpeg2dec=disabled"
-          "-Dsidplay=disabled"
-          "-Dx264=disabled"
-        ]
-    );
+  mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
+    "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
+  ]
+  ++ (
+    if enableGplPlugins then
+      [
+        "-Dgpl=enabled"
+      ]
+    else
+      [
+        "-Da52dec=disabled"
+        "-Dcdio=disabled"
+        "-Ddvdread=disabled"
+        "-Dmpeg2dec=disabled"
+        "-Dsidplay=disabled"
+        "-Dx264=disabled"
+      ]
+  );
 
   postPatch = ''
     patchShebangs \

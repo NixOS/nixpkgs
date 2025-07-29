@@ -7,6 +7,7 @@
   alsa-lib,
   dbus,
   expat,
+  fetchurl,
   fontconfig,
   glib,
   libdrm,
@@ -40,6 +41,19 @@ let
     "8.2.2" = "CiscoPacketTracer822_amd64_signed.deb";
   };
 
+  libxml2' = libxml2.overrideAttrs (oldAttrs: rec {
+    version = "2.13.8";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+    };
+    meta = oldAttrs.meta // {
+      knownVulnerabilities = oldAttrs.meta.knownVulnerabilities or [ ] ++ [
+        "CVE-2025-6021"
+      ];
+    };
+  });
+
   unwrapped = stdenvNoCC.mkDerivation {
     name = "ciscoPacketTracer8-unwrapped";
     inherit version;
@@ -54,46 +68,45 @@ let
           url = "https://www.netacad.com";
         };
 
-    buildInputs =
-      [
-        autoPatchelfHook
-        makeWrapper
-        alsa-lib
-        dbus
-        expat
-        fontconfig
-        glib
-        libdrm
-        libglvnd
-        libpulseaudio
-        libudev0-shim
-        libxkbcommon
-        libxml2
-        libxslt
-        nspr
-        nss
-        wayland
-      ]
-      ++ (with xorg; [
-        libICE
-        libSM
-        libX11
-        libXScrnSaver
-        libXcomposite
-        libXcursor
-        libXdamage
-        libXext
-        libXfixes
-        libXi
-        libXrandr
-        libXrender
-        libXtst
-        libxcb
-        xcbutilimage
-        xcbutilkeysyms
-        xcbutilrenderutil
-        xcbutilwm
-      ]);
+    buildInputs = [
+      autoPatchelfHook
+      makeWrapper
+      alsa-lib
+      dbus
+      expat
+      fontconfig
+      glib
+      libdrm
+      libglvnd
+      libpulseaudio
+      libudev0-shim
+      libxkbcommon
+      libxml2'
+      libxslt
+      nspr
+      nss
+      wayland
+    ]
+    ++ (with xorg; [
+      libICE
+      libSM
+      libX11
+      libXScrnSaver
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libxcb
+      xcbutilimage
+      xcbutilkeysyms
+      xcbutilrenderutil
+      xcbutilwm
+    ]);
 
     unpackPhase = ''
       runHook preUnpack
@@ -137,6 +150,11 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bin
     ln -s ${fhs-env}/bin/${fhs-env.name} $out/bin/packettracer8
 
+    mkdir -p $out/share/icons/hicolor/48x48/apps
+    ln -s ${unwrapped}/opt/pt/art/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer.png
+    ln -s ${unwrapped}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/mimetypes
+    ln -s ${unwrapped}/usr/share/mime $out/share/mime
+
     runHook postInstall
   '';
 
@@ -144,12 +162,14 @@ stdenvNoCC.mkDerivation {
     (makeDesktopItem {
       name = "cisco-pt8.desktop";
       desktopName = "Cisco Packet Tracer 8";
-      icon = "${unwrapped}/opt/pt/art/app.png";
+      icon = "cisco-packet-tracer";
       exec = "packettracer8 %f";
       mimeTypes = [
         "application/x-pkt"
         "application/x-pka"
         "application/x-pkz"
+        "application/x-pksz"
+        "application/x-pks"
       ];
     })
   ];

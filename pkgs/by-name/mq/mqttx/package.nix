@@ -48,13 +48,13 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful cross-platform MQTT 5.0 Desktop, CLI, and WebSocket client tools";
     homepage = "https://mqttx.app/";
     changelog = "https://github.com/emqx/MQTTX/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "mqttx";
   };
 }

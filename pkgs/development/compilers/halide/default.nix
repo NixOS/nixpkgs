@@ -22,6 +22,7 @@
   wasmSupport ? false,
   wabt,
   doCheck ? true,
+  ctestCheckHook,
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -51,22 +52,21 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace src/runtime/CMakeLists.txt --replace-fail \
-          '-isystem "''${VulkanHeaders_INCLUDE_DIR}"' \
-          '-isystem "''${VulkanHeaders_INCLUDE_DIR}"
-           -isystem "${llvmPackages.clang}/resource-root/include"'
-    ''
-    # Upstream Halide include a check in their CMake files that forces Halide to
-    # link LLVM dynamically because of WebAssembly. It unnecessarily increases
-    # the closure size in cases when the WebAssembly target is not used. Hence,
-    # the following hack
-    + lib.optionalString (!wasmSupport) ''
-      substituteInPlace cmake/FindHalide_LLVM.cmake --replace-fail \
-          'if (comp STREQUAL "WebAssembly")' \
-          'if (FALSE)'
-    '';
+  postPatch = ''
+    substituteInPlace src/runtime/CMakeLists.txt --replace-fail \
+        '-isystem "''${VulkanHeaders_INCLUDE_DIR}"' \
+        '-isystem "''${VulkanHeaders_INCLUDE_DIR}"
+         -isystem "${llvmPackages.clang}/resource-root/include"'
+  ''
+  # Upstream Halide include a check in their CMake files that forces Halide to
+  # link LLVM dynamically because of WebAssembly. It unnecessarily increases
+  # the closure size in cases when the WebAssembly target is not used. Hence,
+  # the following hack
+  + lib.optionalString (!wasmSupport) ''
+    substituteInPlace cmake/FindHalide_LLVM.cmake --replace-fail \
+        'if (comp STREQUAL "WebAssembly")' \
+        'if (FALSE)'
+  '';
 
   cmakeFlags = [
     "-DWITH_PYTHON_BINDINGS=${if pythonSupport then "ON" else "OFF"}"
@@ -102,15 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     "correctness_cross_compilation"
     "correctness_simd_op_check_hvx"
   ];
-  # ninja's setup-hook doesn't let us specify custom flags for the checkPhase, see
-  # https://discourse.nixos.org/t/building-only-specific-targets-with-cmake/31545/4
-  # so we resort to overriding the whole checkPhase
+
   dontUseNinjaCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest --exclude-regex '^(${lib.strings.concatStringsSep "|" finalAttrs.disabledTests})$'
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
 
   postInstall =
     lib.optionalString pythonSupport ''
@@ -128,35 +122,33 @@ stdenv.mkDerivation (finalAttrs: {
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
   # to get a hint howto setup atlas instead of openblas
-  buildInputs =
-    [
-      llvmPackages.llvm
-      llvmPackages.lld
-      llvmPackages.openmp
-      llvmPackages.libclang
-      libffi
-      libpng
-      libjpeg
-      eigen
-      openblas
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libgbm
-      libGL
-    ]
-    ++ lib.optionals wasmSupport [ wabt ];
+  buildInputs = [
+    llvmPackages.llvm
+    llvmPackages.lld
+    llvmPackages.openmp
+    llvmPackages.libclang
+    libffi
+    libpng
+    libjpeg
+    eigen
+    openblas
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libgbm
+    libGL
+  ]
+  ++ lib.optionals wasmSupport [ wabt ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      flatbuffers
-      removeReferencesTo
-      ninja
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pybind11
-    ];
+  nativeBuildInputs = [
+    cmake
+    flatbuffers
+    removeReferencesTo
+    ninja
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pybind11
+  ];
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     python3Packages.numpy

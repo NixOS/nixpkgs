@@ -52,22 +52,26 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch =
-    ''
-      # Wrong concatenation
-      substituteInPlace data/libpersistent-cache-cpp.pc.in \
-        --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
+  postPatch = ''
+    # GTest needs C++17
+    # Remove when https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/merge_requests/19 merged & in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'std=c++14' 'std=c++17'
 
-      # Runs in parallel to other tests, limit to 1 thread
-      substituteInPlace tests/headers/compile_headers.py \
-        --replace 'multiprocessing.cpu_count()' '1'
+    # Wrong concatenation
+    substituteInPlace data/libpersistent-cache-cpp.pc.in \
+      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
 
-      sed '1i#include <iomanip>' \
-        -i tests/core/persistent_string_cache/speed_test.cpp
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/{headers,whitespace}/*.py
-    '';
+    # Runs in parallel to other tests, limit to 1 thread
+    substituteInPlace tests/headers/compile_headers.py \
+      --replace 'multiprocessing.cpu_count()' '1'
+
+    sed '1i#include <iomanip>' \
+      -i tests/core/persistent_string_cache/speed_test.cpp
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/{headers,whitespace}/*.py
+  '';
 
   nativeBuildInputs = [
     cmake

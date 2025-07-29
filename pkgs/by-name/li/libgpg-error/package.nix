@@ -25,16 +25,18 @@ in
 stdenv.mkDerivation (
   rec {
     pname = "libgpg-error";
-    version = "1.51";
+    version = "1.55";
 
     src = fetchurl {
       url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-      hash = "sha256-vg8bLba5Pu1VNpzfefGfcnUMjHw5/CC1d+ckVFQn5rI=";
+      hash = "sha256-lbF4FIhj8H1F3wzqZ+iAp5ue9x9dIwut3ABxEoUW73g=";
     };
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
     '';
+
+    hardeningDisable = [ "strictflexarrays3" ];
 
     configureFlags = [
       # See https://dev.gnupg.org/T6257#164567
@@ -72,7 +74,7 @@ stdenv.mkDerivation (
 
     doCheck = true; # not cross
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
       changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
       description = "Small library that defines common error values for all GnuPG components";
@@ -85,9 +87,9 @@ stdenv.mkDerivation (
         Daemon and possibly more in the future.
       '';
 
-      license = licenses.lgpl2Plus;
-      platforms = platforms.all;
-      maintainers = [ ];
+      license = lib.licenses.lgpl2Plus;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ ];
     };
   }
   // genPosixLockObjOnlyAttrs

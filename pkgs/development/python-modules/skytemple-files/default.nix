@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.8.3";
+  version = "1.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = "skytemple-files";
     rev = version;
-    hash = "sha256-4ENuYq074j/VdzLyrGVCGaZhoStwlgJWTqGbrt20A3Q=";
+    hash = "sha256-s7r6wS7H19+is3CFr+dLaTiq0N/gaO/8IFknmr+OAJk=";
     # Most patches are in submodules
     fetchSubmodules = true;
   };
@@ -69,14 +69,16 @@ buildPythonPackage rec {
       gql
       graphql-core
       lru-dict
-    ] ++ gql.optional-dependencies.aiohttp;
+    ]
+    ++ gql.optional-dependencies.aiohttp;
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     parameterized
     xmldiff
-  ] ++ optional-dependencies.spritecollab;
+  ]
+  ++ optional-dependencies.spritecollab;
 
   preCheck = "pushd test";
   postCheck = "popd";

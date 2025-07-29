@@ -15,12 +15,11 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "nickgerace";
-    repo = pname;
+    repo = "gfold";
     rev = version;
     hash = "sha256-7PnqhS80Ozh5ZQNQ8iYgCiFT0JDLzhA09NV1HgrCOww=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nGHJ96jFqG1pe3WUILPzm52HxrZYde2Z1p8N4DTaxlw=";
 
   passthru.tests.version = testers.testVersion {

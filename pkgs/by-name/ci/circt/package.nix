@@ -19,12 +19,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.114.1";
+  version = "1.125.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-VCoXuJl5Qyvu+TQSZHEx7bmF8p3hlp8vNyhFBSQ7ePQ=";
+    hash = "sha256-bpQvBUSYpmv6bmgXSCz9pfGgFxlGVFFDfaSkvk7481E=";
     fetchSubmodules = true;
   };
 
@@ -103,12 +103,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
-
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    echo moving libarc-jit-env.dylib to '$lib' before check because archilator links to the output path
-    mkdir -pv $lib/lib
-    cp -v ./lib/libarc-jit-env.dylib $lib/lib
-  '';
 
   outputs = [
     "out"

@@ -30,16 +30,15 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      ott
-      menhir
-      lem
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.sigtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    ott
+    menhir
+    lem
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.sigtool
+  ];
 
   propagatedBuildInputs = [
     base64

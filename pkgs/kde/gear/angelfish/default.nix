@@ -14,8 +14,7 @@ mkKdeDerivation rec {
   inherit (sources.${pname}) version;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+    inherit pname version;
     src = sources.${pname};
     hash = "sha256-FgzmWw8FZb+DNSf2n6H14Rq07+x1LzG9hX4hFetuqDw=";
   };

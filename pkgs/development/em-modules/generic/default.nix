@@ -29,11 +29,13 @@ wrapDerivation (
     buildInputs = [
       emscripten
       python3
-    ] ++ buildInputs;
+    ]
+    ++ buildInputs;
     nativeBuildInputs = [
       emscripten
       python3
-    ] ++ nativeBuildInputs;
+    ]
+    ++ nativeBuildInputs;
 
     # fake conftest results with emscripten's python magic
     EMCONFIGURE_JS = 2;
@@ -84,17 +86,16 @@ wrapDerivation (
 
     enableParallelBuilding = args.enableParallelBuilding or true;
 
-    meta =
-      {
-        # Add default meta information
-        platforms = lib.platforms.all;
-        # Do not build this automatically
-        hydraPlatforms = [ ];
-      }
-      // meta
-      // {
-        # add an extra maintainer to every package
-        maintainers = (meta.maintainers or [ ]) ++ [ lib.maintainers.qknight ];
-      };
+    meta = {
+      # Add default meta information
+      platforms = lib.platforms.all;
+      # Do not build this automatically
+      hydraPlatforms = [ ];
+    }
+    // meta
+    // {
+      # add an extra maintainer to every package
+      maintainers = (meta.maintainers or [ ]) ++ [ lib.maintainers.qknight ];
+    };
   }
 )

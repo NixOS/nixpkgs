@@ -41,13 +41,13 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  legacyRenderer ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
   hidpiXWayland ? false,
   enableNvidiaPatches ? false,
+  legacyRenderer ? false,
 }:
 let
   inherit (builtins)
@@ -73,7 +73,9 @@ let
 
   # possibility to add more adapters in the future, such as keepDebugInfo,
   # which would be controlled by the `debug` flag
-  adapters = [
+  # Condition on darwin to avoid breaking eval for darwin in CI,
+  # even though darwin is not supported anyway.
+  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
@@ -83,17 +85,20 @@ assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed."
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
+assert assertMsg (
+  !legacyRenderer
+) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.48.1";
+  version = "0.50.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-skuJFly6LSFfyAVy2ByNolkEwIijsTu2TxzQ9ugWarI=";
+    hash = "sha256-ALp/WkfOfXMScwytTmjxpjRNmbezrgFQdEX6n3py7L8=";
   };
 
   postPatch = ''
@@ -102,10 +107,6 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
-
-    substituteInPlace protocols/meson.build --replace-fail \
-      "wayland_scanner = dependency('wayland-scanner')" \
-      "wayland_scanner = dependency('wayland-scanner', native: true)"
   '';
 
   # variables used by generateVersion.sh script, and shown in `hyprctl version`
@@ -184,7 +185,6 @@ customStdenv.mkDerivation (finalAttrs: {
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {
       "xwayland" = enableXWayland;
-      "legacy_renderer" = legacyRenderer;
       "systemd" = withSystemd;
       "uwsm" = false;
       "hyprpm" = false;

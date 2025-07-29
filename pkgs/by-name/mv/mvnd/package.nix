@@ -19,6 +19,7 @@ let
     x86_64-darwin = "darwin-amd64";
     x86_64-linux = "linux-amd64";
   };
+  inherit (platformMap.${stdenv.system}) os arch;
 in
 
 maven.buildMavenPackage rec {
@@ -30,10 +31,11 @@ maven.buildMavenPackage rec {
     rev = version;
     sha256 = "sha256-c1jD7m4cOdPWQEoaUMcNap2zvvX7H9VaWQv8JSgAnRU=";
   };
+  patches = [ ./patches/0001-update-groovy-for-compatibility-with-Java-24.patch ];
 
   # need graalvm at build-time for the `native-image` tool
   mvnJdk = graalvmPackages.graalvm-ce;
-  mvnHash = "sha256-Bx0XSnpHNxNX07uVPc18py9qbnG5b3b7J4vs44ty034=";
+  mvnHash = "sha256-/Ful6v3hfm+0aa0vBQhqMK6VE+93L3o7pwZ6wmeXzQY=";
 
   nativeBuildInputs = [
     graalvmPackages.graalvm-ce
@@ -75,33 +77,32 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  passthru =
-    {
-      updateScript = nix-update-script { };
-    }
-    // (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      tests.version = testers.testVersion {
-        # `java` or `JAVA_HOME` is required to run mvnd
-        # presumably the user already has a JDK installed if they're using maven; don't pull in an unnecessary runtime dependency
-        package =
-          runCommand "mvnd"
-            {
-              inherit version;
-              nativeBuildInputs = [ makeWrapper ];
-            }
-            ''
-              mkdir -p $out/bin
-              makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
-                --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
-            '';
-      };
-    });
+  passthru = {
+    updateScript = nix-update-script { };
+  }
+  // (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    tests.version = testers.testVersion {
+      # `java` or `JAVA_HOME` is required to run mvnd
+      # presumably the user already has a JDK installed if they're using maven; don't pull in an unnecessary runtime dependency
+      package =
+        runCommand "mvnd"
+          {
+            inherit version;
+            nativeBuildInputs = [ makeWrapper ];
+          }
+          ''
+            mkdir -p $out/bin
+            makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
+              --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
+          '';
+    };
+  });
 
   meta = {
-    description = "The Apache Maven Daemon";
+    description = "Apache Maven Daemon";
     homepage = "https://maven.apache.org/";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = builtins.attrNames platformMap;
     maintainers = with lib.maintainers; [ nathanregner ];
     mainProgram = "mvnd";
   };

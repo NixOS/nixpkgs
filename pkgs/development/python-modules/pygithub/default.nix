@@ -39,7 +39,8 @@ buildPythonPackage rec {
     requests
     typing-extensions
     urllib3
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   # Test suite makes REST calls against github.com
   doCheck = false;

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wemake-services";
-    repo = pname;
+    repo = "eradicate";
     tag = version;
     hash = "sha256-ikiqNe1a+OeRraNBbtAx6v3LsTajWlgxm4wR2Tcbmjk=";
   };
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eradicate" ];
 
-  pytestFlagsArray = [ "test_eradicate.py" ];
+  enabledTestPaths = [ "test_eradicate.py" ];
 
   meta = with lib; {
     description = "Library to remove commented-out code from Python files";

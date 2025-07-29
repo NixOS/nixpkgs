@@ -10,7 +10,6 @@
   readline,
   sqlite,
   darwin,
-  Security ? darwin.Security,
 }:
 
 let
@@ -135,14 +134,13 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postConfigure
     '';
 
-  kochArgs =
-    [
-      "--cpu:${nimHost.cpu}"
-      "--os:${nimHost.os}"
-      "-d:release"
-      "-d:useGnuReadline"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
+  kochArgs = [
+    "--cpu:${nimHost.cpu}"
+    "--os:${nimHost.os}"
+    "-d:release"
+    "-d:useGnuReadline"
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace makefile \

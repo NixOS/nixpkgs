@@ -21,34 +21,37 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "postgresql-interfaces";
     repo = "psqlodbc";
-    tag = "REL-17_00_0002";
-    hash = "sha256-zCjoX+Ew8sS5TWkFSgoqUN5ukEF38kq+MdfgCQQGv9w=";
+    tag = "REL-17_00_0006";
+    hash = "sha256-iu1PWkfOyWtMmy7/8W+acu8v+e8nUPkCIHtVNZ8HzRg=";
   };
 
-  buildInputs =
-    [
-      libpq
-      openssl
-    ]
-    ++ lib.optional withLibiodbc libiodbc
-    ++ lib.optional withUnixODBC unixODBC;
+  buildInputs = [
+    libpq
+    openssl
+  ]
+  ++ lib.optional withLibiodbc libiodbc
+  ++ lib.optional withUnixODBC unixODBC;
 
   nativeBuildInputs = [
     autoreconfHook
   ];
 
-  passthru =
-    {
-      updateScript = nix-update-script { };
-    }
-    // lib.optionalAttrs withUnixODBC {
-      fancyName = "PostgreSQL";
-      driver = "lib/psqlodbcw.so";
-    };
+  strictDeps = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  }
+  // lib.optionalAttrs withUnixODBC {
+    fancyName = "PostgreSQL";
+    driver = "lib/psqlodbcw.so";
+  };
 
   configureFlags = [
+    "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
     "--with-libpq=${lib.getDev libpq}"
-  ] ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
+  ]
+  ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
+  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
   meta = with lib; {
     homepage = "https://odbc.postgresql.org/";

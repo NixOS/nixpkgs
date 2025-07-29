@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -35,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.9.2";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-mxQHqApyxO57zo/lK8p9xWEdEgkXF89yX/+pPBUlbwE=";
+    hash = "sha256-N0RlXnmSYJvD4/a47U4EjMczw1VIyereZoPicjgEkAI=";
   };
 
   build-system = [
@@ -62,7 +63,8 @@ buildPythonPackage rec {
     rich
     scikit-learn
     tensorflow
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [
     "keras"
@@ -90,6 +92,10 @@ buildPythonPackage rec {
 
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "test_reloading_default_saved_model"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Hangs forever
+    "test_fit_with_data_adapter"
   ];
 
   disabledTestPaths = [

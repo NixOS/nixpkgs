@@ -14,6 +14,7 @@ let
   jre = jre_minimal.override {
     modules = [
       "java.base"
+      "java.desktop"
     ];
     jdk = jre_headless;
   };

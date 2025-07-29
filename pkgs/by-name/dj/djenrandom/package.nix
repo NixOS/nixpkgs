@@ -15,13 +15,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-r5UT8z8vvFZDffsl6CqBXuvBaZ/sl1WLxJi26CxkpAw=";
   };
 
-  preBuild =
-    ''
-      sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      sed -i s/-m64//g Makefile
-    '';
+  preBuild = ''
+    sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    sed -i s/-m64//g Makefile
+  '';
 
   installPhase = ''
     runHook preInstall

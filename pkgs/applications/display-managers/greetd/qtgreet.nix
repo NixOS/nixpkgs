@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     dfl-utils
     dfl-applications
     dfl-login1
-  ] ++ lib.optionals mpvSupport [ mpv ];
+  ]
+  ++ lib.optionals mpvSupport [ mpv ];
 
   mesonFlags = [
     (lib.mesonOption "dynpath" "${placeholder "out"}/var/lib/qtgreet")

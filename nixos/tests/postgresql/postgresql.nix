@@ -54,6 +54,9 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
+            identMap = ''
+              postgres root postgres
+            '';
             # TODO(@Ma27) split this off into its own VM test and move a few other
             # extension tests to use postgresqlTestExtension.
             extensions = ps: with ps; [ plv8 ];
@@ -73,13 +76,13 @@ let
         in
         ''
           def check_count(statement, lines):
-              return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+              return 'test $(psql -U postgres postgres -tAc "{}"|wc -l) -eq {}'.format(
                   statement, lines
               )
 
 
           machine.start()
-          machine.wait_for_unit("postgresql")
+          machine.wait_for_unit("postgresql.target")
 
           with subtest("Postgresql is available just after unit start"):
               machine.succeed(
@@ -91,7 +94,7 @@ let
               import time
               time.sleep(2)
               machine.start()
-              machine.wait_for_unit("postgresql")
+              machine.wait_for_unit("postgresql.target")
 
           machine.fail(check_count("SELECT * FROM sth;", 3))
           machine.succeed(check_count("SELECT * FROM sth;", 5))
@@ -216,7 +219,7 @@ let
         ''
           import json
           machine.start()
-          machine.wait_for_unit("postgresql")
+          machine.wait_for_unit("postgresql.target")
 
           with subtest("All user permissions are set according to the ensureClauses attr"):
               clauses = json.loads(

@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DoFqHKTu4CvgDYPT4vbwNvSZ/lNTdAF+wlHOOIBJKUw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-w/d/MMd5JNQMRUxRaH4Tpf4Dzh14eykG+zzuM/YrU40=";
 
   nativeBuildInputs = [
@@ -32,11 +31,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   # relax lints to fix an error caused by invalid macro_export
   # error: `log_error` isn't a valid `#[macro_export]` argument
@@ -49,18 +49,17 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # TODO export TREMOR_PATH($out/lib) variable
-  postInstall =
-    ''
-      # Copy the standard library to $out/lib
-      cp -r ${src}/tremor-script/lib/ $out
+  postInstall = ''
+    # Copy the standard library to $out/lib
+    cp -r ${src}/tremor-script/lib/ $out
 
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd tremor \
-        --bash <($out/bin/tremor completions bash) \
-        --fish <($out/bin/tremor completions fish) \
-        --zsh <($out/bin/tremor completions zsh)
-    '';
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tremor \
+      --bash <($out/bin/tremor completions bash) \
+      --fish <($out/bin/tremor completions fish) \
+      --zsh <($out/bin/tremor completions zsh)
+  '';
 
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;

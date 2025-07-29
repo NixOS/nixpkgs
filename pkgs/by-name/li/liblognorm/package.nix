@@ -9,13 +9,13 @@
   fastJson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblognorm";
   version = "2.0.6";
 
   src = fetchurl {
-    url = "http://www.liblognorm.com/files/download/liblognorm-${version}.tar.gz";
-    sha256 = "1wpn15c617r7lfm1z9d5aggmmi339s6yn4pdz698j0r2bkl5gw6g";
+    url = "http://www.liblognorm.com/files/download/liblognorm-${finalAttrs.version}.tar.gz";
+    hash = "sha256-z/BX6FwiA4mS+e0S641OY8Ra31OlpR+qoyefYFgJ9vI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-regexp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     homepage = "https://www.liblognorm.com/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     mainProgram = "lognormalizer";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

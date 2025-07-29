@@ -4,6 +4,7 @@
   buildDartApplication,
   buf,
   protoc-gen-dart,
+  writableTmpDirAsHomeHook,
   testers,
   dart-sass,
   runCommand,
@@ -11,24 +12,24 @@
 }:
 
 let
-  embedded-protocol-version = "3.1.0";
+  embedded-protocol-version = "3.2.0";
 
   embedded-protocol = fetchFromGitHub {
     owner = "sass";
     repo = "sass";
-    rev = "refs/tags/embedded-protocol-${embedded-protocol-version}";
-    hash = "sha256-DBoGACNhc9JMT8D+dO50aKUitY8xx/3IGj/XntFts1w=";
+    tag = "embedded-protocol-${embedded-protocol-version}";
+    hash = "sha256-yX30i1gbVZalVhefj9c37mpFOIDaQlsLeAh7UnY56ro=";
   };
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.87.0";
+  version = "1.89.2";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = "dart-sass";
-    rev = version;
-    hash = "sha256-orFmX5I5j8Ds0zTQ0HLEd0LOw433Age2LOl9of/ggKI=";
+    tag = version;
+    hash = "sha256-IDR00pxEKQ5DQM+q0P/iRnsH80ZUbokZhbnBoomy2oQ=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -36,12 +37,13 @@ buildDartApplication rec {
   nativeBuildInputs = [
     buf
     protoc-gen-dart
+    writableTmpDirAsHomeHook
   ];
 
   preConfigure = ''
     mkdir -p build
     ln -s ${embedded-protocol} build/language
-    HOME="$TMPDIR" buf generate
+    buf generate
   '';
 
   dartCompileFlags = [ "--define=version=${version}" ];

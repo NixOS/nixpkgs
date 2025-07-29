@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     zlib
     libpcap
     boost
-  ] ++ lib.optional useCairo cairo;
+  ]
+  ++ lib.optional useCairo cairo;
 
   prePatch = ''
     substituteInPlace bootstrap.sh \

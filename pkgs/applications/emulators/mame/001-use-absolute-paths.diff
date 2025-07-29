@@ -1,8 +1,8 @@
 diff --git a/src/emu/emuopts.cpp b/src/emu/emuopts.cpp
-index 3defd33d0bb..33daacc4fc8 100644
+index 834710c9eb0..6394ad8a7bc 100644
 --- a/src/emu/emuopts.cpp
 +++ b/src/emu/emuopts.cpp
-@@ -39,16 +39,16 @@ const options_entry emu_options::s_option_entries[] =
+@@ -42,16 +42,16 @@ const options_entry emu_options::s_option_entries[] =
  	{ nullptr,                                           nullptr,     core_options::option_type::HEADER,     "CORE SEARCH PATH OPTIONS" },
  	{ OPTION_PLUGINDATAPATH,                             ".",         core_options::option_type::PATH,       "path to base folder for plugin data (read/write)" },
  	{ OPTION_MEDIAPATH ";rp;biospath;bp",                "roms",      core_options::option_type::MULTIPATH,  "path to ROM sets and hard disk images" },
@@ -27,3 +27,16 @@ index 3defd33d0bb..33daacc4fc8 100644
  	{ OPTION_SWPATH,                                     "software",  core_options::option_type::MULTIPATH,  "path to loose software" },
  
  	// output directory options
+diff --git a/src/osd/modules/lib/osdobj_common.cpp b/src/osd/modules/lib/osdobj_common.cpp
+index 82fabfdc0ba..eefdaba7fbe 100644
+--- a/src/osd/modules/lib/osdobj_common.cpp
++++ b/src/osd/modules/lib/osdobj_common.cpp
+@@ -158,7 +158,7 @@ const options_entry osd_options::s_option_entries[] =
+ 	{ OSDOPTION_NETWORK_PROVIDER,                OSDOPTVAL_AUTO,   core_options::option_type::STRING,    "Emulated networking provider: " },
+ 
+ 	{ nullptr,                                   nullptr,           core_options::option_type::HEADER,   "BGFX POST-PROCESSING OPTIONS" },
+-	{ OSDOPTION_BGFX_PATH,                       "bgfx",            core_options::option_type::PATH,     "path to BGFX-related files" },
++	{ OSDOPTION_BGFX_PATH,                       "@mamePath@/bgfx",            core_options::option_type::PATH,     "path to BGFX-related files" },
+ 	{ OSDOPTION_BGFX_BACKEND,                    "auto",            core_options::option_type::STRING,   "BGFX backend to use (d3d9, d3d11, d3d12, metal, opengl, gles, vulkan)" },
+ 	{ OSDOPTION_BGFX_DEBUG,                      "0",               core_options::option_type::BOOLEAN,  "enable BGFX debugging statistics" },
+ 	{ OSDOPTION_BGFX_SCREEN_CHAINS,              "",                core_options::option_type::STRING,   "comma-delimited list of screen chain JSON names, colon-delimited per-window" },

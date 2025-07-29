@@ -50,6 +50,14 @@ in
     };
 
     package = lib.mkPackageOption pkgs "docker" { };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      description = ''
+        Extra packages to add to PATH for the docker daemon process.
+      '';
+    };
   };
 
   ###### implementation
@@ -68,7 +76,7 @@ in
       wantedBy = [ "default.target" ];
       description = "Docker Application Container Engine (Rootless)";
       # needs newuidmap from pkgs.shadow
-      path = [ "/run/wrappers" ];
+      path = [ "/run/wrappers" ] ++ cfg.extraPackages;
       environment = proxy_env;
       unitConfig = {
         # docker-rootless doesn't support running as root.
@@ -82,13 +90,15 @@ in
         TimeoutSec = 0;
         RestartSec = 2;
         Restart = "always";
-        StartLimitBurst = 3;
         LimitNOFILE = "infinity";
         LimitNPROC = "infinity";
         LimitCORE = "infinity";
         Delegate = true;
         NotifyAccess = "all";
         KillMode = "mixed";
+      };
+      unitConfig = {
+        StartLimitBurst = 3;
       };
     };
   };

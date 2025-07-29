@@ -12,7 +12,6 @@
   cargo-auditable,
   buildPackages,
   rustc,
-  libiconv,
   windows,
 }:
 
@@ -23,6 +22,7 @@ lib.extendMkDerivation {
     "depsExtraArgs"
     "cargoUpdateHook"
     "cargoLock"
+    "useFetchCargoVendor"
   ];
 
   extendDrvArgs =
@@ -72,7 +72,11 @@ lib.extendMkDerivation {
     }@args:
 
     assert lib.assertMsg useFetchCargoVendor
-      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05";
+      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
+
+    assert lib.warnIf (args ? useFetchCargoVendor)
+      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
+      true;
 
     lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
       RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
@@ -135,22 +139,18 @@ lib.extendMkDerivation {
           cargo
         ];
 
-      buildInputs =
-        buildInputs
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-        ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
       patches = cargoPatches ++ patches;
 
       PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
 
-      postUnpack =
-        ''
-          eval "$cargoDepsHook"
+      postUnpack = ''
+        eval "$cargoDepsHook"
 
-          export RUST_LOG=${logLevel}
-        ''
-        + (args.postUnpack or "");
+        export RUST_LOG=${logLevel}
+      ''
+      + (args.postUnpack or "");
 
       configurePhase =
         args.configurePhase or ''

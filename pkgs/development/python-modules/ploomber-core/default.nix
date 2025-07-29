@@ -2,25 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pyyaml,
   posthog,
   pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ploomber-core";
-  version = "0.2.25";
-
+  version = "0.2.26";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "core";
     tag = version;
-    hash = "sha256-QUEnWFhf42ppoXoz3H/2SHtoPZOi6lbopsrbmEAk+1U=";
+    hash = "sha256-4lAsO+igyb/JXmZsgDgUUrgw3EyhdrliD9LlQqxhBMM=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     posthog
+    typing-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -39,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ploomber_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core module shared across Ploomber projects";
     homepage = "https://github.com/ploomber/core";
     changelog = "https://github.com/ploomber/core/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

@@ -17,37 +17,35 @@
 
 stdenv.mkDerivation rec {
   pname = "gutenprint";
-  version = "5.3.4";
+  version = "5.3.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.bz2";
-    sha256 = "0s0b14hjwvbxksq7af5v8z9g2rfqv9jdmxd9d81m57f5mh6rad0p";
+    url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.xz";
+    hash = "sha256-9an0feKFMLGuIGnPvGR6mmQbruq+gJuw7ys+xblmjXA=";
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-    ]
-    ++ lib.optionals cupsSupport [
-      cups
-      perl
-    ]; # for cups-config
-  buildInputs =
-    [
-      ijs
-      zlib
-    ]
-    ++ lib.optionals gimp2Support [
-      gimp.gtk
-      gimp
-    ]
-    ++ lib.optionals cupsSupport [
-      cups
-      libusb1
-      perl
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ]
+  ++ lib.optionals cupsSupport [
+    cups
+    perl
+  ]; # for cups-config
+  buildInputs = [
+    ijs
+    zlib
+  ]
+  ++ lib.optionals gimp2Support [
+    gimp.gtk
+    gimp
+  ]
+  ++ lib.optionals cupsSupport [
+    cups
+    libusb1
+    perl
+  ];
 
   configureFlags = lib.optionals cupsSupport [
     "--disable-static-genppd" # should be harmless on NixOS

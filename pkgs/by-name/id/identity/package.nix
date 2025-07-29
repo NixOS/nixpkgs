@@ -26,19 +26,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "identity";
-  version = "0.7.0";
+  version = "25.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-h8/mWGuosBiQRpoW8rINJht/7UBVEnUnTKY5HBCAyw4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JZyhT220ARZ2rX0CZYeFkHx8i9ops7TcfGje0NKebnU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-YkbhZQUpe8ffBpHcYl7wjFgs3krAXlvHgcBdP/6uvek=";
+    hash = "sha256-RCSTxtHXkLsH8smGp2XzQeV9SSpLx5llrFg3cgIsWKY=";
   };
 
   strictDeps = true;

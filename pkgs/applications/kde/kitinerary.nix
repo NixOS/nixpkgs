@@ -18,6 +18,7 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ lgpl21 ];
     maintainers = [ lib.maintainers.bkchr ];
+    broken = true; # doesn't build with latest Poppler
   };
   nativeBuildInputs = [
     extra-cmake-modules

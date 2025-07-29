@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "8.2.1";
+  version = "8.2.4";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-kBCoDB0+STKIOVFnQ1FWKulJ0qNwNfvxB3QwaGnl7sM=";
+    hash = "sha256-VRYkh7MM8Oq1/alSbZL1w76DtUc0731VAMLUZW32rA8=";
   };
 
   nativeBuildInputs = [
@@ -46,27 +46,26 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      sqlite
-      patchelf
-    ]
-    ++ lib.optionals (!headless) [
-      libGLU
-      libGL
-      libXmu
-      libXi
-      libglut
-      libjpeg
-      wxGTK32
-      gtk3
-      libXScrnSaver
-      libnotify
-      libX11
-      libxcb
-      xcbutil
-    ];
+  buildInputs = [
+    curl
+    sqlite
+    patchelf
+  ]
+  ++ lib.optionals (!headless) [
+    libGLU
+    libGL
+    libXmu
+    libXi
+    libglut
+    libjpeg
+    wxGTK32
+    gtk3
+    libXScrnSaver
+    libnotify
+    libX11
+    libxcb
+    xcbutil
+  ];
 
   NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
 
@@ -79,7 +78,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-server"
     "--sysconfdir=${placeholder "out"}/etc"
-  ] ++ lib.optionals headless [ "--disable-manager" ];
+  ]
+  ++ lib.optionals headless [ "--disable-manager" ];
 
   postInstall = ''
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"

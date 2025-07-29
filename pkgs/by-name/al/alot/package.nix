@@ -16,13 +16,12 @@ buildPythonApplication rec {
   version = "0.11";
   pyproject = true;
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals withManpage [
-      "man"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals withManpage [
+    "man"
+  ];
 
   disabled = !isPy3k;
 
@@ -40,7 +39,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     setuptools-scm
-  ] ++ lib.optional withManpage sphinx;
+  ]
+  ++ lib.optional withManpage sphinx;
 
   propagatedBuildInputs = [
     configobj

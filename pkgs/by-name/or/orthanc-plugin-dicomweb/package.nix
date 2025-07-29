@@ -39,12 +39,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc-plugin-dicomweb";
-  version = "1.18";
+  version = "1.20";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc-dicomweb/";
     rev = "OrthancDicomWeb-${finalAttrs.version}";
-    hash = "sha256-ee271Fcu8yi1gZpTWrCuqhsBdFcPR/JK/fsnJg8PwIc=";
+    hash = "sha256-p1n4YAFC3W2B2YYsFm/1cJ/zqLsrycJgkMrcXFf/3Xk=";
   };
 
   postPatch = ''

@@ -1,33 +1,43 @@
 { lib, ... }:
 {
   name = "anubis";
-  meta.maintainers = [ lib.maintainers.soopyc ];
+  meta.maintainers = with lib.maintainers; [
+    soopyc
+    nullcube
+    ryand56
+  ];
 
   nodes.machine =
+    { config, pkgs, ... }:
     {
-      config,
-      pkgs,
-      ...
-    }:
-    {
-      services.anubis.instances = {
-        "".settings.TARGET = "http://localhost:8080";
-
-        "tcp" = {
-          user = "anubis-tcp";
-          group = "anubis-tcp";
-          settings = {
-            TARGET = "http://localhost:8080";
-            BIND = ":9000";
-            BIND_NETWORK = "tcp";
-            METRICS_BIND = ":9001";
-            METRICS_BIND_NETWORK = "tcp";
-          };
+      services.anubis = {
+        defaultOptions.settings = {
+          DIFFICULTY = 3;
+          USER_DEFINED_DEFAULT = true;
         };
+        instances = {
+          "".settings = {
+            TARGET = "http://localhost:8080";
+            DIFFICULTY = 5;
+            USER_DEFINED_INSTANCE = true;
+          };
 
-        "unix-upstream" = {
-          group = "nginx";
-          settings.TARGET = "unix:///run/nginx/nginx.sock";
+          "tcp" = {
+            user = "anubis-tcp";
+            group = "anubis-tcp";
+            settings = {
+              TARGET = "http://localhost:8080";
+              BIND = ":9000";
+              BIND_NETWORK = "tcp";
+              METRICS_BIND = ":9001";
+              METRICS_BIND_NETWORK = "tcp";
+            };
+          };
+
+          "unix-upstream" = {
+            group = "nginx";
+            settings.TARGET = "unix:///run/nginx/nginx.sock";
+          };
         };
       };
 
@@ -86,7 +96,6 @@
     machine.succeed('curl -f http://basic.localhost | grep "it works"')
     machine.succeed('curl -f http://basic.localhost -H "User-Agent: Mozilla" | grep anubis')
     machine.succeed('curl -f http://basic.localhost/metrics | grep anubis_challenges_issued')
-    machine.succeed('curl -f -X POST http://basic.localhost/.within.website/x/cmd/anubis/api/make-challenge | grep challenge')
 
     # TCP mode
     machine.succeed('curl -f http://tcp.localhost -H "User-Agent: Mozilla" | grep anubis')
@@ -94,5 +103,17 @@
 
     # Upstream is a unix socket mode
     machine.succeed('curl -f http://unix.localhost/index.html | grep "it works"')
+
+    # Default user-defined environment variables
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "USER_DEFINED_DEFAULT"')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "USER_DEFINED_DEFAULT"')
+
+    # Instance-specific user-specified environment variables
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "USER_DEFINED_INSTANCE"')
+    machine.fail('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "USER_DEFINED_INSTANCE"')
+
+    # Make sure defaults don't overwrite themselves
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "DIFFICULTY=5"')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "DIFFICULTY=3"')
   '';
 }

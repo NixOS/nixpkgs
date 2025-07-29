@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
 
   meta = with lib; {
     homepage = "https://github.com/sionescu/libfixposix";

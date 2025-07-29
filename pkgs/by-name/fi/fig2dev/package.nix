@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-YeGFOTF2hS8DuQGzsFsZ+8Wtglj/FC89pucLG4NRMyY=";
   };
 
+  patches = [
+    ./CVE-2025-31162.patch
+    ./CVE-2025-31163.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 

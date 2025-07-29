@@ -8,15 +8,15 @@
   nspr,
   alsa-lib,
   openssl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   udev,
   libayatana-appindicator,
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mihomo-party";
-  version = "1.7.2";
+  version = "1.7.6";
 
   src =
     let
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
       };
     in
     fetchurl {
-      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${arch}.deb";
+      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${finalAttrs.version}/mihomo-party-linux-${finalAttrs.version}-${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-hJnb0K3ytw0ITwL6dY1klSG260WrZQiHhz4FRZ0idI4=";
-        aarch64-linux = "sha256-6hAB1QezewgKI2We0zDTK+vNgxcMP2AEmGZqdSbMcWQ=";
+        x86_64-linux = "sha256-83RajPreGieOYBAkoR6FsFREnOGDDuMK6+Qg+R/koac=";
+        aarch64-linux = "sha256-oWOXLUYWRKRgPtNv9ZvM1ODd44dhymVTKHJBK/xxOOs=";
       };
     };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     nspr
     alsa-lib
     openssl
-    webkitgtk_4_0
+    webkitgtk_4_1
     (lib.getLib stdenv.cc.cc)
   ];
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ];
   };
-}
+})

@@ -62,8 +62,20 @@ let
     };
 
   selectPartitionTableLayout =
-    { useEFIBoot, useDefaultFilesystems }:
-    if useDefaultFilesystems then if useEFIBoot then "efi" else "legacy" else "none";
+    {
+      useEFIBoot,
+      useDefaultFilesystems,
+      useBIOSBoot,
+    }:
+    if useDefaultFilesystems then
+      if useEFIBoot then
+        "efi"
+      else if useBIOSBoot then
+        "legacy+boot"
+      else
+        "legacy"
+    else
+      "none";
 
   driveCmdline =
     idx:
@@ -182,6 +194,7 @@ let
           -L ${nixStoreFilesystemLabel} \
           -U eb176051-bd15-49b7-9e6b-462e0b467019 \
           -T 0 \
+          --hard-dereference \
           --tar=f \
           "$TMPDIR"/store.img
 
@@ -337,7 +350,9 @@ let
     format = "qcow2";
     onlyNixStore = false;
     label = rootFilesystemLabel;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout {
+      inherit (cfg) useBIOSBoot useDefaultFilesystems useEFIBoot;
+    };
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
@@ -391,7 +406,7 @@ in
       type = types.ints.positive;
       default = 1024;
       description = ''
-        The memory size in megabytes of the virtual machine.
+        The memory size of the virtual machine in MiB (1024×1024 bytes).
       '';
     };
 
@@ -431,8 +446,17 @@ in
 
     virtualisation.bootPartition = mkOption {
       type = types.nullOr types.path;
-      default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
-      defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
+      default =
+        if cfg.useEFIBoot then
+          "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then
+          "/dev/disk/by-label/BOOT"
+        else
+          null;
+      defaultText = literalExpression ''
+        if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then "/dev/disk/by-label/BOOT"
+        else null'';
       example = "/dev/disk/by-label/esp";
       description = ''
         The path (inside the VM) to the device containing the EFI System Partition (ESP).
@@ -457,7 +481,7 @@ in
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
-        a list of size in megabytes of each disk. These disks are
+        a list of size in MiB (1024×1024 bytes) of each disk. These disks are
         writeable by the VM.
       '';
     };
@@ -929,6 +953,14 @@ in
       '';
     };
 
+    virtualisation.useBIOSBoot = mkEnableOption null // {
+      description = ''
+        If enabled for legacy MBR VMs, the VM image will have a separate boot
+        partition mounted at /boot.
+        useBIOSBoot is ignored if useEFIBoot == true.
+      '';
+    };
+
     virtualisation.useEFIBoot = mkOption {
       type = types.bool;
       default = false;
@@ -1098,7 +1130,7 @@ in
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
-            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
+            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047 MiB RAM on 32bit max.
           '';
         }
         {
@@ -1128,6 +1160,9 @@ in
       `useBootLoader` useless. You might want to disable one of those options.
     '';
 
+    # Install Limine on the bootloader device
+    boot.loader.limine.biosDevice = cfg.bootLoaderDevice;
+
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
     # legacy and UEFI. In order to avoid this, we have to put "nodev" to force UEFI-only installs.
     # Otherwise, we set the proper bootloader device for this.
@@ -1151,8 +1186,7 @@ in
     '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
-      ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1303,7 +1337,8 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
-          ] ++ lib.optional (tag == "nix-store") "cache=loose";
+          ]
+          ++ lib.optional (tag == "nix-store") "cache=loose";
         };
       in
       lib.mkMerge [

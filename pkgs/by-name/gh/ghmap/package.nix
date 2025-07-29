@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ghmap";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uhourri";
     repo = "ghmap";
     tag = "v${version}";
-    hash = "sha256-ZA7jtcmvjZEIS3iYaTv9rFqeQSqsh8pCxcbpQDUPDfs=";
+    hash = "sha256-hv+44udltQYzLofs1APlEAi8HgT26dvcfK1GT8yfxFw=";
   };
 
   build-system = with python3Packages; [

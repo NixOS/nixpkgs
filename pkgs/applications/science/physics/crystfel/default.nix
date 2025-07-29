@@ -229,31 +229,31 @@ stdenv.mkDerivation rec {
     doxygen
     opencl-headers
     makeWrapper
-  ] ++ lib.optionals withGui [ wrapGAppsHook3 ];
-  buildInputs =
-    [
-      hdf5
-      gsl
-      ncurses
-      msgpack
-      fftw
-      fdip
-      zeromq
-      ocl-icd
-      libccp4
-      mosflm
-      pinkIndexer
-      xgandalf
-      pandoc
-    ]
-    ++ lib.optionals withGui [
-      gtk3
-      gdk-pixbuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      argp-standalone
-    ]
-    ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
+  ]
+  ++ lib.optionals withGui [ wrapGAppsHook3 ];
+  buildInputs = [
+    hdf5
+    gsl
+    ncurses
+    msgpack
+    fftw
+    fdip
+    zeromq
+    ocl-icd
+    libccp4
+    mosflm
+    pinkIndexer
+    xgandalf
+    pandoc
+  ]
+  ++ lib.optionals withGui [
+    gtk3
+    gdk-pixbuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ]
+  ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
   patches = [
     # on darwin at least, we need to link to a separate argp library;

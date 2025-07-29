@@ -49,60 +49,50 @@ let
 
   mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
 
-  warnStub =
-    prefix:
-    lib.warn "${prefix} these stubs do nothing and will be removed in Nixpkgs 25.11; see <https://nixos.org/manual/nixpkgs/stable/#sec-darwin> for documentation and migration instructions";
+  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
 
-  apple_sdk_11_0 = warnStub "darwin.apple_sdk_11_0.*:" (
-    pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { }
-  );
-
-  apple_sdk_12_3 =
-    warnStub
-      "darwin.apple_sdk_12_3.*: add `apple-sdk_12` to build inputs instead to use the macOS 12 SDK."
-      (pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { });
+  apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
 
   apple_sdk = apple_sdk_11_0;
 
-  stubs =
-    {
-      inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
-    }
-    // lib.genAttrs [
-      "CF"
-      "CarbonHeaders"
-      "CommonCrypto"
-      "CoreSymbolication"
-      "IOKit"
-      "Libc"
-      "Libinfo"
-      "Libm"
-      "Libnotify"
-      "Librpcsvc"
-      "Libsystem"
-      "LibsystemCross"
-      "Security"
-      "architecture"
-      "cf-private"
-      "configd"
-      "configdHeaders"
-      "darwin-stubs"
-      "dtrace"
-      "eap8021x"
-      "hfs"
-      "hfsHeaders"
-      "launchd"
-      "libclosure"
-      "libdispatch"
-      "libmalloc"
-      "libobjc"
-      "libplatform"
-      "libpthread"
-      "mDNSResponder"
-      "objc4"
-      "ppp"
-      "xnu"
-    ] (name: warnStub "darwin.${name}:" (mkStub "11.0" name));
+  stubs = {
+    inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
+  }
+  // lib.genAttrs [
+    "CF"
+    "CarbonHeaders"
+    "CommonCrypto"
+    "CoreSymbolication"
+    "IOKit"
+    "Libc"
+    "Libinfo"
+    "Libm"
+    "Libnotify"
+    "Librpcsvc"
+    "Libsystem"
+    "LibsystemCross"
+    "Security"
+    "architecture"
+    "cf-private"
+    "configd"
+    "configdHeaders"
+    "darwin-stubs"
+    "dtrace"
+    "eap8021x"
+    "hfs"
+    "hfsHeaders"
+    "launchd"
+    "libclosure"
+    "libdispatch"
+    "libmalloc"
+    "libobjc"
+    "libplatform"
+    "libpthread"
+    "mDNSResponder"
+    "objc4"
+    "ppp"
+    "xnu"
+  ] (mkStub "darwin" "11.0");
 in
 
 stubs
@@ -136,11 +126,11 @@ stubs
   ### L ###
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
-  libresolvHeaders = lib.warn "darwin.libresolvHeaders: use `lib.getInclude darwin.libresolv`; this will be removed in 25.11" (
+  libresolvHeaders = lib.warnOnInstantiate "darwin.libresolvHeaders: use `lib.getInclude darwin.libresolv`; this will be removed in 25.11" (
     lib.getDev self.libresolv
   ); # added 2025-04-20
   libtapi = pkgs.libtapi; # 2024-08-16
-  libutilHeaders = lib.warn "darwin.libutilHeaders: use `lib.getInclude darwin.libutil`; this will be removed in 25.11" (
+  libutilHeaders = lib.warnOnInstantiate "darwin.libutilHeaders: use `lib.getInclude darwin.libutil`; this will be removed in 25.11" (
     lib.getDev self.libutil
   ); # added 2025-04-20
 
@@ -163,7 +153,8 @@ stubs
   ### S ###
 
   stdenvNoCF =
-    lib.warn "darwin.stdenvNoCF: use `stdenv` or `stdenvNoCC`; this will be removed in 25.11"
+    lib.warnOnInstantiate
+      "darwin.stdenvNoCF: use `stdenv` or `stdenvNoCC`; this will be removed in 25.11"
       (
         pkgs.stdenv.override {
           extraBuildInputs = [ ];

@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
     libidn
     openssl
     icu
-  ] ++ withExtraLibs;
+  ]
+  ++ withExtraLibs;
 
   configureFlags = [
     "--ostype=linux"

@@ -27,7 +27,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     perl
-  ] ++ perlDeps;
+  ]
+  ++ perlDeps;
 
   installPhase = ''
     runHook preInstall

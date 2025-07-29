@@ -2,10 +2,11 @@
   buildPecl,
   lib,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildPecl rec {
-  version = "unstable-2022-03-25";
+  version = "1.1.1-unstable-2022-03-25";
   pname = "meminfo";
 
   src = fetchFromGitHub {
@@ -16,6 +17,8 @@ buildPecl rec {
   };
 
   sourceRoot = "${src.name}/extension";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "PHP extension to get insight about memory usage";

@@ -6,22 +6,22 @@
   boost,
   blas,
   gmp,
-  tbb_2021_11,
+  tbb_2021,
   gfortran,
 }:
 
 stdenv.mkDerivation rec {
   pname = "scipopt-papilo";
-  version = "2.4.1";
+  version = "2.4.2";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.1";
+  scipVersion = "9.2.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${version}";
-    hash = "sha256-oQ9iq5UkFK0ghUx6uxdJIOo5niQjniHegSZptqi2fgE=";
+    hash = "sha256-/1AsAesUh/5YXeCU2OYopoG3SXAwAecPD88QvGkb2bY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     gmp
     gfortran
     boost
-    tbb_2021_11
+    tbb_2021
   ];
 
   cmakeFlags = [
@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
     #   > include/boost/multiprecision/mpfr.hpp:22: fatal error: mpfr.h: No such file or directory
     #   > compilation terminated.
     (lib.cmakeBool "SOPLEX" false)
-
-    # (lib.cmakeBool "GMP" true)
-    # (lib.cmakeBool "QUADMATH" true)
-    # (lib.cmakeBool "TBB" true)
   ];
   doCheck = true;
   meta = {

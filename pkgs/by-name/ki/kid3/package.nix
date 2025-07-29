@@ -59,36 +59,38 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
+  buildInputs = [
+    chromaprint
+    ffmpeg
+    flac
+    id3lib
+    libogg
+    libvorbis
+    libxslt
+    mp4v2
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    readline
+    taglib
+    zlib
+  ]
+  ++ lib.optionals withKDE (
+    with kdePackages;
     [
-      chromaprint
-      ffmpeg
-      flac
-      id3lib
-      libogg
-      libvorbis
-      libxslt
-      mp4v2
-      qtbase
-      qtdeclarative
-      qtmultimedia
-      readline
-      taglib
-      zlib
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      kio
+      kxmlgui
+      phonon
     ]
-    ++ lib.optionals withKDE (
-      with kdePackages;
-      [
-        kconfig
-        kconfigwidgets
-        kcoreaddons
-        kio
-        kxmlgui
-        phonon
-      ]
-    );
+  );
 
-  cmakeFlags = [ (lib.cmakeFeature "WITH_APPS" apps) ];
+  cmakeFlags = [
+    (lib.cmakeFeature "WITH_APPS" apps)
+    (lib.cmakeBool "WITH_MP4V2" true)
+  ];
 
   env = {
     DOCBOOKDIR = "${docbook_xsl}/xml/xsl/docbook/";

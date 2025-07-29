@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.4";
+  version = "17.5";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_4";
-    hash = "sha256-TEpvX28chR3CXiOQsNY12t8WfM9ywoZVX1e/6mj9DqE=";
+    rev = "refs/tags/REL_17_5";
+    hash = "sha256-jWV7hglu7IPMZbqHrZVZHLbZYjVuDeut7nH50aSQIBc=";
   };
 
   __structuredAttrs = true;
@@ -53,16 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
     disallowedReferences = [ "dev" ];
     disallowedRequisites = [
       stdenv.cc
-    ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+    ]
+    ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
   };
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals gssSupport [ libkrb5 ]
-    ++ lib.optionals nlsSupport [ gettext ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals gssSupport [ libkrb5 ]
+  ++ lib.optionals nlsSupport [ gettext ];
 
   nativeBuildInputs = [
     bison
@@ -100,18 +100,17 @@ stdenv.mkDerivation (finalAttrs: {
   # This doesn't apply to us with Nix.
   env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
 
-  configureFlags =
-    [
-      "--enable-debug"
-      "--sysconfdir=/etc"
-      "--with-openssl"
-      "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      "--without-icu"
-      "--without-perl"
-      "--without-readline"
-    ]
-    ++ lib.optionals gssSupport [ "--with-gssapi" ]
-    ++ lib.optionals nlsSupport [ "--enable-nls" ];
+  configureFlags = [
+    "--enable-debug"
+    "--sysconfdir=/etc"
+    "--with-openssl"
+    "--with-system-tzdata=${tzdata}/share/zoneinfo"
+    "--without-icu"
+    "--without-perl"
+    "--without-readline"
+  ]
+  ++ lib.optionals gssSupport [ "--with-gssapi" ]
+  ++ lib.optionals nlsSupport [ "--enable-nls" ];
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     ./patches/socketdir-in-run-13+.patch

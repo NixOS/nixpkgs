@@ -41,24 +41,25 @@ stdenv.mkDerivation rec {
     libXt
     libiconv
     docbook_xml_dtd_412
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  configureFlags =
-    [
-      "--enable-zlib"
-      "--enable-readline"
-      "--enable-openssl"
-      "--enable-pcsc"
-      "--enable-sm"
-      "--enable-man"
-      "--enable-doc"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin)
+  configureFlags = [
+    "--enable-zlib"
+    "--enable-readline"
+    "--enable-openssl"
+    "--enable-pcsc"
+    "--enable-sm"
+    "--enable-man"
+    "--enable-doc"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
+  ]
+  ++
+    lib.optional (!stdenv.hostPlatform.isDarwin)
       "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   installFlags = [

@@ -1,0 +1,75 @@
+From e1ee1a2df1ad32de24e8fdaeac0a533681710578 Mon Sep 17 00:00:00 2001
+From: John Ericson <git@JohnEricson.me>
+Date: Wed, 18 Aug 2021 01:55:52 -0400
+Subject: [PATCH 3/3] find_a_program: Only search for prefixed paths in
+ undisambiguated dirs
+
+This means, we might search for:
+
+- path/$machine/$version/prog
+- path/$machine/prog
+- path/$machine-prog
+
+But not
+
+- path/$machine/$version/$machine-prog
+
+because disambiguating $machine twice is unnecessary.
+
+This does mean we less liberal in what we accept than LLVM, but that's
+OK. The down side of always Postel's law is everyone converges on
+accepting all sorts of garbage, which makes debugging end-to-end hard
+when mistakes are not caught early.
+---
+ gcc/gcc.cc | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index f9f83d1a804..d837b6ea779 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -3097,15 +3097,9 @@ program_at_path (char *path, bool machine_specific, void *data)
+   struct file_at_path_info *info = (struct file_at_path_info *) data;
+   size_t path_len = strlen (path);
+ 
+-  for (auto prefix : { just_machine_prefix, "" })
++  auto search = [=](size_t len) -> void *
+     {
+-      auto len = path_len;
+-
+-      auto prefix_len = strlen(prefix);
+-      memcpy (path + len, prefix, prefix_len);
+-      len += prefix_len;
+-
+-      memcpy (path + len, info->name, info->name_len);
++      memcpy (path + len, info->name, info->name_len + 1);
+       len += info->name_len;
+ 
+       /* Some systems have a suffix for executable files.
+@@ -3120,9 +3114,22 @@ program_at_path (char *path, bool machine_specific, void *data)
+       path[len] = '\0';
+       if (access_check (path, info->mode) == 0)
+ 	return path;
++
++      return NULL;
++    };
++
++  /* Additionally search for $target-prog in machine-agnostic dirs, as an
++     additional way to disambiguate targets. Do not do this in machine-specific
++     dirs because so further disambiguation is needed. */
++  if (!machine_specific)
++    {
++      auto prefix_len = strlen(just_machine_prefix);
++      memcpy (path + path_len, just_machine_prefix, prefix_len);
++      auto res = search(path_len + prefix_len);
++      if (res) return res;
+     }
+ 
+-  return NULL;
++  return search(path_len);
+ }
+ 
+ /* Specialization of find_a_file for programs that also takes into account
+-- 
+2.47.2
+

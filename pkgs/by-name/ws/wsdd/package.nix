@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "christgau";
     repo = "wsdd";
     rev = "v${version}";
-    hash = "sha256-T8/XlQpx4CtNy8LuLwOQBG9muFe9pp5583tDaCT4ReI=";
+    hash = "sha256-i3+Mw1l/kTRQT/CxRKvaEfdEh2qcEQp1Wa90Vk3JUMM=";
   };
 
   outputs = [

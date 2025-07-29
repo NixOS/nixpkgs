@@ -72,6 +72,14 @@ let
     serviceConfig.KillSignal = "SIGHUP";
   };
 
+  managerSettings = {
+    # Don't clobber the console with duplicate systemd messages.
+    ShowStatus = false;
+    # Allow very slow start
+    DefaultTimeoutStartSec = 300;
+    DefaultDeviceTimeoutSec = 300;
+  };
+
 in
 
 {
@@ -86,7 +94,6 @@ in
       enables commands to be sent to test and debug stage 1. Use
       machine.switch_root() to leave stage 1 and proceed to stage 2
     '';
-
   };
 
   config = {
@@ -116,7 +123,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        extraConfig = config.systemd.extraConfig;
+        settings.Manager = managerSettings;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -211,13 +218,7 @@ in
       MaxLevelConsole=debug
     '';
 
-    systemd.extraConfig = ''
-      # Don't clobber the console with duplicate systemd messages.
-      ShowStatus=no
-      # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+    systemd.settings.Manager = managerSettings;
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300

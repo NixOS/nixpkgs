@@ -32,20 +32,23 @@ stdenv.mkDerivation (finalAttrs: {
         )
       )
       {
-        USE_EXTERNAL_CPUINFO = true;
         LIBDOVI_FOUND = true;
         LIBHDR10PLUS_RS_FOUND = true;
       };
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
   ];
 
   buildInputs = [
-    cpuinfo
     libdovi
     hdr10plus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    cpuinfo
   ];
 
   passthru.updateScript = unstableGitUpdater {
@@ -69,5 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ johnrtitor ];
+    mainProgram = "SvtAv1EncApp";
   };
 })

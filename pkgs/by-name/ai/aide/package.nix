@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aide";
-  version = "0.19";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/aide/aide/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5/ugIUvgEpnXY1m/8pdSM+0kEzLkz8//Wc0baomrpeQ=";
+    sha256 = "sha256-bfi/XwQD10r329uR6zyPYf4H6WRmnbjPoe5+TuPpC1I=";
   };
 
   buildInputs = [
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aide.github.io/";
     changelog = "https://github.com/aide/aide/blob/v${version}/ChangeLog";
     description = "File and directory integrity checker";
     mainProgram = "aide";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.linux;
   };
 }

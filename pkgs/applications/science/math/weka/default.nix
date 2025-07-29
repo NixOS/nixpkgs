@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     unzip
     imagemagick
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   # The -Xmx1000M comes suggested from their download page:
   # https://www.cs.waikato.ac.nz/ml/weka/downloading.html

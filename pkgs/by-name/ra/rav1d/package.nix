@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rav1d";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "memorysafety";
     repo = "rav1d";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Moj3v7cxPluzNPmOmGhYuz/Qh48BnBjN7Vt4f8aY2o=";
+    hash = "sha256-OAfuUeScdjL7xIpf6pclNyo4ugRLIIcTjjf0AwoF+7o=";
   };
 
-  cargoHash = "sha256-M0j0zgDqElhG3Jgetjx2sL3rxLrShK0zTMmOXwNxBEI=";
+  cargoHash = "sha256-13j0++XHcNjkVc3VZxv2ukQvhiu+heZPgaTsA1U4MGQ=";
 
   nativeBuildInputs = [
     nasm

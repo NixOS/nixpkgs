@@ -13,28 +13,27 @@
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "2.2.1";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
     repo = "sslh";
     rev = "v${version}";
-    hash = "sha256-AAGS7/mhlPRbZ6VazVA0wnKf3SrEB/AgF8HgeICwvx4=";
+    hash = "sha256-jG2+CT+Zcfkp+RLKcVfCTozgNuldfxKw7YaJLGKIZzE=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs =
-    [
-      libev
-      libconfig
-      perl
-      pcre2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      tcp_wrappers
-    ];
+  buildInputs = [
+    libev
+    libconfig
+    perl
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    tcp_wrappers
+  ];
 
   makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "USELIBCAP=1"

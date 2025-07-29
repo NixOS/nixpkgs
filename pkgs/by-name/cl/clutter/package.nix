@@ -46,38 +46,36 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
   ];
-  propagatedBuildInputs =
-    [
-      cogl
-      pango
-      atk
-      json-glib
-      gobject-introspection
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libGL
-      libGLU
-      libXext
-      libXfixes
-      libXdamage
-      libXcomposite
-      libXi
-      libxcb
-      libinput
-      libgudev
-      libxkbcommon
-    ];
+  propagatedBuildInputs = [
+    cogl
+    pango
+    atk
+    json-glib
+    gobject-introspection
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libGL
+    libGLU
+    libXext
+    libXfixes
+    libXdamage
+    libXcomposite
+    libXi
+    libxcb
+    libinput
+    libgudev
+    libxkbcommon
+  ];
 
-  configureFlags =
-    [
-      "--enable-introspection" # needed by muffin AFAIK
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--without-x"
-      "--enable-x11-backend=no"
-      "--enable-quartz-backend=yes"
-    ];
+  configureFlags = [
+    "--enable-introspection" # needed by muffin AFAIK
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--without-x"
+    "--enable-x11-backend=no"
+    "--enable-quartz-backend=yes"
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";

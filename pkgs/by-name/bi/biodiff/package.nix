@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1/FNMXzEQB4LM57+SccUjJ31rYB46DO8AQYQBn6B7zg=";
 
   buildInputs = [ wfa2-lib ];
@@ -26,11 +25,11 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ "wfa2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hex diff viewer using alignment algorithms from biology";
     homepage = "https://github.com/8051Enthusiast/biodiff";
     changelog = "https://github.com/8051Enthusiast/biodiff/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

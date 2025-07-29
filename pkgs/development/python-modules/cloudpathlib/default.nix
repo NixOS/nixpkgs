@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     tag = "v${version}";
-    hash = "sha256-sChYdXltPPQ5XP7obY5EoMz/dq3fHQ3FqI0w8noEI+4=";
+    hash = "sha256-Bhr92xMK/WV3u0SG8q9SvO0kGnwSVXHzq6lK/RD2ssk=";
   };
 
   postPatch = ''
@@ -68,7 +68,8 @@ buildPythonPackage rec {
     python-dotenv
     shortuuid
     tenacity
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   meta = with lib; {
     description = "Python pathlib-style classes for cloud storage services such as Amazon S3, Azure Blob Storage, and Google Cloud Storage";

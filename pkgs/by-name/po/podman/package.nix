@@ -57,30 +57,29 @@ let
     name = "podman-helper-binary-wrapper";
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths =
-      [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+    paths = [
+      gvproxy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      aardvark-dns
+      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      netavark
+      passt
+      conmon
+      crun
+    ]
+    ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.4.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-RirMBb45KeBLdBJrRa86WxI4FiXdBar+RnVQ2ezEEYc=";
+    hash = "sha256-iLpJQC1v+jPeQNCjgtx3pPKsa6wLcrqtQkeG7qF3rWo=";
   };
 
   patches = [
@@ -165,23 +164,22 @@ buildGoModule rec {
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
   '';
 
-  passthru.tests =
-    {
-      version = testers.testVersion {
-        package = podman;
-        command = "HOME=$TMPDIR podman --version";
-      };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) podman;
-      # related modules
-      inherit (nixosTests)
-        podman-tls-ghostunnel
-        ;
-      oci-containers-podman = nixosTests.oci-containers.podman;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = podman;
+      command = "HOME=$TMPDIR podman --version";
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) podman;
+    # related modules
+    inherit (nixosTests)
+      podman-tls-ghostunnel
+      ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://podman.io/";
     description = "Program for managing pods, containers and container images";
     longDescription = ''
@@ -190,8 +188,8 @@ buildGoModule rec {
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
     mainProgram = "podman";
   };
 }

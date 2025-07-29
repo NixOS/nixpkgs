@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
     fontconfig
     stdenv.cc.cc
     zlib
-  ] ++ runtimeDependencies;
+  ]
+  ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     icu

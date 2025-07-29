@@ -8,16 +8,18 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pianotrans";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "azuwis";
-    repo = pname;
+    repo = "pianotrans";
     rev = "v${version}";
     hash = "sha256-gRbyUQmPtGvx5QKAyrmeJl0stp7hwLBWwjSbJajihdE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     piano-transcription-inference
     resampy
     tkinter

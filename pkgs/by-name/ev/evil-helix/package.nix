@@ -9,16 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evil-helix";
-  version = "20250413";
+  version = "20250601";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
     rev = "release-${version}";
-    hash = "sha256-0dXDAhnkkr5rh4UK0zkT3xYthk01VbNnRrYe5rD3oh4=";
+    hash = "sha256-bsl9ltPXEhkcnnHFAXQMyBCh1qd+UBV0XK2EcJOe+eg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-epI/Xvw0mgc1IoDXpACws7Lsbkj1Xdk7conzJlUqRxY=";
 
   nativeBuildInputs = [ installShellFiles ];

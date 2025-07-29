@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   cairo,
@@ -31,15 +31,15 @@
   hyprgraphics,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pmkJCzjflvsOytiu2mgn2wfSeyL6mTfoi214T4A2OZQ=";
+    hash = "sha256-Q5gDH48MqkiglGvRtD0Uj653kYzu46j27JIB0h1ecEg=";
   };
 
   prePatch = ''
@@ -90,7 +90,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = gcc14Stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

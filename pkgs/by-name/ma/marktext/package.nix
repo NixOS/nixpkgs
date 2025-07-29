@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marktext";
-  version = "0.17.0-unstable-2024-06-10";
+  version = "0.17.1-unstable-2024-06-10";
 
   src = fetchFromGitHub {
     owner = "marktext";
@@ -41,21 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mr79FV/LHkoY3vX9B5yv95IQIJQ9akwfslKndKYmwCo=";
   };
 
-  nativeBuildInputs =
-    [
-      yarn
-      fixup-yarn-lock
-      makeShellWrapper
-      yarnBuildHook
-      (python3.withPackages (ps: with ps; [ packaging ]))
-      pkg-config
-      nodejs
-      nodePackages.node-gyp-build
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      libtool
-    ];
+  nativeBuildInputs = [
+    yarn
+    fixup-yarn-lock
+    makeShellWrapper
+    yarnBuildHook
+    (python3.withPackages (ps: with ps; [ packaging ]))
+    pkg-config
+    nodejs
+    nodePackages.node-gyp-build
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    libtool
+  ];
 
   buildInputs = [
     libsecret
@@ -136,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/opt/marktext $out/bin
 
-    install -Dm644 resources/linux/marktext.desktop $out/share/application/marktext.desktop
+    install -Dm644 resources/linux/marktext.desktop $out/share/applications/marktext.desktop
 
     pushd resources/icons/
 

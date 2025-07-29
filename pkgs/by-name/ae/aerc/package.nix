@@ -33,7 +33,14 @@ buildGoModule (finalAttrs: {
     python3Packages.wrapPython
   ];
 
-  patches = [ ./runtime-libexec.patch ];
+  patches = [
+    ./runtime-libexec.patch
+
+    # TODO remove these with the next release
+    # they resolve a path injection vulnerability when saving attachments (CVE-2025-49466)
+    ./basename-temp-file.patch
+    ./basename-temp-file-fixup.patch
+  ];
 
   postPatch = ''
     substituteAllInPlace config/aerc.conf
@@ -52,7 +59,8 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     python3Packages.python
     gawk
-  ] ++ lib.optional withNotmuch notmuch;
+  ]
+  ++ lib.optional withNotmuch notmuch;
 
   installPhase = ''
     runHook preInstall

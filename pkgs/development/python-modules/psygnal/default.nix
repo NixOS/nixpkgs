@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.11.1";
+  version = "0.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
-    repo = pname;
+    repo = "psygnal";
     tag = "v${version}";
-    hash = "sha256-eGJWtmw2Ps3jII4T8E6s3djzxfqcSdyPemvejal0cn4=";
+    hash = "sha256-ZEN8S2sI1usXl5A1Ow1+l4BBB6qNnlVt/nvFtAX4maY=";
   };
 
   build-system = [
@@ -48,9 +48,8 @@ buildPythonPackage rec {
     attrs
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   pythonImportsCheck = [ "psygnal" ];
@@ -58,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of Qt Signals";
     homepage = "https://github.com/pyapp-kit/psygnal";
-    changelog = "https://github.com/pyapp-kit/psygnal/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

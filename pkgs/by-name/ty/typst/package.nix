@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
 
   nativeBuildInputs = [
@@ -36,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
+    # to not have "unknown hash" in help output
+    TYPST_VERSION = finalAttrs.version;
   };
 
   # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"

@@ -38,15 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      # For `resample-sndfile`
-      libsndfile
-    ]
-    ++ lib.optionals (!libsamplerate.meta.broken) [
-      # For `compareresample`
-      libsamplerate
-    ];
+  buildInputs = [
+    # For `resample-sndfile`
+    libsndfile
+  ]
+  ++ lib.optionals (!libsamplerate.meta.broken) [
+    # For `compareresample`
+    libsamplerate
+  ];
 
   mesonFlags = [ (lib.mesonEnable "compareresample" (!libsamplerate.meta.broken)) ];
 

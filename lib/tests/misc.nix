@@ -91,6 +91,7 @@ let
     range
     recursiveUpdateUntil
     removePrefix
+    replaceString
     replicate
     runTests
     setFunctionArgs
@@ -495,6 +496,11 @@ runTests {
       ]
     );
     expected = "/usr/include:/usr/local/include";
+  };
+
+  testReplaceStringString = {
+    expr = strings.replaceString "." "_" "v1.2.3";
+    expected = "v1_2_3";
   };
 
   testReplicateString = {
@@ -968,6 +974,28 @@ runTests {
   };
 
   testToSentenceCasePath = testingThrow (strings.toSentenceCase ./.);
+
+  testToCamelCase = {
+    expr = strings.toCamelCase "hello world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromKebab = {
+    expr = strings.toCamelCase "hello-world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromSnake = {
+    expr = strings.toCamelCase "hello_world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromPascal = {
+    expr = strings.toCamelCase "HelloWorld";
+    expected = "helloWorld";
+  };
+
+  testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
 
   testToInt = testAllTrue [
     # Naive
@@ -1704,6 +1732,11 @@ runTests {
       2
       6
     ];
+  };
+
+  testReplaceString = {
+    expr = replaceString "world" "Nix" "Hello, world!";
+    expected = "Hello, Nix!";
   };
 
   testReplicate = {
@@ -4125,6 +4158,34 @@ runTests {
     };
   };
 
+  # Make sure that passing a string for the `directory` works.
+  #
+  # See: https://github.com/NixOS/nixpkgs/pull/361424#discussion_r1934813568
+  # See: https://github.com/NixOS/nix/issues/9428
+  testPackagesFromDirectoryRecursiveStringDirectory = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      # Do NOT remove the `builtins.toString` call here!!!
+      directory = builtins.toString ./packages-from-directory/plain;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
   # Check that `packagesFromDirectoryRecursive` can process a directory with a
   # top-level `package.nix` file into a single package.
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
@@ -4222,4 +4283,50 @@ runTests {
         };
       };
     };
+
+  testFilesystemResolveDefaultNixFile1 = {
+    expr = lib.filesystem.resolveDefaultNix ./foo.nix;
+    expected = ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2 = {
+    expr = lib.filesystem.resolveDefaultNix ./default.nix;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1 = {
+    expr = lib.filesystem.resolveDefaultNix ./.;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./foo.nix);
+    expected = toString ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./default.nix);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString2 = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./. + "/default.nix";
+  };
+
+  testFilesystemResolveDefaultNixNonExistent = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+  };
+
+  testFilesystemResolveDefaultNixNonExistentDir = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
+  };
+
 }

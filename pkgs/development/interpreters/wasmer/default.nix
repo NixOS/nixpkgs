@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rP0qvSb9PxsTMAq0hpB+zdSTHvridyCVdukLUYxdao8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Fympp2A04viibo4U79FiBSJIeGDUWS34OOwebCks6S0=";
 
   nativeBuildInputs = [
@@ -34,16 +33,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # check references to `compiler_features` in Makefile on update
-  buildFeatures =
-    [
-      "cranelift"
-      "wasmer-artifact-create"
-      "static-artifact-create"
-      "wasmer-artifact-load"
-      "static-artifact-load"
-    ]
-    ++ lib.optional withLLVM "llvm"
-    ++ lib.optional withSinglepass "singlepass";
+  buildFeatures = [
+    "cranelift"
+    "wasmer-artifact-create"
+    "static-artifact-create"
+    "wasmer-artifact-load"
+    "static-artifact-load"
+  ]
+  ++ lib.optional withLLVM "llvm"
+  ++ lib.optional withSinglepass "singlepass";
 
   cargoBuildFlags = [
     "--manifest-path"

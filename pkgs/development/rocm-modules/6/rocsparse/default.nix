@@ -22,16 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse${clr.gpuArchSuffix}";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -48,38 +47,36 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs =
-    [
-      rocprim
-      git
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      gtest
-      boost
-      python3Packages.python
-      python3Packages.pyyaml
-    ];
+  buildInputs = [
+    rocprim
+    git
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    gtest
+    boost
+    python3Packages.python
+    python3Packages.pyyaml
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_BUILD_TYPE=Release"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      "-DBUILD_CLIENTS_TESTS=ON"
-      "-DCMAKE_MATRICES_DIR=/build/source/matrices"
-      "-Dpython=python3"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_CLIENTS_BENCHMARKS=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    "-DBUILD_CLIENTS_TESTS=ON"
+    "-DCMAKE_MATRICES_DIR=/build/source/matrices"
+    "-Dpython=python3"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_CLIENTS_BENCHMARKS=ON"
+  ];
 
   # We have to manually generate the matrices
   postPatch = lib.optionalString (buildTests || buildBenchmarks) ''

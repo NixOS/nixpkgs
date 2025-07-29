@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "extract_msg" ];
 
-  pytestFlagsArray = [ "extract_msg_tests/*.py" ];
+  enabledTestPaths = [ "extract_msg_tests/*.py" ];
 
   meta = with lib; {
     description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files";

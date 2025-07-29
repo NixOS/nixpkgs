@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-arch-native"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-link-time-optimization" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-link-time-optimization" ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

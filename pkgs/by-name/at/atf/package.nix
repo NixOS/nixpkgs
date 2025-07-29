@@ -10,25 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atf";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "atf";
     tag = "atf-${finalAttrs.version}";
-    hash = "sha256-vZfBk/lH+04d3NbTUYjAaxwGFHtnagl/kY04hgkE4Iw=";
+    hash = "sha256-g9cXeiCaiyGQXtg6eyrbRQpqk4VLGSFuhfPB+ynbDIo=";
   };
-
-  patches = [
-    # https://github.com/freebsd/atf/issues/88
-    # https://github.com/freebsd/atf/pull/85
-    # Maintainer say it fix some tests in issue 88.
-    ./pr-85.patch
-    (fetchpatch {
-      url = "https://github.com/freebsd/atf/commit/b42c98612cb99fa3f52766a46203263dc1de7187.patch?full_index=1";
-      hash = "sha256-goDPIdIF8vHXDengVIYbxw5W/JT5kfsG5japgtranas=";
-    })
-  ];
 
   postPatch =
     lib.optionalString finalAttrs.doInstallCheck ''

@@ -30,6 +30,9 @@ let
         hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
       }
     );
+
+    # robin-map headers require c++17
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [ (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") ];
   });
 in
 

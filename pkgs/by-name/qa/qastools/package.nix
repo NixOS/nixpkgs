@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "sebholt";
-    repo = pname;
+    repo = "qastools";
     rev = "v${version}";
     hash = "sha256-mJjhM1y50f44kvxMidM7uqlkkXx1sbJC21vIMEDenoU=";
   };
@@ -23,16 +23,15 @@ stdenv.mkDerivation rec {
     cmake
     qt6Packages.wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      alsa-lib
-      udev
-    ]
-    ++ (with qt6Packages; [
-      qtbase
-      qtsvg
-      qttools
-    ]);
+  buildInputs = [
+    alsa-lib
+    udev
+  ]
+  ++ (with qt6Packages; [
+    qtbase
+    qtsvg
+    qttools
+  ]);
 
   meta = with lib; {
     description = "Collection of desktop applications for ALSA configuration";

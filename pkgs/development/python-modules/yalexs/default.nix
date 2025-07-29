@@ -52,7 +52,8 @@ buildPythonPackage rec {
     python-socketio
     requests
     typing-extensions
-  ] ++ python-socketio.optional-dependencies.asyncio_client;
+  ]
+  ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
     aioresponses

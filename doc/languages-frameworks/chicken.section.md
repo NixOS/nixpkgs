@@ -77,8 +77,8 @@ let
       );
     }
   );
+  # Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
+  # the local copy of `srfi-180`.
 in
-# Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
-# the local copy of `srfi-180`.
 <...>
 ```

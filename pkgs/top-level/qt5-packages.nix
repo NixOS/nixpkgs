@@ -174,7 +174,7 @@ makeScopeWithSplicing' {
 
         kreport = callPackage ../development/libraries/kreport { };
 
-        kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+        kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
@@ -190,9 +190,7 @@ makeScopeWithSplicing' {
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
-        libopenshot = callPackage ../development/libraries/libopenshot {
-          python3 = pkgs.python311;
-        };
+        libopenshot = callPackage ../development/libraries/libopenshot { };
 
         packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
@@ -203,8 +201,6 @@ makeScopeWithSplicing' {
         libqofono = callPackage ../development/libraries/libqofono { };
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
-
-        libquotient = callPackage ../development/libraries/libquotient { };
 
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
@@ -248,6 +244,8 @@ makeScopeWithSplicing' {
         qcoro = callPackage ../development/libraries/qcoro { };
 
         qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
+
+        qcustomplot = callPackage ../development/libraries/qcustomplot { };
 
         qjson = callPackage ../development/libraries/qjson { };
 
@@ -326,8 +324,6 @@ makeScopeWithSplicing' {
         xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
         xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
-
-        yuview = callPackage ../applications/video/yuview { };
       }
     ))
   );

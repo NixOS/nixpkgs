@@ -69,6 +69,7 @@ let
     version = config.system.nixos.release;
     revision = "release-${version}";
     extraSources = cfg.nixos.extraModuleSources;
+    checkRedirects = cfg.nixos.checkRedirects;
     options =
       let
         scrubbedEval = evalModules {
@@ -76,7 +77,8 @@ let
             {
               _module.check = false;
             }
-          ] ++ docModules.eager;
+          ]
+          ++ docModules.eager;
           class = "nixos";
           specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
@@ -350,6 +352,14 @@ in
         example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
+        '';
+      };
+
+      nixos.checkRedirects = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Check redirects for manualHTML.
         '';
       };
 

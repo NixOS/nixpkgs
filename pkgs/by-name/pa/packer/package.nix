@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.12.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    hash = "sha256-19eaQs2f4zM3lXuQrWoS2S/tXWe3HdxXesjtVG67LFE=";
+    hash = "sha256-8DKMRiqv0XasLvFHGscpet51ZLVJjWjAYP8bLgVRIyQ=";
   };
 
-  vendorHash = "sha256-BsYL0PEpujsXLjhFP05yK8Pr0tc0lrdsQqxzmKso3rw=";
+  vendorHash = "sha256-aXeYGyMn+lnsfcQMJXRt1uZsdi9np26sMna6Ch1swbg=";
 
   subPackages = [ "." ];
 
@@ -31,11 +31,11 @@ buildGoModule rec {
     installShellCompletion --zsh contrib/zsh-completion/_packer
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for creating identical machine images for multiple platforms from a single source configuration";
     homepage = "https://www.packer.io";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       zimbatm
       ma27
       techknowlogick

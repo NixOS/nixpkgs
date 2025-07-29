@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "test_quit_gracefully"
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 

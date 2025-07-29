@@ -1,0 +1,137 @@
+From 3af17de3a5f6acd5a2f9340d84b8667459f43eea Mon Sep 17 00:00:00 2001
+From: John Ericson <git@JohnEricson.me>
+Date: Wed, 18 Aug 2021 01:55:31 -0400
+Subject: [PATCH 1/3] find_a_program: First search with machine prefix
+
+This matches the behavior of Clang, and makes it easier to work with
+cross compilers without heeding to hard-code paths at build time.
+---
+ gcc/gcc.cc | 78 +++++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 68 insertions(+), 10 deletions(-)
+
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index 4fd87f2c4a1..55738d258b3 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -1600,6 +1600,11 @@ static const char *machine_suffix = 0;
+ 
+ static const char *just_machine_suffix = 0;
+ 
++/* Prefix to attach to *basename* of commands being searched.
++   This is just `MACHINE-'.  */
++
++static const char *just_machine_prefix = 0;
++
+ /* Adjusted value of GCC_EXEC_PREFIX envvar.  */
+ 
+ static const char *gcc_exec_prefix;
+@@ -3043,15 +3048,6 @@ file_at_path (char *path, void *data)
+   memcpy (path + len, info->name, info->name_len);
+   len += info->name_len;
+ 
+-  /* Some systems have a suffix for executable files.
+-     So try appending that first.  */
+-  if (info->suffix_len)
+-    {
+-      memcpy (path + len, info->suffix, info->suffix_len + 1);
+-      if (access_check (path, info->mode) == 0)
+-	return path;
+-    }
+-
+   path[len] = '\0';
+   if (access_check (path, info->mode) == 0)
+     return path;
+@@ -3091,12 +3087,52 @@ find_a_file (const struct path_prefix *pprefix, const char *name, int mode,
+ 				file_at_path, &info);
+ }
+ 
++/* Callback for find_a_program.  Appends the file name to the directory
++   path. Like file_at_path but tries machine prefix and exe suffix too. */
++
++static void *
++program_at_path (char *path, void *data)
++{
++  /* try first with machine-prefixed name */
++  struct file_at_path_info *info = (struct file_at_path_info *) data;
++  size_t path_len = strlen (path);
++
++  for (auto prefix : { just_machine_prefix, "" })
++    {
++      auto len = path_len;
++
++      auto prefix_len = strlen(prefix);
++      memcpy (path + len, prefix, prefix_len);
++      len += prefix_len;
++
++      memcpy (path + len, info->name, info->name_len);
++      len += info->name_len;
++
++      /* Some systems have a suffix for executable files.
++	 So try appending that first.  */
++      if (info->suffix_len)
++	{
++	  memcpy (path + len, info->suffix, info->suffix_len + 1);
++	  if (access_check (path, info->mode) == 0)
++	    return path;
++	}
++
++      path[len] = '\0';
++      if (access_check (path, info->mode) == 0)
++	return path;
++    }
++
++  return NULL;
++}
++
+ /* Specialization of find_a_file for programs that also takes into account
+    configure-specified default programs. */
+ 
+ static char*
+ find_a_program (const char *name)
+ {
++  const int mode = X_OK;
++
+   /* Do not search if default matches query. */
+ 
+ #ifdef DEFAULT_ASSEMBLER
+@@ -3114,7 +3150,28 @@ find_a_program (const char *name)
+     return xstrdup (DEFAULT_DSYMUTIL);
+ #endif
+ 
+-  return find_a_file (&exec_prefixes, name, X_OK, false);
++  /* Find the filename in question (special case for absolute paths).  */
++
++  if (IS_ABSOLUTE_PATH (name))
++    {
++      if (access (name, mode) == 0)
++	return xstrdup (name);
++
++      return NULL;
++    }
++
++  struct file_at_path_info info;
++
++  info.name = name;
++  info.suffix = HOST_EXECUTABLE_SUFFIX;
++  info.name_len = strlen (info.name);
++  info.suffix_len = strlen (info.suffix);
++  info.mode = mode;
++
++  return (char*) for_each_path (
++    &exec_prefixes, false,
++    info.name_len + info.suffix_len + strlen(just_machine_prefix),
++    program_at_path, &info);
+ }
+ 
+ /* Ranking of prefixes in the sort list. -B prefixes are put before
+@@ -8492,6 +8549,7 @@ driver::set_up_specs () const
+   machine_suffix = concat (spec_host_machine, dir_separator_str, spec_version,
+ 			   accel_dir_suffix, dir_separator_str, NULL);
+   just_machine_suffix = concat (spec_machine, dir_separator_str, NULL);
++  just_machine_prefix = concat (spec_machine, "-", NULL);
+ 
+   specs_file = find_a_file (&startfile_prefixes, "specs", R_OK, true);
+   /* Read the specs file unless it is a default one.  */
+-- 
+2.47.2
+

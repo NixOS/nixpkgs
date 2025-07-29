@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "API Test Automation Made Simple";
     mainProgram = "karate";
     longDescription = ''
@@ -37,8 +37,8 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/karatelabs/karate";
     changelog = "https://github.com/karatelabs/karate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.kephasp ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.kephasp ];
     platforms = jre.meta.platforms;
   };
 }

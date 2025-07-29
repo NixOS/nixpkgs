@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.3";
+  version = "6.3.1";
   pname = "icalendar";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-qRIBsRy+gQ6/6yB8AZN/GHt7Tk4VymtJGMXRmfngDxI=";
+    hash = "sha256-lLcMuwKFdZbjscrp4dW5ybPHwcx9RHf44RH3BWwO6ng=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "test_docstring_of_python_file"
   ];
 
-  pytestFlagsArray = [ "src/icalendar" ];
+  enabledTestPaths = [ "src/icalendar" ];
 
   meta = with lib; {
     changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";

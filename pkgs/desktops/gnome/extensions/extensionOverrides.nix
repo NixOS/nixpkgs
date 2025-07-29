@@ -1,17 +1,15 @@
 {
   lib,
   fetchFromGitLab,
-  fetchzip,
   cpio,
   ddcutil,
   easyeffects,
   gjs,
   glib,
+  gnome-menus,
   nautilus,
   gobject-introspection,
-  gsound,
   hddtemp,
-  libgda6,
   libgtop,
   libhandy,
   liquidctl,
@@ -27,6 +25,9 @@
   vte,
   wrapGAppsHook3,
   xdg-utils,
+  gtk4,
+  desktop-file-utils,
+  xdg-user-dirs,
 }:
 let
   # Helper method to reduce redundancy
@@ -47,6 +48,17 @@ in
 # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
+  (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (replaceVars
+        ./extensionOverridesPatches/apps-menu_at_gnome-shell-extensions.gcampax.github.com.patch
+        {
+          gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+        }
+      )
+    ];
+  }))
+
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
@@ -128,7 +140,9 @@ lib.trivial.pipe super [
         inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
-        nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
+        gtk_update_icon_cache = "${gtk4.out}/bin/gtk4-update-icon-cache";
+        update_desktop_database = "${desktop-file-utils.out}/bin/update-desktop-database";
+        nautilus_gsettings_path = glib.getSchemaPath nautilus;
       })
     ];
   }))
@@ -162,22 +176,6 @@ lib.trivial.pipe super [
           chinese_calendar_path = chinese-calendar;
         })
       ];
-    }
-  ))
-
-  (patchExtension "pano@elhan.io" (
-    final: prev: {
-      version = "23-alpha3";
-      src = fetchzip {
-        url = "https://github.com/oae/gnome-shell-pano/releases/download/v${final.version}/pano@elhan.io.zip";
-        hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
-        stripRoot = false;
-      };
-      preInstall = ''
-        substituteInPlace extension.js \
-          --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
-          --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
-      '';
     }
   ))
 
@@ -217,4 +215,18 @@ lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
+
+  (patchExtension "pwcalc@thilomaurer.de" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm settings-importexport.ui
+    '';
+  })
+
+  (patchExtension "TeaTimer@zener.sbg.at" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm utilities-teatime.svg
+    '';
+  })
 ]

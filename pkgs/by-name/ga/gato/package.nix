@@ -40,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
     "gato"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GitHub Self-Hosted Runner Enumeration and Attack Tool";
     homepage = "https://github.com/praetorian-inc/gato";
     changelog = "https://github.com/praetorian-inc/gato/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gato";
   };
 }

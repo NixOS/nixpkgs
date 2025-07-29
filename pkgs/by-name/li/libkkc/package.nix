@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Japanese Kana Kanji conversion input method library";
     homepage = "https://github.com/ueno/libkkc";
     license = licenses.gpl3Plus;

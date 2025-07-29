@@ -8,18 +8,21 @@
   tigervnc,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "crowbar";
   version = "unstable-2020-04-23";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "galkan";
-    repo = pname;
+    repo = "crowbar";
     rev = "500d633ff5ddfcbc70eb6d0b4d2181e5b8d3c535";
     sha256 = "05m9vywr9976pc7il0ak8nl26mklzxlcqx0p8rlfyx1q766myqzf";
   };
 
-  propagatedBuildInputs = [ python3Packages.paramiko ];
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [ python3Packages.paramiko ];
 
   patchPhase = ''
     sed -i 's,/usr/bin/xfreerdp,${freerdp}/bin/xfreerdp,g' lib/main.py

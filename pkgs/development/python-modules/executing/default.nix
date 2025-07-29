@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
-    repo = pname;
+    repo = "executing";
     rev = "v${version}";
     hash = "sha256-2BT4VTZBAJx8Gk4qTTyhSoBMjJvKzmL4PO8IfTpN+2g=";
   };
@@ -39,7 +39,8 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency

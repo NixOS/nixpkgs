@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.176";
+  version = "1.0.180";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-YThPGxKtGEv/jTlvtWvdJFjk+1+GLuKAtH0ivNlmr6A=";
+    sha256 = "sha256-X9CtiG2kl32ErWyNwzr5WjUl2DnweKiegy0GXyLL81E=";
   };
 
   proxyVendor = true;

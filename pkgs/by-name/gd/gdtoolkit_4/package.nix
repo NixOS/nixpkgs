@@ -28,6 +28,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
   version = "4.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Scony";

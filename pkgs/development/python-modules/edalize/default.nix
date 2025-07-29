@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "olofk";
-    repo = pname;
+    repo = "edalize";
     tag = "v${version}";
     hash = "sha256-5c3Szq0tXQdlyzFTFCla44qB/O6RK8vezVOaFOv8sw4=";
   };
@@ -52,7 +52,8 @@ buildPythonPackage rec {
     pytestCheckHook
     which
     yosys
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "edalize" ];
 

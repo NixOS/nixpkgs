@@ -35,16 +35,15 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ];
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-        "-Wno-error=implicit-function-declaration"
-        "-Wno-error=incompatible-pointer-types"
-      ]);
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-      CPP = "${stdenv.cc.targetPrefix}cpp";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+    ]);
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    CPP = "${stdenv.cc.targetPrefix}cpp";
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

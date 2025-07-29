@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     opusfile
     openssl
     spirv-cross
-  ] ++ lib.optional gamemodeSupport gamemode;
+  ]
+  ++ lib.optional gamemodeSupport gamemode;
 
   mesonFlags = [
     (lib.mesonBool "b_lto" false)

@@ -2,7 +2,7 @@ let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
 in
-import ./make-test-python.nix {
+{
   name = "schleuder";
   nodes.machine =
     { pkgs, ... }:
@@ -12,8 +12,10 @@ import ./make-test-python.nix {
         enable = true;
         enableSubmission = true;
         tlsTrustedAuthorities = "${certs.ca.cert}";
-        sslCert = "${certs.${domain}.cert}";
-        sslKey = "${certs.${domain}.key}";
+        config.smtpd_tls_chain_files = [
+          "${certs.${domain}.key}"
+          "${certs.${domain}.cert}"
+        ];
         inherit domain;
         destination = [ domain ];
         localRecipients = [

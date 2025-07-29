@@ -14,21 +14,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "0.8.3";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oFwRFFDLl4/3szVj/ge8cSrpuuHEzf4VsCPGTE0dxRc=";
+    hash = "sha256-8H1eJQYQn1DsVsJ0OpJAOJSWD/0iSn1SQLzg1elyEmM=";
   };
+
+  patches = [
+    ./0001-Use-libdwarf-2-as-the-base-include-path.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [ libdwarf ];
+  buildInputs = [ (lib.getDev libdwarf) ];
+
   propagatedBuildInputs = [ zstd ] ++ (lib.optionals static [ libdwarf ]);
 
   cmakeFlags = [
@@ -40,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [ gtest ];
+
   doCheck = true;
 
   passthru = {

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  python,
+  python3,
   pkg-config,
   libxml2,
   glib,
@@ -17,8 +17,8 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.19.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.20.0";
   pname = "librepo";
 
   outputs = [
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "librepo";
-    rev = version;
-    sha256 = "sha256-ws57vFoK5yBMHHNQ9W48Icp4am0/5k3n4ybem1aAzVM=";
+    tag = finalAttrs.version;
+    hash = "sha256-KYBHImdGQgf/IZ5FMhzrbBTeZF76AIP3RjVPT3w0oT8=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python3
     libxml2
     glib
     openssl
@@ -59,19 +59,20 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}" ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python3.pythonVersion}" ];
 
   postFixup = ''
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

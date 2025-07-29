@@ -9,11 +9,12 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "nimbo";
   version = "0.3.0";
+  format = "setuptools";
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nimbo-sh";
-    repo = pname;
+    repo = "nimbo";
     rev = "v${version}";
     sha256 = "YC5T02Sw22Uczufbyts8l99oCQW4lPq0gPMRXCoKsvw=";
   };

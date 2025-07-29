@@ -7,6 +7,7 @@
   vscode,
   unzip,
   jq,
+  vscode-extension-update-script,
 }:
 let
   buildVscodeExtension = lib.extendMkDerivation {
@@ -40,7 +41,11 @@ let
       {
         pname = "vscode-extension-${pname}";
 
-        passthru = passthru // {
+        passthru = {
+          updateScript = vscode-extension-update-script { };
+        }
+        // passthru
+        // {
           inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
         };
 

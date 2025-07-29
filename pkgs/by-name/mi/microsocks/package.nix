@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/rofl0r/microsocks/releases/tag/v${version}";

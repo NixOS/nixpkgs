@@ -38,22 +38,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.21.13";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
-    tag = "${finalAttrs.version}-noetic";
-    hash = "sha256-W4yjHKb2BprPYkL8rLwLQcZDGgmMZ8279ntR+Eqj7R0=";
+    tag = finalAttrs.version;
+    hash = "sha256-6kDjIfUgyaqrsVAWO6k0h1qIDN/idMOJJxLpqMQ6DFY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix the ctor and dtor warning
-      url = "https://github.com/introlab/rtabmap/pull/1496/commits/84c59a452b40a26edf1ba7ec8798700a2f9c3959.patch";
-      hash = "sha256-kto02qcL2dW8Frt81GA+OCldPgCF5bAs/28w9amcf0o=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

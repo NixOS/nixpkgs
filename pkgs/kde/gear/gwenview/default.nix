@@ -3,6 +3,8 @@
   qtsvg,
   qtwayland,
   qtimageformats,
+  phonon,
+  phonon-vlc,
   pkg-config,
   cfitsio,
   exiv2,
@@ -20,6 +22,9 @@ mkKdeDerivation {
     qtwayland
     # adds support for webp and other image formats
     qtimageformats
+
+    phonon
+    phonon-vlc
 
     cfitsio
     exiv2

@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     libevent
     openssl
     c-ares
-  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
   enableParallelBuilding = true;
   configureFlags = lib.optional stdenv.hostPlatform.isLinux "--with-systemd";
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "named-data";
-    repo = pname;
+    repo = "python-ndn";
     tag = "v${version}";
     hash = "sha256-8fcBIcZ2l6mkKe9YQe5+5fh7+vK9qxzBO2kLRUONumQ=";
   };

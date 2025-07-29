@@ -1,25 +1,8 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodejs libarchive prefetch-npm-deps moreutils jq
-# shellcheck shell=bash
+#!nix-shell -i bash -p curl nix-update jq
 
-set -exuo pipefail
+# GitHub tags include many unrelated subpackage versions, making it unreliable to determine the latest mongosh version.
+# Fetch the latest mongosh version directly from the npm registry instead.
+version="$(curl -fsSL https://registry.npmjs.org/mongosh/latest | jq -r ".version")"
 
-cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
-
-TMPDIR="$(mktemp -d)"
-trap 'rm -r -- "$TMPDIR"' EXIT
-
-pushd -- "$TMPDIR"
-npm pack mongosh --json | jq '.[0] | { version, integrity, filename }' > source.json
-bsdtar -x -f "$(jq -r .filename source.json)"
-
-pushd package
-npm install --omit=optional --package-lock-only
-popd
-
-DEPS="$(prefetch-npm-deps package/package-lock.json)"
-jq ".deps = \"$DEPS\"" source.json | sponge source.json
-
-popd
-
-cp -t . -- "$TMPDIR/source.json" "$TMPDIR/package/package-lock.json"
+nix-update --version "$version" mongosh

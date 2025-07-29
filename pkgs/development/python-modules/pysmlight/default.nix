@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pysmlight";
-  version = "0.2.4";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     tag = "v${version}";
-    hash = "sha256-ZNqNRz7d3HZybQG778+ubxuc7Eakf/kWpd3I3cosSIU=";
+    hash = "sha256-w5t8ApshET7DkxxDsEpRBdo3+sg05ch9ec85TI4dAms=";
   };
 
   build-system = [ poetry-core ];
@@ -40,6 +40,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/${src.tag}";

@@ -4,20 +4,21 @@
   python3,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "rfc-bibtex";
   version = "0.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iluxonchik";
-    repo = pname;
+    repo = "rfc-bibtex";
     tag = version;
     hash = "sha256-bPCNQqiG50vWVFA6J2kyxftwsXunHTNBdSkoIRYkb0s=";
   };
 
-  nativeCheckInputs = [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     vcrpy
   ];

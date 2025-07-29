@@ -10,15 +10,15 @@
 
 stdenv.mkDerivation {
   pname = "xrsh";
-  version = "0-unstable-2025-04-18";
+  version = "0-unstable-2025-05-23";
 
   src = fetchFromGitea {
     fetchSubmodules = true;
     domain = "codeberg.org";
     owner = "xrsh";
     repo = "xrsh";
-    rev = "f9ca00efb864447ceac94d3e8134a7ed4c41a590";
-    hash = "sha256-2nGG6B+uW2QEdIjg8NXQjtbIQu+1hhOSKeHFQenc6eI=";
+    rev = "ab5efe4a337459886394b9c13550a543c4c4ae25";
+    hash = "sha256-ERGy/xvh2S8ivSDdOap5NEE13cQm+JAa5h/CqN4j8Ws=";
   };
 
   dontBuild = true;

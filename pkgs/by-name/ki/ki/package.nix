@@ -6,7 +6,7 @@
   anki,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "ki";
   version = "0-unstable-2023-11-08";
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "langfield";
-    repo = pname;
+    repo = "ki";
     rev = "eb32fbd3229dc1a60bcc76a937ad63f3eb869f65";
     hash = "sha256-5mQhJhvJQC9835goL3t3DRbD+c4P3KxnOflxvqmxL58=";
   };
@@ -29,18 +29,19 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs =
-    [ anki ]
-    ++ (with python3Packages; [
-      beartype
-      click
-      colorama
-      git-filter-repo
-      gitpython
-      lark
-      tqdm
-      whatthepatch
-    ]);
+  propagatedBuildInputs = [
+    anki
+  ]
+  ++ (with python3Packages; [
+    beartype
+    click
+    colorama
+    git-filter-repo
+    gitpython
+    lark
+    tqdm
+    whatthepatch
+  ]);
 
   nativeCheckInputs = with python3Packages; [
     bitstring

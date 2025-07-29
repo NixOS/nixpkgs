@@ -13,12 +13,12 @@ let
     {
       aarch64-darwin = {
         arch = "arm64";
-        sha256 = "sha256-tp8qKk06HvSVY1GggOv9VYH+1Ntlirf8Pf2FY0Qhksk=";
+        sha256 = "sha256-KOvYt3VL1hZAyf6T+3whMTyhHgndnlZO0e3L1KtDxqE=";
       };
 
       x86_64-darwin = {
         arch = "64";
-        sha256 = "sha256-8hSxtLGoAcTLmUpr3Il/1wii2MgLqOJ3oAYSSPq7a1o=";
+        sha256 = "sha256-LCpxbDgcIbVmA7RYykli7gLGb0FWQ4LigxghZYEv1Bk=";
       };
     }
     .${stdenvNoCC.hostPlatform.system}

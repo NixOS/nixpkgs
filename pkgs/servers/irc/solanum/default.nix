@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
   bison,
   fetchFromGitHub,
   flex,
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "solanum";
-  version = "0-unstable-2025-02-25";
+  version = "0-unstable-2025-07-20";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "1669c6406cea5092f5ac25634136341a92c6373b";
-    hash = "sha256-Y/fXtBgqzt9tRxL4Xs0KM9nX7Os9QBHBjoDuiaHOsfY=";
+    rev = "7feda92636c9d5b5e7decceee1273dd18b6cc31b";
+    hash = "sha256-cfDwdE2CA69dSg59Sn1TKk3OWxvoTIm/KCiKfgzokVU=";
   };
 
   patches = [
@@ -33,22 +35,27 @@ stdenv.mkDerivation {
     substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
   '';
 
-  configureFlags =
-    [
-      "--enable-epoll"
-      "--enable-ipv6"
-      "--enable-openssl=${openssl.dev}"
-      "--with-program-prefix=solanum-"
-      "--localstatedir=/var/lib"
-      "--with-rundir=/run"
-      "--with-logdir=/var/log"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      "--enable-sctp=${lksctp-tools.out}/lib"
-    ];
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  configureFlags = [
+    "--enable-epoll"
+    "--enable-ipv6"
+    "--enable-openssl=${openssl.dev}"
+    "--with-program-prefix=solanum-"
+    "--localstatedir=/var/lib"
+    "--with-rundir=/run"
+    "--with-logdir=/var/log"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    "--enable-sctp=${lksctp-tools.out}/lib"
+  ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
+    libtool
     bison
     flex
     pkg-config

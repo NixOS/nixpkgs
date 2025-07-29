@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oksh";
-  version = "7.6";
+  version = "7.7";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "oksh";
     rev = "oksh-${version}";
-    hash = "sha256-iEV0ibEXwJioBaKN2Tuy0+SaVs8q0Ac4bImP8zhI7oI=";
+    hash = "sha256-Go73MvL9Mi/Rz1KzrKM7KP9UkI9GQFTduMPSUxEbl70=";
   };
 
   strictDeps = true;

@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 
-  buildInputs =
-    [
-      libmysqlclient
-    ]
-    ++ lib.optionals withGmp [
-      gmp
-    ];
+  buildInputs = [
+    libmysqlclient
+  ]
+  ++ lib.optionals withGmp [
+    gmp
+  ];
 
   configureFlags = lib.optionals withGmp [
     "--with-gmp"

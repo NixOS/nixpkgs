@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
-    repo = pname;
+    repo = "setools";
     tag = version;
     hash = "sha256-/6dOzSz2Do4d6TSS50fuak0CysoQ532zJ0bJ532BUCE=";
   };

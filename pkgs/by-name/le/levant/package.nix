@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "levant";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "levant";
     rev = "v${version}";
-    sha256 = "sha256-pinrBLzBMptqzMMiQmZob6B5rNNyQsaEkuECFFyTkrw=";
+    sha256 = "sha256-XxdLN/z+mtiaAy6heRbj4kyIOeKbS9yb1xIZnIyfI3s=";
   };
 
-  vendorHash = "sha256-z3QoDcp7l3XUNo4xvgd6iD1Nw6cly2CoxjRtbo+IKQ0=";
+  vendorHash = "sha256-UJuAT02rYid2IESuABTDEAJiIBOfcyvH7ASOZfgTrZs=";
 
   # The tests try to connect to a Nomad cluster.
   doCheck = false;

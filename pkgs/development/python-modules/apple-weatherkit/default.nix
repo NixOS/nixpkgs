@@ -29,7 +29,8 @@ buildPythonPackage rec {
     aiohttp
     aiohttp-retry
     pyjwt
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   # Module has no tests
   doCheck = false;

@@ -21,11 +21,7 @@
       {
         virtualisation.vlans = [ ];
         environment.systemPackages = [ pkgs.hello ];
-        imports = [
-          "${modulesPath}/installer/netboot/netboot-minimal.nix"
-          "${modulesPath}/testing/test-instrumentation.nix"
-          "${modulesPath}/profiles/qemu-guest.nix"
-        ];
+        imports = [ "${modulesPath}/installer/netboot/netboot.nix" ];
       };
   };
 

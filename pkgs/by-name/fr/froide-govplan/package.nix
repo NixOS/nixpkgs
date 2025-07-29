@@ -14,13 +14,14 @@
 let
   python = python3Packages.python.override {
     packageOverrides = self: super: {
-      django = super.django.override { withGdal = true; };
+      django_5 = super.django_5.override { withGdal = true; };
+      django = super.django_5;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide-govplan";
-  version = "0-unstable-2025-01-27";
+  version = "0-unstable-2025-06-25";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -28,8 +29,8 @@ python.pkgs.buildPythonApplication rec {
     repo = "froide-govplan";
     # No tagged release yet
     # https://github.com/okfde/froide-govplan/issues/15
-    rev = "f1763807614b8c54a9214359a2a1e442ca58cb6d";
-    hash = "sha256-Y7/qjhu3y9E55ZDmDf5HUk9JVcUTvi9KnqavqwNixTM=";
+    rev = "9c325e70a84f26fea37b5a34f24d19fd82ea62ff";
+    hash = "sha256-OD4vvKt0FLuiAVGwpspWLB2ZuM1UJkZdv2YcbKKYk9A=";
   };
 
   patches = [
@@ -69,7 +70,6 @@ python.pkgs.buildPythonApplication rec {
   build-inputs = [ gdal ];
 
   dependencies = with python.pkgs; [
-    bleach
     django-admin-sortable2
     django-cms
     django-filer
@@ -93,6 +93,7 @@ python.pkgs.buildPythonApplication rec {
         };
       })
     ))
+    nh3
     psycopg
   ];
 
@@ -103,7 +104,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r project $out/${python.sitePackages}/froide_govplan/
     cp -r froide_govplan/locale $out/${python.sitePackages}/froide_govplan/
     makeWrapper $out/${python.sitePackages}/froide_govplan/manage.py $out/bin/froide-govplan \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : ${passthru.pythonPath}:$out/${python.sitePackages} \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
@@ -112,8 +113,8 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) froide-govplan;
     };
-    python = python;
-    pythonPath = "${python.pkgs.makePythonPath dependencies}:${froide-govplan}/${python.sitePackages}";
+    inherit python;
+    pythonPath = "${python.pkgs.makePythonPath dependencies}";
   };
 
   meta = {

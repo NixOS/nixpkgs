@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "dotmap/test.py" ];
+  enabledTestPaths = [ "dotmap/test.py" ];
 
   pythonImportsCheck = [ "dotmap" ];
 

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "atomman";
-  version = "1.4.11";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "atomman";
     tag = "v${version}";
-    hash = "sha256-2yxHv9fSgLM5BeUkXV9NX+xyplXtyfWodwS9sVUVzqU=";
+    hash = "sha256-NFv811grKNZcC5RrC371k0kK/pPYLg3V0cnr+gX7Cnw=";
   };
 
   build-system = [

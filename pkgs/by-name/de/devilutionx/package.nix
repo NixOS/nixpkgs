@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "In order to play this game a copy of diabdat.mpq is required. Place a copy of diabdat.mpq in ~/.local/share/diasurgical/devilution before executing the game.";
     license = lib.licenses.sustainableUse;
     maintainers = with lib.maintainers; [
-      karolchmist
       aanderse
     ];
     platforms = with lib.platforms; linux ++ windows;

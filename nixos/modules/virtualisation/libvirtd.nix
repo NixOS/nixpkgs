@@ -410,7 +410,7 @@ in
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [
         libressl.nc
-        iptables
+        config.networking.firewall.package
         cfg.package
         cfg.qemu.package
       ];
@@ -526,13 +526,12 @@ in
         ++ cfg.extraOptions
       );
 
-      path =
-        [
-          cfg.qemu.package
-          pkgs.netcat
-        ] # libvirtd requires qemu-img to manage disk images
-        ++ optional vswitch.enable vswitch.package
-        ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
+      path = [
+        cfg.qemu.package
+        pkgs.netcat
+      ] # libvirtd requires qemu-img to manage disk images
+      ++ optional vswitch.enable vswitch.package
+      ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
       serviceConfig = {
         Type = "notify";

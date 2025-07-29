@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.40.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-4gn8bbzI+NerU8Bdi6FxLB/Kg1JaDBiZkR98zMRvTkw=";
+    hash = "sha256-y2JLYalJ4aEGRF3AF1tWaDXQpT4SoXg/4DfVBMsbdIs=";
   };
 
   outputs = [
@@ -45,17 +45,16 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gpgme
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      btrfs-progs
-      libapparmor
-      libseccomp
-      libselinux
-      lvm2
-    ];
+  buildInputs = [
+    gpgme
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    btrfs-progs
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
     runHook preBuild

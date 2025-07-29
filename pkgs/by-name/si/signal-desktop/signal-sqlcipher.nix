@@ -11,17 +11,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-piHgAcUdmJo09UG/840GOim3TrlM1Wbzh2wceC1xb9k=";
+    hash = "sha256-JYdc3H8PhDLkJH5ApfReq0e7HgKoJaK01JGuzoqftyc=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
   };
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qT4HM/FRL8qugKKNlMYM/0zgUsC6cDOa9fgd1d4VIrc=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     nodejs
     pnpm.configHook

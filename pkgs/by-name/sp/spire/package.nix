@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spire";
-  version = "1.12.0";
+  version = "1.12.4";
 
   outputs = [
     "out"
@@ -16,17 +16,50 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "spiffe";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-hNa1e6h4IhD2SfhZZ5xkwQ7e7X5x3Gk4v33nw2t+cvk=";
+    repo = "spire";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-gyACFRoA0WwIea4GRmKvZlC83YGtjyZROH6QB0GyHOg=";
   };
 
-  vendorHash = "sha256-6qtR9SF6QQKqsVpKpp6YBkB9wOLFwm8C3PF0DlN0Ud0=";
+  vendorHash = "sha256-yWONqvSNOgeXkYU5TX1Sec8xNCnaqdVLXk3ylhGBvyE=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/spiffe/spire/pkg/common/version.gittag=${finalAttrs.version}"
+  ];
 
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
   ];
+
+  excludedPackages = [
+    # ensure these files aren't evaluated, see preCheck
+    "test/tmpsimulator"
+    "pkg/agent/plugin/nodeattestor/tpmdevid"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        # wants to reach remote TUF mirror
+        "TestDockerConfig"
+        "TestPlugin"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  preCheck = ''
+    # remove test files which reference github.com/google/go-tpm-tools/simulator
+    # since it requires cgo and some missing header files
+    rm -rf test/tpmsimulator pkg/server/plugin/nodeattestor/tpmdevid/devid_test.go
+
+    # unset to run all tests
+    unset subPackages
+  '';
 
   # Usually either the agent or server is needed for a given use case, but not both
   postInstall = ''
@@ -38,11 +71,34 @@ buildGoModule rec {
     ln -vs $server/bin/spire-server $out/bin/spire-server
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/spire-agent -h
+    if [ "$($out/bin/spire-agent --version 2>&1)" != "${finalAttrs.version}" ]; then
+      echo "spire-agent version does not match"
+      exit 1
+    fi
+
+    $out/bin/spire-server -h
+    if [ "$($out/bin/spire-server --version 2>&1)" != "${finalAttrs.version}" ]; then
+      echo "spire-server version does not match"
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
     description = "SPIFFE Runtime Environment";
-    homepage = "https://github.com/spiffe/spire";
-    changelog = "https://github.com/spiffe/spire/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fkautz ];
+    homepage = "https://spiffe.io/";
+    downloadPage = "https://github.com/spiffe/spire";
+    changelog = "https://github.com/spiffe/spire/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fkautz
+      jk
+    ];
   };
-}
+})

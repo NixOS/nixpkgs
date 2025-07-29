@@ -1,8 +1,9 @@
 {
+  lib,
+  repoRevToNameMaybe,
   fetchgit,
   fetchhg,
   fetchzip,
-  lib,
 }:
 
 let
@@ -18,9 +19,9 @@ makeOverridable (
     owner,
     repo,
     rev,
+    name ? repoRevToNameMaybe repo rev "sourcehut",
     domain ? "sr.ht",
     vc ? "git",
-    name ? "source",
     fetchSubmodules ? false,
     ... # For hash agility
   }@args:
@@ -35,19 +36,18 @@ makeOverridable (
   let
     urlFor = resource: "https://${resource}.${domain}/${owner}/${repo}";
     baseUrl = urlFor vc;
-    baseArgs =
-      {
-        inherit name;
-      }
-      // removeAttrs args [
-        "owner"
-        "repo"
-        "rev"
-        "domain"
-        "vc"
-        "name"
-        "fetchSubmodules"
-      ];
+    baseArgs = {
+      inherit name;
+    }
+    // removeAttrs args [
+      "owner"
+      "repo"
+      "rev"
+      "domain"
+      "vc"
+      "name"
+      "fetchSubmodules"
+    ];
     vcArgs = baseArgs // {
       inherit rev;
       url = baseUrl;

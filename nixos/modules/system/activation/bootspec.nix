@@ -24,19 +24,18 @@ let
           (
             cfg.extensions
             // {
-              "org.nixos.bootspec.v1" =
-                {
-                  system = config.boot.kernelPackages.stdenv.hostPlatform.system;
-                  kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
-                  kernelParams = config.boot.kernelParams;
-                  label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
-                }
-                // lib.optionalAttrs config.boot.initrd.enable {
-                  initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
-                }
-                // lib.optionalAttrs hasAtLeastOneInitrdSecret {
-                  initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
-                };
+              "org.nixos.bootspec.v1" = {
+                system = config.boot.kernelPackages.stdenv.hostPlatform.system;
+                kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
+                kernelParams = config.boot.kernelParams;
+                label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
+              }
+              // lib.optionalAttrs config.boot.initrd.enable {
+                initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+              }
+              // lib.optionalAttrs hasAtLeastOneInitrdSecret {
+                initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
+              };
             }
           )
       );

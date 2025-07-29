@@ -48,14 +48,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.0";
+  version = "2.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-yugtL3dCuGb2OSTy49V4mil9EnfACcGrYCA1rW/lo+4=";
+    hash = "sha256-v9xFUjjk7KHsUtuZjQWLtc1m3f6VOUPlQtSBtUR6Pcg=";
   };
 
   patches = [
@@ -99,6 +99,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       aiohttp
+      chardet
       mashumaro
       orjson
     ]
@@ -149,11 +150,13 @@ python.pkgs.buildPythonApplication rec {
     ++ (providerPackages.jellyfin python.pkgs)
     ++ (providerPackages.opensubsonic python.pkgs);
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # blocks in poll()
-    "--deselect=tests/providers/jellyfin/test_init.py::test_initial_sync"
-    "--deselect=tests/core/test_server_base.py::test_start_and_stop_server"
-    "--deselect=tests/core/test_server_base.py::test_events"
+    "tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "tests/core/test_server_base.py::test_start_and_stop_server"
+    "tests/core/test_server_base.py::test_events"
+    # not compatible with the required py-subsonic version
+    "tests/providers/opensubsonic/test_parsers.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
@@ -173,7 +176,7 @@ python.pkgs.buildPythonApplication rec {
     tests = nixosTests.music-assistant;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
@@ -182,8 +185,8 @@ python.pkgs.buildPythonApplication rec {
       always-on device like a Raspberry Pi, a NAS or an Intel NUC or alike.
     '';
     homepage = "https://github.com/music-assistant/server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "mass";
   };
 }

@@ -25,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "man"
-  ] ++ lib.optional enablePython "py";
+  ]
+  ++ lib.optional enablePython "py";
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/libselinux-${finalAttrs.version}.tar.gz";
@@ -57,67 +58,67 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
     })
 
-    # PR: https://github.com/SELinuxProject/selinux/pull/464
+    # commit 5c3fcbd931b7f9752b5ce29cec3b6813991d61c0 plus an additional
+    # fix for a musl build regression caused by that commit:
+    # https://lore.kernel.org/selinux/20250426151356.7116-2-hi@alyssa.is/
     # Fix build on 32-bit LFS platforms
     ./fix-build-32bit-lfs.patch
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals enablePython [
-      python3Packages.pip
-      python3Packages.setuptools
-      python3Packages.wheel
-      swig
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enablePython [
+    python3Packages.pip
+    python3Packages.setuptools
+    python3Packages.wheel
+    swig
+  ];
   buildInputs = [
     libsepol
     pcre2
     fts
-  ] ++ lib.optionals enablePython [ python3 ];
+  ]
+  ++ lib.optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = "-Wno-error -D_FILE_OFFSET_BITS=64";
-    }
-    // lib.optionalAttrs
-      (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error -D_FILE_OFFSET_BITS=64";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
       {
         NIX_LDFLAGS = "--undefined-version";
       };
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "INCDIR=$(dev)/include/selinux"
-      "INCLUDEDIR=$(dev)/include"
-      "MAN3DIR=$(man)/share/man/man3"
-      "MAN5DIR=$(man)/share/man/man5"
-      "MAN8DIR=$(man)/share/man/man8"
-      "SBINDIR=$(bin)/sbin"
-      "SHLIBDIR=$(out)/lib"
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCDIR=$(dev)/include/selinux"
+    "INCLUDEDIR=$(dev)/include"
+    "MAN3DIR=$(man)/share/man/man3"
+    "MAN5DIR=$(man)/share/man/man5"
+    "MAN8DIR=$(man)/share/man/man8"
+    "SBINDIR=$(bin)/sbin"
+    "SHLIBDIR=$(out)/lib"
 
-      "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-    ]
-    ++ lib.optionals (fts != null) [
-      "FTS_LDLIBS=-lfts"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "DISABLE_SHARED=y"
-    ]
-    ++ lib.optionals enablePython [
-      "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
-      "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
-      "PYTHON_SETUP_ARGS=--no-build-isolation"
-    ];
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ]
+  ++ lib.optionals (fts != null) [
+    "FTS_LDLIBS=-lfts"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "DISABLE_SHARED=y"
+  ]
+  ++ lib.optionals enablePython [
+    "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
+    "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
+    "PYTHON_SETUP_ARGS=--no-build-isolation"
+  ];
 
   preInstall = lib.optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux

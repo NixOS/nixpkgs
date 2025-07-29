@@ -10,26 +10,31 @@ an existing, securely configured Postfix setup, as it does not automatically con
 
 For a basic configuration with Postfix as the MTA, the following settings are suggested:
 ```nix
-{ config, ... }: {
+{ config, ... }:
+{
   services.postfix = {
     enable = true;
-    relayDomains = ["hash:/var/lib/mailman/data/postfix_domains"];
+    relayDomains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
     sslCert = config.security.acme.certs."lists.example.org".directory + "/full.pem";
     sslKey = config.security.acme.certs."lists.example.org".directory + "/key.pem";
     config = {
-      transport_maps = ["hash:/var/lib/mailman/data/postfix_lmtp"];
-      local_recipient_maps = ["hash:/var/lib/mailman/data/postfix_lmtp"];
+      transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+      local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
     };
   };
   services.mailman = {
     enable = true;
     serve.enable = true;
     hyperkitty.enable = true;
-    webHosts = ["lists.example.org"];
+    webHosts = [ "lists.example.org" ];
     siteOwner = "mailman@example.org";
   };
   services.nginx.virtualHosts."lists.example.org".enableACME = true;
-  networking.firewall.allowedTCPPorts = [ 25 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    25
+    80
+    443
+  ];
 }
 ```
 
@@ -51,7 +56,8 @@ necessary, but outside the scope of the Mailman module.
 
 Mailman also supports other MTA, though with a little bit more configuration. For example, to use Mailman with Exim, you can use the following settings:
 ```nix
-{ config, ... }: {
+{ config, ... }:
+{
   services = {
     mailman = {
       enable = true;

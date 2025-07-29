@@ -46,7 +46,7 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Diagnostic tool that makes it easier to understand the state of a Kubernetes cluster";
     longDescription = ''
       Sonobuoy is a diagnostic tool that makes it easier to understand the state of
@@ -56,9 +56,9 @@ buildGoModule rec {
 
     homepage = "https://sonobuoy.io";
     changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "sonobuoy";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       carlosdagos
       saschagrunert
       wilsonehusin

@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-26B/bwXz60fcZrh6H1RPROiML44S1Pt1J3VrJh2gRrI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Bdk553tECJiMxJlXj147Sv2LzH+nM+/Cm5BpBr78I4o=";
 
   nativeCheckInputs = [ gitMinimal ];
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = serie; };
 
   meta = with lib; {
-    description = "A rich git commit graph in your terminal, like magic";
+    description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ matthiasbeyer ];

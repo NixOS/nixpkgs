@@ -175,14 +175,13 @@ in
 
     users.groups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
-    services.rabbitmq.configItems =
-      {
-        "listeners.tcp.1" = lib.mkDefault "${cfg.listenAddress}:${toString cfg.port}";
-      }
-      // lib.optionalAttrs cfg.managementPlugin.enable {
-        "management.tcp.port" = toString cfg.managementPlugin.port;
-        "management.tcp.ip" = cfg.listenAddress;
-      };
+    services.rabbitmq.configItems = {
+      "listeners.tcp.1" = lib.mkDefault "${cfg.listenAddress}:${toString cfg.port}";
+    }
+    // lib.optionalAttrs cfg.managementPlugin.enable {
+      "management.tcp.port" = toString cfg.managementPlugin.port;
+      "management.tcp.ip" = cfg.listenAddress;
+    };
 
     services.rabbitmq.plugins = lib.optional cfg.managementPlugin.enable "rabbitmq_management";
 
@@ -213,7 +212,8 @@ in
         RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
           [ ${lib.concatStringsSep "," cfg.plugins} ].
         '';
-      } // lib.optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
+      }
+      // lib.optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";

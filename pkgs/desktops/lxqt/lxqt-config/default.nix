@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-config";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-Vzf+Olaxl6tn3ETEQseFIPstjo+pfdzZUgyVFqk6p3c=";
+    hash = "sha256-iyAqdAWcg94a65lPjq412slvSKdP3W62LTyyvYdWipA=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     xf86inputlibinput
     xf86inputlibinput.dev
   ];
+
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
 
   postPatch = ''
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \

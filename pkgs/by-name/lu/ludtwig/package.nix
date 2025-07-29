@@ -10,14 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "MalteJanz";
-    repo = pname;
+    repo = "ludtwig";
     rev = "v${version}";
     hash = "sha256-3E1W6AlGQ9AhMzLvTV5KBjlKiWXyi7rFwHOdU3CIp60=";
   };
 
   checkType = "debug";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-00JHtrDffFl3h3IOH+h491qGOSfXIJH9NBmaqqUtQ6k=";
 
   meta = with lib; {

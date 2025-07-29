@@ -9,6 +9,7 @@
   libpng,
   gfortran,
   perl,
+  ctestCheckHook,
   enablePython ? false,
   pythonPackages,
   enablePosixThreads ? false,
@@ -65,11 +66,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = ''
-    ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "-R"
+    # Only do tests that don't require downloading 120MB of testdata
+    "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)"
+  ];
 
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";

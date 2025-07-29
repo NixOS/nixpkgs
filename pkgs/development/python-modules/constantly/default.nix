@@ -30,7 +30,8 @@ let
     nativeBuildInputs = [
       setuptools
       versioneer
-    ] ++ versioneer.optional-dependencies.toml;
+    ]
+    ++ versioneer.optional-dependencies.toml;
 
     # would create dependency loop with twisted
     doCheck = false;

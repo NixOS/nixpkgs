@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
   bison,
   flex,
@@ -19,6 +20,13 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     sha256 = "1lndk0yp27qm8bds4jd204ynxcq92fqmpfb0kkcla5zgky3miks3";
   };
+
+  patches = [
+    (fetchurl {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/d13eb723d7e9512fb2f2516e5934bd927a92eb2c/community/charybdis/fix-missing-include.patch";
+      hash = "sha256-8JXYuIjoHQg+l33OjseF5nnd5ZPagBA2/bSa3Il5Te4=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace include/defaults.h --replace 'PKGLOCALSTATEDIR "' '"/var/lib/charybdis'

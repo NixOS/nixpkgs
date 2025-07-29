@@ -12,26 +12,27 @@
   stdenv,
   open-policy-agent,
   cctools,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.14.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    tag = "v${version}";
-    hash = "sha256-s6LVCISmbG3ubY/67DcUUE/pnTJSE0v9n8INmLMQNcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JimVGDHL4pwN0ALdZVJjkzgdOMTlXo4okiH8b7aALJg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VJiIt0/zTJgCCskevb4/p62im/lAMkyJSiFUdaIdKO8=";
+  cargoHash = "sha256-5Db3veAs2Zk1EzCp0M8krkUEtfiuJwbAUpUODquYXlA=";
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = "${src}/${npmRoot}";
-    hash = "sha256-5Hq7wbvm3bLUSLAkLd3SNdwYCVhniV4XMCI84mO0iTc=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-m0W9S/NcbwVMsqSBh5GIHawQR1kRsEEQCnHGbSGNq74=";
   };
 
   npmRoot = "frontend";
@@ -43,7 +44,8 @@ rustPlatform.buildRustPackage rec {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
   buildInputs = [
     sqlite
@@ -52,6 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
@@ -82,12 +85,17 @@ rustPlatform.buildRustPackage rec {
     cp -r translations   "$out/share/$pname/translations"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
     homepage = "https://github.com/element-hq/matrix-authentication-service";
-    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
   };
-}
+})

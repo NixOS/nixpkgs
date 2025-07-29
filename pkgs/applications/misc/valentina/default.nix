@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     install -Dm644 dist/debian/valentina.sharedmimeinfo $out/share/mime/packages/valentina.xml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source sewing pattern drafting software";
     homepage = "https://smart-pattern.com.ua/";
     changelog = "https://gitlab.com/smart-pattern/valentina/-/blob/v${version}/ChangeLog.txt";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
 }

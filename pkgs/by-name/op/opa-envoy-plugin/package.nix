@@ -14,13 +14,13 @@ assert
 
 buildGoModule rec {
   pname = "opa-envoy-plugin";
-  version = "1.3.0-envoy-1";
+  version = "1.6.0-envoy-2";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa-envoy-plugin";
     tag = "v${version}";
-    hash = "sha256-IJe/JKdsjJ0oJWa35UjxXHiVsm7M1mFwVx5oQ45uuSE=";
+    hash = "sha256-pYyGbZKrdQj1Bw6q4c8wcfqOzgX/WE0hn/qODxFItB0=";
   };
 
   vendorHash = null;
@@ -67,7 +67,7 @@ buildGoModule rec {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org/docs/latest/envoy-introduction/";
     changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${version}/CHANGELOG.md";
-    description = "A plugin to enforce OPA policies with Envoy";
+    description = "Plugin to enforce OPA policies with Envoy";
     longDescription = ''
       OPA-Envoy extends OPA with a gRPC server that implements the Envoy
       External Authorization API. You can use this version of OPA to enforce

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2025_04_15.2340bbf";
+  version = "2025_06_11.0293c6f";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eYIgAj8BtCZ9OxG8/IDaUvFCtB+1ROU0UHf6sbaVUEY=";
+    hash = "sha256-ovkFQlUa5gLYwCpNjwfGVJ055aDKCXIZou/t4pf6q5o=";
   };
 
   separateDebugInfo = true;

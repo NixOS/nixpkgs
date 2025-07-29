@@ -28,15 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = lib.optionalString hdf5.mpiSupport "export CC=${lib.getBin hdf5.mpi}/mpicc";
 
-  buildInputs =
-    [
-      hdf5
-      libjpeg
-      libpng
-    ]
-    ++ lib.optional hdf5.mpiSupport hdf5.mpi
-    ++ lib.optional (hdf4 != null) hdf4
-    ++ lib.optional (libmatheval != null) libmatheval;
+  buildInputs = [
+    hdf5
+    libjpeg
+    libpng
+  ]
+  ++ lib.optional hdf5.mpiSupport hdf5.mpi
+  ++ lib.optional (hdf4 != null) hdf4
+  ++ lib.optional (libmatheval != null) libmatheval;
 
   meta = {
     description = "Set of utilities for visualization and conversion of scientific data in the free, portable HDF5 format";

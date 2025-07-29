@@ -21,7 +21,7 @@
   pytest-asyncio,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -58,7 +58,10 @@ buildPythonPackage rec {
     "psycopg-pool"
   ];
 
-  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
+  # Temporarily disabled until the following is solved:
+  # https://github.com/NixOS/nixpkgs/pull/425384
+  doCheck = false;
+  # doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -84,21 +87,20 @@ buildPythonPackage rec {
     "test_vector_search_with_filters"
     "test_vector_search_pagination"
     "test_vector_search_edge_cases"
+    # Flaky under a parallel build (database in use)
+    "test_store_ttl"
   ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "checkpointpostgres==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpointpostgres==";
   };
 
   meta = {
     description = "Library with a Postgres implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-postgres";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres==${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       drupol

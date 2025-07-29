@@ -78,21 +78,22 @@ let
   };
 
   # Tools invoked by swiftpm at run-time.
-  runtimeDeps =
-    [ git ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild.xcrun
-      # These tools are part of cctools, but adding that as a build input puts
-      # an unwrapped linker in PATH, and breaks builds. This small derivation
-      # exposes just the tools we need:
-      # - vtool is used to determine a minimum deployment target.
-      # - libtool is used to build static libraries.
-      (runCommandLocal "swiftpm-cctools" { } ''
-        mkdir -p $out/bin
-        ln -s ${cctools}/bin/vtool $out/bin/vtool
-        ln -s ${cctools}/bin/libtool $out/bin/libtool
-      '')
-    ];
+  runtimeDeps = [
+    git
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild.xcrun
+    # These tools are part of cctools, but adding that as a build input puts
+    # an unwrapped linker in PATH, and breaks builds. This small derivation
+    # exposes just the tools we need:
+    # - vtool is used to determine a minimum deployment target.
+    # - libtool is used to build static libraries.
+    (runCommandLocal "swiftpm-cctools" { } ''
+      mkdir -p $out/bin
+      ln -s ${cctools}/bin/vtool $out/bin/vtool
+      ln -s ${cctools}/bin/libtool $out/bin/libtool
+    '')
+  ];
 
   # Common attributes for the bootstrap derivations.
   mkBootstrapDerivation =
@@ -223,20 +224,18 @@ let
       sqlite
     ];
 
-    postInstall =
-      cmakeGlue.TSC
-      + ''
-        # Swift modules are not installed.
-        mkdir -p $out/${swiftModuleSubdir}
-        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+    postInstall = cmakeGlue.TSC + ''
+      # Swift modules are not installed.
+      mkdir -p $out/${swiftModuleSubdir}
+      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
 
-        # Static libs are not installed.
-        cp lib/*.a $out/lib/
+      # Static libs are not installed.
+      cp lib/*.a $out/lib/
 
-        # Headers are not installed.
-        mkdir -p $out/include
-        cp -r ../Sources/TSCclibc/include $out/include/TSC
-      '';
+      # Headers are not installed.
+      mkdir -p $out/include
+      cp -r ../Sources/TSCclibc/include $out/include/TSC
+    '';
   };
 
   swift-argument-parser = mkBootstrapDerivation {
@@ -306,16 +305,14 @@ let
       "-DLLBUILD_SUPPORT_BINDINGS=Swift"
     ];
 
-    postInstall =
-      cmakeGlue.LLBuild
-      + ''
-        # Install module map.
-        cp ../products/libllbuild/include/module.modulemap $out/include
+    postInstall = cmakeGlue.LLBuild + ''
+      # Install module map.
+      cp ../products/libllbuild/include/module.modulemap $out/include
 
-        # Swift modules are not installed.
-        mkdir -p $out/${swiftModuleSubdir}
-        cp products/llbuildSwift/*.swift{module,doc} $out/${swiftModuleSubdir}/
-      '';
+      # Swift modules are not installed.
+      mkdir -p $out/${swiftModuleSubdir}
+      cp products/llbuildSwift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+    '';
   };
 
   swift-driver = mkBootstrapDerivation {
@@ -336,13 +333,11 @@ let
         --replace CYaml ""
     '';
 
-    postInstall =
-      cmakeGlue.SwiftDriver
-      + ''
-        # Swift modules are not installed.
-        mkdir -p $out/${swiftModuleSubdir}
-        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
-      '';
+    postInstall = cmakeGlue.SwiftDriver + ''
+      # Swift modules are not installed.
+      mkdir -p $out/${swiftModuleSubdir}
+      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+    '';
   };
 
   swift-crypto = mkBootstrapDerivation {
@@ -357,15 +352,13 @@ let
         --replace /usr/bin/ranlib $NIX_CC/bin/ranlib
     '';
 
-    postInstall =
-      cmakeGlue.SwiftCrypto
-      + ''
-        # Static libs are not installed.
-        cp lib/*.a $out/lib/
+    postInstall = cmakeGlue.SwiftCrypto + ''
+      # Static libs are not installed.
+      cp lib/*.a $out/lib/
 
-        # Headers are not installed.
-        cp -r ../Sources/CCryptoBoringSSL/include $out/include
-      '';
+      # Headers are not installed.
+      cp -r ../Sources/CCryptoBoringSSL/include $out/include
+    '';
   };
 
   # Build a bootrapping swiftpm using CMake.
@@ -415,24 +408,22 @@ stdenv.mkDerivation (
       XCTest
     ];
 
-    configurePhase =
-      generated.configure
-      + ''
-        # Functionality provided by Xcode XCTest, but not available in
-        # swift-corelibs-xctest.
-        swiftpmMakeMutable swift-tools-support-core
-        substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
-          --replace 'canImport(Darwin)' 'false'
-        patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
+    configurePhase = generated.configure + ''
+      # Functionality provided by Xcode XCTest, but not available in
+      # swift-corelibs-xctest.
+      swiftpmMakeMutable swift-tools-support-core
+      substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
+        --replace 'canImport(Darwin)' 'false'
+      patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
 
-        # Prevent a warning about SDK directories we don't have.
-        swiftpmMakeMutable swift-driver
-        patch -p1 -d .build/checkouts/swift-driver -i ${
-          replaceVars ../swift-driver/patches/prevent-sdk-dirs-warnings.patch {
-            inherit (builtins) storeDir;
-          }
+      # Prevent a warning about SDK directories we don't have.
+      swiftpmMakeMutable swift-driver
+      patch -p1 -d .build/checkouts/swift-driver -i ${
+        replaceVars ../swift-driver/patches/prevent-sdk-dirs-warnings.patch {
+          inherit (builtins) storeDir;
         }
-      '';
+      }
+    '';
 
     buildPhase = ''
       TERM=dumb swift-build -c release

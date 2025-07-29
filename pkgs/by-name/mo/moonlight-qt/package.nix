@@ -6,7 +6,7 @@
   qt6,
   pkg-config,
   vulkan-headers,
-  SDL2_classic,
+  SDL2,
   SDL2_ttf,
   ffmpeg,
   libopus,
@@ -49,27 +49,26 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  buildInputs =
-    [
-      (SDL2_classic.override { drmSupport = stdenv.hostPlatform.isLinux; })
-      SDL2_ttf
-      ffmpeg
-      libopus
-      libplacebo
-      qt6.qtdeclarative
-      qt6.qtsvg
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-      libva
-      libvdpau
-      libxkbcommon
-      qt6.qtwayland
-      wayland
-      libdrm
-    ];
+  buildInputs = [
+    SDL2
+    SDL2_ttf
+    ffmpeg
+    libopus
+    libplacebo
+    qt6.qtdeclarative
+    qt6.qtsvg
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+    libva
+    libvdpau
+    libxkbcommon
+    qt6.qtwayland
+    wayland
+    libdrm
+  ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 

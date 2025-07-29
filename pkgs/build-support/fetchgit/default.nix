@@ -5,30 +5,27 @@
   git-lfs,
   cacert,
 }:
+
 let
   urlToName =
     url: rev:
     let
-      inherit (lib) removeSuffix splitString last;
-      base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
-
-      matched = builtins.match "(.*)\\.git" base;
-
-      short = builtins.substring 0 7 rev;
-
-      appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
+      shortRev = lib.sources.shortRev rev;
+      appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
     in
-    "${if matched == null then base else builtins.head matched}${appendShort}";
+    "${lib.sources.urlToName url}${appendShort}";
 in
+
 lib.makeOverridable (
   lib.fetchers.withNormalizedHash { } (
     # NOTE Please document parameter additions or changes in
-    #   doc/build-helpers/fetchers.chapter.md
+    #   ../../../doc/build-helpers/fetchers.chapter.md
     {
       url,
       tag ? null,
       rev ? null,
-      leaveDotGit ? deepClone,
+      name ? urlToName url (lib.revOrTag rev tag),
+      leaveDotGit ? deepClone || fetchTags,
       outputHash ? lib.fakeHash,
       outputHashAlgo ? null,
       fetchSubmodules ? true,
@@ -36,8 +33,12 @@ lib.makeOverridable (
       branchName ? null,
       sparseCheckout ? [ ],
       nonConeMode ? false,
-      name ? null,
       nativeBuildInputs ? [ ],
+      # Shell code executed before the file has been fetched.  This, in
+      # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
+      # run operations between the checkout completing and deleting the .git
+      # directory.
+      preFetch ? "",
       # Shell code executed after the file has been fetched
       # successfully. This can do things like check or transform the file.
       postFetch ? "",
@@ -50,6 +51,8 @@ lib.makeOverridable (
       netrcImpureEnvVars ? [ ],
       meta ? { },
       allowedRequisites ? null,
+      # fetch all tags after tree (useful for git describe)
+      fetchTags ? false,
     }:
 
     /*
@@ -75,8 +78,8 @@ lib.makeOverridable (
       server admins start using the new version?
     */
 
-    assert deepClone -> leaveDotGit;
     assert nonConeMode -> (sparseCheckout != [ ]);
+    assert fetchTags -> leaveDotGit;
 
     let
       revWithTag =
@@ -101,18 +104,17 @@ lib.makeOverridable (
         "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
     else
       stdenvNoCC.mkDerivation {
-        name = if name != null then name else urlToName url revWithTag;
+        inherit name;
 
         builder = ./builder.sh;
         fetcher = ./nix-prefetch-git;
 
-        nativeBuildInputs =
-          [
-            git
-            cacert
-          ]
-          ++ lib.optionals fetchLFS [ git-lfs ]
-          ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          git
+          cacert
+        ]
+        ++ lib.optionals fetchLFS [ git-lfs ]
+        ++ nativeBuildInputs;
 
         inherit outputHash outputHashAlgo;
         outputHashMode = "recursive";
@@ -130,7 +132,9 @@ lib.makeOverridable (
           deepClone
           branchName
           nonConeMode
+          preFetch
           postFetch
+          fetchTags
           ;
         rev = revWithTag;
 
@@ -153,6 +157,19 @@ lib.makeOverridable (
             "GIT_PROXY_COMMAND"
             "NIX_GIT_SSL_CAINFO"
             "SOCKS_SERVER"
+
+            # This is a parameter intended to be set by setup hooks or preFetch
+            # scripts that want per-URL control over HTTP proxies used by Git
+            # (if per-URL control isn't needed, `http_proxy` etc. will
+            # suffice). It must be a whitespace-separated (with backslash as an
+            # escape character) list of pairs like this:
+            #
+            #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
+            #
+            # where the URLs are as documented in the `git-config` manual page
+            # under `http.<url>.*`, and the proxies are as documented on the
+            # same page under `http.proxy`.
+            "FETCHGIT_HTTP_PROXIES"
           ];
 
         inherit preferLocalBuild meta allowedRequisites;

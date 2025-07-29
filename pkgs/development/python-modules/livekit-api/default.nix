@@ -8,18 +8,19 @@
   protobuf,
   livekit-protocol,
   pytestCheckHook,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "livekit-api";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
     tag = "api-v${version}";
-    hash = "sha256-QFUCMqRshEid08IbNjyvJvJSVhYfVJRjvXjSTlNlzlU=";
+    hash = "sha256-W9WmruzN5Nm9vrjG1Kcf3Orst0b2Mxm80hKLjwXowl8=";
   };
 
   pypaBuildFlags = [ "livekit-api" ];
@@ -39,9 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "livekit-api/tests" ];
+  enabledTestPaths = [ "livekit-api/tests" ];
 
   pythonImportsCheck = [ "livekit" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "api-v"; };
 
   meta = {
     description = "LiveKit real-time and server SDKs for Python";

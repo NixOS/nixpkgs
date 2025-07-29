@@ -25,6 +25,7 @@ nginx.section.md
 opengl.section.md
 shell-helpers.section.md
 python-tree-sitter.section.md
+treefmt.section.md
 steam.section.md
 cataclysm-dda.section.md
 urxvt.section.md

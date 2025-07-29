@@ -29,17 +29,16 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs =
-    [
-      blas
-      gmp
-      mpfr
-      fplll
-      eigen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    blas
+    gmp
+    mpfr
+    fplll
+    eigen
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 

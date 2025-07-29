@@ -35,25 +35,25 @@ stdenv.mkDerivation rec {
     ninja
     docutils
   ];
-  buildInputs =
-    [ libpthreadstubs ]
-    ++ lib.optional withIntel libpciaccess
-    ++ lib.optional withValgrind valgrind-light;
+  buildInputs = [
+    libpthreadstubs
+  ]
+  ++ lib.optional withIntel libpciaccess
+  ++ lib.optional withValgrind valgrind-light;
 
-  mesonFlags =
-    [
-      "-Dinstall-test-programs=true"
-      "-Dcairo-tests=disabled"
-      (lib.mesonEnable "intel" withIntel)
-      (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "valgrind" withValgrind)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch [
-      "-Dtegra=enabled"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Detnaviv=disabled"
-    ];
+  mesonFlags = [
+    "-Dinstall-test-programs=true"
+    "-Dcairo-tests=disabled"
+    (lib.mesonEnable "intel" withIntel)
+    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "valgrind" withValgrind)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch [
+    "-Dtegra=enabled"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Detnaviv=disabled"
+  ];
 
   passthru = {
     updateScript = gitUpdater {
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

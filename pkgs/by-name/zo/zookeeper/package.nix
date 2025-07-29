@@ -50,17 +50,17 @@ stdenv.mkDerivation rec {
     inherit jre;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     changelog = "https://zookeeper.apache.org/doc/r${version}/releasenotes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nathan-gs
       pradeepchhetri
       ztzg
     ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

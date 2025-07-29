@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "mapcidr";
     tag = "v${version}";
     hash = "sha256-/bZ6LimkdbR7nG7XcetNshk0KXw1FGbuaTXP+DH7hQg=";
   };
@@ -22,7 +22,7 @@ buildGoModule rec {
     "cmd/mapcidr"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small utility program to perform multiple operations for a given subnet/CIDR ranges";
     longDescription = ''
       mapCIDR is developed to ease load distribution for mass scanning
@@ -30,8 +30,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/mapcidr";
     changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hanemile ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hanemile ];
     mainProgram = "mapcidr";
   };
 }

@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "twitchdev";
-    repo = pname;
+    repo = "twitch-cli";
     rev = "v${version}";
     hash = "sha256-+6/o2vhj1iaT0hkyQRedn7ga1dhNZOupX4lOadnTDU0=";
   };
@@ -37,8 +37,8 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = twitch-cli;
-    command = "HOME=$(mktemp -d) ${pname} version";
-    version = "${pname}/${version}";
+    command = "HOME=$(mktemp -d) twitch-cli version";
+    version = "twitch-cli/${version}";
   };
 
   meta = with lib; {

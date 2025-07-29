@@ -4,10 +4,8 @@
   fetchPypi,
   pythonOlder,
   pytestCheckHook,
-  setuptools,
   meson-python,
   ninja,
-  meson,
   poppler,
   pkg-config,
   pybind11,
@@ -29,6 +27,9 @@ buildPythonPackage rec {
   patches = [
     # Prevent Meson from downloading pybind11, use system version instead
     ./use_system_pybind11.patch
+    # Fix build with Poppler 25.01+
+    # See: https://github.com/cbrunet/python-poppler/pull/92
+    ./poppler-25.patch
   ];
 
   build-system = [ meson-python ];

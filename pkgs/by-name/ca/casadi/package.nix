@@ -58,50 +58,49 @@ stdenv.mkDerivation (finalAttrs: {
     ./clang-19.diff
   ];
 
-  postPatch =
-    ''
-      # fix case of hpipmConfig.cmake
-      substituteInPlace CMakeLists.txt --replace-fail \
-        "FATROP HPIPM" \
-        "FATROP hpipm"
+  postPatch = ''
+    # fix case of hpipmConfig.cmake
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "FATROP HPIPM" \
+      "FATROP hpipm"
 
-      # nix provide lib/clang headers in libclang, not in llvm.
-      substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
-        '$'{CLANG_LLVM_LIB_DIR} \
-        ${lib.getLib llvmPackages.libclang}/lib
+    # nix provide lib/clang headers in libclang, not in llvm.
+    substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
+      '$'{CLANG_LLVM_LIB_DIR} \
+      ${lib.getLib llvmPackages.libclang}/lib
 
-      # help casadi find its own libs
-      substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
-        "std::vector<std::string> search_paths;" \
-        "std::vector<std::string> search_paths;
-         search_paths.push_back(\"$out/lib\");"
-    ''
-    + lib.optionalString pythonSupport ''
-      # fix including Python.h issue
-      substituteInPlace swig/python/CMakeLists.txt --replace-fail \
-        "add_library(_casadi MODULE \''${PYTHON_FILE})" \
-        "add_library(_casadi MODULE \''${PYTHON_FILE})
-         target_include_directories(_casadi SYSTEM PRIVATE
-           ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
+    # help casadi find its own libs
+    substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
+      "std::vector<std::string> search_paths;" \
+      "std::vector<std::string> search_paths;
+       search_paths.push_back(\"$out/lib\");"
+  ''
+  + lib.optionalString pythonSupport ''
+    # fix including Python.h issue
+    substituteInPlace swig/python/CMakeLists.txt --replace-fail \
+      "add_library(_casadi MODULE \''${PYTHON_FILE})" \
+      "add_library(_casadi MODULE \''${PYTHON_FILE})
+       target_include_directories(_casadi SYSTEM PRIVATE
+         ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
 
-      # I have no clue. without this, it tries to install a non existent file.
-      # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.
-      # but we need SWIG_IMPORT at some point for something else TODO
-      substituteInPlace swig/python/CMakeLists.txt --replace-fail \
-        "if (SWIG_IMPORT)" \
-        "if (NOT SWIG_IMPORT)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # this is only printing stuff, and is not defined on all CPU
-      substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
-        "d_print_exp_tran_mat" \
-        "//d_print_exp_tran_mat"
+    # I have no clue. without this, it tries to install a non existent file.
+    # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.
+    # but we need SWIG_IMPORT at some point for something else TODO
+    substituteInPlace swig/python/CMakeLists.txt --replace-fail \
+      "if (SWIG_IMPORT)" \
+      "if (NOT SWIG_IMPORT)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # this is only printing stuff, and is not defined on all CPU
+    substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
+      "d_print_exp_tran_mat" \
+      "//d_print_exp_tran_mat"
 
-      # fix missing symbols
-      substituteInPlace cmake/FindCLANG.cmake --replace-fail \
-        "clangBasic)" \
-        "clangBasic clangASTMatchers clangSupport)"
-    '';
+    # fix missing symbols
+    substituteInPlace cmake/FindCLANG.cmake --replace-fail \
+      "clangBasic)" \
+      "clangBasic clangASTMatchers clangSupport)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -109,43 +108,42 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      #alpaqa
-      blas
-      blasfeo
-      bzip2
-      bonmin
-      cbc
-      clp
-      fatrop
-      highs
-      hpipm
-      ipopt
-      lapack
-      llvmPackages.clang
-      llvmPackages.libclang
-      llvmPackages.llvm
-      mumps
-      osqp
-      proxsuite
-      sleqp
-      suitesparse
-      #sundials
-      superscs
-      spral
-      swig
-      tinyxml-2
-    ]
-    ++ lib.optionals withUnfree [
-      cplex
-      gurobi
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.python
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  buildInputs = [
+    #alpaqa
+    blas
+    blasfeo
+    bzip2
+    bonmin
+    cbc
+    clp
+    fatrop
+    highs
+    hpipm
+    ipopt
+    lapack
+    llvmPackages.clang
+    llvmPackages.libclang
+    llvmPackages.llvm
+    mumps
+    osqp
+    proxsuite
+    sleqp
+    suitesparse
+    #sundials
+    superscs
+    spral
+    swig
+    tinyxml-2
+  ]
+  ++ lib.optionals withUnfree [
+    cplex
+    gurobi
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.python
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)

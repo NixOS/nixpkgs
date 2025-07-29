@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     aws-c-io
     aws-checksums
     s2n-tls
-  ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"

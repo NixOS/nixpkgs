@@ -2,40 +2,52 @@
   lib,
   async-timeout,
   buildPythonPackage,
+  setuptools,
+  versioneer,
   deprecated,
   fetchFromGitHub,
+  packaging,
   pympler,
   pytest-asyncio,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
   redis,
+  typing-extensions,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.20.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "4.23.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
-    repo = pname;
+    repo = "coredis";
     tag = version;
-    hash = "sha256-N7RQEgpBnXa+xtthySfec1Xw3JHtGCT2ZjmOK7H5B+A=";
+    hash = "sha256-5Ho9X2VCOwKo079M2ReJ93jqEpG2ZV6vKM5/qrgzjxM=";
   };
 
   postPatch = ''
+    sed -i '/mypy==/d' pyproject.toml
+    sed -i '/packaging/d' pyproject.toml
+    sed -i '/pympler/d' pyproject.toml
+    sed -i '/types_deprecated/d' pyproject.toml
     substituteInPlace pytest.ini \
-      --replace "-K" ""
+      --replace-fail "-K" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     async-timeout
     deprecated
+    packaging
     pympler
+    typing-extensions
     wrapt
   ];
 
@@ -48,7 +60,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "coredis" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # All other tests require Docker
     "tests/test_lru_cache.py"
     "tests/test_parsers.py"
@@ -56,11 +68,11 @@ buildPythonPackage rec {
     "tests/test_utils.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
-    teams = [ teams.wdz ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.wdz ];
   };
 }

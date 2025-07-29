@@ -84,7 +84,7 @@ zsh).
 }
 ```
 
-The path may also be a fifo or named fd (such as produced by `<(cmd)`), in which
+The path may also be the result of process substitution (e.g. `<(cmd)`), in which
 case the shell and name must be provided (see below).
 
 If the destination shell completion file is not actually present or consists of
@@ -99,17 +99,12 @@ failure. To prevent this, guard the completion generation commands.
 ```nix
 {
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      # using named fd
-      installShellCompletion --cmd foobar \
-        --bash <(${emulator} $out/bin/foobar --bash-completion) \
-        --fish <(${emulator} $out/bin/foobar --fish-completion) \
-        --zsh <(${emulator} $out/bin/foobar --zsh-completion)
-    ''
-  );
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # using process substitution
+    installShellCompletion --cmd foobar \
+      --bash <($out/bin/foobar --bash-completion) \
+      --fish <($out/bin/foobar --fish-completion) \
+      --zsh <($out/bin/foobar --zsh-completion)
+  '';
 }
 ```

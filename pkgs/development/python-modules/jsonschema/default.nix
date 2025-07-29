@@ -49,17 +49,16 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      attrs
-      jsonschema-specifications
-      referencing
-      rpds-py
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-      pkgutil-resolve-name
-    ];
+  dependencies = [
+    attrs
+    jsonschema-specifications
+    referencing
+    rpds-py
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+    pkgutil-resolve-name
+  ];
 
   optional-dependencies = {
     format = [
@@ -96,7 +95,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-jsonschema/jsonschema";
     changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     mainProgram = "jsonschema";
   };
 }

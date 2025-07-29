@@ -32,16 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
       "-DQT=OFF"
     ];
 
-  preConfigure =
-    ''
-      mkdir -p $PWD/build/_deps
+  preConfigure = ''
+    mkdir -p $PWD/build/_deps
 
-    ''
-    + lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
-      ) (import ./deps.nix)
-    );
+  ''
+  + lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
+    ) (import ./deps.nix)
+  );
 
   meta = {
     description = "Extensible text editor based on Scintilla with Lua scripting";

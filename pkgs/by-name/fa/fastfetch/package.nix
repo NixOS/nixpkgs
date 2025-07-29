@@ -38,6 +38,7 @@
   xorg,
   yyjson,
   zlib,
+  zfs,
   # Feature flags
   audioSupport ? true,
   brightnessSupport ? true,
@@ -54,16 +55,17 @@
   waylandSupport ? true,
   x11Support ? true,
   xfceSupport ? true,
+  zfsSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.42.0";
+  version = "2.48.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-nlhW3ftBOjb2BHz1qjOI4VGiSn1+VAUcaA9n0nPikCU=";
+    hash = "sha256-+0TN4tSay2fpSl5Aoy8M6y3fsWPKGfWWdLiVvg+r978=";
   };
 
   outputs = [
@@ -175,6 +177,10 @@ stdenv.mkDerivation (finalAttrs: {
           #  Needed for XFWM theme and XFCE Terminal font.
           xfce.xfconf
         ]
+        ++ lib.optionals zfsSupport [
+          # Needed for zpool module
+          zfs
+        ]
       );
 
       macosDeps = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -184,71 +190,71 @@ stdenv.mkDerivation (finalAttrs: {
     in
     commonDeps ++ imageDeps ++ sqliteDeps ++ linuxCoreDeps ++ linuxFeatureDeps ++ macosDeps;
 
-  cmakeFlags =
-    [
-      (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
-      (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
-      (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
+  cmakeFlags = [
+    (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
+    (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
 
-      # Feature flags
-      (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
+    # Feature flags
+    (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
 
-      (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
-      (lib.cmakeBool "ENABLE_IMAGEMAGICK7" imageSupport)
-      (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
+    (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
+    (lib.cmakeBool "ENABLE_IMAGEMAGICK7" imageSupport)
+    (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
 
-      (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.cmakeBool "ENABLE_PULSE" audioSupport)
+    (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
 
-      (lib.cmakeBool "ENABLE_DDCUTIL" brightnessSupport)
+    (lib.cmakeBool "ENABLE_LIBZFS" zfsSupport)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "ENABLE_PULSE" audioSupport)
 
-      (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
+    (lib.cmakeBool "ENABLE_DDCUTIL" brightnessSupport)
 
-      (lib.cmakeBool "ENABLE_ELF" terminalSupport)
+    (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
 
-      (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
-      (lib.cmakeBool "ENABLE_DCONF" gnomeSupport)
+    (lib.cmakeBool "ENABLE_ELF" terminalSupport)
 
-      (lib.cmakeBool "ENABLE_ZLIB" imageSupport)
+    (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
+    (lib.cmakeBool "ENABLE_DCONF" gnomeSupport)
 
-      (lib.cmakeBool "ENABLE_OPENCL" openclSupport)
+    (lib.cmakeBool "ENABLE_ZLIB" imageSupport)
 
-      (lib.cmakeBool "ENABLE_EGL" openglSupport)
-      (lib.cmakeBool "ENABLE_GLX" openglSupport)
+    (lib.cmakeBool "ENABLE_OPENCL" openclSupport)
 
-      (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+    (lib.cmakeBool "ENABLE_EGL" openglSupport)
+    (lib.cmakeBool "ENABLE_GLX" openglSupport)
 
-      (lib.cmakeBool "ENABLE_DRM" (!x11Support && !waylandSupport))
-      (lib.cmakeBool "ENABLE_DRM_AMDGPU" (!x11Support && !waylandSupport))
+    (lib.cmakeBool "ENABLE_RPM" rpmSupport)
 
-      (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
+    (lib.cmakeBool "ENABLE_DRM" (!x11Support && !waylandSupport))
+    (lib.cmakeBool "ENABLE_DRM_AMDGPU" (!x11Support && !waylandSupport))
 
-      (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
 
-      (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
-      (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
 
-      (lib.cmakeBool "ENABLE_XFCONF" xfceSupport)
+    (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
+    (lib.cmakeBool "ENABLE_XRANDR" x11Support)
 
-      (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
-      (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
-    ];
+    (lib.cmakeBool "ENABLE_XFCONF" xfceSupport)
+
+    (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
+    (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
+  ];
 
   postPatch = ''
-    substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
+    substituteInPlace completions/fastfetch.{bash,fish,zsh} --replace-fail python3 '${python3.interpreter}'
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/fastfetch \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    ''
-    + lib.optionalString flashfetchSupport ''
-      wrapProgram $out/bin/flashfetch \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/fastfetch \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+  ''
+  + lib.optionalString flashfetchSupport ''
+    wrapProgram $out/bin/flashfetch \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -257,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
+    description = "Actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
@@ -270,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Fast and highly customizable system info script.
 
-      Feature flags (all default to 'true' except rpmSupport and flashfetchSupport):
+      Feature flags (all default to 'true' except rpmSupport, flashfetchSupport and zfsSupport):
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
@@ -286,6 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
       * waylandSupport: Wayland display detection
       * x11Support: X11 display information
       * xfceSupport: XFCE integration for theme and terminal font detection
+      * zfsSupport: zpool information
     '';
   };
 })

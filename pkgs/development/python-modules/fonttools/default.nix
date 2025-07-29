@@ -39,6 +39,12 @@ buildPythonPackage rec {
     hash = "sha256-ZkC1+I2d9wY9J7IoCGHGWG2gOVN7wW274UpN1lQxmJY=";
   };
 
+  patches = [
+    # https://github.com/fonttools/fonttools/pull/3855
+    # FIXME: remove when merged
+    ./python-3.13.4.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -68,25 +74,24 @@ buildPythonPackage rec {
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
-  nativeCheckInputs =
-    [
-      # test suite fails with pytest>=8.0.1
-      # https://github.com/fonttools/fonttools/issues/3458
-      pytest7CheckHook
-    ]
-    ++ lib.concatLists (
-      lib.attrVals (
-        [
-          "woff"
-          # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
-          "ufo"
-        ]
-        ++ lib.optionals (!skia-pathops.meta.broken) [
-          "pathops" # broken
-        ]
-        ++ [ "repacker" ]
-      ) optional-dependencies
-    );
+  nativeCheckInputs = [
+    # test suite fails with pytest>=8.0.1
+    # https://github.com/fonttools/fonttools/issues/3458
+    pytest7CheckHook
+  ]
+  ++ lib.concatLists (
+    lib.attrVals (
+      [
+        "woff"
+        # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+        "ufo"
+      ]
+      ++ lib.optionals (!skia-pathops.meta.broken) [
+        "pathops" # broken
+      ]
+      ++ [ "repacker" ]
+    ) optional-dependencies
+  );
 
   pythonImportsCheck = [ "fontTools" ];
 

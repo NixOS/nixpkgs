@@ -2,15 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
+  hatchling,
+  hatch-vcs,
   httpx,
   pydantic,
-
-  # tests
   pillow,
   pytest-asyncio,
   pytest-httpserver,
@@ -19,24 +14,22 @@
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.4.8";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama-python";
     tag = "v${version}";
-    hash = "sha256-ZhSbd7Um3+jG3yL3FwCm0lUdi5EQXVjJk0UMLRKeLOQ=";
+    hash = "sha256-XCsBdU8dUJIcfbvwUB6UNP2AhAmBxnk0kiFkOYcd1zY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
-  '';
 
   pythonRelaxDeps = [ "httpx" ];
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     httpx
@@ -53,6 +46,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "ollama" ];
+
+  disabledTestPaths = [
+    # Don't test the examples
+    "examples/"
+  ];
 
   meta = {
     description = "Ollama Python library";

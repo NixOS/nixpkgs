@@ -40,34 +40,33 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-1pPrc7lzxaLK1QbxslGYGS8xOxuT231RvZrdvWeGFOk=";
+    hash = "sha256-TOZuMiE5RjaJYvNWxl2FyCp6uIO+LLWiRb7N9jc1yRk=";
   };
 
   format = "pyproject";
 
-  buildInputs =
-    [
-      gtk4
-      adwaita-icon-theme
-      gtksourceview5
-      glib-networking
-    ]
-    ++ lib.optionals enableJingle [
-      farstream
-      gstreamer
-      gst-plugins-base
-      gst-libav
-      gst-plugins-good
-      libnice
-    ]
-    ++ lib.optional enableSecrets libsecret
-    ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd
-    ++ lib.optional enableAppIndicator libappindicator-gtk3;
+  buildInputs = [
+    gtk4
+    adwaita-icon-theme
+    gtksourceview5
+    glib-networking
+  ]
+  ++ lib.optionals enableJingle [
+    farstream
+    gstreamer
+    gst-plugins-base
+    gst-libav
+    gst-plugins-good
+    libnice
+  ]
+  ++ lib.optional enableSecrets libsecret
+  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableUPnP gupnp-igd
+  ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
     gettext

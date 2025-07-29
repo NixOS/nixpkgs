@@ -120,7 +120,8 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         configFile
-      ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+      ]
+      ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
       serviceConfig =
         let
           paths = lib.flatten (
@@ -149,7 +150,8 @@ in
         };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
     };
   };
 }

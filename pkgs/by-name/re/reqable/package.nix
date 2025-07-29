@@ -23,15 +23,16 @@
   pango,
   util-linux,
   xz,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reqable";
-  version = "2.33.8";
+  version = "2.33.12";
 
   src = fetchurl {
     url = "https://github.com/reqable/reqable-app/releases/download/${finalAttrs.version}/reqable-app-linux-x86_64.deb";
-    hash = "sha256-YCuJpTDJNAHBhTrxl5qvtFnUm4VzhkJ66gaKHhWVBEU=";
+    hash = "sha256-LCHeJUzTRjl/lh3PWygZV0Rd3AxJEGlTkVrI/5l+Go4=";
   };
 
   nativeBuildInputs = [
@@ -77,13 +78,15 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : $out/share/reqable/lib
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Generation API debugging and testing one-stop solution";
     homepage = "https://reqable.com";
     mainProgram = "reqable";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

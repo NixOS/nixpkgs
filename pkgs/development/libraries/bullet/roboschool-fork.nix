@@ -32,16 +32,15 @@ stdenv.mkDerivation {
 
   patches = [ ./gwen-narrowing.patch ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_CPU_DEMOS=OFF"
-      "-DINSTALL_EXTRA_LIBS=ON"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DBUILD_BULLET2_DEMOS=OFF"
-      "-DBUILD_UNIT_TESTS=OFF"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_CPU_DEMOS=OFF"
+    "-DINSTALL_EXTRA_LIBS=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DBUILD_BULLET2_DEMOS=OFF"
+    "-DBUILD_UNIT_TESTS=OFF"
+  ];
 
   meta = with lib; {
     description = "Professional free 3D Game Multiphysics Library";

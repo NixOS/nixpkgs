@@ -159,7 +159,12 @@ let
       qtsvg = callPackage ./modules/qtsvg.nix { };
       qtscxml = callPackage ./modules/qtscxml.nix { };
       qttools = callPackage ./modules/qttools { };
-      qttranslations = callPackage ./modules/qttranslations.nix { };
+      qttranslations = callPackage ./modules/qttranslations.nix {
+        qttools = self.qttools.override {
+          qtbase = self.qtbase.override { qttranslations = null; };
+          qtdeclarative = null;
+        };
+      };
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
@@ -178,13 +183,12 @@ let
         makeSetupHook {
           name = "wrap-qt6-apps-hook";
           propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated =
-            [
-              (onlyPluginsAndQml qtbase)
-            ]
-            ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
-              (onlyPluginsAndQml qtwayland)
-            ];
+          depsTargetTargetPropagated = [
+            (onlyPluginsAndQml qtbase)
+          ]
+          ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+            (onlyPluginsAndQml qtwayland)
+          ];
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
 
@@ -215,18 +219,5 @@ let
     otherSplices = generateSplicesForMkScope "qt6";
     f = addPackages;
   };
-
-  bootstrapScope = baseScope.overrideScope (
-    final: prev: {
-      qtbase = prev.qtbase.override { qttranslations = null; };
-      qtdeclarative = null;
-    }
-  );
-
-  finalScope = baseScope.overrideScope (
-    final: prev: {
-      qttranslations = bootstrapScope.qttranslations;
-    }
-  );
 in
-finalScope
+baseScope

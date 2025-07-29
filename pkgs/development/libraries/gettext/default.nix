@@ -14,17 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.22.5";
+  version = "0.25.1";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    hash = "sha256-7BcFselpuDqfBzFE7IBhUduIEn9eQP5alMtsj6SJlqA=";
+    hash = "sha256-dG+VXULXHrac52OGnLkmgvCaQGZSjQGLbKej9ICJoIU=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+    ./memory-safety.patch
   ];
 
   outputs = [
@@ -36,47 +37,45 @@ stdenv.mkDerivation rec {
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
-  configureFlags =
-    [
-      "--disable-csharp"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # On cross building, gettext supposes that the wchar.h from libc
-      # does not fulfill gettext needs, so it tries to work with its
-      # own wchar.h file, which does not cope well with the system's
-      # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-      "gl_cv_func_wcwidth_works=yes"
-    ];
+  configureFlags = [
+    "--disable-csharp"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # On cross building, gettext supposes that the wchar.h from libc
+    # does not fulfill gettext needs, so it tries to work with its
+    # own wchar.h file, which does not cope well with the system's
+    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+    "gl_cv_func_wcwidth_works=yes"
+  ];
 
-  postPatch =
-    ''
-      # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
-      # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
-      # replace whatever (probably compatible) version of `extern-inline.m4` with one that probalby won’t work
-      # because `autopoint` will copy the autoconf macros from the project’s required version of gettext.
-      # Fixing this requires replacing all the older copies of the problematic file with a new one.
-      #
-      # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
-      declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
-      oldFilesDir=$(mktemp -d)
-      for oldFile in "''${oldFiles[@]}"; do
-        mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
-        cp -a gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
-      done
-      tar uf gettext-tools/misc/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
+  postPatch = ''
+    # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
+    # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
+    # replace whatever (probably compatible) version of `extern-inline.m4` with one that probalby won’t work
+    # because `autopoint` will copy the autoconf macros from the project’s required version of gettext.
+    # Fixing this requires replacing all the older copies of the problematic file with a new one.
+    #
+    # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
+    declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
+    oldFilesDir=$(mktemp -d)
+    for oldFile in "''${oldFiles[@]}"; do
+      mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
+      cp -a gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
+    done
+    tar uf gettext-tools/misc/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
 
-      substituteAllInPlace gettext-runtime/src/gettext.sh.in
-      substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-      substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-      substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isCygwin ''
-      sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-      sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
-    '';
+    substituteAllInPlace gettext-runtime/src/gettext.sh.in
+    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -97,6 +96,12 @@ stdenv.mkDerivation rec {
   ];
   env = {
     gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # macOS iconv implementation is slightly broken since Sonoma
+    # https://github.com/Homebrew/homebrew-core/pull/199639
+    # https://savannah.gnu.org/bugs/index.php?66541
+    am_cv_func_iconv_works = "yes";
   };
 
   enableParallelBuilding = true;

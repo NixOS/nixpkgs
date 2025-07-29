@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     sed -i '6G' tests/snapshots/run__file@empty.hvm.snap
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nLcT+o6xrxPmQqK7FQpCqTlxOOUA1FzqRGQIypcq4fo=";
 
   meta = with lib; {

@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lDDGZUpW9LU5S/gzNJFIuVIk08pQlQLK07RwuzcYyjg=";
+    hash = "sha256-y5q3shwmMjXlMaLWfxjN164uM8hSbWymsHIIJxM82Nk=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-MuCQJgUHyAKpKWM7lYE49zur+G+KtIVBVXCspWImnY8=";
+    fetcherVersion = 1;
+    hash = "sha256-laTyxRh54x3iopGVgoFtcgaV7R6IKux1O/+tzGEy0Fg=";
   };
 
   nativeBuildInputs = [
@@ -62,13 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches =
-    [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemEquicord (
-      replaceVars ./use_system_equicord.patch {
-        inherit equicord;
-      }
-    );
+  patches = [
+    ./disable_update_checking.patch
+  ]
+  ++ lib.optional withSystemEquicord (
+    replaceVars ./use_system_equicord.patch {
+      inherit equicord;
+    }
+  );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

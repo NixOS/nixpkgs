@@ -355,8 +355,11 @@ let
   mergeAttrByFunc =
     x: y:
     let
-      mergeAttrBy2 =
-        { mergeAttrBy = mergeAttrs; } // (maybeAttr "mergeAttrBy" { } x) // (maybeAttr "mergeAttrBy" { } y);
+      mergeAttrBy2 = {
+        mergeAttrBy = mergeAttrs;
+      }
+      // (maybeAttr "mergeAttrBy" { } x)
+      // (maybeAttr "mergeAttrBy" { } y);
     in
     foldr mergeAttrs { } [
       x

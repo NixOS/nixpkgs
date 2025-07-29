@@ -100,6 +100,9 @@ let
           "ReceiveQueues"
           "TransmitQueues"
           "TransmitQueueLength"
+          "RxFlowControl"
+          "TxFlowControl"
+          "AutoNegotiationFlowControl"
         ])
         (assertValueOneOf "MACAddressPolicy" [
           "persistent"
@@ -137,6 +140,9 @@ let
         (assertValueOneOf "GenericSegmentationOffload" boolValues)
         (assertValueOneOf "GenericReceiveOffload" boolValues)
         (assertValueOneOf "LargeReceiveOffload" boolValues)
+        (assertValueOneOf "RxFlowControl" boolValues)
+        (assertValueOneOf "TxFlowControl" boolValues)
+        (assertValueOneOf "AutoNegotiationFlowControl" boolValues)
         (assertInt "RxChannels")
         (assertRange "RxChannels" 1 4294967295)
         (assertInt "TxChannels")
@@ -899,8 +905,8 @@ let
           boolValues
           ++ [
             "static"
-            "dhcp-on-stop"
-            "dhcp"
+            "dynamic-on-stop"
+            "dynamic"
           ]
         ))
       ];
@@ -3128,19 +3134,18 @@ let
     };
 
   renderConfig = def: {
-    text =
-      ''
-        [Network]
-        ${attrsToSection def.networkConfig}
-      ''
-      + optionalString (def.dhcpV4Config != { }) ''
-        [DHCPv4]
-        ${attrsToSection def.dhcpV4Config}
-      ''
-      + optionalString (def.dhcpV6Config != { }) ''
-        [DHCPv6]
-        ${attrsToSection def.dhcpV6Config}
-      '';
+    text = ''
+      [Network]
+      ${attrsToSection def.networkConfig}
+    ''
+    + optionalString (def.dhcpV4Config != { }) ''
+      [DHCPv4]
+      ${attrsToSection def.dhcpV4Config}
+    ''
+    + optionalString (def.dhcpV6Config != { }) ''
+      [DHCPv6]
+      ${attrsToSection def.dhcpV6Config}
+    '';
   };
 
   mkUnitFiles =
@@ -3293,10 +3298,11 @@ let
       {
         systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
 
-        systemd.network.wait-online.extraArgs =
-          [ "--timeout=${toString cfg.wait-online.timeout}" ]
-          ++ optional cfg.wait-online.anyInterface "--any"
-          ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
+        systemd.network.wait-online.extraArgs = [
+          "--timeout=${toString cfg.wait-online.timeout}"
+        ]
+        ++ optional cfg.wait-online.anyInterface "--any"
+        ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
       }
 
       (mkIf config.systemd.network.enable {

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   passthru.deps =
     let
-      distro = vmTools.debDistros.debian11x86_64;
+      distro = vmTools.debDistros.debian12x86_64;
     in
     vmTools.debClosureGenerator {
       name = "x32edit-dependencies";
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       packagesLists = [ distro.packagesList ];
       packages = [
         "libstdc++6"
-        "libcurl3-gnutls"
+        "libcurl4"
         "libfreetype6"
         "libasound2"
         "libx11-6"

@@ -2,35 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  async-timeout,
   docopt,
   pyserial,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rflink";
-  version = "0.0.66";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.0.67";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aequitas";
     repo = "python-rflink";
     tag = version;
-    hash = "sha256-n6VLa0xX1qewMS7Kv+kiitezWRbRvDJRNuOmA7IV6u0=";
+    hash = "sha256-LAmn9/l+J++CvRa5gypuoQ41mZVSoVqbPpbqVSP6CN4=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     pyserial
-    pyserial-asyncio
-    setuptools
+    pyserial-asyncio-fast
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -38,10 +34,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version=version_from_git()" "version='${version}'"
-
-    substituteInPlace rflinkproxy/__main__.py --replace-fail \
-      "with async_timeout.timeout(CONNECTION_TIMEOUT):" \
-      "async with async_timeout.timeout(CONNECTION_TIMEOUT):"
   '';
 
   pythonImportsCheck = [ "rflink.protocol" ];
@@ -49,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library and CLI tools for interacting with RFlink 433MHz transceiver";
     homepage = "https://github.com/aequitas/python-rflink";
-    changelog = "https://github.com/aequitas/python-rflink/releases/tag/${version}";
+    changelog = "https://github.com/aequitas/python-rflink/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

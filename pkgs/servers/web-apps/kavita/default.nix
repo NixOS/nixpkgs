@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchpatch2,
   buildDotnetModule,
   buildNpmPackage,
   dotnetCorePackages,
@@ -11,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.8.5.11";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HSVdEB0yhmm/SZseHQ5kTRBaVqCZZx934Ovq1pTmQkM=";
+    hash = "sha256-jRP7ts6+jogPdmP+DfzeijlG70kvJWgf8da/sTBT9d4=";
   };
 
   backend = buildDotnetModule {
@@ -27,19 +26,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patches = [
       # The webroot is hardcoded as ./wwwroot
       ./change-webroot.diff
-      # Upstream removes database migrations between versions
-      # Restore them to avoid breaking on updates
-      # Info: Restores migrations for versions between v0.7.1.4 and v0.7.9
-      # On update: check if more migrations need to be restored!
-      # Migrations should at least allow updates from previous NixOS versions
-      ./restore-migrations.diff
-      # Our nixos test depends on /api/locale; this patch fixes an upstream bug where the first response always fails
-      # https://github.com/Kareadita/Kavita/pull/3686 remove once upstream is fixed
-      (fetchpatch2 {
-        name = "fix-locale-cache.patch";
-        url = "https://github.com/Kareadita/Kavita/commit/5af07b9525c2164a6548092244bbdf66815b3e95.patch?full_index=1";
-        hash = "sha256-aFZRxijAbA2mXJM+3kC4P4p76d0p5fEXLiaRhNmjOAA=";
-      })
+      # NOTE: Upstream frequently removes old database migrations between versions.
+      # Currently no migration patches are needed for upgrades from NixOS 24.11 (v0.8.3.2).
+      # Future updates should check if migration restoration is needed for supported upgrade paths.
     ];
     postPatch = ''
       substituteInPlace API/Services/DirectoryService.cs --subst-var out
@@ -65,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-9SfiH567+q3Id6/7pqWeX0y934V2YFQ4EWIJ+66smgI=";
+    npmDepsHash = "sha256-/fBUOlZfNGyRu9mfniSMBKHPNgNsZNpbFZpVrFwBtb4=";
   };
 
   dontBuild = true;

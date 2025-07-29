@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "gnuwget";
-    repo = pname;
+    repo = "wget2";
     tag = "v${version}";
     hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
@@ -59,23 +59,22 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs =
-    [
-      brotli
-      bzip2
-      gpgme
-      libhsts
-      libidn2
-      libpsl
-      nghttp2
-      pcre2
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals sslSupport [
-      openssl
-    ];
+  buildInputs = [
+    brotli
+    bzip2
+    gpgme
+    libhsts
+    libidn2
+    libpsl
+    nghttp2
+    pcre2
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals sslSupport [
+    openssl
+  ];
 
   # TODO: include translation files
   autoreconfPhase = ''

@@ -12,7 +12,11 @@
     stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
   perl,
   withPython ?
-    !stdenv.hostPlatform.isStatic && lib.meta.availableOn stdenv.hostPlatform python3Packages.python,
+    # static can't load python libraries
+    !stdenv.hostPlatform.isStatic
+    && lib.meta.availableOn stdenv.hostPlatform python3Packages.python
+    # m4 python include script fails if cpu bit depth is different across machines
+    && stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
   python3Packages,
   swig,
   ncurses,
@@ -28,13 +32,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapparmor";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitLab {
     owner = "apparmor";
     repo = "apparmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oj6mGw/gvoRGpJqw72Lk6LJuurg8efjiV1pvZYbXz6A=";
+    hash = "sha256-f9FgowlV4lZKKuddGCirqbajhIGyTUQc7IFHSvqY6eQ=";
   };
   sourceRoot = "${finalAttrs.src.name}/libraries/libapparmor";
 
@@ -45,39 +49,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoconf-archive
-      autoreconfHook
-      bison
-      flex
-      pkg-config
-      swig
-      ncurses
-      which
-      dejagnu
-    ]
-    ++ lib.optionals withPython [
-      python3Packages.setuptools
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      # TODO FIXME This is a super ugly HACK.
-      # perl is required for podchecker.
-      # It is a native build input on native platform because checks are enabled there.
-      # Checks can't be enabled on cross, but moving perl to
-      # nativeCheckInputs causes rebuilds on native compile.
-      # Thus, hacks!
-      # This should just be made unconditional and removed from nativeCheckInputs.
-      perl
-    ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+    swig
+    ncurses
+    which
+    dejagnu
+    perl # podchecker
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.setuptools
+  ];
 
   nativeCheckInputs = [
     python3Packages.pythonImportsCheckHook
-    perl
   ];
 
-  buildInputs =
-    [ libxcrypt ] ++ (lib.optional withPerl perl) ++ (lib.optional withPython python3Packages.python);
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ (lib.optional withPerl perl)
+  ++ (lib.optional withPython python3Packages.python);
 
   # required to build apparmor-parser
   dontDisableStatic = true;

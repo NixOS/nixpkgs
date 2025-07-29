@@ -57,6 +57,7 @@ buildNimPackage' (finalAttrs: {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";
     license = lib.licenses.mit;
+    mainProgram = "nimlsp";
     maintainers = with lib.maintainers; [ xtrayambak ];
   };
 })

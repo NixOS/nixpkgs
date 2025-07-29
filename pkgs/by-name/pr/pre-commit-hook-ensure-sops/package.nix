@@ -8,11 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit-hook-ensure-sops";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yuvipanda";
-    repo = pname;
+    repo = "pre-commit-hook-ensure-sops";
     tag = "v${version}";
     hash = "sha256-8sMmHNzmYwOmHYSWoZ4rKb/2lKziFmT6ux+s+chd/Do=";
   };
@@ -26,8 +26,12 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.ruamel-yaml
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    ruamel-yaml
   ];
 
   pythonImportsCheck = [

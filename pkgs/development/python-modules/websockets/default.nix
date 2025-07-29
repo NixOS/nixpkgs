@@ -26,26 +26,25 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  disabledTests =
-    [
-      # Disables tests relying on tight timeouts to avoid failures like:
-      #   File "/build/source/tests/legacy/test_protocol.py", line 1270, in test_keepalive_ping_with_no_ping_timeout
-      #     ping_1_again, ping_2 = tuple(self.protocol.pings)
-      #   ValueError: too many values to unpack (expected 2)
-      "test_keepalive_ping_stops_when_connection_closing"
-      "test_keepalive_ping_does_not_crash_when_connection_lost"
-      "test_keepalive_ping"
-      "test_keepalive_ping_not_acknowledged_closes_connection"
-      "test_keepalive_ping_with_no_ping_timeout"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/python-websockets/websockets/issues/1569
-      "test_writing_in_send_context_fails"
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
-      "test_reject_invalid_server_certificate"
-    ];
+  disabledTests = [
+    # Disables tests relying on tight timeouts to avoid failures like:
+    #   File "/build/source/tests/legacy/test_protocol.py", line 1270, in test_keepalive_ping_with_no_ping_timeout
+    #     ping_1_again, ping_2 = tuple(self.protocol.pings)
+    #   ValueError: too many values to unpack (expected 2)
+    "test_keepalive_ping_stops_when_connection_closing"
+    "test_keepalive_ping_does_not_crash_when_connection_lost"
+    "test_keepalive_ping"
+    "test_keepalive_ping_not_acknowledged_closes_connection"
+    "test_keepalive_ping_with_no_ping_timeout"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/python-websockets/websockets/issues/1569
+    "test_writing_in_send_context_fails"
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
+    "test_reject_invalid_server_certificate"
+  ];
 
   nativeCheckInputs = [
     unittestCheckHook

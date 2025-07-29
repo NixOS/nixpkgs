@@ -69,38 +69,36 @@ stdenv.mkDerivation (finalAttrs: {
       "-DINSTALL_LIB=${mkFlag installLib}"
     ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-    ]
-    ++ lib.optionals enableGTK3 [ wrapGAppsHook3 ]
-    ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ]
+  ++ lib.optionals enableGTK3 [ wrapGAppsHook3 ]
+  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      openssl
-      curl
-      libevent
-      zlib
-      pcre
-      libb64
-      libutp
-      miniupnpc
-      dht
-      libnatpmp
-    ]
-    ++ lib.optionals enableQt [
-      qt5.qttools
-      qt5.qtbase
-    ]
-    ++ lib.optionals enableGTK3 [
-      gtk3
-      xorg.libpthreadstubs
-    ]
-    ++ lib.optionals enableSystemd [ systemd ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [
+    openssl
+    curl
+    libevent
+    zlib
+    pcre
+    libb64
+    libutp
+    miniupnpc
+    dht
+    libnatpmp
+  ]
+  ++ lib.optionals enableQt [
+    qt5.qttools
+    qt5.qtbase
+  ]
+  ++ lib.optionals enableGTK3 [
+    gtk3
+    xorg.libpthreadstubs
+  ]
+  ++ lib.optionals enableSystemd [ systemd ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   postInstall = ''
     mkdir $apparmor
@@ -170,7 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.transmissionbt.com/";
     license = lib.licenses.gpl2Plus; # parts are under MIT
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 

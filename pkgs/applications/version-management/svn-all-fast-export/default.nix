@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.0.19";
+  version = "1.0.20";
 in
 stdenv.mkDerivation {
   pname = "svn-all-fast-export";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "svn-all-fast-export";
     repo = "svn2git";
     rev = version;
-    sha256 = "sha256-r8tS1fbpSWp9btC2hkCg304G4lftQZ09QXWwC943miU=";
+    sha256 = "sha256-ALZ9wGEM2woELUdCxG1SSzIhOCHERsnrSnCVN2MH9Lo=";
   };
 
   nativeBuildInputs = [

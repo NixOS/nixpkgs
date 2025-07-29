@@ -1,7 +1,7 @@
 {
   runtimeShell,
   symlinkJoin,
-  writeTextFile,
+  writeShellScriptBin,
 }:
 
 { emulator, rom }:
@@ -9,18 +9,10 @@
 assert emulator.version == rom.version;
 
 let
-  runScript = writeTextFile {
-    name = "run-x16";
-    text = ''
-      #!${runtimeShell}
-
-      defaultRom="${rom}/share/x16-rom/rom.bin"
-
-      exec "${emulator}/bin/x16emu" -rom $defaultRom "$@"
-    '';
-    executable = true;
-    destination = "/bin/run-x16";
-  };
+  runScript = writeShellScriptBin "run-x16" ''
+    defaultRom="${rom}/share/x16-rom/rom.bin"
+    exec "${emulator}/bin/x16emu" -rom $defaultRom "$@"
+  '';
 in
 symlinkJoin {
   pname = "run-x16";

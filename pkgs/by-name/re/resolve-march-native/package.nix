@@ -8,10 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "resolve-march-native";
   version = "6.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hartwork";
-    repo = pname;
+    repo = "resolve-march-native";
     tag = version;
     hash = "sha256-YJvKLHxn80RRVEOGeg9BwxhDZ8Hhg5Qa6ryLOXumY5w=";
   };

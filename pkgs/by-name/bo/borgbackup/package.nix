@@ -57,17 +57,16 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  buildInputs =
-    [
-      libb2
-      lz4
-      xxHash
-      zstd
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-    ];
+  buildInputs = [
+    libb2
+    lz4
+    xxHash
+    zstd
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+  ];
 
   dependencies = with python.pkgs; [
     msgpack
@@ -101,7 +100,7 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-skip"
     "--pyargs"
     "borg.testsuite"
@@ -121,8 +120,6 @@ python.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
-    # https://github.com/borgbackup/borg/issues/6573
-    "test_basic_functionality"
   ];
 
   preCheck = ''

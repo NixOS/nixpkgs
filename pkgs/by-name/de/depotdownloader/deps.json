@@ -31,13 +31,13 @@
   },
   {
     "pname": "protobuf-net",
-    "version": "3.2.46",
-    "hash": "sha256-NirxAUXEIUQz0HHLS+KS4fgOZwJy1zJZYGcjPa5ujTs="
+    "version": "3.2.52",
+    "hash": "sha256-phXeroBt5KbHYkApkkMa0mRCVkDY+dtOOXXNY+i50Ek="
   },
   {
     "pname": "protobuf-net.Core",
-    "version": "3.2.46",
-    "hash": "sha256-Srg7pP7rleL462idLPFUxgXBLrywWeHFyEvSV+keA4E="
+    "version": "3.2.52",
+    "hash": "sha256-/9Jj26tuSKeYJb9udwew5i5EVvaoeNu/vBCKS0VhSQQ="
   },
   {
     "pname": "QRCoder",
@@ -46,18 +46,13 @@
   },
   {
     "pname": "SteamKit2",
-    "version": "3.0.2",
-    "hash": "sha256-bRiLFaq/hsr+7BKtSKoD2+pf0VCGhBYe/rO3DgqMZpo="
-  },
-  {
-    "pname": "System.Collections.Immutable",
-    "version": "7.0.0",
-    "hash": "sha256-9an2wbxue2qrtugYES9awshQg+KfJqajhnhs45kQIdk="
+    "version": "3.2.0",
+    "hash": "sha256-hB/36fP9kf+1mIx+hTELUMHe8ZkmSKxOK41ZzOaBa3E="
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "9.0.1",
-    "hash": "sha256-IJru9BdFNsNs7FbG+F9djJdkkWdpoz2IxQ+GgvKvUOs="
+    "version": "9.0.4",
+    "hash": "sha256-rbcQzEncB3VuUZIcsE1tq30suf5rvRE4HkE+0lR/skU="
   },
   {
     "pname": "System.Security.AccessControl",
@@ -68,5 +63,10 @@
     "pname": "System.Security.Principal.Windows",
     "version": "5.0.0",
     "hash": "sha256-CBOQwl9veFkrKK2oU8JFFEiKIh/p+aJO+q9Tc2Q/89Y="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.5",
+    "hash": "sha256-+UQFeU64md0LlSf9nMXif6hHnfYEKm+WRyYd0Vo2QvI="
   }
 ]

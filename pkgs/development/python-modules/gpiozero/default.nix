@@ -16,6 +16,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -27,15 +28,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gpiozero";
-    repo = pname;
+    repo = "gpiozero";
     tag = "v${version}";
     hash = "sha256-ifdCFcMH6SrhKQK/TJJ5lJafSfAUzd6ZT5ANUzJGwxI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov" ""
-  '';
 
   outputs = [
     "out"
@@ -50,7 +46,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorzero ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [
     "gpiozero"

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "asottile";
-    repo = pname;
+    repo = "pyupgrade";
     rev = "v${version}";
     hash = "sha256-bijW1uxoaVKLO0Psv3JeAG6rKeTwGa9ZW06VU1qFrrU=";
   };

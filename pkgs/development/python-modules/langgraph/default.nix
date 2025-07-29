@@ -38,14 +38,14 @@
 }:
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.3.34";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "${version}";
-    hash = "sha256-xGznstX6RHo4vO03xnR2by9yW1jc7+E2oSVNWD/9L7c=";
+    tag = version;
+    hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
   };
 
   postgresqlTestSetupPost = ''
@@ -128,17 +128,18 @@ buildPythonPackage rec {
     "tests/test_pregel_async.py"
   ];
 
+  # Since `langgraph` is the only unprefixed package, we have to use an explicit match
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)"
+      "([0-9.]+)"
     ];
   };
 
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

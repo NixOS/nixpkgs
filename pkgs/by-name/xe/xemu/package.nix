@@ -37,20 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lTZ5j5ULh4GFW4zlQy4l7e4zr8TEIvenGNC59O6G0Wg=";
   };
 
-  nativeBuildInputs =
-    [
-      SDL2
-      meson
-      ninja
-      perl
-      pkg-config
-      which
-      wrapGAppsHook3
-    ]
-    ++ (with python3Packages; [
-      python
-      pyyaml
-    ]);
+  nativeBuildInputs = [
+    SDL2
+    meson
+    ninja
+    perl
+    pkg-config
+    which
+    wrapGAppsHook3
+  ]
+  ++ (with python3Packages; [
+    python
+    pyyaml
+  ]);
 
   buildInputs = [
     SDL2
@@ -92,16 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
   '';
 
-  preConfigure =
+  preConfigure = ''
+    configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
+  ''
+  +
+    # When the data below can't be obtained through git, the build process tries
+    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
     ''
-      configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
-    ''
-    +
-      # When the data below can't be obtained through git, the build process tries
-      # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
-      ''
-        echo '${finalAttrs.version}' > XEMU_VERSION
-      '';
+      echo '${finalAttrs.version}' > XEMU_VERSION
+    '';
 
   preBuild = ''
     cd build

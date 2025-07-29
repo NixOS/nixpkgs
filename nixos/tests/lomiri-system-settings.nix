@@ -109,7 +109,11 @@
       machine.wait_for_x()
 
       with subtest("lomiri system settings launches"):
-          machine.execute("lomiri-system-settings >&2 &")
+          machine.succeed("lomiri-system-settings >&2 &")
+          machine.wait_for_console_text("qml: Plugin about does not exist")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("System Settings")
           machine.screenshot("lss_open")
 
@@ -137,7 +141,11 @@
       machine.execute("pkill -f lomiri-system-settings")
 
       with subtest("lomiri system settings localisation works"):
-          machine.execute("env LANG=de_DE.UTF-8 lomiri-system-settings >&2 &")
+          machine.succeed("env LANG=de_DE.UTF-8 lomiri-system-settings >&2 &")
+          machine.wait_for_console_text("qml: Plugin about does not exist")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("Systemeinstellungen")
           machine.screenshot("lss_localised_open")
 

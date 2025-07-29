@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cagebreak";
-  version = "2.4.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = "cagebreak";
     tag = finalAttrs.version;
-    hash = "sha256-eJLYv9CalBTOQEOMRg/5ctHByrkA44pfS7K3H4XTdSc=";
+    hash = "sha256-vXRIZqFyywRettzriOArl1FGdzWdaeVOfYFZCiPLQZg=";
   };
 
   nativeBuildInputs = [

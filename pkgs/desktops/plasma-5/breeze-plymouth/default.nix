@@ -36,13 +36,14 @@ assert lib.asserts.assertOneOf "bottomColor" bottomColor validColors;
 
 mkDerivation {
   pname = "breeze-plymouth";
-  nativeBuildInputs =
-    [ extra-cmake-modules ]
-    ++ lib.optionals (logoFile != null) [
-      imagemagick
-      netpbm
-      perl
-    ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+  ]
+  ++ lib.optionals (logoFile != null) [
+    imagemagick
+    netpbm
+    perl
+  ];
   buildInputs = [ plymouth ];
   patches = [
     ./install-paths.patch
@@ -55,15 +56,14 @@ mkDerivation {
     ++ lib.optional (topColor != null) "-DBACKGROUND_TOP_COLOR=${topColor}"
     ++ lib.optional (bottomColor != null) "-DBACKGROUND_BOTTOM_COLOR=${bottomColor}";
 
-  postPatch =
-    ''
-      substituteInPlace cmake/FindPlymouth.cmake --subst-var out
-    ''
-    + lib.optionalString (logoFile != null) ''
-      cp ${logoFile} breeze/images/${resolvedLogoName}.logo.png
+  postPatch = ''
+    substituteInPlace cmake/FindPlymouth.cmake --subst-var out
+  ''
+  + lib.optionalString (logoFile != null) ''
+    cp ${logoFile} breeze/images/${resolvedLogoName}.logo.png
 
-      # conversion for 16bit taken from the breeze-plymouth readme
-      convert ${logoFile} -alpha Background -background "#000000" -fill "#000000" -flatten tmp.png
-      pngtopnm tmp.png | pnmquant 16 | pnmtopng > breeze/images/16bit/${resolvedLogoName}.logo.png
-    '';
+    # conversion for 16bit taken from the breeze-plymouth readme
+    convert ${logoFile} -alpha Background -background "#000000" -fill "#000000" -flatten tmp.png
+    pngtopnm tmp.png | pnmquant 16 | pnmtopng > breeze/images/16bit/${resolvedLogoName}.logo.png
+  '';
 }

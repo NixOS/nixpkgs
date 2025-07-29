@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aanderse
-      karolchmist
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch

@@ -1,24 +1,24 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
   stdenv,
 }:
-buildGo124Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "fluxcd-operator";
-  version = "0.19.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
     repo = "fluxcd-operator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2AkO8nie2ep3ASy0hkM9JEryv0ekyRNPkCoZ3WgBQwU=";
+    hash = "sha256-pNJPP49yAZ5guo6fYRkICxuY5Hz6eaF6xmuoLx/CBHo=";
   };
 
-  vendorHash = "sha256-sQhp89AzICeu3oRVh3ys93PyeU5A24T36QwQsHxMSaY=";
+  vendorHash = "sha256-tTers8A4x8hS43/NIG2LH3mTWlGTkLBIPPk05mINsWg=";
 
   ldflags = [
     "-s"

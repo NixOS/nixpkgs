@@ -33,46 +33,44 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.10";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UUN8zLkXyXRbUOGFD6TYKUlbkZCIEJGw/S7xpUWVPxQ=";
+    hash = "sha256-FhlYowmu3McXuhOplnN/tnfkHAvRJqIuk60ceFYOmR0=";
     fetchSubmodules = true;
   };
 
-  cmakeFlags =
+  cmakeFlags = [
+    (lib.cmakeFeature "OPEN62541_VERSION" finalAttrs.src.rev)
+    (lib.cmakeFeature "UA_NAMESPACE_ZERO" "FULL")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    # Note comment near doCheck
+    (lib.cmakeBool "UA_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "UA_ENABLE_ALLOW_REUSEADDR" finalAttrs.finalPackage.doCheck)
+
+    (lib.cmakeBool "UA_BUILD_EXAMPLES" withExamples)
+  ]
+  ++ lib.optionals (withEncryption != false) [
+    (lib.cmakeFeature "UA_ENABLE_ENCRYPTION" (lib.toUpper withEncryption))
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3Packages.python
+  ]
+  ++ lib.optionals withDoc (
+    with python3Packages;
     [
-      (lib.cmakeFeature "OPEN62541_VERSION" finalAttrs.src.rev)
-      (lib.cmakeFeature "UA_NAMESPACE_ZERO" "FULL")
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-
-      # Note comment near doCheck
-      (lib.cmakeBool "UA_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
-      (lib.cmakeBool "UA_ENABLE_ALLOW_REUSEADDR" finalAttrs.finalPackage.doCheck)
-
-      (lib.cmakeBool "UA_BUILD_EXAMPLES" withExamples)
+      sphinx
+      sphinx_rtd_theme
+      graphviz-nox
     ]
-    ++ lib.optionals (withEncryption != false) [
-      (lib.cmakeFeature "UA_ENABLE_ENCRYPTION" (lib.toUpper withEncryption))
-    ];
-
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      python3Packages.python
-    ]
-    ++ lib.optionals withDoc (
-      with python3Packages;
-      [
-        sphinx
-        sphinx_rtd_theme
-        graphviz-nox
-      ]
-    );
+  );
 
   buildInputs = lib.optional (withEncryption != false) encryptionBackend;
 
@@ -149,6 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
       # references to /build/ in ua_server_ctt
       rm -r bin/libopen62541*
     '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

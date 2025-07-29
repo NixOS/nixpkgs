@@ -28,28 +28,26 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-Q0W5Q1+PbN+yneh98jx0/UNHVfD6okX92hxNzCE+Ibc=";
   };
 
-  nativeBuildInputs =
-    [
-      gettext
-      qt5.wrapQtAppsHook
-      pythonPackages.pytestCheckHook
-    ]
-    ++ lib.optionals (pyqt5.multimediaEnabled) [
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-vaapi
-      gst_all_1.gstreamer
-    ];
+  nativeBuildInputs = [
+    gettext
+    qt5.wrapQtAppsHook
+    pythonPackages.pytestCheckHook
+  ]
+  ++ lib.optionals (pyqt5.multimediaEnabled) [
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-vaapi
+    gst_all_1.gstreamer
+  ];
 
-  buildInputs =
-    [
-      qt5.qtbase
-      qt5.qtwayland
-    ]
-    ++ lib.optionals (pyqt5.multimediaEnabled) [
-      qt5.qtmultimedia.bin
-    ];
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtwayland
+  ]
+  ++ lib.optionals (pyqt5.multimediaEnabled) [
+    qt5.qtmultimedia.bin
+  ];
 
   propagatedBuildInputs = with pythonPackages; [
     chromaprint
@@ -75,13 +73,12 @@ pythonPackages.buildPythonApplication rec {
   doCheck = true;
 
   # In order to spare double wrapping, we use:
-  preFixup =
-    ''
-      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    ''
-    + lib.optionalString (pyqt5.multimediaEnabled) ''
-      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
-    '';
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+  + lib.optionalString (pyqt5.multimediaEnabled) ''
+    makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
 
   meta = {
     homepage = "https://picard.musicbrainz.org";

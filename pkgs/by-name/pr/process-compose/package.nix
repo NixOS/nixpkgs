@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   installShellFiles,
 }:
 
@@ -10,13 +11,13 @@ let
 in
 buildGoModule rec {
   pname = "process-compose";
-  version = "1.46.0";
+  version = "1.64.1";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
-    repo = pname;
+    repo = "process-compose";
     rev = "v${version}";
-    hash = "sha256-E7ovd/dNSMxVld7CS4ZjxZxUVDXLuoQR7W4ZZ1cPMP0=";
+    hash = "sha256-qv/fVfuQD7Nan5Nn1RkwXoGZuPYSRWQaojEn6MCF9BQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,6 +29,15 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
+  patches = [
+    # Fix a linker issue with dlopen on x86_64-darwin
+    # https://github.com/f1bonacc1/process-compose/pull/342
+    (fetchpatch2 {
+      url = "https://github.com/F1bonacc1/process-compose/commit/af82749c5dacaa20f2c3b07ca4e081d1b38e40c4.patch";
+      hash = "sha256-5Hgvwn2GEp/lINPefxXdJUGb2TJfufqAPm+/3gdi6XY=";
+    })
+  ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
@@ -45,7 +55,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  vendorHash = "sha256-pztub6PsHhF56ks4UFG9u/mGrvKFUZi+7EudpP9DVYE=";
+  vendorHash = "sha256-qkfJo+QGqcqiZMLuWbj0CpgRWxbqTu6DGAW8pBu4O/0=";
 
   doCheck = false;
 
@@ -58,12 +68,12 @@ buildGoModule rec {
       --fish <($out/bin/process-compose completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and flexible scheduler and orchestrator to manage non-containerized applications";
     homepage = "https://github.com/F1bonacc1/process-compose";
     changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thenonameguy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thenonameguy ];
     mainProgram = "process-compose";
   };
 }

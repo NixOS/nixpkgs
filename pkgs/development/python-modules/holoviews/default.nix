@@ -58,6 +58,10 @@ buildPythonPackage rec {
     flaky
   ];
 
+  pytestFlags = [
+    "-Wignore::FutureWarning"
+  ];
+
   disabledTests = [
     # All the below fail due to some change in flaky API
     "test_periodic_param_fn_non_blocking"

@@ -15,75 +15,50 @@
   webkitgtk_4_1,
   openssl,
 }:
+
 let
   pnpm = pnpm_10;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedistar";
   version = "1.11.3";
+
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "fedistar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q2j6K4ys/z77+n3kdGJ15rWbFlbbIHBWB9hOARsgg2A=";
   };
-  fedistar-frontend = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "fedistar-frontend";
-    inherit version src;
-    pnpmDeps = pnpm.fetchDeps {
-      inherit pname version src;
-      hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
-    };
-    nativeBuildInputs = [
-      pnpm.configHook
-      pnpm
-      nodejs
-    ];
 
-    buildPhase = ''
-      runHook preBuild
-      pnpm run build
-      runHook postBuild
-    '';
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = "src-tauri";
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r out/* $out/
-      runHook postInstall
-    '';
-  });
-
-in
-rustPlatform.buildRustPackage {
-  inherit
-    pname
-    version
-    src
-    fedistar-frontend
-    ;
-  sourceRoot = "${src.name}/src-tauri";
-
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
 
-  postPatch = ''
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../out",' '"frontendDist": "${fedistar-frontend}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
-  '';
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
+  };
 
   nativeBuildInputs = [
     cargo-tauri.hook
+
+    pnpm.configHook
+    pnpm
+    nodejs
 
     pkg-config
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      glib-networking
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   doCheck = false; # This version's tests do not pass
 
@@ -107,6 +82,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "fedistar";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ noodlez1232 ];
-    changelog = "https://github.com/h3poteto/fedistar/releases/tag/v${version}";
+    changelog = "https://github.com/h3poteto/fedistar/releases/tag/v${finalAttrs.version}";
   };
-}
+})

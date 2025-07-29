@@ -5,6 +5,7 @@ from pathlib import Path
 
 import ptpython.ipython
 
+from test_driver.debug import Debug, DebugAbstract, DebugNop
 from test_driver.driver import Driver
 from test_driver.logger import (
     CompositeLogger,
@@ -66,6 +67,10 @@ def main() -> None:
         action=argparse.BooleanOptionalAction,
     )
     arg_parser.add_argument(
+        "--debug-hook-attach",
+        help="Enable interactive debugging breakpoints for sandboxed runs",
+    )
+    arg_parser.add_argument(
         "--start-scripts",
         metavar="START-SCRIPT",
         action=EnvDefault,
@@ -109,6 +114,11 @@ def main() -> None:
         help="the test script to run",
         type=Path,
     )
+    arg_parser.add_argument(
+        "--dump-vsocks",
+        help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
+        type=int,
+    )
 
     args = arg_parser.parse_args()
 
@@ -124,6 +134,10 @@ def main() -> None:
     if not args.keep_vm_state:
         logger.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
+    debugger: DebugAbstract = DebugNop()
+    if args.debug_hook_attach is not None:
+        debugger = Debug(logger, args.debug_hook_attach)
+
     with Driver(
         args.start_scripts,
         args.vlans,
@@ -132,10 +146,13 @@ def main() -> None:
         logger,
         args.keep_vm_state,
         args.global_timeout,
+        debug=debugger,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
+            if offset := args.dump_vsocks:
+                driver.dump_machine_ssh(offset)
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,

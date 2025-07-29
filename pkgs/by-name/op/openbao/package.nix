@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qbLaa7EUQywPRTIgUclTomDDBxzdQnyVAqCGD+iOlpg=";
+    hash = "sha256-X0O3JwJS49yReTEIjRfk0GGzgGDUZjNadKMZXUuor/I=";
   };
 
-  vendorHash = "sha256-Upvv3dxS6HIFxR6T+2/dqnFsUtemjOGUaiICgPlepJ8=";
+  vendorHash = "sha256-uOWLCyLCSGMTjRpPbOWlJJYKbZmkkOWnzr5o3zvRLU0=";
 
   proxyVendor = true;
 

@@ -47,34 +47,34 @@ This is an example of configuration, where [](#opt-services.pleroma.configs) opt
     secretConfigFile = "/var/lib/pleroma/secrets.exs";
     configs = [
       ''
-      import Config
+        import Config
 
-      config :pleroma, Pleroma.Web.Endpoint,
-        url: [host: "pleroma.example.net", scheme: "https", port: 443],
-        http: [ip: {127, 0, 0, 1}, port: 4000]
+        config :pleroma, Pleroma.Web.Endpoint,
+          url: [host: "pleroma.example.net", scheme: "https", port: 443],
+          http: [ip: {127, 0, 0, 1}, port: 4000]
 
-      config :pleroma, :instance,
-        name: "Test",
-        email: "admin@example.net",
-        notify_email: "admin@example.net",
-        limit: 5000,
-        registrations_open: true
+        config :pleroma, :instance,
+          name: "Test",
+          email: "admin@example.net",
+          notify_email: "admin@example.net",
+          limit: 5000,
+          registrations_open: true
 
-      config :pleroma, :media_proxy,
-        enabled: false,
-        redirect_on_failure: true
+        config :pleroma, :media_proxy,
+          enabled: false,
+          redirect_on_failure: true
 
-      config :pleroma, Pleroma.Repo,
-        adapter: Ecto.Adapters.Postgres,
-        username: "pleroma",
-        database: "pleroma",
-        hostname: "localhost"
+        config :pleroma, Pleroma.Repo,
+          adapter: Ecto.Adapters.Postgres,
+          username: "pleroma",
+          database: "pleroma",
+          hostname: "localhost"
 
-      # Configure web push notifications
-      config :web_push_encryption, :vapid_details,
-        subject: "mailto:admin@example.net"
+        # Configure web push notifications
+        config :web_push_encryption, :vapid_details,
+          subject: "mailto:admin@example.net"
 
-      # ... TO CONTINUE ...
+        # ... TO CONTINUE ...
       ''
     ];
   };

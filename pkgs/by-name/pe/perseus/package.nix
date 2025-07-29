@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       around datasets arising from point samples, images, distance
       matrices and so forth.
     '';
-    homepage = "http://people.maths.ox.ac.uk/nanda/perseus/index.html";
+    homepage = "https://people.maths.ox.ac.uk/nanda/perseus/index.html";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;

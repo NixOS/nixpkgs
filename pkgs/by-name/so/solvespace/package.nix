@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parametric 3d CAD program";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.edef ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.edef ];
+    platforms = lib.platforms.linux;
     homepage = "https://solvespace.com";
     changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
   };

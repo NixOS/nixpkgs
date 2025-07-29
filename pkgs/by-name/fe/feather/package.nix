@@ -40,27 +40,26 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      bc-ur
-      boost186
-      hidapi
-      libsodium
-      libusb1
-      openssl
-      protobuf
-      qrencode
-      unbound
-      zxing-cpp
-    ]
-    ++ (with qt6; [
-      qtbase
-      qtmultimedia
-      qtsvg
-      qttools
-      qtwayland
-      qtwebsockets
-    ]);
+  buildInputs = [
+    bc-ur
+    boost186
+    hidapi
+    libsodium
+    libusb1
+    openssl
+    protobuf
+    qrencode
+    unbound
+    zxing-cpp
+  ]
+  ++ (with qt6; [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+    qtwayland
+    qtwebsockets
+  ]);
 
   cmakeFlags = [
     "-DProtobuf_INCLUDE_DIR=${lib.getDev protobuf}/include"

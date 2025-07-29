@@ -79,9 +79,7 @@ let
         sha256,
         ...
       }:
-      pkgs.fetchzip {
-        inherit name url sha256;
-      };
+      pkgs.fetchzip { inherit name url sha256; };
   };
 
 in

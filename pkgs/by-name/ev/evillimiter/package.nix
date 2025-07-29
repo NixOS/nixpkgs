@@ -26,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     iptables
     netaddr
     netifaces
+    setuptools
     scapy
     terminaltables
     tqdm

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
     tag = "v${version}";
-    hash = "sha256-1oPcYEwjkkK+hAemUXaG/LFleBtsjbPUZ1b2W9/BNlg=";
+    hash = "sha256-ZBkuhONvn1/QpD+ml3HJinMIdg1HFpVj5KZAlUt/qR4=";
   };
 
   build-system = [ poetry-core ];

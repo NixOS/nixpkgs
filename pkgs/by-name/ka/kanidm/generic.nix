@@ -39,17 +39,17 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
   inherit version cargoHash;
-  useFetchCargoVendor = true;
+
   cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "kanidm";
+    repo = "kanidm";
     rev = "refs/tags/v${version}";
     inherit hash;
   };
 
-  KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+  KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches = lib.optionals enableSecretProvisioning [
     "${patchDir}/oauth2-basic-secret-modify.patch"
@@ -59,27 +59,27 @@ rustPlatform.buildRustPackage rec {
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
-      profile =
-        {
-          cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
-        }
-        // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
-          client_config_path = "/etc/kanidm/config";
-          resolver_config_path = "/etc/kanidm/unixd";
-          resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
-          server_admin_bind_path = "/run/kanidmd/sock";
-          server_config_path = "/etc/kanidm/server.toml";
-          server_ui_pkg_path = "@htmx_ui_pkg_path@";
-        }
-        // lib.optionalAttrs (lib.versionOlder version "1.5") {
-          admin_bind_path = "/run/kanidmd/sock";
-          default_config_path = "/etc/kanidm/server.toml";
-          default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
-          htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
-        }
-        // lib.optionalAttrs (lib.versions.majorMinor version == "1.3") {
-          web_ui_pkg_path = "@web_ui_pkg_path@";
-        };
+      socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidmd/sock" else "/var/run/kanidm.socket";
+      profile = {
+        cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
+      }
+      // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
+        client_config_path = "/etc/kanidm/config";
+        resolver_config_path = "/etc/kanidm/unixd";
+        resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        server_admin_bind_path = socket_path;
+        server_config_path = "/etc/kanidm/server.toml";
+        server_ui_pkg_path = "@htmx_ui_pkg_path@";
+      }
+      // lib.optionalAttrs (lib.versionOlder version "1.5") {
+        admin_bind_path = socket_path;
+        default_config_path = "/etc/kanidm/server.toml";
+        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
+      }
+      // lib.optionalAttrs (lib.versions.majorMinor version == "1.3") {
+        web_ui_pkg_path = "@web_ui_pkg_path@";
+      };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
@@ -95,22 +95,23 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    udev
     openssl
     sqlite
     pam
     rust-jemalloc-sys
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
   ];
 
   # The UI needs to be in place before the tests are run.
-  postBuild =
-    ''
-      mkdir -p $out/ui
-      cp -r server/core/static $out/ui/hpkg
-    ''
-    + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
-      cp -r server/web_ui/pkg $out/ui/pkg
-    '';
+  postBuild = ''
+    mkdir -p $out/ui
+    cp -r server/core/static $out/ui/hpkg
+  ''
+  + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
+    cp -r server/web_ui/pkg $out/ui/pkg
+  '';
 
   # Upstream runs with the Rust equivalent of -Werror,
   # which breaks when we upgrade to new Rust before them.
@@ -129,7 +130,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion \
       --bash $releaseDir/build/completions/*.bash \
       --zsh $releaseDir/build/completions/_*
-
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # PAM and NSS need fix library names
     mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
     mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
@@ -166,7 +168,7 @@ rustPlatform.buildRustPackage rec {
       description = "Simple, secure and fast identity management platform";
       homepage = "https://github.com/kanidm/kanidm";
       license = licenses.mpl20;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [
         adamcstephens
         Flakebi

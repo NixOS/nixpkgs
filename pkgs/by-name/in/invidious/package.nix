@@ -137,7 +137,6 @@ crystal.buildCrystalPackage rec {
       _999eagle
       GaetanLepage
       sbruder
-      pbsds
     ];
   };
 }

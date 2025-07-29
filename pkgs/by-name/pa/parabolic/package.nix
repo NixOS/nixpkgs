@@ -7,6 +7,7 @@
   itstool,
   ninja,
   yelp-tools,
+  desktop-file-utils,
   pkg-config,
   libnick,
   boost,
@@ -18,6 +19,8 @@
   libxmlxx5,
   blueprint-compiler,
   qt6,
+  qlementine,
+  qlementine-icons,
   yt-dlp,
   ffmpeg,
   aria2,
@@ -31,62 +34,86 @@ assert lib.assertOneOf "uiPlatform" uiPlatform [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parabolic";
-  version = "2025.1.4";
+  version = "2025.6.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
     tag = finalAttrs.version;
-    hash = "sha256-B8/e5urhy5tAgHNd/PR3HlNQd0M0CxgC56nArFGlQ9c=";
+    hash = "sha256-Osfj/GaD4t85ZYnlFDqgHhLJLA8VvgqtHEJN8bn0SxI=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      gettext
-      ninja
-      pkg-config
-      itstool
-      yelp-tools
-    ]
-    ++ lib.optionals (uiPlatform == "gnome") [
-      wrapGAppsHook4
-      blueprint-compiler
-      glib
-      shared-mime-info
-    ]
-    ++ lib.optional (uiPlatform == "qt") qt6.wrapQtAppsHook;
+  # Patches desktop file/dbus service bypassing wrapped executable
+  postPatch = ''
+    substituteInPlace "resources/linux/org.nickvision.tubeconverter.desktop.in" \
+      --replace-fail "@CMAKE_INSTALL_FULL_LIBDIR@/@PROJECT_NAME@/@OUTPUT_NAME@" \
+                     "@PROJECT_NAME@"
 
-  buildInputs =
-    [
-      libnick
-      boost
-    ]
-    ++ lib.optionals (uiPlatform == "qt") [
-      qt6.qtbase
-      qt6.qtsvg
-    ]
-    ++ lib.optionals (uiPlatform == "gnome") [
-      glib
-      gtk4
-      libadwaita
-      libxmlxx5
-    ];
+    substituteInPlace "resources/linux/org.nickvision.tubeconverter.service.in" \
+      --replace-fail "@CMAKE_INSTALL_FULL_LIBDIR@/@PROJECT_NAME@/@OUTPUT_NAME@" \
+                     "@CMAKE_INSTALL_FULL_BINDIR@/@PROJECT_NAME@"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    gettext
+    ninja
+    pkg-config
+    itstool
+    yelp-tools
+    desktop-file-utils
+  ]
+  ++ lib.optionals (uiPlatform == "gnome") [
+    wrapGAppsHook4
+    blueprint-compiler
+    glib
+    shared-mime-info
+  ]
+  ++ lib.optional (uiPlatform == "qt") qt6.wrapQtAppsHook;
+
+  buildInputs = [
+    libnick
+    boost
+  ]
+  ++ lib.optionals (uiPlatform == "qt") [
+    qt6.qtbase
+    qt6.qtsvg
+    qlementine
+    qlementine-icons
+  ]
+  ++ lib.optionals (uiPlatform == "gnome") [
+    glib
+    gtk4
+    libadwaita
+    libxmlxx5
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "UI_PLATFORM" uiPlatform)
   ];
 
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
   preFixup =
-    lib.optionalString (uiPlatform == "gnome") "gappsWrapperArgs"
-    + lib.optionalString (uiPlatform == "qt") "qtWrapperArgs"
-    + "+=(--prefix PATH : ${
-      lib.makeBinPath [
-        aria2
-        ffmpeg
-        yt-dlp
-      ]
-    })";
+    lib.optionalString (uiPlatform == "gnome") ''
+      makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    ''
+    + lib.optionalString (uiPlatform == "qt") ''
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    ''
+    + ''
+        makeWrapperArgs+=(--prefix PATH : ${
+          lib.makeBinPath [
+            aria2
+            ffmpeg
+            yt-dlp
+          ]
+        })
+
+      wrapProgram $out/bin/org.nickvision.tubeconverter \
+        ''${makeWrapperArgs[@]}
+    '';
 
   passthru.updateScript = nix-update-script { };
 
