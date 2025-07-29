@@ -123,6 +123,9 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
+    # PostgreSQL 18 is not yet supported
+    # Will be supported in the next release (likely 0.5.0), as it's already supported in the main branch
+    broken = lib.versionAtLeast postgresql.version "18" && finalAttrs.version == "0.4.2";
     changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
     homepage = "https://github.com/tensorchord/VectorChord";
