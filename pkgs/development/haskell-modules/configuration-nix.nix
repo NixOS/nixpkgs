@@ -1260,21 +1260,6 @@ builtins.intersectAttrs super {
   # not used to link against by anyone, we can make it’s closure smaller and
   # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).
   cabal2nix-unstable = overrideCabal (drv: {
-    buildTools = (drv.buildTools or [ ]) ++ [
-      pkgs.buildPackages.makeWrapper
-    ];
-    postInstall = ''
-      ${drv.postInstall or ""}
-
-      wrapProgram $out/bin/cabal2nix \
-        --prefix PATH ":" "${
-          pkgs.lib.makeBinPath [
-            pkgs.nix
-            pkgs.nix-prefetch-scripts
-          ]
-        }"
-    '';
-
     passthru = drv.passthru or { } // {
       updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
 
