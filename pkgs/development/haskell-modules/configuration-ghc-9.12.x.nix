@@ -73,29 +73,15 @@ with haskellLib;
   # Hand pick versions that are compatible with ghc 9.12 and base 4.21
   #
 
-  extra = doDistribute self.extra_1_8;
   htree = doDistribute self.htree_0_2_0_0;
-  tagged = doDistribute self.tagged_0_8_9;
-  time-compat = doDistribute self.time-compat_1_9_8;
   extensions = doDistribute self.extensions_0_1_0_3;
-  ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
-  ghc-lib = doDistribute self.ghc-lib_9_12_2_20250421;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250421;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
-  hlint = doDistribute self.hlint_3_10;
-  # fourmolu checks require Diff > 1.0, which is not yet supported by various other deps of hls.
-  fourmolu = doDistribute (dontCheck self.fourmolu_0_18_0_0);
-  ormolu = doDistribute self.ormolu_0_8_0_0;
-  stylish-haskell = doDistribute self.stylish-haskell_0_15_1_0;
-  apply-refact = doDistribute self.apply-refact_0_15_0_0;
 
   #
   # Jailbreaks
   #
 
   large-generics = doJailbreak super.large-generics; # base <4.20
-  time-compat_1_9_8 = doJailbreak super.time-compat_1_9_8; # too strict lower bound on QuickCheck
   cpphs = overrideCabal (drv: {
     # jail break manually the conditional dependencies
     postPatch = ''
