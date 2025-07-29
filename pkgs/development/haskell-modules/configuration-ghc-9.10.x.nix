@@ -97,10 +97,6 @@ in
   #
   # Jailbreaks
   #
-  # 2025-04-09: base <4.20, containers <0.7, filepath <1.5, Cabal-syntax <3.11
-  cabal-install-parsers =
-    assert super.cabal-install-parsers.version == "0.6.1.1";
-    doJailbreak super.cabal-install-parsers;
   floskell = doJailbreak super.floskell; # base <4.20
   # 2025-04-09: filepath <1.5
   haddock-library =
