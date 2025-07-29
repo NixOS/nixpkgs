@@ -190,7 +190,6 @@ in
     users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
-    services.xserver.tty = null;
     services.xserver.display = null;
     services.xserver.verbose = null;
 
@@ -260,12 +259,10 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
-      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
     ];
     systemd.services.display-manager.onFailure = [
