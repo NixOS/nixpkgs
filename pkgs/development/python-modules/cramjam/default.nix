@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.11.0";
+  version = "2.11.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "cramjam";
     tag = "v${version}";
-    hash = "sha256-Ev1wiqsTRoWnURqHDRUlGCw7DlmkNUIHzJKNwHETco0=";
+    hash = "sha256-iYx/cPQpZVVPAH+HTiYH/E9tmdnHvKf3Cel4yZpXSIA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
