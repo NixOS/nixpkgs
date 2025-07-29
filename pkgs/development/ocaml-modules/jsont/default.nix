@@ -9,13 +9,13 @@
 
 buildTopkgPackage rec {
   pname = "jsont";
-  version = "0.1.1";
+  version = "0.2.0";
 
   minimalOCamlVersion = "4.14.0";
 
   src = fetchzip {
     url = "https://erratique.ch/software/jsont/releases/jsont-${version}.tbz";
-    hash = "sha256-bLbTfRVz/Jzuy2LnQeTEHQGojfA34M+Xj7LODpBAVK4=";
+    hash = "sha256-dXHl+bLuIrlrQ5Np37+uVuETFBb3j8XeDVEK9izoQFk=";
   };
 
   # docs say these dependendencies are optional, but buildTopkgPackage doesn’t
