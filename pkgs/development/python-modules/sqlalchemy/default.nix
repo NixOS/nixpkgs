@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.41";
+  version = "2.0.42";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-DixgBUI+HJLTCsunN5Y+ogcAHnRnQ3CKSFc6HrxzsPM=";
+    hash = "sha256-e/DkS9CioMLG/qMOf0//DxMFDTep4xEtCVTp/Hn0Wiw=";
   };
 
   postPatch = ''
@@ -113,7 +113,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "([0-9.]+)"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
     ];
   };
 
