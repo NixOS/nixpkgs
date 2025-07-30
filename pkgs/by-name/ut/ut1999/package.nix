@@ -36,7 +36,7 @@ let
       hash = "sha256-Qel/p5wDLsrmD+Nd/+6+s4b6rjcPFDbRw18VHsMH47M=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS-.dmg";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS.dmg";
       hash = "sha256-Vtp/b+00La0U/jh+UC0SkPnHi0G5+7h7wjsy7FxWdNY=";
     };
     # fat binary
