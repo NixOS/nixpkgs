@@ -14,6 +14,26 @@ fixCmakeFiles() {
         done
 }
 
+# The docdir flag needs to include PROJECT_NAME as per GNU guidelines,
+# try to extract it from CMakeLists.txt.
+parseShareDocName() {
+    local cmakeLists="$cmakeDir/CMakeLists.txt"
+    if [[ -f "$cmakeLists" ]]; then
+        local shareDocName
+        shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' <"$cmakeLists" | head -n1)"
+    fi
+    # The argument sometimes contains garbage or variable interpolation.
+    # When that is the case, let’s fall back to the derivation name.
+    if [[ -z "$shareDocName" ]] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_+-]'; then
+        if [[ -n "${pname-}" ]]; then
+            shareDocName="$pname"
+        else
+            shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+        fi
+    fi
+    echo "$shareDocName"
+}
+
 cmakeConfigurePhase() {
     runHook preConfigure
 
@@ -38,24 +58,6 @@ cmakeConfigurePhase() {
     fi
 
     declare -ga cmakeDefaultFlags=()
-
-    # The docdir flag needs to include PROJECT_NAME as per GNU guidelines,
-    # try to extract it from CMakeLists.txt.
-    if [[ -z "$shareDocName" ]]; then
-        local cmakeLists="${cmakeDir}/CMakeLists.txt"
-        if [[ -f "$cmakeLists" ]]; then
-            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' <"$cmakeLists" | head -n1)"
-        fi
-        # The argument sometimes contains garbage or variable interpolation.
-        # When that is the case, let’s fall back to the derivation name.
-        if [[ -z "$shareDocName" ]] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_+-]'; then
-            if [[ -n "${pname-}" ]]; then
-                shareDocName="$pname"
-            else
-                shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
-            fi
-        fi
-    fi
 
     cmakeDefaultFlags+=(
         # We should set the proper `CMAKE_SYSTEM_NAME`.
@@ -94,7 +96,6 @@ cmakeConfigurePhase() {
         "-DCMAKE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
         "-DCMAKE_INSTALL_MANDIR=${!outputMan}/share/man"
         "-DCMAKE_INSTALL_INFODIR=${!outputInfo}/share/info"
-        "-DCMAKE_INSTALL_DOCDIR=${!outputDoc}/share/doc/${shareDocName}"
         "-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib"
         "-DCMAKE_INSTALL_LIBEXECDIR=${!outputLib}/libexec"
         "-DCMAKE_INSTALL_LOCALEDIR=${!outputLib}/share/locale"
@@ -122,6 +123,11 @@ cmakeConfigurePhase() {
     if [ "${buildPhase-}" = ninjaBuildPhase ]; then
         cmakeDefaultFlags+=("-GNinja")
     fi
+
+    if [[ -z "${shareDocName-}" ]]; then
+        local shareDocName=$(parseShareDocName)
+    fi
+    cmakeDefaultFlags+=("-DCMAKE_INSTALL_DOCDIR=${!outputDoc}/share/doc/${shareDocName}")
 
     local flagsArray=()
     concatTo flagsArray cmakeDefaultFlags cmakeFlags cmakeFlagsArray
