@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
     substituteInPlace t/200-shell/nonshelltest.do \
       --replace-fail "/usr/bin/env perl" "${perl}/bin/perl"
 
+    # See https://github.com/apenwarr/redo/pull/47
+    substituteInPlace minimal/do \
+      --replace-fail 'cd "$dodir"' 'cd "''${dodir:-.}"'
   '';
 
   inherit doCheck;
