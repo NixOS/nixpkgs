@@ -24,6 +24,7 @@
   alsa-lib,
   makeWrapper,
   replaceVars,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -85,6 +86,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/android-translation-layer \
       --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) android-translation-layer;
+  };
 
   meta = {
     description = "Translation layer that allows running Android apps on a Linux system";
