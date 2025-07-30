@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-ndk";
-  version = "3.5.7";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "cargo-ndk";
     rev = "v${version}";
-    sha256 = "sha256-tzjiq1jjluWqTl+8MhzFs47VRp3jIRJ7EOLhUP8ydbM=";
+    sha256 = "sha256-laHRXy0eYDniDH9g0Bwnmd7NOSmuy+OFaqUd9YEsslc=";
   };
 
-  cargoHash = "sha256-Kt4GLvbGK42RjivLpL5W5z5YBfDP5B83mCulWz6Bisw=";
+  cargoHash = "sha256-bppnSgwMGku6tRC9wxvOVaNGN8Jua64hPikzgk9SlYI=";
 
   meta = with lib; {
     description = "Cargo extension for building Android NDK projects";
