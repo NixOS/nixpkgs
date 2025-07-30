@@ -108,10 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     wayland-scanner
-    # For `libdisplay-info`
-    python3
-    hwdata
-    v4l-utils
+
     # For OpenVR
     cmake
 
@@ -121,6 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
+
+    # For `libdisplay-info`
+    python3
+    hwdata
+    v4l-utils
   ];
 
   buildInputs = [
@@ -130,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     vulkan-loader
-    luajit
   ]
   ++ lib.optionals enableWsi [
     vulkan-headers
@@ -160,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       pixman
       libcap
       lcms
+      luajit
     ]
   );
 
