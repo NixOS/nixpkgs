@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-hX5u+AD+qiu0V4+8gQIUvl08iLBy6lPFOEczqWVzcyk=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "portability.patch";
+      url = "https://lore.kernel.org/linux-ext4/20250722194053.GO2672022@frogsfrogsfrogs/raw";
+      hash = "sha256-8I5bBZB9VA8wHXYJc8f9xSVBs1cTzj+5+4fVY/Ojvxw=";
+    })
+  ];
+
   # fuse2fs adds 14mb of dependencies
   outputs = [
     "bin"
