@@ -39,6 +39,7 @@ let
       bignums = callPackage ../development/rocq-modules/bignums { };
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
+      rocq-navi = callPackage ../development/rocq-modules/rocq-navi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;

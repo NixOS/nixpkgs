@@ -193,6 +193,7 @@ let
       reglang = callPackage ../development/coq-modules/reglang { };
       relation-algebra = callPackage ../development/coq-modules/relation-algebra { };
       rewriter = callPackage ../development/coq-modules/rewriter { };
+      rocqnavi = callPackage ../development/rocq-modules/rocq-navi { };
       RustExtraction = callPackage ../development/coq-modules/RustExtraction { };
       semantics = callPackage ../development/coq-modules/semantics { };
       serapi = callPackage ../development/coq-modules/serapi { };
