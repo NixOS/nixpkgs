@@ -275,7 +275,7 @@ in
 
           LIVEKIT_API_URL = mkOption {
             type = types.nullOr types.str;
-            default = if cfg.enableNginx && cfg.livekit.enable then "http://${cfg.domain}/livekit" else null;
+            default = if cfg.enableNginx && cfg.livekit.enable then "https://${cfg.domain}/livekit" else null;
             defaultText = lib.literalExpression ''
               if cfg.enableNginx && cfg.livekit.enable then
                 "https://$${cfg.domain}/livekit"
