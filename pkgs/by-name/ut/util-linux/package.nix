@@ -45,8 +45,6 @@ stdenv.mkDerivation (finalPackage: rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     (fetchurl {
       name = "bits-only-build-when-cpu_set_t-is-available.patch";
       url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
@@ -138,12 +136,10 @@ stdenv.mkDerivation (finalPackage: rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     autoconf
     automake116x
+    installShellFiles
+    pkg-config
   ]
   ++ lib.optionals translateManpages [ po4a ]
   ++ lib.optionals (cryptsetupSupport == "dlopen") [ cryptsetup ];
