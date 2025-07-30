@@ -1226,7 +1226,6 @@ in
     _module.args.socket = false;
     _module.args.listenTcp = false;
   };
-  private-gpt = runTest ./private-gpt.nix;
   privatebin = runTest ./privatebin.nix;
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };
