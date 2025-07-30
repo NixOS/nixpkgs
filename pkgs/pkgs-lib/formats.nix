@@ -898,14 +898,13 @@ rec {
           pkgs.callPackage (
             {
               runCommand,
-              python3,
               libxml2Python,
+              python3Packages,
             }:
             runCommand name
               {
                 nativeBuildInputs = [
-                  python3
-                  python3.pkgs.xmltodict
+                  python3Packages.xmltodict
                   libxml2Python
                 ];
                 value = builtins.toJSON value;

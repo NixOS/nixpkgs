@@ -192,7 +192,7 @@ in
                             "NOINTERCEPT"
                           ]);
                         description = ''
-                          Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/docs/man/1.9.15/sudoers.man/#Tag_Spec).
+                          Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/docs/man/1.9.17/sudoers.man/#Tag_Spec).
                         '';
                         default = [ ];
                       };
