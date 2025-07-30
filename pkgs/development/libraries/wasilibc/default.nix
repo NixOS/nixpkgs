@@ -1,23 +1,19 @@
 {
   stdenv,
-  buildPackages,
   fetchFromGitHub,
   lib,
   firefox-unwrapped,
   firefox-esr-unwrapped,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasilibc";
-  version = "27-unstable-2025-07-27";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "27";
 
-  src = buildPackages.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "3f7eb4c7d6ede4dde3c4bffa6ed14e8d656fe93f";
+    tag = "wasi-sdk-${finalAttrs.version}";
     hash = "sha256-RIjph1XdYc1aGywKks5JApcLajbNFEuWm+Wy/GMHddg=";
     fetchSubmodules = true;
   };
@@ -44,10 +40,7 @@ stdenv.mkDerivation {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773200
-      "BULK_MEMORY_SOURCES:="
     )
-
   '';
 
   enableParallelBuilding = true;
@@ -64,13 +57,14 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${version}";
+    changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${finalAttrs.version}";
     description = "WASI libc implementation for WebAssembly";
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
     maintainers = with maintainers; [
       matthewbauer
       rvolosatovs
+      wucke13
     ];
     license = with licenses; [
       asl20
@@ -78,4 +72,4 @@ stdenv.mkDerivation {
       mit
     ];
   };
-}
+})
