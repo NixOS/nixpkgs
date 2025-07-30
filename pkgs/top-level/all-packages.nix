@@ -5870,6 +5870,7 @@ with pkgs;
     cargo-auditable-cargo-wrapper
     clippy
     rustc
+    rustc-unwrapped
     rustPlatform
     ;
 
