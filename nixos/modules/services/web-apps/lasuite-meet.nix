@@ -278,7 +278,7 @@ in
             default = if cfg.enableNginx && cfg.livekit.enable then "http://${cfg.domain}/livekit" else null;
             defaultText = lib.literalExpression ''
               if cfg.enableNginx && cfg.livekit.enable then
-                "http://$${cfg.domain}/livekit"
+                "https://$${cfg.domain}/livekit"
               else
                 null
             '';
