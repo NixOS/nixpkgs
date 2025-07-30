@@ -19,7 +19,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "piper";
+  pname = "piper-tts";
   version = "2023.11.14-2";
 
   src = fetchFromGitHub {
@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit piper-train;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
     description = "Fast, local neural text to speech system";
     homepage = "https://github.com/rhasspy/piper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "piper";
   };
 })

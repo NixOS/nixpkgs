@@ -1,6 +1,7 @@
 {
   comma,
   fetchFromGitHub,
+  installShellFiles,
   fzy,
   lib,
   nix-index-unwrapped,
@@ -11,16 +12,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comma";
-  version = "2.3.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
     rev = "v${version}";
-    hash = "sha256-JogC9NIS71GyimpqmX2/dhBX1IucK395iWZVVabZxiE=";
+    hash = "sha256-dNek1a8Yt3icWc8ZpVe1NGuG+eSoTDOmAAJbkYmMocU=";
   };
 
-  cargoHash = "sha256-Cd4WaOG+OkCM4Q1K9qVzMYOjSi9U8W82JypqUN20x9w=";
+  cargoHash = "sha256-SJBfWjOVrv2WMIh/cQbaFK8jn3oSbmJpdJM7pkJppDs=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postPatch = ''
     substituteInPlace ./src/main.rs \
@@ -33,20 +36,21 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     ln -s $out/bin/comma $out/bin/,
 
-    mkdir -p $out/etc/profile.d
-    mkdir -p $out/etc/nushell
-    mkdir -p $out/etc/fish/functions
+    mkdir -p $out/share/comma
 
-    cp $src/etc/comma-command-not-found.sh $out/etc/profile.d
-    cp $src/etc/comma-command-not-found.nu $out/etc/nushell
-    cp $src/etc/comma-command-not-found.fish $out/etc/fish/functions
+    cp $src/etc/command-not-found.sh $out/share/comma
+    cp $src/etc/command-not-found.nu $out/share/comma
+    cp $src/etc/command-not-found.fish $out/share/comma
 
-    patchShebangs $out/etc/profile.d/comma-command-not-found.sh
+    patchShebangs $out/share/comma/command-not-found.sh
     substituteInPlace \
-      "$out/etc/profile.d/comma-command-not-found.sh" \
-      "$out/etc/nushell/comma-command-not-found.nu" \
-      "$out/etc/fish/functions/comma-command-not-found.fish" \
+      "$out/share/comma/command-not-found.sh" \
+      "$out/share/comma/command-not-found.nu" \
+      "$out/share/comma/command-not-found.fish" \
       --replace-fail "comma --ask" "$out/bin/comma --ask"
+
+    "$out/bin/comma" --mangen > comma.1
+    installManPage comma.1
   '';
 
   passthru.tests = {

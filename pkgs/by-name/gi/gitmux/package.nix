@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitmux";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "arl";
     repo = "gitmux";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0Cw98hTg8qPu7BUTBDEgFBOpoCxstPW9HeNXQUUjgGA=";
+    sha256 = "sha256-Jw2yl95vCQ5JcRGvBeLlGuAagTHUf+IEF7XvzehcMvU=";
   };
 
-  vendorHash = "sha256-PHY020MIuLlC1LqNGyBJRNd7J+SzoHbNMPAil7CKP/M=";
+  vendorHash = "sha256-MvvJGB9KPMYeqYclmAAF6qlU7vrJFMPToogbGDRoCpU=";
 
   nativeCheckInputs = [ git ];
 

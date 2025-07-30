@@ -2112,8 +2112,6 @@ with pkgs;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
   };
 
-  f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
-
   fast-cli = nodePackages.fast-cli;
 
   ### TOOLS/TYPESETTING/TEX
@@ -4080,9 +4078,6 @@ with pkgs;
   };
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
-
-  piper-train = callPackage ../tools/audio/piper/train.nix { };
-  piper-tts = callPackage ../tools/audio/piper { };
 
   phosh = callPackage ../applications/window-managers/phosh { };
 
@@ -9635,17 +9630,19 @@ with pkgs;
     wine = wineWowPackages.staging;
   };
 
-  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
+  inherit (callPackage ../development/libraries/vtk { }) vtk_9_5;
+
+  vtk = vtk_9_5;
+
+  vtk-full = vtk.override {
+    qtVersion = "6";
+    mpiSupport = true;
+    pythonSupport = true;
   };
 
-  vtk_9_withQt5 = vtk_9.override { enableQt = true; };
+  vtkWithQt5 = vtk.override { qtVersion = "5"; };
 
-  vtk = vtk_9;
-
-  vtk_9_egl = vtk_9.override { enableEgl = true; };
-
-  vtkWithQt5 = vtk_9_withQt5;
+  vtkWithQt6 = vtk.override { qtVersion = "6"; };
 
   vulkan-caps-viewer = libsForQt5.callPackage ../tools/graphics/vulkan-caps-viewer { };
 
@@ -12806,8 +12803,6 @@ with pkgs;
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
-  kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
   kubectl-view-allocations =
@@ -16050,7 +16045,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_29;
+    nix = nixVersions.nix_2_30;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

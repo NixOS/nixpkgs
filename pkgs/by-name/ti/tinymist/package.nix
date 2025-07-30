@@ -15,16 +15,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.13.14";
+  version = "0.13.16";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CTZhMbXLL13ybKFC34LArE/OXGfrAnXKXM79DP8ct60=";
+    hash = "sha256-4ffFIqF+UYFKTl4dQadr2mCKDYnpIdaKKBQ/tXonfAA=";
   };
 
-  cargoHash = "sha256-aD50+awwVds9zwW5hM0Hgxv8NGV7J63BOSpU9907O+k=";
+  cargoHash = "sha256-cQTfyzvnrxdcYOnmJGAqwLN4Ueqh9PkYZsiGljmcrY8=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -4,22 +4,21 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
-  openssl,
   zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tui-journal";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
     rev = "v${version}";
-    hash = "sha256-hZpS0r3ky18XtDj4x8croKAZ+css1NmVy98NUuhtR/s=";
+    hash = "sha256-crrh7lV5ZMKaxsrFmhXsUgBMbN5nmbf8wQ6croTqUKI=";
   };
 
-  cargoHash = "sha256-XsrHNzTiYWqTDV9+soY5oC4UoE5OBC7Ow7qir2dKV/A=";
+  cargoHash = "sha256-PmQDLGOXvI0OJ+gMsYa/XLc0WgSH6++23X/b1+iU3JQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +26,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-    openssl
     zlib
   ];
 

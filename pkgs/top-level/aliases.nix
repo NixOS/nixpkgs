@@ -666,6 +666,7 @@ mapAliases {
 
   ### F ###
 
+  f3d_egl = lib.warnOnInstantiate "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # added 2025-07-18
   factor-lang-scope = throw "'factor-lang-scope' has been renamed to 'factorPackages'"; # added 2024-11-28
   fahcontrol = throw "fahcontrol has been removed because the download is no longer available"; # added 2024-09-24
   fahviewer = throw "fahviewer has been removed because the download is no longer available"; # added 2024-09-24
@@ -2123,6 +2124,9 @@ mapAliases {
   vocal = throw "'vocal' has been archived upstream. Consider using 'gnome-podcasts' or 'kasts' instead."; # Added 2025-04-12
   void = throw "'void' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
+  vtk_9 = lib.warnOnInstantiate "'vtk_9' has been renamed to 'vtk_9_5'" vtk_9_5; # Added 2025-07-18
+  vtk_9_egl = lib.warnOnInstantiate "'vtk_9_5' now build with egl support by default, so `vtk_9_egl` is deprecated, consider using 'vtk_9_5' instead." vtk_9_5; # Added 2025-07-18
+  vtk_9_withQt5 = throw "'vtk_9_withQt5' has been removed, Consider using 'vtkWithQt5' instead." vtkWithQt5; # Added 2025-07-18
   vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
