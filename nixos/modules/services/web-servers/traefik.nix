@@ -87,6 +87,15 @@ in
       };
     };
 
+    plugins = mkOption {
+      default = [ ];
+      type = types.listOf types.package;
+      example = lib.literalExpression "[ pkgs.fosrl-badger ]";
+      description = ''
+        List of plugins to be added to the `localPlugins` attribute in the static configuration. These plugins are usually packaged in Nixpkgs, and are managed by Nix.
+      '';
+    };
+
     dataDir = mkOption {
       default = "/var/lib/traefik";
       type = types.path;
@@ -119,6 +128,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.traefik.staticConfigOptions.experimental.localPlugins = listToAttrs (
+      map (plugin: nameValuePair plugin.pname { inherit (plugin) moduleName; }) cfg.plugins
+    );
+
     systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
 
     systemd.services.traefik = {
@@ -130,12 +143,25 @@ in
       startLimitBurst = 5;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = lib.optional (cfg.environmentFiles != [ ]) (
-          pkgs.writeShellScript "pre-start" ''
-            umask 077
-            ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          ''
-        );
+        ExecStartPre =
+          optional (cfg.plugins != [ ]) (
+            let
+              pluginsJoined = pkgs.symlinkJoin {
+                name = "traefik-plugins";
+                paths = cfg.plugins;
+              };
+            in
+            pkgs.writeShellScript "traefik-pre-start-plugins" ''
+              umask 077
+              ${getExe' pkgs.coreutils "ln"} -s ${pluginsJoined} plugins-local
+            ''
+          )
+          ++ optional (cfg.environmentFiles != [ ]) (
+            pkgs.writeShellScript "traefik-pre-start-envsubst" ''
+              umask 077
+              ${getExe pkgs.envsubst} -i "${staticConfigFile}" > "${finalStaticConfigFile}"
+            ''
+          );
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";
