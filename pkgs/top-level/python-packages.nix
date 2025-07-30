@@ -4352,6 +4352,8 @@ self: super: with self; {
 
   ds-store = callPackage ../development/python-modules/ds-store { };
 
+  ds-xbom-lib = callPackage ../development/python-modules/ds-xbom-lib { };
+
   ds4drv = callPackage ../development/python-modules/ds4drv { };
 
   dscribe = callPackage ../development/python-modules/dscribe { };
