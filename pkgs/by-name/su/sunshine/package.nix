@@ -56,13 +56,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "2025.628.4510";
+  version = "2025.730.31216";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${version}";
-    hash = "sha256-xNWFo6a4YrJ+tBFTSReoAEi1oZ4DSguBEusizWeWKYY=";
+    hash = "sha256-UsOwg/BgZT+T1mmVg+By9emx+79t4Bd8eeOw3/iqBCQ=";
     fetchSubmodules = true;
   };
 
@@ -70,7 +70,7 @@ stdenv'.mkDerivation rec {
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-kUixeLf8prsWQolg1v+vJ5rvwKZOsU+88+0hVOgTZ0A=";
+    npmDepsHash = "sha256-CrGm1ElAzyyTErAwTt9r3p0tnPV8EDUA4BiK+9Ld5Dg=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
