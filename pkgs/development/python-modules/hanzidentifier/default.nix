@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hanzidentifier" ];
 
   meta = {
-    description = "A Python module that identifies Chinese text as being Simplified or Traditional";
+    description = "Python module that identifies Chinese text as being Simplified or Traditional";
     homepage = "https://github.com/tsroten/hanzidentifier";
     changelog = "https://github.com/tsroten/hanzidentifier/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;

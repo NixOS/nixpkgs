@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "The parser for the manifest files in the ament buildsystem";
+    description = "Parser for the manifest files in the ament buildsystem";
     homepage = "https://github.com/ament/ament_package";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];

@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lasuite" ];
 
   meta = {
-    description = "The common library for La Suite Django projects and Proconnected Django projects";
+    description = "Common library for La Suite Django projects and Proconnected Django projects";
     homepage = "https://github.com/suitenumerique/django-lasuite";
     changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

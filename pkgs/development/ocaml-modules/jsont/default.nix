@@ -31,7 +31,7 @@ buildTopkgPackage rec {
   ];
 
   meta = {
-    description = "declarative JSON data manipulation";
+    description = "Declarative JSON data manipulation";
     longDescription = ''
       Jsont is an OCaml library for declarative JSON data manipulation. it
       provides:

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-xg9tBBo3Al8x0HkgRnfdZybcjaHsNMv/Ot3NwGiHkBg=";
 
   meta = {
-    description = "tags for markdown file";
+    description = "Tags for markdown file";
     homepage = "https://github.com/wsdjeg/mdctags.rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];

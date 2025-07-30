@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A hatch plugin to develop and package Odoo projects";
+    description = "Hatch plugin to develop and package Odoo projects";
     homepage = "https://github.com/acsone/hatch-odoo";
     license = licenses.mit;
     maintainers = with maintainers; [ yajo ];

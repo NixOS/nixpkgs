@@ -51,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tree_sitter_sql" ];
 
   meta = {
-    description = "sql grammar for tree-sitter";
+    description = "Sql grammar for tree-sitter";
     homepage = "https://github.com/DerekStride/tree-sitter-sql";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
