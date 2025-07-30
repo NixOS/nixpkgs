@@ -263,6 +263,7 @@ let
         coin = callPackage ../development/ocaml-modules/coin { };
 
         colombe = callPackage ../development/ocaml-modules/colombe { };
+        sendmail = callPackage ../development/ocaml-modules/colombe/sendmail.nix { };
 
         color = callPackage ../development/ocaml-modules/color { };
 
