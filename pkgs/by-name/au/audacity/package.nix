@@ -70,6 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kESKpIke9Xi4A55i3mUu1JkDjp8voBJBixiAK8pUkKA=";
   };
 
+  patches = [
+    # Introduced by https://github.com/Tencent/rapidjson/commit/b1c0c2843fcb2aca9ecc650fc035c57ffc13697c#diff-2f1bcf2729ff7c408adb0c2cc2cfa01602bd5646b05b3e4bc7e46b606035d249R21
+    ./rapidjson.patch
+  ];
+
   postPatch = ''
     mkdir src/private
     substituteInPlace scripts/build/macOS/fix_bundle.py \
