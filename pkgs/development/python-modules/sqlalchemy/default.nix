@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
+  nix-update-script,
 
   # build
   cython,
@@ -108,6 +109,13 @@ buildPythonPackage rec {
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "([0-9.]+)"
+    ];
+  };
 
   meta = with lib; {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
