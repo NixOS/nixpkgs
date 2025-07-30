@@ -1953,6 +1953,8 @@ let
 
         semver = callPackage ../development/ocaml-modules/semver { };
 
+        sendmail = callPackage ../development/ocaml-modules/colombe/sendmail.nix { };
+
         seq = callPackage ../development/ocaml-modules/seq { };
 
         seqes = callPackage ../development/ocaml-modules/seqes { };
