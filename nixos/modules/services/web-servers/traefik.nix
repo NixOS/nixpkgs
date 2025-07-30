@@ -15,6 +15,7 @@ let
     path
     str
     submodule
+    package
     ;
   inherit (lib)
     attrByPath
@@ -22,6 +23,7 @@ let
     concatStringsSep
     filter
     getExe
+    id
     literalExpression
     maintainers
     mapAttrs'
@@ -249,6 +251,14 @@ in
         };
       };
     };
+    localPlugins = mkOption {
+      default = [ ];
+      type = listOf package;
+      example = literalExpression "[ pkgs.fosrl-badger pkgs.geoblock ]";
+      description = ''
+        List of local plugins to be added to the `localPlugins` attribute in the static configuration. These plugins are usually packaged in Nixpkgs, and are managed by Nix.
+      '';
+    };
 
     dataDir = mkOption {
       default = "/var/lib/traefik";
@@ -405,6 +415,15 @@ in
               remove ./traefik.nix (map (attr: attr.file) opt.dynamic.settings.definitionsWithLocations)
             )
           }
+      ''
+      ++ optional (!builtins.all id (map (plugin: plugin._isTraefikPlugin or false) cfg.localPlugins)) ''
+        Some of the Traefik local plugins in 'services.traefik.localPlugins' may be misconfigured.
+        The following paths are built from derivations that do not have the '_isTraefikPlugin' attribute set to 'true':
+        - ${
+          concatMapStringsSep "\n- " (badPlugin: badPlugin.outPath) (
+            filter (plugin: plugin._isTraefikPlugin or false) cfg.localPlugins
+          )
+        }
       '';
 
     # https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
@@ -418,13 +437,22 @@ in
       dynamic.files = mkIf (!(isDefault "static.file")) {
         "custom-migrated".settings = cfg.dynamic.settings;
       };
-      static.settings = mkIf (cfg.dynamic.dir != null || !(isDefault "dynamic.file")) {
-        providers.file = {
-          directory = mkIf (cfg.dynamic.dir != null) cfg.dynamic.dir;
-          filename = mkIf (!(isDefault "dynamic.file")) cfg.dynamic.file;
-          watch = mkDefault true;
-        };
-      };
+      static.settings = mkMerge [
+
+        (mkIf (cfg.localPlugins != [ ]) {
+          experimental.localPlugins = lib.listToAttrs (
+            map (plugin: lib.nameValuePair plugin.plugin { inherit (plugin) moduleName; }) cfg.localPlugins
+          );
+        })
+
+        (mkIf (cfg.dynamic.dir != null || !(isDefault "dynamic.file")) {
+          providers.file = {
+            directory = mkIf (cfg.dynamic.dir != null) cfg.dynamic.dir;
+            filename = mkIf (!(isDefault "dynamic.file")) cfg.dynamic.file;
+            watch = mkDefault true;
+          };
+        })
+      ];
     };
 
     systemd.services.traefik = {
@@ -437,6 +465,18 @@ in
       unitConfig.Documentation = "https://doc.traefik.io/traefik/";
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
+        # ExecStartPre = mkIf (cfg.localPlugins != [ ]) (
+        #   pkgs.writeShellScript "traefik-pre-start-ln-plugins" ''
+        #     ${lib.getExe' pkgs.coreutils "ln"} -Tsf ${
+        #       toString (
+        #         pkgs.symlinkJoin {
+        #           name = "traefik-plugins";
+        #           paths = cfg.localPlugins;
+        #         }
+        #       )
+        #     } plugins-local
+        #   ''
+        # );
         ExecStart = "${getExe cfg.package} --configfile=${staticFile}";
         Type = "notify";
         User = cfg.user;
@@ -488,6 +528,20 @@ in
           }
         ) cfg.dynamic.files)
       ))
+      mkIf
+      (cfg.localPlugins != [ ])
+      {
+        "${cfg.dataDir}/plugins-local"."L+" = {
+          inherit (cfg) user group;
+          mode = "0700";
+          argument = toString (
+            pkgs.symlinkJoin {
+              name = "traefik-plugins";
+              paths = cfg.localPlugins;
+            }
+          );
+        };
+      }
     ];
 
     users = {
