@@ -15754,6 +15754,8 @@ self: super: with self; {
 
   robomachine = callPackage ../development/python-modules/robomachine { };
 
+  robot-descriptions = callPackage ../development/python-modules/robot-descriptions { };
+
   robot-detection = callPackage ../development/python-modules/robot-detection { };
 
   robotframework = callPackage ../development/python-modules/robotframework { };
