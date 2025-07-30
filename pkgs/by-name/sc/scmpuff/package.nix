@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "scmpuff";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = "scmpuff";
     rev = "v${version}";
-    sha256 = "sha256-+L0W+M8sZdUSCWj9Ftft1gkRRfWMHdxon2xNnotx8Xs=";
+    sha256 = "sha256-c8F7BgjbR/w2JH8lE2t93s8gj6cWbTQGIkgYTQp9R3U=";
   };
 
-  vendorHash = "sha256-7WHVSEz3y1nxWfbxkzkfHhINLC8+snmWknHyUUpNy7c=";
+  vendorHash = "sha256-7xSMToc5rlxogS0N9H6siauu8i33zUA5/omqXAszDOg=";
 
   ldflags = [
     "-s"
