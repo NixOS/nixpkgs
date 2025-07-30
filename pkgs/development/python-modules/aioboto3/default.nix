@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "14.3.0";
+  version = "15.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "terrycain";
+    owner = "terricain";
     repo = "aioboto3";
     tag = "v${version}";
-    hash = "sha256-3GdTpbU0uEEzezQPHJTGPB42Qu604eIhcIAP4rZMQiY=";
+    hash = "sha256-Z4tUwTFaXC3BGUKc1FPY0xoaUViAEiZNeP5REWotw2M=";
   };
 
   pythonRelaxDeps = [
@@ -63,8 +63,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";
-    homepage = "https://github.com/terrycain/aioboto3";
-    changelog = "https://github.com/terrycain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
+    homepage = "https://github.com/terricain/aioboto3";
+    changelog = "https://github.com/terricain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mbalatsko ];
   };
