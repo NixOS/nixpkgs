@@ -4014,7 +4014,8 @@
       ];
     "nsw_fuel_station" =
       ps: with ps; [
-      ]; # missing inputs: nsw-fuel-api-client
+        nsw-fuel-api-client
+      ];
     "nsw_rural_fire_service_feed" =
       ps: with ps; [
         aio-geojson-nsw-rfs-incidents
@@ -7372,6 +7373,7 @@
     "notify"
     "notify_events"
     "notion"
+    "nsw_fuel_station"
     "nsw_rural_fire_service_feed"
     "ntfy"
     "nuheat"
