@@ -262,6 +262,8 @@ let
 
         coin = callPackage ../development/ocaml-modules/coin { };
 
+        colombe = callPackage ../development/ocaml-modules/colombe { };
+
         color = callPackage ../development/ocaml-modules/color { };
 
         colors = callPackage ../development/ocaml-modules/colors { };
