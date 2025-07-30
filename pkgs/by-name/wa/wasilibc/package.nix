@@ -4,6 +4,7 @@
   lib,
   firefox-unwrapped,
   firefox-esr-unwrapped,
+  enablePosixThreads ? false,
 }:
 
 stdenvNoLibc.mkDerivation (finalAttrs: {
@@ -40,6 +41,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
+      ${lib.strings.optionalString enablePosixThreads "THREAD_MODEL:=posix"}
     )
   '';
 
