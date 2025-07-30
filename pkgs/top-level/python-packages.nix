@@ -19662,6 +19662,8 @@ self: super: with self; {
 
   winsspi = callPackage ../development/python-modules/winsspi { };
 
+  wirelesstagpy = callPackage ../development/python-modules/wirelesstagpy { };
+
   wirerope = callPackage ../development/python-modules/wirerope { };
 
   withings-api = callPackage ../development/python-modules/withings-api { };
