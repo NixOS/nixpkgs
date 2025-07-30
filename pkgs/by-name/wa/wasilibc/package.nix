@@ -8,7 +8,7 @@
 
 let
   pname = "wasilibc";
-  version = "22-unstable-2024-10-16";
+  version = "27-unstable-2025-07-27";
 in
 stdenvNoLibc.mkDerivation {
   inherit pname version;
@@ -16,8 +16,8 @@ stdenvNoLibc.mkDerivation {
   src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "98897e29fcfc81e2b12e487e4154ac99188330c4";
-    hash = "sha256-NFKhMJj/quvN3mR7lmxzA9w46KhX92iG0rQA9qDeS8I=";
+    rev = "3f7eb4c7d6ede4dde3c4bffa6ed14e8d656fe93f";
+    hash = "sha256-RIjph1XdYc1aGywKks5JApcLajbNFEuWm+Wy/GMHddg=";
     fetchSubmodules = true;
   };
 
@@ -31,6 +31,7 @@ stdenvNoLibc.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-Werror" ""
+    patchShebangs scripts/
   '';
 
   preBuild = ''
