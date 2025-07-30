@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchurl,
+  fetchpatch,
   pkg-config,
   libuuid,
   gettext,
@@ -23,6 +24,16 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
     hash = "sha256-hX5u+AD+qiu0V4+8gQIUvl08iLBy6lPFOEczqWVzcyk=";
   };
+
+  patches = [
+    # Upstream patch that fixes musl build (and probably others).
+    # Should be included in next release after 1.47.3.
+    (fetchpatch {
+      name = "stdio-portability.patch";
+      url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/patch/?id=f79abd8554e600eacc2a7c864a8332b670c9e262";
+      hash = "sha256-zZ7zmSMTwGyS3X3b/D/mVG0bV2ul5xtY5DJx9YUvQO8=";
+    })
+  ];
 
   # fuse2fs adds 14mb of dependencies
   outputs = [
