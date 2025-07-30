@@ -1,3 +1,5 @@
+# how to use
+# nix-update -u librewolf-unwrapped
 {
   writeScript,
   lib,
