@@ -27,16 +27,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.0.30";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mhscs7yv3/FmJ/v1W0xcHya82ztrYGVULrtMyq4W4BY=";
+    hash = "sha256-LzQsx7b//C90w2nqDIR0AexRuD58tjiwL/KIzBrF5M4=";
   };
 
-  cargoHash = "sha256-TNmeu0nQHTFnbe7CY5b58ysN6+iMD6yFTktr4gjKNY0=";
+  cargoHash = "sha256-ENuNt6rr039iiUqj9eK5trEdZLvaI0CZr33j7D+X3oA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -76,6 +76,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=providers::factory::tests::test_create_lead_worker_provider"
     "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
     "--skip=providers::factory::tests::test_lead_model_env_vars_with_defaults"
+    # need network access
+    "--skip=test_concurrent_access"
+    "--skip=test_model_not_in_openrouter"
+    "--skip=test_pricing_cache_performance"
+    "--skip=test_pricing_refresh"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=providers::gcpauth::tests::test_load_from_metadata_server"
