@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "tlsclient command line utility";
+    description = "Command line utility";
     longDescription = "unix port of 9front's tlsclient(1) and rcpu(1)";
     homepage = "https://git.sr.ht/~moody/tlsclient";
     license = licenses.mit;

@@ -152,7 +152,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
+    description = ", a decentralized, fault-tolerant, distributed storage system";
     mainProgram = "tahoe";
     longDescription = ''
       Tahoe-LAFS is a secure, decentralized, fault-tolerant filesystem.

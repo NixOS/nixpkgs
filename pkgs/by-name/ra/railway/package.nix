@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     mainProgram = "railway";
-    description = "Railway.app CLI";
+    description = ".app CLI";
     homepage = "https://github.com/railwayapp/cli";
     changelog = "https://github.com/railwayapp/cli/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -135,7 +135,7 @@ let
       '';
 
       meta = with lib; {
-        description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
+        description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C";
         homepage = "https://haxe.org";
         license = with licenses; [
           gpl2Plus

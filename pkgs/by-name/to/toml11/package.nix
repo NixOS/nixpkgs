@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/ToruNiina/toml11";
-    description = "TOML for Modern C++";
+    description = "TOML for Modern C";
     longDescription = ''
       toml11 is a C++11 (or later) header-only toml parser/encoder depending
       only on C++ standard library.

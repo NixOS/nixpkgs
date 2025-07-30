@@ -84,7 +84,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://fonts.google.com/specimen/Rubik";
-    description = "Rubik Font - is a 5 weight Roman + Italic family";
+    description = "Font - is a 5 weight Roman + Italic family";
     longDescription = ''
       The Rubik Fonts project was initiated as part of the Chrome CubeLab
       project.

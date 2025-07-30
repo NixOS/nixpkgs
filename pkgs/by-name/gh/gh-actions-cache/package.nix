@@ -27,7 +27,7 @@ buildGoModule rec {
   env.GH_TOKEN = "dummy-token-to-facilitate-rest-client";
 
   meta = {
-    description = "gh extension to manage GitHub Actions caches";
+    description = "'gh' extension to manage GitHub Actions caches";
     homepage = "https://github.com/actions/gh-actions-cache";
     changelog = "https://github.com/actions/gh-actions-cache/releases/tag/${src.rev}";
     license = lib.licenses.mit;

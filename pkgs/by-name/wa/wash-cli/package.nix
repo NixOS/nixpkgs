@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "wasmCloud Shell (wash) CLI tool";
+    description = "WasmCloud Shell (wash) CLI tool";
     homepage = "https://wasmcloud.com/";
     mainProgram = "wash";
     license = licenses.asl20;

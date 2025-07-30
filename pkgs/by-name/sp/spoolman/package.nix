@@ -73,7 +73,7 @@ python.pkgs.buildPythonPackage rec {
     '';
 
   meta = common.meta // {
-    description = "Spoolman server";
+    description = "Server";
     mainProgram = "spoolman";
   };
 }

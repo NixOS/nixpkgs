@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "oneAPI Level Zero Specification Headers and Loader";
+    description = "OneAPI Level Zero Specification Headers and Loader";
     homepage = "https://github.com/oneapi-src/level-zero";
     changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;

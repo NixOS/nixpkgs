@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Surrealist is the ultimate way to visually manage your SurrealDB database";
+    description = "The ultimate way to visually manage your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
     license = licenses.mit;
     mainProgram = "surrealist";

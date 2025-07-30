@@ -81,7 +81,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/icloud-photos-downloader/icloud_photos_downloader";
-    description = "iCloud Photos Downloader";
+    description = "ICloud Photos Downloader";
     license = licenses.mit;
     mainProgram = "icloudpd";
     maintainers = with maintainers; [

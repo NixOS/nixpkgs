@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "oneAPI Video Processing Library Intel GPU implementation";
+    description = "OneAPI Video Processing Library Intel GPU implementation";
     homepage = "https://github.com/intel/vpl-gpu-rt";
     changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${src.rev}";
     license = [ lib.licenses.mit ];

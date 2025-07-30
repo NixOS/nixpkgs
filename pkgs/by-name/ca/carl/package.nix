@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-kzHMjrLCiiMLMTSozKq5jMWq3rGb+xsXhZoOuod7qGE=";
 
   meta = {
-    description = "cal(1) with more features and written in rust";
+    description = "'cal' with more features and written in rust";
     longDescription = ''
       Carl is a calendar for the commandline. It tries to mimic the various cal(1)
       implementations out there, but also adds enhanced features like colors and ical

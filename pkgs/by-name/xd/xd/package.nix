@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "i2p bittorrent client";
+    description = "I2p bittorrent client";
     homepage = "https://xd-torrent.github.io";
     maintainers = with maintainers; [ nixbitcoin ];
     license = licenses.mit;

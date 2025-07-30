@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mpeg5/xevd";
-    description = "eXtra-fast Essential Video Decoder, MPEG-5 EVC";
+    description = "EXtra-fast Essential Video Decoder, MPEG-5 EVC";
     license = lib.licenses.bsd3;
     mainProgram = "xevd_app";
     pkgConfigModules = [ "xevd" ];

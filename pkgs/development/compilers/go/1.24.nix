@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
-    description = "Go Programming language";
+    description = "Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     teams = [ teams.golang ];

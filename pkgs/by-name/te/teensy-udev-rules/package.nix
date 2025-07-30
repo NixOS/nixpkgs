@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.pjrc.com/teensy/00-teensy.rules";
-    description = "udev rules for the Teensy microcontrollers";
+    description = "Udev rules for the Teensy microcontrollers";
     longDescription = ''
       udev rules that give non-root users permission to communicate with the
       Teensy family of microcontrolers.

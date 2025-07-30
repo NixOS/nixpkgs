@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Health tracking app for the GNOME desktop";
+    description = "Tracking app for the GNOME desktop";
     homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
     license = licenses.gpl3Plus;
     mainProgram = "dev.Cogitri.Health";

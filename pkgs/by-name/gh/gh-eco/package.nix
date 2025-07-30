@@ -27,7 +27,7 @@ buildGoModule {
 
   meta = {
     homepage = "https://github.com/coloradocolby/gh-eco";
-    description = "gh extension to explore the ecosystem";
+    description = "'gh' extension to explore the ecosystem";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ helium ];
     mainProgram = "gh-eco";

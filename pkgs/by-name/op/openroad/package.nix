@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "OpenROAD's unified application implementing an RTL-to-GDS flow";
+    description = "'s unified application implementing an RTL-to-GDS flow";
     homepage = "https://theopenroadproject.org";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

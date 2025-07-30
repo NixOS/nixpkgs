@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
+    description = "X86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;

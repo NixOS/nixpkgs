@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ bzip2 ];
 
   meta = {
-    description = "mdbook backend for generating an e-book in the EPUB format";
+    description = "Mdbook backend for generating an e-book in the EPUB format";
     mainProgram = "mdbook-epub";
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
     license = lib.licenses.mpl20;

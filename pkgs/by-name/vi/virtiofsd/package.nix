@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
-    description = "vhost-user virtio-fs device backend written in Rust";
+    description = "Vhost-user virtio-fs device backend written in Rust";
     maintainers = with maintainers; [
       qyliss
       astro

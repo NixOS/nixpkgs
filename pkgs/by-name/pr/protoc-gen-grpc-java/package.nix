@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "gRPC Java Codegen Plugin for Protobuf Compiler";
+    description = "GRPC Java Codegen Plugin for Protobuf Compiler";
     longDescription = ''
       This generates the Java interfaces out of the service definition from a `.proto` file.
       It works with the Protobuf Compiler (`protoc`).

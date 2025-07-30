@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/google/crc32c";
-    description = "CRC32C implementation with support for CPU-specific acceleration instructions";
+    description = "Implementation with support for CPU-specific acceleration instructions";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ cpcloud ];
   };

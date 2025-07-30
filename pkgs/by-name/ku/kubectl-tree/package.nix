@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-iblEfpYOvTjd3YXQ3Mmj5XckivHoXf4336H+F7NEfBA=";
 
   meta = {
-    description = "kubectl plugin to browse Kubernetes object hierarchies as a tree";
+    description = "Kubectl plugin to browse Kubernetes object hierarchies as a tree";
     mainProgram = "kubectl-tree";
     homepage = "https://github.com/ahmetb/kubectl-tree";
     changelog = "https://github.com/ahmetb/kubectl-tree/releases/tag/v${version}";

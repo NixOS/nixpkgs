@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "srt live server for low latency";
+    description = "Srt live server for low latency";
     license = licenses.mit;
     homepage = "https://github.com/Edward-Wu/srt-live-server";
     maintainers = with maintainers; [ shamilton ];

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";
-    description = "xdg-desktop-portal backend for wlroots";
+    description = "Xdg-desktop-portal backend for wlroots";
     maintainers = with maintainers; [ minijackson ];
     platforms = platforms.linux;
     license = licenses.mit;

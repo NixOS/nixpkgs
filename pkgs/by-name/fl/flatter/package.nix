@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "(F)ast (lat)tice (r)eduction of integer lattice bases";
+    description = "Fast lattice reduction of integer lattice bases";
     homepage = "https://github.com/keeganryan/flatter";
     license = licenses.lgpl3Only;
     mainProgram = "flatter";

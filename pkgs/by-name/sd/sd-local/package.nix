@@ -20,7 +20,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "screwdriver.cd local mode";
+    description = "Screwdriver.cd local mode";
     mainProgram = "sd-local";
     homepage = "https://github.com/screwdriver-cd/sd-local";
     license = licenses.bsd3;

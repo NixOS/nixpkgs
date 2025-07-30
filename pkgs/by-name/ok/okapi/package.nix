@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Okapi Library";
+    description = "Library";
     longDescription = ''
       Collection of tools that support workflows for working
       with authentic data and identity management

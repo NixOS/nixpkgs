@@ -40,7 +40,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";
-    description = "Keybase official command-line utility and service";
+    description = "Official command-line utility and service";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [
       avaq

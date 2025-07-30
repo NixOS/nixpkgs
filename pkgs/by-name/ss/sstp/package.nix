@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "SSTP client for Linux";
+    description = "Client for Linux";
     homepage = "https://sstp-client.sourceforge.net/";
     platforms = platforms.linux;
     maintainers = [ ];

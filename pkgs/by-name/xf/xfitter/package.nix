@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
+    description = "Project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
     license = licenses.gpl3;
     homepage = "https://www.xfitter.org/xFitter";
     platforms = platforms.unix;

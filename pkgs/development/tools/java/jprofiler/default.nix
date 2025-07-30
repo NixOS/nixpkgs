@@ -15,7 +15,7 @@ let
   nameApp = "JProfiler";
 
   meta = {
-    description = "JProfiler's intuitive UI helps you resolve performance bottlenecks";
+    description = "'s intuitive UI helps you resolve performance bottlenecks";
     longDescription = ''
       JProfiler's intuitive UI helps you resolve performance bottlenecks,
       pin down memory leaks and understand threading issues.

@@ -131,7 +131,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "John the Ripper password cracker";
+    description = "The Ripper password cracker";
     license = [ licenses.gpl2Plus ] ++ lib.optionals enableUnfree [ licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
     maintainers = with maintainers; [

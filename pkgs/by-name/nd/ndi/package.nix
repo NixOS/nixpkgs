@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ndi.video/ndi-sdk/";
-    description = "NDI Software Developer Kit";
+    description = "Software Developer Kit";
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   installTargets = "pam.install";
 
   meta = with lib; {
-    description = "dp9ik pam module";
+    description = "Dp9ik pam module";
     longDescription = "Uses tlsclient to authenticate users against a 9front auth server";
     homepage = "https://git.sr.ht/~moody/tlsclient";
     license = licenses.mit;

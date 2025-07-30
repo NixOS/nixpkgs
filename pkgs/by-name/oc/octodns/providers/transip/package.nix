@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "octoDNS provider that targets Transip DNS";
+    description = "OctoDNS provider that targets Transip DNS";
     homepage = "https://github.com/octodns/octodns-transip";
     changelog = "https://github.com/octodns/octodns-transip/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

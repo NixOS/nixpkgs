@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "ibusb based driver for Elgato StreamDeck devices";
+    description = "Ibusb based driver for Elgato StreamDeck devices";
     homepage = "https://github.com/ryankurte/rust-streamdeck";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.gdifolco ];

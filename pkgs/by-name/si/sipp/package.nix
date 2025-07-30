@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://sipp.sf.net";
-    description = "SIPp testing tool";
+    description = "Testing tool";
     mainProgram = "sipp";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;

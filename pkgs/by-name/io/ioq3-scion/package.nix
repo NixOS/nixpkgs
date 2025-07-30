@@ -19,7 +19,7 @@ ioquake3.overrideAttrs (old: {
     hash = "sha256-CBy3Av/mkFojXr0tAXPRWKwLeQJPebazXQ4wzKEmx0I=";
   };
   meta = {
-    description = "ioquake3 with support for path aware networking";
+    description = "Ioquake3 with support for path aware networking";
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 })

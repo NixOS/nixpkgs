@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://archlinux.org/";
-    description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
+    description = "Ipconfig and nfsmount tools for root on NFS, ported from klibc";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

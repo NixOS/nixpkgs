@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "libpcap based program for live TCP connection monitoring";
+    description = "Libpcap based program for live TCP connection monitoring";
     mainProgram = "tcptrack";
     license = licenses.lgpl21;
     platforms = platforms.linux;

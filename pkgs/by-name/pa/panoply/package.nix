@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "netCDF, HDF and GRIB Data Viewer";
+    description = "NetCDF, HDF and GRIB Data Viewer";
     homepage = "https://www.giss.nasa.gov/tools/panoply";
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

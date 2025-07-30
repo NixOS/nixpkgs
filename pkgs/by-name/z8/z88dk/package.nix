@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.z88dk.org";
-    description = "z80 Development Kit";
+    description = "Z80 Development Kit";
     license = licenses.clArtistic;
     maintainers = with maintainers; [
       siraben

@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "udev rules for ZSA devices";
+    description = "Udev rules for ZSA devices";
     license = licenses.mit;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.linux;

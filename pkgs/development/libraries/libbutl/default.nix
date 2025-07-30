@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "build2 utility library";
+    description = "Build2 utility library";
     longDescription = ''
       This library is a collection of utilities that are used throughout the
       build2 toolchain.

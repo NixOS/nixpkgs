@@ -29,7 +29,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "jq language server";
+    description = "Jq language server";
     homepage = "https://github.com/wader/jq-lsp";
     license = licenses.mit;
     maintainers = with maintainers; [ sysedwinistrator ];

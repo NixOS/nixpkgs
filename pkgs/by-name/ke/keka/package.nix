@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "macOS file archiver";
+    description = "MacOS file archiver";
     homepage = "https://www.keka.io";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "udev rules for UHK keyboards from https://ultimatehackingkeyboard.com";
+    description = "Udev rules for UHK keyboards from https://ultimatehackingkeyboard.com";
     inherit (uhk-agent.meta) license;
     maintainers = [ lib.maintainers.ngiger ];
   };

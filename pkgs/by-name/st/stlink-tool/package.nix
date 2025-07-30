@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "libusb tool for flashing chinese ST-Link dongles";
+    description = "Libusb tool for flashing chinese ST-Link dongles";
     homepage = "https://github.com/jeanthom/stlink-tool";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
+    description = "X86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     homepage = "https://flatassembler.net/download.php";
     license = lib.licenses.bsd2;
     mainProgram = "fasm";

@@ -72,7 +72,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://www.rewind.ai/changelog";
-    description = "Rewind is a personalized AI powered by everything you've seen, said, or heard";
+    description = "Personalized AI powered by everything you've seen, said, or heard";
     homepage = "https://www.rewind.ai/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ donteatoreo ];

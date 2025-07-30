@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://dyalog.com/dyalog/dyalog-versions/${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.shortVersion
     }.htm";
-    description = "Dyalog APL interpreter";
+    description = "APL interpreter";
     homepage = "https://www.dyalog.com";
     license = {
       fullName = "Dyalog License";

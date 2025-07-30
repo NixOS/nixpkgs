@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "xdg-desktop-portal backend for wlroots based compositors, providing screenshot and screencast";
+    description = "Xdg-desktop-portal backend for wlroots based compositors, providing screenshot and screencast";
     homepage = "https://github.com/waycrate/xdg-desktop-portal-luminous";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
