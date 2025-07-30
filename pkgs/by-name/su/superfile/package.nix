@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
+  exiftool,
 }:
 let
   version = "1.3.2";
@@ -27,10 +29,19 @@ buildGoModule {
     "-w"
   ];
 
+  nativeBuildInputs = [ exiftool ];
+
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  # Upstream notes that this could be flakey, and it consistently fails for me.
-  checkFlags = [ "-skip=^TestReturnDirElement/Sort_by_Date$" ];
+  # Upstream notes that this could be flaky, and it consistently fails for me.
+  checkFlags = [
+    "-skip=^TestReturnDirElement/Sort_by_Date$"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # Only failing on nix darwin. I suspect this is due to the way
+    # darwin handles file permissions.
+    "-skip=^TestCompressSelectedFiles"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
