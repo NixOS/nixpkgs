@@ -22,7 +22,7 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = {
-    description = "Postmoogle is Matrix <-> Email bridge in a form of an SMTP server";
+    description = "Matrix <-> Email bridge in the form of an SMTP server";
     homepage = "https://github.com/etkecc/postmoogle";
     changelog = "https://github.com/etkecc/postmoogle/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
