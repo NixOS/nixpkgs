@@ -27,7 +27,7 @@ mkRocqDerivation {
   mlPlugin = true;
 
   meta = {
-    description = "The Rocq Proof Assistant -- Standard Library";
+    description = "Rocq Proof Assistant -- Standard Library";
     license = lib.licenses.lgpl21Only;
   };
 

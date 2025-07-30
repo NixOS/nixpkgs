@@ -21,7 +21,7 @@ mkCoqDerivation {
   releaseRev = v: "v${v}";
   mlPlugin = true;
   meta = with lib; {
-    description = "An enhanced unification algorithm for Coq";
+    description = "Enhanced unification algorithm for Coq";
     license = licenses.mit;
   };
   preBuild = ''
