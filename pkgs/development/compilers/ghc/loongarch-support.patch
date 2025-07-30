@@ -1,0 +1,1891 @@
+From ae78be5608a82abf5e9b95e44c6e28dbb0295e18 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 30 Jul 2025 05:05:58 +0800
+Subject: [PATCH] Backport ea25088d4edd9f96e48f0a7f9407fd8eb9c2ae9c
+
+---
+ compiler/GHC/CmmToAsm.hs                      |   5 +-
+ .../GHC/CmmToAsm/Reg/Graph/TrivColorable.hs   |   8 +-
+ compiler/GHC/CmmToAsm/Reg/Linear.hs           |  17 +-
+ compiler/GHC/CmmToAsm/Reg/Linear/FreeRegs.hs  |   1 +
+ compiler/GHC/CmmToAsm/Reg/Target.hs           |   8 +-
+ compiler/GHC/Driver/Pipeline.hs               |  16 +-
+ compiler/GHC/Platform.hs                      |   3 +-
+ compiler/GHC/Platform/LoongArch64.hs          |   9 +
+ compiler/GHC/Platform/Regs.hs                 |   6 +
+ compiler/ghc.cabal.in                         |   1 +
+ configure.ac                                  |  12 +-
+ hadrian/src/Oracles/Flag.hs                   |   3 +-
+ includes/CodeGen.Platform.hs                  |  73 +-
+ includes/stg/MachRegs.h                       | 651 ++++++++++--------
+ includes/stg/MachRegsForHost.h                |  26 +-
+ includes/stg/SMP.h                            |   6 +
+ libraries/base/System/Info.hs                 |   2 +
+ libraries/ghc-boot/GHC/Platform/ArchOS.hs     |   3 +-
+ llvm-targets                                  |   2 +
+ m4/fptools_set_haskell_platform_vars.m4       |   5 +-
+ m4/ghc_convert_cpu.m4                         |   6 +
+ rts/StgCRunAsm.S                              | 118 ++++
+ rts/linker/Elf.c                              |   6 +
+ rts/rts.cabal.in                              |   2 +-
+ utils/llvm-targets/gen-data-layout.sh         |   3 +
+ 25 files changed, 621 insertions(+), 371 deletions(-)
+ create mode 100644 compiler/GHC/Platform/LoongArch64.hs
+
+diff --git a/compiler/GHC/CmmToAsm.hs b/compiler/GHC/CmmToAsm.hs
+index de11ee3..337f514 100644
+--- a/compiler/GHC/CmmToAsm.hs
++++ b/compiler/GHC/CmmToAsm.hs
+@@ -173,6 +173,7 @@ nativeCodeGen logger dflags this_mod modLoc h us cmms
+       ArchMipseb    -> panic "nativeCodeGen: No NCG for mipseb"
+       ArchMipsel    -> panic "nativeCodeGen: No NCG for mipsel"
+       ArchRISCV64   -> panic "nativeCodeGen: No NCG for RISCV64"
++      ArchLoongArch64->panic "nativeCodeGen: No NCG for LoongArch64"
+       ArchUnknown   -> panic "nativeCodeGen: No NCG for unknown arch"
+       ArchJavaScript-> panic "nativeCodeGen: No NCG for JavaScript"
+ 
+@@ -285,7 +286,6 @@ finishNativeGen logger dflags config modLoc bufh@(BufHandle _ _ h) us ngs
+                                   (targetRealRegSqueeze platform))
+                   $ graphGlobal
+ 
+-
+         -- dump global NCG stats for linear allocator
+         let linearStats = concat (ngs_linearStats ngs)
+         unless (null linearStats) $
+@@ -360,7 +360,6 @@ cmmNativeGenStream logger dflags config modLoc ncgImpl h us cmm_stream ngs
+ 
+           loop us' cmm_stream' ngs''
+ 
+-
+ -- | Do native code generation on all these cmms.
+ --
+ cmmNativeGens :: forall statics instr jumpDest.
+@@ -427,7 +426,6 @@ cmmNativeGens logger dflags config modLoc ncgImpl h dbgMap = go
+                       }
+         go us' cmms ngs' (count + 1)
+ 
+-
+ emitNativeCode :: Logger -> DynFlags -> NCGConfig -> BufHandle -> SDoc -> IO ()
+ emitNativeCode logger dflags config h sdoc = do
+ 
+@@ -551,7 +549,6 @@ cmmNativeGen logger dflags modLoc ncgImpl us fileIds dbgMap cmm count
+                                                 (mapM ((ncgAllocMoreStack ncgImpl) amount) alloced)
+                                     return (alloced', concat stack_updt_blks )
+ 
+-
+                 -- dump out what happened during register allocation
+                 dumpIfSet_dyn logger dflags
+                         Opt_D_dump_asm_regalloc "Registers allocated"
+diff --git a/compiler/GHC/CmmToAsm/Reg/Graph/TrivColorable.hs b/compiler/GHC/CmmToAsm/Reg/Graph/TrivColorable.hs
+index 6f9775c..03499ae 100644
+--- a/compiler/GHC/CmmToAsm/Reg/Graph/TrivColorable.hs
++++ b/compiler/GHC/CmmToAsm/Reg/Graph/TrivColorable.hs
+@@ -47,7 +47,6 @@ import GHC.Utils.Panic
+ --      Look at includes/stg/MachRegs.h to get the numbers.
+ --
+ 
+-
+ -- Disjoint registers ----------------------------------------------------------
+ --
+ --      The definition has been unfolded into individual cases for speed.
+@@ -122,6 +121,7 @@ trivColorable platform virtualRegSqueeze realRegSqueeze RcInteger conflicts excl
+                             ArchMipsel    -> panic "trivColorable ArchMipsel"
+                             ArchS390X     -> panic "trivColorable ArchS390X"
+                             ArchRISCV64   -> panic "trivColorable ArchRISCV64"
++                            ArchLoongArch64->panic "trivColorable ArchLoongArch64"
+                             ArchJavaScript-> panic "trivColorable ArchJavaScript"
+                             ArchUnknown   -> panic "trivColorable ArchUnknown")
+         , count2        <- accSqueeze 0 cALLOCATABLE_REGS_INTEGER
+@@ -157,6 +157,7 @@ trivColorable platform virtualRegSqueeze realRegSqueeze RcFloat conflicts exclus
+                             ArchMipsel    -> panic "trivColorable ArchMipsel"
+                             ArchS390X     -> panic "trivColorable ArchS390X"
+                             ArchRISCV64   -> panic "trivColorable ArchRISCV64"
++                            ArchLoongArch64->panic "trivColorable ArchLoongArch64"
+                             ArchJavaScript-> panic "trivColorable ArchJavaScript"
+                             ArchUnknown   -> panic "trivColorable ArchUnknown")
+         , count2        <- accSqueeze 0 cALLOCATABLE_REGS_FLOAT
+@@ -191,6 +192,7 @@ trivColorable platform virtualRegSqueeze realRegSqueeze RcDouble conflicts exclu
+                             ArchMipsel    -> panic "trivColorable ArchMipsel"
+                             ArchS390X     -> panic "trivColorable ArchS390X"
+                             ArchRISCV64   -> panic "trivColorable ArchRISCV64"
++                            ArchLoongArch64->panic "trivColorable ArchLoongArch64"
+                             ArchJavaScript-> panic "trivColorable ArchJavaScript"
+                             ArchUnknown   -> panic "trivColorable ArchUnknown")
+         , count2        <- accSqueeze 0 cALLOCATABLE_REGS_DOUBLE
+@@ -203,9 +205,6 @@ trivColorable platform virtualRegSqueeze realRegSqueeze RcDouble conflicts exclu
+ 
+         = count3 < cALLOCATABLE_REGS_DOUBLE
+ 
+-
+-
+-
+ -- Specification Code ----------------------------------------------------------
+ --
+ --      The trivColorable function for each particular architecture should
+@@ -259,7 +258,6 @@ allocatableRegs
+    = let isFree i = freeReg i
+      in  filter isFree allMachRegNos
+ 
+-
+ -- | The number of regs in each class.
+ --      We go via top level CAFs to ensure that we're not recomputing
+ --      the length of these lists each time the fn is called.
+diff --git a/compiler/GHC/CmmToAsm/Reg/Linear.hs b/compiler/GHC/CmmToAsm/Reg/Linear.hs
+index b6454f9..0f7d555 100644
+--- a/compiler/GHC/CmmToAsm/Reg/Linear.hs
++++ b/compiler/GHC/CmmToAsm/Reg/Linear.hs
+@@ -104,7 +104,6 @@ module GHC.CmmToAsm.Reg.Linear (
+ 
+ #include "HsVersions.h"
+ 
+-
+ import GHC.Prelude
+ 
+ import GHC.CmmToAsm.Reg.Linear.State
+@@ -196,11 +195,9 @@ regAlloc config (CmmProc static lbl live sccs)
+ regAlloc _ (CmmProc _ _ _ _)
+         = panic "RegAllocLinear.regAlloc: no match"
+ 
+-
+ -- -----------------------------------------------------------------------------
+ -- Linear sweep to allocate registers
+ 
+-
+ -- | Do register allocation on some basic blocks.
+ --   But be careful to allocate a block in an SCC only if it has
+ --   an entry in the block map or it is the first block.
+@@ -230,6 +227,7 @@ linearRegAlloc config entry_ids block_live sccs
+       ArchMipseb     -> panic "linearRegAlloc ArchMipseb"
+       ArchMipsel     -> panic "linearRegAlloc ArchMipsel"
+       ArchRISCV64    -> panic "linearRegAlloc ArchRISCV64"
++      ArchLoongArch64-> panic "linearRegAlloc ArchLoongArch64"
+       ArchJavaScript -> panic "linearRegAlloc ArchJavaScript"
+       ArchUnknown    -> panic "linearRegAlloc ArchUnknown"
+  where
+@@ -259,7 +257,6 @@ linearRegAlloc' config initFreeRegs entry_ids block_live sccs
+                     $ linearRA_SCCs entry_ids block_live [] sccs
+         return  (blocks, stats, getStackUse stack)
+ 
+-
+ linearRA_SCCs :: OutputableRegConstraint freeRegs instr
+               => [BlockId]
+               -> BlockMap RegSet
+@@ -331,7 +328,6 @@ process entry_ids block_live =
+ 
+             else do go blocks (b : next_round) accum madeProgress
+ 
+-
+ -- | Do register allocation on this basic block
+ --
+ processBlock
+@@ -349,7 +345,6 @@ processBlock block_live (BasicBlock id instrs)
+         -- pprTraceM "blockResult" $ ppr (instrs', fixups)
+         return  $ BasicBlock id instrs' : fixups
+ 
+-
+ -- | Load the freeregs and current reg assignment into the RegM state
+ --      for the basic block with this BlockId.
+ initBlock :: FR freeRegs
+@@ -379,7 +374,6 @@ initBlock id block_live
+                  -> do  setFreeRegsR    freeregs
+                         setAssigR       assig
+ 
+-
+ -- | Do allocation for a sequence of instructions.
+ linearRA
+         :: forall freeRegs instr. (OutputableRegConstraint freeRegs instr)
+@@ -425,7 +419,6 @@ raInsn _     new_instrs _ (LiveInstr ii@(Instr i) Nothing)
+         | isMetaInstr ii
+         = return (i : new_instrs, [])
+ 
+-
+ raInsn block_live new_instrs id (LiveInstr (Instr instr) (Just live))
+  = do
+     assig    <- getAssigR :: RegM freeRegs (UniqFM Reg Loc)
+@@ -484,12 +477,10 @@ raInsn _ _ _ instr
+ -- assignment to R1 will clobber x, so we'll spill x into another reg,
+ -- generating another reg->reg move.
+ 
+-
+ isInReg :: Reg -> RegMap Loc -> Bool
+ isInReg src assig | Just (InReg _) <- lookupUFM assig src = True
+                   | otherwise = False
+ 
+-
+ genRaInsn :: forall freeRegs instr.
+              (OutputableRegConstraint freeRegs instr)
+           => BlockMap RegSet
+@@ -650,7 +641,6 @@ releaseRegs regs = do
+          _                    -> loop (delFromUFM assig r) free rs
+   loop assig free regs
+ 
+-
+ -- -----------------------------------------------------------------------------
+ -- Clobber real registers
+ 
+@@ -733,8 +723,6 @@ saveClobberedTemps clobbered dying
+ 
+                   clobber new_assign (spill ++ instrs) rest
+ 
+-
+-
+ -- | Mark all these real regs as allocated,
+ --      and kick out their vreg assignments.
+ --
+@@ -895,7 +883,6 @@ allocRegsAndSpill_spill reading keep spills alloc r rs assig spill_loc
+ 
+                 allocateRegsAndSpill reading keep spills' (final_reg : alloc) rs
+ 
+-
+           -- case (3): we need to push something out to free up a register
+          [] ->
+            do   let inRegOrBoth (InReg _) = True
+@@ -959,7 +946,6 @@ allocRegsAndSpill_spill reading keep spills alloc r rs assig spill_loc
+                                         (spill_store ++ spills')
+                                         (my_reg:alloc) rs
+ 
+-
+                         -- there wasn't anything to spill, so we're screwed.
+                         | otherwise
+                         = pprPanic ("RegAllocLinear.allocRegsAndSpill: no spill candidates\n")
+@@ -971,7 +957,6 @@ allocRegsAndSpill_spill reading keep spills alloc r rs assig spill_loc
+ 
+                 result
+ 
+-
+ -- | Calculate a new location after a register has been loaded.
+ newLocation :: SpillLoc -> RealReg -> Loc
+ -- if the tmp was read from a slot, then now its in a reg as well
+diff --git a/compiler/GHC/CmmToAsm/Reg/Linear/FreeRegs.hs b/compiler/GHC/CmmToAsm/Reg/Linear/FreeRegs.hs
+index 526048b..ac1f18d 100644
+--- a/compiler/GHC/CmmToAsm/Reg/Linear/FreeRegs.hs
++++ b/compiler/GHC/CmmToAsm/Reg/Linear/FreeRegs.hs
+@@ -92,5 +92,6 @@ maxSpillSlots config = case platformArch (ncgPlatform config) of
+    ArchMipseb    -> panic "maxSpillSlots ArchMipseb"
+    ArchMipsel    -> panic "maxSpillSlots ArchMipsel"
+    ArchRISCV64   -> panic "maxSpillSlots ArchRISCV64"
++   ArchLoongArch64->panic "maxSpillSlots ArchLoongArch64"
+    ArchJavaScript-> panic "maxSpillSlots ArchJavaScript"
+    ArchUnknown   -> panic "maxSpillSlots ArchUnknown"
+diff --git a/compiler/GHC/CmmToAsm/Reg/Target.hs b/compiler/GHC/CmmToAsm/Reg/Target.hs
+index ebce991..90940a1 100644
+--- a/compiler/GHC/CmmToAsm/Reg/Target.hs
++++ b/compiler/GHC/CmmToAsm/Reg/Target.hs
+@@ -38,7 +38,6 @@ import qualified GHC.CmmToAsm.PPC.Regs       as PPC
+ import qualified GHC.CmmToAsm.SPARC.Regs     as SPARC
+ import qualified GHC.CmmToAsm.AArch64.Regs   as AArch64
+ 
+-
+ targetVirtualRegSqueeze :: Platform -> RegClass -> VirtualReg -> Int
+ targetVirtualRegSqueeze platform
+     = case platformArch platform of
+@@ -55,10 +54,10 @@ targetVirtualRegSqueeze platform
+       ArchMipseb    -> panic "targetVirtualRegSqueeze ArchMipseb"
+       ArchMipsel    -> panic "targetVirtualRegSqueeze ArchMipsel"
+       ArchRISCV64   -> panic "targetVirtualRegSqueeze ArchRISCV64"
++      ArchLoongArch64->panic "targetVirtualRegSqueeze ArchLoongArch64"
+       ArchJavaScript-> panic "targetVirtualRegSqueeze ArchJavaScript"
+       ArchUnknown   -> panic "targetVirtualRegSqueeze ArchUnknown"
+ 
+-
+ targetRealRegSqueeze :: Platform -> RegClass -> RealReg -> Int
+ targetRealRegSqueeze platform
+     = case platformArch platform of
+@@ -75,6 +74,7 @@ targetRealRegSqueeze platform
+       ArchMipseb    -> panic "targetRealRegSqueeze ArchMipseb"
+       ArchMipsel    -> panic "targetRealRegSqueeze ArchMipsel"
+       ArchRISCV64   -> panic "targetRealRegSqueeze ArchRISCV64"
++      ArchLoongArch64->panic "targetRealRegSqueeze ArchLoongArch64"
+       ArchJavaScript-> panic "targetRealRegSqueeze ArchJavaScript"
+       ArchUnknown   -> panic "targetRealRegSqueeze ArchUnknown"
+ 
+@@ -94,6 +94,7 @@ targetClassOfRealReg platform
+       ArchMipseb    -> panic "targetClassOfRealReg ArchMipseb"
+       ArchMipsel    -> panic "targetClassOfRealReg ArchMipsel"
+       ArchRISCV64   -> panic "targetClassOfRealReg ArchRISCV64"
++      ArchLoongArch64->panic "targetClassOfRealReg ArchLoongArch64"
+       ArchJavaScript-> panic "targetClassOfRealReg ArchJavaScript"
+       ArchUnknown   -> panic "targetClassOfRealReg ArchUnknown"
+ 
+@@ -113,6 +114,7 @@ targetMkVirtualReg platform
+       ArchMipseb    -> panic "targetMkVirtualReg ArchMipseb"
+       ArchMipsel    -> panic "targetMkVirtualReg ArchMipsel"
+       ArchRISCV64   -> panic "targetMkVirtualReg ArchRISCV64"
++      ArchLoongArch64->panic "targetMkVirtualReg ArchLoongArch64"
+       ArchJavaScript-> panic "targetMkVirtualReg ArchJavaScript"
+       ArchUnknown   -> panic "targetMkVirtualReg ArchUnknown"
+ 
+@@ -132,10 +134,10 @@ targetRegDotColor platform
+       ArchMipseb    -> panic "targetRegDotColor ArchMipseb"
+       ArchMipsel    -> panic "targetRegDotColor ArchMipsel"
+       ArchRISCV64   -> panic "targetRegDotColor ArchRISCV64"
++      ArchLoongArch64->panic "targetRegDotColor ArchLoongArch64"
+       ArchJavaScript-> panic "targetRegDotColor ArchJavaScript"
+       ArchUnknown   -> panic "targetRegDotColor ArchUnknown"
+ 
+-
+ targetClassOfReg :: Platform -> Reg -> RegClass
+ targetClassOfReg platform reg
+  = case reg of
+diff --git a/compiler/GHC/Driver/Pipeline.hs b/compiler/GHC/Driver/Pipeline.hs
+index 23936e8..0d81783 100644
+--- a/compiler/GHC/Driver/Pipeline.hs
++++ b/compiler/GHC/Driver/Pipeline.hs
+@@ -518,7 +518,6 @@ link ghcLink logger tmpfs hooks dflags unit_env batch_attempt_linking hpt =
+               -> panicBadLink LinkInMemory
+       Just h  -> h ghcLink dflags batch_attempt_linking hpt
+ 
+-
+ panicBadLink :: GhcLink -> a
+ panicBadLink other = panic ("link: GHC not built to link this way: " ++
+                             show other)
+@@ -587,7 +586,6 @@ link' logger tmpfs dflags unit_env batch_attempt_linking hpt
+                                 text "   Main.main not exported; not linking.")
+         return Succeeded
+ 
+-
+ linkingNeeded :: Logger -> DynFlags -> UnitEnv -> Bool -> [Linkable] -> [UnitId] -> IO Bool
+ linkingNeeded logger dflags unit_env staticLink linkables pkg_deps = do
+         -- if the modification time on the executable is later than the
+@@ -673,7 +671,6 @@ compileFile hsc_env stop_phase (src, mb_phase) = do
+                             Nothing{-no ModLocation-} []
+    return out_file
+ 
+-
+ doLink :: HscEnv -> Phase -> [FilePath] -> IO ()
+ doLink hsc_env stop_phase o_files
+   | not (isStopLn stop_phase)
+@@ -692,7 +689,6 @@ doLink hsc_env stop_phase o_files
+         LinkDynLib    -> linkDynLibCheck    logger tmpfs dflags unit_env o_files []
+         other         -> panicBadLink other
+ 
+-
+ -- ---------------------------------------------------------------------------
+ 
+ -- | Run a compilation pipeline, consisting of multiple phases.
+@@ -889,7 +885,6 @@ pipeLoop phase input_fn = do
+                   liftIO $ copyWithHeader logger dflags msg line_prag input_fn final_fn
+                return final_fn
+ 
+-
+      | not (realPhase `happensBefore'` stopPhase)
+         -- Something has gone wrong.  We'll try to cover all the cases when
+         -- this could happen, so if we reach here it is a panic.
+@@ -1046,7 +1041,6 @@ getOutputFilename logger tmpfs stop_phase output basename dflags next_phase mayb
+              | Just d <- odir = d </> persistent
+              | otherwise      = persistent
+ 
+-
+ -- | LLVM Options. These are flags to be passed to opt and llc, to ensure
+ -- consistency we list them in pairs, so that they form groups.
+ llvmOptions :: DynFlags
+@@ -1097,6 +1091,7 @@ llvmOptions dflags =
+         abi :: String
+         abi = case platformArch (targetPlatform dflags) of
+                 ArchRISCV64 -> "lp64d"
++                ArchLoongArch64 -> "lp64d"
+                 _           -> ""
+ 
+ -- -----------------------------------------------------------------------------
+@@ -1118,7 +1113,6 @@ runPhase :: PhasePlus   -- ^ Run this phase
+         -- Interesting case: Hsc when there is no recompilation to do
+         --                   Then the output filename is still a .o file
+ 
+-
+ -------------------------------------------------------------------------------
+ -- Unlit phase
+ 
+@@ -1640,7 +1634,6 @@ runPhase (RealPhase (As with_cpp)) input_fn
+ 
+         return (RealPhase next_phase, output_fn)
+ 
+-
+ -----------------------------------------------------------------------------
+ -- LlvmOpt phase
+ runPhase (RealPhase LlvmOpt) input_fn = do
+@@ -1677,7 +1670,6 @@ runPhase (RealPhase LlvmOpt) input_fn = do
+ 
+     return (RealPhase LlvmLlc, output_fn)
+ 
+-
+ -----------------------------------------------------------------------------
+ -- LlvmLlc phase
+ 
+@@ -1752,8 +1744,6 @@ runPhase (RealPhase LlvmLlc) input_fn = do
+ 
+     return (RealPhase next_phase, output_fn)
+ 
+-
+-
+ -----------------------------------------------------------------------------
+ -- LlvmMangle phase
+ 
+@@ -1818,7 +1808,6 @@ getLocation src_flavour mod_name = do
+               | HsBootFile <- src_flavour = addBootSuffixLocnOut location1
+               | otherwise                 = location1
+ 
+-
+         -- Take -ohi into account if present
+         -- This can't be done in mkHomeModuleLocation because
+         -- it only applies to the module being compiles
+@@ -1852,7 +1841,6 @@ getHCFilePackages filename =
+       _other ->
+           return []
+ 
+-
+ linkDynLibCheck :: Logger -> TmpFs -> DynFlags -> UnitEnv -> [String] -> [UnitId] -> IO ()
+ linkDynLibCheck logger tmpfs dflags unit_env o_files dep_units = do
+   when (haveRtsOptsFlags dflags) $
+@@ -1862,7 +1850,6 @@ linkDynLibCheck logger tmpfs dflags unit_env o_files dep_units = do
+       text "    Call hs_init_ghc() from your main() function to set these options.")
+   linkDynLib logger tmpfs dflags unit_env o_files dep_units
+ 
+-
+ -- -----------------------------------------------------------------------------
+ -- Running CPP
+ 
+@@ -2042,7 +2029,6 @@ We must enable bigobj output in a few places:
+ Unfortunately the big object format is not supported on 32-bit targets so
+ none of this can be used in that case.
+ 
+-
+ Note [Merging object files for GHCi]
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ GHCi can usually loads standard linkable object files using GHC's linker
+diff --git a/compiler/GHC/Platform.hs b/compiler/GHC/Platform.hs
+index bf9f704..537efd5 100644
+--- a/compiler/GHC/Platform.hs
++++ b/compiler/GHC/Platform.hs
+@@ -218,6 +218,7 @@ platformCConvNeedsExtension platform = case platformArch platform of
+   ArchPPC_64 _ -> True
+   ArchS390X    -> True
+   ArchRISCV64  -> True
++  ArchLoongArch64 -> True
+   ArchAArch64
+       -- Apple's AArch64 ABI requires that the caller sign-extend
+       -- small integer arguments. See
+@@ -225,7 +226,6 @@ platformCConvNeedsExtension platform = case platformArch platform of
+     | OSDarwin <- platformOS platform -> True
+   _            -> False
+ 
+-
+ --------------------------------------------------
+ -- Instruction sets
+ --------------------------------------------------
+@@ -310,7 +310,6 @@ platformSOExt platform
+ -- agnostic.
+ --
+ 
+-
+ -- | Try to locate "DerivedConstants.h" file in the given dirs and to parse the
+ -- PlatformConstants from it.
+ --
+diff --git a/compiler/GHC/Platform/LoongArch64.hs b/compiler/GHC/Platform/LoongArch64.hs
+new file mode 100644
+index 0000000..abe3c38
+--- /dev/null
++++ b/compiler/GHC/Platform/LoongArch64.hs
+@@ -0,0 +1,9 @@
++{-# LANGUAGE CPP #-}
++
++module GHC.Platform.LoongArch64 where
++
++import GHC.Prelude
++
++#define MACHREGS_NO_REGS 0
++#define MACHREGS_loongarch64 1
++#include "../../../includes/CodeGen.Platform.hs"
+diff --git a/compiler/GHC/Platform/Regs.hs b/compiler/GHC/Platform/Regs.hs
+index e0bdf5d..c23e2cc 100644
+--- a/compiler/GHC/Platform/Regs.hs
++++ b/compiler/GHC/Platform/Regs.hs
+@@ -16,6 +16,7 @@ import qualified GHC.Platform.SPARC      as SPARC
+ import qualified GHC.Platform.X86        as X86
+ import qualified GHC.Platform.X86_64     as X86_64
+ import qualified GHC.Platform.RISCV64    as RISCV64
++import qualified GHC.Platform.LoongArch64 as LoongArch64
+ import qualified GHC.Platform.NoRegs     as NoRegs
+ 
+ -- | Returns 'True' if this global register is stored in a caller-saves
+@@ -33,6 +34,7 @@ callerSaves platform
+    ArchARM {}  -> ARM.callerSaves
+    ArchAArch64 -> AArch64.callerSaves
+    ArchRISCV64 -> RISCV64.callerSaves
++   ArchLoongArch64 -> LoongArch64.callerSaves
+    arch
+     | arch `elem` [ArchPPC, ArchPPC_64 ELF_V1, ArchPPC_64 ELF_V2] ->
+         PPC.callerSaves
+@@ -56,6 +58,7 @@ activeStgRegs platform
+    ArchARM {}  -> ARM.activeStgRegs
+    ArchAArch64 -> AArch64.activeStgRegs
+    ArchRISCV64 -> RISCV64.activeStgRegs
++   ArchLoongArch64 -> LoongArch64.activeStgRegs
+    arch
+     | arch `elem` [ArchPPC, ArchPPC_64 ELF_V1, ArchPPC_64 ELF_V2] ->
+         PPC.activeStgRegs
+@@ -74,6 +77,7 @@ haveRegBase platform
+    ArchARM {}  -> ARM.haveRegBase
+    ArchAArch64 -> AArch64.haveRegBase
+    ArchRISCV64 -> RISCV64.haveRegBase
++   ArchLoongArch64 -> LoongArch64.haveRegBase
+    arch
+     | arch `elem` [ArchPPC, ArchPPC_64 ELF_V1, ArchPPC_64 ELF_V2] ->
+         PPC.haveRegBase
+@@ -92,6 +96,7 @@ globalRegMaybe platform
+    ArchARM {}  -> ARM.globalRegMaybe
+    ArchAArch64 -> AArch64.globalRegMaybe
+    ArchRISCV64 -> RISCV64.globalRegMaybe
++   ArchLoongArch64 -> LoongArch64.globalRegMaybe
+    arch
+     | arch `elem` [ArchPPC, ArchPPC_64 ELF_V1, ArchPPC_64 ELF_V2] ->
+         PPC.globalRegMaybe
+@@ -110,6 +115,7 @@ freeReg platform
+    ArchARM {}  -> ARM.freeReg
+    ArchAArch64 -> AArch64.freeReg
+    ArchRISCV64 -> RISCV64.freeReg
++   ArchLoongArch64 -> LoongArch64.freeReg
+    arch
+     | arch `elem` [ArchPPC, ArchPPC_64 ELF_V1, ArchPPC_64 ELF_V2] ->
+         PPC.freeReg
+diff --git a/compiler/ghc.cabal.in b/compiler/ghc.cabal.in
+index 92fb34e..10defca 100644
+--- a/compiler/ghc.cabal.in
++++ b/compiler/ghc.cabal.in
+@@ -499,6 +499,7 @@ Library
+         GHC.Platform.Reg.Class
+         GHC.Platform.Regs
+         GHC.Platform.RISCV64
++        GHC.Platform.LoongArch64
+         GHC.Platform.S390X
+         GHC.Platform.SPARC
+         GHC.Platform.Ways
+diff --git a/configure.ac b/configure.ac
+index 31dd8a8..da5f017 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -287,7 +287,7 @@ dnl --------------------------------------------------------------
+ 
+ AC_MSG_CHECKING(whether target supports a registerised ABI)
+ case "$TargetArch" in
+-    i386|x86_64|powerpc|powerpc64|powerpc64le|s390x|arm|aarch64|riscv64)
++    i386|x86_64|powerpc|powerpc64|powerpc64le|s390x|arm|aarch64|riscv64|loongarch64)
+         UnregisterisedDefault=NO
+         AC_MSG_RESULT([yes])
+         ;;
+@@ -322,7 +322,7 @@ AC_MSG_CHECKING(whether target supports tables next to code)
+ case "$Unregisterised" in
+     NO)
+         case "$TargetArch" in
+-            ia64|powerpc64|powerpc64le|s390x|riscv64)
++            ia64|powerpc64|powerpc64le|s390x|riscv64|loongarch64)
+                 TablesNextToCodeDefault=NO
+                 AC_MSG_RESULT([no])
+                 ;;
+@@ -351,7 +351,7 @@ AC_SUBST(TablesNextToCode)
+ dnl ** Does target have runtime linker support?
+ dnl --------------------------------------------------------------
+ case "$target" in
+-    powerpc64-*|powerpc64le-*|powerpc-ibm-aix*|s390x-ibm-linux|riscv64-*)
++    powerpc64-*|powerpc64le-*|powerpc-ibm-aix*|s390x-ibm-linux|riscv64-*|loongarch64-*)
+         TargetHasRTSLinker=NO
+         ;;
+     *)
+@@ -363,7 +363,6 @@ AC_SUBST(TargetHasRTSLinker)
+ # Requires FPTOOLS_SET_PLATFORM_VARS to be run first.
+ FP_FIND_ROOT
+ 
+-
+ if test "$HostOS" = "mingw32"
+ then
+     # Find the mingw-w64 7z file to extract.
+@@ -515,7 +514,6 @@ fi
+ 
+ XCODE_VERSION()
+ 
+-
+ dnl ** Building a cross compiler?
+ dnl --------------------------------------------------------------
+ CrossCompiling=NO
+@@ -658,7 +656,6 @@ AC_CHECK_TARGET_TOOL([STRIP], [strip])
+ StripCmd="$STRIP"
+ AC_SUBST([StripCmd])
+ 
+-
+ dnl ** which libtool to use?
+ dnl --------------------------------------------------------------
+ # The host normalization on Windows breaks autoconf, it no longer
+@@ -836,7 +833,6 @@ FP_SETTINGS
+ dnl ** Find the path to sed
+ AC_PATH_PROGS(SedCmd,gsed sed,sed)
+ 
+-
+ dnl ** check for time command
+ AC_PATH_PROG(TimeCmd,time)
+ 
+@@ -989,7 +985,6 @@ FP_CHECK_SIZEOF_AND_ALIGNMENT(uint32_t)
+ FP_CHECK_SIZEOF_AND_ALIGNMENT(int64_t)
+ FP_CHECK_SIZEOF_AND_ALIGNMENT(uint64_t)
+ 
+-
+ dnl for use in settings file
+ TargetWordSize=$ac_cv_sizeof_void_p
+ if test "x$TargetWordSize" = x8; then
+@@ -1257,7 +1252,6 @@ case ${TargetOS} in
+ AC_DEFINE_UNQUOTED([RTS_LINKER_USE_MMAP], [$RtsLinkerUseMmap],
+                    [Use mmap in the runtime linker])
+ 
+-
+ dnl ** Use libffi for adjustors?
+ dnl --------------------------------------------------------------
+ 
+diff --git a/hadrian/src/Oracles/Flag.hs b/hadrian/src/Oracles/Flag.hs
+index 5b41698..0c2f4b2 100644
+--- a/hadrian/src/Oracles/Flag.hs
++++ b/hadrian/src/Oracles/Flag.hs
+@@ -81,7 +81,8 @@ targetSupportsSMP = do
+                             , "arm"
+                             , "aarch64"
+                             , "s390x"
+-                            , "riscv64"]
++                            , "riscv64"
++                            , "loongarch64"]
+   if   -- The THREADED_RTS requires `BaseReg` to be in a register and the
+        -- Unregisterised mode doesn't allow that.
+      | unreg                -> return False
+diff --git a/includes/CodeGen.Platform.hs b/includes/CodeGen.Platform.hs
+index ebec021..1857279 100644
+--- a/includes/CodeGen.Platform.hs
++++ b/includes/CodeGen.Platform.hs
+@@ -1,4 +1,3 @@
+-
+ import GHC.Cmm.Expr
+ #if !(defined(MACHREGS_i386) || defined(MACHREGS_x86_64) \
+     || defined(MACHREGS_sparc) || defined(MACHREGS_powerpc) \
+@@ -41,7 +40,6 @@ import GHC.Platform.Reg
+ #  define r15   15
+ # endif
+ 
+-
+ -- N.B. XMM, YMM, and ZMM are all aliased to the same hardware registers hence
+ -- being assigned the same RegNos.
+ # define xmm0  16
+@@ -449,6 +447,74 @@ import GHC.Platform.Reg
+ # define ft10 62
+ # define ft11 63
+ 
++#elif defined(MACHREGS_loongarch64)
++
++# define zero 0
++# define ra   1
++# define tp   2
++# define sp   3
++# define a0   4
++# define a1   5
++# define a2   6
++# define a3   7
++# define a4   8
++# define a5   9
++# define a6  10
++# define a7  11
++# define t0  12
++# define t1  13
++# define t2  14
++# define t3  15
++# define t4  16
++# define t5  17
++# define t6  18
++# define t7  19
++# define t8  20
++# define u0  21
++# define fp  22
++# define s0  23
++# define s1  24
++# define s2  25
++# define s3  26
++# define s4  27
++# define s5  28
++# define s6  29
++# define s7  30
++# define s8  31
++
++# define fa0  32
++# define fa1  33
++# define fa2  34
++# define fa3  35
++# define fa4  36
++# define fa5  37
++# define fa6  38
++# define fa7  39
++# define ft0  40
++# define ft1  41
++# define ft2  42
++# define ft3  43
++# define ft4  44
++# define ft5  45
++# define ft6  46
++# define ft7  47
++# define ft8  48
++# define ft9  49
++# define ft10 50
++# define ft11 51
++# define ft12 52
++# define ft13 53
++# define ft14 54
++# define ft15 55
++# define fs0  56
++# define fs1  57
++# define fs2  58
++# define fs3  59
++# define fs4  60
++# define fs5  61
++# define fs6  62
++# define fs7  63
++
+ #endif
+ 
+ callerSaves :: GlobalReg -> Bool
+@@ -736,7 +802,8 @@ globalRegMaybe :: GlobalReg -> Maybe RealReg
+ #if defined(MACHREGS_i386) || defined(MACHREGS_x86_64) \
+     || defined(MACHREGS_sparc) || defined(MACHREGS_powerpc) \
+     || defined(MACHREGS_arm) || defined(MACHREGS_aarch64) \
+-    || defined(MACHREGS_s390x) || defined(MACHREGS_riscv64)
++    || defined(MACHREGS_s390x) || defined(MACHREGS_riscv64) \
++    || defined(MACHREGS_loongarch64)
+ # if defined(REG_Base)
+ globalRegMaybe BaseReg                  = Just (RealRegSingle REG_Base)
+ # endif
+diff --git a/includes/stg/MachRegs.h b/includes/stg/MachRegs.h
+index d50969b..455ff7d 100644
+--- a/includes/stg/MachRegs.h
++++ b/includes/stg/MachRegs.h
+@@ -88,45 +88,45 @@
+ #define REG(x) __asm__("%" #x)
+ 
+ #if !defined(not_doing_dynamic_linking)
+-#define REG_Base    ebx
++#define REG_Base ebx
+ #endif
+-#define REG_Sp      ebp
++#define REG_Sp ebp
+ 
+ #if !defined(STOLEN_X86_REGS)
+ #define STOLEN_X86_REGS 4
+ #endif
+ 
+ #if STOLEN_X86_REGS >= 3
+-# define REG_R1     esi
++#define REG_R1 esi
+ #endif
+ 
+ #if STOLEN_X86_REGS >= 4
+-# define REG_Hp     edi
++#define REG_Hp edi
+ #endif
+-#define REG_MachSp  esp
+-
+-#define REG_XMM1    xmm0
+-#define REG_XMM2    xmm1
+-#define REG_XMM3    xmm2
+-#define REG_XMM4    xmm3
+-
+-#define REG_YMM1    ymm0
+-#define REG_YMM2    ymm1
+-#define REG_YMM3    ymm2
+-#define REG_YMM4    ymm3
+-
+-#define REG_ZMM1    zmm0
+-#define REG_ZMM2    zmm1
+-#define REG_ZMM3    zmm2
+-#define REG_ZMM4    zmm3
+-
+-#define MAX_REAL_VANILLA_REG 1  /* always, since it defines the entry conv */
+-#define MAX_REAL_FLOAT_REG   0
+-#define MAX_REAL_DOUBLE_REG  0
+-#define MAX_REAL_LONG_REG    0
+-#define MAX_REAL_XMM_REG     4
+-#define MAX_REAL_YMM_REG     4
+-#define MAX_REAL_ZMM_REG     4
++#define REG_MachSp esp
++
++#define REG_XMM1 xmm0
++#define REG_XMM2 xmm1
++#define REG_XMM3 xmm2
++#define REG_XMM4 xmm3
++
++#define REG_YMM1 ymm0
++#define REG_YMM2 ymm1
++#define REG_YMM3 ymm2
++#define REG_YMM4 ymm3
++
++#define REG_ZMM1 zmm0
++#define REG_ZMM2 zmm1
++#define REG_ZMM3 zmm2
++#define REG_ZMM4 zmm3
++
++#define MAX_REAL_VANILLA_REG 1 /* always, since it defines the entry conv */
++#define MAX_REAL_FLOAT_REG 0
++#define MAX_REAL_DOUBLE_REG 0
++#define MAX_REAL_LONG_REG 0
++#define MAX_REAL_XMM_REG 4
++#define MAX_REAL_YMM_REG 4
++#define MAX_REAL_ZMM_REG 4
+ 
+ /* -----------------------------------------------------------------------------
+   The x86-64 register mapping
+@@ -161,17 +161,17 @@
+ 
+ #define REG(x) __asm__("%" #x)
+ 
+-#define REG_Base  r13
+-#define REG_Sp    rbp
+-#define REG_Hp    r12
+-#define REG_R1    rbx
+-#define REG_R2    r14
+-#define REG_R3    rsi
+-#define REG_R4    rdi
+-#define REG_R5    r8
+-#define REG_R6    r9
++#define REG_Base r13
++#define REG_Sp rbp
++#define REG_Hp r12
++#define REG_R1 rbx
++#define REG_R2 r14
++#define REG_R3 rsi
++#define REG_R4 rdi
++#define REG_R5 r8
++#define REG_R6 r9
+ #define REG_SpLim r15
+-#define REG_MachSp  rsp
++#define REG_MachSp rsp
+ 
+ /*
+ Map both Fn and Dn to register xmmn so that we can pass a function any
+@@ -179,40 +179,40 @@ combination of up to six Float# or Double# arguments without touching
+ the stack. See Note [Overlapping global registers] for implications.
+ */
+ 
+-#define REG_F1    xmm1
+-#define REG_F2    xmm2
+-#define REG_F3    xmm3
+-#define REG_F4    xmm4
+-#define REG_F5    xmm5
+-#define REG_F6    xmm6
+-
+-#define REG_D1    xmm1
+-#define REG_D2    xmm2
+-#define REG_D3    xmm3
+-#define REG_D4    xmm4
+-#define REG_D5    xmm5
+-#define REG_D6    xmm6
+-
+-#define REG_XMM1    xmm1
+-#define REG_XMM2    xmm2
+-#define REG_XMM3    xmm3
+-#define REG_XMM4    xmm4
+-#define REG_XMM5    xmm5
+-#define REG_XMM6    xmm6
+-
+-#define REG_YMM1    ymm1
+-#define REG_YMM2    ymm2
+-#define REG_YMM3    ymm3
+-#define REG_YMM4    ymm4
+-#define REG_YMM5    ymm5
+-#define REG_YMM6    ymm6
+-
+-#define REG_ZMM1    zmm1
+-#define REG_ZMM2    zmm2
+-#define REG_ZMM3    zmm3
+-#define REG_ZMM4    zmm4
+-#define REG_ZMM5    zmm5
+-#define REG_ZMM6    zmm6
++#define REG_F1 xmm1
++#define REG_F2 xmm2
++#define REG_F3 xmm3
++#define REG_F4 xmm4
++#define REG_F5 xmm5
++#define REG_F6 xmm6
++
++#define REG_D1 xmm1
++#define REG_D2 xmm2
++#define REG_D3 xmm3
++#define REG_D4 xmm4
++#define REG_D5 xmm5
++#define REG_D6 xmm6
++
++#define REG_XMM1 xmm1
++#define REG_XMM2 xmm2
++#define REG_XMM3 xmm3
++#define REG_XMM4 xmm4
++#define REG_XMM5 xmm5
++#define REG_XMM6 xmm6
++
++#define REG_YMM1 ymm1
++#define REG_YMM2 ymm2
++#define REG_YMM3 ymm3
++#define REG_YMM4 ymm4
++#define REG_YMM5 ymm5
++#define REG_YMM6 ymm6
++
++#define REG_ZMM1 zmm1
++#define REG_ZMM2 zmm2
++#define REG_ZMM3 zmm3
++#define REG_ZMM4 zmm4
++#define REG_ZMM5 zmm5
++#define REG_ZMM6 zmm6
+ 
+ #if !defined(mingw32_HOST_OS)
+ #define CALLER_SAVES_R3
+@@ -267,12 +267,12 @@ the stack. See Note [Overlapping global registers] for implications.
+ #endif
+ 
+ #define MAX_REAL_VANILLA_REG 6
+-#define MAX_REAL_FLOAT_REG   6
+-#define MAX_REAL_DOUBLE_REG  6
+-#define MAX_REAL_LONG_REG    0
+-#define MAX_REAL_XMM_REG     6
+-#define MAX_REAL_YMM_REG     6
+-#define MAX_REAL_ZMM_REG     6
++#define MAX_REAL_FLOAT_REG 6
++#define MAX_REAL_DOUBLE_REG 6
++#define MAX_REAL_LONG_REG 0
++#define MAX_REAL_XMM_REG 6
++#define MAX_REAL_YMM_REG 6
++#define MAX_REAL_ZMM_REG 6
+ 
+ /* -----------------------------------------------------------------------------
+    The PowerPC register mapping
+@@ -306,38 +306,38 @@ the stack. See Note [Overlapping global registers] for implications.
+ 
+ #define REG(x) __asm__(#x)
+ 
+-#define REG_R1          r14
+-#define REG_R2          r15
+-#define REG_R3          r16
+-#define REG_R4          r17
+-#define REG_R5          r18
+-#define REG_R6          r19
+-#define REG_R7          r20
+-#define REG_R8          r21
+-#define REG_R9          r22
+-#define REG_R10         r23
+-
+-#define REG_F1          fr14
+-#define REG_F2          fr15
+-#define REG_F3          fr16
+-#define REG_F4          fr17
+-#define REG_F5          fr18
+-#define REG_F6          fr19
+-
+-#define REG_D1          fr20
+-#define REG_D2          fr21
+-#define REG_D3          fr22
+-#define REG_D4          fr23
+-#define REG_D5          fr24
+-#define REG_D6          fr25
+-
+-#define REG_Sp          r24
+-#define REG_SpLim       r25
+-#define REG_Hp          r26
+-#define REG_Base        r27
+-
+-#define MAX_REAL_FLOAT_REG   6
+-#define MAX_REAL_DOUBLE_REG  6
++#define REG_R1 r14
++#define REG_R2 r15
++#define REG_R3 r16
++#define REG_R4 r17
++#define REG_R5 r18
++#define REG_R6 r19
++#define REG_R7 r20
++#define REG_R8 r21
++#define REG_R9 r22
++#define REG_R10 r23
++
++#define REG_F1 fr14
++#define REG_F2 fr15
++#define REG_F3 fr16
++#define REG_F4 fr17
++#define REG_F5 fr18
++#define REG_F6 fr19
++
++#define REG_D1 fr20
++#define REG_D2 fr21
++#define REG_D3 fr22
++#define REG_D4 fr23
++#define REG_D5 fr24
++#define REG_D6 fr25
++
++#define REG_Sp r24
++#define REG_SpLim r25
++#define REG_Hp r26
++#define REG_Base r27
++
++#define MAX_REAL_FLOAT_REG 6
++#define MAX_REAL_DOUBLE_REG 6
+ 
+ /* -----------------------------------------------------------------------------
+    The Sun SPARC register mapping
+@@ -443,33 +443,33 @@ the stack. See Note [Overlapping global registers] for implications.
+ #define CALLER_SAVES_D1
+ #define CALLER_SAVES_D2
+ 
+-#define REG_R1          l1
+-#define REG_R2          l2
+-#define REG_R3          l3
+-#define REG_R4          l4
+-#define REG_R5          l5
+-#define REG_R6          i5
++#define REG_R1 l1
++#define REG_R2 l2
++#define REG_R3 l3
++#define REG_R4 l4
++#define REG_R5 l5
++#define REG_R6 i5
+ 
+-#define REG_F1          f22
+-#define REG_F2          f23
+-#define REG_F3          f24
+-#define REG_F4          f25
++#define REG_F1 f22
++#define REG_F2 f23
++#define REG_F3 f24
++#define REG_F4 f25
+ 
+ /* for each of the double arg regs,
+    Dn_2 is the high half. */
+ 
+-#define REG_D1          f2
+-#define REG_D1_2        f3
++#define REG_D1 f2
++#define REG_D1_2 f3
+ 
+-#define REG_D2          f4
+-#define REG_D2_2        f5
++#define REG_D2 f4
++#define REG_D2_2 f5
+ 
+-#define REG_Sp          i0
+-#define REG_SpLim       i2
++#define REG_Sp i0
++#define REG_SpLim i2
+ 
+-#define REG_Hp          i3
++#define REG_Hp i3
+ 
+-#define REG_Base        i1
++#define REG_Base i1
+ 
+ #define NCG_FirstFloatReg f22
+ 
+@@ -507,31 +507,32 @@ the stack. See Note [Overlapping global registers] for implications.
+ 
+    VFPv3/NEON registers (added to the VFPv2 registers set)
+    d16-d31/q8-q15        Argument / result/ scratch registers
+-   ----------------------------------------------------------------------------- */
++   -----------------------------------------------------------------------------
++ */
+ 
+ #elif defined(MACHREGS_arm)
+ 
+ #define REG(x) __asm__(#x)
+ 
+-#define REG_Base        r4
+-#define REG_Sp          r5
+-#define REG_Hp          r6
+-#define REG_R1          r7
+-#define REG_R2          r8
+-#define REG_R3          r9
+-#define REG_R4          r10
+-#define REG_SpLim       r11
++#define REG_Base r4
++#define REG_Sp r5
++#define REG_Hp r6
++#define REG_R1 r7
++#define REG_R2 r8
++#define REG_R3 r9
++#define REG_R4 r10
++#define REG_SpLim r11
+ 
+ #if !defined(arm_HOST_ARCH_PRE_ARMv6)
+ /* d8 */
+-#define REG_F1    s16
+-#define REG_F2    s17
++#define REG_F1 s16
++#define REG_F2 s17
+ /* d9 */
+-#define REG_F3    s18
+-#define REG_F4    s19
++#define REG_F3 s18
++#define REG_F4 s19
+ 
+-#define REG_D1    d10
+-#define REG_D2    d11
++#define REG_D1 d10
++#define REG_D2 d11
+ #endif
+ 
+ /* -----------------------------------------------------------------------------
+@@ -560,36 +561,37 @@ the stack. See Note [Overlapping global registers] for implications.
+    FPU/SIMD registers
+ 
+    s/d/q/v0-v7    Argument / result/ scratch registers
+-   s/d/q/v8-v15   callee-saved registers (must be preserved across subroutine calls,
+-                  but only bottom 64-bit value needs to be preserved)
+-   s/d/q/v16-v31  temporary registers
++   s/d/q/v8-v15   callee-saved registers (must be preserved across subroutine
++   calls, but only bottom 64-bit value needs to be preserved) s/d/q/v16-v31
++   temporary registers
+ 
+-   ----------------------------------------------------------------------------- */
++   -----------------------------------------------------------------------------
++ */
+ 
+ #elif defined(MACHREGS_aarch64)
+ 
+ #define REG(x) __asm__(#x)
+ 
+-#define REG_Base        r19
+-#define REG_Sp          r20
+-#define REG_Hp          r21
+-#define REG_R1          r22
+-#define REG_R2          r23
+-#define REG_R3          r24
+-#define REG_R4          r25
+-#define REG_R5          r26
+-#define REG_R6          r27
+-#define REG_SpLim       r28
+-
+-#define REG_F1          s8
+-#define REG_F2          s9
+-#define REG_F3          s10
+-#define REG_F4          s11
+-
+-#define REG_D1          d12
+-#define REG_D2          d13
+-#define REG_D3          d14
+-#define REG_D4          d15
++#define REG_Base r19
++#define REG_Sp r20
++#define REG_Hp r21
++#define REG_R1 r22
++#define REG_R2 r23
++#define REG_R3 r24
++#define REG_R4 r25
++#define REG_R5 r26
++#define REG_R6 r27
++#define REG_SpLim r28
++
++#define REG_F1 s8
++#define REG_F2 s9
++#define REG_F3 s10
++#define REG_F4 s11
++
++#define REG_D1 d12
++#define REG_D2 d13
++#define REG_D3 d14
++#define REG_D4 d15
+ 
+ /* -----------------------------------------------------------------------------
+    The s390x register mapping
+@@ -624,33 +626,33 @@ the stack. See Note [Overlapping global registers] for implications.
+ 
+ #define REG(x) __asm__("%" #x)
+ 
+-#define REG_Base        r7
+-#define REG_Sp          r8
+-#define REG_Hp          r10
+-#define REG_R1          r11
+-#define REG_R2          r12
+-#define REG_R3          r13
+-#define REG_R4          r6
+-#define REG_R5          r2
+-#define REG_R6          r3
+-#define REG_R7          r4
+-#define REG_R8          r5
+-#define REG_SpLim       r9
+-#define REG_MachSp      r15
+-
+-#define REG_F1          f8
+-#define REG_F2          f9
+-#define REG_F3          f10
+-#define REG_F4          f11
+-#define REG_F5          f0
+-#define REG_F6          f1
+-
+-#define REG_D1          f12
+-#define REG_D2          f13
+-#define REG_D3          f14
+-#define REG_D4          f15
+-#define REG_D5          f2
+-#define REG_D6          f3
++#define REG_Base r7
++#define REG_Sp r8
++#define REG_Hp r10
++#define REG_R1 r11
++#define REG_R2 r12
++#define REG_R3 r13
++#define REG_R4 r6
++#define REG_R5 r2
++#define REG_R6 r3
++#define REG_R7 r4
++#define REG_R8 r5
++#define REG_SpLim r9
++#define REG_MachSp r15
++
++#define REG_F1 f8
++#define REG_F2 f9
++#define REG_F3 f10
++#define REG_F4 f11
++#define REG_F5 f0
++#define REG_F6 f1
++
++#define REG_D1 f12
++#define REG_D2 f13
++#define REG_D3 f14
++#define REG_D4 f15
++#define REG_D5 f2
++#define REG_D6 f3
+ 
+ #define CALLER_SAVES_R5
+ #define CALLER_SAVES_R6
+@@ -696,34 +698,85 @@ the stack. See Note [Overlapping global registers] for implications.
+ 
+ #define REG(x) __asm__(#x)
+ 
+-#define REG_Base        s1
+-#define REG_Sp          s2
+-#define REG_Hp          s3
+-#define REG_R1          s4
+-#define REG_R2          s5
+-#define REG_R3          s6
+-#define REG_R4          s7
+-#define REG_R5          s8
+-#define REG_R6          s9
+-#define REG_R7          s10
+-#define REG_SpLim       s11
+-
+-#define REG_F1          fs0
+-#define REG_F2          fs1
+-#define REG_F3          fs2
+-#define REG_F4          fs3
+-#define REG_F5          fs4
+-#define REG_F6          fs5
+-
+-#define REG_D1          fs6
+-#define REG_D2          fs7
+-#define REG_D3          fs8
+-#define REG_D4          fs9
+-#define REG_D5          fs10
+-#define REG_D6          fs11
+-
+-#define MAX_REAL_FLOAT_REG   6
+-#define MAX_REAL_DOUBLE_REG  6
++#define REG_Base s1
++#define REG_Sp s2
++#define REG_Hp s3
++#define REG_R1 s4
++#define REG_R2 s5
++#define REG_R3 s6
++#define REG_R4 s7
++#define REG_R5 s8
++#define REG_R6 s9
++#define REG_R7 s10
++#define REG_SpLim s11
++
++#define REG_F1 fs0
++#define REG_F2 fs1
++#define REG_F3 fs2
++#define REG_F4 fs3
++#define REG_F5 fs4
++#define REG_F6 fs5
++
++#define REG_D1 fs6
++#define REG_D2 fs7
++#define REG_D3 fs8
++#define REG_D4 fs9
++#define REG_D5 fs10
++#define REG_D6 fs11
++
++#define MAX_REAL_FLOAT_REG 6
++#define MAX_REAL_DOUBLE_REG 6
++
++/* -----------------------------------------------------------------------------
++   The loongarch64 register mapping
++
++   Register    | Role(s)                                 | Call effect
++   ------------+-----------------------------------------+-------------
++   zero        | Hard-wired zero                         | -
++   ra          | Return address                          | caller-saved
++   tp          | Thread pointer                          | -
++   sp          | Stack pointer                           | callee-saved
++   a0,a1       | Arguments / return values               | caller-saved
++   a2..a7      | Arguments                               | caller-saved
++   t0..t8      | -                                       | caller-saved
++   u0          | Reserve                                 | -
++   fp          | Frame pointer                           | callee-saved
++   s0..s8      | -                                       | callee-saved
++   fa0,fa1     | Arguments / return values               | caller-saved
++   fa2..fa7    | Arguments                               | caller-saved
++   ft0..ft15   | -                                       | caller-saved
++   fs0..fs7    | -                                       | callee-saved
++
++   Each general purpose register as well as each floating-point
++   register is 64 bits wide, also, the u0 register is called r21 in some cases.
++
++   -------------------------------------------------------------------------- */
++#elif defined(MACHREGS_loongarch64)
++
++#define REG(x) __asm__("$" #x)
++
++#define REG_Base s0
++#define REG_Sp s1
++#define REG_Hp s2
++#define REG_R1 s3
++#define REG_R2 s4
++#define REG_R3 s5
++#define REG_R4 s6
++#define REG_R5 s7
++#define REG_SpLim s8
++
++#define REG_F1 fs0
++#define REG_F2 fs1
++#define REG_F3 fs2
++#define REG_F4 fs3
++
++#define REG_D1 fs4
++#define REG_D2 fs5
++#define REG_D3 fs6
++#define REG_D4 fs7
++
++#define MAX_REAL_FLOAT_REG 4
++#define MAX_REAL_DOUBLE_REG 4
+ 
+ #else
+ 
+@@ -753,95 +806,95 @@ the stack. See Note [Overlapping global registers] for implications.
+  */
+ 
+ #if !defined(MAX_REAL_VANILLA_REG)
+-#  if   defined(REG_R10)
+-#  define MAX_REAL_VANILLA_REG 10
+-#  elif   defined(REG_R9)
+-#  define MAX_REAL_VANILLA_REG 9
+-#  elif   defined(REG_R8)
+-#  define MAX_REAL_VANILLA_REG 8
+-#  elif defined(REG_R7)
+-#  define MAX_REAL_VANILLA_REG 7
+-#  elif defined(REG_R6)
+-#  define MAX_REAL_VANILLA_REG 6
+-#  elif defined(REG_R5)
+-#  define MAX_REAL_VANILLA_REG 5
+-#  elif defined(REG_R4)
+-#  define MAX_REAL_VANILLA_REG 4
+-#  elif defined(REG_R3)
+-#  define MAX_REAL_VANILLA_REG 3
+-#  elif defined(REG_R2)
+-#  define MAX_REAL_VANILLA_REG 2
+-#  elif defined(REG_R1)
+-#  define MAX_REAL_VANILLA_REG 1
+-#  else
+-#  define MAX_REAL_VANILLA_REG 0
+-#  endif
++#if defined(REG_R10)
++#define MAX_REAL_VANILLA_REG 10
++#elif defined(REG_R9)
++#define MAX_REAL_VANILLA_REG 9
++#elif defined(REG_R8)
++#define MAX_REAL_VANILLA_REG 8
++#elif defined(REG_R7)
++#define MAX_REAL_VANILLA_REG 7
++#elif defined(REG_R6)
++#define MAX_REAL_VANILLA_REG 6
++#elif defined(REG_R5)
++#define MAX_REAL_VANILLA_REG 5
++#elif defined(REG_R4)
++#define MAX_REAL_VANILLA_REG 4
++#elif defined(REG_R3)
++#define MAX_REAL_VANILLA_REG 3
++#elif defined(REG_R2)
++#define MAX_REAL_VANILLA_REG 2
++#elif defined(REG_R1)
++#define MAX_REAL_VANILLA_REG 1
++#else
++#define MAX_REAL_VANILLA_REG 0
++#endif
+ #endif
+ 
+ #if !defined(MAX_REAL_FLOAT_REG)
+-#  if   defined(REG_F7)
+-#  error Please manually define MAX_REAL_FLOAT_REG for this architecture
+-#  elif defined(REG_F6)
+-#  define MAX_REAL_FLOAT_REG 6
+-#  elif defined(REG_F5)
+-#  define MAX_REAL_FLOAT_REG 5
+-#  elif defined(REG_F4)
+-#  define MAX_REAL_FLOAT_REG 4
+-#  elif defined(REG_F3)
+-#  define MAX_REAL_FLOAT_REG 3
+-#  elif defined(REG_F2)
+-#  define MAX_REAL_FLOAT_REG 2
+-#  elif defined(REG_F1)
+-#  define MAX_REAL_FLOAT_REG 1
+-#  else
+-#  define MAX_REAL_FLOAT_REG 0
+-#  endif
++#if defined(REG_F7)
++#error Please manually define MAX_REAL_FLOAT_REG for this architecture
++#elif defined(REG_F6)
++#define MAX_REAL_FLOAT_REG 6
++#elif defined(REG_F5)
++#define MAX_REAL_FLOAT_REG 5
++#elif defined(REG_F4)
++#define MAX_REAL_FLOAT_REG 4
++#elif defined(REG_F3)
++#define MAX_REAL_FLOAT_REG 3
++#elif defined(REG_F2)
++#define MAX_REAL_FLOAT_REG 2
++#elif defined(REG_F1)
++#define MAX_REAL_FLOAT_REG 1
++#else
++#define MAX_REAL_FLOAT_REG 0
++#endif
+ #endif
+ 
+ #if !defined(MAX_REAL_DOUBLE_REG)
+-#  if   defined(REG_D7)
+-#  error Please manually define MAX_REAL_DOUBLE_REG for this architecture
+-#  elif defined(REG_D6)
+-#  define MAX_REAL_DOUBLE_REG 6
+-#  elif defined(REG_D5)
+-#  define MAX_REAL_DOUBLE_REG 5
+-#  elif defined(REG_D4)
+-#  define MAX_REAL_DOUBLE_REG 4
+-#  elif defined(REG_D3)
+-#  define MAX_REAL_DOUBLE_REG 3
+-#  elif defined(REG_D2)
+-#  define MAX_REAL_DOUBLE_REG 2
+-#  elif defined(REG_D1)
+-#  define MAX_REAL_DOUBLE_REG 1
+-#  else
+-#  define MAX_REAL_DOUBLE_REG 0
+-#  endif
++#if defined(REG_D7)
++#error Please manually define MAX_REAL_DOUBLE_REG for this architecture
++#elif defined(REG_D6)
++#define MAX_REAL_DOUBLE_REG 6
++#elif defined(REG_D5)
++#define MAX_REAL_DOUBLE_REG 5
++#elif defined(REG_D4)
++#define MAX_REAL_DOUBLE_REG 4
++#elif defined(REG_D3)
++#define MAX_REAL_DOUBLE_REG 3
++#elif defined(REG_D2)
++#define MAX_REAL_DOUBLE_REG 2
++#elif defined(REG_D1)
++#define MAX_REAL_DOUBLE_REG 1
++#else
++#define MAX_REAL_DOUBLE_REG 0
++#endif
+ #endif
+ 
+ #if !defined(MAX_REAL_LONG_REG)
+-#  if   defined(REG_L1)
+-#  define MAX_REAL_LONG_REG 1
+-#  else
+-#  define MAX_REAL_LONG_REG 0
+-#  endif
++#if defined(REG_L1)
++#define MAX_REAL_LONG_REG 1
++#else
++#define MAX_REAL_LONG_REG 0
++#endif
+ #endif
+ 
+ #if !defined(MAX_REAL_XMM_REG)
+-#  if   defined(REG_XMM6)
+-#  define MAX_REAL_XMM_REG 6
+-#  elif defined(REG_XMM5)
+-#  define MAX_REAL_XMM_REG 5
+-#  elif defined(REG_XMM4)
+-#  define MAX_REAL_XMM_REG 4
+-#  elif defined(REG_XMM3)
+-#  define MAX_REAL_XMM_REG 3
+-#  elif defined(REG_XMM2)
+-#  define MAX_REAL_XMM_REG 2
+-#  elif defined(REG_XMM1)
+-#  define MAX_REAL_XMM_REG 1
+-#  else
+-#  define MAX_REAL_XMM_REG 0
+-#  endif
++#if defined(REG_XMM6)
++#define MAX_REAL_XMM_REG 6
++#elif defined(REG_XMM5)
++#define MAX_REAL_XMM_REG 5
++#elif defined(REG_XMM4)
++#define MAX_REAL_XMM_REG 4
++#elif defined(REG_XMM3)
++#define MAX_REAL_XMM_REG 3
++#elif defined(REG_XMM2)
++#define MAX_REAL_XMM_REG 2
++#elif defined(REG_XMM1)
++#define MAX_REAL_XMM_REG 1
++#else
++#define MAX_REAL_XMM_REG 0
++#endif
+ #endif
+ 
+ /* define NO_ARG_REGS if we have no argument registers at all (we can
+diff --git a/includes/stg/MachRegsForHost.h b/includes/stg/MachRegsForHost.h
+index e902d52..b13fafd 100644
+--- a/includes/stg/MachRegsForHost.h
++++ b/includes/stg/MachRegsForHost.h
+@@ -39,40 +39,44 @@
+ #define MACHREGS_NO_REGS 0
+ 
+ #if defined(i386_HOST_ARCH)
+-#define MACHREGS_i386     1
++#define MACHREGS_i386 1
+ #endif
+ 
+ #if defined(x86_64_HOST_ARCH)
+-#define MACHREGS_x86_64   1
++#define MACHREGS_x86_64 1
+ #endif
+ 
+-#if defined(powerpc_HOST_ARCH) || defined(powerpc64_HOST_ARCH) \
+-        || defined(powerpc64le_HOST_ARCH) || defined(rs6000_HOST_ARCH)
+-#define MACHREGS_powerpc  1
++#if defined(powerpc_HOST_ARCH) || defined(powerpc64_HOST_ARCH) ||              \
++    defined(powerpc64le_HOST_ARCH) || defined(rs6000_HOST_ARCH)
++#define MACHREGS_powerpc 1
+ #endif
+ 
+ #if defined(sparc_HOST_ARCH)
+-#define MACHREGS_sparc    1
++#define MACHREGS_sparc 1
+ #endif
+ 
+ #if defined(arm_HOST_ARCH)
+-#define MACHREGS_arm      1
++#define MACHREGS_arm 1
+ #endif
+ 
+ #if defined(aarch64_HOST_ARCH)
+-#define MACHREGS_aarch64  1
++#define MACHREGS_aarch64 1
+ #endif
+ 
+ #if defined(darwin_HOST_OS)
+-#define MACHREGS_darwin   1
++#define MACHREGS_darwin 1
+ #endif
+ 
+ #if defined(s390x_HOST_ARCH)
+-#define MACHREGS_s390x    1
++#define MACHREGS_s390x 1
+ #endif
+ 
+ #if defined(riscv64_HOST_ARCH)
+-#define MACHREGS_riscv64  1
++#define MACHREGS_riscv64 1
++#endif
++
++#if defined(loongarch64_HOST_ARCH)
++#define MACHREGS_loongarch64 1
+ #endif
+ 
+ #endif
+diff --git a/includes/stg/SMP.h b/includes/stg/SMP.h
+index 57eb618..f279fbe 100644
+--- a/includes/stg/SMP.h
++++ b/includes/stg/SMP.h
+@@ -397,6 +397,8 @@ write_barrier(void) {
+     __asm__ __volatile__ ("dmb  st" : : : "memory");
+ #elif defined(riscv64_HOST_ARCH)
+     __asm__ __volatile__ ("fence w,w" : : : "memory");
++#elif defined(loongarch64_HOST_ARCH)
++    __asm__ __volatile__ ("dbar 0" : : : "memory");
+ #else
+ #error memory barriers unimplemented on this architecture
+ #endif
+@@ -423,6 +425,8 @@ store_load_barrier(void) {
+     __asm__ __volatile__ ("dmb sy" : : : "memory");
+ #elif defined(riscv64_HOST_ARCH)
+     __asm__ __volatile__ ("fence w,r" : : : "memory");
++#elif defined(loongarch64_HOST_ARCH)
++    __asm__ __volatile__ ("dbar 0" : : : "memory");
+ #else
+ #error memory barriers unimplemented on this architecture
+ #endif
+@@ -450,6 +454,8 @@ load_load_barrier(void) {
+     __asm__ __volatile__ ("dmb sy" : : : "memory");
+ #elif defined(riscv64_HOST_ARCH)
+     __asm__ __volatile__ ("fence w,r" : : : "memory");
++#elif defined(loongarch64_HOST_ARCH)
++    __asm__ __volatile__ ("dbar 0" : : : "memory");
+ #else
+ #error memory barriers unimplemented on this architecture
+ #endif
+diff --git a/libraries/base/System/Info.hs b/libraries/base/System/Info.hs
+index 70284d4..8d1de42 100644
+--- a/libraries/base/System/Info.hs
++++ b/libraries/base/System/Info.hs
+@@ -89,6 +89,8 @@ os = HOST_OS
+ --    * "powerpc64le"
+ --    * "riscv32"
+ --    * "riscv64"
++--    * "loongarch32"
++--    * "loongarch64"
+ --    * "rs6000"
+ --    * "s390"
+ --    * "s390x"
+diff --git a/libraries/ghc-boot/GHC/Platform/ArchOS.hs b/libraries/ghc-boot/GHC/Platform/ArchOS.hs
+index 55c22fb..ac3b9ea 100644
+--- a/libraries/ghc-boot/GHC/Platform/ArchOS.hs
++++ b/libraries/ghc-boot/GHC/Platform/ArchOS.hs
+@@ -46,6 +46,7 @@ data Arch
+    | ArchMipseb
+    | ArchMipsel
+    | ArchRISCV64
++   | ArchLoongArch64
+    | ArchJavaScript
+    deriving (Read, Show, Eq)
+ 
+@@ -99,7 +100,6 @@ data OS
+    | OSHurd
+    deriving (Read, Show, Eq)
+ 
+-
+ -- Note [Platform Syntax]
+ -- ~~~~~~~~~~~~~~~~~~~~~~
+ --
+@@ -136,6 +136,7 @@ stringEncodeArch = \case
+   ArchMipseb        -> "mipseb"
+   ArchMipsel        -> "mipsel"
+   ArchRISCV64       -> "riscv64"
++  ArchLoongArch64   -> "loongarch64"
+   ArchJavaScript    -> "js"
+ 
+ -- | See Note [Platform Syntax].
+diff --git a/llvm-targets b/llvm-targets
+index 1d00445..de0f5b1 100644
+--- a/llvm-targets
++++ b/llvm-targets
+@@ -40,6 +40,8 @@
+ ,("s390x-ibm-linux", ("E-m:e-i1:8:16-i8:8:16-i64:64-f128:64-a:8:16-n32:64", "z10", ""))
+ ,("riscv64-unknown-linux-gnu", ("e-m:e-p:64:64-i64:64-i128:128-n64-S128", "", "+m +a +f +d +c +relax"))
+ ,("riscv64-unknown-linux", ("e-m:e-p:64:64-i64:64-i128:128-n64-S128", "", "+m +a +f +d +c +relax"))
++,("loongarch64-unknown-linux-gnu", ("e-m:e-p:64:64-i64:64-i128:128-n64-S128", "", "+f +d"))
++,("loongarch64-unknown-linux", ("e-m:e-p:64:64-i64:64-i128:128-n64-S128", "", "+f +d"))
+ ,("i386-apple-darwin", ("e-m:o-p:32:32-p270:32:32-p271:32:32-p272:64:64-f64:32:64-f80:128-n8:16:32-S128", "penryn", ""))
+ ,("x86_64-apple-darwin", ("e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128", "penryn", ""))
+ ,("arm64-apple-darwin", ("e-m:o-i64:64-i128:128-n32:64-S128", "generic", "+v8.3a +fp-armv8 +neon +crc +crypto +fullfp16 +ras +lse +rdm +rcpc +zcm +zcz +sha2 +aes"))
+diff --git a/m4/fptools_set_haskell_platform_vars.m4 b/m4/fptools_set_haskell_platform_vars.m4
+index 7aec2e1..9511b56 100644
+--- a/m4/fptools_set_haskell_platform_vars.m4
++++ b/m4/fptools_set_haskell_platform_vars.m4
+@@ -48,7 +48,10 @@ AC_DEFUN([FPTOOLS_SET_HASKELL_PLATFORM_VARS],
+         riscv64)
+             test -z "[$]2" || eval "[$]2=ArchRISCV64"
+             ;;
+-        hppa|hppa1_1|ia64|m68k|nios2|riscv32|rs6000|s390|sh4|vax)
++        loongarch64)
++            test -z "[$]2" || eval "[$]2=ArchLoongArch64"
++            ;;
++        hppa|hppa1_1|ia64|m68k|nios2|riscv32|loongarch32|rs6000|s390|sh4|vax)
+             test -z "[$]2" || eval "[$]2=ArchUnknown"
+             ;;
+         *)
+diff --git a/m4/ghc_convert_cpu.m4 b/m4/ghc_convert_cpu.m4
+index 15dda71..db3634e 100644
+--- a/m4/ghc_convert_cpu.m4
++++ b/m4/ghc_convert_cpu.m4
+@@ -56,6 +56,12 @@ case "$1" in
+   riscv|riscv32*)
+     $2="riscv32"
+     ;;
++  loongarch64*)
++    $2="loongarch64"
++    ;;
++  loongarch32*)
++    $2="loongarch32"
++    ;;
+   rs6000)
+     $2="rs6000"
+     ;;
+diff --git a/rts/StgCRunAsm.S b/rts/StgCRunAsm.S
+index aed3241..77af3d9 100644
+--- a/rts/StgCRunAsm.S
++++ b/rts/StgCRunAsm.S
+@@ -375,6 +375,124 @@ StgReturn:
+ 	.cfi_endproc
+ 	.size StgReturn, .-StgReturn
+ 
++#elif defined(loongarch64_HOST_ARCH)
++# define STACK_FRAME_SIZE (RESERVED_C_STACK_BYTES+160)
++	.text
++	.align 1
++	.globl StgRun
++	.type StgRun, @function
++StgRun:
++	.cfi_startproc
++	addi.d	$sp,$sp,-160
++	.cfi_def_cfa_offset 160
++	/* save callee-saved registers plus ra */
++	st.d	$ra,$sp,152
++	st.d    $fp,$sp,144
++	st.d	$s0,$sp,136
++	st.d	$s1,$sp,128
++	st.d	$s2,$sp,120
++	st.d	$s3,$sp,112
++	st.d	$s4,$sp,104
++	st.d	$s5,$sp,96
++	st.d	$s6,$sp,88
++	st.d	$s7,$sp,80
++	st.d	$s8,$sp,72
++	fst.d	$fs0,$sp,56
++	fst.d	$fs1,$sp,48
++	fst.d	$fs2,$sp,40
++	fst.d	$fs3,$sp,32
++	fst.d	$fs4,$sp,24
++	fst.d	$fs5,$sp,16
++	fst.d	$fs6,$sp,8
++	fst.d	$fs7,$sp,0
++	/* allocate stack frame */
++	li.d	$t0,RESERVED_C_STACK_BYTES
++	sub.d	$sp,$sp,$t0
++	.cfi_def_cfa_offset STACK_FRAME_SIZE
++	.cfi_offset 1, -8
++	.cfi_offset 22, -16
++	.cfi_offset 23, -24
++	.cfi_offset 24, -32
++	.cfi_offset 25, -40
++	.cfi_offset 26, -48
++	.cfi_offset 27, -56
++	.cfi_offset 28, -64
++	.cfi_offset 29, -72
++	.cfi_offset 30, -80
++	.cfi_offset 31, -88
++	.cfi_offset 56, -104
++	.cfi_offset 57, -112
++	.cfi_offset 58, -120
++	.cfi_offset 59, -128
++	.cfi_offset 60, -136
++	.cfi_offset 61, -144
++	.cfi_offset 62, -152
++	.cfi_offset 63, -160
++	/* set STGs BaseReg from LoongArch a1 */
++	move	$s0,$a1
++	/* jump to STG function */
++	jr	$a0
++	.cfi_endproc
++	.size StgRun, .-StgRun
++
++	.text
++	.align 2
++	.globl StgReturn
++	.type StgReturn, @function
++StgReturn:
++	.cfi_startproc
++	/* set return value from STGs R1 (LoongArch64 s3) */
++	move	$a0,$s3
++	/* deallocate stack frame */
++	li.d	$t0,RESERVED_C_STACK_BYTES
++	add.d	$sp,$sp,$t0
++	.cfi_def_cfa_offset 160
++	/* restore callee-saved registers and ra */
++	ld.d	$ra,$sp,152
++	.cfi_restore 1
++	ld.d	$fp,$sp,144
++	.cfi_restore 22
++	ld.d	$s0,$sp,136
++	.cfi_restore 23
++	ld.d	$s1,$sp,128
++	.cfi_restore 24
++	ld.d	$s2,$sp,120
++	.cfi_restore 25
++	ld.d	$s3,$sp,112
++	.cfi_restore 26
++	ld.d	$s4,$sp,104
++	.cfi_restore 27
++	ld.d	$s5,$sp,96
++	.cfi_restore 28
++	ld.d	$s6,$sp,88
++	.cfi_restore 29
++	ld.d	$s7,$sp,80
++	.cfi_restore 30
++	ld.d	$s8,$sp,72
++	.cfi_restore 31
++	fld.d	$fs0,$sp,56
++	.cfi_restore 56
++	fld.d	$fs1,$sp,48
++	.cfi_restore 57
++	fld.d	$fs2,$sp,40
++	.cfi_restore 58
++	fld.d	$fs3,$sp,32
++	.cfi_restore 59
++	fld.d	$fs4,$sp,24
++	.cfi_restore 60
++	fld.d	$fs5,$sp,16
++	.cfi_restore 61
++	fld.d	$fs6,$sp,8
++	.cfi_restore 62
++	fld.d	$fs7,$sp,0
++	.cfi_restore 63
++	addi.d	$sp,$sp,160
++	.cfi_def_cfa_offset 0
++	/* jump back to caller of StgRun() */
++	ret
++	.cfi_endproc
++	.size StgReturn, .-StgReturn
++
+ 	.section	.note.GNU-stack,"",@progbits
+ #endif
+ 
+diff --git a/rts/linker/Elf.c b/rts/linker/Elf.c
+index 9ae8b43..3588e2d 100644
+--- a/rts/linker/Elf.c
++++ b/rts/linker/Elf.c
+@@ -420,6 +420,12 @@ ocVerifyImage_ELF ( ObjectCode* oc )
+           errorBelch("%s: RTS linker not implemented on riscv",
+                      oc->fileName);
+           return 0;
++#endif
++#if defined(EM_LOONGARCH)
++      case EM_LOONGARCH:  IF_DEBUG(linker,debugBelch( "loongarch64" ));
++          errorBelch("%s: RTS linker not implemented on loongarch64",
++                     oc->fileName);
++          return 0;
+ #endif
+        default:       IF_DEBUG(linker,debugBelch( "unknown" ));
+                      errorBelch("%s: unknown architecture (e_machine == %d)"
+diff --git a/rts/rts.cabal.in b/rts/rts.cabal.in
+index 0a06414..e2a7df1 100644
+--- a/rts/rts.cabal.in
++++ b/rts/rts.cabal.in
+@@ -451,7 +451,7 @@ library
+         c-sources: adjustor/NativeSparc.c
+ 
+     -- Use assembler STG entrypoint on archictures where it is used
+-    if arch(ppc) || arch(ppc64) || arch(s390x) || arch(riscv64)
++    if arch(ppc) || arch(ppc64) || arch(s390x) || arch(riscv64) || arch(loongarch64)
+       asm-sources: StgCRunAsm.S
+ 
+     c-sources: Adjustor.c
+diff --git a/utils/llvm-targets/gen-data-layout.sh b/utils/llvm-targets/gen-data-layout.sh
+index 09953f2..c8ef19d 100755
+--- a/utils/llvm-targets/gen-data-layout.sh
++++ b/utils/llvm-targets/gen-data-layout.sh
+@@ -79,6 +79,9 @@ TARGETS=(
+     # Linux riscv64
+     "riscv64-unknown-linux-gnu"
+     "riscv64-unknown-linux"
++    # Linux loongarch64
++    "loongarch64-unknown-linux-gnu"
++    "loongarch64-unknown-linux"
+ 
+     #########################
+     # Darwin
+-- 
+2.50.1
+
