@@ -67,6 +67,9 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_1_0_0;
+
   # Only required for ghc >= 9.2
   nothunks = super.nothunks.override {
     wherefrom-compat = null;

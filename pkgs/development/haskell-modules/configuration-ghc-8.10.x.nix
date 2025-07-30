@@ -64,6 +64,10 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  # os-string >= 2 is incompatible with bytestring < 0.11
+  os-string = doDistribute self.os-string_1_0_0;
+
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
