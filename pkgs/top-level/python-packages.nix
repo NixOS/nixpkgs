@@ -10479,6 +10479,8 @@ self: super: with self; {
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
+  nsw-fuel-api-client = callPackage ../development/python-modules/nsw-fuel-api-client { };
+
   nsz = callPackage ../development/python-modules/nsz { };
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
@@ -11931,8 +11933,6 @@ self: super: with self; {
   prisma = callPackage ../development/python-modules/prisma { };
 
   prison = callPackage ../development/python-modules/prison { };
-
-  private-gpt = callPackage ../development/python-modules/private-gpt { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
 
@@ -19661,6 +19661,8 @@ self: super: with self; {
   winacl = callPackage ../development/python-modules/winacl { };
 
   winsspi = callPackage ../development/python-modules/winsspi { };
+
+  wirelesstagpy = callPackage ../development/python-modules/wirelesstagpy { };
 
   wirerope = callPackage ../development/python-modules/wirerope { };
 

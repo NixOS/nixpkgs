@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "madonctl";
-  version = "2.3.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "McKael";
     repo = "madonctl";
     rev = "v${version}";
-    hash = "sha256-mo185EKjLkiujAKcAFM1XqkXWvcfYbnv+r3dF9ywaf8=";
+    hash = "sha256-R/es9QVTBpLiCojB/THWDkgQcxexyX/iH9fF3Q2tq54=";
   };
 
   vendorHash = null;

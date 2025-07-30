@@ -99,11 +99,11 @@
     "vendorHash": "sha256-YIn8akPW+DCVF0eYZxsmJxmrJuYhK4QLG/uhmmrXd4c="
   },
   "auth0": {
-    "hash": "sha256-Pr8cqPtmINxM5zYy8qrGlGoW/q2ha7sLwSy3oCPm/h8=",
+    "hash": "sha256-kFlRAwvKpqcD0n5VKJC+Whr8ZeO4DUzkLT2umvLXgEA=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.24.0",
+    "rev": "v1.24.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-uKzgEBNrLqcOkrrxKO9c5wKRwUjQInzeseN/euEI2G8="
   },
@@ -171,11 +171,11 @@
     "vendorHash": null
   },
   "baiducloud": {
-    "hash": "sha256-9NarSg8uXhdx+kJK7M9ftDoWXr9St1CEqL0N9+OJAXE=",
+    "hash": "sha256-bmKoxLvWc1mX1NaV3ksHeuRX8yYDKnfFhPiASPBVlnM=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.22.8",
+    "rev": "v1.22.9",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -750,13 +750,13 @@
     "vendorHash": "sha256-LeMFN4pOJotTTqakEbVelHSTEb4p7CQIuKzeuX3SZUM="
   },
   "launchdarkly": {
-    "hash": "sha256-ZiRHloNipUqiD1YC8c2oln1sknW8cazSQHrxX75o/ek=",
+    "hash": "sha256-U3l2Tf7vcLAz7nZYKaGR0Nv/Qw2HgbGNV7w1dYBvSEc=",
     "homepage": "https://registry.terraform.io/providers/launchdarkly/launchdarkly",
     "owner": "launchdarkly",
     "repo": "terraform-provider-launchdarkly",
-    "rev": "v2.25.2",
+    "rev": "v2.25.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rw73A4dD+ObozIRYoxIwAx6/8zlSSBtQDpJIpgVhSp8="
+    "vendorHash": "sha256-b9+0YLuv9AVszGDQ2v+VbYameN16PCdE3jUhL9efK6M="
   },
   "libvirt": {
     "hash": "sha256-6wG6J6SQGxR74gbGZlW5/8zgIqsBUo0Xg/gN0wNppSg=",
