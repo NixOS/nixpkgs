@@ -11,9 +11,9 @@
   pahole,
   lib,
   stdenv,
-  rustc,
+  rustc-unwrapped,
   rustPlatform,
-  rust-bindgen,
+  rust-bindgen-unwrapped,
   # testing
   emptyFile,
   nixos,
@@ -126,7 +126,7 @@ let
 
       commonStructuredConfig = import ./common-config.nix {
         inherit lib stdenv version;
-        rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc;
+        rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc-unwrapped;
 
         features = kernelFeatures; # Ensure we know of all extra patches, etc.
       };
@@ -190,8 +190,8 @@ let
         ]
         ++ lib.optional (lib.versionAtLeast version "5.2") pahole
         ++ lib.optionals withRust [
-          rust-bindgen.unwrapped
-          rustc.unwrapped
+          rust-bindgen-unwrapped
+          rustc-unwrapped
         ];
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;

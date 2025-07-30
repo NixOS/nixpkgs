@@ -22,8 +22,8 @@
   kmod,
   ubootTools,
   fetchpatch,
-  rustc,
-  rust-bindgen,
+  rustc-unwrapped,
+  rust-bindgen-unwrapped,
   rustPlatform,
 }:
 
@@ -169,8 +169,8 @@ lib.makeOverridable (
         ]
         ++ optional (lib.versionAtLeast version "5.13") zstd
         ++ optionals withRust [
-          rustc.unwrapped
-          rust-bindgen.unwrapped
+          rustc-unwrapped
+          rust-bindgen-unwrapped
         ];
 
       in
@@ -229,8 +229,8 @@ lib.makeOverridable (
           zlib
         ]
         ++ optionals withRust [
-          rustc.unwrapped
-          rust-bindgen.unwrapped
+          rustc-unwrapped
+          rust-bindgen-unwrapped
         ];
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
