@@ -94,6 +94,8 @@
   canokey-qemu,
   capstoneSupport ? !minimal,
   capstone,
+  valgrindSupport ? false,
+  valgrind-light,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -248,7 +250,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals smbdSupport [ samba ]
   ++ lib.optionals uringSupport [ liburing ]
   ++ lib.optionals canokeySupport [ canokey-qemu ]
-  ++ lib.optionals capstoneSupport [ capstone ];
+  ++ lib.optionals capstoneSupport [ capstone ]
+  ++ lib.optionals valgrindSupport [ valgrind-light ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;

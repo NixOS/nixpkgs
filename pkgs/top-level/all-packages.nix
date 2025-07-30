@@ -6842,23 +6842,17 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_33-bin
-    electron_34-bin
     electron_35-bin
     electron_36-bin
     electron_37-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
-    electron-chromedriver_33
-    electron-chromedriver_34
     electron-chromedriver_35
     electron-chromedriver_36
     electron-chromedriver_37
     ;
 
-  electron_33 = electron_33-bin;
-  electron_34 = electron_34-bin;
   electron_35 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_35 then
       electron-source.electron_35
@@ -12183,7 +12177,7 @@ with pkgs;
   };
 
   buildMozillaMach =
-    opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
+    opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
   firefox-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox.nix {
     inherit
@@ -13060,6 +13054,7 @@ with pkgs;
 
   inherit (mopidyPackages)
     mopidy
+    mopidy-listenbrainz
     mopidy-bandcamp
     mopidy-iris
     mopidy-jellyfin

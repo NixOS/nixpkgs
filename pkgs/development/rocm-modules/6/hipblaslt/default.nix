@@ -222,7 +222,7 @@ stdenv.mkDerivation (
     };
     passthru.tensilelite = tensile';
     meta = with lib; {
-      description = "hipBLASLt is a library that provides general matrix-matrix operations with a flexible API";
+      description = "Library that provides general matrix-matrix operations with a flexible API";
       homepage = "https://github.com/ROCm/hipBLASlt";
       license = with licenses; [ mit ];
       teams = [ teams.rocm ];

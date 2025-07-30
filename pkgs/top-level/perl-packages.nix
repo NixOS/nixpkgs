@@ -6844,7 +6844,7 @@ with self;
       hash = "sha256-Z/ymiwUm5zTi2VvGsyutAcMZ5Yer9j5M80Itpmu+o6A=";
     };
     meta = {
-      description = "modern bcrypt implementation";
+      description = "Modern bcrypt implementation";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -8863,7 +8863,7 @@ with self;
     };
     propagatedBuildInputs = [ DateSimple ];
     meta = {
-      description = "work with a range of dates";
+      description = "Work with a range of dates";
       license = with lib.licenses; [ gpl2Plus ];
     };
   };
@@ -31457,7 +31457,7 @@ with self;
       hash = "sha256-nkF6j42epiO+6i0TpHwNWmlvyGAsBQm4Js1F+Xt253g=";
     };
     meta = {
-      description = "sprintf-like string formatting capabilities with arbitrary format definitions";
+      description = "Sprintf-like string formatting capabilities with arbitrary format definitions";
       license = with lib.licenses; [ gpl2Only ];
     };
   };

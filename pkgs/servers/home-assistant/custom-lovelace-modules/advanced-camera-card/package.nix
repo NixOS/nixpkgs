@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/dermotduffy/advanced-camera-card/releases/tag/v${version}";
-    description = "A comprehensive camera card for Home Assistant";
+    description = "Comprehensive camera card for Home Assistant";
     homepage = "https://github.com/dermotduffy/advanced-camera-card";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];

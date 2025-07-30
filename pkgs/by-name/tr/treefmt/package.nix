@@ -45,7 +45,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "one CLI to format the code tree";
+    description = "One CLI to format the code tree";
     longDescription = ''
       [treefmt](${meta.homepage}) streamlines the process of applying formatters
       to your project, making it a breeze with just one command line.

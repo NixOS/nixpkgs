@@ -26,7 +26,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
+    description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = src.meta.homepage;
     license = licenses.agpl3Only;
     platforms = platforms.unix;
