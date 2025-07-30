@@ -124,30 +124,19 @@ patchShebangs() {
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=${newInterpreterLine//\\/\\\\}
 
-                # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
-                timestamp=$(stat --printf "%y" "$f")
-
                 # Manually create temporary file instead of using sed -i
                 # (sed -i on $out/x creates tmpfile /nix/store/x which fails on macos + sandbox)
-                tmpFile=$(mktemp -t patchShebangs.XXXXXXXXXX)
+                tmpFile="$(mktemp -t patchShebangs.XXXXXXXXXX)"
                 sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpFile"
 
-                # Make original file writable if it is read-only
-                local restoreReadOnly
-                if [[ ! -w "$f" ]]; then
-                    chmod +w "$f"
-                    restoreReadOnly=true
-                fi
+                # Preserve permissions
+                chmod --reference="$f" "$tmpFile"
 
-                # Replace the original file's content with the patched content
-                # (preserving permissions)
-                cat "$tmpFile" > "$f"
-                rm "$tmpFile"
-                if [[ -n "${restoreReadOnly:-}" ]]; then
-                    chmod -w "$f"
-                fi
+                # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
+                timestamp="$(stat --printf "%y" "$f")"
+                touch --date "$timestamp" "$tmpFile"
 
-                touch --date "$timestamp" "$f"
+                mv "$tmpFile" "$f"
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
