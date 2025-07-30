@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.0.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${finalAttrs.pname}/${finalAttrs.version}/src/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "mirror://kde/stable/krename/${finalAttrs.version}/src/krename-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-sjxgp93Z9ttN1/VaxV/MqKVY+miq+PpcuJ4er2kvI+0=";
   };
 
