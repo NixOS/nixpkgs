@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
-    rev = "libbladeRF_v${version}";
+    tag = "libbladeRF_v${version}";
     hash = "sha256-H40w5YKp6M3QLrsPhILEnJiWutCYLtbgC4a63sV397Q=";
     fetchSubmodules = true;
   };

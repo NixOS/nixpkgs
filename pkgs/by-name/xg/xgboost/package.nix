@@ -53,7 +53,7 @@ effectiveStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-8mj8uw7bbwhRaL0JZf9L9//a+Re2AwbL0e7Oiw/BqIA=";
   };

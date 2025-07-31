@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    rev = "syslog-ng-${finalAttrs.version}";
+    tag = "syslog-ng-${finalAttrs.version}";
     hash = "sha256-/hLrUwJhA0jesOl7gmWHfTVO2M7IG8QNPRzc/TIGTH4=";
     fetchSubmodules = true;
   };

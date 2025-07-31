@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = "zam-plugins";
-    rev = version;
+    tag = version;
     hash = "sha256-pjnhDavKnyQjPF4nUO+j1J+Qtw8yIYMY9A5zBMb4zFU=";
     fetchSubmodules = true;
   };

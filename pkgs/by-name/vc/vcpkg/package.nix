@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZJu3dFsKc7L2THgGXNtBszXUbEEoM3bnLxtf5x5UPTM=";
     leaveDotGit = true;
     postFetch = ''
