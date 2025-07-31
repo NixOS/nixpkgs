@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pytest-benchmark,
   pythonOlder,
@@ -18,9 +18,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wOaFLlFCNUo7RWWiMXRuztyVJTXpJtPvZJi9d6UmkcY=";
+  src = fetchFromGitHub {
+    owner = "goodmami";
+    repo = "wn";
+    tag = "v${version}";
+    hash = "sha256-xUraVRQmr4Oq1T/RiWgch8YJtAZR9ebOzaGBJ1NPKtw=";
   };
 
   build-system = [ hatchling ];
@@ -51,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Modern, interlingual wordnet interface for Python";
     homepage = "https://github.com/goodmami/wn";
-    changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/goodmami/wn/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ zendo ];
   };
