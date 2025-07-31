@@ -9836,13 +9836,10 @@ with pkgs;
   wrapLisp = callPackage ../development/lisp-modules/nix-cl.nix { };
 
   # Armed Bear Common Lisp
-  abcl = wrapLisp {
-    pkg = callPackage ../development/compilers/abcl {
-      # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
-      # supported JDK.
-      jdk = openjdk17;
-    };
-    faslExt = "abcl";
+  abcl = callPackage ../development/compilers/abcl {
+    # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
+    # supported JDK.
+    jdk = openjdk17;
   };
 
   # Clozure Common Lisp
