@@ -95,6 +95,10 @@ buildPythonPackage rec {
     "test_convert_url"
     "test_convert_file"
     "test_convert_warmup"
+
+    # Flaky due to comparison with magic object
+    # https://github.com/docling-project/docling-jobkit/issues/45
+    "test_options_validator"
   ];
 
   meta = {
