@@ -77,7 +77,7 @@ freecad-utils.makeCustomizable (
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
       fetchSubmodules = true;
     };
