@@ -55,50 +55,7 @@ import ./default.nix
     llvmShared = llvmSharedFor pkgsHostTarget;
 
     # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
-    llvmPackages =
-      if (stdenv.targetPlatform.useLLVM or false) then
-        callPackage (
-          {
-            pkgs,
-            bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
-            bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
-          }:
-          let
-            llvmPackages = llvmPackages_20;
-
-            setStdenv =
-              pkg:
-              pkg.override {
-                stdenv = stdenv.override {
-                  allowedRequisites = null;
-                  cc = pkgsBuildHost.llvmPackages_20.clangUseLLVM;
-                };
-              };
-          in
-          rec {
-            inherit (llvmPackages) bintools;
-
-            libunwind = setStdenv llvmPackages.libunwind;
-            llvm = setStdenv llvmPackages.llvm;
-
-            libcxx = llvmPackages.libcxx.override {
-              stdenv = stdenv.override {
-                allowedRequisites = null;
-                cc = pkgsBuildHost.llvmPackages_20.clangNoLibcxx;
-                hostPlatform = stdenv.hostPlatform // {
-                  useLLVM = !stdenv.hostPlatform.isDarwin;
-                };
-              };
-              inherit libunwind;
-            };
-
-            clangUseLLVM = llvmPackages.clangUseLLVM.override { inherit libcxx; };
-
-            stdenv = overrideCC args.stdenv clangUseLLVM;
-          }
-        ) { }
-      else
-        llvmPackages_20;
+    llvmPackages = llvmPackages_20;
 
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
