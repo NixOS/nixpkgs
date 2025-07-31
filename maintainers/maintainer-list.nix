@@ -10597,6 +10597,18 @@
     githubId = 51162078;
     name = "IceDBorn";
   };
+  icetan = {
+    name = "Christopher Fredén";
+    email = "me@icetan.org";
+    matrix = "@icetan:matrix.org";
+    github = "icetan";
+    githubId = 839982;
+    keys = [
+      {
+        fingerprint = "D572 2356 FAE3 D9C5 3753  C464 E4A6 9EDB E76F 692E";
+      }
+    ];
+  };
   icewind1991 = {
     name = "Robin Appelman";
     email = "robin@icewind.nl";
