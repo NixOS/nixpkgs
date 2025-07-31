@@ -1251,6 +1251,17 @@ with lib.maintainers;
     shortName = "coqui-ai TTS";
   };
 
+  windows = {
+    members = [
+      RossSmyth
+      eveeifyeve
+      ericson2314
+      puffnfresh
+    ];
+    scope = "Maintains the windows package set";
+    shortName = "Windows";
+  };
+
   wdz = {
     members = [
       n0emis
