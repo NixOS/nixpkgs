@@ -29,14 +29,15 @@ let
   tinygltf-src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
-    rev = "v2.6.3";
+    tag = "v2.6.3";
     hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
   };
+
   # requires submodules to build
   lib3mf-src = fetchFromGitHub {
     owner = "3MFConsortium";
     repo = "lib3mf";
-    rev = "v2.3.2";
+    tag = "v2.3.2";
     fetchSubmodules = true;
     hash = "sha256-pKjnN9H6/A2zPvzpFed65J+mnNwG/dkSE2/pW7IlN58=";
   };
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
     repo = "meshlab";
     # note that this is in branch devel
     rev = "72142583980b6dbfc5b85c6cca226a72f48497a9";
-    sha256 = "1q7qga4d82pvpcbsp9pi2i7nzdbflhp6q0d3y31kpch9r3r9pzks";
+    hash = "sha256-ev6b8sgJsjvD8KMBbC6kbrVvTxTxpqsXu/sK1Ih6+OA=";
     # needed for an updated version of vcg in their submodule
     fetchSubmodules = true;
   };
