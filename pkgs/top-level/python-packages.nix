@@ -12441,6 +12441,8 @@ self: super: with self; {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  pybind11_3 = callPackage ../development/python-modules/pybind11/3.nix { };
+
   pybind11-abseil = callPackage ../development/python-modules/pybind11-abseil { };
 
   pybind11-protobuf = callPackage ../development/python-modules/pybind11-protobuf { };
