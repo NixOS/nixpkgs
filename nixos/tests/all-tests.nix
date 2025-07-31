@@ -511,6 +511,7 @@ in
   dep-scan = runTest ./dep-scan.nix;
   evcc = runTest ./evcc.nix;
   fail2ban = runTest ./fail2ban.nix;
+  fail2ban-dashboard = runTest ./fail2ban-dashboard.nix;
   fakeroute = runTest ./fakeroute.nix;
   fancontrol = runTest ./fancontrol.nix;
   fanout = runTest ./fanout.nix;

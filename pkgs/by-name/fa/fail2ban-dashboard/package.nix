@@ -2,6 +2,7 @@
   lib,
   buildGo125Module,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGo125Module rec {
@@ -16,6 +17,8 @@ buildGo125Module rec {
   };
 
   vendorHash = "sha256-HYCr0tZebhBE7jTB/ec1JZr4dT1WUsCjpdXN97r1Jes=";
+
+  passthru.tests.nixos = nixosTests.fail2ban-dashboard;
 
   meta = {
     description = "Web based dashboard for fail2ban";
