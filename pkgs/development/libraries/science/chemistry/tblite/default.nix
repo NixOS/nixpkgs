@@ -16,6 +16,7 @@
   multicharge,
   dftd4,
   simple-dftd3,
+  python3,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
@@ -28,13 +29,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "tblite";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "tblite";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KV2fxB+SF4LilN/87YCvxUt4wsY4YyIV4tqnn+3/0oI=";
+    hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
   };
 
   patches = [
@@ -43,6 +44,11 @@ stdenv.mkDerivation rec {
     # Fix wrong paths in pkg-config file
     ./pkgconfig.patch
   ];
+
+  # Python scripts in test subdirectories to run the tests
+  postPatch = ''
+    patchShebangs ./
+  '';
 
   nativeBuildInputs = [
     gfortran
