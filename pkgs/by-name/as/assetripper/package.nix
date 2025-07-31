@@ -19,6 +19,11 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-ixXWbygFhvOjld+YRLIhkO3cgDNkQsbivri2pjU4rgM=";
   };
 
+  postPatch = ''
+    sed 's@Path.Join(ExecutingDirectory, "temp",@Path.Join(Path.GetTempPath(), "AssetRipper",@' \
+      -i Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs
+  '';
+
   buildInputs = [
     dbus
     (lib.getLib stdenv.cc.cc)
