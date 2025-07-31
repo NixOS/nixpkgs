@@ -167,6 +167,7 @@ stdenv.mkDerivation {
       pushd $tmpdir
       git clone -b current https://github.com/subsurface/subsurface.git
       cd subsurface
+      sed -i '1s/#!\/bin\/bash/#!\/usr\/bin\/env bash/' ./scripts/get-version.sh
       # this returns 6.0.????-local
       new_version=$(./scripts/get-version.sh | cut -d '-' -f 1)
       new_rev=$(git rev-list -1 HEAD)
