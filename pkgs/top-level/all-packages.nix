@@ -5452,19 +5452,18 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages =
-    dontRecurseIntoAttrs
-      (
-        # Prefer native-bignum to avoid linking issues with gmp;
-        # TemplateHaskell doesn't work with hadrian built GHCs yet
-        # https://github.com/NixOS/nixpkgs/issues/275304
-        if stdenv.hostPlatform.isStatic then
-          haskell.packages.native-bignum.ghc94
-        # JS backend can't use gmp
-        else if stdenv.hostPlatform.isGhcjs then
-          haskell.packages.native-bignum.ghc910
-        else
-          haskell.packages.ghc910
-      )
+    dontRecurseIntoAttrs (
+      # Prefer native-bignum to avoid linking issues with gmp;
+      # TemplateHaskell doesn't work with hadrian built GHCs yet
+      # https://github.com/NixOS/nixpkgs/issues/275304
+      if stdenv.hostPlatform.isStatic then
+        haskell.packages.native-bignum.ghc94
+      # JS backend can't use gmp
+      else if stdenv.hostPlatform.isGhcjs then
+        haskell.packages.native-bignum.ghc910
+      else
+        haskell.packages.ghc910
+    )
     // {
       __recurseIntoDerivationForReleaseJobs = true;
     };
@@ -5478,8 +5477,7 @@ with pkgs;
   # however, targetPackages won't be populated, so we need to fall back to the
   # plain, cross-compiled compiler (which is only theoretical at the moment).
   ghc =
-    targetPackages.haskellPackages.ghc or
-    (
+    targetPackages.haskellPackages.ghc or (
       # Prefer native-bignum to avoid linking issues with gmp;
       # TemplateHaskell doesn't work with hadrian built GHCs yet
       # https://github.com/NixOS/nixpkgs/issues/275304
