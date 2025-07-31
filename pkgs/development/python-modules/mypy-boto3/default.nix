@@ -210,8 +210,8 @@ rec {
       "sha256-l5h3p1f+KuO3l3KSNtESY6mly6rEzHCyziFNWsQvD5s=";
 
   mypy-boto3-cleanrooms =
-    buildMypyBoto3Package "cleanrooms" "1.39.0"
-      "sha256-yttoC0IpPiXGEogyZLGIU4NaJaUPkqi+OFNrR6KKBrg=";
+    buildMypyBoto3Package "cleanrooms" "1.39.16"
+      "sha256-8nUKUeKeHPPNdTIlvp7ubg1/VR0NG3i/Y6xm7WrH+zE=";
 
   mypy-boto3-cloud9 =
     buildMypyBoto3Package "cloud9" "1.39.0"
