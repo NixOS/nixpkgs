@@ -10,6 +10,7 @@
   swig,
   pkgsCross,
   libcap_ng,
+  installShellFiles,
 
   # Enabling python support while cross compiling would be possible, but the
   # configure script tries executing python to gather info instead of relying on
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    installShellFiles
   ]
   ++ lib.optionals enablePython [
     python3
@@ -84,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libcap-ng=yes"
     (if enablePython then "--with-python" else "--without-python")
   ];
+
+  postInstall = ''
+    installShellCompletion --bash init.d/audit.bash_completion
+  '';
 
   enableParallelBuilding = true;
 
