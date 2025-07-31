@@ -12172,8 +12172,6 @@ with pkgs;
 
   fclones = callPackage ../tools/misc/fclones { };
 
-  fclones-gui = callPackage ../tools/misc/fclones/gui.nix { };
-
   feh = callPackage ../applications/graphics/feh {
     imlib2 = imlib2Full;
   };
