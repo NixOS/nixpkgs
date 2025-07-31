@@ -14,16 +14,17 @@
 }:
 
 let
+  version = "1506";
   gradle = gradle_8;
   jdk = jdk_headless;
 
   freenet_ext = fetchurl {
-    url = "https://github.com/freenet/fred/releases/download/build01495/freenet-ext.jar";
+    url = "https://github.com/hyphanet/fred/releases/download/build01495/freenet-ext.jar";
     hash = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
   };
 
   seednodes = fetchFromGitHub {
-    name = "freenet-seednodes";
+    name = "hyphanet-seednodes";
     owner = "hyphanet";
     repo = "seedrefs";
     rev = "b34dbc4d021c58c4a108214a71a9e1ab986c4e14";
@@ -32,16 +33,15 @@ let
       cat $out/* > $out/seednodes.fref
     '';
   };
-
 in
-stdenv.mkDerivation rec {
-  pname = "freenet";
-  version = "01506";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hyphanet";
+  version = "0.7.5.${version}";
 
   src = fetchFromGitHub {
     owner = "hyphanet";
     repo = "fred";
-    tag = "build${version}";
+    tag = "build0${version}";
     hash = "sha256-MmI/e/Sh4WeSSw2//xpmJtF5/oC9+eauXnTMLuojb2A=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     jdk
   ];
 
-  wrapper = replaceVars ./freenetWrapper {
+  wrapper = replaceVars ./hyphanetWrapper {
     inherit
       bash
       coreutils
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   };
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     install -Dm644 build/libs/freenet.jar $out/share/freenet/freenet.jar
     ln -s ${freenet_ext} $out/share/freenet/freenet-ext.jar
     mkdir -p $out/bin
-    install -Dm755 ${wrapper} $out/bin/freenet
-    export CLASSPATH="$(find ${mitmCache} -name "*.jar"| sort | grep -v bcprov-jdk15on-1.48.jar|tr $'\n' :):$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar"
+    install -Dm755 ${finalAttrs.wrapper} $out/bin/freenet
+    export CLASSPATH="$(find ${finalAttrs.mitmCache} -name "*.jar"| sort | grep -v bcprov-jdk15on-1.48.jar|tr $'\n' :):$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar"
     substituteInPlace $out/bin/freenet \
       --subst-var-by CLASSPATH "$CLASSPATH"
 
@@ -88,17 +88,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) freenet;
+    inherit (nixosTests) hyphanet;
   };
 
   meta = {
     description = "Decentralised and censorship-resistant network";
-    homepage = "https://freenetproject.org/";
+    homepage = "https://www.hyphanet.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
-    changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
+    changelog = "https://github.com/hyphanet/fred/blob/build${version}/NEWS.md";
     mainProgram = "freenet";
   };
-}
+})
