@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   kernel,
-  kernelModuleMakeFlags,
   elfutils,
   python3,
   perl,
@@ -103,8 +102,9 @@ stdenv.mkDerivation {
     "prefix=$(out)"
     "WERROR=0"
     "ASCIIDOC8=1"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
-  ++ kernelModuleMakeFlags
   ++ lib.optional (!withGtk) "NO_GTK2=1"
   ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
   ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
