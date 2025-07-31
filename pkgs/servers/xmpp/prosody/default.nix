@@ -35,7 +35,7 @@ let
     ++ withExtraLuaPackages p
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.12.5"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "http_upload"
   ];
   src = fetchurl {
-    url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
+    url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-d4+3cHoPEDmVlbp6ucZt0qIojArjp/5Kt4+X1GK9OZ8=";
   };
 
@@ -93,9 +93,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${lib.concatMapStringsSep "\n"
       (module: ''
-        cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
+        cp -r ${finalAttrs.communityModules}/mod_${module} $out/lib/prosody/modules/
       '')
-      (lib.lists.unique (nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))
+      (
+        lib.lists.unique (
+          finalAttrs.nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules
+        )
+      )
     }
     make -C tools/migration install
   '';
@@ -115,4 +119,4 @@ stdenv.mkDerivation rec {
       mirror230469
     ];
   };
-}
+})
