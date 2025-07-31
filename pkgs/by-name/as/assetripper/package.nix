@@ -44,7 +44,7 @@ buildDotnetModule (finalAttrs: {
 
   # Make the main executable available under a more intuitive name.
   postInstall = ''
-    mkdir -p $out/bin/AssetRipper
+    mkdir -p $out/bin
     ln -rs $out/bin/AssetRipper.GUI.Free $out/bin/AssetRipper
   '';
 
