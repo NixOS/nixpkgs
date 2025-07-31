@@ -112,48 +112,38 @@ in
         assertion = cfg.clean.enable -> cfg.enable;
         message = "programs.nh.clean.enable requires programs.nh.enable";
       }
-
-      {
-        assertion = (cfg.flake != null) -> !(lib.hasSuffix ".nix" cfg.flake);
-        message = "nh.flake must be a directory, not a nix file";
-      }
-      {
-        assertion = (cfg.osFlake != null) -> !(lib.hasSuffix ".nix" cfg.osFlake);
-        message = "nh.osFlake must be a directory, not a nix file";
-      }
-      {
-        assertion = (cfg.homeFlake != null) -> !(lib.hasSuffix ".nix" cfg.homeFlake);
-        message = "nh.homeFlake must be a directory, not a nix file";
-      }
-      {
-        assertion = (cfg.darwinFlake != null) -> !(lib.hasSuffix ".nix" cfg.darwinFlake);
-        message = "nh.darwinFlake must be a directory, not a nix file";
-      }
+      map
+      (name: {
+        assertion = cfg.${name} != null -> !(lib.hasSuffix ".nix" cfg.${name});
+        message = "nh.${name} must be a directory, not a nix file";
+      })
+      [
+        "darwinFlake"
+        "flake"
+        "homeFlake"
+        "osFlake"
+      ]
     ];
 
     environment = lib.mkIf cfg.enable {
       systemPackages = [ cfg.package ];
       variables = lib.mkMerge [
-        lib.mkIf
-        (cfg.flake != null)
-        {
+        (lib.mkIf (cfg.flake != null) {
           NH_FLAKE = cfg.flake;
-        }
-        lib.mkIf
-        (cfg.osFlake != null)
-        {
-          NH_OS_FLAKE = cfg.osFlake;
-        }
-        lib.mkIf
-        (cfg.homeFlake != null)
-        {
-          NH_HOME_FLAKE = cfg.homeFlake;
-        }
-        lib.mkIf
-        (cfg.darwinFlake != null)
-        {
-          NH_DARWIN_FLAKE = cfg.darwinFlake;
-        }
+        })
+        (map
+          (
+            name:
+            lib.mkIf (cfg."${nane}Flake" != null) {
+              "NH_${lib.toUpper name}_FLAKE" = cfg."${name}Flake";
+            }
+          )
+          [
+            "darwin"
+            "home"
+            "os"
+          ]
+        )
       ];
     };
 
