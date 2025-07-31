@@ -11,7 +11,7 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "promptfoo";
     repo = "promptfoo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-sMBgjxPzG3SJ7RS4oTtOq7hJ1MYaKW3/6FF8Pn5l89c=";
   };
 
