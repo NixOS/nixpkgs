@@ -64,6 +64,9 @@ in
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_7;
+
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
 

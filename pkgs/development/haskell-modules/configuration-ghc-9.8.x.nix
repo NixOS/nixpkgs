@@ -64,6 +64,9 @@ in
   unix = null;
   xhtml = null;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_7;
+
   #
   # Version upgrades
   #
