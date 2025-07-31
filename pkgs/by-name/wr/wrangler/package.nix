@@ -12,7 +12,7 @@
   xorg,
   jq,
   moreutils,
-  gitUpdater,
+  nix-update-script,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     jq 'del(.packageManager)' package.json | sponge package.json
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=wrangler@(.*)"
+    ];
+  };
 
   buildInputs = [
     llvmPackages.libcxx
