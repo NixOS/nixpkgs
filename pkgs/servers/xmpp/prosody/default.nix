@@ -123,5 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
       toastal
       mirror230469
     ];
+    teams = with lib.teams; [ c3d2 ];
   };
 })
