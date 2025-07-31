@@ -4350,6 +4350,8 @@ self: super: with self; {
 
   dropmqttapi = callPackage ../development/python-modules/dropmqttapi { };
 
+  ds-analysis-lib = callPackage ../development/python-modules/ds-analysis-lib { };
+
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
