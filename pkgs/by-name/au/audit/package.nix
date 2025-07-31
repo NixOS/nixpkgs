@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   bash,
   buildPackages,
@@ -21,18 +22,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MWlHaGue7Ca8ks34KNg74n4Rfj8ivqAhLOJHeyE2Q04=";
+    hash = "sha256-gsG12XAmXZrq5ycCdDDdiqBb7qFdjaEXGbUSnmFaa8o=";
   };
 
   patches = [
-    # https://github.com/linux-audit/audit-userspace/pull/476
-    ./musl.patch
+    # musl is missing a libgen.h include
+    # https://github.com/linux-audit/audit-userspace/pull/491
+    (fetchpatch {
+      url = "https://github.com/linux-audit/audit-userspace/commit/cc8752f4f91ee1ba231852d1a1030ecb5b4d6511.patch?full_index=1";
+      hash = "sha256-3SOEil7beaWzQJ/9am+T79HRKGD9n+YJ37aEYbVrBoI=";
+    })
   ];
 
   postPatch = ''
