@@ -18,12 +18,12 @@ let
   jdk = jdk_headless;
 
   freenet_ext = fetchurl {
-    url = "https://github.com/freenet/fred/releases/download/build01495/freenet-ext.jar";
+    url = "https://github.com/hyphanet/fred/releases/download/build01495/freenet-ext.jar";
     hash = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
   };
 
   seednodes = fetchFromGitHub {
-    name = "freenet-seednodes";
+    name = "hyphanet-seednodes";
     owner = "hyphanet";
     repo = "seedrefs";
     rev = "8e8b3574b63e649e03f67d23d3dfa461b7a0ba4a";
@@ -35,11 +35,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "freenet";
+  pname = "hyphanet";
   version = "01503";
 
   src = fetchFromGitHub {
-    owner = "freenet";
+    owner = "hyphanet";
     repo = "fred";
     tag = "build${version}";
     hash = "sha256-SjHQssCwPjSoaxsLmaov4bRoz+6XSlHfiOoxWxlRn60=";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     jdk
   ];
 
-  wrapper = replaceVars ./freenetWrapper {
+  wrapper = replaceVars ./hyphanetWrapper {
     inherit
       bash
       coreutils
@@ -93,12 +93,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Decentralised and censorship-resistant network";
-    homepage = "https://freenetproject.org/";
+    homepage = "https://www.hyphanet.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
-    changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
+    changelog = "https://github.com/hyphanet/fred/blob/build${version}/NEWS.md";
     mainProgram = "freenet";
   };
 }
