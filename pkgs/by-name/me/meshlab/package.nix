@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     libsForQt5.wrapQtAppsHook
+    vcg # templated library
   ];
 
   buildInputs = [
@@ -89,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     xercesc
     tbb
     embree
-    vcg
     libigl
     corto
     openctm
