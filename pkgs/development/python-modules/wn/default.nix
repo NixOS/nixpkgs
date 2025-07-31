@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
   hatchling,
@@ -16,9 +16,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TDvTNh+5cxgBoy9nuXItHOdtfbsP+3F16egZjUBSpak=";
+  src = fetchFromGitHub {
+    owner = "goodmami";
+    repo = "wn";
+    tag = "v${version}";
+    hash = "sha256-pGDYXuvDTjdAD01wv+LdiFkGFm2JPGI1Rk8RWzd6kS8=";
   };
 
   build-system = [ hatchling ];
