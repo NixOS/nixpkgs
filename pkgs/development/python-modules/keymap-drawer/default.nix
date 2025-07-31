@@ -18,7 +18,7 @@
   versionCheckHook,
 }:
 let
-  version = "0.22.0";
+  version = "0.22.1";
 in
 buildPythonPackage {
   inherit version;
@@ -30,10 +30,14 @@ buildPythonPackage {
     owner = "caksoylar";
     repo = "keymap-drawer";
     tag = "v${version}";
-    hash = "sha256-SPnIfrUA0M9xznjEe60T+0VHh9lCmY4cni9hyqFlZqM=";
+    hash = "sha256-X3O5yspEdey03YQ6JsYN/DE9NUiq148u1W6LQpUQ3ns=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "tree-sitter-devicetree"
+  ];
 
   dependencies = [
     pcpp
