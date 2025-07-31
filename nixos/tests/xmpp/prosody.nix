@@ -40,7 +40,6 @@ import ../make-test-python.nix {
       }:
       {
         security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
-        console.keyMap = "fr-bepo";
         networking.extraHosts = ''
           ${nodes.server.config.networking.primaryIPAddress} example.com
           ${nodes.server.config.networking.primaryIPAddress} conference.example.com
@@ -55,7 +54,6 @@ import ../make-test-python.nix {
       { config, pkgs, ... }:
       {
         security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
-        console.keyMap = "fr-bepo";
         networking.extraHosts = ''
           ${config.networking.primaryIPAddress} example.com
           ${config.networking.primaryIPAddress} conference.example.com
