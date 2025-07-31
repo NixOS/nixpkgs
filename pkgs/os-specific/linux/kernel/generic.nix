@@ -190,7 +190,7 @@ let
         ]
         ++ lib.optional (lib.versionAtLeast version "5.2") pahole
         ++ lib.optionals withRust [
-          rust-bindgen
+          rust-bindgen.unwrapped
           rustc.unwrapped
         ];
 
