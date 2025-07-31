@@ -5699,6 +5699,8 @@ self: super: with self; {
 
   gaphas = callPackage ../development/python-modules/gaphas { };
 
+  garak = callPackage ../development/python-modules/garak { };
+
   gardena-bluetooth = callPackage ../development/python-modules/gardena-bluetooth { };
 
   garminconnect = callPackage ../development/python-modules/garminconnect { };
