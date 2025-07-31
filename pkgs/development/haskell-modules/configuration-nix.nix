@@ -344,10 +344,10 @@ builtins.intersectAttrs super {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "6e8d82a451fccbaa4714da8f7a3db5907bdfa96d";
-        hash = "sha256-Ht5wD/n2I/tQWNgYIdmi3UQbm1FNwp9m9JmDjZEd6ng=";
+        rev = "1d21f73a2d563ffbb924a4244c29b35e898caefe";
+        hash = "sha256-N6c3NozYqAGwmjf+k5GHOZzlcquDntrJwsZQ7O2sqtQ=";
       };
-      version = "1.0.0-unstable-2024-12-02";
+      version = "1.0.1-unstable-2025-05-28";
       #editedCabalFile = null;
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
@@ -356,7 +356,7 @@ builtins.intersectAttrs super {
       broken = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
     }) super.nix-serve-ng).override
       {
-        nix = pkgs.nixVersions.nix_2_24;
+        nix = pkgs.nixVersions.nix_2_28;
       };
 
   # These packages try to access the network.
