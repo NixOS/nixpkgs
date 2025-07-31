@@ -8816,6 +8816,8 @@ self: super: with self; {
 
   loqedapi = callPackage ../development/python-modules/loqedapi { };
 
+  lorem = callPackage ../development/python-modules/lorem { };
+
   loro = callPackage ../development/python-modules/loro { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
