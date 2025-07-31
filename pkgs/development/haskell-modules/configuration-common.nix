@@ -2629,27 +2629,38 @@ with haskellLib;
 
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
+
   cborg = lib.pipe super.cborg [
-    # Fix build on 32-bit: https://github.com/well-typed/cborg/pull/322
-    (appendPatches (
-      lib.optionals pkgs.stdenv.hostPlatform.is32bit [
-        (pkgs.fetchpatch {
-          name = "cborg-i686-1.patch";
-          url = "https://github.com/well-typed/cborg/commit/a4757c46219afe6d235652ae642786f2e2977020.patch";
-          sha256 = "01n0x2l605x7in9hriz9asmzsfb5f8d6zkwgypckfj1r18qbs2hj";
-          includes = [ "**/Codec/CBOR/**" ];
-          stripLen = 1;
-        })
-        (pkgs.fetchpatch {
-          name = "cborg-i686-2.patch";
-          url = "https://github.com/well-typed/cborg/commit/94a856e4e544a5bc7f927cfb728de385d6260af4.patch";
-          sha256 = "03iz85gsll38q5bl3m024iv7yb1k5sisly7jvgf66zic8fbvkhcn";
-          includes = [ "**/Codec/CBOR/**" ];
-          stripLen = 1;
-        })
-      ]
-    ))
+    (appendPatches [
+      # This patch changes CPP macros form gating on the version of ghc-prim to base
+      # since that's where the definitions are imported from. The source commit
+      # also changes the cabal file metadata which we filter out since we are
+      # only interested in this change as a dependency of cborg-i686-support-upstream.patch.
+      (pkgs.fetchpatch {
+        name = "cborg-no-gate-on-ghc-prim-version.patch";
+        url = "https://github.com/well-typed/cborg/commit/a33f94f616f5047e45608a34ca16bfb1304ceaa1.patch";
+        hash = "sha256-30j4Dksh2nnLKAcUF5XJw3Z/UjfV3F+JFnHeXSUs9Rk=";
+        includes = [ "**/Codec/CBOR/**" ];
+        stripLen = 1;
+      })
+      # Fixes compilation on 32-bit platforms. Unreleased patch committed to the
+      # upstream master branch: https://github.com/well-typed/cborg/pull/351
+      (pkgs.fetchpatch {
+        name = "cborg-i686-support-upstream.patch";
+        url = "https://github.com/well-typed/cborg/commit/ecc1360dcf9e9ee27d08de5206b844e075c88ca4.patch";
+        hash = "sha256-9m2FlG6ziRxA1Dy22mErBaIjiZHa1dqtkbmFnMMFrTI=";
+        stripLen = 1;
+      })
+    ])
+    # Make sure patches to cborg.cabal apply
+    (overrideCabal (drv: {
+      prePatch = ''
+        ${drv.prePatch or ""}
+        ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
+      '';
+    }))
   ];
+
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
   # https://github.com/Bodigrim/data-array-byte/issues/1
