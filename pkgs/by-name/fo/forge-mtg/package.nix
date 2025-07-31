@@ -5,17 +5,18 @@
   lib,
   maven,
   makeWrapper,
+  nix-update-script,
   openjdk,
 }:
 
 let
-  version = "1.6.65";
 
+  version = "2.0.05";
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-MCJl3nBHbX/O24bzD4aQ12eMWxYY2qJC5vomvtsIBek=";
+    hash = "sha256-71CZBI4FvN5X7peDjhv+0cdTYv8hWwzM8ePdvQSb6QI=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -26,7 +27,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-ouF0Ja3oGrlUCcT0PzI5i9FQ+oLdEhE/LvhJ0QGErvI=";
+  mvnHash = "sha256-HEcKPvNttQsG7Vip/N/sduK4uEDpQe8GsQwkOcATa38=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -40,15 +41,15 @@ maven.buildMavenPackage {
       forge-gui-desktop/target/forge-gui-desktop-${version}-jar-with-dependencies.jar \
       forge-gui-mobile-dev/target/forge-adventure.sh \
       forge-gui-mobile-dev/target/forge-gui-mobile-dev-${version}-jar-with-dependencies.jar \
-      forge-adventure/target/forge-adventure-editor.sh \
-      forge-adventure/target/forge-adventure-${version}-jar-with-dependencies.jar \
+      adventure-editor/target/adventure-editor.sh \
+      adventure-editor/target/adventure-editor-jar-with-dependencies.jar \
       forge-gui/res \
       $out/share/forge
     runHook postInstall
   '';
 
   preFixup = ''
-    for commandToInstall in forge forge-adventure forge-adventure-editor; do
+    for commandToInstall in forge forge-adventure adventure-editor; do
       chmod 555 $out/share/forge/$commandToInstall.sh
       makeWrapper $out/share/forge/$commandToInstall.sh $out/bin/$commandToInstall \
         --prefix PATH : ${
@@ -63,10 +64,17 @@ maven.buildMavenPackage {
     done
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=forge-(.*)" ];
+  };
+
   meta = with lib; {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://www.slightlymagic.net/forum/viewforum.php?f=26";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ eigengrau ];
+    maintainers = with maintainers; [
+      eigengrau
+      icetan
+    ];
   };
 }
