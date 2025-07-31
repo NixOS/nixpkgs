@@ -116,17 +116,17 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fVbHz/Sa3aSIYBic3lNQl5iUYo+9LHIk52vO9mx6XRE=";
+    hash = "sha256-BoT4WUapxakETHAlHP64okcReMIhQ+PzKaSVpELvrcI=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-oHTo8EQGfrKOwg6SRPrL23qSH+p+clBxxiXsuO1auLk=";
+  vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
 
   env =
     lib.optionalAttrs enableRocm {

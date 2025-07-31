@@ -3447,12 +3447,6 @@
     githubId = 535135;
     name = "Brennon Loveless";
   };
-  bloxx12 = {
-    email = "charlie@charlieroot.dev";
-    github = "bloxx12";
-    githubId = 75451918;
-    name = "Charlie Root";
-  };
   blusk = {
     email = "bluskript@gmail.com";
     github = "bluskript";
@@ -8118,6 +8112,11 @@
     github = "farnoy";
     githubId = 345808;
     name = "Jakub Okoński";
+  };
+  faukah = {
+    github = "faukah";
+    name = "faukah";
+    githubId = 75451918;
   };
   fauxmight = {
     email = "nix@ivories.org";
@@ -23300,6 +23299,12 @@
     githubId = 4294323;
     name = "Langston Barrett";
   };
+  siegema = {
+    email = "bee@sharpbeedevelopment.com";
+    name = "Martin";
+    github = "Siegema";
+    githubId = 15473103;
+  };
   sielicki = {
     name = "Nicholas Sielicki";
     email = "nix@opensource.nslick.com";
@@ -24749,6 +24754,14 @@
     github = "tazjin";
     githubId = 1552853;
     name = "Vincent Ambo";
+  };
+  tbaldwin = {
+    email = "trent.baldwin@proton.me";
+    matrix = "@tbaldwin:matrix.org";
+    github = "tbaldwin-dev";
+    githubId = 220447215;
+    name = "Trent Baldwin";
+    keys = [ { fingerprint = "930C 3A61 F911 1296 7DA5  56D1 665A 9E2A FCDD 68AA"; } ];
   };
   tbenst = {
     email = "nix@tylerbenster.com";
