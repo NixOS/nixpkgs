@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oxfordcontrol";
     repo = "osqp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-enkK5EFyAeLaUnHNYS3oq43HsHY5IuSLgsYP0k/GW8c=";
     fetchSubmodules = true;
   };

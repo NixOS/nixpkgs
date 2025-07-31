@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "orocos";
     repo = "orocos_kinematics_dynamics";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "15ky7vw461005axx96d0f4zxdnb9dxl3h082igyd68sbdb8r1419";
     # Needed to build Python bindings
     fetchSubmodules = true;
