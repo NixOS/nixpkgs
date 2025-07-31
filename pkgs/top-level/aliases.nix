@@ -659,6 +659,7 @@ mapAliases {
   freecad-qt6 = freecad; # Added 2025-06-14
   freecad-wayland = freecad; # Added 2025-06-14
   freeimage = throw "freeimage was removed due to numerous vulnerabilities"; # Added 2025-10-23
+  freenet = lib.warnOnInstantiate "freenet has been renamed to hyphanet" hyphanet; # Added 2026-01-17
   freerdp3 = throw "'freerdp3' has been renamed to/replaced by 'freerdp'"; # Converted to throw 2025-10-27
   freerdpUnstable = throw "'freerdpUnstable' has been renamed to/replaced by 'freerdp'"; # Converted to throw 2025-10-27
   frugal = throw "'frugal' was removed because upstream has been pulled"; # Added 2025-12-20
