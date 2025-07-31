@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.11.0";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "goodmami";
     repo = "wn";
     tag = "v${version}";
-    hash = "sha256-pGDYXuvDTjdAD01wv+LdiFkGFm2JPGI1Rk8RWzd6kS8=";
+    hash = "sha256-xUraVRQmr4Oq1T/RiWgch8YJtAZR9ebOzaGBJ1NPKtw=";
   };
 
   build-system = [ hatchling ];
@@ -45,10 +45,14 @@ buildPythonPackage rec {
     ];
   };
 
+  # probably not worth spending time on plus require additional dependencies
+  disabledTestPaths = [ "bench/" ];
+
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.web;
 
   pythonImportsCheck = [ "wn" ];
 
