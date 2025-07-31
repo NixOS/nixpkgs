@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  llvmPackages,
   libsForQt5,
   libGLU,
   lib3ds,
@@ -94,10 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     corto
     openctm
     structuresynth
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
-  preConfigure = ''
-    substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+  postPatch = ''
     substituteInPlace src/external/tinygltf.cmake \
       --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/tinygltf-2.6.3 ${tinygltf-src}
     substituteInPlace src/external/libigl.cmake \
@@ -112,6 +115,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn "MD5 ''${SSYNTH_MD5}" ""
     substituteInPlace src/common_gui/CMakeLists.txt \
       --replace-warn "MESHLAB_LIB_INSTALL_DIR" "CMAKE_INSTALL_LIBDIR"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/meshlab/CMakeLists.txt \
+      --replace-fail "set_additional_settings_info_plist(" "# set_additional_settings_info_plist(" \
+      --replace-fail "	TARGET meshlab" "#	TARGET meshlab" \
+      --replace-fail "	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)" \
+                     "#	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)"
   '';
 
   cmakeFlags = [
@@ -119,15 +132,31 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ cmakeFlagsDisallowDownload;
 
-  postFixup = ''
-    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin,lib}
+    mv $out/meshlab.app $out/Applications/
+    ln $out/Applications/meshlab.app/Contents/Frameworks/libmeshlab-common.dylib $out/lib/
+    makeWrapper $out/{Applications/meshlab.app/Contents/MacOS,bin}/meshlab
   '';
+
+  # The hook will wrap all the plugin binaries, make they are not a
+  # valid plugin. So we have to wrap the main app manually.
+  # See: https://github.com/NixOS/nixpkgs/pull/396295#issuecomment-3137779781
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   # display a black screen on wayland, so force XWayland for now.
   # Might be fixed when upstream will be ready for Qt6.
-  qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM xcb";
+
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapQtApp "$out/Applications/meshlab.app/Contents/MacOS/meshlab"
+      install_name_tool -change libopenctm.dylib "${lib.getOutput "out" openctm}/lib/libopenctm.dylib" \
+        "$out/Applications/meshlab.app/Contents/PlugIns/libio_ctm.so"
+    '';
 
   meta = {
     description = "System for processing and editing 3D triangular meshes";
@@ -135,6 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
