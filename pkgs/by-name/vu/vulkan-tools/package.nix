@@ -20,6 +20,7 @@
   wayland-protocols,
   wayland-scanner,
   moltenvk,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-47RVuhK9NDtOazG4awTjwbZSnG+thGw6GpyKmcCgWpQ=";
   };
 
-  patches = [ ./wayland-scanner.patch ];
+  patches = [
+    ./wayland-scanner.patch
+    # Fixes build of vkcube
+    (fetchpatch {
+      name = "remove-pkg-config-lib-names.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/KhronosGroup/Vulkan-Tools/pull/1134.patch";
+      hash = "sha256-MX9jaxs3KK2stWwotGkZLS1WCUg0XUGJPyi440ltlCg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -70,9 +79,6 @@ stdenv.mkDerivation rec {
   env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
 
   cmakeFlags = [
-    # Temporarily disabled, see https://github.com/KhronosGroup/Vulkan-Tools/issues/1130
-    # FIXME: remove when fixed upstream
-    "-DBUILD_CUBE=OFF"
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
