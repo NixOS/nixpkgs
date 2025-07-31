@@ -36,8 +36,14 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "13.0.2"; # also update communityModules
   pname = "prosody";
+  version = "13.0.2"; # also update communityModules
+
+  src = fetchurl {
+    url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
+    hash = "sha256-PmG9OW83ylJF3r/WvkmkemGRMy8Pqi1O5fAPuwQK3bA=";
+  };
+
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
   # default setup.
@@ -46,10 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     "vcard_muc"
     "http_upload"
   ];
-  src = fetchurl {
-    url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PmG9OW83ylJF3r/WvkmkemGRMy8Pqi1O5fAPuwQK3bA=";
-  };
 
   # A note to all those merging automated updates: Please also update this
   # attribute as some modules might not be compatible with a newer prosody
@@ -61,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [
     luaEnv
     libidn
@@ -77,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--c-compiler=${stdenv.cc.targetPrefix}cc"
     "--linker=${stdenv.cc.targetPrefix}cc"
   ];
+
   configurePlatforms = [ ];
 
   postBuild = ''
