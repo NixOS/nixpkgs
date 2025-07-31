@@ -7,6 +7,8 @@
   httpx,
   tomli,
 
+  starlette,
+
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -31,6 +33,17 @@ buildPythonPackage rec {
     httpx
     tomli
   ];
+
+  optional-dependencies = {
+    # doesn't exist in nixpkgs yet
+    # editor = [
+    #   wn-editor
+    # ];
+
+    web = [
+      starlette
+    ];
+  };
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
