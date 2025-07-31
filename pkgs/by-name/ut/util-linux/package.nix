@@ -28,6 +28,8 @@
   installShellFiles,
   writeSupport ? stdenv.hostPlatform.isLinux,
   shadowSupport ? stdenv.hostPlatform.isLinux,
+  # Doesn't build on Darwin, also doesn't really make sense on Darwin
+  withLastlog ? !stdenv.hostPlatform.isDarwin,
   gitUpdater,
 }:
 
@@ -72,10 +74,15 @@ stdenv.mkDerivation (finalPackage: rec {
     "out"
     "lib"
     "man"
+    "login"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "mount" ]
-  ++ [ "login" ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "swap" ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "mount"
+    "swap"
+  ]
+  ++ lib.optionals withLastlog [
+    "lastlog"
+  ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -129,8 +136,7 @@ stdenv.mkDerivation (finalPackage: rec {
     "--disable-ipcrm"
     "--disable-ipcs"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Doesn't build on Darwin, also doesn't really make sense on Darwin
+  ++ lib.optionals (!withLastlog) [
     "--disable-liblastlog2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -182,6 +188,18 @@ stdenv.mkDerivation (finalPackage: rec {
       moveToOutput sbin/sulogin "$login"
       prefix=$login _moveSbin
       ln -svf "$login/bin/"* $bin/bin/
+    ''
+    + lib.optionalString withLastlog ''
+      # moveToOutput "lib/liblastlog2*" "$lastlog"
+      ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
+      moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
+
+      moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
+      substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
+        --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
+
+      moveToOutput "bin/lastlog2" "$lastlog"
+      ln -svf "$lastlog/bin/"* $bin/bin/
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
 
