@@ -9892,38 +9892,10 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_4_6 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.6"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
-  sbcl_2_4_10 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.10"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
-  sbcl_2_5_4 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.4"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
-  sbcl_2_5_5 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.5"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
+  sbcl_2_4_6 = callPackage ../development/compilers/sbcl { version = "2.4.6"; };
+  sbcl_2_4_10 = callPackage ../development/compilers/sbcl { version = "2.4.10"; };
+  sbcl_2_5_4 = callPackage ../development/compilers/sbcl { version = "2.5.4"; };
+  sbcl_2_5_5 = callPackage ../development/compilers/sbcl { version = "2.5.5"; };
   sbcl = sbcl_2_5_5;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
