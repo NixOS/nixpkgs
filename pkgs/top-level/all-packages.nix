@@ -9876,14 +9876,8 @@ with pkgs;
   };
 
   # Embeddable Common Lisp
-  ecl = wrapLisp {
-    pkg = callPackage ../development/compilers/ecl { };
-    faslExt = "fas";
-  };
-  ecl_16_1_2 = wrapLisp {
-    pkg = callPackage ../development/compilers/ecl/16.1.2.nix { };
-    faslExt = "fas";
-  };
+  ecl = callPackage ../development/compilers/ecl { };
+  ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
   # GNU Common Lisp
   gcl = wrapLisp {
