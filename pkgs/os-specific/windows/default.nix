@@ -48,5 +48,7 @@ lib.makeScope newScope (
     pthreads = callPackage ./pthread-w32 { };
 
     libgnurx = callPackage ./libgnurx { };
+
+    sdk = callPackage ./msvcSdk { };
   }
 )
