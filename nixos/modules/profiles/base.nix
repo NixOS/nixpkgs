@@ -11,41 +11,50 @@
 {
   # Include some utilities that are useful for installing or repairing
   # the system.
-  environment.systemPackages = [
-    pkgs.w3m-nographics # needed for the manual anyway
-    pkgs.testdisk # useful for repairing boot problems
-    pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
-    pkgs.efibootmgr
-    pkgs.efivar
-    pkgs.parted
-    pkgs.gptfdisk
-    pkgs.ddrescue
-    pkgs.ccrypt
-    pkgs.cryptsetup # needed for dm-crypt volumes
+  environment.systemPackages =
+    [
+      pkgs.w3m-nographics # needed for the manual anyway
+      pkgs.testdisk # useful for repairing boot problems
+      pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
+      pkgs.parted
+      pkgs.gptfdisk
+      pkgs.ddrescue
+      pkgs.ccrypt
+      pkgs.cryptsetup # needed for dm-crypt volumes
 
-    # Some text editors.
-    pkgs.vim
+      # Some text editors.
+      pkgs.vim
 
-    # Some networking tools.
-    pkgs.fuse
-    pkgs.fuse3
-    pkgs.sshfs-fuse
-    pkgs.socat
-    pkgs.screen
-    pkgs.tcpdump
+      # Some networking tools.
+      pkgs.fuse
+      pkgs.fuse3
+      pkgs.sshfs-fuse
+      pkgs.socat
+      pkgs.screen
+      pkgs.tcpdump
 
-    # Hardware-related tools.
-    pkgs.sdparm
-    pkgs.hdparm
-    pkgs.smartmontools # for diagnosing hard disks
-    pkgs.pciutils
-    pkgs.usbutils
-    pkgs.nvme-cli
+      # Hardware-related tools.
+      pkgs.sdparm
+      pkgs.hdparm
+      pkgs.smartmontools # for diagnosing hard disks
+      pkgs.pciutils
+      pkgs.usbutils
+      pkgs.nvme-cli
 
-    # Some compression/archiver tools.
-    pkgs.unzip
-    pkgs.zip
-  ];
+      # Some compression/archiver tools.
+      pkgs.unzip
+      pkgs.zip
+    ]
+    ++ (
+      if pkgs.stdenv.hostPlatform.is32bit then
+        [ ]
+      else
+        [
+          # See https://github.com/NixOS/nixpkgs/issues/388309
+          pkgs.efibootmgr
+          pkgs.efivar
+        ]
+    );
 
   # Include support for various filesystems and tools to create / manipulate them.
   boot.supportedFilesystems = lib.mkMerge [
