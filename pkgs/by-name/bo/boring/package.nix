@@ -10,20 +10,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "boring";
-  version = "0.11.5";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "alebeck";
     repo = "boring";
     tag = finalAttrs.version;
-    hash = "sha256-s/mkC/6FvzytKJ9wpAIU36HhClGqEO0XFaAyErhD3Mo=";
+    hash = "sha256-mIR12OkdZll3MqlKF3OMqrc3C73SPmqypj0as9Y5LRQ=";
   };
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  vendorHash = "sha256-j8A0F+o3EnzJdge+T/gHAwRGwzC86oD6ddZejUs/C7o=";
+  vendorHash = "sha256-1FVSKjsPDe4faaIioJG89556ibREcJt6xi28mp68Ea0=";
 
   ldflags = [
     "-s"
