@@ -23300,6 +23300,12 @@
     githubId = 4294323;
     name = "Langston Barrett";
   };
+  siegema = {
+    email = "bee@sharpbeedevelopment.com";
+    name = "Martin";
+    github = "Siegema";
+    githubId = 15473103;
+  };
   sielicki = {
     name = "Nicholas Sielicki";
     email = "nix@opensource.nslick.com";
