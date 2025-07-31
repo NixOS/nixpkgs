@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0-unstable-2025-06-19";
 
   src = fetchFromGitHub {
-    repo = finalAttrs.pname;
+    repo = "ld-audit-search-mod";
     owner = "DDoSolitary";
     rev = "261f475f154d0f1f0766d6756af9c714eeeb14ea";
     hash = "sha256-c6ub+m4ihIE3gh6yHtLfJIVqm12C46wThrBCqp8SOLE=";
@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     description = "Audit module that modifies ld.so library search behavior";
     license = lib.licenses.mit;
+    maintainers = [
+      lib.maintainers.atry
+      lib.maintainers.DDoSolitary
+    ];
     platforms = lib.platforms.linux;
   };
 })
