@@ -14094,9 +14094,7 @@ with pkgs;
     onlyLibVLC = true;
   };
 
-  vorbis-tools = callPackage ../applications/audio/vorbis-tools {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
   vscode-fhs = vscode.fhs;
