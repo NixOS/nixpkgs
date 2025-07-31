@@ -5,6 +5,7 @@
   pkgs, # Only for pkgs.plantuml,
   setuptools,
   httplib2,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [
     httplib2
+    mkdocs
   ];
 
   pythonImportsCheck = [ "mkdocs_build_plantuml_plugin" ];
