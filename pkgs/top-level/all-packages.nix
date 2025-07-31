@@ -15201,8 +15201,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
-
   nest = callPackage ../applications/science/biology/nest { };
 
   nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
