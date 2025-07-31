@@ -25,6 +25,9 @@ buildNpmPackage rec {
     homepage = "https://www.promptfoo.dev/";
     changelog = "https://github.com/promptfoo/promptfoo/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nathanielbrough ];
+    maintainers = with lib.maintainers; [
+      nathanielbrough
+      jk
+    ];
   };
 }
