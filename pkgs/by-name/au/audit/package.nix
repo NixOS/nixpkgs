@@ -22,19 +22,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.0";
+  version = "4.1.1-unstable-2025-08-01";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MWlHaGue7Ca8ks34KNg74n4Rfj8ivqAhLOJHeyE2Q04=";
+    rev = "bee5984843d0b38992a369825a87a65fb54b18fc"; # musl fixes, --disable-legacy-actions and --runstatedir support
+    hash = "sha256-l3JHWEHz2xGrYxEvfCUD29W8xm5llUnXwX5hLymRG74=";
   };
-
-  patches = [
-    # https://github.com/linux-audit/audit-userspace/pull/476
-    ./musl.patch
-  ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
@@ -81,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-arm"
     "--with-aarch64"
     "--with-io_uring"
+    # allows putting audit files in /run/audit, which removes the requirement
+    # to wait for tmpfiles to set up the /var/run -> /run symlink
+    "--runstatedir=/run"
     # capability dropping, currently mostly for plugins as those get spawned as root
     # see auditd-plugins(5)
     "--with-libcap-ng=yes"
@@ -105,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";
     description = "Audit Library";
-    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.1";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
     pkgConfigModules = [
