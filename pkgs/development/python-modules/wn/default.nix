@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pytest-benchmark,
   pythonOlder,
   hatchling,
   httpx,
   tomli,
   starlette,
+
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -37,16 +38,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     pytestCheckHook
-    pytest-benchmark
   ]
   ++ optional-dependencies.web;
 
-  pytestFlags = [ "--benchmark-disable" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # probably not worth spending time on plus require additional dependencies
+  disabledTestPaths = [ "bench/" ];
 
   pythonImportsCheck = [ "wn" ];
 
