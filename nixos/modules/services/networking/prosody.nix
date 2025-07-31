@@ -1000,6 +1000,7 @@ in
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";
 
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateMounts = true;
