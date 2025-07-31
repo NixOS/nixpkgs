@@ -28,8 +28,11 @@
   # A config directory that is considered for all the dependencies of an app, typically in $src/config/
   # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
   appConfigPath ? null,
+  removeConfig ? false,
   ...
 }@attrs:
+
+assert removeConfig -> appConfigPath == null;
 
 let
   shell =
@@ -86,6 +89,15 @@ let
               ''
                 rm -rf config
                 cp -r ${appConfigPath} config
+              ''
+            }
+            ${lib.optionalString removeConfig
+              # As above, but if we don't have any particular app config to
+              # use. This will be the case when compiling the majority of
+              # (independent) dependencies.
+              ''
+                rm -rf config
+                mkdir config
               ''
             }
 
