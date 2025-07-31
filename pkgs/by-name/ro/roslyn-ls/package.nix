@@ -12,7 +12,7 @@ let
   pname = "roslyn-ls";
   dotnet-sdk =
     with dotnetCorePackages;
-    sdk_9_0
+    sdk_10_0
     // {
       inherit
         (combinePackages [
@@ -24,7 +24,7 @@ let
         ;
     };
   # need sdk on runtime as well
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.sdk_10_0;
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
@@ -32,18 +32,18 @@ in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.84.19";
+  vsVersion = "2.87.26";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-K2gR/SqGe22S1yShBE3/yhLRKQQPcwmpYlP9R2+wbVI=";
+    hash = "sha256-5XDE2fwBga1hhXgaNG46vruljnKulLR7yIT5BLjJBGA=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.0.0-1.25319.11";
+  version = "5.0.0-2.25371.17";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
