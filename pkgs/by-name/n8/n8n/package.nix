@@ -103,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontRewriteSymlinks = true;
 
   meta = {
+    # building @/n8n/chat with `pnpm run build` fails
+    # logs: https://github.com/NixOS/nixpkgs/pull/429198#issuecomment-3131585135
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Free and source-available fair-code licensed workflow automation tool";
     longDescription = ''
       Free and source-available fair-code licensed workflow automation tool.
