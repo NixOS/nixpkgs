@@ -8,7 +8,6 @@
   meson,
   ninja,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
   version = "5.2.0";
@@ -60,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "persepolis";
     homepage = "https://persepolisdm.github.io/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ iFreilicht ];
+    maintainers = with maintainers; [
+      iFreilicht
+      L0L1P0P
+    ];
   };
 }
