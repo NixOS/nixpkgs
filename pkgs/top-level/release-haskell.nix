@@ -79,6 +79,7 @@ let
     ghc984
     ghc9101
     ghc9102
+    ghc9103
     # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
@@ -468,8 +469,8 @@ let
                 ;
             };
 
-            haskell.packages.native-bignum.ghc9102 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9102)
+            haskell.packages.native-bignum.ghc9103 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
                 hello
                 random
                 QuickCheck
@@ -609,6 +610,7 @@ let
         # for 9.10, test that using filepath (instead of filepath-bytestring) works.
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
       ];
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
@@ -623,6 +625,7 @@ let
         compilerNames.ghc902
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
         compilerNames.ghc9122
       ] released;
       hpack = released;
@@ -657,6 +660,7 @@ let
       weeder = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
         compilerNames.ghc9122
       ] released;
     })
@@ -744,7 +748,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9102
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9103
         ];
       };
     }
