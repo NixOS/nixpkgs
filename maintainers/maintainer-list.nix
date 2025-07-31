@@ -5380,6 +5380,13 @@
     githubId = 176372446;
     name = "Katja Kwast";
   };
+  curious = {
+    email = "curious@curious.host";
+    matrix = "@curious:curious.host";
+    github = "Curious-r";
+    githubId = 19733878;
+    name = "Curious";
+  };
   curran = {
     email = "curran@mercury.com";
     github = "curranosaurus";
