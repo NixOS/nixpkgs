@@ -20032,6 +20032,8 @@ self: super: with self; {
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
+  zalgolib = callPackage ../development/python-modules/zalgolib { };
+
   zamg = callPackage ../development/python-modules/zamg { };
 
   zammad-py = callPackage ../development/python-modules/zammad-py { };
