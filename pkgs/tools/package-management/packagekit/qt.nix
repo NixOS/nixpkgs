@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "packagekit-qt";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit-Qt";
     rev = "v${version}";
-    sha256 = "sha256-rLNeVjzIT18qUZgj6Qcf7E59CL4gx/ArYJfs9KHrqNs=";
+    sha256 = "sha256-ZHkOFPaOMLCectYKzQs9oQ70kv8APOdkjDRimHgld+c=";
   };
 
   buildInputs = [ packagekit ];
