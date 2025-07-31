@@ -62,12 +62,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.26.3";
+  version = "1.26.4";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-q0Z/wtiIzYQkzc5Lxt1+xh80ggWC3fN2mjNuaQnZpI4=";
+    hash = "sha256-ilfpt46iwjEskVkP1eq+HSRrXpi1hbwVIQDiS/gSUqE=";
   };
 
   patches = [
