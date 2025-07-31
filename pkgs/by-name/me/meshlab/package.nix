@@ -33,6 +33,26 @@ let
     tag = "v2.6.3";
     hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
   };
+
+  downloads = [
+    "DLL_EMBREE"
+    "SOURCE_BOOST"
+    "SOURCE_CGAL"
+    "SOURCE_EMBREE"
+    "SOURCE_LEVMAR"
+    "SOURCE_LIB3DS"
+    "SOURCE_LIBE57"
+    "SOURCE_LIBIGL"
+    "SOURCE_MUPARSER"
+    "SOURCE_NEXUS"
+    "SOURCE_OPENCTM"
+    "SOURCE_QHULL"
+    "SOURCE_STRUCTURE_SYNTH"
+    "SOURCE_TINYGLTF"
+    "SOURCE_U3D"
+    "SOURCE_XERCE"
+  ];
+  cmakeFlagsDisallowDownload = lib.map (x: "-DMESHLAB_ALLOW_DOWNLOAD_${x}=OFF") downloads;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "meshlab";
@@ -96,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DVCGDIR=${vcg.src}"
-  ];
+  ]
+  ++ cmakeFlagsDisallowDownload;
 
   postFixup = ''
     patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
