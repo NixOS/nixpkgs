@@ -13013,6 +13013,11 @@ with pkgs;
     llvmPackages = llvmPackages_18;
   };
 
+  meshlab-unstable = callPackage ../by-name/me/meshlab-unstable/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
+    llvmPackages = llvmPackages_18;
+  };
+
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
