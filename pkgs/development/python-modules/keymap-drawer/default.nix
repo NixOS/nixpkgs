@@ -60,6 +60,7 @@ buildPythonPackage {
   meta = {
     description = "Module and CLI tool to help parse and draw keyboard layouts";
     homepage = "https://github.com/caksoylar/keymap-drawer";
+    changelog = "https://github.com/caksoylar/keymap-drawer/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       MattSturgeon
