@@ -80,19 +80,18 @@ self: super: {
   aeson = dontCheck super.aeson;
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
-  # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
-  hashable =
+  # hashable >= 1.5 only supports GHC >= 9.6 / base >= 4.18
+  hashable = self.hashable_1_4_7_0;
+  hashable_1_4_7_0 =
+    # extra deps for GHC < 9.4
     addBuildDepends
       [
         self.data-array-byte
         self.base-orphans
       ]
-      (
-        super.hashable.override {
-          os-string = null;
-        }
-      );
+      # For GHC < 9.2, os-string is not required
+      (super.hashable_1_4_7_0.override { os-string = null; });
   hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
   # Needs base-orphans for GHC < 9.8 / base < 4.19

@@ -2226,6 +2226,10 @@ with haskellLib;
   # hashable (<1.5): https://github.com/kapralVV/Unique/issues/11#issuecomment-3088832168
   Unique = doJailbreak super.Unique;
 
+  # Too strict bound on tasty-quickcheck (<0.11)
+  # https://github.com/haskell-unordered-containers/hashable/issues/321
+  hashable_1_4_7_0 = doDistribute (doJailbreak super.hashable_1_4_7_0);
+
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
   aeson-casing = warnAfterVersion "0.2.0.0" (
     overrideCabal (drv: {

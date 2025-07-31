@@ -64,6 +64,8 @@ self: super: {
 
   # Jailbreaks & Version Updates
 
+  # hashable >= 1.5 needs base >= 4.18
+  hashable = self.hashable_1_4_7_0;
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
 

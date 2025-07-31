@@ -90,6 +90,7 @@ extra-packages:
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
   - happy == 1.19.12                    # for ghcjs
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
+  - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
   - hasql-dynamic-statements < 0.3.1.6  # 2025-01-19: Needed for building postgrest
   - hasql-implicits < 0.2               # 2025-01-19: Needed for building postgrest

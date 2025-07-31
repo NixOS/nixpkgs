@@ -87,18 +87,17 @@ self: super: {
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
-  # For GHC < 9.2, os-string is not required.
-  hashable =
+  # hashable >= 1.5 only supports GHC >= 9.6 / base >= 4.18
+  hashable = self.hashable_1_4_7_0;
+  hashable_1_4_7_0 =
+    # extra deps for GHC < 9.4
     addBuildDepends
       [
         self.data-array-byte
         self.base-orphans
       ]
-      (
-        super.hashable.override {
-          os-string = null;
-        }
-      );
+      # For GHC < 9.2, os-string is not required
+      (super.hashable_1_4_7_0.override { os-string = null; });
 
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;

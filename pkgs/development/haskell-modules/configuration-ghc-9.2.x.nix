@@ -86,8 +86,10 @@ self: super: {
       "haskell-language-server has dropped support for ghc 9.2 in version 2.10.0.0, please use a newer ghc version or an older nixpkgs version"
       (markBroken super.haskell-language-server);
 
+  # hashable >= 1.5 doesn't support base < 4.18
+  hashable = self.hashable_1_4_7_0;
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
-  hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
+  hashable_1_4_7_0 = addBuildDepends [ self.data-array-byte ] super.hashable_1_4_7_0;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   primitive-unlifted = super.primitive-unlifted_0_1_3_1;
   # Too strict lower bound on base
