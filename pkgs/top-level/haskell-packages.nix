@@ -175,11 +175,31 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
         llvmPackages = pkgs.llvmPackages_15;
       };
-      ghc910 = compiler.ghc9102;
+      ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
+        bootPkgs =
+          if stdenv.buildPlatform.isDarwin then
+            # it seems like the GHC 9.6.* bindists are built with a different
+            # toolchain than we are using (which I'm guessing from the fact
+            # that 9.6.4 bindists pass linker flags our ld doesn't support).
+            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
+            # the clock package (probably a hsc2hs problem).
+            bb.packages.ghc963
+          else
+            bb.packages.ghc963Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        # 2023-01-15: Support range >= 11 && < 16
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+        llvmPackages = pkgs.llvmPackages_15;
+      };
+      ghc910 = compiler.ghc9103;
       ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
         bootPkgs =
           # No suitable bindist packaged yet
-          bb.packages.ghc9102;
+          bb.packages.ghc9103;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -192,7 +212,7 @@ in
       ghc9122 = callPackage ../development/compilers/ghc/9.12.2.nix {
         bootPkgs =
           # No suitable bindist packaged yet
-          bb.packages.ghc9102;
+          bb.packages.ghc9103;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -305,7 +325,12 @@ in
         ghc = bh.compiler.ghc9102;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
       };
-      ghc910 = packages.ghc9102;
+      ghc9103 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc9103;
+        ghc = bh.compiler.ghc9103;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
+      };
+      ghc910 = packages.ghc9103;
       ghc9121 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9121;
         ghc = bh.compiler.ghc9121;
