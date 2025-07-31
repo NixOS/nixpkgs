@@ -17833,6 +17833,33 @@ with self;
     };
   };
 
+  IPCShareable = buildPerlPackage {
+    pname = "IPC-Shareable";
+    version = "1.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/ST/STEVEB/IPC-Shareable-1.13.tar.gz";
+      hash = "sha256-RW5mX3Kj+3ulqOcOMhz8nIJZ3vsxEbUZQK0IyrnADms=";
+    };
+    # remove t/04-key.t pulling in Mock::Sub, it'd get skipped anyways.
+    postPatch = ''
+      rm t/04-key.t
+    '';
+    propagatedBuildInputs = [
+      JSON
+      StringCRC32
+    ];
+    checkInputs = [
+      TestSharedFork
+    ];
+    meta = {
+      description = "Use shared memory backed variables across processes";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   IPCShareLite = buildPerlPackage {
     pname = "IPC-ShareLite";
     version = "0.17";
