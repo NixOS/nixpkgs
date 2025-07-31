@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "ninja-compatible build tool written in C";
+    description = "Ninja-compatible build tool written in C";
     longDescription = ''
       samurai is a ninja-compatible build tool with a focus on simplicity,
       speed, and portability.

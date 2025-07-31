@@ -101,9 +101,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "pyscf/pbc/tdscf"
     "pyscf/pbc/gw"
-    "*_slow.*py"
-    "*_kproxy_.*py"
-    "test_proxy.py"
     "pyscf/nac/test/test_sacasscf.py"
     "pyscf/grad/test/test_casscf.py"
   ];

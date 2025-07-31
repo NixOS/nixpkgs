@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "truetype monospaced typeface designed for X environments";
+    description = "TrueType monospaced typeface designed for X environments";
     homepage = "https://b.agaric.net/page/agave";
     license = licenses.mit;
     maintainers = [ ];

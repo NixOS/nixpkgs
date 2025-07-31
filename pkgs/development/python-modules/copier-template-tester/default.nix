@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "ctt: CLI and pre-commit tool for testing copier";
+    description = "CLI and pre-commit tool for testing copier";
     homepage = "https://copier-template-tester.kyleking.me";
     license = licenses.mit;
     maintainers = with maintainers; [ yajo ];

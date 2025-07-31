@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-mmefX3SpQoSdpuwoxFmlYocE9ETOHz3fh/IDG5LlY7E=";
 
   meta = with lib; {
-    description = "cross-platform and ultrafast toolkit for FASTA/Q file manipulation";
+    description = "Cross-platform and ultrafast toolkit for FASTA/Q file manipulation";
     homepage = "https://github.com/shenwei356/seqkit";
     license = licenses.mit;
     maintainers = with maintainers; [ bzizou ];

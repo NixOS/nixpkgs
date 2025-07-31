@@ -61,7 +61,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A tool to bundle a python application with dependencies into a single package";
+    description = "Tool to bundle a python application with dependencies into a single package";
     homepage = "https://pyinstaller.org/";
     changelog = "https://pyinstaller.org/en/v${version}/CHANGES.html";
     downloadPage = "https://pypi.org/project/pyinstaller/";

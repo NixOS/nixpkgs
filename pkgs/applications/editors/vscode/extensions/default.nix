@@ -618,7 +618,7 @@ let
           hash = "sha256-7pbl5OgvJ6S0mtZWsEyUzlg+lkUhdq3rkCCpLsvTm4g=";
         };
         meta = {
-          description = "A VSCode extension that changes the markdown preview to support GitHub markdown features";
+          description = "VSCode extension that changes the markdown preview to support GitHub markdown features";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.github-markdown-preview";
           homepage = "https://github.com/mjbvz/vscode-github-markdown-preview";
           license = lib.licenses.mit;
@@ -1212,8 +1212,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.13.22";
-          hash = "sha256-pu02QJVAhPVeGGwN/NRctQpLjDphYqm4cn4qGJo3+es=";
+          version = "3.13.40";
+          hash = "sha256-2O96Bey2VKj2FdK1nJSYSKE9fltciNbqD/UI7rKlFgY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1807,8 +1807,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.26.12";
-          hash = "sha256-hyackacUhqP38H2CyWB6nyZ5BP04KlHkQlEshhok85c=";
+          version = "0.27.2";
+          hash = "sha256-wuguBoIYTdlu03wNu9sfRnUkBvYgZEcTJiujq7KWZZ4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -1919,7 +1919,7 @@ let
           hash = "sha256-YAMH5smLyBuoTdlxSCTPyMIKOWTSIdf2MQVZuOO2V1w=";
         };
         meta = {
-          description = "A VSCode extension that adds syntax highlighting for Pandoc-flavored Markdown";
+          description = "VSCode extension that adds syntax highlighting for Pandoc-flavored Markdown";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=garlicbreadcleric.pandoc-markdown-syntax";
           homepage = "https://github.com/garlicbreadcleric/vscode-pandoc-markdown";
           license = lib.licenses.mit;
@@ -2667,7 +2667,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/wayou.vscode-todo-highlight/changelog";
-          description = "highlight TODOs, FIXMEs, and any keywords, annotations...";
+          description = "Highlight TODOs, FIXMEs, and any keywords, annotations...";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jgclark.vscode-todo-highlight";
           homepage = "https://github.com/jgclark/vscode-todo-highlight";
           license = lib.licenses.mit;
@@ -3210,8 +3210,8 @@ let
         mktplcRef = {
           name = "vscode-dotnet-runtime";
           publisher = "ms-dotnettools";
-          version = "2.3.6";
-          hash = "sha256-owl/GkUaPTame0jojeAKKtgffHc201tQGFvO9k+PDbc=";
+          version = "2.3.7";
+          hash = "sha256-Pe0rgs1vDbaOO178lB5P/Z+gqmf6LALIIZB3DntkmOc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
@@ -3523,7 +3523,7 @@ let
           hash = "sha256-yeX6RAJl07d+SuYyGQFLZNcUzVKAsmPFyTKEn+y3GuM=";
         };
         meta = {
-          description = "A Visual Studio Code extension that complements the Remote SSH extension with syntax colorization, keyword intellisense, and simple snippets when editing SSH configuration files";
+          description = "Visual Studio Code extension that complements the Remote SSH extension with syntax colorization, keyword intellisense, and simple snippets when editing SSH configuration files";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit";
           homepage = "https://code.visualstudio.com/docs/remote/ssh";
           license = lib.licenses.unfree;
@@ -4207,7 +4207,7 @@ let
           changelog = "https://github.com/sdras/night-owl-vscode-theme/blob/main/CHANGELOG.md#${
             builtins.replaceStrings [ "." ] [ "" ] mktplcRef.version
           }";
-          description = "A Visual Studio Code theme named Light Owl for daytime usage";
+          description = "Visual Studio Code theme named Light Owl for daytime usage";
           longDescription = ''
             A VS Code theme for the night owls out there. Now introducing
             Light Owl theme for daytime usage. Decisions were based
@@ -4851,8 +4851,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.74.0";
-          hash = "sha256-kK4+zTe91b54BxefoUiFgKc0SgHBQ74Y44ivSFkk1/A=";
+          version = "0.82.0";
+          hash = "sha256-JpqHwQksZ/NsgiZ7EqHxT1FG9DLeInhDg6B+UWOFkeM=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
@@ -5253,8 +5253,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.0.3";
-          hash = "sha256-6iInkhGZ0r4xtJCiHrsTa6EMnNR4mXUARR4B9YXRm+I=";
+          version = "3.0.4";
+          hash = "sha256-Eqg4+jX1dARryfb9Ueb2qng5xwhyaU6cDG089nlLNgc=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";

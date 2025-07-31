@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A safetensors extension to efficiently store sparse quantized tensors on disk";
+    description = "Safetensors extension to efficiently store sparse quantized tensors on disk";
     homepage = "https://github.com/neuralmagic/compressed-tensors";
     changelog = "https://github.com/neuralmagic/compressed-tensors/releases/tag/${version}";
     license = lib.licenses.asl20;

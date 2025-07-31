@@ -3520,6 +3520,12 @@
     githubId = 33910565;
     name = "Abdallah Gamal";
   };
+  bohanubis = {
+    email = "BK_anubis_GG@proton.me";
+    name = "bohanubis";
+    github = "bohanubis";
+    githubId = 77834479;
+  };
   bohreromir = {
     github = "bohreromir";
     githubId = 40412303;

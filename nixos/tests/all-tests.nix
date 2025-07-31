@@ -226,6 +226,7 @@ in
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
   ax25 = runTest ./ax25.nix;
+  audit = runTest ./audit.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
@@ -1226,7 +1227,6 @@ in
     _module.args.socket = false;
     _module.args.listenTcp = false;
   };
-  private-gpt = runTest ./private-gpt.nix;
   privatebin = runTest ./privatebin.nix;
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };

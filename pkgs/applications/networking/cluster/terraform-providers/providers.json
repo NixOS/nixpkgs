@@ -99,11 +99,11 @@
     "vendorHash": "sha256-YIn8akPW+DCVF0eYZxsmJxmrJuYhK4QLG/uhmmrXd4c="
   },
   "auth0": {
-    "hash": "sha256-Pr8cqPtmINxM5zYy8qrGlGoW/q2ha7sLwSy3oCPm/h8=",
+    "hash": "sha256-kFlRAwvKpqcD0n5VKJC+Whr8ZeO4DUzkLT2umvLXgEA=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.24.0",
+    "rev": "v1.24.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-uKzgEBNrLqcOkrrxKO9c5wKRwUjQInzeseN/euEI2G8="
   },
@@ -171,11 +171,11 @@
     "vendorHash": null
   },
   "baiducloud": {
-    "hash": "sha256-9NarSg8uXhdx+kJK7M9ftDoWXr9St1CEqL0N9+OJAXE=",
+    "hash": "sha256-bmKoxLvWc1mX1NaV3ksHeuRX8yYDKnfFhPiASPBVlnM=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.22.8",
+    "rev": "v1.22.9",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -579,13 +579,13 @@
     "vendorHash": "sha256-C1MT4mA7ubh1mN4+HO0bwMpjVHjDIG6UXZI6gvXHFZE="
   },
   "hcloud": {
-    "hash": "sha256-/BcK9K/jNEU4r7mFc4rrhNnPlyH98UrDUCgIluY52fA=",
+    "hash": "sha256-O6GaMSL5E9t5v9nsRh7aGIXy/w04sCy7AYG4AvGsbLc=",
     "homepage": "https://registry.terraform.io/providers/hetznercloud/hcloud",
     "owner": "hetznercloud",
     "repo": "terraform-provider-hcloud",
-    "rev": "v1.51.0",
+    "rev": "v1.52.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jbNkhNSSO9jT20J6dVhBEbN9cwtNrvx5EUcyOZcMd4Y="
+    "vendorHash": "sha256-pYetWQ7IIEvm2p9DoAh91W9atoCRgYDXCmthCiL5Vu0="
   },
   "helm": {
     "hash": "sha256-i4ceWiEXJYL1x9DmqAfcUidiW5+x/sRCxevDz4MnzHs=",
@@ -750,13 +750,13 @@
     "vendorHash": "sha256-LeMFN4pOJotTTqakEbVelHSTEb4p7CQIuKzeuX3SZUM="
   },
   "launchdarkly": {
-    "hash": "sha256-ZiRHloNipUqiD1YC8c2oln1sknW8cazSQHrxX75o/ek=",
+    "hash": "sha256-U3l2Tf7vcLAz7nZYKaGR0Nv/Qw2HgbGNV7w1dYBvSEc=",
     "homepage": "https://registry.terraform.io/providers/launchdarkly/launchdarkly",
     "owner": "launchdarkly",
     "repo": "terraform-provider-launchdarkly",
-    "rev": "v2.25.2",
+    "rev": "v2.25.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rw73A4dD+ObozIRYoxIwAx6/8zlSSBtQDpJIpgVhSp8="
+    "vendorHash": "sha256-b9+0YLuv9AVszGDQ2v+VbYameN16PCdE3jUhL9efK6M="
   },
   "libvirt": {
     "hash": "sha256-6wG6J6SQGxR74gbGZlW5/8zgIqsBUo0Xg/gN0wNppSg=",
@@ -1264,11 +1264,11 @@
     "vendorHash": "sha256-D8VG9CWP4wo+cxb/ewP+b6qAeaBCu6lNwH2leoiBMAc="
   },
   "spotinst": {
-    "hash": "sha256-GU0r4mdV3pv7uv2r/GkDVhvTyHA3lsxd3npSaYdA1Kw=",
+    "hash": "sha256-0SuXvbGms5JM05YqRFZ1RpzI/qy6VO5tSXFP43C2bhw=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.224.0",
+    "rev": "v1.224.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-vY8ii9HtItuNmbX1ij/orH7RmVV6OhIbKV0VEjQpaig="
   },
@@ -1300,22 +1300,22 @@
     "vendorHash": "sha256-9M1DsE/FPQK8TG7xCJWbU3HAJCK3p/7lxdzjO1oAfWs="
   },
   "sumologic": {
-    "hash": "sha256-+/evQ3bpgvjTjRD7BT90rkJtMYPddf95p/MP8QxL5xI=",
+    "hash": "sha256-bWwRJMb6ESViNg9xdcUp3YIlVDER0tQhuUlfUxo9Nhg=",
     "homepage": "https://registry.terraform.io/providers/SumoLogic/sumologic",
     "owner": "SumoLogic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v3.1.1",
+    "rev": "v3.1.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
   "sysdig": {
-    "hash": "sha256-RGHf1JpcPP6VMPZSvj3HsL4Z7EnJKv5Y0T+tSk2hauc=",
+    "hash": "sha256-q7HXqmvOiUktGOas9Xjt2hucxqasnPZ2O9uIn1gL1FE=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v1.57.1",
+    "rev": "v1.58.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-IrkNNKoBCMd+8vwQDF5PNiC9vS5iz0pjhM2nN0rsMrA="
+    "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },
   "tailscale": {
     "hash": "sha256-p96Jv4sIxWHWcpxcAWXASf2m06M7lsIvCCygM9KEALY=",

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.7.3";
+  version = "2025.7.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -4014,7 +4014,8 @@
       ];
     "nsw_fuel_station" =
       ps: with ps; [
-      ]; # missing inputs: nsw-fuel-api-client
+        nsw-fuel-api-client
+      ];
     "nsw_rural_fire_service_feed" =
       ps: with ps; [
         aio-geojson-nsw-rfs-incidents
@@ -6510,7 +6511,8 @@
       ];
     "wirelesstag" =
       ps: with ps; [
-      ]; # missing inputs: wirelesstagpy
+        wirelesstagpy
+      ];
     "withings" =
       ps: with ps; [
         aiohasupervisor
@@ -7372,6 +7374,7 @@
     "notify"
     "notify_events"
     "notion"
+    "nsw_fuel_station"
     "nsw_rural_fire_service_feed"
     "ntfy"
     "nuheat"
