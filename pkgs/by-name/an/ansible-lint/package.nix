@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "25.6.1";
+  version = "25.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ansible_lint";
-    hash = "sha256-ah3St6nz8gLJ6SpsgClv8zyoYzSMOs+Xj4D7DUU23OQ=";
+    hash = "sha256-mvz0GZl84f/FesqjpW83e86M7rnbEOarhP1WXQm+QIs=";
   };
 
   postPatch = ''
