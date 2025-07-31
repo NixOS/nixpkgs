@@ -26,11 +26,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "POSIX threads library for Windows";
     homepage = "https://sourceware.org/pthreads-win32";
-    license = licenses.lgpl21Plus;
-    maintainers = [ ];
-    platforms = platforms.windows;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.RossSmyth ];
+    platforms = lib.platforms.windows;
+    teams = [ lib.teams.windows ];
   };
 }
