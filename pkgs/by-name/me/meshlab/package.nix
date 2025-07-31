@@ -30,20 +30,25 @@ let
   tinygltf-src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
-    rev = "v2.6.3";
+    tag = "v2.6.3";
     hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "meshlab";
   version = "2023.12";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
-    rev = "MeshLab-${version}";
-    sha256 = "sha256-AdUAWS741RQclYaSE3Tz1/I0YSinNAnfSaqef+Tib8Y=";
+    tag = "MeshLab-${finalAttrs.version}";
+    hash = "sha256-AdUAWS741RQclYaSE3Tz1/I0YSinNAnfSaqef+Tib8Y=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     libGLU
@@ -69,11 +74,6 @@ stdenv.mkDerivation rec {
     corto
     openctm
     structuresynth
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    libsForQt5.wrapQtAppsHook
   ];
 
   preConfigure = ''
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})
