@@ -15,8 +15,7 @@ let
   # test interactively.
   createUsers =
     pkgs:
-    pkgs.writeScriptBin "create-prosody-users" ''
-      #!${pkgs.bash}/bin/bash
+    pkgs.writeShellScriptBin "create-prosody-users" ''
       set -e
       prosodyctl register cthon98 example.com nothunter2
       prosodyctl register azurediamond example.com hunter2
@@ -24,8 +23,7 @@ let
   # Deletes the test users.
   delUsers =
     pkgs:
-    pkgs.writeScriptBin "delete-prosody-users" ''
-      #!${pkgs.bash}/bin/bash
+    pkgs.writeShellScriptBin "delete-prosody-users" ''
       set -e
       prosodyctl deluser cthon98@example.com
       prosodyctl deluser azurediamond@example.com
