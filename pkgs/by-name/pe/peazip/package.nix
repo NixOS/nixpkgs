@@ -14,17 +14,17 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
   version = "10.5.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tEx0ZSvv+byn8OPSFprFJwMFxuEQzyrkvk4FbvGtH2A=";
   };
-  sourceRoot = "${src.name}/peazip-sources";
+  sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
   postPatch = ''
     # set it to use compression programs from $PATH
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libqtpas
   ]);
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   buildPhase = ''
     # lazarus tries to create files in $HOME/.lazarus
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     install -D dev/{pea,peazip} -t $out/lib/peazip
     wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
       lib.makeBinPath [
-        _7z
+        finalAttrs._7z
         brotli
         upx
         zpaq
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ annaaurora ];
     mainProgram = "peazip";
   };
-}
+})
