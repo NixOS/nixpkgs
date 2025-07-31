@@ -169,7 +169,7 @@ lib.makeOverridable (
         ]
         ++ optional (lib.versionAtLeast version "5.13") zstd
         ++ optionals withRust [
-          rustc
+          rustc.unwrapped
           rust-bindgen.unwrapped
         ];
 
@@ -229,7 +229,7 @@ lib.makeOverridable (
           zlib
         ]
         ++ optionals withRust [
-          rustc
+          rustc.unwrapped
           rust-bindgen.unwrapped
         ];
 
