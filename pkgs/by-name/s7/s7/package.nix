@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.5-unstable-2025-07-22";
+  version = "11.5-unstable-2025-07-31";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "03939f855e15f84f9113a92271cdfa0a09b28a67";
-    hash = "sha256-n6Uattns9TxXRi1lz/adexa13nlYXSp0usTT9uZ47JY=";
+    rev = "71e547b1a210d1ff06daeb4dee5247cd949d0178";
+    hash = "sha256-gMZCmpGPSgM73PRbRY5BgyaTeRnojduNnZntvr75jzw=";
   };
 
   buildInputs = [
