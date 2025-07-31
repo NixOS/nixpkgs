@@ -84,10 +84,7 @@ import ./default.nix
             libcxx = llvmPackages.libcxx.override {
               stdenv = stdenv.override {
                 allowedRequisites = null;
-                cc = pkgsBuildHost.llvmPackages_20.clangNoLibcxx;
-                hostPlatform = stdenv.hostPlatform // {
-                  useLLVM = !stdenv.hostPlatform.isDarwin;
-                };
+                cc = pkgsBuildHost.llvmPackages_20.clangWithLibcAndBasicRt;
               };
               inherit libunwind;
             };
