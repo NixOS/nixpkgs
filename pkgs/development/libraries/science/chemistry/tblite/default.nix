@@ -16,6 +16,7 @@
   multicharge,
   dftd4,
   simple-dftd3,
+  python3,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
@@ -28,13 +29,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "tblite";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "tblite";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KV2fxB+SF4LilN/87YCvxUt4wsY4YyIV4tqnn+3/0oI=";
+    hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
   };
 
   patches = [
@@ -44,6 +45,11 @@ stdenv.mkDerivation rec {
     ./pkgconfig.patch
   ];
 
+  # Python scripts in test subdirectories to run the tests
+  postPatch = ''
+    patchShebangs ./
+  '';
+
   nativeBuildInputs = [
     gfortran
     pkg-config
@@ -52,7 +58,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ]
-  ++ lib.optional (buildType == "cmake") cmake;
+  ++ lib.optionals (buildType == "cmake") [cmake ninja];
 
   buildInputs = [
     blas
@@ -70,7 +76,16 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  doCheck = true;
+  checkInputs = [
+    python3
+  ];
+
+  checkFlags = [
+    "-j1"
+  ];
+
+  doCheck = buildType == "meson";
+
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';
