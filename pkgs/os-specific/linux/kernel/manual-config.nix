@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPackages,
+  makeSetupHook,
   runCommand,
   bc,
   bison,
@@ -166,6 +167,10 @@ lib.makeOverridable (
           elfutils
           # module makefiles often run uname commands to find out the kernel version
           (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+          (makeSetupHook {
+            name = "add-linux-make-flags-hook";
+            substitutions = { inherit commonMakeFlags; };
+          } ./add-linux-make-flags-hook.sh)
         ]
         ++ optional (lib.versionAtLeast version "5.13") zstd
         ++ optionals withRust [
