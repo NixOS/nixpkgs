@@ -28,6 +28,7 @@
   dbus-glib,
   gtk3,
   glib,
+  rclone,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IApPudo8oD6YkYJkGpowqpaqrsl2/Q2VFyYfYQI3mN0=";
   };
 
@@ -109,6 +110,7 @@ rustPlatform.buildRustPackage rec {
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
       wrapProgram $out/bin/ludusavi --prefix PATH : ${
         lib.makeBinPath [
+          rclone
           zenity
           libsForQt5.kdialog
         ]
