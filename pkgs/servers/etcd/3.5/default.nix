@@ -58,7 +58,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo123Module rec {
+  etcdutl = buildGo123Module {
     pname = "etcdutl";
 
     inherit
@@ -73,7 +73,7 @@ let
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGo123Module rec {
+  etcdctl = buildGo123Module {
     pname = "etcdctl";
 
     inherit
@@ -94,7 +94,10 @@ symlinkJoin {
   inherit meta version;
 
   passthru = {
-    inherit etcdserver etcdutl etcdctl;
+    deps = {
+      inherit etcdserver etcdutl etcdctl;
+    };
+
     tests = {
       inherit (nixosTests) etcd etcd-cluster;
       k3s = k3s.passthru.tests.etcd;

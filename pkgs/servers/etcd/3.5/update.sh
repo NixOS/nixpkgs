@@ -45,7 +45,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
         setKV $PKG_KEY $EMPTY_HASH
 
         set +e
-        VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_PATH}/. {}).$ETCD_PKG_NAME.passthru.$INNER_PKG.goModules")
+        VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_PATH}/. {}).$ETCD_PKG_NAME.passthru.deps.$INNER_PKG.goModules")
         set -e
 
         if [ -n "${VENDOR_HASH:-}" ]; then
