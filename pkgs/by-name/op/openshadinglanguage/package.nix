@@ -1,23 +1,23 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
+  bison,
+  boost,
   clang,
+  cmake,
+  fetchFromGitHub,
+  flex,
+  lib,
   libclang,
   libxml2,
-  zlib,
+  llvm,
   openexr,
   openimageio,
-  llvm,
-  boost,
-  flex,
-  bison,
   partio,
   pugixml,
-  robin-map,
-  util-linux,
   python3,
+  robin-map,
+  stdenv,
+  util-linux,
+  zlib,
 }:
 
 let
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Advanced shading language for production GI renderers";
-    homepage = "https://opensource.imageworks.com/osl.html";
+    homepage = "http://openshadinglanguage.org";
     maintainers = with lib.maintainers; [ hodapp ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
