@@ -552,6 +552,8 @@ let
       http_ports = ${toLua cfg.httpPorts}
       https_ports = ${toLua cfg.httpsPorts}
 
+      mime_types_file = "${pkgs.mailcap}/etc/mime.types"
+
       ${cfg.extraConfig}
 
       ${lib.concatMapStrings (muc: ''
