@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sydbox";
-  version = "3.36.0";
+  version = "3.37.2";
 
   outputs = [
     "out"
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Sydbox";
     repo = "sydbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XGZHUMVTJLlWIwgEqVCMoHDoDkzkFAdTvOOtMtCAw98=";
+    hash = "sha256-XV3eB6XGDwoJK+wpfuARV7F4OqZJfoAqDmsYS8D2AK4=";
   };
 
-  cargoHash = "sha256-+NI1poeMXMlR9rafmGKu6i6iFORe2IGVVPj08MP8g3o=";
+  cargoHash = "sha256-uIcF4mzIYOgSfQVFl6kh3337AmdVFDDXIMXtVCqcoXg=";
 
   nativeBuildInputs = [
     mandoc
