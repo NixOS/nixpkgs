@@ -21,12 +21,12 @@
 
   withRdpClient ? true,
 
-  version ? "17.5.4",
-  hash ? "sha256-ojRIyPTrSG3/xuqdaUNrN4s5HP3E8pvzjG8h+qFEYrc=",
-  vendorHash ? "sha256-IHXwCp1MdcEKJhIs9DNf77Vd93Ai2as7ROlh6AJT9+Q=",
+  version ? "17.7.0",
+  hash ? "sha256-+NfYpA6BDpD0/YCMj2y2torgw/ihd279SLTmPySIqvk=",
+  vendorHash ? "sha256-NWZKLiub68OR0U3RkCOLCe4vrzXdOCitYm3ITOU3nhk=",
   extPatches ? [ ],
   cargoHash ? "sha256-qz8gkooQTuBlPWC4lHtvBQpKkd+nEZ0Hl7AVg9JkPqs=",
-  pnpmHash ? "sha256-YwftGEQTEI8NvFTFLMJHhYkvaIIP9+bskCQCp5xuEtY=",
+  pnpmHash ? "sha256-I1mQ/F1ethOPA0jlrN+3ClByk7Ifw6LPbgjSvPx44D4=",
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -182,6 +182,7 @@ buildGo123Module (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    export HOME=$(mktemp -d)
     $out/bin/tsh version | grep ${version} > /dev/null
     $client/bin/tsh version | grep ${version} > /dev/null
     $out/bin/tbot version | grep ${version} > /dev/null
