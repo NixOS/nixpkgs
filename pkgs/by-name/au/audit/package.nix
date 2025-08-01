@@ -73,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     # z/OS plugin is not useful on Linux, and pulls in an extra openldap
     # dependency otherwise
     "--disable-zos-remote"
+    # remove legacy start/stop scripts to remove a bash dependency in $lib
+    # People interested in logging auditd interactions (e.g. for compliance) can start/stop audit using `auditctl --signal`
+    # See also https://github.com/linux-audit/audit-userspace?tab=readme-ov-file#starting-and-stopping-the-daemon
+    "--disable-legacy-actions"
     "--with-arm"
     "--with-aarch64"
     "--with-io_uring"
