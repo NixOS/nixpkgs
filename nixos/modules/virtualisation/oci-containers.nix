@@ -239,10 +239,8 @@ let
           example = literalExpression ''
             virtualisation.oci-containers.containers = {
               node1 = {};
-              node2 = {
-                dependsOn = [ "node1" ];
-              }
-            }
+              node2.dependsOn = [ "node1" ];
+            };
           '';
         };
 
