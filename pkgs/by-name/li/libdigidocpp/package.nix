@@ -59,6 +59,13 @@ stdenv.mkDerivation rec {
   # `-L${libtool.lib}/lib -ltdl` for `CMAKE_DL_LIBS`, but that's a world rebuild.
   env.NIX_LDFLAGS = "-L${libtool.lib}/lib";
 
+  # Prevent cmake from creating a file that sets INTERFACE_INCLUDE_DIRECTORIES to the wrong location,
+  # causing downstream build failures.
+  postFixup = ''
+    sed '/^  INTERFACE_INCLUDE_DIRECTORIES/s|"[^"]*/include"|"${placeholder "dev"}/include"|' \
+      -i "$dev"/lib/cmake/libdigidocpp/libdigidocpp-config.cmake
+  '';
+
   meta = with lib; {
     description = "Library for creating DigiDoc signature files";
     mainProgram = "digidoc-tool";
