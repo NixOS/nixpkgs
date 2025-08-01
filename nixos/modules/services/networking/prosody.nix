@@ -524,7 +524,6 @@ let
       admins = ${toLua cfg.admins}
 
       modules_enabled = {
-
         ${lib.concatStringsSep "\n  " (
           lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
         )}
@@ -590,7 +589,6 @@ let
         '') cfg.virtualHosts
       )}
     '';
-
 in
 {
   options = {
