@@ -11135,6 +11135,10 @@ self: super: with self; {
 
   opensfm = callPackage ../development/python-modules/opensfm { };
 
+  openshadinglanguage = toPythonModule (
+    pkgs.openshadinglanguage.override { python3Packages = self; }
+  );
+
   openshift = callPackage ../development/python-modules/openshift { };
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
