@@ -6,6 +6,7 @@
   fetchFromGitHub,
   libtapi,
   llvm,
+  libxml2,
   meson,
   ninja,
   openssl,
@@ -113,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     llvm
+    libxml2
     openssl
     xar
   ];
