@@ -450,8 +450,8 @@ rec {
       "sha256-iyPAkVpfnqz2RX12klUOTH2NaFO/tAfiWFXLF+FHGe0=";
 
   mypy-boto3-ec2-instance-connect =
-    buildMypyBoto3Package "ec2-instance-connect" "1.39.0"
-      "sha256-VbEhzVf9uNm1DmyEvAUBEkHawITLiArgya5kwotuYbI=";
+    buildMypyBoto3Package "ec2-instance-connect" "1.40.0"
+      "sha256-YmD2QCD6oc8HB3yNpj/ucXrbF3KVuVNiW8rK4UzPxGw=";
 
   mypy-boto3-ecr =
     buildMypyBoto3Package "ecr" "1.39.11"
