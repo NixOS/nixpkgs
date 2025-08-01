@@ -90,6 +90,16 @@ let
         # `$(..)` expanded by make alone
         "HOSTCC:=$(CC_FOR_BUILD)"
         "HOSTCXX:=$(CXX_FOR_BUILD)"
+        # To properly detect LFS flags 32-bit build environments like
+        # pkgsi686Linux.linuxHeaders Kbuild uses this Makefile bit:
+        #     HOST_LFS_CFLAGS := $(shell getconf LFS_CFLAGS 2>/dev/null)
+        #
+        # `getconf` is not available in early bootstrap and thus the
+        # build fails on filesystems with 64-bit inodes as:
+        #     linux-headers> fixdep: error fstat'ing file: scripts/basic/.fixdep.d: Value too large for defined data type
+        #
+        # Let's hardcode subset of the output of `getconf` for this case.
+        "HOST_LFS_CFLAGS=-D_FILE_OFFSET_BITS=64"
       ];
 
       # Skip clean on darwin, case-sensitivity issues.
