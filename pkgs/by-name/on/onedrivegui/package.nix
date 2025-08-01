@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "1.1.1a";
+  version = "1.2.1";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup
@@ -28,13 +28,18 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "onedrivegui";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bpozdena";
     repo = "OneDriveGUI";
-    rev = "v${version}";
-    hash = "sha256-pcY1JOi74pePvkIMRuHv5mlE4F68NzuBLJTCtgjUFRw=";
+    tag = "v${version}";
+    hash = "sha256-QCSCJ1m/PKSpkfseq8fyDEHFyIt156Lp15JC04NY0ps=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -47,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     qt6.qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pyside6
     requests
   ];
@@ -57,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapQtApps = true;
 
   doCheck = false; # No tests defined
-  pythonImportsCheck = [ "OneDriveGUI" ];
+  # pythonImportsCheck = [ "OneDriveGUI" ]; # requires a display
 
   desktopItems = [
     (makeDesktopItem {
@@ -73,8 +78,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    # Patch OneDriveGUI.py so DIR_PATH points to shared files location
-    sed -i src/OneDriveGUI.py -e "s@^DIR_PATH =.*@DIR_PATH = '$out/share/OneDriveGUI'@"
+    # Patch global_config.py so DIR_PATH points to shared files location
+    sed -i src/global_config.py -e "s@^DIR_PATH =.*@DIR_PATH = '$out/share/OneDriveGUI'@"
     cp ${setupPy} ${setupPy.name}
   '';
 
@@ -90,17 +95,17 @@ python3Packages.buildPythonApplication rec {
       ''${qtWrapperArgs[@]} \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
       --prefix PYTHONPATH : ${
-        python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])
+        python3Packages.makePythonPath (dependencies ++ [ (placeholder "out") ])
       } \
       --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bpozdena/OneDriveGUI";
     description = "Simple GUI for Linux OneDrive Client, with multi-account support";
     mainProgram = "onedrivegui";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }
