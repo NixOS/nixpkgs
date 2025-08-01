@@ -2678,12 +2678,6 @@ with haskellLib;
   # https://github.com/phadej/aeson-extra/issues/62
   aeson-extra = doJailbreak super.aeson-extra;
 
-  # Support tasty-quickcheck 0.11: https://github.com/Bodigrim/mod/pull/26
-  mod = appendPatch (fetchpatch {
-    url = "https://github.com/Bodigrim/mod/commit/30596fb9d85b69ec23ecb05ef9a7c91d67901cfd.patch";
-    sha256 = "sha256-9XuzIxEbepaw5bRoIOUka8fkiZBfturIybh/9nhGmWQ=";
-  }) super.mod;
-
   # Fixes build of test suite: not yet released
   primitive-unlifted = appendPatch (fetchpatch {
     url = "https://github.com/haskell-primitive/primitive-unlifted/commit/26922952ef20c4771d857f3e96c9e710cb3c2df9.patch";
