@@ -1,0 +1,29 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colorize (1.1.0)
+    logger (1.5.3)
+    optimist (3.1.0)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    text-table (1.2.4)
+    tty-color (0.6.0)
+    tty-command (0.10.1)
+      pastel (~> 0.8)
+    tty-cursor (0.7.1)
+    tty-spinner (0.9.3)
+      tty-cursor (~> 0.7)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  colorize
+  logger
+  optimist
+  text-table
+  tty-command
+  tty-spinner
+
+BUNDLED WITH
+   2.4.21
