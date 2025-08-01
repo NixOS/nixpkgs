@@ -3298,6 +3298,14 @@ with haskellLib;
   # and therefore aren't uploaded to hackage
   # Needs to be fixed upstream
   haskore = dontCheck (doJailbreak super.haskore);
+
+  # 2025-08-01: Fixes few build errors related to pointers.
+  # https://github.com/haskell-cryptography/botan/pull/17
+  botan-bindings = appendPatch (pkgs.fetchpatch2 {
+    url = "https://github.com/haskell-cryptography/botan/commit/99de68c3938187b7ab740c6534ec032a4a236747.patch";
+    sha256 = "sha256-v255WFO9HsRuTAWFZG27TYbpoK7rJ1AuiCFNFIV18mI=";
+    stripLen = 1;
+  }) super.botan-bindings;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
