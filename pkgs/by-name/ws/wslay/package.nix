@@ -9,14 +9,14 @@
   nettle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wslay";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "tatsuhiro-t";
     repo = "wslay";
-    rev = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-xKQGZO5hNzMg+JYKeqOBsu73YO+ucBEOcNhG8iSNYvA=";
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$(pwd)/lib/.libs
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tatsuhiro-t.github.io/wslay/";
     description = "WebSocket library in C";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ pingiun ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pingiun ];
+    platforms = lib.platforms.unix;
   };
-}
+})
