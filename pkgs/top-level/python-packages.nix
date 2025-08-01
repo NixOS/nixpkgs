@@ -7079,8 +7079,6 @@ self: super: with self; {
 
   iometer = callPackage ../development/python-modules/iometer { };
 
-  ionhash = callPackage ../development/python-modules/ionhash { };
-
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
 
   iopath = callPackage ../development/python-modules/iopath { };
@@ -13258,6 +13256,8 @@ self: super: with self; {
 
   pymilvus = callPackage ../development/python-modules/pymilvus { };
 
+  pymitsubishi = callPackage ../development/python-modules/pymitsubishi { };
+
   pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
@@ -13580,8 +13580,6 @@ self: super: with self; {
   pypykatz = callPackage ../development/python-modules/pypykatz { };
 
   pypytools = callPackage ../development/python-modules/pypytools { };
-
-  pyqldb = callPackage ../development/python-modules/pyqldb { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
@@ -16686,6 +16684,8 @@ self: super: with self; {
   snappy-15-knots = callPackage ../development/python-modules/snappy-15-knots { };
 
   snappy-manifolds = callPackage ../development/python-modules/snappy-manifolds { };
+
+  snapshot-restore-py = callPackage ../development/python-modules/snapshot-restore-py { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 

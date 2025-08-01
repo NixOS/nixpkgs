@@ -46,13 +46,13 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    runHook preConfigure
+    runHook preBuild
 
     for f in SuiteSparse_config Mongoose; do
       (cd $f && cmakeConfigurePhase && make -j$NIX_BUILD_CORES)
     done
 
-    runHook postConfigure
+    runHook postBuild
   '';
 
   installPhase = ''
