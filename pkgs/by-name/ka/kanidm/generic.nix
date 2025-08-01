@@ -70,23 +70,11 @@ rustPlatform.buildRustPackage rec {
         server_admin_bind_path = socket_path;
         server_config_path = "/etc/kanidm/server.toml";
         server_ui_pkg_path = "@htmx_ui_pkg_path@";
-      }
-      // lib.optionalAttrs (lib.versionOlder version "1.5") {
-        admin_bind_path = socket_path;
-        default_config_path = "/etc/kanidm/server.toml";
-        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
-        htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
-      }
-      // lib.optionalAttrs (lib.versions.majorMinor version == "1.3") {
-        web_ui_pkg_path = "@web_ui_pkg_path@";
       };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
-    ''
-    + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
-      substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml --replace-fail '@web_ui_pkg_path@' "$out/ui/pkg"
     '';
 
   nativeBuildInputs = [
@@ -108,9 +96,6 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     mkdir -p $out/ui
     cp -r server/core/static $out/ui/hpkg
-  ''
-  + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
-    cp -r server/web_ui/pkg $out/ui/pkg
   '';
 
   # Upstream runs with the Rust equivalent of -Werror,
