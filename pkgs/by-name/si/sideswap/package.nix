@@ -21,13 +21,13 @@ in
 
 flutter332.buildFlutterApplication rec {
   pname = "sideswap";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "sideswap-io";
     repo = "sideswapclient";
     tag = "v${version}";
-    hash = "sha256-IUUMlaEIUil07nhjep1I+F1WEWakQZfhy42ZlnyRLcQ=";
+    hash = "sha256-+zaQJCMKQZOrZ7i6CzgGTa+rJqpglaufUvYWSWMWTEw=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -84,7 +84,7 @@ flutter332.buildFlutterApplication rec {
           cat $src/pubspec.lock | yq > $out
         '';
 
-    # Usage: nix-shell maintainers/scripts/update.nix --argstr package sideswap --argstr commit true
+    # Usage: nix-shell maintainers/scripts/update.nix --argstr package sideswap
     updateScript = _experimental-update-script-combinators.sequence [
       # Update sideswap to new release.
       (gitUpdater { rev-prefix = "v"; })
