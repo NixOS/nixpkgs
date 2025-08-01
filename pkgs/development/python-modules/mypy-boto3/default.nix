@@ -270,8 +270,8 @@ rec {
       "sha256-FFbyglD7Cuwp20RutRBXu7X097WK+gLfbzhWE7CrPyI=";
 
   mypy-boto3-codecatalyst =
-    buildMypyBoto3Package "codecatalyst" "1.39.0"
-      "sha256-iK4gcn5godd9hDRrG2P0/4dPKXbqdsomhQgqtuxSi38=";
+    buildMypyBoto3Package "codecatalyst" "1.40.0"
+      "sha256-cPLylCvda6iHWRcPMVaL/qEkeg7EzBs38G2mX1eP0ZI=";
 
   mypy-boto3-codecommit =
     buildMypyBoto3Package "codecommit" "1.39.0"
