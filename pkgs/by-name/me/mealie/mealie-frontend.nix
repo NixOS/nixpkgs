@@ -6,6 +6,7 @@ src: version:
   fixup-yarn-lock,
   stdenv,
   yarn,
+  writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation {
   name = "mealie-frontend";
@@ -21,12 +22,12 @@ stdenv.mkDerivation {
     fixup-yarn-lock
     nodejs_20
     (yarn.override { nodejs = nodejs_20; })
+    writableTmpDirAsHomeHook
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
     # TODO: Remove --ignore-engines once upstream supports nodejs_20+
