@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "1.84.3";
+  version = "1.86.2";
 in
 buildGoModule {
   pname = "tailscale";
@@ -37,11 +37,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    rev = "v${version}";
-    hash = "sha256-0HvUNpyi6xzS3PtbgMvh6bLRhV77CZRrVSKGMr7JtbE=";
+    tag = "v${version}";
+    hash = "sha256-hozfvKkvTeaabN1tYl0NlEpjfD4sZQe9Z+agdoXFHNE=";
   };
 
-  vendorHash = "sha256-QBYCMOWQOBCt+69NtJtluhTZIOiBWcQ78M9Gbki6bN0=";
+  vendorHash = "sha256-4QTSspHLYJfzlontQ7msXyOB5gzq7ZwSvWmKuYY5klA=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -63,8 +63,7 @@ buildGoModule {
   ];
 
   excludedPackages = [
-    # exlude integration tests which fail to work
-    # and require additional tooling
+    # Exclude integration tests which fail to work and require additional tooling
     "tstest/integration"
   ];
 
@@ -79,8 +78,7 @@ buildGoModule {
     "ts_include_cli"
   ];
 
-  # remove vendored tooling to ensure it's not used
-  # also avoids some unnecessary tests
+  # Remove vendored tooling to ensure it's not used; also avoids some unnecessary tests
   preBuild = ''
     rm -rf ./tool
   '';
@@ -151,6 +149,12 @@ buildGoModule {
 
         # flaky: https://github.com/tailscale/tailscale/issues/15348
         "TestSafeFuncHappyPath"
+
+        # Requires `go` to be installed with the `go tool` system which we don't use
+        "TestGoVersion"
+
+        # Fails because we vendor dependencies
+        "TestLicenseHeaders"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -165,6 +169,11 @@ buildGoModule {
 
         # Fails only on Darwin, succeeds on other tested platforms.
         "TestOnTailnetDefaultAutoUpdate"
+
+        # Fails due to UNIX domain socket path limits in the Nix build environment.
+        # Likely we could do something to make the paths shorter.
+        "TestProtocolQEMU"
+        "TestProtocolUnixDgram"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
