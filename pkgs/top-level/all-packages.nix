@@ -7799,6 +7799,7 @@ with pkgs;
       certbot-dns-ovh
       certbot-dns-rfc2136
       certbot-dns-route53
+      certbot-nginx
     ]
   );
 
