@@ -79,7 +79,7 @@ buildPythonPackage rec {
     })
   ];
 
-  env.OSL_LOCATION = "${openshadinglanguage}";
+  env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
