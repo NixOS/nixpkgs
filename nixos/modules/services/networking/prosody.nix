@@ -369,11 +369,6 @@ let
           kick other. Useful in jitsi-meet to kick ghosts.
         '';
       };
-      vcard_muc = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Adds the ability to set vCard for Multi User Chat rooms";
-      };
 
       # Extra parameters. Defaulting to prosody default values.
       # Adding them explicitly to make them visible from the options
@@ -579,7 +574,7 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";''} ${optionalString muc.allowners_muc ''"muc_allowners";''}  }
+            modules_enabled = { "muc_mam"; ${optionalString muc.allowners_muc ''"muc_allowners";''}  }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
