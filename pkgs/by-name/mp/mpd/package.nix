@@ -271,7 +271,47 @@ let
       ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
       ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
 
-      passthru.tests.nixos = nixosTests.mpd;
+      passthru = {
+        tests.nixos = nixosTests.mpd;
+        withFeatures = run;
+        small = run {
+          features = [
+            "webdav"
+            "curl"
+            "mms"
+            "bzip2"
+            "zzip"
+            "nfs"
+            "audiofile"
+            "faad"
+            "flac"
+            "gme"
+            "mpg123"
+            "opus"
+            "vorbis"
+            "vorbisenc"
+            "lame"
+            "libsamplerate"
+            "shout"
+            "libmpdclient"
+            "id3tag"
+            "expat"
+            "pcre"
+            "sqlite"
+            "qobuz"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            "alsa"
+            "systemd"
+            "syslog"
+            "io_uring"
+          ]
+          ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+            "mad"
+            "jack"
+          ];
+        };
+      };
 
       meta = with lib; {
         description = "Flexible, powerful daemon for playing music";
@@ -291,44 +331,4 @@ let
       };
     };
 in
-{
-  mpd = run { };
-  mpd-small = run {
-    features = [
-      "webdav"
-      "curl"
-      "mms"
-      "bzip2"
-      "zzip"
-      "nfs"
-      "audiofile"
-      "faad"
-      "flac"
-      "gme"
-      "mpg123"
-      "opus"
-      "vorbis"
-      "vorbisenc"
-      "lame"
-      "libsamplerate"
-      "shout"
-      "libmpdclient"
-      "id3tag"
-      "expat"
-      "pcre"
-      "sqlite"
-      "qobuz"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "alsa"
-      "systemd"
-      "syslog"
-      "io_uring"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "mad"
-      "jack"
-    ];
-  };
-  mpdWithFeatures = run;
-}
+run { }
