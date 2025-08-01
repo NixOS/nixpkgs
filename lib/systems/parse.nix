@@ -798,6 +798,12 @@ rec {
             kernel = "windows";
             abi = "msvc";
           }
+        else if elemAt l 1 == "mingw" then
+          {
+            cpu = elemAt l 0;
+            kernel = "windows";
+            abi = "gnu";
+          }
         else if (elemAt l 1) == "elf" then
           {
             cpu = elemAt l 0;
@@ -935,6 +941,8 @@ rec {
     }:
     if abi == abis.cygnus then
       "${cpu.name}-cygwin"
+    else if kernel == kernels.windows && abi == abis.gnu then
+      "${cpu.name}-mingw"
     else if kernel.families ? darwin then
       "${cpu.name}-darwin"
     else

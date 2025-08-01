@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.windows;
+    platforms = lib.platforms.mingw;
   };
 }
