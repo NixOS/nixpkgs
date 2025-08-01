@@ -1022,8 +1022,8 @@ rec {
       "sha256-mFjiZCTx39BpnVDJkjoHnOKKvctZXoVelDXMG6kznyY=";
 
   mypy-boto3-personalize-runtime =
-    buildMypyBoto3Package "personalize-runtime" "1.39.0"
-      "sha256-5In5YQlxlikaJbAmck01uwMVjsvs0npFtPnspQNc5yY=";
+    buildMypyBoto3Package "personalize-runtime" "1.40.0"
+      "sha256-lcLdLz14tQ3KTUngLTQ4iYOWjJTdquoItqKRBdf4ZqU=";
 
   mypy-boto3-pi =
     buildMypyBoto3Package "pi" "1.39.0"
