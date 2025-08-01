@@ -2,11 +2,9 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  breeze-icons,
   gtk-engine-murrine,
   jdupes,
-  plasma-framework,
-  plasma-workspace,
+  libsForQt5,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -16,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = pname;
+      repo = "nordic";
       rev = "d9b5c42cebf9a165bcce7b6b8a019f5cfd5b789c";
       hash = "sha256-OkXjwaoXyWfTgNkeU+ab+uv+U/5OaJ8oTt/G8YLz84o=";
       name = "Nordic";
@@ -24,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = pname;
+      repo = "nordic";
       rev = "361f0d1d23177a1154d415f793ce52a2c09629d4";
       hash = "sha256-0IBuCMbHxTL3YtIK35g9xiBEs1DZgA4MwMAVPIw3Omk=";
       name = "Nordic-standard-buttons";
@@ -32,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = pname;
+      repo = "nordic";
       rev = "bf05d41c7c7cd03e391854739bcc843fc6053ced";
       hash = "sha256-AjVvciUrm/X3U6Pmo52ZrucLRJdsRFPeEMRwSKyjwi4=";
       name = "Nordic-darker";
@@ -40,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = pname;
+      repo = "nordic";
       rev = "98cdf88d77fa7f0535ff660148e0ccbabe47a579";
       hash = "sha256-70l5+renDhniZroPoMrCHsPgT6Pg3cr5w86LjkaWchg=";
       name = "Nordic-darker-standard-buttons";
@@ -48,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = pname;
+      repo = "nordic";
       rev = "f1e43cf9ba83602f73f71407a8a4ba768122b7f4";
       hash = "sha256-yLE/M9PXfQv2JD+HTsBHFiFaKuY8vOkZiOlQLLON+HM=";
       name = "Nordic-bluish-accent";
@@ -56,7 +54,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = pname;
+      repo = "nordic";
       rev = "52a37ebce50f948129507e4804240d9e7788a7a2";
       hash = "sha256-zwnCaS08vceHjFHn9ET2509Zat7a1gHEG1RDR+xrbhc=";
       name = "Nordic-bluish-accent-standard-buttons";
@@ -64,7 +62,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = "${pname}-polar";
+      repo = "nordic-polar";
       rev = "24dc0325c4a38508039f5fee9a5391c1d9d8d5d5";
       hash = "sha256-Y3PFuIc7UPbRg9NZie4buKCUiMXzl5idg7LSrj/lsos=";
       name = "Nordic-Polar";
@@ -72,7 +70,7 @@ stdenvNoCC.mkDerivation rec {
 
     (fetchFromGitHub {
       owner = "EliverLara";
-      repo = "${pname}-polar";
+      repo = "nordic-polar";
       rev = "fe0d657613a1e6330fa8c41378c324af93a42c3a";
       hash = "sha256-fusSDXawWttXWQfGloRkpkHWvfLPuljm1l0BpAKvNSg=";
       name = "Nordic-Polar-standard-buttons";
@@ -156,7 +154,7 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $sddm/nix-support
 
-    printWords ${breeze-icons} ${plasma-framework} ${plasma-workspace} \
+    printWords ${libsForQt5.breeze-icons} ${libsForQt5.plasma-framework} ${libsForQt5.plasma-workspace} \
       >> $sddm/nix-support/propagated-user-env-packages
   '';
 
@@ -165,6 +163,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/EliverLara/Nordic";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
