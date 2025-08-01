@@ -90,6 +90,12 @@
     githubId = 64707304;
     name = "Dmitry Kulikov";
   };
+  _JaminW55 = {
+    email = "wellerbp@protonmail.com";
+    name = "B Wells";
+    github = "JaminW55";
+    githubId = 133602605;
+  };
   _0x120581f = {
     email = "nixpkgs@0x120581f.dev";
     name = "0x120581f";
