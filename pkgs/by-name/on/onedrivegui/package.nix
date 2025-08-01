@@ -8,6 +8,8 @@
   makeDesktopItem,
   makeWrapper,
   onedrive,
+
+  nix-update-script,
 }:
 
 let
@@ -99,6 +101,8 @@ python3Packages.buildPythonApplication rec {
       } \
       --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/bpozdena/OneDriveGUI";
