@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  editdistance-s,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  cffi,
   setuptools,
   ukkonen,
 }:
@@ -26,18 +26,18 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    editdistance-s
+    cffi
     pytestCheckHook
     ukkonen
   ];
 
   pythonImportsCheck = [ "identify" ];
 
-  meta = with lib; {
+  meta = {
     description = "File identification library for Python";
-    homepage = "https://github.com/chriskuehl/identify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/pre-commit/identify";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "identify-cli";
   };
 }
