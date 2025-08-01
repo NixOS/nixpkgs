@@ -12,7 +12,7 @@
 let
 
   name = "tmux-sessionizer";
-  version = "0.4.5";
+  version = "0.5.0";
 
 in
 rustPlatform.buildRustPackage {
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage {
     owner = "jrmoulton";
     repo = name;
     rev = "v${version}";
-    hash = "sha256-uoSm9oWZSiqwsg7dVVMay9COL5MEK3a5Pd+D66RzzPM=";
+    hash = "sha256-6eMKwp5639DIyhM6OD+db7jr4uF34JSt0Xg+lpyIPSI=";
   };
 
-  cargoHash = "sha256-fd0IEORqnqxKN9zisXTT0G8CwRNVsGd3HZmCVY5DKsM=";
+  cargoHash = "sha256-gIsqHbCmfYs1c3LPNbE4zLVjzU3GJ4MeHMt0DC5sS3c=";
 
   passthru.tests.version = testers.testVersion {
     package = tmux-sessionizer;
