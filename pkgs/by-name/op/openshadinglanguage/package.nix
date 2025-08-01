@@ -13,7 +13,7 @@
   openimageio,
   partio,
   pugixml,
-  python3,
+  python3Packages,
   robin-map,
   stdenv,
   util-linux,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     openimageio
     partio
     pugixml
-    python3.pkgs.pybind11
+    python3Packages.pybind11
     robin-map
     util-linux # needed just for hexdump
     zlib
