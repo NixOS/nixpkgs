@@ -902,8 +902,8 @@ rec {
       "sha256-pbtnV+rUtjVXOreQNRYKyKB9ovSwyZWNY08LHaxDCFs=";
 
   mypy-boto3-meteringmarketplace =
-    buildMypyBoto3Package "meteringmarketplace" "1.39.0"
-      "sha256-vgQbE3GPYOg+RGdqDyjAcWDzntFvpnvxh5X0DM6U20k=";
+    buildMypyBoto3Package "meteringmarketplace" "1.40.0"
+      "sha256-wbPakhKKDtNY6y84jzqJQlP7IiG5QAKQTRsYP/tndV8=";
 
   mypy-boto3-mgh =
     buildMypyBoto3Package "mgh" "1.39.0"
