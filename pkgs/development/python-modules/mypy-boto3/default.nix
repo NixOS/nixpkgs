@@ -422,8 +422,8 @@ rec {
       "sha256-GH91jmgaNkchW2fK8winBTP4IWUftwqFCqfJPqkDj9o=";
 
   mypy-boto3-docdb-elastic =
-    buildMypyBoto3Package "docdb-elastic" "1.39.0"
-      "sha256-rqU+I/5Jn8WqR7bXp53v6TGlgZE9GxYkM/VBQ6TmxsI=";
+    buildMypyBoto3Package "docdb-elastic" "1.40.0"
+      "sha256-TKVaVd92g+2bV5NNRnLuVZQw0lZycTyeyjB6UgV+iHc=";
 
   mypy-boto3-drs =
     buildMypyBoto3Package "drs" "1.39.0"
