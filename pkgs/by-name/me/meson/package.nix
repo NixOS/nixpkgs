@@ -8,16 +8,19 @@
   llvmPackages,
   ninja,
   pkg-config,
-  python3,
+  python3Packages,
   replaceVars,
   writeShellScriptBin,
   zlib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python3 = python3Packages.python;
+in
+python3Packages.buildPythonApplication rec {
   pname = "meson";
   version = "1.8.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
@@ -85,6 +88,8 @@ python3.pkgs.buildPythonApplication rec {
     else
       null;
 
+  build-system = [ python3Packages.setuptools ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
@@ -114,7 +119,7 @@ python3.pkgs.buildPythonApplication rec {
         substituteInPlace \
           'test cases/native/8 external program shebang parsing/script.int.in' \
           'test cases/common/274 customtarget exe for test/generate.py' \
-            --replace /usr/bin/env ${coreutils}/bin/env
+            --replace-fail /usr/bin/env ${coreutils}/bin/env
       ''
     ]
     # Remove problematic tests
@@ -168,7 +173,7 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
 
     substituteInPlace "$out/share/bash-completion/completions/meson" \
-      --replace "python3 -c " "${python3.interpreter} -c "
+      --replace-fail "python3 -c " "${python3.interpreter} -c "
   '';
 
   setupHook = ./setup-hook.sh;

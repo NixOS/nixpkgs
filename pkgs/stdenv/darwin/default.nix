@@ -643,14 +643,13 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         # Use a full Python for the bootstrap. This allows Meson to be built in stage 1 and makes it easier to build
         # packages that have Python dependencies.
+        python3Packages = self.python3.pkgs;
         python3 = self.python3-bootstrap;
         python3-bootstrap = super.python3.override {
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
           enableLTO = false;
         };
-
-        scons = super.scons.override { python3Packages = self.python3.pkgs; };
 
         xar = super.xarMinimal;
 
