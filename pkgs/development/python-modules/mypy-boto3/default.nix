@@ -1102,8 +1102,8 @@ rec {
       "sha256-rJnEK9W8zZ6hxp5YvysRaxk01vaCv3+zpE9GSdRb1jA=";
 
   mypy-boto3-redshift-serverless =
-    buildMypyBoto3Package "redshift-serverless" "1.39.0"
-      "sha256-72LJFKWU9oioDuK1XKbeYAOZYth5zBEezMfKnh4zjh4=";
+    buildMypyBoto3Package "redshift-serverless" "1.40.0"
+      "sha256-iRj6arzq9rBsbuImlWdStHbs5o5D4f9MowdG5M7w6SA=";
 
   mypy-boto3-rekognition =
     buildMypyBoto3Package "rekognition" "1.39.0"
