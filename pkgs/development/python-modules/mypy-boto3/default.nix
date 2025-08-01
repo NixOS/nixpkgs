@@ -886,8 +886,8 @@ rec {
       "sha256-+dq2mYkfUZ8nlcWHQ65ENLLTxxX4X4n4lOniFdqxAXM=";
 
   mypy-boto3-mediastore-data =
-    buildMypyBoto3Package "mediastore-data" "1.39.0"
-      "sha256-JrfzF5valQYWc598YkOByq3EQupgtrAEg2V5kqdMQP0=";
+    buildMypyBoto3Package "mediastore-data" "1.40.0"
+      "sha256-TAVybHWowAXqfpCUgOe0Lt8l2CZhYqha73PSl/0ZmlE=";
 
   mypy-boto3-mediatailor =
     buildMypyBoto3Package "mediatailor" "1.39.0"
