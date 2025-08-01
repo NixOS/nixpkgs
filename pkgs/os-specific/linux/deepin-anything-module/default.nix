@@ -2,6 +2,7 @@
   stdenv,
   deepin,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation {
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    make kdir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
+    make ${builtins.toString kernelModuleMakeFlags} kdir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
     runHook postBuild
   '';
 
