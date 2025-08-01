@@ -16,7 +16,6 @@
   graphicsmagick,
   glew,
   openssl,
-  pcre,
   harfbuzz,
   icu,
 }:
@@ -52,7 +51,6 @@ let
         graphicsmagick
         glew
         openssl
-        pcre
         harfbuzz
         icu
       ];
