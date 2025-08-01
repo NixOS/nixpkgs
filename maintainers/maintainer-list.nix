@@ -26846,6 +26846,12 @@
     githubId = 367185;
     name = "Jan Votava";
   };
+  voxi0 = {
+    name = "Wasiq Arbab";
+    email = "alif200099@gmail.com";
+    github = "Voxi0";
+    githubId = 113725768;
+  };
   vpetersson = {
     email = "vpetersson@screenly.io";
     github = "vpetersson";
