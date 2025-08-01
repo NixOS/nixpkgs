@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.24";
+  version = "1.3.25";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qyKn4qHEpGqis82ALjsog0iH6nM8HKMl4y1KLazXT7I=";
+    hash = "sha256-raqn8TVqD/VFgPw6kiv69JoBmUUVp9Ltj9n2EeEg85U=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     buildInputs = [ nodejs_22 ];
 
-    fetcherVersion = 1;
-    hash = "sha256-Ij2jc5K0WpIIeI/iKXAdU+fxyqkWpkCuQSNqHvhkQS8=";
+    fetcherVersion = 2;
+    hash = "sha256-KZOAbU6IBytkZzwB8jbSwmlkM69uhjNUEKmIu5/DySI=";
   };
 
   env = {
