@@ -248,7 +248,7 @@ let
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
-      windows.mingw_w64_pthreads
+      windows.pthreads
     ]
     ++ optionals tzdataSupport [
       tzdata

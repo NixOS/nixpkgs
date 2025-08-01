@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.mingw_w64_pthreads
+    windows.pthreads
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
