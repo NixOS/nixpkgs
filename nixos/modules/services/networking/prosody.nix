@@ -182,7 +182,7 @@ let
 
     http_files = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = "Serve static files from a directory over HTTP";
     };
 
