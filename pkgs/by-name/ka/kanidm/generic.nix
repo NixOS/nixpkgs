@@ -136,7 +136,8 @@ lib.warnIf (eolDate != null)
 
       passthru = {
         tests = {
-          inherit (nixosTests) kanidm kanidm-provisioning;
+          kanidm = nixosTests.kanidm (lib.versions.majorMinor kanidm.version);
+          kanidm-provisioning = nixosTests.kanidm-provisioning (lib.versions.majorMinor kanidm.version);
         };
 
         updateScript = lib.optionals (!enableSecretProvisioning) (nix-update-script {

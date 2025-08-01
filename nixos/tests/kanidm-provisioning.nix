@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ kanidmVersion, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
@@ -13,6 +13,9 @@ let
   provisionAdminPassword = "very-strong-password-for-admin";
   provisionIdmAdminPassword = "very-strong-password-for-idm-admin";
   provisionIdmAdminPassword2 = "very-strong-alternative-password-for-idm-admin";
+
+  kanidmPackage =
+    pkgs."kanidmWithSecretProvisioning_${builtins.replaceStrings [ "." ] [ "_" ] kanidmVersion}";
 in
 {
   name = "kanidm-provisioning";
@@ -22,7 +25,7 @@ in
     { pkgs, lib, ... }:
     {
       services.kanidm = {
-        package = pkgs.kanidmWithSecretProvisioning_1_6;
+        package = kanidmPackage;
         enableServer = true;
         serverSettings = {
           origin = "https://${serverDomain}";
@@ -273,11 +276,11 @@ in
 
       users.users.kanidm.shell = pkgs.bashInteractive;
 
-      environment.systemPackages = with pkgs; [
-        kanidm
-        openldap
-        ripgrep
-        jq
+      environment.systemPackages = [
+        kanidmPackage
+        pkgs.openldap
+        pkgs.ripgrep
+        pkgs.jq
       ];
     };
 
