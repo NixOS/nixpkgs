@@ -322,8 +322,8 @@ rec {
       "sha256-3BylDhj1qWTDr/xeUxdnrKNXbXisMgXL0OoThhdoSZg=";
 
   mypy-boto3-comprehend =
-    buildMypyBoto3Package "comprehend" "1.39.0"
-      "sha256-RDE+kFtCY6s8jXbqRzjzzrtMnIjPSuVWYcpnEH6Z8Cw=";
+    buildMypyBoto3Package "comprehend" "1.40.0"
+      "sha256-KVfYSlwqY7/ufb+DEChO5Df3bfX0nw2W60YZW7UXSgk=";
 
   mypy-boto3-comprehendmedical =
     buildMypyBoto3Package "comprehendmedical" "1.39.0"
