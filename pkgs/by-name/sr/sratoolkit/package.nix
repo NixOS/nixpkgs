@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OeM4syv9c1rZn2ferrhXyKJu68ywVYwnHoqnviWBZy4=";
   };
 
+  patches = [ ./attribute_unused.patch ];
+
   cmakeFlags = [
     "-DVDB_INCDIR=${ncbi-vdb}/include"
     "-DVDB_LIBDIR=${ncbi-vdb}/lib"
