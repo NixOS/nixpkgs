@@ -8147,9 +8147,9 @@ with pkgs;
     else if libc == "musl" then
       musl
     else if libc == "msvcrt" then
-      windows.mingw_w64
+      if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "ucrt" then
-      windows.mingw_w64
+      if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "libSystem" then
       if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
     else if libc == "fblibc" then
@@ -9426,9 +9426,7 @@ with pkgs;
 
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
-  schroedinger = callPackage ../development/libraries/schroedinger {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  schroedinger = callPackage ../development/libraries/schroedinger { };
 
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
@@ -12170,8 +12168,6 @@ with pkgs;
 
   fclones = callPackage ../tools/misc/fclones { };
 
-  fclones-gui = callPackage ../tools/misc/fclones/gui.nix { };
-
   feh = callPackage ../applications/graphics/feh {
     imlib2 = imlib2Full;
   };
@@ -12573,8 +12569,6 @@ with pkgs;
   i3lock-fancy-rapid = callPackage ../applications/window-managers/i3/lock-fancy-rapid.nix { };
 
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
-
-  i3status-rust = callPackage ../applications/window-managers/i3/status-rust.nix { };
 
   i3wsr = callPackage ../applications/window-managers/i3/wsr.nix { };
 
@@ -14092,9 +14086,7 @@ with pkgs;
     onlyLibVLC = true;
   };
 
-  vorbis-tools = callPackage ../applications/audio/vorbis-tools {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
   vscode-fhs = vscode.fhs;

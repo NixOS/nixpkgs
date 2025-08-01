@@ -243,6 +243,7 @@ else
     inherit (unpacked) pname version;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
+    extraPreBwrapCmds = "unset QT_PLUGIN_PATH";
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 
