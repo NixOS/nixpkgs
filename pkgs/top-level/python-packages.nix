@@ -19472,6 +19472,8 @@ self: super: with self; {
 
   warcio = callPackage ../development/python-modules/warcio { };
 
+  warc3-wet = callPackage ../development/python-modules/warc3-wet { };
+
   ward = callPackage ../development/python-modules/ward { };
 
   warlock = callPackage ../development/python-modules/warlock { };
