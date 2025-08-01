@@ -35,7 +35,7 @@
   pcre,
   systemd,
   tbb_2021,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   libnoise,
@@ -47,8 +47,17 @@ let
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
+      webkitgtk_4_0 = webkitgtk_4_1;
     }).overrideAttrs
       (old: {
+        src = fetchFromGitHub {
+          owner = "SoftFever";
+          repo = "Orca-deps-wxWidgets";
+          rev = "acdc6db5064274405c323c3823eedf559bbe0474";
+          hash = "sha256-Rt03VK0AzZyROkya0zRKpckS/OSa74pLTNbZoJiitfo=";
+          fetchSubmodules = true;
+        };
+
         configureFlags = old.configureFlags ++ [
           # Disable noisy debug dialogs
           "--enable-debug=no"
@@ -112,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb
     pcre
     tbb_2021
-    webkitgtk_4_0
+    webkitgtk_4_1
     wxGTK'
     xorg.libX11
     opencv.cxxdev
