@@ -10317,13 +10317,8 @@ with pkgs;
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
-  inherit
-    (callPackages ../servers/mpd {
-    })
-    mpd
-    mpd-small
-    mpdWithFeatures
-    ;
+  mpd-small = lib.warnOnInstantiate "'mpd-small' is deprecated, please use `mpd.small` instead." mpd.small; # added 2025-08-01
+  mpdWithFeatures = lib.warnOnInstantiate "'mpdWithFeatures' is deprecated, please use `mpd.withFeatures` instead." mpd.withFeatures; # added 2025-08-01
 
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
 
