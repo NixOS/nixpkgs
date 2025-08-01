@@ -108,6 +108,9 @@ let
     "aarch64-windows"
     "x86_64-windows"
     "i686-windows"
+    "x86_64-mingw"
+    "i686-mingw"
+    "aarch64-mingw"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -187,6 +190,8 @@ in
   wasi = filterDoubles predicates.isWasi;
   redox = filterDoubles predicates.isRedox;
   windows = filterDoubles predicates.isWindows;
+  mingw = filterDoubles predicates.isMinGW;
+  msvc = filterDoubles predicates.isMsvc;
   genode = filterDoubles predicates.isGenode;
 
   embedded = filterDoubles predicates.isNone;
