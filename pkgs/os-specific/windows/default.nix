@@ -12,8 +12,6 @@ lib.makeScope newScope (
   self: with self; {
     dlfcn = callPackage ./dlfcn { };
 
-    w32api = callPackage ./w32api { };
-
     mingw_w64 = callPackage ./mingw-w64 {
       stdenv = stdenvNoLibc;
     };
