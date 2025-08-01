@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  jre,
+  openjdk11,
   unzip,
   makeWrapper,
   makeDesktopItem,
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor
     cp -Rv * $out/share/weka
 
-    makeWrapper ${jre}/bin/java $out/bin/weka \
+    makeWrapper ${openjdk11}/bin/java $out/bin/weka \
       --add-flags "-Xmx${maxMemoryAllocationPool} -jar $out/share/weka/weka.jar"
 
-    makeWrapper ${jre}/bin/java $out/bin/weka-java \
+    makeWrapper ${openjdk11}/bin/java $out/bin/weka-java \
       --add-flags "-Xmx${maxMemoryAllocationPool} -cp $out/share/weka/weka.jar"
 
     ${lib.optionalString stdenv.hostPlatform.isLinux "
