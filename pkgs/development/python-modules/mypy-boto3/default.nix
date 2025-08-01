@@ -406,8 +406,8 @@ rec {
       "sha256-UmrcCxy3zK/cEkM/KCGnr4JEMOOjhNwBNRC6IiMm+NM=";
 
   mypy-boto3-discovery =
-    buildMypyBoto3Package "discovery" "1.39.0"
-      "sha256-XvPYYCG1aa2cHKr19g6sjMwE0psPhn+ziCOo5+1c9Zc=";
+    buildMypyBoto3Package "discovery" "1.40.0"
+      "sha256-7B/r3hmwde2URQF3ztv3Ruva+0IPq2uNAoY4lAHga80=";
 
   mypy-boto3-dlm =
     buildMypyBoto3Package "dlm" "1.39.0"
