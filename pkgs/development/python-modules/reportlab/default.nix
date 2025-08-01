@@ -4,6 +4,7 @@
   chardet,
   fetchPypi,
   freetype,
+  charset-normalizer,
   pillow,
   setuptools,
   python,
@@ -17,7 +18,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.4.1";
+  version = "4.4.3";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X5ufwLekjokSwlzPadJrgpgKsNpxjk9YP6cg6Pj1Bz8=";
+    hash = "sha256-BzsJddq2lTas0yUYWOawUk7T4IfnHx0NGJWstQrPnHs=";
   };
 
   postPatch = ''
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     chardet
     pillow
+    charset-normalizer
   ];
 
   checkPhase = ''
