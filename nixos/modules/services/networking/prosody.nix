@@ -956,14 +956,18 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".source =
       if cfg.checkConfig then
-        pkgs.runCommandLocal "prosody.cfg.lua-checked"
+        pkgs.runCommandLocal "prosody.cfg.lua"
           {
             nativeBuildInputs = [ cfg.package ];
           }
           ''
             cp ${configFile} prosody.cfg.lua
+            # Replace the hardcoded path to cacerts with one that is accessible in the build sandbox
+            sed 's|/etc/ssl/certs/ca-bundle.crt|${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt|' -i prosody.cfg.lua
+            # For some reason prosody hard fails to "find" certificates when this directory does not exist
+            mkdir certs
             prosodyctl --config ./prosody.cfg.lua check config
-            touch $out
+            cp prosody.cfg.lua $out
           ''
       else
         configFile;
