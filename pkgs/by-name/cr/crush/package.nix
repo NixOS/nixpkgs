@@ -26,6 +26,11 @@ buildGoModule rec {
   # doCheck = false;
   checkFlags = [ "-skip=TestMain" ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "The glamourous AI coding agent for your favourite terminal";
     homepage = "https://github.com/charmbracelet/crush";
