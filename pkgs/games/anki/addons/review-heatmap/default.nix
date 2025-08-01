@@ -1,9 +1,4 @@
-{
-  lib,
-  anki-utils,
-  fetchFromGitHub,
-  nix-update-script,
-}:
+with import <nixpkgs> {};
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "review-heatmap";
   version = "0-unstable-2025-8-1";
@@ -20,6 +15,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     description = "Add a heatmap graph to Anki to visulaize your past and future card-review activity";
     homepage = "https://github.com/glutanimate/review-heatmap";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ junestepp ];
+    maintainers = with lib.maintainers; [ dastarruer ];
   };
 })
