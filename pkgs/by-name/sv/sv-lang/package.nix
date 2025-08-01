@@ -13,18 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "sv-lang";
-  version = "7.0";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
     rev = "v${version}";
-    sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
+    sha256 = "sha256-U/ApMo07+WwNjGcHP/lyT0htA693gSsTdxJLlTLUVAU=";
   };
 
   postPatch = ''
     substituteInPlace external/CMakeLists.txt \
-      --replace-fail 'set(mimalloc_min_version "2.1")' 'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+      --replace-fail 'set(mimalloc_min_version "2.2")' 'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")' \
+      --replace-fail 'set(fmt_min_version "11.2")' 'set(mimalloc_min_version "${lib.versions.majorMinor fmt_11.version}")'
   '';
 
   cmakeFlags = [
