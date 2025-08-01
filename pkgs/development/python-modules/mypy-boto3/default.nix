@@ -590,8 +590,8 @@ rec {
       "sha256-FMt0y3H1PQ8I7VdZvh/spGzluAmfPFEXypcR8zsebdM=";
 
   mypy-boto3-groundstation =
-    buildMypyBoto3Package "groundstation" "1.39.0"
-      "sha256-xWDtNvT6WhFrEx2VDb1GIKbb/wxu4o8JB/xUBK1tpxY=";
+    buildMypyBoto3Package "groundstation" "1.40.0"
+      "sha256-/LlMFYC7cJWb9C5JIt0dTEPtl2sPsalSq7mYaFSf3c4=";
 
   mypy-boto3-guardduty =
     buildMypyBoto3Package "guardduty" "1.39.7"
