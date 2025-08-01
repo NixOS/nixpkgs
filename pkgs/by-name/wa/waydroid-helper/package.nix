@@ -16,8 +16,12 @@
   dbus,
   systemd,
   bash,
+  bindfs,
+  e2fsprogs,
   fakeroot,
+  fuse,
   gobject-introspection,
+  unzip,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,7 +42,9 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "dbus_service_dir," "'$out/share/dbus-1/system-services',"
     substituteInPlace systemd/meson.build \
       --replace-fail ": systemd_system_unit_dir" ": '$out/lib/systemd/system'" \
-      --replace-fail ": systemd_user_unit_dir" ": '$out/lib/sysusers.d'"
+      --replace-fail ": systemd_user_unit_dir" ": '$out/lib/systemd/user'"
+    substituteInPlace systemd/{system/waydroid-mount,user/waydroid-monitor}.service \
+      --replace-fail "/usr/bin/waydroid-helper" "$out/bin/waydroid-helper"
     # com.jaoushingan.WaydroidHelper.desktop: component-name-missing, description-first-para-too-short
     # url-homepage-missing, desktop-app-launchable-omitted, content-rating-missing, developer-info-missing
     sed -i '/test(/{N;/Validate appstream file/!b;:a;N;/)/!ba;d}' data/meson.build
@@ -80,7 +86,15 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ fakeroot ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        bindfs
+        e2fsprogs
+        fakeroot
+        fuse
+        unzip
+      ]
+    }"
   ];
 
   postInstallCheck = ''
