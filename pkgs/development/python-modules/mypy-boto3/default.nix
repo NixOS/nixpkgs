@@ -670,8 +670,8 @@ rec {
       "sha256-sIOK6xeN9S4rW+SIdhdHuHEeu4Z1t9xiBQfgspSJYSc=";
 
   mypy-boto3-iotfleethub =
-    buildMypyBoto3Package "iotfleethub" "1.39.0"
-      "sha256-RDinbbqgNDp5dmUskqDprRxL7hTyze0sT/CKXmK/ORQ=";
+    buildMypyBoto3Package "iotfleethub" "1.40.0"
+      "sha256-U2nCifkYupb+DcMn8JjPUM+dCROsyyZGukChsaDNROE=";
 
   mypy-boto3-iotfleetwise =
     buildMypyBoto3Package "iotfleetwise" "1.39.0"
