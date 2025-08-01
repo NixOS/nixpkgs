@@ -1258,8 +1258,8 @@ rec {
       "sha256-aGK44+fTKwT+5o4bcqz1GvOm/9gpP3oX82Eta/uXc8w=";
 
   mypy-boto3-shield =
-    buildMypyBoto3Package "shield" "1.39.0"
-      "sha256-fFlG+baqHWYZdyw+IrnCLIaf2enoVzx6pbrxTHKEPqA=";
+    buildMypyBoto3Package "shield" "1.40.0"
+      "sha256-nwgaSaqi1PebG4PEco7o6J0bX28+NpVbYiA+SXk2Or8=";
 
   mypy-boto3-signer =
     buildMypyBoto3Package "signer" "1.39.0"
