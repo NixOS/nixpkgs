@@ -33,7 +33,7 @@ lib.makeScope newScope (
 
     mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
 
-    mingw_w64_pthreads = self.pthreads;
+    mingw_w64_pthreads = lib.warn "windows.mingw_w64_pthreads is deprecated, windows.pthreads should be preferred" self.pthreads;
 
     mcfgthreads = callPackage ./mcfgthreads { stdenv = crossThreadsStdenv; };
 
