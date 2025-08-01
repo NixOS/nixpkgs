@@ -870,6 +870,9 @@ stdenvNoCC.mkDerivation {
     + optionalString cc.langFortran or false ''
       hardening_unsupported_flags+=" format"
     ''
+    + optionalString cc.langGo or false ''
+      hardening_unsupported_flags+=" format"
+    ''
     + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
