@@ -1030,8 +1030,8 @@ rec {
       "sha256-cOQUbgRJXVYYlT4Raormux73YtBHOMnTOZu7F9rj9iY=";
 
   mypy-boto3-pinpoint =
-    buildMypyBoto3Package "pinpoint" "1.39.0"
-      "sha256-/5X1IDvRJSEzDe53Rr1RgAiDPqGTbF4zNFXR7wtV/8o=";
+    buildMypyBoto3Package "pinpoint" "1.40.0"
+      "sha256-7H0lySCszWZpr7YeyGS0nfUeKZX51vf6ILPtHnltHsA=";
 
   mypy-boto3-pinpoint-email =
     buildMypyBoto3Package "pinpoint-email" "1.39.0"
