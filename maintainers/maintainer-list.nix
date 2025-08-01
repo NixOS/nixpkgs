@@ -27958,6 +27958,12 @@
     github = "YorikSar";
     githubId = 428074;
   };
+  yorwba = {
+    email = "yorwb4@gmail.com";
+    github = "Yorwba";
+    githubId = 6555947;
+    name = "Yorwba";
+  };
   YoshiRulz = {
     name = "YoshiRulz";
     email = "OSSYoshiRulz+Nixpkgs@gmail.com";
