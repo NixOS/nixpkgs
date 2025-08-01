@@ -65,14 +65,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.61"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.28.1"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-2lcPqNrGAHvPPVZIQaDbI54sQQ7OsOiMxUx6qg6WeNU=";
+    hash = "sha256-TpyjYnLTBPU83g6/h+BrX4hd4dUbZUvDyJ6m/3v38+A=";
   };
 
   postPatch = ''
@@ -158,6 +158,12 @@ py.pkgs.buildPythonApplication rec {
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
+  ];
+
+  disabledTests = [
+    # Requires networking (socket binding not possible in sandbox)
+    "test_is_socket"
+    "test_is_special_file_warning"
   ];
 
   pythonImportsCheck = [
