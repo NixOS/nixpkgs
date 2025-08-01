@@ -303,6 +303,7 @@ mapAliases {
   arb = throw "'arb' has been removed as it has been merged into 'flint3'"; # Added 2025-03-28
   arcanist = throw "arcanist was removed as phabricator is not supported and does not accept fixes"; # Added 2024-06-07
   archipelago-minecraft = throw "archipelago-minecraft has been removed, as upstream no longer ships minecraft as a default APWorld."; # Added 2025-07-15
+  archivebox = throw "archivebox has been removed, since the packaged version was stuck on django 3."; # Added 2025-08-01
   argo = argo-workflows; # Added 2025-02-01
   aria = aria2; # Added 2024-03-26
   artim-dark = aritim-dark; # Added 2025-07-27
@@ -338,6 +339,7 @@ mapAliases {
   badwolf = throw "'badwolf' has been removed due to being unmaintained"; # Added 2025-04-15
   baget = throw "'baget' has been removed due to being unmaintained";
   base16-builder = throw "'base16-builder' has been removed due to being unmaintained"; # Added 2025-06-03
+  baserow = throw "baserow has been removed, due to lack of maintenance"; # Added 2025-08-02
   bashInteractive_5 = throw "'bashInteractive_5' has been renamed to/replaced by 'bashInteractive'"; # Converted to throw 2024-10-17
   bash_5 = throw "'bash_5' has been renamed to/replaced by 'bash'"; # Converted to throw 2024-10-17
   bareboxTools = throw "bareboxTools has been removed due to lack of interest in maintaining it in nixpkgs"; # Added 2025-04-19
