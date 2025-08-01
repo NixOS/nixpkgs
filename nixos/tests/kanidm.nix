@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ kanidmVersion, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
@@ -13,6 +13,8 @@ let
     cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
     cp ${certs."${serverDomain}".key} $out/snakeoil.key
   '';
+
+  kanidmPackage = pkgs."kanidm_${kanidmVersion}";
 in
 {
   name = "kanidm";
@@ -25,7 +27,7 @@ in
     { pkgs, ... }:
     {
       services.kanidm = {
-        package = pkgs.kanidm_1_6;
+        package = kanidmPackage;
         enableServer = true;
         serverSettings = {
           origin = "https://${serverDomain}";
@@ -44,10 +46,10 @@ in
 
       users.users.kanidm.shell = pkgs.bashInteractive;
 
-      environment.systemPackages = with pkgs; [
-        kanidm
-        openldap
-        ripgrep
+      environment.systemPackages = [
+        kanidmPackage
+        pkgs.openldap
+        pkgs.ripgrep
       ];
     };
 
@@ -55,7 +57,7 @@ in
     { nodes, ... }:
     {
       services.kanidm = {
-        package = pkgs.kanidm_1_6;
+        package = kanidmPackage;
         enableClient = true;
         clientSettings = {
           uri = "https://${serverDomain}";
