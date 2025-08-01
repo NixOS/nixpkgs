@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
     changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

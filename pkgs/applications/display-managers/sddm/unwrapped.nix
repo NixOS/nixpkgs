@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QML based X11 display manager";
     homepage = "https://github.com/sddm/sddm";
     maintainers = with maintainers; [
-      abbradar
       ttuegel
       k900
     ];

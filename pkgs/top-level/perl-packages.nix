@@ -4700,7 +4700,6 @@ with self;
       homepage = "https://pcsc-perl.apdu.fr/";
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = with maintainers; [
-        abbradar
         anthonyroussel
       ];
     };
@@ -8164,7 +8163,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
       mainProgram = "hexdump";
     };
   };
