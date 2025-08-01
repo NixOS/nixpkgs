@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   # default setup.
   nixosModuleDeps = [
     "cloud_notify"
-    "vcard_muc"
     "http_upload"
   ];
 
