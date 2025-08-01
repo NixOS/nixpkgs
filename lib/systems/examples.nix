@@ -372,6 +372,17 @@ rec {
     useLLVM = true;
   };
 
+  # Target the MSVC ABI
+  x86_64-windows = {
+    config = "x86_64-pc-windows-msvc";
+    useLLVM = true;
+  };
+
+  aarch64-windows = {
+    config = "aarch64-pc-windows-msvc";
+    useLLVM = true;
+  };
+
   # BSDs
 
   aarch64-freebsd = {

@@ -13,9 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "09rhnl6zikmdyb960im55jck0rdy5z9nlg3akx68ixn7khf3j8wb";
   };
 
-  meta = {
-    platforms = lib.platforms.windows;
-  };
-
   dontStrip = true;
+
+  meta = {
+    description = "Core win32 headers and libraries for MinGW";
+    downloadPage = "https://sourceforge.net/projects/mingw/files/MinGW/Base/w32api/";
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.RossSmyth ];
+    platforms = lib.intersectLists lib.platforms.windows lib.platforms.x86;
+    teams = [ lib.teams.windows ];
+  };
 }

@@ -2,13 +2,12 @@
   config,
   lib,
   pkgs,
-  options,
   ...
 }:
 
 let
   cfg = config.services.prometheus.exporters.bitcoin;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) mkOption types;
 in
 {
   port = 9332;
@@ -75,7 +74,8 @@ in
   };
   serviceOpts = {
     script = ''
-      export BITCOIN_RPC_PASSWORD=$(cat ${cfg.rpcPasswordFile})
+      BITCOIN_RPC_PASSWORD=$(cat ${cfg.rpcPasswordFile})
+      export BITCOIN_RPC_PASSWORD
       exec ${cfg.package}/bin/bitcoind-monitor.py
     '';
 

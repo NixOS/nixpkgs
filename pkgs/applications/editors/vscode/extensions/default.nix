@@ -2045,8 +2045,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.35.0";
-          hash = "sha256-stSo+GHhEzIE1HevACEUmum9tNetMIfpz0t8330QlTI=";
+          version = "6.35.3";
+          hash = "sha256-VYhKuLiXjLDyRYIE6zg3ZzDeVs9ulTHaAT18BTLz1/M=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -4290,8 +4290,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.9.30";
-          hash = "sha256-3V6So2ulRTk1Ityd4ajzx/Vd+qzvqZMzUyTFMgWNztA=";
+          version = "0.9.31";
+          hash = "sha256-ppX0GgLJENXVzXvJ6AZMZihT6FV6o5rkA7qpDrtxhAQ=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";

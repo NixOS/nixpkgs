@@ -127,8 +127,6 @@
     )
     # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
     && !stdenv.hostPlatform.isMips64
-    # can't find gnu/stubs-32.h
-    && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
     # https://reviews.llvm.org/D43106#1019077
     && (stdenv.hostPlatform.isRiscV32 -> stdenv.cc.isClang)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
