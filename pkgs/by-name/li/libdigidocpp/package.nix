@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   libtool,
   libxml2,
@@ -19,9 +19,11 @@ stdenv.mkDerivation rec {
   version = "4.2.0";
   pname = "libdigidocpp";
 
-  src = fetchurl {
-    url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-    hash = "sha256-d3AqTTVi3lzzu9Tw7p+KilNa0Q7cJBGwb6VoNNLeskE=";
+  src = fetchFromGitHub {
+    owner = "open-eid";
+    repo = "libdigidocpp";
+    tag = "v${version}";
+    hash = "sha256-o/2hF82uRaBDp7I9urn8R6r9YQMkp241M1v92qD66NM=";
   };
 
   nativeBuildInputs = [
