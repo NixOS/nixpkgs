@@ -92,6 +92,11 @@ buildPythonPackage rec {
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
+
+    # Failing since flax==0.11.0
+    # KeyError: "No RngStream named 'dropout' found in Rngs."
+    # https://github.com/pyro-ppl/numpyro/issues/2055
+    "test_nnx_state_dropout_smoke"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Not equal to tolerance rtol=0.06, atol=0
