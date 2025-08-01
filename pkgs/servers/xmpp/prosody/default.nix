@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   # default setup.
   nixosModuleDeps = [
     "cloud_notify"
-    "http_upload"
   ];
 
   # A note to all those merging automated updates: Please also update this

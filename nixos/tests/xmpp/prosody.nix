@@ -89,7 +89,7 @@ import ../make-test-python.nix {
               domain = "conference.example.com";
             }
           ];
-          uploadHttp = {
+          httpFileShare = {
             domain = "uploads.example.com";
           };
         };
