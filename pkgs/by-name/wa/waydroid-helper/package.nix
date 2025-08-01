@@ -1,33 +1,31 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  nix-update-script,
+  appstream,
+  cmake,
   desktop-file-utils,
-  libadwaita,
+  glib,
+  gobject-introspection,
   meson,
   ninja,
   pkg-config,
   wrapGAppsHook4,
-  libxml2,
-  python3Packages,
-  appstream,
-  glib,
-  cmake,
-  dbus,
-  systemd,
   bash,
   bindfs,
+  dbus,
   e2fsprogs,
   fakeroot,
   fuse,
-  gobject-introspection,
+  libadwaita,
+  libxml2,
+  systemd,
   unzip,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "waydroid-helper";
+let
   version = "0.2.3";
-  pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "ayasa520";
@@ -35,6 +33,11 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-QxtCxujf7S3YRx/4rRMecFBomP+9tqrIBdYhc3WQT20=";
   };
+in
+python3Packages.buildPythonApplication {
+  pname = "waydroid-helper";
+  inherit version src;
+  pyproject = false; # uses meson
 
   postPatch = ''
     substituteInPlace dbus/meson.build \
@@ -45,39 +48,41 @@ python3Packages.buildPythonApplication rec {
       --replace-fail ": systemd_user_unit_dir" ": '$out/lib/systemd/user'"
     substituteInPlace systemd/{system/waydroid-mount,user/waydroid-monitor}.service \
       --replace-fail "/usr/bin/waydroid-helper" "$out/bin/waydroid-helper"
-    # com.jaoushingan.WaydroidHelper.desktop: component-name-missing, description-first-para-too-short
-    # url-homepage-missing, desktop-app-launchable-omitted, content-rating-missing, developer-info-missing
+  ''
+  # com.jaoushingan.WaydroidHelper.desktop: component-name-missing, description-first-para-too-short
+  # url-homepage-missing, desktop-app-launchable-omitted, content-rating-missing, developer-info-missing
+  + ''
     sed -i '/test(/{N;/Validate appstream file/!b;:a;N;/)/!ba;d}' data/meson.build
   '';
 
   nativeBuildInputs = [
     appstream
-    glib
     cmake
+    desktop-file-utils
+    glib
+    gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook4
-    desktop-file-utils
-    gobject-introspection
   ];
 
   buildInputs = [
-    libxml2
-    libadwaita
-    dbus
     bash
+    dbus
+    libadwaita
+    libxml2
     systemd
   ];
 
   dontUseCmakeConfigure = true;
 
   dependencies = with python3Packages; [
-    pygobject3
-    httpx
-    pyyaml
     aiofiles
     dbus-python
+    httpx
+    pygobject3
+    pyyaml
   ];
 
   strictDeps = true;
@@ -104,12 +109,12 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/ayasa520/waydroid-helper/releases/tag/${src.tag}";
     description = "User-friendly way to configure Waydroid and install extensions, including Magisk and ARM translation";
     homepage = "https://github.com/ayasa520/waydroid-helper";
-    changelog = "https://github.com/ayasa520/waydroid-helper/releases/tag/${src.tag}";
-    mainProgram = "waydroid-helper";
-    platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "waydroid-helper";
     maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }
