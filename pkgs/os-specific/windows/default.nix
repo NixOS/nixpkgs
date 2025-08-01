@@ -17,9 +17,6 @@ lib.makeScope newScope (
 
     w32api = callPackage ./w32api { };
 
-    mingwrt = callPackage ./mingwrt { };
-    mingw_runtime = mingwrt;
-
     mingw_w64 = callPackage ./mingw-w64 {
       stdenv = stdenvNoLibc;
     };
