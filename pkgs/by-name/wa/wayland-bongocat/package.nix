@@ -9,12 +9,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-bongocat";
-  version = "1.2.1";
+  version = "1.2.2";
   src = fetchFromGitHub {
     owner = "saatvik333";
     repo = "wayland-bongocat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mtbw4UW5I2et2cVWrkCKWbG0p3tDGhgmHfH60OHvPkI=";
+    hash = "sha256-7IsWg0VE6Sqo0elOAUicmWGasXrvBeGeBRP/mDVgfzI=";
   };
 
   # Package dependencies
