@@ -2712,6 +2712,15 @@ with haskellLib;
   # Test failure https://gitlab.com/lysxia/ap-normalize/-/issues/2
   ap-normalize = dontCheck super.ap-normalize;
 
+  # Fixes test that checks error messages which is sensitive to GHC/Cabal version changes
+  heist = appendPatches [
+    (pkgs.fetchpatch {
+      name = "heist-fix-ghc-errorr-message-test.patch";
+      url = "https://github.com/snapframework/heist/commit/9c8c963021608f09e93d486e5339e45073c757bc.patch";
+      sha256 = "sha256-lenMCb6o0aAJ8D450JB76cZ49o+LVl2UO9hhAZYPacI=";
+    })
+  ] super.heist;
+
   heist-extra = doJailbreak super.heist-extra; # base <4.18.0.0.0
   unionmount = doJailbreak super.unionmount; # base <4.18
   tailwind = doJailbreak super.tailwind; # base <=4.17.0.0
