@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+    (lib.withFeatureAs cudaSupport "cuda-libdir" "${cudaPackages.cuda_cudart.stubs}/lib")
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
@@ -144,6 +145,16 @@ stdenv.mkDerivation (finalAttrs: {
     # don't use lib.withFeatureAs
   ]
   ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
+
+  env.NIX_CFLAGS_COMPILE =
+    if cudaSupport then
+      (lib.concatStringsSep " " [
+        "-Wno-error=int-conversion"
+        "-Wno-error=incompatible-pointer-types"
+        "-Wno-error=implicit-function-declaration"
+      ])
+    else
+      "";
 
   enableParallelBuilding = true;
 
