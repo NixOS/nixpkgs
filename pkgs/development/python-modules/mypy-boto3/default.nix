@@ -78,8 +78,8 @@ rec {
       "sha256-wBdq3kI0El1XZRuGMG2lN0Zjc1GIBOItMBvctF/10Wg=";
 
   mypy-boto3-apigateway =
-    buildMypyBoto3Package "apigateway" "1.39.0"
-      "sha256-O3yXNsNoApr1gJoQQMlgqguv0YhIoZLHgHwd4vQZPnc=";
+    buildMypyBoto3Package "apigateway" "1.40.0"
+      "sha256-mfMTQ3XSVHDjTjQEY/EL1xq4t0KRaPwG2Nu0Pwsbk3o=";
 
   mypy-boto3-apigatewaymanagementapi =
     buildMypyBoto3Package "apigatewaymanagementapi" "1.39.0"
