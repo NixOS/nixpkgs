@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "terragrunt";
-  version = "0.83.2";
+  version = "0.84.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "terragrunt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UkBwAhxvxZZT4594UzSmtHmnhxD0qIsy3alGM7I44IU=";
+    hash = "sha256-5GgMiWh9ZvVbZu/WMrggQMl7dq6A5p36sEDSkPWGCTM=";
   };
 
   nativeBuildInputs = [
