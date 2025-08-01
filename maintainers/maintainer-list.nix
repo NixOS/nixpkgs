@@ -20994,6 +20994,11 @@
     githubId = 5653911;
     name = "Rampoina";
   };
+  randomdude = {
+    name = "Random Dude";
+    email = "randomdude16671@proton.me";
+    github = "randomdude16671";
+  };
   rane = {
     name = "Rane";
     email = "rane+git@junkyard.systems";
