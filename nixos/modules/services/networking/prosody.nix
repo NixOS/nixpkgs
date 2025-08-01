@@ -440,6 +440,14 @@ let
           type = with types; nullOr str;
           description = "Domain name for a http_file_share service.";
         };
+        http_host = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            To avoid an additional DNS record and certificate, you may set this option to your primary domain (e.g. "example.com")
+            or use a reverse proxy to handle the HTTP for that domain.
+          '';
+        };
         size_limit = mkOption {
           type = types.int;
           default = 10 * 1024 * 1024;
@@ -577,11 +585,18 @@ let
             ${muc.extraConfig}
       '') cfg.muc}
 
-      ${lib.optionalString (cfg.httpFileShare != null) ''
-        Component ${toLua cfg.httpFileShare.domain} "http_file_share"
-          modules_disabled = { "s2s" }
-        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
-      ''}
+      ${
+        lib.optionalString (cfg.httpFileShare != null) ''
+          Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+            modules_disabled = { "s2s" }
+        ''
+        + lib.optionalString (cfg.httpFileShare.http_host != null) ''
+          http_host = "${cfg.httpFileShare.http_host}"
+        ''
+        + ''
+          ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
+        ''
+      }
 
       ${lib.concatStringsSep "\n" (
         lib.mapAttrsToList (n: v: ''
