@@ -8,6 +8,7 @@
 with lib;
 
 let
+
   cfg = config.services.jitsi-meet;
 
   # The configuration files are JS of format "var <<string>> = <<JSON>>;". In order to
@@ -231,6 +232,14 @@ in
 
   config = mkIf cfg.enable {
     services.prosody = mkIf cfg.prosody.enable {
+
+      # required for muc_breakout_rooms
+      package = lib.mkDefault (
+        config.services.prosody.package.override {
+          withExtraLuaPackages = p: with p; [ cjson ];
+        }
+      );
+
       enable = mkDefault true;
       xmppComplianceSuite = mkDefault false;
       modules = {
@@ -419,6 +428,7 @@ in
               cfg.videobridge.passwordFile
             else
               "/var/lib/jitsi-meet/videobridge-secret";
+
         in
         ''
           ${config.services.prosody.package}/bin/prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
