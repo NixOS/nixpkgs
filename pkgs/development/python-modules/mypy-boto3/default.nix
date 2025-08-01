@@ -378,8 +378,8 @@ rec {
       "sha256-VVmG1myGH8FJpqQ63GDMYH5KVAPsv+Pmnc/WxHpTcHs=";
 
   mypy-boto3-datapipeline =
-    buildMypyBoto3Package "datapipeline" "1.39.0"
-      "sha256-H7m9wDKbGIxgCUpbwSoaWJLlTd/xPPUuhbMUf2TzmjM=";
+    buildMypyBoto3Package "datapipeline" "1.40.0"
+      "sha256-QhTjQ1ZZX8zQzna2rUu2zF5jd51E4mJ/+v45sd9p3lA=";
 
   mypy-boto3-datasync =
     buildMypyBoto3Package "datasync" "1.39.7"
