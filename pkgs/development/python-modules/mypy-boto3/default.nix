@@ -842,8 +842,8 @@ rec {
       "sha256-1zDaKlR03f23CmBe975XugFBDiVC/1WWayCrDZBnBkY=";
 
   mypy-boto3-managedblockchain-query =
-    buildMypyBoto3Package "managedblockchain-query" "1.39.0"
-      "sha256-n0cdz1JNJotqCormhIBbKDWlSDtKE3Xbrf6+Qp9UByc=";
+    buildMypyBoto3Package "managedblockchain-query" "1.40.0"
+      "sha256-lw7LeVq/o8RFK9P62vQ7iR+jZfH/OOZY2AirYqDltSw=";
 
   mypy-boto3-marketplace-catalog =
     buildMypyBoto3Package "marketplace-catalog" "1.39.0"
