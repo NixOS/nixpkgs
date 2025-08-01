@@ -1,0 +1,15 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index d5289b8..598bbbc 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -138,8 +138,8 @@ config("library_impl_config") {
+ # target_defaults and direct_dependent_settings.
+ config("common_inherited_config") {
+   defines = []
+-  cflags = []
+-  ldflags = []
++  cflags = [ "-fvisibility=default" ]
++  ldflags = [ "-lavutil", "-lavformat", "-lavcodec" ]
+ 
+   if (rtc_dlog_always_on) {
+     defines += [ "DLOG_ALWAYS_ON" ]

@@ -1,0 +1,46 @@
+diff --git a/src/converter.js b/src/converter.js
+index af7b4c3..20da407 100644
+--- a/src/converter.js
++++ b/src/converter.js
+@@ -1,4 +1,4 @@
+-import open from 'open';
++const open = import('open');
+ 
+ const os = require("os");
+ const path = require('path');
+@@ -9,9 +9,9 @@ const rpc = require('./weh-rpc');
+ 
+ const exec_dir = path.dirname(process.execPath);
+ 
+-const ffmpeg = findExecutableFullPath("ffmpeg", exec_dir);
+-const ffprobe = findExecutableFullPath("ffprobe", exec_dir);
+-const filepicker = findExecutableFullPath("filepicker", exec_dir);
++const ffmpeg = "@ffmpeg@/bin/ffmpeg";
++const ffprobe = "@ffmpeg@/bin/ffprobe";
++const filepicker = "@filepicker@";
+ 
+ if (!fileExistsSync(ffmpeg)) {
+   logger.error("ffmpeg not found. Install ffmpeg and make sure it's in your path.");
+diff --git a/src/main.js b/src/main.js
+index 47b92de..e2e9402 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -1,4 +1,4 @@
+-const config = require('config.json');
++const config = require('./config.json');
+ const converter = require('./converter');
+ const os = require("os");
+ 
+diff --git a/src/native-autoinstall.js b/src/native-autoinstall.js
+index 556a22b..c729568 100644
+--- a/src/native-autoinstall.js
++++ b/src/native-autoinstall.js
+@@ -1,7 +1,7 @@
+ const os = require("os");
+ const path = require("path");
+ const { spawn, exec } = require('child_process');
+-const config = require('config.json');
++const config = require('./config.json');
+ 
+ let fs;
+ if (process.versions.node.startsWith("10")) {

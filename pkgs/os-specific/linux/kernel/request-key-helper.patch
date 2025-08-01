@@ -1,0 +1,13 @@
+diff --git a/security/keys/request_key.c b/security/keys/request_key.c
+index 957b9e3e1492..5436a0d8b81d 100644
+--- a/security/keys/request_key.c
++++ b/security/keys/request_key.c
+@@ -114,7 +114,7 @@ static int call_usermodehelper_keys(const char *path, char **argv, char **envp,
+  */
+ static int call_sbin_request_key(struct key *authkey, void *aux)
+ {
+-	static char const request_key[] = "/sbin/request-key";
++	static char const request_key[] = "/run/current-system/sw/bin/request-key";
+ 	struct request_key_auth *rka = get_request_key_auth(authkey);
+ 	const struct cred *cred = current_cred();
+ 	key_serial_t prkey, sskey;

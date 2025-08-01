@@ -1,0 +1,42 @@
+diff --git a/src/N_m3u8DL-RE.Common/Entity/WebVttSub.cs b/src/N_m3u8DL-RE.Common/Entity/WebVttSub.cs
+index 6b6d284..b57fc24 100644
+--- a/src/N_m3u8DL-RE.Common/Entity/WebVttSub.cs
++++ b/src/N_m3u8DL-RE.Common/Entity/WebVttSub.cs
+@@ -201,7 +201,8 @@ public partial class WebVttSub
+             time += Convert.ToInt32(parts.Last().PadRight(3, '0'));
+             str = parts.First();
+         }
+-        var t = str.Split(':').Reverse().ToList();
++        var t = str.Split(':').ToList();
++        t.Reverse();
+         for (int i = 0; i < t.Count; i++)
+         {
+             time += (long)Math.Pow(60, i) * Convert.ToInt32(t[i]) * 1000;
+@@ -265,4 +266,4 @@ public partial class WebVttSub
+ 
+         return srt;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/N_m3u8DL-RE/Util/OtherUtil.cs b/src/N_m3u8DL-RE/Util/OtherUtil.cs
+index b2487f3..4eab23f 100644
+--- a/src/N_m3u8DL-RE/Util/OtherUtil.cs
++++ b/src/N_m3u8DL-RE/Util/OtherUtil.cs
+@@ -70,7 +70,8 @@ internal static partial class OtherUtil
+         var hours = -1;
+         var mins = -1;
+         var secs = -1;
+-        arr.Reverse().Select(i => Convert.ToInt32(i)).ToList().ForEach(item =>
++        arr.Reverse();
++        arr.Select(i => Convert.ToInt32(i)).ToList().ForEach(item =>
+         {
+             if (secs == -1) secs = item;
+             else if (mins == -1) mins = item;
+@@ -170,4 +171,4 @@ internal static partial class OtherUtil
+ 
+     [GeneratedRegex(@"^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$")]
+     private static partial Regex TimeStrRegex();
+-}
+\ No newline at end of file
++}

@@ -1,0 +1,122 @@
+{
+    "TrueZen-nvim": {
+        "date": "2022-07-27",
+        "new": "true-zen-nvim"
+    },
+    "codeium-nvim": {
+        "date": "2025-04-09",
+        "new": "windsurf-nvim"
+    },
+    "codeium-vim": {
+        "date": "2025-04-09",
+        "new": "windsurf-vim"
+    },
+    "compe-conjure": {
+        "date": "2024-11-19",
+        "new": "cmp-conjure"
+    },
+    "compe-latex-symbols": {
+        "date": "2024-11-19",
+        "new": "cmp-latex-symbols"
+    },
+    "compe-tabnine": {
+        "date": "2024-11-19",
+        "new": "cmp-tabnine"
+    },
+    "compe-tmux": {
+        "date": "2021-12-07",
+        "new": "cmp-tmux"
+    },
+    "compe-zsh": {
+        "date": "2024-11-19",
+        "new": "cmp-zsh"
+    },
+    "fern-vim": {
+        "date": "2024-05-12",
+        "new": "vim-fern"
+    },
+    "gina-vim": {
+        "date": "2024-05-12",
+        "new": "vim-gina"
+    },
+    "gist-vim": {
+        "date": "2020-03-27",
+        "new": "vim-gist"
+    },
+    "lspsaga-nvim-original": {
+        "date": "2023-08-08",
+        "new": "lspsaga-nvim"
+    },
+    "lua-async-await": {
+        "date": "2025-01-09",
+        "new": "lua-async"
+    },
+    "lua-dev-nvim": {
+        "date": "2022-10-14",
+        "new": "neodev-nvim"
+    },
+    "magma-nvim-goose": {
+        "date": "2024-10-28",
+        "new": "magma-nvim"
+    },
+    "nvchad-extensions": {
+        "date": "2023-08-19",
+        "new": "nvchad-ui"
+    },
+    "nvim-base16": {
+        "date": "2024-02-15",
+        "new": "base16-nvim"
+    },
+    "nvim-bufferline-lua": {
+        "date": "2021-08-22",
+        "new": "bufferline-nvim"
+    },
+    "nvim-compe": {
+        "date": "2024-11-19",
+        "new": "nvim-cmp"
+    },
+    "nvim-lsp": {
+        "date": "2020-08-31",
+        "new": "nvim-lspconfig"
+    },
+    "nvim-toggleterm-lua": {
+        "date": "2021-08-22",
+        "new": "toggleterm-nvim"
+    },
+    "orgmode-nvim": {
+        "date": "2021-11-28",
+        "new": "orgmode"
+    },
+    "render-markdown": {
+        "date": "2024-09-16",
+        "new": "render-markdown-nvim"
+    },
+    "sql-nvim": {
+        "date": "2021-09-03",
+        "new": "sqlite-lua"
+    },
+    "suda-vim": {
+        "date": "2024-05-12",
+        "new": "vim-suda"
+    },
+    "taskwarrior": {
+        "date": "2024-08-13",
+        "new": "taskwarrior3 or taskwarrior2"
+    },
+    "vim-fsharp": {
+        "date": "2024-03-16",
+        "new": "zarchive-vim-fsharp"
+    },
+    "vim-jade": {
+        "date": "2020-03-27",
+        "new": "vim-pug"
+    },
+    "vundle": {
+        "date": "2020-03-27",
+        "new": "Vundle-vim"
+    },
+    "youcompleteme": {
+        "date": "2020-03-27",
+        "new": "YouCompleteMe"
+    }
+}

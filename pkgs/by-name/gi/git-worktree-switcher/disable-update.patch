@@ -1,0 +1,30 @@
+diff --git a/wt b/wt
+index 60999f2..5687822 100755
+--- a/wt
++++ b/wt
+@@ -27,7 +27,6 @@ help_message() {
+ 	echo -e "\twt: go to the main worktree"
+ 	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
+ 	echo -e "\twt names: list out only the git worktree names."
+-	echo -e "\twt update: update to the latest release of worktree switcher."
+ 	echo -e "\twt version: show the CLI version."
+ 	echo -e "\twt init <shell>: print the init script for <shell>."
+ 	echo -e "\twt help: shows this help message."
+@@ -163,9 +162,6 @@ case "${args[0]}" in
+ names)
+ 	worktree_list_names
+ 	;;
+-update)
+-	update
+-	;;
+ help)
+ 	help_message
+ 	;;
+@@ -176,7 +172,6 @@ init)
+ 	init
+ 	;;
+ *)
+-	auto_check_update
+ 	directory=$(git worktree list --porcelain 2> /dev/null | sed -n '/'"${arg:-.}"'/{s/^worktree\s*//p;q}')
+ 	;;
+ esac

@@ -1,0 +1,34 @@
+--- origsrc/Doxyfile.in	2008-04-26 16:57:32.000000000 -0500
++++ src/Doxyfile.in	2012-03-29 18:15:56.649709100 -0500
+@@ -460,14 +460,14 @@ WARN_LOGFILE           =
+ # with spaces.
+ 
+ INPUT                  = \
+-                        ./popt.c \
+-                        ./popt.h \
+-                        ./poptconfig.c \
+-                        ./popthelp.c \
+-                        ./poptint.c \
+-                        ./poptint.h \
+-                        ./poptparse.c \
+-			./system.h
++                        @srcdir@/popt.c \
++                        @srcdir@/popt.h \
++                        @srcdir@/poptconfig.c \
++                        @srcdir@/popthelp.c \
++                        @srcdir@/poptint.c \
++                        @srcdir@/poptint.h \
++                        @srcdir@/poptparse.c \
++			@srcdir@/system.h
+ 
+ # If the value of the INPUT tag contains directories, you can use the 
+ # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
+@@ -658,7 +658,7 @@ HTML_HEADER            =
+ # each generated HTML page. If it is left blank doxygen will generate a 
+ # standard footer.
+ 
+-HTML_FOOTER            = footer_no_timestamp.html
++HTML_FOOTER            = @srcdir@/footer_no_timestamp.html
+ 
+ # The HTML_STYLESHEET tag can be used to specify a user-defined cascading 
+ # style sheet that is used by each HTML page. It can be used to 

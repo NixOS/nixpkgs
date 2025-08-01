@@ -1,0 +1,14 @@
+diff --color -urpN obs-aitum-multistream.bak/file-updater.c obs-aitum-multistream/file-updater.c
+--- obs-aitum-multistream.bak/file-updater.c	2025-07-18 17:41:35.605779462 -0400
++++ obs-aitum-multistream/file-updater.c	2025-07-18 17:45:29.485046420 -0400
+@@ -83,8 +83,8 @@ static bool do_http_request(struct updat
+ 	curl_easy_setopt(info->curl, CURLOPT_ERRORBUFFER, info->error);
+ 	curl_easy_setopt(info->curl, CURLOPT_WRITEFUNCTION, http_write);
+ 	curl_easy_setopt(info->curl, CURLOPT_WRITEDATA, info);
+-	curl_easy_setopt(info->curl, CURLOPT_FAILONERROR, true);
+-	curl_easy_setopt(info->curl, CURLOPT_NOSIGNAL, 1);
++	curl_easy_setopt(info->curl, CURLOPT_FAILONERROR, 1L);
++	curl_easy_setopt(info->curl, CURLOPT_NOSIGNAL, 1L);
+ 	curl_easy_setopt(info->curl, CURLOPT_ACCEPT_ENCODING, "");
+ 	curl_obs_set_revoke_setting(info->curl);
+ 

@@ -1,0 +1,13 @@
+diff --git a/pass.cpp b/pass.cpp
+index c02f9d0..85c5b99 100644
+--- a/pass.cpp
++++ b/pass.cpp
+@@ -193,7 +193,7 @@ void Pass::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &m
+     } else {
+         args << "show" << match.text();
+     }
+-    pass->start("pass", args);
++    pass->start(NIXPKGS_PASS, args);
+
+     connect(pass, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+             [=](int exitCode, QProcess::ExitStatus exitStatus) {

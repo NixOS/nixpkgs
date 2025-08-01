@@ -1,0 +1,38 @@
+From 47f163f6bcd1d66bebc49d96abcf46853a0708fb Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Tue, 22 Oct 2024 07:48:34 +0800
+Subject: [PATCH] fix build
+
+---
+ src/helpers.c | 1 +
+ src/helpers.h | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/helpers.c b/src/helpers.c
+index c7bc4de..00e6098 100644
+--- a/src/helpers.c
++++ b/src/helpers.c
+@@ -9,6 +9,7 @@
+ #include <errno.h> // errno
+ #include <libgen.h> // dirname 
+ 
++light_loglevel_t light_loglevel;
+ 
+ bool light_file_read_uint64(char const *filename, uint64_t *val)
+ {
+diff --git a/src/helpers.h b/src/helpers.h
+index f73714b..4a92753 100644
+--- a/src/helpers.h
++++ b/src/helpers.h
+@@ -21,7 +21,7 @@ typedef enum {
+     LIGHT_NOTE_LEVEL
+ } light_loglevel_t;
+ 
+-light_loglevel_t light_loglevel;
++extern light_loglevel_t light_loglevel;
+ 
+ #define LIGHT_LOG(lvl, fp, fmt, args...)\
+     if(light_loglevel >= lvl)\
+-- 
+2.46.1
+

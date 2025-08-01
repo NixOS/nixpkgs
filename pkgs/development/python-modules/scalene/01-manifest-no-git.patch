@@ -1,0 +1,23 @@
+From 4e25ccee2f1eeed1dfdd9356b4fde511a48d9f01 Mon Sep 17 00:00:00 2001
+From: Sarah Clark <seclark@nextquestion.net>
+Date: Sat, 24 Aug 2024 11:32:38 -0700
+Subject: [PATCH] Update MANIFEST.in to remove .git references
+
+---
+ MANIFEST.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 5ebcb7781..7340b1982 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -1,5 +1,5 @@
+ graft vendor/Heap-Layers
+-prune vendor/Heap-Layers/.git
++# prune vendor/Heap-Layers/.git
+ graft vendor/printf
+-prune vendor/printf/.git
++# prune vendor/printf/.git
+ exclude scalene/old/*
+
+--

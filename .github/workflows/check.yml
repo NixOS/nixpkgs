@@ -1,0 +1,71 @@
+name: Check
+
+on:
+  workflow_call:
+    inputs:
+      baseBranch:
+        required: true
+        type: string
+      headBranch:
+        required: true
+        type: string
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  no-channel-base:
+    name: no channel base
+    if: contains(fromJSON(inputs.baseBranch).type, 'channel')
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - run: |
+          cat <<EOF
+          The nixos-* and nixpkgs-* branches are pushed to by the channel
+          release script and should not be merged into directly.
+
+          Please target the equivalent release-* branch or master instead.
+          EOF
+          exit 1
+
+  cherry-pick:
+    if: |
+      github.event_name == 'pull_request' ||
+      (fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development'))
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          filter: tree:0
+          path: trusted
+
+      - name: Install dependencies
+        run: npm install bottleneck
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Check cherry-picks
+        id: check
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            require('./trusted/ci/github-script/commits.js')({
+              github,
+              context,
+              core,
+              dry: context.eventName == 'pull_request',
+            })
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq

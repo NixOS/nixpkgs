@@ -1,0 +1,48 @@
+From 25c77bff079c331ae12d9e4499c82fdabf301610 Mon Sep 17 00:00:00 2001
+From: Dominique Martinet <asmadeus@codewreck.org>
+Date: Sun, 21 Jul 2024 20:59:51 +0900
+Subject: [PATCH] bashreadline.py: remove dependency on elftools
+
+This helper is only here to differentiate between very old bash
+versions or semi-recent ones; since we'll only catter to newer
+bash versions we don't need to bother with elftools here:
+just hardcode the newer symbol.
+---
+ tools/bashreadline.py | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
+
+diff --git a/tools/bashreadline.py b/tools/bashreadline.py
+index 7e8324a2c0ea..e4b20aeb2371 100755
+--- a/tools/bashreadline.py
++++ b/tools/bashreadline.py
+@@ -17,7 +17,6 @@
+ # 12-Feb-2016    Allan McAleavy migrated to BPF_PERF_OUTPUT
+ 
+ from __future__ import print_function
+-from elftools.elf.elffile import ELFFile
+ from bcc import BPF
+ from time import strftime
+ import argparse
+@@ -33,18 +32,7 @@ args = parser.parse_args()
+ 
+ name = args.shared if args.shared else "/bin/bash"
+ 
+-
+-def get_sym(filename):
+-    with open(filename, 'rb') as f:
+-        elf = ELFFile(f)
+-        symbol_table = elf.get_section_by_name(".dynsym")
+-        for symbol in symbol_table.iter_symbols():
+-            if symbol.name == "readline_internal_teardown":
+-                return "readline_internal_teardown"
+-    return "readline"
+-
+-
+-sym = get_sym(name)
++sym = "readline_internal_teardown"
+ 
+ # load BPF program
+ bpf_text = """
+-- 
+2.45.2
+

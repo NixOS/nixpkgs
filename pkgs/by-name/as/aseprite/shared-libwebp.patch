@@ -1,0 +1,47 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index  87aed2f28f9c..498472ec2a60 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -76,6 +76,7 @@ option(USE_SHARED_TINYXML "Use your installed copy of tinyxml" off)
+ option(USE_SHARED_PIXMAN  "Use your installed copy of pixman" off)
+ option(USE_SHARED_FREETYPE "Use shared FreeType library" off)
+ option(USE_SHARED_HARFBUZZ "Use shared HarfBuzz library" off)
++option(USE_SHARED_WEBP    "Use your installed copy of webp" off)
+ option(ENABLE_ASEPRITE_EXE "Compile main Aseprite executable" on)
+ option(ENABLE_MEMLEAK      "Enable memory-leaks detector (only for developers)" off)
+ option(ENABLE_NEWS         "Enable the news in Home tab" on)
+@@ -380,7 +381,20 @@ add_subdirectory(laf)
+ # libwebp
+ if(ENABLE_WEBP)
+   # Use libwebp from Skia
+-  if(LAF_BACKEND STREQUAL "skia")
++  if(USE_SHARED_WEBP)
++    find_library(WEBP_LIBRARY NAMES webp)
++    find_library(WEBPDEMUX_LIBRARY NAMES webpdemux)
++    find_library(WEBPMUX_LIBRARY NAMES webpmux)
++    set(WEBP_LIBRARIES ${WEBP_LIBRARY} ${WEBPDEMUX_LIBRARY} ${WEBPMUX_LIBRARY})
++    find_path(WEBP_INCLUDE_DIRS NAMES decode.h PATH_SUFFIXES webp)
++    find_path(WEBP_INCLUDE_DIRS NAMES decode.h PATH_SUFFIXES webp)
++    find_path(WEBP_INCLUDE_DIRS NAMES decode.h PATH_SUFFIXES webp)
++    if(WEBP_LIBRARIES)
++      set(WEBP_FOUND ON)
++    else()
++      set(WEBP_FOUND OFF)
++    endif()
++  elseif(LAF_BACKEND STREQUAL "skia")
+     find_library(WEBP_LIBRARIES webp
+       NAMES libwebp # required for Windows
+       PATHS "${SKIA_LIBRARY_DIR}" NO_DEFAULT_PATH)
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 1973b134b9f8..f15dba5a7968 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -33,7 +33,7 @@ if(NOT USE_SHARED_GIFLIB)
+   add_subdirectory(giflib)
+ endif()
+
+-if(ENABLE_WEBP AND NOT LAF_BACKEND STREQUAL "skia")
++if(ENABLE_WEBP AND NOT LAF_BACKEND STREQUAL "skia" AND NOT USE_SHARED_WEBP)
+   set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras.")
+   set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "Build animation utilities.")
+   set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool.")

@@ -1,0 +1,37 @@
+XCTest is not fully open-source, only the Swift library parts. We don't have a
+command-line runner available, so disable support.
+
+--- a/Sources/Commands/Utilities/TestingSupport.swift
++++ b/Sources/Commands/Utilities/TestingSupport.swift
+@@ -72,7 +72,7 @@ enum TestingSupport {
+     /// - Returns: Array of TestSuite
+     static func getTestSuites(fromTestAt path: AbsolutePath, swiftTool: SwiftTool, enableCodeCoverage: Bool, sanitizers: [Sanitizer]) throws -> [TestSuite] {
+         // Run the correct tool.
+-        #if os(macOS)
++        #if false
+         let data: String = try withTemporaryFile { tempFile in
+             let args = [try Self.xctestHelperPath(swiftTool: swiftTool).pathString, path.pathString, tempFile.path.pathString]
+             var env = try Self.constructTestEnvironment(
+--- a/Sources/swiftpm-xctest-helper/main.swift
++++ b/Sources/swiftpm-xctest-helper/main.swift
+@@ -11,8 +11,11 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #if os(macOS)
+-import XCTest
+ import func Darwin.C.exit
++print("Not supported in Nix.")
++exit(1)
++#if false
++import XCTest
+ 
+ /// A helper tool to get list of tests from a XCTest Bundle on macOS.
+ ///
+@@ -134,6 +137,7 @@ do {
+     exit(1)
+ }
+ 
++#endif // nix
+ #else
+ 
+ #if os(Windows)

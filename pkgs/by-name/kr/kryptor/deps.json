@@ -1,0 +1,27 @@
+[
+  {
+    "pname": "Geralt",
+    "version": "3.3.0",
+    "hash": "sha256-vTGhyPsE5xxfM4nbADq54wM9FpEXLJgxuT5a2WvY79g="
+  },
+  {
+    "pname": "libsodium",
+    "version": "1.0.20.1",
+    "hash": "sha256-wd/z31FRbcaVGrogSNVjefEYWjNxTGzQd04DOlY1PFE="
+  },
+  {
+    "pname": "McMaster.Extensions.CommandLineUtils",
+    "version": "4.1.1",
+    "hash": "sha256-K10ukfRqcRIKJT7PFxc7NFpKWRT+FIDg8IJAR8HA5Eo="
+  },
+  {
+    "pname": "Monocypher",
+    "version": "0.4.1",
+    "hash": "sha256-mfLdmQkgsmpCdQuxbdU0IE900FfPrWTdi1iN/ZBL0ow="
+  },
+  {
+    "pname": "System.ComponentModel.Annotations",
+    "version": "5.0.0",
+    "hash": "sha256-0pST1UHgpeE6xJrYf5R+U7AwIlH3rVC3SpguilI/MAg="
+  }
+]

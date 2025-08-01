@@ -1,0 +1,48 @@
+diff --git a/FreeFileSync/Source/Makefile b/FreeFileSync/Source/Makefile
+index 9d81055..aed0f30 100644
+--- a/FreeFileSync/Source/Makefile
++++ b/FreeFileSync/Source/Makefile
+@@ -1,5 +1,5 @@
+ CXX ?= g++
+-exeName = FreeFileSync_$(shell arch)
++exeName = FreeFileSync
+ 
+ CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../.. -I../../zenXml -include "zen/i18n.h" -include "zen/warn_static.h" \
+            -Wall -Wfatal-errors -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wno-unused-function -Wshadow -Wno-maybe-uninitialized \
+@@ -17,9 +17,10 @@ LDFLAGS  += `pkg-config --libs libcurl` -lidn2
+ CXXFLAGS += `pkg-config --cflags libssh2`
+ LDFLAGS  += `pkg-config --libs libssh2`
+ 
+-CXXFLAGS += `pkg-config --cflags gtk+-2.0`
++CXXFLAGS += `pkg-config --cflags gtk+-3.0`
++LDFLAGS += `pkg-config --libs gtk+-3.0`
+ #treat as system headers so that warnings are hidden:
+-CXXFLAGS += -isystem/usr/include/gtk-2.0
++CXXFLAGS += -isystem@gtk3-dev@/include/gtk-3.0
+ 
+ #support for SELinux (optional)
+ SELINUX_EXISTING=$(shell pkg-config --exists libselinux && echo YES)
+diff --git a/FreeFileSync/Source/RealTimeSync/Makefile b/FreeFileSync/Source/RealTimeSync/Makefile
+index 0be46c9..f510284 100644
+--- a/FreeFileSync/Source/RealTimeSync/Makefile
++++ b/FreeFileSync/Source/RealTimeSync/Makefile
+@@ -1,5 +1,5 @@
+ CXX ?= g++
+-exeName = RealTimeSync_$(shell arch)
++exeName = RealTimeSync
+ 
+ CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../../.. -I../../../zenXml -include "zen/i18n.h" -include "zen/warn_static.h" \
+            -Wall -Wfatal-errors -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wno-unused-function -Wshadow -Wno-maybe-uninitialized \
+@@ -8,9 +8,10 @@ CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../../.. -I../../../zen
+ LDFLAGS += -s `wx-config --libs std, aui, richtext --debug=no` -pthread
+ 
+ 
+-CXXFLAGS += `pkg-config --cflags gtk+-2.0`
++CXXFLAGS += `pkg-config --cflags gtk+-3.0`
++LDFLAGS += `pkg-config --libs gtk+-3.0`
+ #treat as system headers so that warnings are hidden:
+-CXXFLAGS += -isystem/usr/include/gtk-2.0
++CXXFLAGS += -isystem@gtk3-dev@/include/gtk-3.0
+ 
+ cppFiles=
+ cppFiles+=application.cpp

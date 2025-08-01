@@ -1,0 +1,13 @@
+diff --git a/util/pandoc.go b/util/pandoc.go
+index 5dbc58d..5f32644 100644
+--- a/util/pandoc.go
++++ b/util/pandoc.go
+@@ -97,6 +97,8 @@ var (
+ )
+ 
+ func InitPandoc() {
++    PandocBinPath = "@pandoc_path@"
++    return
+ 	if ContainerStd != Container {
+ 		return
+ 	}

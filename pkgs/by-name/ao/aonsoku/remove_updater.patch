@@ -1,0 +1,39 @@
+diff --git a/src-tauri/src/main.rs b/src-tauri/src/main.rs
+index 112ee8e..35137f2 100644
+--- a/src-tauri/src/main.rs
++++ b/src-tauri/src/main.rs
+@@ -50,7 +50,6 @@ fn main() {
+             Ok(())
+         })
+         .plugin(tauri_plugin_shell::init())
+-        .plugin(tauri_plugin_updater::Builder::new().build())
+         .plugin(tauri_plugin_process::init())
+         .plugin(tauri_plugin_os::init())
+         .invoke_handler(tauri::generate_handler![commands::download_file])
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index 3afc5f6..19785e5 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -8,7 +8,6 @@
+   "bundle": {
+     "active": true,
+     "category": "Music",
+-    "createUpdaterArtifacts": true,
+     "targets": "all",
+     "icon": [
+       "icons/32x32.png",
+@@ -26,14 +25,6 @@
+   "productName": "Aonsoku",
+   "mainBinaryName": "Aonsoku",
+   "identifier": "com.victoralvesf.aonsoku",
+-  "plugins": {
+-    "updater": {
+-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDRDNTlENjZCNTJFRDdDRDAKUldUUWZPMVNhOVpaVENsbXg5RTM1TzFnME43TmZoaHU5bWplS1VSSW9YcE1QT0w1ZHRIWHNUOVoK",
+-      "endpoints": [
+-        "https://github.com/victoralvesf/aonsoku/releases/latest/download/latest.json"
+-      ]
+-    }
+-  },
+   "app": {
+     "withGlobalTauri": true,
+     "security": {

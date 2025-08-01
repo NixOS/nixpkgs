@@ -1,0 +1,713 @@
+diff --git a/influxdb/tests/client_test.py b/influxdb/tests/client_test.py
+index 115fbc4..5b348c7 100644
+--- a/influxdb/tests/client_test.py
++++ b/influxdb/tests/client_test.py
+@@ -32,7 +32,6 @@ import requests
+ import requests.exceptions
+ import requests_mock
+ 
+-from nose.tools import raises
+ from urllib3.connection import HTTPConnection
+ 
+ from influxdb import InfluxDBClient
+@@ -383,12 +382,12 @@ class TestInfluxDBClient(unittest.TestCase):
+             received_data.decode()
+         )
+ 
+-    @raises(Exception)
+     def test_write_points_fails(self):
+         """Test write points fail for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        with _mocked_session(cli, 'post', 500):
+-            cli.write_points([])
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'post', 500):
++                cli.write_points([])
+ 
+     def test_write_points_with_precision(self):
+         """Test write points with precision for TestInfluxDBClient object."""
+@@ -541,12 +540,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 consistency='boo'
+             )
+ 
+-    @raises(Exception)
+     def test_write_points_with_precision_fails(self):
+         """Test write points w/precision fail for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        with _mocked_session(cli, 'post', 500):
+-            cli.write_points_with_precision([])
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'post', 500):
++                cli.write_points_with_precision([])
+ 
+     def test_query(self):
+         """Test query method for TestInfluxDBClient object."""
+@@ -651,11 +650,11 @@ class TestInfluxDBClient(unittest.TestCase):
+                 [example_object, example_object]
+             )
+ 
+-    @raises(Exception)
+     def test_query_fail(self):
+         """Test query failed for TestInfluxDBClient object."""
+-        with _mocked_session(self.cli, 'get', 401):
+-            self.cli.query('select column_one from foo;')
++        with self.assertRaises(Exception):
++            with _mocked_session(self.cli, 'get', 401):
++                self.cli.query('select column_one from foo;')
+ 
+     def test_ping(self):
+         """Test ping querying InfluxDB version."""
+@@ -697,11 +696,11 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'create database "123"'
+             )
+ 
+-    @raises(Exception)
+     def test_create_database_fails(self):
+         """Test create database fail for TestInfluxDBClient object."""
+-        with _mocked_session(self.cli, 'post', 401):
+-            self.cli.create_database('new_db')
++        with self.assertRaises(Exception):
++            with _mocked_session(self.cli, 'post', 401):
++                self.cli.create_database('new_db')
+ 
+     def test_drop_database(self):
+         """Test drop database for TestInfluxDBClient object."""
+@@ -762,12 +761,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 [{'name': 'new_db_1'}, {'name': 'new_db_2'}]
+             )
+ 
+-    @raises(Exception)
+     def test_get_list_database_fails(self):
+         """Test get list of dbs fail for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 401):
+-            cli.get_list_database()
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 401):
++                cli.get_list_database()
+ 
+     def test_get_list_measurements(self):
+         """Test get list of measurements for TestInfluxDBClient object."""
+@@ -840,12 +839,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 self.cli.get_list_series(tags={'region': 'us-west'}),
+                 ['cpu_load_short,host=server01,region=us-west'])
+ 
+-    @raises(Exception)
+     def test_get_list_series_fails(self):
+         """Test get a list of series from the database but fail."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 401):
+-            cli.get_list_series()
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 401):
++                cli.get_list_series()
+ 
+     def test_create_retention_policy_default(self):
+         """Test create default ret policy for TestInfluxDBClient object."""
+@@ -971,12 +970,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'alter retention policy "somename" on "db" default'
+             )
+ 
+-    @raises(Exception)
+     def test_alter_retention_policy_invalid(self):
+         """Test invalid alter ret policy for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 400):
+-            self.cli.alter_retention_policy('somename', 'db')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 400):
++                self.cli.alter_retention_policy('somename', 'db')
+ 
+     def test_drop_retention_policy(self):
+         """Test drop retention policy for TestInfluxDBClient object."""
+@@ -994,12 +993,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'drop retention policy "somename" on "db"'
+             )
+ 
+-    @raises(Exception)
+     def test_drop_retention_policy_fails(self):
+         """Test failed drop ret policy for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'delete', 401):
+-            cli.drop_retention_policy('default', 'db')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'delete', 401):
++                cli.drop_retention_policy('default', 'db')
+ 
+     def test_get_list_retention_policies(self):
+         """Test get retention policies for TestInfluxDBClient object."""
+@@ -1179,12 +1178,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'grant all privileges to "test"'
+             )
+ 
+-    @raises(Exception)
+     def test_grant_admin_privileges_invalid(self):
+         """Test grant invalid admin privs for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 400):
+-            self.cli.grant_admin_privileges('')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 400):
++                self.cli.grant_admin_privileges('')
+ 
+     def test_revoke_admin_privileges(self):
+         """Test revoke admin privs for TestInfluxDBClient object."""
+@@ -1203,12 +1202,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'revoke all privileges from "test"'
+             )
+ 
+-    @raises(Exception)
+     def test_revoke_admin_privileges_invalid(self):
+         """Test revoke invalid admin privs for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 400):
+-            self.cli.revoke_admin_privileges('')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 400):
++                self.cli.revoke_admin_privileges('')
+ 
+     def test_grant_privilege(self):
+         """Test grant privs for TestInfluxDBClient object."""
+@@ -1227,12 +1226,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'grant read on "testdb" to "test"'
+             )
+ 
+-    @raises(Exception)
+     def test_grant_privilege_invalid(self):
+         """Test grant invalid privs for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 400):
+-            self.cli.grant_privilege('', 'testdb', 'test')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 400):
++                self.cli.grant_privilege('', 'testdb', 'test')
+ 
+     def test_revoke_privilege(self):
+         """Test revoke privs for TestInfluxDBClient object."""
+@@ -1251,12 +1250,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'revoke read on "testdb" from "test"'
+             )
+ 
+-    @raises(Exception)
+     def test_revoke_privilege_invalid(self):
+         """Test revoke invalid privs for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 400):
+-            self.cli.revoke_privilege('', 'testdb', 'test')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 400):
++                self.cli.revoke_privilege('', 'testdb', 'test')
+ 
+     def test_get_list_privileges(self):
+         """Test get list of privs for TestInfluxDBClient object."""
+@@ -1278,12 +1277,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                  {'database': 'db3', 'privilege': 'NO PRIVILEGES'}]
+             )
+ 
+-    @raises(Exception)
+     def test_get_list_privileges_fails(self):
+         """Test failed get list of privs for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 401):
+-            cli.get_list_privileges('test')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 401):
++                cli.get_list_privileges('test')
+ 
+     def test_get_list_continuous_queries(self):
+         """Test getting a list of continuous queries."""
+@@ -1333,11 +1332,11 @@ class TestInfluxDBClient(unittest.TestCase):
+                 ]
+             )
+ 
+-    @raises(Exception)
+     def test_get_list_continuous_queries_fails(self):
+         """Test failing to get a list of continuous queries."""
+-        with _mocked_session(self.cli, 'get', 400):
+-            self.cli.get_list_continuous_queries()
++        with self.assertRaises(Exception):
++            with _mocked_session(self.cli, 'get', 400):
++                self.cli.get_list_continuous_queries()
+ 
+     def test_create_continuous_query(self):
+         """Test continuous query creation."""
+@@ -1366,11 +1365,12 @@ class TestInfluxDBClient(unittest.TestCase):
+                 '"6_months"."events" from "events" group by time(10m) end'
+             )
+ 
+-    @raises(Exception)
+     def test_create_continuous_query_fails(self):
+         """Test failing to create a continuous query."""
+-        with _mocked_session(self.cli, 'get', 400):
+-            self.cli.create_continuous_query('cq_name', 'select', 'db_name')
++        with self.assertRaises(Exception):
++            with _mocked_session(self.cli, 'get', 400):
++                self.cli.create_continuous_query('cq_name', 'select',
++                                                 'db_name')
+ 
+     def test_drop_continuous_query(self):
+         """Test dropping a continuous query."""
+@@ -1387,11 +1387,11 @@ class TestInfluxDBClient(unittest.TestCase):
+                 'drop continuous query "cq_name" on "db_name"'
+             )
+ 
+-    @raises(Exception)
+     def test_drop_continuous_query_fails(self):
+         """Test failing to drop a continuous query."""
+-        with _mocked_session(self.cli, 'get', 400):
+-            self.cli.drop_continuous_query('cq_name', 'db_name')
++        with self.assertRaises(Exception):
++            with _mocked_session(self.cli, 'get', 400):
++                self.cli.drop_continuous_query('cq_name', 'db_name')
+ 
+     def test_invalid_port_fails(self):
+         """Test invalid port fail for TestInfluxDBClient object."""
+diff --git a/influxdb/tests/dataframe_client_test.py b/influxdb/tests/dataframe_client_test.py
+index 87b8e0d..a8c8416 100644
+--- a/influxdb/tests/dataframe_client_test.py
++++ b/influxdb/tests/dataframe_client_test.py
+@@ -13,7 +13,6 @@ import unittest
+ import warnings
+ import requests_mock
+ 
+-from nose.tools import raises
+ from influxdb.tests import skip_if_pypy, using_pypy
+ 
+ from .client_test import _mocked_session
+@@ -597,35 +596,35 @@ class TestDataFrameClient(unittest.TestCase):
+                 m.last_request.body,
+             )
+ 
+-    @raises(TypeError)
+     def test_write_points_from_dataframe_fails_without_time_index(self):
+         """Test failed write points from df without time index."""
+         dataframe = pd.DataFrame(data=[["1", 1, 1.0], ["2", 2, 2.0]],
+                                  columns=["column_one", "column_two",
+                                           "column_three"])
+ 
+-        with requests_mock.Mocker() as m:
+-            m.register_uri(requests_mock.POST,
+-                           "http://localhost:8086/db/db/series",
+-                           status_code=204)
++        with self.assertRaises(TypeError):
++            with requests_mock.Mocker() as m:
++                m.register_uri(requests_mock.POST,
++                               "http://localhost:8086/db/db/series",
++                               status_code=204)
+ 
+-            cli = DataFrameClient(database='db')
+-            cli.write_points(dataframe, "foo")
++                cli = DataFrameClient(database='db')
++                cli.write_points(dataframe, "foo")
+ 
+-    @raises(TypeError)
+     def test_write_points_from_dataframe_fails_with_series(self):
+         """Test failed write points from df with series."""
+         now = pd.Timestamp('1970-01-01 00:00+00:00')
+         dataframe = pd.Series(data=[1.0, 2.0],
+                               index=[now, now + timedelta(hours=1)])
+ 
+-        with requests_mock.Mocker() as m:
+-            m.register_uri(requests_mock.POST,
+-                           "http://localhost:8086/db/db/series",
+-                           status_code=204)
++        with self.assertRaises(TypeError):
++            with requests_mock.Mocker() as m:
++                m.register_uri(requests_mock.POST,
++                               "http://localhost:8086/db/db/series",
++                               status_code=204)
+ 
+-            cli = DataFrameClient(database='db')
+-            cli.write_points(dataframe, "foo")
++                cli = DataFrameClient(database='db')
++                cli.write_points(dataframe, "foo")
+ 
+     def test_create_database(self):
+         """Test create database for TestInfluxDBClient object."""
+@@ -657,12 +656,12 @@ class TestDataFrameClient(unittest.TestCase):
+                 'create database "123"'
+             )
+ 
+-    @raises(Exception)
+     def test_create_database_fails(self):
+         """Test create database fail for TestInfluxDBClient object."""
+         cli = DataFrameClient(database='db')
+-        with _mocked_session(cli, 'post', 401):
+-            cli.create_database('new_db')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'post', 401):
++                cli.create_database('new_db')
+ 
+     def test_drop_database(self):
+         """Test drop database for TestInfluxDBClient object."""
+@@ -709,12 +708,12 @@ class TestDataFrameClient(unittest.TestCase):
+                 'drop database "123"'
+             )
+ 
+-    @raises(Exception)
+     def test_get_list_database_fails(self):
+         """Test get list of dbs fail for TestInfluxDBClient object."""
+         cli = DataFrameClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 401):
+-            cli.get_list_database()
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 401):
++                cli.get_list_database()
+ 
+     def test_get_list_measurements(self):
+         """Test get list of measurements for TestInfluxDBClient object."""
+@@ -819,12 +818,12 @@ class TestDataFrameClient(unittest.TestCase):
+                 'alter retention policy "somename" on "db" default'
+             )
+ 
+-    @raises(Exception)
+     def test_alter_retention_policy_invalid(self):
+         """Test invalid alter ret policy for TestInfluxDBClient object."""
+         cli = DataFrameClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'get', 400):
+-            cli.alter_retention_policy('somename', 'db')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'get', 400):
++                cli.alter_retention_policy('somename', 'db')
+ 
+     def test_drop_retention_policy(self):
+         """Test drop retention policy for TestInfluxDBClient object."""
+@@ -843,12 +842,12 @@ class TestDataFrameClient(unittest.TestCase):
+                 'drop retention policy "somename" on "db"'
+             )
+ 
+-    @raises(Exception)
+     def test_drop_retention_policy_fails(self):
+         """Test failed drop ret policy for TestInfluxDBClient object."""
+         cli = DataFrameClient('host', 8086, 'username', 'password')
+-        with _mocked_session(cli, 'delete', 401):
+-            cli.drop_retention_policy('default', 'db')
++        with self.assertRaises(Exception):
++            with _mocked_session(cli, 'delete', 401):
++                cli.drop_retention_policy('default', 'db')
+ 
+     def test_get_list_retention_policies(self):
+         """Test get retention policies for TestInfluxDBClient object."""
+diff --git a/influxdb/tests/influxdb08/client_test.py b/influxdb/tests/influxdb08/client_test.py
+index 39ab52d..d20a411 100644
+--- a/influxdb/tests/influxdb08/client_test.py
++++ b/influxdb/tests/influxdb08/client_test.py
+@@ -13,7 +13,6 @@ import requests
+ import requests.exceptions
+ import requests_mock
+ 
+-from nose.tools import raises
+ from mock import patch
+ 
+ from influxdb.influxdb08 import InfluxDBClient
+@@ -131,12 +130,12 @@ class TestInfluxDBClient(unittest.TestCase):
+         cli.switch_database('another_database')
+         self.assertEqual(cli._database, 'another_database')
+ 
+-    @raises(FutureWarning)
+     def test_switch_db_deprecated(self):
+         """Test deprecated switch database for TestInfluxDBClient object."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'database')
+-        cli.switch_db('another_database')
+-        self.assertEqual(cli._database, 'another_database')
++        with self.assertRaises(FutureWarning):
++            cli.switch_db('another_database')
++            self.assertEqual(cli._database, 'another_database')
+ 
+     def test_switch_user(self):
+         """Test switch user for TestInfluxDBClient object."""
+@@ -288,12 +287,13 @@ class TestInfluxDBClient(unittest.TestCase):
+                 time_precision='ms'
+             )
+ 
+-    @raises(Exception)
+     def test_write_points_fails(self):
+         """Test failed write points for TestInfluxDBClient object."""
+-        with _mocked_session('post', 500):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.write_points([])
++        with self.assertRaises(Exception):
++            with _mocked_session('post', 500):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.write_points([])
+ 
+     def test_write_points_with_precision(self):
+         """Test write points with precision."""
+@@ -313,12 +313,13 @@ class TestInfluxDBClient(unittest.TestCase):
+                 time_precision='g'
+             )
+ 
+-    @raises(Exception)
+     def test_write_points_with_precision_fails(self):
+         """Test write points where precision fails."""
+-        with _mocked_session('post', 500):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.write_points_with_precision([])
++        with self.assertRaises(Exception):
++            with _mocked_session('post', 500):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.write_points_with_precision([])
+ 
+     def test_delete_points(self):
+         """Test delete points for TestInfluxDBClient object."""
+@@ -333,30 +334,31 @@ class TestInfluxDBClient(unittest.TestCase):
+                              {'u': 'username', 'p': 'password'})
+             self.assertEqual(kwds['url'], 'http://host:8086/db/db/series/foo')
+ 
+-    @raises(Exception)
+     def test_delete_points_with_wrong_name(self):
+         """Test delete points with wrong name."""
+-        with _mocked_session('delete', 400):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.delete_points("nonexist")
++        with self.assertRaises(Exception):
++            with _mocked_session('delete', 400):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.delete_points("nonexist")
+ 
+-    @raises(NotImplementedError)
+     def test_create_scheduled_delete(self):
+         """Test create scheduled deletes."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.create_scheduled_delete([])
++        with self.assertRaises(NotImplementedError):
++            cli.create_scheduled_delete([])
+ 
+-    @raises(NotImplementedError)
+     def test_get_list_scheduled_delete(self):
+         """Test get schedule list of deletes TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.get_list_scheduled_delete()
++        with self.assertRaises(NotImplementedError):
++            cli.get_list_scheduled_delete()
+ 
+-    @raises(NotImplementedError)
+     def test_remove_scheduled_delete(self):
+         """Test remove scheduled delete TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.remove_scheduled_delete(1)
++        with self.assertRaises(NotImplementedError):
++            cli.remove_scheduled_delete(1)
+ 
+     def test_query(self):
+         """Test query for TestInfluxDBClient object."""
+@@ -438,12 +440,13 @@ class TestInfluxDBClient(unittest.TestCase):
+                 [example_object, example_object]
+             )
+ 
+-    @raises(Exception)
+     def test_query_fail(self):
+         """Test failed query for TestInfluxDBClient."""
+-        with _mocked_session('get', 401):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.query('select column_one from foo;')
++        with self.assertRaises(Exception):
++            with _mocked_session('get', 401):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.query('select column_one from foo;')
+ 
+     def test_query_bad_precision(self):
+         """Test query with bad precision for TestInfluxDBClient."""
+@@ -460,12 +463,13 @@ class TestInfluxDBClient(unittest.TestCase):
+             cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+             self.assertTrue(cli.create_database('new_db'))
+ 
+-    @raises(Exception)
+     def test_create_database_fails(self):
+         """Test failed create database for TestInfluxDBClient."""
+-        with _mocked_session('post', 401):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.create_database('new_db')
++        with self.assertRaises(Exception):
++            with _mocked_session('post', 401):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.create_database('new_db')
+ 
+     def test_delete_database(self):
+         """Test delete database for TestInfluxDBClient."""
+@@ -473,12 +477,13 @@ class TestInfluxDBClient(unittest.TestCase):
+             cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+             self.assertTrue(cli.delete_database('old_db'))
+ 
+-    @raises(Exception)
+     def test_delete_database_fails(self):
+         """Test failed delete database for TestInfluxDBClient."""
+-        with _mocked_session('delete', 401):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.delete_database('old_db')
++        with self.assertRaises(Exception):
++            with _mocked_session('delete', 401):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.delete_database('old_db')
+ 
+     def test_get_list_database(self):
+         """Test get list of databases for TestInfluxDBClient."""
+@@ -490,23 +495,23 @@ class TestInfluxDBClient(unittest.TestCase):
+             self.assertEqual(len(cli.get_list_database()), 1)
+             self.assertEqual(cli.get_list_database()[0]['name'], 'a_db')
+ 
+-    @raises(Exception)
+     def test_get_list_database_fails(self):
+         """Test failed get list of databases for TestInfluxDBClient."""
+-        with _mocked_session('get', 401):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password')
+-            cli.get_list_database()
++        with self.assertRaises(Exception):
++            with _mocked_session('get', 401):
++                cli = InfluxDBClient('host', 8086, 'username', 'password')
++                cli.get_list_database()
+ 
+-    @raises(FutureWarning)
+     def test_get_database_list_deprecated(self):
+         """Test deprecated get database list for TestInfluxDBClient."""
+         data = [
+             {"name": "a_db"}
+         ]
+-        with _mocked_session('get', 200, data):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password')
+-            self.assertEqual(len(cli.get_database_list()), 1)
+-            self.assertEqual(cli.get_database_list()[0]['name'], 'a_db')
++        with self.assertRaises(FutureWarning):
++            with _mocked_session('get', 200, data):
++                cli = InfluxDBClient('host', 8086, 'username', 'password')
++                self.assertEqual(len(cli.get_database_list()), 1)
++                self.assertEqual(cli.get_database_list()[0]['name'], 'a_db')
+ 
+     def test_delete_series(self):
+         """Test delete series for TestInfluxDBClient."""
+@@ -514,12 +519,13 @@ class TestInfluxDBClient(unittest.TestCase):
+             cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+             cli.delete_series('old_series')
+ 
+-    @raises(Exception)
+     def test_delete_series_fails(self):
+         """Test failed delete series for TestInfluxDBClient."""
+-        with _mocked_session('delete', 401):
+-            cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-            cli.delete_series('old_series')
++        with self.assertRaises(Exception):
++            with _mocked_session('delete', 401):
++                cli = InfluxDBClient('host', 8086, 'username',
++                                     'password', 'db')
++                cli.delete_series('old_series')
+ 
+     def test_get_series_list(self):
+         """Test get list of series for TestInfluxDBClient."""
+@@ -662,29 +668,30 @@ class TestInfluxDBClient(unittest.TestCase):
+                 }
+             )
+ 
+-    @raises(NotImplementedError)
+     def test_get_list_database_admins(self):
+         """Test get list of database admins for TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.get_list_database_admins()
++        with self.assertRaises(NotImplementedError):
++            cli.get_list_database_admins()
+ 
+-    @raises(NotImplementedError)
+     def test_add_database_admin(self):
+         """Test add database admins for TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.add_database_admin('admin', 'admin_secret_password')
++        with self.assertRaises(NotImplementedError):
++            cli.add_database_admin('admin', 'admin_secret_password')
+ 
+-    @raises(NotImplementedError)
+     def test_update_database_admin_password(self):
+         """Test update database admin pass for TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.update_database_admin_password('admin', 'admin_secret_password')
++        with self.assertRaises(NotImplementedError):
++            cli.update_database_admin_password('admin',
++                                               'admin_secret_password')
+ 
+-    @raises(NotImplementedError)
+     def test_delete_database_admin(self):
+         """Test delete database admin for TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.delete_database_admin('admin')
++        with self.assertRaises(NotImplementedError):
++            cli.delete_database_admin('admin')
+ 
+     def test_get_database_users(self):
+         """Test get database users for TestInfluxDBClient."""
+@@ -842,11 +849,11 @@ class TestInfluxDBClient(unittest.TestCase):
+ 
+             self.assertIsNone(m.last_request.body)
+ 
+-    @raises(NotImplementedError)
+     def test_update_permission(self):
+         """Test update permission for TestInfluxDBClient."""
+         cli = InfluxDBClient('host', 8086, 'username', 'password', 'db')
+-        cli.update_permission('admin', [])
++        with self.assertRaises(NotImplementedError):
++            cli.update_permission('admin', [])
+ 
+     @mock.patch('requests.Session.request')
+     def test_request_retry(self, mock_request):
+diff --git a/influxdb/tests/influxdb08/dataframe_client_test.py b/influxdb/tests/influxdb08/dataframe_client_test.py
+index 0a766af..104ae6b 100644
+--- a/influxdb/tests/influxdb08/dataframe_client_test.py
++++ b/influxdb/tests/influxdb08/dataframe_client_test.py
+@@ -10,8 +10,6 @@ import warnings
+ 
+ import requests_mock
+ 
+-from nose.tools import raises
+-
+ from influxdb.tests import skip_if_pypy, using_pypy
+ 
+ from .client_test import _mocked_session
+@@ -191,33 +189,33 @@ class TestDataFrameClient(unittest.TestCase):
+             cli.write_points({"foo": dataframe}, time_precision='u')
+             self.assertListEqual(json.loads(m.last_request.body), points_us)
+ 
+-    @raises(TypeError)
+     def test_write_points_from_dataframe_fails_without_time_index(self):
+         """Test write points from dataframe that fails without time index."""
+         dataframe = pd.DataFrame(data=[["1", 1, 1.0], ["2", 2, 2.0]],
+                                  columns=["column_one", "column_two",
+                                           "column_three"])
+ 
+-        with requests_mock.Mocker() as m:
+-            m.register_uri(requests_mock.POST,
+-                           "http://localhost:8086/db/db/series")
++        with self.assertRaises(TypeError):
++            with requests_mock.Mocker() as m:
++                m.register_uri(requests_mock.POST,
++                               "http://localhost:8086/db/db/series")
+ 
+-            cli = DataFrameClient(database='db')
+-            cli.write_points({"foo": dataframe})
++                cli = DataFrameClient(database='db')
++                cli.write_points({"foo": dataframe})
+ 
+-    @raises(TypeError)
+     def test_write_points_from_dataframe_fails_with_series(self):
+         """Test failed write points from dataframe with series."""
+         now = pd.Timestamp('1970-01-01 00:00+00:00')
+         dataframe = pd.Series(data=[1.0, 2.0],
+                               index=[now, now + timedelta(hours=1)])
+ 
+-        with requests_mock.Mocker() as m:
+-            m.register_uri(requests_mock.POST,
+-                           "http://localhost:8086/db/db/series")
++        with self.assertRaises(TypeError):
++            with requests_mock.Mocker() as m:
++                m.register_uri(requests_mock.POST,
++                               "http://localhost:8086/db/db/series")
+ 
+-            cli = DataFrameClient(database='db')
+-            cli.write_points({"foo": dataframe})
++                cli = DataFrameClient(database='db')
++                cli.write_points({"foo": dataframe})
+ 
+     def test_query_into_dataframe(self):
+         """Test query into a dataframe."""

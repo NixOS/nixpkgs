@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/sogaiu/tree-sitter-janet-simple",
+  "rev": "7e28cbf1ca061887ea43591a2898001f4245fddf",
+  "date": "2025-05-19T21:38:53+09:00",
+  "path": "/nix/store/k9njvidvlpqlri2dsmfvz3h21b1214a6-tree-sitter-janet-simple",
+  "sha256": "05xn760xxax8q2dsvyj3yw90rhnq7nmv54p0i8af34nhjwyi8sx9",
+  "hash": "sha256-qWsUPZfQkuEUiuCSsqs92MIMEvdD+q2bwKir3oE5thc=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

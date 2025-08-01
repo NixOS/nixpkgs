@@ -1,0 +1,87 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c6b2b2a810..1813c88e42 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -106,7 +106,7 @@ endif ()
+ # Find required dependencies for thrift/lib
+ if (THRIFT_LIB_ONLY OR build_all)
+   find_package(Gflags REQUIRED)
+-  find_package(Glog REQUIRED)
++  find_package(Glog CONFIG REQUIRED)
+   find_package(folly CONFIG REQUIRED)
+   find_package(fizz CONFIG REQUIRED)
+   find_package(wangle CONFIG REQUIRED)
+@@ -119,7 +119,6 @@ if (THRIFT_LIB_ONLY OR build_all)
+   find_package(Threads)
+   include_directories(
+     ${LIBGFLAGS_INCLUDE_DIR}
+-    ${GLOG_INCLUDE_DIRS}
+     ${OPENSSL_INCLUDE_DIR}
+     ${ZSTD_INCLUDE_DIRS}
+     ${Xxhash_INCLUDE_DIR}
+diff --git a/thrift/example/cpp2/CMakeLists.txt b/thrift/example/cpp2/CMakeLists.txt
+index afa28dad61..318860b3d6 100644
+--- a/thrift/example/cpp2/CMakeLists.txt
++++ b/thrift/example/cpp2/CMakeLists.txt
+@@ -28,7 +28,7 @@ target_link_libraries(
+   thriftcpp2
+   chatroom-cpp2
+   ${LIBGFLAGS_LIBRARY}
+-  ${GLOG_LIBRARIES}
++  glog::glog
+ )
+ install(
+   TARGETS example_server
+diff --git a/thrift/lib/cpp/CMakeLists.txt b/thrift/lib/cpp/CMakeLists.txt
+index 6461588a86..8b6ed1b030 100644
+--- a/thrift/lib/cpp/CMakeLists.txt
++++ b/thrift/lib/cpp/CMakeLists.txt
+@@ -45,7 +45,7 @@ target_link_libraries(
+   PUBLIC
+     Folly::folly
+     ${LIBGFLAGS_LIBRARY}
+-    ${GLOG_LIBRARIES}
++    glog::glog
+ )
+ 
+ add_library(
+@@ -121,7 +121,7 @@ target_link_libraries(
+     Boost::boost
+     Folly::folly
+     wangle::wangle
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     ${OPENSSL_LIBRARIES}
+ )
+ 
+@@ -137,7 +137,7 @@ target_link_libraries(
+     thriftprotocol
+     transport
+     Folly::folly
+-    ${GLOG_LIBRARIES}
++    glog::glog
+ )
+ 
+ set(THRIFT1_HEADER_DIRS
+diff --git a/thrift/lib/cpp2/CMakeLists.txt b/thrift/lib/cpp2/CMakeLists.txt
+index f941688ab0..b3609bbc62 100644
+--- a/thrift/lib/cpp2/CMakeLists.txt
++++ b/thrift/lib/cpp2/CMakeLists.txt
+@@ -75,7 +75,7 @@ target_link_libraries(
+     Folly::folly
+     thriftmetadata
+     thriftprotocol
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     ${LIBGFLAGS_LIBRARY}
+ )
+ 
+@@ -206,7 +206,7 @@ target_link_libraries(
+     thrift
+     Folly::folly
+     wangle::wangle
+-    ${GLOG_LIBRARIES}
++    glog::glog
+     thrift-core
+ )
+ 

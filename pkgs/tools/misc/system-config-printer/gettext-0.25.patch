@@ -1,0 +1,24 @@
+diff --git a/Makefile.am b/Makefile.am
+index 9993ca0d..678fa629 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,5 +1,7 @@
+ SUBDIRS=. po
+ 
++ACLOCAL_AMFLAGS = -I m4
++
+ EXPORT_MODULES=					\
+ 	cupshelpers/__init__.py			\
+ 	cupshelpers/cupshelpers.py		\
+diff --git a/configure.ac b/configure.ac
+index 9398fd3e..3b6d8e0e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,6 @@ AC_INIT(system-config-printer, 1.5.18)
+ AC_CONFIG_SRCDIR(system-config-printer.py)
+ AM_INIT_AUTOMAKE([dist-xz dist-bzip2 subdir-objects 1.6])
+ AM_GNU_GETTEXT_VERSION(0.20)
+-AX_REQUIRE_DEFINED([AM_GNU_GETTEXT])
+ AM_GNU_GETTEXT([external])
+ AM_PATH_PYTHON([3])
+ PACKAGE="AC_PACKAGE_NAME"

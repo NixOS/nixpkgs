@@ -1,0 +1,13 @@
+diff --git i/test/tch1dn.f w/test/tch1dn.f
+index 25ec990..3f83e7e 100644
+--- i/test/tch1dn.f
++++ w/test/tch1dn.f
+@@ -34,8 +34,6 @@ c
+       call dtest(n)
+       write (*,*) 'cch1dn test:'
+       call ctest(n)
+-      write (*,*) 'zch1dn test:'
+-      call ztest(n)
+ 
+       call pstats
+       end program

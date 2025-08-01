@@ -1,0 +1,92 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 25 Apr 2023 15:30:30 +0200
+Subject: shiboken2/clang: Fix clashes between type name and enumeration
+ values
+
+Remove all constant and enum value type entries found in the type lookup
+unless it is looking for template arguments; where it may be a
+non-type template argument.
+
+Task-number: PYSIDE-2288
+Pick-to: 6.5 5.15
+Change-Id: If0609ce0d0223f551ed6dee1d1e0ea3ef49d6917
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+(cherry picked from commit e22f717153a5e9855531f45c0bf82ff2461a3f7e)
+---
+ .../shiboken2/ApiExtractor/abstractmetabuilder.cpp  | 21 +++++++++++++++++++--
+ .../shiboken2/ApiExtractor/abstractmetabuilder.h    |  3 ++-
+ .../shiboken2/ApiExtractor/typesystem_typedefs.h    |  1 +
+ 3 files changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp b/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp
+index 5a413ec..2f34e16 100644
+--- a/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp
++++ b/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp
+@@ -2144,6 +2144,13 @@ static bool isNumber(const QString &s)
+                        [](QChar c) { return c.isDigit(); });
+ }
+ 
++// A type entry relevant only for non type template "X<5>"
++static bool isNonTypeTemplateArgument(const TypeEntryCPtr &te)
++{
++    const auto type = te->type();
++    return type == TypeEntry::EnumValue || type == TypeEntry::ConstantValueType;
++}
++
+ AbstractMetaType *AbstractMetaBuilderPrivate::translateTypeStatic(const TypeInfo &_typei,
+                                                                   AbstractMetaClass *currentClass,
+                                                                   AbstractMetaBuilderPrivate *d,
+@@ -2271,7 +2278,15 @@ AbstractMetaType *AbstractMetaBuilderPrivate::translateTypeStatic(const TypeInfo
+         typeInfo.clearInstantiations();
+     }
+ 
+-    const TypeEntries types = findTypeEntries(qualifiedName, name, currentClass, d);
++    TypeEntries types = findTypeEntries(qualifiedName, name, currentClass, d);
++    if (!flags.testFlag(AbstractMetaBuilder::TemplateArgument)) {
++        // Avoid clashes between QByteArray and enum value QMetaType::QByteArray
++        // unless we are looking for template arguments.
++        auto end = std::remove_if(types.begin(), types.end(),
++                                  isNonTypeTemplateArgument);
++        types.erase(end, types.end());
++    }
++
+     if (types.isEmpty()) {
+         if (errorMessageIn) {
+             *errorMessageIn =
+@@ -2293,7 +2308,9 @@ AbstractMetaType *AbstractMetaBuilderPrivate::translateTypeStatic(const TypeInfo
+     const auto &templateArguments = typeInfo.instantiations();
+     for (int t = 0, size = templateArguments.size(); t < size; ++t) {
+         const  TypeInfo &ti = templateArguments.at(t);
+-        AbstractMetaType *targType = translateTypeStatic(ti, currentClass, d, flags, &errorMessage);
++        AbstractMetaType *targType = translateTypeStatic(ti, currentClass, d,
++                                                         flags | AbstractMetaBuilder::TemplateArgument,
++                                                         &errorMessage);
+         // For non-type template parameters, create a dummy type entry on the fly
+         // as is done for classes.
+         if (!targType) {
+diff --git a/sources/shiboken2/ApiExtractor/abstractmetabuilder.h b/sources/shiboken2/ApiExtractor/abstractmetabuilder.h
+index d2dc080..8916eaf 100644
+--- a/sources/shiboken2/ApiExtractor/abstractmetabuilder.h
++++ b/sources/shiboken2/ApiExtractor/abstractmetabuilder.h
+@@ -93,7 +93,8 @@ public:
+     void setSkipDeprecated(bool value);
+ 
+     enum TranslateTypeFlag {
+-        DontResolveType = 0x1
++        DontResolveType = 0x1,
++        TemplateArgument = 0x2
+     };
+     Q_DECLARE_FLAGS(TranslateTypeFlags, TranslateTypeFlag);
+ 
+diff --git a/sources/shiboken2/ApiExtractor/typesystem_typedefs.h b/sources/shiboken2/ApiExtractor/typesystem_typedefs.h
+index 73f92b2..5dcc65c 100644
+--- a/sources/shiboken2/ApiExtractor/typesystem_typedefs.h
++++ b/sources/shiboken2/ApiExtractor/typesystem_typedefs.h
+@@ -48,6 +48,7 @@ using CodeSnipList = QVector<CodeSnip>;
+ using DocModificationList = QVector<DocModification>;
+ using FieldModificationList = QVector<FieldModification>;
+ using FunctionModificationList = QVector<FunctionModification>;
++using TypeEntryCPtr = const TypeEntry *;
+ using TypeEntries = QVector<const TypeEntry *>;
+ 
+ #endif // TYPESYSTEM_TYPEDEFS_H

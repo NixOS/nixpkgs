@@ -1,0 +1,119 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Victor Fuentes <vmfuentes64@gmail.com>
+Date: Thu, 1 Aug 2024 15:59:54 -0400
+Subject: [PATCH] Uses pkexec within modules in order to run calamares without
+ root permissions as a whole.
+
+Also fixes storage check in the welcome module
+---
+ src/libcalamares/utils/Runner.cpp             |  8 +++---
+ src/modules/mount/main.py                     |  8 +++---
+ .../welcome/checker/GeneralRequirements.cpp   | 27 ++++++++++++++++++-
+ .../welcome/checker/GeneralRequirements.h     |  1 +
+ 4 files changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/src/libcalamares/utils/Runner.cpp b/src/libcalamares/utils/Runner.cpp
+index f7872a7d0..a246ca110 100644
+--- a/src/libcalamares/utils/Runner.cpp
++++ b/src/libcalamares/utils/Runner.cpp
+@@ -145,13 +145,13 @@ Calamares::Utils::Runner::run()
+     }
+     if ( m_location == RunLocation::RunInTarget )
+     {
+-        process.setProgram( "chroot" );
+-        process.setArguments( QStringList { workingDirectory.absolutePath() } << m_command );
++        process.setProgram( "pkexec" );
++        process.setArguments( QStringList { "chroot" } + QStringList { workingDirectory.absolutePath() } << m_command );
+     }
+     else
+     {
+-        process.setProgram( "env" );
+-        process.setArguments( m_command );
++        process.setProgram( "pkexec" );
++        process.setArguments( QStringList { "env" } + m_command );
+     }
+ 
+     if ( m_output )
+diff --git a/src/modules/mount/main.py b/src/modules/mount/main.py
+index 4a16f8872..6d32916a5 100644
+--- a/src/modules/mount/main.py
++++ b/src/modules/mount/main.py
+@@ -244,7 +244,7 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
+     # Ensure that the created directory has the correct SELinux context on
+     # SELinux-enabled systems.
+ 
+-    os.makedirs(mount_point, exist_ok=True)
++    subprocess.check_call(["pkexec", "mkdir", "-p", mount_point])
+ 
+     try:
+         subprocess.call(['chcon', '--reference=' + raw_mount_point, mount_point])
+@@ -288,13 +288,13 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
+         for s in btrfs_subvolumes:
+             if not s["subvolume"]:
+                 continue
+-            os.makedirs(root_mount_point + os.path.dirname(s["subvolume"]), exist_ok=True)
+-            subprocess.check_call(["btrfs", "subvolume", "create",
++            subprocess.check_call(["pkexec", "mkdir", "-p", root_mount_point + os.path.dirname(s["subvolume"])])
++            subprocess.check_call(["pkexec", "btrfs", "subvolume", "create",
+                                    root_mount_point + s["subvolume"]])
+             if s["mountPoint"] == "/":
+                 # insert the root subvolume into global storage
+                 libcalamares.globalstorage.insert("btrfsRootSubvolume", s["subvolume"])
+-        subprocess.check_call(["umount", "-v", root_mount_point])
++        subprocess.check_call(["pkexec", "umount", "-v", root_mount_point])
+ 
+         device = partition["device"]
+ 
+diff --git a/src/modules/welcome/checker/GeneralRequirements.cpp b/src/modules/welcome/checker/GeneralRequirements.cpp
+index a58f3df83..b66576b09 100644
+--- a/src/modules/welcome/checker/GeneralRequirements.cpp
++++ b/src/modules/welcome/checker/GeneralRequirements.cpp
+@@ -431,10 +431,35 @@ GeneralRequirements::checkEnoughStorage( qint64 requiredSpace )
+     cWarning() << "GeneralRequirements is configured without libparted.";
+     return false;
+ #else
+-    return check_big_enough( requiredSpace );
++    return big_enough( requiredSpace );
+ #endif
+ }
+ 
++bool
++GeneralRequirements::big_enough( qint64 requiredSpace )
++{
++    FILE *fpipe;
++    char command[128];
++    snprintf(command, sizeof(command), "lsblk --bytes -no SIZE,TYPE | grep disk | awk '$1 > %llu {print $1}'", requiredSpace);
++    char c = 0;
++
++    if (0 == (fpipe = (FILE*)popen(command, "r")))
++    {
++        cWarning() << "Failed to check storage size.";
++        return false;
++    }
++
++    while (fread(&c, sizeof c, 1, fpipe))
++    {
++        pclose(fpipe);
++        return true;
++    }
++
++    pclose(fpipe);
++
++    return false;
++}
++
+ bool
+ GeneralRequirements::checkEnoughRam( qint64 requiredRam )
+ {
+diff --git a/src/modules/welcome/checker/GeneralRequirements.h b/src/modules/welcome/checker/GeneralRequirements.h
+index b6646da11..ea27324fa 100644
+--- a/src/modules/welcome/checker/GeneralRequirements.h
++++ b/src/modules/welcome/checker/GeneralRequirements.h
+@@ -36,6 +36,7 @@ private:
+     bool checkHasPower();
+     bool checkHasInternet();
+     bool checkIsRoot();
++    bool big_enough( qint64 requiredSpace );
+ 
+     qreal m_requiredStorageGiB;
+     qreal m_requiredRamGiB;

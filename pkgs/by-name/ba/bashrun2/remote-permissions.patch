@@ -1,0 +1,12 @@
+diff --git a/src/remote b/src/remote
+index 07674ca..07a6b25 100644
+--- a/src/remote
++++ b/src/remote
+@@ -97,6 +97,7 @@ function §remote.interface.create {
+     local bookmarks="$bashrun_cache_home/remote-bookmarks.bash"
+ 
+     /bin/cp "$bashrun_site/interface" "$interface"
++    chmod +w "$interface"
+     printf '%s\n' "$bashrun_remote_interface" >> "$interface"
+ 
+     printf '%s\n' "source $bindings" >> "$interface"

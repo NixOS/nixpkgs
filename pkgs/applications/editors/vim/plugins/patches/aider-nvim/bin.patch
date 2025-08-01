@@ -1,0 +1,15 @@
+diff --git a/lua/aider.lua b/lua/aider.lua
+index 98b5071..589b06d 100644
+--- a/lua/aider.lua
++++ b/lua/aider.lua
+@@ -61,9 +61,9 @@ function M.AiderOpen(args, window_type)
+     log("Existing aider buffer found, opening in new window")
+     helpers.open_buffer_in_new_window(window_type, M.aider_buf)
+   else
+     log("No existing aider buffer, creating new one")
+-    local command = "aider " .. (args or "")
++    local command = "@aider@ " .. (args or "")
+     log("Opening window with type: " .. window_type)
+     helpers.open_window(window_type)
+     log("Adding buffers to command")
+     command = helpers.add_buffers_to_command(command, is_valid_buffer)

@@ -1,0 +1,65 @@
+From b3a46b9a2a9f86ff416a0ff5f84882c0dedebd14 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Sun, 9 Jan 2022 01:57:18 +0100
+Subject: [PATCH] build: Make includedir properly overrideable
+
+This is required by some package managers like Nix.
+
+Co-authored-by: Artturin <Artturin@artturin.com>
+---
+ CMakeLists.txt | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9f062ca..b28f13c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -49,6 +49,10 @@ if(${CMAKE_INSTALL_LIBDIR} STREQUAL "lib64")
+     set(FIND_LIBRARY_USE_LIB64_PATHS true)
+ endif()
+ 
++if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
++    set(CMAKE_INSTALL_INCLUDEDIR "include")
++endif()
++
+ if(NOT CMAKE_CXX_STANDARD)
+     set(CMAKE_CXX_STANDARD 11)
+ endif()
+@@ -329,7 +333,7 @@ endif()
+ target_include_directories(${PROJECT_NAME} PUBLIC
+     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+     $<BUILD_INTERFACE:${GENERATED_INCLUDE_DIR}>
+-    $<INSTALL_INTERFACE:include>)
++    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ aws_use_package(aws-c-http)
+ aws_use_package(aws-c-mqtt)
+@@ -346,16 +350,16 @@ aws_add_sanitizers(${PROJECT_NAME})
+ 
+ target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_AWS_LIBS})
+ 
+-install(FILES ${AWS_CRT_HEADERS} DESTINATION "include/aws/crt" COMPONENT Development)
+-install(FILES ${AWS_CRT_AUTH_HEADERS} DESTINATION "include/aws/crt/auth" COMPONENT Development)
+-install(FILES ${AWS_CRT_CHECKSUM_HEADERS} DESTINATION "include/aws/crt/checksum" COMPONENT Development)
+-install(FILES ${AWS_CRT_CRYPTO_HEADERS} DESTINATION "include/aws/crt/crypto" COMPONENT Development)
+-install(FILES ${AWS_CRT_IO_HEADERS} DESTINATION "include/aws/crt/io" COMPONENT Development)
+-install(FILES ${AWS_CRT_IOT_HEADERS} DESTINATION "include/aws/iot" COMPONENT Development)
+-install(FILES ${AWS_CRT_MQTT_HEADERS} DESTINATION "include/aws/crt/mqtt" COMPONENT Development)
+-install(FILES ${AWS_CRT_HTTP_HEADERS} DESTINATION "include/aws/crt/http" COMPONENT Development)
+-install(FILES ${AWS_CRT_ENDPOINT_HEADERS} DESTINATION "include/aws/crt/endpoints" COMPONENT Development)
+-install(FILES ${AWS_CRT_CBOR_HEADERS} DESTINATION "include/aws/crt/cbor" COMPONENT Development)
++install(FILES ${AWS_CRT_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt" COMPONENT Development)
++install(FILES ${AWS_CRT_AUTH_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/auth" COMPONENT Development)
++install(FILES ${AWS_CRT_CHECKSUM_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/checksum" COMPONENT Development)
++install(FILES ${AWS_CRT_CRYPTO_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/crypto" COMPONENT Development)
++install(FILES ${AWS_CRT_IO_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/io" COMPONENT Development)
++install(FILES ${AWS_CRT_IOT_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/iot" COMPONENT Development)
++install(FILES ${AWS_CRT_MQTT_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/mqtt" COMPONENT Development)
++install(FILES ${AWS_CRT_HTTP_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/http" COMPONENT Development)
++install(FILES ${AWS_CRT_ENDPOINT_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/endpoints" COMPONENT Development)
++install(FILES ${AWS_CRT_CBOR_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aws/crt/cbor" COMPONENT Development)
+ 
+ install(
+     TARGETS ${PROJECT_NAME}
+-- 
+2.46.0

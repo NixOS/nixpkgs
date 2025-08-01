@@ -1,0 +1,25 @@
+diff --git a/SuperBuild/External-CLOUDFLARE-ZLIB.cmake b/SuperBuild/External-CLOUDFLARE-ZLIB.cmake
+index 9f064eb..fe74df5 100644
+--- a/SuperBuild/External-CLOUDFLARE-ZLIB.cmake
++++ b/SuperBuild/External-CLOUDFLARE-ZLIB.cmake
+@@ -1,8 +1,5 @@
+-set(CLOUDFLARE_BRANCH gcc.amd64) # Cloudflare zlib branch
+-
+ ExternalProject_Add(zlib
+-    GIT_REPOSITORY "https://github.com/ningfei/zlib.git"
+-    GIT_TAG "${CLOUDFLARE_BRANCH}"
++    URL file://@cloudflareZlib@
+     SOURCE_DIR cloudflare-zlib
+     BINARY_DIR cloudflare-zlib-build
+     CMAKE_ARGS
+diff --git a/SuperBuild/SuperBuild.cmake b/SuperBuild/SuperBuild.cmake
+index 2a0a956..81354a7 100644
+--- a/SuperBuild/SuperBuild.cmake
++++ b/SuperBuild/SuperBuild.cmake
+@@ -1,6 +1,1 @@
+-# Check if git exists
+-find_package(Git)
+-if(NOT GIT_FOUND)
+-    message(FATAL_ERROR "Cannot find Git. Git is required for Superbuild")
+-endif()
+ 

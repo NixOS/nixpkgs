@@ -1,0 +1,14 @@
+diff --git a/src_c/surface.c b/src_c/surface.c
+index ee9991fb..32c007bd 100644
+--- a/src_c/surface.c
++++ b/src_c/surface.c
+@@ -733,7 +733,8 @@ _raise_create_surface_error(void)
+ {
+     const char *msg = SDL_GetError();
+ 
+-    if (strcmp(msg, "Unknown pixel format") == 0)
++    if (strcmp(msg, "Unknown pixel format") == 0 ||
++        strcmp(msg, "Parameter 'format' is invalid") == 0)
+         return RAISE(PyExc_ValueError, "Invalid mask values");
+     return RAISE(pgExc_SDLError, msg);
+ }

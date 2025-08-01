@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    net-ldap (0.18.0)
+    pyu-ruby-sasl (0.0.3.3)
+    rubyntlm (0.3.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  net-ldap (= 0.18.0)
+  pyu-ruby-sasl (= 0.0.3.3)
+  rubyntlm (= 0.3.4)
+
+BUNDLED WITH
+   2.5.22

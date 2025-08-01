@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index 877c54f..3e39ed1 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -209,6 +209,8 @@ $(NSS_VERSION).tar.gz:
+ 
+ $(nss_static_libs): $(NSS_VERSION).tar.gz
+ 	tar xf $(NSS_VERSION).tar.gz
++	sed -i -e "1s@#!/usr/bin/env bash@#!$$(type -p bash)@" $(NSS_VERSION)/nss/build.sh
++	sed -i -e "s@/usr/bin/\(env \)\?grep@$$(type -p grep)@" $(NSS_VERSION)/nss/coreconf/config.gypi
+ 
+ ifeq ($(host),$(build))
+ 	# Native build, use NSS' build script.

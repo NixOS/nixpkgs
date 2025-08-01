@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 80
+[pep8]
+aggressive = 1

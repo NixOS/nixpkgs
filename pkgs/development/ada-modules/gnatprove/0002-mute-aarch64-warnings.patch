@@ -1,0 +1,22 @@
+--- a/src/counterexamples/ce_parsing.adb	2025-03-14 21:48:15.657409808 +0100
++++ b/src/counterexamples/ce_parsing.adb	2025-03-14 22:04:32.114664704 +0100
+@@ -975,6 +975,9 @@
+                elsif Is_Extended_Precision_Floating_Point_Type (Ty) then
+                   pragma Assert (Size (Exp) = 15);
+                   pragma Assert (Size (Significand) = 63);
++                  pragma Warnings (Off, "assertion will fail at run time");
++                  pragma Warnings (Off,
++                      "types for unchecked conversion have different sizes");
+                   declare
+                      package P is new Parse_Conversion
+                        (Interfaces.Unsigned_128, Long_Long_Float);
+@@ -983,6 +986,9 @@
+                   begin
+                      return (Float_K, (Extended_K, F));
+                   end;
++                  pragma Warnings (On,
++                      "types for unchecked conversion have different sizes");
++                  pragma Warnings (On, "assertion will fail at run time");
+                else
+                   raise Program_Error;
+                end if;
