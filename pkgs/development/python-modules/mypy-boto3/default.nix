@@ -906,8 +906,8 @@ rec {
       "sha256-wbPakhKKDtNY6y84jzqJQlP7IiG5QAKQTRsYP/tndV8=";
 
   mypy-boto3-mgh =
-    buildMypyBoto3Package "mgh" "1.39.0"
-      "sha256-iAaydi0o4OxHNdIIogr44sC8sIE3U4+MYlh2erN/cFU=";
+    buildMypyBoto3Package "mgh" "1.40.0"
+      "sha256-/LncQEw5kVzE7LcoSgN58zOQU53fRAuN5bIsl/yiJZE=";
 
   mypy-boto3-mgn =
     buildMypyBoto3Package "mgn" "1.39.0"
