@@ -718,8 +718,8 @@ rec {
       "sha256-4wNbhuNsLwrYemkPuadR6oeaCuSajU5IwCb0En89M3U=";
 
   mypy-boto3-kendra =
-    buildMypyBoto3Package "kendra" "1.39.0"
-      "sha256-V5cRYr/2YzcwG4QWtwzdcu/xDZ+GfPrO0D2efjWaraE=";
+    buildMypyBoto3Package "kendra" "1.40.0"
+      "sha256-i5CJ9t2W/EE4/b1jIPqRR3DjIVWSSV/KSYSM+wMc944=";
 
   mypy-boto3-kendra-ranking =
     buildMypyBoto3Package "kendra-ranking" "1.39.0"
