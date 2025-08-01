@@ -74,8 +74,8 @@ rec {
       "sha256-1aP+5IiJI1YepuiymxtltPbNNdSNKw1dHUn11eZEEAQ=";
 
   mypy-boto3-amplifyuibuilder =
-    buildMypyBoto3Package "amplifyuibuilder" "1.39.0"
-      "sha256-dvACoIOv2R6HNSTnPgS9qNJVi5ezmPzzEPt+D9sb0b0=";
+    buildMypyBoto3Package "amplifyuibuilder" "1.40.0"
+      "sha256-wBdq3kI0El1XZRuGMG2lN0Zjc1GIBOItMBvctF/10Wg=";
 
   mypy-boto3-apigateway =
     buildMypyBoto3Package "apigateway" "1.39.0"
