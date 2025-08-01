@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz";
-    sha256 = "1s8iny7g06z289ahdj0kzaxj0cd3wvjbd8j3bh9xlg7g444lhy9w";
+    hash = "sha256-PHlICSHvPNoTXEOituTmozEgu/oTyAZVQuIb8I63Eek=";
   };
 
   makeFlags = [
