@@ -546,8 +546,8 @@ rec {
       "sha256-sTuTQ3ADgiApY0davzOBHz+jz21tp2C4L7Kq6j8dUvY=";
 
   mypy-boto3-forecast =
-    buildMypyBoto3Package "forecast" "1.39.0"
-      "sha256-ugvQqCDYOPldxeIuK53SGHuIgtPR2IRER2Qw/vA5/oU=";
+    buildMypyBoto3Package "forecast" "1.40.0"
+      "sha256-mo2xp2XnApilK6zB+KZLt/KcJ6mTPskjidfZ0ju6Xss=";
 
   mypy-boto3-forecastquery =
     buildMypyBoto3Package "forecastquery" "1.39.0"
