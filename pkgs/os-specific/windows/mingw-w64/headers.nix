@@ -23,6 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    downloadPage = "https://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/";
+    description = "Collection of headers and libraries for building native Windows applications";
+    license = lib.licenses.publicDomain;
     platforms = lib.platforms.windows;
+    teams = [ lib.teams.windows ];
   };
 })

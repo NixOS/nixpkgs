@@ -120,5 +120,6 @@ else
       # The arm manifest is missing critical pieces.
       broken = stdenvNoCC.hostPlatform.isAarch;
       sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      teams = [ lib.teams.windows ];
     };
   })
