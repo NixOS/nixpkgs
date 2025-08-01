@@ -973,6 +973,8 @@ self: super: with self; {
 
   asserts = callPackage ../development/python-modules/asserts { };
 
+  ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
+
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
 
   asteroid-filterbanks = callPackage ../development/python-modules/asteroid-filterbanks { };
