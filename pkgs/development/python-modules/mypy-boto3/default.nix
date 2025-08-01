@@ -614,8 +614,8 @@ rec {
       "sha256-RLcGOVDiwryD6xf9E6lWSdAAIKCP4hNaBQknjbwPAuQ=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.39.0"
-      "sha256-/8z4nQItxryzox1LIOB/q6pk3zk0sGGRL8c6mZ2AZ0A=";
+    buildMypyBoto3Package "imagebuilder" "1.40.0"
+      "sha256-Mcp5NCJal9YyJ9bQN9q/M0E/pXvXiDlLGvAqpCo2xLs=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.39.0"
