@@ -1122,8 +1122,8 @@ rec {
       "sha256-ItxjwhL7oRnh/KWFVsVxX1ayANALBasbEPNe0dBmY5Q=";
 
   mypy-boto3-resourcegroupstaggingapi =
-    buildMypyBoto3Package "resourcegroupstaggingapi" "1.39.0"
-      "sha256-1GiS6t1o2p/7og9B3QuYv50ERAod9wkTyRmyFuGOO0o=";
+    buildMypyBoto3Package "resourcegroupstaggingapi" "1.40.0"
+      "sha256-NRNWvFj3jb7EdKqUEhGXH2zVetFn+GcdokZJQ6JMsUk=";
 
   mypy-boto3-robomaker =
     buildMypyBoto3Package "robomaker" "1.39.0"
