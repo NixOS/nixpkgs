@@ -191,7 +191,7 @@ let
             fetchGit {
               inherit (gitParts) url;
               rev = gitParts.sha;
-              allRefs = true;
+              shallow = true;
               submodules = true;
             }
           else
