@@ -418,62 +418,50 @@ let
     };
   };
 
-  uploadHttpOpts = _: {
-    options = {
-      domain = mkOption {
-        type = types.nullOr types.str;
-        description = "Domain name for the http-upload service";
-      };
-      uploadFileSizeLimit = mkOption {
-        type = types.str;
-        default = "50 * 1024 * 1024";
-        description = "Maximum file size, in bytes. Defaults to 50MB.";
-      };
-      uploadExpireAfter = mkOption {
-        type = types.str;
-        default = "60 * 60 * 24 * 7";
-        description = "Max age of a file before it gets deleted, in seconds.";
-      };
-      userQuota = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-        example = 1234;
-        description = ''
-          Maximum size of all uploaded files per user, in bytes. There
-          will be no quota if this option is set to null.
-        '';
-      };
-      httpUploadPath = mkOption {
-        type = types.str;
-        description = ''
-          Directory where the uploaded files will be stored when the http_upload module is used.
-          By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
-        '';
-        default = "/var/lib/prosody";
+  httpFileShareOpts =
+    { config, options, ... }:
+    {
+      freeformType =
+        with types;
+        let
+          atom = oneOf [
+            int
+            bool
+            str
+            (listOf atom)
+          ];
+        in
+        attrsOf (nullOr atom)
+        // {
+          description = "int, bool, string or list of them";
+        };
+      options = {
+        domain = mkOption {
+          type = with types; nullOr str;
+          description = "Domain name for a http_file_share service.";
+        };
+        size_limit = mkOption {
+          type = types.int;
+          default = 10 * 1024 * 1024;
+          defaultText = "10 * 1024 * 1024";
+          description = "Maximum file size, in bytes.";
+        };
+        expires_after = mkOption {
+          type = types.str;
+          default = "1 week";
+          description = "Max age of a file before it gets deleted.";
+        };
+        daily_quota = mkOption {
+          type = types.nullOr types.int;
+          default = 10 * config.size_limit;
+          defaultText = lib.literalExpression "10 * ${options.size_limit}";
+          example = "100*1024*1024";
+          description = ''
+            Maximum size of daily uploaded files per user, in bytes.
+          '';
+        };
       };
     };
-  };
-
-  httpFileShareOpts = _: {
-    freeformType =
-      with types;
-      let
-        atom = oneOf [
-          int
-          bool
-          str
-          (listOf atom)
-        ];
-      in
-      attrsOf (nullOr atom)
-      // {
-        description = "int, bool, string or list of them";
-      };
-    options.domain = mkOption {
-      type = with types; nullOr str;
-      description = "Domain name for a http_file_share service.";
-    };
-  };
 
   vHostOpts = _: {
     options = {
@@ -505,15 +493,10 @@ let
 
   configFile =
     let
-      httpDiscoItems =
-        optional (cfg.uploadHttp != null) {
-          url = cfg.uploadHttp.domain;
-          description = "HTTP upload endpoint";
-        }
-        ++ optional (cfg.httpFileShare != null) {
-          url = cfg.httpFileShare.domain;
-          description = "HTTP file share endpoint";
-        };
+      httpDiscoItems = optional (cfg.httpFileShare != null) {
+        url = cfg.httpFileShare.domain;
+        description = "HTTP file share endpoint";
+      };
       mucDiscoItems = builtins.foldl' (
         acc: muc:
         [
@@ -592,18 +575,9 @@ let
             ${muc.extraConfig}
       '') cfg.muc}
 
-      ${lib.optionalString (cfg.uploadHttp != null) ''
-        Component ${toLua cfg.uploadHttp.domain} "http_upload"
-            http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
-            http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
-            ${lib.optionalString (
-              cfg.uploadHttp.userQuota != null
-            ) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
-            http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
-      ''}
-
       ${lib.optionalString (cfg.httpFileShare != null) ''
         Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+          modules_disabled = { "s2s" }
         ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
       ''}
 
@@ -812,20 +786,11 @@ in
         description = "Additional path in which to look find plugins/modules";
       };
 
-      uploadHttp = mkOption {
-        description = ''
-          Configures the old Prosody builtin HTTP server to handle user uploads.
-        '';
-        type = types.nullOr (types.submodule uploadHttpOpts);
-        default = null;
-        example = {
-          domain = "uploads.my-xmpp-example-host.org";
-        };
-      };
-
       httpFileShare = mkOption {
         description = ''
           Configures the http_file_share module to handle user uploads.
+
+          See <https://prosody.im/doc/modules/mod_http_file_share> for a full list of options.
         '';
         type = types.nullOr (types.submodule httpFileShareOpts);
         default = null;
@@ -914,6 +879,12 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "prosody" "uploadHttp" ]
+      "mod_http_upload has been obsoloted and been replaced by mod_http_file_share which can be configured with httpFileShare options."
+    )
+  ];
+
   config = mkIf cfg.enable {
     assertions =
       let
@@ -936,10 +907,9 @@ in
             + genericErrMsg;
           }
           {
-            assertion = cfg.uploadHttp != null || cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
+            assertion = cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
             message = ''
-              You need to setup the http_upload or http_file_share modules through config.services.prosody.uploadHttp
-              or config.services.prosody.httpFileShare to comply with XEP-0423.
+              You need to setup http_file_share modules through config.services.prosody.httpFileShare to comply with XEP-0423.
             ''
             + genericErrMsg;
           }
