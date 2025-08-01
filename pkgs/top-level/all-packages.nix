@@ -2271,8 +2271,6 @@ with pkgs;
 
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
-  lief = callPackage ../development/libraries/lief { };
-
   # Less secure variant of lowdown for use inside Nix builds.
   lowdown-unsandboxed = lowdown.override {
     enableDarwinSandbox = false;
@@ -2425,8 +2423,6 @@ with pkgs;
   mcelog = callPackage ../os-specific/linux/mcelog {
     util-linux = util-linuxMinimal;
   };
-
-  sqlint = callPackage ../development/tools/sqlint { };
 
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
@@ -3365,8 +3361,6 @@ with pkgs;
     usePipewire = false;
     usePulseaudio = true;
   };
-
-  jazzy = callPackage ../development/tools/jazzy { };
 
   jc = with python3Packages; toPythonApplication jc;
 
@@ -4355,8 +4349,6 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
-  solanum = callPackage ../servers/irc/solanum { };
-
   solc-select = with python3Packages; toPythonApplication solc-select;
 
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
@@ -4407,8 +4399,6 @@ with pkgs;
   };
 
   systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
-
-  t = callPackage ../tools/misc/t { };
 
   tartube = callPackage ../applications/video/tartube { };
 
@@ -7225,14 +7215,6 @@ with pkgs;
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
-
-  pmd = callPackage ../development/tools/analysis/pmd {
-    openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
-  jdepend = callPackage ../development/tools/analysis/jdepend {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
@@ -10660,8 +10642,6 @@ with pkgs;
     elixir = elixir_1_17.override { inherit erlang; };
   };
 
-  rake = callPackage ../development/tools/build-managers/rake { };
-
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = cctools;
@@ -10713,8 +10693,6 @@ with pkgs;
     # see also openssl, which has/had this same trick
   };
 
-  sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
-
   spacecookie = haskell.lib.compose.justStaticExecutables haskellPackages.spacecookie;
 
   inherit (callPackages ../servers/http/tomcat { })
@@ -10724,8 +10702,6 @@ with pkgs;
     ;
 
   tomcat = tomcat11;
-
-  torque = callPackage ../servers/computing/torque { };
 
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
@@ -11577,8 +11553,6 @@ with pkgs;
     protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
   };
 
-  roapi-http = callPackage ../servers/roapi/http.nix { };
-
   shaderc = callPackage ../development/compilers/shaderc {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -12276,11 +12250,6 @@ with pkgs;
     codec2 = codec2.override {
       freedvSupport = true;
     };
-  };
-
-  freemind = callPackage ../applications/misc/freemind {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   inherit
@@ -14127,10 +14096,6 @@ with pkgs;
 
   webcamoid = qt6Packages.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_36; };
-
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_36; };
-
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
   };
@@ -15416,8 +15381,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  cvc5 = callPackage ../applications/science/logic/cvc5 { };
-
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
@@ -16004,8 +15967,6 @@ with pkgs;
   nix-index = callPackage ../tools/package-management/nix-index/wrapper.nix { };
 
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
-
-  nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   nix-prefetch-github = with python3Packages; toPythonApplication nix-prefetch-github;
 
