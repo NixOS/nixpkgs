@@ -2,6 +2,7 @@
   _7zz,
   avalonia,
   buildDotnetModule,
+  callPackage,
   desktop-file-utils,
   dotnetCorePackages,
   fetchgit,
@@ -33,6 +34,8 @@ buildDotnetModule (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  gameHashes = callPackage ./game-hashes { };
+
   enableParallelBuilding = false;
 
   # If the whole solution is published, there seems to be a race condition where
@@ -62,12 +65,10 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   patches = [
-    ./patches/no-game-hashes-db.patch
     ./patches/no-games-json.patch
   ];
 
   prePatch = ''
-    dos2unix src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
     dos2unix src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
   '';
 
@@ -80,7 +81,10 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)buildDate.txt' "$(realpath buildDate.txt)"
 
-    unix2dos src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
+    # Use a pinned version of the game hashes db
+    substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
+
     unix2dos src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
   '';
 
@@ -154,13 +158,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   disabledTests = [
-    # Fails attempting to download game hashes DB from github:
-    # HttpRequestException : Resource temporarily unavailable (github.com:443)
-    "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
-    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
-    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
-    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
-
     # Fails attempting to fetch SMAPI version data from github:
     # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
     "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
