@@ -26,14 +26,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid-helper";
-  version = "0.1.2";
+  version = "0.2.3";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "ayasa520";
     repo = "waydroid-helper";
     tag = "v${version}";
-    hash = "sha256-dYduO5Wi8Ia/pR1xQKPhC6Ek/1Q9fm2RaVuhm9KYiU0=";
+    hash = "sha256-QxtCxujf7S3YRx/4rRMecFBomP+9tqrIBdYhc3WQT20=";
   };
 
   postPatch = ''
@@ -104,7 +104,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Provides a user-friendly way to configure Waydroid and install extensions";
+    description = "User-friendly way to configure Waydroid and install extensions, including Magisk and ARM translation";
     homepage = "https://github.com/ayasa520/waydroid-helper";
     changelog = "https://github.com/ayasa520/waydroid-helper/releases/tag/${src.tag}";
     mainProgram = "waydroid-helper";
