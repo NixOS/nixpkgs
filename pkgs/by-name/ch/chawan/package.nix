@@ -12,6 +12,7 @@
   brotli,
   zlib,
   gitUpdater,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,6 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/cha ${makeWrapperArgs}
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
