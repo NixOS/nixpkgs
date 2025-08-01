@@ -957,6 +957,8 @@ self: super: with self; {
 
   asn1tools = callPackage ../development/python-modules/asn1tools { };
 
+  asncounter = callPackage ../development/python-modules/asncounter { };
+
   aspectlib = callPackage ../development/python-modules/aspectlib { };
 
   aspell-python = callPackage ../development/python-modules/aspell-python { };
