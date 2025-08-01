@@ -1010,8 +1010,8 @@ rec {
       "sha256-qehLjC74V6sgo+VGJLNVbgGO6I9MQTXZP3BtQGCjxtE=";
 
   mypy-boto3-pca-connector-ad =
-    buildMypyBoto3Package "pca-connector-ad" "1.39.0"
-      "sha256-Chwpz+gUvf5KBJDH9Gh3E8cQcgc27fHgYUdoUztijTc=";
+    buildMypyBoto3Package "pca-connector-ad" "1.40.0"
+      "sha256-6kAZW0V/7XXEGCQl24brFhR3utzZ0Ftg8dTUgRN40iU=";
 
   mypy-boto3-personalize =
     buildMypyBoto3Package "personalize" "1.39.0"
