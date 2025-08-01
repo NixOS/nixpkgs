@@ -25,8 +25,8 @@ llvmPackages_20.stdenv.mkDerivation {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "c3e4a93c0a59281cb53c6991c2c4b67e224a37d8";
-    hash = "sha256-p4XZwmehboq7CZnVO4J+QzyTNIjvJEplBfVPPvzVepw=";
+    rev = "4e8e789876329e03697d1542718fbc21b5053aa5";
+    hash = "sha256-sfNkMeOEvmBbFv2mDnKs3UGPxFRvts9wcgcA23endUI=";
   };
 
   dontConfigure = true;
@@ -59,8 +59,8 @@ llvmPackages_20.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    python3 xenia-build setup
-    python3 xenia-build build --config=release
+    python3 xenia-build.py setup
+    python3 xenia-build.py build --config=release
     runHook postBuild
   '';
 
