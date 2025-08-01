@@ -49,18 +49,15 @@ stdenv.mkDerivation rec {
     "bin"
   ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "PKCS11_MODULE" "${lib.getLib opensc}/lib/opensc-pkcs11.so")
+  ];
+
   # This wants to link to ${CMAKE_DL_LIBS} (ltdl), and there doesn't seem to be
   # a way to tell CMake where this should be pulled from.
   # A cleaner fix would probably be to patch cmake to use
   # `-L${libtool.lib}/lib -ltdl` for `CMAKE_DL_LIBS`, but that's a world rebuild.
   env.NIX_LDFLAGS = "-L${libtool.lib}/lib";
-
-  # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
-  # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.
-  # https://github.com/open-eid/cmake/pull/35 might be an alternative.
-  postFixup = ''
-    patchelf --add-rpath ${opensc}/lib/pkcs11 $lib/lib/libdigidocpp.so
-  '';
 
   meta = with lib; {
     description = "Library for creating DigiDoc signature files";
