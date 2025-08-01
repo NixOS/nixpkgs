@@ -7590,8 +7590,6 @@ with pkgs;
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 
-  travis = callPackage ../development/tools/misc/travis { };
-
   tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) { };
 
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
@@ -11473,6 +11471,13 @@ with pkgs;
   };
 
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix { });
+
+  /**
+    A JSON Schema Catalog is a mapping from URIs to JSON Schema documents.
+
+    It enables offline use, e.g. in build processes, and it improves performance, robustness and safety.
+  */
+  inherit (callPackage ../data/json-schema/default.nix { }) jsonSchemaCatalogs;
 
   kde-rounded-corners =
     kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
@@ -16482,6 +16487,10 @@ with pkgs;
 
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
+  };
+
+  openfreebuds = callPackage ../by-name/op/openfreebuds/package.nix {
+    python3Packages = python3Full.pkgs;
   };
 
   davis = callPackage ../by-name/da/davis/package.nix {

@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     pexpect
     pytestCheckHook
     pytest-xdist
+    tenacity
   ];
 
   preCheck = ''
