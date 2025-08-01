@@ -694,8 +694,8 @@ rec {
       "sha256-UuQ4NUIV3ofY8/+q1dBm3DprGx//lOqngX+zzQIwvn8=";
 
   mypy-boto3-iotwireless =
-    buildMypyBoto3Package "iotwireless" "1.39.17"
-      "sha256-C/BE7hpb30LKAJQwNJuBIA6dtKs92MrdwfAiubvkJlY=";
+    buildMypyBoto3Package "iotwireless" "1.40.0"
+      "sha256-Kj/g5lCH7AgHRlSU6od3O4j1OilposHoDP1hYX4S+fs=";
 
   mypy-boto3-ivs =
     buildMypyBoto3Package "ivs" "1.39.0"
