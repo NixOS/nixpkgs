@@ -970,8 +970,8 @@ rec {
       "sha256-rQDR9czspxeRs84kpSC+tUVeXtAXis6ZCN2qu9IRNmg=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.39.5"
-      "sha256-GVl2DEuM5xkd0Jm1zJW6tYr6990GnYjlZ5xi2roPUss=";
+    buildMypyBoto3Package "opensearch" "1.40.0"
+      "sha256-DduRVsWhYZPX+mQAj1j1kA00rilUHKA4SnmehgS4hYU=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.39.16"
