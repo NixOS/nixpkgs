@@ -108,7 +108,7 @@ python3Packages.buildPythonApplication rec {
     description = "Simple GUI for Linux OneDrive Client, with multi-account support";
     mainProgram = "onedrivegui";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ philipdb ];
     platforms = lib.platforms.linux;
   };
 }
