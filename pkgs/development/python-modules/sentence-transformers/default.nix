@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -123,10 +122,6 @@ buildPythonPackage rec {
     "tests/test_pretrained_stsb.py"
     "tests/test_sentence_transformer.py"
     "tests/test_train_stsb.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Segfault
-    "tests/test_sparse_tensor.py"
   ];
 
   # Sentence-transformer needs a writable hf_home cache
