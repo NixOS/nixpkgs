@@ -3,6 +3,7 @@
   hash,
   cargoHash,
   unsupported ? false,
+  eolDate ? null,
 }:
 
 {
@@ -42,6 +43,13 @@ let
     (./. + "/provision-patches/${versionUnderscored}/oauth2-basic-secret-modify.patch")
     (./. + "/provision-patches/${versionUnderscored}/recover-account.patch")
   ];
+
+  upgradeNote = ''
+    Please upgrade by verifying `kanidmd domain upgrade-check` and choosing the
+    next version with `services.kanidm.package = pkgs.kanidm_1_x;`
+
+    See upgrade guide at https://kanidm.github.io/kanidm/master/server_updates.html
+  '';
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
@@ -132,10 +140,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
 
     updateScript = lib.optionals (!enableSecretProvisioning) (nix-update-script {
-      # avoid spurious releases and tags such as "debs"
       extraArgs = [
         "-vr"
-        "v([0-9\\.]*)"
+        "v(${lib.versions.major kanidm.version}\\.${lib.versions.minor kanidm.version}\\.[0-9]*)"
         "--override-filename"
         "pkgs/by-name/ka/kanidm/${versionUnderscored}.nix"
       ];
@@ -143,27 +150,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     inherit enableSecretProvisioning;
     withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
+
+    eolMessage = lib.optionalString (eolDate != null) ''
+      kanidm ${lib.versions.majorMinor version} is deprecated and will reach end-of-life on ${eolDate}
+
+      ${upgradeNote}
+    '';
   };
 
   # can take over 4 hours on 2 cores and needs 16GB+ RAM
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
     description = "Simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
-    license = licenses.mpl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       adamcstephens
       Flakebi
     ];
     knownVulnerabilities = lib.optionals unsupported [
       ''
-        kanidm ${version} has reached EOL.
+        kanidm ${lib.versions.majorMinor version} has reached end-of-life.
 
-        Please upgrade by verifying `kanidmd domain upgrade-check` and choosing the next version with `services.kanidm.package = pkgs.kanidm_1_x;`
-        See upgrade guide at https://kanidm.github.io/kanidm/master/server_updates.html
+        ${upgradeNote}
       ''
     ];
   };
