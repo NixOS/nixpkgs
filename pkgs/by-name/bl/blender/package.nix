@@ -99,7 +99,6 @@ let
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
-    withOsl = false;
   });
 
   libdecor' = libdecor.overrideAttrs (old: {
@@ -165,7 +164,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
-    (lib.cmakeBool "WITH_CYCLES_OSL" false)
+    (lib.cmakeBool "WITH_CYCLES_OSL" true)
     (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
@@ -265,6 +264,7 @@ stdenv'.mkDerivation (finalAttrs: {
     pugixml
     python3
     python3Packages.materialx
+    python3Packages.openshadinglanguage
     rubberband
     zlib
     zstd
@@ -322,6 +322,7 @@ stdenv'.mkDerivation (finalAttrs: {
     [
       ps.materialx
       ps.numpy_1
+      ps.openshadinglanguage
       ps.requests
       ps.zstandard
     ]
