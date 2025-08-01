@@ -3,4 +3,5 @@ import ./generic.nix {
   hash = "sha256-ui3w1HDHXHARsjQ3WtJfZbM7Xgg3ODnUneXJMQwaOMw=";
   cargoHash = "sha256-KJGELBzScwsLd6g3GR9Vk0nfDU2EjZBfXwlXJ+bZb1k=";
   patchDir = ./patches/1_6;
+  eolDate = "2025-09-01";
 }
