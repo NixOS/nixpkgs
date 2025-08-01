@@ -16,14 +16,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsd2dsl";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "nongeneric";
     repo = "lsd2dsl";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0UsxDNpuWpBrfjh4q3JhZnOyXhHatSa3t/cApiG2JzM=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     exec = "lsd2dsl-qtgui";
     desktopName = "lsd2dsl";
     genericName = "lsd2dsl";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [
       "Dictionary"
       "FileTools"
@@ -75,14 +75,14 @@ stdenv.mkDerivation rec {
     install -Dm755 console/lsd2dsl gui/lsd2dsl-qtgui -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rcebits.com/lsd2dsl/";
     description = "Lingvo dictionaries decompiler";
     longDescription = ''
       A decompiler for ABBYY Lingvo’s proprietary dictionaries.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
-}
+})
