@@ -524,6 +524,7 @@ let
       admins = ${toLua cfg.admins}
 
       modules_enabled = {
+        "admin_shell";  -- for prosodyctl
         ${lib.concatStringsSep "\n  " (
           lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
         )}
