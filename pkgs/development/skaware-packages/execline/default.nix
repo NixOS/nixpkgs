@@ -96,4 +96,14 @@ skawarePackages.buildPackage {
         execlineb -W test.el
       '';
     };
+
+  # Flatten a command-line that uses lists for
+  # execline blocks into the quoted block format.
+  passthru.quoteArgs =
+    let
+      f = builtins.foldl' (
+        acc: arg: acc ++ (if builtins.isList arg then map (_: " ${_}") (f arg) ++ [ "" ] else [ arg ])
+      ) [ ];
+    in
+    f;
 }
