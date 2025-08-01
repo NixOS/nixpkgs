@@ -16687,6 +16687,8 @@ self: super: with self; {
 
   snappy-manifolds = callPackage ../development/python-modules/snappy-manifolds { };
 
+  snapshot-restore-py = callPackage ../development/python-modules/snapshot-restore-py { };
+
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 
   snaptime = callPackage ../development/python-modules/snaptime { };
