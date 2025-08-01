@@ -1131,8 +1131,6 @@ with pkgs;
 
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
 
-  ronin = callPackage ../tools/security/ronin { };
-
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
@@ -1768,8 +1766,6 @@ with pkgs;
 
   hwi = with python3Packages; toPythonApplication hwi;
 
-  kavita = callPackage ../servers/web-apps/kavita { };
-
   pass = callPackage ../tools/security/pass { };
 
   pass-nodmenu = callPackage ../tools/security/pass {
@@ -2046,8 +2042,6 @@ with pkgs;
     aspellDicts_de = aspellDicts.de;
     aspellDicts_en = aspellDicts.en;
   };
-
-  h = callPackage ../tools/misc/h { };
 
   discourse = callPackage ../servers/web-apps/discourse { };
 
@@ -3668,8 +3662,6 @@ with pkgs;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
-  lidarr = callPackage ../servers/lidarr { };
-
   inherit
     ({
       limesuite = callPackage ../applications/radio/limesuite {
@@ -4070,8 +4062,6 @@ with pkgs;
 
   pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
 
-  pgsync = callPackage ../development/tools/database/pgsync { };
-
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
@@ -4158,8 +4148,6 @@ with pkgs;
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
 
-  pws = callPackage ../tools/misc/pws { };
-
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
@@ -4222,8 +4210,6 @@ with pkgs;
   rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
   rapidgzip = with python3Packages; toPythonApplication rapidgzip;
-
-  rar = callPackage ../tools/archivers/rar { };
 
   ratarmount = with python3Packages; toPythonApplication ratarmount;
 
@@ -4516,8 +4502,6 @@ with pkgs;
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
       { };
 
-  twurl = callPackage ../tools/misc/twurl { };
-
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
   uftraceFull = uftrace.override {
@@ -4589,8 +4573,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  whatweb = callPackage ../tools/security/whatweb { };
-
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
 
   woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker/cli.nix { };
@@ -4599,19 +4581,11 @@ with pkgs;
     callPackage ../development/tools/continuous-integration/woodpecker/server.nix
       { };
 
-  wpscan = callPackage ../tools/security/wpscan { };
-
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
 
-  td = callPackage ../tools/misc/td { };
-
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
-
-  tremor-rs = callPackage ../tools/misc/tremor-rs { };
-
-  tremor-language-server = callPackage ../tools/misc/tremor-rs/ls.nix { };
 
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
@@ -7355,8 +7329,6 @@ with pkgs;
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
 
-  mdl = callPackage ../development/tools/misc/mdl { };
-
   meraki-cli = python3Packages.callPackage ../tools/admin/meraki-cli { };
 
   python-matter-server =
@@ -7475,8 +7447,6 @@ with pkgs;
   premake5 = callPackage ../development/tools/misc/premake/5.nix { };
 
   premake = premake4;
-
-  pry = callPackage ../development/tools/pry { };
 
   pycritty = with python3Packages; toPythonApplication pycritty;
 
@@ -9424,8 +9394,6 @@ with pkgs;
     };
   };
 
-  rover = callPackage ../development/tools/rover { };
-
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
   schroedinger = callPackage ../development/libraries/schroedinger { };
@@ -10696,8 +10664,6 @@ with pkgs;
     elixir = elixir_1_17.override { inherit erlang; };
   };
 
-  qcal = callPackage ../tools/networking/qcal/default.nix { };
-
   rake = callPackage ../development/tools/build-managers/rake { };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
@@ -11188,8 +11154,6 @@ with pkgs;
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
-
-  sass = callPackage ../development/tools/sass { };
 
   sddm-astronaut = qt6Packages.callPackage ../data/themes/sddm-astronaut { };
 
@@ -13615,8 +13579,6 @@ with pkgs;
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
-  scribus = callPackage ../applications/office/scribus/default.nix { };
-
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seq66 = qt5.callPackage ../applications/audio/seq66 { };
@@ -14196,8 +14158,6 @@ with pkgs;
     webpSupport = false;
     xwaylandSupport = false;
   };
-
-  wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
     electron = electron_36;
@@ -15645,8 +15605,6 @@ with pkgs;
   raspa = callPackage ../applications/science/molecular-dynamics/raspa { };
 
   raspa-data = callPackage ../applications/science/molecular-dynamics/raspa/data.nix { };
-
-  weka = callPackage ../applications/science/math/weka { jre = openjdk11; };
 
   yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
 
