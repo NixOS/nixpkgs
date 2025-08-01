@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
   cmakeFlags = [
+    "-DBUILD_BENCHMARKS=OFF"
     (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON")
   ]
   ++ (
