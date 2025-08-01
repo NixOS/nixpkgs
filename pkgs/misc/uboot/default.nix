@@ -210,6 +210,20 @@ in
     };
   };
 
+  ubootEnvTools = buildUBoot {
+    pname = "uboot-envtools-only_defconfig";
+    defconfig = "tools-only_defconfig";
+    installDir = "$out/bin";
+    hardeningDisable = [ ];
+    dontStrip = false;
+    extraMeta.platforms = lib.platforms.linux;
+    extraMakeFlags = [ "envtools" ];
+    filesToInstall = [ "tools/env/fw_printenv" ];
+    postInstall = ''
+      ln -sf fw_printenv $out/bin/fw_setenv
+    '';
+  };
+
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
