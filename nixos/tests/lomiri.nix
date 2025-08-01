@@ -64,7 +64,7 @@ let
         ];
       }
       ''
-        magick -size 640x480 canvas:white -pointsize 30 -fill black -annotate +100+100 '${wallpaperText}' $out
+        magick -size 640x480 canvas:black -pointsize 30 -fill white -annotate +100+100 '${wallpaperText}' $out
       '';
 
   lomiriWallpaperDconfSettings = pkgs: {
@@ -703,7 +703,8 @@ in
                 machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
 
                 # Start page shows current time
-                wait_for_text(r"(AM|PM)")
+                # And the greeter *actually* renders our wallpaper!
+                wait_for_text(r"(AM|PM|Lorem|ipsum)")
                 machine.screenshot("lomiri_greeter_launched")
 
                 # Advance to login part
@@ -717,6 +718,7 @@ in
 
                 # Output rendering from Lomiri has started when it starts printing performance diagnostics
                 machine.wait_for_console_text("Last frame took")
+                # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
                 # Look for datetime's clock, one of the last elements to load
                 wait_for_text(r"(AM|PM)")
                 machine.screenshot("lomiri_launched")
@@ -819,7 +821,7 @@ in
       ocr = [ "Log Out" ];
       extraCheck = ''
         # We should be able to log out and return to the greeter
-        mouse_click(600, 280) # "Log Out"
+        mouse_click(600, 250) # "Log Out"
         mouse_click(340, 220) # confirm logout
         machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
       '';
