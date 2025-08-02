@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "3.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "fabioz";
     repo = "PyDev.Debugger";

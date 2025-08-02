@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "whodap";

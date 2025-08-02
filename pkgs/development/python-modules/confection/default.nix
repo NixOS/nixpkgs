@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "confection";

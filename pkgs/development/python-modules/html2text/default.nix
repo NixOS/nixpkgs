@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2024.2.26";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Alir3z4";
     repo = "html2text";

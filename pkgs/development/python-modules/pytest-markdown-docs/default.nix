@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "modal-com";
     repo = "pytest-markdown-docs";

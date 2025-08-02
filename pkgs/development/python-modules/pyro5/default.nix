@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "5.15";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "Pyro5";
     inherit version;

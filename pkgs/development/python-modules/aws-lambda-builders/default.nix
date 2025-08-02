@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.53.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";

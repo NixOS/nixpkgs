@@ -35,8 +35,6 @@ buildPythonPackage rec {
   version = "3.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";

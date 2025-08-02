@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "django-es";
     repo = "django-elasticsearch-dsl";

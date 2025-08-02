@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2024.01.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioridwell";

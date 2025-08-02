@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "rabbit72";
     repo = "single-source";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   pname = "jarowinkler";
   version = "2.0.1";
 
-  disabled = pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchFromGitHub {

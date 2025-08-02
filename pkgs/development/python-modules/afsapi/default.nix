@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.2.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "python-afsapi";

@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "10.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "alphagov";
     repo = "notifications-python-client";

@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.39";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-utils";

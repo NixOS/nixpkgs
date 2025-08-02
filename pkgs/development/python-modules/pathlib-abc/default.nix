@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "pathlib_abc";
     inherit version;

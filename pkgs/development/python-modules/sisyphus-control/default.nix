@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "3.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "sisyphus-control";

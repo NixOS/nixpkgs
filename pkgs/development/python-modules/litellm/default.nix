@@ -49,8 +49,6 @@ buildPythonPackage rec {
   version = "1.74.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";

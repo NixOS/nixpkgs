@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.13.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "messense";
     repo = "typst-py";

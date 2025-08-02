@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.13.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";

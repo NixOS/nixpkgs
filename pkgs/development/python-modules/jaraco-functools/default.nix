@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "4.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "jaraco_functools";
     inherit version;

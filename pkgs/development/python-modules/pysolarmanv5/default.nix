@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.0.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jmccrohan";
     repo = "pysolarmanv5";

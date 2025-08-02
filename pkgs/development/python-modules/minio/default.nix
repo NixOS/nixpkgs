@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "7.2.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";

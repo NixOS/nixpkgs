@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
     repo = "ghrepo-stats";

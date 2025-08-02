@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "12.21.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "azure_storage_file_share";
     inherit version;

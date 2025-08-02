@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.8.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ewels";
     repo = "rich-click";

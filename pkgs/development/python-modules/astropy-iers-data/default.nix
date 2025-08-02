@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.2025.3.31.0.36.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy-iers-data";

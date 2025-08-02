@@ -19,7 +19,6 @@
 buildPythonPackage rec {
   pname = "uvicorn";
   version = "0.34.2";
-  disabled = pythonOlder "3.8";
 
   pyproject = true;
 

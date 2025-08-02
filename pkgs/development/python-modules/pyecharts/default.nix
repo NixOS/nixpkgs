@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.0.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pyecharts";
     repo = "pyecharts";

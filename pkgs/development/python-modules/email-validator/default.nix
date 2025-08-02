@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "email_validator";
     inherit version;

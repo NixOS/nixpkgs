@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.27.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "google_cloud_texttospeech";
     inherit version;

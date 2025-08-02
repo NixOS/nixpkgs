@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio-asyncio";

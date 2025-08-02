@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "3.3.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nephila";
     repo = "django-app-helper";

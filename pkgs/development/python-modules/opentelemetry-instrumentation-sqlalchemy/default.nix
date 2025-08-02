@@ -23,8 +23,6 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-sqlalchemy";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-sqlalchemy";
 
   build-system = [ hatchling ];

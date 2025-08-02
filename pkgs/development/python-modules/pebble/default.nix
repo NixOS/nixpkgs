@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "5.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "noxdafox";
     repo = "pebble";

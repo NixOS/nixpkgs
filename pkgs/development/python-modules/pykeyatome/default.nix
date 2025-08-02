@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jugla";
     repo = "pyKeyAtome";

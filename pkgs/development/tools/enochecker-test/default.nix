@@ -25,8 +25,6 @@ buildPythonApplication rec {
   version = "0.9.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version;
     pname = "enochecker_test";

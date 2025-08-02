@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2025.5.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "stdlibs";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.0.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "napari-nifti";

@@ -14,7 +14,6 @@ buildPythonPackage rec {
   pname = "slicer";
   version = "0.0.8";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

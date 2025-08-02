@@ -24,7 +24,6 @@ buildPythonPackage rec {
   pname = "rio-tiler";
   version = "7.3.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";

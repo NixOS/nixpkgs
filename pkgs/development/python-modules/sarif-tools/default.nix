@@ -26,8 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-Dt8VcYIIpujRp2sOlK2JPGzy5cYZDXdXgnvT/+h3DuU=";
   };
 
-  disabled = pythonOlder "3.8";
-
   build-system = [ poetry-core ];
 
   dependencies = [

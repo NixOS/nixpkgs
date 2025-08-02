@@ -23,8 +23,6 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mlgig";
     repo = "mrsqm";

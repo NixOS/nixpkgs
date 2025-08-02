@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "python-ubus-rpc";

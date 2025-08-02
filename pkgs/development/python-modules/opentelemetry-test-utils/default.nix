@@ -16,8 +16,6 @@ buildPythonPackage {
   version = opentelemetry-instrumentation.version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 
   build-system = [ hatchling ];

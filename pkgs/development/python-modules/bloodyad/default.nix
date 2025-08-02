@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.1.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";

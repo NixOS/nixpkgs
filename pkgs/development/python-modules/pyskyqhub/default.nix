@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.1.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
     repo = "skyq_hub";

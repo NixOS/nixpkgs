@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "3.10.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "jira";

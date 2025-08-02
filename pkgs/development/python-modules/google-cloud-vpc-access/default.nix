@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.13.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "google_cloud_vpc_access";
     inherit version;

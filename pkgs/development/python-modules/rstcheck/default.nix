@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "6.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck";

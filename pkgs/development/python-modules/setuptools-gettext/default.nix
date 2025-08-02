@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.1.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "setuptools-gettext";

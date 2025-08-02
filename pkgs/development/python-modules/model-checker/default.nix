@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.9.31";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "model_checker";
     inherit version;

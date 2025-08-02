@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "spyse-com";
     repo = "spyse-python";

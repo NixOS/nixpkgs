@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.2.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "IceBotYT";
     repo = "linear-garage-door";

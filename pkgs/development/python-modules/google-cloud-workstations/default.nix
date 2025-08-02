@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.5.15";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "google_cloud_workstations";
     inherit version;

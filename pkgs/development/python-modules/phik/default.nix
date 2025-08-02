@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.12.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "KaveIO";
     repo = "PhiK";

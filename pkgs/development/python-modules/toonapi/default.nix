@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-toonapi";

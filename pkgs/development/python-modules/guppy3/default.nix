@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
     repo = "guppy3";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.8.0.62.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iterfzf";

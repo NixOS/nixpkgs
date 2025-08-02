@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "22.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";

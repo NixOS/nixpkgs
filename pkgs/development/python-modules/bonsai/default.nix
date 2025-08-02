@@ -16,8 +16,6 @@ buildPythonPackage rec {
   pname = "bonsai";
   version = "1.5.3";
 
-  disabled = pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchFromGitHub {

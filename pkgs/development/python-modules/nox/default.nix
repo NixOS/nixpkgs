@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2024.10.09";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "wntrblm";
     repo = "nox";

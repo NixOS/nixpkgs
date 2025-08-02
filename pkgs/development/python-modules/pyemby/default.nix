@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyemby";

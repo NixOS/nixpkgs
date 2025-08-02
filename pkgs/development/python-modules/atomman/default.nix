@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "1.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   pname = "blurhash-python";
   version = "1.2.2";
 
-  disabled = pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchFromGitHub {
