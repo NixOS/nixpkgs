@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "4.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";

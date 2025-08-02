@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.18.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "riscv-config";

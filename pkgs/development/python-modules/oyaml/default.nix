@@ -14,8 +14,6 @@ buildPythonPackage {
   version = "unstable-2021-12-03";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "oyaml";

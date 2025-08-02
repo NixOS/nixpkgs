@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "F-Secure";
     repo = "pytest-voluptuous";

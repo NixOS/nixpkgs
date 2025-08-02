@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.3.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "pkgutil_resolve_name";
     inherit version;

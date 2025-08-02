@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "bdcht";
     repo = "crysp";

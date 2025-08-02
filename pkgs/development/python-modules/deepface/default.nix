@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "0.0.93";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";

@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.10.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "MatMaul";
     repo = "pynetgear";

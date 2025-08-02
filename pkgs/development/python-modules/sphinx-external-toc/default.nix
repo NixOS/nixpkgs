@@ -15,8 +15,6 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "sphinx_external_toc";

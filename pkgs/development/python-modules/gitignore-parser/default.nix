@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.1.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mherrmann";
     repo = "gitignore_parser";

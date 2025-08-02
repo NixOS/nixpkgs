@@ -21,8 +21,6 @@ buildPythonPackage {
   inherit pname version src;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-n8IDl1msu2wn6YSsRJDy48M8qo96cXD8n+2HeU2WspE=";

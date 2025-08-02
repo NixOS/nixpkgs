@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "mediafile";

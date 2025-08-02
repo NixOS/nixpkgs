@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.35.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_dns";
     inherit version;

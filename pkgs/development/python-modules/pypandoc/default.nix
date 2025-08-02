@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.13";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "JessicaTegner";
     repo = "pypandoc";

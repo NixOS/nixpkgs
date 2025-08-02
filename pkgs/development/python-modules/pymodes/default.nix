@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.20";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "junzis";
     repo = "pyModeS";

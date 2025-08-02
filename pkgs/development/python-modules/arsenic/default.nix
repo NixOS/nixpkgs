@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "21.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "HENNGE";
     repo = "arsenic";

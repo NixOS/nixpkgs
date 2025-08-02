@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.6.30";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "motion-blinds";

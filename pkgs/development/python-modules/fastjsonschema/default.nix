@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.21.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "horejsek";
     repo = "python-fastjsonschema";

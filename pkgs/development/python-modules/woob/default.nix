@@ -28,7 +28,6 @@ buildPythonPackage rec {
   pname = "woob";
   version = "3.7";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "woob";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "ha-ffmpeg";

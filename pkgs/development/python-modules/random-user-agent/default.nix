@@ -11,8 +11,6 @@ buildPythonPackage {
   version = "1.0.1-unstable-2018-12-26";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Luqman-Ud-Din";
     repo = "random_user_agent";

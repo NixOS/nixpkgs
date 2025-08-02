@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.19.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_tasks";
     inherit version;

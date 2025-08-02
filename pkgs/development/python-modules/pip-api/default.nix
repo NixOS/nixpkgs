@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.0.34";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "di";
     repo = "pip-api";

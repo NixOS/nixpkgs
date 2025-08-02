@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "11.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "azure_mgmt_eventhub";
     inherit version;

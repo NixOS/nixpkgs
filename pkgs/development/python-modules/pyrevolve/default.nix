@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.2.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = pname;

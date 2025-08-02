@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";
     inherit version;

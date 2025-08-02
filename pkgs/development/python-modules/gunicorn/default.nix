@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "23.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";

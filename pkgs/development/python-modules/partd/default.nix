@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dask";
     repo = "partd";

@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.13.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "MSeifert04";
     repo = "iteration_utilities";

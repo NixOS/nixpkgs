@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "8.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "spelling";

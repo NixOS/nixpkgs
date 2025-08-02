@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "sqlalchemy_continuum";
     inherit version;

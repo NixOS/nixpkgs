@@ -32,8 +32,6 @@ buildPythonPackage rec {
   version = "0.12.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.3.61";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "chimpler";
     repo = "pyhocon";

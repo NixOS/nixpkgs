@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.1.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pavoni";
     repo = "pyroon";

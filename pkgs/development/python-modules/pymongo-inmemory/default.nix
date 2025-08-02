@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "kaizendorks";
     repo = "pymongo_inmemory";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-plugin-utils";

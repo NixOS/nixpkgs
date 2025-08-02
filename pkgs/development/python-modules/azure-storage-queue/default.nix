@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "12.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "azure_storage_queue";
     inherit version;

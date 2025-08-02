@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "json-schema-for-humans";

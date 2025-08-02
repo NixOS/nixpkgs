@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.4.29";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";

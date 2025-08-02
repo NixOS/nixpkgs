@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "sectools";

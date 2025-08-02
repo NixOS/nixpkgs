@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.9.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = "getmac";

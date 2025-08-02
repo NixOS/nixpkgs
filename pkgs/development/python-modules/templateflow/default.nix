@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "24.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "templateflow";
     repo = "python-client";

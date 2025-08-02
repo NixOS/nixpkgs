@@ -24,7 +24,6 @@ buildPythonPackage rec {
   pname = "rouge-score";
   version = "0.1.2";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "rouge_score";

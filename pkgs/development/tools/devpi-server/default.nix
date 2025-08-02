@@ -35,8 +35,6 @@ buildPythonApplication rec {
   version = "6.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";

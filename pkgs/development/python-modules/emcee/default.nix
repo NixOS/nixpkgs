@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.1.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "emcee";

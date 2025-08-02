@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "1.2.2.post1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "build";

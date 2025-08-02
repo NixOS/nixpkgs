@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2025.7.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pyschlage";

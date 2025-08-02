@@ -14,8 +14,6 @@ buildPythonPackage {
   version = "1.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "freeman-lab";
     repo = "regional";

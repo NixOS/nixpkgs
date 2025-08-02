@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.15";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "docstring-to-markdown";

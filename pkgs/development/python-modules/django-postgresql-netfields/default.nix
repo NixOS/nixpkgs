@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jimfunk";
     repo = "django-postgresql-netfields";

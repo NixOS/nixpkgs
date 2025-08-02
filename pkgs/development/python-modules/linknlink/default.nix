@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "xuanxuan000";
     repo = "python-linknlink";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "25.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";

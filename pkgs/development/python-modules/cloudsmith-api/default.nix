@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.0.21";
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "cloudsmith_api";
     inherit format version;

@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "8.17.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "elastic-transport-python";

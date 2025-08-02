@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "14.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "azure_mgmt_redis";

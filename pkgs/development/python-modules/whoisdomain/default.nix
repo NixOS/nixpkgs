@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.20250220.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ods";
     repo = "pytest-logdog";

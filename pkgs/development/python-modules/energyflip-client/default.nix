@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.2.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dennisschroer";
     repo = "energyflip-client";

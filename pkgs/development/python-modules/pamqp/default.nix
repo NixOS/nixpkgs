@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "3.3.0";
   pname = "pamqp";
 
-  disabled = pythonOlder "3.7";
-
   pyproject = true;
 
   src = fetchFromGitHub {

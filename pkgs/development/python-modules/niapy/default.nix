@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";

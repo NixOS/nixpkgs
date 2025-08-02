@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "pathable";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "orsinium-labs";
     repo = "svg.py";

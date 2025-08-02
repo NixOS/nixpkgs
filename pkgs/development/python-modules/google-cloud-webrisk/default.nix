@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.18.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_webrisk";
     inherit version;

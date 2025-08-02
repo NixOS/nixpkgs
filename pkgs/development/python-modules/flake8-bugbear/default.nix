@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "24.12.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8-bugbear";

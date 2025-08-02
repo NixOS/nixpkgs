@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "4.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "django";
     repo = "channels_redis";

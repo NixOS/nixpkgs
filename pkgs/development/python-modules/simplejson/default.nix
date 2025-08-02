@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.20.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "simplejson";
     repo = "simplejson";

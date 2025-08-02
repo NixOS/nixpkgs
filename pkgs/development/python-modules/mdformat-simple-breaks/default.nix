@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "csala";
     repo = "mdformat-simple-breaks";

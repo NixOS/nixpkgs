@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jjlawren";
     repo = "sonos-websocket";

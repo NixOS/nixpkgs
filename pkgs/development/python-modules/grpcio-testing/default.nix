@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.74.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "grpcio_testing";
     inherit version;

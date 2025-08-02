@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "devenzo-com";
     repo = "epion_python";

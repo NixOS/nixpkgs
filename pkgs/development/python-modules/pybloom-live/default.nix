@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "pybloom_live";
     inherit version;

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dan-r";
     repo = "ohmepy";

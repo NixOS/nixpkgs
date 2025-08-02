@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.48";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ziv1234";
     repo = "python-dynalite-devices";

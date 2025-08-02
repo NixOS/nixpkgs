@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.1.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ollo69";
     repo = "pyasuswrt";

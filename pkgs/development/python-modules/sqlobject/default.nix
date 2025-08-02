@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "3.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sqlobject";
     repo = "sqlobject";

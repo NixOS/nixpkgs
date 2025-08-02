@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "1.24.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";

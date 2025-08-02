@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "12.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   outputs = [
     "out"
     "doc"

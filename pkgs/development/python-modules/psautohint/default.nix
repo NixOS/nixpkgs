@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = "psautohint";

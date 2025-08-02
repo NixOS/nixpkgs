@@ -18,8 +18,6 @@ let
     version = "25.0";
     pyproject = true;
 
-    disabled = pythonOlder "3.7";
-
     src = fetchPypi {
       inherit pname version;
       hash = "sha256-1EOHLJjWd79g9qHy+MHLdI6P52LSv50xSLVZkpWw/E8=";

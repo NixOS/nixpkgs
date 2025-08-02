@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.0.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mjmeli";
     repo = "pyduke-energy";

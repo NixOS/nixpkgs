@@ -37,8 +37,6 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-GS1bCDOKtdJkzgP3+CSWEUeHQ9lUcAHDT09QmPOOeVc=";
   };
 
-  disabled = python.pythonOlder "3.7";
-
   propagatedBuildInputs = with python.pkgs; [
     docopt
     lark

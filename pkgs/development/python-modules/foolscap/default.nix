@@ -24,8 +24,6 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-vWsAdUDbWQuG3e0oAtLq8rA4Ys2wg38fD/h+E1ViQQg=";

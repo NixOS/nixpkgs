@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "python_crontab";
     inherit version;

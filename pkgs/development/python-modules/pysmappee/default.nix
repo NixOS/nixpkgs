@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.2.29";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "smappee";
     repo = "pysmappee";

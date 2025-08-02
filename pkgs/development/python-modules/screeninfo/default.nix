@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.8.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "screeninfo";

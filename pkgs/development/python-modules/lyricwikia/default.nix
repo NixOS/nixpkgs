@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.1.11";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "enricobacis";
     repo = "lyricwikia";

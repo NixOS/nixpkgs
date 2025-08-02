@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "3.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "apscheduler";

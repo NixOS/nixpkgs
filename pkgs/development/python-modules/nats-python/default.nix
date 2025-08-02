@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Gr1N";
     repo = "nats-python";

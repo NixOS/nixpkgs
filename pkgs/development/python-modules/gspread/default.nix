@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "6.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "burnash";
     repo = "gspread";

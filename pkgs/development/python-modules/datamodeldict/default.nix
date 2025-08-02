@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.9.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "DataModelDict";
     inherit version;

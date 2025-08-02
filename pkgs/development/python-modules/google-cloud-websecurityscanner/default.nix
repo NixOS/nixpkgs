@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.17.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_websecurityscanner";
     inherit version;

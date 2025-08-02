@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "2.6.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "urwid";
     repo = "urwid";

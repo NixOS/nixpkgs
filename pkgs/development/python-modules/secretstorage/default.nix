@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.3.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "SecretStorage";
     inherit version;

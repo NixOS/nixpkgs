@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "alkaline-ml";
     repo = "pmdarima";
