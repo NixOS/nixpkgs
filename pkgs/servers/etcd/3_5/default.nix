@@ -43,6 +43,8 @@ let
       version
       ;
 
+    __darwinAllowLocalNetworking = true;
+
     vendorHash = etcdServerVendorHash;
 
     modRoot = "./server";
