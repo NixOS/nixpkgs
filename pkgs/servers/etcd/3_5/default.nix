@@ -31,7 +31,6 @@ let
     homepage = "https://etcd.io/";
     maintainers = with maintainers; [
       dtomvan
-      offline
     ];
     platforms = platforms.darwin ++ platforms.linux;
   };
