@@ -289,7 +289,7 @@ with lib;
           echo "file vma $out/${config.image.fileName}" > $out/nix-support/hydra-build-products
         '';
       pveBaseConfigs = {
-        name = "proxmox-${cfg.filenameSuffix}";
+        name = config.image.baseName;
         baseName = config.image.baseName;
         inherit (cfg) partitionTableType;
         inherit (cfg.qemuConf) additionalSpace bootSize;
