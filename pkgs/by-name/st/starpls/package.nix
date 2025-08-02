@@ -1,57 +1,50 @@
 {
+  rustPlatform,
   lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
   testers,
   starpls,
+  fetchFromGitHub,
+  protobuf,
 }:
-
 let
-  manifest = lib.importJSON ./manifest.json;
+  commit = "db21acd3cb24893315dd601484c7d40689589e9a";
 in
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starpls";
-  version = manifest.version;
+  version = "0.1.22+${lib.substring 0 5 commit}";
 
-  src =
-    let
-      system = stdenv.hostPlatform.system;
-    in
-    fetchurl (manifest.assets.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchFromGitHub {
+    owner = "withered-magic";
+    repo = "starpls";
+    rev = commit;
+    hash = "sha256-t9kdpBKyGM61CKhtfO5urVVzyKpL0bX0pZuf0djDdCw=";
+  };
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+  cargoHash = "sha256-5xYfQRm7U7sEQiJEfjaLznoXUxHsxnLmIEA/OxTkjFg=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [
-    autoPatchelfHook
+  nativeBuildInputs = [
+    protobuf
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isElf [
-    (lib.getLib stdenv.cc.cc)
-  ];
-
-  installPhase = ''
-    install -D $src $out/bin/starpls
-  '';
+  # The tests assume Bazel build and environment variables set like
+  # RUNFILES_DIR which don't have an equivalent in Cargo.
+  doCheck = false;
 
   passthru = {
     tests.version = testers.testVersion {
       package = starpls;
       command = "starpls version";
-      version = "v${finalAttrs.version}";
+      version = "v0.1.22";
     };
-    updateScript = ./update.py;
   };
 
   meta = {
     description = "Language server for Starlark";
     homepage = "https://github.com/withered-magic/starpls";
     license = lib.licenses.asl20;
-    platforms = builtins.attrNames manifest.assets;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ aaronjheng ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "starpls";
   };
 })
