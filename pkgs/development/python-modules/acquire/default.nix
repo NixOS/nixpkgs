@@ -8,7 +8,6 @@
   minio,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   rich,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "acquire";
   version = "3.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";

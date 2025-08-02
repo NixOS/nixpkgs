@@ -13,7 +13,6 @@
   osprofiler,
   pbr,
   pyparsing,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "python-aodhclient";
   version = "3.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";

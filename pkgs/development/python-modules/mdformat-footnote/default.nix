@@ -5,15 +5,12 @@
   flit-core,
   mdformat,
   mdit-py-plugins,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-footnote";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

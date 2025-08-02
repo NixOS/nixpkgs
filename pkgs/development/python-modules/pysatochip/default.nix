@@ -8,14 +8,12 @@
   pyaes,
   pyopenssl,
   pyscard,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysatochip";
   version = "0.15.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "toporin";

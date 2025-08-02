@@ -9,7 +9,6 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pytest-ansible";
   version = "25.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ansible";

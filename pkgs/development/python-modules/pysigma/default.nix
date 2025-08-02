@@ -7,7 +7,6 @@
   poetry-core,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pysigma";
   version = "0.11.23";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";

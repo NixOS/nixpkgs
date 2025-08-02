@@ -11,7 +11,6 @@
   pillow,
   pycocotools,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
   schema,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "clarifai";
   version = "11.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Clarifai";

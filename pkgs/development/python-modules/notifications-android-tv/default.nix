@@ -7,14 +7,12 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "notifications-android-tv";
   version = "1.2.2";
   format = "pyproject";
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "engrbm87";

@@ -4,7 +4,6 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyserial,
   pyserial-asyncio-fast,
   pytest-asyncio,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "velbus-aio";
   version = "2025.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";

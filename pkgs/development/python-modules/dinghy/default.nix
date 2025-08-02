@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   aiofiles,
   aiohttp,
   backports-datetime-fromisoformat,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "dinghy";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nedbat";

@@ -8,7 +8,6 @@
   faust-cchardet,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   pytz,
   related,
   uonet-request-signer-hebe,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "vulcan-api";
   version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kapi2289";

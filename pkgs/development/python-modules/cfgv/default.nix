@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "cfgv";
   version = "3.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asottile";

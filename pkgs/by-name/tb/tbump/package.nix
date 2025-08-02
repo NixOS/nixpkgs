@@ -8,8 +8,6 @@ python3Packages.buildPythonApplication rec {
   version = "6.11.0";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version;
     pname = "tbump";

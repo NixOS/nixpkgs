@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   dacite,
   htmlmin,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "ydata-profiling";
   version = "4.16.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ydataai";

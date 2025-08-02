@@ -10,7 +10,6 @@
   matplotlib,
   parameterized,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   textparser,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "cantools";
   version = "40.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

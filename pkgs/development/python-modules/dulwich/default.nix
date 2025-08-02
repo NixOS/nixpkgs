@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fastimport,
   fetchFromGitHub,
@@ -12,7 +11,6 @@
   gpgme,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-rust,
   urllib3,
@@ -22,8 +20,6 @@ buildPythonPackage rec {
   pname = "dulwich";
   version = "0.22.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";

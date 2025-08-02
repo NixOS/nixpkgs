@@ -5,7 +5,6 @@
   fetchFromGitHub,
   bats,
   buildPythonApplication,
-  pythonOlder,
   callPackage,
   kicad,
   numpy,
@@ -29,8 +28,6 @@ buildPythonApplication rec {
   pname = "kikit";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "yaqwsx";

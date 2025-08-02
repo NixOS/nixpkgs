@@ -34,7 +34,6 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "40.0.1"; # Also update the hash in vectors.nix
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

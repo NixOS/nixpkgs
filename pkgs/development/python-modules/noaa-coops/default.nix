@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   fetchPypi,
   pandas,
   poetry-core,
-  pythonOlder,
   requests,
   zeep,
 }:
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "noaa-coops";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "noaa_coops";

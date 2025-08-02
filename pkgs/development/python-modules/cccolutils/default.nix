@@ -7,15 +7,12 @@
   krb5-c, # C krb5 library, not PyPI krb5
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cccolutils";
   version = "1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "CCColUtils";

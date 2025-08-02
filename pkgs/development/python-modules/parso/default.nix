@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonAtLeast,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "parso";
   version = "0.8.4";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,7 +8,6 @@
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
   typer,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "niaaml";
   version = "2.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";

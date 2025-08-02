@@ -5,15 +5,12 @@
   neo4j,
   llama-index-core,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-neo4j";
   version = "0.4.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_neo4j";

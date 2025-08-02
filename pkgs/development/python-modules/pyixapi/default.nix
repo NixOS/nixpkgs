@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pyjwt,
-  pythonOlder,
   pytestCheckHook,
   requests,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyixapi";
   version = "0.2.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "peering-manager";

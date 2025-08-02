@@ -9,7 +9,6 @@
   pandas,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   responses,
   setuptools,
   tenacity,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "azure-kusto-ingest";
   version = "4.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Azure";

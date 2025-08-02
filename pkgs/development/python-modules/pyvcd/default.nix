@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   six,
   pytestCheckHook,
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   version = "0.4.1";
   format = "setuptools";
   pname = "pyvcd";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

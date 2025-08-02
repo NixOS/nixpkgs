@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # deps
   setuptools,
   aiohttp,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "mautrix";
   version = "0.20.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mautrix";

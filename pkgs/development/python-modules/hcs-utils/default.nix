@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   poetry-core,
@@ -13,8 +12,6 @@ buildPythonPackage {
   pname = "hcs-utils";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "hcs";

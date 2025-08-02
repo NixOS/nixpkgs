@@ -12,7 +12,6 @@
   stringly,
   treelog,
   pytestCheckHook,
-  pythonOlder,
   pkgs,
 }:
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "nutils";
   version = "9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "evalf";

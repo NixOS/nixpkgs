@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   yarl,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "aionotion";
   version = "2024.03.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";

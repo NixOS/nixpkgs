@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "arcam-fmj";
   version = "1.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "elupus";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build-system
   poetry-core,
 
@@ -37,8 +36,6 @@ buildPythonPackage rec {
   pname = "pygerber";
   version = "2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Argmaster";

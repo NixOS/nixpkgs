@@ -15,15 +15,12 @@
   six,
   pytestCheckHook,
   mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "greynoise";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";

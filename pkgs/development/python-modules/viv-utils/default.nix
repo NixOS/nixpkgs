@@ -8,7 +8,6 @@
   pytest-sugar,
   pytestCheckHook,
   python-flirt,
-  pythonOlder,
   setuptools-scm,
   typing-extensions,
   vivisect,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "viv-utils";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "williballenthin";

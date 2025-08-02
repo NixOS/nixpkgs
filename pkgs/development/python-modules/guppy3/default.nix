@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   tkinter,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "guppy3";
   version = "3.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";

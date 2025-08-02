@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   # python dependencies
   click,
   python-dateutil,
@@ -33,16 +32,11 @@
   which,
   bash,
   glibcLocales,
-  # causes Python packaging conflict with any package requiring rdflib,
-  # so use the unpatched rdflib by default (disables Nipype provenance tracking);
-  # see https://github.com/nipy/nipype/issues/2888:
-  useNeurdflib ? false,
 }:
 
 buildPythonPackage rec {
   pname = "nipype";
   version = "1.10.0";
-  disabled = pythonOlder "3.7";
   format = "setuptools";
 
   src = fetchPypi {

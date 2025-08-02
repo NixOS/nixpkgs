@@ -5,15 +5,12 @@
   pdm-backend,
   pdm-pep517,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jsonref";
   version = "1.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gazpachoking";

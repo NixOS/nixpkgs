@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
   loguru,
   platformdirs,
@@ -28,8 +26,6 @@ buildPythonPackage rec {
   pname = "aria2p";
   version = "0.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pawamoy";

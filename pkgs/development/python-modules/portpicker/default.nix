@@ -4,15 +4,12 @@
   fetchPypi,
   setuptools,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "portpicker";
   version = "1.6.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

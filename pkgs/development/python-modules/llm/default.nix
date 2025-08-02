@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   setuptools,
   click-default-group,
   condense-json,
@@ -100,7 +98,7 @@ let
     }@args:
     let
       # Filter to just the attributes which are set to a true value.
-      setArgs = lib.filterAttrs (name: lib.id) args;
+      setArgs = lib.filterAttrs (_name: lib.id) args;
 
       # Make the derivation name reflect what's inside it, up to a certain limit.
       setArgNames = lib.attrNames setArgs;
@@ -144,7 +142,7 @@ let
     '';
 
   # Uses the `withPlugins` names to make a Python environment with everything.
-  withAllPlugins = withPlugins (lib.genAttrs withPluginsArgNames (name: true));
+  withAllPlugins = withPlugins (lib.genAttrs withPluginsArgNames (_name: true));
 
   # The function signature of `withPlugins` is the list of all the plugins `llm` knows about.
   # The plugin directory is at <https://llm.datasette.io/en/stable/plugins/directory.html>
@@ -169,8 +167,6 @@ let
     pyproject = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";

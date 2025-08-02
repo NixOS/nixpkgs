@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   stdenv,
 
   # build-system
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "pygal";
   version = "3.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

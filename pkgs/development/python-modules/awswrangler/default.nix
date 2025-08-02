@@ -18,7 +18,6 @@
   pyodbc,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   redshift-connector,
   requests-aws4auth,
   setuptools,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "awswrangler";
   version = "3.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";

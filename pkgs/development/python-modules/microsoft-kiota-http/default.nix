@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "microsoft-kiota-http";
   version = "1.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";

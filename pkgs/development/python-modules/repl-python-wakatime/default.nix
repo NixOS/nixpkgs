@@ -6,7 +6,6 @@
   keyring,
   ptpython,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-generate,
   setuptools-scm,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "repl-python-wakatime";
   version = "0.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

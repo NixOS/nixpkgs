@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   altair,
   ipytablewidgets,
   ipywidgets,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "vega";
   version = "4.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

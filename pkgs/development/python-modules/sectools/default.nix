@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   ldap3,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sectools";
   version = "1.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "p0dalirius";

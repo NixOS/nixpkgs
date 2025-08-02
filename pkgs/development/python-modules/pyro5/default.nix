@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   serpent,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyro5";
   version = "5.15";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Pyro5";

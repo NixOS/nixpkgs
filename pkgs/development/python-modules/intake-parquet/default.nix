@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pandas,
   pyarrow,
-  pythonOlder,
   setuptools,
   versioneer,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "intake-parquet";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "intake";

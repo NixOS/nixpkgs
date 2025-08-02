@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-dateutil,
   python-slugify,
-  pythonOlder,
   requests,
   setuptools,
   sortedcontainers,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "blinkpy";
   version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fronzbot";

@@ -12,7 +12,6 @@
   pytestCheckHook,
   python-lzo,
   python,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   wheel,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "fastparquet";
   version = "2024.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";

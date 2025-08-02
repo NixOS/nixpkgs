@@ -6,7 +6,6 @@
   numpy,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   siphash24,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytools";
   version = "2025.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

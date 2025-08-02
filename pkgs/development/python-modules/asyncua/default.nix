@@ -12,7 +12,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcontainers,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "asyncua";
   version = "1.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";

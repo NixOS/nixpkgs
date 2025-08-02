@@ -6,7 +6,6 @@
   cryptography,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "py-dormakaba-dkey";
   version = "1.0.6";
   format = "pyproject";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "emontnemery";

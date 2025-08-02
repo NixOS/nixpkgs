@@ -7,15 +7,12 @@
   hatchling,
   hatch-vcs,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-simple-history";
   version = "3.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";

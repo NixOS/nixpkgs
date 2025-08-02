@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   matplotlib,
   nibabel,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "intensity-normalization";
   version = "2.2.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "intensity_normalization";

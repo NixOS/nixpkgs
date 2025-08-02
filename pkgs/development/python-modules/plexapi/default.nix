@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
   tqdm,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "plexapi";
   version = "4.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pkkid";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   requests,
@@ -15,8 +14,6 @@
 buildPythonPackage rec {
   pname = "zulip";
   version = "0.9.0";
-
-  disabled = pythonOlder "3.8";
 
   pyproject = true;
 

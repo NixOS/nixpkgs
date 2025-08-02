@@ -6,7 +6,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   propcache,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "cached-ipaddress";
   version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";

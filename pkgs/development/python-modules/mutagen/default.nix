@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   fetchpatch,
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "mutagen";
   version = "1.47.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

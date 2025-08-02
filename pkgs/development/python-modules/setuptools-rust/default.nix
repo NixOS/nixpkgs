@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   maturin,
-  pythonOlder,
   rustPlatform,
   rustc,
   cargo,
@@ -11,16 +10,12 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
-  tomli,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "1.11.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "setuptools_rust";

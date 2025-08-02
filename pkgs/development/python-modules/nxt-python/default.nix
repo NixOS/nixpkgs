@@ -5,7 +5,6 @@
   poetry-core,
   pybluez,
   pytestCheckHook,
-  pythonOlder,
   pyusb,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "nxt-python";
   version = "3.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "schodet";

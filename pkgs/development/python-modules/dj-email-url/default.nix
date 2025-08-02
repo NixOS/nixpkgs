@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dj-email-url";
   version = "1.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

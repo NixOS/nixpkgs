@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   sysctl,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "py-cpuinfo";
   version = "9.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "workhorsy";

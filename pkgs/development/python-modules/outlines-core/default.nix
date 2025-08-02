@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   cargo,
   pkg-config,
   rustPlatform,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "outlines-core";
   version = "0.1.26";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

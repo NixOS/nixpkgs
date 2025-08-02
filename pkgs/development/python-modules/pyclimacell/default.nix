@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "pyclimacell";
   version = "0.18.2";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "raman325";

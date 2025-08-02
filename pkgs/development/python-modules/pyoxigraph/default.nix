@@ -5,7 +5,6 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  pythonOlder,
   pytestCheckHook,
   rustPlatform,
 }:
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   dependencies = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
   ];
-
-  disabled = pythonOlder "3.8";
 
   disabledTests = [
     "test_update_load"

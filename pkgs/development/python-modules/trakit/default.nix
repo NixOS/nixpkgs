@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   nix-update-script,
 
   # build dependencies
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "trakit";
   version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";

@@ -18,7 +18,6 @@
   pbr,
   prettytable,
   python-openstackclient,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "python-magnumclient";
   version = "4.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";

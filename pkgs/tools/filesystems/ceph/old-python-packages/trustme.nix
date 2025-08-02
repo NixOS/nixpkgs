@@ -7,7 +7,6 @@
   idna,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   service-identity,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "trustme";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

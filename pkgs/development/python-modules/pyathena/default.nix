@@ -10,7 +10,6 @@
   pandas,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   sqlalchemy,
   tenacity,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pyathena";
   version = "3.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

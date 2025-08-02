@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   installShellFiles,
   setuptools,
   setuptools-scm,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "liquidctl";
   version = "1.15.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "liquidctl";

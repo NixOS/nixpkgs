@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   gitMinimal,
-  pythonOlder,
   stdenv,
   installShellFiles,
   poetry-core,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "commitizen";
   version = "4.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";

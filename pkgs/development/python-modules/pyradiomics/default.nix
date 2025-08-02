@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   numpy,
   pykwalify,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyradiomics";
   version = "3.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "AIM-Harvard";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -17,9 +16,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-uOsrDhE9AwWU7GIrCVuL3uXTPqtrh8sofvo2C5t+25I=";
   };
-
-  # svgwrite requires Python 3.6 or newer
-  disabled = pythonOlder "3.6";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

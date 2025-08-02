@@ -5,9 +5,7 @@
   construct,
   fetchPypi,
   hypothesis,
-  pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "brotlipy";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

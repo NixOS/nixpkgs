@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build time
   pdm-backend,
@@ -21,8 +20,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

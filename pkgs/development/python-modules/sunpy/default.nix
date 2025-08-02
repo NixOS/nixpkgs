@@ -21,7 +21,6 @@
   pytestCheckHook,
   pytest-mock,
   python-dateutil,
-  pythonOlder,
   scikit-image,
   scipy,
   setuptools-scm,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "sunpy";
   version = "6.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

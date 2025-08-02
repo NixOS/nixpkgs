@@ -8,7 +8,6 @@
   hatchling,
   libcst,
   moreorless,
-  pythonOlder,
   stdlibs,
   toml,
   trailrunner,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "usort";
   version = "1.0.8";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "facebook";

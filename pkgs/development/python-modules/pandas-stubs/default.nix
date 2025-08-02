@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -38,8 +37,6 @@ buildPythonPackage rec {
   pname = "pandas-stubs";
   version = "2.2.3.250308";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";

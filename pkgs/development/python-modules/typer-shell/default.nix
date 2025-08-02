@@ -6,7 +6,6 @@
   fetchFromGitHub,
   iterfzf,
   poetry-core,
-  pythonOlder,
   pyyaml,
   rich,
   typer,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "typer-shell";
   version = "0.1.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "FergusFettes";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   camel-converter,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "meilisearch";
   version = "0.36.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meilisearch";

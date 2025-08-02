@@ -8,7 +8,6 @@
   matplotlib,
   ase,
   netcdf4,
-  pythonOlder,
   cython,
   cmake,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "boltztrap2";

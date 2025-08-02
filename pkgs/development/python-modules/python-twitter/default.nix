@@ -7,7 +7,6 @@
   hypothesis,
   lib,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
 
   pyproject = true;
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bear";

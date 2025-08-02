@@ -10,15 +10,12 @@
   execnb,
   ghapi,
   pyyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbdev";
   version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

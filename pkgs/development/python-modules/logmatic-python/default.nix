@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-json-logger,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "logmatic-python";
   version = "0.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "logmatic";

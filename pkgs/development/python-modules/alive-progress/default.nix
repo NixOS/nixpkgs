@@ -7,7 +7,6 @@
   grapheme,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "alive-progress";
   version = "3.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rsalmei";

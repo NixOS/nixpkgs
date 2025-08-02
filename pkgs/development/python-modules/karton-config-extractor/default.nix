@@ -4,15 +4,12 @@
   fetchFromGitHub,
   karton-core,
   malduck,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
   version = "2.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

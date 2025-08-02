@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   numpy,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "medvol";
   version = "0.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";

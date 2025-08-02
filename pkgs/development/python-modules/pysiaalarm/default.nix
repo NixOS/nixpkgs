@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   dataclasses-json,
   pycryptodome,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pysiaalarm";
   version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

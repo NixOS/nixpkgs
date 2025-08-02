@@ -5,7 +5,6 @@
   fetchPypi,
   nvdlib,
   pydantic,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "avidtools";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,6 @@
   psutil,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "lz4";
   version = "4.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   # get full repository in order to run tests
   src = fetchFromGitHub {

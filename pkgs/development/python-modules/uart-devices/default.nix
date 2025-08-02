@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "uart-devices";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";

@@ -9,7 +9,6 @@
   packaging,
   py,
   pytestCheckHook,
-  pythonOlder,
   termcolor,
   wireshark-cli,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyshark";
   version = "0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KimiNewt";

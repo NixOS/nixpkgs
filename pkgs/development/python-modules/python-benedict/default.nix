@@ -14,7 +14,6 @@
   python-decouple,
   python-fsutil,
   python-slugify,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "python-benedict";
   version = "0.34.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";

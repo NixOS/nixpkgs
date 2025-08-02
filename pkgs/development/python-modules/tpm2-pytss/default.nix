@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   asn1crypto,
   cffi,
   cryptography,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "tpm2-pytss";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

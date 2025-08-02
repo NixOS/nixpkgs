@@ -6,7 +6,6 @@
   flask,
   pytestCheckHook,
   python-socketio,
-  pythonOlder,
   redis,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "flask-socketio";
   version = "5.5.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";

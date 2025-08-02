@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   nix-update-script,
 
   # build dependencies
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "cleanit";
   version = "0.4.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";

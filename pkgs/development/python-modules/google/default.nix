@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   beautifulsoup4,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google";
   version = "3.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,15 +4,12 @@
   fetchpatch,
   lib,
   nix-update-script,
-  pythonOlder,
   flit-core,
 }:
 buildPythonPackage rec {
   pname = "pkgutil-resolve-name";
   version = "1.3.10";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pkgutil_resolve_name";

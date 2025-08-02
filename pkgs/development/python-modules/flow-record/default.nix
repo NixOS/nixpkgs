@@ -11,7 +11,6 @@
   maxminddb,
   msgpack,
   pytest7CheckHook,
-  pythonOlder,
   pytz,
   setuptools-scm,
   setuptools,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "flow-record";
   version = "3.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   mako,
   markdown,
   setuptools-git,
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "pdoc3";
   version = "0.11.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pdoc3";

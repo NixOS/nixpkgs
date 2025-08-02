@@ -10,7 +10,6 @@
   markdown,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "faraday-plugins";
   version = "1.24.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "infobyte";

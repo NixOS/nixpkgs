@@ -6,15 +6,12 @@
   google-cloud-core,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-runtimeconfig";
   version = "0.34.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

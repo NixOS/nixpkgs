@@ -50,8 +50,6 @@ python3Packages.buildPythonApplication rec {
   version = "4.4.1";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mindstorm38";
     repo = "portablemc";

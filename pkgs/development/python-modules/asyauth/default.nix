@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   minikerberos,
-  pythonOlder,
   setuptools,
   unicrypto,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "asyauth";
   version = "0.0.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

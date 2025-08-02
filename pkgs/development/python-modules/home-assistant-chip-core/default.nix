@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   aenum,
   home-assistant-chip-wheels,
   coloredlogs,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "home-assistant-chip-core";
   inherit (home-assistant-chip-wheels) version;
   format = "wheel";
-
-  disabled = pythonOlder "3.7";
 
   src = home-assistant-chip-wheels;
 

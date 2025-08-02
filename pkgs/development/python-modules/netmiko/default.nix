@@ -6,7 +6,6 @@
   paramiko,
   poetry-core,
   pyserial,
-  pythonOlder,
   pyyaml,
   rich,
   ruamel-yaml,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "netmiko";
   version = "4.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

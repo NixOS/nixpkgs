@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "regenmaschine";
   version = "2024.03.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";

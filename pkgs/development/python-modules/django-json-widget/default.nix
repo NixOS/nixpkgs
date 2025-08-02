@@ -3,9 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   setuptools,
-  python,
   pytestCheckHook,
   pytest-django,
 }:
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-json-widget";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jmrivas86";

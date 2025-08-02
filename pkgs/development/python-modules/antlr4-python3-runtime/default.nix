@@ -12,8 +12,6 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  disabled = python.pythonOlder "3.6";
-
   sourceRoot = "${src.name}/runtime/Python3";
 
   nativeBuildInputs = [ setuptools ];

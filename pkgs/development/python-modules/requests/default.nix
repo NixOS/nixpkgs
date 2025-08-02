@@ -11,7 +11,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "requests";
   version = "2.32.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 

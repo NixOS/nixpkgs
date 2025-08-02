@@ -4,15 +4,12 @@
   fetchPypi,
   gevent,
   gunicorn,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gevent-websocket";
   version = "0.10.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

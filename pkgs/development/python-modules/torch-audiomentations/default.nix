@@ -6,7 +6,6 @@
   librosa,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   torch-pitch-shift,
   torch,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "torch-audiomentations";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asteroid-team";

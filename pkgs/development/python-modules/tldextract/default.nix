@@ -6,7 +6,6 @@
   idna,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-file,
   responses,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "tldextract";
   version = "5.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "john-kurkowski";

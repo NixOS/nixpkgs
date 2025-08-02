@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   cmake,
   swig,
   elastix,
@@ -18,7 +17,6 @@ buildPythonPackage rec {
     meta
     ;
   format = "pyproject";
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${src.name}/Wrapping/Python";
   preBuild = ''

@@ -8,15 +8,12 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
   version = "1.0.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "einarhauks";

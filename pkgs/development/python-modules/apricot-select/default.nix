@@ -7,7 +7,6 @@
   numba,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "apricot-select";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jmschrei";

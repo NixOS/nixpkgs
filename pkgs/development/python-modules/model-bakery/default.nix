@@ -5,7 +5,6 @@
   hatchling,
   django,
   pytestCheckHook,
-  pythonOlder,
   pytest-django,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "model-bakery";
   version = "1.20.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "model-bakers";

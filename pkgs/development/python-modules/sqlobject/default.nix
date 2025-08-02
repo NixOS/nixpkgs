@@ -8,15 +8,12 @@
   pastedeploy,
   paste,
   pydispatcher,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sqlobject";
   version = "3.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlobject";

@@ -6,7 +6,6 @@
   loguru,
   pydantic,
   poetry-core,
-  pythonOlder,
   requests,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyaussiebb";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yaleman";

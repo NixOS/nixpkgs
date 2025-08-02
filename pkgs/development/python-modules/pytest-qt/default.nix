@@ -5,15 +5,12 @@
   setuptools-scm,
   pytest,
   pyqt5,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-qt";
   version = "4.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

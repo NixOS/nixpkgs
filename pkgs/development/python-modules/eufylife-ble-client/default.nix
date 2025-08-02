@@ -6,15 +6,12 @@
   cryptography,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "eufylife-ble-client";
   version = "0.1.10";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "eufylife_ble_client";

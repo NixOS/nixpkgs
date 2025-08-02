@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   nix-update-script,
 
   # build-system
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   pname = "atproto";
   version = "0.0.61";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
 
   # use GitHub, pypi does not include tests
   src = fetchFromGitHub {

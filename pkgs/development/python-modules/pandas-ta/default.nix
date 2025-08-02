@@ -6,7 +6,6 @@
   numpy,
   pandas,
   python-dateutil,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pandas-ta";
   version = "0.3.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twopirllc";

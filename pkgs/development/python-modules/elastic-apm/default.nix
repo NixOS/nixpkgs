@@ -19,7 +19,6 @@
   pytest-mock,
   pytest-random-order,
   pytestCheckHook,
-  pythonOlder,
   sanic,
   sanic-testing,
   setuptools,
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   pname = "elastic-apm";
   version = "6.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "elastic";

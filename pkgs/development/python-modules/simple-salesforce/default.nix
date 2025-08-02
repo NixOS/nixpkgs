@@ -7,7 +7,6 @@
   pendulum,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   responses,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "simple-salesforce";
   version = "1.12.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simple-salesforce";

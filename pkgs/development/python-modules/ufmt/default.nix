@@ -8,7 +8,6 @@
   libcst,
   moreorless,
   pygls,
-  pythonOlder,
   tomlkit,
   trailrunner,
   ruff-api,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "ufmt";
   version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "omnilib";

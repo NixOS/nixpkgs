@@ -5,15 +5,12 @@
   setuptools,
   wheel,
   bitlist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fountains";
   version = "2.2.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

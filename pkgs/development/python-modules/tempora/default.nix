@@ -6,7 +6,6 @@
   pytest-freezer,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "tempora";
   version = "5.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";

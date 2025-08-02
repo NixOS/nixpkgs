@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   pymysql,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aiomysql";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";

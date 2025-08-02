@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   behave,
   allure-python-commons,
   setuptools-scm,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "allure-behave";
   version = "2.13.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

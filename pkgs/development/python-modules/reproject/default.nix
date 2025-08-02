@@ -12,7 +12,6 @@
   numpy,
   pytest-astropy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   zarr,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "reproject";
   version = "0.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

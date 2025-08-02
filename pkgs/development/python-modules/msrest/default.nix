@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,
@@ -22,8 +21,6 @@ buildPythonPackage {
   pname = "msrest";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Azure";

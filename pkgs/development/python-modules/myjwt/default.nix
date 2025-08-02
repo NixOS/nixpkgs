@@ -12,7 +12,6 @@
   pyperclip,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   questionary,
   requests,
   requests-mock,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "myjwt";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mBouamama";

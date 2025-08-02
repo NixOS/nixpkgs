@@ -7,7 +7,6 @@
   numpy,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typeguard,
   versioneer,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "monai-deploy";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";

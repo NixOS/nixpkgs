@@ -10,7 +10,6 @@
   pandas,
   pathvalidate,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools-scm,
   simplejson,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "pytablewriter";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";

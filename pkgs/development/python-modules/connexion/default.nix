@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -37,8 +36,6 @@ buildPythonPackage rec {
   pname = "connexion";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spec-first";

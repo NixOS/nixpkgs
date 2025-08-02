@@ -4,10 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
-  trimesh,
 
   # optional deps
   colorlog,
@@ -31,8 +29,6 @@ buildPythonPackage rec {
   pname = "trimesh";
   version = "4.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mikedh";

@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   minikerberos,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "winsspi";
   version = "0.0.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

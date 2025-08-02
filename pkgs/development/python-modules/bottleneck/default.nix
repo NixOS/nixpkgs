@@ -4,16 +4,12 @@
   fetchPypi,
   numpy,
   pytestCheckHook,
-  python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bottleneck";
   version = "1.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   poetry-core,
   pyyaml,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "refery" ];
-
-  disabled = pythonOlder "3.10";
 
   # No tests yet
   doCheck = false;

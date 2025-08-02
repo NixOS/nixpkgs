@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pydexcom";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gagebenne";

@@ -15,7 +15,6 @@
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   typing-extensions,
   websockets,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "ring-doorbell";
   version = "0.9.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "ring_doorbell";

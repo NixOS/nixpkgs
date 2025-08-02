@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   docopt,
   pythondialog,
@@ -17,8 +16,6 @@ buildPythonApplication rec {
   pname = "protonvpn-cli_2";
   version = "2.2.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Rafficer";

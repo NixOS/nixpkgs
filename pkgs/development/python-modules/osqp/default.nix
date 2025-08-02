@@ -4,11 +4,9 @@
   cmake,
   cvxopt,
   fetchPypi,
-  future,
   numpy,
   oldest-supported-numpy,
   pytestCheckHook,
-  pythonOlder,
   qdldl,
   scipy,
   setuptools-scm,
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   pname = "osqp";
   version = "0.6.7.post3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

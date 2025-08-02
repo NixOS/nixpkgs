@@ -6,15 +6,12 @@
   hatchling,
   paho-mqtt,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiomqtt";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sbtinstruments";

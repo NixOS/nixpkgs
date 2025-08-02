@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "retrying";
   version = "1.3.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

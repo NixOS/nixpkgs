@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "2.27.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;

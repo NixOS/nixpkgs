@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   distutils,
@@ -25,8 +23,6 @@ buildPythonPackage rec {
   pname = "python-ldap";
   version = "3.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-ldap";

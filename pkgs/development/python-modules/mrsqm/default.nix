@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cython,
   fftw,
   pandas,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
   ];
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mlgig";

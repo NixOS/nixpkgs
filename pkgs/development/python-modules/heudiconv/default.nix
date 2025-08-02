@@ -13,7 +13,6 @@
   nipype,
   pydicom,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   versioningit,
 }:
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "heudiconv";
   version = "1.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

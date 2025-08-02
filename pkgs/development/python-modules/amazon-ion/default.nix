@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonconversion,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   tabulate,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "amazon-ion";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "amazon-ion";
