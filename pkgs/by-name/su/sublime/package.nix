@@ -7,6 +7,7 @@
   cairo,
   gtk2,
   makeDesktopItem,
+  gccNGPackages_15,
 }:
 let
   libPath = lib.makeLibraryPath [
@@ -14,6 +15,7 @@ let
     xorg.libX11
     gtk2
     cairo
+    gccNGPackages_15.libstdcxx
   ];
 in
 
