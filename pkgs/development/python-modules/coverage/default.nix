@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.8.2";
+  version = "7.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = "coveragepy";
     tag = version;
-    hash = "sha256-PCMGxyG5zIc8iigi9BsuhyuyQindZnewqTgxErT/jHw=";
+    hash = "sha256-gtjmyE6FN3LGZ87PXuPDsyRY1iUNn2D1SfY4H0rbNMM=";
   };
 
   postPatch = ''
