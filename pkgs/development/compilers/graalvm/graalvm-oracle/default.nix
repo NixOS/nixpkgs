@@ -3,8 +3,9 @@
   stdenv,
   fetchurl,
   graalvmPackages,
+  onnxruntime,
   useMusl ? false,
-  version ? "23",
+  version ? "24",
 }:
 
 graalvmPackages.buildGraalvm {

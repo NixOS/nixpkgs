@@ -23,9 +23,12 @@ lib.makeScope pkgs.newScope (
 
     truffleruby = self.callPackage ./community-edition/truffleruby { };
 
+    graalvm-oracle_24 = (self.callPackage ./graalvm-oracle { version = "24"; }).overrideAttrs (prev: {
+      autoPatchelfIgnoreMissingDeps = [ "libonnxruntime.so.1.18.0" ];
+    });
     graalvm-oracle_23 = self.callPackage ./graalvm-oracle { version = "23"; };
     graalvm-oracle_17 = self.callPackage ./graalvm-oracle { version = "17"; };
-    graalvm-oracle = self.graalvm-oracle_23;
+    graalvm-oracle = self.graalvm-oracle_24;
   }
   // lib.optionalAttrs config.allowAliases {
     graalvm-oracle_22 = throw "GraalVM 22 is EOL, use a newer version instead";
