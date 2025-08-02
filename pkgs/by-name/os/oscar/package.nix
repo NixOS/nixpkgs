@@ -32,23 +32,39 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "OSCAR_QT.pro" ];
 
-  installPhase = ''
-    runHook preInstall
-    install -d $out/bin
-    install -d $out/share/OSCAR/Help
-    install -d $out/share/OSCAR/Html
-    install -d $out/share/OSCAR/Translations
-    install -d $out/share/icons/OSCAR
-    install -d $out/share/applications
-    install -T oscar/OSCAR $out/bin/OSCAR
-    # help browser was removed 'temporarily' in https://gitlab.com/pholy/OSCAR-code/-/commit/57c3e4c33ccdd2d0eddedbc24c0e4f2969da3841
-    # install oscar/Help/* $out/share/OSCAR/Help
-    install oscar/Html/* $out/share/OSCAR/Html
-    install oscar/Translations/* $out/share/OSCAR/Translations
-    install -T Building/Linux/OSCAR.png $out/share/icons/OSCAR/OSCAR.png
-    install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
-    runHook postInstall
-  '';
+  # Graphs/gGraphView.cpp:1416:9: error: variable 'pinned_graphs' set but not used [-Werror,-Wunused-but-set-variable]
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-error=unused-but-set-variable" ];
+
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + (
+      if stdenv.isDarwin then
+        ''
+          install -d $out/Applications
+          mv oscar/OSCAR.app $out/Applications
+        ''
+      else
+        ''
+          install -d $out/bin
+          install -d $out/share/OSCAR/Help
+          install -d $out/share/OSCAR/Html
+          install -d $out/share/OSCAR/Translations
+          install -d $out/share/icons/OSCAR
+          install -d $out/share/applications
+          install -T oscar/OSCAR $out/bin/OSCAR
+          # help browser was removed 'temporarily' in https://gitlab.com/pholy/OSCAR-code/-/commit/57c3e4c33ccdd2d0eddedbc24c0e4f2969da3841
+          # install oscar/Help/* $out/share/OSCAR/Help
+          install oscar/Html/* $out/share/OSCAR/Html
+          install oscar/Translations/* $out/share/OSCAR/Translations
+          install -T Building/Linux/OSCAR.png $out/share/icons/OSCAR/OSCAR.png
+          install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
+        ''
+    )
+    + ''
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://www.sleepfiles.com/OSCAR/";
@@ -56,8 +72,8 @@ stdenv.mkDerivation rec {
     mainProgram = "OSCAR";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.roconnor ];
-    # Someone needs to create a suitable installPhase for Darwin and Windows.
+    # Someone needs to create a suitable installPhase for Windows.
     # See https://gitlab.com/pholy/OSCAR-code/-/tree/master/Building.
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
