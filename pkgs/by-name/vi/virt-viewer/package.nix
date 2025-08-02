@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://gitlab.com/virt-viewer/virt-viewer";
     description = "Viewer for remote virtual machines";
     maintainers = with maintainers; [
       raskin
