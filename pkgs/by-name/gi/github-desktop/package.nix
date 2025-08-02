@@ -21,6 +21,8 @@
   gnome-keyring,
   libsecret,
   curl,
+
+  nix-update-script,
 }:
 
 let
@@ -160,6 +162,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      ''^release-(\d\.\d\.\d)$''
+    ];
+  };
 
   meta = {
     description = "GUI for managing Git and GitHub";
