@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cargo,
   meson,
   ninja,
@@ -35,10 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  passthru.updateScript = nix-update-script {
+    # to be dropped once there are stable releases
+    extraArgs = [
+      "--version=unstable"
+    ];
+  };
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     hash = "sha256-zFGFmiPozfBSIYxCu4fHynb2eh9emfVPtj3grPAoZeA=";
   };
+
+  mesonBuildType = "release";
 
   nativeBuildInputs = [
     cargo
