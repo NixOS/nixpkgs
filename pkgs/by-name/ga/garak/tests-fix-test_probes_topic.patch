@@ -1,0 +1,50 @@
+From 79400c37f750efed284c1024552da080b7f754ee Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Thu, 31 Jul 2025 20:39:04 +0100
+Subject: [PATCH 1/2] Trigger `wn` config overrides from `WordnetBlockedWords`
+ before using `wn` in tests
+
+Running `wn.Download()` before changing the config location just ends up
+causing problems and dowloading it again for the new location.
+---
+ tests/probes/test_probes_topic.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tests/probes/test_probes_topic.py b/tests/probes/test_probes_topic.py
+index 1221fff2a..086f0e08e 100644
+--- a/tests/probes/test_probes_topic.py
++++ b/tests/probes/test_probes_topic.py
+@@ -8,6 +8,9 @@
+ import garak.probes.base
+ import garak.probes.topic
+ 
++# trigger wn config overrides
++garak.probes.topic.WordnetBlockedWords()
++
+ TEST_LEXICON = "oewn:2023"
+ TEST_TERM = "abortion"
+ TEST_SYNSET_ID = "oewn-00231191-n"
+
+From f03b008378f5396358af0da341ece02767ac776d Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Thu, 31 Jul 2025 20:40:49 +0100
+Subject: [PATCH 2/2] Use `lang` and pass it through to `wn.Wordnet` in
+ `WordnetBlockedWords`
+
+---
+ garak/probes/topic.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/garak/probes/topic.py b/garak/probes/topic.py
+index 678052a2b..a5009d075 100644
+--- a/garak/probes/topic.py
++++ b/garak/probes/topic.py
+@@ -103,7 +103,7 @@ def __init__(self, config_root=_config):
+ 
+         self.w = None
+         try:
+-            self.w = wn.Wordnet(self.lexicon)
++            self.w = wn.Wordnet(lexicon=self.lexicon, lang=self.lang)
+         except sqlite3.OperationalError:
+             logging.debug("Downloading wordnet lexicon: %s", self.lexicon)
+             download_tempfile_path = wn.download(self.lexicon)
