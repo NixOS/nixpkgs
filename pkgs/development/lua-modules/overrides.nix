@@ -151,6 +151,15 @@ in
   });
 
   fzf-lua = prev.fzf-lua.overrideAttrs {
+    patches = [
+      # https://github.com/ibhagwan/fzf-lua/pull/1914
+      (fetchpatch {
+        name = "fix-flaky-test.patch"; # Not a fix for Darwin
+        url = "https://github.com/midchildan/fzf-lua/commit/97328ccb7674ec3031b33c1fee616c93f4d1cd08.patch";
+        hash = "sha256-4mCub9k1LeSvJUL94uaFW/pbYSZTFQQrFpvEwIFlRAs=";
+      })
+    ];
+
     # FIXME: Darwin flaky tests
     # address already in use on second test run
     # Previewer transient failure
