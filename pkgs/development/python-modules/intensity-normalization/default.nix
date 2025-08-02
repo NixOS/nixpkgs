@@ -30,11 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-s/trDIRoqLFj3NO+iv3E+AEB4grBAHDlEL6+TCdsgmg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "!=3.10.*," "" --replace "!=3.11.*" ""
-    substituteInPlace setup.cfg --replace "pytest-runner" ""
-  '';
-
   pythonRelaxDeps = [ "nibabel" ];
 
   propagatedBuildInputs = [

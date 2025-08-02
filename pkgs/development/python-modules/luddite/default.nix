@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--disable-socket" ""
+      --replace-fail "--disable-socket" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

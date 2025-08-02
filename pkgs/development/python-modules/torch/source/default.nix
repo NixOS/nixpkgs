@@ -352,7 +352,7 @@ buildPythonPackage rec {
 
     # Strangely, this is never set in cmake
     substituteInPlace cmake/public/LoadHIP.cmake \
-      --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
+      --replace-fail "set(ROCM_PATH \$ENV{ROCM_PATH})" \
         "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
 
     # Use composable kernel as dependency, rather than built-in third-party

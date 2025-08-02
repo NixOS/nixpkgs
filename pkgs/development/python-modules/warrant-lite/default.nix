@@ -28,12 +28,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  postPatch = ''
-    # requirements.txt is not part of the source
-    substituteInPlace setup.py \
-      --replace "parse_requirements('requirements.txt')," "[],"
-  '';
-
   # Tests require credentials
   doCheck = false;
 

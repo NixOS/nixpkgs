@@ -25,7 +25,7 @@ buildPythonPackage rec {
   postPatch = ''
     # see comment on https://github.com/cmroche/moonraker-api/commit/e5ca8ab60d2839e150a81182fbe65255d84b4e4e
     substituteInPlace setup.py \
-      --replace 'name="moonraker-api",' 'name="moonraker-api",version="${version}",'
+      --replace-fail 'name="moonraker-api",' 'name="moonraker-api",version="${version}",'
   '';
 
   propagatedBuildInputs = [ aiohttp ];

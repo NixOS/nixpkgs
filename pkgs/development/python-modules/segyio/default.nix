@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Removing unecessary build dependency
-    substituteInPlace python/setup.py --replace "'pytest-runner'," ""
+    substituteInPlace python/setup.py --replace-fail "'pytest-runner'," ""
 
     # Fixing bug making one test fail in the python 3.10 build
-    substituteInPlace python/segyio/open.py --replace \
+    substituteInPlace python/segyio/open.py --replace-fail \
     "cube_metrics = f.xfd.cube_metrics(iline, xline)" \
     "cube_metrics = f.xfd.cube_metrics(int(iline), int(xline))"
   '';

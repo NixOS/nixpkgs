@@ -33,11 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'referencing = ">=0.28.0,<0.30.0"' 'referencing = ">=0.28.0"'
-  '';
-
   nativeBuildInputs = [
     poetry-core
   ];

@@ -25,7 +25,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=VERSION" 'version="${subunit.version}"'
+      --replace-fail "version=VERSION" 'version="${subunit.version}"'
   '';
 
   nativeBuildInputs = [

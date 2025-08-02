@@ -32,12 +32,6 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/lazdavila/pescea/pull/1
-    substituteInPlace setup.py \
-      --replace '"asyncio",' ""
-  '';
-
   disabledTests = [
     # AssertionError: assert <State.BUSY: 'BusyWaiting'>...
     "test_updates_while_busy"

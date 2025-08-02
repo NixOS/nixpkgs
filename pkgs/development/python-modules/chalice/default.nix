@@ -39,8 +39,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
-      --replace "pip>=9,<23.1" "pip" \
+      --replace-fail "inquirer>=2.7.0,<3.0.0" "inquirer" \
+      --replace-fail "pip>=9,<23.1" "pip" \
   '';
 
   propagatedBuildInputs = [

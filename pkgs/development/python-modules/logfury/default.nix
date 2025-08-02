@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'setuptools_scm<6.0'" "'setuptools_scm'"
+      --replace-fail "'setuptools_scm<6.0'" "'setuptools_scm'"
   '';
 
   pythonImportsCheck = [ "logfury" ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   postPatch = ''
     # don't do hacky tarball download + setuptools check
     sed -i '38,54d' setup.py
-    substituteInPlace setup.py --replace ", 'pytest-runner==2.6.2'" ""
+    substituteInPlace setup.py --replace-fail ", 'pytest-runner==2.6.2'" ""
   '';
 
   nativeBuildInputs = [ pkg-config ];

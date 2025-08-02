@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner>=5.2",' ""
+    substituteInPlace setup.py --replace-fail '"pytest-runner>=5.2",' ""
   '';
 
   pythonImportsCheck = [ "aioemonitor" ];

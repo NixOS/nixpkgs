@@ -38,16 +38,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}" \
-      --replace "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
-      --replace "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
+      --replace-fail "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}" \
+      --replace-fail "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
+      --replace-fail "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
     substituteInPlace etc/tmpfiles.d/CMakeLists.txt \
-      --replace "DESTINATION /usr/lib/tmpfiles.d" "DESTINATION $out/usr/lib/tmpfiles.d"
+      --replace-fail "DESTINATION /usr/lib/tmpfiles.d" "DESTINATION $out/usr/lib/tmpfiles.d"
     substituteInPlace dnf/const.py.in \
-      --replace "/etc" "$out/etc" \
-      --replace "/var/tmp" "/tmp"
+      --replace-fail "/etc" "$out/etc" \
+      --replace-fail "/var/tmp" "/tmp"
     substituteInPlace doc/CMakeLists.txt \
-      --replace 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
+      --replace-fail 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
   '';
 
   nativeBuildInputs = [

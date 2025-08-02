@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-        --replace 'Unidecode>=0.04.14,<0.05' 'Unidecode>=0.04.14'
+        --replace-fail 'Unidecode>=0.04.14,<0.05' 'Unidecode>=0.04.14'
   '';
 
   patches = [

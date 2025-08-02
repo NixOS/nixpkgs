@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace supervise_api/supervise.py \
-      --replace 'which("supervise")' '"${supervise}/bin/supervise"'
+      --replace-fail 'which("supervise")' '"${supervise}/bin/supervise"'
   '';
 
   nativeBuildInputs = [ setuptools ];

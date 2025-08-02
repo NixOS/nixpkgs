@@ -42,11 +42,11 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'add_include_dirs = [".", "libgumath", "ndtypes/python/ndtypes", "xnd/python/xnd"] + INCLUDES' \
+      --replace-fail 'add_include_dirs = [".", "libgumath", "ndtypes/python/ndtypes", "xnd/python/xnd"] + INCLUDES' \
                 'add_include_dirs = [".", "${libndtypes.dev}/include", "${libxnd}/include", "${libgumath}/include"]' \
-      --replace 'add_library_dirs = ["libgumath", "ndtypes/libndtypes", "xnd/libxnd"] + LIBS' \
+      --replace-fail 'add_library_dirs = ["libgumath", "ndtypes/libndtypes", "xnd/libxnd"] + LIBS' \
                 'add_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib", "${libgumath}/lib"]' \
-      --replace 'add_runtime_library_dirs = ["$ORIGIN"]' \
+      --replace-fail 'add_runtime_library_dirs = ["$ORIGIN"]' \
                 'add_runtime_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib", "${libgumath}/lib"]'
   '';
 
@@ -58,7 +58,7 @@ buildPythonPackage {
     pushd python
     mv gumath _gumath
     # minor precision issues
-    substituteInPlace test_gumath.py --replace 'test_sin' 'dont_test_sin'
+    substituteInPlace test_gumath.py --replace-fail 'test_sin' 'dont_test_sin'
     python test_gumath.py
     python test_xndarray.py
     popd

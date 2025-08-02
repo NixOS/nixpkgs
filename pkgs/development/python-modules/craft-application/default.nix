@@ -97,7 +97,7 @@ buildPythonPackage rec {
     # Not using `--replace-fail` here only because it simplifies overriding this package in the charmcraft
     # derivation. Once charmcraft has moved to craft-application >= 5, `--replace-fail` can be added.
     substituteInPlace tests/conftest.py \
-      --replace "include_lsb=False, include_uname=False, include_oslevel=False" "include_lsb=False, include_uname=False, include_oslevel=False, os_release_file='$HOME/os-release'"
+      --replace-fail "include_lsb=False, include_uname=False, include_oslevel=False" "include_lsb=False, include_uname=False, include_oslevel=False, os_release_file='$HOME/os-release'"
 
     # The project attempts to write into the user's runtime directory, usually
     # '/run/user/<uid>', which fails in the build environment. By setting this

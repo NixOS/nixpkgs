@@ -22,12 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-zdBIX/uetkOAalg4uJPWXRL9WUgNN+hmqUwQDTdzrzA=";
   };
 
-  postPatch = ''
-    # https://github.com/mrbean-bremen/ghrepo-stats/pull/1
-    substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
-  '';
-
   propagatedBuildInputs = [
     beautifulsoup4
     matplotlib

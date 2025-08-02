@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "lz4<=3.0.1" "lz4<=4"
+      --replace-fail "lz4<=3.0.1" "lz4<=4"
   '';
 
   # remove source to prevent pytest testing source instead of the build artifacts

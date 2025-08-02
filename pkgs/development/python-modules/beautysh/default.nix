@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
+      --replace-fail 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
   '';
 
   nativeBuildInputs = [ poetry-core ];

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--durations=2 --verbose" ""
+      --replace-fail "--durations=2 --verbose" ""
   '';
 
   __darwinAllowLocalNetworking = true;
