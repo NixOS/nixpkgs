@@ -10,13 +10,10 @@ in
 {
   name = "stalwart-mail";
 
+  configurations.main = ./stalwart-mail-config.nix;
   nodes.main =
     { pkgs, ... }:
     {
-      imports = [
-        ./stalwart-mail-config.nix
-      ];
-
       environment.systemPackages = [
         (pkgs.writers.writePython3Bin "test-smtp-submission" { } ''
           from smtplib import SMTP

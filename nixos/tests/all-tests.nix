@@ -203,7 +203,7 @@ in
   alice-lg = runTest ./alice-lg.nix;
   alloy = runTest ./alloy.nix;
   allTerminfo = runTest ./all-terminfo.nix;
-  alps = runTest ./alps.nix;
+  alps = runTest ./alps/alps.nix;
   amazon-cloudwatch-agent = runTest ./amazon-cloudwatch-agent.nix;
   amazon-init-shell = runTest ./amazon-init-shell.nix;
   amazon-ssm-agent = runTest ./amazon-ssm-agent.nix;

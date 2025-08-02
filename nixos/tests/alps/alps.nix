@@ -1,7 +1,3 @@
-let
-  certs = import ./common/acme/server/snakeoil-certs.nix;
-  domain = certs.domain;
-in
 { pkgs, ... }:
 {
   name = "alps";
@@ -9,60 +5,20 @@ in
     maintainers = [ hmenke ];
   };
 
+  configurations = {
+    server = ./alps-server.nix;
+    client = ./alps-client.nix;
+  };
+
   nodes = {
     server = {
-      imports = [ ./common/user-account.nix ];
-      security.pki.certificateFiles = [
-        certs.ca.cert
-      ];
-      networking.extraHosts = ''
-        127.0.0.1 ${domain}
-      '';
-      networking.firewall.allowedTCPPorts = [
-        25
-        465
-        993
-      ];
-      services.postfix = {
-        enable = true;
-        enableSubmission = true;
-        enableSubmissions = true;
-        tlsTrustedAuthorities = "${certs.ca.cert}";
-        config.smtpd_tls_chain_files = [
-          "${certs.${domain}.key}"
-          "${certs.${domain}.cert}"
-        ];
-      };
-      services.dovecot2 = {
-        enable = true;
-        enableImap = true;
-        sslCACert = "${certs.ca.cert}";
-        sslServerCert = "${certs.${domain}.cert}";
-        sslServerKey = "${certs.${domain}.key}";
-      };
+      # empty because node needs to be defined but has
+      # no test components
     };
 
     client =
       { nodes, config, ... }:
       {
-        security.pki.certificateFiles = [
-          certs.ca.cert
-        ];
-        networking.extraHosts = ''
-          ${nodes.server.config.networking.primaryIPAddress} ${domain}
-        '';
-        services.alps = {
-          enable = true;
-          theme = "alps";
-          imaps = {
-            host = domain;
-            port = 993;
-          };
-          smtps = {
-            host = domain;
-            port = 465;
-          };
-        };
         environment.systemPackages = [
           (pkgs.writers.writePython3Bin "test-alps-login" { } ''
             from urllib.request import build_opener, HTTPCookieProcessor, Request
@@ -71,7 +27,7 @@ in
 
             baseurl = "http://localhost:${toString config.services.alps.port}"
             username = "alice"
-            password = "${nodes.server.config.users.users.alice.password}"
+            password = "${nodes.server.users.users.alice.password}"
             cookiejar = CookieJar()
             cookieprocessor = HTTPCookieProcessor(cookiejar)
             opener = build_opener(cookieprocessor)
@@ -113,7 +69,7 @@ in
 
       client.start()
       client.wait_for_unit("alps.service")
-      client.wait_for_open_port(${toString nodes.client.config.services.alps.port})
+      client.wait_for_open_port(${toString nodes.client.services.alps.port})
       client.succeed("test-alps-login")
     '';
 }
