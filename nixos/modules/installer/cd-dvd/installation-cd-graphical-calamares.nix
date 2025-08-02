@@ -4,7 +4,7 @@
 { pkgs, ... }:
 let
   calamares-nixos-autostart = pkgs.makeAutostartItem {
-    name = "io.calamares.calamares";
+    name = "calamares";
     package = pkgs.calamares-nixos;
   };
 in
