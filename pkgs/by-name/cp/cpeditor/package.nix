@@ -2,25 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  libsForQt5,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  syntax-highlighting,
   cmake,
   ninja,
   python3,
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpeditor";
   version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-t7nn3sO45dOQq5OMWhaseO9XHicQ/1fjukXal5yPMgY";
     fetchSubmodules = true;
   };
@@ -29,13 +26,13 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     python3
   ];
   buildInputs = [
-    qtbase
-    qttools
-    syntax-highlighting
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.syntax-highlighting
   ];
 
   postPatch = ''
@@ -43,12 +40,12 @@ stdenv.mkDerivation rec {
     substituteInPlace dist/linux/cpeditor.desktop --replace-fail 'Exec=/usr/bin/cpeditor' "Exec=cpeditor"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IDE specially designed for competitive programming";
     homepage = "https://cpeditor.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rewine ];
     mainProgram = "cpeditor";
   };
-}
+})
