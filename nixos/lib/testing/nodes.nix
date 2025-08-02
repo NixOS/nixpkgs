@@ -82,6 +82,14 @@ in
 {
 
   options = {
+    configurations = mkOption {
+      # we use types.raw instead of submodules or other because
+      # we get the path back from it
+      type = types.lazyAttrsOf types.raw;
+      description = "Path to a node's test configuration";
+      default = { };
+    };
+
     sshBackdoor = {
       enable = mkOption {
         default = config.enableDebugHook;
@@ -199,6 +207,8 @@ in
             config;
       }
     ) config.nodes;
+
+    nodes = mapAttrs (_: v: { imports = [ v ]; }) config.configurations;
 
     passthru.nodes = config.nodesCompat;
 
