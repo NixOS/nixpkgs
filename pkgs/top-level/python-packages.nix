@@ -2809,7 +2809,11 @@ self: super: with self; {
 
   colout = callPackage ../development/python-modules/colout { };
 
+  comet-ml = callPackage ../development/python-modules/comet-ml { };
+
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
+
+  cometx = callPackage ../development/python-modules/cometx { };
 
   comicapi = callPackage ../development/python-modules/comicapi { };
 
@@ -4774,6 +4778,8 @@ self: super: with self; {
   eventlet = callPackage ../development/python-modules/eventlet { };
 
   events = callPackage ../development/python-modules/events { };
+
+  everett = callPackage ../development/python-modules/everett { };
 
   evohome-async = callPackage ../development/python-modules/evohome-async { };
 
