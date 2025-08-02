@@ -150,7 +150,7 @@ let
 
       sudo=exec
       if [[ "$USER" != ${cfg.user} ]]; then
-        sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env'
+        sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env --chroot=/var/lib/mastodon/'
       fi
       $sudo ${cfg.package}/bin/tootctl "$@"
     '';
@@ -1129,7 +1129,7 @@ in
           (lib.mkIf (cfg.user == "mastodon") {
             mastodon = {
               isSystemUser = true;
-              home = cfg.package;
+              home = "/var/lib/mastodon/";
               inherit (cfg) group;
             };
           })
