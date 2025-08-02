@@ -7884,6 +7884,8 @@ self: super: with self; {
 
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
 
+  langgraph-runtime-inmem-open = callPackage ../development/python-modules/langgraph-runtime-inmem-open { };
+
   langid = callPackage ../development/python-modules/langid { };
 
   langsmith = callPackage ../development/python-modules/langsmith { };
