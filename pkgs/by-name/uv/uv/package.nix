@@ -66,6 +66,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
+    longDescription = ''
+      `uv` manages project dependencies and environments, with support for lockfiles, workspaces, and more.
+
+      When running `uv` on NixOS systems, make sure to use `UV_PYTHON` or `--python`, where applicable, to pass a path to a compatible interpreter
+      via dev-shell (e.g. `UV_PYTHON=''${pkgs.python313}`), .env file, or from the command line, as NixOS cannot run dynamically
+      linked executables intended for generic Linux environments out of the box.
+
+      For building Python projects with uv and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.
+    '';
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
