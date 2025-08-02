@@ -17,6 +17,8 @@
   openasar,
   withVencord ? false,
   vencord,
+  withEquicord ? false,
+  equicord,
   withMoonlight ? false,
   moonlight,
   commandLineArgs ? "",
@@ -81,7 +83,12 @@ stdenv.mkDerivation {
       echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
     ''
-
+    + lib.strings.optionalString withEquicord ''
+      mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
+      mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
+      echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
+      echo 'require("${equicord}/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
+    ''
     + lib.strings.optionalString withMoonlight ''
       mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
       mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
