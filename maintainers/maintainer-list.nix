@@ -15106,6 +15106,12 @@
     matrix = "@sananatheskenana:matrix.org";
     name = "sanana the skenana";
   };
+  m-saghir = {
+    email = "m@saghir.ca";
+    name = "Muhammad Saghir";
+    github = "m-saghir";
+    githubId = 139656372;
+  };
   m00wl = {
     name = "Moritz Lumme";
     email = "moritz.lumme@gmail.com";
