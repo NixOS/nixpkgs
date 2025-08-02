@@ -165,8 +165,8 @@ in
       };
       preStart = ''
         ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-        ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
-        ${pkgs.postfix}/bin/postmap /etc/postfix/transport
+        ${config.services.postfix.package}/bin/postmap /etc/postfix/virtual
+        ${config.services.postfix.package}/bin/postmap /etc/postfix/transport
       '';
     };
 
