@@ -275,6 +275,9 @@ stdenv.mkDerivation rec {
     })
   );
 
+  # The default "all" target unconditionally builds the "tests" target.
+  buildFlags = lib.optionals (!doCheck) [ "shared" ];
+
   doCheck = true;
   checkTarget = "tests";
 
