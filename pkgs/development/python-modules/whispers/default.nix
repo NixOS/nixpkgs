@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.1";
-
   src = fetchFromGitHub {
     owner = "adeptex";
     repo = "whispers";
