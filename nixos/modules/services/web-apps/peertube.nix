@@ -959,7 +959,7 @@ in
 
     services.postfix = lib.mkIf cfg.smtp.createLocally {
       enable = true;
-      hostname = lib.mkDefault "${cfg.localDomain}";
+      settings.main.myhostname = lib.mkDefault "${cfg.localDomain}";
     };
 
     users.users = lib.mkMerge [
