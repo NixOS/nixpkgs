@@ -65,7 +65,7 @@ It also understands the following special attributes:
 - `vocabRoot` is the vocabulary root to install the vocabulary under.
   Defaults to `extra`.
   Unless you know what you are doing, do not change it.
-  Other readily understood vocabulary roots are `core` and `base`, which allow you to modify the default Factor runtime environment with an external package.
+  Other readily understood vocabulary roots are `core` and `basis`, which allow you to modify the default Factor runtime environment with an external package.
 - `extraLibs`, `extraVocabs`, `extraPaths` have the same meaning as for [applications](#ssec-factor-applications).
   They have no immediate effect and are just passed through.
   When building factor-lang packages and Factor applications that use this respective vocabulary, these variables are evaluated and their paths added to the runtime environment.

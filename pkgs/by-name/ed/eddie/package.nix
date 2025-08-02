@@ -22,6 +22,8 @@
 
   mono,
 
+  versionCheckHook,
+
   eddie,
   testers,
 }:
@@ -123,6 +125,13 @@ buildDotnetModule (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${finalAttrs.runtimeInputs} \
       ''${makeWrapperArgs[@]}
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/eddie-cli";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     tests.version = testers.testVersion {
