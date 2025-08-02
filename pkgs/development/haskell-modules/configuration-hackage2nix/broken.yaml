@@ -3574,7 +3574,6 @@ broken-packages:
   - libriscv # failure in job https://hydra.nixos.org/build/295122867 at 2025-04-22
   - libsecp256k1 # failure in job https://hydra.nixos.org/build/234441559 at 2023-09-13
   - libsodium # failure in job https://hydra.nixos.org/build/243816565 at 2024-01-01
-  - libssh2 # failure in job https://hydra.nixos.org/build/295095049 at 2025-04-22
   - libstackexchange # failure in job https://hydra.nixos.org/build/295095048 at 2025-04-22
   - libsystemd-daemon # failure in job https://hydra.nixos.org/build/233207090 at 2023-09-02
   - libtagc # failure in job https://hydra.nixos.org/build/233223631 at 2023-09-02
