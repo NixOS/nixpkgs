@@ -1,0 +1,40 @@
+diff --git a/MANIFEST.in b/MANIFEST.in
+new file mode 100644
+index 00000000..bec3e4d2
+--- /dev/null
++++ b/MANIFEST.in
+@@ -0,0 +1 @@
++recursive-include src/data *
+diff --git a/pyproject.toml b/pyproject.toml
+index b415e8cb..252f761e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -2,9 +2,6 @@
+ requires = ["setuptools", "ez_setup"]
+ build-backend = "setuptools.build_meta"
+ 
+-[tool.setuptools.packages.find]
+-where = ["lazylibrarian"]
+-
+ [project]
+ name = "LazyLibrarian"
+ version = "2025.01.09"
+@@ -16,7 +13,7 @@ classifiers = [
+ ]
+ 
+ dependencies = [
+-    'bs4',
++    'beautifulsoup4',
+     'html5lib',
+     'webencodings',
+     'requests[use_chardet_on_py3]',
+@@ -44,6 +41,9 @@ dependencies = [
+ "Documentation" = "https://lazylibrarian.gitlab.io/"
+ "Issue Tracker" = "https://gitlab.com/LazyLibrarian/LazyLibrarian/-/issues"
+ 
++[project.scripts]
++lazylibrarian = "LazyLibrarian:main"
++
+ # Config file for pytest
+ [tool.pytest.ini_options]
+ pythonpath = "."
