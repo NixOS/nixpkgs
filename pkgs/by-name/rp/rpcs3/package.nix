@@ -33,6 +33,13 @@
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
+  miniupnpc,
+  rtmidi,
+  asmjit,
+  glslang,
+  zstd,
+  hidapi,
+  vulkan-memory-allocator,
 }:
 
 let
@@ -80,6 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
+    (lib.cmakeBool "USE_SYSTEM_MINIUPNPC" true)
+    (lib.cmakeBool "USE_SYSTEM_RTMIDI" true)
+    (lib.cmakeBool "USE_SYSTEM_GLSLANG" true)
+    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+    (lib.cmakeBool "USE_SYSTEM_HIDAPI" true)
+    (lib.cmakeBool "USE_SYSTEM_VULKAN_MEMORY_ALLOCATOR" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -121,6 +134,13 @@ stdenv.mkDerivation (finalAttrs: {
     libSM
     opencv.cxxdev
     cubeb
+    miniupnpc
+    rtmidi
+    asmjit
+    glslang
+    zstd
+    hidapi
+    vulkan-memory-allocator
   ]
   ++ lib.optional faudioSupport faudio
   ++ lib.optionals waylandSupport [
