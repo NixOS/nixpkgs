@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   patches = [ ./hostlist.patch ];
 
   buildPhase = ''
+    runHook preBuild
+
     gcc -I${lib.getDev slurm}/include -shared -fPIC -o stunnel.so slurm-spank-stunnel.c
+
+    runHook postBuild
   '';
 
   installPhase = ''

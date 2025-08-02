@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ go ];
 
   buildPhase = ''
+    runHook preBuild
+
     cd Source
     export HOME=/tmp
     go build -o act *.go
+
+    runHook postBuild
   '';
 
   installPhase = ''

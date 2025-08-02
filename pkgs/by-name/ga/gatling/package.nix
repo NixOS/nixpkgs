@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make gatling
+
+    runHook postBuild
   '';
 
   meta = with lib; {

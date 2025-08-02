@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     # convert bdf fonts to otb
     for i in *.bdf; do
       name=$(basename "$i" .bdf)
       faketime -f "1970-01-01 00:00:01" fonttosfnt -g 2 -m 2 -v -o "$name.otb" "$i"
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/lib
     cd libmilter
     cat > a.m4 <<EOF
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     EOF
     export MILTER_SOVER=1
     sh Build -f ./a.m4
+
+    runHook postBuild
   '';
 
   patches = [

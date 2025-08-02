@@ -37,7 +37,11 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin
+
+    runHook postBuild
   '';
 
   installPhase = ''

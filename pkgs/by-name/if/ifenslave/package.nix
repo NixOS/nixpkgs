@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     gcc -o ifenslave ifenslave.c
+
+    runHook postBuild
   '';
 
   installPhase = ''

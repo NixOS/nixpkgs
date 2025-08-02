@@ -19,10 +19,14 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     # build scripts need some love
     patchShebangs bin/preproc
 
     make -C src bgnet.html
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   buildPhase = ''
+    runHook preBuild
+
     gcc -Wall -lX11 ${src} -o xgeometry-select
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -86,6 +86,8 @@ stdenvNoCC.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir redis-work
     pushd redis-work
     redis-server &
@@ -103,6 +105,8 @@ stdenvNoCC.mkDerivation {
     kill $REDIS_PID
     pg_ctl stop -D postgres-work -m immediate
     rm -r redis-work postgres-work
+
+    runHook postBuild
   '';
 
   installPhase = ''

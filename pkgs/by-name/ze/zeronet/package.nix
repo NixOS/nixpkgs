@@ -33,7 +33,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ${python3Packages.python.pythonOnBuildForHost.interpreter} -O -m compileall .
+
+    runHook postBuild
   '';
 
   installPhase = ''

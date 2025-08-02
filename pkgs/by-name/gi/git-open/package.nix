@@ -27,11 +27,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     # marked-man is broken and severly outdated.
     # pandoc with some extra metadata is good enough and produces a by man readable file.
     cat <(echo echo '% git-open (1) Version ${version} | Git manual') git-open.1.md > tmp
     mv tmp git-open.1.md
     pandoc --standalone --to man git-open.1.md -o git-open.1
+
+    runHook postBuild
   '';
 
   installPhase = ''

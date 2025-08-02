@@ -26,7 +26,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ${python3.interpreter} -O -m compileall .
+
+    runHook postBuild
   '';
 
   installPhase = ''

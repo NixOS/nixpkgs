@@ -31,8 +31,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make bootstrap -j$NIX_BUILD_CORES
     make -j$NIX_BUILD_CORES
+
+    runHook postBuild
   '';
 
   postInstall = ''

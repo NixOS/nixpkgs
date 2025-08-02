@@ -21,7 +21,11 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   buildPhase = ''
+    runHook preBuild
+
     prevodb -s -i $src -o prevo.db
+
+    runHook postBuild
   '';
 
   installPhase = ''

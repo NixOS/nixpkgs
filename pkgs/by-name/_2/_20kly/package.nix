@@ -29,7 +29,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     python -O -m compileall .
+
+    runHook postBuild
   '';
 
   installPhase = ''

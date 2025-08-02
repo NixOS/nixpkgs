@@ -61,8 +61,12 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cmake --build RetroFE/Build
     python Scripts/Package.py --os=linux --build=full
+
+    runHook postBuild
   '';
 
   installPhase = ''

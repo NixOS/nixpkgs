@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ xen ];
 
   buildPhase = ''
+    runHook preBuild
+
     make all PREFIX=/ LIBDIR="$out/lib" INCLUDEDIR="$out/include"
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
+    runHook preBuild
+
     make nuweb
     make nuweb.pdf nuwebdoc.pdf all
+
+    runHook postBuild
   '';
   installPhase = ''
     install -d $out/bin $out/share/man/man1 $out/share/doc/${pname}-${version} $out/share/emacs/site-lisp

@@ -31,8 +31,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ./icm_prepare $out
     ./icm_bootstrap x
+
+    runHook postBuild
   '';
 
   installPhase = ''

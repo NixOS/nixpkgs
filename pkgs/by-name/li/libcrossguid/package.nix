@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ];
 
   buildPhase = ''
+    runHook preBuild
+
     $CXX -c guid.cpp -o guid.o $CXXFLAGS -std=c++11 -DGUID_LIBUUID
     $AR rvs libcrossguid.a guid.o
+
+    runHook postBuild
   '';
   installPhase = ''
     mkdir -p $out/{lib,include}

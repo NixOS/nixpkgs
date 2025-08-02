@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
 
@@ -72,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     pushd source/docs
     make man
     popd
+
+    runHook postBuild
   '';
 
   dontStrip = true;
