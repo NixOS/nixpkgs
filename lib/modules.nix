@@ -652,7 +652,13 @@ let
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
-        name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
+        name: _:
+        addErrorContext (context name) (
+          args.${name} or (addErrorContext
+            "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
+            config._module.args.${name}
+          )
+        )
       ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
