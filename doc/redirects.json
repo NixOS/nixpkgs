@@ -562,6 +562,9 @@
   "strictflexarrays3": [
     "index.html#strictflexarrays3"
   ],
+  "glibcxxassertions": [
+    "index.html#glibcxxassertions"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
