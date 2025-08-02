@@ -52,13 +52,13 @@ stdenv.mkDerivation (
   in
   {
     pname = "parallel-launcher";
-    version = "8.2.1"; # Check ./parallel-n64-next.nix for updates when updating, too
+    version = "8.3.0"; # Check ./parallel-n64-next.nix for updates when updating, too
 
     src = fetchFromGitLab {
       owner = "parallel-launcher";
       repo = "parallel-launcher";
       tag = reformatVersion finalAttrs.version;
-      hash = "sha256-1fPbgpTTfXkhVRBFnNzeNGUzEkLvurBcJQlAhL7Fp6c=";
+      hash = "sha256-Zp/QTPREfpOG0zgnP1Lg5FgT9u+OEhoqBgnxWMu451A=";
     };
 
     patches =
