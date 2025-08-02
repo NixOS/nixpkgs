@@ -23,6 +23,9 @@
   gnome-keyring,
   libsecret,
   curl,
+
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
 let
@@ -176,6 +179,20 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (finalAttrs) cacheRoot cacheApp;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          ''^release-(\d\.\d\.\d)$''
+        ];
+      })
+      # TODO: in the future, use `nix-update --custom-dep`.
+      ./update-yarn-caches.sh
+    ];
+  };
 
   meta = {
     description = "GUI for managing Git and GitHub";
