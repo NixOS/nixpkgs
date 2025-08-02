@@ -147,6 +147,10 @@ let
           tag = "v${version}";
           hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
+        pytestFlagsArray = [
+          "-W"
+          "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+        ];
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
