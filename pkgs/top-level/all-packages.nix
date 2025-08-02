@@ -2757,6 +2757,7 @@ with pkgs;
     {
       idnSupport = true;
       pslSupport = true;
+      scpSupport = !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin;
       zstdSupport = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
