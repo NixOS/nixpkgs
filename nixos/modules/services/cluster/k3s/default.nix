@@ -26,21 +26,20 @@ let
   mkManifestTarget =
     name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
   # Produces a list containing all duplicate manifest names
-  duplicateManifests =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.manifests);
+  duplicateManifests = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.manifests
+  );
   # Produces a list containing all duplicate chart names
-  duplicateCharts =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.charts);
+  duplicateCharts = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.charts
+  );
 
   # Converts YAML -> JSON -> Nix
   fromYaml =
     path:
-    with builtins;
-    fromJSON (
-      readFile (
-        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ yq-go ]; } ''
+    builtins.fromJSON (
+      builtins.readFile (
+        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
           yq --no-colors --output-format json ${path} > $out
         ''
       )
