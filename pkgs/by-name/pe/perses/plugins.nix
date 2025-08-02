@@ -62,9 +62,9 @@
     hash = "sha256-X/W2vSBddGHbEXzBW2MDxMwSMfVweSi5MtztXTURne8=";
   };
   "Tempo" = {
-    version = "0.51.0-rc.3";
-    url = "https://github.com/perses/plugins/releases/download/tempo/v0.51.0-rc.3/Tempo-0.51.0-rc.3.tar.gz";
-    hash = "sha256-oy2jBdZzf86G8+6wFkFPKiOj2yyYpUD1nVSGwou9vxg=";
+    version = "0.52.0";
+    url = "https://github.com/perses/plugins/releases/download/tempo/v0.52.0/Tempo-0.52.0.tar.gz";
+    hash = "sha256-00QEcaLWgG5WPr2n/XJQEwE4dOvfY//XZb/XPU4nd2w=";
   };
   "TimeSeriesChart" = {
     version = "0.9.1";
@@ -82,8 +82,8 @@
     hash = "sha256-PeCR0Oe8V8dBQMjPtU6xo5hpZJIXXPyXPfOtAMp2CjU=";
   };
   "TracingGanttChart" = {
-    version = "0.7.0";
-    url = "https://github.com/perses/plugins/releases/download/tracingganttchart/v0.7.0/TracingGanttChart-0.7.0.tar.gz";
-    hash = "sha256-satiNlwzbHdgrHgfWs99lUCXt4tsKi/K2ON1/NNFyGU=";
+    version = "0.8.0";
+    url = "https://github.com/perses/plugins/releases/download/tracingganttchart/v0.8.0/TracingGanttChart-0.8.0.tar.gz";
+    hash = "sha256-SKy9XM5vrfnJCod6gnTVpHqPoE/EkacihCunakG9HKM=";
   };
 }
