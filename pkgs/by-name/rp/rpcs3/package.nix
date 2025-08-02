@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   nix-update-script,
   cmake,
   pkg-config,
@@ -46,23 +45,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.37";
+  version = "0.0.38";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/ve1qe76Rc+mXHemq8DI2U9IP6+tPV5m5SNh/wmppEw=";
+    hash = "sha256-HaguOzCN0/FvAb0b4RZWnw9yvVum14wEj26WnqOnSag=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/RPCS3/rpcs3/pull/17316
-      url = "https://github.com/RPCS3/rpcs3/commit/bad6e992586264344ee1a3943423863d2bd39b45.patch?full_index=1";
-      hash = "sha256-rSyA1jcmRiV6m8rPKqTnDFuBh9WYFTGmyTSU2qrd+Go=";
-    })
-  ];
 
   passthru.updateScript = nix-update-script { };
 
