@@ -31,14 +31,14 @@
   rclone,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ludusavi";
   version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IApPudo8oD6YkYJkGpowqpaqrsl2/Q2VFyYfYQI3mN0=";
   };
 
@@ -120,7 +120,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Backup tool for PC game saves";
     homepage = "https://github.com/mtkennerly/ludusavi";
-    changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mtkennerly/ludusavi/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pasqui23
@@ -128,4 +128,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ludusavi";
   };
-}
+})
