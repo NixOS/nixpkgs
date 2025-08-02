@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "flex-ndax";
   version = "0.5-20250801.0";
 
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nDAX";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2yHv1FSikQuPamAwSzZB6+ZoblFoD/8Jnvhhv9OO+VY=";
   };
 
@@ -28,9 +28,9 @@ buildGoModule rec {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/kc2g-flex-tools/nDAX";
     description = "FlexRadio digital audio transport (DAX) connector for PulseAudio";
-    changelog = "https://github.com/kc2g-flex-tools/nDAX/releases/tag/v${version}";
+    changelog = "https://github.com/kc2g-flex-tools/nDAX/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "nDAX";
   };
-}
+})
