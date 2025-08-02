@@ -79,7 +79,7 @@ rec {
   # - Increment this version
   # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 3;
+  _currentVersion = 4;
 
   # Migrations between versions. The 0th element converts from v0 to v1, and so on
   migrations = [
@@ -112,9 +112,20 @@ rec {
       filesetV2:
       filesetV2
       // {
-        # All v1 file sets are not the new empty file set
+        # All v2 file sets are not the new empty file set
         _internalIsEmptyWithoutBase = false;
         _internalVersion = 3;
+      }
+    )
+
+    # Convert v3 into v4: filesetTree's now have a representation for a virtual file, where the path might not exist
+    (
+      filesetV3:
+      filesetV3
+      // {
+        # No v3 file sets have virtual files
+        _internalHasVirtualFiles = false;
+        _internalVersion = 4;
       }
     )
   ];
@@ -132,6 +143,7 @@ rec {
 
     # The one and only!
     _internalIsEmptyWithoutBase = true;
+    _internalHasVirtualFiles = false;
 
     # Due to alphabetical ordering, this is evaluated last,
     # which makes the nix repl output nicer than if it would be ordered first.
@@ -140,9 +152,9 @@ rec {
   };
 
   # Create a fileset, see ./README.md#fileset
-  # Type: path -> filesetTree -> fileset
+  # Type: bool -> path -> filesetTree -> fileset
   _create =
-    base: tree:
+    hasVirtualFiles: base: tree:
     let
       # Decompose the base into its components
       # See ../path/README.md for why we're not just using `toString`
@@ -154,6 +166,7 @@ rec {
       _internalVersion = _currentVersion;
 
       _internalIsEmptyWithoutBase = false;
+      _internalHasVirtualFiles = hasVirtualFiles;
       _internalBase = base;
       _internalBaseRoot = parts.root;
       _internalBaseComponents = components parts.subpath;
@@ -244,7 +257,7 @@ rec {
       type = pathType path;
     in
     if type == "directory" then
-      _create path type
+      _create false path type
     else
       # This turns a file path ./default.nix into a fileset with
       # - _internalBase: ./.
@@ -252,7 +265,7 @@ rec {
       #     "default.nix" = <type>;
       #   }
       # See ./README.md#single-files
-      _create (dirOf path) {
+      _create false (dirOf path) {
         ${baseNameOf path} = type;
       };
 
@@ -261,14 +274,17 @@ rec {
   # Type: Path -> filesetTree -> { <name> = filesetTree; }
   _directoryEntries =
     path: value:
-    if value == "directory" then
+    if !pathExists path then
+      # only happens for virtual files
+      value
+    else if value == "directory" then
       readDir path
     else
       # Set all entries not present to null
       mapAttrs (name: value: null) (readDir path) // value;
 
   /**
-    A normalisation of a filesetTree suitable filtering with `builtins.path`:
+    A normalisation of a filesetTree suitable for filtering with `builtins.path`:
     - Replace all directories that have no files with `null`.
       This removes directories that would be empty
     - Replace all directories with all files with `"directory"`.
@@ -350,6 +366,10 @@ rec {
       if all (value: value == "emptyDir") subtreeValues then
         "emptyDir"
 
+      # If there are only virtual files, the entire directory is virtual.
+      else if all (value: value == "virtual") subtreeValues then
+        "virtual directory"
+
       # If all subtrees are fully included or empty directories
       # (both of which are coincidentally represented as strings), return "directory".
       # This takes advantage of the fact that empty directories can be represented as included directories.
@@ -380,6 +400,8 @@ rec {
           ""
         else if tree == "directory" then
           " (all files in directory)"
+        else if tree == "virtual directory" then
+          " (all files in virtual directory)"
         else
           # This does "leak" the file type strings of the internal representation,
           # but this is the main reason these file type strings even are in the representation!
@@ -575,11 +597,11 @@ rec {
     in
     if rootPathType == "directory" then
       # We imitate builtins.path not calling the filter on the root path
-      _create root (fromDir root rootString)
+      _create false root (fromDir root rootString)
     else
       # Direct files are always included by builtins.path without calling the filter
       # But we need to lift up the base path to its parent to satisfy the base path invariant
-      _create (dirOf root) {
+      _create false (dirOf root) {
         ${baseNameOf root} = rootPathType;
       };
 
@@ -605,7 +627,7 @@ rec {
       recurse fileset._internalBase fileset._internalTree;
 
   # Transforms the filesetTree of a file set to a shorter base path, e.g.
-  # _shortenTreeBase [ "foo" ] (_create /foo/bar null)
+  # _shortenTreeBase [ "foo" ] (_create false /foo/bar null)
   # => { bar = null; }
   _shortenTreeBase =
     targetBaseComponents: fileset:
@@ -623,7 +645,7 @@ rec {
     recurse (length targetBaseComponents);
 
   # Transforms the filesetTree of a file set to a longer base path, e.g.
-  # _lengthenTreeBase [ "foo" "bar" ] (_create /foo { bar.baz = "regular"; })
+  # _lengthenTreeBase [ "foo" "bar" ] (_create false /foo { bar.baz = "regular"; })
   # => { baz = "regular"; }
   _lengthenTreeBase =
     targetBaseComponents: fileset:
@@ -684,13 +706,21 @@ rec {
       # Therefore allowing combined operations over them.
       trees = map (_shortenTreeBase commonBaseComponents) filesetsWithBase;
 
+      anyHasVirtualFiles = lib.any (fileset: fileset._internalHasVirtualFiles) filesetsWithBase;
+      allHaveVirtualFiles = lib.all (fileset: fileset._internalHasVirtualFiles) filesetsWithBase;
+
       # Folds all trees together into a single one using _unionTree
       # We do not use a fold here because it would cause a thunk build-up
       # which could cause a stack overflow for a large number of trees
       resultTree = _unionTrees trees;
     in
-    # If there's no values with a base, we have no files
-    if filesetsWithBase == [ ] then _emptyWithoutBase else _create commonBase resultTree;
+    if filesetsWithBase == [ ] then
+      # If there's no values with a base, we have no files
+      _emptyWithoutBase
+    else if anyHasVirtualFiles != allHaveVirtualFiles then
+      throw "lib.fileset: Unions of directories and virtual files are not implemented."
+    else
+      _create anyHasVirtualFiles commonBase resultTree;
 
   # The union of multiple filesetTree's with the same base path.
   # Later elements are only evaluated if necessary.
@@ -762,7 +792,9 @@ rec {
     if resultIsEmptyWithoutBase then
       _emptyWithoutBase
     else
-      _create longestBaseFileset._internalBase resultTree;
+      _create (
+        fileset1._internalHasVirtualFiles && fileset2._internalHasVirtualFiles
+      ) longestBaseFileset._internalBase resultTree;
 
   # The intersection of two filesetTree's with the same base path
   # The second element is only evaluated as much as necessary.
@@ -837,7 +869,7 @@ rec {
       # We use the positive file set base for the result,
       # because only files from the positive side may be included,
       # which is what base path is for
-      _create positive._internalBase resultingTree;
+      _create positive._internalHasVirtualFiles positive._internalBase resultingTree;
 
   # Computes the set difference of two filesetTree's
   # Type: Path -> filesetTree -> filesetTree
@@ -857,10 +889,10 @@ rec {
         _directoryEntries path lhs
       );
 
-  # Filters all files in a path based on a predicate
-  # Type: ({ name, type, ... } -> Bool) -> Path -> FileSet
+  # Filters all files in a file set based on a predicate
+  # Type: ({ name, type, ... } -> Bool) -> FileSet -> FileSet
   _fileFilter =
-    predicate: root:
+    predicate: fileset:
     let
       # Check the predicate for a single file
       # Type: String -> String -> filesetTree
@@ -888,16 +920,22 @@ rec {
         mapAttrs (
           name: type: if type == "directory" then fromDir (path + "/${name}") else fromFile name type
         ) (readDir path);
-
-      rootType = pathType root;
     in
-    if rootType == "directory" then
-      _create root (fromDir root)
+    if fileset._internalIsEmptyWithoutBase then
+      _emptyWithoutBase
     else
-      # Single files are turned into a directory containing that file or nothing.
-      _create (dirOf root) {
-        ${baseNameOf root} = fromFile (baseNameOf root) rootType;
-      };
+      _create fileset._internalHasVirtualFiles fileset._internalBase (
+        if fileset._internalTree == "directory" then
+          fromDir fileset._internalBase
+        else
+          lib.mapAttrsRecursive (
+            components: type:
+            if type == "directory" then
+              fromDir (fileset._internalBase + ("/" + concatStringsSep "/" components))
+            else
+              fromFile (lib.last components) type
+          ) fileset._internalTree
+      );
 
   # Support for `builtins.fetchGit` with `submodules = true` was introduced in 2.4
   # https://github.com/NixOS/nix/commit/55cefd41d63368d4286568e2956afd535cb44018
@@ -922,7 +960,7 @@ rec {
           name: type: if type == "directory" then recurse (focusedStorePath + "/${name}") else type
         ) (builtins.readDir focusedStorePath);
     in
-    _create localPath (recurse storePath);
+    _create false localPath (recurse storePath);
 
   # Create a file set from the files included in the result of a fetchGit call
   # Type: String -> String -> Path -> Attrs -> FileSet
