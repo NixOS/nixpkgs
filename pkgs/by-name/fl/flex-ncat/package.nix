@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "flex-ncat";
-  version = "0.5-2025031901";
+  version = "0.6-20250801.0";
 
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nCAT";
-    rev = "v${version}";
-    hash = "sha256-hbsrs9lgpxNqG8mmXsft01LmpX4dBpl1ncpdTWBgrUQ=";
+    tag = "v${version}";
+    hash = "sha256-l+A7PlckZFGwibMU5QelMzANP1WS5WPApOnQV0P+SGw=";
   };
 
-  vendorHash = "sha256-RqQMCP9rmdTG5AXLXkIQz0vE7qF+3RZ1BDdVRYoHHQs=";
+  vendorHash = "sha256-daMeYk64xzDPIyZl7SdXaQbu2Dvdw/yVV87/8Agvxk0=";
 
   passthru.updateScript = nix-update-script { };
 
