@@ -70,6 +70,8 @@ in
   nixosTests,
   perl,
   pkg-config,
+  http-parser,
+  utf8cpp,
   libargon2,
   openldap,
   libpq,
@@ -148,13 +150,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${version}";
-    sha256 = "sha256-/LiniV5moKGX7K6Hfzq1mxEBZ+sqnScQxT0AApiBPaA=";
+    sha256 = "sha256-fMfsNbkp9M8KiuhwOEFmPjowZ4JLP4IpX6LRO9aLHzY=";
   };
 
   outputs = [
@@ -172,7 +174,18 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (lib.elem "pgsql" extraModules) [
     libpq.pg_config
   ];
-  buildInputs = extraInputs;
+
+  # Disable use of the vendored versions of these libraries
+  env = {
+    SYSTEM_HTTP_PARSER = "1";
+    SYSTEM_UTFCPP = "1";
+  };
+
+  buildInputs = [
+    http-parser
+    utf8cpp
+  ]
+  ++ extraInputs;
 
   configurePhase = ''
     runHook preConfigure
@@ -189,8 +202,7 @@ stdenv.mkDerivation rec {
     ./configure \
       --disable-auto-extras \
       --distribution-label nixpkgs${version} \
-      --uid 0 \
-      --gid 0 \
+      --disable-ownership \
       --binary-dir  ${placeholder "bin"}/bin \
       --config-dir  /etc/inspircd \
       --data-dir    ${placeholder "lib"}/lib/inspircd \
