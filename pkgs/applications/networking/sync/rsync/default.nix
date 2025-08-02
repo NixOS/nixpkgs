@@ -85,5 +85,10 @@ stdenv.mkDerivation rec {
       ivan
     ];
     platforms = platforms.unix;
+    identifiers.cpeParts = {
+      vendor = "samba";
+      inherit version;
+      update = "-";
+    };
   };
 }
