@@ -170,6 +170,7 @@
   ./programs/bash/bash-completion.nix
   ./programs/bash/bash.nix
   ./programs/bash/blesh.nix
+  ./programs/bash/git-ps1.nix
   ./programs/bash/ls-colors.nix
   ./programs/bash/undistract-me.nix
   ./programs/bat.nix
