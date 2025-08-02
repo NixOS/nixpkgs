@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SkhFV/a3A6BqzoicQa7MUgsEuDzd+JfgYvL4ztHg/K0=";
+    hash = "sha256-x9vOj5Dy2SaQOLBCM13wZ/4SxgBz+99K/UxJqhKTg3c=";
   };
 
   outputs = [
