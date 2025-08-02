@@ -2365,7 +2365,7 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
-  rare = python3Packages.callPackage ../games/rare { };
+  rare = callPackage ../games/rare { };
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
 

@@ -1,22 +1,17 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
-  qt5,
+  libsForQt5,
+  python3,
   legendary-gl,
-  orjson,
-  pypresence,
-  pyqt5,
-  python,
-  qtawesome,
-  requests,
-  setuptools,
-  typing-extensions,
 }:
 
-buildPythonApplication rec {
-  pname = "rare";
+let
   version = "1.10.11";
+in
+python3.pkgs.buildPythonApplication {
+  pname = "rare";
+  inherit version;
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -26,27 +21,35 @@ buildPythonApplication rec {
     hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    qt5.wrapQtAppsHook
-  ];
+  build-system = builtins.attrValues {
+    inherit (python3.pkgs)
+      poetry-core
+      setuptools-scm
+      wheel
+      ;
+  };
 
-  propagatedBuildInputs = [
-    legendary-gl
-    orjson
-    pypresence
-    pyqt5
-    qtawesome
-    requests
-    typing-extensions
-  ];
+  nativeBuildInputs = [ libsForQt5.qt5.wrapQtAppsHook ];
 
-  dontWrapQtApps = true;
+  dependencies = builtins.attrValues {
+    inherit (python3.pkgs)
+      orjson
+      pypresence
+      pyqt5
+      qtawesome
+      requests
+      typing-extensions
+      ;
+  };
+
+  propagatedBuildInputs = [ legendary-gl ];
 
   postInstall = ''
-    install -Dm644 misc/rare.desktop -t $out/share/applications/
-    install -Dm644 $out/${python.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
+    install -Dm 0644 misc/rare.desktop -t $out/share/applications/
+    install -Dm 0644 rare/resources/images/Rare.png $out/share/icons/hicolor/512x512/apps/rare.png
   '';
+
+  dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -55,12 +58,12 @@ buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "GUI for Legendary, an Epic Games Launcher open source alternative";
+  meta = {
+    description = "Alternative for Epic Games Launcher, using Legendary";
     homepage = "https://github.com/RareDevs/Rare";
     maintainers = [ ];
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     mainProgram = "rare";
   };
 }
