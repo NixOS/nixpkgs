@@ -33,6 +33,13 @@
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
+  miniupnpc,
+  rtmidi,
+  asmjit,
+  glslang,
+  zstd,
+  hidapi,
+  vulkan-memory-allocator,
 }:
 
 let
@@ -56,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Not upstreamable, see https://github.com/RPCS3/rpcs3/pull/17411#issuecomment-3148556089
+    ./0001-Add-option-to-use-system-AsmJit.patch
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -83,6 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
+    (lib.cmakeBool "USE_SYSTEM_MINIUPNPC" true)
+    (lib.cmakeBool "USE_SYSTEM_RTMIDI" true)
+    (lib.cmakeBool "USE_SYSTEM_ASMJIT" true)
+    (lib.cmakeBool "USE_SYSTEM_GLSLANG" true)
+    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+    (lib.cmakeBool "USE_SYSTEM_HIDAPI" true)
+    (lib.cmakeBool "USE_SYSTEM_VULKAN_MEMORY_ALLOCATOR" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -124,6 +140,13 @@ stdenv.mkDerivation (finalAttrs: {
     libSM
     opencv.cxxdev
     cubeb
+    miniupnpc
+    rtmidi
+    asmjit
+    glslang
+    zstd
+    hidapi
+    vulkan-memory-allocator
   ]
   ++ lib.optional faudioSupport faudio
   ++ lib.optionals waylandSupport [

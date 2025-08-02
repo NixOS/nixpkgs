@@ -1,0 +1,71 @@
+From 749fc235dfe7bdfd608aebb55131dcc77ab283ba Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 2 Aug 2025 16:51:56 +0200
+Subject: [PATCH] Add option to use system AsmJit
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ 3rdparty/asmjit/CMakeLists.txt | 36 ++++++++++++++++++++--------------
+ CMakeLists.txt                 |  1 +
+ 2 files changed, 22 insertions(+), 15 deletions(-)
+
+diff --git a/3rdparty/asmjit/CMakeLists.txt b/3rdparty/asmjit/CMakeLists.txt
+index ae88ce2fe..cc2760291 100644
+--- a/3rdparty/asmjit/CMakeLists.txt
++++ b/3rdparty/asmjit/CMakeLists.txt
+@@ -1,19 +1,25 @@
+-set(ASMJIT_EMBED TRUE)
+-set(ASMJIT_STATIC TRUE)
+-set(ASMJIT_BUILD_X86 TRUE)
+-set(ASMJIT_BUILD_ARM FALSE)
+-set(ASMJIT_BUILD_TEST FALSE)
+-set(ASMJIT_NO_DEPRECATED TRUE)
+-set(ASMJIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/asmjit" CACHE PATH "Location of 'asmjit'")
++if(USE_SYSTEM_ASMJIT)
++  message(STATUS "RPCS3: using shared AsmJit")
++  find_package(asmjit REQUIRED GLOBAL)
++  add_library(3rdparty::asmjit ALIAS asmjit::asmjit)
++else()
++  set(ASMJIT_EMBED TRUE)
++  set(ASMJIT_STATIC TRUE)
++  set(ASMJIT_BUILD_X86 TRUE)
++  set(ASMJIT_BUILD_ARM FALSE)
++  set(ASMJIT_BUILD_TEST FALSE)
++  set(ASMJIT_NO_DEPRECATED TRUE)
++  set(ASMJIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/asmjit" CACHE PATH "Location of 'asmjit'")
+ 
+-include("${ASMJIT_DIR}/CMakeLists.txt")
++  include("${ASMJIT_DIR}/CMakeLists.txt")
+ 
+-add_library(asmjit ${ASMJIT_SRC})
+-target_include_directories(asmjit PUBLIC ${ASMJIT_DIR}/src)
+-target_link_libraries(asmjit PRIVATE ${ASMJIT_DEPS})
++  add_library(asmjit ${ASMJIT_SRC})
++  target_include_directories(asmjit PUBLIC ${ASMJIT_DIR}/src)
++  target_link_libraries(asmjit PRIVATE ${ASMJIT_DEPS})
+ 
+-# ASMJIT should have a option for disabling installing and this wouldnt
+-# be required to avoid installing ASMJIT...
++  # ASMJIT should have a option for disabling installing and this wouldnt
++  # be required to avoid installing ASMJIT...
+ 
+-set_property(TARGET asmjit PROPERTY FOLDER "3rdparty/")
+-add_library(3rdparty::asmjit ALIAS asmjit)
++  set_property(TARGET asmjit PROPERTY FOLDER "3rdparty/")
++  add_library(3rdparty::asmjit ALIAS asmjit)
++endif()
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a3c14bcd8..ae8acf0b2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,6 +38,7 @@ option(USE_DISCORD_RPC "Discord rich presence integration" OFF)
+ option(USE_VULKAN "Vulkan render backend" ON)
+ option(USE_PRECOMPILED_HEADERS "Use precompiled headers" OFF)
+ option(USE_SDL "Enables SDL input handler" OFF)
++option(USE_SYSTEM_ASMJIT "Prefer system AsmJit instead of the builtin one" OFF)
+ option(USE_SYSTEM_CUBEB "Prefer system cubeb instead of the builtin one" OFF)
+ option(USE_SYSTEM_CURL "Prefer system Curl instead of the prebuild one" ON)
+ option(USE_SYSTEM_FAUDIO "Prefer system FAudio instead of the builtin one" OFF)
+-- 
+2.51.0
+
