@@ -30,6 +30,7 @@ in
 
       systemd.services.qemu-guest-agent = {
         description = "Run the QEMU Guest Agent";
+        path = [ pkgs.shadow ];
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/qemu-ga --statedir /run/qemu-ga";
           Restart = "always";
