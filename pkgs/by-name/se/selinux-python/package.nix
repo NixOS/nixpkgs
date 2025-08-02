@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-python";
-  version = "3.8.1";
+  version = "3.9";
 
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/selinux-python-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dJAlv6SqDgCb8//EVdVloY1Ntxz+eWvkQFghcXIGwlo=";
+    hash = "sha256-3PpfGRnct+e3dYUZlOtcg7dYDcSWzS0fc4Z9+gdNIzk=";
   };
 
   strictDeps = true;
