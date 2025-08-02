@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Gliczy
+      keenanweaver
       neonfuz
     ];
   };
