@@ -27,17 +27,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.50.2";
+  version = "3.50.3";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-hKYW/9MXOORZC2W6uzqeHvk3DzY4422yIO4Oc/itIVY=";
+    hash = "sha256-7FSWzf+8KkrbWTF/0r8OWCvw5qzY9Krn6XvHI926cjM=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-n4uitTo6oskWbUagLZEbhdO4sLhAxJHTIdX8YhUONBk=";
+    hash = "sha256-vb1OR9UsZMeswzLRKUqmetYlHvNwq+sLCG7gy+yRGG0=";
   };
 
   outputs = [
