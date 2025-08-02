@@ -4519,8 +4519,6 @@ self: super: with self; {
 
   editdistance = callPackage ../development/python-modules/editdistance { };
 
-  editdistance-s = callPackage ../development/python-modules/editdistance-s { };
-
   editdistpy = callPackage ../development/python-modules/editdistpy { };
 
   editor = callPackage ../development/python-modules/editor { };
