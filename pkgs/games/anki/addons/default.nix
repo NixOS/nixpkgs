@@ -4,6 +4,8 @@
 {
   adjust-sound-volume = callPackage ./adjust-sound-volume { };
 
+  anki-button-colours = callPackage ./anki-button-colours { };
+
   anki-connect = callPackage ./anki-connect { };
 
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
