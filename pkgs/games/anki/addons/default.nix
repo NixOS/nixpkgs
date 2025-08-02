@@ -6,6 +6,8 @@
 
   anki-connect = callPackage ./anki-connect { };
 
+  ankimon = callPackage ./ankimon { };
+
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
 
   passfail2 = callPackage ./passfail2 { };
