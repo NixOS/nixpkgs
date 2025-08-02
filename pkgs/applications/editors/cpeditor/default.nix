@@ -2,11 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  libsForQt5,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  syntax-highlighting,
   cmake,
   ninja,
   python3,
@@ -29,13 +26,13 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     python3
   ];
   buildInputs = [
-    qtbase
-    qttools
-    syntax-highlighting
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.syntax-highlighting
   ];
 
   postPatch = ''
