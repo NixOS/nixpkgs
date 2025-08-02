@@ -19,7 +19,11 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [ setuptools ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/sftpman help
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "sftpman" ];

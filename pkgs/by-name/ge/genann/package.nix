@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
 
   # Nix doesn't seem to recognize this by default.
   checkPhase = ''
+    runHook preCheck
+
     make check
+
+    runHook postCheck
   '';
 
   installPhase = ''

@@ -55,7 +55,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     meson test
+
+    runHook postCheck
   '';
 
   postInstall = ''

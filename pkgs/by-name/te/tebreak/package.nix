@@ -43,9 +43,13 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/tebreak -b test/data/example.ins.bam  -r test/data/Homo_sapiens_chr4_50000000-60000000_assembly19.fasta -p 4 --pickle test/example.pickle --detail_out test/example.tebreak.detail.out -i lib/teref.human.fa
     pushd test
     ${python3.interpreter} checktest.py
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "tebreak" ];

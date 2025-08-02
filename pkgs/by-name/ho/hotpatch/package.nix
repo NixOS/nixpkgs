@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     LD_LIBRARY_PATH=$(pwd)/src make test
+
+    runHook postCheck
   '';
 
   patches = [ ./no-loader-test.patch ];

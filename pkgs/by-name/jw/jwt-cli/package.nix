@@ -32,9 +32,13 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/jwt --version > /dev/null
     $out/bin/jwt decode eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c \
       | grep -q 'John Doe'
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = gitUpdater { };

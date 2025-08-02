@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   '';
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     bash test/run_tests $out/bin
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

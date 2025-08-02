@@ -20,7 +20,11 @@ buildGoModule rec {
 
   nativeCheckInputs = [ gnupg ];
   checkPhase = ''
+    runHook preCheck
+
     HOME=$TMPDIR go test .
+
+    runHook postCheck
   '';
 
   doCheck = true;

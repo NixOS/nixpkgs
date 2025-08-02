@@ -37,8 +37,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     patchShebangs .
     make -C test
+
+    runHook postCheck
   '';
 
   meta = with lib; {

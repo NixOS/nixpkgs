@@ -34,7 +34,11 @@ buildGoModule rec {
   subPackages = [ "cmd/rvz" ];
 
   checkPhase = ''
+    runHook preCheck
+
     go test -v -short -coverprofile=cover.out ./...
+
+    runHook postCheck
   '';
 
   meta = {

@@ -58,6 +58,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     # Resolves the warning "Fontconfig error: No writable cache directories"
     export XDG_CACHE_HOME="$(mktemp -d)"
 
@@ -71,6 +73,8 @@ stdenv.mkDerivation {
     # 2 tests are still failing, we exclude them for now
     mono ${deps}/share/nuget/packages/nunit.console/3.0.1/tools/nunit3-console.exe bin/Debug/UnitTest.dll \
       --where "test != 'MidiFileTest.TestChangeSoundTrack' && test != 'MidiFileTest.TestChangeSoundPerChannelTracks'"
+
+    runHook postCheck
   '';
 
   # This fixes tests that fail because of missing fonts

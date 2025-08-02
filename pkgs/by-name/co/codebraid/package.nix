@@ -20,7 +20,11 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ bespon ];
   # unfortunately upstream doesn't contain tests
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/codebraid --help > /dev/null
+
+    runHook postCheck
   '';
   meta = with lib; {
     homepage = "https://github.com/gpoore/codebraid";

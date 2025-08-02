@@ -38,7 +38,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/argocd-autopilot version | grep ${src.rev} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   installPhase = ''

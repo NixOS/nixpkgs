@@ -85,9 +85,13 @@ python3Packages.buildPythonApplication rec {
   # The included doctests expect specific, hardcoded hardware to be present.
   # Instead, we just make sure the program runs enough to report its version.
   checkPhase = ''
+    runHook preCheck
+
     export XDG_DATA_HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen
     $out/bin/rapid-photo-downloader --detailed-version
+
+    runHook postCheck
   '';
 
   buildInputs = [

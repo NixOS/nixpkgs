@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/firrtl --firrtl-source "${''
       circuit test:
         module test:
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
     ''}" -o test.v
     cat test.v
     grep -qFe "module test" -e "endmodule" test.v
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

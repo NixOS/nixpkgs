@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
   ];
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/kooha --help
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

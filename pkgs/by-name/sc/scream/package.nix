@@ -51,10 +51,14 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     set +o pipefail
 
     # Programs exit with code 1 when testing help, so grep for a string
     $out/bin/scream -h 2>&1 | grep -q Usage:
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
