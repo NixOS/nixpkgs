@@ -10,14 +10,14 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpeditor";
   version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-t7nn3sO45dOQq5OMWhaseO9XHicQ/1fjukXal5yPMgY";
     fetchSubmodules = true;
   };
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rewine ];
     mainProgram = "cpeditor";
   };
-}
+})
