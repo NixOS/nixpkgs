@@ -549,8 +549,8 @@ let
             '';
           };
 
-          package = lib.mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
-            pkgsText = "pkgs.plasma5Packages";
+          package = lib.mkPackageOption pkgs.kdePackages "kwallet-pam" {
+            pkgsText = "pkgs.kdePackages";
           };
 
           forceRun = lib.mkEnableOption null // {
