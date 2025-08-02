@@ -387,6 +387,10 @@ let
               in
               php;
             inherit ztsSupport;
+
+            services.default = {
+              imports = [ ./service.nix ];
+            };
           };
 
           meta = with lib; {
