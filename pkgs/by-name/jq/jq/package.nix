@@ -49,6 +49,13 @@ stdenv.mkDerivation rec {
     # Improve-performance-of-repeating-strings is only a partial fix
     # https://github.com/jqlang/jq/commit/c6e041699d8cd31b97375a2596217aff2cfca85b
     ./0005-Fix-heap-buffer-overflow-when-formatting-an-empty-st.patch
+
+    # CVE-2025-49014 only relevant to 1.8.0, added for posterity
+    # https://github.com/jqlang/jq/commit/499c91bca9d4d027833bc62787d1bb075c03680e
+
+    # GHSA-f946-j5j2-4w5m (no CVE identifier)
+    # https://github.com/jqlang/jq/commit/5e159b34b179417e3e0404108190a2ac7d65611c
+    ./0006-Fix-GHSA-f946-j5j2-4w5m-stack-overflow-by-limit-regex-parse-depth.patch
   ];
 
   # https://github.com/jqlang/jq/issues/2871

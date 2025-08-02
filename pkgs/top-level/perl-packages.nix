@@ -2059,7 +2059,17 @@ with self;
       url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1700.tar.gz";
       hash = "sha256-uG1aV2uNOHruJPOfR6VK/RS7ZrCQA9tQZQAfHeA6js4=";
     };
-    propagatedBuildInputs = [ DigestHMAC ];
+    patches = [
+      (fetchurl {
+        name = "CVE-2025-40918.patch";
+        url = "https://security.metacpan.org/patches/A/Authen-SASL/2.1800/CVE-2025-40918-r1.patch";
+        hash = "sha256-2Mk6RoD7tI8V6YFV8gs08LLs0QeMJqwGz/eZ6zXBBpw=";
+      })
+    ];
+    propagatedBuildInputs = [
+      DigestHMAC
+      CryptURandom
+    ];
     meta = {
       description = "SASL Authentication framework";
       license = with lib.licenses; [
@@ -13827,6 +13837,11 @@ with self;
       url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.118.tar.gz";
       hash = "sha256-O7KiC6Nd+VjcCk8jBvwF2QPYuMTePIvu/OF3OdKByVg=";
     };
+    # Fix dynamic loading not available when cross compiling
+    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/install_share/d' Makefile.PL
+      sed -i '/File::ShareDir::Install/d' Makefile.PL
+    '';
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ FileShareDirInstall ];
     meta = {
@@ -13836,8 +13851,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      # Can't load module IO, dynamic loading not available in this perl.
-      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 

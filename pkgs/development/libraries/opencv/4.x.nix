@@ -13,7 +13,7 @@
   glib,
   glog,
   gflags,
-  protobuf_21,
+  protobuf,
   config,
   ocl-icd,
   qimgv,
@@ -332,7 +332,7 @@ effectiveStdenv.mkDerivation {
     glib
     glog
     pcre2
-    protobuf_21
+    protobuf
     zlib
   ]
   ++ optionals enablePython [
@@ -463,6 +463,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
+    (cmakeFeature "CMAKE_CXX_STANDARD" "17") # required to enable protobuf
     (cmakeBool "WITH_PROTOBUF" true)
     (cmakeBool "PROTOBUF_UPDATE_FILES" true)
     (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)

@@ -60,7 +60,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.49.0";
+  version = "2.50.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-YYGQz1kLfp9sEfkfI7HSZ82Yw6szuFBBbYdY+LWoVig=";
+    hash = "sha256-fj5sNt7L2PHu3RTULbZnS+A2ccIgSGS++ipBdWxcj8Q=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -295,7 +295,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/git
     cp -a contrib $out/share/git/
     mkdir -p $out/share/bash-completion/completions
-    ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
     ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
     # only readme, developed in another repo
     rm -r contrib/hooks/multimail
@@ -566,6 +565,8 @@ stdenv.mkDerivation (finalAttrs: {
       wmertens
       globin
       kashw2
+      me-and
+      philiptaron
     ];
     mainProgram = "git";
   };
