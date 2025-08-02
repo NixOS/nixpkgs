@@ -27,8 +27,12 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip -j ${meslo-lg}
     unzip -j ${meslo-lg-dz}
+
+    runHook postUnpack
   '';
 
   installPhase = ''

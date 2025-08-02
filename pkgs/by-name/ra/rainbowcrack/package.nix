@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p $out/{bin,share/rainbowcrack}
     unzip $src -d $out || true
+
+    runHook postUnpack
   '';
 
   installPhase = ''

@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ perlPackages.perl ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     sourceRoot=.
     gzip -d < $src > mb2md.pl
+
+    runHook postUnpack
   '';
 
   installPhase = ''

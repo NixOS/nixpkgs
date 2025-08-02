@@ -21,9 +21,13 @@ stdenv.mkDerivation {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p src
     pushd src
     tar xvzf $src
+
+    runHook postUnpack
   '';
 
   postPatch = ''

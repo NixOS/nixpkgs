@@ -67,8 +67,12 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     dpkg --fsys-tarfile $src | tar --extract
+
+    runHook postUnpack
   '';
 
   installPhase = ''

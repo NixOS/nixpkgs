@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg-deb -x $src $out
+
+    runHook postUnpack
   '';
 
   nativeBuildInputs = [

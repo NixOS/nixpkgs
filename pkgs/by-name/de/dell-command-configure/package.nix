@@ -38,9 +38,13 @@ let
     nativeBuildInputs = [ dpkg ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       tar -xzf ${finalAttrs.src}
       dpkg-deb -x command-configure_${version}.ubuntu24_amd64.deb command-configure
       dpkg-deb -x srvadmin-hapi_9.5.0_amd64.deb srvadmin-hapi
+
+      runHook postUnpack
     '';
 
     installPhase = ''
@@ -56,7 +60,11 @@ let
     inherit version;
 
     unpackPhase = ''
+      runHook preUnpack
+
       cp ${./wrapper-lib.c} wrapper-lib.c
+
+      runHook postUnpack
     '';
 
     postPatch = ''
