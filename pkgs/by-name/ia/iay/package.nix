@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       aaqaishtyaq
-      omasanori
     ];
     mainProgram = "iay";
   };
