@@ -105,7 +105,7 @@ let
     versionAtLeast
     ;
 
-  inherit (stdenvNoCC) hostPlatform targetPlatform;
+  inherit (stdenvNoCC) buildPlatform hostPlatform targetPlatform;
 
   includeFortifyHeaders' =
     if includeFortifyHeaders != null then
@@ -428,6 +428,17 @@ stdenvNoCC.mkDerivation {
     inherit nixSupport;
 
     inherit defaultHardeningFlags;
+  }
+  // optionalAttrs cc.langGo or false {
+    # So gccgo looks more like go
+
+    inherit (targetPlatform.go) GOOS GOARCH GOARM;
+
+    # go derivations say these must match the building system, not the host one
+    GOHOSTOS = buildPlatform.go.GOOS;
+    GOHOSTARCH = buildPlatform.go.GOARCH;
+
+    CGO_ENABLED = 1;
   };
 
   dontBuild = true;
@@ -861,6 +872,9 @@ stdenvNoCC.mkDerivation {
       hardening_unsupported_flags+=" format"
     ''
     + optionalString cc.langFortran or false ''
+      hardening_unsupported_flags+=" format"
+    ''
+    + optionalString cc.langGo or false ''
       hardening_unsupported_flags+=" format"
     ''
     + optionalString targetPlatform.isWasm ''
