@@ -121,9 +121,9 @@ python3Packages.buildPythonApplication rec {
         with_nix_stable = nixos-rebuild-ng.override {
           nix = nixVersions.stable;
         };
-        with_nix_2_3 = nixos-rebuild-ng.override {
-          # oldest / minimum supported version in nixpkgs
-          nix = nixVersions.nix_2_3;
+        with_nix_2_24 = nixos-rebuild-ng.override {
+          # oldest supported version in nixpkgs
+          nix = nixVersions.nix_2_24;
         };
         with_lix_latest = nixos-rebuild-ng.override {
           nix = lixPackageSets.latest.lix;
