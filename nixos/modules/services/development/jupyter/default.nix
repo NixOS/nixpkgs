@@ -7,6 +7,8 @@
 }:
 let
 
+  inherit (lib) filterAttrs;
+
   cfg = config.services.jupyter;
 
   package = pkgs.python3.withPackages (
@@ -203,7 +205,7 @@ in
         environment = {
           JUPYTER_PATH = toString kernels;
         }
-        // cfg.extraEnvironmentVariables;
+        // filterAttrs (k: v: v != null) cfg.extraEnvironmentVariables;
 
         serviceConfig = {
           Restart = "always";

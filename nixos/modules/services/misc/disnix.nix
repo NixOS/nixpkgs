@@ -97,10 +97,10 @@ in
         environment = {
           HOME = "/root";
         }
-        // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) {
+        // (lib.optionalAttrs (config.environment.variables.DYSNOMIA_CONTAINERS_PATH or null != null) {
           inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH;
         })
-        // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) {
+        // (lib.optionalAttrs (config.environment.variables.DYSNOMIA_MODULES_PATH or null != null) {
           inherit (config.environment.variables) DYSNOMIA_MODULES_PATH;
         });
 
