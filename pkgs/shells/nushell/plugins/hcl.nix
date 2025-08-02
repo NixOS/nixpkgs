@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_hcl";
-  version = "0.105.1";
+  version = "0.106.0";
 
   src = fetchFromGitHub {
     owner = "Yethal";
     repo = "nu_plugin_hcl";
     tag = finalAttrs.version;
-    hash = "sha256-V1RKZ0Tqq0LTGbHS2lLMyf6M4AgAgWSzkDeFUighO4k=";
+    hash = "sha256-hIvym7n5m6gulqrJ1K44OXVivWyAitGUWquaukgFvas=";
   };
 
-  cargoHash = "sha256-UbqKfQxut+76yB9F1gT8FEapbX/kHvaShltHpWUdhgc=";
+  cargoHash = "sha256-uLfBkrXq088hy7JMnzXRIZzu4QTklGCnscmhCJ1p2AQ=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
