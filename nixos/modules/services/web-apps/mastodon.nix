@@ -1100,7 +1100,7 @@ in
 
         services.postfix = lib.mkIf (cfg.smtp.createLocally && cfg.smtp.host == "127.0.0.1") {
           enable = true;
-          hostname = lib.mkDefault "${cfg.localDomain}";
+          settings.main.myhostname = lib.mkDefault "${cfg.localDomain}";
         };
 
         services.redis.servers.mastodon = lib.mkIf redisActuallyCreateLocally (
