@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         Version build with ${interface} interface.
       '';
       license = lib.licenses.unfreeRedistributable // {
-        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.rev}/LICENSE";
+        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.tag}/LICENSE";
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [
