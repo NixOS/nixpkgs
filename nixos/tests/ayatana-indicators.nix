@@ -44,6 +44,7 @@ in
           ++ (with pkgs.lomiri; [
             lomiri-indicator-datetime
             lomiri-indicator-network
+            lomiri-indicator-transfer
             lomiri-telephony-service
           ]);
       };
