@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    protobufc
     removeReferencesTo
   ];
   buildInputs = [
@@ -107,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   doCheck = false;
   # TODO: investigate failures; see this and linked discussions:
