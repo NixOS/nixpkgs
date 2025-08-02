@@ -1,0 +1,3 @@
+$pdf_mode = 1;
+$pdflatex = 'pdflatex';
+@default_files = ('print.tex');
