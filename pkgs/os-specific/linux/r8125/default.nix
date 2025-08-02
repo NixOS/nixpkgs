@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
   '';
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "BASEDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
   ];
 
