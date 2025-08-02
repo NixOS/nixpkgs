@@ -2,64 +2,63 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
+  meson-python,
+
+  # nativeBuildInputs
   cython,
   gfortran,
-  meson-python,
   numpy,
   scipy,
 
-  # native dependencies
+  # dependencies
   glibcLocales,
-  llvmPackages,
-  pytestCheckHook,
-  pytest-xdist,
-  pillow,
   joblib,
+  llvmPackages,
+  pillow,
+  pytest-xdist,
+  pytestCheckHook,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    pname = "scikit_learn";
-    inherit version;
-    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn";
+    repo = "scikit-learn";
+    tag = version;
+    hash = "sha256-U5c79YeCK8tbKgWY2fWQE0BMjTcwn4kJO3QyQY3wOlI=";
   };
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"numpy>=2,<2.3.0\"," "\"numpy>=2,<2.4.0\","
   '';
 
-  buildInputs = [
+  build-system = [
+    meson-python
+  ];
+
+  nativeBuildInputs = [
+    cython
+    gfortran
+    glibcLocales
+    numpy
     numpy.blas
     pillow
     glibcLocales
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
-
-  nativeBuildInputs = [
-    gfortran
-  ];
-
-  build-system = [
-    cython
-    meson-python
-    numpy
-    scipy
-  ];
 
   dependencies = [
     joblib
@@ -82,11 +81,13 @@ buildPythonPackage rec {
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
 
-    # Fail due to new deprecation warnings in scipy
-    # FIXME: reenable when fixed upstream
-    "test_logistic_regression_path_convergence_fail"
-    "test_linalg_warning_with_newton_solver"
-    "test_newton_cholesky_fallback_to_lbfgs"
+  disabledTestPaths = [
+    "tests/test_build.py::test_openmp_parallelism_enabled"
+  ];
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "sklearn"
 
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
@@ -115,17 +116,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sklearn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of python modules for machine learning and data mining";
     changelog =
       let
-        major = versions.major version;
-        minor = versions.minor version;
-        dashVer = replaceStrings [ "." ] [ "-" ] version;
+        major = lib.versions.major version;
+        minor = lib.versions.minor version;
+        dashVer = lib.replaceStrings [ "." ] [ "-" ] version;
       in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ davhau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      davhau
+      sarahec
+    ];
   };
 }
