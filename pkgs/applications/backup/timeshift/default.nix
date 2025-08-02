@@ -3,6 +3,7 @@
   btrfs-progs,
   coreutils,
   cron,
+  debianutils,
   grubPackage,
   mount,
   psmisc,
@@ -17,6 +18,7 @@ in
   btrfs-progs
   coreutils
   cron
+  debianutils
   grubPackage
   mount
   psmisc
