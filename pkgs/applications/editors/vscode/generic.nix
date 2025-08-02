@@ -96,6 +96,31 @@ stdenv.mkDerivation (
 
             # mono
             krb5
+
+            # Needed for headless browser-in-vscode based plugins such as
+            # anything based on Puppeteer https://pptr.dev .
+            # e.g. Roo Code
+            glib
+            nspr
+            nss
+            dbus
+            at-spi2-atk
+            cups
+            expat
+            libxkbcommon
+            xorg.libX11
+            xorg.libXcomposite
+            xorg.libXdamage
+            xorg.libxcb
+            xorg.libXext
+            xorg.libXfixes
+            xorg.libXrandr
+            cairo
+            pango
+            alsa-lib
+            libgbm
+            udev
+            libudev0-shim
           ])
           ++ additionalPkgs pkgs;
 
