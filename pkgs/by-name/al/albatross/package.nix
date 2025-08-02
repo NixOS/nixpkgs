@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "Albatross";
+  pname = "albatross";
   version = "1.7.4";
 
   src = fetchFromGitHub {

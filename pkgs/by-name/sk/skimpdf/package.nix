@@ -5,7 +5,7 @@
   fetchurl,
 }:
 stdenv.mkDerivation rec {
-  pname = "Skim";
+  pname = "skimpdf";
   version = "1.7.9";
 
   src = fetchurl {

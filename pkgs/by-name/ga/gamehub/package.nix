@@ -21,7 +21,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "GameHub";
+  pname = "gamehub";
   version = "0.16.3-2";
 
   src = fetchFromGitHub {

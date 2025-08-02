@@ -7,7 +7,7 @@
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "VictoriaLogs";
+  pname = "victorialogs";
   version = "1.26.0";
 
   src = fetchFromGitHub {

@@ -11,7 +11,7 @@
 }:
 
 buildDotnetModule rec {
-  pname = "Pinta";
+  pname = "pinta";
   version = "3.0.2";
 
   src = fetchFromGitHub {

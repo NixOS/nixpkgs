@@ -10,7 +10,7 @@
 }:
 let
   bigpemu-unwrapped = stdenv.mkDerivation rec {
-    pname = "BigPEmu";
+    pname = "bigpemu";
     version = "1.19";
     src = fetchurl {
       url = "https://www.richwhitehouse.com/jaguar/builds/BigPEmu_Linux64_v${

@@ -34,7 +34,7 @@ let
   ];
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
-  pname = "BoilR";
+  pname = "boilr";
   version = "1.9.6";
 
   src = fetchFromGitHub {

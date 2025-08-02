@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "JankyBorders";
+  pname = "jankyborders";
   version = "1.7.0";
 
   src = fetchFromGitHub {
