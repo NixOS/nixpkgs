@@ -4329,4 +4329,82 @@ runTests {
     expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
   };
 
+  # Tests for cross index utilities
+
+  testRenameCrossIndexFrom = {
+    expr = lib.renameCrossIndexFrom "pkgs" {
+      pkgsBuildBuild = "buildBuild";
+      pkgsBuildHost = "buildHost";
+      pkgsBuildTarget = "buildTarget";
+      pkgsHostHost = "hostHost";
+      pkgsHostTarget = "hostTarget";
+      pkgsTargetTarget = "targetTarget";
+    };
+    expected = {
+      buildBuild = "buildBuild";
+      buildHost = "buildHost";
+      buildTarget = "buildTarget";
+      hostHost = "hostHost";
+      hostTarget = "hostTarget";
+      targetTarget = "targetTarget";
+    };
+  };
+
+  testRenameCrossIndexTo = {
+    expr = lib.renameCrossIndexTo "self" {
+      buildBuild = "buildBuild";
+      buildHost = "buildHost";
+      buildTarget = "buildTarget";
+      hostHost = "hostHost";
+      hostTarget = "hostTarget";
+      targetTarget = "targetTarget";
+    };
+    expected = {
+      selfBuildBuild = "buildBuild";
+      selfBuildHost = "buildHost";
+      selfBuildTarget = "buildTarget";
+      selfHostHost = "hostHost";
+      selfHostTarget = "hostTarget";
+      selfTargetTarget = "targetTarget";
+    };
+  };
+
+  testMapCrossIndex = {
+    expr = lib.mapCrossIndex (x: x * 10) {
+      buildBuild = 1;
+      buildHost = 2;
+      buildTarget = 3;
+      hostHost = 4;
+      hostTarget = 5;
+      targetTarget = 6;
+    };
+    expected = {
+      buildBuild = 10;
+      buildHost = 20;
+      buildTarget = 30;
+      hostHost = 40;
+      hostTarget = 50;
+      targetTarget = 60;
+    };
+  };
+
+  testMapCrossIndexString = {
+    expr = lib.mapCrossIndex (x: "prefix-${x}") {
+      buildBuild = "bb";
+      buildHost = "bh";
+      buildTarget = "bt";
+      hostHost = "hh";
+      hostTarget = "ht";
+      targetTarget = "tt";
+    };
+    expected = {
+      buildBuild = "prefix-bb";
+      buildHost = "prefix-bh";
+      buildTarget = "prefix-bt";
+      hostHost = "prefix-hh";
+      hostTarget = "prefix-ht";
+      targetTarget = "prefix-tt";
+    };
+  };
+
 }
