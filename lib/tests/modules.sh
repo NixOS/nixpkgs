@@ -315,8 +315,8 @@ checkConfigOutput '^true$' "$@" ./define-_module-args-custom.nix
 # Check that using _module.args on imports cause infinite recursions, with
 # the proper error context.
 set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
-checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
-checkConfigError 'infinite recursion encountered' "$@"
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix

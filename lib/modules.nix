@@ -254,11 +254,12 @@ let
                   inherit
                     lib
                     options
-                    config
                     specialArgs
                     ;
                   _class = class;
                   _prefix = prefix;
+                  config = builtins.addErrorContext "If you get an infinite recursion here, you probably reference `config`
+              in `imports`. This is not supported; consider using mkEnableOption." config;
                 }
                 // specialArgs
               );
@@ -637,15 +638,6 @@ let
     key: f:
     args@{ config, ... }:
     let
-      importHint =
-        name:
-        if name == "config" then
-          "\n\n"
-          + ''
-            … If you get an infinite recursion here, you probably reference `config`
-              in `imports`. This is not supported; consider using mkEnableOption.''
-        else
-          "";
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
       # config._module.args option, the strictness used on the attribute
@@ -658,7 +650,7 @@ let
       # a module will resolve strictly the attributes used as argument but
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
-      context = name: ''while evaluating the module argument `${name}' in "${key}":${importHint name}'';
+      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
         name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
       ) (functionArgs f);
