@@ -258,8 +258,7 @@ let
                     ;
                   _class = class;
                   _prefix = prefix;
-                  config = builtins.addErrorContext "If you get an infinite recursion here, you probably reference `config`
-              in `imports`. This is not supported; consider using mkEnableOption." config;
+                  config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. This is not possible. If you are trying to achieve a conditional behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
                 }
                 // specialArgs
               );
