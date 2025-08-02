@@ -14397,6 +14397,7 @@ with pkgs;
   };
 
   zcash = callPackage ../applications/blockchains/zcash {
+    boost = boost183;
     stdenv = llvmPackages.stdenv;
   };
 
