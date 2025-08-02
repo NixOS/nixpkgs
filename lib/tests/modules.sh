@@ -82,6 +82,30 @@ checkConfigOutput() {
     fi
 }
 
+invertIfUnset() {
+    gate="$1"
+    shift
+    if [[ -n "${!gate:-}" ]]; then
+        "$@"
+    else
+        ! "$@"
+    fi
+}
+
+globalErrorLogCheck() {
+    invertIfUnset "REQUIRE_INFINITE_RECURSION_HINT" \
+      grep -i 'if you get an infinite recursion here' \
+      <<<"$err" >/dev/null \
+      || {
+        if [[ -n "${REQUIRE_INFINITE_RECURSION_HINT:-}" ]]; then
+            echo "Unexpected infinite recursion hint"
+        else
+            echo "Expected infinite recursion hint, but none found"
+        fi
+        return 1
+      }
+}
+
 checkConfigError() {
     local errorContains=$1
     local err=""
@@ -94,6 +118,14 @@ checkConfigError() {
         logFailure
         logEndFailure
     else
+        if ! globalErrorLogCheck "$err"; then
+            logStartFailure
+            echo "LOG:"
+            reportFailure "$@"
+            echo "GLOBAL ERROR LOG CHECK FAILED"
+            logFailure
+            logEndFailure
+        fi
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
@@ -283,8 +315,8 @@ checkConfigOutput '^true$' "$@" ./define-_module-args-custom.nix
 # Check that using _module.args on imports cause infinite recursions, with
 # the proper error context.
 set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
-checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
-checkConfigError 'infinite recursion encountered' "$@"
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
@@ -488,7 +520,7 @@ checkConfigOutput '^"bar"$' config.nest.bar ./freeform-attrsOf.nix ./freeform-ne
 checkConfigOutput '^null$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix ./define-value-string.nix
 # Check whether an freeform-typed value can depend on a declared option, this can only work with lazyAttrsOf
-checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
+REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigError 'The option .* was accessed but has no value defined. Try setting the option.' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 # submodules in freeformTypes should have their locations annotated
