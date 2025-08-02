@@ -61,6 +61,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
     "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "IS_AARCH64=1"
   ];
 
   enableParallelBuilding = true;
