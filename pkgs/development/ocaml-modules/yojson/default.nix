@@ -7,11 +7,11 @@
 
 buildDunePackage rec {
   pname = "yojson";
-  version = "2.2.2";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
-    hash = "sha256-mr+tjJp51HI60vZEjmacHmjb/IfMVKG3wGSwyQkSxZU=";
+    hash = "sha256-mUFNp2CbkqAkdO9LSezaFe3Iy7pSKTQbEk5+RpXDlhA=";
   };
 
   propagatedBuildInputs = [ seq ];
