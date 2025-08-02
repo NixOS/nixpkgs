@@ -226,6 +226,8 @@ self: super: with self; {
 
   aiocache = callPackage ../development/python-modules/aiocache { };
 
+  aiocmd = callPackage ../development/python-modules/aiocmd { };
+
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
   aiocomelit = callPackage ../development/python-modules/aiocomelit { };
@@ -970,6 +972,8 @@ self: super: with self; {
   assertpy = callPackage ../development/python-modules/assertpy { };
 
   asserts = callPackage ../development/python-modules/asserts { };
+
+  ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
 
@@ -7079,8 +7083,6 @@ self: super: with self; {
 
   iometer = callPackage ../development/python-modules/iometer { };
 
-  ionhash = callPackage ../development/python-modules/ionhash { };
-
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
 
   iopath = callPackage ../development/python-modules/iopath { };
@@ -7932,6 +7934,8 @@ self: super: with self; {
   lazr-restfulclient = callPackage ../development/python-modules/lazr-restfulclient { };
 
   lazr-uri = callPackage ../development/python-modules/lazr-uri { };
+
+  lazrs = callPackage ../development/python-modules/lazrs { };
 
   lazy = callPackage ../development/python-modules/lazy { };
 
@@ -11358,6 +11362,8 @@ self: super: with self; {
 
   pdfplumber = callPackage ../development/python-modules/pdfplumber { };
 
+  pdfquery = callPackage ../development/python-modules/pdfquery { };
+
   pdfrw = callPackage ../development/python-modules/pdfrw { };
 
   pdfrw2 = callPackage ../development/python-modules/pdfrw2 { };
@@ -13258,6 +13264,8 @@ self: super: with self; {
 
   pymilvus = callPackage ../development/python-modules/pymilvus { };
 
+  pymitsubishi = callPackage ../development/python-modules/pymitsubishi { };
+
   pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
@@ -13580,8 +13588,6 @@ self: super: with self; {
   pypykatz = callPackage ../development/python-modules/pypykatz { };
 
   pypytools = callPackage ../development/python-modules/pypytools { };
-
-  pyqldb = callPackage ../development/python-modules/pyqldb { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
@@ -16686,6 +16692,8 @@ self: super: with self; {
   snappy-15-knots = callPackage ../development/python-modules/snappy-15-knots { };
 
   snappy-manifolds = callPackage ../development/python-modules/snappy-manifolds { };
+
+  snapshot-restore-py = callPackage ../development/python-modules/snapshot-restore-py { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 

@@ -5311,6 +5311,8 @@ let
 
       wakatime.vscode-wakatime = callPackage ./WakaTime.vscode-wakatime { };
 
+      wgsl-analyzer.wgsl-analyzer = callPackage ./wgsl-analyzer.wgsl-analyzer { };
+
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "jinja";

@@ -333,6 +333,10 @@ in
     dependencies = [ self.blink-cmp ];
   };
 
+  blink-cmp-words = super.blink-cmp-words.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };

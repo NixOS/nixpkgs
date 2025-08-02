@@ -985,13 +985,13 @@
     "vendorHash": "sha256-AlB9tC3KejgUAjjT2pY7Q2mTS/AV4QRusSnyPiOheXE="
   },
   "opentelekomcloud": {
-    "hash": "sha256-HbtNk5UAr+q09mOICkKzh9wIP0HM9MFVVR6gEIBdnvs=",
+    "hash": "sha256-lBaer+ZI4kYHocgLlDDOVJnr3EwVhLEHO9JXqbLcH9E=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.36.43",
+    "rev": "v1.36.44",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-9ese4fUPQifxbvcK6QiSIet++WFaK9XuyBv6oJiIOGA="
+    "vendorHash": "sha256-+OT7y7YN8xT9MJqzVGlGxR1cEK6PYSNZLeSVNp9yOvI="
   },
   "openwrt": {
     "hash": "sha256-z78IceF2VJtiQpVqC+rTUDsph73LZawIK+az3rEhljA=",
@@ -1138,13 +1138,13 @@
     "vendorHash": "sha256-75GQmp/ybD+VugrrB8qTbP3OPHy3eyBGe5u7CM7CRcc="
   },
   "routeros": {
-    "hash": "sha256-ciQsBvpX6gWnDPt9O1SGrVVgNCvAHBPCaLfVlPxrSAY=",
+    "hash": "sha256-1qdq09QFijxQDUaoPJwJB4F5aZ0AHXJSGndcdR9iqOs=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.85.3",
+    "rev": "v1.86.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-lurBPksF2+SPraQ6KRr4EmI8rR7lY9BN+LZY8pKHjYU="
+    "vendorHash": "sha256-et1xqcaCKTRz9bJjTlRnxhXBoc6PaeSwJgBI4pAzcdg="
   },
   "rundeck": {
     "hash": "sha256-g8unbz8+UGLiAOJju6E2bLkygvZgHkv173PdMDefmrc=",
