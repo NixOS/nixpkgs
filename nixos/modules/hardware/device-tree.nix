@@ -81,6 +81,8 @@ let
 
   filteredDTBs = filterDTBs cfg.dtbSource;
 
+  dtcIncludePath = "${lib.getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes";
+
   # Fill in `dtboFile` for each overlay if not set already.
   # Existence of one of these is guarded by assertion below
   withDTBOs =
@@ -92,7 +94,7 @@ let
         dtboFile =
           let
             includePaths = [
-              "${lib.getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes"
+              dtcIncludePath
             ]
             ++ cfg.dtboBuildExtraIncludePaths;
             extraPreprocessorFlags = cfg.dtboBuildExtraPreprocessorFlags;
@@ -141,6 +143,29 @@ in
         '';
       };
 
+      dtbBuildExtraPreprocessorFlags = lib.mkOption {
+        default = [ ];
+        example = lib.literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
+        type = lib.types.listOf lib.types.str;
+        description = ''
+          Additional flags to pass to the preprocessor during dtb compilations.
+        '';
+      };
+
+      dtbBuildExtraIncludePaths = lib.mkOption {
+        default = [ ];
+        example = lib.literalExpression ''
+          [
+            ./my_custom_include_dir_1
+            ./custom_include_dir_2
+          ]
+        '';
+        type = lib.types.listOf lib.types.path;
+        description = ''
+          Additional include paths that will be passed to the preprocessor when compiling the .dts into .dtb.
+        '';
+      };
+
       dtboBuildExtraPreprocessorFlags = lib.mkOption {
         default = [ ];
         example = lib.literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
@@ -182,6 +207,55 @@ in
           The name of an explicit dtb to be loaded, relative to the dtb base.
           Useful in extlinux scenarios if the bootloader doesn't pick the
           right .dtb file from FDTDIR.
+        '';
+      };
+
+      platform = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Platform of this device.
+          Path ''${lib.getDev cfg.kernelPackage}/lib/modules/''${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes/\
+          ''${pkgs.stdenv.hostPlatform.linuxArch}/''${cfg.platform} will be included in compiling the devicetree.
+        '';
+      };
+
+      dtsText = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Literal DTS contents.
+        '';
+        example = ''
+          /dts-v1/;
+
+          #include "rk3588.dtsi"
+
+          / {
+            model = "HINLINK H88K";
+            compatible = "hinlink,h88k", "rockchip,rk3588";
+          };
+
+          &sdhci {
+            status = "okay";
+          };
+        '';
+      };
+
+      dtsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        description = ''
+          Path to .dts file.
+        '';
+        default = null;
+        example = lib.literalExpression "./dts/rockchip/hinlink-h88k.dts";
+      };
+
+      dtbFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          Path to .dtb compiled file.
         '';
       };
 
@@ -243,10 +317,47 @@ in
         '';
       };
 
-    hardware.deviceTree.package =
-      if (cfg.overlays != [ ]) then
-        pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
-      else
-        filteredDTBs;
+    hardware.deviceTree = {
+      dtsFile = lib.mkIf (cfg.dtsText != null) (
+        lib.mkDefault (pkgs.writeText "fromtext.dts" cfg.dtsText)
+      );
+
+      dtbFile =
+        let
+          includePaths =
+            cfg.dtbBuildExtraIncludePaths
+            ++ lib.optionals (cfg.platform != null) [
+              dtcIncludePath
+              "${dtcIncludePath}/${pkgs.stdenv.hostPlatform.linuxArch}/${cfg.platform}"
+            ];
+          extraPreprocessorFlags = cfg.dtbBuildExtraPreprocessorFlags;
+        in
+        lib.mkIf (cfg.dtsFile != null) (
+          lib.mkDefault (
+            pkgs.deviceTree.compileDTS {
+              name = "${baseNameOf (lib.removeSuffix ".dts" cfg.dtsFile)}.dtb";
+              inherit (cfg) dtsFile;
+              inherit includePaths extraPreprocessorFlags;
+            }
+          )
+        );
+
+      name = lib.mkIf (cfg.dtbFile != null) (lib.mkOverride 0 (baseNameOf cfg.dtbFile));
+
+      dtbSource = lib.mkIf (cfg.dtbFile != null) (
+        lib.mkOverride 0 (
+          pkgs.runCommand "single-dtb" { } ''
+            mkdir -p $out
+            cp ${cfg.dtbFile} $out
+          ''
+        )
+      );
+
+      package =
+        if (cfg.overlays != [ ]) then
+          pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
+        else
+          filteredDTBs;
+    };
   };
 }
