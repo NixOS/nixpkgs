@@ -91,7 +91,7 @@ let
     ];
   };
 
-  version = "0.100.1";
+  version = "0.101.2";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -108,7 +108,7 @@ stdenv.mkDerivation {
           "sdk-ia32" = "sha256-8T3lyQi5tvXhThapng/l+wEbmXdUQBqPT7HHDBpEk5Y=";
           "sdk-x64" = "sha256-nD1MYEm+4sq4MHkiOI46IgM6oDWpcyVWl3Yis0beEIg=";
           "ia32" = "sha256-TfAw7+z/I3eYRn20DN0sR9moqD23UG7nvQbeXQDNDcg=";
-          "x64" = "sha256-EqLESL4zVdBzFvhPgXfcIwSVNNBVIMy1SdCu6eNU96Q=";
+          "x64" = "sha256-lO0+YI+k3wIqUJc71OgP/ENQj8tZegp2fh7ZqdlGJBM=";
         }
         ."${flavor + bits}";
     };
