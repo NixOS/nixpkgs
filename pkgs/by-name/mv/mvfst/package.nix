@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  sanitiseHeaderPathsHook,
 
   folly,
   gflags,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [
