@@ -121,10 +121,13 @@ stdenv.mkDerivation (
     ];
 
     patches =
+      # Don’t include a reference to the build directory in the
+      # installed `llvm-config(1)`.
+      [ ./llvm-config-reproducibility.patch ]
       # Support custom installation dirs
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
-      [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
+      ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++
         lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
