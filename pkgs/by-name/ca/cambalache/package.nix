@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  fetchurl,
   python3,
   meson,
   ninja,
@@ -19,11 +20,13 @@
   webkitgtk_6_0,
   nix-update-script,
   casilda,
+  libxml2,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "cambalache";
-  version = "0.94.1";
+  # need https://gitlab.gnome.org/jpu/cambalache/-/commit/cbe5a6ab11b621f428a09954b3e0bc8c24b8a922
+  version = "0.97.6-unstable-2025-07-29";
   pyproject = false;
 
   # Did not fetch submodule since it is only for tests we don't run.
@@ -31,8 +34,8 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "jpu";
     repo = "cambalache";
-    tag = version;
-    hash = "sha256-dX9YiBCBG/ALWX0W1CjvdUlOCQ6UulnQCiYUscRMKWk=";
+    rev = "4375049d89cc719976ea9a578846ac554e9b7ea9";
+    hash = "sha256-JZRN8/qzxUKM85msHRMXd2T6FJnZBcCwRr3P9GbMqK0=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +49,20 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonPath = with python3.pkgs; [
-    pygobject3
+    (pygobject3.overrideAttrs (
+      oldAttrs:
+      let
+        version = "3.52.3";
+      in
+      {
+        inherit version;
+
+        src = fetchurl {
+          url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
+          hash = "sha256-AOQn0pHpV0Yqj61lmp+ci+d2/4Kot2vfQC8eruwIbYI=";
+        };
+      }
+    ))
     lxml
   ];
 
@@ -57,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
     gtksourceview5
     webkitgtk_4_1
     webkitgtk_6_0
+    libxml2
     # For extra widgets support.
     libadwaita
     libhandy
