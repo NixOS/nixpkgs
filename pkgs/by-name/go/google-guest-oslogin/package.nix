@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "google-guest-oslogin";
-  version = "20230831.00";
+  version = "20250725.01";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = version;
-    sha256 = "sha256-9QCB94HVbeLjioJuSN1Aa+EqFncojPoWFxw5mS9bDGw=";
+    sha256 = "sha256-WJf/iu+Q0/NDioWenC9AT8g4zbaxmkettB0c7Sj+P94=";
   };
 
   postPatch = ''
