@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # $dev/include/xcb/xcb.h includes pthread.h
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
