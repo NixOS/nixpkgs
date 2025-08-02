@@ -27,7 +27,7 @@ for i in "$@"; do
         mv "$i.tmp" "$i"
 
         for hook in "${fixupHooks[@]}"; do
-            eval "$hook" "$i"
+            "$hook" "$i"
         done
     fi
 done
