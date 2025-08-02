@@ -56,6 +56,8 @@ let
       ) s.mysql_databases;
     });
 
+  requireZfs = s: s ? zfs;
+
   repository =
     with lib.types;
     submodule {
@@ -124,6 +126,9 @@ let
 
   anycfgRequiresSudo =
     requireSudo cfg.settings || lib.any requireSudo (lib.attrValues cfg.configurations);
+  anycfgRequiresZfs =
+    requireZfs cfg.settings || lib.any requireZfs (lib.attrValues cfg.configurations);
+  anycfgSnapshots = anycfgRequiresZfs;
 in
 {
   options.services.borgmatic = {
@@ -185,11 +190,40 @@ in
       environment.etc = configFiles;
 
       systemd.packages = [ pkgs.borgmatic ];
-      systemd.services.borgmatic.path = [ pkgs.coreutils ];
-      systemd.services.borgmatic.serviceConfig = lib.optionalAttrs anycfgRequiresSudo {
-        NoNewPrivileges = false;
-        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_RAW CAP_SETUID CAP_SETGID";
-      };
+      systemd.services.borgmatic.path = [
+        pkgs.coreutils
+      ]
+      ++ lib.optional anycfgSnapshots pkgs.util-linux
+      ++ lib.optional anycfgRequiresZfs config.boot.zfs.package;
+
+      systemd.services.borgmatic.serviceConfig = lib.mkMerge [
+        (lib.mkIf anycfgRequiresSudo {
+          NoNewPrivileges = false;
+          CapabilityBoundingSet = [
+            "CAP_DAC_READ_SEARCH"
+            "CAP_NET_RAW"
+            "CAP_SETUID"
+            "CAP_SETGID"
+          ];
+        })
+        (lib.mkIf anycfgSnapshots {
+          NoNewPrivileges = false;
+          CapabilityBoundingSet = [ "CAP_SYS_ADMIN" ];
+          # this next line is included in the latest upstream unit and should become unnecessary
+          SystemCallFilter = [
+            "@system-service"
+            "@mount"
+          ];
+        })
+        (lib.mkIf anycfgRequiresZfs {
+          PrivateDevices = false;
+          CapabilityBoundingSet = [
+            "CAP_SYS_RAWIO"
+            "CAP_DAC_OVERRIDE"
+          ];
+          ReadWritePaths = [ "/etc/zfs" ];
+        })
+      ];
 
       # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
       systemd.timers.borgmatic.wantedBy = [ "timers.target" ];
