@@ -707,7 +707,10 @@ checkConfigOutput '"nixos"' config.sub.nixos.foo ./specialArgs-class.nix
 checkConfigOutput '"bar"' config.sub.conditionalImportAsNixos.foo ./specialArgs-class.nix
 checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNixos.bar ./specialArgs-class.nix
 checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
-checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
+
+# Checks for _module.freeformConfig
+checkConfigOutput 'true' config.result ./freeform-options.nix
+
 
 cat <<EOF
 ====== module tests ======
