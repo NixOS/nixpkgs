@@ -79,17 +79,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libpcap.so.0.8"
-  ];
-
   installPhase = ''
     runHook preInstall
 
     mv usr $out
     mv bin $out
     mv etc $out
-    patchelf --replace-needed libpcap.so.0.8 ${libpcap}/lib/libpcap.so $out/bin/warp-dex
     mv lib/systemd/system $out/lib/systemd/
     substituteInPlace $out/lib/systemd/system/warp-svc.service \
       --replace "ExecStart=" "ExecStart=$out"
