@@ -11520,8 +11520,6 @@ with pkgs;
     inherit (kdePackages) breeze-icons;
   };
 
-  material-kwin-decoration = libsForQt5.callPackage ../data/themes/material-kwin-decoration { };
-
   mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
   noto-fonts-cjk-serif-static = callPackage ../by-name/no/noto-fonts-cjk-serif/package.nix {
