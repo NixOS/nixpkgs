@@ -1,14 +1,9 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  hatchling,
-  hatch-requirements-txt,
-  hatch-vcs,
-  pyserial,
-  importlib-metadata,
 }:
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mpremote";
   version = "1.25.0";
 
@@ -21,24 +16,24 @@ buildPythonApplication rec {
   sourceRoot = "${src.name}/tools/mpremote";
   format = "pyproject";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     hatchling
     hatch-requirements-txt
     hatch-vcs
   ];
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     pyserial
     importlib-metadata
   ];
 
   pythonImportsCheck = [ "mpremote" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integrated set of utilities to remotely interact with and automate a MicroPython device over a serial connection";
     homepage = "https://github.com/micropython/micropython/blob/master/tools/mpremote/README.md";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ _999eagle ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _999eagle ];
     mainProgram = "mpremote";
   };
 }
