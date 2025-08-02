@@ -17,13 +17,6 @@ let
   cfg = config.boot.plymouth;
   opt = options.boot.plymouth;
 
-  nixosBreezePlymouth = pkgs.plasma5Packages.breeze-plymouth.override {
-    logoFile = cfg.logo;
-    logoName = "nixos";
-    osName = "NixOS";
-    osVersion = config.system.nixos.release;
-  };
-
   plymouthLogos = pkgs.runCommand "plymouth-logos" { inherit (cfg) logo; } ''
     mkdir -p $out
 
@@ -87,12 +80,7 @@ in
       };
 
       themePackages = mkOption {
-        default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
-        defaultText = literalMD ''
-          A NixOS branded variant of the breeze theme when
-          `config.${opt.theme} == "breeze"`, otherwise
-          `[ ]`.
-        '';
+        default = [ ];
         type = types.listOf types.package;
         description = ''
           Extra theme packages for plymouth.
