@@ -14,11 +14,12 @@
   wayland-scanner,
   wlroots_0_18,
   libxkbcommon,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "0.9.1";
+  version = "0.9.2";
 
   outputs = [
     "out"
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpu";
     repo = "casilda";
     tag = finalAttrs.version;
-    hash = "sha256-7A3XzfUALsmkykwOqF/8fg7T7LoVzwk1+7TmRkh1Wys=";
+    hash = "sha256-AvbgFUahZUdcV5MTEthcrXNt3HmEfd7tyi0YeeBFr14=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ gtk4 ];
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.gnome.org/jpu/casilda";
