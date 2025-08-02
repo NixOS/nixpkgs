@@ -1,0 +1,26 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "packages/core": {
+      "name": "@test/core",
+      "version": "1.0.0",
+      "dependencies": {
+        "lodash": "^4.17.21"
+      }
+    },
+    "packages/ui": {
+      "name": "@test/ui",
+      "version": "1.0.0",
+      "dependencies": {
+        "@test/core": "workspace:*",
+        "react": "^18.2.0"
+      }
+    }
+  },
+  "packages": {
+    "@test/core": ["@test/core@workspace:packages/core"],
+    "@test/ui": ["@test/ui@workspace:packages/ui"],
+    "lodash": ["lodash@4.17.21", "", {}, "sha512-validhashwithoutslashes"],
+    "react": ["react@18.2.0", "", {}, "sha512-anotherhashwithoutslashes"]
+  }
+}
