@@ -94,8 +94,12 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
 
     sed -i 's|/usr/bin/env perl|"${lib.getExe perl}"|' contrib/openssl-cmake/CMakeLists.txt
 
-    substituteInPlace src/Storages/System/StorageSystemLicenses.sh utils/list-licenses/list-licenses.sh \
+    substituteInPlace utils/list-licenses/list-licenses.sh \
       --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
+  ''
+  + lib.optionalString (lib.versions.majorMinor version <= "25.6") ''
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+       --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/tools.cmake \
