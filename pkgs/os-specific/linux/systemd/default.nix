@@ -63,7 +63,6 @@
   libseccomp,
   withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools,
   kexec-tools,
-  bashInteractive,
   bash,
   libmicrohttpd,
   libfido2,
@@ -399,7 +398,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcap
     libuuid
     linuxHeaders
-    bashInteractive # for patch shebangs
   ]
 
   ++ lib.optionals withGcrypt [
@@ -464,10 +462,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version-tag" version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
-    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
+
+    # /bin/sh is also the upstream default. Explicitly set this so that we're
+    # independent of upstream changes to the default.
+    (lib.mesonOption "debug-shell" "/bin/sh")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
@@ -514,6 +515,10 @@ stdenv.mkDerivation (finalAttrs: {
     # SSH
     (lib.mesonOption "sshconfdir" "")
     (lib.mesonOption "sshdconfdir" "no")
+
+    # RPM
+    # This stops building/installing RPM specific tools.
+    (lib.mesonOption "rpmmacrosdir" "no")
 
     # Features
 
