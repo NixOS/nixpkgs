@@ -231,6 +231,72 @@ with lib;
         || partitionTableType == "legacy+gpt";
       hasBootPartition = partitionTableType == "efi" || partitionTableType == "hybrid";
       hasNoFsPartition = partitionTableType == "hybrid" || partitionTableType == "legacy+gpt";
+      postVM =
+        let
+          # Build qemu with PVE's patch that adds support for the VMA format
+          vma =
+            (pkgs.qemu_kvm.override {
+              alsaSupport = false;
+              pulseSupport = false;
+              sdlSupport = false;
+              jackSupport = false;
+              gtkSupport = false;
+              vncSupport = false;
+              smartcardSupport = false;
+              spiceSupport = false;
+              ncursesSupport = false;
+              libiscsiSupport = false;
+              tpmSupport = false;
+              numaSupport = false;
+              seccompSupport = false;
+              guestAgentSupport = false;
+            }).overrideAttrs
+              (super: rec {
+                # Check https://github.com/proxmox/pve-qemu/tree/master for the version
+                # of qemu and patch to use
+                version = "9.0.0";
+                src = pkgs.fetchurl {
+                  url = "https://download.qemu.org/qemu-${version}.tar.xz";
+                  hash = "sha256-MnCKxmww2MiSYz6paMdxwcdtWX1w3erSGg0izPOG2mk=";
+                };
+                patches = [
+                  # Proxmox' VMA tool is published as a particular patch upon QEMU
+                  "${
+                    pkgs.fetchFromGitHub {
+                      owner = "proxmox";
+                      repo = "pve-qemu";
+                      rev = "14afbdd55f04d250bd679ca1ad55d3f47cd9d4c8";
+                      hash = "sha256-lSJQA5SHIHfxJvMLIID2drv2H43crTPMNIlIT37w9Nc=";
+                    }
+                  }/debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch"
+                ];
+
+                buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
+                nativeBuildInputs = super.nativeBuildInputs ++ [ pkgs.perl ];
+
+              });
+        in
+        ''
+          ${vma}/bin/vma create "${config.image.baseName}.vma" \
+            -c ${
+              cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)
+            }/qemu-server.conf drive-virtio0=$diskImage
+          rm $diskImage
+          ${pkgs.zstd}/bin/zstd "${config.image.baseName}.vma"
+          mv "${config.image.fileName}" $out/
+
+          mkdir -p $out/nix-support
+          echo "file vma $out/${config.image.fileName}" > $out/nix-support/hydra-build-products
+        '';
+      pveBaseConfigs = {
+        name = "proxmox-${cfg.filenameSuffix}";
+        baseName = config.image.baseName;
+        inherit (cfg) partitionTableType;
+        inherit (cfg.qemuConf) additionalSpace bootSize;
+        inherit (config.virtualisation) diskSize;
+        format = "raw";
+        inherit config lib pkgs;
+      };
     in
     {
       assertions = [
@@ -253,72 +319,15 @@ with lib;
       ];
       image.baseName = lib.mkDefault "vzdump-qemu-${cfg.filenameSuffix}";
       image.extension = "vma.zst";
-      system.build.image = config.system.build.VMA;
-      system.build.VMA = import ../../lib/make-disk-image.nix {
-        name = "proxmox-${cfg.filenameSuffix}";
-        baseName = config.image.baseName;
-        inherit (cfg) partitionTableType;
-        postVM =
-          let
-            # Build qemu with PVE's patch that adds support for the VMA format
-            vma =
-              (pkgs.qemu_kvm.override {
-                alsaSupport = false;
-                pulseSupport = false;
-                sdlSupport = false;
-                jackSupport = false;
-                gtkSupport = false;
-                vncSupport = false;
-                smartcardSupport = false;
-                spiceSupport = false;
-                ncursesSupport = false;
-                libiscsiSupport = false;
-                tpmSupport = false;
-                numaSupport = false;
-                seccompSupport = false;
-                guestAgentSupport = false;
-              }).overrideAttrs
-                (super: rec {
-                  # Check https://github.com/proxmox/pve-qemu/tree/master for the version
-                  # of qemu and patch to use
-                  version = "9.0.0";
-                  src = pkgs.fetchurl {
-                    url = "https://download.qemu.org/qemu-${version}.tar.xz";
-                    hash = "sha256-MnCKxmww2MiSYz6paMdxwcdtWX1w3erSGg0izPOG2mk=";
-                  };
-                  patches = [
-                    # Proxmox' VMA tool is published as a particular patch upon QEMU
-                    "${
-                      pkgs.fetchFromGitHub {
-                        owner = "proxmox";
-                        repo = "pve-qemu";
-                        rev = "14afbdd55f04d250bd679ca1ad55d3f47cd9d4c8";
-                        hash = "sha256-lSJQA5SHIHfxJvMLIID2drv2H43crTPMNIlIT37w9Nc=";
-                      }
-                    }/debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch"
-                  ];
-
-                  buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
-                  nativeBuildInputs = super.nativeBuildInputs ++ [ pkgs.perl ];
-
-                });
-          in
-          ''
-            ${vma}/bin/vma create "${config.image.baseName}.vma" \
-              -c ${
-                cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)
-              }/qemu-server.conf drive-virtio0=$diskImage
-            rm $diskImage
-            ${pkgs.zstd}/bin/zstd "${config.image.baseName}.vma"
-            mv "${config.image.fileName}" $out/
-
-            mkdir -p $out/nix-support
-            echo "file vma $out/${config.image.fileName}" > $out/nix-support/hydra-build-products
-          '';
-        inherit (cfg.qemuConf) additionalSpace bootSize;
-        inherit (config.virtualisation) diskSize;
-        format = "raw";
-        inherit config lib pkgs;
+      system.build = {
+        cloudImage = import ../../lib/make-disk-image.nix pveBaseConfigs;
+        VMA = import ../../lib/make-disk-image.nix (
+          pveBaseConfigs
+          // {
+            inherit postVM;
+          }
+        );
+        image = config.system.build.VMA;
       };
 
       boot = {
