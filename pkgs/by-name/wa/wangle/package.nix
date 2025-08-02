@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2025.04.21.00";
+  version = "2025.07.28.00";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t3b+R2tb4VTsjDL9Jzjcaehs5k+BLNLilm3+nXxyjj0=";
+    hash = "sha256-3pmk4q3sUDxkyjMl6iThAUKUmPUfODjoU0xoXqfqOWo=";
   };
 
   patches = [
