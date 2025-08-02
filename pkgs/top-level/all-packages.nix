@@ -1587,8 +1587,6 @@ with pkgs;
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
-  apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
-
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
   arpack-mpi = arpack.override { useMpi = true; };
