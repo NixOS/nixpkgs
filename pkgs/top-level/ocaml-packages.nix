@@ -1066,6 +1066,8 @@ let
 
         logs = callPackage ../development/ocaml-modules/logs { };
 
+        logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
+
         lru = callPackage ../development/ocaml-modules/lru { };
 
         lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
