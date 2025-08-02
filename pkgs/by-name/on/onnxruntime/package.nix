@@ -293,7 +293,6 @@ effectiveStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       puffnfresh
       ck3d
-      cbourjau
     ];
   };
 }
