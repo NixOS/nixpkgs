@@ -312,6 +312,8 @@ print OUT <<EOF;
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xprop,
+  xrefresh,
   xtrans,
 }:
 
@@ -331,6 +333,8 @@ self: with self; {
     sessreg
     xbitmaps
     xorgproto
+    xprop
+    xrefresh
     xtrans
     ;
   fontalias = font-alias;
