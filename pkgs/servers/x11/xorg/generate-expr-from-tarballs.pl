@@ -307,7 +307,13 @@ print OUT <<EOF;
   util-macros,
   xbitmaps,
   xcb-proto,
+  xcmsdb,
+  xdriinfo,
   xkeyboard-config,
+  xlsatoms,
+  xlsclients,
+  xlsfonts,
+  xmodmap,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -330,6 +336,12 @@ self: with self; {
     pixman
     sessreg
     xbitmaps
+    xcmsdb
+    xdriinfo
+    xlsatoms
+    xlsclients
+    xlsfonts
+    xmodmap
     xorgproto
     xtrans
     ;

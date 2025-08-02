@@ -745,13 +745,6 @@ self: super:
     };
   });
 
-  xdriinfo = super.xdriinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ libGL ];
-    meta = attrs.meta // {
-      mainProgram = "xdriinfo";
-    };
-  });
-
   xev = addMainProgram super.xev { };
   xeyes = addMainProgram super.xeyes { };
 
@@ -825,13 +818,6 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
-
-  xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "xlsfonts";
-    };
-  });
 
   xorgserver = super.xorgserver.overrideAttrs (
     attrs_passed:
@@ -1100,7 +1086,6 @@ self: super:
 
   xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
-  xcmsdb = addMainProgram super.xcmsdb { };
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };
   xcursorgen = addMainProgram super.xcursorgen { };
@@ -1206,11 +1191,8 @@ self: super:
   xkbprint = addMainProgram super.xkbprint { };
   xkill = addMainProgram super.xkill { };
   xload = addMainProgram super.xload { };
-  xlsatoms = addMainProgram super.xlsatoms { };
-  xlsclients = addMainProgram super.xlsclients { };
   xmag = addMainProgram super.xmag { };
   xmessage = addMainProgram super.xmessage { };
-  xmodmap = addMainProgram super.xmodmap { };
   xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
