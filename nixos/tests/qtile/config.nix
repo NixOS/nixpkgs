@@ -15,10 +15,7 @@ stdenvNoCC.mkDerivation {
     cp $src config.py
   '';
 
-  patches = [
-    ./add-widget.patch
-    ./add-startup-hook.patch
-  ];
+  patches = [ ./add-startup-hook.patch ];
 
   dontUnpack = true;
   dontBuild = true;
