@@ -24298,6 +24298,12 @@
     githubId = 1315818;
     name = "Felix Bühler";
   };
+  stupidcomputer = {
+    email = "ryan@beepboop.systems";
+    github = "stupidcomputer";
+    githubId = 108326967;
+    name = "Ryan Marina";
+  };
   stupremee = {
     email = "jutus.k@protonmail.com";
     github = "Stupremee";
