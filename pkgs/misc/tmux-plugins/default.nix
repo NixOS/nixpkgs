@@ -284,7 +284,7 @@ in
     '';
     meta = {
       homepage = "https://github.com/laktak/extrakto";
-      description = "Fuzzy find your text with fzf instead of selecting it by hand ";
+      description = "Fuzzy find your text with fzf instead of selecting it by hand";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [
@@ -870,7 +870,7 @@ in
     '';
     meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
-      description = "Use fzf to manage your tmux work environment! ";
+      description = "Use fzf to manage your tmux work environment";
       longDescription = ''
         Features:
         * Manage sessions (attach, detach*, rename, kill*).

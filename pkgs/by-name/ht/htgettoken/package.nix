@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Gets OIDC authentication tokens for High Throughput Computing via a Hashicorp vault server ";
+    description = "Gets OIDC authentication tokens for High Throughput Computing via a Hashicorp vault server";
     license = licenses.bsd3;
     homepage = "https://github.com/fermitools/htgettoken";
     maintainers = with maintainers; [ veprbl ];

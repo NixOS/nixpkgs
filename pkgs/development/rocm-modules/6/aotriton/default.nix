@@ -217,7 +217,7 @@ stdenv.mkDerivation (
         rmdir $out/bin
       '';
     meta = with lib; {
-      description = "ROCm Ahead of Time (AOT) Triton Math Library ";
+      description = "ROCm Ahead of Time (AOT) Triton Math Library";
       homepage = "https://github.com/ROCm/aotriton";
       license = with licenses; [ mit ];
       teams = [ teams.rocm ];

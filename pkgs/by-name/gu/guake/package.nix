@@ -42,7 +42,7 @@ python311Packages.buildPythonApplication rec {
     # Note: This is not a long-term solution, setup.py is deprecated.
     (fetchpatch {
       url = "https://github.com/Guake/guake/commit/14abaa0c69cfab64fe3467fbbea211d830042de8.patch";
-      hash = "sha256-RjGRFJDTQX2meAaw3UZi/3OxAtIHbRZVpXTbcJk/scY= ";
+      hash = "sha256-RjGRFJDTQX2meAaw3UZi/3OxAtIHbRZVpXTbcJk/scY=";
       revert = true;
     })
 

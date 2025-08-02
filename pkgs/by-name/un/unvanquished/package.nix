@@ -51,7 +51,7 @@ let
     version = binary-deps-version;
 
     src = fetchzip {
-      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz ";
+      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz";
       hash = "sha256-5n8gRvTuke4e7EaZ/5G+dtCG6qmnawhtA1IXIFQPkzA=";
     };
 

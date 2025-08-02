@@ -3851,7 +3851,7 @@ with self;
       FormValidatorSimple
     ];
     meta = {
-      description = "Validation with simple chains of constraints ";
+      description = "Validation with simple chains of constraints";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -5965,7 +5965,7 @@ with self;
     ];
     buildInputs = [ TestDeep ];
     meta = {
-      description = "Load (and optionally decrypt via GnuPG) user/pass identity information ";
+      description = "Load (and optionally decrypt via GnuPG) user/pass identity information";
       homepage = "https://github.com/dagolden/Config-Identity";
       license = with lib.licenses; [
         artistic1
@@ -18632,7 +18632,7 @@ with self;
     };
     propagatedBuildInputs = [ LinguaENWords2Nums ];
     meta = {
-      description = "Locate (written) numbers in English text ";
+      description = "Locate (written) numbers in English text";
       homepage = "https://github.com/neilb/Lingua-EN-FindNumber";
       license = with lib.licenses; [
         artistic1

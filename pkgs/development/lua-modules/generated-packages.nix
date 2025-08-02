@@ -4347,7 +4347,7 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-lua/plenary.nvim";
-        description = "lua functions you don't want to write ";
+        description = "lua functions you don't want to write";
         license.fullName = "MIT/X11";
       };
     }
