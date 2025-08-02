@@ -1174,15 +1174,13 @@ substituteAllInPlace() {
 # What follows is the generic builder.
 
 
-# This function is useful for debugging broken Nix builds.  It dumps
-# all environment variables to a file `env-vars' in the build
-# directory.  If the build fails and the `-K' option is used, you can
-# then go to the build directory and source in `env-vars' to reproduce
-# the environment used for building.
+# This function is useful for debugging broken Nix builds. It dumps all environment variables to a
+# file `env-vars' in the Nix build directory. If the build fails and the `-K' option is used,
+# you can then go to the build directory and source the `env-vars' file to reproduce the environment
+# used for building. Set `noDumpEnvVars` in the derivation to avoid this, and if for whatever reason
+# `$NIX_BUILD_TOP` is not a directory, this function also does nothing.
 dumpVars() {
-    if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        # Don't use `install` here to prevent executing a process each time.
-
+    if [[ "${noDumpEnvVars:-0}" != 1 && -d "$NIX_BUILD_TOP" ]]; then
         # Set umask to create env-vars file with 0600 permissions (owner read/write only)
         local old_umask
         old_umask=$(umask)
