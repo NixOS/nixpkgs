@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     cp tpm_server $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IBM's Software TPM 2.0, an implementation of the TCG TPM 2.0 specification";
     mainProgram = "tpm_server";
     homepage = "https://sourceforge.net/projects/ibmswtpm2/";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hachoir" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to view and edit a binary stream";
     homepage = "https://hachoir.readthedocs.io/";
     changelog = "https://github.com/vstinner/hachoir/blob/${version}/doc/changelog.rst";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -12,13 +12,13 @@
 
 mkDerivation {
   pname = "kteatime";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/utilities/org.kde.kteatime";
     description = "Handy timer for steeping tea";
     mainProgram = "kteatime";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

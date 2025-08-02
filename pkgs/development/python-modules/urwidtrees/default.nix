@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urwidtrees" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tree widgets for urwid";
     homepage = "https://github.com/pazz/urwidtrees";
     changelog = "https://github.com/pazz/urwidtrees/releases/tag/${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

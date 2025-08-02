@@ -29,7 +29,7 @@ buildGoModule rec {
   # There are no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Go assembler formatter";
     mainProgram = "asmfmt";
     longDescription = ''
@@ -38,7 +38,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/klauspost/asmfmt";
     changelog = "https://github.com/klauspost/asmfmt/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

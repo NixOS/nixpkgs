@@ -30,14 +30,14 @@ rustPlatform.buildRustPackage rec {
   # Requires a running substrate node
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paritytech/subxt";
     description = "Submit transactions to a substrate node via RPC";
     mainProgram = "subxt";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       asl20
     ];
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = [ lib.maintainers.FlorianFranzen ];
   };
 }

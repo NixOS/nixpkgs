@@ -29,15 +29,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Font containing stroke order diagrams for over 6500 kanji, 180 kana and other characters";
     homepage = "https://www.nihilist.org.uk/";
 
-    license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.bsd3 ];
+    maintainers = with lib.maintainers; [
       ptrhlm
       stephen-huan
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

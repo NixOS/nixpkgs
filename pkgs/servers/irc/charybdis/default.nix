@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     gnutls
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IRCv3 server designed to be highly scalable";
     homepage = "https://github.com/charybdis-ircd/charybdis";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lassulus ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lassulus ];
+    platforms = lib.platforms.unix;
   };
 
 }

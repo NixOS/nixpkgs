@@ -39,11 +39,11 @@ buildPythonPackage rec {
   # Tests require a running forked-daapd server
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for forked-daapd";
     homepage = "https://github.com/uvjustin/pyforked-daapd";
     changelog = "https://github.com/uvjustin/pyforked-daapd/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

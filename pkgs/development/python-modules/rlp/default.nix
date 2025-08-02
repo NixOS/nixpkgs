@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rlp" ];
 
-  meta = with lib; {
+  meta = {
     description = "RLP serialization library";
     homepage = "https://github.com/ethereum/pyrlp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

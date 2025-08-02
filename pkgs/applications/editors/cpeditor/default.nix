@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     substituteInPlace dist/linux/cpeditor.desktop --replace-fail 'Exec=/usr/bin/cpeditor' "Exec=cpeditor"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IDE specially designed for competitive programming";
     homepage = "https://cpeditor.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rewine ];
     mainProgram = "cpeditor";
   };
 }

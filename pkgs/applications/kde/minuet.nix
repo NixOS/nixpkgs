@@ -17,15 +17,15 @@
 
 mkDerivation {
   pname = "minuet";
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/minuet/";
     description = "Music Education Software";
     mainProgram = "minuet";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       gpl3
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peterhoeg
       HaoZeke
     ];

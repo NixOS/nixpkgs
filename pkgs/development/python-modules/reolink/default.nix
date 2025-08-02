@@ -57,11 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reolink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/fwestenberg/reolink";
     changelog = "https://github.com/fwestenberg/reolink/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -24,10 +24,10 @@ mkDerivation {
     mauikit
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/maui/mauikit-terminal";
     description = "Terminal support components for Maui applications";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

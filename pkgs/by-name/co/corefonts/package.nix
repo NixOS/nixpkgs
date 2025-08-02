@@ -137,11 +137,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://corefonts.sourceforge.net/";
     description = "Microsoft's TrueType core fonts for the Web";
-    platforms = platforms.all;
-    license = licenses.unfreeRedistributable;
+    platforms = lib.platforms.all;
+    license = lib.licenses.unfreeRedistributable;
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;

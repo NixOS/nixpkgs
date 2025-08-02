@@ -57,10 +57,10 @@ buildPythonPackage rec {
     "batchgenerators.utilities"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "2D and 3D image data augmentation for deep learning";
     homepage = "https://github.com/MIC-DKFZ/batchgenerators";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

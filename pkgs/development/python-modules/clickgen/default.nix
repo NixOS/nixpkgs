@@ -44,15 +44,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickgen" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ful1e5/clickgen";
     description = "Hassle-free cursor building toolbox";
     longDescription = ''
       clickgen is API for building X11 and Windows Cursors from
       .png files. clickgen is using anicursorgen and xcursorgen under the hood.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AdsonCicilioti ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AdsonCicilioti ];
     # fails with:
     # ld: unknown option: -zdefs
     broken = stdenv.hostPlatform.isDarwin;

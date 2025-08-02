@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_import_order" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 and pylama plugin that checks the ordering of import statements";
     homepage = "https://github.com/PyCQA/flake8-import-order";
     changelog = "https://github.com/PyCQA/flake8-import-order/blob/${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3
       mit
     ];

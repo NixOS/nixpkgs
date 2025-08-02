@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygls" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
     changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

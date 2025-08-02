@@ -27,11 +27,11 @@ buildGo124Module {
     "-X tailscale.com/version.shortStamp=${tailscale.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tailscale.com";
     description = "Allows users to use a GitOps flow for managing Tailscale ACLs";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "gitops-pusher";
-    teams = [ teams.cyberus ];
+    teams = [ lib.teams.cyberus ];
   };
 }

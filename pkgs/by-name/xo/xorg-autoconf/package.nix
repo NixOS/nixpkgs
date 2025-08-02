@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "GNU autoconf macros shared across X.Org projects";
     homepage = "https://gitlab.freedesktop.org/xorg/util/macros";
-    maintainers = with maintainers; [ raboof ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

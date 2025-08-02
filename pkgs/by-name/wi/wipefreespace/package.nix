@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     export LDFLAGS="-L${jfsutils}/lib -L${reiser4progs}/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program which will securely wipe the free space";
     homepage = "https://wipefreespace.sourceforge.io";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ catap ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ catap ];
     mainProgram = "wipefreespace";
   };
 }

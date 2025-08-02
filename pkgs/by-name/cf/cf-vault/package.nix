@@ -29,13 +29,13 @@ buildGoModule rec {
     command = "cf-vault version";
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       A tool for managing your Cloudflare credentials, securely..
     '';
     homepage = "https://github.com/jacobbednarz/cf-vault/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "cf-vault";
   };
 }

@@ -19,10 +19,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert hcl2 to json";
     homepage = "https://github.com/tmccombs/hcl2json";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "hcl2json";
   };

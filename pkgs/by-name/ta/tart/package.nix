@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "macOS VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
-    license = licenses.fairsource09;
-    maintainers = with maintainers; [
+    license = lib.licenses.fairsource09;
+    maintainers = with lib.maintainers; [
       emilytrau
       aduh95
     ];
@@ -50,6 +50,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

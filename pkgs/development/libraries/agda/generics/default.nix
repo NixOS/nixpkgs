@@ -22,11 +22,11 @@ mkDerivation rec {
 
   # everythingFile = "./README.agda";
 
-  meta = with lib; {
+  meta = {
     description = "Library for datatype-generic programming in Agda";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ turion ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ turion ];
   };
 }

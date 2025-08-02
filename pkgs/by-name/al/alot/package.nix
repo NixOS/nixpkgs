@@ -95,12 +95,12 @@ buildPythonApplication rec {
       sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
     mainProgram = "alot";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
 }

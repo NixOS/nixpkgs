@@ -64,12 +64,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lsprotocol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/microsoft/lsprotocol";
     changelog = "https://github.com/microsoft/lsprotocol/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       doronbehar
       fab
     ];

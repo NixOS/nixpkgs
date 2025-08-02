@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
     # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the conda package manager";
     homepage = "https://github.com/mamba-org/mamba";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mausch ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mausch ];
     mainProgram = "micromamba";
   };
 }

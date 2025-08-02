@@ -29,10 +29,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyairctrl" ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Command Line App for Controlling Philips Air Purifiers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urbas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urbas ];
   };
 }

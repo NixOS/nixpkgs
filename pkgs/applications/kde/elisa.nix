@@ -46,11 +46,11 @@ mkDerivation {
     qtwebsockets
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/elisa/";
     description = "Simple media player for KDE";
     mainProgram = "elisa";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

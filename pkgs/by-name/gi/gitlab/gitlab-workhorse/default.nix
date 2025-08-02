@@ -28,10 +28,10 @@ buildGoModule rec {
   doCheck = false;
   prodyVendor = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gitlab.com/";
-    platforms = platforms.linux;
-    teams = [ teams.gitlab ];
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gitlab ];
+    license = lib.licenses.mit;
   };
 }

@@ -57,12 +57,12 @@ mkDerivation rec {
 
   NIX_LDFLAGS = "-ltag";
 
-  meta = with lib; {
+  meta = {
     description = "Powerful batch renamer for KDE";
     mainProgram = "krename";
     homepage = "https://kde.org/applications/utilities/krename/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (kconfig.meta) platforms;
   };
 }

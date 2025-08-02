@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/maldoinc/plasma-theme-switcher/";
     description = "KDE Plasma theme switcher";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ kevink ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ kevink ];
     mainProgram = "plasma-theme";
   };
 }

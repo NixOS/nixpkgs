@@ -40,10 +40,10 @@ mkDerivation rec {
     kdecoration
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern style for qt applications";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pasqui23 ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pasqui23 ];
     homepage = "https://github.com/Luwx/Lightly/";
     inherit (kwindowsystem.meta) platforms;
   };

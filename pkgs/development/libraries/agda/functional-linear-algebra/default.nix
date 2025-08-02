@@ -22,14 +22,14 @@ mkDerivation rec {
     sh generate-everything.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ryanorendorff/functional-linear-algebra";
     description = ''
       Formalizing linear algebra in Agda by representing matrices as functions
       from one vector space to another.
     '';
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ryanorendorff ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ryanorendorff ];
   };
 }

@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
       --replace "-o aslr" ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scriptable music files tags tool and editor";
     homepage = "https://github.com/kaworu/tagutil";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "tagutil";
   };
 }

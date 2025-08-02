@@ -45,12 +45,12 @@ mkDerivation {
     rm $out/bin/AppCSXCAD.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Application using the QCSXCAD library";
     mainProgram = "AppCSXCAD";
     homepage = "https://github.com/thliebig/AppCSXCAD";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
 }

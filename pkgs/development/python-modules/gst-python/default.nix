@@ -87,10 +87,10 @@ buildPythonPackage rec {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
   };
 }

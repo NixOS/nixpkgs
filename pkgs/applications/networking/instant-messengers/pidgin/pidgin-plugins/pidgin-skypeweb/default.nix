@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/EionRobb/skype4pidgin";
     description = "SkypeWeb plugin for Pidgin";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

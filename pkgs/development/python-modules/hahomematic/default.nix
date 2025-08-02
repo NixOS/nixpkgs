@@ -55,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hahomematic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with HomeMatic devices";
     homepage = "https://github.com/SukramJ/hahomematic";
     changelog = "https://github.com/SukramJ/hahomematic/blob/${src.tag}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
       fab
     ];

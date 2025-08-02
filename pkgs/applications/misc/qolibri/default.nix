@@ -54,12 +54,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EPWING reader for viewing Japanese dictionaries";
     homepage = "https://github.com/mvf/qolibri";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; # Looks like a libcxx version mismatch problem.
     mainProgram = "qolibri";
   };

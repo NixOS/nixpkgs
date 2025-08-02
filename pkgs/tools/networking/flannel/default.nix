@@ -26,15 +26,15 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) flannel; };
 
-  meta = with lib; {
+  meta = {
     description = "Network fabric for containers, designed for Kubernetes";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/flannel-io/flannel";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johanot
       offline
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "flannel";
   };
 }

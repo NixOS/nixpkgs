@@ -44,10 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KWin Script for snapping windows into zones";
-    maintainers = with maintainers; [ matthiasbeyer ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Plus;
     inherit (finalAttrs.src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

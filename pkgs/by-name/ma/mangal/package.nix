@@ -37,11 +37,11 @@ buildGoModule rec {
 
   doCheck = false; # test fail because of sandbox
 
-  meta = with lib; {
+  meta = {
     description = "CLI app written in Go which scrapes, downloads and packs manga into different formats";
     homepage = "https://github.com/metafates/mangal";
-    license = licenses.mit;
-    maintainers = [ maintainers.bertof ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.bertof ];
     mainProgram = "mangal";
   };
 }

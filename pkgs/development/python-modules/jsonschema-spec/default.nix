@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   passthru.skipBulkUpdate = true; # newer versions under the jsonschema-path name
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/p1c2u/jsonschema-spec/releases/tag/${version}";
     description = "JSONSchema Spec with object-oriented paths";
     homepage = "https://github.com/p1c2u/jsonschema-spec";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

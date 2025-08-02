@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Cm1CzWwh6SWif6Vg3EWsgAV9J18jNCECglkJwC07Ekk=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://x42.github.io/libltc/";
     description = "POSIX-C Library for handling Linear/Logitudinal Time Code (LTC)";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
   };
 }

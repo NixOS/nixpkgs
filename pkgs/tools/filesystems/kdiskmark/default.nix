@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     (lib.makeBinPath [ fio ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HDD and SSD benchmark tool with a friendly graphical user interface";
     longDescription = ''
       If kdiskmark is not run as root it can rely on polkit to get the necessary
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
       on NixOS, nix-env will not work.
     '';
     homepage = "https://github.com/JonMagon/KDiskMark";
-    maintainers = [ maintainers.symphorien ];
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.symphorien ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     mainProgram = "kdiskmark";
   };
 }

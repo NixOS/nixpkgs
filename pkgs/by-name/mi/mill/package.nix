@@ -41,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/mill --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://com-lihaoyi.github.io/mill/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Build tool for Scala, Java and more";
     mainProgram = "mill";
     longDescription = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       scalavision
       zenithal
     ];

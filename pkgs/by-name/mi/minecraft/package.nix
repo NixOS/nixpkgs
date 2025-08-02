@@ -153,12 +153,12 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
-    maintainers = with maintainers; [ ryantm ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ ryantm ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     # "minecraft-launcher will fail on NixOS for minecraft versions >1.19
     # try prismlauncher or atlauncher instead"

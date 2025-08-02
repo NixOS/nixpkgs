@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     ./sdl-error.patch # Adds required include for SDL_GetError.
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Slide show presentation tool";
 
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "xsw";
   };

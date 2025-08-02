@@ -24,13 +24,13 @@ let
 
     propagatedBuildInputs = [ rocq-elpi ];
 
-    meta = with lib; {
+    meta = {
       description = "High level commands to declare a hierarchy based on packed classes";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         cohencyril
         siraben
       ];
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in

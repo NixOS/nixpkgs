@@ -80,11 +80,11 @@ buildPythonApplication rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open source ecosystem for open FPGA boards";
     mainProgram = "apio";
     homepage = "https://github.com/FPGAwars/apio";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

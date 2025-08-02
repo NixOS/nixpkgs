@@ -39,10 +39,10 @@ buildPythonPackage rec {
       "test_json_default_encoder_with_timestamp"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Json Formatter for the standard python logger";
     homepage = "https://github.com/madzak/python-json-logger";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

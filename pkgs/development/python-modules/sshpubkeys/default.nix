@@ -23,10 +23,10 @@ buildPythonPackage rec {
     ecdsa
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenSSH Public Key Parser for Python";
     homepage = "https://github.com/ojarva/python-sshpubkeys";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

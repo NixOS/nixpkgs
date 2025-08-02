@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     "-DMYGUI_RENDERSYSTEM=${renderSystem}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mygui.info/";
     description = "Library for creating GUIs for games and 3D applications";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

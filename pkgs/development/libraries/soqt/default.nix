@@ -33,11 +33,11 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coin3d/soqt";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Glue between Coin high-level 3D visualization library and Qt";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

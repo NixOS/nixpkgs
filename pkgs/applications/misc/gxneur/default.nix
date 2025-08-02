@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     libappindicator-gtk2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for XNEUR keyboard layout switcher";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl2
       gpl3
     ];

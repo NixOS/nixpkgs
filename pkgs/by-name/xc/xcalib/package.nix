@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     cp xcalib $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Tiny monitor calibration loader for X and MS-Windows";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xcalib";
   };
 }

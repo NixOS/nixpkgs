@@ -14,11 +14,11 @@ stdenv.mkDerivation {
     sha256 = "1nmg9acxhcqly9gwkyb9m0hpy76fll91ywk4b1q4xms0ajxip1h7";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Japanese handwriting model for the Zinnia engine";
     homepage = "http://tegaki.org/";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 

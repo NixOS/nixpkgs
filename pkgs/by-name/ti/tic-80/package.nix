@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     SDL2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
@@ -108,9 +108,9 @@ stdenv.mkDerivation {
       channel sound and etc.
     '';
     homepage = "https://github.com/nesbox/TIC-80";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "tic80";
-    maintainers = with maintainers; [ blinry ];
+    maintainers = with lib.maintainers; [ blinry ];
   };
 }

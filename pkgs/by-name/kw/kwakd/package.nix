@@ -23,11 +23,11 @@ stdenv.mkDerivation {
       --replace "kwakd -p 80" "$out/bin/kwakd -p 80"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Super small webserver that serves blank pages";
     mainProgram = "kwakd";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.nicknovitski ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.nicknovitski ];
+    platforms = lib.platforms.unix;
   };
 }

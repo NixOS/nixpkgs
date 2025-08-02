@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crownstone_cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for communicating with Crownstone Cloud and devices";
     homepage = "https://github.com/Crownstone-Community/crownstone-lib-python-cloud";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

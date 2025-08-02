@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland Conformance Test Suite";
     longDescription = ''
       wlcs aspires to be a protocol-conformance-verifying test suite usable by Wayland
@@ -77,9 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/MirServer/wlcs";
     changelog = "https://github.com/MirServer/wlcs/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "wlcs"
     ];

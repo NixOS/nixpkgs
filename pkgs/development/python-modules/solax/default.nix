@@ -46,11 +46,11 @@ buildPythonPackage rec {
     "test_smoke"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Solax Inverter API";
     homepage = "https://github.com/squishykid/solax";
     changelog = "https://github.com/squishykid/solax/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

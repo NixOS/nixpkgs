@@ -23,11 +23,11 @@ mkDerivation {
     kio
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/ksystemlog/";
     description = "System log viewer";
     mainProgram = "ksystemlog";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ peterhoeg ];
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

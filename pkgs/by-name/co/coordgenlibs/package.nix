@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Schrodinger-developed 2D Coordinate Generation";
     homepage = "https://github.com/schrodinger/coordgenlibs";
     changelog = "https://github.com/schrodinger/coordgenlibs/releases/tag/${finalAttrs.version}";
-    maintainers = [ maintainers.rmcgibbo ];
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.rmcgibbo ];
+    license = lib.licenses.bsd3;
   };
 })

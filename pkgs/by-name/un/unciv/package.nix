@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
-    maintainers = with maintainers; [ tex ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mpl20;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ tex ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
   };
 }

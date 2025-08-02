@@ -34,10 +34,10 @@ stdenvNoCC.mkDerivation {
     grav = nixosTests.grav;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, simple, and flexible, file-based web platform";
     homepage = "https://getgrav.com";
-    maintainers = with maintainers; [ rycee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ rycee ];
+    license = lib.licenses.mit;
   };
 }

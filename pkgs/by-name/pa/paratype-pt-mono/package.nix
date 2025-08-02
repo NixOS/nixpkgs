@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.paratype.ru/public/";
     description = "Open Paratype font";
 
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation {
     # must rename on modification
     # http://www.paratype.ru/public/pt_openlicense.asp
 
-    platforms = platforms.all;
-    maintainers = with maintainers; [ raskin ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ raskin ];
   };
 }

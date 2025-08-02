@@ -26,7 +26,7 @@ buildDunePackage rec {
     bos
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty print an OCaml cmi/cmt/cmti file in human-readable OCaml signature form";
     homepage = "https://github.com/${author}/${pname}";
     license = lib.licenses.isc;

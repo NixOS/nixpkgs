@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     install xrandr-invert-colors $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Inverts the colors of your screen";
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/zoltanp/xrandr-invert-colors";
     maintainers = [ lib.maintainers.magnetophon ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xrandr-invert-colors";
   };
 }

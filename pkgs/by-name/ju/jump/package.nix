@@ -29,7 +29,7 @@ buildGoModule rec {
     installManPage man/j.1 man/jump.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Navigate directories faster by learning your habits";
     longDescription = ''
       Jump integrates with the shell and learns about your
@@ -37,7 +37,7 @@ buildGoModule rec {
       strives to give you the best directory for the shortest search term.
     '';
     homepage = "https://github.com/gsamokovarov/jump";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jump";
   };

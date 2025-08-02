@@ -67,11 +67,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Icon pack flat with light colors";
     homepage = "https://github.com/zayronxio/Zafiro-icons";
-    license = with licenses; [ gpl3 ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = with lib.licenses; [ gpl3 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

@@ -41,11 +41,11 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for fetching and formatting historical price data, with support for multiple data sources and output formats";
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pricehist";
-    maintainers = with maintainers; [ chrpinedo ];
+    maintainers = with lib.maintainers; [ chrpinedo ];
   };
 }

@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     patchShebangs tests contrib/tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C Library for reading, writing and updating ESRI Shapefiles";
     homepage = "http://shapelib.maptools.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ehmry ];
-    teams = [ teams.geospatial ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ehmry ];
+    teams = [ lib.teams.geospatial ];
     changelog = "http://shapelib.maptools.org/release.html";
   };
 }

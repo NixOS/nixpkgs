@@ -13,14 +13,14 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "ruby-zoom";
 
-  meta = with lib; {
+  meta = {
     description = "Quickly open CLI search results in your favorite editor";
     homepage = "https://gitlab.com/mjwhitta/zoom";
-    license = with licenses; gpl3;
-    maintainers = with maintainers; [
+    license = with lib.licenses; gpl3;
+    maintainers = with lib.maintainers; [
       vmandela
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

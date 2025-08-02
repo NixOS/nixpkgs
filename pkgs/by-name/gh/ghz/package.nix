@@ -40,9 +40,9 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple gRPC benchmarking and load testing tool";
     homepage = "https://ghz.sh";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

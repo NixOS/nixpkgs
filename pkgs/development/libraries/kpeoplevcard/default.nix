@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     extra-cmake-modules
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulseaudio bindings for Qt";
     homepage = "https://github.com/KDE/kpeoplevcard";
-    license = with licenses; [ lgpl2 ];
-    maintainers = with maintainers; [ doronbehar ];
+    license = with lib.licenses; [ lgpl2 ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 })

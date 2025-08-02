@@ -28,12 +28,12 @@ mkDerivation {
     taglib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/multimedia/juk";
     description = "Audio jukebox app, supporting collections of MP3, Ogg Vorbis and FLAC audio files";
     mainProgram = "juk";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

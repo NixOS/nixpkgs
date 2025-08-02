@@ -128,11 +128,11 @@ symlinkJoin {
     zod_map_editor
     zod_assets
   ];
-  meta = with lib; {
+  meta = {
     description = "Multiplayer remake of ZED";
     homepage = "https://zod.sourceforge.net/";
-    maintainers = with maintainers; [ zeri ];
-    license = licenses.gpl3Plus; # Says the website
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ zeri ];
+    license = lib.licenses.gpl3Plus; # Says the website
+    platforms = lib.platforms.linux;
   };
 }

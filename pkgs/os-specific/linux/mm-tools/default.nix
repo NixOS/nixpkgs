@@ -12,9 +12,9 @@ stdenv.mkDerivation {
 
   preConfigure = "cd tools/mm";
 
-  meta = with lib; {
+  meta = {
     inherit (linux.meta) license platforms;
     description = "Set of virtual memory tools";
-    maintainers = [ maintainers.evils ];
+    maintainers = [ lib.maintainers.evils ];
   };
 }

@@ -24,11 +24,11 @@ appimageTools.wrapType2 rec {
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
 
-  meta = with lib; {
+  meta = {
     description = "App for managing ROMs in Steam";
     homepage = "https://github.com/SteamGridDB/steam-rom-manager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ squarepear ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ squarepear ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "steam-rom-manager";
   };

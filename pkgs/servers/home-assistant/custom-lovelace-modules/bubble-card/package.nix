@@ -31,11 +31,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Clooos/bubble-card/releases/tag/v${version}";
     description = "Bubble Card is a minimalist card collection for Home Assistant with a nice pop-up touch";
     homepage = "https://github.com/Clooos/Bubble-Card";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pta2002 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pta2002 ];
   };
 }

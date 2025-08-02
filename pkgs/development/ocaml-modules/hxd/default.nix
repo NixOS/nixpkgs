@@ -32,11 +32,11 @@ buildDunePackage rec {
     export DUNE_CACHE=disabled
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hexdump in OCaml";
     homepage = "https://github.com/dinosaure/hxd";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "hxd.xxd";
   };
 }

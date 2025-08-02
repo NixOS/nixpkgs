@@ -91,16 +91,16 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://thetimelineproj.sourceforge.net/";
     changelog = "https://thetimelineproj.sourceforge.net/changelog.html";
     description = "Display and navigate information on a timeline";
     mainProgram = "timeline";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       cc-by-sa-30
     ];
-    platforms = with platforms; unix;
-    maintainers = with maintainers; [ davidak ];
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ davidak ];
   };
 }

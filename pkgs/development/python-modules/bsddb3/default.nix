@@ -44,10 +44,10 @@ buildPythonPackage rec {
     ${python.interpreter} test.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
-    license = with licenses; [ agpl3Only ]; # License changed from bsd3 to agpl3 since 6.x
+    license = with lib.licenses; [ agpl3Only ]; # License changed from bsd3 to agpl3 since 6.x
     maintainers = [ ];
   };
 }

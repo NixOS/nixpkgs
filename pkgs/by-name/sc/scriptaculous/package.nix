@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp src/*.js $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of JavaScript libraries to enhance the user interface of web sites";
     longDescription = ''
       script.aculo.us provides you with
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://script.aculo.us/";
     downloadPage = "https://script.aculo.us/dist/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

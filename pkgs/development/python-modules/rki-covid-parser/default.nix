@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rki_covid_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for working with data from the Robert-Koch Institut";
     homepage = "https://github.com/thebino/rki-covid-parser";
     changelog = "https://github.com/thebino/rki-covid-parser/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

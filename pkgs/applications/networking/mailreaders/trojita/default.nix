@@ -69,15 +69,15 @@ mkDerivation rec {
       done
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt IMAP e-mail client";
     homepage = "http://trojita.flaska.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       gpl3
     ];
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux;
   };
 
 }

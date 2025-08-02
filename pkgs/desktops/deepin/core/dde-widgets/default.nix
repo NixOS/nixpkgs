@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop widgets service/implementation for DDE";
     mainProgram = "dde-widgets";
     homepage = "https://github.com/linuxdeepin/dde-widgets";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

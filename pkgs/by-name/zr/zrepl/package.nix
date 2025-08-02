@@ -44,12 +44,12 @@ buildGoModule rec {
     inherit (nixosTests) zrepl;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zrepl.github.io/";
     description = "One-stop, integrated solution for ZFS replication";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cole-h
       mdlayher
     ];

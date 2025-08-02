@@ -41,11 +41,11 @@ mkDerivation rec {
     cp config.xml $out/bin/config.xml
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xp-pen.com/download-46.html";
     description = "Driver for XP-PEN Pentablet drawing tablets";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

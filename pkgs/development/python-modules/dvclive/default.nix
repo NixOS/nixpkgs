@@ -114,11 +114,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvclive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for logging machine learning metrics and other metadata in simple file formats";
     homepage = "https://github.com/iterative/dvclive";
     changelog = "https://github.com/iterative/dvclive/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

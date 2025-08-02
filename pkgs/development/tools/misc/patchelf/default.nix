@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/patchelf/issues/417
     && stdenv.cc.targetPrefix == "";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NixOS/patchelf";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
     mainProgram = "patchelf";
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

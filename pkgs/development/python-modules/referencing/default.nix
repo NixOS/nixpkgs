@@ -53,12 +53,12 @@ let
 
     pythonImportsCheck = [ "referencing" ];
 
-    meta = with lib; {
+    meta = {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
       changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fab ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fab ];
     };
   };
 in

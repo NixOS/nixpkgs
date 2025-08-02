@@ -140,7 +140,7 @@ llvmPackages.stdenv.mkDerivation rec {
     uclibc = chosenKleeuClibc;
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "klee";
     description = "Symbolic virtual machine built on top of LLVM";
     longDescription = ''
@@ -163,8 +163,8 @@ llvmPackages.stdenv.mkDerivation rec {
       environment variables, and passing command line arguments.
     '';
     homepage = "https://klee.github.io";
-    license = licenses.ncsa;
+    license = lib.licenses.ncsa;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ numinit ];
+    maintainers = with lib.maintainers; [ numinit ];
   };
 }

@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markups" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around various text markup languages";
     homepage = "https://github.com/retext-project/pymarkups";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ klntsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ klntsky ];
   };
 }

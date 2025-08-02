@@ -21,11 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ msgpack ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of exchange-correlation functionals with arbitrary-order derivatives";
     homepage = "https://github.com/rcsb/mmtf-cpp";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 })

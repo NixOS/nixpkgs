@@ -42,11 +42,11 @@ buildGoModule rec {
     "-X github.com/smallstep/step-kms-plugin/cmd.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "step plugin to manage keys and certificates on cloud KMSs and HSMs";
     homepage = "https://smallstep.com/cli/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qbit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qbit ];
     mainProgram = "step-kms-plugin";
     # can't find pcsclite header files
     broken = stdenv.hostPlatform.isDarwin;

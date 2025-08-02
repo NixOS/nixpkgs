@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/slstatus/";
     description = "Status monitor for window managers that use WM_NAME like dwm";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       oxzi
       qusic
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "slstatus";
   };
 }

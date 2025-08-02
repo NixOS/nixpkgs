@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Random Number Generator test suite";
     mainProgram = "dieharder";
     homepage = "https://webhome.phy.duke.edu/~rgb/General/dieharder.php";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zhaofengli ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zhaofengli ];
+    platforms = lib.platforms.unix;
   };
 })

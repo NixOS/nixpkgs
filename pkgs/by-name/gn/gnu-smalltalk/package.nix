@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # executed within nix-shell --pure.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the Smalltalk-80 language";
     longDescription = ''
       GNU Smalltalk is a free implementation of the Smalltalk-80 language. It
@@ -86,11 +86,11 @@ stdenv.mkDerivation rec {
       language, well-versed to scripting tasks.
     '';
     homepage = "http://smalltalk.gnu.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
 }

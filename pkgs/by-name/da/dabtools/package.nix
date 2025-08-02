@@ -30,11 +30,11 @@ stdenv.mkDerivation {
     libusb1
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tools for DAB and DAB+ digital radio broadcasts";
     homepage = "https://github.com/Opendigitalradio/dabtools";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 }

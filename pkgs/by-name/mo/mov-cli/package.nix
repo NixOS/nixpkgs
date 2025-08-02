@@ -61,7 +61,7 @@ python3.pkgs.buildPythonPackage {
       "--prefix PATH : ${binPath}"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mov-cli/mov-cli";
     description = "Cli tool to browse and watch movies";
     license = with lib.licenses; [ gpl3Only ];

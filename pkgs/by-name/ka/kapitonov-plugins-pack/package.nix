@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     zita-resampler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of LADSPA and LV2 plugins for guitar sound processing";
     homepage = "https://github.com/olegkapitonov/Kapitonov-Plugins-Pack";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
 }

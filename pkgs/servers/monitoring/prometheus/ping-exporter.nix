@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-1oNbg6lu9xLJKeYOzK23HOTLJc3KWri7z4/2AZ7Hzms=";
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for ICMP echo requests";
     mainProgram = "ping_exporter";
     homepage = "https://github.com/czerwonk/ping_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nudelsalat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nudelsalat ];
   };
 }

@@ -52,12 +52,12 @@ mkDerivation {
     mpv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mastodon client for Plasma and Plasma Mobile";
     mainProgram = "tokodon";
     homepage = "https://invent.kde.org/network/tokodon";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

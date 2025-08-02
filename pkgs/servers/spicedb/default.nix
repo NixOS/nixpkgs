@@ -33,15 +33,15 @@ buildGoModule rec {
       --zsh <($out/bin/spicedb completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source permission database";
     longDescription = ''
       SpiceDB is an open-source permissions database inspired by
       Google Zanzibar.
     '';
     homepage = "https://authzed.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       squat
       thoughtpolice
     ];

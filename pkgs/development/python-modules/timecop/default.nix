@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "timecop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Port of the most excellent TimeCop Ruby Gem for Python";
     homepage = "https://github.com/bluekelp/pytimecop";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zakame ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ zakame ];
   };
 }

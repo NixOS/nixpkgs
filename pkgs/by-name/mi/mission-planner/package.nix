@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "ArduPilot ground station";
     mainProgram = "mission-planner";
     longDescription = ''
@@ -82,8 +82,8 @@ stdenv.mkDerivation rec {
       Plane, Copter and Rover targets.
     '';
     homepage = "https://ardupilot.org/planner/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wucke13 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wucke13 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -21,7 +21,7 @@ let
     inherit pname version src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
@@ -32,8 +32,8 @@ let
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       hugoreeves
       qjoly
       yajo

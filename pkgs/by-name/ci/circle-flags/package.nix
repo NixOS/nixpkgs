@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/HatScripts/circle-flags";
     description = "Collection of 400+ minimal circular SVG country and state flags";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bobby285271 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    platforms = lib.platforms.all;
   };
 })

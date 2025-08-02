@@ -48,11 +48,11 @@ mkDerivation {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SMS application for Plasma Mobile";
     mainProgram = "spacebar";
     homepage = "https://invent.kde.org/plasma-mobile/spacebar";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

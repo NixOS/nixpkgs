@@ -34,11 +34,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mullvad_closest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Find Mullvad servers with the lowest latency at your location";
     mainProgram = "mullvad-closest";
     homepage = "https://github.com/Ch00k/mullvad-closest";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

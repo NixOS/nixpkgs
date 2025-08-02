@@ -32,10 +32,10 @@ buildPythonPackage rec {
   # Tests are broken
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/inducer/codepy";
     description = "Generate and execute native code at run time, from Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

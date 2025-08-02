@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn any object into a module";
     homepage = "https://github.com/rec/xmod";
     changelog = "https://github.com/rec/xmod/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

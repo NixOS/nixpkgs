@@ -27,11 +27,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightning Pool Client";
     homepage = "https://github.com/lightninglabs/pool";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       proofofkeags
       prusnak
     ];

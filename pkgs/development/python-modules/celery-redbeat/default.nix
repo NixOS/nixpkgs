@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "redbeat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Database-backed Periodic Tasks";
     homepage = "https://github.com/celery/django-celery-beat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -33,11 +33,11 @@ buildPythonPackage {
     defusedxml
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/v${version}";
     description = "Sitemap generator for Sphinx";
     homepage = "https://github.com/jdillard/sphinx-sitemap";
-    maintainers = with maintainers; [ alejandrosame ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ alejandrosame ];
+    license = lib.licenses.mit;
   };
 }

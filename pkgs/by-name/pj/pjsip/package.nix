@@ -130,13 +130,13 @@ stdenv.mkDerivation (finalAttrs: {
     ${(python3.withPackages (pkgs: [ pkgs.pjsua2 ])).interpreter} -c "import pjsua2" > $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ olynch ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ olynch ];
     mainProgram = "pjsua";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     pkgConfigModules = [ "libpjproject" ];
   };
 })

@@ -41,11 +41,11 @@ mkDerivation {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt library for CSXCAD";
     homepage = "https://github.com/thliebig/QCSXCAD";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
 }

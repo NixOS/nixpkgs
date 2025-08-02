@@ -186,11 +186,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
     homepage = "https://ladybird.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fgaz ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/himitsu-firefox";
     description = "Himitsu integration for Firefox";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ auchter ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ auchter ];
     inherit (hare.meta) platforms badPlatforms;
     broken = true;
   };

@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "systemdcatalogdir" "${placeholder "out"}/lib/systemd/catalog")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Safe and secure software updates for embedded Linux";
     homepage = "https://rauc.io";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
     mainProgram = "rauc";
   };
 }

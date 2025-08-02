@@ -61,10 +61,10 @@ buildPythonPackage rec {
     "intensity_normalization.util"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jcreinhold/intensity-normalization";
     description = "MRI intensity normalization tools";
-    maintainers = with maintainers; [ bcdarwin ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
   };
 }

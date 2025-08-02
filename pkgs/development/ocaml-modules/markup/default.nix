@@ -29,11 +29,11 @@ buildDunePackage rec {
   checkInputs = [ ounit2 ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aantron/markup.ml/";
     description = "Pair of best-effort parsers implementing the HTML5 and XML specifications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gal_bolle ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gal_bolle ];
   };
 
 }

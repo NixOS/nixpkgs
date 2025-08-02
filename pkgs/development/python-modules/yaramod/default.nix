@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaramod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing of YARA rules into AST and building new rulesets in C++";
     homepage = "https://github.com/avast/yaramod";
     changelog = "https://github.com/avast/yaramod/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ msm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ msm ];
   };
 }

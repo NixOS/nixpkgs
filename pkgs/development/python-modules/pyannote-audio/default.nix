@@ -90,11 +90,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyannote.audio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Neural building blocks for speaker diarization: speech activity detection, speaker change detection, overlapped speech detection, speaker embedding";
     homepage = "https://github.com/pyannote/pyannote-audio";
     changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -27,11 +27,11 @@ buildHomeAssistantComponent rec {
     wakeonlan
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ollo69/ha-samsungtv-smart/releases/tag/v${version}";
     description = "Home Assistant Samsung TV Integration";
     homepage = "https://github.com/ollo69/ha-samsungtv-smart";
-    maintainers = with maintainers; [ mindstorms6 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ mindstorms6 ];
+    license = lib.licenses.asl20;
   };
 }

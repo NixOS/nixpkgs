@@ -49,13 +49,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance CPU-based implementation of the Vulkan 1.3 graphics API";
     homepage = "https://opensource.google/projects/swiftshader";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     # Should be possible to support Darwin by changing the install phase with
     # 's/Linux/Darwin/' and 's/so/dylib/' or something similar.
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     maintainers = [ ];
   };
 }

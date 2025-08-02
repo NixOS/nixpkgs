@@ -39,10 +39,10 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       description = "Pathlib-compatible object wrapper for zip files";
       homepage = "https://github.com/jaraco/zipp";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     };
   };

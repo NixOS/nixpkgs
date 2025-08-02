@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_PACKAGE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "C++ Reflection Library";
     homepage = "https://www.rttr.org";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

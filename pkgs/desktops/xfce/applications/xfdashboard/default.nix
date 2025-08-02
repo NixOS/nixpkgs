@@ -47,8 +47,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gnome shell like dashboard";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

@@ -46,12 +46,12 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram "$out/bin/gh-f" --prefix PATH : "${binPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gennaro-tedesco/gh-f";
     description = "GitHub CLI ultimate FZF extension";
-    maintainers = with maintainers; [ loicreynier ];
-    license = licenses.unlicense;
+    maintainers = with lib.maintainers; [ loicreynier ];
+    license = lib.licenses.unlicense;
     mainProgram = "gh-f";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

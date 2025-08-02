@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # takes some time
 
-  meta = with lib; {
+  meta = {
     description = "Library for doing Number Theory";
     longDescription = ''
       NTL is a high-performance, portable C++ library providing data
@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
     homepage = "http://www.shoup.net/ntl/";
     # also locally at "${src}/doc/tour-changes.html";
     changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
-    teams = [ teams.sage ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     # Does not cross compile
     # https://github.com/libntl/ntl/issues/8
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);

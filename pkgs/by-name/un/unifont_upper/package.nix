@@ -23,13 +23,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
 
     # Basically GPL2+ with font exception.
     license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.mathnerd314 ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.mathnerd314 ];
+    platforms = lib.platforms.all;
   };
 }

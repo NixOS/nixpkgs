@@ -32,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) knot; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Knot DNS";
     homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/knot_exporter";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ma27
       hexa
     ];

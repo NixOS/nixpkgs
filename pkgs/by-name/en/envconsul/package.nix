@@ -30,11 +30,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hashicorp/envconsul/";
     description = "Read and set environmental variables for processes from Consul";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ pradeepchhetri ];
     mainProgram = "envconsul";
   };
 }

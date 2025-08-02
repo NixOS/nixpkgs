@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     broken = true; # undefined reference to `TIFFReadEncodedStrip'
     description = "Cartographic Projections Library";
     homepage = "https://proj4.org";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

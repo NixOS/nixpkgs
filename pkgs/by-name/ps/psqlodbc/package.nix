@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
   ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
     teams = libpq.meta.teams;
   };
 }

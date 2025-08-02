@@ -23,10 +23,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-diet";
     description = "Simple implementation of Discrete Interval Encoding Trees";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ehmry ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

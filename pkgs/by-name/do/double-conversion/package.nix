@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     rm BUILD
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
     homepage = "https://github.com/google/double-conversion";
-    license = licenses.bsd3;
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

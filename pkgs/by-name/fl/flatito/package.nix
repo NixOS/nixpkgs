@@ -33,12 +33,12 @@ buildRubyGem rec {
 
   passthru.updateScript = bundlerUpdateScript "${pname}";
 
-  meta = with lib; {
+  meta = {
     description = "It allows you to search for a key and get the value and the line number where it is located in YAML and JSON files";
     homepage = "https://github.com/ceritium/flatito";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rucadi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rucadi ];
+    platforms = lib.platforms.unix;
     mainProgram = "flatito";
   };
 }

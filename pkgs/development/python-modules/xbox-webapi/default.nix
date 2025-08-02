@@ -47,11 +47,11 @@ buildPythonPackage rec {
   # https://github.com/OpenXbox/xbox-webapi-python/issues/114
   disabledTests = [ "test_import" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OpenXbox/xbox-webapi-python/blob/${src.rev}/CHANGELOG.md";
     description = "Library to authenticate with Windows Live/Xbox Live and use their API";
     homepage = "https://github.com/OpenXbox/xbox-webapi-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

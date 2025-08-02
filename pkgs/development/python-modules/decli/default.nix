@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "decli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal, easy to use, declarative command line interface tool";
     homepage = "https://github.com/Woile/decli";
     changelog = "https://github.com/woile/decli/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

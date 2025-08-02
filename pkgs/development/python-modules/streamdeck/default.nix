@@ -27,10 +27,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "StreamDeck" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control the Elgato Stream Deck";
     homepage = "https://github.com/abcminiuser/python-elgato-streamdeck";
-    license = licenses.mit;
-    maintainers = with maintainers; [ majiir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ majiir ];
   };
 }

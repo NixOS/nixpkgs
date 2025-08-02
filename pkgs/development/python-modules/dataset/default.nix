@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataset" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for Python-based database access";
     homepage = "https://dataset.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xfnw ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xfnw ];
   };
 }

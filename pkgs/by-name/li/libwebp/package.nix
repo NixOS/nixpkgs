@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
     haskell-webp = haskellPackages.webp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools and library for the WebP image format";
     homepage = "https://developers.google.com/speed/webp/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ajs124 ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ajs124 ];
   };
 }

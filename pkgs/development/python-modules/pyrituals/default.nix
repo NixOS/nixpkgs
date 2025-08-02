@@ -28,10 +28,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyrituals" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Rituals Perfume Genie API";
     homepage = "https://github.com/milanmeu/pyrituals";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

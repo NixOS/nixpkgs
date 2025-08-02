@@ -44,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dicomweb_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for DICOMweb RESTful services";
     homepage = "https://dicomweb-client.readthedocs.io";
     changelog = "https://github.com/ImagingDataCommons/dicomweb-client/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "dicomweb_client";
   };
 }

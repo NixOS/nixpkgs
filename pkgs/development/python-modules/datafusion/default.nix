@@ -91,7 +91,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible query execution framework";
     longDescription = ''
       DataFusion is an extensible query execution framework, written in Rust,
@@ -99,7 +99,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://arrow.apache.org/datafusion/";
     changelog = "https://github.com/apache/arrow-datafusion-python/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ cpcloud ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

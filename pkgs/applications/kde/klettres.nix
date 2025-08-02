@@ -11,13 +11,13 @@
 
 mkDerivation {
   pname = "klettres";
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/education/klettres";
     description = "Application specially designed to help the user to learn an alphabet";
     mainProgram = "klettres";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

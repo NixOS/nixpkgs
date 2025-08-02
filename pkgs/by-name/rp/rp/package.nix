@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     cp rp-${if stdenv.hostPlatform.isDarwin then "osx" else "lin"} $out/bin/rp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast C++ ROP gadget finder for PE/ELF/Mach-O x86/x64/ARM/ARM64 binaries";
     homepage = "https://github.com/0vercl0k/rp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sportshead ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sportshead ];
+    platforms = lib.platforms.all;
     mainProgram = "rp";
   };
 }

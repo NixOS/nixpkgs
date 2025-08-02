@@ -45,12 +45,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE Desktop menu editor";
     mainProgram = "mozo";
     homepage = "https://github.com/mate-desktop/mozo";
-    license = with licenses; [ lgpl2Plus ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = with lib.licenses; [ lgpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

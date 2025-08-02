@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_datetimes_to_durations_with_different_frequencies" ];
 
-  meta = with lib; {
+  meta = {
     description = "Survival analysis in Python";
     homepage = "https://lifelines.readthedocs.io";
     changelog = "https://github.com/CamDavidsonPilon/lifelines/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ swflint ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ swflint ];
   };
 }

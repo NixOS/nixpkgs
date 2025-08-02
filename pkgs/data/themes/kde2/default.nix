@@ -36,11 +36,11 @@ mkDerivation rec {
     kdecoration
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KDE 2 window decoration ported to Plasma 5";
     homepage = "https://github.com/repos-holder/kdecoration2-kde2";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

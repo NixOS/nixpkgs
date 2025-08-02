@@ -26,10 +26,10 @@ gccStdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr/local" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIME alteration tool";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
     license.fullName = "alterMIME LICENSE";
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";

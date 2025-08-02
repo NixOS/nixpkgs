@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       --replace "$dev/$dev/" "$dev/"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://munt.sourceforge.net/";
     description = "Library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
-    license = with licenses; [ lgpl21Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.unix; # Not tested on ReactOS yet :)
+    license = with lib.licenses; [ lgpl21Plus ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.unix; # Not tested on ReactOS yet :)
   };
 }

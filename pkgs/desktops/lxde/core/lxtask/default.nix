@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lxde.sourceforge.net/";
     description = "Lightweight and desktop independent task manager";
     mainProgram = "lxtask";
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       Desktop Environment, it's totally desktop independent and only
       requires pure GTK.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

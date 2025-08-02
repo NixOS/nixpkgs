@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires network access
 
-  meta = with lib; {
+  meta = {
     homepage = "http://epam.github.io/nfstrace/";
     description = "NFS and CIFS tracing/monitoring/capturing/analyzing tool";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "nfstrace";
   };
 }

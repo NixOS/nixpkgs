@@ -30,15 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unicode routines validation and transcoding at billions of characters per second";
     homepage = "https://github.com/simdutf/simdutf";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ rewine ];
     mainProgram = "simdutf";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

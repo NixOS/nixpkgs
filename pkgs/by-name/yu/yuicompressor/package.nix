@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript and CSS minifier";
     mainProgram = "yuicompressor";
     homepage = "http://yui.github.io/yuicompressor/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jwiegley ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jwiegley ];
+    platforms = lib.platforms.all;
   };
 }

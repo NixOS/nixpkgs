@@ -32,11 +32,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings="tests.settings"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for social authentication/registration mechanism";
     homepage = "https://github.com/python-social-auth/social-app-django";
     changelog = "https://github.com/python-social-auth/social-app-django/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -37,9 +37,9 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Look at your windows and desktops from above";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;

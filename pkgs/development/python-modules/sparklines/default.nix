@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sparklines" ];
 
-  meta = with lib; {
+  meta = {
     description = "This Python package implements Edward Tufte's concept of sparklines, but limited to text only";
     mainProgram = "sparklines";
     homepage = "https://github.com/deeplook/sparklines";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.gpl3Only;
   };
 }

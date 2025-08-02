@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-4fYQM+GQ5yqES8HQ23ft4wfM5mwDdcWuE5Ed2LST9Gw=";
 
-  meta = with lib; {
+  meta = {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
     mainProgram = "spr";
     homepage = "https://github.com/spacedentist/spr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ spacedentist ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ spacedentist ];
   };
 }

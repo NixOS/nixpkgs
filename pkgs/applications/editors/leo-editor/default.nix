@@ -98,12 +98,12 @@ mkDerivation rec {
     wrapQtApp $out/bin/leo
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://leo-editor.github.io/leo-editor/";
     description = "Powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       leonardoce
       kashw2
     ];

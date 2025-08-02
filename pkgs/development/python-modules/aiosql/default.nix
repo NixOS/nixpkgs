@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple SQL in Python";
     homepage = "https://nackjicholson.github.io/aiosql/";
     changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${version}";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ kaction ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

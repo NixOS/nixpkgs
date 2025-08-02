@@ -34,15 +34,15 @@ mkDerivation {
     qmltermwidget
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal app for Plasma Mobile";
     mainProgram = "qmlkonsole";
     homepage = "https://invent.kde.org/plasma-mobile/qmlkonsole";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3Plus
       cc0
     ];
-    maintainers = with maintainers; [ balsoft ];
+    maintainers = with lib.maintainers; [ balsoft ];
   };
 }

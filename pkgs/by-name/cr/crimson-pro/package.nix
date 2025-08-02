@@ -30,11 +30,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Fonthausen/CrimsonPro";
     description = "Professionally produced redesign of Crimson by Jacques Le Bailly";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ncfavier ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 }

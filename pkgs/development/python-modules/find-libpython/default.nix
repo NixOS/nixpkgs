@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "find_libpython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Finds the libpython associated with your environment, wherever it may be hiding";
     mainProgram = "find_libpython";
     changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/v${version}";
     homepage = "https://github.com/ktbarrett/find_libpython";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jleightcap ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jleightcap ];
   };
 }

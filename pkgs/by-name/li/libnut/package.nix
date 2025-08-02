@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     "install-nututils"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read/write the NUT video container format";
     homepage = "https://git.ffmpeg.org/gitweb/nut.git";
-    license = licenses.mit;
-    maintainers = with maintainers; [ quag ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ quag ];
+    platforms = lib.platforms.linux;
   };
 }

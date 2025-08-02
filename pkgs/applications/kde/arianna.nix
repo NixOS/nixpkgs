@@ -52,12 +52,12 @@ mkDerivation {
     qqc2-desktop-style
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Epub Reader for Plasma and Plasma Mobile";
     mainProgram = "arianna";
     homepage = "https://invent.kde.org/graphics/arianna";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ Thra11 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ Thra11 ];
   };
 }

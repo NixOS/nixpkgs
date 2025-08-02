@@ -45,11 +45,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python client bindings for D-Bus AT-SPI";
     homepage = "https://wiki.linuxfoundation.org/accessibility/d-bus";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = with lib.platforms; unix;
   };
 }

@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage = "http://www.httrack.com";
-    license = licenses.gpl3;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; unix;
   };
 }

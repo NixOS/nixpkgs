@@ -34,11 +34,11 @@ mkDerivation {
     qtmultimedia
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convergent terminal emulator";
     mainProgram = "station";
     homepage = "https://invent.kde.org/maui/station";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

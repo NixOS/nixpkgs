@@ -60,7 +60,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://f1ash.github.io/qt-virt-manager";
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''
@@ -68,8 +68,8 @@ mkDerivation rec {
       virtual machines through libvirt. It primarily targets KVM VMs, but also
       manages Xen and LXC (linux containers).
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
   };
 }

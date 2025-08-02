@@ -32,9 +32,9 @@ mkXfceDerivation {
 
   propagatedBuildInputs = [ glib ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple client-server configuration storage and query system for Xfce";
     mainProgram = "xfconf-query";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }
