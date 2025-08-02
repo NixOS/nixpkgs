@@ -52,7 +52,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.36.00";
+  version = "6.36.02";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-lK/I3vkoQmeaEwonUhvmbiq9qjdiCIjmHYKKQ/xLAaI=";
+    hash = "sha256-UQ1nezOsfKSKoNcSvbiNg1of9qN074bxoeFo+ieetHA=";
   };
 
   clad_src = fetchFromGitHub {
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     patchRcPathFish
     patchRcPathPosix
     pcre2
-    python3.pkgs.numpy
+    python3
     tbb
     xrootd
     xxHash
@@ -162,18 +162,15 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCLAD_SOURCE_DIR=${clad_src}"
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DClang_DIR=${clang}/lib/cmake/clang"
     "-Dbuiltin_clang=OFF"
     "-Dbuiltin_llvm=OFF"
     "-Dfail-on-missing=ON"
     "-Dfftw3=ON"
     "-Dfitsio=OFF"
-    "-Dgnuinstall=ON"
     "-Dmathmore=ON"
     "-Dsqlite=OFF"
+    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
