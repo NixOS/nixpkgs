@@ -16,6 +16,10 @@
   libtool,
   miniupnpc,
   hexdump,
+
+  withGui ? true,
+  withQrencode ? withGui,
+  withUpnp ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,32 +35,49 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
     autoreconfHook
     libtool
     hexdump
-  ];
+  ] ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [
-    qttools
-    qtbase
-    qrencode
-    libevent
-    libzip
-    openssl
-    boost
-    miniupnpc
-    curl
-  ];
+  buildInputs =
+    [
+      libevent
+      libzip
+      openssl
+      boost
+      curl
+    ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+    ]
+    ++ lib.optionals withQrencode [
+      qrencode
+    ]
+    ++ lib.optionals withUpnp [
+      miniupnpc
+    ];
 
-  configureFlags = [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-    "--with-qrencode"
-    "--with-boost-libdir=${boost.out}/lib"
-  ];
+  configureFlags =
+    [
+      "--with-boost-libdir=${boost.out}/lib"
+    ]
+    ++ lib.optionals withGui [
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ]
+    ++ lib.optionals withQrencode [
+      "--with-qrencode"
+    ]
+    ++ lib.optionals withUpnp [
+      "--with-miniupnpc"
+      "--enable-upnp-default"
+    ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with lib; {
     description = "POS-based cryptocurrency that rewards users for participating on the BOINC network";
