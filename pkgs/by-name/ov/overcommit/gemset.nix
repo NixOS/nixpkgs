@@ -40,10 +40,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1i81n0h8h2mb81kjfvqj493flx7rb809z5w8sbjfd7szsqnq86n7";
+      sha256 = "1l68phk7kixncc13db5yqgkryf69gc3h63vj7l5f2970i1ix5g5z";
       type = "gem";
     };
-    version = "0.67.1";
+    version = "0.68.0";
   };
   rexml = {
     groups = [ "default" ];

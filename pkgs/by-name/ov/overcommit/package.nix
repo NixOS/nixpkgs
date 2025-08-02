@@ -24,7 +24,7 @@ bundlerApp rec {
       package = overcommit;
       version = (import ./gemset.nix).overcommit.version;
     };
-    updateScript = bundlerUpdateScript pname;
+    updateScript = bundlerUpdateScript "overcommit";
   };
 
   meta = with lib; {
@@ -32,7 +32,7 @@ bundlerApp rec {
     homepage = "https://github.com/sds/overcommit";
     changelog = "https://github.com/sds/overcommit/blob/main/CHANGELOG.md";
     license = licenses.mit;
-    mainProgram = pname;
+    mainProgram = "overcommit";
     maintainers = with maintainers; [
       Br1ght0ne
       anthonyroussel
