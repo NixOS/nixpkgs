@@ -11859,7 +11859,7 @@ with pkgs;
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
-  cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
+  cpeditor = callPackage ../applications/editors/cpeditor { };
 
   csound = callPackage ../applications/audio/csound { };
 
