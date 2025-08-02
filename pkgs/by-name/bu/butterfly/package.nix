@@ -3,14 +3,12 @@
   flutter332,
   fetchFromGitHub,
   runCommand,
-  butterfly,
-  yq,
+  yq-go,
   _experimental-update-script-combinators,
   gitUpdater,
 }:
 
-flutter332.buildFlutterApplication rec {
-  pname = "butterfly";
+let
   version = "2.3.3";
 
   src = fetchFromGitHub {
@@ -19,6 +17,10 @@ flutter332.buildFlutterApplication rec {
     tag = "v${version}";
     hash = "sha256-3cDT1t74SrDUqUtFmNZFQHUx+eCdDjZhPseT3lhNOYE=";
   };
+in
+flutter332.buildFlutterApplication {
+  pname = "butterfly";
+  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -34,11 +36,11 @@ flutter332.buildFlutterApplication rec {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          buildInputs = [ yq ];
-          inherit (butterfly) src;
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/app/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater {
