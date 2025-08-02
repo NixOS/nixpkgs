@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pytrydan";

@@ -39,7 +39,6 @@
 buildPythonPackage rec {
   pname = "fmpy";
   version = "0.3.23";
-  disabled = pythonOlder "3.10";
   pyproject = true;
 
   # Bumping version? Make sure to look through the commit history for

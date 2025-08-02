@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";

@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "2024.01.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "simplisafe-python";

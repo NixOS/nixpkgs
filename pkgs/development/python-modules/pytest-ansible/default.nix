@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "25.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";

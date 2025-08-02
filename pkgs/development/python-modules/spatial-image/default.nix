@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "spatial-image";

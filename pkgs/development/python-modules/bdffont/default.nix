@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.0.32";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "bdffont";
     inherit version;

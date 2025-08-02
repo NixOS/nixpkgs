@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-volkszaehler";

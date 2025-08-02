@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2025.04.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";

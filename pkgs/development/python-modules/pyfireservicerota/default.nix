@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.0.46";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-fireservicerota";

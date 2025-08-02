@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "5.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "greeneye-monitor";

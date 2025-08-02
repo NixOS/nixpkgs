@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.23.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "celery_types";
     inherit version;

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-cargo";

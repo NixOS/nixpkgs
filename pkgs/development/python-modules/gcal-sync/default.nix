@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "7.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "gcal_sync";

@@ -16,7 +16,6 @@ buildPythonPackage rec {
   pname = "comicon";
   version = "1.5.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "5.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "django_stubs_ext";
     inherit version;

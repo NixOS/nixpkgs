@@ -15,8 +15,6 @@ python.pkgs.buildPythonApplication rec {
   version = "0.0.74";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.10";
-
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";

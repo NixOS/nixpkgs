@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "tomaszsluszniak";
     repo = "sanix_py";
