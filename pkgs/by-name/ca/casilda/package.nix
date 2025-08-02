@@ -14,6 +14,7 @@
   wayland-scanner,
   wlroots_0_18,
   libxkbcommon,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ gtk4 ];
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.gnome.org/jpu/casilda";
