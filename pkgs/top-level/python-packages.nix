@@ -3743,6 +3743,8 @@ self: super: with self; {
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
 
+  django-agnocomplete = callPackage ../development/python-modules/django-agnocomplete { };
+
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
   django-annoying = callPackage ../development/python-modules/django-annoying { };
@@ -3978,6 +3980,8 @@ self: super: with self; {
   django-postgresql-netfields =
     callPackage ../development/python-modules/django-postgresql-netfields
       { };
+
+  django-probes = callPackage ../development/python-modules/django-probes { };
 
   django-prometheus = callPackage ../development/python-modules/django-prometheus { };
 
