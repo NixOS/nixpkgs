@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-rs";
-  version = "0.30.0";
+  version = "0.32.0";
 
   pyproject = true;
 
@@ -21,12 +21,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jsonschema_rs";
-    hash = "sha256-KfmI0ik3HWrv1WDFsT5xvxyRyXKg2DpmxeuUHOR9MZM=";
+    hash = "sha256-BQDPoBn6WNwaxS1gWSol021My7Oiz0DIspHujY9/7Mc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-LNT2wQnOaVMBrI+fW6wbIRaTYPvw3ESinI5KY8wjp1o=";
+    hash = "sha256-MbIBiV0xOKvDrQPnovTLgGgvdJIHPw19faJFmMqWIMw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
