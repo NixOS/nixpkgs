@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
-    description = ''Simulates the digital rain from "The Matrix"'';
+    description = ''Simulates the digital rain from "The Matrix'';
     license = licenses.gpl3Plus;
     longDescription = ''
       neo recreates the digital rain effect from "The Matrix". Streams of random

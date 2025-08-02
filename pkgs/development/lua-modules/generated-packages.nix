@@ -2965,7 +2965,7 @@ final: prev: {
 
       meta = {
         homepage = "http://www.luarocks.org";
-        description = "A package manager for Lua modules.";
+        description = "Package manager for Lua modules";
         maintainers = with lib.maintainers; [
           mrcjkb
           teto

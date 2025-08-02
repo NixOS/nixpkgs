@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://tangled.sh/@rockorager.dev/lsr";
-    description = "ls but with io_uring";
+    description = "'ls' but with io_uring";
     changelog = "https://tangled.sh/@rockorager.dev/lsr/tags";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ddogfoodd ];

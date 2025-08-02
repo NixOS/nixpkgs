@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "ncdu for your restic repo";
+    description = "Ncdu for your restic repo";
     homepage = "https://github.com/drdo/redu";
     changelog = "https://github.com/drdo/redu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

@@ -20,7 +20,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "go test with colors";
+    description = "'go test' with colors";
     mainProgram = "gotest";
     homepage = "https://github.com/rakyll/gotest";
     license = licenses.bsd3;

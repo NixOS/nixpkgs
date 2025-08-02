@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "Penelope Shell Handler";
+    description = "Shell Handler";
     homepage = "https://github.com/brightio/penelope";
     changelog = "https://github.com/brightio/penelope/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

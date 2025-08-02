@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.greenwoodsoftware.com/less/";
-    description = "More advanced file pager than 'more'";
+    description = "More advanced file pager than 'more";
     changelog = "https://www.greenwoodsoftware.com/less/news.${finalAttrs.version}.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "less";

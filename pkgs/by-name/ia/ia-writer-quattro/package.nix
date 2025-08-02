@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "iA Writer Quattro Typeface";
+    description = "IA Writer Quattro Typeface";
     homepage = "https://github.com/iaolo/iA-Fonts";
     license = licenses.ofl;
     platforms = platforms.all;

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = lib.optionals pythonSupport [ python3Packages.scipy ];
 
   meta = with lib; {
-    description = "Crocoddyl optimal control library";
+    description = "Optimal control library";
     homepage = "https://github.com/loco-3d/crocoddyl";
     license = licenses.bsd3;
     maintainers = with maintainers; [

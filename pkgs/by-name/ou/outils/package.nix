@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/leahneukirchen/outils";
-    description = "Port of OpenBSD-exclusive tools such as `calendar`, `vis`, and `signify`";
+    description = "Port of OpenBSD-exclusive tools such as `calendar`, `vis`, and `signify";
     license = with licenses; [
       beerware
       bsd2

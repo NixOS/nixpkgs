@@ -21,7 +21,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/sachaos/todoist";
-    description = "Todoist CLI Client";
+    description = "CLI Client";
     license = lib.licenses.mit;
     mainProgram = "todoist";
   };

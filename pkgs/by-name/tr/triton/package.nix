@@ -37,7 +37,7 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "TritonDataCenter Client CLI and Node.js SDK";
+    description = "DataCenter Client CLI and Node.js SDK";
     homepage = "https://github.com/TritonDataCenter/node-triton";
     license = licenses.mpl20;
     maintainers = with maintainers; [ teutat3s ];

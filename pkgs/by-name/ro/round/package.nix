@@ -20,7 +20,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "Round image corners from CLI";
+    description = "Image corners from CLI";
     homepage = "https://github.com/mingrammer/round";
     license = licenses.mit;
     maintainers = with maintainers; [ addict3d ];

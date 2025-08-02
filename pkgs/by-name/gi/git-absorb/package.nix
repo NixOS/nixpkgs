@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tummychow/git-absorb";
-    description = "git commit --fixup, but automatic";
+    description = "'git commit --fixup', but automatic";
     license = [ licenses.bsd3 ];
     maintainers = with maintainers; [
       matthiasbeyer

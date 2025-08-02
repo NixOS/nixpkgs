@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "udev rules that give NixOS permission to communicate with usb blasters";
+    description = "Udev rules that give NixOS permission to communicate with usb blasters";
     longDescription = ''
       udev rules that give NixOS permission to communicate with usb blasters.
       To use it under NixOS, add

@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "xdg-desktop-portal backend for choosing files with your favorite file chooser";
+    description = "Xdg-desktop-portal backend for choosing files with your favorite file chooser";
     homepage = "https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser";
     license = licenses.mit;
     platforms = platforms.linux;

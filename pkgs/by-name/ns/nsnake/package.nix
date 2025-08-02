@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "ncurses based snake game for the terminal";
+    description = "Ncurses based snake game for the terminal";
     mainProgram = "nsnake";
     homepage = "https://github.com/alexdantas/nSnake";
     license = lib.licenses.gpl3Plus;

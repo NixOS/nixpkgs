@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/dail8859/NotepadNext";
-    description = "Cross-platform, reimplementation of Notepad++";
+    description = "Cross-platform, reimplementation of Notepad";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sebtm ];

@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "ustream SSL wrapper";
+    description = "Ustream SSL wrapper";
     homepage = "https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary";
     license = licenses.isc;
     maintainers = with maintainers; [

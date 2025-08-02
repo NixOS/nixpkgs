@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ zlib ] ++ lib.optionals mklSupport [ mkl ];
 
   meta = {
-    description = "FEBio Suite Solver";
+    description = "Suite Solver";
     license = with lib.licenses; [ mit ];
     homepage = "https://febio.org/";
     platforms = lib.platforms.unix;

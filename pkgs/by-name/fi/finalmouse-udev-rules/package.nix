@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/teamfinalmouse/xpanel-linux-permissions";
-    description = "udev rules that give NixOS permission to communicate with Finalmouse mice";
+    description = "Udev rules that give NixOS permission to communicate with Finalmouse mice";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

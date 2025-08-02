@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
-    description = "SUMO traffic simulator";
+    description = "Traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
       portable, microscopic and continuous traffic simulation package

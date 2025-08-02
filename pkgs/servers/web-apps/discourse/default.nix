@@ -445,7 +445,7 @@ let
       platforms = platforms.linux;
       maintainers = with maintainers; [ talyz ];
       license = licenses.gpl2Plus;
-      description = "Discourse is an open source discussion platform";
+      description = "Open source discussion platform";
     };
   };
 in

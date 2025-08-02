@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mpeg5/xeve";
-    description = "eXtra-fast Essential Video Encoder, MPEG-5 EVC";
+    description = "EXtra-fast Essential Video Encoder, MPEG-5 EVC";
     license = lib.licenses.bsd3;
     mainProgram = "xeve_app";
     maintainers = with lib.maintainers; [ jopejoe1 ];

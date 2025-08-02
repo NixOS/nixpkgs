@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${finalAttrs.version}";
-    description = "oneAPI Deep Neural Network Library (oneDNN)";
+    description = "OneAPI Deep Neural Network Library (oneDNN)";
     homepage = "https://01.org/oneDNN";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bhipple ];

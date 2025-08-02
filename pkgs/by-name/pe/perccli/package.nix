@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec {
   dontFixup = true;
 
   meta = with lib; {
-    description = "Perccli Support for PERC RAID controllers";
+    description = "Support for PERC RAID controllers";
 
     # Must be updated with every release
     homepage = "https://www.dell.com/support/home/en-us/drivers/driversdetails?driverid=tdghn";

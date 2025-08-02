@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Mitimasu webfont";
+    description = "Webfont";
     homepage = "https://github.com/kemomimi-no-sato/mitimasu-webfont";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

@@ -19,7 +19,7 @@ buildGoModule {
   proxyVendor = true;
 
   meta = with lib; {
-    description = "xmonad DBus monitoring solution";
+    description = "Xmonad DBus monitoring solution";
     homepage = "https://github.com/xintron/xmonad-log";
     license = licenses.mit;
     platforms = platforms.unix;

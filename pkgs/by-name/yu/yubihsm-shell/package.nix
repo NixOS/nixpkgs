@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
-    description = "yubihsm-shell and libyubihsm";
+    description = "And libyubihsm";
     homepage = "https://github.com/Yubico/yubihsm-shell";
     maintainers = with maintainers; [ matthewcroughan ];
     license = licenses.asl20;

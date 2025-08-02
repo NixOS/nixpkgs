@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "githead.yazi with yatline.yazi support";
+    description = "Githead.yazi with yatline.yazi support";
     homepage = "https://github.com/imsi32/yatline-githead.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

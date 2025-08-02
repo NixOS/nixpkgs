@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication {
   pythonImportsCheck = [ "macpm" ];
 
   meta = {
-    description = "Perf monitoring CLI tool for Apple Silicon; previously named 'asitop'";
+    description = "Perf monitoring CLI tool for Apple Silicon; previously named 'asitop";
     homepage = "https://github.com/visualcjy/macpm";
     mainProgram = "macpm";
     platforms = [ "aarch64-darwin" ];

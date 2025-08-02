@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [ openssl ];
 
   meta = {
-    description = "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
+    description = "MdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
     mainProgram = "mdbook-plantuml";
     homepage = "https://github.com/sytsereitsma/mdbook-plantuml";
     license = lib.licenses.mit;

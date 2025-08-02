@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "eBPF based, always-on profiling agent";
+    description = "EBPF based, always-on profiling agent";
     homepage = "https://github.com/parca-dev/parca-agent";
     changelog = "https://github.com/parca-dev/parca-agent/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

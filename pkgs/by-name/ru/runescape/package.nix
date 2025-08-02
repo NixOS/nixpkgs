@@ -146,7 +146,7 @@ buildFHSEnv {
   '';
 
   meta = with lib; {
-    description = "RuneScape Game Client (NXT) - Launcher for RuneScape 3";
+    description = "Game Client (NXT) - Launcher for RuneScape 3";
     homepage = "https://www.runescape.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ grburst ];

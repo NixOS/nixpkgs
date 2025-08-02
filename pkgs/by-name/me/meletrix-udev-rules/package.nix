@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "udev rules to configure Meletrix keyboards";
+    description = "Udev rules to configure Meletrix keyboards";
     license = licenses.cc0;
     maintainers = with maintainers; [ Scrumplex ];
     platforms = platforms.linux;

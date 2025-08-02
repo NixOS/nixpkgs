@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mptre/yank";
-    description = "Yank terminal output to clipboard";
+    description = "Terminal output to clipboard";
     longDescription = ''
       Read input from stdin and display a selection interface that allows a
       field to be selected and copied to the clipboard. Fields are determined

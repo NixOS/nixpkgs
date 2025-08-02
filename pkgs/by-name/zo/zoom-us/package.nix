@@ -145,7 +145,7 @@ let
     meta = {
       homepage = "https://zoom.us/";
       changelog = "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061222";
-      description = "zoom.us video conferencing application";
+      description = "Zoom.us video conferencing application";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
       platforms = builtins.attrNames srcs;

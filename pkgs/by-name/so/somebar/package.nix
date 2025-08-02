@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~raphi/somebar";
-    description = "dwm-like bar for dwl";
+    description = "Dwm-like bar for dwl";
     license = licenses.mit;
     maintainers = with maintainers; [ magnouvean ];
     platforms = platforms.linux;

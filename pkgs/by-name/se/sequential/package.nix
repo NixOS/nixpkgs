@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "macOS native comic reader and image viewer";
+    description = "MacOS native comic reader and image viewer";
     homepage = "https://github.com/chuchusoft/Sequential";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ Enzime ];

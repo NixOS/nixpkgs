@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "ncurses-based hierarchical todo list manager with vim-like keybindings";
+    description = "Ncurses-based hierarchical todo list manager with vim-like keybindings";
     homepage = "https://code.meskio.net/tudu/";
     license = licenses.gpl3;
     platforms = platforms.unix;

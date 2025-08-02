@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
 
   meta = {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
-    description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
+    description = "Open source alternative to ChatGPT that runs 100% offline on your computer";
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";

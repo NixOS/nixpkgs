@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "gh extension with animated terminal screensavers";
+    description = "'gh' extension with animated terminal screensavers";
     homepage = "https://github.com/vilmibm/gh-screensaver";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ foo-dogsquared ];

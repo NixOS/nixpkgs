@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "macOS VMs on Apple Silicon to use in CI and other automations";
+    description = "MacOS VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
     license = licenses.fairsource09;
     maintainers = with maintainers; [

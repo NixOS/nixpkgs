@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Jump back to a specific directory, without doing `cd ../../..`";
+    description = "Jump back to a specific directory, without doing `cd";
     homepage = "https://github.com/Tarrasch/zsh-bd";
     license = lib.licenses.free;
 

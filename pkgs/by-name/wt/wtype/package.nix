@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "xdotool type for wayland";
+    description = "Xdotool type for wayland";
     homepage = "https://github.com/atx/wtype";
     license = licenses.mit;
     platforms = platforms.linux;

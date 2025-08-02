@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "tmux session manager";
+    description = "Tmux session manager";
     homepage = "https://tmuxp.git-pull.com/";
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
     license = lib.licenses.mit;

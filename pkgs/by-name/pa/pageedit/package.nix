@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       null;
 
   meta = {
-    description = "ePub XHTML Visual Editor";
+    description = "EPub XHTML Visual Editor";
     mainProgram = "pageedit";
     homepage = "https://sigil-ebook.com/pageedit/";
     license = lib.licenses.gpl3Plus;
