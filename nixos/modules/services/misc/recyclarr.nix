@@ -11,6 +11,7 @@ let
   format = pkgs.formats.yaml { };
   stateDir = "/var/lib/recyclarr";
   configPath = "${stateDir}/config.json";
+  settingsPath = "${stateDir}/settings.yml";
 in
 {
   options.services.recyclarr = {
@@ -59,6 +60,48 @@ in
       '';
     };
 
+    settings = lib.mkOption {
+      type = format.type;
+      default = { };
+      example = {
+        enable_ssl_certificate_validation = true;
+        git_path = lib.literalExpression "\${lib.getExe pkgs.git}";
+
+        log_janitor = {
+          max_files = 20;
+        };
+
+        notifications = {
+          verbosity = "normal";
+          apprise = {
+            mode = "stateful";
+            base_url = "http://localhost:8000";
+            key = "recyclarr";
+            tags = "foo bar, baz";
+          };
+        };
+
+        repositories = {
+          trash_guides = {
+            clone_url = "https://github.com/TRaSH-/Guides.git";
+            branch = "master";
+            sha1 = null;
+          };
+          config_templates = {
+            clone_url = "https://github.com/recyclarr/config-templates.git";
+            branch = "master";
+            sha1 = null;
+          };
+        };
+      };
+      description = ''
+        Recyclarr YAML settings as a Nix attribute set.
+
+        For detailed settings options and examples, see the
+        [official settings reference](https://recyclarr.dev/wiki/yaml/settings-reference/).
+      '';
+    };
+
     schedule = lib.mkOption {
       type = lib.types.str;
       default = "daily";
@@ -103,7 +146,10 @@ in
       description = "Recyclarr Service";
 
       # YAML is a JSON super-set
-      preStart = utils.genJqSecretsReplacementSnippet cfg.configuration configPath;
+      preStart = ''
+        ${utils.genJqSecretsReplacementSnippet cfg.configuration configPath}
+        ${pkgs.coreutils}/bin/ln -fs ${format.generate "settings.yaml" cfg.settings} ${settingsPath}
+      '';
 
       serviceConfig = {
         Type = "oneshot";
