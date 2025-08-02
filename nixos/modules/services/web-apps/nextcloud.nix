@@ -772,10 +772,13 @@ in
 
     configureRedis = lib.mkOption {
       type = lib.types.bool;
-      default = config.services.nextcloud.notify_push.enable;
-      defaultText = lib.literalExpression "config.services.nextcloud.notify_push.enable";
+      default = true;
       description = ''
         Whether to configure Nextcloud to use the recommended Redis settings for small instances.
+
+        ::: {.note}
+        The Nextcloud system check recommends to configure either Redis or Memcache for file lock caching.
+        :::
 
         ::: {.note}
         The `notify_push` app requires Redis to be configured. If this option is turned off, this must be configured manually.
