@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "azure_mgmt_databoxedge";
     inherit version;

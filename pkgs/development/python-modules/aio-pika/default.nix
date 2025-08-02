@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "9.5.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";

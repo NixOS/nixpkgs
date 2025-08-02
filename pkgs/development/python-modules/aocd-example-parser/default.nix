@@ -11,8 +11,6 @@ buildPythonPackage {
   version = "2024.12.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "aocd-example-parser";

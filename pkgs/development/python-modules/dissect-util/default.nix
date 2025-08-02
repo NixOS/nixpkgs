@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.21";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";

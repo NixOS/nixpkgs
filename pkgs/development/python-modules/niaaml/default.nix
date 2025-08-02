@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";

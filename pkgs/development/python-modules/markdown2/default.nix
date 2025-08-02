@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "trentm";
     repo = "python-markdown2";

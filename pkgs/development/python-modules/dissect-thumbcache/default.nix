@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.thumbcache";

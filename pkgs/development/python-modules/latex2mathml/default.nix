@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.78.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "latex2mathml";

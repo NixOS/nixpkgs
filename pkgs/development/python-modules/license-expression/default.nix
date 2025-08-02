@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "30.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "license-expression";

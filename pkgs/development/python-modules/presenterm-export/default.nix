@@ -23,8 +23,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  disabled = pythonOlder "3.9";
-
   build-system = [
     setuptools
   ];

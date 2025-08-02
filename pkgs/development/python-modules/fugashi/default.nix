@@ -16,7 +16,6 @@ buildPythonPackage rec {
   pname = "fugashi";
   version = "1.5.1";
   format = "pyproject";
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "polm";

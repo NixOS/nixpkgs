@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";

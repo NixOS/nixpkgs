@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.6.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aiostream";

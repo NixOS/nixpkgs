@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "0.4.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";

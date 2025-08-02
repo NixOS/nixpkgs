@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "3.3.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "scmrepo";

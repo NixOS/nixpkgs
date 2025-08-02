@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.24.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "IBM";
     repo = "python-sdk-core";

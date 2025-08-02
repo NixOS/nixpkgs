@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "20250523";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "mborsetti";
     repo = "airportsdata";

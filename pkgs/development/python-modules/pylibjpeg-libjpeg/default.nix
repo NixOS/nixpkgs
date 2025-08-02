@@ -19,8 +19,6 @@ let
     version = "2.3.0";
     pyproject = true;
 
-    disabled = pythonOlder "3.9";
-
     src = fetchFromGitHub {
       owner = "pydicom";
       repo = "pylibjpeg-libjpeg";

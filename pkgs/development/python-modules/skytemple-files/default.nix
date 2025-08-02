@@ -31,8 +31,6 @@ buildPythonPackage rec {
   version = "1.8.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-files";

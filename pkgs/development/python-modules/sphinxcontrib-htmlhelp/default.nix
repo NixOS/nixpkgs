@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "sphinxcontrib_htmlhelp";
     inherit version;

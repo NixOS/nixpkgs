@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "4.1.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-cms";

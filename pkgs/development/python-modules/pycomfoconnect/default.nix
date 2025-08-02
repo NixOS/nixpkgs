@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "michaelarnauts";
     repo = "comfoconnect";

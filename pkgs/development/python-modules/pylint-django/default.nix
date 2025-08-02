@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";

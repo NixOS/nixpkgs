@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "1.10.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "psd-tools";
     repo = "psd-tools";

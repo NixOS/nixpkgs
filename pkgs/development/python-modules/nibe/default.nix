@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";

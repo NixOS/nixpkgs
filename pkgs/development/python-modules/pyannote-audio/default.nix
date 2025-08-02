@@ -34,8 +34,6 @@ buildPythonPackage rec {
   version = "3.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";

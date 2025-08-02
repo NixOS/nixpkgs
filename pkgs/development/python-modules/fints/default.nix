@@ -17,8 +17,6 @@ buildPythonPackage rec {
   pname = "fints";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";

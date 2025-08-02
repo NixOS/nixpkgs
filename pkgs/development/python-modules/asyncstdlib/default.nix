@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "maxfischer2781";
     repo = "asyncstdlib";

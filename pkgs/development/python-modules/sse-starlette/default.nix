@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "2.3.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";

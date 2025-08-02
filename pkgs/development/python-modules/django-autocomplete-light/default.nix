@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.12.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "yourlabs";
     repo = "django-autocomplete-light";

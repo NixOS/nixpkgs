@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziafont";

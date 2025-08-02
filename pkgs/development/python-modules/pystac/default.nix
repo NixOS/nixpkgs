@@ -19,7 +19,6 @@ buildPythonPackage rec {
   pname = "pystac";
   version = "1.13.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "vkurup";
     repo = "python-tcxparser";

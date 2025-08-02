@@ -13,8 +13,6 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit version;
     pname = "sphinx_design";

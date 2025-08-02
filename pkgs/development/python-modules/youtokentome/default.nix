@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.0.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "VKCOM";
     repo = "YouTokenToMe";

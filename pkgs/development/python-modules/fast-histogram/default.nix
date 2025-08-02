@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = "fast-histogram";

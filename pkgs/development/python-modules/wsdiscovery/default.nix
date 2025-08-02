@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "andreikop";
     repo = "python-ws-discovery";

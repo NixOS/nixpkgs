@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "6.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "rspeer";
     repo = "python-ftfy";

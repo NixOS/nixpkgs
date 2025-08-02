@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "9.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;

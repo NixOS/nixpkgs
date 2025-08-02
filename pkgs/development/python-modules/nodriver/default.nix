@@ -19,8 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-X8MRgqTbcl6lb8BCJpopoT5Vorr4Pf3XMKqFHdUmlgg=";
   };
 
-  disabled = pythonOlder "3.9";
-
   dependencies = [
     deprecated
     mss

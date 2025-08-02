@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "3.20";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";

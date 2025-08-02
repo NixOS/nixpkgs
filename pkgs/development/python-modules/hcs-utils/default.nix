@@ -14,8 +14,6 @@ buildPythonPackage {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitLab {
     owner = "hcs";
     repo = "hcs_utils";

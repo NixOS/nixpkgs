@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.30.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2021.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioflo";

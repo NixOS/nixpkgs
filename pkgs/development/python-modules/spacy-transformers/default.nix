@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.3.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-transformers";

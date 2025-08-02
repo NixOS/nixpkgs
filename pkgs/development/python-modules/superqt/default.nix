@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.7.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "superqt";

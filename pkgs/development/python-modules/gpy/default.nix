@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.13.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "SheffieldML";
     repo = "GPy";

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "tilt-ble";

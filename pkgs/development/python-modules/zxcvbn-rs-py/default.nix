@@ -12,8 +12,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "zxcvbn_rs_py";
     inherit version;

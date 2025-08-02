@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "6.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "mammothb";
     repo = "symspellpy";
