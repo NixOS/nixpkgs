@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.12.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "tsukumijima";
     repo = "netifaces-plus";

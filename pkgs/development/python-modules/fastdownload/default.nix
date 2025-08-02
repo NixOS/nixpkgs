@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "fastdownload";
   version = "0.0.7";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

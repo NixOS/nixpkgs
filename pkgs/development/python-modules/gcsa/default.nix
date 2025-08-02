@@ -17,7 +17,6 @@ buildPythonPackage rec {
   pname = "gcsa";
   version = "2.1.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kuzmoyev";

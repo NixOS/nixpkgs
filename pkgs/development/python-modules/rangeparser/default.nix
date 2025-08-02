@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "RangeParser";
     inherit version;

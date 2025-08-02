@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "albertosottile";
     repo = "darkdetect";

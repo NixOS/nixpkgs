@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication {
   version = "0-unstable-2021-07-02";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "snovvcrash";
     repo = "usbrip";

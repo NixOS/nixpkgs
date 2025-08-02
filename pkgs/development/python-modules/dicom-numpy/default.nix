@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.6.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "innolitics";
     repo = "dicom-numpy";

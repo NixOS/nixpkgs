@@ -21,8 +21,6 @@ buildPythonPackage {
   version = "0.0.50";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "joaopalotti";
     repo = "trectools";

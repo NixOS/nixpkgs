@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "wbolster";
     repo = "black-macchiato";

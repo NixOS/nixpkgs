@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2.1.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jorisschellekens";
     repo = "borb";

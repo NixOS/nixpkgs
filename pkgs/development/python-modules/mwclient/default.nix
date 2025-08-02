@@ -17,8 +17,6 @@ buildPythonPackage rec {
   pname = "mwclient";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "mwclient";
     repo = "mwclient";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.2.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "palace";

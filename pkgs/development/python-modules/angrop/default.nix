@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "9.2.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angrop";

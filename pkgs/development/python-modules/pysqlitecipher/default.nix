@@ -11,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysqlitecipher";
   version = "0.22";
 
-  disabled = pythonOlder "3.6";
-
   format = "setuptools";
 
   src = fetchPypi {

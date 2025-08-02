@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.1.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "webdjoe";
     repo = "pyvesync";

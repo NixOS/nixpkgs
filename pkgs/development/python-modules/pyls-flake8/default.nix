@@ -11,7 +11,6 @@ buildPythonPackage {
   pname = "pyls-flake8";
   version = "0.4.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "emanspeaks";

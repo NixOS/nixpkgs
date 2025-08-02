@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "3.5.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "dvershinin";
     repo = "lastversion";

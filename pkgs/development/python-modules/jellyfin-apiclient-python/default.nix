@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-apiclient-python";

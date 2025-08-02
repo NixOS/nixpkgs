@@ -11,8 +11,6 @@ buildPythonPackage rec {
   pname = "grappelli-safe";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "grappelli_safe";
     inherit version;

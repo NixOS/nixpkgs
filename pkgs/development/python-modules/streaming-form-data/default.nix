@@ -12,7 +12,6 @@ buildPythonPackage rec {
   pname = "streaming-form-data";
   version = "1.13.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "siddhantgoel";

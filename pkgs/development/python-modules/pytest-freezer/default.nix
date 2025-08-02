@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.4.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-freezer";

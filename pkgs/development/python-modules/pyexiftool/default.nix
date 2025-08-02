@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "sylikc";
     repo = "pyexiftool";

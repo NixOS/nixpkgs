@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "django-encrypted-model-fields";
   version = "0.6.5";
-  disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "5.6.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
