@@ -7,6 +7,7 @@
   models-dev,
   nix-update-script,
   testers,
+  tree-sitter,
   writableTmpDirAsHomeHook,
 }:
 
@@ -106,6 +107,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+
+  buildInputs = [ tree-sitter ];
 
   nativeBuildInputs = [
     bun
