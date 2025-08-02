@@ -71,8 +71,10 @@ buildPythonApplication rec {
     click-completion
     colorama
     git
+    intelhex
     lockfile
     marshmallow
+    pip
     pyelftools
     pyserial
     requests
@@ -82,6 +84,7 @@ buildPythonApplication rec {
     starlette
     tabulate
     uvicorn
+    wheel
     wsproto
     zeroconf
   ]
