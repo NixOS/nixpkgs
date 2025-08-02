@@ -5,6 +5,7 @@ let
   generic =
     {
       callPackage,
+      buildPackages,
       lib,
       stdenv,
       nixosTests,
@@ -334,18 +335,30 @@ let
             mv $out/share/man/man1/phpize.1.gz \
                $out/share/man/man1/php-config.1.gz \
                $dev/share/man/man1/
+
+            # remove duplicated files from other packages
+            rm $out/lib/build/{config.guess,config.sub,libtool.m4,pkg.m4,ltmain.sh}
           '';
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
           patches =
-            lib.optionals (lib.versionOlder version "8.4") [
+            [
+              ./copy-libtool-files-from-packages.diff
+            ]
+            ++ lib.optionals (lib.versionOlder version "8.4") [
               ./fix-paths-php7.patch
             ]
             ++ lib.optionals (lib.versionAtLeast version "8.4") [
               ./fix-paths-php84.patch
             ]
             ++ extraPatches;
+
+          postPatch = ''
+            substituteInPlace scripts/phpize.in \
+              --replace-fail "@libtool@" ${buildPackages.libtool} \
+              --replace-fail "@pkg-config@" ${buildPackages.pkg-config}
+          '';
 
           separateDebugInfo = true;
 
