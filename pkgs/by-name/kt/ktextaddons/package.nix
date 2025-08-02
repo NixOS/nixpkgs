@@ -1,30 +1,28 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   cmake,
-  extra-cmake-modules,
-  karchive,
-  kconfigwidgets,
-  kcoreaddons,
-  ki18n,
-  kxmlgui,
-  qtkeychain,
+  libsForQt5,
 }:
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktextaddons";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/ktextaddons/ktextaddons-${finalAttrs.version}.tar.xz";
     hash = "sha256-mB7Hh2Ljrg8D2GxDyHCa1s6CVmg5DDkhwafEqtSqUeM=";
   };
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ (with libsForQt5; [
     extra-cmake-modules
-  ];
-  buildInputs = [
+    wrapQtAppsHook
+  ]);
+
+  buildInputs = with libsForQt5; [
     karchive
     kconfigwidgets
     kcoreaddons
@@ -33,10 +31,10 @@ mkDerivation rec {
     qtkeychain
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Various text handling addons for KDE applications";
     homepage = "https://invent.kde.org/libraries/ktextaddons/";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ];
   };
-}
+})
