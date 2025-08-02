@@ -12,6 +12,7 @@
   brotli,
   zlib,
   gitUpdater,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,13 +74,19 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
     changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ];
     mainProgram = "cha";
