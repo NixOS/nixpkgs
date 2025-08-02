@@ -1,0 +1,13 @@
+diff --git a/source/cling/setup.py b/source/cling/setup.py
+index d43f9b1..77c013e 100755
+--- a/source/cling/setup.py
++++ b/source/cling/setup.py
+@@ -149,7 +149,7 @@ class my_cmake_build(_build):
+ 
+         CMAKE_COMMAND = ['cmake', srcdir, '-Wno-dev',
+                 stdcxx, '-DLLVM_ENABLE_TERMINFO=0', '-DLLVM_ENABLE_ASSERTIONS=0',
+-                '-Dminimal=ON', '-Dbuiltin_cling=ON', '-Druntime_cxxmodules=OFF', '-Dbuiltin_zlib=ON']
++                '-Dminimal=ON', '-Dbuiltin_cling=ON', '-Druntime_cxxmodules=OFF', '-Dbuiltin_zlib=OFF']
+         if 'darwin' in sys.platform:
+             CMAKE_COMMAND.append('-Dlibcxx=ON')
+         CMAKE_COMMAND.append('-DCMAKE_BUILD_TYPE='+get_build_type())
