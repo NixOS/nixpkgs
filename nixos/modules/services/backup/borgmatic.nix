@@ -57,6 +57,7 @@ let
     });
 
   requireZfs = s: s ? zfs;
+  requireBtrfs = s: s ? btrfs;
 
   repository =
     with lib.types;
@@ -128,7 +129,9 @@ let
     requireSudo cfg.settings || lib.any requireSudo (lib.attrValues cfg.configurations);
   anycfgRequiresZfs =
     requireZfs cfg.settings || lib.any requireZfs (lib.attrValues cfg.configurations);
-  anycfgSnapshots = anycfgRequiresZfs;
+  anycfgRequiresBtrfs =
+    requireBtrfs cfg.settings || lib.any requireBtrfs (lib.attrValues cfg.configurations);
+  anycfgSnapshots = anycfgRequiresZfs || anycfgRequiresBtrfs;
 in
 {
   options.services.borgmatic = {
@@ -194,7 +197,8 @@ in
         pkgs.coreutils
       ]
       ++ lib.optional anycfgSnapshots pkgs.util-linux
-      ++ lib.optional anycfgRequiresZfs config.boot.zfs.package;
+      ++ lib.optional anycfgRequiresZfs config.boot.zfs.package
+      ++ lib.optional anycfgRequiresBtrfs pkgs.btrfs-progs;
 
       systemd.services.borgmatic.serviceConfig = lib.mkMerge [
         (lib.mkIf anycfgRequiresSudo {
