@@ -193,6 +193,12 @@
     github = "2gn";
     githubId = 101851090;
   };
+  _2goodAP = {
+    name = "2goodAP";
+    email = "workerap@protonmail.com";
+    github = "2goodAP";
+    githubId = 45424904;
+  };
   _2hexed = {
     name = "n";
     email = "twohexed@gmail.com";
