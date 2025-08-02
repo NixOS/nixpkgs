@@ -387,7 +387,9 @@ let
   mkService =
     name: container:
     let
-      dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+      dependsOn = lib.attrsets.mapAttrsToList (k: v: "${v.serviceName}.service") (
+        lib.attrsets.getAttrs container.dependsOn cfg.containers
+      );
       escapedName = escapeShellArg name;
       preStartScript = pkgs.writeShellApplication {
         name = "pre-start";
@@ -516,7 +518,6 @@ let
       unitConfig = mkIf (effectiveUser != "root") {
         RequiresMountsFor = "/run/user/${toString uid}/containers";
       };
-
       serviceConfig = {
         ### There is no generalized way of supporting `reload` for docker
         ### containers. Some containers may respond well to SIGHUP sent to their
@@ -547,7 +548,6 @@ let
         RuntimeDirectory = escapedName;
       };
     };
-
 in
 {
   imports = [
