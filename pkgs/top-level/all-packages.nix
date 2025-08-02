@@ -1085,8 +1085,6 @@ with pkgs;
     }
   );
 
-  gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
-
   inherit (callPackages ../tools/networking/ivpn/default.nix { })
     ivpn
     ivpn-service
