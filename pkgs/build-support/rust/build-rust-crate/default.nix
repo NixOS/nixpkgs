@@ -452,7 +452,7 @@ lib.makeOverridable
               "out"
               "lib"
             ];
-        outputDev = if buildTests then [ "out" ] else [ "lib" ];
+        outputDev = if buildTests then "out" else "lib";
 
         meta = {
           mainProgram = crateName;
