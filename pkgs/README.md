@@ -38,7 +38,9 @@ Before adding a new package, please consider the following questions:
 * How realistic is it that it will be used by other people?
   It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
   A good estimate is checking upstream issues and pull requests, or other software repositories.
-  Library packages should have at least one dependent.
+    * Library packages should have at least one dependent.
+      If possible, that dependent should be packaged in the same PR the library is added in, as a sanity check.
+      If it is not possible to package the dependent, a minimal test program should be added to `passthru.tests`.
 * Is the software actively maintained upstream?
   Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
 * Are you willing to maintain the package?
