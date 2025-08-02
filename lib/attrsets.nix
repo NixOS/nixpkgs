@@ -827,6 +827,48 @@ rec {
     ) { } list_of_attrs;
 
   /**
+    Apply fold function to values grouped by key. Like
+    [`lib.attrsets.foldAttrs`](#function-library-lib.attrsets.foldAttrs), but
+    passes an attribute name as a first argument to `op`.
+
+    # Inputs
+
+    `op`
+
+    : A function, given an attribute name, a value and a collector combines the later two.
+
+    `nul`
+
+    : The starting value.
+
+    `list_of_attrs`
+
+    : A list of attribute sets to fold together by key.
+
+    # Type
+
+    ```
+    foldAttrs' :: (String -> Any -> Any -> Any) -> Any -> [AttrSets] -> Any
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.foldAttrs'` usage example
+
+    ```nix
+    foldAttrs' (name: item: acc: ["${name}${toString item}"] ++ acc) [] [{ a = 2; b = 3; } { a = 4; }]
+    => { a = [ "a2" "a4" ]; b = [ "b3" ]; }
+    ```
+
+    :::
+  */
+  foldAttrs' =
+    op: nul: list_of_attrs:
+    foldr (
+      n: a: foldr (name: o: o // { ${name} = op name n.${name} (a.${name} or nul); }) a (attrNames n)
+    ) { } list_of_attrs;
+
+  /**
     Recursively collect sets that verify a given predicate named `pred`
     from the set `attrs`. The recursion is stopped when the predicate is
     verified.
