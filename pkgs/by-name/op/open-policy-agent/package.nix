@@ -53,6 +53,9 @@ buildGoModule (finalAttrs: {
         # This test depends on the metrics available in go not changing. This is a bit
         # too unstable for us updating go independently.
         "TestJSONSerialization"
+
+        # Flaky
+        "TestGraphQLParseSchemaAlloc"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Skip tests that require network, not available in the darwin sandbox
