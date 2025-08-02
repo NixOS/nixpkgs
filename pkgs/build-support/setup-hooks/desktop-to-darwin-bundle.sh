@@ -124,7 +124,7 @@ convertIconTheme() {
 
         if [[ ($scale -eq 1) && ($iconSize -eq 32 || $iconSize -eq 16) ]]; then
             echo "desktopToDarwinBundle: converting ${iconSize}x icon to argb" >&2
-            icnsutil convert "$out" "$in"
+            @icnsutil@/bin/icnsutil convert "$out" "$in"
             rm "$in"
         fi
     }
@@ -208,7 +208,7 @@ convertIconTheme() {
 
     iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
     if [[ -n "$(ls -A1 "$iconsdir")" ]]; then
-        icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
+        @icnsutil@/bin/icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
     else
         echo "Warning: no icons were found. Creating an empty icon for ${iconName}.icns."
         touch "$out/${iconName}.icns"
