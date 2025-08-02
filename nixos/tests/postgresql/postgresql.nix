@@ -101,6 +101,12 @@ let
           machine.fail(check_count("SELECT * FROM sth;", 4))
           machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
 
+          with subtest("killing postgres process should trigger an automatic restart"):
+              machine.succeed("systemctl kill -s KILL postgresql")
+
+              machine.wait_until_succeeds("systemctl is-active postgresql.service")
+              machine.wait_until_succeeds("systemctl is-active postgresql.target")
+
           with subtest("Backup service works"):
               machine.succeed(
                   "systemctl start ${backupService}.service",
