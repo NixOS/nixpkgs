@@ -1,21 +1,12 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  click,
-  semantic-version,
-  requests,
-  colorama,
-  pyserial,
-  wheel,
-  scons,
-  setuptools,
   tinyprog,
-  flit-core,
-  pytestCheckHook,
+  scons,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "apio";
   version = "0.9.5";
 
@@ -24,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VU4tOszGkw20DWW2SerFsnjFiSkrSwqBcwosGnHJfU8=";
   };
 
@@ -50,24 +41,30 @@ buildPythonApplication rec {
         'version = semantic_version.Version(pkg_version.replace(".dev", "-dev"))'
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     flit-core
   ];
 
-  propagatedBuildInputs = [
-    click
-    semantic-version
-    requests
-    colorama
-    pyserial
-    wheel
-    scons
-    setuptools # needs pkg_resources at runtime (technically not needed when tinyprog is also in this list because of the propagatedBuildInputs of tinyprog)
+  dependencies =
+    with python3Packages;
+    [
+      click
+      semantic-version
+      requests
+      colorama
+      pyserial
+      wheel
+    ]
+    ++ [
+      scons
+      tinyprog # needed for upload to TinyFPGA
+    ];
 
-    tinyprog # needed for upload to TinyFPGA
+  build-system = with python3Packages; [
+    setuptools # needs pkg_resources at runtime (technically not needed when tinyprog is also in this list because of the propagatedBuildInputs of tinyprog)
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
@@ -80,11 +77,11 @@ buildPythonApplication rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open source ecosystem for open FPGA boards";
     mainProgram = "apio";
     homepage = "https://github.com/FPGAwars/apio";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }
