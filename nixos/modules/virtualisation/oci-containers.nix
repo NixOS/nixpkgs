@@ -494,7 +494,7 @@ let
           filterAttrs (_: v: v == false) container.capabilities
         )
         ++ map (d: "--device=${escapeShellArg d}") container.devices
-        ++ map (n: "--network=${escapeShellArg n}") container.networks
+        ++ map (n: "--network=${escapeShellArg n}") (lib.lists.unique container.networks)
         ++ [ "--pull ${escapeShellArg container.pull}" ]
         ++ map escapeShellArg container.extraOptions
         ++ [ container.image ]
