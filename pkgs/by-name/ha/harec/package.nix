@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "0.24.2";
+  version = "0.25.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
     rev = finalAttrs.version;
-    hash = "sha256-YCUBdPYr/44stW9k54QoUEhNkti6ULJkVBphx7xhmKo=";
+    hash = "sha256-5+aYoO7khH1wfH0iC6ZiIVZ4Y11+TpIC4yaEEEC00GM=";
   };
 
   nativeBuildInputs = [ qbe ];
@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postConfigure = ''
     ln -s configs/${platform}.mk config.mk
+    echo "CFLAGS := \$(CFLAGS) -Wno-maybe-uninitialized" >> config.mk
   '';
 
   passthru = {
