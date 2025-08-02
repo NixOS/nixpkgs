@@ -1,19 +1,17 @@
 {
+  fetchPypi,
   lib,
-  fetchFromGitHub,
   python3Packages,
   xorg,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exegol";
-  version = "5.1.1";
+  version = "4.3.11";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ThePorgs";
-    repo = "Exegol";
-    tag = version;
-    hash = "sha256-q84uWxVooQ+tFA2NhQ5N30h8LPhT+fJfxVmcpMzOQVk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-+LnZSFRW7EvG+cPwMStgO6qD4AjOGkLzCarXBrW3Aak=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
@@ -21,27 +19,20 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "rich"
     "argcomplete"
-    "supabase"
   ];
 
   dependencies =
     with python3Packages;
     [
-      argcomplete
-      cryptography
-      docker
-      gitpython
-      ifaddr
-      pydantic
-      pyjwt
       pyyaml
+      gitpython
+      docker
       requests
       rich
-      supabase
+      argcomplete
+      tzlocal
     ]
-    ++ pyjwt.optional-dependencies.crypto
-    ++ [ xorg.xhost ]
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) tzlocal;
+    ++ [ xorg.xhost ];
 
   doCheck = true;
 
@@ -58,17 +49,8 @@ python3Packages.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${src.tag}";
-    license = with lib.licenses; [
-      gpl3Only
-      {
-        fullName = "Exegol Software License (ESL) - Version 1.0";
-        url = "https://docs.exegol.com/legal/software-license";
-        # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
-        free = false;
-        redistributable = false;
-      }
-    ];
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
+    license = lib.licenses.gpl3Only;
     mainProgram = "exegol";
     maintainers = with lib.maintainers; [
       _0b11stan
