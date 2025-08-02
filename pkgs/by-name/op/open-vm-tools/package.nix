@@ -140,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional (!withX) "--without-x";
 
+  NIX_LDFLAGS = "-L${pam}/lib -lpam";
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;
