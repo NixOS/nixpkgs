@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gtk3,
   adwaita-icon-theme,
-  breeze-icons,
+  kdePackages,
   hicolor-icon-theme,
   gitUpdater,
 }:
@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
-    rev = "v${version}";
-    sha256 = "sha256-Oralfx5MzCzkx+c+zwtFp8q83oKrNINd/PmVeugNKGo=";
+    tag = "v${version}";
+    hash = "sha256-Oralfx5MzCzkx+c+zwtFp8q83oKrNINd/PmVeugNKGo=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
 
@@ -50,11 +50,11 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
-    license = with licenses; [ gpl3Only ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
