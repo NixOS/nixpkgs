@@ -53,6 +53,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # To prevent test from writing out non-reproducible .pyc files
+  # https://github.com/agronholm/typeguard/blob/ca512c28132999da514f31b5e93ed2f294ca8f77/tests/test_typechecked.py#L641
+  preCheck = "export PYTHONDONTWRITEBYTECODE=1";
+
   pythonImportsCheck = [ "typeguard" ];
 
   meta = {
