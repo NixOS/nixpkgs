@@ -63,7 +63,7 @@ let
     kitty.pkg = p: p.kitty;
     kitty.cmd = "kitty $command";
 
-    konsole.pkg = p: p.plasma5Packages.konsole;
+    konsole.pkg = p: p.kdePackages.konsole;
 
     lxterminal.pkg = p: p.lxterminal;
 
