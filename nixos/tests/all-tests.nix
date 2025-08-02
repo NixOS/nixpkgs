@@ -725,6 +725,7 @@ in
   ifm = runTest ./ifm.nix;
   iftop = runTest ./iftop.nix;
   immich = runTest ./web-apps/immich.nix;
+  immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   incron = runTest ./incron.nix;
   incus = pkgs.recurseIntoAttrs (
