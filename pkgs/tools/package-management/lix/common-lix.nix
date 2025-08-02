@@ -57,7 +57,7 @@ assert lib.assertMsg (
   rustc,
   toml11,
   pegtl,
-  python3,
+  buildPackages,
   pkg-config,
   rapidcheck,
   sqlite,
@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
-    (python3.pythonOnBuildForHost.withPackages (
+    (buildPackages.python3.withPackages (
       p:
       [
         p.python-frontmatter
@@ -154,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     cmake
-    python3
     # Required for libstd++ assertions that leaks inside of the final binary.
     removeReferencesTo
 
