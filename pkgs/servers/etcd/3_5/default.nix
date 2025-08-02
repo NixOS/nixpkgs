@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   symlinkJoin,
   nixosTests,
@@ -33,7 +33,7 @@ let
     platforms = platforms.darwin ++ platforms.linux;
   };
 
-  etcdserver = buildGo123Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -60,7 +60,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo123Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -75,7 +75,7 @@ let
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGo123Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit
