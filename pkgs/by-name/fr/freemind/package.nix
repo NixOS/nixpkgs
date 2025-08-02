@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   ant,
-  jdk,
-  jre,
+  jdk8,
+  jre8,
   makeWrapper,
   stripJavaArchivesHook,
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     ant
-    jdk
+    jdk8
     makeWrapper
     stripJavaArchivesHook
   ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     makeWrapper $out/share/freemind/freemind.sh $out/bin/freemind \
-        --set JAVA_HOME ${jre}
+        --set JAVA_HOME ${jre8}
   '';
 
   meta = {

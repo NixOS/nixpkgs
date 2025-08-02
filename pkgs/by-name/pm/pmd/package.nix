@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   makeWrapper,
-  openjdk,
+  jdk8,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install -Dm644 lib/*.jar -t $out/lib/pmd
 
     wrapProgram $out/libexec/pmd \
-        --prefix PATH : ${openjdk.jre}/bin \
+        --prefix PATH : ${jdk8.jre}/bin \
         --set LIB_DIR $out/lib/pmd
 
     for app in pmd cpd cpdgui designer bgastviewer designerold ast-dump; do

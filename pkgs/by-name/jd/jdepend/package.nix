@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   ant,
-  jdk,
+  jdk8,
   makeWrapper,
   stripJavaArchivesHook,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     ant
-    jdk
+    jdk8
     makeWrapper
     stripJavaArchivesHook
   ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 dist/jdepend-*.jar -t $out/share/jdepend
 
-    makeWrapper ${jdk.jre}/bin/java $out/bin/jdepend \
+    makeWrapper ${jdk8.jre}/bin/java $out/bin/jdepend \
         --add-flags "-classpath $out/share/jdepend/jdepend-*.jar"
 
     for type in "swingui" "textui" "xmlui"; do
