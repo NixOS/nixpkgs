@@ -1368,8 +1368,6 @@ with pkgs;
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
-  arpack-mpi = arpack.override { useMpi = true; };
-
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
