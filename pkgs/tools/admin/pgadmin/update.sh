@@ -41,11 +41,10 @@ pushd $TMPDIR
 wget -c $url
 tar -xzf "pgadmin4-$newest_version.tar.gz"
 cd "pgadmin4-$newest_version/web"
-patch -u yarn.lock ${scriptDir}/mozjpeg.patch
 
 printf "Will now generate the hash. This will download the packages to the nix store and also take some time\n"
-yarn-berry-fetcher missing-hashes yarn.lock
-if [[ -f missing-hashes.json ]]; then
+yarn-berry-fetcher missing-hashes yarn.lock > missing-hashes.json
+if [[ $(wc -l <missing-hashes.json) -ge 2 ]]; then
   YARN_HASH=$(yarn-berry-fetcher prefetch yarn.lock missing-hashes.json)
 else
   YARN_HASH=$(yarn-berry-fetcher prefetch yarn.lock)
