@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  buildPackages,
+  pkgsBuildBuild,
   SDL2,
   SDL2_image,
   SDL2_mixer,
@@ -31,11 +33,25 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/riksweeney/edgar/commit/cec80a04d765fd2f6563d1cf060ad5000f9efe0a.patch";
       hash = "sha256-RJpIt7M3c989nXkWRTY+dIUGqqttyTTGx8s5u/iTWX4=";
     })
+
+    (fetchpatch {
+      # https://github.com/riksweeney/edgar/pull/68
+      name = "add-cross-compilation-support.patch";
+      url = "https://github.com/riksweeney/edgar/commit/9cc071d06b97e20aee3841c2eaa8078c6ed396d7.patch";
+      hash = "sha256-+yHzLgqBI8qgD40pSCmwF68SDDnC/4QdCXEz/g7l0a4=";
+    })
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkgsBuildBuild.pkg-config
+  ];
   nativeBuildInputs = [
     pkg-config
     gettext
+    zlib
   ];
 
   buildInputs = [
@@ -54,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "BIN_DIR=${placeholder "out"}/bin/"
+    "BUILD_CC=$(CC_FOR_BUILD)"
+    "BUILD_PKG_CONFIG=$(PKG_CONFIG_FOR_BUILD)"
   ];
 
   enableParallelBuilding = true;
