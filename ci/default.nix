@@ -75,6 +75,22 @@ let
           includes = [ "*" ];
           priority = 1;
         };
+
+        # TODO: Upstream this into treefmt-nix eventually?
+        settings.formatter.markdown-code-runner = {
+          command = pkgs.lib.getExe pkgs.markdown-code-runner;
+          options = [
+            "--config=${
+              pkgs.writers.writeTOML "markdown-code-runner-config" {
+                presets.nixfmt = {
+                  language = "nix";
+                  command = [ (pkgs.lib.getExe pkgs.nixfmt-rfc-style) ];
+                };
+              }
+            }"
+          ];
+          includes = [ "*.md" ];
+        };
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
