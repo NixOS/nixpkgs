@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.10.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-rJ3/JtbzYwsMRk5OZKczr/BDwfDU4NH48JdYWC5/fNk=";
+    hash = "sha256-4pB4MiG55bVN5AuCvBz6N+U7beYOnwGb2YIUMxjJdas=";
   };
 
   build-system = [
