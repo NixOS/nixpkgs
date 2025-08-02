@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ python3 ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   checkTarget = "test";
 
   installPhase = ''
