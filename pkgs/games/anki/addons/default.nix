@@ -4,6 +4,8 @@
 {
   adjust-sound-volume = callPackage ./adjust-sound-volume { };
 
+  anki-code-highlighter = callPackage ./anki-code-highlighter { };
+
   anki-connect = callPackage ./anki-connect { };
 
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
