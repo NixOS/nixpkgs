@@ -12,11 +12,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
   version = "1.13.1";
 
-  outputs = [
-    "out"
-    "lib"
-    "dev"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Workaround for cycle lib->out on darwin
+      "lib"
+    ];
 
   src = fetchFromGitHub {
     owner = "fraunhoferhhi";
