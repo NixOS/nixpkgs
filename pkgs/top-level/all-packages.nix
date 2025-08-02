@@ -1439,10 +1439,6 @@ with pkgs;
     stdenv = gcc14Stdenv;
   };
 
-  snes9x-gtk = snes9x.override {
-    withGtk = true;
-  };
-
   winetricks = callPackage ../applications/emulators/wine/winetricks.nix { };
 
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
