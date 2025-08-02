@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fixVersioneerSourcesHook,
 
   # build-system
   setuptools,
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     repo = "dask-jobqueue";
     tag = version;
     hash = "sha256-YujfhjOJzl4xsjjsyrQkEu/CBR04RwJ79c1iSTcMIgw=";
+    nativeBuildInputs = [ fixVersioneerSourcesHook ];
   };
 
   build-system = [ setuptools ];

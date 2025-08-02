@@ -8,6 +8,7 @@
   h5py,
   truncnorm,
   pytestCheckHook,
+  fixVersioneerSourcesHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,8 @@ buildPythonPackage rec {
     owner = "bayespy";
     repo = "bayespy";
     tag = version;
-    hash = "sha256-X7CwJBrKHlU1jqMkt/7XEzaiwul1Yzkb/V64lXG4Aqo=";
+    hash = "sha256-kx87XY4GCL1PQIeZyovEbrPyCC/EVA6Hdvt+3P/D6VI=";
+    nativeBuildInputs = [ fixVersioneerSourcesHook ];
   };
 
   postPatch = ''
