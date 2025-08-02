@@ -1,3 +1,5 @@
+declare -a EXTRA_ENV
+
 echo_build_heading() {
   if (( $# == 1 )); then
     echo_colored "Building $1"
@@ -10,7 +12,7 @@ build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
 
-  noisily rustc \
+  noisily env "${EXTRA_ENV[@]}" rustc \
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
@@ -41,7 +43,7 @@ build_bin() {
     main_file=$2
   fi
   echo_build_heading $@
-  noisily rustc \
+  noisily env "${EXTRA_ENV[@]}" rustc \
     --crate-name $crate_name_ \
     $main_file \
     --crate-type bin \
