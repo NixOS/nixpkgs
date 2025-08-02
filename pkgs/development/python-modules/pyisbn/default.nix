@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   hypothesis,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
 }:

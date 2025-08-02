@@ -4,7 +4,6 @@
   docopt,
   fetchPypi,
   pdfminer-six,
-  pythonOlder,
   setuptools,
   wand,
 }:

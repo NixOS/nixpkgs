@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

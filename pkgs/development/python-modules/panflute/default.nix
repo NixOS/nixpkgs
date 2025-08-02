@@ -4,7 +4,6 @@
   click,
   pyyaml,
   buildPythonPackage,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

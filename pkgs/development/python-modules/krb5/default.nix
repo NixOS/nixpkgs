@@ -7,7 +7,6 @@
   k5test,
   krb5-c, # C krb5 library
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

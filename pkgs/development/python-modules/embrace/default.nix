@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromSourcehut,
   pytestCheckHook,
-  pythonOlder,
   sqlparse,
   wrapt,
 }:

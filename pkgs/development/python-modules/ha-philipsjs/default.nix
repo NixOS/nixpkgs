@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   respx,
   setuptools,
 }:

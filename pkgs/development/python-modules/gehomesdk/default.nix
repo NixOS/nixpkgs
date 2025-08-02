@@ -6,7 +6,6 @@
   fetchPypi,
   humanize,
   lxml,
-  pythonOlder,
   requests,
   setuptools,
   slixmpp,

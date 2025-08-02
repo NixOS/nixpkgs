@@ -14,7 +14,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   tenacity,
   respx,
   retrying,

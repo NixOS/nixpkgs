@@ -10,7 +10,6 @@
   pillow-heif,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   wand,
 }:
 

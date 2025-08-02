@@ -5,7 +5,6 @@
   google-generativeai,
   llama-index-core,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

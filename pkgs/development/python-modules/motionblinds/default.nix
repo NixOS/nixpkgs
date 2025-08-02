@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodomex,
-  pythonOlder,
   setuptools,
 }:
 

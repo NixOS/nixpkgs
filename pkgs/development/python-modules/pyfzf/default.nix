@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fzf,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

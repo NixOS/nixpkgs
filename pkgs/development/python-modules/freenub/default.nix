@@ -12,7 +12,6 @@
   pytest-vcr,
   pytestCheckHook,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

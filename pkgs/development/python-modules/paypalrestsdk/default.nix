@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   pyopenssl,
-  pythonOlder,
   requests,
   six,
 }:

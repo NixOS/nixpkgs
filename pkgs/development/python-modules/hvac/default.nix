@@ -5,7 +5,6 @@
   pyhcl,
   requests,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-json-logger,
-  pythonOlder,
   setuptools,
 }:
 

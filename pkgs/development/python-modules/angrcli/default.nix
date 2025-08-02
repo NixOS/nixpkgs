@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdenv,
 }:

@@ -8,7 +8,6 @@
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   six,

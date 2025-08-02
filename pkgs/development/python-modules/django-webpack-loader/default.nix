@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 

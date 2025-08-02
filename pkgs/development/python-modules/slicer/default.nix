@@ -4,7 +4,6 @@
   dos2unix,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pandas,
   torch,
   scipy,

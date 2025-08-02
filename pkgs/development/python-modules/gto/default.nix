@@ -12,7 +12,6 @@
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
-  pythonOlder,
   rich,
   ruamel-yaml,
   scmrepo,

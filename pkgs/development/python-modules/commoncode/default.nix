@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools-scm,

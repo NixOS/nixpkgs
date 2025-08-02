@@ -6,7 +6,6 @@
   mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   simplejson,
   twisted,

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flask,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

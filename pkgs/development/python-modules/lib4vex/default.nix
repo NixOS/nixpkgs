@@ -5,7 +5,6 @@
   csaf-tool,
   lib4sbom,
   packageurl-python,
-  pythonOlder,
   setuptools,
 }:
 

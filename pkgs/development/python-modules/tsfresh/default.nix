@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   stdenv,
-  pythonOlder,
   requests,
   numpy,
   pandas,

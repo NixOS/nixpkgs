@@ -12,7 +12,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   six,

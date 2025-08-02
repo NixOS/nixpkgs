@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

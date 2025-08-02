@@ -8,7 +8,6 @@
   prompt-toolkit,
   pyfwup,
   pygreat,
-  pythonOlder,
   pyusb,
   setuptools,
   tabulate,

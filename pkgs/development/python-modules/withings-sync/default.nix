@@ -5,7 +5,6 @@
   garth,
   lxml,
   python-dotenv,
-  pythonOlder,
   requests,
   setuptools,
 }:

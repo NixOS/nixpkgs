@@ -5,7 +5,6 @@
   poetry-core,
   pylint,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 

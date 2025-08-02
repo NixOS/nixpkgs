@@ -6,7 +6,6 @@
   pytest-freezer,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools-scm,
 }:
 

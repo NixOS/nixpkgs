@@ -5,7 +5,6 @@
   setuptools,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   tzlocal,
 }:

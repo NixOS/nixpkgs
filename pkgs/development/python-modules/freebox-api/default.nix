@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 

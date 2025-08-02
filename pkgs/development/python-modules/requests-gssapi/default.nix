@@ -4,7 +4,6 @@
   fetchPypi,
   gssapi,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

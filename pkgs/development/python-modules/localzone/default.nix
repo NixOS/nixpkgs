@@ -5,7 +5,6 @@
   dnspython,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

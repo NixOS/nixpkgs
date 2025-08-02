@@ -13,7 +13,6 @@
   nipype,
   pydicom,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   versioningit,
 }:

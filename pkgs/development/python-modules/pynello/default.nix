@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-dateutil,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:

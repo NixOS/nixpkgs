@@ -13,7 +13,6 @@
   pyshark,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 

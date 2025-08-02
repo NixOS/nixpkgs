@@ -6,7 +6,6 @@
   protobuf,
   pycryptodomex,
   pyogg,
-  pythonOlder,
   requests,
   setuptools,
   websocket-client,

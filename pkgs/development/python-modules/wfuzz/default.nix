@@ -10,7 +10,6 @@
   pycurl,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   fetchpatch2,

@@ -12,7 +12,6 @@
   numpy,
   pytest-astropy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   zarr,

@@ -7,7 +7,6 @@
   fetchPypi,
   pyjwt,
   python-jose,
-  pythonOlder,
   setuptools-scm,
 }:
 

@@ -4,7 +4,6 @@
   buildPythonPackage,
   parameterized,
   pygments,
-  pythonOlder,
   pytestCheckHook,
 }:
 

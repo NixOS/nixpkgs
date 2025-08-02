@@ -4,7 +4,6 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   yarl,
 }:
 

@@ -10,7 +10,6 @@
   matplotlib,
   parameterized,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   textparser,

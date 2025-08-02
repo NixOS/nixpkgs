@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchPypi,
   installShellFiles,
-  pythonOlder,
   setuptools-scm,
   writeScript,
 }:

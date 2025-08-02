@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   aiofiles,
   aiohttp,
   backports-datetime-fromisoformat,

@@ -8,7 +8,6 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

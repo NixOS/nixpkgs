@@ -3,7 +3,6 @@
   buildPythonPackage,
   certifi,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   urllib3,

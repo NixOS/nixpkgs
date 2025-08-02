@@ -6,7 +6,6 @@
   pylint,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 

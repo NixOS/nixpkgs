@@ -11,7 +11,6 @@
   pyqt6-sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   mesa,
   withMultimedia ? true,
   withWebSockets ? true,

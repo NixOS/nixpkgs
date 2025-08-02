@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   azure-keyvault-certificates,
   azure-keyvault-keys,

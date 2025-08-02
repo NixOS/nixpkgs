@@ -31,7 +31,6 @@
   pytestCheckHook,
   python-dateutil,
   python-multipart,
-  pythonOlder,
   rich,
   sanic,
   sanic-testing,

@@ -5,7 +5,6 @@
   hatchling,
   hatch-requirements-txt,
   setuptools,
-  pythonOlder,
   dnspython,
 
   # for passthru.tests

@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   unittestCheckHook,
   pandoc,
   lib,

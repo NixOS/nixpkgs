@@ -5,7 +5,6 @@
   llama-index-core,
   poetry-core,
   pyowm,
-  pythonOlder,
   pytestCheckHook,
 }:
 

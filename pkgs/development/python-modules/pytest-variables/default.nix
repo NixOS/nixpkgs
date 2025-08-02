@@ -9,7 +9,6 @@
   toml,
   pytestCheckHook,
   pyyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -12,7 +12,6 @@
   pscript,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   uvicorn,
 }:

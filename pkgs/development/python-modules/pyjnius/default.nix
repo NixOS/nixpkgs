@@ -4,7 +4,6 @@
   cython,
   fetchPypi,
   jdk,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

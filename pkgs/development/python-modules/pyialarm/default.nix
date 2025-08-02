@@ -3,7 +3,6 @@
   buildPythonPackage,
   dicttoxml2,
   fetchFromGitHub,
-  pythonOlder,
   xmltodict,
 }:
 

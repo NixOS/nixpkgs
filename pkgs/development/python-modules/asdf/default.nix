@@ -14,7 +14,6 @@
   psutil,
   pytest-remotedata,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semantic-version,
   setuptools,

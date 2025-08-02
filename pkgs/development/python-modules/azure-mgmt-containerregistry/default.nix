@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-common,
   azure-mgmt-core,
   isodate,

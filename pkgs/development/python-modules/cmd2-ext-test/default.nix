@@ -4,7 +4,6 @@
   cmd2,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

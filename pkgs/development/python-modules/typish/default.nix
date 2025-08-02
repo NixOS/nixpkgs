@@ -5,7 +5,6 @@
   numpy,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

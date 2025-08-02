@@ -3,7 +3,6 @@
   fetchPypi,
   setuptools,
   lib,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "pwinput";

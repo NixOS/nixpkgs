@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   responses,

@@ -8,7 +8,6 @@
   minidump,
   minikerberos,
   msldap,
-  pythonOlder,
   winsspi,
 }:
 

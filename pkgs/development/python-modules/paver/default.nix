@@ -6,7 +6,6 @@
   mock,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   six,
   virtualenv,
 }:

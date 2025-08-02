@@ -9,9 +9,7 @@
   hatchling,
   minikerberos-bad,
   msldap-bad,
-  pyasn1,
   pytestCheckHook,
-  pythonOlder,
   winacl,
 }:
 

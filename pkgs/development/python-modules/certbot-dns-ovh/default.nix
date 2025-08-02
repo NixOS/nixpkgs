@@ -4,7 +4,6 @@
   certbot,
   dns-lexicon,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

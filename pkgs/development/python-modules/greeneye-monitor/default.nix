@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   siobrultech-protocols,
 }:

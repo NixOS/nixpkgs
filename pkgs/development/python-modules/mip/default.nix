@@ -9,7 +9,6 @@
   networkx,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,

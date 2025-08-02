@@ -7,7 +7,6 @@
   lxml,
   poetry-core,
   pyasn1,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

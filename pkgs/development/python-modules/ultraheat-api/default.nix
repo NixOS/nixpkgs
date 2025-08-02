@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

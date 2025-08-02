@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flask,
   pymongo,
-  pythonOlder,
   setuptools,
   simplejson,
 }:

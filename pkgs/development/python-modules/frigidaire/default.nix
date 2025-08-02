@@ -5,7 +5,6 @@
   chardet,
   fetchFromGitHub,
   idna,
-  pythonOlder,
   requests,
   setuptools,
   urllib3,

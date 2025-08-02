@@ -4,7 +4,6 @@
   fetchPypi,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   setuptools-scm,

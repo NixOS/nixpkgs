@@ -6,7 +6,6 @@
   fetchFromGitHub,
   iterfzf,
   poetry-core,
-  pythonOlder,
   pyyaml,
   rich,
   typer,

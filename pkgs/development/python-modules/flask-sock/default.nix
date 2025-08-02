@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitHub,
   flask,
   setuptools,

@@ -6,7 +6,6 @@
   fetchPypi,
   importlib-metadata,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

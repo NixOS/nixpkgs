@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   flit-core,
   fetchPypi,
   buildPythonPackage,

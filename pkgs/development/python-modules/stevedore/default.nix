@@ -3,7 +3,6 @@
   buildPythonPackage,
   callPackage,
   fetchPypi,
-  pythonOlder,
   pbr,
   setuptools,
 }:

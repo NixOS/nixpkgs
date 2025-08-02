@@ -13,7 +13,6 @@
   oslotest,
   osprofiler,
   pbr,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,

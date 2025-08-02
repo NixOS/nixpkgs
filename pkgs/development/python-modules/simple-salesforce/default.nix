@@ -7,7 +7,6 @@
   pendulum,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   responses,

@@ -4,7 +4,6 @@
   fetchPypi,
   httpx,
   pyspnego,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

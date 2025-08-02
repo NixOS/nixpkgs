@@ -5,7 +5,6 @@
   pytestCheckHook,
   setuptools,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

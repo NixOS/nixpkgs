@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 

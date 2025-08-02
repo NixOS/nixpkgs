@@ -5,7 +5,6 @@
   mock,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,

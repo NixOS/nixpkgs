@@ -6,7 +6,6 @@
   cmake,
   perl,
   stdenv,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

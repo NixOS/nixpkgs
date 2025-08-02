@@ -7,7 +7,6 @@
   mock,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

@@ -5,7 +5,6 @@
   fetchPypi,
   pillow,
   hatchling,
-  pythonOlder,
   requests,
   rich,
   uv-dynamic-versioning,

@@ -5,7 +5,6 @@
   setuptools,
   traits,
   pyface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

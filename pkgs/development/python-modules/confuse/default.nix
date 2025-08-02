@@ -5,7 +5,6 @@
   flit-core,
   pyyaml,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

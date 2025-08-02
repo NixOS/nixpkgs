@@ -5,7 +5,6 @@
   fetchPypi,
   flask,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:

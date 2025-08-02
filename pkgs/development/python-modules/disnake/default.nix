@@ -6,7 +6,6 @@
   fetchFromGitHub,
   libopus,
   pynacl,
-  pythonOlder,
   withVoice ? true,
   ffmpeg,
 }:

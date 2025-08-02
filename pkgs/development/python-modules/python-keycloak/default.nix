@@ -5,7 +5,6 @@
   fetchFromGitHub,
   jwcrypto,
   poetry-core,
-  pythonOlder,
   requests,
   requests-toolbelt,
 }:

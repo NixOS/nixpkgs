@@ -7,7 +7,6 @@
   setuptools,
   setuptoolsRustBuildHook,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   libiconv,
   stdenv,

@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tenacity,

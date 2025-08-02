@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nanomsg,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage {

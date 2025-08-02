@@ -5,7 +5,6 @@
   flit-core,
   pretend,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

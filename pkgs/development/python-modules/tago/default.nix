@@ -5,7 +5,6 @@
   fetchFromGitHub,
   promise,
   python-socketio,
-  pythonOlder,
   requests,
   websockets,
 }:

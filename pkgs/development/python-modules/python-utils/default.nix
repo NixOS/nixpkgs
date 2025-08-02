@@ -6,7 +6,6 @@
   loguru,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

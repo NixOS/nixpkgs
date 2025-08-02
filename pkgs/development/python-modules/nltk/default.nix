@@ -3,7 +3,6 @@
   pkgs,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   click,
   joblib,
   regex,

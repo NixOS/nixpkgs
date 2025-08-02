@@ -6,7 +6,6 @@
   pillow,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools-scm,
   setuptools,

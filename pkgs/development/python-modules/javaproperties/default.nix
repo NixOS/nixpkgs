@@ -5,7 +5,6 @@
   hatchling,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,6 @@
   callPackage,
   fetchPypi,
   hatchling,
-  pythonOlder,
   appnope,
   comm,
   ipython,

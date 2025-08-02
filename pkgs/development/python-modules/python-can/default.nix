@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   typing-extensions,

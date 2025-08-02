@@ -6,7 +6,6 @@
   mock,
   netifaces,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

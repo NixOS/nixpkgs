@@ -7,7 +7,6 @@
   fetchFromGitLab,
   pyfakefs,
   python-dateutil,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   unittestCheckHook,

@@ -7,7 +7,6 @@
   pylibmc,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   toml,

@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 

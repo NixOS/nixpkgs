@@ -10,7 +10,6 @@
   pkgs,
   process-tests,
   pytestCheckHook,
-  pythonOlder,
   redis,
   django-redis,
 }:

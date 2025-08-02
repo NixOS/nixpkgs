@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

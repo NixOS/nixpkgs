@@ -7,7 +7,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   jpype1,

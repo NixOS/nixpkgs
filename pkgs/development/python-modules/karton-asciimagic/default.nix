@@ -4,7 +4,6 @@
   fetchFromGitHub,
   karton-core,
   unittestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

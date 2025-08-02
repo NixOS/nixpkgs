@@ -4,7 +4,6 @@
   fetchPypi,
   dacite,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
 }:

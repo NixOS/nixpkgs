@@ -10,7 +10,6 @@
   pandas,
   pillow,
   python-barcode,
-  pythonOlder,
   qrcode,
   pytestCheckHook,
   requests,

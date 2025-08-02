@@ -5,7 +5,6 @@
   fetchPypi,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

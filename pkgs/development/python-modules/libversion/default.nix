@@ -5,7 +5,6 @@
   libversion,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

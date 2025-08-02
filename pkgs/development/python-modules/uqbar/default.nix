@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   defusedxml,
   setuptools,
   sphinx,

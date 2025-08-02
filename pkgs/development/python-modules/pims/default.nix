@@ -5,7 +5,6 @@
   imageio,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scikit-image,
   slicerator,
 }:

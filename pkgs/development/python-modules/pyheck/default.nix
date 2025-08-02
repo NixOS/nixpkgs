@@ -6,7 +6,6 @@
   libiconv,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
   stdenv,

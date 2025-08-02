@@ -5,7 +5,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

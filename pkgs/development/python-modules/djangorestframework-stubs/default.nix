@@ -8,7 +8,6 @@
   coreapi,
   pytest-mypy-plugins,
   pytestCheckHook,
-  pythonOlder,
   requests,
   types-pyyaml,
   setuptools,

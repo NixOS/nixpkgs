@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   python-multipart,
   starlette,
   syrupy,

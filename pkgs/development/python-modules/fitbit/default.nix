@@ -6,7 +6,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests-mock,
   requests-oauthlib,
 }:

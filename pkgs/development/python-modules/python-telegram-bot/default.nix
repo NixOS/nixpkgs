@@ -16,7 +16,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   tornado,

@@ -6,7 +6,6 @@
   requests,
   six,
   pyopenssl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

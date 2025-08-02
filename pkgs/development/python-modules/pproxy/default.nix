@@ -5,7 +5,6 @@
   pycryptodome,
   uvloop,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

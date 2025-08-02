@@ -10,7 +10,6 @@
   markdown,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools,

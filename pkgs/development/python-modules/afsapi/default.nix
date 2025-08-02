@@ -6,7 +6,6 @@
   lxml,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

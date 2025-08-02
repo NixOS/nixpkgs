@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   jmespath,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

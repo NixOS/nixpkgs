@@ -4,7 +4,6 @@
   fetchFromGitHub,
   prometheus-client,
   pyserial,
-  pythonOlder,
   pyyaml,
   legacy-cgi,
   setuptools,

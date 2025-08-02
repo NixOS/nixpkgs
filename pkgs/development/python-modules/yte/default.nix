@@ -6,7 +6,6 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   uv-build,
 }:

@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   unittestCheckHook,
 }:
 

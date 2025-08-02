@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   behave,
   allure-python-commons,
   setuptools-scm,

@@ -6,7 +6,6 @@
   oauthlib,
   python-dateutil,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

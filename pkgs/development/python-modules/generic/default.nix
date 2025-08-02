@@ -4,7 +4,6 @@
   exceptiongroup,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

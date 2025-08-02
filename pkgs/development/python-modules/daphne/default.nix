@@ -10,7 +10,6 @@
   hypothesis,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   twisted,
 }:

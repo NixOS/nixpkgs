@@ -8,7 +8,6 @@
   pastedeploy,
   paste,
   pydispatcher,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

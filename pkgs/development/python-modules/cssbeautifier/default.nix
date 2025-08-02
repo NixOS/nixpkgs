@@ -4,7 +4,6 @@
   editorconfig,
   fetchPypi,
   jsbeautifier,
-  pythonOlder,
   setuptools,
   six,
 }:

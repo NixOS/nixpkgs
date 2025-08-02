@@ -5,7 +5,6 @@
   typing-extensions,
   heapdict,
   pytestCheckHook,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "cachey";

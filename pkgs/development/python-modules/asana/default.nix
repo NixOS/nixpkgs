@@ -6,7 +6,6 @@
   pytestCheckHook,
   python-dateutil,
   python-dotenv,
-  pythonOlder,
   setuptools,
   six,
   urllib3,

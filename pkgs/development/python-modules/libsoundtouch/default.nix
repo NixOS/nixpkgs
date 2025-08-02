@@ -7,7 +7,6 @@
   zeroconf,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -12,7 +12,6 @@
   python-jose,
   python3-openid,
   python3-saml,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,

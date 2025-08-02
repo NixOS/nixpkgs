@@ -13,7 +13,6 @@
   pyemd,
   pyphen,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scikit-learn,
   scipy,

@@ -7,7 +7,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   python-dateutil,
-  pythonOlder,
   pytz,
   taskwarrior2,
 }:

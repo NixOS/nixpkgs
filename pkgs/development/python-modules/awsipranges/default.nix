@@ -5,7 +5,6 @@
   poetry-core,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

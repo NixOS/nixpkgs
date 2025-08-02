@@ -6,7 +6,6 @@
   fzf,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -6,7 +6,6 @@
   fetchPypi,
   lxml,
   python-slugify,
-  pythonOlder,
   setuptools,
   sphinx,
   unidecode,

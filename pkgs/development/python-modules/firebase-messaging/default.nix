@@ -14,7 +14,6 @@
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   sphinx,
   sphinx-autodoc-typehints,

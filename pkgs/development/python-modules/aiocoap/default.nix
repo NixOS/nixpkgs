@@ -10,8 +10,6 @@
   ge25519,
   pygments,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   termcolor,
   websockets,

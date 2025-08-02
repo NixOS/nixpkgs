@@ -5,7 +5,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

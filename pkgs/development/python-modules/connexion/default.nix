@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   poetry-core,

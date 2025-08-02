@@ -9,7 +9,6 @@
   requests,
   requests-mock,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

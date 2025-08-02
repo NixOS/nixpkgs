@@ -11,7 +11,6 @@
   markdown,
   policy-sentry,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   schema,
   setuptools,

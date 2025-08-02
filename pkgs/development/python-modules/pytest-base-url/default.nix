@@ -9,7 +9,6 @@
   pytest-metadata,
   requests,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

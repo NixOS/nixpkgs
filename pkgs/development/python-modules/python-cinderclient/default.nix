@@ -11,7 +11,6 @@
   pbr,
   requests,
   prettytable,
-  pythonOlder,
   reno,
   requests-mock,
   setuptools,

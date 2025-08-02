@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pyee,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   playwright-driver,

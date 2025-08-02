@@ -15,7 +15,6 @@
   pysocks,
   gunicorn,
   pytestCheckHook,
-  pythonOlder,
   selenium,
   setuptools,
   wsproto,

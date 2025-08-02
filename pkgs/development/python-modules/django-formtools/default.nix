@@ -4,7 +4,6 @@
   django,
   fetchPypi,
   python,
-  pythonOlder,
   setuptools-scm,
 }:
 

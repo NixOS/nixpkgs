@@ -10,7 +10,6 @@
   jinja2,
   pkgs-docker,
   python-json-logger,
-  pythonOlder,
   requests,
   ruamel-yaml,
   semver,

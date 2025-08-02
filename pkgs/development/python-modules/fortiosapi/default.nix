@@ -6,7 +6,6 @@
   packaging,
   paramiko,
   pexpect,
-  pythonOlder,
   requests,
   six,
 }:

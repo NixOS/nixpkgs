@@ -4,7 +4,6 @@
   buildPythonPackage,
   git,
   which,
-  pythonOlder,
   unittestCheckHook,
   sphinxHook,
   sphinx-argparse,

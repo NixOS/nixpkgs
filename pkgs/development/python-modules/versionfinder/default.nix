@@ -6,7 +6,6 @@
   gitpython,
   pip,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

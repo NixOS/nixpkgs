@@ -4,7 +4,6 @@
   fetchPypi,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   fetchpatch,
   setuptools,
 }:

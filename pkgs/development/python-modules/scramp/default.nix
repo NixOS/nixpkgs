@@ -6,7 +6,6 @@
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   versioningit,
 }:
 

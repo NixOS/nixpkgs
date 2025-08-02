@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   requests,
 }:
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   unittestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

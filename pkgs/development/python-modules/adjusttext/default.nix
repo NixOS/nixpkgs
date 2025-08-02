@@ -5,7 +5,6 @@
   matplotlib,
   numpy,
   packaging,
-  pythonOlder,
   scipy,
   setuptools,
 }:

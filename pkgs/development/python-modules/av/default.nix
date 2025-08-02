@@ -11,7 +11,6 @@
   pillow,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

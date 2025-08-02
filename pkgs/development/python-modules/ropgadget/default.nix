@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   capstone,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

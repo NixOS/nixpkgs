@@ -20,7 +20,6 @@
   pillow,
   psutil,
   pynvml,
-  pythonOlder,
   ruamel-yaml,
   scikit-learn,
   scmrepo,

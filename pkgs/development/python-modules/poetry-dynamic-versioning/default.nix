@@ -7,7 +7,6 @@
   poetry-core,
   poetry,
   pytestCheckHook,
-  pythonOlder,
   tomlkit,
 }:
 

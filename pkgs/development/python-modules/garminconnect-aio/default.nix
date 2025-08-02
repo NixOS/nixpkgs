@@ -4,7 +4,6 @@
   brotlipy,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   yarl,
 }:
 

@@ -12,7 +12,6 @@
   pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   requests,
   respx,
   setuptools,

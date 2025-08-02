@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
-  pythonOlder,
   setuptools,
 }:
 

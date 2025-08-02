@@ -7,7 +7,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-memcached,
-  pythonOlder,
   setuptools,
   zstd,
   stdenv,

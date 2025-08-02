@@ -3,7 +3,6 @@
   angr,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   tqdm,
 }:

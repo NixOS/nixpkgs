@@ -6,7 +6,6 @@
   poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   urllib3,
 }:
 

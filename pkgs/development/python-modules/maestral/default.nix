@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   makePythonPath,
-  pythonOlder,
   python,
   click,
   dbus-python,

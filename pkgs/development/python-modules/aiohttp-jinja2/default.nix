@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   websocket-client,

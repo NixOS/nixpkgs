@@ -7,7 +7,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   miauth,
-  pythonOlder,
   setuptools,
   wheel,
 }:

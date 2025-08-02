@@ -5,7 +5,6 @@
   graphql-core,
   promise,
   fetchpatch,
-  pythonOlder,
   pytestCheckHook,
 }:
 

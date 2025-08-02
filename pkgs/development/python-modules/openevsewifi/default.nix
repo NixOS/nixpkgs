@@ -6,7 +6,6 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:

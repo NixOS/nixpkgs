@@ -6,7 +6,6 @@
   flask,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
   quart,
   requests,

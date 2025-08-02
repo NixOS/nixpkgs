@@ -7,7 +7,6 @@
   fetchFromGitHub,
   go,
   pykerberos,
-  pythonOlder,
   skein,
   sqlalchemy,
   traitlets,

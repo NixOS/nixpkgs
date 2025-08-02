@@ -17,7 +17,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests-mock,
   requests,
   typing-extensions,

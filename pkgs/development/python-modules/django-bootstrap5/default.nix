@@ -9,7 +9,6 @@
   pillow,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

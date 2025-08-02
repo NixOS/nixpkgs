@@ -5,7 +5,6 @@
   beautifulsoup4,
   requests,
   click,
-  pythonOlder,
   poetry-core,
 }:
 

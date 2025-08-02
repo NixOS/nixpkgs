@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ifaddr,
   poetry-core,
-  pythonOlder,
   requests,
   six,
   websocket-client,

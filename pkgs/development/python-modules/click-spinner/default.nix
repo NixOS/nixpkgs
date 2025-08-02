@@ -4,7 +4,6 @@
   click,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   versioneer,

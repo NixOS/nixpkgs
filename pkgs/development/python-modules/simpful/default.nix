@@ -6,7 +6,6 @@
   matplotlib,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scipy,
   seaborn,

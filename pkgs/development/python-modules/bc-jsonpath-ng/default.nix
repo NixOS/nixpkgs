@@ -5,7 +5,6 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

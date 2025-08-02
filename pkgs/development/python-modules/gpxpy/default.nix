@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   lxml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

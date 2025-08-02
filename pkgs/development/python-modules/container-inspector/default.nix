@@ -7,7 +7,6 @@
   dockerfile-parse,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

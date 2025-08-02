@@ -15,7 +15,6 @@
   pdfminer-six,
   phonenumbers,
   python-magic,
-  pythonOlder,
   readabilipy,
   setuptools,
 }:

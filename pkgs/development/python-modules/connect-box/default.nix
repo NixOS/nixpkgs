@@ -5,7 +5,6 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pyspnego,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

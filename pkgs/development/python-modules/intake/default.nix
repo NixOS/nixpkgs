@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   platformdirs,
   bokeh,
   buildPythonPackage,
@@ -18,7 +17,6 @@
   pyarrow,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   pythonAtLeast,
   pyyaml,
   networkx,

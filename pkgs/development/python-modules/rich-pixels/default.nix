@@ -6,7 +6,6 @@
   pillow,
   rich,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
 }:
 

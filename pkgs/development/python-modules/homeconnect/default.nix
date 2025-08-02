@@ -4,7 +4,6 @@
   fetchPypi,
   requests,
   requests-oauthlib,
-  pythonOlder,
   setuptools,
 }:
 

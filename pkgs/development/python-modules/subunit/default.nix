@@ -5,7 +5,6 @@
   cppunit,
   pkg-config,
   subunit,
-  pythonOlder,
 
   # python dependencies
   extras,

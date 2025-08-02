@@ -8,7 +8,6 @@
   terminaltables,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

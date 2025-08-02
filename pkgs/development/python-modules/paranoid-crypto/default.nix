@@ -9,7 +9,6 @@
   protobuf,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   sympy,
 }:

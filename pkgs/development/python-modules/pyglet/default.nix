@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   unzip,
-  pythonOlder,
   libGL,
   libGLU,
   xorg,
@@ -18,7 +17,6 @@
   openal,
   libpulseaudio,
   harfbuzz,
-  mesa,
   apple-sdk,
 }:
 

@@ -6,7 +6,6 @@
   gevent,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
   watchdog,
 }:
 

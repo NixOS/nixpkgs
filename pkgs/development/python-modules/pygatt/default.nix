@@ -6,7 +6,6 @@
   pexpect,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

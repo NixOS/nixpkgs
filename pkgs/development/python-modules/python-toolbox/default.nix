@@ -4,7 +4,6 @@
   docutils,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

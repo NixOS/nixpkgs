@@ -10,7 +10,6 @@
   pandas,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   sqlalchemy,
   tenacity,
 }:

@@ -8,7 +8,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   urllib3,
 }:
 

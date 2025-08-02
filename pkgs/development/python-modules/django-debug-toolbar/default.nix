@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
 
   # build-system
@@ -16,8 +15,6 @@
   html5lib,
   jinja2,
   pygments,
-  pytest-django,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

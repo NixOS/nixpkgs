@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

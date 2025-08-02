@@ -8,7 +8,6 @@
   jinja2,
   pytestCheckHook,
   pytest-rerunfailures,
-  pythonOlder,
   pyzmq,
   redis,
   setuptools,

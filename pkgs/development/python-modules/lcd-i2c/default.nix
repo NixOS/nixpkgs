@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
   smbus2,
 }:
 

@@ -7,7 +7,6 @@
   gtk3,
   pkg-config,
   pygobject3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,6 @@
   setuptools,
   certifi,
   pytestCheckHook,
-  pythonOlder,
   trio,
   trio-websocket,
   typing-extensions,

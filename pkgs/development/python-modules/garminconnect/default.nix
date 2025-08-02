@@ -4,7 +4,6 @@
   fetchFromGitHub,
   garth,
   pdm-backend,
-  pythonOlder,
   requests,
   withings-sync,
 }:

@@ -10,7 +10,6 @@
   mypy-boto3-ebs,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   typer,
   urllib3,
 }:

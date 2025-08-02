@@ -13,7 +13,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sphinx-rtd-theme,
   sphinxHook,
   uart-devices,

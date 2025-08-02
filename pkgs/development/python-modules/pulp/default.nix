@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  pythonOlder,
   pytestCheckHook,
 }:
 

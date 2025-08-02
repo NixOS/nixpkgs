@@ -6,7 +6,6 @@
   fetchpatch,
   ffmpeg-full,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   replaceVars,
 }:

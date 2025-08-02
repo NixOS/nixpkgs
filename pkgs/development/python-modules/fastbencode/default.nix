@@ -4,7 +4,6 @@
   cython,
   fetchPypi,
   python,
-  pythonOlder,
   setuptools,
 }:
 

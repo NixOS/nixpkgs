@@ -7,7 +7,6 @@
   pytz,
   requests,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

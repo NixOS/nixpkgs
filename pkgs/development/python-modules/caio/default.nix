@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

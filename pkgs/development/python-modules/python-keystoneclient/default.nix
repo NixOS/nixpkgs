@@ -7,7 +7,6 @@
   oslo-config,
   oslo-serialization,
   pbr,
-  pythonOlder,
   requests-mock,
   setuptools,
   stestr,

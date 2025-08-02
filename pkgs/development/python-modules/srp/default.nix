@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

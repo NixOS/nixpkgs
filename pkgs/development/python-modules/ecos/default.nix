@@ -4,7 +4,6 @@
   fetchFromGitHub,
   oldest-supported-numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools,
 }:

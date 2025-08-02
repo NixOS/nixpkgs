@@ -7,7 +7,6 @@
   fetchFromGitHub,
   impacket,
   pyasn1,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

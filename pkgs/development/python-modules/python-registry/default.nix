@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   unicodecsv,
-  pythonOlder,
   setuptools,
   six,
 }:

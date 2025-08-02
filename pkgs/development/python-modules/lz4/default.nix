@@ -6,7 +6,6 @@
   psutil,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

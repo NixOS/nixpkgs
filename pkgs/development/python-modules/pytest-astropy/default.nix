@@ -14,7 +14,6 @@
   pytest-remotedata,
   setuptools,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

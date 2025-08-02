@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   flit-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

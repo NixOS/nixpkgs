@@ -8,7 +8,6 @@
   lxml,
   pytestCheckHook,
   python,
-  pythonOlder,
   xmlschema,
 }:
 

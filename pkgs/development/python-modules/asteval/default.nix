@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

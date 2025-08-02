@@ -14,7 +14,6 @@
   opencv4,
   pillow,
   prettytable,
-  pythonOlder,
   requests,
   setuptools,
   scipy,

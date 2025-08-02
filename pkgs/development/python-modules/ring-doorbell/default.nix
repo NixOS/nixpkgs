@@ -15,7 +15,6 @@
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   typing-extensions,
   websockets,

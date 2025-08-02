@@ -9,7 +9,6 @@
   pytest-timeout,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

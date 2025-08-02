@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-slugify,
   python-status,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

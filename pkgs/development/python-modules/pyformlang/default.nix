@@ -6,7 +6,6 @@
   numpy,
   pydot,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:

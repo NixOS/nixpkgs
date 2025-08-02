@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-dotenv,
-  pythonOlder,
   requests,
   responses,
   setuptools,

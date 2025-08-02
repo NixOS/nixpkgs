@@ -4,7 +4,6 @@
   fetchFromGitLab,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
 }:
 

@@ -8,7 +8,6 @@
   verlib2,
   pueblo,
   pandas,
-  pythonOlder,
   sqlalchemy,
   pytestCheckHook,
   pytz,

@@ -7,7 +7,6 @@
   pyserial-asyncio-fast,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   tailer,

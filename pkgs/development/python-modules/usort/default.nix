@@ -8,7 +8,6 @@
   hatchling,
   libcst,
   moreorless,
-  pythonOlder,
   stdlibs,
   toml,
   trailrunner,

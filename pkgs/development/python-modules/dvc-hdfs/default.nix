@@ -4,7 +4,6 @@
   dvc,
   fetchFromGitHub,
   fsspec,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

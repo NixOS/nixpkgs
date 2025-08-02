@@ -8,7 +8,6 @@
   pyyaml,
   urllib3,
   fetchPypi,
-  pythonOlder,
   hatchling,
 }:
 

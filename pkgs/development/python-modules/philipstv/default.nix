@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   poetry-core,
   poetry-dynamic-versioning,
   installShellFiles,

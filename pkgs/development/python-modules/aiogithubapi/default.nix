@@ -9,8 +9,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  sigstore,
 }:
 
 buildPythonPackage rec {

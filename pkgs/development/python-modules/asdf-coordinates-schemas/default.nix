@@ -4,7 +4,6 @@
   asdf,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:

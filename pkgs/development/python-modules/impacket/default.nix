@@ -11,7 +11,6 @@
   pyasn1-modules,
   pycryptodomex,
   pyopenssl,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   six,

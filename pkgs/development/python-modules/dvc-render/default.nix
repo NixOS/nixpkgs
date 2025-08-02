@@ -10,7 +10,6 @@
   pytestCheckHook,
   pytest-mock,
   pytest-test-utils,
-  pythonOlder,
   setuptools-scm,
 }:
 

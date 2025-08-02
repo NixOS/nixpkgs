@@ -11,7 +11,6 @@
   maxminddb,
   msgpack,
   pytest7CheckHook,
-  pythonOlder,
   pytz,
   setuptools-scm,
   setuptools,

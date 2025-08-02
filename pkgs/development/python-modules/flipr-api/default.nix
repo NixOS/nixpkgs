@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   requests-mock,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,

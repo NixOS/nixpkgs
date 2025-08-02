@@ -7,7 +7,6 @@
   pytest-httpserver,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

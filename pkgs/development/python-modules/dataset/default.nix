@@ -4,7 +4,6 @@
   banal,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   sqlalchemy_1_4,
 }:
 

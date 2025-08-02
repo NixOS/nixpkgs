@@ -4,7 +4,6 @@
   cryptography,
   fetchFromGitHub,
   getmac,
-  pythonOlder,
   requests,
   setuptools,
   zeroconf,

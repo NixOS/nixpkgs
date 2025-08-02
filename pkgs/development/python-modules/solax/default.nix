@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   voluptuous,
 }:

@@ -5,7 +5,6 @@
   scipy,
   numba,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

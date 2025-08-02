@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytest7CheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:

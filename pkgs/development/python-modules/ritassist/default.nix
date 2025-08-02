@@ -4,7 +4,6 @@
   ciso8601,
   fetchPypi,
   geopy,
-  pythonOlder,
   requests,
   sseclient,
 }:

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   importlib-resources,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

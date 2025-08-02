@@ -6,7 +6,6 @@
   jsonschema,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

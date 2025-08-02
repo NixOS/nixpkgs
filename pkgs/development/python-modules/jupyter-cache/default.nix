@@ -11,7 +11,6 @@
   pyyaml,
   sqlalchemy,
   tabulate,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

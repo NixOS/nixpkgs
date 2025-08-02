@@ -8,7 +8,6 @@
   packaging,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   w3lib,
 }:

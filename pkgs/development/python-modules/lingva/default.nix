@@ -6,7 +6,6 @@
   fetchFromGitHub,
   polib,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

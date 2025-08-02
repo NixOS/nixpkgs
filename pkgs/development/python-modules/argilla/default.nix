@@ -41,7 +41,6 @@
   pytestCheckHook,
   python-jose,
   python-multipart,
-  pythonOlder,
   pyyaml,
   rich,
   schedule,

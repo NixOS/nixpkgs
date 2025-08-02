@@ -6,9 +6,7 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
-  setuptools,
 }:
 
 buildPythonPackage rec {

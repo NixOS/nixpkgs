@@ -4,7 +4,6 @@
   fetchPypi,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

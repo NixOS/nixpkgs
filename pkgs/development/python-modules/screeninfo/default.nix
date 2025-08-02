@@ -8,7 +8,6 @@
   libXrandr,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

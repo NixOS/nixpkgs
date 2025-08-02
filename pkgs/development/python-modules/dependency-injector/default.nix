@@ -11,7 +11,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   scipy,
   setuptools,

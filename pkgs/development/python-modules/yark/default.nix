@@ -7,7 +7,6 @@
   flask,
   poetry-core,
   progress,
-  pythonOlder,
   requests,
   yt-dlp,
 }:

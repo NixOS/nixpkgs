@@ -4,7 +4,6 @@
   cachetools,
   fetchFromGitHub,
   paho-mqtt,
-  pythonOlder,
   pytz,
   requests,
   requests-oauthlib,

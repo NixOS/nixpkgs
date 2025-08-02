@@ -8,7 +8,6 @@
   flit-core,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   testfixtures,

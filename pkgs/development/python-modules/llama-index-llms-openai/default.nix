@@ -5,7 +5,6 @@
   llama-index-core,
   openai,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

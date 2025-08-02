@@ -8,7 +8,6 @@
   numpy,
   proglog,
   pytestCheckHook,
-  pythonOlder,
   python-codon-tables,
   primer3,
   genome-collector,

@@ -8,7 +8,6 @@
   ipywidgets,
   nbconvert,
   nbformat,
-  pythonOlder,
   sphinx,
   pytestCheckHook,
 }:

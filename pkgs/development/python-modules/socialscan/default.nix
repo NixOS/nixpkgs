@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   colorama,
-  pythonOlder,
   tqdm,
 }:
 

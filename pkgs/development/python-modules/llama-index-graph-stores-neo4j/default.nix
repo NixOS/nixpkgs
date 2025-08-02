@@ -5,7 +5,6 @@
   neo4j,
   llama-index-core,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

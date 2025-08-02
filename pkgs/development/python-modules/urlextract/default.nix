@@ -7,7 +7,6 @@
   idna,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   uritools,
 }:

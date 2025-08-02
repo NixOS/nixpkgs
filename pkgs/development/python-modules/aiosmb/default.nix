@@ -9,7 +9,6 @@
   minikerberos,
   prompt-toolkit,
   pycryptodomex,
-  pythonOlder,
   setuptools,
   six,
   tqdm,

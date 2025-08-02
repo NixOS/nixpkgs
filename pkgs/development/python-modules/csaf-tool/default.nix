@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packageurl-python,
-  pythonOlder,
   rich,
   setuptools,
   versionCheckHook,

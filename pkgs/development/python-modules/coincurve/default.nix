@@ -18,7 +18,6 @@
 
   # checks
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

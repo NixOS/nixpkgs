@@ -6,7 +6,6 @@
   flask,
   pytestCheckHook,
   python-http-client,
-  pythonOlder,
   pyyaml,
   setuptools,
   starkbank-ecdsa,

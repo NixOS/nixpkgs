@@ -10,7 +10,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   xlrd,

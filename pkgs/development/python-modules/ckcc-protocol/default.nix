@@ -6,7 +6,6 @@
   hidapi,
   fetchPypi,
   pyaes,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

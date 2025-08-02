@@ -6,7 +6,6 @@
   freezegun,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

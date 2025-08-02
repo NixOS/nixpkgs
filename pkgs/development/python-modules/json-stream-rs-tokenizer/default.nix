@@ -7,7 +7,6 @@
   fetchFromGitHub,
   json-stream,
   json-stream-rs-tokenizer,
-  pythonOlder,
   rustc,
   rustPlatform,
   setuptools,

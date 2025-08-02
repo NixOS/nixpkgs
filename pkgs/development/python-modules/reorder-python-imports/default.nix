@@ -4,7 +4,6 @@
   classify-imports,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -9,7 +9,6 @@
   more-itertools,
   poetry-core,
   pprintpp,
-  pythonOlder,
   tbm-utils,
 }:
 

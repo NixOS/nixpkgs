@@ -8,7 +8,6 @@
   mdit-py-plugins,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

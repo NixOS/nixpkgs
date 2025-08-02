@@ -6,7 +6,6 @@
   pytest-cov-stub,
   pytest-doctestplus,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

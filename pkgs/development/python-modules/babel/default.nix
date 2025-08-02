@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  pythonOlder,
 
   # build-system
   setuptools,

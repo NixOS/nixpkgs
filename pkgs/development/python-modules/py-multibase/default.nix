@@ -5,7 +5,6 @@
   morphys,
   pytestCheckHook,
   python-baseconv,
-  pythonOlder,
   six,
 }:
 buildPythonPackage rec {

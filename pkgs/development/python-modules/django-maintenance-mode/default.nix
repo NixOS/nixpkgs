@@ -5,7 +5,6 @@
   fetchFromGitHub,
   python,
   python-fsutil,
-  pythonOlder,
   setuptools,
 }:
 

@@ -10,7 +10,6 @@
   pygobject3,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

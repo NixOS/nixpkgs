@@ -4,7 +4,6 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

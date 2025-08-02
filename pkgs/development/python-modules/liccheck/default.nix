@@ -7,7 +7,6 @@
   pytest-mock,
   pytestCheckHook,
   python3-openid,
-  pythonOlder,
   semantic-version,
   toml,
 }:

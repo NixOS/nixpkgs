@@ -4,7 +4,6 @@
   fetchPypi,
   fastprogress,
   fastcore,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

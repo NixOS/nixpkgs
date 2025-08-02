@@ -9,7 +9,6 @@
   scipy,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

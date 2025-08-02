@@ -6,7 +6,6 @@
   pysigma,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

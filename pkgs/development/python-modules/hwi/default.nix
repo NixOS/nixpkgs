@@ -10,7 +10,6 @@
   mnemonic,
   pyaes,
   pyserial,
-  pythonOlder,
   typing-extensions,
 }:
 

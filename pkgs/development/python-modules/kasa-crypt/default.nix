@@ -7,7 +7,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

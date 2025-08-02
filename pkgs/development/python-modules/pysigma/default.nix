@@ -7,7 +7,6 @@
   poetry-core,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
 }:

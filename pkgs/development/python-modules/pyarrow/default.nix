@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   pythonAtLeast,
-  pythonOlder,
   arrow-cpp,
   cffi,
   cloudpickle,

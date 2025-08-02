@@ -7,7 +7,6 @@
   fastapi,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

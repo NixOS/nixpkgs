@@ -9,7 +9,6 @@
   pcsclite,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
   vcrpy,
 }:

@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
 }:

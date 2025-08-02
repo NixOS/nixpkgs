@@ -12,7 +12,6 @@
   fetchFromGitHub,
   halo,
   poetry-core,
-  pythonOlder,
   requests,
   rich,
 }:

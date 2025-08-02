@@ -10,7 +10,6 @@
   oslo-serialization,
   oslo-utils,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,

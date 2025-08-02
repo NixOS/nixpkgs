@@ -6,7 +6,6 @@
   pillow,
   pycryptodomex,
   pytestCheckHook,
-  pythonOlder,
   pyvirtualdisplay,
   setuptools,
   twisted,

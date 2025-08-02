@@ -7,7 +7,6 @@
   jedi,
   jupyter-core,
   pexpect,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

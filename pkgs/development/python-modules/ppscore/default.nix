@@ -5,7 +5,6 @@
   setuptools,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
 }:
 

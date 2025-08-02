@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   click,
-  pythonOlder,
   requests,
 }:
 

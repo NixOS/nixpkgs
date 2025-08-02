@@ -7,7 +7,6 @@
   dissect-target,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,

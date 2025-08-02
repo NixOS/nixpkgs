@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-xprocess,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

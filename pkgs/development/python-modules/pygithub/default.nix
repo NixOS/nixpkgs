@@ -6,7 +6,6 @@
   pynacl,
   typing-extensions,
   pyjwt,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

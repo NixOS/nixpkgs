@@ -14,7 +14,6 @@
   pytest-datadir,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   tomli,
 }:
 

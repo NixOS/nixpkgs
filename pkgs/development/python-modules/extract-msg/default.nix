@@ -7,7 +7,6 @@
   fetchFromGitHub,
   olefile,
   pytestCheckHook,
-  pythonOlder,
   red-black-tree-mod,
   rtfde,
   setuptools,

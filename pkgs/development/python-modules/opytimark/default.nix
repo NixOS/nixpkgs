@@ -5,7 +5,6 @@
   fetchpatch,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

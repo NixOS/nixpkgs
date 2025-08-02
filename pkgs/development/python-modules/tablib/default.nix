@@ -8,7 +8,6 @@
   pandas,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   pyyaml,
   setuptools-scm,
   tabulate,

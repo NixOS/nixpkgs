@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   sybil,
 }:

@@ -12,7 +12,6 @@
   opencv4,
   pandas,
   pillow,
-  pythonOlder,
   requests,
   retinaface,
   setuptools,

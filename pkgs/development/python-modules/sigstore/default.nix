@@ -12,7 +12,6 @@
   pyjwt,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   rich,
   nix-update-script,

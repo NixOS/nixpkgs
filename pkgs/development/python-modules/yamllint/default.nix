@@ -6,7 +6,6 @@
   setuptools,
   pathspec,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 

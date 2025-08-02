@@ -17,7 +17,6 @@
   mutatormath,
   ninja,
   pytestCheckHook,
-  pythonOlder,
   runAllTests ? false,
   scikit-build,
   setuptools-scm,

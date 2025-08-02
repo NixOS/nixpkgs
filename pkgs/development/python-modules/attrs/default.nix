@@ -3,7 +3,6 @@
   callPackage,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   replaceVars,
   hatchling,
 }:

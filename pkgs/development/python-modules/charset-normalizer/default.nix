@@ -5,7 +5,6 @@
   fetchFromGitHub,
   mypy,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

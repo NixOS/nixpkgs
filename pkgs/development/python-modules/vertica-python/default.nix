@@ -6,7 +6,6 @@
   parameterized,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   six,
 }:

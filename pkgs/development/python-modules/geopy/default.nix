@@ -6,7 +6,6 @@
   geographiclib,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
 }:
 

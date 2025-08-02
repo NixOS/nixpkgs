@@ -4,7 +4,6 @@
   boto3,
   certbot,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

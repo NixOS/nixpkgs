@@ -6,7 +6,6 @@
   httpbin,
   multidict,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,

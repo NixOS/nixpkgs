@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   minikerberos,
-  pythonOlder,
   setuptools,
   unicrypto,
 }:

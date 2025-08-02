@@ -7,7 +7,6 @@
   poetry-core,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   testfixtures,
 }:
 

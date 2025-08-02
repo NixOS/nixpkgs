@@ -12,7 +12,6 @@
   pytest-jupyter,
   pytest-tornasync,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

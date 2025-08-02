@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lxml,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   pytestCheckHook,

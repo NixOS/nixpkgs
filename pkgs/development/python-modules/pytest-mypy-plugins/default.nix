@@ -9,7 +9,6 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   regex,
   setuptools,

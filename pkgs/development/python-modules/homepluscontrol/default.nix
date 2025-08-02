@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 

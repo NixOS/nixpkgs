@@ -6,7 +6,6 @@
   pytest,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

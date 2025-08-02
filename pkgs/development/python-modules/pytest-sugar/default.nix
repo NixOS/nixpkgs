@@ -6,7 +6,6 @@
   pytest,
   packaging,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

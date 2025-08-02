@@ -8,7 +8,6 @@
   proto-plus,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

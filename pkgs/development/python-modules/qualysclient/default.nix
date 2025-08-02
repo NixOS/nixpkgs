@@ -9,7 +9,6 @@
   lxml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   urllib3,

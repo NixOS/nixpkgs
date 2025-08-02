@@ -4,7 +4,6 @@
   fetchFromGitHub,
   loguru,
   poetry-core,
-  pythonOlder,
   setuptools,
   standard-imghdr,
 }:

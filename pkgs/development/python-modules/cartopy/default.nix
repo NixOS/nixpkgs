@@ -15,7 +15,6 @@
   pyshp,
   pytest-mpl,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   shapely,

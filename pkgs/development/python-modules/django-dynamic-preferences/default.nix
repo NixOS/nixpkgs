@@ -8,7 +8,6 @@
   persisting-theory,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

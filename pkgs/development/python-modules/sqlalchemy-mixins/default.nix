@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   six,
   sqlalchemy,
   pytestCheckHook,

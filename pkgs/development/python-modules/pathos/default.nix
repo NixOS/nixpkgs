@@ -6,7 +6,6 @@
   multiprocess,
   pox,
   ppft,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

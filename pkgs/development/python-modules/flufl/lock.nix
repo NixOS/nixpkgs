@@ -7,7 +7,6 @@
   psutil,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sybil,
 }:
 

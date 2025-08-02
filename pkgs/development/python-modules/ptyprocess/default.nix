@@ -4,7 +4,6 @@
   fetchPypi,
   fetchpatch,
   flit-core,
-  pythonOlder,
   pytestCheckHook,
 }:
 

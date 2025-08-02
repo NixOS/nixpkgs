@@ -7,7 +7,6 @@
   mscerts,
   oscrypto,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

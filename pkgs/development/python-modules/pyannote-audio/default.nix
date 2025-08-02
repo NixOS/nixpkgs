@@ -13,7 +13,6 @@
   pyannote-metrics,
   pyannote-pipeline,
   pyscaffold,
-  pythonOlder,
   pytorch-lightning,
   pytorch-metric-learning,
   rich,

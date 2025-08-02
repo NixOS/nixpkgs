@@ -5,7 +5,6 @@
   aiohttp,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

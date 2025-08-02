@@ -4,7 +4,6 @@
   cryptography,
   fetchPypi,
   jmespath,
-  pythonOlder,
   setuptools,
 }:
 

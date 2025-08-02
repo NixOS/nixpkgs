@@ -8,7 +8,6 @@
   pkg-config, # from pkgs
   pkgconfig, # from pythonPackages
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   vips,
 }:

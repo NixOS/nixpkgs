@@ -6,7 +6,6 @@
   hatchling,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   pyzmq,
   setuptools,
 }:

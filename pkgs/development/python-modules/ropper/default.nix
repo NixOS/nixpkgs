@@ -5,7 +5,6 @@
   capstone,
   filebytes,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

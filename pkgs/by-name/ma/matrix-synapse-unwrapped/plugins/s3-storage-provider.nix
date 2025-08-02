@@ -5,7 +5,6 @@
   fetchFromGitHub,
   humanize,
   matrix-synapse-unwrapped,
-  pythonOlder,
   tqdm,
   twisted,
   psycopg2,

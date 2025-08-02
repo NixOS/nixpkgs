@@ -8,7 +8,6 @@
   multiprocess,
   pefile,
   pyelftools,
-  pythonOlder,
   python-fx,
   python-registry,
   pyyaml,

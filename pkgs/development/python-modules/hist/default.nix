@@ -9,7 +9,6 @@
   numpy,
   pytestCheckHook,
   pytest-mpl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   wcwidth,
 }:

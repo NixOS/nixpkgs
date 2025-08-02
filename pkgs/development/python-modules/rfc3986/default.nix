@@ -4,7 +4,6 @@
   fetchPypi,
   idna,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
 
   # dependencies
@@ -31,7 +30,6 @@
   tomli,
 
   # tests
-  pytest,
   pytest-asyncio,
   pytest-httpx,
   pytest-mock,

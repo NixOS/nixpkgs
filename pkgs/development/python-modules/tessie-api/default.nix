@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   aiohttp,
-  pythonOlder,
   hatchling,
   pytz,
   pytestCheckHook,

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ipython,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   tornado,

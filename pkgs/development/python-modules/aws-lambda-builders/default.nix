@@ -7,7 +7,6 @@
   pip,
   pyelftools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:

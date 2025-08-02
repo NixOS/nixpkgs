@@ -8,7 +8,6 @@
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
   typer,

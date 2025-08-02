@@ -11,7 +11,6 @@
   poetry-core,
   pyarrow,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   thrift,
   requests,

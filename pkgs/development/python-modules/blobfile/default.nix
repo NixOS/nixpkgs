@@ -5,7 +5,6 @@
   filelock,
   lxml,
   pycryptodomex,
-  pythonOlder,
   urllib3,
 }:
 

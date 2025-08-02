@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   cmake,
   numpy,
   scipy,

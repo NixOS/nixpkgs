@@ -12,7 +12,6 @@
   paramiko,
   pyparsing,
   pyserial,
-  pythonOlder,
   pyyaml,
   scp,
   setuptools,

@@ -16,7 +16,6 @@
   pytestCheckHook,
   python-memcached,
   pythonAtLeast,
-  pythonOlder,
   requests-toolbelt,
   routes,
   setuptools-scm,

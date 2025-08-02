@@ -9,7 +9,6 @@
   poetry-core,
   pytest7CheckHook,
   pytest-xdist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

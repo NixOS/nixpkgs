@@ -4,7 +4,6 @@
   dvc-objects,
   fetchPypi,
   ossfs,
-  pythonOlder,
   setuptools-scm,
 }:
 

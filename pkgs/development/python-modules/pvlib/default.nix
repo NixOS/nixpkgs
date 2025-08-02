@@ -10,7 +10,6 @@
   pytest-remotedata,
   pytest-rerunfailures,
   pytest-timeout,
-  pythonOlder,
   pytz,
   requests,
   requests-mock,

@@ -4,7 +4,6 @@
   fetchPypi,
   poetry-core,
   pycryptodomex,
-  pythonOlder,
   requests,
 }:
 

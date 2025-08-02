@@ -8,7 +8,6 @@
   libxkbcommon,
   libinput,
   pixman,
-  pythonOlder,
   udev,
   wlroots,
   wayland,

@@ -7,7 +7,6 @@
   six,
   pyyaml,
   mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

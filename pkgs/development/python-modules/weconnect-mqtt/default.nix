@@ -6,7 +6,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   weconnect,
 }:

@@ -12,7 +12,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcontainers,

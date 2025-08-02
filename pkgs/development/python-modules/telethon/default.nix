@@ -6,7 +6,6 @@
   rsa,
   pyaes,
   cryptg,
-  pythonOlder,
   setuptools,
   pytest-asyncio,
   pytestCheckHook,

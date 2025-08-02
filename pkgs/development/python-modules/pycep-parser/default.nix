@@ -6,7 +6,6 @@
   lark,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   regex,
   typing-extensions,
 }:

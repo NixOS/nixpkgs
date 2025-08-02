@@ -6,7 +6,6 @@
   librosa,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   torch-pitch-shift,
   torch,

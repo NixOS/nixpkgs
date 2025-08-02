@@ -4,7 +4,6 @@
   fetchPypi,
   astropy,
   pillow,
-  pythonOlder,
   pytestCheckHook,
   pytest-astropy,
   requests,

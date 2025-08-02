@@ -8,7 +8,6 @@
   pyjwt,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 
   # for passthru.tests

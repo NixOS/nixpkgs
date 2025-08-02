@@ -4,7 +4,6 @@
   fetchPypi,
   ifaddr,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -10,7 +10,6 @@
   moto,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   trio,

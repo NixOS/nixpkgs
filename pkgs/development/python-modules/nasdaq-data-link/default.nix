@@ -13,7 +13,6 @@
   parameterized,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   six,
 }:

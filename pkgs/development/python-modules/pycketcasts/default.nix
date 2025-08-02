@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-magic,
-  pythonOlder,
   requests,
 }:
 

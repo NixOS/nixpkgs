@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   cacert,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,

@@ -8,7 +8,6 @@
   paramiko,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pywinrm,
   salt,
 }:

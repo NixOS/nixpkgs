@@ -5,7 +5,6 @@
   fst-pso,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   setuptools,
   simpful,

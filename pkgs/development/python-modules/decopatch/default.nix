@@ -4,7 +4,6 @@
   fetchPypi,
   makefun,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

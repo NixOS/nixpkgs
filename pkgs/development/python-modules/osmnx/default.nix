@@ -10,7 +10,6 @@
   networkx,
   numpy,
   pandas,
-  pythonOlder,
   rasterio,
   requests,
   rtree,

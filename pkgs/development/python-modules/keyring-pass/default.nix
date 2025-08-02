@@ -6,7 +6,6 @@
   keyring,
   pass,
   poetry-core,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "keyring-pass";

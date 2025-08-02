@@ -7,7 +7,6 @@
   pandas,
   pyface,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tables,
   traits,

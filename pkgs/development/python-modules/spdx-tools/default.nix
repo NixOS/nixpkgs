@@ -7,7 +7,6 @@
   license-expression,
   ply,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdflib,
   semantic-version,

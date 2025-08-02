@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pythonAtLeast,
-  pythonOlder,
   replaceVars,
 
   # build

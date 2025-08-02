@@ -8,7 +8,6 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

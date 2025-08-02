@@ -6,7 +6,6 @@
   idna,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-file,
   responses,

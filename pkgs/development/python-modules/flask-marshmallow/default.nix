@@ -8,7 +8,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

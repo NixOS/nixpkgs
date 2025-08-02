@@ -6,7 +6,6 @@
   gitpython,
   pycryptodomex,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

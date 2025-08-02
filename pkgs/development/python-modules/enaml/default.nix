@@ -11,7 +11,6 @@
   qtpy,
   setuptools,
   setuptools-scm,
-  pythonOlder,
   sip,
 }:
 

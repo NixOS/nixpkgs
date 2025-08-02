@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-flake8,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   webtest,

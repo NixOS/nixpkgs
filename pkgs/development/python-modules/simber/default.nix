@@ -4,7 +4,6 @@
   fetchFromGitHub,
   colorama,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

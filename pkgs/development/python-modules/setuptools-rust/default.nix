@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   maturin,
-  pythonOlder,
   rustPlatform,
   rustc,
   cargo,
@@ -11,8 +10,6 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
-  tomli,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {

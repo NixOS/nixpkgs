@@ -6,7 +6,6 @@
   invoke,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

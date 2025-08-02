@@ -5,7 +5,6 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

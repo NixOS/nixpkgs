@@ -6,7 +6,6 @@
   netmiko,
   pip,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

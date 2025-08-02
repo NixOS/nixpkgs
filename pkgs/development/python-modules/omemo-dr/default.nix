@@ -5,7 +5,6 @@
   fetchPypi,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -6,7 +6,6 @@
   jaraco-context,
   keyring,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

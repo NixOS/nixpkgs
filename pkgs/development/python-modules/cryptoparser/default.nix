@@ -6,7 +6,6 @@
   cryptodatahub,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   urllib3,

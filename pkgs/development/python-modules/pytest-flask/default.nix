@@ -6,7 +6,6 @@
   flask,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   werkzeug,
 }:

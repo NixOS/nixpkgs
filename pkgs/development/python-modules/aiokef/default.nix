@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   tenacity,
 }:
 

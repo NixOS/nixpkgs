@@ -10,7 +10,6 @@
   marshmallow-dataclass,
   poetry-core,
   pyjwt,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   syrupy,

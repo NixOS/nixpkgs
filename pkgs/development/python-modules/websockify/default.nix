@@ -6,7 +6,6 @@
   jwcrypto,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   simplejson,

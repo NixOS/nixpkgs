@@ -10,7 +10,6 @@
   pytest-xdist,
   pytestCheckHook,
   pytz,
-  pythonOlder,
   setuptools,
 }:
 

@@ -21,7 +21,6 @@
   stdenv,
   pytest-regressions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

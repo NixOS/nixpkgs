@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  pythonOlder,
 
   # Python dependencies
   uvloop,

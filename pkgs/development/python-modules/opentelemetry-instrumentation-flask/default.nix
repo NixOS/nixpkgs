@@ -10,7 +10,6 @@
   opentelemetry-util-http,
   packaging,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {

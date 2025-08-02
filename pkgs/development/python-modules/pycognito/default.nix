@@ -9,7 +9,6 @@
   moto,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,

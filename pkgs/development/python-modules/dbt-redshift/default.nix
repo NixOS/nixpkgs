@@ -7,7 +7,6 @@
   dbt-postgres,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   redshift-connector,
   setuptools,
 }:

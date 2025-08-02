@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   python,
   py-multiaddr,
   requests,

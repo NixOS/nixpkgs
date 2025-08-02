@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   tornado,
 }:
 

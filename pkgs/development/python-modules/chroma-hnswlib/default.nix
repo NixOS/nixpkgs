@@ -6,7 +6,6 @@
   pybind11,
   setuptools,
   wheel,
-  pythonOlder,
   pytestCheckHook,
 }:
 

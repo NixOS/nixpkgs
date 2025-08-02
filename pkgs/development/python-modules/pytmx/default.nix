@@ -6,7 +6,6 @@
   pyglet,
   pysdl2,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

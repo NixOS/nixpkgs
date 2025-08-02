@@ -6,7 +6,6 @@
   jinja2,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

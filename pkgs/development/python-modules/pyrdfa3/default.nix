@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   html5lib,
-  pythonOlder,
   rdflib,
   requests,
   setuptools,

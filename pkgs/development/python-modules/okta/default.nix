@@ -16,7 +16,6 @@
   pytest-recording,
   pytestCheckHook,
   python-jose,
-  pythonOlder,
   pyyaml,
   setuptools,
   xmltodict,

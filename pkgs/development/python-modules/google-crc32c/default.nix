@@ -5,7 +5,6 @@
   crc32c,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

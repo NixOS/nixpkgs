@@ -5,7 +5,6 @@
   azure-common,
   azure-core,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

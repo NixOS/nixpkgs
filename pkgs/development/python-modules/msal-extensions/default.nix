@@ -6,7 +6,6 @@
   portalocker,
   setuptools,
   stdenv,
-  pythonOlder,
   pytestCheckHook,
 }:
 

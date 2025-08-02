@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonschema,
   unittestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

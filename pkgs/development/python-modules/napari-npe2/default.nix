@@ -9,7 +9,6 @@
   magicgui,
   napari, # reverse dependency, for tests
   pydantic,
-  pythonOlder,
   pytomlpp,
   pyyaml,
   rich,

@@ -7,7 +7,6 @@
   fetchPypi,
   pyte,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

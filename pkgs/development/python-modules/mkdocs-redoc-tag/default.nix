@@ -7,7 +7,6 @@
   mkdocs,
   mkdocs-material,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

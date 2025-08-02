@@ -3,7 +3,6 @@
   gitUpdater,
   fetchFromGitHub,
   buildPythonApplication,
-  pythonOlder,
   requests,
   filelock,
 }:

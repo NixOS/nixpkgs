@@ -6,7 +6,6 @@
   fetchPypi,
   psycopg,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlparse,
 }:

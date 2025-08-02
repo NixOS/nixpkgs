@@ -21,7 +21,6 @@
   pyflakes,
   pyrsistent,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdkafka,
   requests,

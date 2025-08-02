@@ -8,7 +8,6 @@
   pyasynchat,
   pyopenssl,
   pysendfile,
-  pythonOlder,
   setuptools,
 }:
 

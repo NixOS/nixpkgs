@@ -8,7 +8,6 @@
   mock,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wrapt,
 }:

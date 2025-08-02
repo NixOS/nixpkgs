@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   docopt,
   pythondialog,

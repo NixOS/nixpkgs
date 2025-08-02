@@ -8,7 +8,6 @@
   llama-index-core,
   pymupdf,
   pypdf,
-  pythonOlder,
   striprtf,
 }:
 

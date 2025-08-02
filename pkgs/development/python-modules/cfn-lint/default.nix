@@ -12,7 +12,6 @@
   networkx,
   pydot,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   regex,
   sarif-om,

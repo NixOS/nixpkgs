@@ -8,7 +8,6 @@
   lxml,
   pyasn1,
   pycryptodome,
-  pythonOlder,
   setuptools,
 }:
 

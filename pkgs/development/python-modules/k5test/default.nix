@@ -4,7 +4,6 @@
   fetchPypi,
   findutils,
   krb5-c,
-  pythonOlder,
   setuptools,
   replaceVars,
 }:

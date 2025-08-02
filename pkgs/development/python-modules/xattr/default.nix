@@ -5,7 +5,6 @@
   python,
   cffi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

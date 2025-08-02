@@ -6,7 +6,6 @@
   libspatialindex,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:

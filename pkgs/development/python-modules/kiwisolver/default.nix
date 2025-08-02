@@ -5,7 +5,6 @@
   stdenv,
   cppy,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,6 @@
   pytest-asyncio,
   pytest-repeat,
   pytest-timeout,
-  pythonOlder,
   setuptools,
 }:
 

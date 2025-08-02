@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   blinker,
   pytestCheckHook,
   buildPythonPackage,
   fetchPypi,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,6 @@
   pysigma,
   pysigma-pipeline-sysmon,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

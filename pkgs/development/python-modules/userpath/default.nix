@@ -4,7 +4,6 @@
   fetchPypi,
   hatchling,
   click,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

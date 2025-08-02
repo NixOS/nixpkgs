@@ -5,7 +5,6 @@
   httpretty,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:

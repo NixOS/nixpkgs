@@ -5,7 +5,6 @@
   gevent,
   preggy,
   python,
-  pythonOlder,
   setuptools,
 }:
 

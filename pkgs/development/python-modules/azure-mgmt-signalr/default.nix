@@ -6,7 +6,6 @@
   msrestazure,
   azure-common,
   azure-mgmt-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

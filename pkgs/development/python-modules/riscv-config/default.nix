@@ -3,7 +3,6 @@
   buildPythonPackage,
   cerberus,
   fetchFromGitHub,
-  pythonOlder,
   pyyaml,
   ruamel-yaml,
   setuptools,

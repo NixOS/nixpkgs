@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   setuptools,
   sgmllib3k,
 }:

@@ -3,7 +3,6 @@
   buildPythonPackage,
   e3-core,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 

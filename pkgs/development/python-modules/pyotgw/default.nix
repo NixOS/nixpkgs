@@ -5,7 +5,6 @@
   pyserial-asyncio-fast,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

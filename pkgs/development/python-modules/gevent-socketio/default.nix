@@ -5,7 +5,6 @@
   gevent,
   gevent-websocket,
   versiontools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

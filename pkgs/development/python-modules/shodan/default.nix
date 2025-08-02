@@ -4,7 +4,6 @@
   click-plugins,
   colorama,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
   tldextract,

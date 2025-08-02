@@ -6,7 +6,6 @@
   buildPythonPackage,
   databases,
   fetchFromGitHub,
-  pythonOlder,
   typesystem,
 }:
 

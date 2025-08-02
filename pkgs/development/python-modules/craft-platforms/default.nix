@@ -8,7 +8,6 @@
   hypothesis,
   pytest-check,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

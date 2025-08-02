@@ -8,7 +8,6 @@
   libarchive-c,
   pytestCheckHook,
   python-xz,
-  pythonOlder,
   writableTmpDirAsHomeHook,
   rapidgzip,
   rarfile,

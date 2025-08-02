@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   aiohttp,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

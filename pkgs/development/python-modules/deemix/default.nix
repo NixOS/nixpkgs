@@ -8,7 +8,6 @@
   mutagen,
   requests,
   deezer-py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

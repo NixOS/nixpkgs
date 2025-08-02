@@ -6,7 +6,6 @@
   fetchFromGitHub,
   keyring,
   pytestCheckHook,
-  pythonOlder,
   playwright,
   setuptools,
   setuptools-scm,

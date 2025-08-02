@@ -5,7 +5,6 @@
   hatchling,
   llama-index-core,
   ollama,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

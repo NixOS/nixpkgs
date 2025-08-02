@@ -5,7 +5,6 @@
   hatchling,
   requests,
   ciso8601,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

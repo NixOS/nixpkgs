@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   defusedxml,
   docutils,
   jinja2,

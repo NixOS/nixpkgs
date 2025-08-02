@@ -11,7 +11,6 @@
   pytest-codspeed,
   pytest-cov-stub,
   python,
-  pythonOlder,
   setuptools,
 }:
 

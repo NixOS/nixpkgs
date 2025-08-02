@@ -7,7 +7,6 @@
   libiconv,
   numpy,
   unittestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

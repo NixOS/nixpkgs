@@ -10,7 +10,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   openpyxl,
-  pythonOlder,
   roadlib,
   setuptools,
   sqlalchemy,

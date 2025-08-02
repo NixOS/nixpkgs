@@ -5,7 +5,6 @@
   poetry-core,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   termcolor,
 }:
 

@@ -4,7 +4,6 @@
   fetchPypi,
   llama-cloud-services,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

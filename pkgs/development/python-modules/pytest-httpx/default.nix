@@ -6,7 +6,6 @@
   pytest,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

@@ -4,7 +4,6 @@
   django,
   fetchFromGitHub,
   polib,
-  pythonOlder,
   requests,
   setuptools,
 }:

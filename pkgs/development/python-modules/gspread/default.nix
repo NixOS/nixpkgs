@@ -7,7 +7,6 @@
   google-auth-oauthlib,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   strenum,
 }:
 

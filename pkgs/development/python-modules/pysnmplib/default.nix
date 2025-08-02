@@ -6,7 +6,6 @@
   pycryptodomex,
   pysnmp-pyasn1,
   pysnmp-pysmi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

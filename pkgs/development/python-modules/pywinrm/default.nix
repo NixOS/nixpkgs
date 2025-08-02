@@ -5,7 +5,6 @@
   mock,
   pykerberos,
   pytestCheckHook,
-  pythonOlder,
   requests-credssp,
   requests-ntlm,
   requests,

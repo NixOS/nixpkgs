@@ -11,7 +11,6 @@
   pyasn1,
   pyaxmlparser,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

@@ -9,7 +9,6 @@
   psygnal,
   pyside2,
   pytestCheckHook,
-  pythonOlder,
   superqt,
   typing-extensions,
 }:

@@ -10,7 +10,6 @@
   pyaml,
   pyclipper,
   python-bidi,
-  pythonOlder,
   scikit-image,
   scipy,
   shapely,

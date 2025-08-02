@@ -6,7 +6,6 @@
   fetchPypi,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   saneyaml,
   semantic-version,
   semver,

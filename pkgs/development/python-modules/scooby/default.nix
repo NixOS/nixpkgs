@@ -6,7 +6,6 @@
   numpy,
   pytest-console-scripts,
   pytestCheckHook,
-  pythonOlder,
   pyvips,
   scipy,
   setuptools-scm,

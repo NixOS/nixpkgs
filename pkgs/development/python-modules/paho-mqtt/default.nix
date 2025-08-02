@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,

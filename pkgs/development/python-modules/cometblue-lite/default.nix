@@ -4,7 +4,6 @@
   bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

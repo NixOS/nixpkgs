@@ -6,7 +6,6 @@
   poetry-core,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   xmltodict,
 }:
 

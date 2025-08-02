@@ -5,7 +5,6 @@
   appdirs,
   httpx,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

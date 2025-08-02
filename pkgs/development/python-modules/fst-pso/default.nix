@@ -4,7 +4,6 @@
   fetchPypi,
   miniful,
   numpy,
-  pythonOlder,
   setuptools,
 }:
 

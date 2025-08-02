@@ -9,7 +9,6 @@
   pytest-timeout,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   python-dotenv,
 }:
 

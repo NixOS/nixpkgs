@@ -10,7 +10,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   requests-oauthlib,

@@ -5,7 +5,6 @@
   h2,
   pyjwt,
   pyopenssl,
-  pythonOlder,
   setuptools,
 }:
 

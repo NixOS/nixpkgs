@@ -6,7 +6,6 @@
   opentelemetry-api,
   opentelemetry-test-utils,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wrapt,
 }:

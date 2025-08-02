@@ -7,7 +7,6 @@
   lxml,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   quixote,
   setuptools,
 }:

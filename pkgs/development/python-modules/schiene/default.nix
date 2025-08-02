@@ -3,7 +3,6 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 

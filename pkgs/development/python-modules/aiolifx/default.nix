@@ -7,7 +7,6 @@
   fetchPypi,
   ifaddr,
   inquirerpy,
-  pythonOlder,
   setuptools,
 }:
 

@@ -5,7 +5,6 @@
   aiohttp,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   packaging,
 }:
 

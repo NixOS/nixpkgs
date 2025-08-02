@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mac-alias,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

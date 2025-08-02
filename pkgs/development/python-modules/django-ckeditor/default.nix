@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pillow,
   python,
-  pythonOlder,
   selenium,
   setuptools-scm,
 }:

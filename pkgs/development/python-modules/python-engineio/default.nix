@@ -11,7 +11,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   simple-websocket,
   tornado,

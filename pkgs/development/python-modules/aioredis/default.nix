@@ -7,7 +7,6 @@
   typing-extensions,
   hiredis,
   isPyPy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

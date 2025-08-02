@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools-scm,
   certifi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

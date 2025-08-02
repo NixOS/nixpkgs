@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
 
   # build-system
   poetry-core,

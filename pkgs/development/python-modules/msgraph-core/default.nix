@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   python-dotenv,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   httpx,

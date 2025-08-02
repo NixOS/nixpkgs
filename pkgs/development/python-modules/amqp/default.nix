@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pytest-rerunfailures,
-  pythonOlder,
   vine,
 }:
 

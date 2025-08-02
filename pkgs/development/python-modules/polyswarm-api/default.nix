@@ -5,7 +5,6 @@
   jsonschema,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   responses,
   setuptools,

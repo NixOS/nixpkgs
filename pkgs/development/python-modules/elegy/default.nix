@@ -10,7 +10,6 @@
   jaxlib,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   sh,
   tables,

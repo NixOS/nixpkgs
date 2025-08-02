@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   tree-sitter-python,
   tree-sitter-rust,

@@ -2,9 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   python,
   toPythonModule,
 

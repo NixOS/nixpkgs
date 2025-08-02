@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   requests,
   ruamel-yaml,

@@ -4,7 +4,6 @@
   certbot,
   dnspython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

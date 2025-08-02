@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   time-machine,

@@ -6,7 +6,6 @@
   pycodestyle,
   pylama,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

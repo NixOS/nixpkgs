@@ -3,7 +3,6 @@
   pycryptodome,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 

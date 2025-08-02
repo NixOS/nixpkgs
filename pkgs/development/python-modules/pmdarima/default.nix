@@ -11,7 +11,6 @@
   scipy,
   statsmodels,
   urllib3,
-  pythonOlder,
   python,
   pytest7CheckHook,
   setuptools,

@@ -11,7 +11,6 @@
   pillow,
   pycocotools,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
   schema,

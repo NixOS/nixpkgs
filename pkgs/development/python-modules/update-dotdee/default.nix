@@ -8,7 +8,6 @@
   naturalsort,
   property-manager,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 

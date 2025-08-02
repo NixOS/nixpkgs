@@ -12,7 +12,6 @@
   pytest-resource-path,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   time-machine,
 }:

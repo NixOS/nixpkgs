@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   fetchFromGitea,
   setuptools,

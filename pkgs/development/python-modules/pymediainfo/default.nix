@@ -6,7 +6,6 @@
   libmediainfo,
   pdm-backend,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

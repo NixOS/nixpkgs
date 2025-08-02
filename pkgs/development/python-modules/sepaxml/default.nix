@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lxml,
   pytestCheckHook,
   text-unidecode,

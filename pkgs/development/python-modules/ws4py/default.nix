@@ -7,7 +7,6 @@
   git,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tornado,
 }:

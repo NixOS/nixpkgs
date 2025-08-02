@@ -7,7 +7,6 @@
   jsonschema,
   lark,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

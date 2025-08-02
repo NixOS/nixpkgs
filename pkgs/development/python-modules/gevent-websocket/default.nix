@@ -4,7 +4,6 @@
   fetchPypi,
   gevent,
   gunicorn,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

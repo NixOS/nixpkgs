@@ -5,7 +5,6 @@
   setuptools,
   flake8,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,

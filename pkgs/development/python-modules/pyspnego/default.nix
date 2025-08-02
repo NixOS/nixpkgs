@@ -8,7 +8,6 @@
   ruamel-yaml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   glibcLocales,
 }:

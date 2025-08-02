@@ -6,7 +6,6 @@
   fetchPypi,
   setuptools-scm,
   sshfs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

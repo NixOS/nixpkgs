@@ -3,7 +3,6 @@
   pkgs,
   pulumiPackages,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   protobuf,
   grpcio,

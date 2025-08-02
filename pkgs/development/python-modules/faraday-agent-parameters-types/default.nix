@@ -5,7 +5,6 @@
   marshmallow,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validators,
 }:

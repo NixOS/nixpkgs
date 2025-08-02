@@ -13,11 +13,9 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
   rich,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,6 @@
   configargparse,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   pytestCheckHook,
 }:
 

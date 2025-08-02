@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lib,
   cmake,
   setuptools,
