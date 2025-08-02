@@ -330,6 +330,7 @@
   ./programs/turbovnc.nix
   ./programs/udevil.nix
   ./programs/usbtop.nix
+  ./programs/uv.nix
   ./programs/vim.nix
   ./programs/virt-manager.nix
   ./programs/vivid.nix
