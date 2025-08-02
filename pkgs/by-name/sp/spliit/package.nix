@@ -13,17 +13,18 @@ buildNpmPackage rec {
   version = "1.16.0";
 
   src = fetchFromGitHub {
-    owner = "spliit-app";
+    owner = "qvalentin";
     repo = "spliit";
-    tag = version;
-    hash = "sha256-vYNs8dYXZTWHySB3aaUcvXpoVIm7usNq7wb7WNrf+D4=";
+    rev = "7e2d104ac549ff31c40661f6a9c1fae81e3158c0";
+    # tag = version;
+    hash = "sha256-H+bHW2TtefHONBfVqnov8n4yq+aYdan/wo+4pOlR/5o=";
   };
 
   preBuild = ''
     prisma generate
   '';
 
-  npmDepsHash = "sha256-sd0/7ruNUFxUKTeTwx/v8Vc/G3llkXP6RSDE78h3qVU=";
+  npmDepsHash = "sha256-MD0GsSDJiTvT6xyj3Z3D91Ybnpv38R2AtdBo93KI+Tc=";
 
   buildInputs = [
     openssl
