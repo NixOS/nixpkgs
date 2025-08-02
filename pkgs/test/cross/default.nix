@@ -71,7 +71,7 @@ let
 
   mapMultiPlatformTest =
     crossSystemFun: test:
-    lib.dontRecurseIntoAttrs (
+    lib.recurseIntoAttrs (
       lib.mapAttrs (
         name: system:
         lib.recurseIntoAttrs (test rec {
@@ -222,5 +222,10 @@ in
     lib.mapAttrs (_: mapMultiPlatformTest (system: system // { useLLVM = true; })) tests
   );
 
-  inherit mbuffer sanity;
+  sanity = pkgs.buildEnv {
+    name = "sanity";
+    paths = sanity;
+    ignoreCollisions = true;
+  };
+  inherit mbuffer;
 }
