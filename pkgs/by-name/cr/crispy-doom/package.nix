@@ -11,6 +11,8 @@
   SDL2_mixer,
   SDL2_net,
   zlib,
+
+  enableTruecolor ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
+
+  configureFlags = lib.optional enableTruecolor [ "--enable-truecolor" ];
 
   nativeBuildInputs = [
     autoreconfHook
