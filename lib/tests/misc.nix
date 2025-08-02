@@ -2727,6 +2727,50 @@ runTests {
     };
     expected = "«foo»";
   };
+  testToPrettyCustomPrinters = {
+    expr =
+      generators.toPretty
+        {
+          customPrinters.special = {
+            check = v: lib.isAttrs v && v.type or null == "special" && v ? special;
+            print = { v, ... }: "<<special: ${v.special}>>";
+          };
+        }
+        {
+          foo = [
+            {
+              bar = {
+                type = "special";
+                special = "with value";
+              };
+            }
+            {
+              type = "not special";
+              special = "but still with value";
+            }
+            {
+              type = "special";
+              no = "value";
+            }
+          ];
+        };
+    expected = ''
+      {
+        foo = [
+          {
+            bar = <<special: with value>>;
+          }
+          {
+            special = "but still with value";
+            type = "not special";
+          }
+          {
+            no = "value";
+            type = "special";
+          }
+        ];
+      }'';
+  };
 
   testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
