@@ -17,6 +17,7 @@ let
 
       shell,
       allowedRequisites ? null,
+      # Extra package attributes, like passthru. Not passed to `derivation`.
       extraAttrs ? { },
       overrides ? (self: super: { }),
       config,
