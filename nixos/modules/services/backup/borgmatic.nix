@@ -58,6 +58,7 @@ let
 
   requireZfs = s: s ? zfs;
   requireBtrfs = s: s ? btrfs;
+  requireLvm = s: s ? lvm;
 
   repository =
     with lib.types;
@@ -131,7 +132,9 @@ let
     requireZfs cfg.settings || lib.any requireZfs (lib.attrValues cfg.configurations);
   anycfgRequiresBtrfs =
     requireBtrfs cfg.settings || lib.any requireBtrfs (lib.attrValues cfg.configurations);
-  anycfgSnapshots = anycfgRequiresZfs || anycfgRequiresBtrfs;
+  anycfgRequiresLvm =
+    requireLvm cfg.settings || lib.any requireLvm (lib.attrValues cfg.configurations);
+  anycfgSnapshots = anycfgRequiresZfs || anycfgRequiresBtrfs || anycfgRequiresLvm;
 in
 {
   options.services.borgmatic = {
@@ -198,7 +201,8 @@ in
       ]
       ++ lib.optional anycfgSnapshots pkgs.util-linux
       ++ lib.optional anycfgRequiresZfs config.boot.zfs.package
-      ++ lib.optional anycfgRequiresBtrfs pkgs.btrfs-progs;
+      ++ lib.optional anycfgRequiresBtrfs pkgs.btrfs-progs
+      ++ lib.optional anycfgRequiresLvm pkgs.lvm2;
 
       systemd.services.borgmatic.serviceConfig = lib.mkMerge [
         (lib.mkIf anycfgRequiresSudo {
@@ -226,6 +230,10 @@ in
             "CAP_DAC_OVERRIDE"
           ];
           ReadWritePaths = [ "/etc/zfs" ];
+        })
+        (lib.mkIf anycfgRequiresLvm {
+          PrivateDevices = false;
+          CapabilityBoundingSet = [ "CAP_DAC_OVERRIDE" ];
         })
       ];
 
