@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat";
-  version = "6.2.6";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
+    sha256 = "sha256-hCtx0NNLAgAFiCR6rp/smg/BMnfyzTpqSSWw8Jszv3U=";
   };
 
   postPatch = ''
