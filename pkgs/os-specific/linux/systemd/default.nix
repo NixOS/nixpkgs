@@ -138,6 +138,7 @@
   withLogind ? true,
   withMachined ? true,
   withNetworkd ? true,
+  withNspawn ? !buildLibsOnly,
   withNss ? !stdenv.hostPlatform.isMusl,
   withOomd ? true,
   withOpenSSL ? true,
@@ -203,6 +204,8 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1734643670";
+
+  kbd' = if withPam then kbd else kbd.override { withVlock = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -253,6 +256,21 @@ stdenv.mkDerivation (finalAttrs: {
     ./0019-meson-Don-t-link-ssh-dropins.patch
 
     ./0020-install-unit_file_exists_full-follow-symlinks.patch
+
+    # add nspawn build option flag
+    # required to disable nspawn for systemdLibs to avoid dependency on getent
+    # https://github.com/systemd/systemd/pull/36876, remove for systemd 258
+    (fetchpatch {
+      # required for the actual patch to apply
+      url = "https://github.com/systemd/systemd/commit/b1fb2d971c810e0bdf9ff0ae567a1c6c230e4e5d.patch";
+      hash = "sha256-JBheazg1OFkx8vUl2l8+34BoEPVURBQJHxqntOBYB60=";
+      includes = [ "src/nspawn/meson.build" ];
+    })
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/d95818f5221d9b9b19648cffa0cb2407f023b27e.patch";
+      hash = "sha256-FTpWGec5ivlkyEEDMCPaLE+BH91e7JI0kH8pS88bBDY=";
+      excludes = [ "test/fuzz/meson.build" ];
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
@@ -364,7 +382,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     meson
     glibcLocales
-    getent
     m4
     autoPatchelfHook
 
@@ -396,7 +413,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcrypt
-    libcap
+    (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
     bashInteractive # for patch shebangs
@@ -485,8 +502,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
 
     # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+    (lib.mesonOption "loadkeys-path" "${kbd'}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd'}/bin/setfont")
 
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
@@ -583,6 +600,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" true)
+    (lib.mesonEnable "nspawn" withNspawn)
 
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
@@ -631,11 +649,6 @@ stdenv.mkDerivation (finalAttrs: {
       # build fails with an error message.
       binaryReplacements = [
         {
-          search = "/usr/bin/getent";
-          replacement = "${getent}/bin/getent";
-          where = [ "src/nspawn/nspawn-setuid.c" ];
-        }
-        {
           search = "/sbin/mkswap";
           replacement = "${lib.getBin util-linux}/sbin/mkswap";
           where = [
@@ -680,6 +693,13 @@ stdenv.mkDerivation (finalAttrs: {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [ "man/systemd-fsck@.service.xml" ];
+        }
+      ]
+      ++ lib.optionals withNspawn [
+        {
+          search = "/usr/bin/getent";
+          replacement = "${getent}/bin/getent";
+          where = [ "src/nspawn/nspawn-setuid.c" ];
         }
       ]
       ++ lib.optionals withImportd [
@@ -923,8 +943,9 @@ stdenv.mkDerivation (finalAttrs: {
       withUtmp
       util-linux
       kmod
-      kbd
       ;
+
+    kbd = kbd';
 
     # Many TPM2-related units are only installed if this trio of features are
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521

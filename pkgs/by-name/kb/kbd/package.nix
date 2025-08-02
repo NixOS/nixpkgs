@@ -15,6 +15,7 @@
   xz,
   zstd,
   gitUpdater,
+  withVlock ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,16 +31,19 @@ stdenv.mkDerivation rec {
   # reduces closure size for most use cases.
   outputs = [
     "out"
-    "vlock"
     "dev"
     "scripts"
     "man"
+  ]
+  ++ lib.optionals withVlock [
+    "vlock"
   ];
 
   configureFlags = [
     "--enable-optional-progs"
     "--enable-libkeymap"
     "--disable-nls"
+    (lib.enableFeature withVlock "vlock")
   ]
   ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
@@ -89,9 +93,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     check
-    pam
     bash
-  ];
+  ]
+  ++ lib.optionals withVlock [ pam ];
+
   NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [
     autoreconfHook
