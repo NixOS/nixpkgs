@@ -395,12 +395,11 @@ in
       environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
     };
 
-    environment.extraInit = lib.optionalString cfg.startAgent ''
-      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
-      fi
-    '';
-
+    environment.variables.SSH_AUTH_SOCK = lib.mkIf cfg.startAgent (
+      builtins.addErrorContext "while setting SSH_AUTH_SOCK, did you enable another agent already?" (
+        lib.mkDefault "$XDG_RUNTIME_DIR/ssh-agent"
+      )
+    );
     environment.variables.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword cfg.askPassword;
 
   };
