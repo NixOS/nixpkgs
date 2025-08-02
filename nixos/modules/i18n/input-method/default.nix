@@ -21,8 +21,10 @@ let
       {
         preferLocalBuild = true;
         allowSubstitutes = false;
-        buildInputs = [
+        nativeBuildInputs = [
           pkgs.gtk2
+        ];
+        buildInputs = [
           cfg.package
         ];
       }
@@ -36,8 +38,10 @@ let
       {
         preferLocalBuild = true;
         allowSubstitutes = false;
-        buildInputs = [
+        nativeBuildInputs = [
           pkgs.gtk3
+        ];
+        buildInputs = [
           cfg.package
         ];
       }
