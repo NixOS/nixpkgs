@@ -1,32 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  fetchurl,
   python3,
-  qtbase,
-  qtwayland,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
+let
+  qt = libsForQt5;
+
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "puddletag";
-  version = "2.3.0";
+  version = "2.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
     tag = version;
-    hash = "sha256-oScT8YcQoDf2qZ+J7xKm22Sbfym3tkVUrWT5D2LU5e8=";
+    hash = "sha256-Per+olIi2yd2cNRO22Fi6cC7/90AqRP1NpRK1XU1i0A=";
   };
-
-  patches = [
-    (fetchurl {
-      url = "https://github.com/puddletag/puddletag/commit/54074824adb05da42c03d7adfbba94d8e24982f0.patch";
-      hash = "sha256-DkgaFWgp2m2bRuhdXhHW+nxV/2GaCgeRNdwLMYAkcYQ=";
-      name = "fix_for_pyparsing_3_1_2.patch";
-    })
-  ];
 
   pythonRelaxDeps = true;
 
@@ -37,19 +30,19 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace share/pixmaps share/icons
+      --replace-fail share/pixmaps share/icons
   '';
 
-  buildInputs = [
+  buildInputs = with qt; [
     qtbase
     qtwayland
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with qt; [
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     configobj
     levenshtein
     lxml
@@ -73,15 +66,15 @@ python3.pkgs.buildPythonApplication rec {
 
   dontStrip = true; # we are not generating any binaries
 
-  meta = with lib; {
+  meta = {
     description = "Audio tag editor similar to the Windows program, Mp3tag";
     mainProgram = "puddletag";
     homepage = "https://docs.puddletag.net";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       peterhoeg
       dschrempf
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
