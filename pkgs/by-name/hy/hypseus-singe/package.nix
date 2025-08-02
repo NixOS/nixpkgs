@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypseus-singe";
-  version = "2.11.5";
+  version = "2.11.6";
 
   src = fetchFromGitHub {
     owner = "DirtBagXon";
     repo = "hypseus-singe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K/U/cx1y8mbC81qYNHz+AqT/hsc108NCHo0MoDhQqvs=";
+    hash = "sha256-fSqlpzA2NUY1Sk+OTj9SmeRfQ+nqY9iAa3vTwr4OV9Q=";
   };
 
   patches = [ ./use-shared-mpeg2.patch ];

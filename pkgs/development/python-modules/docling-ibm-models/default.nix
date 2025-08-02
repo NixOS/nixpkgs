@@ -7,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   docling-core,
   huggingface-hub,
   jsonlines,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.8.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-Yogg71CXQTdF5OUbdbma1rQxtLudTLjyOIFe2LS9CpI=";
+    hash = "sha256-UmgxEPEm6fNf4FbZ7CIcSEIaJg4sReI0pnkWwPdrJvQ=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     docling-core
     huggingface-hub
     jsonlines
