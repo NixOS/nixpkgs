@@ -15,8 +15,6 @@ buildPythonPackage {
   version = "unstable-2022-11-01";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "allefeld";
     repo = "pytikz";

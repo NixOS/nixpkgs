@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";

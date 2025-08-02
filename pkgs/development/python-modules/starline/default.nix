@@ -12,8 +12,6 @@ buildPythonPackage rec {
   pname = "starline";
   version = "0.1.5";
 
-  disabled = pythonOlder "3.5";
-
   pyproject = true;
 
   src = fetchPypi {

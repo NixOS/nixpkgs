@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.2.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "python-gammu";
