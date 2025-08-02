@@ -1,5 +1,5 @@
---- old/linux/CMakeLists.txt
-+++ new/linux/CMakeLists.txt
+--- a/linux/CMakeLists.txt
++++ b/linux/CMakeLists.txt
 @@ -41,35 +41,6 @@
  target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
  target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)

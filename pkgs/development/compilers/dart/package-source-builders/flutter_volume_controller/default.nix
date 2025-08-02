@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
 }:
 
@@ -9,17 +10,16 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionAtLeast version "1.2.0") ''
     substituteInPlace linux/CMakeLists.txt \
-      --replace-fail '# Include ALSA' 'find_package(PkgConfig REQUIRED)' \
-      --replace-fail 'find_package(ALSA REQUIRED)' 'pkg_check_modules(ALSA REQUIRED alsa)'
+      --replace-fail "# Include ALSA" "find_package(PkgConfig REQUIRED)" \
+      --replace-fail "find_package(ALSA REQUIRED)" "pkg_check_modules(ALSA REQUIRED alsa)"
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp -r ./* $out/
+    cp -r . "$out"
 
     runHook postInstall
   '';

@@ -1,18 +1,18 @@
 {
-  stdenv,
   lib,
-  writeScript,
+  stdenv,
   sqlite,
+  writeScript,
 }:
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sqlite3";
   inherit version src;
   inherit (src) passthru;
 
-  setupHook = writeScript "${pname}-setup-hook" ''
+  setupHook = writeScript "sqlite3-setup-hook" ''
     sqliteFixupHook() {
       runtimeDependencies+=('${lib.getLib sqlite}')
     }
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"
-    ln -s '${src}'/* "$out"
+    cp -r . "$out"
 
     runHook postInstall
   '';

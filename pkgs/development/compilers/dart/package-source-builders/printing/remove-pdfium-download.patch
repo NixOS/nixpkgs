@@ -1,5 +1,5 @@
---- old/linux/CMakeLists.txt	2024-07-16 18:45:19.000000000 +0800
-+++ new/linux/CMakeLists.txt	2024-10-01 01:49:05.544910894 +0800
+--- a/linux/CMakeLists.txt
++++ b/linux/CMakeLists.txt
 @@ -16,6 +16,7 @@
  set(PROJECT_NAME "printing")
  project(${PROJECT_NAME} LANGUAGES CXX)
