@@ -4082,8 +4082,6 @@ self: super: with self; {
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
 
   # LTS in extended support phase
-  django_3 = callPackage ../development/python-modules/django/3.nix { };
-
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
   django_5 = self.django_5_2;
@@ -15762,6 +15760,8 @@ self: super: with self; {
 
   robomachine = callPackage ../development/python-modules/robomachine { };
 
+  robot-descriptions = callPackage ../development/python-modules/robot-descriptions { };
+
   robot-detection = callPackage ../development/python-modules/robot-detection { };
 
   robotframework = callPackage ../development/python-modules/robotframework { };
@@ -19350,6 +19350,8 @@ self: super: with self; {
 
   virtualenvwrapper = callPackage ../development/python-modules/virtualenvwrapper { };
 
+  viser = callPackage ../development/python-modules/viser { };
+
   visions = callPackage ../development/python-modules/visions { };
 
   visitor = callPackage ../development/python-modules/visitor { };
@@ -19983,6 +19985,8 @@ self: super: with self; {
   yoto-api = callPackage ../development/python-modules/yoto-api { };
 
   youless-api = callPackage ../development/python-modules/youless-api { };
+
+  yourdfpy = callPackage ../development/python-modules/yourdfpy { };
 
   youseedee = callPackage ../development/python-modules/youseedee { };
 
