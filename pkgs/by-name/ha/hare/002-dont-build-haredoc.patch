@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index 2482be1f..9d58bc81 100644
+index f562138a..d5d68416 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -5,7 +5,7 @@ all:
@@ -11,7 +11,7 @@ index 2482be1f..9d58bc81 100644
  
  HARE_DEFINES = \
  	-D PLATFORM:str='"$(PLATFORM)"' \
-@@ -79,11 +79,10 @@ docs: \
+@@ -83,11 +83,10 @@ docs: \
  	docs/haredoc.1 \
  	docs/hare-run.1 \
  	docs/hare-test.1 \
@@ -25,15 +25,15 @@ index 2482be1f..9d58bc81 100644
  
  bootstrap:
  	@BINOUT=$(BINOUT) ./scripts/genbootstrap
-@@ -104,7 +103,6 @@ install-cmd:
+@@ -108,7 +107,6 @@ install-cmd: all $(BINOUT)/hare-install
  		'$(DESTDIR)$(BINDIR)' '$(DESTDIR)$(MANDIR)/man1' \
  		'$(DESTDIR)$(BINDIR)' '$(DESTDIR)$(MANDIR)/man5'
- 	install -m755 '$(BINOUT)/hare' '$(DESTDIR)$(BINDIR)/hare'
+ 	install -m755 '$(BINOUT)/hare-install' '$(DESTDIR)$(BINDIR)/hare'
 -	install -m755 '$(BINOUT)/haredoc' '$(DESTDIR)$(BINDIR)/haredoc'
  	for i in $(MAN1); do install -m644 docs/$$i.1 '$(DESTDIR)$(MANDIR)'/man1/$$i.1; done
  	for i in $(MAN5); do install -m644 docs/$$i.5 '$(DESTDIR)$(MANDIR)'/man5/$$i.5; done
  
-@@ -115,7 +113,6 @@ install-mods:
+@@ -119,7 +117,6 @@ install-mods:
  
  uninstall:
  	rm -- '$(DESTDIR)$(BINDIR)/hare'
