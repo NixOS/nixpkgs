@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
-    rev = "release_xt_${version}";
+    tag = "release_xt_${version}";
     fetchSubmodules = true;
     hash = "sha256-4b0H3ZioiXFc4KCeQReobwQZJBl6Ep2/8JlRIwvq/hQ=";
   };

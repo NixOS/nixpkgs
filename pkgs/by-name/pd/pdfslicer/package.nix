@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "junrrein";
     repo = "pdfslicer";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     sha256 = "0sja0ddd9c8wjjpzk2ag8q1lxpj09adgmhd7wnsylincqnj2jyls";
   };
