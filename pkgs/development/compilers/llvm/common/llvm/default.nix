@@ -728,7 +728,7 @@ stdenv.mkDerivation (
         ''
     );
 
-    doCheck =
+    doInstallCheck =
       !isDarwinBootstrap
       && !stdenv.hostPlatform.isAarch32
       && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
@@ -739,7 +739,7 @@ stdenv.mkDerivation (
       && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
       && (stdenv.hostPlatform == stdenv.buildPlatform);
 
-    checkTarget = "check-all";
+    installCheckTarget = "check-all";
 
     # For the update script:
     passthru.monorepoSrc = monorepoSrc;
