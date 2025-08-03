@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "strictdoc";
-  version = "0.9.3";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = version;
-    hash = "sha256-3bZfyjylNrCK2UFXgCoNI/LckSa8FkVWD/kBopFIbec=";
+    hash = "sha256-TXrSv6V5fMhcx4YolTfsFwgGL5qxNp67iv62KDC5H00=";
   };
 
   build-system = [
@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Software for technical documentation and requirements management";
     homepage = "https://github.com/strictdoc-project/strictdoc";
-    changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yuu ];
     mainProgram = "strictdoc";
