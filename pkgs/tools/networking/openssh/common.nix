@@ -59,6 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+    # Don't set PAM_RHOST to "UNKNOWN" when used with vsock and systemd-ssh-generator, as it causes a massive slowdown in login
+    # Upstream PR: https://github.com/openssh/openssh-portable/pull/388
+    # See this commit for why this is needed: https://src.fedoraproject.org/rpms/openssh/c/8fb8f02a0d20c36145d00309f91356e4552ebcd3
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/openssh/raw/f6e9920c49b0edd039dc9b0e3de1b39a6650387e/f/0047-openssh-9.6p1-pam-rhost.patch";
+      hash = "sha256-AXyETs5Qylvz3C/hZX7M+mnf/1PcxE3RxQxrBnubgVI=";
+    })
   ]
   ++ extraPatches;
 
