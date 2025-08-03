@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "loqusion";
     repo = "hyprshade";
     tag = version;
-    hash = "sha256-11waygndqycnbhan0ks3f4dqgi6lx81cw1x82afs6f6000ia2win=";
+    hash = "sha256-NnKhIgDAOKOdEqgHzgLq1MSHG3FDT2AVXJZ53Ozzioc=";
   };
 
   nativeBuildInputs = [
