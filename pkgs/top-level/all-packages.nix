@@ -11626,20 +11626,6 @@ with pkgs;
     patches = config."2bwm".patches or [ ];
   };
 
-  acd-cli = callPackage ../applications/networking/sync/acd_cli {
-    inherit (python3Packages)
-      buildPythonApplication
-      appdirs
-      colorama
-      python-dateutil
-      requests
-      requests-toolbelt
-      setuptools
-      sqlalchemy
-      fusepy
-      ;
-  };
-
   inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
     aw-qt
     aw-notify

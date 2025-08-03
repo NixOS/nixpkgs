@@ -1,20 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
   fuse,
-  appdirs,
-  colorama,
-  python-dateutil,
-  requests,
-  requests-toolbelt,
-  fusepy,
-  sqlalchemy,
-  setuptools,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
-  pname = "acd_cli";
+python3Packages.buildPythonApplication rec {
+  pname = "acd-cli";
   version = "0.3.2";
   format = "setuptools";
 
@@ -22,12 +14,12 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "yadayada";
-    repo = pname;
-    rev = version;
-    sha256 = "0a0fr632l24a3jmgla3b1vcm50ayfa9hdbp677ch1chwj5dq4zfp";
+    repo = "acd_cli";
+    tag = version;
+    hash = "sha256-132CW5EcsgDZOeauBpNyXoFS2Q5rKPqqHIoIKobJDig=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     appdirs
     colorama
     python-dateutil
@@ -50,10 +42,10 @@ buildPythonApplication rec {
     lnOverBin acd_cli.py acdcli
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface and FUSE filesystem for Amazon Cloud Drive";
     homepage = "https://github.com/yadayada/acd_cli";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }
