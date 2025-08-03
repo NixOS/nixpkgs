@@ -1,13 +1,10 @@
 {
   lib,
+  nixosTests,
   stdenvNoCC,
   fetchurl,
   crt ? stdenvNoCC.hostPlatform.libc,
 }:
-assert lib.assertOneOf "crt" crt [
-  "msvcrt"
-  "ucrt"
-];
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mingw_w64-headers";
   version = "12.0.0";
@@ -24,6 +21,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preConfigure = ''
     cd mingw-w64-headers
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) wine;
+    };
+    updateScript = ./update.nu;
+  };
 
   meta = {
     homepage = "https://www.mingw-w64.org/";
