@@ -82,12 +82,22 @@ with haskellLib;
           }
         )
       );
-  # TODO(@sternenseemann): apply unix bound workaround
-  Cabal_3_16_0_0 = doDistribute (
-    super.Cabal_3_16_0_0.override {
-      Cabal-syntax = self.Cabal-syntax_3_16_0_0;
-    }
-  );
+  Cabal_3_16_0_0 =
+    overrideCabal
+      (drv: {
+        # Revert increased lower bound on unix since we have backported
+        # the required patch to all GHC bundled versions of unix.
+        postPatch = drv.postPatch or "" + ''
+          substituteInPlace Cabal.cabal --replace-fail "unix  >= 2.8.6.0" "unix >= 2.6.0.0"
+        '';
+      })
+      (
+        doDistribute (
+          super.Cabal_3_16_0_0.override {
+            Cabal-syntax = self.Cabal-syntax_3_16_0_0;
+          }
+        )
+      );
 
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
