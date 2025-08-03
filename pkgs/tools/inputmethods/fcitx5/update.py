@@ -35,7 +35,7 @@ def main():
     for repo in REPOS:
         rev = get_latest_tag(repo)
         if repo == "fcitx5-qt":
-            subprocess.run(["nix-update", "--commit", "--version", rev, "libsForQt5.{}".format(repo)])
+            subprocess.run(["nix-update", "--commit", "--version", rev, "qt6Packages.{}".format(repo)])
         else:
             subprocess.run(["nix-update", "--commit", "--version", rev, repo])
 
