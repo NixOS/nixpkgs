@@ -72,8 +72,6 @@ in
 
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
-  # 2025-04-09: jailbreak to allow hedgehog >= 1.5, hspec-hedgehog >=0.2
-  extensions = doJailbreak (doDistribute self.extensions_0_1_0_2);
   fourmolu = doDistribute self.fourmolu_0_16_0_0;
   # https://github.com/digital-asset/ghc-lib/issues/600
   ghc-lib = doDistribute self.ghc-lib_9_10_2_20250515;
