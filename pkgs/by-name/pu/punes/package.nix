@@ -12,12 +12,14 @@
   libX11,
   libXrandr,
   sndio,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
+  qt6Packages,
+  withQt6 ? false,
 }:
 
+let
+  qtPackages = if withQt6 then qt6Packages else libsForQt5;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "punes";
   version = "0.111";
@@ -25,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TIXjYkInWV3yVnvXrdHcmeWYeps5TcvkG2Xjg4roIds=";
   };
 
@@ -50,16 +52,20 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ (with qtPackages; [
     qttools
     wrapQtAppsHook
-  ];
+  ]);
 
   buildInputs = [
     ffmpeg
     libGLU
+  ]
+  ++ (with qtPackages; [
     qtbase
     qtsvg
-  ]
+  ])
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libX11
@@ -74,20 +80,20 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_RELEASE=ON"
     "-DENABLE_FFMPEG=ON"
     "-DENABLE_OPENGL=ON"
-    "-DENABLE_QT6_LIBS=${if lib.versionAtLeast qtbase.version "6.0" then "ON" else "OFF"}"
+    (lib.strings.cmakeBool "ENABLE_QT6_LIBS" withQt6)
   ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
     mainProgram = "punes";
     homepage = "https://github.com/punesemu/puNES";
     changelog = "https://github.com/punesemu/puNES/blob/v${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; linux ++ freebsd ++ openbsd ++ windows;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; linux ++ freebsd ++ openbsd ++ windows;
   };
 })
