@@ -636,6 +636,8 @@ let
         compilerNames.ghc902
       ];
       ghc-bignum = [
+        # When removing this, remember to drop the overrides from config*8.10.x.nix
+        # and the extra-packages entry from config*hackage2nix/main.yaml.
         compilerNames.ghc8107
       ];
       ghc-lib = released;

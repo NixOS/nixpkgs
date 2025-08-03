@@ -27,8 +27,6 @@
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
-  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
-  - ghc-bignum == 1.0
   # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
   - hiedb < 0.7
   # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
@@ -64,6 +62,7 @@ extra-packages:
   - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-bignum == 1.0.*                 # 2021-11-09: preserve for GHC 8.10.7
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4

@@ -2053,32 +2053,6 @@ with haskellLib;
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
 
-  # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
-  ghc-bignum = super.ghc-bignum or self.mkDerivation {
-    pname = "ghc-bignum";
-    version = "1.0";
-    sha256 = "0xl848q8z6qx2bi6xil0d35lra7wshwvysyfblki659d7272b1im";
-    description = "GHC BigNum library";
-    license = lib.licenses.bsd3;
-    # ghc-bignum is not buildable if none of the three backends
-    # is explicitly enabled. We enable Native for now as it doesn't
-    # depend on anything else as opposed to GMP and FFI.
-    # Apply patch which fixes a compilation failure we encountered.
-    # Will need to be kept until we can drop ghc-bignum entirely,
-    # i. e. if GHC 8.10.* and 8.8.* have been removed.
-    configureFlags = [
-      "-f"
-      "Native"
-    ];
-    patches = [
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
-        sha256 = "sha256-Y9WW0KDQ/qY2L9ObPvh1i/6lxXIlprbxzdSBDfiaMtE=";
-        relative = "libraries/ghc-bignum";
-      })
-    ];
-  };
-
   # 2021-04-09: too strict time bound
   # PR pending https://github.com/zohl/cereal-time/pull/2
   cereal-time = doJailbreak super.cereal-time;

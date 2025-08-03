@@ -68,6 +68,25 @@ self: super: {
   # os-string >= 2 is incompatible with bytestring < 0.11
   os-string = doDistribute self.os-string_1_0_0;
 
+  # Becomes a core package in GHC >= 9.0
+  ghc-bignum = lib.pipe self.ghc-bignum_1_0 [
+    # ghc-bignum is not buildable if none of the three backends
+    # is explicitly enabled. We enable Native for now as it doesn't
+    # depend on anything else as opposed to GMP and FFI.
+    # Apply patch which fixes a compilation failure we encountered.
+    # Will need to be kept until we can drop ghc-bignum entirely,
+    # i. e. if GHC 8.10.* and 8.8.* have been removed.
+    (enableCabalFlag "Native")
+    # Fixes compilation failure
+    (appendPatches [
+      (pkgs.fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
+        sha256 = "sha256-Y9WW0KDQ/qY2L9ObPvh1i/6lxXIlprbxzdSBDfiaMtE=";
+        relative = "libraries/ghc-bignum";
+      })
+    ])
+  ];
+
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
