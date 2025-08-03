@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.5.0";
+  version = "0.6.0";
 in
 stdenvNoCC.mkDerivation {
   pname = "bash-preexec";
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
     owner = "rcaloras";
     repo = "bash-preexec";
     rev = version;
-    sha256 = "sha256-+FU5n7EkY78X5nUiW3WN9+6Bf6oiPjsG2MSRCleooFs=";
+    sha256 = "sha256-4DzbeIiUX7iXy2CeSvRC2X+XnjVk+/UiMbM/dLHx7zU=";
   };
 
   nativeCheckInputs = [ bats ];
