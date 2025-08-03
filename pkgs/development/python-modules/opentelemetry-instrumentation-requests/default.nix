@@ -17,8 +17,6 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-requests";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-requests";
 
   build-system = [ hatchling ];

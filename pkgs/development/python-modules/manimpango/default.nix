@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manimpango";

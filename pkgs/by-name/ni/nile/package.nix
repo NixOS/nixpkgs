@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication {
     hash = "sha256-/C4b8wPKWHGgiheuAN7AvU+KcD5aj5i6KzgFSdTIkNI=";
   };
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   propagatedBuildInputs = with python3Packages; [
     setuptools
     requests

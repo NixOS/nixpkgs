@@ -18,8 +18,6 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-grpc";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-grpc";
 
   build-system = [ hatchling ];

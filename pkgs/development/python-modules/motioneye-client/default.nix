@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.3.14";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "motioneye-client";

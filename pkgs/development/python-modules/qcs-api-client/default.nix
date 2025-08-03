@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "0.26.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";

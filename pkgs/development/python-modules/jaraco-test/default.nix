@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "5.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.test";

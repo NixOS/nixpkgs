@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "5.4.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-app-django";

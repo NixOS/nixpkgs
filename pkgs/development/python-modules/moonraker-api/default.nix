@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.0.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "moonraker-api";

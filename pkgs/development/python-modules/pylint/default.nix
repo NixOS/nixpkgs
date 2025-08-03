@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "3.3.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";

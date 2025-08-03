@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "4.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "JohannesBuchner";
     repo = "imagehash";

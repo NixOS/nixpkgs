@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.13.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";

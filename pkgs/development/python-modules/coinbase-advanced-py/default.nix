@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "coinbase";
     repo = "coinbase-advanced-py";

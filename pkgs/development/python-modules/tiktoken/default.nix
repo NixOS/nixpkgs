@@ -34,8 +34,6 @@ buildPythonPackage {
     ;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   build-system = [
     setuptools
     setuptools-rust

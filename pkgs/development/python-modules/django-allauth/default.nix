@@ -44,8 +44,6 @@ buildPythonPackage rec {
   version = "65.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "allauth";

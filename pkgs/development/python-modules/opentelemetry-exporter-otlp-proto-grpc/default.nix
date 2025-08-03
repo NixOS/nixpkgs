@@ -17,8 +17,6 @@ buildPythonPackage {
   pname = "opentelemetry-exporter-otlp-proto-grpc";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-grpc";
 
   build-system = [ hatchling ];

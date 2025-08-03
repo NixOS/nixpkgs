@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "8.18.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "elasticsearch_dsl";
     inherit version;

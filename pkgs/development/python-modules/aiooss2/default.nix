@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.2.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "karajan1001";
     repo = "aiooss2";

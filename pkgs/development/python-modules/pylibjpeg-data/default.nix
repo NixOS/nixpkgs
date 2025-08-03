@@ -11,8 +11,6 @@ buildPythonPackage {
   version = "unstable-2024-03-28";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-data";

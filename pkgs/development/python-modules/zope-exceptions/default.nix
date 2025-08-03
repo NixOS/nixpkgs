@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.exceptions";

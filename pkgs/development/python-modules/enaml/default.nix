@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.18.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "enaml";

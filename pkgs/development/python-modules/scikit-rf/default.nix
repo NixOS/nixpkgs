@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";

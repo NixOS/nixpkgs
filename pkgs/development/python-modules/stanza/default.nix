@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.10.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = "stanza";

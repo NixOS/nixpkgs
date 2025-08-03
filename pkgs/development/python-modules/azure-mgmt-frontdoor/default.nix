@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "azure_mgmt_frontdoor";
     inherit version;

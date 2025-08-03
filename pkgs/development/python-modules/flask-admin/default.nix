@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";

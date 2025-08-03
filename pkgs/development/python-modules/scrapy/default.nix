@@ -40,8 +40,6 @@ buildPythonPackage rec {
   version = "2.13.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";

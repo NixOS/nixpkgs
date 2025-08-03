@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "types_s3transfer";
     inherit version;

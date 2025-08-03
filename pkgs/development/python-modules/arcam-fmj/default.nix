@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";

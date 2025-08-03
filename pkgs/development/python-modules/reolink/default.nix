@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0053";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "reolink";

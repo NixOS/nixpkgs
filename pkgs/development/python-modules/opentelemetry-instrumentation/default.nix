@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.55b0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   # To avoid breakage, every package in opentelemetry-python-contrib must inherit this version, src, and meta
   src = fetchFromGitHub {
     owner = "open-telemetry";

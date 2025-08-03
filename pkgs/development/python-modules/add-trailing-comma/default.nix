@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "add-trailing-comma";

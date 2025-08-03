@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ojacques";
     repo = "mkdocs-git-committers-plugin-2";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_agent_openai";
     inherit version;

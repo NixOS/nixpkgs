@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.17.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-common";

@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "3.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-metrics";

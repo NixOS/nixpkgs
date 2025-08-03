@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.6.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-schema-validator";

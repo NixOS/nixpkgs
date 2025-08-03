@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "24.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pycountry";
     repo = "pycountry";

@@ -36,8 +36,6 @@ buildPythonPackage {
   inherit version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-api-tools";

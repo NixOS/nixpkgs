@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "packageurl_python";
     inherit version;

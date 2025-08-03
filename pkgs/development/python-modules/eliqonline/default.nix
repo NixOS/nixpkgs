@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.2.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "hOUN4cA4pKVioIrfJM02GOnZdDRc7xbNtvHfoD3//bM=";

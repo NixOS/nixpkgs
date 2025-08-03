@@ -33,8 +33,6 @@ buildPythonPackage rec {
     apple-sdk_15
   ];
 
-  disabled = pythonOlder "3.8";
-
   disabledTests = [
     "test_update_load"
   ];

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "crownstone";
     repo = "crownstone-lib-python-uart";

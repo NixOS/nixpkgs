@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "3.0.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "datafolklabs";
     repo = "cement";

@@ -12,8 +12,6 @@ buildPythonPackage {
   pname = "opentelemetry-proto";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
   pythonRelaxDeps = [ "protobuf" ];

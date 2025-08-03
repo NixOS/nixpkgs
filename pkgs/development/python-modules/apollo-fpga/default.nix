@@ -19,7 +19,6 @@ buildPythonPackage rec {
   pname = "apollo-fpga";
   version = "1.1.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";

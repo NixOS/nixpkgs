@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "1.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";

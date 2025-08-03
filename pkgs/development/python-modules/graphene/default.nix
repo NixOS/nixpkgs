@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "3.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";

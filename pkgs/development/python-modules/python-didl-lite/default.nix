@@ -14,8 +14,6 @@ buildPythonPackage rec {
   format = "setuptools";
   pyroject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "python-didl-lite";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.0.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "telemetry-python";

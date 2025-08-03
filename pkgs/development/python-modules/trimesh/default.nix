@@ -32,8 +32,6 @@ buildPythonPackage rec {
   version = "4.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";

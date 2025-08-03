@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "5.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "ismartgate";

@@ -18,8 +18,6 @@ let
     version = "1.34.0";
     pyproject = true;
 
-    disabled = pythonOlder "3.8";
-
     # to avoid breakage, every package in opentelemetry-python must inherit this version, src, and meta
     src = fetchFromGitHub {
       owner = "open-telemetry";

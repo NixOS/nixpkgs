@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.11.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";

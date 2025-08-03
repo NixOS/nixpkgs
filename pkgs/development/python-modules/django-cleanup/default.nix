@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "9.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "django_cleanup";
     inherit version;

@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.5.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "python_rtmidi";
     inherit version;

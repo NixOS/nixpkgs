@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "vesoft-inc";
     repo = "nebula-python";

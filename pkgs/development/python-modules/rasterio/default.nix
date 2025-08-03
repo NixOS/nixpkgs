@@ -36,8 +36,6 @@ buildPythonPackage rec {
   version = "1.4.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";

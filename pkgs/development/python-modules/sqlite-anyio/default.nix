@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "davidbrochart";
     repo = "sqlite-anyio";

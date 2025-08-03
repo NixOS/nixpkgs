@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.14.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version;
     pname = "azure_iot_device";

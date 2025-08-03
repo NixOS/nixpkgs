@@ -22,8 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-bqhRV0WtWRUKkBG2tEvctxdoYRkcrpL4JZSHYzox8so=";
   };
 
-  disabled = pythonOlder "3.8";
-
   nativeCheckInputs = [
     git
     pytestCheckHook

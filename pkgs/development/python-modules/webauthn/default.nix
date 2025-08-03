@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";

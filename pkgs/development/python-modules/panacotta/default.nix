@@ -10,8 +10,6 @@ buildPythonPackage rec {
   version = "0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "u1f35c";
     repo = "python-panacotta";

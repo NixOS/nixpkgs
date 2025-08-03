@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.3.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "erev0s";
     repo = "apkInspector";

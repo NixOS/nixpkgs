@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.22.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "django-maintenance-mode";

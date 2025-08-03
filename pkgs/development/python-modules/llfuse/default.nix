@@ -19,8 +19,6 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "14.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "environs";

@@ -35,8 +35,6 @@ buildPythonPackage rec {
   version = "0.65.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";

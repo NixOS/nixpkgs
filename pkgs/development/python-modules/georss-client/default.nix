@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-client";

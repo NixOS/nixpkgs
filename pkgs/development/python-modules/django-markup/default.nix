@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "1.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "bartTC";
     repo = "django-markup";

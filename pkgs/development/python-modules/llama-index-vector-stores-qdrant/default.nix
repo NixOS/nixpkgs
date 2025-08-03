@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_vector_stores_qdrant";
     inherit version;

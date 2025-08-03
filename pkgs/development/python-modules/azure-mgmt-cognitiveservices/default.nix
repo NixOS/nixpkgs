@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "13.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "azure_mgmt_cognitiveservices";
     inherit version;

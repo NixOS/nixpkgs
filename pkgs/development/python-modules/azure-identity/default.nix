@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.21.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "azure_identity";
     inherit version;
