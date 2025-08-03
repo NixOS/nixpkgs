@@ -33,11 +33,21 @@ stdenv.mkDerivation rec {
     gsl-lite
   ];
 
-  postPatch = ''
+  postPatch =
     # Disable a test that requires an internet connection.
-    substituteInPlace tests/CMakeLists.txt \
-      --replace "add_subdirectory(cmake_fetch_content)" ""
-  '';
+    ''
+      substituteInPlace tests/CMakeLists.txt \
+        --replace "add_subdirectory(cmake_fetch_content)" ""
+    ''
+    # Replace the modern gsl-lite header with the legacy compatibility header,
+    # so that unqualified symbols like `Expects()` and `Ensures()` are available
+    # in the global `gsl` namespace as expected by the bencode library
+    + ''
+      for f in include/bencode/detail/*.hpp; do
+        substituteInPlace "$f" \
+          --replace-quiet "#include <gsl-lite/gsl-lite.hpp>" "#include <gsl/gsl-lite.hpp>"
+      done
+    '';
 
   doCheck = true;
 
