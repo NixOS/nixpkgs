@@ -59,14 +59,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
-  env =
-    {
-      OPENSSL_NO_VENDOR = true;
-      ZSTD_SYS_USE_PKG_CONFIG = true;
-      ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-      ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-    }
-    // lib.optionalAttrs
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  }
+  //
+    lib.optionalAttrs
       (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
       {
         JEMALLOC_SYS_WITH_LG_PAGE = 16;
