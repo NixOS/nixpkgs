@@ -1750,8 +1750,6 @@ self: super: with self; {
 
   basiciw = callPackage ../development/python-modules/basiciw { };
 
-  basswood-av = callPackage ../development/python-modules/basswood-av { };
-
   batchgenerators = callPackage ../development/python-modules/batchgenerators { };
 
   batchspawner = callPackage ../development/python-modules/batchspawner { };
