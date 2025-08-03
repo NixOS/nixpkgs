@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "konikvranik";
     repo = "pycec";

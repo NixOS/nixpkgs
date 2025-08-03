@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1dfy3h823ylz4w2vv3mrmnmiyvf6rvyvsp4j3llr074w9id0zy16";
   };
 
-  disabled = python3Packages.pythonOlder "3.7";
-
   nativeBuildInputs = [
     python3Packages.doit
     python3Packages.pyscss

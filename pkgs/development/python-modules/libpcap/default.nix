@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.11.0b8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     extension = "zip";

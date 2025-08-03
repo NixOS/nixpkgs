@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "django_cacheops";
     inherit version;

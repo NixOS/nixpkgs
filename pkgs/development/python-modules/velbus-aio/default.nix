@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2025.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";

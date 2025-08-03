@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "7.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";

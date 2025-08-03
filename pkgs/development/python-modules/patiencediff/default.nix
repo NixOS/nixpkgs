@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.2.15";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "patiencediff";

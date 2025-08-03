@@ -118,8 +118,6 @@ buildPythonPackage rec {
   inherit pname version src;
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   outputs = [
     "out"
   ]

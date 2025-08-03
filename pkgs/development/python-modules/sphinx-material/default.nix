@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.0.36";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "sphinx_material";
     inherit version;

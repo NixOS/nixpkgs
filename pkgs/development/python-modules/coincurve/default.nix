@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "20.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "coincurve";

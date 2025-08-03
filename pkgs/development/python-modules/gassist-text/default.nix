@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.0.14";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "gassist_text";

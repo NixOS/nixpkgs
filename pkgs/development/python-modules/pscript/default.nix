@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.7.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "flexxui";
     repo = "pscript";

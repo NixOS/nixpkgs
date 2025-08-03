@@ -10,8 +10,6 @@ buildPythonPackage rec {
   version = "0.1.6.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "PyRIC";
     inherit version;

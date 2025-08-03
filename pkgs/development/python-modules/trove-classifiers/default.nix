@@ -14,8 +14,6 @@ let
     version = "2025.5.9.12";
     pyproject = true;
 
-    disabled = pythonOlder "3.7";
-
     src = fetchPypi {
       pname = "trove_classifiers";
       inherit version;

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.5.post0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "cher-nov";
     repo = "cryptg";

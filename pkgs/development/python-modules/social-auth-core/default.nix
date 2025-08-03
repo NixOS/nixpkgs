@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "4.5.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";

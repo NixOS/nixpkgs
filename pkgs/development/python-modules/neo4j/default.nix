@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "5.28.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";

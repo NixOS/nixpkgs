@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "5.15.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "PyQt3D";
     inherit version;

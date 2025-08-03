@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "1.1.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "prophet";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   pname = "aspectlib";
   version = "2.0.0";
 
-  disabled = pythonOlder "3.7";
-
   pyproject = true;
 
   src = fetchPypi {

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "3.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "rsalmei";
     repo = "alive-progress";

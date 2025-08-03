@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.5.24";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = "adb-enhanced";

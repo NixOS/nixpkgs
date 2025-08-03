@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-async";

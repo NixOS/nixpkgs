@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.3.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "agoose77";
     repo = "hatch-nodejs-version";

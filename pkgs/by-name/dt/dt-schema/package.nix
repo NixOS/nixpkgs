@@ -10,7 +10,6 @@ let
       # see https://github.com/devicetree-org/dt-schema/issues/108
       jsonschema = super.jsonschema.overridePythonAttrs (old: rec {
         version = "4.17.3";
-        disabled = self.pythonOlder "3.7";
 
         src = old.src.override {
           inherit version;

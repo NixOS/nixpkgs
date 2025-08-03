@@ -362,8 +362,6 @@ buildPythonPackage rec {
   version = "1.40.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;

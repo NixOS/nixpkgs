@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "gpib_ctypes";
     inherit version;

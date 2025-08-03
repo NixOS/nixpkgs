@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.15";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "irgeek";
     repo = "StrEnum";

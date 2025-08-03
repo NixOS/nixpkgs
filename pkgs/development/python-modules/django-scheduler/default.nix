@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "llazzaro";
     repo = "django-scheduler";

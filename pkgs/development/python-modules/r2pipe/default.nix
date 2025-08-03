@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.9.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   postPatch =
     let
       r2lib = "${lib.getOutput "lib" radare2}/lib";

@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "8.0.0";
   format = "pyproject";
 
-  disabled = python3.pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "EntySec";
     repo = "Ghost";

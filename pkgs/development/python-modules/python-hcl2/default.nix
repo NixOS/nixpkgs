@@ -21,8 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-aHaDZvgpiINUEdSYlUVwa0l80mujb9F04eboAdiuzDc=";
   };
 
-  disabled = pythonOlder "3.7";
-
   build-system = [
     setuptools
     setuptools-scm

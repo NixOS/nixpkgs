@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "31.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "debian_inspector";
     inherit version;

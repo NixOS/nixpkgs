@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "carletes";
     repo = "mock-ssh-server";

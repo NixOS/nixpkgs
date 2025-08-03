@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "cdent";
     repo = "wsgi-intercept";

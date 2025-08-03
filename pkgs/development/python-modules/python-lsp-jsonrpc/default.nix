@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.1.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-jsonrpc";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "5.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";

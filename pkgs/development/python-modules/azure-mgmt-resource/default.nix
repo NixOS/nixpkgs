@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "23.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "azure_mgmt_resource";
     inherit version;

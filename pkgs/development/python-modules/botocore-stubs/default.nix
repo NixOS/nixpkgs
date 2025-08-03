@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.38.46";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "botocore_stubs";
     inherit version;

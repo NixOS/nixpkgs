@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.4.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tlocke";
     repo = "scramp";

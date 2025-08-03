@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "7.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-bdd";

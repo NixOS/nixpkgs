@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.1.1-unstable-2023-11-28";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi-ldap";

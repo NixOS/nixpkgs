@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.7.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "Whoosh";
     inherit version;

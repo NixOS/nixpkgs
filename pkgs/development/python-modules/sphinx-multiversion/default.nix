@@ -12,7 +12,6 @@ buildPythonPackage rec {
   pname = "sphinx-multiversion";
   version = "0.2.4";
 
-  disabled = pythonOlder "3.7";
   pyproject = true;
 
   src = fetchPypi {

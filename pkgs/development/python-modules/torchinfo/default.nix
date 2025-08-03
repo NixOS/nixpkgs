@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "TylerYep";
     repo = "torchinfo";

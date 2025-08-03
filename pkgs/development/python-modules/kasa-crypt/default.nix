@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "kasa-crypt";

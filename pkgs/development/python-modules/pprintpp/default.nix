@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.0-unstable-2022-05-31";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "joaonc";
     repo = "pprintpp2";

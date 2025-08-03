@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect-aio";

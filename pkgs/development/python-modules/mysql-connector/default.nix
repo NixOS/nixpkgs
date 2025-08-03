@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "8.0.33";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   setupPyBuildFlags = [
     "--with-mysql-capi=${mysql80}"
     "--with-openssl-include-dir=${openssl.dev}/include"

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Leggin";
     repo = "dirigera";

@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "8.1.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";

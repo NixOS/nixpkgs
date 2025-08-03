@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.0.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "unicrypto";

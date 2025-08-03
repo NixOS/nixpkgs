@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "GooCalendar";
     inherit version;

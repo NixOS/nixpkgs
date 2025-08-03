@@ -22,8 +22,6 @@ buildPythonPackage rec {
   inherit (home-assistant-chip-wheels) version;
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
-
   src = home-assistant-chip-wheels;
 
   # format=wheel needs src to be a wheel not a folder of wheels

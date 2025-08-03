@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "24.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "klein";

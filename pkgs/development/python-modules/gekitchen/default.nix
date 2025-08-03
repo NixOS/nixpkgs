@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.2.19";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ajmarks";
     repo = "gekitchen";

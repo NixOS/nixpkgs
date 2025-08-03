@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "accessible_pygments";
     inherit version;

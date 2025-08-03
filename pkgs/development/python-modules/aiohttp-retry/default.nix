@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "inyutin";
     repo = "aiohttp_retry";

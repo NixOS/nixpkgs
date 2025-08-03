@@ -16,8 +16,6 @@ buildPythonPackage rec {
 
   inherit stdenv;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-e+nD66OL7Mtkleozr9mCpEB0t48oxDSh9RzAf9MVxFY=";

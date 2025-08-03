@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.6.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";

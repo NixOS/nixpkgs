@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "attrs";
   version = "25.3.0";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {

@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.1.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;

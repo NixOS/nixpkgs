@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.28";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "w1ll1am23";
     repo = "pyeconet";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "3.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";

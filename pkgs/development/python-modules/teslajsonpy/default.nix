@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "3.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = "teslajsonpy";

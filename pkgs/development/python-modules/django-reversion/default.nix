@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "5.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "django_reversion";
     inherit version;

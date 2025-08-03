@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-services";

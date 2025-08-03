@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2.24.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";

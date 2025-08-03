@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "4.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;

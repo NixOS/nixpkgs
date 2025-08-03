@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.0.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "fortinet-solutions-cse";
     repo = "fortiosapi";

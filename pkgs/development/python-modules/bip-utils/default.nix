@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.9.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ebellocchia";
     repo = "bip_utils";

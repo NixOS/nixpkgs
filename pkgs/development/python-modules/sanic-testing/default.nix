@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "24.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";

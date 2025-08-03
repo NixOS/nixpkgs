@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.15.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "d5h-foss";
     repo = "grpc-interceptor";

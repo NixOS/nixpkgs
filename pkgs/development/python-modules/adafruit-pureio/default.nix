@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.1.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "Adafruit_PureIO";
     inherit version;

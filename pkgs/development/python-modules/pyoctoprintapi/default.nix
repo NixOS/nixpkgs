@@ -21,8 +21,6 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "rfleming71";
     repo = "pyoctoprintapi";

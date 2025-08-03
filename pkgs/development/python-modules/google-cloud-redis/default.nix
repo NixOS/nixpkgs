@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2.18.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_redis";
     inherit version;

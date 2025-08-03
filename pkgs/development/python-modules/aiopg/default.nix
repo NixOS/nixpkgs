@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiopg";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "coady";
     repo = "multimethod";

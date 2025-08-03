@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.9.22";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "caio";

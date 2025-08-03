@@ -26,8 +26,6 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "chacha20poly1305-reuseable";

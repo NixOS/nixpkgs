@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Nekmo";
     repo = "proxy-db";

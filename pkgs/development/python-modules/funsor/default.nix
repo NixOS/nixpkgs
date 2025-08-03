@@ -34,8 +34,6 @@ buildPythonPackage rec {
   version = "0.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "funsor";

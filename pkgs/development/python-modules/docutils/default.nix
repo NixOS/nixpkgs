@@ -17,8 +17,6 @@ let
     version = "0.21.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.7";
-
     src = fetchFromRepoOrCz {
       repo = "docutils";
       rev = "docutils-${version}";

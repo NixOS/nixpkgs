@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "3.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "MrBin99";
     repo = "django-vite";

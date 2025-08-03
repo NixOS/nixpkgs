@@ -44,8 +44,6 @@ buildPythonPackage rec {
   version = "0.115.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";

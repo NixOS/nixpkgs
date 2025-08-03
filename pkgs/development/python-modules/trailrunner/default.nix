@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "trailrunner";

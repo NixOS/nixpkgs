@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Matmaus";
     repo = "LnkParse3";

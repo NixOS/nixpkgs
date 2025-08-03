@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "4.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "pymongo";
