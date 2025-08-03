@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  pythonAtLeast,
   setuptools,
   pytestCheckHook,
   matplotlib,
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   dependencies = [
     setuptools # pkg_resources is referenced at runtime
   ]
-  ++ lib.optionals (!pythonOlder "3.13") [
+  ++ lib.optionals (pythonAtLeast "3.13") [
     legacy-cgi
   ];
 

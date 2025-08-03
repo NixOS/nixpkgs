@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  pythonAtLeast,
   pybind11,
   pytestCheckHook,
   python-dateutil,
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   # pelican requires > 2.7
-  doCheck = !pythonOlder "3.6";
+  doCheck = pythonAtLeast "3.6";
 
   disabledTests = [
     # incompatible with pytest7
