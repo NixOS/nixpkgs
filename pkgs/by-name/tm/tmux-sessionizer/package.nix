@@ -8,20 +8,14 @@
   tmux-sessionizer,
   installShellFiles,
 }:
-let
-
-  name = "tmux-sessionizer";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "tmux-sessionizer";
   version = "0.5.0";
-
-in
-rustPlatform.buildRustPackage {
-  pname = name;
-  inherit version;
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
-    repo = name;
-    rev = "v${version}";
+    repo = "tmux-sessionizer";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6eMKwp5639DIyhM6OD+db7jr4uF34JSt0Xg+lpyIPSI=";
   };
 
@@ -29,7 +23,7 @@ rustPlatform.buildRustPackage {
 
   passthru.tests.version = testers.testVersion {
     package = tmux-sessionizer;
-    version = version;
+    version = finalAttrs.version;
   };
 
   nativeBuildInputs = [
@@ -54,4 +48,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "tms";
   };
-}
+})
