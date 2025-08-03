@@ -158,8 +158,7 @@ with haskellLib;
                       ]
                     )
                     [
-                      # TODO(@sternenseemann): update patch
-                      ./patches/cabal-install-3.14.1.1-lift-unix-bound.patch
+                      ./patches/cabal-install-3.16-lift-unix-bound.patch
                     ];
             }
             // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
