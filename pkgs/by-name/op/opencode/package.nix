@@ -7,15 +7,16 @@
   models-dev,
   nix-update-script,
   testers,
+  tree-sitter,
   writableTmpDirAsHomeHook,
 }:
 
 let
   opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-iPMaEpepvKCb0VEUQPy4to6kwgSKnVsMbckVEYF+58E=";
-    "aarch64-linux" = "sha256-Ybf8MiiCHHEMQGqc4PGPHvcfons+sLvhO4UkWQghJ34=";
-    "x86_64-darwin" = "sha256-5ULx3Y7RmMggyMp7eGN7XFCKvoIqW7W7lHaTlgjBLWo=";
-    "x86_64-linux" = "sha256-ZtZvS0jF2YpkDeCdP2y1qX4fJVMq8BBq6EFwqvDEfdc=";
+    "aarch64-darwin" = "sha256-QfsPK6iPuXXKpT3z1SUDdvCx3uT+U2IZy4msH8UiFg8=";
+    "aarch64-linux" = "sha256-/BpbECRBxLOz+YEQrEHNrtHSr/BaLOrAkJXH0TBHjFE=";
+    "x86_64-darwin" = "sha256-KA3jaU7BD7lueKBuM9cTJuEby6AC0E03JYZMKRxceqY=";
+    "x86_64-linux" = "sha256-us6m4Iwaf+zS3NBSoOEAVBpHoyXPDnt+P9/D/Qbui+Y=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -26,20 +27,21 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.3.85";
+  version = "0.3.112";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7L50P3+u4SHQtjSdFJviPaeLFnOIGP/l4BFLHKm4pNs=";
+    hash = "sha256-BeUgZUzuphQ1gqPnDnKP2HMy5nyoD5au4AekGT2deIc=";
   };
 
   tui = buildGoModule {
     pname = "opencode-tui";
-    inherit (finalAttrs) version;
-    src = "${finalAttrs.src}/packages/tui";
+    inherit (finalAttrs) version src;
 
-    vendorHash = "sha256-+j8+TjTzd7AH9Si9tS7noTpPcG1lz9j+tmxUTrPcThw=";
+    modRoot = "packages/tui";
+
+    vendorHash = "sha256-nBwYVaBau1iTnPY3d5F/5/ENyjMCikpQYNI5whEJwBk=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -105,6 +107,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+
+  buildInputs = [ tree-sitter ];
 
   nativeBuildInputs = [
     bun

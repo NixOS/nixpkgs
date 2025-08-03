@@ -21728,6 +21728,12 @@
     githubId = 521306;
     name = "Rob Glossop";
   };
+  robinheghan = {
+    email = "git@heghan.org";
+    github = "robinheghan";
+    githubId = 854889;
+    name = "Robin Heggelund Hansen";
+  };
   robinkrahl = {
     email = "nix@ireas.org";
     github = "robinkrahl";
