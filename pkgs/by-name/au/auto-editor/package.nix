@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "auto-editor";
-  version = "28.0.2";
+  version = "28.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-ozw5ZPvKP7aTBBItQKNx85hZ1T4IxX9NYCcNHC5UuuM=";
+    hash = "sha256-uSFihHYGfz3/b4aaK91qYFu9zx2gvpdKO0530NwV0E4=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
-    basswood-av
+    av
     numpy
   ];
 
