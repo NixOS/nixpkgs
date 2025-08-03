@@ -76,15 +76,16 @@ EOF
 mv chart-versions.nix.update chart-versions.nix
 
 # Concatenate all sha256sums, one entry per line
-SHA256_HASHES="$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-amd64.txt")
-    \n$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm64.txt")
-    \n$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")"
+SHA256_HASHES="\
+$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-amd64.txt")
+$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm64.txt")
+$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")
+$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/k3s-images.txt" | sha256sum | cut -d' ' -f1)  k3s-images.txt"
 
 # Get all airgap images files associated with this release
 IMAGES_ARCHIVES=$(curl "https://api.github.com/repos/k3s-io/k3s/releases/tags/v${K3S_VERSION}" | \
     # Filter the assets so that only zstd archives and text files that have "images" in their name remain
-    jq -r '.assets[] | select(.name | contains("images")) |
-        select(.content_type == "application/zstd" or .content_type == "text/plain; charset=utf-8") |
+    jq -r '.assets[] | select(.name | (contains("images") and (endswith(".tar.zst") or endswith("k3s-images.txt")))) |
         "\(.name) \(.browser_download_url)"')
 
 # Create a JSON object for each airgap images file and prefetch all download URLs in the process
