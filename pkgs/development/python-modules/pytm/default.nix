@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
   pydal,
   graphviz,
   pandoc,

@@ -5,7 +5,6 @@
   poetry-core,
   pybluez,
   pytestCheckHook,
-  pythonOlder,
   pyusb,
 }:
 

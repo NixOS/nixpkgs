@@ -13,7 +13,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   redis,
   starlette,
 }:

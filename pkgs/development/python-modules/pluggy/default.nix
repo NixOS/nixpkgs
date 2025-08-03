@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   setuptools-scm,
-  pythonOlder,
   callPackage,
 }:
 

@@ -11,7 +11,6 @@
   pystache,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   requests,

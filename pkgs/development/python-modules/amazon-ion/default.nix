@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonconversion,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   tabulate,

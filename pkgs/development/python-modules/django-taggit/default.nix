@@ -5,7 +5,6 @@
   djangorestframework,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 }:
 

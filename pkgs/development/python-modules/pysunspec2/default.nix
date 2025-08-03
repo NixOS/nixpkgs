@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,

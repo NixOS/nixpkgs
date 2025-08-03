@@ -6,7 +6,6 @@
   mock,
   pytestCheckHook,
   cryptography,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

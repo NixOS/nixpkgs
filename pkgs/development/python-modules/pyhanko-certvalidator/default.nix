@@ -9,7 +9,6 @@
   oscrypto,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   uritools,

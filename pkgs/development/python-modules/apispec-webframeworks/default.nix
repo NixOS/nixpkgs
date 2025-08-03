@@ -9,7 +9,6 @@
   flask,
   mock,
   pytestCheckHook,
-  pythonOlder,
   tornado,
 }:
 

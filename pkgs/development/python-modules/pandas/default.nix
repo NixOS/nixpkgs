@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   cython,

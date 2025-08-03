@@ -7,7 +7,6 @@
   paste,
   setuptools,
   pastedeploy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

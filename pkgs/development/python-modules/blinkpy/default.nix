@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-dateutil,
   python-slugify,
-  pythonOlder,
   requests,
   setuptools,
   sortedcontainers,

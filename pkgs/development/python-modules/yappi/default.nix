@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gevent,
   python,
-  pythonOlder,
   setuptools,
 }:
 

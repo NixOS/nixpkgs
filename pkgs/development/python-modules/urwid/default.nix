@@ -7,7 +7,6 @@
   pygobject3,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   pyzmq,
   setuptools,
   setuptools-scm,

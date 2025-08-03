@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonschema,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   simplejson,

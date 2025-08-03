@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   stdenv,
   buildPythonPackage,
   fetchPypi,

@@ -5,7 +5,6 @@
   setuptools,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   requests,
   sh,
 }:

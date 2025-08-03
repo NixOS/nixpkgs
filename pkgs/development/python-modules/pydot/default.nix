@@ -8,7 +8,6 @@
   pytestCheckHook,
   chardet,
   parameterized,
-  pythonOlder,
   pyparsing,
 }:
 

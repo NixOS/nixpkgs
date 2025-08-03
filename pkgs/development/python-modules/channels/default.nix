@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

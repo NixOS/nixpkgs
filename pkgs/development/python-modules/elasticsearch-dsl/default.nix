@@ -4,7 +4,6 @@
   elasticsearch,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

@@ -8,7 +8,6 @@
   pytest-vcr,
   pytestCheckHook,
   python-box,
-  pythonOlder,
   requests,
   responses,
   setuptools,

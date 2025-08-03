@@ -6,7 +6,6 @@
   fetchPypi,
   imageio,
   imutils,
-  pythonOlder,
   requests,
   urllib3,
   tqdm,

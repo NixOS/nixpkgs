@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

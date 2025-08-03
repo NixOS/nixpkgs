@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   enlighten,
   zstandard,
   withGUI ? true,

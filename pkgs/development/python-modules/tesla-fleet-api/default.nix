@@ -9,7 +9,6 @@
   cryptography,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 

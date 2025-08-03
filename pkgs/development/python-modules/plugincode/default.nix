@@ -8,7 +8,6 @@
   pluggy,
   pytestCheckHook,
   pytest-xdist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   natsort,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

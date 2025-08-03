@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   setuptools,
 }:

@@ -6,7 +6,6 @@
   pytestCheckHook,
   six,
   ssdeep,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

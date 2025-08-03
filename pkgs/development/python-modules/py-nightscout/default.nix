@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
 }:
 

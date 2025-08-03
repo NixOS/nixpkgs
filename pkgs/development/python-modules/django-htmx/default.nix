@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

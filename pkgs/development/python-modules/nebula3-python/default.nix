@@ -7,7 +7,6 @@
   httpx,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   six,
 }:

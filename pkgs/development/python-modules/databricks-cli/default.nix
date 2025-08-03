@@ -9,7 +9,6 @@
   oauthlib,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   six,

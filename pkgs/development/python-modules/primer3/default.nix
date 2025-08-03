@@ -7,7 +7,6 @@
   gcc,
   click,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -6,7 +6,6 @@
   num2words,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools-scm,
   setuptools,

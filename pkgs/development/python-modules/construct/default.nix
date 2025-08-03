@@ -9,7 +9,6 @@
   lz4,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
 }:

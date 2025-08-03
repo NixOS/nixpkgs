@@ -11,7 +11,6 @@
   phonopy,
   potentials,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scipy,
   setuptools,

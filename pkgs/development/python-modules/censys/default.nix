@@ -10,7 +10,6 @@
   pytest-mock,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   responses,

@@ -5,7 +5,6 @@
   easyprocess,
   path,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

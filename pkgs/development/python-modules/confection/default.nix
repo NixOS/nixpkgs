@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   srsly,
 }:
 

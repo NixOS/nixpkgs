@@ -12,7 +12,6 @@
   pyperclip,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   questionary,
   requests,
   requests-mock,

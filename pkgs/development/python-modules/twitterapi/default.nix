@@ -4,7 +4,6 @@
   fetchFromGitHub,
   requests,
   requests-oauthlib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

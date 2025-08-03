@@ -11,7 +11,6 @@
   pyserial-asyncio,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   voluptuous,
 }:

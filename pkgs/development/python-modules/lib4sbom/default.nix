@@ -4,7 +4,6 @@
   defusedxml,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semantic-version,
   setuptools,

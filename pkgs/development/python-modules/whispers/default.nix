@@ -12,7 +12,6 @@
   lxml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semgrep,
   setuptools,

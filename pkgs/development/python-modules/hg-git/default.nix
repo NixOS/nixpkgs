@@ -6,7 +6,6 @@
   setuptools-scm,
   dulwich,
   mercurial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

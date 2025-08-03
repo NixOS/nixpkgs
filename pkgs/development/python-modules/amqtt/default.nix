@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   setuptools,
   transitions,

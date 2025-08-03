@@ -12,7 +12,6 @@
   pandas,
   tabulate,
   pytest-cases,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

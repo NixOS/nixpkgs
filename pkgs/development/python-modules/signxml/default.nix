@@ -7,7 +7,6 @@
   lxml,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   hatch-vcs,
 }:

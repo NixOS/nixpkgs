@@ -3,7 +3,6 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   babel,

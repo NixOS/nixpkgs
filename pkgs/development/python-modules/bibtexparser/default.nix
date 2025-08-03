@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

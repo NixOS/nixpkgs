@@ -7,7 +7,6 @@
   pbr,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   restructuredtext-lint,
   setuptools-scm,
   stevedore,

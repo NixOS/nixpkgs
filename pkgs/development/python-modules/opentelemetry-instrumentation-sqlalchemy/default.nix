@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,

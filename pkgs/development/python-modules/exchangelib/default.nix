@@ -11,7 +11,6 @@
   psutil,
   pygments,
   python-dateutil,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,

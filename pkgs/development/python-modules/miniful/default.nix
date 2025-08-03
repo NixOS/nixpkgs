@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   scipy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

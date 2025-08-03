@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   dbus,
   pkgsLibpcap,
   pkg-about,

@@ -3,7 +3,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pygtrie,
   orjson,
   setuptools-scm,

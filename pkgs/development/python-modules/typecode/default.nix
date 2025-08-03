@@ -12,7 +12,6 @@
   typecode-libmagic,
   pytestCheckHook,
   pytest-xdist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

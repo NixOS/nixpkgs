@@ -6,7 +6,6 @@
   marshmallow,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,

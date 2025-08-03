@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   attrs,
   isodate,
   python-dateutil,

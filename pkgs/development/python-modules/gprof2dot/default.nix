@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   graphviz,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

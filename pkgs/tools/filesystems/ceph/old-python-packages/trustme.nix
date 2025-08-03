@@ -7,7 +7,6 @@
   idna,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   service-identity,
 }:
 

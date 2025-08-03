@@ -10,7 +10,6 @@
   numpy,
   openjpeg,
   pytestCheckHook,
-  pythonOlder,
   scikit-image,
   setuptools,
   replaceVars,

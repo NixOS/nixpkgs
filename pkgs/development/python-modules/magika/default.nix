@@ -8,7 +8,6 @@
   onnxruntime,
   hatchling,
   python-dotenv,
-  pythonOlder,
   stdenv,
   tabulate,
   testers,

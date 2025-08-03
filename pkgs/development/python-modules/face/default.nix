@@ -4,7 +4,6 @@
   fetchPypi,
   boltons,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

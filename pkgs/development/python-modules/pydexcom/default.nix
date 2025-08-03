@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   requests,
 }:
 

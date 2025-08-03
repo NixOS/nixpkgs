@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   legacy-cgi,
 }:

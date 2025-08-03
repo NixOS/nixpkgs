@@ -11,7 +11,6 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   ujson,
 }:

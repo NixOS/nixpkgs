@@ -9,7 +9,6 @@
   pyotp,
   python-dotenv,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

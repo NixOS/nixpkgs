@@ -11,7 +11,6 @@
   tqdm,
   setuptools,
   six,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

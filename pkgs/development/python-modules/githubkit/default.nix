@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

@@ -6,7 +6,6 @@
   pytestCheckHook,
   cffi,
   lmdb,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

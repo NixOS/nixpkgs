@@ -5,7 +5,6 @@
   fetchPypi,
   nvdlib,
   pydantic,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

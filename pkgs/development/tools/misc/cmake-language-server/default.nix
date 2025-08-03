@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonApplication,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   cmake-format,

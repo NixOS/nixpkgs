@@ -17,7 +17,6 @@
   pytest-cases,
   pytest-parallel,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   s3fs,

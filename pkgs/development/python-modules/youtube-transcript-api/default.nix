@@ -7,7 +7,6 @@
   requests,
   httpretty,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -8,7 +8,6 @@
   pyserial,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   structlog,
   typing-extensions,

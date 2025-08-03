@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

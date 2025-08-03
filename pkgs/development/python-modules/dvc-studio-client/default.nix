@@ -4,7 +4,6 @@
   dulwich,
   fetchFromGitHub,
   gitpython,
-  pythonOlder,
   requests,
   setuptools-scm,
   voluptuous,

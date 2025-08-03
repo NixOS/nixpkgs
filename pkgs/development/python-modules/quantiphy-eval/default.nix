@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   inform,
-  pythonOlder,
   sly,
 }:
 

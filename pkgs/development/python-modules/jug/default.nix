@@ -5,7 +5,6 @@
   fetchPypi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
 }:

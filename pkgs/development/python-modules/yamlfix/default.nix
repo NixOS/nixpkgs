@@ -8,7 +8,6 @@
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   ruyaml,
   setuptools,
   writableTmpDirAsHomeHook,

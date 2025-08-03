@@ -9,7 +9,6 @@
   pybind11,
   wheel,
   pytestCheckHook,
-  pythonOlder,
   graphviz,
 }:
 

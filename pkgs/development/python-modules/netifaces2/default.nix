@@ -3,7 +3,6 @@
   buildPythonPackage,
   rustPlatform,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 let

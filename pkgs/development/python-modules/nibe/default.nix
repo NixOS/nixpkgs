@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-slugify,
-  pythonOlder,
   setuptools,
   tenacity,
 }:

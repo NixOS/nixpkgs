@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchPypi,
   buildPythonPackage,
   hatchling,

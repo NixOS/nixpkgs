@@ -9,7 +9,6 @@
   poetry-core,
   pylint-plugin-utils,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -4,7 +4,6 @@
   fetchPypi,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   tinycss2,
 }:
 

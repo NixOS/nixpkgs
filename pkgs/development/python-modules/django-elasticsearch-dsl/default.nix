@@ -4,7 +4,6 @@
   fetchFromGitHub,
   elasticsearch-dsl,
   django,
-  pythonOlder,
   elastic-transport,
   setuptools,
 }:

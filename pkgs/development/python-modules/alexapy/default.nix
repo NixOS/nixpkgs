@@ -11,7 +11,6 @@
   fetchFromGitLab,
   poetry-core,
   pyotp,
-  pythonOlder,
   requests,
   simplejson,
   yarl,

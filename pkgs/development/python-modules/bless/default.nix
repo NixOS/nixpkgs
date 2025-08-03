@@ -8,7 +8,6 @@
   numpy,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

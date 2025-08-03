@@ -13,7 +13,6 @@
   python-mistralclient,
   python-openstackclient,
   python-swiftclient,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,

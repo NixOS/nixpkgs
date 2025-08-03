@@ -7,7 +7,6 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

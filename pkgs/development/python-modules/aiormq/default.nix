@@ -3,7 +3,6 @@
   aiomisc-pytest,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pamqp,
   yarl,

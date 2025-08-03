@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   unzip,
-  pythonOlder,
   libGL,
   libGLU,
   xorg,

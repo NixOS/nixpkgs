@@ -3,7 +3,6 @@
   bleak,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   wheel,
 }:

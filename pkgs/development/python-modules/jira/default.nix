@@ -11,7 +11,6 @@
   pyjwt,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   requests,
   requests-futures,
   requests-mock,

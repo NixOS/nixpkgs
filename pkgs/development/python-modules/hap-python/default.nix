@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zeroconf,
 }:

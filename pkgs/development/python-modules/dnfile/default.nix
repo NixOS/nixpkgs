@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pefile,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

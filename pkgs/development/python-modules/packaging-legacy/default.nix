@@ -5,7 +5,6 @@
   packaging,
   pretend,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

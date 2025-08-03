@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   pytest-asyncio,
   setuptools,
   pytestCheckHook,

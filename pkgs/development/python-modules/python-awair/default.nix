@@ -6,7 +6,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   voluptuous,
   vcrpy,
 }:

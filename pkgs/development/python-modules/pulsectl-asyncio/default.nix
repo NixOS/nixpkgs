@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pulsectl,
-  pythonOlder,
   setuptools,
 }:
 

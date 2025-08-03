@@ -8,7 +8,6 @@
   async-timeout,
   kasa-crypt,
   orjson,
-  pythonOlder,
   requests,
   websocket-client,
   websockets,

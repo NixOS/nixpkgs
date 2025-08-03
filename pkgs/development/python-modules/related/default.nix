@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:

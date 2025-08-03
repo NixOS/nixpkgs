@@ -6,7 +6,6 @@
   mock,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 

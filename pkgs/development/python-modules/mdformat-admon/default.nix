@@ -6,7 +6,6 @@
   mdformat,
   mdit-py-plugins,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

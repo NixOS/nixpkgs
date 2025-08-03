@@ -5,7 +5,6 @@
   django,
   six,
   pycrypto,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

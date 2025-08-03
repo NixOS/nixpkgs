@@ -5,7 +5,6 @@
   mock,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   which,

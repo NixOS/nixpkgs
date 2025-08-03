@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonpickle,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,

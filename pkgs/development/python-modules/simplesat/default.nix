@@ -6,7 +6,6 @@
   mock,
   okonomiyaki,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   six,

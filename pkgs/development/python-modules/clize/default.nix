@@ -7,7 +7,6 @@
   od,
   pygments,
   python-dateutil,
-  pythonOlder,
   repeated-test,
   setuptools-scm,
   sigtools,

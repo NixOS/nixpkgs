@@ -5,7 +5,6 @@
   fetchFromGitHub,
   hypothesis,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:

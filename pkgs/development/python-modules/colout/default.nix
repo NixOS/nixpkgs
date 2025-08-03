@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pygments,
-  pythonOlder,
   setuptools-scm,
 }:
 

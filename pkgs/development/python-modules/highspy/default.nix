@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   scikit-build-core,
   pybind11,
   numpy,

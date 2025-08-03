@@ -8,7 +8,6 @@
   prettytable,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   requests,
   stevedore,
 }:

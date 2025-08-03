@@ -13,7 +13,6 @@
   pyyaml,
   pmdsky-debug-py,
   range-typed-integers,
-  pythonOlder,
   # optional dependencies for SpriteCollab
   aiohttp,
   lru-dict,

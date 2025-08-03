@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   requests,
   robotframework,
 }:

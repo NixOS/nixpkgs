@@ -4,7 +4,6 @@
   eth-hash,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

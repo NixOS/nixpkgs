@@ -6,7 +6,6 @@
   protobuf,
   pytestCheckHook,
   pycrypto,
-  pythonOlder,
   setuptools,
 }:
 

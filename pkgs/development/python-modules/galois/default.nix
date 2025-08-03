@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   setuptools-scm,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   pytest-xdist,

@@ -8,7 +8,6 @@
   google-auth-httplib2,
   google-auth-oauthlib,
   oauth2client,
-  pythonOlder,
   setuptools,
   versioneer,
 }:

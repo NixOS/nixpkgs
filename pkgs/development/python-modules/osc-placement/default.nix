@@ -9,7 +9,6 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,

@@ -5,7 +5,6 @@
   fpyutils,
   pyfakefs,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

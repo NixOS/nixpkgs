@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   networkx,
-  pythonOlder,
   setuptools,
   tqdm,
   z3-solver,

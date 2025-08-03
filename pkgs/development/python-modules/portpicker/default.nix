@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

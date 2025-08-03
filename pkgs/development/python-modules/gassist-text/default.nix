@@ -7,7 +7,6 @@
   grpcio,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

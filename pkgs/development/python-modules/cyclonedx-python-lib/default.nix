@@ -11,7 +11,6 @@
   py-serializable,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requirements-parser,
   sortedcontainers,
   setuptools,

@@ -5,7 +5,6 @@
   fetchPypi,
   flit-core,
   jinja2,
-  pythonOlder,
   requests,
   sphinx,
 }:

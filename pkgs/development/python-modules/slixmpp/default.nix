@@ -13,7 +13,6 @@
   pytestCheckHook,
   replaceVars,
   rustPlatform,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

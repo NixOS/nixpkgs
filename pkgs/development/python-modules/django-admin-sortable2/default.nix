@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   django,

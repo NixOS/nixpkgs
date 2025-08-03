@@ -7,7 +7,6 @@
   indexed-zstd,
   libarchive-c,
   python-xz,
-  pythonOlder,
   rapidgzip,
   rarfile,
   ratarmountcore,

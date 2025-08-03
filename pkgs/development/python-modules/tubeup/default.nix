@@ -6,7 +6,6 @@
   fetchPypi,
   yt-dlp,
   docopt,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

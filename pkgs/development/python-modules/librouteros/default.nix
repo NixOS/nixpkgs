@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   toml,
 }:

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   karton-core,
   malduck,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

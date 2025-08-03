@@ -3,7 +3,6 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
-  pythonOlder,
   cffi,
   pytestCheckHook,
   six,

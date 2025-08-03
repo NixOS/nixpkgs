@@ -9,7 +9,6 @@
   httpretty,
   opentelemetry-test-utils,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {

@@ -7,7 +7,6 @@
   jsonrpc-base,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

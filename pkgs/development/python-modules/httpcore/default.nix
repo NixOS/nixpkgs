@@ -13,7 +13,6 @@
   pytest-httpbin,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   socksio,
   trio,
   # for passthru.tests

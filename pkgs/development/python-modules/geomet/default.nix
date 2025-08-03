@@ -5,7 +5,6 @@
   click,
   setuptools,
   six,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

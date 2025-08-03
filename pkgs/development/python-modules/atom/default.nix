@@ -5,7 +5,6 @@
   setuptools-scm,
   cppy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -9,7 +9,6 @@
   pymdown-extensions,
   pyyaml,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

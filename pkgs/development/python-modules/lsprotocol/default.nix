@@ -10,7 +10,6 @@
   nox,
   pyhamcrest,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

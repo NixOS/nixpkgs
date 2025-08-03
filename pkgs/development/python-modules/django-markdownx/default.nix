@@ -5,7 +5,6 @@
   fetchFromGitHub,
   markdown,
   pillow,
-  pythonOlder,
   setuptools,
 }:
 

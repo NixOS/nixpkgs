@@ -7,7 +7,6 @@
   transaction,
   zope-testrunner,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

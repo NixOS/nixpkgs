@@ -9,7 +9,6 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   python-dateutil,
 }:

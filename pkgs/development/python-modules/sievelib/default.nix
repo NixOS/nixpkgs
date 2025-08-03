@@ -4,7 +4,6 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   typing-extensions,
 }:

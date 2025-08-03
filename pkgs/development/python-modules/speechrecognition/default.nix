@@ -13,7 +13,6 @@
   pocketsphinx,
   pyaudio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   respx,
   setuptools,

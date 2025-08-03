@@ -5,7 +5,6 @@
   fetchPypi,
   libmaxminddb,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

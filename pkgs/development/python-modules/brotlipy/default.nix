@@ -7,7 +7,6 @@
   hypothesis,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

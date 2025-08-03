@@ -9,7 +9,6 @@
   mock,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   requests,
   six,
 }:

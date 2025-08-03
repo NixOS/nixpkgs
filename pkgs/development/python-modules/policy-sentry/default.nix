@@ -6,7 +6,6 @@
   fetchFromGitHub,
   orjson,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   schema,

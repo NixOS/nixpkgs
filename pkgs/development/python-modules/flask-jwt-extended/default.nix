@@ -7,7 +7,6 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   werkzeug,
 }:

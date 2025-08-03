@@ -9,7 +9,6 @@
   pyusb,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zigpy,
 }:

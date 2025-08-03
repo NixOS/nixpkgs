@@ -4,7 +4,6 @@
   cryptography,
   cython,
   fetchPypi,
-  pythonOlder,
   setuptools,
   wheel,
 }:

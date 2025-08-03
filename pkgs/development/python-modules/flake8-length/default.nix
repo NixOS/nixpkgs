@@ -5,7 +5,6 @@
   flake8,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

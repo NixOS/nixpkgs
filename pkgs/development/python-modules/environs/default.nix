@@ -9,7 +9,6 @@
   marshmallow,
   pytestCheckHook,
   python-dotenv,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

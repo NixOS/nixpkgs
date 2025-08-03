@@ -6,7 +6,6 @@
   pytest-metadata,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

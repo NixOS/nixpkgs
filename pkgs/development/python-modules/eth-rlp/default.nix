@@ -7,7 +7,6 @@
   eth-utils,
   hexbytes,
   pytestCheckHook,
-  pythonOlder,
   rlp,
   pydantic,
 }:

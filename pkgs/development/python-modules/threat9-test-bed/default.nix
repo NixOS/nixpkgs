@@ -9,7 +9,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools-scm,
   standard-telnetlib,

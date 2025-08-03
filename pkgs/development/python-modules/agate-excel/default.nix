@@ -7,7 +7,6 @@
   xlrd,
   olefile,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

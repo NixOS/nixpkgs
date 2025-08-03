@@ -19,7 +19,6 @@
   pillow,
   joblib,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

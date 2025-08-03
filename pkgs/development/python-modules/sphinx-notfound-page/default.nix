@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   # documentation build dependencies
   sphinxHook,
   sphinx-prompt,

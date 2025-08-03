@@ -6,7 +6,6 @@
   future,
   python-dateutil,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,

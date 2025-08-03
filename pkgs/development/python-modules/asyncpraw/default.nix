@@ -11,7 +11,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-vcr,
-  pythonOlder,
   requests-toolbelt,
   update-checker,
   vcrpy,

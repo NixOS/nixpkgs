@@ -12,7 +12,6 @@
   stringly,
   treelog,
   pytestCheckHook,
-  pythonOlder,
   pkgs,
 }:
 

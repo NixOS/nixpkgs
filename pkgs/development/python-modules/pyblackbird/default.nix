@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyserial,
   pyserial-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

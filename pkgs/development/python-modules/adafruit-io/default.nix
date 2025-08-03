@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paho-mqtt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:

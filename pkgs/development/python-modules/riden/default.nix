@@ -6,7 +6,6 @@
   modbus-tk,
   poetry-core,
   pyserial,
-  pythonOlder,
   setuptools,
 }:
 

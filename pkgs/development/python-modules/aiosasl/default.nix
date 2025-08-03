@@ -5,7 +5,6 @@
   fetchpatch,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

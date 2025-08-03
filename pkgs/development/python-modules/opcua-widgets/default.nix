@@ -1,7 +1,6 @@
 {
   pkgs,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pyqt5,
   asyncua,

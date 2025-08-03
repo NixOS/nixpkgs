@@ -27,7 +27,6 @@
   asgiref,
   setuptools,
   trustme,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

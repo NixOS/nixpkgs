@@ -4,7 +4,6 @@
   buildPythonPackage,
   editorconfig,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 

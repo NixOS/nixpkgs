@@ -6,7 +6,6 @@
   httpx,
   typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

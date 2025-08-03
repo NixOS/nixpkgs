@@ -12,7 +12,6 @@
   mock,
   vcrpy,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

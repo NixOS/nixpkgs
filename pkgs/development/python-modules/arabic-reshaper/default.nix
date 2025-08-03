@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fonttools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

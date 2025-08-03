@@ -5,7 +5,6 @@
   latex2mathml,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wavedrom,
 }:

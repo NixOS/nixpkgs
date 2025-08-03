@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pytest-rerunfailures,
   setuptools,

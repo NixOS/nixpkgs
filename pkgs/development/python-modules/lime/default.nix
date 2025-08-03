@@ -11,7 +11,6 @@
   scikit-image,
 
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,6 @@
   pytest-trio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
 }:

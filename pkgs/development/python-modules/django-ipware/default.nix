@@ -4,7 +4,6 @@
   fetchPypi,
   django,
   python-ipware,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -7,7 +7,6 @@
   pycryptodomex,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   sensor-state-data,
 }:
 

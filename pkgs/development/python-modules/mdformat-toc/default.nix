@@ -5,7 +5,6 @@
   mdformat,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

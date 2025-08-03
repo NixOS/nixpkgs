@@ -18,7 +18,6 @@
   pyfiglet,
   pyperclip,
   pytestCheckHook,
-  pythonOlder,
   antlr4,
   pyyaml,
   setuptools,

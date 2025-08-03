@@ -10,7 +10,6 @@
   graphql-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

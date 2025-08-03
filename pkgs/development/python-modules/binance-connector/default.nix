@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   requests,
   setuptools,
   websocket-client,

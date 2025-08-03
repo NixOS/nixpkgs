@@ -6,7 +6,6 @@
   paramiko,
   poetry-core,
   pyserial,
-  pythonOlder,
   pyyaml,
   rich,
   ruamel-yaml,

@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
   coverage,
   miss-hit-core,
   python,

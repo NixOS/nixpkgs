@@ -5,7 +5,6 @@
   fetchpatch2,
   pytestCheckHook,
   sphinxHook,
-  pythonOlder,
   libsodium,
   cffi,
   hypothesis,

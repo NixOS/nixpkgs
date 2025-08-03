@@ -6,7 +6,6 @@
   cffi,
   fetchPypi,
   idna,
-  pythonOlder,
   setuptools,
   tornado,
 }:

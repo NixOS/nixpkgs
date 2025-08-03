@@ -5,7 +5,6 @@
   numpy,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   timeout-decorator,
 }:
 

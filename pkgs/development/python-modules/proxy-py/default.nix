@@ -15,7 +15,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   typing-extensions,

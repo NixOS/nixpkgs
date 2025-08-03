@@ -3,7 +3,6 @@
   buildPythonPackage,
   colorlog,
   fetchPypi,
-  pythonOlder,
   pyserial,
 }:
 

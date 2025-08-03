@@ -6,7 +6,6 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 

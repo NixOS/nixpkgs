@@ -7,7 +7,6 @@
   primepy,
   torch,
   torchaudio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

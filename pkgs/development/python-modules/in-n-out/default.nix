@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   hatchling,
   hatch-vcs,
   toolz,

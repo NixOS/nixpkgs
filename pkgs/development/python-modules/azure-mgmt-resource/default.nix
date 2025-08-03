@@ -5,7 +5,6 @@
   azure-mgmt-core,
   azure-mgmt-common,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

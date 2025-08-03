@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   tornado,
   typeguard,

@@ -5,7 +5,6 @@
   setuptools,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

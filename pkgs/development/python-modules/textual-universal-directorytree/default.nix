@@ -11,7 +11,6 @@
   paramiko,
   requests,
   s3fs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

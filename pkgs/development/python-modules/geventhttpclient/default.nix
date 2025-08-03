@@ -7,7 +7,6 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdenv,
   urllib3,

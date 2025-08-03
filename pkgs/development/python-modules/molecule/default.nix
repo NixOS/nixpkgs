@@ -10,7 +10,6 @@
   molecule,
   packaging,
   pluggy,
-  pythonOlder,
   rich,
   setuptools,
   setuptools-scm,

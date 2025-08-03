@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zeroconf,
 }:

@@ -9,7 +9,6 @@
   parameterized,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   torch,
 }:
 

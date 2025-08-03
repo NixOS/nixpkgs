@@ -6,7 +6,6 @@
   setuptools,
   jdk11,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

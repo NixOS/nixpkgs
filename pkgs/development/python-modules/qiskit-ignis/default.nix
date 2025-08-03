@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   httpx,
   poetry-core,
-  pythonOlder,
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,

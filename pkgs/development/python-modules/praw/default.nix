@@ -9,7 +9,6 @@
   mock,
   prawcore,
   pytestCheckHook,
-  pythonOlder,
   requests-toolbelt,
   update-checker,
   websocket-client,

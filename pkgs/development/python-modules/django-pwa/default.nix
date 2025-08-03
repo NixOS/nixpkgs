@@ -6,7 +6,6 @@
   hatch-vcs,
   hatchling,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

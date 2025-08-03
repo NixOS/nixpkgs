@@ -1,7 +1,6 @@
 {
   lib,
   isPyPy,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
 

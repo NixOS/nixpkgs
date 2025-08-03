@@ -11,7 +11,6 @@
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

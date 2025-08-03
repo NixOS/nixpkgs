@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
-  pytestCheckHook,
   django-polymorphic,
   setuptools,
   python,

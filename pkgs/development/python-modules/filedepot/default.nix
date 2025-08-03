@@ -11,7 +11,6 @@
   pymongo,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
   sqlalchemy,

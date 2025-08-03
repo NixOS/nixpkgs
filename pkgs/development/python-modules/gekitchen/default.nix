@@ -7,7 +7,6 @@
   humanize,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   requests,
   slixmpp,
   websockets,

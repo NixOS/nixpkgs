@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   # pytestCheckHook,
-  pythonOlder,
   versionCheckHook,
 
   hatchling,

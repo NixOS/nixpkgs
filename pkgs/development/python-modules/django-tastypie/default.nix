@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python-dateutil,
   python-mimeparse,
-  pythonOlder,
   setuptools,
 }:
 

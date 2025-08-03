@@ -7,7 +7,6 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

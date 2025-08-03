@@ -3,7 +3,6 @@
   stdenv,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   blosc2,
   bzip2,
   c-blosc,

@@ -8,7 +8,6 @@
   pytest-httpx,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   segno,
   setuptools-scm,
   syrupy,

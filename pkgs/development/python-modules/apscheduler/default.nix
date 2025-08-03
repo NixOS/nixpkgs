@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-tornado,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   setuptools-scm,

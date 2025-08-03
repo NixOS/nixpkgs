@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   testfixtures,
 }:
 

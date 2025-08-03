@@ -6,7 +6,6 @@
   numpy,
   pytestCheckHook,
   python-utils,
-  pythonOlder,
   setuptools,
 }:
 

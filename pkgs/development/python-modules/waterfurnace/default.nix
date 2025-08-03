@@ -6,7 +6,6 @@
   mock,
   pytestCheckHook,
   requests,
-  pythonOlder,
   websocket-client,
 }:
 

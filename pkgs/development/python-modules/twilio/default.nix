@@ -12,8 +12,6 @@
   pyjwt,
   pyngrok,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   pytz,
   requests,
   setuptools,

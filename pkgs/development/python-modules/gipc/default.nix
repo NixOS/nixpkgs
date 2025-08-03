@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -4,7 +4,6 @@
   buildPythonPackage,
   pytestCheckHook,
   stdenv,
-  pythonOlder,
   setuptools,
   cmake,
   ninja,

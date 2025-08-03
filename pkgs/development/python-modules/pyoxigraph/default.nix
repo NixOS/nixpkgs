@@ -5,7 +5,6 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  pythonOlder,
   pytestCheckHook,
   rustPlatform,
 }:

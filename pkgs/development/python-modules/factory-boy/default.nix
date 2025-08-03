@@ -8,7 +8,6 @@
   flask-sqlalchemy,
   mongoengine,
   pytestCheckHook,
-  pythonOlder,
   mongomock,
   sqlalchemy,
   sqlalchemy-utils,

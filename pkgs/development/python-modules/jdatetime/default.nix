@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   jalali-core,
-  pythonOlder,
   setuptools,
 }:
 

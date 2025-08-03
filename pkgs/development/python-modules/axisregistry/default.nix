@@ -5,7 +5,6 @@
   fonttools,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

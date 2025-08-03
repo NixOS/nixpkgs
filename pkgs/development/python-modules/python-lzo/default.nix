@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lzo,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:

@@ -6,7 +6,6 @@
   requests,
   six,
   sseclient-py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

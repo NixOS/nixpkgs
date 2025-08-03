@@ -43,7 +43,6 @@
   pydot,
   pygtrie,
   pyparsing,
-  pythonOlder,
   requests,
   rich,
   ruamel-yaml,

@@ -6,7 +6,6 @@
   packaging,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

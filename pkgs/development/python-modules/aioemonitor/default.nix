@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-raises,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
 }:
 

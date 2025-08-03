@@ -11,7 +11,6 @@
   pytest-order,
   pytestCheckHook,
   python,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

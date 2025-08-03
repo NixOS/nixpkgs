@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flask,
-  pythonOlder,
   setuptools,
   webob,
   pytestCheckHook,

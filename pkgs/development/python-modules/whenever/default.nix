@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pythonOlder,
   rustPlatform,
   cargo,
   rustc,

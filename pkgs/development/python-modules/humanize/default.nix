@@ -5,7 +5,6 @@
   freezegun,
   gettext,
   pytestCheckHook,
-  pythonOlder,
   python,
   hatch-vcs,
   hatchling,

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   beautifulsoup4,
-  pythonOlder,
   pandas,
   python,
   numpy,

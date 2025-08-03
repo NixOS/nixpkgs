@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jinja2,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 

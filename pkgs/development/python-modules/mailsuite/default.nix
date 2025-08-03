@@ -9,7 +9,6 @@
   imapclient,
   mail-parser,
   publicsuffix2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

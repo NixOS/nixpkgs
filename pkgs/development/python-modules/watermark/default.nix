@@ -6,7 +6,6 @@
   ipython,
   py3nvml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

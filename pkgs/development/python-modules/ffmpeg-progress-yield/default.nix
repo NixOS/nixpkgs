@@ -5,7 +5,6 @@
   setuptools,
   tqdm,
   pytestCheckHook,
-  pythonOlder,
   ffmpeg,
   procps,
 }:

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   google-auth-oauthlib,
   google-auth,
-  pythonOlder,
   setuptools,
   versioneer,
 }:

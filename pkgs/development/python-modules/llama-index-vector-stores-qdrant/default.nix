@@ -5,7 +5,6 @@
   grpcio,
   hatchling,
   llama-index-core,
-  pythonOlder,
   qdrant-client,
 }:
 

@@ -9,7 +9,6 @@
   packaging,
   prance,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 

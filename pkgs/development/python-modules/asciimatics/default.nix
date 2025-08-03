@@ -5,7 +5,6 @@
   pillow,
   pyfiglet,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   wcwidth,
 }:

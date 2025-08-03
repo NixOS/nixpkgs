@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   file,
-  pythonOlder,
   setuptools,
 }:
 

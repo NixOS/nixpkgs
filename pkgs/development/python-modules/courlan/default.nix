@@ -5,7 +5,6 @@
   fetchPypi,
   langcodes,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tld,
   urllib3,

@@ -10,8 +10,6 @@
   pytest-cov-stub,
   pytest-docker-tools,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
   tenacity,
 }:

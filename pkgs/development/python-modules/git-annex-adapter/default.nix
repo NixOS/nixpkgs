@@ -8,7 +8,6 @@
   gitMinimal,
   pygit2,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   replaceVars,
   util-linux,

@@ -9,7 +9,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   scipy,
 }:

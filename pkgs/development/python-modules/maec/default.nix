@@ -7,7 +7,6 @@
   lxml,
   mixbox,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

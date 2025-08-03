@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   marisa-trie,
-  pythonOlder,
   setuptools-scm,
 }:
 

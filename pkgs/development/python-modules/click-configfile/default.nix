@@ -5,7 +5,6 @@
   click,
   six,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

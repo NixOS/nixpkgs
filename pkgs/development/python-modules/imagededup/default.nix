@@ -8,7 +8,6 @@
   pillow,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pywavelets,
   scikit-learn,
   setuptools,

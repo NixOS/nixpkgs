@@ -6,7 +6,6 @@
   numpy,
   pandas,
   python-dateutil,
-  pythonOlder,
   pytz,
   setuptools,
   six,

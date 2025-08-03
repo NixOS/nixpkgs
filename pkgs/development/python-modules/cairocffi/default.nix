@@ -2,7 +2,6 @@
 {
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   lib,
   replaceVars,

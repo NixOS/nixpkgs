@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   untangle,

@@ -5,7 +5,6 @@
   fetchpatch,
   ftfy,
   packaging,
-  pythonOlder,
   regex,
   setuptools,
   torch,

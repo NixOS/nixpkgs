@@ -6,7 +6,6 @@
   fetchpatch,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   umodbus,
 }:

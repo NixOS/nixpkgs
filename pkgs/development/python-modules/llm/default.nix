@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   setuptools,
   click-default-group,
   condense-json,

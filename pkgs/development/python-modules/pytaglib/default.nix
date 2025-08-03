@@ -5,7 +5,6 @@
   taglib,
   cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

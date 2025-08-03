@@ -11,7 +11,6 @@
   ncurses,
   meson,
   ninja,
-  pythonOlder,
   gnome,
   python,
 }:

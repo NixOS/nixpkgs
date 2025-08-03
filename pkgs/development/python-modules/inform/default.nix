@@ -8,7 +8,6 @@
   hypothesis,
   num2words,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
 }:
 

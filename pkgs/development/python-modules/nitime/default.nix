@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   cython,
   setuptools,

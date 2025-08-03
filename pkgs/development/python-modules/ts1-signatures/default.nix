@@ -5,7 +5,6 @@
   setuptools,
   dpkt,
   pyyaml,
-  pythonOlder,
   pytestCheckHook,
 }:
 buildPythonPackage {

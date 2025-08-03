@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:

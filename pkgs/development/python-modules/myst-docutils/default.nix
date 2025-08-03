@@ -12,7 +12,6 @@
   pytest-param-files,
   pytest-regressions,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   sphinx-pytest,
   sphinx,

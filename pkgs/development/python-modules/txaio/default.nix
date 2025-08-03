@@ -5,7 +5,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   twisted,
   zope-interface,
 }:

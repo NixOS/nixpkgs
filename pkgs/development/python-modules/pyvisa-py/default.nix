@@ -12,7 +12,6 @@
   psutil,
   zeroconf,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

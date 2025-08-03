@@ -10,7 +10,6 @@
   importlib-metadata,
   packaging,
   pycryptodome,
-  pythonOlder,
   recommonmark,
   setuptools-scm,
   sphinx,

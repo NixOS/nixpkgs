@@ -4,7 +4,6 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

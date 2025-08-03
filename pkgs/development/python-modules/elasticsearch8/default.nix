@@ -6,7 +6,6 @@
   fetchPypi,
   hatchling,
   orjson,
-  pythonOlder,
   requests,
 }:
 

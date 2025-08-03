@@ -6,7 +6,6 @@
   fetchPypi,
   packaging,
   pykwalify,
-  pythonOlder,
   pyyaml,
 }:
 

@@ -4,7 +4,6 @@
   dvc-objects,
   fetchPypi,
   fsspec,
-  pythonOlder,
   requests-kerberos,
   setuptools-scm,
   setuptools,

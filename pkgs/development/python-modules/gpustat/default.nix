@@ -7,7 +7,6 @@
   nvidia-ml-py,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

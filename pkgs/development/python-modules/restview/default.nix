@@ -6,7 +6,6 @@
   packaging,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   readme-renderer,
   setuptools,
 }:

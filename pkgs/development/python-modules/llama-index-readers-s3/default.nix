@@ -5,7 +5,6 @@
   llama-index-core,
   llama-index-readers-file,
   poetry-core,
-  pythonOlder,
   s3fs,
 }:
 

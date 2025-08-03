@@ -6,7 +6,6 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:

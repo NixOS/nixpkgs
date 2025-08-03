@@ -11,7 +11,6 @@
   pandas,
   pillow,
   pyro-api,
-  pythonOlder,
   scikit-learn,
   scipy,
   seaborn,

@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   h11,
-  pythonOlder,
   setuptools,
 }:
 

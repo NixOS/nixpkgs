@@ -5,7 +5,6 @@
   colorlog,
   fetchPypi,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

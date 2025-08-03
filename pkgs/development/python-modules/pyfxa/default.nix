@@ -9,7 +9,6 @@
   pybrowserid,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   hatchling,

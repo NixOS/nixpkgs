@@ -5,7 +5,6 @@
   makeWrapper,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
 }:
 

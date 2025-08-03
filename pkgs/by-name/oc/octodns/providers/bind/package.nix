@@ -4,7 +4,6 @@
   fetchFromGitHub,
   octodns,
   pytestCheckHook,
-  pythonOlder,
   dnspython,
   setuptools,
 }:

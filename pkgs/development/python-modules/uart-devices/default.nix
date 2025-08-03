@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
-  pythonOlder,
   pytestCheckHook,
 }:
 

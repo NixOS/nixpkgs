@@ -4,7 +4,6 @@
   fetchPypi,
   calver,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

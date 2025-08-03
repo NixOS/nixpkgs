@@ -5,7 +5,6 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sybil,
   twisted,

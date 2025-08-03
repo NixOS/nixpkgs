@@ -6,7 +6,6 @@
   dvc-objects,
   fsspec,
   funcy,
-  pythonOlder,
   setuptools-scm,
 }:
 

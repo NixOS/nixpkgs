@@ -5,7 +5,6 @@
   pycryptodomex,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

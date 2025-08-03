@@ -10,7 +10,6 @@
   nbformat,
   sphinx,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

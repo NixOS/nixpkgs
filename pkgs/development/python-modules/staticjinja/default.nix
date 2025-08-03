@@ -8,7 +8,6 @@
   jinja2,
   pytestCheckHook,
   pytest-check,
-  pythonOlder,
   markdown,
   testers,
   tomlkit,

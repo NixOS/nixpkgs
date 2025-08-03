@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   titlecase,
   types-pytz,

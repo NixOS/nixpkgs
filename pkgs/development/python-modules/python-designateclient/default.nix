@@ -11,7 +11,6 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,

@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   asn1crypto,
   cffi,
   cryptography,

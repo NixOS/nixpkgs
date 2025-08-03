@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cffi,
   # overridden as pkgs.brotli
   brotli,

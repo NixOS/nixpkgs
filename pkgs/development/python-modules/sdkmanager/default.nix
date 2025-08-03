@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   pythonAtLeast,
   argcomplete,
   requests,

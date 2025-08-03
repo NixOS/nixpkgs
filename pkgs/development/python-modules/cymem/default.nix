@@ -5,7 +5,6 @@
   setuptools,
   cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

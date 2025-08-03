@@ -4,7 +4,6 @@
   fetchPypi,
   pytest,
   invoke,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

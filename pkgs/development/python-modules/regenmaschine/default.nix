@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

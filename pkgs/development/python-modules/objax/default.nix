@@ -9,7 +9,6 @@
   parameterized,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools,
   tensorboard,

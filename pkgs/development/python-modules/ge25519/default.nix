@@ -8,7 +8,6 @@
   parts,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

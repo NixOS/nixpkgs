@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pysimplesoap,
-  pythonOlder,
   setuptools,
   distutils,
 }:

@@ -5,7 +5,6 @@
   pytest-timeout,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   bashInteractive,

@@ -5,7 +5,6 @@
   setuptools,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

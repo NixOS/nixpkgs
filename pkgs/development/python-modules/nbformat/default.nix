@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchPypi,
   hatchling,
   hatch-nodejs-version,

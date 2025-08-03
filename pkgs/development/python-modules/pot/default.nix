@@ -12,7 +12,6 @@
   pymanopt,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,

@@ -5,7 +5,6 @@
   fetchpatch,
   findutils,
   pytestCheckHook,
-  pythonOlder,
   pip,
   setuptools,
   setuptools-scm,

@@ -5,7 +5,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   rstcheck-core,
   sphinx,
   typer,

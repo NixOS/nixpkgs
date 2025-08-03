@@ -6,7 +6,6 @@
   tree-sitter,
   symlinkJoin,
   writeTextDir,
-  pythonOlder,
   # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
   name,
   grammarDrv,

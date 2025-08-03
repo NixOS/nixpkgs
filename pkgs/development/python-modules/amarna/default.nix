@@ -5,7 +5,6 @@
   lark,
   pydot,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

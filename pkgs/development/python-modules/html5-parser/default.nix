@@ -8,7 +8,6 @@
   pkg-config,
   pkgs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

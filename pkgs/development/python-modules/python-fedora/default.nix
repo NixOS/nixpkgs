@@ -8,7 +8,6 @@
   munch,
   openidc-client,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,

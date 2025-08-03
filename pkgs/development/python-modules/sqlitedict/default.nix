@@ -5,7 +5,6 @@
   py,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

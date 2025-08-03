@@ -10,7 +10,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   trio,
   untangle,
 }:

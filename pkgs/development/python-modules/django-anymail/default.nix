@@ -7,7 +7,6 @@
   hatchling,
   mock,
   python,
-  pythonOlder,
   requests,
   responses,
   urllib3,

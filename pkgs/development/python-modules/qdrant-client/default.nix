@@ -12,7 +12,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 

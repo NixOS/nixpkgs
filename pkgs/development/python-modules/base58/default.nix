@@ -4,7 +4,6 @@
   fetchPypi,
   pyhamcrest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

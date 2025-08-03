@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   pyjwt,
-  pythonOlder,
   setuptools,
   requests,
   sqlalchemy,

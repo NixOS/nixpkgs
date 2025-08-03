@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
-  pythonOlder,
   h5py,
   numpy,
   dill,

@@ -5,7 +5,6 @@
   mypy-extensions,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   six,
 }:

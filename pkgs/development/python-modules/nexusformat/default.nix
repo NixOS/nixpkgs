@@ -6,7 +6,6 @@
   hdf5plugin,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,

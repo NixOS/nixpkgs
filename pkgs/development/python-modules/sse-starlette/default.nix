@@ -11,7 +11,6 @@
   psutil,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   starlette,

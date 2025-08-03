@@ -4,7 +4,6 @@
   fetchpatch,
   lib,
   nix-update-script,
-  pythonOlder,
   flit-core,
 }:
 buildPythonPackage rec {

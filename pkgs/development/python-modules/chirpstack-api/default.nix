@@ -4,7 +4,6 @@
   fetchFromGitHub,
   google-api-core,
   grpcio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

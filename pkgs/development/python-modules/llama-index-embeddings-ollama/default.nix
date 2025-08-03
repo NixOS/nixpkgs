@@ -5,7 +5,6 @@
   llama-index-core,
   ollama,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

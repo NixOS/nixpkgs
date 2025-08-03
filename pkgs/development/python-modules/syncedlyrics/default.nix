@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   rapidfuzz,
   requests,
 }:

@@ -8,7 +8,6 @@
   stups-zign,
   pytestCheckHook,
   hypothesis,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

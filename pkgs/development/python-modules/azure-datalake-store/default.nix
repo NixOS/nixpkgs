@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msal,
-  pythonOlder,
   requests,
 }:
 

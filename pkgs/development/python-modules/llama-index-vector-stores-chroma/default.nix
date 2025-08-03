@@ -5,7 +5,6 @@
   fetchPypi,
   hatchling,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

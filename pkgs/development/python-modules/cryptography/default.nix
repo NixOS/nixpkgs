@@ -16,7 +16,6 @@
   pretend,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 

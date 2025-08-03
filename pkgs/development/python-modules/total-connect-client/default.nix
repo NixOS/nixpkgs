@@ -5,7 +5,6 @@
   pycryptodome,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   setuptools,
   zeep,

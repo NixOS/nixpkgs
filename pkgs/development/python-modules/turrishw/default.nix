@@ -5,7 +5,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,6 @@
   setuptools,
   wheel,
   bitlist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

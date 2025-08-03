@@ -4,7 +4,6 @@
   colorlog,
   pyyaml,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
 }:

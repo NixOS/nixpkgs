@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   python-dotenv,
   pytz,
   requests,

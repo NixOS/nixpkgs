@@ -4,7 +4,6 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools,
 }:

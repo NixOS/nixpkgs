@@ -9,7 +9,6 @@
   pyserial,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typer,
   webcolors,
   udevCheckHook,

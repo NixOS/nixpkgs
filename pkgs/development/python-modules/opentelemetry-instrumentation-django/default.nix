@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   django,
   hatchling,
   opentelemetry-api,

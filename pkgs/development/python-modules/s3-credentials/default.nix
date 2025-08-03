@@ -9,7 +9,6 @@
   moto,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

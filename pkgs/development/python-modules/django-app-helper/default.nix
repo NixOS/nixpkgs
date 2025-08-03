@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  django,
-  pythonOlder,
   setuptools,
   docopt,
   dj-database-url,

@@ -5,7 +5,6 @@
   setuptools-scm,
   ruamel-yaml,
   attrs,
-  pythonOlder,
   pytest7CheckHook,
   pytest-cov-stub,
   pytest-xdist,

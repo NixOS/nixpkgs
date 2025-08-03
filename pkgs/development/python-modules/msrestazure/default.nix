@@ -8,7 +8,6 @@
   msrest,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

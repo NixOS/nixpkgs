@@ -4,7 +4,6 @@
   cbor2,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   setuptools,
   solc-select,
   toml,

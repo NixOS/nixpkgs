@@ -14,7 +14,6 @@
   requests,
   rich,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   pkg-config,
   pkgconfig,
   setuptools-scm,

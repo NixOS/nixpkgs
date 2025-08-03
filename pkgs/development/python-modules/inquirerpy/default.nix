@@ -6,7 +6,6 @@
   poetry-core,
   prompt-toolkit,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

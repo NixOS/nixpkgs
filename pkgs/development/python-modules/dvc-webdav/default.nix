@@ -3,7 +3,6 @@
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   webdav4,

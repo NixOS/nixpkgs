@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

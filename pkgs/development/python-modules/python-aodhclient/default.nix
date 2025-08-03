@@ -13,7 +13,6 @@
   osprofiler,
   pbr,
   pyparsing,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,

@@ -6,7 +6,6 @@
   setuptools,
   karton-core,
   malduck,
-  pythonOlder,
   regex,
 }:
 

@@ -4,7 +4,6 @@
   cryptography,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

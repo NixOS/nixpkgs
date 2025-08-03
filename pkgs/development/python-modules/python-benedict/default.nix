@@ -14,7 +14,6 @@
   python-decouple,
   python-fsutil,
   python-slugify,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:

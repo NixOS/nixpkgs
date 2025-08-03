@@ -11,7 +11,6 @@
   packaging,
   pytest-astropy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,

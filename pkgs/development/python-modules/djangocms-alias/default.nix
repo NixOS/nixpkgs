@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   django-parler,

@@ -10,7 +10,6 @@
   google-cloud-translate,
   polib,
   python,
-  pythonOlder,
   typing-extensions,
   wagtail,
   wagtail-modeladmin,

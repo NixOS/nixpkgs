@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
 
   # build-system

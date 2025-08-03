@@ -4,7 +4,6 @@
   async-upnp-client,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 

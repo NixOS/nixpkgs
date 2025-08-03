@@ -7,7 +7,6 @@
   pytest-django,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

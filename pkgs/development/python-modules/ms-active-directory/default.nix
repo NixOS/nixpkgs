@@ -6,7 +6,6 @@
   ldap3,
   pyasn1,
   pycryptodome,
-  pythonOlder,
   pytz,
   setuptools,
   six,

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   trio,
 }:
 

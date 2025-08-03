@@ -5,7 +5,6 @@
   buildPythonPackage,
   csrmesh,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   librosa,
   pytestCheckHook,
-  pythonOlder,
   resampy,
   scipy,
   setuptools,

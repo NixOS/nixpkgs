@@ -5,7 +5,6 @@
   gemmi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   rdkit,
   scipy,
 }:

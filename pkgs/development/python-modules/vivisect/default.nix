@@ -9,7 +9,6 @@
   pycparser,
   pyqt5,
   pyqtwebengine,
-  pythonOlder,
   withGui ? false,
   wrapQtAppsHook,
   setuptools,

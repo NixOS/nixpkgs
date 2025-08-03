@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qtcharts,
   setuptools,
   sip,

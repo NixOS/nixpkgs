@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flake8,
   pydocstyle,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

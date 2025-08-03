@@ -9,7 +9,6 @@
   tcolorpy,
   typepy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

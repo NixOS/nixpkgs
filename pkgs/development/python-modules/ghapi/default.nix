@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fastcore,
   packaging,
-  pythonOlder,
   setuptools,
 }:
 

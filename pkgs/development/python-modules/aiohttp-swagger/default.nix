@@ -6,7 +6,6 @@
   aiohttp,
   jinja2,
   markupsafe,
-  pythonOlder,
   pyyaml,
 }:
 

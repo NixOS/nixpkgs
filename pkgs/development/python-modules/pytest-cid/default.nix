@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   flit-core,
   py-cid,
   pytestCheckHook,

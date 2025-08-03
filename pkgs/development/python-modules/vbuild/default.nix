@@ -6,7 +6,6 @@
   pscript,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

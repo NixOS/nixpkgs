@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   rustPlatform,
   nix-update-script,
 

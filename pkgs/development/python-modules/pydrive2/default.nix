@@ -8,7 +8,6 @@
   google-api-python-client,
   oauth2client,
   pyopenssl,
-  pythonOlder,
   pyyaml,
   setuptools,
   setuptools-scm,

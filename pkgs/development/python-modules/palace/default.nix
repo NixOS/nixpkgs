@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromSourcehut,
-  pythonOlder,
   cmake,
   cython_0,
   setuptools,

@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
   poetry-core,
   grpclib,
   python-dateutil,

@@ -10,7 +10,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   rapidfuzz,
   scipy,
   shapely,

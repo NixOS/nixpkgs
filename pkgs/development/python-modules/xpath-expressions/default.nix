@@ -5,7 +5,6 @@
   fetchpatch,
   lxml,
   poetry-core,
-  pythonOlder,
   pytestCheckHook,
 }:
 

@@ -12,7 +12,6 @@
   pyicu,
   pytestCheckHook,
   python-slugify,
-  pythonOlder,
   pytimeparse,
   setuptools,
 }:

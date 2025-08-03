@@ -7,7 +7,6 @@
   poetry-core,
   pyaml,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

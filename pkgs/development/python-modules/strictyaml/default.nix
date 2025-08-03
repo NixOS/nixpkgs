@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   ruamel-yaml,
   python-dateutil,
 }:

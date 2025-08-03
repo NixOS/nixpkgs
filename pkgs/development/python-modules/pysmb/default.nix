@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pyasn1,
-  pythonOlder,
   tqdm,
 }:
 

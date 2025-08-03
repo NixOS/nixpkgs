@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

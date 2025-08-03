@@ -8,7 +8,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fsspec,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

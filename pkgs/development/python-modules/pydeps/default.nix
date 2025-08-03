@@ -5,7 +5,6 @@
   graphviz,
   stdlib-list,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   toml,

@@ -8,7 +8,6 @@
   intervaltree,
   json5,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   scipy,
   setuptools,

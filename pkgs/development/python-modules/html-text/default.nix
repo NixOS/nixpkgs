@@ -5,7 +5,6 @@
   lxml,
   lxml-html-clean,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

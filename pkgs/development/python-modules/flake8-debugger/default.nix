@@ -5,7 +5,6 @@
   flake8,
   pycodestyle,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

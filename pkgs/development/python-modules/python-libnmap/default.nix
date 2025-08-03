@@ -3,7 +3,6 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

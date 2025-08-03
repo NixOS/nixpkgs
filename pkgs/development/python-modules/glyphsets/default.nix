@@ -7,7 +7,6 @@
   gflanguages,
   glyphslib,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools-scm,

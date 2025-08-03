@@ -6,7 +6,6 @@
   mkdocs,
   pathspec,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

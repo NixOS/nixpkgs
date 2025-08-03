@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   pymysql,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,

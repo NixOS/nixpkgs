@@ -6,7 +6,6 @@
   pytestCheckHook,
   python-gvm,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

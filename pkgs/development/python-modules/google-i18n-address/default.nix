@@ -5,7 +5,6 @@
   hatchling,
   requests,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

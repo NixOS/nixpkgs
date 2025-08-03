@@ -8,7 +8,6 @@
   pytest-timeout,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools-scm,

@@ -16,7 +16,6 @@
   webob,
   zope-deprecation,
   zope-interface,
-  pythonOlder,
   pytestCheckHook,
 }:
 

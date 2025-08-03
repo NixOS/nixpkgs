@@ -6,7 +6,6 @@
   poetry-core,
   cryptography,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

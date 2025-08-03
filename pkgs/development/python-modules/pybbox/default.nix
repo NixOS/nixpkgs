@@ -4,7 +4,6 @@
   fetchFromGitHub,
   netaddr,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

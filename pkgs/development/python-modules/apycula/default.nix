@@ -3,7 +3,6 @@
   buildPythonPackage,
   crc,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 

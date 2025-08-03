@@ -11,7 +11,6 @@
   pillow,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   sentence-transformers,

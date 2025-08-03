@@ -5,7 +5,6 @@
   into-dbus-python,
   dbus-python,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

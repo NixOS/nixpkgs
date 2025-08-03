@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 }:
 

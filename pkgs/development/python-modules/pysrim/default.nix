@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   numpy,
-  pythonOlder,
   pyyaml,
 }:
 

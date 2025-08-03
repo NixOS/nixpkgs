@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-gnupg,
   pythonAtLeast,
-  pythonOlder,
   qrcode,
   requests,
   setuptools,

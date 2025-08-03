@@ -6,7 +6,6 @@
   cryptography,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   setuptools,
   wheel,
 }:

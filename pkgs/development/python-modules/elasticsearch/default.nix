@@ -8,7 +8,6 @@
   orjson,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
 }:

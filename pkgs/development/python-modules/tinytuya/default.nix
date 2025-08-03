@@ -4,7 +4,6 @@
   colorama,
   cryptography,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:

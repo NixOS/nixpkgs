@@ -15,7 +15,6 @@
   six,
   pytestCheckHook,
   mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

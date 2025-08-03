@@ -9,7 +9,6 @@
   mock,
   pyrdfa3,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   setuptools,
   six,

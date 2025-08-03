@@ -4,7 +4,6 @@
   fetchPypi,
   pytest,
   pyvirtualdisplay,
-  pythonOlder,
   setuptools,
 }:
 

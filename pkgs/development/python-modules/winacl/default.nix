@@ -3,7 +3,6 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 

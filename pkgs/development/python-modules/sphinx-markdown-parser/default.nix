@@ -6,7 +6,6 @@
   markdown,
   pydash,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   recommonmark,
   setuptools,

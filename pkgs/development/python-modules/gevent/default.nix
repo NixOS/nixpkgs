@@ -14,7 +14,6 @@
   wheel,
   zope-event,
   zope-interface,
-  pythonOlder,
   c-ares,
   libuv,
 

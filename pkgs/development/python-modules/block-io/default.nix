@@ -7,7 +7,6 @@
   pycryptodome,
   requests,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

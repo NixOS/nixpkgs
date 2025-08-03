@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   fonttools,
   lxml,
   fs, # for fonttools extras

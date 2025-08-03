@@ -13,7 +13,6 @@
   psycopg2,
   pymongo,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   shapely,
   sqlalchemy,

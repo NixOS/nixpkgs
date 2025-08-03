@@ -4,7 +4,6 @@
   fetchPypi,
   pycryptodome,
   python-kasa,
-  pythonOlder,
   requests,
   rtp,
   setuptools,

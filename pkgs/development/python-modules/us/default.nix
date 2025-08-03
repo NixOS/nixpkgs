@@ -4,7 +4,6 @@
   fetchPypi,
   jellyfish,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:

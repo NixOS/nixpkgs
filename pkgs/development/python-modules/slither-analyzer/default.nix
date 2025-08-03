@@ -7,7 +7,6 @@
   makeWrapper,
   packaging,
   prettytable,
-  pythonOlder,
   setuptools-scm,
   solc,
   web3,

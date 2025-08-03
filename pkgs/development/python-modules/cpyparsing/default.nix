@@ -5,7 +5,6 @@
   cython,
   pexpect,
   python,
-  pythonOlder,
   setuptools,
 }:
 

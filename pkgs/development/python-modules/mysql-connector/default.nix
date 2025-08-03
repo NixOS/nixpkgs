@@ -4,7 +4,6 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
   mysql80,
   openssl,
   pkgs,

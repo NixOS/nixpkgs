@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   google-api-core,
   grpc-google-iam-v1,
   mock,

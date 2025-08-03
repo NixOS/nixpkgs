@@ -7,7 +7,6 @@
   jsonschema,
   pyfakefs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

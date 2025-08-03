@@ -5,7 +5,6 @@
   async-timeout,
   pillow,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

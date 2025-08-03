@@ -9,7 +9,6 @@
   pluggy,
   poetry-core,
   pprintpp,
-  pythonOlder,
   rich,
   tomli,
 }:

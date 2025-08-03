@@ -6,7 +6,6 @@
   buildPythonPackage,
   fetchPypi,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

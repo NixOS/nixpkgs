@@ -4,7 +4,6 @@
   fetchFromGitHub,
   geojson,
   pysocks,
-  pythonOlder,
   requests,
   setuptools,
   pytestCheckHook,

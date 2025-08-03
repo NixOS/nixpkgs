@@ -8,7 +8,6 @@
   isodate,
   nest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   mock,
   pyhamcrest,
   pyyaml,

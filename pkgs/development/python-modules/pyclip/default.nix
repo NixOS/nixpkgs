@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytest,
-  pythonOlder,
   xclip,
   xvfb-run,
 }:

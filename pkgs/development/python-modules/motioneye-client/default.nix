@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -8,7 +8,6 @@
   optuna,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   scipy,
 }:

@@ -3,7 +3,6 @@
   buildNpmPackage,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatch-vcs,
   hatchling,
   jinja2,

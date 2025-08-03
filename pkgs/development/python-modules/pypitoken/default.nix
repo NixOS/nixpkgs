@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   uv-dynamic-versioning,
 }:

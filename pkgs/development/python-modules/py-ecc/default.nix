@@ -7,7 +7,6 @@
   eth-utils,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   pydantic,
 }:

@@ -9,7 +9,6 @@
   hepunits,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   tabulate,
 }:
 

@@ -25,7 +25,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyvis,
   pyyaml,
   requests,

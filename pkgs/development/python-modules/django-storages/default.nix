@@ -14,7 +14,6 @@
   paramiko,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   rsa,
   setuptools,
 }:

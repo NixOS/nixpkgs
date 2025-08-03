@@ -10,7 +10,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 

@@ -19,7 +19,6 @@
   breezy,
   launchpadlib,
   testtools,
-  pythonOlder,
   installShellFiles,
   rustPlatform,
   rustc,

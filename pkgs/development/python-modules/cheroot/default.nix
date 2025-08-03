@@ -10,7 +10,6 @@
   pypytools,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   requests-unixsocket,

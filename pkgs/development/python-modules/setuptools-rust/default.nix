@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   maturin,
-  pythonOlder,
   rustPlatform,
   rustc,
   cargo,

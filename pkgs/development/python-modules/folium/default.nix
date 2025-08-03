@@ -11,7 +11,6 @@
   pandas,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   requests,
   selenium,
   setuptools,

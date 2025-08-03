@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

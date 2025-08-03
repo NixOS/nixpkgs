@@ -4,7 +4,6 @@
   fetchFromGitHub,
   georss-client,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

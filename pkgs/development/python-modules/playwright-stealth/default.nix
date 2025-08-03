@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   playwright,
-  pythonOlder,
   setuptools,
 }:
 

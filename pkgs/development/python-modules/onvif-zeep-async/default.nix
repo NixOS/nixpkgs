@@ -4,7 +4,6 @@
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   yarl,
   zeep,

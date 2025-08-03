@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pefile,
-  pythonOlder,
   setuptools,
 }:
 

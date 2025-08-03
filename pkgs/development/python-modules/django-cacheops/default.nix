@@ -13,7 +13,6 @@
   dill,
   jinja2,
   before-after,
-  pythonOlder,
   net-tools,
   pkgs,
   setuptools,

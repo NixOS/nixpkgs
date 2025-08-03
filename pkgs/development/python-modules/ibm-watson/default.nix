@@ -7,7 +7,6 @@
   pytestCheckHook,
   python-dateutil,
   python-dotenv,
-  pythonOlder,
   requests,
   setuptools,
   responses,

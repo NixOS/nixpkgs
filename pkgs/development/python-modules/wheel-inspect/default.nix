@@ -10,7 +10,6 @@
   packaging,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   readme-renderer,
   setuptools,
   wheel-filename,

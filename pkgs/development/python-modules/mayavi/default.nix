@@ -9,7 +9,6 @@
   pyface,
   pygments,
   pyqt5,
-  pythonOlder,
   pythonAtLeast,
   traitsui,
   vtk,

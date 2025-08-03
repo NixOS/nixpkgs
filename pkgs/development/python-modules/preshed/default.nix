@@ -6,7 +6,6 @@
   fetchPypi,
   murmurhash,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

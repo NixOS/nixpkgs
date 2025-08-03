@@ -11,7 +11,6 @@
   pytest-xdist,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   selenium,
   tenacity,

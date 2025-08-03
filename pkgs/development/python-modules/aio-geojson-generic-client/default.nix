@@ -8,7 +8,6 @@
   geojson,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:

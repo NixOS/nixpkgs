@@ -5,7 +5,6 @@
   flit-core,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   sphinx,
 }:
 

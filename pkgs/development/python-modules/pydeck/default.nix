@@ -9,7 +9,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   traitlets,
   wheel,

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   gitMinimal,
-  pythonOlder,
   stdenv,
   installShellFiles,
   poetry-core,

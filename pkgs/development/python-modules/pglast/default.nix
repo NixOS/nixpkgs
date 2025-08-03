@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-cov-stub,
   pytest,
-  pythonOlder,
   setuptools,
 }:
 

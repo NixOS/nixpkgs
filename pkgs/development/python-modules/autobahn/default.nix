@@ -21,7 +21,6 @@
   pytest-asyncio,
   python-snappy,
   pytestCheckHook,
-  pythonOlder,
   service-identity,
   setuptools,
   twisted,

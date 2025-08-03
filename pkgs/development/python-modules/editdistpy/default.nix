@@ -5,8 +5,6 @@
 
   pytestCheckHook,
 
-  pythonOlder,
-
   setuptools,
   cython,
 

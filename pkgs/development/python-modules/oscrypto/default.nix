@@ -7,7 +7,6 @@
   fetchpatch,
   openssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,6 @@
   llama-index-core,
   nebula3-python,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

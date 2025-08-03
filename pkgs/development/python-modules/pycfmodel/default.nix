@@ -5,7 +5,6 @@
   httpx,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

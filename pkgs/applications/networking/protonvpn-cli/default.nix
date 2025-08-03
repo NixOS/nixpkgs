@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonApplication,
-  pythonOlder,
   fetchFromGitHub,
   protonvpn-nm-lib,
   pythondialog,

@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

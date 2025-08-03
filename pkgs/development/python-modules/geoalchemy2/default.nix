@@ -9,7 +9,6 @@
   sqlalchemy,
   alembic,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pandas,
-  pythonOlder,
   numpy,
   pytestCheckHook,
 }:

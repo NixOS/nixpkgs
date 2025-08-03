@@ -7,7 +7,6 @@
   lazrs,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   powershell,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   xmldiff,
 }:

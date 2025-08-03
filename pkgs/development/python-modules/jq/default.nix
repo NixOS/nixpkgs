@@ -6,7 +6,6 @@
   jq,
   oniguruma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

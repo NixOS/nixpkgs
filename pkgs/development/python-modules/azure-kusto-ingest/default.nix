@@ -9,7 +9,6 @@
   pandas,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   responses,
   setuptools,
   tenacity,

@@ -5,7 +5,6 @@
   networkx,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

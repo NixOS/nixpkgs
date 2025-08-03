@@ -5,7 +5,6 @@
   fetchPypi,
   pandas,
   poetry-core,
-  pythonOlder,
   requests,
   zeep,
 }:

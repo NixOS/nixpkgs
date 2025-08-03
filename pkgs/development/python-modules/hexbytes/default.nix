@@ -6,7 +6,6 @@
   eth-utils,
   hypothesis,
   pytestCheckHook,
-  pythonOlder,
   pydantic,
 }:
 

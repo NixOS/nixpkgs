@@ -39,7 +39,6 @@
   pydantic,
   pygments,
   pyjwt,
-  pythonOlder,
   pyyaml,
   setuptools,
   tldextract,

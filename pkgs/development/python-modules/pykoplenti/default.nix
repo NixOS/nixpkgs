@@ -7,7 +7,6 @@
   prompt-toolkit,
   pycryptodome,
   pydantic,
-  pythonOlder,
   setuptools,
 }:
 

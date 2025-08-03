@@ -6,7 +6,6 @@
   igraph,
   igraph-c,
   libleidenalg,
-  pythonOlder,
   setuptools-scm,
   unittestCheckHook,
 }:

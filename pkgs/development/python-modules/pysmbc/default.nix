@@ -4,7 +4,6 @@
   fetchPypi,
   samba,
   pkg-config,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

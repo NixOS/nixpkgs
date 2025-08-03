@@ -11,7 +11,6 @@
   pytestCheckHook,
   pyyaml,
   ruamel-yaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

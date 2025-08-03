@@ -5,7 +5,6 @@
   mecab,
   swig,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

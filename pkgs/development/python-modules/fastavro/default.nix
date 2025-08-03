@@ -10,7 +10,6 @@
   pytestCheckHook,
   python-dateutil,
   cramjam,
-  pythonOlder,
   setuptools,
   zlib-ng,
   zstandard,

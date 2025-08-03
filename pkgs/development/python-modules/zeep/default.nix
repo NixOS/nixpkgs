@@ -17,7 +17,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   requests-toolbelt,

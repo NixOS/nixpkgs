@@ -13,7 +13,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   transitions,
 }:
 

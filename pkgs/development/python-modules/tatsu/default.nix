@@ -4,7 +4,6 @@
   colorama,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
 }:

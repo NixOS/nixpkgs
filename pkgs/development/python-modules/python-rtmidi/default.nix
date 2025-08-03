@@ -11,7 +11,6 @@
   meson-python,
   ninja,
   pkg-config,
-  pythonOlder,
   tox,
   wheel,
 }:

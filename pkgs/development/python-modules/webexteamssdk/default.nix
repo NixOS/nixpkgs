@@ -4,7 +4,6 @@
   fetchFromGitHub,
   future,
   pyjwt,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,

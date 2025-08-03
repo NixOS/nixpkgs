@@ -6,7 +6,6 @@
   importlib-metadata,
   platformdirs,
   tomli,
-  pythonOlder,
   pytestCheckHook,
 }:
 

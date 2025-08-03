@@ -14,7 +14,6 @@
   more-itertools,
   pytest-snapshot,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

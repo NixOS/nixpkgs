@@ -5,7 +5,6 @@
   flit-core,
   rich,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

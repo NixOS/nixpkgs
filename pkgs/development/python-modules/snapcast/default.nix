@@ -5,7 +5,6 @@
   packaging,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

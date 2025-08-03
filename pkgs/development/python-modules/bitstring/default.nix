@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   bitarray,
   setuptools,
   pytest-benchmark,

@@ -4,7 +4,6 @@
   fetchPypi,
   pbr,
   pythonix,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

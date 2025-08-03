@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitea,
-  pythonOlder,
   python,
 
   # build-system

@@ -6,7 +6,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

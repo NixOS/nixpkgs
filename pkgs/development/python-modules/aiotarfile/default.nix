@@ -4,7 +4,6 @@
   nix-update-script,
   buildPythonPackage,
   unittestCheckHook,
-  pythonOlder,
   cargo,
   rustc,
   rustPlatform,

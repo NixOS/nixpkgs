@@ -10,7 +10,6 @@
   jsonmerge,
   kornia,
   pillow,
-  pythonOlder,
   rotary-embedding-torch,
   safetensors,
   scikit-image,

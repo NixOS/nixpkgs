@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   dnspython,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

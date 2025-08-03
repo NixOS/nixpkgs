@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

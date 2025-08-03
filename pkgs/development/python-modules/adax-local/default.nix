@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   async-timeout,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

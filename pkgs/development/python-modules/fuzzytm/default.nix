@@ -8,7 +8,6 @@
   pyfume,
   setuptools,
   scipy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

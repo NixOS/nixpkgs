@@ -11,7 +11,6 @@
   pyside2,
   pyside6,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
   typing-extensions,
 }:

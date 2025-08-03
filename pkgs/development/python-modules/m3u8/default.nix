@@ -5,7 +5,6 @@
   iso8601,
   bottle,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

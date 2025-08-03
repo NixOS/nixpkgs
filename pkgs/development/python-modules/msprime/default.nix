@@ -9,7 +9,6 @@
   oldest-supported-numpy,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   tskit,

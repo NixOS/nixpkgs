@@ -7,7 +7,6 @@
   pytest,
   pytest-base-url,
   python-slugify,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

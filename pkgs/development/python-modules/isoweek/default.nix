@@ -4,7 +4,6 @@
   buildPythonPackage,
   setuptools,
   unittestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

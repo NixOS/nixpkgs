@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  pythonOlder,
   setuptools,
 }:
 

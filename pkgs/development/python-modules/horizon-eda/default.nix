@@ -4,7 +4,6 @@
   horizon-eda,
   pycairo,
   python,
-  pythonOlder,
 }:
 
 let

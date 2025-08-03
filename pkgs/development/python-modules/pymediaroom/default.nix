@@ -3,7 +3,6 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   xmltodict,
 }:
 

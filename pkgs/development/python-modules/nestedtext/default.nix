@@ -8,7 +8,6 @@
   inform,
   nestedtext,
   pytestCheckHook,
-  pythonOlder,
   quantiphy,
   voluptuous,
 }:

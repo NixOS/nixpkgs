@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   plum-py,
   pytestCheckHook,
   baseline,

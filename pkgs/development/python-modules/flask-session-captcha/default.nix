@@ -8,7 +8,6 @@
   flask-sqlalchemy,
   markupsafe,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

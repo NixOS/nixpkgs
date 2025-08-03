@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonschema,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   testers,

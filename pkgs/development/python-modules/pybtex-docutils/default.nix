@@ -5,7 +5,6 @@
   fetchPypi,
   pybtex,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -12,7 +12,6 @@
   mypy-extensions,
   pip,
   pytest7CheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

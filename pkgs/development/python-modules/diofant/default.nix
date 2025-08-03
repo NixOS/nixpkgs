@@ -9,7 +9,6 @@
   mpmath,
   numpy,
   pexpect,
-  pythonOlder,
   pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,

@@ -7,7 +7,6 @@
   oldest-supported-numpy,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:

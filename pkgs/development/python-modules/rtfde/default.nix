@@ -6,7 +6,6 @@
   lxml,
   oletools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

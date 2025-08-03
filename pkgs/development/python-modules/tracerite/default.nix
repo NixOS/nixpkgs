@@ -6,7 +6,6 @@
   html5tagger,
   setuptools,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

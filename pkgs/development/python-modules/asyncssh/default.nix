@@ -14,7 +14,6 @@
   pyopenssl,
   pytestCheckHook,
   python-pkcs11,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

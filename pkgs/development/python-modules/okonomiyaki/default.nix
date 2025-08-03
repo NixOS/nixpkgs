@@ -10,7 +10,6 @@
   mock,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testfixtures,
   zipfile2,

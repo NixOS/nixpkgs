@@ -8,7 +8,6 @@
   numpy,
   oldest-supported-numpy,
   pytestCheckHook,
-  pythonOlder,
   qdldl,
   scipy,
   setuptools-scm,

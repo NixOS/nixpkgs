@@ -10,7 +10,6 @@
   pytestCheckHook,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   statsmodels,
 }:

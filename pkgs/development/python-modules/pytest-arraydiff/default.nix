@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   pytest,
-  pythonOlder,
   setuptools-scm,
 }:
 

@@ -8,7 +8,6 @@
   fetchpatch2,
   mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   six,
   werkzeug,

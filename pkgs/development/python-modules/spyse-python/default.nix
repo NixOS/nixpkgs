@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   limiter,
-  pythonOlder,
   requests,
   responses,
   setuptools,

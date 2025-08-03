@@ -6,7 +6,6 @@
   fetchFromGitHub,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   beautifulsoup4,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

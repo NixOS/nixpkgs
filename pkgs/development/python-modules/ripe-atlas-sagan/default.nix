@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   ujson,
 }:

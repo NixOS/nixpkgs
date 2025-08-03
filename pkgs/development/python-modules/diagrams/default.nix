@@ -9,7 +9,6 @@
   jinja2,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   round,
 }:
 

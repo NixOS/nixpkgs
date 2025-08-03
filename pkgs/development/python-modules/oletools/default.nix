@@ -9,7 +9,6 @@
   pcodedmp,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

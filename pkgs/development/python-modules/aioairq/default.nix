@@ -6,7 +6,6 @@
   pycryptodome,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

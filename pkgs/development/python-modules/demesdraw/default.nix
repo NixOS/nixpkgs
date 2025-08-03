@@ -8,7 +8,6 @@
   matplotlib,
   numpy,
   scipy,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,

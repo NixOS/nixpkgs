@@ -10,7 +10,6 @@
   poetry-core,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   redis,
   starlette,
 }:

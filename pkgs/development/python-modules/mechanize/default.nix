@@ -5,7 +5,6 @@
   fetchPypi,
   html5lib,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

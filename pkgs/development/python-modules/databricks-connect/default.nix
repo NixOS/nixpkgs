@@ -6,7 +6,6 @@
   setuptools,
   six,
   py4j,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

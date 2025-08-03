@@ -11,7 +11,6 @@
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   testpath,
   traitlets,
   xmltodict,

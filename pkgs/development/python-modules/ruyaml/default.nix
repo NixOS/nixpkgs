@@ -4,7 +4,6 @@
   distro,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

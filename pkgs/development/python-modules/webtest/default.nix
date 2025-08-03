@@ -7,7 +7,6 @@
   pastedeploy,
   pyquery,
   pytestCheckHook,
-  pythonOlder,
   six,
   waitress,
   webob,

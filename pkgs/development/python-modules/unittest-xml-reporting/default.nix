@@ -5,7 +5,6 @@
   lxml,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

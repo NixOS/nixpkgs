@@ -31,7 +31,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   python-dateutil,
-  pythonOlder,
   requests,
   ruamel-yaml,
   setuptools,

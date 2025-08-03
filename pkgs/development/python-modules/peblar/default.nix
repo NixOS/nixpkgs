@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   typer,
   yarl,

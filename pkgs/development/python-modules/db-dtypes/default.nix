@@ -7,7 +7,6 @@
   pandas,
   pyarrow,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

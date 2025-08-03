@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   marshmallow,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,

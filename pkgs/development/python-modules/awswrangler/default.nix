@@ -18,7 +18,6 @@
   pyodbc,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   redshift-connector,
   requests-aws4auth,
   setuptools,

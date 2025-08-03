@@ -5,7 +5,6 @@
   poetry-core,
   pyrate-limiter,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   requests,
   requests-cache,

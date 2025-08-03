@@ -22,7 +22,6 @@
 
   # tests
   pytestCheckHook,
-  pythonOlder,
 
 }:
 

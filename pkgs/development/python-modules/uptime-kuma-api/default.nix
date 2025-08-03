@@ -4,7 +4,6 @@
   fetchPypi,
   packaging,
   python-socketio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

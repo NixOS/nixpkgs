@@ -16,7 +16,6 @@
   pytest-socket,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   voluptuous,
 }:

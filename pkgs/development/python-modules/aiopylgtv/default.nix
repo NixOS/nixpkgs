@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
   sqlitedict,
   websockets,
 }:

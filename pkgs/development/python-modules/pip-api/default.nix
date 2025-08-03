@@ -5,7 +5,6 @@
   pip,
   pretend,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   virtualenv,
 }:

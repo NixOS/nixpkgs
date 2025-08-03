@@ -3,7 +3,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 

@@ -8,7 +8,6 @@
   google-auth,
   protobuf,
   pydantic,
-  pythonOlder,
   setuptools,
   tqdm,
   typing-extensions,

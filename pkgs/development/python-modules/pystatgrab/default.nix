@@ -6,7 +6,6 @@
   fetchFromGitHub,
   libstatgrab,
   pkg-config,
-  pythonOlder,
   setuptools,
   unittestCheckHook,
 }:

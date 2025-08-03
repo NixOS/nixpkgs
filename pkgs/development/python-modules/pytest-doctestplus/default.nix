@@ -7,7 +7,6 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

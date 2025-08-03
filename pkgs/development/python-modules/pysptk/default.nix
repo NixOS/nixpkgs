@@ -5,7 +5,6 @@
   decorator,
   fetchPypi,
   numpy,
-  pythonOlder,
   scipy,
   setuptools,
   six,

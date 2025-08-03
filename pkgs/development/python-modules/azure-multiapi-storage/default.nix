@@ -6,7 +6,6 @@
   cryptography,
   fetchPypi,
   msrest,
-  pythonOlder,
   requests,
   setuptools,
   python-dateutil,

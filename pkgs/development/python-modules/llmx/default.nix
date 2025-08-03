@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools-scm,
   setuptools,
-  pythonOlder,
   pydantic,
   openai,
   tiktoken,

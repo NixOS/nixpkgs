@@ -14,7 +14,6 @@
   prettytable,
   python-openstackclient,
   python-swiftclient,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,

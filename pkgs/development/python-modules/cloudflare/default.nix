@@ -8,7 +8,6 @@
   anyio,
   distro,
   sniffio,
-  pythonOlder,
   hatchling,
   hatch-fancy-pypi-readme,
 }:

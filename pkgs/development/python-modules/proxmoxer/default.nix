@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   responses,

@@ -8,7 +8,6 @@
   mkdocstrings,
   networkx,
   pytestCheckHook,
-  pythonOlder,
   requests,
   typing-extensions,
 }:

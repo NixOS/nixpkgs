@@ -22,7 +22,6 @@
   pyqtgraph,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   qdarkstyle,
   qimage2ndarray,
   scikit-image,

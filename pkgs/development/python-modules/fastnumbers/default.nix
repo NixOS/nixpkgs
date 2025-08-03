@@ -6,7 +6,6 @@
   hypothesis,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

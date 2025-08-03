@@ -7,7 +7,6 @@
   pylibjpeg,
   pint,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

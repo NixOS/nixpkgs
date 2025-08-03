@@ -9,7 +9,6 @@
   lxml,
   pytestCheckHook,
   python-pam,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

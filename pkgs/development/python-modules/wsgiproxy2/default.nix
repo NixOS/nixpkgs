@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   webob,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

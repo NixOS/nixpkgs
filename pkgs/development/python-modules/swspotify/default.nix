@@ -6,7 +6,6 @@
   flask,
   flask-cors,
   poetry-core,
-  pythonOlder,
   requests,
 }:
 

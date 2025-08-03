@@ -18,7 +18,6 @@
   pyarrow,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   pythonAtLeast,
   pyyaml,
   networkx,

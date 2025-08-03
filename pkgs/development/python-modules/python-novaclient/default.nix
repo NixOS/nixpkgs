@@ -11,7 +11,6 @@
   oslo-serialization,
   pbr,
   prettytable,
-  pythonOlder,
   requests-mock,
   setuptools,
   sphinxcontrib-apidoc,

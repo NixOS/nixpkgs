@@ -8,7 +8,6 @@
   mock,
   pure-python-adb,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

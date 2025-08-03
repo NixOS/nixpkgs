@@ -20,7 +20,6 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   redis,
   uvloop,

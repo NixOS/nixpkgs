@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # build-system
   setuptools,
