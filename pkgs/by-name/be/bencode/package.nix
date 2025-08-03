@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fbdtemme";
     repo = "bencode";
-    rev = version;
+    tag = version;
     hash = "sha256-zpxvADZfYTUdlNLMZJSCanPL40EGl9BBCxR7oDhvOTw=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # Disable a test that requires an internet connection.
     ''
       substituteInPlace tests/CMakeLists.txt \
-        --replace "add_subdirectory(cmake_fetch_content)" ""
+        --replace-fail "add_subdirectory(cmake_fetch_content)" ""
     ''
     # Replace the modern gsl-lite header with the legacy compatibility header,
     # so that unqualified symbols like `Expects()` and `Ensures()` are available
@@ -55,14 +55,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib64
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++20 bencode serialization/deserialization library";
     homepage = "https://github.com/fbdtemme/bencode";
     changelog = "https://github.com/fbdtemme/bencode/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # Broken because the default stdenv on these targets doesn't support C++20.
-    broken = with stdenv; isDarwin || (isLinux && isAarch64);
+    broken =
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }
