@@ -7,14 +7,14 @@
   SDL2_mixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abbaye-des-morts";
   version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-muJt1cml0nYdgl0v8cudpUXcdSntc49e6zICTCwzkks=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})
