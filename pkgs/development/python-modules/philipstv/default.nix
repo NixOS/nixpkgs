@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "2.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "philipstv";

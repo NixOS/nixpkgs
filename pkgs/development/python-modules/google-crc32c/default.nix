@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-crc32c";

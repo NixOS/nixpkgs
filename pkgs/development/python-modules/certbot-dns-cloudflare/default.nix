@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.9";
 
   sourceRoot = "${src.name}/certbot-dns-cloudflare";
 

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "5.33.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";

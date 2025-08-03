@@ -36,8 +36,6 @@ buildPythonPackage rec {
   version = "8.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";

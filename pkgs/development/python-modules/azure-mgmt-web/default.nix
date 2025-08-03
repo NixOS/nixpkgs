@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "9.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "azure_mgmt_web";
     inherit version;

@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.12.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";

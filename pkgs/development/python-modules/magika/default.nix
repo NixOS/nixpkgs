@@ -19,7 +19,6 @@ buildPythonPackage rec {
   pname = "magika";
   version = "0.6.2";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

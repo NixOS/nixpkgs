@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.0.1436";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";

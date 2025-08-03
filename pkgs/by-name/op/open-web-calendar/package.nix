@@ -15,8 +15,6 @@ python.pkgs.buildPythonApplication rec {
   version = "1.49";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.9";
-
   src = fetchPypi {
     inherit version;
     pname = "open_web_calendar";

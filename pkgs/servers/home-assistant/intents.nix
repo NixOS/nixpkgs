@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "2025.6.23";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "intents-package";

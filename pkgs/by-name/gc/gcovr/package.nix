@@ -9,8 +9,6 @@ python3Packages.buildPythonPackage rec {
   version = "8.3";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-+qNx+cSn94yYANplUQfU+Z8EtxjRwNn0jK/cvvAEkHk=";

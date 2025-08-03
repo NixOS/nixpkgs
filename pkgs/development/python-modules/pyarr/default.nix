@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "5.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "totaldebug";
     repo = "pyarr";

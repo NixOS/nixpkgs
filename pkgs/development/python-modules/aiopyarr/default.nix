@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "23.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "aiopyarr";

@@ -16,8 +16,6 @@ buildPythonPackage {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bitcraft";
     repo = "PyTMX";

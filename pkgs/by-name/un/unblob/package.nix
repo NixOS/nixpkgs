@@ -49,7 +49,6 @@ python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
   version = "25.5.26";
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "onekey-sec";

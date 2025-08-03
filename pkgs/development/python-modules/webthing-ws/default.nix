@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "webthing-ws";

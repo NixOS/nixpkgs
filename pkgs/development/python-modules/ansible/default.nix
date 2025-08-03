@@ -31,8 +31,6 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-+d83xx1Af2W8ucXAbJkY4pfZ6nS1za9ZJsTJqp5E218=";

@@ -22,7 +22,6 @@ buildPythonPackage rec {
     "out"
     "man"
   ];
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "seppeljordan";

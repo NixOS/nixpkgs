@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.2.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beancount-parser";

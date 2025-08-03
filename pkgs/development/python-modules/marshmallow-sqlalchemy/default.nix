@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "marshmallow_sqlalchemy";
     inherit version;

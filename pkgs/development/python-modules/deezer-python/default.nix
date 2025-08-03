@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "7.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";

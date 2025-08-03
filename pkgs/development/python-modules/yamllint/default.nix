@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.37.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "yamllint";

@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.19.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "folium";

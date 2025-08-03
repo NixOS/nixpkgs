@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "6.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = "aioswitcher";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "agateblue";
     repo = "django-dynamic-preferences";

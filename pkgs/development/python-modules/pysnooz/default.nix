@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
     repo = "pysnooz";

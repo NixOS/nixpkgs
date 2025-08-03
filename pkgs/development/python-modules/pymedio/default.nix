@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.2.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jcreinhold";
     repo = "pymedio";

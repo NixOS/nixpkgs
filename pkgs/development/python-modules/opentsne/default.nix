@@ -17,8 +17,6 @@ let
     version = "1.0.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.9";
-
     src = fetchFromGitHub {
       owner = "pavlin-policar";
       repo = "openTSNE";

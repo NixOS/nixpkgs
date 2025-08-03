@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "6.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "PyQt6_WebEngine";
     inherit version;

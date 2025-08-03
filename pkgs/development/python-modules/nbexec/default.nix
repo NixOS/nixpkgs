@@ -20,8 +20,6 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "nbexec";

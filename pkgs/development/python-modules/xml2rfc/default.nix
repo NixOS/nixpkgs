@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "3.29.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";

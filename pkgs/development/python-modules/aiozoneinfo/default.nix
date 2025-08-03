@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "aiozoneinfo";

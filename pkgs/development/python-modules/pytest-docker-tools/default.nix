@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.1.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "pytest-docker-tools";

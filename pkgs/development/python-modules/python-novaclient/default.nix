@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "18.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "python_novaclient";
     inherit version;

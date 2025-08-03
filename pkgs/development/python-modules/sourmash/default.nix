@@ -23,7 +23,6 @@ buildPythonPackage rec {
   pname = "sourmash";
   version = "4.8.14";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

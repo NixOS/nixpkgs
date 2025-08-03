@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "mopeka-iot-ble";

@@ -31,8 +31,6 @@ buildPythonPackage rec {
   version = "3.21.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";

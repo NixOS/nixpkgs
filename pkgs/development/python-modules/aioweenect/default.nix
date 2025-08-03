@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "aioweenect";

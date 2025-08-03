@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "FergusFettes";
     repo = "typer-shell";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.3.24";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";

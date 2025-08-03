@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "dogpile_cache";
     inherit version;

@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitea {
     domain = "opendev.org";
     owner = "openstack";

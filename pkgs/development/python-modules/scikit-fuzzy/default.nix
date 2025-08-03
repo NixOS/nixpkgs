@@ -16,8 +16,6 @@ buildPythonPackage {
   version = "0.4.2-unstable-2023-09-14";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "scikit-fuzzy";
     repo = "scikit-fuzzy";

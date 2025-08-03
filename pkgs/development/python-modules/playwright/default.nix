@@ -24,7 +24,6 @@ buildPythonPackage rec {
   # run ./pkgs/development/python-modules/playwright/update.sh to update
   version = "1.54.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";

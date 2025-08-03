@@ -55,8 +55,6 @@ buildPythonPackage rec {
   version = "5.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
