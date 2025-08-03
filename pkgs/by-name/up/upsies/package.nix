@@ -93,6 +93,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru = {
+    inherit runtimeDeps;
+
     updateScript = nix-update-script { };
   };
 
