@@ -32,8 +32,6 @@ buildPythonPackage rec {
   version = "4.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";

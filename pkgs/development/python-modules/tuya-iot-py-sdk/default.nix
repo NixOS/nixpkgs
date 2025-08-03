@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.6.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "tuya";
     repo = "tuya-iot-python-sdk";

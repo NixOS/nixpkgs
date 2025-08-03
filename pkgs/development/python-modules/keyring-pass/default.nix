@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "keyring-pass";
   version = "0.9.3";
-  disabled = pythonOlder "3.6";
 
   pyproject = true;
 

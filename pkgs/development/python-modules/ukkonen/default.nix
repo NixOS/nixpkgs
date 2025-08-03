@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "ukkonen";

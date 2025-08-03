@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "3.29";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "matlink";
     repo = "gplaycli";

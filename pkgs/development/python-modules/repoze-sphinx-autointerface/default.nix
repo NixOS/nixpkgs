@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "repoze.sphinx.autointerface";
     inherit version;

@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "33.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "container-inspector";

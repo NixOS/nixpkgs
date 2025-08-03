@@ -29,8 +29,6 @@ buildPythonPackage rec {
   version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;

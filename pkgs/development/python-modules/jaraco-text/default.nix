@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "4.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "jaraco_text";
     inherit version;

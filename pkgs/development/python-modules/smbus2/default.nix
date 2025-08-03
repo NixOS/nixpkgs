@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "kplindegaard";
     repo = "smbus2";

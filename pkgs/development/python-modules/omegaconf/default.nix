@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "omry";
     repo = "omegaconf";

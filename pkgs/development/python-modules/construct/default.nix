@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.10.70";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "construct";
     repo = "construct";

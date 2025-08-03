@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.74.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "grpcio_status";
     inherit version;

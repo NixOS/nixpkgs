@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2025.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "hstspreload";

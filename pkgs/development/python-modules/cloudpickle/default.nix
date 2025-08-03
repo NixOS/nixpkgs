@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "cloudpipe";
     repo = "cloudpickle";

@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.3.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";

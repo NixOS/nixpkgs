@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.2.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "repology";
     repo = "py-libversion";

@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "3.2.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene-django";

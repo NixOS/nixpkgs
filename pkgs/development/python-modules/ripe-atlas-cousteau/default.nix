@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-cousteau";

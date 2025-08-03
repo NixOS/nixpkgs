@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.4.73";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "avantrec";
     repo = "soco-cli";

@@ -21,8 +21,6 @@ buildPythonPackage {
   version = "0.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitLab {
     owner = "bersace";
     repo = "flask-dramatiq";

@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "4.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "RoadrunnerWMC";
     repo = "ndspy";

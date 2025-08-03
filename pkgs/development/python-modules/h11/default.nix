@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "h11";
   version = "0.16.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jmrivas86";
     repo = "django-json-widget";

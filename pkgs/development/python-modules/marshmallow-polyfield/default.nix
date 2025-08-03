@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "5.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Bachmann1234";
     repo = "marshmallow-polyfield";

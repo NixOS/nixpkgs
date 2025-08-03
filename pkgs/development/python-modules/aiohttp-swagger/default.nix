@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.0.15";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "cr0hn";
     repo = "aiohttp-swagger";

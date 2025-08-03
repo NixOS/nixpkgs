@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "24.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";

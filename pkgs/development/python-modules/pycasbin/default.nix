@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.45.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "casbin";
     repo = "pycasbin";
