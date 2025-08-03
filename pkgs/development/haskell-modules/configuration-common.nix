@@ -1821,6 +1821,10 @@ with haskellLib;
         }) super.optparse-applicative
       );
 
+  # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
+  # https://github.com/typeclasses/chell/issues/5
+  system-filepath = dontCheck super.system-filepath;
+
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
   # So let's not go there and just disable the tests altogether.
