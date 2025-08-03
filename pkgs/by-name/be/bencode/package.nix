@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  catch2,
   cmake,
+  ninja,
+  catch2,
   expected-lite,
   fmt,
   gsl-lite,
-  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,18 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-zpxvADZfYTUdlNLMZJSCanPL40EGl9BBCxR7oDhvOTw=";
   };
-
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
-
-  buildInputs = [
-    catch2
-    expected-lite
-    fmt
-    gsl-lite
-  ];
 
   postPatch =
     # Disable a test that requires an internet connection.
@@ -49,6 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  buildInputs = [
+    catch2
+    expected-lite
+    fmt
+    gsl-lite
+  ];
+
   doCheck = true;
 
   postInstall = ''
@@ -56,14 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Header-only C++20 bencode serialization/deserialization library";
-    homepage = "https://github.com/fbdtemme/bencode";
-    changelog = "https://github.com/fbdtemme/bencode/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = [ ];
-    platforms = lib.platforms.unix;
     # Broken because the default stdenv on these targets doesn't support C++20.
     broken =
       stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    changelog = "https://github.com/fbdtemme/bencode/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    description = "Header-only C++20 bencode serialization/deserialization library";
+    homepage = "https://github.com/fbdtemme/bencode";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })
