@@ -815,8 +815,9 @@ with haskellLib;
     sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
   }) super.xml-picklers;
 
-  # 2024-05-18: Upstream tests against a different pandoc version
-  pandoc-crossref = dontCheck super.pandoc-crossref;
+  # 2025-08-03: Too strict bounds on open-browser, data-default and containers
+  # https://github.com/lierdakil/pandoc-crossref/issues/478
+  pandoc-crossref = doJailbreak super.pandoc-crossref;
 
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
