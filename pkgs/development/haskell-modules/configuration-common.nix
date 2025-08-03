@@ -848,6 +848,10 @@ with haskellLib;
     hnix-store-core = self.hnix-store-core_0_6_1_0;
   };
 
+  # 2025-08-03: Too strict bound on filepath (<1.5)
+  # https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/pull/29
+  nix-derivation = doJailbreak super.nix-derivation;
+
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
