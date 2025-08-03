@@ -366,8 +366,11 @@ lib.extendMkDerivation {
           # We do not set trimpath for tests, in case they reference test assets
           export GOFLAGS=''${GOFLAGS//-trimpath/}
 
+          declare -a flags
+          flags+=(''${tags:+-tags=$(concatStringsSep "," tags)})
+
           for pkg in $(getGoDirs test); do
-            buildGoDir test "$pkg"
+            buildGoDir test "''${flags[@]}" "$pkg"
           done
 
           runHook postCheck
