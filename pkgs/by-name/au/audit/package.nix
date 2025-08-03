@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   bash,
+  bashNonInteractive,
   buildPackages,
   linuxHeaders,
   python3,
@@ -87,6 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
     # see auditd-plugins(5)
     "--with-libcap-ng=yes"
     (if enablePython then "--with-python" else "--without-python")
+  ];
+
+  __structuredAttrs = true;
+
+  # lib output is part of the mandatory nixos system closure, so avoid bash here
+  outputChecks.lib.disallowedRequisites = [
+    bash
+    bashNonInteractive
   ];
 
   postInstall = ''
