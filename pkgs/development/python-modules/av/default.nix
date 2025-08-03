@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  cython,
+  cython_3_1,
   fetchFromGitHub,
   fetchurl,
   linkFarm,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "14.1.0";
+  version = "15.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,11 +26,14 @@ buildPythonPackage rec {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-GYdt6KMMmDSyby447MbShL2GbrH8R1UuOeiVlztGuS4=";
+    hash = "sha256-Apb3DTMuMYyKHoRaaBLdYDc9PLA8bZQZLezUMUGOTiw=";
   };
 
+  # setting this env-var disables the requirement of being in a virtualenv
+  env.GITHUB_ACTIONS = "true";
+
   build-system = [
-    cython
+    cython_3_1
     setuptools
   ];
 
@@ -65,6 +68,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "av"
     "av.audio"
+    "av.bitstream"
     "av.buffer"
     "av.bytesource"
     "av.codec"
@@ -78,10 +82,12 @@ buildPythonPackage rec {
     "av.format"
     "av.frame"
     "av.logging"
+    "av.opaque"
     "av.option"
     "av.packet"
     "av.plane"
     "av.stream"
+    "av.sidedata"
     "av.subtitles"
     "av.utils"
     "av.video"
