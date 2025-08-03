@@ -85,6 +85,7 @@ self: super: {
         relative = "libraries/ghc-bignum";
       })
     ])
+    doDistribute
   ];
 
   # only broken for >= 9.6
