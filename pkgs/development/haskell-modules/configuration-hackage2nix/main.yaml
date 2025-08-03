@@ -37,8 +37,6 @@ default-package-overrides:
   - hnix-store-remote < 0.7
   # 2025-01-17: need to match stackage version of hosc
   - hsc3 < 0.21
-  # 2024-12-31: last version that's compatible with GHC < 9.9
-  - htree < 0.2.0.0
   # 2025-06-11: last version that supports pandoc == 3.6.* which is prescribed by LTS 23
   - pandoc-crossref < 0.3.20
 # keep-sorted end
