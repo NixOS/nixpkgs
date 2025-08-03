@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     # Use scripts/kernel-doc.py here, not scripts/kernel-doc because
     # patchShebangs skips symlinks
 
+    chmod +x scripts/kernel-doc.py scripts/split-man.pl
     patchShebangs --build \
       scripts/kernel-doc.py \
       scripts/split-man.pl
