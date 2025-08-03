@@ -11,7 +11,8 @@ rustPlatform.buildRustPackage rec {
   version = "0.32.0";
 
   src = fetchCrate {
-    inherit pname version;
+    pname = "jsonschema-cli";
+    inherit version;
     hash = "sha256-ZcavZSHf2eT65f7HbtZmD2mYUtrXEL/l1opXCvdn1O0=";
   };
 
