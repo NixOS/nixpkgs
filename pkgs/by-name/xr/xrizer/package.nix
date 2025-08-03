@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   libGL,
   libxkbcommon,
@@ -12,16 +13,24 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
     tag = "v${version}";
-    hash = "sha256-0RICNxF8RBHthve69Z9msTg2+jegg5K4aHYRF0YZ8a4=";
+    hash = "sha256-o6/uGbczYp5t6trjFIltZAMSM61adn+BvNb1fBhBSsk=";
   };
 
-  cargoHash = "sha256-87JcULH1tAA487VwKVBmXhYTXCdMoYM3gOQTkM53ehE=";
+  patches = [
+    (fetchpatch2 {
+      name = "xrizer-fix-flaky-tests.patch";
+      url = "https://github.com/Supreeeme/xrizer/commit/f58d797e75a8d920982abeaeedee83877dd3c493.diff?full_index=1";
+      hash = "sha256-TI++ZY7QX1iaj3WT0woXApSY2Tairraao5kzF77ewYY=";
+    })
+  ];
+
+  cargoHash = "sha256-kXcnD98ZaqRAA3jQvIoWSRC37Uq8l5PUYEzubxfMuUI=";
 
   nativeBuildInputs = [
     pkg-config
