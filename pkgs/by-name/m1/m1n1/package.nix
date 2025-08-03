@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "1.4.21";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ZnDexY/Sf2TJFfUv/YelCctFJVENffWqBU0r0azD0M=";
+    hash = "sha256-J1PZVaEdI6gx/qzsoVW1ehRQ/ZDKzdC1NgIGgBqxQ+0=";
   };
 
   nativeBuildInputs = [
