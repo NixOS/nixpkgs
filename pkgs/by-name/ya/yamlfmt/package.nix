@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  yamlfmt,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -38,9 +37,11 @@ buildGoModule (finalAttrs: {
   # https://github.com/google/yamlfmt/issues/256
   checkFlags = [ "-run=!S/TestNodeRoundtrip" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = yamlfmt;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Extensible command line tool or library to format yaml files";
