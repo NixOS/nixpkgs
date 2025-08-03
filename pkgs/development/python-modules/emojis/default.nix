@@ -17,8 +17,6 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  disabled = pythonOlder "3.4";
-
   src = fetchFromGitHub {
     owner = "alexandrevicenzi";
     repo = "emojis";
