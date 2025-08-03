@@ -82,10 +82,11 @@ in
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString cfg.port}";
             proxyWebsockets = true;
-            extraConfig = ''
-              keepalive_timeout 0;
-              proxy_buffering off;
-            '';
+            extraConfig = # nginx
+              ''
+                proxy_buffering off;
+                proxy_read_timeout 3600s;
+              '';
           };
         };
       };
