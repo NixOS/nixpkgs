@@ -117,8 +117,8 @@ navigation: widget
 strings:
     productName:         "${NAME}"
     shortProductName:    NixOS
-    version:             
-    shortVersion:        
+    version:
+    shortVersion:
     versionedName:       NixOS
     shortVersionedName:  NixOS
     bootloaderEntryName: NixOS

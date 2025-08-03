@@ -1,26 +1,25 @@
 {
   stdenv,
-  fetchFromGitHub,
   lib,
+  glibcLocales,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calamares-nixos-extensions";
   version = "0.3.23";
 
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "calamares-nixos-extensions";
-    rev = finalAttrs.version;
-    hash = "sha256-KNRztajU7sTLNDwCwP4WOdR2IRMqfbeapdko58LcrjM=";
-  };
+  src = ./src;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{lib,share}/calamares
+    mkdir -p $out/{etc,lib,share}/calamares
     cp -r modules $out/lib/calamares/
-    cp -r config/* $out/share/calamares/
+    cp -r config/* $out/etc/calamares/
     cp -r branding $out/share/calamares/
+
+    substituteInPlace $out/etc/calamares/settings.conf --replace-fail @out@ $out
+    substituteInPlace $out/etc/calamares/modules/locale.conf --replace-fail @glibcLocales@ ${glibcLocales}
+
     runHook postInstall
   '';
 

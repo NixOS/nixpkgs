@@ -700,10 +700,9 @@ def run():
 
     # Check if unfree packages are allowed
     free = True
-    if gs.value("packagechooser_unfree") is not None:
-        if gs.value("packagechooser_unfree") == "unfree":
-            free = False
-            cfg += cfgunfree
+    if gs.value("nixos_allow_unfree"):
+        free = False
+        cfg += cfgunfree
 
     cfg += cfgpkgs
     # Use firefox as default as a graphical web browser, and add kate to plasma desktop
