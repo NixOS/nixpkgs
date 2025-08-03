@@ -143,6 +143,39 @@ in
     plugins = lib.mkOption {
       type = lib.types.attrsOf pluginOptions;
       default = { };
+      defaultText = lib.literalExpression ''
+        {
+          af_unix = {
+            path = lib.getExe' pkgs.audit "audisp-af_unix";
+            args = [
+              "0640"
+              "/var/run/audispd_events"
+              "string"
+            ];
+            format = "binary";
+          };
+          remote = {
+            path = lib.getExe' pkgs.audit "audisp-remote";
+            settings = { };
+          };
+          filter = {
+            path = lib.getExe' pkgs.audit "audisp-filter";
+            args = [
+              "allowlist"
+              "/etc/audit/audisp-filter.conf"
+              (lib.getExe' pkgs.audit "audisp-syslog")
+              "LOG_USER"
+              "LOG_INFO"
+              "interpret"
+            ];
+            settings = { };
+          };
+          syslog = {
+            path = lib.getExe' pkgs.audit "audisp-syslog";
+            args = [ "LOG_INFO" ];
+          };
+        }
+      '';
       description = "Plugin definitions to register with auditd";
     };
   };
@@ -192,6 +225,38 @@ in
         text = prepareConfigText pluginDefinitionConfigValue.settings;
       }
     ) (lib.filterAttrs (_: v: v.settings != null) cfg.plugins));
+
+    security.auditd.plugins = {
+      af_unix = {
+        path = lib.getExe' pkgs.audit "audisp-af_unix";
+        args = [
+          "0640"
+          "/var/run/audispd_events"
+          "string"
+        ];
+        format = "binary";
+      };
+      remote = {
+        path = lib.getExe' pkgs.audit "audisp-remote";
+        settings = { };
+      };
+      filter = {
+        path = lib.getExe' pkgs.audit "audisp-filter";
+        args = [
+          "allowlist"
+          "/etc/audit/audisp-filter.conf"
+          (lib.getExe' pkgs.audit "audisp-syslog")
+          "LOG_USER"
+          "LOG_INFO"
+          "interpret"
+        ];
+        settings = { };
+      };
+      syslog = {
+        path = lib.getExe' pkgs.audit "audisp-syslog";
+        args = [ "LOG_INFO" ];
+      };
+    };
 
     systemd.services.auditd = {
       description = "Security Audit Logging Service";
