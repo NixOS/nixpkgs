@@ -1,6 +1,11 @@
+{ lib, ... }:
 {
 
   name = "audit";
+
+  meta = {
+    maintainers = with lib.maintainers; [ grimmauld ];
+  };
 
   nodes = {
     machine =
