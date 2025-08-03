@@ -1,12 +1,12 @@
 {
-  lib,
   fetchFromGitHub,
-  stdenv,
-  rustPlatform,
+  installShellFiles,
+  lib,
   pkg-config,
+  rustPlatform,
+  stdenv,
   testers,
   tmux-sessionizer,
-  installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tmux-sessionizer";
