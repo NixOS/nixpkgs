@@ -265,6 +265,9 @@ builtins.intersectAttrs super {
   );
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] super.hnix;
 
+  # Provides a library and an executable (pretty-derivation)
+  nix-derivation = enableSeparateBinOutput super.nix-derivation;
+
   # Generate shell completion.
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
