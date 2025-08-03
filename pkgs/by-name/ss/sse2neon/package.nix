@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   # use postBuild instead of installPhase, because the build
   # in itself doesn't produce any ($out) output
   postBuild = ''
-    mkdir -p $out/lib
-    install -m444 sse2neon.h $out/lib/
+    mkdir -p $out/include
+    install -m444 sse2neon.h $out/include/
   '';
 
   meta = {
-    description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
-    homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
+    description = "Translator from Intel SSE intrinsics to Arm/Aarch64 NEON implementation";
+    homepage = "https://github.com/DLTcollab/sse2neon";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.gador ];
