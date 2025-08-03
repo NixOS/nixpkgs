@@ -59,7 +59,10 @@ stdenv.mkDerivation {
     )
   '';
 
-  enableParallelBuilding = true;
+  # Handwritten Makefiles, doesn't properly ensure that libraries are built before they're used in linking
+  # ld: cannot find -libUtils: No such file or directory
+  # ld: cannot find -libLocal: No such file or directory
+  enableParallelBuilding = false;
 
   installPhase = ''
     runHook preInstall
