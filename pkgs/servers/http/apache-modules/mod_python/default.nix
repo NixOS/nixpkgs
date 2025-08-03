@@ -45,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  # https://github.com/grisha/mod_python/issues/143
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   passthru = {
     inherit apacheHttpd;
     updateScript = nix-update-script { };
