@@ -30,7 +30,7 @@ buildGoModule rec {
   meta = {
     description = "Passive DNS Capture and Monitoring Toolkit";
     homepage = "https://github.com/mosajjal/dnsmonster";
-    changelog = "https://github.com/mosajjal/dnsmonster/releases/tag/v${version}";
+    changelog = "https://github.com/mosajjal/dnsmonster/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
