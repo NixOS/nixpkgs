@@ -62,6 +62,8 @@ let
 
         nativeBuildInputs = [ undmg ];
 
+        sourceRoot = "Breitbandmessung.app";
+
         installPhase = ''
           runHook preInstall
           mkdir -p $out/Applications/Breitbandmessung.app
