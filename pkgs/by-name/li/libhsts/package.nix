@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Library to easily check a domain against the Chromium HSTS Preload list";
     mainProgram = "hsts";
