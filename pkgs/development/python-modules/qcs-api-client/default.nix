@@ -13,7 +13,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
   pythonOlder,
   tenacity,
   respx,
@@ -76,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   # Tests are failing on Python 3.11, Fatal Python error: Aborted
-  doCheck = !(pythonAtLeast "3.11");
+  doCheck = pythonOlder "3.11";
 
   pythonImportsCheck = [ "qcs_api_client" ];
 

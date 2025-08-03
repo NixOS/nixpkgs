@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crashtest";
   version = "0.4.1";
   format = "setuptools";
-  disabled = !(pythonAtLeast "3.6");
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

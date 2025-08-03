@@ -16,6 +16,7 @@
   pytestCheckHook,
   torch,
   pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -72,7 +73,7 @@ buildPythonPackage rec {
 
   # All remaining tests fail with:
   # ValueError: invalid literal for int() with base 10: 'L1'
-  doCheck = !(pythonAtLeast "3.13");
+  doCheck = pythonOlder "3.13";
 
   pythonImportsCheck = [ "depyf" ];
 

@@ -9,7 +9,7 @@
   # dependencies
   pyyaml,
   requests,
-  pythonAtLeast,
+  pythonOlder,
   importlib-resources,
 }:
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pyyaml
     requests
   ]
-  ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   SKHEP_DATA = 1; # install the actual root files
 
