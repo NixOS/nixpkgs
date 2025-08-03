@@ -15944,7 +15944,7 @@ with pkgs;
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.compose.justStaticExecutables haskellPackages.nix-deploy;
-  nix-derivation = haskell.lib.compose.justStaticExecutables haskellPackages.nix-derivation;
+  nix-derivation = haskellPackages.nix-derivation.bin;
   nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
 
   nix-info = callPackage ../tools/nix/info { };
