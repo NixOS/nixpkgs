@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
     "DESTDIR="
   ];
 
