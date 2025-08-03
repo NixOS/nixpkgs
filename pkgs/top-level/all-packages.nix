@@ -1085,8 +1085,6 @@ with pkgs;
     }
   );
 
-  gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
-
   inherit (callPackages ../tools/networking/ivpn/default.nix { })
     ivpn
     ivpn-service
@@ -1122,8 +1120,6 @@ with pkgs;
     withTools = true;
     withUsdView = true;
   };
-
-  pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
 
   py7zr = with python3Packages; toPythonApplication py7zr;
 
@@ -1611,8 +1607,6 @@ with pkgs;
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
-
-  awsume = python3Packages.callPackage ../tools/admin/awsume { };
 
   aws-mfa = python3Packages.callPackage ../tools/admin/aws-mfa { };
 
@@ -3879,8 +3873,6 @@ with pkgs;
   ola = callPackage ../applications/misc/ola {
     protobuf = protobuf_21;
   };
-
-  olive-editor = qt6Packages.callPackage ../applications/video/olive-editor { };
 
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
@@ -8437,8 +8429,6 @@ with pkgs;
   };
   libkrb5 = krb5; # TODO(de11n) Try to make krb5 reuse libkrb5 as a dependency
 
-  ktextaddons = libsForQt5.callPackage ../development/libraries/ktextaddons { };
-
   l-smash = callPackage ../development/libraries/l-smash {
     stdenv = gccStdenv;
   };
@@ -11610,10 +11600,6 @@ with pkgs;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
 
-  zafiro-icons = callPackage ../data/icons/zafiro-icons {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
   zeal = zeal-qt5;
   zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal {
@@ -13300,8 +13286,6 @@ with pkgs;
   };
 
   pineapple-pictures = qt6Packages.callPackage ../applications/graphics/pineapple-pictures { };
-
-  plater = libsForQt5.callPackage ../applications/misc/plater { };
 
   plexamp = callPackage ../applications/audio/plexamp { };
 

@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  breeze-icons,
+  libsForQt5,
   gnome-icon-theme,
   numix-icon-theme,
   numix-icon-theme-circle,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zafiro-icons";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "zayronxio";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-IbFnlUOSADYMNMfvRuRPndxcQbnV12BqMDb9bJRjnoU=";
+    repo = "zafiro-icons";
+    tag = finalAttrs.version;
+    hash = "sha256-IbFnlUOSADYMNMfvRuRPndxcQbnV12BqMDb9bJRjnoU=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
+    libsForQt5.breeze-icons
     gnome-icon-theme
     numix-icon-theme
     numix-icon-theme-circle
@@ -67,11 +67,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Icon pack flat with light colors";
     homepage = "https://github.com/zayronxio/Zafiro-icons";
-    license = with licenses; [ gpl3 ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})
