@@ -17,6 +17,7 @@
   webp-pixbuf-loader,
   libsoup_3,
   bash,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
@@ -68,6 +69,8 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Make your screenshots ready for the world";
