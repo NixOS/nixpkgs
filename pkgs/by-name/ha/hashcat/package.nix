@@ -3,7 +3,7 @@
   stdenv,
   addDriverRunpath,
   config,
-  cudaPackages_12_4 ? { },
+  cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   fetchurl,
   makeWrapper,
@@ -13,6 +13,7 @@
   xxHash,
   zlib,
   libiconv,
+  sse2neon,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     opencl-headers
     xxHash
     zlib
+    sse2neon
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
           "${ocl-icd}/lib"
         ]
         ++ lib.optionals cudaSupport [
-          "${cudaPackages_12_4.cudatoolkit}/lib"
+          "${cudaPackages.cudatoolkit}/lib"
         ]
       );
     in
