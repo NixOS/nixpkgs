@@ -186,6 +186,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       raskin
       ehmry
+      rnhmjoj
     ];
     mainProgram = "baresip";
     license = lib.licenses.bsd3;
