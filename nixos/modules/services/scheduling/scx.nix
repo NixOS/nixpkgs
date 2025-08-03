@@ -47,6 +47,7 @@ in
         "scx_mitosis"
         "scx_nest"
         "scx_pair"
+        "scx_p2dq"
         "scx_qmap"
         "scx_rlfifo"
         "scx_rustland"
