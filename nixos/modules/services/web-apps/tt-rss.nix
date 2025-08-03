@@ -41,7 +41,6 @@ let
         putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
         putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
         putenv('TTRSS_ICONS_DIR=${cfg.root}/feed-icons');
-        putenv('TTRSS_ICONS_URL=feed-icons');
         putenv('TTRSS_SELF_URL_PATH=${cfg.selfUrlPath}');
 
         putenv('TTRSS_MYSQL_CHARSET=UTF8');
