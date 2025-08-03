@@ -470,12 +470,11 @@ with haskellLib;
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
-  # Fixes compilation for basement on i686 for GHC >= 9.4
+  # Fixes compilation for basement on i686
   # https://github.com/haskell-foundation/foundation/pull/573
-  # Patch would not work for GHC >= 9.2 where it breaks compilation on x86_64
+  # Don't apply patch for GHC == 9.2.* on 64bit where it breaks compilation:
   # https://github.com/haskell-foundation/foundation/pull/573#issuecomment-1669468867
-  # TODO(@sternenseemann): make unconditional
-  basement = appendPatches (lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+  basement = appendPatches (lib.optionals (pkgs.stdenv.hostPlatform.is32bit || lib.versions.majorMinor self.ghc.version != "9.2") [
     (fetchpatch {
       name = "basement-i686-ghc-9.4.patch";
       url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
@@ -486,13 +485,13 @@ with haskellLib;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
-  memory = appendPatches (lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+  memory = appendPatches [
     (fetchpatch {
       name = "memory-i686-ghc-9.4.patch";
       url = "https://github.com/vincenthz/hs-memory/pull/99/commits/2738929ce15b4c8704bbbac24a08539b5d4bf30e.patch";
       sha256 = "196rj83iq2k249132xsyhbbl81qi1j23h9pa6mmk6zvxpcf63yfw";
     })
-  ]) super.memory;
+  ] super.memory;
 
   # Depends on outdated deps hedgehog < 1.4, doctest < 0.12 for tests
   # As well as deepseq < 1.5 (so it forbids GHC 9.8)
