@@ -8,13 +8,15 @@ MINOR_VERSION="${1:?Must provide a minor version number, like '26', as the only 
 WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
 
+# GitHub caps requests to GitHub API without GITHUB_TOKEN
+CURL="curl --silent --fail --location ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"}"
+
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
 OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_1_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_1_${MINOR_VERSION}.name).version" | tr -d '"')"
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
-curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-    https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
+$CURL https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 
 LATEST_TAG_NAME=$(cat ${LATEST_TAG_RAWFILE} | \
     jq -r 'map(select(.prerelease == false))' | \
@@ -23,8 +25,7 @@ LATEST_TAG_NAME=$(cat ${LATEST_TAG_RAWFILE} | \
 
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
-K3S_COMMIT=$(curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-    https://api.github.com/repos/k3s-io/k3s/git/refs/tags \
+K3S_COMMIT=$($CURL https://api.github.com/repos/k3s-io/k3s/git/refs/tags \
     | jq -r "map(select(.ref == \"refs/tags/${LATEST_TAG_NAME}\")) | .[0] | .object.sha")
 
 PREFETCH_META=$(nix-prefetch-url --unpack --print-path https://github.com/k3s-io/k3s/archive/refs/tags/${LATEST_TAG_NAME}.tar.gz)
@@ -77,13 +78,13 @@ mv chart-versions.nix.update chart-versions.nix
 
 # Concatenate all sha256sums, one entry per line
 SHA256_HASHES="\
-$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-amd64.txt")
-$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm64.txt")
-$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")
-$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/k3s-images.txt" | sha256sum | cut -d' ' -f1)  k3s-images.txt"
+$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-amd64.txt")
+$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm64.txt")
+$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")
+$($CURL "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/k3s-images.txt" | sha256sum | cut -d' ' -f1)  k3s-images.txt"
 
 # Get all airgap images files associated with this release
-IMAGES_ARCHIVES=$(curl "https://api.github.com/repos/k3s-io/k3s/releases/tags/v${K3S_VERSION}" | \
+IMAGES_ARCHIVES=$($CURL "https://api.github.com/repos/k3s-io/k3s/releases/tags/v${K3S_VERSION}" | \
     # Filter the assets so that only zstd archives and text files that have "images" in their name remain
     jq -r '.assets[] | select(.name | (contains("images") and (endswith(".tar.zst") or endswith("k3s-images.txt")))) |
         "\(.name) \(.browser_download_url)"')
