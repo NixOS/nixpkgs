@@ -304,6 +304,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/comparators/test_uimage.py"
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
+    # OSError: AF_UNIX path too long
+    "tests/comparators/test_sockets.py"
   ];
 
   passthru = {
