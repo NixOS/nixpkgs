@@ -5,8 +5,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  testers,
-  tmux-sessionizer,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tmux-sessionizer";
@@ -21,10 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-gIsqHbCmfYs1c3LPNbE4zLVjzU3GJ4MeHMt0DC5sS3c=";
 
-  passthru.tests.version = testers.testVersion {
-    package = tmux-sessionizer;
-    version = finalAttrs.version;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   nativeBuildInputs = [
     pkg-config
