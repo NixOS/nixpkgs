@@ -34,11 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace -fpredictive-commoning ""
   '';
 
-  preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/applications
-  '';
-
   meta = {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
     description = "Retro arcade video game";
