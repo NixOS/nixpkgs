@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.28.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-data-tools";

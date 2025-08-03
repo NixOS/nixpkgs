@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "2025.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pydrawise";

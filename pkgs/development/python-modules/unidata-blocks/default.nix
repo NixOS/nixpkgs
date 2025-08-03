@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.0.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "unidata_blocks";
     inherit version;

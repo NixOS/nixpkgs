@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "0.25.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";
     repo = "highdicom";

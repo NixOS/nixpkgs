@@ -31,8 +31,6 @@ buildPythonPackage rec {
   version = "1.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";

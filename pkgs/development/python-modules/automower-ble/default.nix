@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.2.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "alistair23";
     repo = "AutoMower-BLE";

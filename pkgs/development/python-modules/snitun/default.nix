@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.40.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "snitun";

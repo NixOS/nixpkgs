@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";

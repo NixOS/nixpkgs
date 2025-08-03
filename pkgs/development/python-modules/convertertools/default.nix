@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "convertertools";

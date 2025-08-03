@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2024.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";

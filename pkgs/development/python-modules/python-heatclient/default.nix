@@ -29,8 +29,6 @@ buildPythonPackage rec {
   version = "4.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "python_heatclient";
     inherit version;

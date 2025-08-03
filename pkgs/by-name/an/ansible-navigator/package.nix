@@ -10,8 +10,6 @@ python3Packages.buildPythonApplication rec {
   version = "25.5.0";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.10";
-
   src = fetchPypi {
     inherit version;
     pname = "ansible_navigator";

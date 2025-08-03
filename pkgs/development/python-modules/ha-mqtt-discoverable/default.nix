@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.20.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";

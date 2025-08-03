@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.6.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "reverse_geocode";
     inherit version;

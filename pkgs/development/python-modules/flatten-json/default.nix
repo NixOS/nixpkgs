@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "amirziai";
     repo = "flatten";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.2.28";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "modbus_tk";
     inherit version;

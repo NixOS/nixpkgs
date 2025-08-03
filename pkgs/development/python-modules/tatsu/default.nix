@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "5.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";

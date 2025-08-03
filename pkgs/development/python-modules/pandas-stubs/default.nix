@@ -39,8 +39,6 @@ buildPythonPackage rec {
   version = "2.2.3.250308";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";

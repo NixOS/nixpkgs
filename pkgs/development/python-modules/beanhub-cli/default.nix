@@ -42,8 +42,6 @@ buildPythonPackage rec {
   version = "2.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";

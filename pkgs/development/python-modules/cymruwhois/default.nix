@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "JustinAzoff";
     repo = "python-cymruwhois";
