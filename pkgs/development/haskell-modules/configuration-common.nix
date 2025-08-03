@@ -830,23 +830,7 @@ with haskellLib;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2024-01-15: too strict bound on free < 5.2
-  hnix = doJailbreak (
-    dontCheck (
-      super.hnix.override {
-        # 2023-12-11: Needs older core due to remote
-        hnix-store-core = self.hnix-store-core_0_6_1_0;
-      }
-    )
-  );
-
-  # Too strict bounds on algebraic-graphs
-  # https://github.com/haskell-nix/hnix-store/issues/180
-  hnix-store-core_0_6_1_0 = doJailbreak super.hnix-store-core_0_6_1_0;
-
-  # 2023-12-11: Needs older core
-  hnix-store-remote = super.hnix-store-remote.override {
-    hnix-store-core = self.hnix-store-core_0_6_1_0;
-  };
+  hnix = doJailbreak (dontCheck super.hnix);
 
   # 2025-08-03: Too strict bound on filepath (<1.5)
   # https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/pull/29
