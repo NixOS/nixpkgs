@@ -548,7 +548,7 @@ in
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*$";
+                    originStrType = types.strMatching ".*://?.*$";
                   in
                   types.either originStrType (types.nonEmptyListOf originStrType);
                 example = "https://someservice.example.com/auth/login";
