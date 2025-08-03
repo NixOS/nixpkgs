@@ -1418,10 +1418,6 @@ with pkgs;
     in
     ppsspp.override argset;
 
-  punes = libsForQt5.callPackage ../applications/emulators/punes { };
-
-  punes-qt6 = qt6Packages.callPackage ../applications/emulators/punes { };
-
   py65 = with python3.pkgs; toPythonApplication py65;
 
   rmg-wayland = callPackage ../by-name/rm/rmg/package.nix {
@@ -10064,6 +10060,7 @@ with pkgs;
     asterisk-lts
     asterisk_18
     asterisk_20
+    asterisk_22
     ;
 
   asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
