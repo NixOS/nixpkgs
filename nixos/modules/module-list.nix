@@ -1278,6 +1278,7 @@
   ./services/networking/openconnect.nix
   ./services/networking/opengfw.nix
   ./services/networking/openvpn.nix
+  ./services/networking/orb.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
   ./services/networking/pdns-recursor.nix

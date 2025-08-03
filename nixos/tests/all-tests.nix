@@ -1110,6 +1110,7 @@ in
   openvswitch = runTest ./openvswitch.nix;
   optee = handleTestOn [ "aarch64-linux" ] ./optee.nix { };
   orangefs = runTest ./orangefs.nix;
+  orb = runTest ./orb.nix;
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
   osquery = handleTestOn [ "x86_64-linux" ] ./osquery.nix { };
   osrm-backend = runTest ./osrm-backend.nix;
