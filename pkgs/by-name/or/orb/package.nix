@@ -5,6 +5,7 @@
   dpkg,
   autoPatchelfHook,
   versionCheckHook,
+  nixosTests,
 }:
 
 let
@@ -50,6 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
+    tests = nixosTests.orb;
     updateScript = ./update.sh;
   };
 
