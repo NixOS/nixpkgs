@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "0.22.0";
 
   src = fetchFromGitHub {
-    owner = "kitabisa";
+    owner = "mubeng";
     repo = "mubeng";
     tag = "v${version}";
     hash = "sha256-YK3a975l/gMCaWxTB4gEQWAzzX+GRnYSvKksPmp3ZRA=";
@@ -20,13 +20,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=ktbs.dev/mubeng/common.Version=${version}"
+    "-X=github.com/mubeng/mubeng/common.Version=${version}"
   ];
 
   meta = {
     description = "Proxy checker and IP rotator";
-    homepage = "https://github.com/kitabisa/mubeng";
-    changelog = "https://github.com/kitabisa/mubeng/releases/tag/v${version}";
+    homepage = "https://github.com/mubeng/mubeng";
+    changelog = "https://github.com/mubeng/mubeng/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mubeng";
