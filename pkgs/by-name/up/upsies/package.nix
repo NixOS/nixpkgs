@@ -4,6 +4,7 @@
   fetchpatch,
   ffmpeg-headless,
   mediainfo,
+  nix-update-script,
   oxipng,
   python3Packages,
 }:
@@ -90,6 +91,10 @@ python3Packages.buildPythonApplication rec {
     ":"
     (lib.makeBinPath runtimeDeps)
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "a toolkit for collecting, generating, normalizing and sharing video metadata";
