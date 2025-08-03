@@ -25,7 +25,7 @@
 # not work.
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
-  - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
+  - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
   # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
   - diagrams-input < 0.1.4
   - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
