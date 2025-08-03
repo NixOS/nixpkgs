@@ -9,13 +9,13 @@
 buildKodiAddon rec {
   pname = "jurialmunkey";
   namespace = "script.module.jurialmunkey";
-  version = "0.2.28";
+  version = "0.2.29";
 
   src = fetchFromGitHub {
     owner = "jurialmunkey";
     repo = namespace;
     rev = "v${version}";
-    hash = "sha256-3bT1mFzY28r3tzb5zrLKwLs83uotfKezI020SetJuso=";
+    hash = "sha256-qVS3vwYFicDXZ8ls/5MfZL8iwmz+CAwB6ZWUV4Zjmbw=";
   };
 
   propagatedBuildInputs = [

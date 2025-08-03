@@ -87,7 +87,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The fast, Pythonic way to build MCP servers and clients";
+    description = "Fast, Pythonic way to build MCP servers and clients";
     changelog = "https://github.com/jlowin/fastmcp/releases/tag/v${version}";
     homepage = "https://github.com/jlowin/fastmcp";
     license = lib.licenses.asl20;

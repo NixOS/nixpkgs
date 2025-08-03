@@ -222,6 +222,17 @@ in
               '';
             };
 
+            http_script = mkOption {
+              type = with types; nullOr str;
+              default = "${lib.getExe pkgs.curl} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-";
+              defaultText = lib.literalExpression ''
+                ''${lib.getExe pkgs.curl} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-
+              '';
+              description = ''
+                Call to an HTTPS client, that accepts the URL on the commandline and the request body from stdin.
+              '';
+            };
+
             sender_address = mkOption {
               type = types.str;
               example = "noreply@example.com";

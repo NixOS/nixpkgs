@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "simple, stupid idle inhibitor for wayland";
+    description = "Simple, stupid idle inhibitor for wayland";
     license = lib.licenses.mit;
     homepage = "https://github.com/0x5a4/wlinhibit";
     platforms = lib.platforms.linux;

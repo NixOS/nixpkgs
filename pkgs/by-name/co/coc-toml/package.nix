@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "toml extension for coc.nvim";
+    description = "Toml extension for coc.nvim";
     homepage = "https://github.com/kkiyama117/coc-toml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soopyc ];

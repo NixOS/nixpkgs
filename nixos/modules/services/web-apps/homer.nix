@@ -49,7 +49,7 @@ in
 
         To add files such as icons or backgrounds, you can reference them in line such as
         ```nix
-        icon = "$\{./icon.png}";
+        icon = "''${./icon.png}";
         ```
         This will add the file to the nix store upon build, referencing it by file path as expected by Homer.
       '';

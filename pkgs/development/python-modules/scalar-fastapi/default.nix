@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A plugin for FastAPI to render a reference for your OpenAPI document";
+    description = "Plugin for FastAPI to render a reference for your OpenAPI document";
     homepage = "https://github.com/scalar/scalar/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ codgician ];

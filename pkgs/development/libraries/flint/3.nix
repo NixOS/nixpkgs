@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ntl
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.mingw_w64_pthreads
+    windows.pthreads
   ];
 
   # We're not using autoreconfHook because flint's bootstrap

@@ -235,7 +235,7 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf (cfg.enable && cfg.configurePostfix && config.services.postfix.enable) {
-      services.postfix.config = {
+      services.postfix.settings.main = {
         # https://github.com/roehling/postsrsd#configuration
         sender_canonical_maps = "socketmap:${cfg.settings.socketmap}:forward";
         sender_canonical_classes = "envelope_sender";

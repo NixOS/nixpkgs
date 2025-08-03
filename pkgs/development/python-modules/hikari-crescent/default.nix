@@ -44,7 +44,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_handle_resp" ];
 
   meta = {
-    description = "A command handler for Hikari that keeps your project neat and tidy";
+    description = "Command handler for Hikari that keeps your project neat and tidy";
     license = lib.licenses.mit;
     homepage = "https://github.com/hikari-crescent/hikari-crescent";
     maintainers = with lib.maintainers; [ sigmanificient ];

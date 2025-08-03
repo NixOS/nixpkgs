@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enableJemalloc jemalloc
     ++ lib.optional enableLiburing liburing
-    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   outputs = [
     "out"

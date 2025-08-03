@@ -85,6 +85,7 @@ buildGoModule (
       maintainers = with lib.maintainers; [
         arjan-s
         fpletz
+        matthiasbeyer
       ];
       mainProgram = "ntfy";
     };

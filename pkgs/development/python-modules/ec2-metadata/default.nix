@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ec2-metadata";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ec2_metadata";
     inherit version;
-    hash = "sha256-svgzgXIgcu+ij2XcN+cmwKvToFMvIns/pqKtaEYMf+s=";
+    hash = "sha256-sGayaAkcpANp/dZEuQo07L/XgiW85vDiafC/nOOrG3U=";
   };
 
   build-system = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An easy interface to query the EC2 metadata API, with caching";
+    description = "Easy interface to query the EC2 metadata API, with caching";
     homepage = "https://pypi.org/project/ec2-metadata/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];

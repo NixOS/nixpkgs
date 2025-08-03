@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "7.3.3";
+  version = "7.3.4";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oSXie1yEHO7CREjC1uo6i9yu5QTix7fxbniuGaTJOH8=";
+    hash = "sha256-vIsM/i1RrtCqcnrMSyipgrtsdO32nqSbnYGdmjTyrN8=";
   };
 
   # Fix build on darwin

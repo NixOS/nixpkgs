@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
-    description = "libjaylink is a shared library written in C to access SEGGER J-Link and compatible devices";
+    description = "Shared library written in C to access SEGGER J-Link and compatible devices";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.unix;

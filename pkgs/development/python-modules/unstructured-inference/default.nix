@@ -87,7 +87,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unstructured_inference" ];
 
   meta = with lib; {
-    description = "hosted model inference code for layout parsing models";
+    description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;

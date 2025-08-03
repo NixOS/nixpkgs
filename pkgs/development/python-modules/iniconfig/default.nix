@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "brain-dead simple parsing of ini files";
+    description = "Brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
     license = licenses.mit;
     maintainers = [ ];

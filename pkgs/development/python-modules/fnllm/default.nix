@@ -80,7 +80,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A function-based LLM protocol and wrapper";
+    description = "Function-based LLM protocol and wrapper";
     homepage = "https://github.com/microsoft/essex-toolkit/tree/main/python/fnllm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

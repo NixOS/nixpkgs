@@ -19,7 +19,7 @@ buildDunePackage {
   propagatedBuildInputs = [ ptime ];
 
   meta = {
-    description = "A POSIX clock for MirageOS";
+    description = "POSIX clock for MirageOS";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     changelog = "https://raw.githubusercontent.com/mirage/mirage-ptime/refs/tags/v${version}/CHANGES.md";

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "pdfrw is a pure Python library that reads and writes PDFs";
+    description = "Pure Python library that reads and writes PDFs";
     homepage = "https://github.com/pmaupin/pdfrw";
     maintainers = with maintainers; [ teto ];
     license = licenses.mit;

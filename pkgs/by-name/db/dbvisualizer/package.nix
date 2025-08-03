@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "The universal database tool";
+    description = "Universal database tool";
     homepage = "https://www.dbvis.com/";
     maintainers = with lib.maintainers; [ boldikoller ];
     license = lib.licenses.unfree;

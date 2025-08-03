@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/DigitalTrustCenter/sectxt";
     changelog = "https://github.com/DigitalTrustCenter/sectxt/releases/tag/${src.tag}";
-    description = "security.txt parser and validator";
+    description = "Security.txt parser and validator";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ networkexception ];
   };

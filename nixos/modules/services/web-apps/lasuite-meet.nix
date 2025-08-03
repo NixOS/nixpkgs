@@ -434,6 +434,10 @@ in
           recommendedProxySettings = true;
         };
 
+        locations."/static" = {
+          root = "${cfg.backendPackage}/share";
+        };
+
         locations."/livekit" = mkIf cfg.livekit.enable {
           proxyPass = "http://localhost:${toString config.services.livekit.settings.port}";
           recommendedProxySettings = true;

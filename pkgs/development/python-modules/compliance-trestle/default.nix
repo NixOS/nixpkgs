@@ -98,7 +98,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "trestle" ];
 
   meta = {
-    description = "An opinionated tooling platform for managing compliance as code, using continuous integration and NIST's OSCAL standard";
+    description = "Opinionated tooling platform for managing compliance as code, using continuous integration and NIST's OSCAL standard";
     homepage = "https://github.com/oscal-compass/compliance-trestle";
     changelog = "https://github.com/oscal-compass/compliance-trestle/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       dotlambda
       rhendric
-      bloxx12
+      faukah
     ];
     license = licenses.asl20;
     mainProgram = "magick";

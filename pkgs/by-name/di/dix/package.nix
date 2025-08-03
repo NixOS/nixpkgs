@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner = "bloxx12";
+    owner = "faukah";
     repo = "dix";
     tag = "v${finalAttrs.version}";
     hash = "sha256-cSmxpzj5bNcMgfxJQiYwcwKjCrsTHxY+loRi+pzpFd4=";
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/bloxx12/dix";
+    homepage = "https://github.com/faukah/dix";
     description = "Blazingly fast tool to diff Nix related things";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      bloxx12
+      faukah
       NotAShelf
     ];
     mainProgram = "dix";

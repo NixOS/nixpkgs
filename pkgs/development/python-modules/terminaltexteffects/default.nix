@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "terminaltexteffects" ];
 
   meta = with lib; {
-    description = "A collection of visual effects that can be applied to terminal piped stdin text";
+    description = "Collection of visual effects that can be applied to terminal piped stdin text";
     homepage = "https://chrisbuilds.github.io/terminaltexteffects";
     changelog = "https://chrisbuilds.github.io/terminaltexteffects/changeblog/";
     license = licenses.mit;

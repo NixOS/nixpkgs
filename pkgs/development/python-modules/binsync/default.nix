@@ -59,7 +59,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "binsync" ];
 
   meta = {
-    description = "A reversing plugin for cross-decompiler collaboration, built on git";
+    description = "Reversing plugin for cross-decompiler collaboration, built on git";
     homepage = "https://github.com/binsync/binsync";
     changelog = "https://github.com/binsync/binsync/releases/tag/v${version}";
     license = lib.licenses.bsd2;

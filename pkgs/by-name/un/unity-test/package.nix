@@ -6,7 +6,7 @@
   meson,
   ninja,
   ruby,
-  python3Minimal,
+  python3,
   nix-update-script,
   testers,
   iniparser,
@@ -66,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    python3Minimal
+    python3
     validatePkgConfig
   ];
 
   # For the helper shebangs
   buildInputs = [
-    python3Minimal
+    python3
     ruby
   ];
 

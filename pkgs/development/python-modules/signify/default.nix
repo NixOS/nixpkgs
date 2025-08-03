@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/ralphje/signify/blob/refs/tags/${src.tag}/docs/changelog.rst";
-    description = "library that verifies PE Authenticode-signed binaries";
+    description = "Library that verifies PE Authenticode-signed binaries";
     homepage = "https://github.com/ralphje/signify";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baloo ];

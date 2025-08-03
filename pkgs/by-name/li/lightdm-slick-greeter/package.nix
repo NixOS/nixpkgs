@@ -8,7 +8,6 @@
   python3,
   vala,
   wrapGAppsHook3,
-  xapp,
   lightdm,
   gtk3,
   pixman,
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "2.0.9";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-YSSAFH6azXVk527CmZ6RM2hBdzziTdXeOmYZKusF/DQ=";
+    hash = "sha256-AErY8Gy1AkYY/vpXoSE8zhyJd/nboMw+9BO3j6N7CNc=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xapp
     lightdm
     gtk3
     pixman
@@ -70,6 +68,10 @@ stdenv.mkDerivation rec {
     # We prefer stable path here.
     substituteInPlace data/x.dm.slick-greeter.gschema.xml \
       --replace-fail "/usr/share/onboard" "/run/current-system/sw/share/onboard"
+
+    # This image is really just a fallback.
+    substituteInPlace src/user-prompt-box.vala \
+      --replace-fail "/usr/share/cinnamon/faces/" "/run/current-system/sw/share/cinnamon/faces/"
 
     patchShebangs files/usr/bin/*
   '';

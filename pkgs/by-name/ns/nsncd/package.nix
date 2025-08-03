@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.5.1";
+  version = "1.5.2";
 in
 
 rustPlatform.buildRustPackage {
@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "nsncd";
-    rev = "v${version}";
-    hash = "sha256-0cFCX5pKvYv6yr4+X5kXGz8clNi/LYndFtHaxSmHN+I=";
+    tag = "v${version}";
+    hash = "sha256-HNg2pf6dUQW95B8x/xWa53+GZVWzpTMRVeqWT3dp/M8=";
   };
 
-  cargoHash = "sha256-9M8Y0WwXFlrpRleSQPYDpnjNnxKGvrtO6Istl9qM30M=";
+  cargoHash = "sha256-kjxRhrgKPLCKWc3/gOvdcmQX7IdxFLuwcV7DRZIte78=";
 
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"
@@ -36,13 +36,6 @@ rustPlatform.buildRustPackage {
     "--skip=handlers::test::test_handle_getservbyport_port"
     "--skip=handlers::test::test_handle_getservbyport_port_proto"
     "--skip=handlers::test::test_handle_getservbyport_port_proto_aliases"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isBigEndian [
-    # Expected serialisation output in tests doesn't account for endianness differences
-    # https://github.com/twosigma/nsncd/issues/160
-    "--skip=handlers::test::test_hostent_serialization"
-    "--skip=handlers::test::test_innetgroup_serialization_in_group"
-    "--skip=handlers::test::test_netgroup_serialization"
   ];
 
   meta = with lib; {

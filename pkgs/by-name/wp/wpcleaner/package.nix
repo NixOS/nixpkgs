@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "An utility for performing maintenance on Wikipedia";
+    description = "Utility for performing maintenance on Wikipedia";
     longDescription = ''
       WPCleaner is a tool designed to help with various maintenance tasks, especially repairing
       links to disambiguation pages, checking Wikipedia, fixing spelling and typography, and

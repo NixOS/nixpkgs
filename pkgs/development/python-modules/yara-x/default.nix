@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "The official Python library for YARA-X";
+    description = "Official Python library for YARA-X";
     homepage = "https://github.com/VirusTotal/yara-x/tree/main/py";
     changelog = "https://github.com/VirusTotal/yara-x/tree/v${version}/py";
     license = lib.licenses.bsd3;

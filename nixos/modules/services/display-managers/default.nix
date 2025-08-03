@@ -267,12 +267,6 @@ in
       in
       lib.mkIf noDmUsed (lib.mkDefault false);
 
-    # We can't just rely on 'Conflicts=autovt@tty1.service' because
-    # 'switch-to-configuration switch' will start 'autovt@tty1.service'
-    # and kill us.
-    systemd.services."autovt@tty1".enable =
-      lib.mkIf config.systemd.services.display-manager.enable false;
-
     systemd.services.display-manager = {
       description = "Display Manager";
       after = [

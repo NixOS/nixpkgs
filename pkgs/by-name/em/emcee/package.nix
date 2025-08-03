@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "emcee";
-  version = "0.4.5";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "loopwork-ai";
     repo = "emcee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qiH9Om1ChuMpU3CFQkOdJj1uITSI7hojRtXkRF9GSC0=";
+    hash = "sha256-ri/4Xxc6QgGqsARI5c2JjVeEe5lOmi/c+B3+vUvW6ow=";
   };
 
-  vendorHash = "sha256-TU6Z06b+ZkiaK2ArNKIhHMwBludThpSo4RLZO/sirK4=";
+  vendorHash = "sha256-B8shxh1fLdIR7TN0mSugu9wFNShmrb1WBzCArHVVnoU=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"

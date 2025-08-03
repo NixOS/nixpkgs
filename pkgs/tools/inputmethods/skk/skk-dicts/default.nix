@@ -93,7 +93,7 @@ lib.listToAttrs (
   map mkDictNameValue [
     {
       name = "L";
-      description = "The standard SKK dictionary";
+      description = "Standard SKK dictionary";
       license = lib.licenses.gpl2Plus;
     }
     {

@@ -23,7 +23,7 @@ let
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.105.1";
+  version = "0.106.1";
 in
 rustPlatform.buildRustPackage {
   pname = "nushell";
@@ -33,10 +33,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-UcIcCzfe2C7qFJKLo3WxwXyGI1rBBrhQHtrglKNp6ck=";
+    hash = "sha256-VrGsdO7RiTlf8JK3MBMcgj0z4cWUklDwikMN5Pu6JQI=";
   };
 
-  cargoHash = "sha256-v3BtcEd1eMtHlDLsu0Y4i6CWA47G0CMOyVlMchj7EJo=";
+  cargoHash = "sha256-GSpR54QGiY9Yrs/A8neoKK6hMvSr3ORtNnwoz4GGprY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -72,7 +72,13 @@ rustPlatform.buildRustPackage {
         --test-threads=$NIX_BUILD_CORES \
         --skip=repl::test_config_path::test_default_config_path \
         --skip=repl::test_config_path::test_xdg_config_bad \
-        --skip=repl::test_config_path::test_xdg_config_empty
+        --skip=repl::test_config_path::test_xdg_config_empty ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+          \
+                  --skip=plugins::config::some \
+                  --skip=plugins::stress_internals::test_exit_early_local_socket \
+                  --skip=plugins::stress_internals::test_failing_local_socket_fallback \
+                  --skip=plugins::stress_internals::test_local_socket
+        ''}
     )
     runHook postCheck
   '';

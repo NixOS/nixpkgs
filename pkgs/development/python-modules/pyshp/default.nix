@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyshp";
-  version = "2.4.0";
+  version = "2.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "GeospatialPython";
     repo = "pyshp";
     tag = version;
-    hash = "sha256-q1++2pifLZWc562m5cKoL2jLWM4lOnIwEAOqzKArh+w=";
+    hash = "sha256-NBZCqCbrCUIowj/EwWfC1vNC1fyNdg7EC06RRi6pul0=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

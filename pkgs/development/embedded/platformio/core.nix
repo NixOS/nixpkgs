@@ -32,7 +32,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./interpreter.patch {
-      interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
+      interpreter = (python3Packages.python.withPackages (_: dependencies)).interpreter;
     })
     (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
@@ -45,6 +45,7 @@ buildPythonApplication rec {
       hash = "sha256-yq+/QHCkhAkFND11MbKFiiWT3oF1cHhgWj5JkYjwuY0=";
       revert = true;
     })
+    ./builder-prioritize-python-env-in-path.patch
   ];
 
   postPatch = ''
@@ -57,13 +58,14 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools
     udevCheckHook
   ];
 
+  build-system = [ setuptools ];
+
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     ajsonrpc
     bottle
@@ -71,10 +73,13 @@ buildPythonApplication rec {
     click-completion
     colorama
     git
+    intelhex
     lockfile
     marshmallow
+    pip
     pyelftools
     pyserial
+    pyyaml
     requests
     semantic-version
     setuptools
@@ -82,6 +87,7 @@ buildPythonApplication rec {
     starlette
     tabulate
     uvicorn
+    wheel
     wsproto
     zeroconf
   ]

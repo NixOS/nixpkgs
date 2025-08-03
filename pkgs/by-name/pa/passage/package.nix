@@ -39,18 +39,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  extraPath = lib.makeBinPath [
-    age
-    coreutils
-    findutils
-    git
-    gnugrep
-    gnused
-    qrencode
-    tree
-    wl-clipboard
-    xclip
-  ];
+  extraPath = lib.makeBinPath (
+    [
+      age
+      coreutils
+      findutils
+      git
+      gnugrep
+      gnused
+      qrencode
+      tree
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      wl-clipboard
+      xclip
+    ]
+  );
 
   # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''

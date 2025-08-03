@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A nushell plugin that adds integrates the skim fuzzy finder";
+    description = "Nushell plugin that adds integrates the skim fuzzy finder";
     mainProgram = "nu_plugin_skim";
     homepage = "https://github.com/idanarye/nu_plugin_skim";
     license = lib.licenses.mit;

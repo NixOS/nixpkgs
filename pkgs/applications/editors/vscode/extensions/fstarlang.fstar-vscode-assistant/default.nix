@@ -8,7 +8,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-uiw3EJbYoDG5r93NIxloiF7Co3gxcZT9+hlLZFnxkBE=";
   };
   meta = {
-    description = "An interactive editing mode VS Code extension for F*";
+    description = "Interactive editing mode VS Code extension for F*";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=FStarLang.fstar-vscode-assistant";
     homepage = "https://github.com/FStarLang/fstar-vscode-assistant";
     license = lib.licenses.mit;

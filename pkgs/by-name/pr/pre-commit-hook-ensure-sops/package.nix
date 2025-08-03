@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "pre-commit hook to ensure that files that should be encrypted with sops are";
+    description = "Pre-commit hook to ensure that files that should be encrypted with sops are";
     homepage = "https://github.com/yuvipanda/pre-commit-hook-ensure-sops";
     maintainers = with maintainers; [ nialov ];
     license = licenses.bsd3;

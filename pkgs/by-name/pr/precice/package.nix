@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "preCICE stands for Precise Code Interaction Coupling Environment";
+    description = "PreCICE stands for Precise Code Interaction Coupling Environment";
     homepage = "https://precice.org/";
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ Scriptkiddi ];
