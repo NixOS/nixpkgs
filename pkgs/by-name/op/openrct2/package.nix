@@ -103,10 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DDOWNLOAD_OBJECTS=OFF"
-    "-DDOWNLOAD_OPENMSX=OFF"
-    "-DDOWNLOAD_OPENSFX=OFF"
-    "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
+    (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
+    (lib.cmakeBool "DOWNLOAD_OPENMSX" false)
+    (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
+    (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
   ];
 
   postUnpack = ''
