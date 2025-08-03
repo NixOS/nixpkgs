@@ -27,11 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "DESTDIR="
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin "PLATFORM=mac";
 
-  preBuild = lib.optionalString stdenv.cc.isClang ''
+  # Even with PLATFORM=mac, the Makefile specifies some GCC-specific CFLAGS that
+  # are not supported by modern Clang on macOS
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace -fpredictive-commoning ""
+      --replace-fail "-funswitch-loops" "" \
+      --replace-fail "-fgcse-after-reload" ""
   '';
 
   meta = {
