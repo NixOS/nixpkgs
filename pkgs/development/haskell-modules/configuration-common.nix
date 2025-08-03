@@ -3240,13 +3240,13 @@ with haskellLib;
     amazonkaSrc = pkgs.fetchFromGitHub {
       owner = "brendanhay";
       repo = "amazonka";
-      rev = "f3a7fca02fdbb832cc348e991983b1465225d50c";
-      sha256 = "sha256-u+R+4WeCd16X8H2dkDHzD3nOLsvsTB0lLNUsbRT23aE=";
+      rev = "7645bd335f008912b9e5257486f622b674de7afa";
+      sha256 = "sha256-ObamDnJdcLA2BlX9iGIxkaknUeL3Po3madKO4JA/em0=";
     };
     setAmazonkaSourceRoot =
       dir: drv:
       (overrideSrc {
-        version = "2.0";
+        version = "2.0-unstable-2025-04-16";
         src = amazonkaSrc + "/${dir}";
       })
         drv;
