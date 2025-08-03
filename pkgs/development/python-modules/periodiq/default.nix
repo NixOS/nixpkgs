@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.13.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitLab {
     owner = "bersace";
     repo = "periodiq";

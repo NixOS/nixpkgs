@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchPypi {
     pname = "async_generator";
     inherit version;

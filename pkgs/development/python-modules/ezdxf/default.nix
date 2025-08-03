@@ -23,8 +23,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "ezdxf";

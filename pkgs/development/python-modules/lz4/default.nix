@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "4.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   # get full repository in order to run tests
   src = fetchFromGitHub {
     owner = "python-lz4";

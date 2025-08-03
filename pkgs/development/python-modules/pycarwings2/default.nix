@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "filcole";
     repo = "pycarwings2";

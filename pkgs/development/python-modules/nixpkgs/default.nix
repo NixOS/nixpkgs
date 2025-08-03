@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "nixpkgs";
   version = "0.2.4";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

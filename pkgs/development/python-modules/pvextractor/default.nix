@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
     repo = "pvextractor";
