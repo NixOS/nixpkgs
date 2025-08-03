@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyosohotwaterapi";
-  version = "1.2.0";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";
     tag = version;
-    hash = "sha256-GFjA1RtJC2bxSoH2TIZwEdSAvpteYBTbsS81hhp4Y3E=";
+    hash = "sha256-hpbmiSOLawKVSh7BGV70bRi45HCDKmdxEEhCOdJuIww=";
   };
 
   build-system = [
