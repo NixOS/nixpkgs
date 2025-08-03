@@ -1,5 +1,5 @@
---- a/bridge/bridge.go	2025-05-13 07:36:58.578038227 +0000
-+++ b/bridge/bridge.go	2025-05-13 07:39:01.667180229 +0000
+--- a/bridge/bridge.go
++++ b/bridge/bridge.go
 @@ -41,13 +41,13 @@
  }
 
