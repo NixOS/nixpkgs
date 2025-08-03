@@ -737,11 +737,11 @@ mapAliases {
   futuresql = libsForQt5.futuresql; # added 2023-11-11
   fx_cast_bridge = fx-cast-bridge; # added 2023-07-26
 
-  fcitx5-chinese-addons = libsForQt5.fcitx5-chinese-addons; # Added 2024-03-01
-  fcitx5-configtool = libsForQt5.fcitx5-configtool; # Added 2024-03-01
-  fcitx5-skk-qt = libsForQt5.fcitx5-skk-qt; # Added 2024-03-01
-  fcitx5-unikey = libsForQt5.fcitx5-unikey; # Added 2024-03-01
-  fcitx5-with-addons = libsForQt5.fcitx5-with-addons; # Added 2024-03-01
+  fcitx5-chinese-addons = qt6Packages.fcitx5-chinese-addons; # Added 2024-03-01
+  fcitx5-configtool = qt6Packages.fcitx5-configtool; # Added 2024-03-01
+  fcitx5-skk-qt = qt6Packages.fcitx5-skk-qt; # Added 2024-03-01
+  fcitx5-unikey = qt6Packages.fcitx5-unikey; # Added 2024-03-01
+  fcitx5-with-addons = qt6Packages.fcitx5-with-addons; # Added 2024-03-01
 
   ### G ###
 

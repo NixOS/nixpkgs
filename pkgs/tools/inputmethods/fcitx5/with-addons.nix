@@ -5,7 +5,6 @@
   fcitx5,
   withConfigtool ? true,
   fcitx5-configtool,
-  libsForQt5,
   qt6Packages,
   fcitx5-gtk,
   addons ? [ ],
@@ -16,7 +15,6 @@ symlinkJoin {
 
   paths = [
     fcitx5
-    libsForQt5.fcitx5-qt
     qt6Packages.fcitx5-qt
     fcitx5-gtk
   ]
