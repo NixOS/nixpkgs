@@ -52,6 +52,10 @@ let
         hash = "sha256-mZWP9yF1O4knCiXx8CqolnS+93bM+hTQy40cd0HZmwI=";
       };
       commit_date = "2023-01-05";
+      patches = [
+        # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
+        ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
+      ];
     };
     "14" = {
       src = fetchSpark2014 {
