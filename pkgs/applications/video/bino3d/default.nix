@@ -4,17 +4,14 @@
   fetchgit,
   cmake,
   ninja,
-  pkg-config,
   pandoc,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qttools,
+  pkg-config,
+  kdePackages,
   pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "bino";
+  pname = "bino3d";
   version = "2.5";
 
   src = fetchgit {
@@ -46,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    kdePackages.wrapQtAppsHook
     ninja
     pkg-config
     pandoc
-    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qttools
+    kdePackages.qtbase
+    kdePackages.qtmultimedia
+    kdePackages.qttools
     # The optional QVR dependency is not currently packaged.
   ];
 
