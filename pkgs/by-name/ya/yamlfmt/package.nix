@@ -14,7 +14,12 @@ buildGoModule (finalAttrs: {
     owner = "google";
     repo = "yamlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EYOtxb2Xq4bQpWbITmPieVMqJz3/2chgNirZEjiyjAY=";
+    hash = "sha256-WSw4WhWNyvkCwRCQYFAKhtkvOSSCrSlX3+i6cMHRtOQ=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C "$out" rev-parse --short HEAD > "$out/.git_head"
+      rm -rf "$out/.git"
+    '';
   };
 
   vendorHash = "sha256-Cy1eBvKkQ90twxjRL2bHTk1qNFLQ22uFrOgHKmnoUIQ=";
@@ -23,8 +28,11 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X=main.version=${finalAttrs.version}"
-    "-X=main.commit=${finalAttrs.src.rev}"
   ];
+
+  preBuild = ''
+    ldflags+=" -X=main.commit=$(<.git_head)"
+  '';
 
   # Test failure in vendored yaml package, see:
   # https://github.com/google/yamlfmt/issues/256
