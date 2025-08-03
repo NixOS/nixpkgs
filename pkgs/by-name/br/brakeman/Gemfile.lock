@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    brakeman (6.1.2)
+    brakeman (7.1.0)
       racc
-    racc (1.7.3)
+    racc (1.8.1)
 
 PLATFORMS
   ruby
@@ -12,4 +12,4 @@ DEPENDENCIES
   brakeman
 
 BUNDLED WITH
-   2.5.5
+   2.6.9
