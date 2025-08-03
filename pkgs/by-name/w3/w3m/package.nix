@@ -127,7 +127,10 @@ stdenv.mkDerivation rec {
     homepage = "https://w3m.sourceforge.net/";
     changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
     description = "Text-mode web browser";
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      toastal
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     mainProgram = "w3m";
