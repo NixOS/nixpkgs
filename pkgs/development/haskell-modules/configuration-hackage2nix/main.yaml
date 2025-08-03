@@ -26,8 +26,6 @@
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
-  # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
-  - diagrams-input < 0.1.4
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
