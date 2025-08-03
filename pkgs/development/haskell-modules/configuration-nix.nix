@@ -1785,6 +1785,9 @@ builtins.intersectAttrs super {
 
   xmobar = enableSeparateBinOutput super.xmobar;
 
+  # Combination of library and executable
+  extensions = enableSeparateBinOutput super.extensions;
+
   # These test cases access the network
   hpack = overrideCabal (drv: {
     testFlags = drv.testFlags or [ ] ++ [
