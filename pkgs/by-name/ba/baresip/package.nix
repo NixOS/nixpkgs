@@ -29,21 +29,29 @@
   zlib,
   dbusSupport ? true,
 }:
+
 stdenv.mkDerivation rec {
   version = "3.24.0";
   pname = "baresip";
+
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
     hash = "sha256-32XyMblHF+ST+TpIbdyPFdRtWnIugYMr4lYZnfeFm/c=";
   };
+
+  patches = [
+    ./fix-modules-path.patch
+  ];
+
   prePatch = ''
     substituteInPlace cmake/FindGTK3.cmake --replace-fail GTK3_CFLAGS_OTHER ""
   ''
   + lib.optionalString (!dbusSupport) ''
     substituteInPlace cmake/modules.cmake --replace-fail 'list(APPEND MODULES ctrl_dbus)' ""
   '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
