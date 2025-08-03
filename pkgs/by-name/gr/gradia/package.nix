@@ -22,14 +22,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.7.1";
+  version = "1.9.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-EyO09tKv0SjqMyYM5J8wdeIH6/vJgF7p7FLaTfJDqXY=";
+    hash = "sha256-iDldzS7LLJ/+CfKBpD50LW/YrZ2xb8aqZI9Bs1AOcCM=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    substituteInPlace $out/share/gradia/gradia/ui/image_exporters.py --replace-fail "/bin/bash" "${lib.getExe bash}"
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
