@@ -3,6 +3,7 @@
 
 set -x -eu -o pipefail
 
+MAJOR_VERSION=1
 MINOR_VERSION="${1:?Must provide a minor version number, like '26', as the only argument}"
 
 WORKDIR=$(mktemp -d)
@@ -13,7 +14,7 @@ CURL="curl --silent --fail --location ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"}"
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
-OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_1_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_1_${MINOR_VERSION}.name).version" | tr -d '"')"
+OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_${MAJOR_VERSION}_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_${MAJOR_VERSION}_${MINOR_VERSION}.name).version" | tr -d '"')"
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
 $CURL https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
@@ -21,7 +22,7 @@ $CURL https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 LATEST_TAG_NAME=$(cat ${LATEST_TAG_RAWFILE} | \
     jq -r 'map(select(.prerelease == false))' | \
     jq 'map(.tag_name)' | \
-    grep -v -e rc -e engine | tail -n +2 | head -n -1 | sed 's|[", ]||g' | sort -rV | grep -E "^v1\.${MINOR_VERSION}\." | head -n1)
+    grep -v -e rc -e engine | tail -n +2 | head -n -1 | sed 's|[", ]||g' | sort -rV | grep -E "^v${MAJOR_VERSION}\.${MINOR_VERSION}\." | head -n1)
 
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
@@ -57,7 +58,7 @@ if [[ "${#CHART_FILES[@]}" != "2" ]]; then
     exit 1
 fi
 
-cd "${NIXPKGS_K3S_PATH}/1_${MINOR_VERSION}"
+cd "${NIXPKGS_K3S_PATH}/${MAJOR_VERSION}_${MINOR_VERSION}"
 
 CHARTS_URL=https://k3s.io/k3s-charts/assets
 # Get metadata for both files
@@ -123,7 +124,7 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules")
+K3S_VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_ROOT}. {}).k3s_${MAJOR_VERSION}_${MINOR_VERSION}.goModules")
 set -e
 
 if [ -n "${K3S_VENDOR_HASH:-}" ]; then
@@ -137,7 +138,7 @@ fi
 # See https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
 cat <<EOF
 [{
-    "attrPath": "k3s_1_${MINOR_VERSION}",
+    "attrPath": "k3s_${MAJOR_VERSION}_${MINOR_VERSION}",
     "oldVersion": "$OLD_VERSION",
     "newVersion": "$K3S_VERSION",
     "files": ["$PWD/versions.nix","$PWD/chart-versions.nix","$PWD/images-versions.json"]
