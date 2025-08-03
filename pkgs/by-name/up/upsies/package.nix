@@ -18,7 +18,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "upsies";
-  version = "2025.04.21";
+  version = "2025.08.03";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "plotski";
     repo = "upsies";
     tag = "v${version}";
-    hash = "sha256-gjv0HOFV1VdfhVejGbV2+bMxP9BPfB3/3p6nOAYMS34=";
+    hash = "sha256-y6Bonw5IW67dvT1V4MzEgmdy5sZG2RwmVr8vzG0r8fc=";
   };
 
   patches = [
@@ -62,10 +62,15 @@ python3Packages.buildPythonApplication rec {
     unidecode
   ];
 
+  pythonRelaxDeps = [
+    "unidecode"
+  ];
+
   nativeCheckInputs =
     with python3Packages;
     [
       pytest-asyncio
+      pytest-cov-stub
       pytest-mock
       pytest-timeout
       pytest-httpserver
