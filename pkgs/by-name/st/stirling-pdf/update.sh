@@ -2,5 +2,5 @@
 #!nix-shell -i bash -p nix-update
 
 nix-update stirling-pdf
-$(nix-build -A stirling-pdf.mitmCache.updateScript)
+DISABLE_ADDITIONAL_FEATURES=true $(nix-build -A stirling-pdf.mitmCache.updateScript)
 
