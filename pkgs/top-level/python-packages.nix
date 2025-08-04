@@ -14125,6 +14125,8 @@ self: super: with self; {
 
   pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
 
+  pytest-asyncio_0 = callPackage ../development/python-modules/pytest-asyncio/0.nix { };
+
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytest-asyncio-cooperative =
