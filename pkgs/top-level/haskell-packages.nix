@@ -21,6 +21,7 @@ let
     "integer-simple"
     "native-bignum"
     # Binary GHCs
+    "ghc801Binary"
     "ghc865Binary"
     "ghc8107Binary"
     "ghc902Binary"
@@ -83,6 +84,11 @@ in
       bb = pkgsBuildBuild.haskell;
     in
     {
+      ghc801Binary = callPackage ../development/compilers/ghc/8.0.1-binary.nix {
+        # Should be llvmPackages_37(?) which has been removed from nixpkgs
+        llvmPackages = null;
+      };
+
       ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
         # Should be llvmPackages_6 which has been removed from nixpkgs
         llvmPackages = null;
@@ -508,6 +514,12 @@ in
     in
     {
 
+      ghc801Binary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc801Binary;
+        ghc = bh.compiler.ghc801Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
       ghc865Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc865Binary;
         ghc = bh.compiler.ghc865Binary;
