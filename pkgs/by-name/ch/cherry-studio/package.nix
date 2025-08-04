@@ -5,7 +5,7 @@
   yarn-berry_4,
   nodejs,
   python3,
-  electron_35,
+  electron_37,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
@@ -14,7 +14,7 @@
 }:
 
 let
-  electron = electron_35;
+  electron = electron_37;
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
