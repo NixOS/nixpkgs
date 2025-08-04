@@ -15174,8 +15174,6 @@ with pkgs;
 
   p4est-dbg = p4est.override { debug = true; };
 
-  sageWithDoc = sage.override { withDoc = true; };
-
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
   };
