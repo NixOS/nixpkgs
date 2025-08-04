@@ -3221,7 +3221,7 @@ with haskellLib;
 
   # 2025-07-10: Hackage release is outdated, https://github.com/portnov/libssh2-hs/issues/77
   libssh2 = overrideSrc {
-    version = "unstable-2025-04-03";
+    version = "0.2.0.9-unstable-2025-04-03";
     src =
       pkgs.fetchFromGitHub {
         owner = "portnov";
