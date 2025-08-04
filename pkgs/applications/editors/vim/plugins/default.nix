@@ -43,10 +43,11 @@ let
       (builtins.mapAttrs (name: _: call name))
     ];
 
-  plugins = callPackage ./generated.nix {
-    inherit buildVimPlugin;
-    inherit (neovimUtils) buildNeovimPlugin;
-  };
+  plugins =
+    self: super:
+    callPackage ./utils/parse-generated.nix {
+      inherit buildVimPlugin;
+    };
 
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
