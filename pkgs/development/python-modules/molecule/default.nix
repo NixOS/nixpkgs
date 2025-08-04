@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "25.6.0";
+  version = "25.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DbII3li+zssMqHvyzEjhAXI04eOtlHwXlIdzf4hOfHw=";
+    hash = "sha256-oljMrwotFaoLSS/Epa1jhouyKeCYRRzZpY+/QBW7pRA=";
   };
 
   nativeBuildInputs = [
