@@ -38,14 +38,14 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "w3m";
   version = "0.5.4";
 
   src = fetchFromSourcehut {
     owner = "~rkta";
     repo = "w3m";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A11vHFiyotFncqWRiljRJbHO1wEzmWTEh1DOel803q4=";
   };
 
@@ -120,14 +120,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   passthru.tests.version = testers.testVersion {
-    inherit version;
+    inherit (finalAttrs) version;
     package = w3m;
     command = "w3m -version";
   };
 
   meta = {
     homepage = "https://git.sr.ht/~rkta/w3m";
-    changelog = "https://git.sr.ht/~rkta/w3m/tree/v${version}/item/NEWS";
+    changelog = "https://git.sr.ht/~rkta/w3m/tree/v${finalAttrs.version}/item/NEWS";
     description = "Text-mode web browser";
     maintainers = with lib.maintainers; [
       anthonyroussel
@@ -137,4 +137,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "w3m";
   };
-}
+})
