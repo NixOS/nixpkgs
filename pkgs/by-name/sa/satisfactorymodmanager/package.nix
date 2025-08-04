@@ -65,7 +65,7 @@ buildGoModule rec {
   # running this caches some additional dependencies for the FOD
   overrideModAttrs = {
     preBuild = ''
-      wails build
+      wails build -tags webkit2_41 # 4.0 EOL
     '';
   };
 
@@ -75,7 +75,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    wails build
+    wails build -tags webkit2_41 # 4.0 EOL
     runHook postBuild
   '';
 
