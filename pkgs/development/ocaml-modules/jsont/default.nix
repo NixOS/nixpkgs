@@ -1,9 +1,13 @@
 {
   lib,
   fetchzip,
+  topkg,
   buildTopkgPackage,
+  withBrr ? true,
   brr,
+  withBytesrw ? true,
   bytesrw,
+  withCmdliner ? true,
   cmdliner,
 }:
 
@@ -18,17 +22,22 @@ buildTopkgPackage rec {
     hash = "sha256-dXHl+bLuIrlrQ5Np37+uVuETFBb3j8XeDVEK9izoQFk=";
   };
 
-  # docs say these dependendencies are optional, but buildTopkgPackage doesn’t
-  # handle missing dependencies
+  buildInputs = lib.optional withCmdliner cmdliner;
 
-  buildInputs = [
-    cmdliner
-  ];
+  propagatedBuildInputs = lib.optional withBrr brr ++ lib.optional withBytesrw bytesrw;
 
-  propagatedBuildInputs = [
-    brr
-    bytesrw
-  ];
+  buildPhase = "${topkg.run} build ${
+    lib.escapeShellArgs [
+      "--with-brr"
+      (lib.boolToString withBrr)
+
+      "--with-bytesrw"
+      (lib.boolToString withBytesrw)
+
+      "--with-cmdliner"
+      (lib.boolToString withCmdliner)
+    ]
+  }";
 
   meta = {
     description = "Declarative JSON data manipulation";
