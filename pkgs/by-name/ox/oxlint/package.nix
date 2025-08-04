@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   rust-jemalloc-sys,
   versionCheckHook,
 }:
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Collection of JavaScript tools written in Rust";
