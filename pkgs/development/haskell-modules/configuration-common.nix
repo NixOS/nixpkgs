@@ -488,14 +488,17 @@ with haskellLib;
   # https://github.com/haskell-foundation/foundation/pull/573
   # Don't apply patch for GHC == 9.2.* on 64bit where it breaks compilation:
   # https://github.com/haskell-foundation/foundation/pull/573#issuecomment-1669468867
-  basement = appendPatches (lib.optionals (pkgs.stdenv.hostPlatform.is32bit || lib.versions.majorMinor self.ghc.version != "9.2") [
-    (fetchpatch {
-      name = "basement-i686-ghc-9.4.patch";
-      url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
-      sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
-      stripLen = 1;
-    })
-  ]) super.basement;
+  basement = appendPatches (lib.optionals
+    (pkgs.stdenv.hostPlatform.is32bit || lib.versions.majorMinor self.ghc.version != "9.2")
+    [
+      (fetchpatch {
+        name = "basement-i686-ghc-9.4.patch";
+        url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
+        sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
+        stripLen = 1;
+      })
+    ]
+  ) super.basement;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
