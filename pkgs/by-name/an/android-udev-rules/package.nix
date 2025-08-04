@@ -4,11 +4,6 @@
   fetchFromGitHub,
   udevCheckHook,
 }:
-
-## Usage
-# In NixOS, simply add this package to services.udev.packages:
-#   services.udev.packages = [ pkgs.android-udev-rules ];
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "android-udev-rules";
   version = "20250525";
@@ -34,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/M0Rf30/android-udev-rules";
     description = "Android udev rules list aimed to be the most comprehensive on the net";
+    longDescription = ''
+      Android udev rules list aimed to be the most comprehensive on the net.
+      To use on NixOS, simply add this package to services.udev.packages:
+      ```nix
+      services.udev.packages = [ pkgs.android-udev-rules ];
+      ```
+    '';
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.abbradar ];
