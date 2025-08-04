@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  buildPythonPackage,
   fetchPypi,
 }:
 
