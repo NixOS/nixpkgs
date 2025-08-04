@@ -59,6 +59,9 @@ self: super: {
   # Becomes a core package in GHC >= 9.10
   os-string = doDistribute self.os-string_2_0_7;
 
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
