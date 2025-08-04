@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.199";
+  version = "2.216";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-1d5OzhAFo0s5xshJCdfWufo5Xb0UtHzUPdR6fwuaGYQ=";
+    hash = "sha256-cHWB8uSOt2UhxkR+UsuQs8EG5FpW8mMsrk+k9uHa21Q=";
   };
 
   nativeBuildInputs = [
@@ -124,8 +124,8 @@ stdenv.mkDerivation rec {
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
-    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
+    gradle nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
+    gradle nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
   '';
 
   passthru.updateScript = writeScript "update-ed-odyssey-materials-helper" ''
