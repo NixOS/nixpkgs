@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "duckduckgo-search";
+  pname = "duckduckgo-search_8";
   version = "8.1.1";
   pyproject = true;
 
