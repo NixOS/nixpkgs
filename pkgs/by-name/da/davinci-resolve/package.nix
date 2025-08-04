@@ -269,6 +269,8 @@ buildFHSEnv {
 
   passthru = {
     inherit davinci;
+  }
+  // lib.optionalAttrs (!studioVariant) {
     updateScript = lib.getExe (writeShellApplication {
       name = "update-davinci-resolve";
       runtimeInputs = [
