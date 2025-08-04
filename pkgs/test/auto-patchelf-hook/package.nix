@@ -100,4 +100,8 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
   inherit __structuredAttrs;
+  meta = {
+    # Downloads an x86_64-linux only binary
+    platforms = [ "x86_64-linux" ];
+  };
 }
