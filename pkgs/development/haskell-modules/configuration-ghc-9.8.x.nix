@@ -70,7 +70,6 @@ in
   #
   # Version upgrades
   #
-  megaparsec = doDistribute self.megaparsec_9_7_0;
   ghc-tags = self.ghc-tags_1_8;
 
   #
