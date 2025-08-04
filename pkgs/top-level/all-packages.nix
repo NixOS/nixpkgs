@@ -3233,8 +3233,6 @@ with pkgs;
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack { };
 
-  heimdall-gui = heimdall.override { enableGUI = true; };
-
   headscale = callPackage ../servers/headscale { };
 
   highlight = callPackage ../tools/text/highlight {
