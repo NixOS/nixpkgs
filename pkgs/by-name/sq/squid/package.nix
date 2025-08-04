@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp src/squid $out/bin
     cp src/unlinkd $out/libexec
     cp src/mime.conf.default $out/etc/mime.conf
+    cp src/log/file/log_file_daemon $out/libexec
     cp -r icons $out/share
     cp -r errors $out/share
     runHook postInstall
