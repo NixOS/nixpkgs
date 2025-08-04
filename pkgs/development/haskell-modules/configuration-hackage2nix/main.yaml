@@ -70,10 +70,10 @@ extra-packages:
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
   - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.2, 9.4
-  - ghc-lib-parser == 9.10.*            # 2024-12-26: preserve for GHC 9.10
+  - ghc-lib-parser == 9.10.*            # 2024-12-26: preserve for GHC 9.6, 9.8, 9.10
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.2, 9.4
-  - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for 9.10 HLS
+  - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for GHC 9.6, 9.8, 9.10
   - ghc-source-gen < 0.4.6.0            # 2024-12-31: support GHC < 9.0
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*

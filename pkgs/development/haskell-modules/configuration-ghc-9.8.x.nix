@@ -100,14 +100,6 @@ in
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  # 2025-04-21: "flavor" for GHC 9.8.5 is missing a fix introduced for 9.8.4. See:
-  # https://github.com/digital-asset/ghc-lib/pull/571#discussion_r2052684630
-  ghc-lib-parser = warnAfterVersion "9.8.5.20250214" (
-    overrideCabal {
-      postPatch = ''
-        substituteInPlace compiler/cbits/genSym.c \
-          --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
-      '';
-    } super.ghc-lib-parser
-  );
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_2_20250515;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }

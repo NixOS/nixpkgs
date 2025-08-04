@@ -196,6 +196,9 @@ in
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
+
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_2_20250515;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
 //
