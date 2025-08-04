@@ -21,14 +21,17 @@ stdenv.mkDerivation {
   dontBuild = true;
   doInstallCheck = true;
 
-  postPatch = ''
-    # Use scripts/kernel-doc.py here, not scripts/kernel-doc because
-    # patchShebangs skips symlinks
-
-    patchShebangs --build \
-      scripts/kernel-doc.py \
-      scripts/split-man.pl
-  '';
+  postPatch =
+    let
+      scripts = lib.escapeShellArgs [
+        "scripts/kernel-doc.py"
+        "scripts/split-man.pl"
+      ];
+    in
+    ''
+      chmod +x ${scripts}
+      patchShebangs --build ${scripts}
+    '';
 
   installPhase = ''
     runHook preInstall
