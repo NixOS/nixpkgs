@@ -3138,6 +3138,10 @@ with pkgs;
     xenSupport = true;
   };
 
+  grub2_xen_pvh = grub2.override {
+    xenPvhSupport = true;
+  };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
