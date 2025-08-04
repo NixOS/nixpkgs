@@ -1,13 +1,12 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   replaceVars,
-  requests,
   dmenu,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "dmensamenu";
   version = "1.2.2";
   format = "setuptools";
@@ -15,8 +14,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dotlambda";
     repo = "dmensamenu";
-    rev = version;
-    sha256 = "1ck1i1k40bli6m3n49ff6987hglby9fn4vfr28jpkm3h70s2km3n";
+    tag = version;
+    hash = "sha256-dtQpNDhw1HklEtltYl3yiz54UDLOJWJHNZEuQGaIYbI=";
   };
 
   patches = [
@@ -25,18 +24,18 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     requests
   ];
 
   # No tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dotlambda/dmensamenu";
     description = "Print German canteen menus using dmenu and OpenMensa";
     mainProgram = "dmensamenu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

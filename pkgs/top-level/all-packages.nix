@@ -11862,10 +11862,6 @@ with pkgs;
 
   dmenu-rs-enable-plugins = dmenu-rs.override { enablePlugins = true; };
 
-  dmensamenu = callPackage ../applications/misc/dmensamenu {
-    inherit (python3Packages) buildPythonApplication requests;
-  };
-
   inherit (callPackage ../applications/virtualization/docker { })
     docker_25
     docker_28
@@ -16067,8 +16063,6 @@ with pkgs;
   terraforming = callPackage ../applications/networking/cluster/terraforming { };
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
-
-  unityhub = callPackage ../development/tools/unityhub { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 

@@ -12,14 +12,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "console-setup";
-  version = "1.239";
+  version = "1.240";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
     tag = finalAttrs.version;
-    hash = "sha256-jyV+tgasZPjidcOmWhnK/ggf+ocN8ZZODMQfA6ZAHcc=";
+    hash = "sha256-cKMgFW97B0ippQjXur8e5rrlEVo5EBoAgCCni2MY5Ys=";
   };
 
   buildInputs = [
