@@ -8,9 +8,9 @@
   fetchFromGitHub,
   bundlerEnv,
   callPackage,
+  nixosTests,
 
   ruby_3_3,
-  replace,
   gzip,
   gnutar,
   git,
@@ -43,16 +43,16 @@
   uglify-js,
 
   plugins ? [ ],
-}@args:
+}:
 
 let
-  version = "3.4.4";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-rA42fOhSJVrNPcFSB2+On7JVeZch8t2yNo+36UK+QcA=";
+    sha256 = "sha256-vidv5aa2r1YOcnvkqrk7ttuIk1bN5Ct7kMANl8kpEm0=";
   };
 
   ruby = ruby_3_3;
@@ -433,13 +433,13 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix {
-        inherit (stdenv) system;
-        inherit pkgs;
-        package = pkgs.discourse.override args;
+      tests = {
+        inherit (nixosTests)
+          discourse
+          discourseAllPlugins
+          ;
       };
     };
-
     meta = with lib; {
       homepage = "https://www.discourse.org/";
       platforms = platforms.linux;

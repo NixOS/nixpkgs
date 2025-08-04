@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "xtf";
-  version = "0-unstable-2025-07-24";
+  version = "0-unstable-2025-07-26";
 
   outputs = [
     "out" # xtf-runner and test suite.
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xtf.git";
-    rev = "1f7323571e7be793a2f969eaf95273564f323b0d";
-    hash = "sha256-cqechUi+UbrvNni9wryxWCtXw2+rDGfqpq0DE4INlPw=";
+    rev = "0cbf4c35b06b2b285fc325b8458132e844c5cf0e";
+    hash = "sha256-sCNHhh6ZkMder1PSokfukKfcP8cVIIz8NiHH/4Yx3sE=";
   };
 
   nativeBuildInputs =
