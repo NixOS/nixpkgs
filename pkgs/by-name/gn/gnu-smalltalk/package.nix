@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     # The awk script incorrectly parsed `glib/glib.h` and was trying to find `glib/gwin32.h`,
     # that isn't included since we're building only for linux.
     ./0000-fix_mkorder.patch
+    ./0001-fix-compilation.patch
   ];
 
   # The dependencies and their justification are explained at
