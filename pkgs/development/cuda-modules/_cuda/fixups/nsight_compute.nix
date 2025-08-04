@@ -19,8 +19,7 @@ let
   inherit (qt6) wrapQtAppsHook qtwebview;
   archDir =
     {
-      aarch64-linux =
-        "linux-" + (if flags.isJetsonBuild then "v4l_l4t" else "linux-desktop") + "-t210-a64";
+      aarch64-linux = "linux-" + (if flags.isJetsonBuild then "v4l_l4t" else "desktop") + "-t210-a64";
       x86_64-linux = "linux-desktop-glibc_2_11_3-x64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -36,7 +35,7 @@ in
       (qt6.qtwebengine or qt6.full)
       rdma-core
     ]
-    ++ lib.optionals (cudaMajorMinorVersion == "12.0" && flags.isJetsonBuild) [
+    ++ lib.optionals (cudaMajorMinorVersion == "12.0" && stdenv.hostPlatform.isAarch64) [
       libjpeg8
     ]
     ++ lib.optionals (cudaAtLeast "12.1" && cudaOlder "12.4") [
