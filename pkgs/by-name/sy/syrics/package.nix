@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "syrics";
-  version = "0.1.2.2";
+  version = "0.1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "akashrchandran";
     repo = "syrics";
     tag = "v${version}";
-    hash = "sha256-Ck7pTUgOdib0WqPnvTU6NHKWhMYsIZBY0rzUtFi0q/A=";
+    hash = "sha256-uOk/9PzQgLXAy8eSp739fArq1/C7ZqdY9GoOJ3LObJ8=";
   };
 
   build-system = [

@@ -141,6 +141,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smolagents" ];
 
+  disabledTestPaths = [
+    # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+    "tests/test_types.py"
+  ];
+
   disabledTests = [
     # Missing dependencies
     "test_cleanup"
