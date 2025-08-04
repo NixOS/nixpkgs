@@ -1,14 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   git,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-archive-all";
   version = "1.23.1";
   format = "setuptools";
@@ -16,7 +13,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Kentzo";
     repo = "git-archive-all";
-    rev = version;
+    tag = version;
     hash = "sha256-fIPjggOx+CEorj1bazz8s81ZdppkTL0OlA5tRqCYZyc=";
   };
 
@@ -40,7 +37,7 @@ buildPythonApplication rec {
     git
   ];
 
-  checkInputs = [
+  checkInputs = with python3Packages; [
     pytestCheckHook
     pytest-cov-stub
     pytest-mock
@@ -52,15 +49,15 @@ buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Archive a repository with all its submodules";
     longDescription = ''
       A python script wrapper for git-archive that archives a git superproject
       and its submodules, if it has any. Takes into account .gitattributes
     '';
     homepage = "https://github.com/Kentzo/git-archive-all";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-archive-all";
   };
 }

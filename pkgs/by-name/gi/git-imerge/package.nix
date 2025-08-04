@@ -1,11 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
   installShellFiles,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-imerge";
   version = "1.2.0";
   format = "setuptools";
@@ -21,11 +21,11 @@ buildPythonApplication rec {
     installShellCompletion --bash completions/git-imerge
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mhagger/git-imerge";
     description = "Perform a merge between two branches incrementally";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "git-imerge";
   };
 }
