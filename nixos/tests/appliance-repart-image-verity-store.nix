@@ -22,19 +22,7 @@
     in
     {
       imports = [ ../modules/image/repart.nix ];
-
-      virtualisation.fileSystems = lib.mkVMOverride {
-        "/" = {
-          fsType = "tmpfs";
-          options = [ "mode=0755" ];
-        };
-
-        # bind-mount the store
-        "/nix/store" = {
-          device = "/usr/nix/store";
-          options = [ "bind" ];
-        };
-      };
+      virtualisation.fileSystems = lib.mkForce {};
 
       image.repart = {
         verityStore = {
@@ -78,11 +66,6 @@
         id = "nixos-appliance";
         version = "1";
       };
-
-      # don't create /usr/bin/env
-      # this would require some extra work on read-only /usr
-      # and it is not a strict necessity
-      system.activationScripts.usrbinenv = lib.mkForce "";
     };
 
   testScript =

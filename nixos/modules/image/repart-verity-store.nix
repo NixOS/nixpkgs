@@ -13,17 +13,17 @@ let
 
   # TODO: make these and other arch mappings available from systemd-lib for example
   partitionTypes = {
-    usr =
+    nix-store =
       {
-        "x86_64" = "usr-x86-64";
-        "arm64" = "usr-arm64";
+        "x86_64" = "83df5f3c-3378-484c-b61a-eb6035de90c1";
+        "arm64" = "dd7c5f84-7f48-484e-945c-bc8067417ab2";
       }
       ."${pkgs.stdenv.hostPlatform.linuxArch}";
 
-    usr-verity =
+    nix-store-verity =
       {
-        "x86_64" = "usr-x86-64-verity";
-        "arm64" = "usr-arm64-verity";
+        "x86_64" = "6c190700-0c79-4e3b-b010-f370fc989f01";
+        "arm64" = "247d5fbc-a73d-4940-a416-4b8b16788eaf";
       }
       ."${pkgs.stdenv.hostPlatform.linuxArch}";
   };
@@ -37,7 +37,7 @@ let
         builtins.replaceStrings
           [ "@NIX_STORE_VERITY@" ]
           [
-            partitionTypes.usr-verity
+            partitionTypes.nix-store-verity
           ]
           (builtins.readFile ./assert_uki_repart_match.py)
       );
@@ -83,6 +83,7 @@ in
   config = lib.mkIf cfg.enable {
     boot.initrd = {
       systemd.dmVerity.enable = true;
+      nix-store-veritysetup.enable = true;
       supportedFilesystems = {
         ${config.image.repart.partitions.${cfg.partitionIds.store}.repartConfig.Format} =
           lib.mkDefault true;
@@ -92,25 +93,36 @@ in
     image.repart.partitions = {
       # dm-verity hash partition
       ${cfg.partitionIds.store-verity}.repartConfig = {
-        Type = lib.mkDefault partitionTypes.usr-verity;
+        Type = partitionTypes.nix-store-verity;
         Verity = "hash";
         VerityMatchKey = lib.mkDefault verityMatchKey;
         Label = lib.mkDefault "store-verity";
       };
       # dm-verity data partition that contains the nix store
       ${cfg.partitionIds.store} = {
+        stripNixStorePrefix = true;
         storePaths = [ config.system.build.toplevel ];
         repartConfig = {
-          Type = lib.mkDefault partitionTypes.usr;
+          Type = partitionTypes.nix-store;
           Verity = "data";
           Format = lib.mkDefault "erofs";
           VerityMatchKey = lib.mkDefault verityMatchKey;
           Label = lib.mkDefault "store";
         };
       };
-
     };
 
+    fileSystems = {
+      "/" = lib.mkDefault {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = [ "mode=0755" ];
+      };
+      "/nix/store" = lib.mkImageMediaOverride {
+        device = "/dev/mapper/nix-store";
+        fsType = "erofs";
+      };
+    };
     system.build = {
 
       # intermediate system image without ESP
@@ -129,7 +141,7 @@ in
             }
           );
 
-      # UKI with embedded usrhash from intermediateImage
+      # UKI with embedded storehash from intermediateImage
       uki =
         let
           inherit (config.system.boot.loader) ukiFile;
@@ -147,16 +159,16 @@ in
             ''
               mkdir -p $out
 
-              # Extract the usrhash from the output of the systemd-repart invocation for the intermediate image.
-              usrhash=$(jq -r \
-                '.[] | select(.type=="${partitionTypes.usr-verity}") | .roothash' \
+              # Extract the storehash from the output of the systemd-repart invocation for the intermediate image.
+              storehash=$(jq -r \
+                '.[] | select(.type=="${partitionTypes.nix-store-verity}") | .roothash' \
                 ${config.system.build.intermediateImage}/repart-output.json
               )
 
-              # Build UKI with the embedded usrhash.
+              # Build UKI with the embedded storehash.
               ukify build \
                   --config=${config.boot.uki.configFile} \
-                  --cmdline="${cmdline} usrhash=$usrhash" \
+                  --cmdline="${cmdline} storehash=$storehash" \
                   --output="$out/${ukiFile}"
             ''
         );
