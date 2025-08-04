@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xfangfang";
     repo = "wiliwili";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-37DQafP+PFjrfNXJt88oK0ghqQEVQjDdVbYsf1tHAN4=";
   };

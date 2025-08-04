@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alex1701c";
     repo = "JetBrainsRunner";
-    rev = version;
+    tag = version;
     hash = "sha256-fzGwwvBgvUVU6Ra66KrIAqRjWWR6pWYbWVkOk2tDwkc=";
     fetchSubmodules = true;
   };

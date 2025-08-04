@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "biojppm";
     repo = "rapidyaml";
     fetchSubmodules = true;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+ENfflVjeesX14m0G71HdeSIECopZV4J2JL9+c+nbXE=";
   };
 

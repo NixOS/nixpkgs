@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
-    rev = version;
+    tag = version;
     hash = "sha256-Ejr+FxaYRDI01apHhKTs11iwcv72a8ZxyPmVetEvadU=";
     fetchSubmodules = true;
   };
