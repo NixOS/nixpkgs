@@ -12,7 +12,10 @@ in
 {
 
   meta = {
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [
+      nickcao
+      prince213
+    ];
   };
 
   options = {
