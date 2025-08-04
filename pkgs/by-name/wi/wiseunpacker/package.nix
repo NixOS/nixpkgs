@@ -34,7 +34,7 @@ buildDotnetModule {
 
   meta = with lib; {
     homepage = "https://github.com/mnadareski/WiseUnpacker/";
-    description = "C# Wise installer unpacker based on HWUN and E_WISE ";
+    description = "C# Wise installer unpacker based on HWUN and E_WISE";
     maintainers = [ maintainers.gigahawk ];
     license = licenses.mit;
   };

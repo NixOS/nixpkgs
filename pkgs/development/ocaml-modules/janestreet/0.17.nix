@@ -1427,7 +1427,7 @@ with self;
   ppx_python = janePackage {
     pname = "ppx_python";
     hash = "sha256-WqTYH5Zz/vRak/CL1ha8oUbQ8+XRuUu9610uj8II74o=";
-    meta.description = "A [@@deriving] plugin to generate Python conversion functions ";
+    meta.description = "A [@@deriving] plugin to generate Python conversion functions";
     propagatedBuildInputs = [
       ppx_base
       ppxlib

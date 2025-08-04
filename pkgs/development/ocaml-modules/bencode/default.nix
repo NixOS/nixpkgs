@@ -25,7 +25,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "Bencode (.torrent file format) reader/writer in OCaml ";
+    description = "Bencode (.torrent file format) reader/writer in OCaml";
     homepage = "https://github.com/rgrinberg/bencode";
     changelog = "https://github.com/rgrinberg/bencode/blob/${version}/Changelog.md";
     license = lib.licenses.mit;

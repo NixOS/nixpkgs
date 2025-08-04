@@ -1812,7 +1812,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
-          description = "Personal knowledge management and sharing system for VSCode ";
+          description = "Personal knowledge management and sharing system for VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=foam.foam-vscode";
           homepage = "https://foambubble.github.io/";
           license = lib.licenses.mit;
@@ -5464,7 +5464,7 @@ let
           hash = "sha256-sin2kTx7aXFPhtraKUjsowuV8Z2z237RIePL4F/JiPM=";
         };
         meta = {
-          description = "Visual Studio Code extension to help user easyly finish long words ";
+          description = "Visual Studio Code extension to help user easyly finish long words";
           longDescription = ''
             Dictionary completion allows user to get a list of keywords, based off of the current word at the cursor.
             This is useful if you are typing a long word (e.g. acknowledgeable) and don't want to finish typing or don't remember the Spelling
