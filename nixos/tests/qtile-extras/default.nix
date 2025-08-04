@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  name = "qtile";
+  name = "qtile-extras";
 
   meta = {
     maintainers = with lib.maintainers; [
@@ -16,9 +16,9 @@
       ...
     }:
     let
-      # We create a custom Qtile configuration file that adds a
-      # startup hook to qtile. This ensure we can reproducibly check
-      # when Qtile is truly ready to receive our inputs
+      # We create a custom Qtile configuration file that adds a widget from
+      # qtile-extras to the bar. This ensure that the qtile-extras package
+      # also works, and that extraPackages behave as expected.
       config-deriv = pkgs.callPackage ./config.nix { };
     in
     {
@@ -36,10 +36,7 @@
 
       services.displayManager.defaultSession = lib.mkForce "qtile";
 
-      environment.systemPackages = [
-        pkgs.kitty
-        pkgs.xorg.xwininfo
-      ];
+      environment.systemPackages = [ pkgs.kitty ];
     };
 
   testScript = ''
