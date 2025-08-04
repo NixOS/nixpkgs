@@ -4,7 +4,7 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "sqlalchemy-adapter";
   version = "1.3.0";
   pyproject = true;
