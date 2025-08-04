@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   pkg-config,
   libftdi1,
@@ -18,13 +19,18 @@
   usePyPy ? stdenv.hostPlatform.system == "x86_64-linux",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icestorm";
   version = "0-unstable-2025-06-03";
 
   passthru = rec {
     pythonPkg = if (false && usePyPy) then pypy3 else python3;
     pythonInterp = pythonPkg.interpreter;
+
+    tests.examples = callPackage ./tests.nix {
+      inherit (finalAttrs) pname src;
+      icestorm = finalAttrs.finalPackage;
+    };
   };
 
   src = fetchFromGitHub {
@@ -36,12 +42,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    passthru.pythonPkg
+    finalAttrs.passthru.pythonPkg
     libftdi1
   ];
   makeFlags = [
     "PREFIX=$(out)"
-    "PYTHON3=${passthru.pythonInterp}"
+    "PYTHON3=${finalAttrs.passthru.pythonInterp}"
   ];
 
   enableParallelBuilding = true;
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     for x in $(find . -type f -iname '*.py' -executable); do
       substituteInPlace "$x" \
-        --replace-fail '/usr/bin/env python3' '${passthru.pythonInterp}'
+        --replace-fail '/usr/bin/env python3' '${finalAttrs.passthru.pythonInterp}'
     done
 
     # We use GNU sed on Darwin, while icebox/Makefile assumed BSD sed (which
@@ -75,4 +81,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
