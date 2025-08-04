@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Give hello some install checks for testing purpose.
   postInstallCheck = ''
-    stat "''${!outputBin}/bin/${finalAttrs.meta.mainProgram}"
+    stat "''${!outputBin}/bin/${finalAttrs.mainProgram}"
   '';
 
   passthru.tests = {
@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru.tests.run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };
+
+  mainProgram = "hello";
 
   meta = {
     description = "Program that produces a familiar, friendly greeting";
@@ -53,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ stv0g ];
-    mainProgram = "hello";
     platforms = lib.platforms.all;
   };
 })
