@@ -439,19 +439,16 @@ in
             dns = {
               final = "dns:default";
               independent_cache = true;
-              fakeip = {
-                enabled = true;
-                inet4_range = "198.18.0.0/16";
-              };
               servers = [
                 {
-                  detour = "outbound:direct";
+                  type = "udp";
                   tag = "dns:default";
-                  address = hosts."${target_host}";
+                  server = hosts."${target_host}";
                 }
                 {
+                  type = "fakeip";
                   tag = "dns:fakeip";
-                  address = "fakeip";
+                  inet4_range = "198.18.0.0/16";
                 }
               ];
               rules = [
