@@ -4,6 +4,7 @@
   opam,
   jsonm,
   ocamlgraph,
+  patch,
   re,
   sha,
   swhid_core,
@@ -20,6 +21,7 @@ buildDunePackage {
     ocamlgraph
     uutf
     re
+    patch
     sha
     swhid_core
   ];
