@@ -11577,11 +11577,6 @@ with pkgs;
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
 
-  utterly-nord-plasma = kdePackages.callPackage ../data/themes/utterly-nord-plasma {
-    # renamed in KF6
-    plasma-framework = kdePackages.libplasma;
-  };
-
   whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
   xkeyboard_config = xkeyboard-config;
