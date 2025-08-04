@@ -13,10 +13,10 @@
 
 let
   opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-QfsPK6iPuXXKpT3z1SUDdvCx3uT+U2IZy4msH8UiFg8=";
-    "aarch64-linux" = "sha256-/BpbECRBxLOz+YEQrEHNrtHSr/BaLOrAkJXH0TBHjFE=";
-    "x86_64-darwin" = "sha256-KA3jaU7BD7lueKBuM9cTJuEby6AC0E03JYZMKRxceqY=";
-    "x86_64-linux" = "sha256-us6m4Iwaf+zS3NBSoOEAVBpHoyXPDnt+P9/D/Qbui+Y=";
+    "aarch64-darwin" = "sha256-AM+4jX1lroqBxslGK1by2q8MRsox4xrtlN95qPj0x2Y=";
+    "aarch64-linux" = "sha256-iQIqv6r6uo9zj8kiQDJuPyFdySNHIj+F4C286K6icv0=";
+    "x86_64-darwin" = "sha256-L6ae0C8AVzwMVfob38wdwNZoK02FMokzPGC2209r7NU=";
+    "x86_64-linux" = "sha256-oZa8O0iK5uSJjl6fOdnjqjIuG//ihrj4six3FUdfob8=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -27,12 +27,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.3.112";
+  version = "0.3.122";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BeUgZUzuphQ1gqPnDnKP2HMy5nyoD5au4AekGT2deIc=";
+    hash = "sha256-JsyUXRfMQ40qQwtaW0Ebh/HlHqzb2D8AvsyJm5Yjm8E=";
   };
 
   tui = buildGoModule {
