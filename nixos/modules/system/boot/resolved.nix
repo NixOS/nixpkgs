@@ -13,9 +13,7 @@ let
 
   resolvedConf = ''
     [Resolve]
-    ${optionalString (
-      config.networking.nameservers != [ ]
-    ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
+    ${optionalString (cfg.dns != [ ]) "DNS=${concatStringsSep " " cfg.dns}"}
     ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
     ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
     LLMNR=${cfg.llmnr}
@@ -36,6 +34,19 @@ in
         Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
 
         Search for `services.resolved` to see all options.
+      '';
+    };
+
+    services.resolved.dns = mkOption {
+      default = config.networking.nameservers;
+      defaultText = literalExpression "config.networking.nameservers";
+      example = [
+        "8.8.8.8"
+        "2001:4860:4860::8844"
+      ];
+      type = types.listOf types.str;
+      description = ''
+        A space-separated list of IPv4 and IPv6 addresses to use as system DNS servers.
       '';
     };
 
