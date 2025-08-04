@@ -1,21 +1,13 @@
 {
   lib,
-  qt5 ? null,
-  qt6 ? null,
+  qt6,
   rdma-core,
   stdenv,
 }:
 prevAttrs:
 let
-  inherit (lib.strings) versionOlder versionAtLeast;
-  inherit (prevAttrs) version;
-  qt = if versionOlder version "2022.2.0" then qt5 else qt6;
-  qtwayland =
-    if lib.versions.major qt.qtbase.version == "5" then
-      lib.getBin qt.qtwayland
-    else
-      lib.getLib qt.qtwayland;
-  inherit (qt) wrapQtAppsHook qtwebview;
+  qtwayland = lib.getLib qt6.qtwayland;
+  inherit (qt6) wrapQtAppsHook qtwebview;
   archDir =
     {
       aarch64-linux = "linux-desktop-t210-a64";
@@ -28,7 +20,7 @@ in
   buildInputs = prevAttrs.buildInputs or [ ] ++ [
     qtwayland
     qtwebview
-    (qt.qtwebengine or qt.full)
+    (qt6.qtwebengine or qt6.full)
     rdma-core
   ];
   dontWrapQtApps = true;
@@ -49,8 +41,4 @@ in
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
   ];
-  brokenConditions = prevAttrs.brokenConditions or { } // {
-    "Qt 5 missing (<2022.2.0)" = !(versionOlder version "2022.2.0" -> qt5 != null);
-    "Qt 6 missing (>=2022.2.0)" = !(versionAtLeast version "2022.2.0" -> qt6 != null);
-  };
 }

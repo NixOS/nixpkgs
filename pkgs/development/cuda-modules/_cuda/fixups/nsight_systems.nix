@@ -1,15 +1,13 @@
 {
   boost178,
   cuda_cudart,
-  cudaOlder,
   e2fsprogs,
   gst_all_1,
   lib,
   nss,
   numactl,
   pulseaudio,
-  qt5 ? null,
-  qt6 ? null,
+  qt6,
   rdma-core,
   stdenv,
   ucx,
@@ -18,15 +16,9 @@
 }:
 prevAttrs:
 let
-  inherit (lib.strings) versionOlder versionAtLeast;
   inherit (prevAttrs) version;
-  qt = if lib.strings.versionOlder prevAttrs.version "2022.4.2.1" then qt5 else qt6;
-  qtwayland =
-    if lib.versions.major qt.qtbase.version == "5" then
-      lib.getBin qt.qtwayland
-    else
-      lib.getLib qt.qtwayland;
-  qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
+  qtwayland = lib.getLib qt6.qtwayland;
+  qtWaylandPlugins = "${qtwayland}/${qt6.qtbase.qtPluginPrefix}";
   hostDir =
     {
       aarch64-linux = "host-linux-armv8";
@@ -63,17 +55,17 @@ in
     done
     patchShebangs nsight-systems
   '';
-  nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ qt.wrapQtAppsHook ];
+  nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ qt6.wrapQtAppsHook ];
   dontWrapQtApps = true;
   buildInputs = prevAttrs.buildInputs or [ ] ++ [
-    (qt.qtdeclarative or qt.full)
-    (qt.qtsvg or qt.full)
-    (qt.qtimageformats or qt.full)
-    (qt.qtpositioning or qt.full)
-    (qt.qtscxml or qt.full)
-    (qt.qttools or qt.full)
-    (qt.qtwebengine or qt.full)
-    (qt.qtwayland or qt.full)
+    (qt6.qtdeclarative or qt6.full)
+    (qt6.qtsvg or qt6.full)
+    (qt6.qtimageformats or qt6.full)
+    (qt6.qtpositioning or qt6.full)
+    (qt6.qtscxml or qt6.full)
+    (qt6.qttools or qt6.full)
+    (qt6.qtwebengine or qt6.full)
+    (qt6.qtwayland or qt6.full)
     boost178
     cuda_cudart.stubs
     e2fsprogs
@@ -82,7 +74,7 @@ in
     nss
     numactl
     pulseaudio
-    qt.qtbase
+    qt6.qtbase
     qtWaylandPlugins
     rdma-core
     ucx
@@ -114,13 +106,4 @@ in
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
   ];
-
-  brokenConditions = prevAttrs.brokenConditions or { } // {
-    "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
-    "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
-  };
-  badPlatformsConditions = prevAttrs.badPlatformsConditions or { } // {
-    # Older releases require boost 1.70, which is deprecated in Nixpkgs
-    "CUDA too old (<11.8)" = cudaOlder "11.8";
-  };
 }
