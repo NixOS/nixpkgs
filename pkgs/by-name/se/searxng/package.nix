@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-18";
+    version = "0-unstable-2025-08-03";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "ff2e0ea2788a04ae5a13fc90b3725828a1ebc026";
-      hash = "sha256-Pxpozg3ecqGzwUCXL9zYsCivr9VpCVSYc/kjZn+V4xk=";
+      rev = "2e62eb5d68d875c49e32229103a4fd75fe26c104";
+      hash = "sha256-UKGPkaG2agXZhEi2h8g2gXHHEDmDSzL/f9B+l5WZVvE=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
@@ -81,6 +81,7 @@ python.pkgs.toPythonModule (
         typer
         uvloop
         valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;
