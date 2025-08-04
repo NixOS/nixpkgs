@@ -132,6 +132,12 @@ with haskellLib;
     dontCheck super.interpolate;
 
   #
+  # Unbreaking
+  #
+  # 2025-08-04: Requires filepath >= 1.5.0.1 <=> GHC >= 9.10
+  gitrev-typed = unmarkBroken super.gitrev-typed;
+
+  #
   # Multiple issues
   #
 

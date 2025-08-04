@@ -101,4 +101,10 @@ in
   fsnotify = dontCheck super.fsnotify; # https://github.com/haskell-fswatch/hfsnotify/issues/115
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
+
+  #
+  # Unbreaking
+  #
+  # 2025-08-04: Requires filepath >= 1.5.0.1 <=> GHC >= 9.10
+  gitrev-typed = unmarkBroken super.gitrev-typed;
 }
