@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "ldacBT";
     owner = "ehfive";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "09dalysx4fgrgpfdm9a51x6slnf4iik1sqba4xjgabpvq91bnb63";
     fetchSubmodules = true;
   };

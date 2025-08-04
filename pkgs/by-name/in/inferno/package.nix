@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "inferno";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D72rkTnUgLJRHFEDoUwQDLQJAPGyqmxhf6hmNJGUl+U=";
     fetchSubmodules = true;
   };

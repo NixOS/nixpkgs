@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dQef5TiOV33lnNl7XKl7TlCY0E2sEclehWOmy2uvISY=";
     fetchSubmodules = true;
   };

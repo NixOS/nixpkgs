@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TheWaveWarden";
     repo = "odin2";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-N96Nb7G6hqfh8DyMtHbttl/fRZUkS8f2KfPSqeMAhHY=";
   };

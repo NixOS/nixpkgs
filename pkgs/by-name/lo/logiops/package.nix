@@ -17,7 +17,7 @@ stdenv.mkDerivation (oldAttrs: {
   src = fetchFromGitHub {
     owner = "PixlOne";
     repo = "logiops";
-    rev = "v${oldAttrs.version}";
+    tag = "v${oldAttrs.version}";
     hash = "sha256-GAnlPqjIFGyOWwYFs7gth2m9ITc1jyiaW0sWwQ2zFOs=";
     # In v0.3.0, the `ipcgull` submodule was added as a dependency
     # https://github.com/PixlOne/logiops/releases/tag/v0.3.0
