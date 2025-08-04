@@ -2054,6 +2054,8 @@ self: super: with self; {
 
   bot-safe-agents = callPackage ../development/python-modules/bot-safe-agents { };
 
+  botan3 = callPackage ../development/python-modules/botan3 { inherit (pkgs) botan3; };
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto3-stubs = callPackage ../development/python-modules/boto3-stubs { };
