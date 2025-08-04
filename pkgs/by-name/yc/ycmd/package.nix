@@ -127,6 +127,7 @@ stdenv.mkDerivation {
       rasendubi
       lnl7
       mel
+      S0AndS0
     ];
     platforms = platforms.all;
   };
