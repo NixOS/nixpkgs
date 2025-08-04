@@ -4086,6 +4086,16 @@ runTests {
       type = "derivation";
       out = "somelonghash";
       bin = "somelonghash";
+      mainProgram = "mainProgram";
+    };
+    expected = "somelonghash/bin/mainProgram";
+  };
+
+  testGetExeOutputMeta = {
+    expr = getExe {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
       meta.mainProgram = "mainProgram";
     };
     expected = "somelonghash/bin/mainProgram";

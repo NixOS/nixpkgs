@@ -605,6 +605,14 @@ let
       ]
       ++ optional (hasOutput "man") "man";
     }
+    // optionalAttrs (attrs ? mainProgram) {
+      # This is used within derivations, but is also useful metadata
+      # for external consumers.
+      #
+      # TODO: Phase out setting this in `meta` (but still keep
+      # inheriting it here).
+      inherit (attrs) mainProgram;
+    }
     // (filterAttrs (_: v: v != null) {
       # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
       # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
