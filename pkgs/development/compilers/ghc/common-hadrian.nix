@@ -132,10 +132,12 @@
     -- no way to set this via the command line
     finalStage :: Stage
     finalStage = ${
-      # Always build the stage 2 compiler if possible.
-      # TODO(@sternensemann): unify condition with make-built GHCs
-      if stdenv.hostPlatform.canExecute stdenv.targetPlatform then
-        "Stage2" # native compiler or “native” cross e.g. pkgsStatic
+      # N. B. hadrian ignores this setting if it doesn't agree it's possible,
+      # i.e. when its cross-compiling setting is true. So while we could, in theory,
+      # build Stage2 if hostPlatform.canExecute targetPlatform, hadrian won't play
+      # ball (with make, Stage2 was built if hostPlatform.system == targetPlatform.system).
+      if stdenv.hostPlatform == stdenv.targetPlatform then
+        "Stage2" # native compiler
       else
         "Stage1" # cross compiler
     }
