@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "25.4.0";
+  version = "25.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ansible_lint";
-    hash = "sha256-8vKzGtGZklsjQ/ZgVS+5Rolw8WwsXVfan+rnDsTuyn0=";
+    hash = "sha256-mvz0GZl84f/FesqjpW83e86M7rnbEOarhP1WXQm+QIs=";
   };
 
   postPatch = ''
@@ -95,6 +95,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ansible/ansible-lint";
     changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sengaya ];
+    maintainers = with lib.maintainers; [
+      sengaya
+      HarisDotParis
+      robsliwi
+    ];
   };
 }
