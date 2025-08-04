@@ -100,4 +100,7 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
   inherit __structuredAttrs;
+  meta = {
+    platforms = [ "x86_64-linux" ];
+  };
 }
