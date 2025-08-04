@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.2.2.post1";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "build";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PHS7CjdKo5u4VTpbo409zLQAOmslV9bX0j0S83Gdv1U=";
+    tag = version;
+    hash = "sha256-w2YKQzni8e6rpnQJH2J0bHzRigjWOlWiI8Po5d3ZqS8=";
   };
 
   postPatch = ''
@@ -107,7 +107,7 @@ buildPythonPackage rec {
       is a simple build tool and does not perform any dependency management.
     '';
     homepage = "https://github.com/pypa/build";
-    changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pypa/build/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = [ maintainers.fab ];
     teams = [ teams.python ];
