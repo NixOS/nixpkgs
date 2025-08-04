@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.11";
+  version = "4.0.12";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-QNbXgTkzI0fqvg3nU2TAE8A8h6MNMm2TsTzOXBdpqYA=";
+    hash = "sha256-MwCUilfyum1yJb6nHEViYiYWufXlz2+krHZmXw2NAck=";
     rev = version;
   };
 
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 4 requires LLVM tip-of-tree instead of LLVM 20
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 21/EXPECTED_LLVM_VERSION = 20.1/g" tools/shared.py
+    # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
