@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gren";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "gren-lang";
     repo = "compiler";
     tag = finalAttrs.version;
-    hash = "sha256-lF0m/ffmwuuhNIFlwnztxVwXF1mtiKZBCnJQYfyo9UA=";
+    hash = "sha256-fTSxQdcOe8VhRb1RhxBJjZ7ZZCMzMDOhEbXag1hjDrA=";
   };
 
   buildInputs = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/gren";
   versionCheckProgramArg = "--version";
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Compiler for the Gren programming language";
+    description = "Programming language for simple and correct applications";
     homepage = "https://gren-lang.org";
     license = lib.licenses.bsd3;
     mainProgram = "gren";
