@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
       (if pythonSupport then "-Dpython_version=${python.pythonVersion}" else "-DBUILD_python=OFF")
       "-DBLAS=open"
       "-DCPU_ONLY=ON"
+      "-DCMAKE_CXX_STANDARD=17"
+      "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
     ]
     ++ [ "-DUSE_LEVELDB=${toggle leveldbSupport}" ]
     ++ [ "-DUSE_LMDB=${toggle lmdbSupport}" ];
