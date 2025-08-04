@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg-tools";
-  version = "1.0.20241018";
+  version = "1.0.20250706";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
