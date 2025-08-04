@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   rust-jemalloc-sys,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin=oxc_language_server"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Collection of JavaScript tools written in Rust";
