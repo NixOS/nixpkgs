@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydexcom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to interact with Dexcom Share service";
     homepage = "https://github.com/gagebenne/pydexcom";
     changelog = "https://github.com/gagebenne/pydexcom/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

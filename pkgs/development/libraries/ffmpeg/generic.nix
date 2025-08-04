@@ -1014,7 +1014,7 @@ stdenv.mkDerivation (
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       description = "Complete, cross-platform solution to record, convert and stream audio and video";
       homepage = "https://www.ffmpeg.org/";
       changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
@@ -1026,28 +1026,28 @@ stdenv.mkDerivation (
         a corporation.
       '';
       license =
-        with licenses;
+        with lib.licenses;
         [ lgpl21Plus ]
-        ++ optional withGPL gpl2Plus
-        ++ optional withVersion3 lgpl3Plus
-        ++ optional withGPLv3 gpl3Plus
-        ++ optional withUnfree unfreeRedistributable
-        ++ optional (withGPL && withUnfree) unfree;
+        ++ lib.optional withGPL gpl2Plus
+        ++ lib.optional withVersion3 lgpl3Plus
+        ++ lib.optional withGPLv3 gpl3Plus
+        ++ lib.optional withUnfree unfreeRedistributable
+        ++ lib.optional (withGPL && withUnfree) unfree;
       pkgConfigModules =
         [ ]
-        ++ optional buildAvcodec "libavcodec"
-        ++ optional buildAvdevice "libavdevice"
-        ++ optional buildAvfilter "libavfilter"
-        ++ optional buildAvformat "libavformat"
-        ++ optional buildAvresample "libavresample"
-        ++ optional buildAvutil "libavutil"
-        ++ optional buildPostproc "libpostproc"
-        ++ optional buildSwresample "libswresample"
-        ++ optional buildSwscale "libswscale";
-      platforms = platforms.all;
+        ++ lib.optional buildAvcodec "libavcodec"
+        ++ lib.optional buildAvdevice "libavdevice"
+        ++ lib.optional buildAvfilter "libavfilter"
+        ++ lib.optional buildAvformat "libavformat"
+        ++ lib.optional buildAvresample "libavresample"
+        ++ lib.optional buildAvutil "libavutil"
+        ++ lib.optional buildPostproc "libpostproc"
+        ++ lib.optional buildSwresample "libswresample"
+        ++ lib.optional buildSwscale "libswscale";
+      platforms = lib.platforms.all;
       # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
       broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         atemu
         jopejoe1
         emily

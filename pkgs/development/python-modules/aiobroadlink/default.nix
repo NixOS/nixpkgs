@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobroadlink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to control various Broadlink devices";
     mainProgram = "aiobroadlink";
     homepage = "https://github.com/frawau/aiobroadlink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

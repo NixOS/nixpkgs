@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny wrapper around webrtc-audio-processing for noise suppression/auto gain only";
     homepage = "https://github.com/rhasspy/webrtc-noise-gain";
     changelog = "https://github.com/rhasspy/webrtc-noise-gain/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

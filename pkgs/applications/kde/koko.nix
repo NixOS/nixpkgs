@@ -72,14 +72,14 @@ mkDerivation {
     ln -s ${cities1000} src/cities1000.zip
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image gallery mobile application";
     mainProgram = "koko";
     homepage = "https://apps.kde.org/koko/";
     # LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
     license = [
-      licenses.lgpl3Only
-      licenses.lgpl21Only
+      lib.licenses.lgpl3Only
+      lib.licenses.lgpl21Only
     ];
     maintainers = [ ];
   };

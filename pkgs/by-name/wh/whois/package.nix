@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-whois" ];
 
-  meta = with lib; {
+  meta = {
     description = "Intelligent WHOIS client from Debian";
     longDescription = ''
       This package provides a commandline client for the WHOIS (RFC 3912)
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://packages.qa.debian.org/w/whois.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
     mainProgram = "whois";
   };
 }

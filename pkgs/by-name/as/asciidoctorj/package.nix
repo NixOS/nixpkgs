@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --prefix JAVA_HOME : ${jdk}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official library for running Asciidoctor on the JVM";
     longDescription = ''
       AsciidoctorJ is the official library for running Asciidoctor on the JVM.
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       languages.
     '';
     homepage = "https://asciidoctor.org/docs/asciidoctorj/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "asciidoctorj";
   };
 }

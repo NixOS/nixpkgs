@@ -22,11 +22,11 @@ buildNpmPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "About A CLI interface for Marp and Marpit based converters";
     homepage = "https://github.com/marp-team/marp-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
     platforms = nodejs.meta.platforms;
     mainProgram = "marp";
   };

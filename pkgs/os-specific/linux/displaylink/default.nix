@@ -87,18 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "DisplayLink DL-7xxx, DL-6xxx, DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     homepage = "https://www.displaylink.com/";
     hydraPlatforms = [ ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "DisplayLinkManager";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

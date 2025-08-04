@@ -50,11 +50,11 @@ mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application to split, merge, rotate and mix PDF files";
     mainProgram = "pdfmixtool";
     homepage = "https://gitlab.com/scarpetta/pdfmixtool";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

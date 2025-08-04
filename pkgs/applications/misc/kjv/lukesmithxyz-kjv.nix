@@ -20,12 +20,12 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read the Word of God from your terminal + Apocrypha";
     mainProgram = "kjv";
     homepage = "https://lukesmith.xyz/articles/command-line-bibles";
-    license = licenses.unlicense;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.wesleyjrz ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.wesleyjrz ];
   };
 }

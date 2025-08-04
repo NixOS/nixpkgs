@@ -59,10 +59,10 @@ buildPythonPackage rec {
     "supybot"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

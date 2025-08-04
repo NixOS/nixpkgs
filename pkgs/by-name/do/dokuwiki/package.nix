@@ -97,12 +97,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple to use and highly versatile Open Source wiki software that doesn't require a database";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       _1000101
       e1mo
     ];

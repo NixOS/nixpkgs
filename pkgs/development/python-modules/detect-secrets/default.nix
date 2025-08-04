@@ -63,10 +63,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "detect_secrets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

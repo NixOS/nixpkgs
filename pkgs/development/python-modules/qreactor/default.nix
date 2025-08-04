@@ -28,10 +28,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "qreactor" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frmdstryr/qt-reactor";
     description = "Twisted and PyQt5/qtpy eventloop integration base";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

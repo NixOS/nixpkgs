@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iterm2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to iTerm2's scripting API";
     homepage = "https://github.com/gnachman/iTerm2";
-    license = licenses.gpl2;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
 }

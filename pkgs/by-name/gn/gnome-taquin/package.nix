@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-taquin"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-taquin";
     description = "Move tiles so that they reach their places";
     mainProgram = "gnome-taquin";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

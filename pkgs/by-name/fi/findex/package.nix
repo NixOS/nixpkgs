@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 css/style.css $out/share/findex/style.css
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable application finder written in Rust and uses Gtk3";
     homepage = "https://github.com/mdgaziur/findex";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

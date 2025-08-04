@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     cp -r * $dir/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linter component for Isabelle";
     homepage = "https://github.com/isabelle-prover/isabelle-linter";
-    maintainers = with maintainers; [ jvanbruegge ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

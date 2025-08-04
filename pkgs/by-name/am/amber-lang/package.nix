@@ -69,15 +69,15 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language compiled to bash";
     homepage = "https://amber-lang.com";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "amber";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
       aleksana
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

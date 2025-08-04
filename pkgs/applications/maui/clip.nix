@@ -40,11 +40,11 @@ mkDerivation {
     ffmpeg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Video player and video collection manager";
     mainProgram = "clip";
     homepage = "https://invent.kde.org/maui/clip";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

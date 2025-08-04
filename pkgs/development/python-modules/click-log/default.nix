@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/click-contrib/click-log/";
     description = "Logging integration for Click";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

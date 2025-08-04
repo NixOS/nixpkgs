@@ -32,11 +32,11 @@ buildPythonPackage rec {
   # Module has only tests in mono-repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Power BI Embedded Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/powerbiembedded/azure-mgmt-powerbiembedded";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-powerbiembedded_${version}/sdk/powerbiembedded/azure-mgmt-powerbiembedded/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

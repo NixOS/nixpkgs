@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icnsutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and extract .icns files";
     homepage = "https://github.com/relikd/icnsutil";
     changelog = "https://github.com/relikd/icnsutil/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ reckenrode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ reckenrode ];
   };
 }

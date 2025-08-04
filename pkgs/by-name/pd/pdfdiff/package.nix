@@ -34,10 +34,10 @@ python3Packages.buildPythonApplication rec {
     chmod +x $out/bin/pdfdiff
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cascremers/pdfdiff";
     description = "Tool to view the difference between two PDF or PS files";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

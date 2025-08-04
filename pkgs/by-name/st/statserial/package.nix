@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     cp statserial.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sites.google.com/site/tranter/software";
     description = "Display serial port modem status lines";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       Statserial displays a table of the signals on a standard 9-pin or
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       can be useful for debugging problems with serial ports or modems.
     '';
 
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rps ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rps ];
     mainProgram = "statserial";
   };
 }

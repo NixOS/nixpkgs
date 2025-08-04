@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast Library for Number Theory";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ smasher164 ];
-    teams = [ teams.sage ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ smasher164 ];
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
     homepage = "https://www.flintlib.org/";
     downloadPage = "https://www.flintlib.org/downloads.html";
   };

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ahocorasick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module implementing Aho-Corasick algorithm";
     longDescription = ''
       This Python module is a fast and memory efficient library for exact or
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/WojciechMula/pyahocorasick";
     changelog = "https://github.com/WojciechMula/pyahocorasick/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

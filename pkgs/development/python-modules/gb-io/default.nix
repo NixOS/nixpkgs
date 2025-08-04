@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gb_io" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/althonos/gb-io.py";
     description = "Python interface to gb-io, a fast GenBank parser written in Rust";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dlesl ];
   };
 }

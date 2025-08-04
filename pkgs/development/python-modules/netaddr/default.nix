@@ -25,13 +25,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netaddr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Network address manipulation library for Python";
     mainProgram = "netaddr";
     homepage = "https://netaddr.readthedocs.io/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";
     changelog = "https://github.com/netaddr/netaddr/blob/${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

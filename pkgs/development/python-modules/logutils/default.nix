@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging utilities";
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

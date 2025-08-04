@@ -65,15 +65,15 @@ mkDerivation rec {
     wrapProgram $out/bin/kmplayer --suffix PATH : ${mplayer}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPlayer front-end for KDE";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
       fdl12Plus
     ];
     homepage = "https://kmplayer.kde.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sander
       zraexy
     ];

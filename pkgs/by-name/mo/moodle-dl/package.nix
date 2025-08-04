@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";
-    maintainers = [ maintainers.kmein ];
+    maintainers = [ lib.maintainers.kmein ];
     description = "Moodle downloader that downloads course content fast from Moodle";
     mainProgram = "moodle-dl";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

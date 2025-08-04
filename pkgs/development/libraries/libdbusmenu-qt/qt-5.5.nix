@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/libdbusmenu-qt";
     description = "Provides a Qt implementation of the DBusMenu spec";
-    maintainers = [ maintainers.ttuegel ];
+    maintainers = [ lib.maintainers.ttuegel ];
     inherit (qtbase.meta) platforms;
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
   };
 }

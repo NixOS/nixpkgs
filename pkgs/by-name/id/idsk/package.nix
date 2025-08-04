@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manipulating CPC dsk images and files";
     homepage = "https://github.com/cpcsdk/idsk";
     changelog = "https://github.com/cpcsdk/idsk/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "iDSK";
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.all;
   };
 }

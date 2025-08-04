@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Names and keywords for Unicode characters from the Common Locale Data Repository";
     homepage = "https://cldr.unicode.org";
-    license = licenses.unicode-30;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ DeeUnderscore ];
+    license = lib.licenses.unicode-30;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
 }

@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_js_reverse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Javascript url handling for Django that doesn't hurt";
     homepage = "https://django-js-reverse.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

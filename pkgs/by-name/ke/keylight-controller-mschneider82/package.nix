@@ -41,14 +41,14 @@ buildGoModule rec {
     xinput
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application to control Elgato Keylights";
     longDescription = ''
       Requires having:
       * Elgato's Keylight paired to local wifi network.
       * Service avahi with nssmdns4 enabled.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mschneider82/keylight-control";
     maintainers = [ ];
     mainProgram = "keylight-control";

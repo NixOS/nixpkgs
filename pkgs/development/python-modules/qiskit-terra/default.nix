@@ -211,7 +211,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Provides the foundations for Qiskit";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.
@@ -219,7 +219,7 @@ buildPythonPackage rec {
     homepage = "https://qiskit.org/terra";
     downloadPage = "https://github.com/QISKit/qiskit-terra/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

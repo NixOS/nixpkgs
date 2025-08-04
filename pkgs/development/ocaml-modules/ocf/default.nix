@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ yojson ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml library to read and write configuration options in JSON syntax";
     homepage = "https://zoggy.frama.io/ocf/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ regnat ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ regnat ];
   };
 }

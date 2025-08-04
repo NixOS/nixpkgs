@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # XXX: 1 of 65 tests failed.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile-ncurses/";
     description = "Scheme interface to the NCurses libraries";
     mainProgram = "guile-ncurses-shell";
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
       interface functionality is built on the ncurses libraries: curses, form,
       panel, and menu.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ vyp ];
     platforms = guile.meta.platforms;
   };
 }

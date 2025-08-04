@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/translateShellProcess.cpp --replace "start(\"trans\", arguments);" "start(\"${translate-shell}/bin/trans\", arguments);"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for KRunner which integrates a translator, supports Google Translate, Bing Translator, youdao and Baidu Fanyi";
     homepage = "https://github.com/naraesk/krunner-translator";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pongo1231 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pongo1231 ];
+    platforms = lib.platforms.unix;
   };
 }

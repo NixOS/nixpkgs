@@ -17,10 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-UxWARWOFp8AYKEdiJwRZNwFrphgMTJSZjnvktTNOsgU=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI to search for sensitive services/files/folders";
     homepage = "https://github.com/michelin/ChopChop";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/doona
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wireghoul/doona";
     description = "Fork of the Bruteforce Exploit Detector Tool (BED)";
     mainProgram = "doona";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       A fork of the Bruteforce Exploit Detector Tool (BED).
       BED is a program which is designed to check daemons for potential buffer overflows, format string bugs etc.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

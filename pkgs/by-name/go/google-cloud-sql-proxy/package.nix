@@ -26,7 +26,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for ensuring secure connections to Google Cloud SQL instances";
     longDescription = ''
       The Cloud SQL Auth Proxy is a utility for ensuring secure connections to your Cloud SQL instances.
@@ -37,8 +37,8 @@ buildGoModule rec {
       page for details on how the Cloud SQL Proxy works.
     '';
     homepage = "https://github.com/GoogleCloudPlatform/cloud-sql-proxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nicknovitski
       totoroot
     ];

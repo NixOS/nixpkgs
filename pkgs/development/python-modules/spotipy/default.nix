@@ -34,11 +34,11 @@ buildPythonPackage rec {
     "spotipy.oauth2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the Spotify Web API";
     homepage = "https://spotipy.readthedocs.org/";
     changelog = "https://github.com/plamere/spotipy/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
   };
 }

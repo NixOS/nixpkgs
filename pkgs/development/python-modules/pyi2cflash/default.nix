@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "i2cflash" ];
 
-  meta = with lib; {
+  meta = {
     description = "I2C eeprom device drivers in Python";
     homepage = "https://github.com/eblot/pyi2cflash";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

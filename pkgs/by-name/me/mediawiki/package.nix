@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests.mediawiki) mysql postgresql;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collaborative editing software that runs Wikipedia";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
-    platforms = platforms.all;
-    teams = [ teams.c3d2 ];
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.c3d2 ];
   };
 }

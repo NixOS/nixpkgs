@@ -45,12 +45,12 @@ perlPackages.buildPerlPackage {
       --prefix PATH : ${openssh}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage big projects consisting of multiple loosely-coupled git repositories";
     homepage = "https://github.com/kernkonzept/ham";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ aw ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ aw ];
     mainProgram = "ham";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

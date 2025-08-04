@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mind-mapping application for elementary OS";
     homepage = "https://github.com/phase1geo/Minder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "com.github.phase1geo.minder";
   };
 }

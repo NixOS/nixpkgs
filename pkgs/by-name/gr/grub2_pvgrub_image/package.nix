@@ -40,7 +40,7 @@ in
       cp "grub-${efiSystemsBuild.${stdenv.hostPlatform.system}.target}-xen.bin" $out/lib/grub-xen/
     '';
 
-    meta = with lib; {
+    meta = {
       description = "PvGrub image for use for booting PV Xen guests";
 
       longDescription = ''
@@ -48,7 +48,7 @@ in
         Xen guests
       '';
 
-      platforms = platforms.gnu ++ platforms.linux;
+      platforms = lib.platforms.gnu ++ lib.platforms.linux;
     };
   }
 )

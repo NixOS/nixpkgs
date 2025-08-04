@@ -31,7 +31,7 @@ buildGoModule rec {
   # There are no tests for cmd/serf.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Service orchestration and management tool";
     mainProgram = "serf";
     longDescription = ''
@@ -39,7 +39,7 @@ buildGoModule rec {
       that is lightweight, highly available, and fault tolerant.
     '';
     homepage = "https://www.serf.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ pradeepchhetri ];
   };
 }

@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/AOMediaCodec/SVT-AV1";
     description = "AV1-compliant encoder/decoder library core";
 
@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       aom
       bsd3
     ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with lib.maintainers; [ Madouura ];
     mainProgram = "SvtAv1EncApp";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

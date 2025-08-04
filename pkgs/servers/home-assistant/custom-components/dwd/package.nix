@@ -22,11 +22,11 @@ buildHomeAssistantComponent rec {
   # defusedxml version mismatch
   dontCheckManifest = true;
 
-  meta = with lib; {
+  meta = {
     description = "Custom component for Home Assistant that integrates weather data (measurements and forecasts) of Deutscher Wetterdienst";
     homepage = "https://github.com/hg1337/homeassistant-dwd";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hexa
       emilylange
     ];

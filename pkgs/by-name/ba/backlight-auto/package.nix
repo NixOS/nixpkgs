@@ -24,14 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     libyuv
   ];
 
-  meta = with lib; {
+  meta = {
     # Does not support zig 0.12 or newer, hasn't been updated in 2 years.
     broken = lib.versionAtLeast zig.version "0.12";
     description = "Automatically set screen brightness with a webcam";
     mainProgram = "backlight-auto";
     homepage = "https://len.falken.directory/backlight-auto.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

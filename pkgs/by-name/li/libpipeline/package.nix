@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libpipeline.nongnu.org";
     description = "C library for manipulating pipelines of subprocesses in a flexible and convenient way";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 }

@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt/QML wrapper library for the ZXing library";
     homepage = "https://github.com/ftylitak/qzxing";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "QZXing"
     ];

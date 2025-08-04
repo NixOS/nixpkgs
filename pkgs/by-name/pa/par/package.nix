@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     cp  par.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.nicemice.net/par/";
     description = "Paragraph reflow for email";
     mainProgram = "par";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # See https://fedoraproject.org/wiki/Licensing/Par for license details
-    license = licenses.free;
+    license = lib.licenses.free;
   };
 }

@@ -14,10 +14,10 @@ buildFishPlugin rec {
     sha256 = "sha256-28QW/WTLckR4lEfHv6dSotwkAKpNJFCShxmKFGQQ1Ew=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ef-fish-ient fish keybindings for fzf";
     homepage = "https://github.com/jethrokuan/fzf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

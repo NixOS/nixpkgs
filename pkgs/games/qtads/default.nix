@@ -37,12 +37,12 @@ mkDerivation rec {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://realnc.github.io/qtads/";
     description = "Multimedia interpreter for TADS games";
     mainProgram = "qtads";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

@@ -374,11 +374,11 @@ backendStdenv.mkDerivation rec {
     majorVersion = lib.versions.majorMinor version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Deprecated runfile-based CUDAToolkit installation (a compiler for NVIDIA GPUs, math libraries, and tools)";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];
-    license = licenses.nvidiaCuda;
-    teams = [ teams.cuda ];
+    license = lib.licenses.nvidiaCuda;
+    teams = [ lib.teams.cuda ];
   };
 }

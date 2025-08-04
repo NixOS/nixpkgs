@@ -84,12 +84,12 @@ buildPythonPackage rec {
     "integration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Native Rust library for Delta Lake, with bindings into Python";
     homepage = "https://github.com/delta-io/delta-rs";
     changelog = "https://github.com/delta-io/delta-rs/blob/python-v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kfollesdal
       mslingsby
       harvidsen

@@ -21,10 +21,10 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.07";
   duneVersion = "3";
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate, parse and generate OCaml compiler version strings";
     homepage = "https://github.com/ocurrent/ocaml-version";
-    license = licenses.isc;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

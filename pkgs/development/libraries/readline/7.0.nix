@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ]
   ++ upstreamPatches;
 
-  meta = with lib; {
+  meta = {
     description = "Library for interactive line editing";
 
     longDescription = ''
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
 
     homepage = "https://savannah.gnu.org/projects/readline/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
 
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     branch = "7.0";
   };
 }

@@ -61,13 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font for Base Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
 
     # Basically GPL2+ with font exception.
     license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.all;
   };
 })

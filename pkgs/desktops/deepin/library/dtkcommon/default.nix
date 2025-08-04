@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Public project for building DTK Library";
     homepage = "https://github.com/linuxdeepin/dtkcommon";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

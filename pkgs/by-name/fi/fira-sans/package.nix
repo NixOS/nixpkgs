@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bboxtype.com/fira/";
     description = "Sans-serif font for Firefox OS";
     longDescription = ''
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation rec {
       Medium, Semi Bold, Bold, Extra Bold, Heavy weights with
       corresponding italic versions.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

@@ -72,11 +72,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Starter of deepin desktop environment";
     homepage = "https://github.com/linuxdeepin/startdde";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

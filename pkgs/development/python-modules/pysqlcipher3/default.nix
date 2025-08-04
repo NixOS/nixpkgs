@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysqlcipher3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 bindings for SQLCipher";
     homepage = "https://github.com/rigglemania/pysqlcipher3/";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = [ ];
   };
 }

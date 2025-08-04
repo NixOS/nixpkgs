@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     "PYTHON_VERSION=3.${python3.sourceVersion.minor}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
     homepage = "https://csoundqt.github.io/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hlolli ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hlolli ];
   };
 }

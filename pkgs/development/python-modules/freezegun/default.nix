@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freezegun" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that allows your Python tests to travel through time";
     homepage = "https://github.com/spulec/freezegun";
     changelog = "https://github.com/spulec/freezegun/blob/${version}/CHANGELOG";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

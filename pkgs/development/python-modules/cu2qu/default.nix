@@ -44,12 +44,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/googlefonts/cu2qu/releases/tag/v${version}";
     description = "Cubic-to-quadratic bezier curve conversion";
     mainProgram = "cu2qu";
     homepage = "https://github.com/googlefonts/cu2qu";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

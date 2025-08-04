@@ -56,7 +56,7 @@ mkDerivation rec {
     substituteInPlace settings/QvkSettings.cpp --subst-var-by ffmpeg ${ffmpeg}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple GUI screencast recorder, using ffmpeg";
     homepage = "https://linuxecke.volkoh.de/vokoscreen/vokoscreen.html";
     longDescription = ''
@@ -64,9 +64,9 @@ mkDerivation rec {
       educational videos, live recordings of browser, installation,
       videoconferences, etc.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.league ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.league ];
+    platforms = lib.platforms.linux;
     mainProgram = "vokoscreen";
   };
 }

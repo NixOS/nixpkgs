@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtsp_to_webrtc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for RTSPtoWeb and RTSPtoWebRTC";
     homepage = "https://github.com/allenporter/rtsp-to-webrtc-client";
     changelog = "https://github.com/allenporter/rtsp-to-webrtc-client/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

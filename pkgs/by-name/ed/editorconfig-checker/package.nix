@@ -34,13 +34,13 @@ buildGoModule rec {
     package = editorconfig-checker;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/editorconfig-checker/editorconfig-checker/releases/tag/${src.rev}";
     description = "Tool to verify that your files are in harmony with your .editorconfig";
     mainProgram = "editorconfig-checker";
     homepage = "https://editorconfig-checker.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       uri-canva
       zowoq
     ];

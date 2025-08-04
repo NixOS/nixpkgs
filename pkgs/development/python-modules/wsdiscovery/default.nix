@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wsdiscovery" ];
 
-  meta = with lib; {
+  meta = {
     description = "WS-Discovery implementation for Python";
     homepage = "https://github.com/andreikop/python-ws-discovery";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

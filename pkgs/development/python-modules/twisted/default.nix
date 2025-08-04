@@ -258,11 +258,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/twisted/twisted/blob/twisted-${version}/NEWS.rst";
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

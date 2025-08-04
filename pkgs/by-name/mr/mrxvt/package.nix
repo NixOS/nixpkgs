@@ -52,15 +52,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.mrxvt;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight multitabbed feature-rich X11 terminal emulator";
     longDescription = "
       Multitabbed lightweight terminal emulator based on rxvt.
       Supports transparency, backgroundimages, freetype fonts, ...
     ";
     homepage = "https://sourceforge.net/projects/materm";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     knownVulnerabilities = [
       "Usage of ANSI escape sequences causes unexpected newline-termination, leading to unexpected command execution (https://www.openwall.com/lists/oss-security/2021/05/17/1)"

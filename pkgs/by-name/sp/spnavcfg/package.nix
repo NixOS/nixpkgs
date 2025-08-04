@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://spacenav.sourceforge.net/";
     description = "Interactive configuration GUI for space navigator input devices";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "spnavcfg";
   };
 })

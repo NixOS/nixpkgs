@@ -22,12 +22,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "striprtf" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/joshy/striprtf/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/joshy/striprtf";
     description = "Simple library to convert rtf to text";
     mainProgram = "striprtf";
-    maintainers = with maintainers; [ aanderse ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ aanderse ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

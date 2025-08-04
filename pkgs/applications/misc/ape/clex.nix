@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     cp clex_lexicon.pl $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Large lexicon for APE (~100,000 entries)";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yrashk ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yrashk ];
   };
 }

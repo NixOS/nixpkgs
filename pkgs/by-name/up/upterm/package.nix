@@ -40,10 +40,10 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hax404 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hax404 ];
   };
 }

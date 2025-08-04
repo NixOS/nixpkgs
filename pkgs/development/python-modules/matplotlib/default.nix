@@ -197,15 +197,15 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python plotting library, making publication quality plots";
     homepage = "https://matplotlib.org/";
     changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       psfl
       bsd0
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       veprbl
     ];

@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ lv2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Airwindows plugins (ported to LV2)";
     homepage = "https://sr.ht/~hannes/airwindows-lv2";
-    license = licenses.mit;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hcl2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for HCL2 written in Python using Lark";
     longDescription = ''
       This parser only supports HCL2 and isn't backwards compatible with HCL v1.
@@ -37,8 +37,8 @@ buildPythonPackage rec {
     # Although this is the main homepage from PyPi but it is also a homepage
     # of another PyPi package (python-hcl2). But these two are different.
     homepage = "https://github.com/amplify-education/python-hcl2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anhdle14 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anhdle14 ];
     mainProgram = "hcl2tojson";
   };
 }

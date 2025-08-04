@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     install -D ./lib/mpv_inhibit_gnome.so $out/share/mpv/scripts/mpv_inhibit_gnome.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "This mpv plugin prevents screen blanking in GNOME";
     homepage = "https://github.com/Guldoman/mpv_inhibit_gnome";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ myaats ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ myaats ];
   };
 }

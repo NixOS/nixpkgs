@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Strict, predictable, and typed datetimes";
     homepage = "https://github.com/ariebovenberg/whenever";
     changelog = "https://github.com/ariebovenberg/whenever/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

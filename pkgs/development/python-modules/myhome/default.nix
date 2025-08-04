@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myhome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with MyHomeSERVER1";
     homepage = "https://github.com/speijnik/myhome";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -26,12 +26,12 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mill1000/midea-ac-py/releases/tag/${src.tag}";
     description = "Home Assistant custom integration to control Midea (and associated brands) air conditioners via LAN";
     homepage = "https://github.com/mill1000/midea-ac-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hexa
       emilylange
     ];

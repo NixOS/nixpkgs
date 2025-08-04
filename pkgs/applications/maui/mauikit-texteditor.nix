@@ -24,10 +24,10 @@ mkDerivation {
     syntax-highlighting
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/maui/mauikit-texteditor";
     description = "MauiKit Text Editor components";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

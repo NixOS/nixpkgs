@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Board definitions for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-boards";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       pbsds
     ];

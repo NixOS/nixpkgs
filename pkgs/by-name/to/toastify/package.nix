@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tool that shows desktop notifications using notify-rust";
     homepage = "https://github.com/hoodie/toastify";
     changelog = "https://github.com/hoodie/toastify/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "toastify";
   };
 }

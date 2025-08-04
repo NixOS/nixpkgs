@@ -183,15 +183,15 @@ stdenv.mkDerivation rec {
       }).goModules;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Special build of curl that can impersonate Chrome & Firefox";
     homepage = "https://github.com/lwthiker/curl-impersonate";
-    license = with licenses; [
+    license = with lib.licenses; [
       curl
       mit
     ];
-    maintainers = with maintainers; [ deliciouslytyped ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ deliciouslytyped ];
+    platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate-ff";
   };
 }

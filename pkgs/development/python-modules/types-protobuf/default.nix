@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for protobuf";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ andersk ];
   };
 }

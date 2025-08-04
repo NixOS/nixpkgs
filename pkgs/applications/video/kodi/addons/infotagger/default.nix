@@ -24,10 +24,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jurialmunkey/script.module.infotagger";
     description = "Wrapper for new Nexus InfoTagVideo ListItem methods to maintain backwards compatibility";
-    license = licenses.gpl3Plus;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

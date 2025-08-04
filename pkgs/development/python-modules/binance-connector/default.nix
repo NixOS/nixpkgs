@@ -52,10 +52,10 @@ buildPythonPackage rec {
     "binance.websocket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple connector to Binance Public API";
     homepage = "https://github.com/binance/binance-connector-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ trishtzy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ trishtzy ];
   };
 }

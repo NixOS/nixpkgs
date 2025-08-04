@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
   # fails with sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatically trims your branches whose tracking remote refs are merged or gone";
     homepage = "https://github.com/foriequal0/git-trim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "git-trim";
   };
 }

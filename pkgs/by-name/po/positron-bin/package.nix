@@ -130,11 +130,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Positron, a next-generation data science IDE";
     homepage = "https://github.com/posit-dev/positron";
-    license = licenses.elastic20;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
     ];
@@ -143,6 +143,6 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ]
-    ++ platforms.darwin;
+    ++ lib.platforms.darwin;
   };
 }

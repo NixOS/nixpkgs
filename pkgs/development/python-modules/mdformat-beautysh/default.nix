@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_beautysh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin to beautify Bash scripts";
     homepage = "https://github.com/hukkin/mdformat-beautysh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
 }

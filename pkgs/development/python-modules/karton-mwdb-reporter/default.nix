@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.mwdb_reporter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Karton service that uploads analyzed artifacts and metadata to MWDB Core";
     mainProgram = "karton-mwdb-reporter";
     homepage = "https://github.com/CERT-Polska/karton-mwdb-reporter";
     changelog = "https://github.com/CERT-Polska/karton-mwdb-reporter/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

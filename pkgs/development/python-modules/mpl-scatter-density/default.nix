@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpl_scatter_density" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/astrofrog/mpl-scatter-density";
     description = "Fast scatter density plots for Matplotlib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

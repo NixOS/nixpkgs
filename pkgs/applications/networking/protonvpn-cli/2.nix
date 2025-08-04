@@ -42,16 +42,16 @@ buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Linux command-line client for ProtonVPN using Openvpn";
     homepage = "https://github.com/Rafficer/linux-cli-community";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jtcoolen
       jefflabonte
       shamilton
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "protonvpn";
   };
 }

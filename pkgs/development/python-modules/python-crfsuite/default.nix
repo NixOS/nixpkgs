@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycrfsuite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for CRFsuite";
     homepage = "https://github.com/scrapinghub/python-crfsuite";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

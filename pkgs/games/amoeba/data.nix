@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     cp demo.dat $out/share/amoeba/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast-paced, polished OpenGL demonstration by Excess (data files)";
     homepage = "https://packages.qa.debian.org/a/amoeba-data.html";
-    license = licenses.unfree;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.all;
   };
 }

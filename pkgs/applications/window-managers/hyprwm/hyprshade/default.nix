@@ -37,12 +37,12 @@ buildPythonPackage rec {
       --prefix PATH : ${lib.makeBinPath [ hyprland ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/loqusion/hyprshade";
     description = "Hyprland shade configuration tool";
     mainProgram = "hyprshade";
-    license = licenses.mit;
-    maintainers = with maintainers; [ willswats ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ willswats ];
+    platforms = lib.platforms.linux;
   };
 }

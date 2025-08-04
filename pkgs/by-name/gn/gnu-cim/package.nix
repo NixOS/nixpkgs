@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU compiler for the programming language Simula";
     longDescription = ''
       GNU Cim is a compiler for the programming language Simula.
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
       discrete event modelling.
     '';
     homepage = "https://www.gnu.org/software/cim/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

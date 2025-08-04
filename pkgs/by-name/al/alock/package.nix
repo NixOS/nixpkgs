@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     allowedVersions = "\\.";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
     mainProgram = "alock";
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
       xscreensaver and never will. It's just for locking the current
       X session.
     '';
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       ftrvxmtrx
       chris-martin
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

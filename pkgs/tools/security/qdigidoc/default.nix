@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
     mainProgram = "qdigidoc4";
     homepage = "https://www.id.ee/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       flokli
       mmahut
     ];

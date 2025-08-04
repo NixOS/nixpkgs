@@ -45,12 +45,12 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "fastai" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fastai/fastai";
     description = "Fastai deep learning library";
     mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rxiao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rxiao ];
   };
 }

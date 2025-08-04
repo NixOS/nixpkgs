@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glcontext" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moderngl/glcontext";
     description = "OpenGL implementation for ModernGL";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typesystem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type system library for Python";
     homepage = "https://github.com/encode/typesystem";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-rQS3QH9vnEbQZszG3FOr1P5HYgS63BurCNCFQTTdvZs=";
 
-  meta = with lib; {
+  meta = {
     description = "Convert images into ASCII art on the console";
     homepage = "https://github.com/TheZoraiz/ascii-image-converter#readme";
-    license = licenses.asl20;
-    maintainers = [ maintainers.danth ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.danth ];
     mainProgram = "ascii-image-converter";
   };
 }

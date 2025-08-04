@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 2004 Macintosh game by Pangea Software.
@@ -52,9 +52,9 @@ stdenv.mkDerivation {
       Is a continuation of the original Nanosaur storyline, only this time you get to fly a pterodactyl who’s loaded with hi-tech weaponry.
     '';
     homepage = "https://github.com/jorio/Nanosaur2";
-    license = licenses.cc-by-sa-40;
+    license = lib.licenses.cc-by-sa-40;
     mainProgram = "Nanosaur2";
-    maintainers = with maintainers; [ lux ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lux ];
+    platforms = lib.platforms.linux;
   };
 }

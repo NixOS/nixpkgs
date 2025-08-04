@@ -47,11 +47,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "libagent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Using Trezor as hardware SSH agent";
     homepage = "https://github.com/romanz/trezor-agent";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       hkjn
       np
       mmahut

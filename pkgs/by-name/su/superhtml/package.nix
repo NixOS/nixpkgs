@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HTML Language Server and Templating Language Library";
     homepage = "https://github.com/kristoff-it/superhtml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "superhtml";
-    maintainers = with maintainers; [ petertriho ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ petertriho ];
+    platforms = lib.platforms.unix;
   };
 }

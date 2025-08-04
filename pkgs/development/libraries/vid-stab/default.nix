@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
 
-  meta = with lib; {
+  meta = {
     description = "Video stabilization library";
     homepage = "http://public.hronopik.de/vid.stab/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
   };
 }

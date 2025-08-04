@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     libdbusmenu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plasma 5 applet in order to show window menu in your panels";
     homepage = "https://github.com/psifidotos/applet-window-appmenu";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ greydot ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ greydot ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -101,7 +101,7 @@ mkYarnPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Moderation tool for Matrix";
     homepage = "https://github.com/the-draupnir-project/Draupnir";
     longDescription = ''
@@ -118,8 +118,8 @@ mkYarnPackage rec {
       A Synapse module is also available to apply the same rulesets the bot
       uses across an entire homeserver.
     '';
-    license = licenses.afl3;
-    maintainers = with maintainers; [ RorySys ];
+    license = lib.licenses.afl3;
+    maintainers = with lib.maintainers; [ RorySys ];
     mainProgram = "draupnir";
   };
 }

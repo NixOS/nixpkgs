@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   pathsToLink = [ "/etc/xdg/peruse.knsrc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comic book reader";
     homepage = "https://peruse.kde.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "peruse";
     inherit (kirigami2.meta) platforms;
   };

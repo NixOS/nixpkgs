@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK Libretro frontend framework";
     mainProgram = "retro-demo";
     longDescription = ''
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.gnome.org/GNOME/retro-gtk";
     changelog = "https://gitlab.gnome.org/GNOME/retro-gtk/-/blob/master/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.DamienCassou ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.DamienCassou ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/retro-gtk.x86_64-darwin
   };
 }

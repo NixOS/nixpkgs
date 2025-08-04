@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility that makes sweeping changes to large, shared code bases";
     mainProgram = "fastmod";
     homepage = "https://github.com/facebookincubator/fastmod";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jduan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jduan ];
   };
 }

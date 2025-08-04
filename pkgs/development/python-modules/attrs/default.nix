@@ -49,11 +49,11 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
     changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

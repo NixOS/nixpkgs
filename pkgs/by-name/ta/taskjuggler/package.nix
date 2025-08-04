@@ -23,12 +23,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "taskjuggler";
 
-  meta = with lib; {
+  meta = {
     description = "Modern and powerful project management tool";
     homepage = "https://taskjuggler.org/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       manveru
       nicknovitski
     ];

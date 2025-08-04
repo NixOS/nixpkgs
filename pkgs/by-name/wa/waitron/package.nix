@@ -24,7 +24,7 @@ buildGoModule rec {
     ./staticfiles-directory.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage network booting of machines";
     longDescription = ''
       Waitron is used to build machines (primarily bare-metal, but anything that
@@ -32,9 +32,9 @@ buildGoModule rec {
       specified inventory sources.
     '';
     homepage = "https://github.com/ns1/waitron";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ guibert ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ guibert ];
+    platforms = lib.platforms.linux;
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

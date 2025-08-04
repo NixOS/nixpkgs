@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace libsystemd-daemon libsystemd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gnosek/fcgiwrap";
     description = "Simple server for running CGI applications over FastCGI";
     maintainers = [ ];
-    platforms = with platforms; linux;
-    license = licenses.mit;
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.mit;
     mainProgram = "fcgiwrap";
   };
 }

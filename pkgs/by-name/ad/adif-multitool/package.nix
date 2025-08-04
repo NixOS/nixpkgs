@@ -16,11 +16,11 @@ buildGoModule rec {
     hash = "sha256-qeAH8UTyEZn8As3wTjluONpjeT/5l9zicN5+8uwnbLo=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line program for working with ham logfiles";
     homepage = "https://github.com/flwyd/adif-multitool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mafo ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mafo ];
     mainProgram = "adifmt";
   };
 }

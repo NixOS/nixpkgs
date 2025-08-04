@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # Apply patch relative to source/src
   patchFlags = [ "-p3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for Omorfi";
     homepage = "https://github.com/flammie/omorfi";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ lurkki ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ lurkki ];
   };
 }

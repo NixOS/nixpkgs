@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     cp ${region}/${language}/*.PPD $out/share/cups/model/Kyocera/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PPD files for Kyocera ECOSYS M2040dn/M2135dn/M2540dn/M2540dw/M2635dn/M2635dw/M2640idw/M2735dw/P2040dn/M2040dw/P2235dn/P2235dw";
     homepage = "https://www.kyoceradocumentsolutions.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.linux;
   };
 }

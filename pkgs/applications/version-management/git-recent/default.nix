@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paulirish/git-recent";
     description = "See your latest local git branches, formatted real fancy";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.jlesquembre ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.jlesquembre ];
     mainProgram = "git-recent";
   };
 }

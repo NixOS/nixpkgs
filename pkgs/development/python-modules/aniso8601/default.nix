@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aniso8601" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Parser for ISO 8601 strings";
     homepage = "https://bitbucket.org/nielsenb/aniso8601";
     changelog = "https://bitbucket.org/nielsenb/aniso8601/src/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

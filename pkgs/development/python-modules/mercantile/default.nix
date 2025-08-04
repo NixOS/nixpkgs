@@ -26,11 +26,11 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Spherical mercator tile and coordinate utilities";
     mainProgram = "mercantile";
     homepage = "https://github.com/mapbox/mercantile";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

@@ -23,10 +23,10 @@ buildPythonPackage rec {
     inherit sabnzbd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C implementations of functions for use within SABnzbd";
     homepage = "https://github.com/sabnzbd/sabctools";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ adamcstephens ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ adamcstephens ];
   };
 }

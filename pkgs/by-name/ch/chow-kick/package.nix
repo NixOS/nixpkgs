@@ -97,12 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ChowKick_artefacts/Release/Standalone/ChowKick  $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Chowdhury-DSP/ChowKick";
     description = "Kick synthesizer based on old-school drum machine circuits";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "ChowKick";
   };
 })

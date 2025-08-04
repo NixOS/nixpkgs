@@ -55,11 +55,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/inormalize";
     description = "Program to normalize intensity of MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

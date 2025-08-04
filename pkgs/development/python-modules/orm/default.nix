@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "orm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async ORM";
     homepage = "https://github.com/encode/orm";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

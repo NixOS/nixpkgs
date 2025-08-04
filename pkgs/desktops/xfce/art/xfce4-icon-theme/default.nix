@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     url = "https://archive.xfce.org/src/art/${pname}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xfce.org/";
     description = "Icons for Xfce";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.xfce ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 }

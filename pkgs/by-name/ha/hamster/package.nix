@@ -65,12 +65,12 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $out/libexec "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time tracking application";
     mainProgram = "hamster";
     homepage = "http://projecthamster.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.fabianhauser ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.fabianhauser ];
   };
 }

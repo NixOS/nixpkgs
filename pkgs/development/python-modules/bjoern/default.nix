@@ -27,10 +27,10 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test_wsgi_compliance.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jonashaag/bjoern";
     description = "Screamingly fast Python 2/3 WSGI server written in C";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

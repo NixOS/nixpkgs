@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
   # process didn't exit successfully: <...> SIGSEGV
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Industrial-grade brainfuck compiler";
     mainProgram = "bfc";
     homepage = "https://bfc.wilfred.me.uk";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }

@@ -26,11 +26,11 @@ buildGoModule rec {
   # needs a kafka server
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for easy, declarative management of Kafka topics";
     inherit (src.meta) homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       eskytthe
       srhb
     ];

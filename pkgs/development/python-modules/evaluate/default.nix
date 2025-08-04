@@ -54,12 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evaluate" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://huggingface.co/docs/evaluate/index";
     description = "Easily evaluate machine learning models and datasets";
     changelog = "https://github.com/huggingface/evaluate/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "evaluate-cli";
   };
 }

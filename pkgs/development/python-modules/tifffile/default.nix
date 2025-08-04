@@ -58,11 +58,11 @@ buildPythonPackage rec {
   # flaky, often killed due to OOM or timeout
   env.SKIP_LARGE = "1";
 
-  meta = with lib; {
+  meta = {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
     changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lebastr ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lebastr ];
   };
 }

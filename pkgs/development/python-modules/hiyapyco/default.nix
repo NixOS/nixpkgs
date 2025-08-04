@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hiyapyco" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library allowing hierarchical overlay of config files in YAML syntax";
     homepage = "https://github.com/zerwes/hiyapyco";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

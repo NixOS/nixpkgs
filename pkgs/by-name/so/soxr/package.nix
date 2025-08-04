@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio resampling library";
     homepage = "https://soxr.sourceforge.net";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
   };
 }

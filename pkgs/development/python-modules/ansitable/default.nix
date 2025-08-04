@@ -34,11 +34,11 @@ buildPythonPackage rec {
     pandas
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quick and easy display of tabular data and matrices with optional ANSI color and borders";
     homepage = "https://pypi.org/project/ansitable/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       djacu
       a-camarillo
     ];

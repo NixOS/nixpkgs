@@ -28,11 +28,11 @@ ocamlPackages.buildDunePackage rec {
     yojson
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stan-dev/stanc3";
     description = "Stan compiler and utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 }

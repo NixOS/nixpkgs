@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal and flexible login manager daemon";
     longDescription = ''
       greetd is a minimal and flexible login manager daemon
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
     mainProgram = "greetd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

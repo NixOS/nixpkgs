@@ -38,10 +38,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Channel Level Live Debug Information Service for gRPC";
     homepage = "https://pypi.org/project/grpcio-channelz";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

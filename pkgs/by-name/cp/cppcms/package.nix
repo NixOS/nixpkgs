@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     "--no-warn-unused-cli"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cppcms.com";
     description = "High Performance C++ Web Framework";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

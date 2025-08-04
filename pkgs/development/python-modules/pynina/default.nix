@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynina" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API wrapper to retrieve warnings from the german NINA app";
     homepage = "https://gitlab.com/DeerMaximum/pynina";
     changelog = "https://gitlab.com/DeerMaximum/pynina/-/releases/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

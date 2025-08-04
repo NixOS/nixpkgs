@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "0g663npi5lkvwcqafd4cjrm90ph0nv1lig7d19xzfymnj47qpj8x";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.google.com/fonts/specimen/Roboto+Slab";
     description = "Roboto Slab Typeface by Google";
     longDescription = ''
@@ -38,8 +38,8 @@ stdenv.mkDerivation {
       This is the Roboto Slab family, which can be used alongside the normal
       Roboto family and the Roboto Condensed family.
     '';
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

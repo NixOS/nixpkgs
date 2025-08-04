@@ -66,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "3D fractal rendering engine";
     mainProgram = "mandelbulber2";
     longDescription = "Mandelbulber creatively generates three-dimensional fractals. Explore trigonometric, hyper-complex, Mandelbox, IFS, and many other 3D fractals.";
     homepage = "https://mandelbulber.com";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kovirobi ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ kovirobi ];
   };
 })

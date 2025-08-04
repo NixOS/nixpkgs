@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Implements Wake On LAN functionality in a small program";
     homepage = "https://sourceforge.net/projects/wake-on-lan/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "wol";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

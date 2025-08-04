@@ -17,10 +17,10 @@ buildPythonPackage rec {
     sha256 = "sha256-egxQ1tGC6R5p1stYm4r05+b2HkuT+nBySTZPGqeAbSE=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy transactional database for Python dicts, backed by SQLite";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://itemdb.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

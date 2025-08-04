@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blockchain" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client Blockchain Bitcoin Developer API";
     homepage = "https://github.com/blockchain/api-v1-client-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

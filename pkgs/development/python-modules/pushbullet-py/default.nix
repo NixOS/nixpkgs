@@ -47,9 +47,9 @@ buildPythonPackage rec {
     "test_new_chat_ok"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple python client for pushbullet.com";
     homepage = "https://github.com/randomchars/pushbullet.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

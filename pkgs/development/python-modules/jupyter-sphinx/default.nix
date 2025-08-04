@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
     changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

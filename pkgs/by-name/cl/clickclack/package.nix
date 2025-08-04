@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vibration/audio feedback tool to be used with virtual keyboards";
     homepage = "https://git.sr.ht/~proycon/clickclack";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "clickclack";
   };
 }

@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.babeld = nixosTests.babeld;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.irif.fr/~jch/software/babel/";
     description = "Loop-avoiding distance-vector routing protocol";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.linux;
     mainProgram = "babeld";
   };
 }

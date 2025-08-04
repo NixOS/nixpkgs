@@ -44,13 +44,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hpccm" ];
 
-  meta = with lib; {
+  meta = {
     description = "HPC Container Maker";
     homepage = "https://github.com/NVIDIA/hpc-container-maker";
     changelog = "https://github.com/NVIDIA/hpc-container-maker/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ atila ];
     mainProgram = "hpccm";
-    platforms = platforms.x86;
+    platforms = lib.platforms.x86;
   };
 }

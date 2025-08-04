@@ -24,10 +24,10 @@ buildPythonPackage rec {
     gevent
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous HTTP requests";
     homepage = "https://github.com/kennethreitz/grequests";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ matejc ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ matejc ];
   };
 }

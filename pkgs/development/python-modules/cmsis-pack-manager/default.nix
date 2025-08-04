@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "test_dump_parts_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust and Python module for handling CMSIS Pack files";
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

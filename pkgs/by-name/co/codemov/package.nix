@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create a video of how a git repository's code changes over time";
     homepage = "https://github.com/sloganking/codemov";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "codemov";
   };
 }

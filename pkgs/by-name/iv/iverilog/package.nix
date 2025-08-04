@@ -85,14 +85,14 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Icarus Verilog compiler";
     homepage = "https://steveicarus.github.io/iverilog";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.all;
   };
 }

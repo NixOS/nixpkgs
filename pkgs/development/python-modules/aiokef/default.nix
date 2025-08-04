@@ -40,10 +40,10 @@ buildPythonPackage rec {
   enabledTestPaths = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for KEF speakers";
     homepage = "https://github.com/basnijholt/aiokef";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

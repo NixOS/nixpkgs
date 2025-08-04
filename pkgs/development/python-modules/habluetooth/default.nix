@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "habluetooth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for high availability Bluetooth";
     homepage = "https://github.com/Bluetooth-Devices/habluetooth";
     changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

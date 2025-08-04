@@ -55,11 +55,11 @@ buildGoModule rec {
     package = manifest-tool;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to create and query container image manifest list/indexes";
     mainProgram = "manifest-tool";
     homepage = "https://github.com/estesp/manifest-tool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tricktron ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tricktron ];
   };
 }

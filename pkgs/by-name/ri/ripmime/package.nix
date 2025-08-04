@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-liconv";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Attachment extractor for MIME messages";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [ raskin ];
     homepage = "https://pldaniels.com/ripmime/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "ripmime";
   };
 

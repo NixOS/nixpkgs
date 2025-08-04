@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nclib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that provides netcat features";
     mainProgram = "serve-stdio";
     homepage = "https://nclib.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

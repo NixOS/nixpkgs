@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir "$out/libexec/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Oracle's Oracle DB CLI client";
     longDescription = ''
       Oracle SQL Developer Command Line (SQLcl) is a free command line
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       also supporting your previously written SQL*Plus scripts.
     '';
     homepage = "https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ misterio77 ];
+    maintainers = with lib.maintainers; [ misterio77 ];
   };
 })

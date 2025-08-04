@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tcxreader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reader for Garmin’s TCX file format";
     homepage = "https://github.com/alenrajsp/tcxreader";
     changelog = "https://github.com/alenrajsp/tcxreader/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

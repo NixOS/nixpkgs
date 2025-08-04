@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.servicebus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Service Bus Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/servicebus/azure-servicebus";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-servicebus_${version}/sdk/servicebus/azure-servicebus/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

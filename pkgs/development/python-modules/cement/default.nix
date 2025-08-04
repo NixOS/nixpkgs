@@ -76,12 +76,12 @@ buildPythonPackage rec {
     "tests/ext/test_ext_smtp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
     changelog = "https://github.com/datafolklabs/cement/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ eqyiel ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ eqyiel ];
     mainProgram = "cement";
   };
 }

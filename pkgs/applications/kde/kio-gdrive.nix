@@ -14,12 +14,12 @@
 
 mkDerivation {
   pname = "kio-gdrive";
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KDE/kio-gdrive";
     description = "KIO slave for Google APIs";
-    maintainers = with maintainers; [ kennyballou ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ kennyballou ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

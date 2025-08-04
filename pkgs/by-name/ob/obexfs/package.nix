@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     bluez
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFs";
     description = "Tool to mount OBEX-based devices (such as Bluetooth phones)";
-    platforms = platforms.linux;
-    license = licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2Plus;
   };
 }

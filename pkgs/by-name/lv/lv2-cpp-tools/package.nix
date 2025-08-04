@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ll-plugins.nongnu.org/hacking.html";
     description = "Tools and libraries that may come in handy when writing LV2 plugins in C++";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.michalrus ];
+    platforms = lib.platforms.linux;
   };
 }

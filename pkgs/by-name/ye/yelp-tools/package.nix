@@ -53,12 +53,12 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/yelp-tools";
     description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
-    maintainers = with maintainers; [ ];
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ];
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -139,12 +139,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ormar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
     changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andreasfelix ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andreasfelix ];
     broken = true;
   };
 }

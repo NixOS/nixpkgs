@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_basic_ng" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modernised skeleton for Sphinx themes";
     homepage = "https://sphinx-basic-ng.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

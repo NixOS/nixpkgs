@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     "-DPROJECT_VERSION=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkits of libdfm-io,libdfm-mount and libdfm-burn";
     homepage = "https://github.com/linuxdeepin/util-dfm";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

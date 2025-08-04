@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sybil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated testing for the examples in your documentation";
     homepage = "https://github.com/cjw296/sybil";
     changelog = "https://github.com/simplistix/sybil/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

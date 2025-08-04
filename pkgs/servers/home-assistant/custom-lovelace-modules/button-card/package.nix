@@ -42,12 +42,12 @@ mkYarnPackage rec {
 
   doDist = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lovelace button-card for home assistant";
     homepage = "https://github.com/custom-cards/button-card";
     changelog = "https://github.com/custom-cards/button-card/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

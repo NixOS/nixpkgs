@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt graph manager for PipeWire, similar to QjackCtl";
     longDescription = ''
       qpwgraph is a graph manager dedicated for PipeWire,
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
       the same of QjackCtl.
     '';
     homepage = "https://gitlab.freedesktop.org/rncbc/qpwgraph";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       kanashimia
       exi
       Scrumplex

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript-like language with optional templating";
     homepage = "https://github.com/jow-/ucode";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

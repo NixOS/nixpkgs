@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest7CheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ralphbean/taskw";
     description = "Python bindings for your taskwarrior database";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pierron ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pierron ];
   };
 }

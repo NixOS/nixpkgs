@@ -133,11 +133,11 @@ lib.checkListOfEnum "${pname}: theme variants" availableThemeVariants themeVaria
         runHook postInstall
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Recoloring of the Afterglow Cursors x-cursor theme";
       homepage = "https://github.com/TeddyBearKilla/Afterglow-Cursors-Recolored";
-      maintainers = with maintainers; [ d3vil0p3r ];
-      platforms = platforms.all;
-      license = licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [ d3vil0p3r ];
+      platforms = lib.platforms.all;
+      license = lib.licenses.gpl3Plus;
     };
   }

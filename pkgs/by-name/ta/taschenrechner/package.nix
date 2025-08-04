@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/tgfHU4/B7tes2jU8L/MbWIG1sTLg9exWhmuSA6Davk=";
 
-  meta = with lib; {
+  meta = {
     description = "Cli-calculator written in Rust";
     homepage = "https://gitlab.fem-net.de/mabl/taschenrechner";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ netali ];
     mainProgram = "taschenrechner";
   };
 }

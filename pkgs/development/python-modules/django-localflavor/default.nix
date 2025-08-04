@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/django/django-localflavor/blob/${src.tag}/docs/changelog.rst";
     description = "Country-specific Django helpers";
     homepage = "https://github.com/django/django-localflavor";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

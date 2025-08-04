@@ -38,11 +38,11 @@ buildGoModule rec {
     command = "sql_exporter -version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Flexible SQL exporter for Prometheus";
     mainProgram = "sql_exporter";
     homepage = "https://github.com/justwatchcom/sql_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ justinas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ justinas ];
   };
 }

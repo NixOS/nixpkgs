@@ -19,10 +19,10 @@
 
 mkDerivation {
   pname = "ktorrent";
-  meta = with lib; {
+  meta = {
     description = "KDE integrated BtTorrent client";
     homepage = "https://apps.kde.org/ktorrent/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 

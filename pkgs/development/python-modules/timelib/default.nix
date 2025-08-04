@@ -17,9 +17,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse english textual date descriptions";
     homepage = "https://github.com/pediapress/timelib/";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
   };
 }

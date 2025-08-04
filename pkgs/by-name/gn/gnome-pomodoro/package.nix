@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     mainProgram = "gnome-pomodoro";
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aleksana
       herschenglime
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

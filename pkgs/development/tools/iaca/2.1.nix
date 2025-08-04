@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
           $out/bin/iaca
     '';
   postFixup = "wrapProgram $out/bin/iaca --set LD_LIBRARY_PATH $out/lib";
-  meta = with lib; {
+  meta = {
     description = "Intel Architecture Code Analyzer";
     homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kazcw ];
+    maintainers = with lib.maintainers; [ kazcw ];
   };
 }

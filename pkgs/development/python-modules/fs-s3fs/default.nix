@@ -26,9 +26,9 @@ buildPythonPackage rec {
   # tests try to integrate an s3 bucket which can't be tested properly in an isolated environment.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/fs-s3fs/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Amazon S3 filesystem for PyFilesystem2";
     maintainers = [ ];
   };

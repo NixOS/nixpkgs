@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for psycopg2";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

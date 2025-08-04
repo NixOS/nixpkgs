@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywerview" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for PowerSploit's PowerView support";
     homepage = "https://github.com/the-useless-one/pywerview";
     changelog = "https://github.com/the-useless-one/pywerview/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pywerview";
   };
 }

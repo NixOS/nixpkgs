@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_serialization_json" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON serialization implementation for Kiota clients in Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/json";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-json-${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

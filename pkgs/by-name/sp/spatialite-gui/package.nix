@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     rm -fr $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for SpatiaLite";
     homepage = "https://www.gaia-gis.it/fossil/spatialite_gui";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.geospatial ];
     mainProgram = "spatialite_gui";
   };
 }

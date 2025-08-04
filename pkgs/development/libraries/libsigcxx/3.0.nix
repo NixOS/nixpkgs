@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libsigcplusplus.github.io/libsigcplusplus/";
     description = "Typesafe callback system for standard C++";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.all;
   };
 }

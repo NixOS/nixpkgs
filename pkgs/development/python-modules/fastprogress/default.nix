@@ -23,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "fastprogress" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fastai/fastprogress";
     description = "Simple and flexible progress bar for Jupyter Notebook and console";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

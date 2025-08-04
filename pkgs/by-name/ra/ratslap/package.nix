@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configure G300 and G300s Logitech mice";
     longDescription = ''
       A tool to configure Logitech mice on Linux. Supports remapping
@@ -64,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/krayon/ratslap";
     changelog = "https://github.com/krayon/ratslap/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ zebreus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ zebreus ];
+    platforms = lib.platforms.linux;
   };
 })

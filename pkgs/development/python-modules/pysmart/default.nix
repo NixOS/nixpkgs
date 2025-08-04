@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pySMART" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for smartctl (smartmontools)";
     homepage = "https://github.com/truenas/py-SMART";
     changelog = "https://github.com/truenas/py-SMART/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication rec {
     ''--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"''
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple GUI for ByteDance's Piano Transcription with Pedals";
     mainProgram = "pianotrans";
     homepage = "https://github.com/azuwis/pianotrans";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azuwis ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
   };
 }

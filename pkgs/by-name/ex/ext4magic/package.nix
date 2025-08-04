@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Recover / undelete files from ext3 or ext4 partitions";
     longDescription = ''
       ext4magic can recover/undelete files from ext3 or ext4 partitions
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
       It's much more effective and works much better than extundelete.
     '';
     homepage = "https://ext4magic.sourceforge.net/ext4magic_en.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rkoe ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rkoe ];
     mainProgram = "ext4magic";
   };
 }

@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "supervisor" ];
 
-  meta = with lib; {
+  meta = {
     description = "System for controlling process state under UNIX";
     homepage = "https://supervisord.org/";
     changelog = "https://github.com/Supervisor/supervisor/blob/${version}/CHANGES.rst";
-    license = licenses.free; # http://www.repoze.org/LICENSE.txt
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.free; # http://www.repoze.org/LICENSE.txt
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

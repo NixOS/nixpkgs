@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     ./headers.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to integrate C/Cpp code with Lua";
     homepage = "http://www.codenix.com/~tolua/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tolua++";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP, HTTP2, HTTPS, Websocket debugging proxy";
     homepage = "https://github.com/avwo/whistle";
     changelog = "https://github.com/avwo/whistle/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "whistle";
   };

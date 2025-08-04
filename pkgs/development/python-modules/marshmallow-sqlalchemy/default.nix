@@ -39,11 +39,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLAlchemy integration with marshmallow";
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
     changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

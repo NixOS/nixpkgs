@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "zope" ];
 
-  meta = with lib; {
+  meta = {
     description = "Supports the efficient creation of “hookable” objects";
     homepage = "https://github.com/zopefoundation/zope.hookable";
     changelog = "https://github.com/zopefoundation/zope.hookable/blob/${src.tag}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
   };
 }

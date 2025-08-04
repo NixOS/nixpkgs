@@ -49,11 +49,11 @@ rustPlatform.buildRustPackage {
       --zsh <(COMPLETE=zsh $out/bin/tms)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fastest way to manage projects as tmux sessions";
     homepage = "https://github.com/jrmoulton/tmux-sessionizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       vinnymeller
       mrcjkb
     ];

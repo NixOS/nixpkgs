@@ -34,10 +34,10 @@ stdenv.mkDerivation {
   patches = lib.optionals stdenv.buildPlatform.isDarwin [ ./darwin.patch ];
   configureFlags = lib.optionals (localStateDir != null) [ "--localstatedir=${localStateDir}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Falling tower game";
     mainProgram = "xjump";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pmeunier ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pmeunier ];
   };
 }

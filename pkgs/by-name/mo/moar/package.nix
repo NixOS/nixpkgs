@@ -31,11 +31,11 @@ buildGoModule rec {
     "main.versionString=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Nice-to-use pager for humans";
     homepage = "https://github.com/walles/moar";
-    license = licenses.bsd2WithViews;
+    license = lib.licenses.bsd2WithViews;
     mainProgram = "moar";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

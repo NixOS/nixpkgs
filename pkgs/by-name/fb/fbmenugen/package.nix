@@ -70,12 +70,12 @@ perlPackages.buildPerlPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trizen/fbmenugen";
     description = "Simple menu generator for the Fluxbox Window Manager";
     mainProgram = "fbmenugen";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

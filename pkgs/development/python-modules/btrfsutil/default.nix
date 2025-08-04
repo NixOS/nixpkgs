@@ -39,11 +39,11 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "btrfsutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing Btrfs filesystems";
     homepage = "https://btrfs.wiki.kernel.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       raskin
       lopsided98
     ];

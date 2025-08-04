@@ -28,11 +28,11 @@ buildGoModule rec {
     installManPage bombadillo.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Non-web client for the terminal, supporting Gopher, Gemini and more";
     mainProgram = "bombadillo";
     homepage = "https://bombadillo.colorfield.space/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ehmry ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

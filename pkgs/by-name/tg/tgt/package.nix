@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "https://github.com/fujita/tgt";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ johnazoidberg ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ johnazoidberg ];
   };
 }

@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Module that implements the Virtual Instrument Software Architecture";
     homepage = "https://github.com/pyvisa/pyvisa-py";
     changelog = "https://github.com/pyvisa/pyvisa-py/blob/${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
   };
 }

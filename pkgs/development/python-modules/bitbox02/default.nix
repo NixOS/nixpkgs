@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitbox02" ];
 
-  meta = with lib; {
+  meta = {
     description = "Firmware code of the BitBox02 hardware wallet";
     homepage = "https://github.com/digitalbitbox/bitbox02-firmware/";
     changelog = "https://github.com/digitalbitbox/bitbox02-firmware/blob/py-bitbox02-${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

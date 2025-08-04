@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "construct_classes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse your binary data into dataclasses";
     homepage = "https://github.com/matejcik/construct-classes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

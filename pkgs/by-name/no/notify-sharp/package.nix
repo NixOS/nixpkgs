@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     sed -i 's#^[ \t]*DOCDIR=.*$#DOCDIR=$out/lib/monodoc#' ./configure.ac
   '';
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus for .NET";
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

@@ -41,11 +41,11 @@ buildNpmPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Converts modern Yarn v2+ yarn.lock files into a Yarn v1 format";
     homepage = "https://github.com/VHT/yarn-lock-converter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "yarn-lock-converter";
   };
 }

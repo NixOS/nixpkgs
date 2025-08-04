@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Translate files using Argos Translate";
     homepage = "https://www.argosopentech.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
     ln -s ${belcard}/share/belr/grammars/* $out/share/belr/grammars/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.linphone.org/technical-corner/liblinphone";
     description = "Library for SIP calls and instant messaging";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

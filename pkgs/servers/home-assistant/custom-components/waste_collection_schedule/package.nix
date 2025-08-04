@@ -31,11 +31,11 @@ buildHomeAssistantComponent rec {
     pypdf
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mampfes/hacs_waste_collection_schedule/releases/tag/${version}";
     description = "Home Assistant integration framework for (garbage collection) schedules";
     homepage = "https://github.com/mampfes/hacs_waste_collection_schedule";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
   };
 }

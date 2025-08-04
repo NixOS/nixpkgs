@@ -48,10 +48,10 @@ buildGoModule rec {
     mv "$GOPATH/bin/list" "$GOPATH/bin/git-list"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Better way to clone, organize and manage multiple git repositories";
     homepage = "https://github.com/grdl/git-get";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sumnerevans ];
   };
 }

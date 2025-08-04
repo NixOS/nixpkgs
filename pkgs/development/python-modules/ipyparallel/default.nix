@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ipyparallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
     changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

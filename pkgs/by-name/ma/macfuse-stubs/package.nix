@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cp -R usr/local/include/* $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://osxfuse.github.io";
     description = "Build time stubs for FUSE on macOS";
     longDescription = ''
@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
       use the installer from the <link xlink:href="https://osxfuse.github.io/">
       project website</link>.
     '';
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ midchildan ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ midchildan ];
 
     # macFUSE as a whole includes code with restrictions on commercial
     # redistribution. However, the build artifacts that we actually touch for
     # this derivation are distributed under a free license.
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus # libfuse
     ];
   };

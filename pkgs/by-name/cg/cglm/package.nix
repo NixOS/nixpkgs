@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/recp/cglm";
     description = "Highly Optimized Graphics Math (glm) for C";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

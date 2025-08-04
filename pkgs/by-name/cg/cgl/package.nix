@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     osi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cut Generator Library";
     homepage = "https://github.com/coin-or/Cgl";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 })

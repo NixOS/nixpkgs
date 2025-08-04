@@ -90,7 +90,7 @@ mkDerivation {
     inherit kpmcore;
   };
 
-  meta = with lib; {
+  meta = {
     description = "KDE Partition Manager";
     longDescription = ''
       KDE Partition Manager is a utility to help you manage the disks, partitions, and file systems on your computer.
@@ -99,7 +99,7 @@ mkDerivation {
 
       To install on NixOS, use the option `programs.partition-manager.enable = true`.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-40
       cc0
       gpl3Plus
@@ -107,7 +107,7 @@ mkDerivation {
       mit
     ];
     homepage = "https://www.kde.org/applications/system/kdepartitionmanager/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peterhoeg
       oxalica
     ];

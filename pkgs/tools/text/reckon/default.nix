@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     updateScript = bundlerUpdateScript "reckon";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Flexibly import bank account CSV files into Ledger for command line accounting";
     mainProgram = "reckon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nicknovitski ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nicknovitski ];
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
   };
 }

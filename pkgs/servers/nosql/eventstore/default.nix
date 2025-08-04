@@ -71,11 +71,11 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       puffnfresh
       mdarocha
     ];

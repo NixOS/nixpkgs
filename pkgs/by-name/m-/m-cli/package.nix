@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 completion/zsh/_m
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Swiss Army Knife for macOS";
     inherit (src.meta) homepage;
 
-    license = licenses.mit;
+    license = lib.licenses.mit;
 
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
     maintainers = [ ];
     mainProgram = "m";
   };

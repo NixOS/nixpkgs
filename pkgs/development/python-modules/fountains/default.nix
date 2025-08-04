@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fountains" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for generating and embedding data for unit testing";
     homepage = "https://github.com/reity/fountains";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

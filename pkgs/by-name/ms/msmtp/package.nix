@@ -40,12 +40,12 @@ let
     hash = "sha256-aM2qId08zvT9LbncCQYHsklbvHVtcZJgr91JTjwpQ/0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
     homepage = "https://marlam.de/msmtp/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "msmtp";
   };
 

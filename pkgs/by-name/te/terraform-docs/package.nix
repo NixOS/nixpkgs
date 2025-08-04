@@ -29,11 +29,11 @@ buildGoModule rec {
     installShellCompletion terraform-docs.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

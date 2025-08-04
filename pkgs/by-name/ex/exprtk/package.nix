@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ Mathematical Expression Toolkit Library";
     homepage = "https://www.partow.net/programming/exprtk/index.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

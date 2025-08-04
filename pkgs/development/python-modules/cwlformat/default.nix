@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cwlformat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Code formatter for CWL";
     homepage = "https://github.com/rabix/cwl-format";
     changelog = "https://github.com/rabix/cwl-format/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "MeerK40t camera plugin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/meerk40t/meerk40t-camera";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

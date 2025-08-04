@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qP4AIPST1s6fiGq6FM2aXpEfkm4G/cOSYJyhtqF2k1E=";
 
-  meta = with lib; {
+  meta = {
     description = "OCI container runtime monitor written in Rust";
     homepage = "https://github.com/containers/conmon-rs";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
 }

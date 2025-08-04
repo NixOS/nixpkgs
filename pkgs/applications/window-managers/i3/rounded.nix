@@ -21,11 +21,11 @@ i3.overrideAttrs (oldAttrs: {
   # Some tests are failing.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fork of i3-gaps that adds rounding to window corners";
     homepage = "https://github.com/LinoBigatti/i3-rounded";
-    maintainers = with maintainers; [ marsupialgutz ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ marsupialgutz ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 })

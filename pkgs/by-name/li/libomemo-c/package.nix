@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   buildsInputs = [ openssl ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fork of libsignal-protocol-c adding support for OMEMO XEP-0384 0.5.0+";
     homepage = "https://github.com/dino/libomemo-c";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.astro ];
   };
 }

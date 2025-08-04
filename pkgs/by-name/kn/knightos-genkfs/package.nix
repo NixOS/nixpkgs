@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://knightos.org/";
     description = "Utility to write a KFS filesystem into a ROM file";
     mainProgram = "genkfs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.all;
   };
 }

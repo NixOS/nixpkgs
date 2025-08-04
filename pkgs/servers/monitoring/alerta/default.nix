@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication rec {
     "alerta"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
     mainProgram = "alertad";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

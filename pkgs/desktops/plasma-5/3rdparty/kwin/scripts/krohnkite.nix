@@ -39,10 +39,10 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic tiling extension for KWin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drawille" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drawing in terminal with unicode braille characters";
     homepage = "https://github.com/asciimoo/drawille";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ nobbz ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ nobbz ];
+    platforms = lib.platforms.all;
   };
 }

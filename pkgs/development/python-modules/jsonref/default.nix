@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonref" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of JSON Reference for Python";
     homepage = "https://github.com/gazpachoking/jsonref";
     changelog = "https://github.com/gazpachoking/jsonref/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

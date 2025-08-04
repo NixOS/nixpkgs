@@ -52,14 +52,14 @@ buildRubyGem rec {
     installShellCompletion $GEM_HOME/gems/${gemName}-${version}/completion/tmuxinator.{bash,zsh,fish}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage complex tmux sessions easily";
     homepage = "https://github.com/tmuxinator/tmuxinator";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       auntie
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "tmuxinator";
   };
 }

@@ -59,17 +59,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create simple and beautiful presentations";
     homepage = "https://github.com/Philip-Scott/Spice-up";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       samdroid-apps
       xiorcale
     ];
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.philip_scott.spice-up";
   };
 }

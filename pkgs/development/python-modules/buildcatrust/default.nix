@@ -30,11 +30,11 @@ buildPythonPackage rec {
     "buildcatrust.cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Build SSL/TLS trust stores";
     mainProgram = "buildcatrust";
     homepage = "https://github.com/lukegb/buildcatrust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukegb ];
   };
 }

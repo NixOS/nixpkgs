@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Header files and API registry";
     homepage = "https://www.lunarg.com";
-    platforms = platforms.unix ++ platforms.windows;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

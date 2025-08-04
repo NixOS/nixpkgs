@@ -92,15 +92,15 @@ buildGoModule rec {
     wrapPythonProgramsIn $out/share/goldwarden "$out/share/goldwarden $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feature-packed Bitwarden compatible desktop integration";
     homepage = "https://github.com/quexten/goldwarden";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       arthsmn
       justanotherariel
     ];
     mainProgram = "goldwarden";
-    platforms = platforms.linux; # Support for other platforms is not yet ready, see https://github.com/quexten/goldwarden/issues/4
+    platforms = lib.platforms.linux; # Support for other platforms is not yet ready, see https://github.com/quexten/goldwarden/issues/4
   };
 }

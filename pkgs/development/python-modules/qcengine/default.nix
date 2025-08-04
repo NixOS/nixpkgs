@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcengine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quantum chemistry program executor and IO standardizer (QCSchema) for quantum chemistry";
     homepage = "https://molssi.github.io/QCElemental/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sheepforce ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sheepforce ];
     mainProgram = "qcengine";
   };
 }

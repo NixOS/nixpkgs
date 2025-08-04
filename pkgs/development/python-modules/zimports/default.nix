@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zimports" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python import rewriter";
     homepage = "https://github.com/sqlalchemyorg/zimports";
-    license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ timokau ];
   };
 }

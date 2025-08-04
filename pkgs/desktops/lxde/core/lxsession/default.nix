@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.lxde.org/en/LXSession";
     description = "Classic LXDE session manager";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.shamilton ];
+    platforms = lib.platforms.linux;
   };
 }

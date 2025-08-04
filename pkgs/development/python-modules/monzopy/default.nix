@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "monzopy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to work with the Monzo API";
     homepage = "https://github.com/JakeMartin-ICL/monzopy";
     changelog = "https://github.com/JakeMartin-ICL/monzopy/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

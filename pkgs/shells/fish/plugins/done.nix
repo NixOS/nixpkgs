@@ -21,10 +21,10 @@ buildFishPlugin rec {
     fishtape test/done.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically receive notifications when long processes finish";
     homepage = "https://github.com/franciscolourenco/done";
-    license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
   };
 }

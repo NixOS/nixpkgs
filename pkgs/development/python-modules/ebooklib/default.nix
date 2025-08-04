@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ebooklib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python E-book library for handling books in EPUB2/EPUB3  format";
     homepage = "https://github.com/aerkalov/ebooklib";
     changelog = "https://github.com/aerkalov/ebooklib/blob/${src.rev}/CHANGES.txt";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

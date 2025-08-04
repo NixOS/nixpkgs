@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nkdfu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool for Nitrokeys' firmware update";
     mainProgram = "nkdfu";
     homepage = "https://github.com/Nitrokey/nkdfu";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ frogamic ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ frogamic ];
   };
 }

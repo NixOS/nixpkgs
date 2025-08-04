@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_STANDARD=14"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
     homepage = "https://xc3sprog.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

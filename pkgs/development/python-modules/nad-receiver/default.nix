@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nad_receiver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for NAD receivers";
     homepage = "https://github.com/joopert/nad_receiver";
     changelog = "https://github.com/joopert/nad_receiver/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

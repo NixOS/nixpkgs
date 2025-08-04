@@ -44,11 +44,11 @@ buildGoModule rec {
     version = "${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Holos CLI tool";
     homepage = "https://github.com/holos-run/holos";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cameronraysmith ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cameronraysmith ];
     mainProgram = "holos";
   };
 }

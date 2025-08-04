@@ -61,11 +61,11 @@ buildPythonPackage rec {
     redisTestPort=6390
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
     changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

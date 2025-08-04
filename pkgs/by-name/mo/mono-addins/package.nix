@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mono-project.com/archived/monoaddins/";
     description = "Generic framework for creating extensible applications";
     mainProgram = "mautil";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       Mono.Addins is a generic framework for creating extensible applications,
       and for creating libraries which extend those applications.
     '';
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

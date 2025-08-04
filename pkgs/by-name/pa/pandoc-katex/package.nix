@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ve8s+LLjJiP/I+A/X23CnGiRsbfz5sxFr6kySAgYTyE=";
 
-  meta = with lib; {
+  meta = {
     description = "Pandoc filter to render math equations using KaTeX";
     homepage = "https://github.com/xu-cheng/pandoc-katex";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       minijackson
       euxane
     ];

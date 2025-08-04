@@ -136,15 +136,15 @@ stdenv.mkDerivation {
     patchShebangs build-aux/* src/generate-resource-xml.{py,sh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Inform 7 for the Gnome platform";
     longDescription = ''
       This version of Inform 7 for the Gnome platform was created by Philip Chimento, based on a design by Graham Nelson and Andrew Hunter.
     '';
     homepage = "https://github.com/ptomato/gnome-inform7";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.fitzgibbon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.fitzgibbon ];
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-inform7";
   };
 }

@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Genetic variant annotation and effect prediction toolbox";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     homepage = "https://snpeff.sourceforge.net/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.all;
   };
 
 }

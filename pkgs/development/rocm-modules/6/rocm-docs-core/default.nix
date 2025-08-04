@@ -58,14 +58,14 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm Documentation Python package for ReadTheDocs build standardization";
     homepage = "https://github.com/ROCm/rocm-docs-core";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       cc-by-40
     ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -21,13 +21,13 @@ buildGoModule rec {
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Update version constraints in your Terraform configurations";
     mainProgram = "tfupdate";
     homepage = "https://github.com/minamijoyo/tfupdate";
     changelog = "https://github.com/minamijoyo/tfupdate/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Intuinewin
       qjoly
     ];

@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "syncer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python async to sync converter";
     homepage = "https://github.com/miyakogi/syncer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

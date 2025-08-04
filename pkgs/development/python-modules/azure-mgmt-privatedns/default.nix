@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "azure.mgmt.privatedns"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure DNS Private Zones Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-privatedns";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-privatedns_${version}/sdk/network/azure-mgmt-privatedns/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

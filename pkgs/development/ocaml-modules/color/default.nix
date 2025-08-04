@@ -21,10 +21,10 @@ buildDunePackage rec {
     gg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts between different color formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/anuragsoni/color";
   };
 }

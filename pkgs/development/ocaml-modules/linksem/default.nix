@@ -31,11 +31,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
 
     createFindlibDestdir = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/rems-project/linksem";
       description = "Formalisation of substantial parts of ELF linking and DWARF debug information";
-      maintainers = with maintainers; [ genericnerdyusername ];
-      license = licenses.bsd2;
+      maintainers = with lib.maintainers; [ genericnerdyusername ];
+      license = lib.licenses.bsd2;
       platforms = ocaml.meta.platforms;
     };
   }

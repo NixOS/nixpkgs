@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastapi_sso" ];
 
-  meta = with lib; {
+  meta = {
     description = "FastAPI plugin to enable SSO to most common providers (such as Facebook login, Google login and login via Microsoft Office 365 Account";
     homepage = "https://github.com/tomasvotava/fastapi-sso";
     changelog = "https://github.com/tomasvotava/fastapi-sso/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

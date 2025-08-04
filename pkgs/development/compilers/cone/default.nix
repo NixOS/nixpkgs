@@ -33,12 +33,12 @@ llvmPackages.stdenv.mkDerivation rec {
     install -Dm644 libconestd.a $out/lib/libconestd.a
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cone Programming Language";
     mainProgram = "conec";
     homepage = "https://cone.jondgoodwin.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.all;
   };
 }

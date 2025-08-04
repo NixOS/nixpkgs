@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     libsecret
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/EionRobb/pidgin-opensteamworks";
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ arobyn ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ arobyn ];
   };
 }

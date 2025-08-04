@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
     }
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mattbas/glaxnimate";
     description = "Simple vector animation program";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tobiasBora ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tobiasBora ];
     mainProgram = "glaxnimate";
   };
 }

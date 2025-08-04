@@ -21,9 +21,9 @@ buildDunePackage {
 
   propagatedBuildInputs = [ dyn ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse ocaml compiler output into structured form";
-    maintainers = [ maintainers.ulrikstrid ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = lib.licenses.mit;
   };
 }

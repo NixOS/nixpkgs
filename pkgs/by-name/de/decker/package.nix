@@ -75,12 +75,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://beyondloom.com/decker";
     description = "Multimedia platform for creating and sharing interactive documents";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "decker";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

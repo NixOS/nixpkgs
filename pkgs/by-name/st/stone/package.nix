@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TCP/IP repeater in the application layer";
     homepage = "http://www.gcd.org/sengoku/stone/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ corngood ];
     mainProgram = "stone";
   };
 }

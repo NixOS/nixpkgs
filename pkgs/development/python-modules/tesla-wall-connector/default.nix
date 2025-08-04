@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tesla_wall_connector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

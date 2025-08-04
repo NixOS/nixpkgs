@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Deepin-wallpapers provides wallpapers of dde";
     homepage = "https://github.com/linuxdeepin/deepin-wallpapers";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-sa-30
     ];
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

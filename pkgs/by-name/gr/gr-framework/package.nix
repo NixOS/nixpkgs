@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "GR framework is a graphics library for visualisation applications";
     homepage = "https://gr-framework.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

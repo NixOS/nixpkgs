@@ -43,7 +43,7 @@ llvmPackages.stdenv.mkDerivation {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Language and an embedded JIT compiler";
     longDescription = ''
@@ -51,8 +51,8 @@ llvmPackages.stdenv.mkDerivation {
       dynamic expression evaluation, data storage and analysis.
     '';
     homepage = "https://github.com/morganstanley/hobbes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kthielen
       thmzlt
     ];

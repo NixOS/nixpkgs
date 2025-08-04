@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rmyorston/pdpmake";
     description = "Public domain POSIX make";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ eownerdead ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ eownerdead ];
     mainProgram = "pdpmake";
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin; # Requires `uimensat`
+    platforms = lib.platforms.all;
+    badPlatforms = lib.platforms.darwin; # Requires `uimensat`
   };
 }

@@ -32,15 +32,15 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform chewing user phrase editor";
     mainProgram = "chewing-editor";
     longDescription = ''
       chewing-editor is a cross platform chewing user phrase editor. It provides a easy way to manage user phrase. With it, user can customize their user phrase to increase input performance.
     '';
     homepage = "https://github.com/chewing/chewing-editor";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ShamrockLee ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ShamrockLee ];
+    platforms = lib.platforms.all;
   };
 }

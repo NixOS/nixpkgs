@@ -44,11 +44,11 @@ buildPythonPackage rec {
     anyio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Production-grade retries for Python";
     homepage = "https://github.com/hynek/stamina";
     changelog = "https://github.com/hynek/stamina/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

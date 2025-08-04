@@ -43,11 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     "gitprivacy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to redact Git author and committer dates";
     homepage = "https://github.com/EMPRI-DEVOPS/git-privacy";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "git-privacy";
   };
 }

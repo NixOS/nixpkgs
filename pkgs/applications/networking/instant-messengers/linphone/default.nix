@@ -133,12 +133,12 @@ mkDerivation rec {
       --set MEDIASTREAMER_PLUGINS_DIR $out/lib/mediastreamer/plugins
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.linphone.org/";
     description = "Open source SIP phone for voice/video calls and instant messaging";
     mainProgram = "linphone";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

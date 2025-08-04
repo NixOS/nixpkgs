@@ -51,15 +51,15 @@ rustPlatform.buildRustPackage {
       --suffix PATH : ${lib.makeBinPath [ cargo ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
     mainProgram = "rustfmt";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       globin
       basvandijk
     ];

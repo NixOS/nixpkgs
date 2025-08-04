@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/picard --add-flags "-jar $out/libexec/picard/picard.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://broadinstitute.github.io/picard/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ jbedo ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ jbedo ];
     mainProgram = "picard";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

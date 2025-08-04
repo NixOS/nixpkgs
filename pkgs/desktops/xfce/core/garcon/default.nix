@@ -29,12 +29,12 @@ mkXfceDerivation {
     libxfce4util
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Xfce menu support library";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       fdl11Only
     ];
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

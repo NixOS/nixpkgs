@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nginx config file formatter";
-    maintainers = with maintainers; [ Baughn ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ Baughn ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/slomkowski/nginx-config-formatter";
     mainProgram = "nginxfmt";
   };

@@ -39,14 +39,14 @@ buildGoModule rec {
 
   doCheck = false; # Tests has lots of hardcoded mess.
 
-  meta = with lib; {
+  meta = {
     description = "Go version of Plan9 Acme Editor";
     homepage = "https://github.com/rjkroege/edwood";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with lib.maintainers; [ kranzes ];
     mainProgram = "edwood";
   };
 }

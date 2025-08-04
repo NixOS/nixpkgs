@@ -87,14 +87,14 @@ stdenv.mkDerivation {
     cp -r doc/html "$out/share/doc/libftdi1/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       gpl2Only
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

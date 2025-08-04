@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crispy_forms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Best way to have DRY Django forms";
     homepage = "https://django-crispy-forms.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

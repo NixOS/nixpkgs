@@ -55,15 +55,15 @@ stdenvNoCC.mkDerivation rec {
     chmod +x "$out/bin/blesh-share"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/akinomyoga/ble.sh";
     description = "Bash Line Editor -- a full-featured line editor written in pure Bash";
     mainProgram = "blesh-share";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       aiotter
       matthiasbeyer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

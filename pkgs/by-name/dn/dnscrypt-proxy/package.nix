@@ -22,16 +22,16 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) dnscrypt-proxy2; };
 
-  meta = with lib; {
+  meta = {
     description = "Tool that provides secure DNS resolution";
 
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://dnscrypt.info/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atemu
       waynr
     ];
     mainProgram = "dnscrypt-proxy";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

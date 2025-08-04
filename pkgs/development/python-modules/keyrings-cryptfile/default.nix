@@ -47,12 +47,12 @@ buildPythonPackage rec {
     "TestEncryptedFileKeyring"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encrypted file keyring backend";
     mainProgram = "cryptfile-convert";
     homepage = "https://github.com/frispete/keyrings.cryptfile";
     changelog = "https://github.com/frispete/keyrings.cryptfile/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.bbjubjub ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.bbjubjub ];
   };
 }

@@ -50,7 +50,7 @@ buildGoModule rec {
 
   doCheck = false; # no test
 
-  meta = with lib; {
+  meta = {
     description = "Data-provider-agnostic (GTFS) public transportation app";
     longDescription = ''
       Transito is a data-provider-agnostic public transportation app
@@ -66,9 +66,9 @@ buildGoModule rec {
       GTFS data, to name a few: Lisbon, NYC, Brussels, Krakow, and Bourges.
     '';
     homepage = "https://git.sr.ht/~mil/transito";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

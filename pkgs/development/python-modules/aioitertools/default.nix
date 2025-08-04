@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioitertools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables";
     homepage = "https://aioitertools.omnilib.dev/";
     changelog = "https://github.com/omnilib/aioitertools/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

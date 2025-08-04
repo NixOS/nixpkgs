@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Integrated family of CLI’s for various Atlassian applications";
     homepage = "https://bobswift.atlassian.net/wiki/spaces/ACLI/overview";
-    license = licenses.unfreeRedistributable;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ twey ];
     inherit (jre.meta) platforms;
   };
 }

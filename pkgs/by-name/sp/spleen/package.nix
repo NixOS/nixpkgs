@@ -32,10 +32,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospaced bitmap fonts";
     homepage = "https://www.cambus.net/spleen-monospaced-bitmap-fonts";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

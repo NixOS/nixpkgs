@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_scan_png_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scan a QR code in the terminal using the system camera or a given image";
     mainProgram = "qrscan";
     homepage = "https://github.com/sayanarijit/qrscan";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = [ maintainers.sayanarijit ];
+    maintainers = [ lib.maintainers.sayanarijit ];
   };
 }

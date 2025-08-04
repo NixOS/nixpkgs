@@ -32,10 +32,10 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "torchlibrosa" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch implemention of part of librosa functions";
     homepage = "https://github.com/qiuqiangkong/torchlibrosa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azuwis ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
   };
 }

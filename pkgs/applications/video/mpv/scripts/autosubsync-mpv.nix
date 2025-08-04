@@ -29,10 +29,10 @@ buildLua {
   scriptPath = "./";
   passthru.scriptName = "autosubsync-mpv";
 
-  meta = with lib; {
+  meta = {
     description = "Automatically sync subtitles in mpv using the `n` button";
     homepage = "https://github.com/joaquintorres/autosubsync-mpv";
-    maintainers = with maintainers; [ kovirobi ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ kovirobi ];
+    license = lib.licenses.mit;
   };
 }

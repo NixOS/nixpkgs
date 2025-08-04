@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized and secure messenger";
     mainProgram = "briar-desktop";
     homepage = "https://code.briarproject.org/briar/briar-desktop";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       onny
       supinie
     ];

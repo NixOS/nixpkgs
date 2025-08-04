@@ -47,12 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cffsubr" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/adobe-type-tools/cffsubr/releases/tag/v${version}";
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

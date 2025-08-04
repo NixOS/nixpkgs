@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sasmodels" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of small angle scattering models";
     homepage = "https://github.com/SasView/sasmodels";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rprospero ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }

@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Boring crypto that simply works";
     homepage = "https://monocypher.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       cc0
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_socketio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Socket.IO integration for Flask applications";
     homepage = "https://github.com/miguelgrinberg/Flask-SocketIO/";
     changelog = "https://github.com/miguelgrinberg/Flask-SocketIO/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

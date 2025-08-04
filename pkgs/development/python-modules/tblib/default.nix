@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Traceback fiddling library. Allows you to pickle tracebacks";
     homepage = "https://github.com/ionelmc/python-tblib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

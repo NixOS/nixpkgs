@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Detector for Log4Shell exploitation attempts";
     homepage = "https://github.com/Neo23x0/log4shell-detector";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "log4shell-detector";
   };
 }

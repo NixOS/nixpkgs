@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal interface construction kit";
     longDescription = ''
       This library provides an abstracted mechanism for building interactive full-screen terminal
@@ -59,8 +59,8 @@ stdenv.mkDerivation {
       input events.
     '';
     homepage = "https://www.leonerd.org.uk/code/libtickit/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onemoresuza ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onemoresuza ];
+    platforms = lib.platforms.unix;
   };
 }

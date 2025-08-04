@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolifx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for local communication with LIFX devices over a LAN";
     homepage = "https://github.com/aiolifx/aiolifx";
     changelog = "https://github.com/aiolifx/aiolifx/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ netixx ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ netixx ];
     mainProgram = "aiolifx";
   };
 }

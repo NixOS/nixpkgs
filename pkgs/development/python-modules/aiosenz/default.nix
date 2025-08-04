@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosenz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the nVent Raychem SENZ RestAPI";
     homepage = "https://github.com/milanmeu/aiosenz";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

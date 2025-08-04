@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.redis" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Redis Cache Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-redis_${version}/sdk/redis/azure-mgmt-redis/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

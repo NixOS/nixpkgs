@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "posix_ipc" ];
 
-  meta = with lib; {
+  meta = {
     description = "POSIX IPC primitives (semaphores, shared memory and message queues)";
     homepage = "https://github.com/osvenskan/posix_ipc";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -25,12 +25,12 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jaywink/matrix-alertmanager/blob/${src.rev}/CHANGELOG.md";
     description = "Bot to receive Alertmanager webhook events and forward them to chosen rooms";
     mainProgram = "matrix-alertmanager";
     homepage = "https://github.com/jaywink/matrix-alertmanager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erethon ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erethon ];
   };
 }

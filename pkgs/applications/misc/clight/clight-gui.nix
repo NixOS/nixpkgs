@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  meta = with lib; {
+  meta = {
     description = "Qt GUI for clight";
     homepage = "https://github.com/nullobsi/clight-gui";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nickhu ];
     mainProgram = "clight-gui";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

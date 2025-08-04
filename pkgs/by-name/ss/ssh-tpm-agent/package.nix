@@ -39,12 +39,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "SSH agent with support for TPM sealed keys for public key authentication";
     homepage = "https://github.com/Foxboron/ssh-tpm-agent";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sgo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sgo ];
     mainProgram = "ssh-tpm-agent";
   };
 }

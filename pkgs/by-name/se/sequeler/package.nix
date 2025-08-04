@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Friendly SQL Client";
     longDescription = ''
       Sequeler is a native Linux SQL client built in Vala and Gtk. It allows you
@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
       Gtk.Grid Widget.
     '';
     homepage = "https://github.com/Alecaddd/sequeler";
-    license = licenses.gpl3;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.alecaddd.sequeler";
   };
 }

@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "probables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic data structures";
     homepage = "https://github.com/barrust/pyprobables";
     changelog = "https://github.com/barrust/pyprobables/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

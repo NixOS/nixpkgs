@@ -57,10 +57,10 @@ stdenv.mkDerivation rec {
     install -Dm755 build/EmojiOneColor-SVGinOT.ttf $out/share/fonts/truetype/EmojiOneColor-SVGinOT.ttf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source emoji set";
     homepage = "http://emojione.com/";
-    license = licenses.cc-by-40;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.cc-by-40;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

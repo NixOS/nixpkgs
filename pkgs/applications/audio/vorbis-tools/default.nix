@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  meta = with lib; {
+  meta = {
     description = "Extra tools for Ogg-Vorbis audio codec";
     longDescription = ''
       A set of command-line tools to manipulate Ogg Vorbis audio
       files, notably the `ogg123' player and the `oggenc' encoder.
     '';
     homepage = "https://xiph.org/vorbis/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

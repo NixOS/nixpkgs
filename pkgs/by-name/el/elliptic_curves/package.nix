@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ${python3.interpreter} ${spkg-install}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Databases of elliptic curves";
     longDescription = ''
       Includes two databases:
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
          http://sage.math.washington.edu/cremona/INDEX.html
        * William Stein's database of interesting curves
     '';
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    teams = [ teams.sage ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.sage ];
   };
 }

@@ -34,9 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-trio/sniffio";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Sniff out which async library your code is running under";
   };
 }

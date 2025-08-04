@@ -37,7 +37,7 @@ let
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
     longDescription = ''
       Dynamic mathematics software for all levels of education that brings
@@ -45,20 +45,20 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sikmir
       soupglasses
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       cc-by-nc-sa-30
       geogebra
     ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode # some jars include native binaries
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     hydraPlatforms = [ ];
   };
 

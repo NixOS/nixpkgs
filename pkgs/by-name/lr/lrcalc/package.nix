@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit sage; };
 
-  meta = with lib; {
+  meta = {
     description = "Littlewood-Richardson calculator";
     homepage = "http://math.rutgers.edu/~asbuch/lrcalc/";
-    license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
   };
 }

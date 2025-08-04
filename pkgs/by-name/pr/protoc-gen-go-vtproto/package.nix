@@ -18,11 +18,11 @@ buildGoModule rec {
 
   excludedPackages = [ "conformance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protocol Buffers compiler that generates optimized marshaling & unmarshaling Go code for ProtoBuf APIv2";
     mainProgram = "protoc-gen-go-vtproto";
     homepage = "https://github.com/planetscale/vtprotobuf";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.zane ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.zane ];
   };
 }

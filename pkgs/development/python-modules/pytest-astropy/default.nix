@@ -51,10 +51,10 @@ buildPythonPackage rec {
   # pytest-astropy is a meta package that only propagates requirements
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://astropy.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minikerberos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kerberos manipulation library in Python";
     homepage = "https://github.com/skelsec/minikerberos";
     changelog = "https://github.com/skelsec/minikerberos/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

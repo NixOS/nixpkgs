@@ -20,10 +20,10 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = with lib; {
+  meta = {
     description = "Get the dimensions of the terminal";
     homepage = "https://github.com/cryptosense/terminal_size";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

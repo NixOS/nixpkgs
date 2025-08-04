@@ -61,8 +61,8 @@ mkXfceDerivation {
   ++ lib.optionals withUpower [ "--enable-upower-glib" ]
   ++ lib.optionals withColord [ "--enable-colord" ];
 
-  meta = with lib; {
+  meta = {
     description = "Settings manager for Xfce";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

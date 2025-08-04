@@ -37,10 +37,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sacad" ];
 
-  meta = with lib; {
+  meta = {
     description = "Smart Automatic Cover Art Downloader";
     homepage = "https://github.com/desbma/sacad";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

@@ -35,11 +35,11 @@ buildPythonPackage rec {
   # Tests spin up a local server and are not mocking the requests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Client for the Meilisearch API";
     homepage = "https://github.com/meilisearch/meilisearch-python";
     changelog = "https://github.com/meilisearch/meilisearch-python/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

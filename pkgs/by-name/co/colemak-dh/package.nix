@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://colemakmods.github.io/mod-dh";
     description = "Colemak mod for more comfortable typing";
-    license = licenses.publicDomain;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ monaaraj ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ monaaraj ];
   };
 }

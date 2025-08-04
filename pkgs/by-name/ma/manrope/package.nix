@@ -30,11 +30,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source modern sans-serif font family";
     homepage = "https://www.gent.media/manrope";
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

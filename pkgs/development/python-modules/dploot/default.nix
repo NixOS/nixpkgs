@@ -42,12 +42,12 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DPAPI looting remotely in Python";
     homepage = "https://github.com/zblurx/dploot";
     changelog = "https://github.com/zblurx/dploot/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vncsb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "dploot";
   };
 }

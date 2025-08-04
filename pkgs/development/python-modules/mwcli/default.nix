@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # Tests require mwxml which itself depends on this package (circular dependency)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Set of helper functions and classes for mediawiki-utilities command-line utilities";
     homepage = "https://github.com/mediawiki-utilities/python-mwcli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

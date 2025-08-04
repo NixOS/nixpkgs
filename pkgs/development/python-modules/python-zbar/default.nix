@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for zbar";
     homepage = "https://github.com/mchehab/zbar";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

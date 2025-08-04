@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hamcrest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hamcrest framework for matcher objects";
     homepage = "https://github.com/hamcrest/PyHamcrest";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ alunduil ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ alunduil ];
   };
 }

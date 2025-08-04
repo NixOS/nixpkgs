@@ -14,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "0zy6prrj85jjc4xmxgfg8h94j81k6zhfxfffcbvq9b10jis1rgav";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy peasy wrapper for HipChat's v1 API";
     homepage = "https://github.com/kurttheviking/simple-hipchat-py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

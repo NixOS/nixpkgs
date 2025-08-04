@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage DBus service on Deepin";
     mainProgram = "deepin-service-manager";
     homepage = "https://github.com/linuxdeepin/deepin-service-manager";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

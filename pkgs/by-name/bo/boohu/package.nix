@@ -20,7 +20,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "New coffee-break roguelike game";
     mainProgram = "boohu";
     longDescription = ''
@@ -30,8 +30,8 @@ buildGoModule rec {
       simplified inventory.
     '';
     homepage = "https://download.tuxfamily.org/boohu/index.html";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

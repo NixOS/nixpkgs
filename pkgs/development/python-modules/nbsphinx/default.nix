@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbsphinx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Notebook Tools for Sphinx";
     homepage = "https://nbsphinx.readthedocs.io/";
     changelog = "https://github.com/spatialaudio/nbsphinx/blob/${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

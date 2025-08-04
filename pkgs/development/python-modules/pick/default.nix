@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to create curses-based interactive selection list in the terminal";
     homepage = "https://github.com/wong2/pick";
     changelog = "https://github.com/wong2/pick/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -60,10 +60,10 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing secrets on Google Cloud";
     homepage = "https://github.com/GoogleCloudPlatform/berglas";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "berglas";
   };
 }

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     cp bin/bossa{c,sh,} $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       Source SAM-BA Application to reflect that goal.
     '';
     homepage = "http://www.shumatech.com/web/products/bossa";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

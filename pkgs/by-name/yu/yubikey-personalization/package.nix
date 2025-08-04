@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
     install -D -t $out/lib/udev/rules.d 69-yubikey.rules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developers.yubico.com/yubikey-personalization";
     description = "Library and command line tool to personalize YubiKeys";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
   };
 }

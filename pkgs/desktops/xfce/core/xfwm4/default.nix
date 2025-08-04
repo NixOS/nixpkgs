@@ -40,8 +40,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Window manager for Xfce";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

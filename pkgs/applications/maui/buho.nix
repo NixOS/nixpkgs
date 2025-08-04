@@ -40,11 +40,11 @@ mkDerivation {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Task and Note Keeper";
     mainProgram = "buho";
     homepage = "https://invent.kde.org/maui/buho";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

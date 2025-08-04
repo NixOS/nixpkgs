@@ -30,12 +30,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyodbc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python ODBC module to connect to almost any database";
     homepage = "https://github.com/mkleehammer/pyodbc";
     changelog = "https://github.com/mkleehammer/pyodbc/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

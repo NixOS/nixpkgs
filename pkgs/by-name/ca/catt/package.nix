@@ -61,10 +61,10 @@ python.pkgs.buildPythonApplication rec {
     "catt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "catt";
   };

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Widget Factory";
     longDescription = ''
       A widget factory is a theme preview application for gtk2 and
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       applied theme.
     '';
     homepage = "https://github.com/valr/awf";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ michalrus ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ michalrus ];
   };
 }

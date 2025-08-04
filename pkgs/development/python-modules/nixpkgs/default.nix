@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "nixpkgs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows to `from nixpkgs import` stuff in interactive Python sessions";
     homepage = "https://github.com/t184256/nixpkgs-python-importer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t184256 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t184256 ];
   };
 }

@@ -100,19 +100,19 @@ stdenv.mkDerivation {
     mv app/mindforger.app "$out"/Applications/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Thinking Notebook & Markdown IDE";
     longDescription = ''
       MindForger is actually more than an editor or IDE - it's human
       mind inspired personal knowledge management tool
     '';
     homepage = "https://www.mindforger.com";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ cyplo ];
+    maintainers = with lib.maintainers; [ cyplo ];
     mainProgram = "mindforger";
   };
 }

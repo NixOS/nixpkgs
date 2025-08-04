@@ -22,11 +22,11 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-stAVuyjuRQthQ3jQdekmZYjeau9l0GzEEMkV1q5fT2k=";
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Converts OSM data to GeoJSON";
     homepage = "https://tyrasd.github.io/osmtogeojson/";
-    maintainers = with maintainers; [ thibautmarty ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ thibautmarty ];
+    license = lib.licenses.mit;
     mainProgram = "osmtogeojson";
   };
 }

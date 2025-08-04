@@ -43,12 +43,12 @@ python3.pkgs.buildPythonApplication {
 
   doCheck = false; # Tests are interactive.
 
-  meta = with lib; {
+  meta = {
     description = "Password Safe V3 compatible password vault";
     mainProgram = "loxodo";
     homepage = "https://www.christoph-sommer.de/loxodo/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

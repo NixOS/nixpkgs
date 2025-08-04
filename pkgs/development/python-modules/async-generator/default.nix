@@ -26,13 +26,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_generator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async generators and context managers for Python 3.5+";
     homepage = "https://github.com/python-trio/async_generator";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

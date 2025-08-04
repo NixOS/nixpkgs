@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "engineio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Engine.IO client and server";
     longDescription = ''
       Engine.IO is a lightweight transport protocol that enables real-time
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brelpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python to communicate with the Brel hubs";
     homepage = "https://gitlab.com/rogiervandergeer/brelpy";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

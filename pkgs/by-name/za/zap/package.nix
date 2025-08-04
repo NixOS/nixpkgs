@@ -64,15 +64,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zaproxy.org/";
     description = "Java application for web penetration testing";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mog
       rafael
     ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
     mainProgram = "zap";
   };
 }

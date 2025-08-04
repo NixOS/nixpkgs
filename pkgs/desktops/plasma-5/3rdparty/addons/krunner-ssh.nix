@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple backend for KRunner providing SSH hosts from your .ssh/known_hosts file as search results";
     homepage = "https://selfcoders.com/projects/krunner-ssh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aanderse ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aanderse ];
+    platforms = lib.platforms.linux;
   };
 }

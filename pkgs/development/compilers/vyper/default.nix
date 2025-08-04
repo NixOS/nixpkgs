@@ -82,11 +82,11 @@ buildPythonPackage rec {
     "vyper"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Smart Contract Language for the EVM";
     homepage = "https://github.com/vyperlang/vyper";
     changelog = "https://github.com/vyperlang/vyper/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

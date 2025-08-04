@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modeltranslation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
     changelog = "https://github.com/deschler/django-modeltranslation/blob/v${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

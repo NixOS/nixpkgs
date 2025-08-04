@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "napalm_procurve" ];
 
-  meta = with lib; {
+  meta = {
     description = "HP ProCurve Driver for NAPALM automation frontend";
     homepage = "https://github.com/napalm-automation-community/napalm-hp-procurve";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

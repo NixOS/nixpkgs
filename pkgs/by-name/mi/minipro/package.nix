@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/DavidGriffith/minipro";
     description = "Open source program for controlling the MiniPRO TL866xx series of chip programmers";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bmwalters ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.bmwalters ];
     mainProgram = "minipro";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

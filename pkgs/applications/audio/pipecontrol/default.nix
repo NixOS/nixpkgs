@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pipewire control GUI program in Qt (Kirigami2)";
     mainProgram = "pipecontrol";
     homepage = "https://github.com/portaloffreedom/pipecontrol";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tilcreator ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tilcreator ];
   };
 }

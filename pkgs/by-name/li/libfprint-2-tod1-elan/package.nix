@@ -43,12 +43,12 @@ stdenvNoCC.mkDerivation {
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
-  meta = with lib; {
+  meta = {
     description = "Elan(04f3:0c4b) driver module for libfprint-2-tod Touch OEM Driver";
     homepage = "https://support.lenovo.com/us/en/downloads/ds560939-elan-fingerprint-driver-for-ubuntu-2204-thinkpad-e14-gen-4-e15-gen-4";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ qdlmcfresh ];
+    maintainers = with lib.maintainers; [ qdlmcfresh ];
   };
 }

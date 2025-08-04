@@ -22,11 +22,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  meta = with lib; {
+  meta = {
     description = "CI friendly wrapper around nix-build";
     mainProgram = "nix-build-uncached";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Mic92/nix-build-uncached";
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

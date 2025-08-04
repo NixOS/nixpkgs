@@ -24,12 +24,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sftpman" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/spantaleev/sftpman";
     description = "Application that handles sshfs/sftp file systems mounting";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ contrun ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ contrun ];
     mainProgram = "sftpman";
   };
 }

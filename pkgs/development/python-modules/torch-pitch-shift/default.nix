@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torch_pitch_shift" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pitch-shift audio clips quickly with PyTorch (CUDA supported)! Additional utilities for searching efficient transformations are included";
     homepage = "https://github.com/KentoNishi/torch-pitch-shift";
     changelog = "https://github.com/KentoNishi/torch-pitch-shift/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

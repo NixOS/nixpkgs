@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyiqvia" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for working with IQVIA data";
     longDescription = ''
       pyiqvia is an async-focused Python library for allergen, asthma, and
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/pyiqvia";
     changelog = "https://github.com/bachya/pyiqvia/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

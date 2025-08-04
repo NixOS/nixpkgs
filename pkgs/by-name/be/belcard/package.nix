@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ library to manipulate VCard standard format. Part of the Linphone project";
     homepage = "https://gitlab.linphone.org/BC/public/belcard";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

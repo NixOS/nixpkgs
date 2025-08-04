@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
     mainProgram = "screengrab";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

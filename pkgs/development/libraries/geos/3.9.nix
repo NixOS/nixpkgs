@@ -21,11 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "C++ port of the Java Topology Suite (JTS)";
     mainProgram = "geos-config";
     homepage = "https://trac.osgeo.org/geos";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     pkgConfigModules = [ "geos" ];
     maintainers = with lib.maintainers; [
       willcohen

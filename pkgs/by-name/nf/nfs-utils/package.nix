@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
     nfs4-kerberos = nixosTests.nfs4.kerberos;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -193,8 +193,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://linux-nfs.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

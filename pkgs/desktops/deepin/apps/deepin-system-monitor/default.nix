@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "More user-friendly system monitor";
     homepage = "https://github.com/linuxdeepin/deepin-system-monitor";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

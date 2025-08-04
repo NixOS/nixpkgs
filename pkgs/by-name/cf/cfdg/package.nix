@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Context-free design grammar - a tool for graphics generation";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://contextfreeart.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "cfdg";
   };
 }

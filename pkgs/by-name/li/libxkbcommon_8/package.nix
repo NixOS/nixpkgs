@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle keyboard descriptions";
     longDescription = ''
       libxkbcommon is a keyboard keymap compiler and support library which
@@ -95,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ttuegel
     ];
     mainProgram = "xkbcli";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
     pkgConfigModules = [
       "xkbcommon"
       "xkbcommon-x11"

@@ -32,13 +32,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Offline IP address to Autonomous System Number lookup module";
     homepage = "https://github.com/hadiasghari/pyasn";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsdOriginal
       mit
     ];
-    maintainers = with maintainers; [ onny ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

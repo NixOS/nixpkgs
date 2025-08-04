@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_dependency" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RKrahl/pytest-dependency";
     changelog = "https://github.com/RKrahl/pytest-dependency/blob/${version}/CHANGES.rst";
     description = "Manage dependencies of tests";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

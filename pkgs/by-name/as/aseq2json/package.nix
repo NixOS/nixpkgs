@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D --target-directory "$out/bin" aseq2json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Listens for MIDI events on the Alsa sequencer and outputs as JSON to stdout";
     mainProgram = "aseq2json";
     homepage = "https://github.com/google/midi-dump-tools";
-    license = licenses.asl20;
-    maintainers = [ maintainers.queezle ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.queezle ];
+    platforms = lib.platforms.linux;
   };
 })

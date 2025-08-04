@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/*.[1-9]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible pomodoro timer";
     homepage = "https://github.com/metent/uair";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thled ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thled ];
   };
 }

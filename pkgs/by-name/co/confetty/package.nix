@@ -22,11 +22,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Confetti in your TTY";
     homepage = "https://github.com/maaslalani/confetty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "confetty";
   };
 }

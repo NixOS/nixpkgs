@@ -47,15 +47,15 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/oro";
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for tools that use node_modules";
     homepage = "https://github.com/orogene/orogene";
     changelog = "https://github.com/orogene/orogene/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       isc
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "oro";
   };
 }

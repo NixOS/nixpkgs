@@ -26,10 +26,10 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collect runtime profiling information in CTF format";
     homepage = "https://github.com/mirage/mirage-profile";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

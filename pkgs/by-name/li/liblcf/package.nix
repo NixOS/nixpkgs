@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
     homepage = "https://github.com/EasyRPG/liblcf";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

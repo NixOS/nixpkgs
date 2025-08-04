@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [ "test_dict" ];
 
-  meta = with lib; {
+  meta = {
     description = "This python module helps converting arbitrary Python objects into JSON strings and back";
     homepage = "https://github.com/DLR-RM/python-jsonconversion";
     changelog = "https://github.com/DLR-RM/python-jsonconversion/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ terlar ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ terlar ];
   };
 }

@@ -39,9 +39,9 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KWin script that automatically adds/removes virtual desktops";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;

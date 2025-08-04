@@ -38,12 +38,12 @@ buildGoModule rec {
     installManPage docs/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/chmouel/clipman";
     description = "Simple clipboard manager for Wayland";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.linux;
     mainProgram = "clipman";
   };
 }

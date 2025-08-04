@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/bpm-graph --prefix PATH : "${path}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.pogo.org.uk/~mark/bpm-tools/";
     description = "Automatically calculate BPM (tempo) of music files";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 })

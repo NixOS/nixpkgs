@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
     }
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deepin desktop-environment - session-shell module";
     homepage = "https://github.com/linuxdeepin/dde-session-shell";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

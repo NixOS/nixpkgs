@@ -26,12 +26,12 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lovelace card to display advanced graphs and charts based on ApexChartsJS for Home Assistant";
     homepage = "https://github.com/RomRider/apexcharts-card";
     changelog = "https://github.com/RomRider/apexcharts-card/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.all;
   };
 }

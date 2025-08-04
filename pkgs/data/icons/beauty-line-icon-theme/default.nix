@@ -58,11 +58,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BeautyLine icon theme";
     homepage = "https://www.gnome-look.org/p/1425426/";
-    platforms = platforms.linux;
-    license = [ licenses.publicDomain ];
-    maintainers = with maintainers; [ gvolpe ];
+    platforms = lib.platforms.linux;
+    license = [ lib.licenses.publicDomain ];
+    maintainers = with lib.maintainers; [ gvolpe ];
   };
 }

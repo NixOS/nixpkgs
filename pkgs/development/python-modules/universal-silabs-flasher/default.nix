@@ -67,12 +67,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/${src.tag}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

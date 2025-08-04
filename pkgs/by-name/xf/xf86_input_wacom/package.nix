@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
   ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ moni ];
+  meta = {
+    maintainers = with lib.maintainers; [ moni ];
     description = "Wacom digitizer driver for X11";
     homepage = "https://linuxwacom.sourceforge.net";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux; # Probably, works with other unixes as well
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux; # Probably, works with other unixes as well
   };
 }

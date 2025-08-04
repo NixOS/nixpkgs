@@ -45,11 +45,11 @@ yarn2nix-moretea.mkYarnPackage {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Computer management web app";
     homepage = "https://meshcentral.com/";
-    maintainers = with maintainers; [ ma27 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ ma27 ];
+    license = lib.licenses.asl20;
     mainProgram = "meshcentral";
   };
 }

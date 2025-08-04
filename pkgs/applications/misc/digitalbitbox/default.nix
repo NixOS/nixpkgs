@@ -125,7 +125,7 @@ mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "QT based application for the Digital Bitbox hardware wallet";
     longDescription = ''
       Digital Bitbox provides dbb-app, a GUI tool, and dbb-cli, a CLI tool, to manage Digital Bitbox devices.
@@ -144,10 +144,10 @@ mkDerivation rec {
       to the configuration which installs the package and enables the hardware module.
     '';
     homepage = "https://digitalbitbox.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       vidbina
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "flufl" ];
 
-  meta = with lib; {
+  meta = {
     description = "High level API for internationalizing Python libraries and applications";
     homepage = "https://gitlab.com/warsaw/flufl.i18n";
     changelog = "https://gitlab.com/warsaw/flufl.i18n/-/raw/${version}/docs/NEWS.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

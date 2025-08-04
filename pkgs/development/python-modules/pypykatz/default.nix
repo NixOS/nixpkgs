@@ -39,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypykatz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mimikatz implementation in Python";
     mainProgram = "pypykatz";
     homepage = "https://github.com/skelsec/pypykatz";
     changelog = "https://github.com/skelsec/pypykatz/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

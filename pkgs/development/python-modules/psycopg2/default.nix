@@ -69,10 +69,10 @@ buildPythonPackage rec {
     buildPackages.libpq
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL database adapter for the Python programming language";
     homepage = "https://www.psycopg.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus
       zpl20
     ];

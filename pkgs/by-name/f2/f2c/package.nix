@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert Fortran 77 source code to C";
     homepage = "https://www.netlib.org/f2c/";
-    license = licenses.mit;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.unix;
   };
 }

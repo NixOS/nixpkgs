@@ -53,11 +53,11 @@ buildPythonPackage rec {
     "test_optional_components"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts Jupyter Notebooks to Atlassian Confluence (R) pages using nbconvert";
     mainProgram = "nbconflux";
     homepage = "https://github.com/Valassis-Digital-Media/nbconflux";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.arnoldfarkas ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.arnoldfarkas ];
   };
 }

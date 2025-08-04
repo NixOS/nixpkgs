@@ -28,12 +28,12 @@ buildGoModule rec {
     "-X github.com/nanovms/ops/lepton.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Build and run nanos unikernels";
     homepage = "https://github.com/nanovms/ops";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "ops";
   };
 }

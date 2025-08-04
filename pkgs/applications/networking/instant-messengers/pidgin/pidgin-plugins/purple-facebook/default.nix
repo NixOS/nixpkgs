@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Facebook protocol plugin for libpurple";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ davorb ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ davorb ];
   };
 }

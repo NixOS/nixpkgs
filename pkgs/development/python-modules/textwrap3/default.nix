@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Textwrap from Python 3.6 backport plus a few tweaks";
     homepage = "https://github.com/jonathaneunice/textwrap3";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     maintainers = [ ];
   };
 }

@@ -45,7 +45,7 @@ buildGoModule rec {
 
   passthru.tests.soju = nixosTests.soju;
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly IRC bouncer";
     longDescription = ''
       soju is a user-friendly IRC bouncer. soju connects to upstream IRC servers
@@ -56,8 +56,8 @@ buildGoModule rec {
     '';
     homepage = "https://soju.im";
     changelog = "https://codeberg.org/emersion/soju/releases/tag/${src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       azahi
       malte-v
     ];

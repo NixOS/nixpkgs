@@ -18,11 +18,11 @@ buildGoModule rec {
 
   subPackages = [ "easyjson" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mailru/easyjson";
     description = "Fast JSON serializer for Go";
     mainProgram = "easyjson";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Madouura ];
   };
 }

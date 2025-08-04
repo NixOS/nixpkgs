@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication {
     install -Dm 555 exe2hex.py $out/bin/exe2hex
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Inline file transfer using in-built Windows tools";
     homepage = "https://github.com/g0tmi1k/exe2hex";
     mainProgram = "exe2hex";
-    license = licenses.mit;
-    maintainers = with maintainers; [ d3vil0p3r ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
   };
 }

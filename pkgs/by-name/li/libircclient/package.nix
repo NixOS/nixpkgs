@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
       --replace "cp "              "install "
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small but extremely powerful library which implements the client IRC protocol";
     homepage = "http://www.ulduzsoft.com/libircclient/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Host app for the WebExtension PassFF";
     homepage = "https://github.com/passff/passff-host";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
 }

@@ -71,12 +71,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = lib.singleton "--version=branch"; };
 
-  meta = with lib; {
+  meta = {
     description = "GDB Frontend";
     homepage = "https://github.com/nakst/gf";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "gf2";
-    maintainers = with maintainers; [ _0xd61 ];
+    maintainers = with lib.maintainers; [ _0xd61 ];
   };
 }

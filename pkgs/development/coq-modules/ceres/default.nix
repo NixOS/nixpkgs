@@ -29,9 +29,9 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for serialization to S-expressions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
   };
 }

@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/matrix-org/python-unpaddedbase64";
     description = "Unpadded Base64";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

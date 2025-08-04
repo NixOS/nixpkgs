@@ -45,11 +45,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official CLI for interacting with your Doppler Enclave secrets and configuration";
     mainProgram = "doppler";
     homepage = "https://doppler.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

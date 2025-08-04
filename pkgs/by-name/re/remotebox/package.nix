@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     cp -pv packagers-readme/*.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VirtualBox client with remote management";
     homepage = "http://remotebox.knobgoblin.org.uk/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       VirtualBox is traditionally considered to be a virtualization solution
       aimed at the desktop. While it is certainly possible to install
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       RemoteBox aims to fill this gap by providing a graphical VirtualBox
       client which is able to manage a VirtualBox server installation.
     '';
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "remotebox";
   };
 }

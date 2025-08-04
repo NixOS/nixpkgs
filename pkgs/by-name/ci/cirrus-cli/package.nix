@@ -34,11 +34,11 @@ buildGoModule rec {
   # tests fail on read-only filesystem
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI for executing Cirrus tasks locally and in any CI";
     homepage = "https://github.com/cirruslabs/cirrus-cli";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "cirrus";
   };
 }

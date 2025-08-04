@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyws66i" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with WS66i 6-zone amplifier";
     homepage = "https://github.com/bigmoby/pyialarmxr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

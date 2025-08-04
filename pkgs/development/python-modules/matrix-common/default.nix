@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "matrix_common" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common utilities for Synapse, Sydent and Sygnal";
     homepage = "https://github.com/matrix-org/matrix-python-common";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sumnerevans ];
   };
 }

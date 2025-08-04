@@ -29,11 +29,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ postgresql ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Export databases with data being anonymized with the anonymizer extension";
     homepage = "https://postgresql-anonymizer.readthedocs.io/en/stable/";
-    teams = [ teams.flyingcircus ];
-    license = licenses.postgresql;
+    teams = [ lib.teams.flyingcircus ];
+    license = lib.licenses.postgresql;
     mainProgram = "pg_dump_anon";
   };
 }

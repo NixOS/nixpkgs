@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Concise Binary Object Representation (CBOR) Library";
     mainProgram = "cbordump";
     homepage = "https://github.com/intel/tinycbor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

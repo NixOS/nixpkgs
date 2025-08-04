@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ci" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with Continuous Integration services";
     homepage = "https://github.com/grantmcconnaughey/ci.py";
     changelog = "https://github.com/grantmcconnaughey/ci.py/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

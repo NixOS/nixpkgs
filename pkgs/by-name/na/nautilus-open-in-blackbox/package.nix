@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extension for nautilus, which adds an context-entry for opening in blackbox";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ blankparticle ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ blankparticle ];
     homepage = "https://github.com/ppvan/nautilus-open-in-blackbox";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

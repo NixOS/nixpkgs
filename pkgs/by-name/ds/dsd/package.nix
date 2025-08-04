@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Digital Speech Decoder";
     longDescription = ''
       DSD is able to decode several digital voice formats from discriminator
@@ -41,8 +41,8 @@ stdenv.mkDerivation {
       mbelib, which is a separate package.
     '';
     homepage = "https://github.com/szechyjs/dsd";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "dsd";
   };

@@ -17,10 +17,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.14";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-metadata";
     description = "Library to read metadata from files in various formats";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

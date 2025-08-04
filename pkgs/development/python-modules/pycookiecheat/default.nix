@@ -64,12 +64,12 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_slack_config" ];
 
-  meta = with lib; {
+  meta = {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";
     homepage = "https://github.com/n8henrie/pycookiecheat";
     changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       n8henrie
     ];

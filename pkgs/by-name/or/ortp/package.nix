@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ bctoolbox ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Real-Time Transport Protocol (RFC3550) stack. Part of the Linphone project";
     mainProgram = "ortp_tester";
     homepage = "https://linphone.org/technical-corner/ortp";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mixins" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nickderobertis/py-mixins";
     description = "Mixin classes which may be added to your own classes to add certain functionality to them";
-    maintainers = with maintainers; [ aanderse ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ aanderse ];
+    license = lib.licenses.mit;
   };
 }

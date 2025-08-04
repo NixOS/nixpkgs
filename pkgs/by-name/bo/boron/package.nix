@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     make -C test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://urlan.sourceforge.net/boron/";
     description = "Scripting language and C library useful for building DSLs";
     mainProgram = "boron";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mausch ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mausch ];
   };
 }

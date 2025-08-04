@@ -48,12 +48,12 @@ buildGoModule rec {
     installManPage yubikey-touch-detector.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect when your YubiKey is waiting for a touch";
     homepage = "https://github.com/maximbaz/yubikey-touch-detector";
-    maintainers = with maintainers; [ sumnerevans ];
-    license = licenses.isc;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ sumnerevans ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
     mainProgram = "yubikey-touch-detector";
   };
 }

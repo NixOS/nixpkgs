@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic unit testing framework and methodology for testing any kind of code";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

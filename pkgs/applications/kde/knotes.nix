@@ -77,9 +77,9 @@ mkDerivation {
     akonadi-search
     kcalendarcore
   ];
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/knotes/";
     description = "Popup notes";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

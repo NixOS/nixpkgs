@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Next generation web scanner";
     mainProgram = "whatweb";
     homepage = "https://github.com/urbanadventurer/whatweb";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

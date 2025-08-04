@@ -28,10 +28,10 @@ buildDunePackage {
     stdlib-shims
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quick implementation of a Binary Decision Diagrams (BDD) library for OCaml";
     homepage = "https://github.com/backtracking/ocaml-bdd";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

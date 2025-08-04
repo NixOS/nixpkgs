@@ -24,12 +24,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.home.unix-ag.org/simon/woof.html";
     description = "Web Offer One File - Command-line utility to easily exchange files over a local network";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "woof";
   };
 }

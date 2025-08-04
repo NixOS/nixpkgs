@@ -45,10 +45,10 @@ buildPythonPackage rec {
             --ignore=test/test_shutdown_event.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Improved Python library to control i3wm and sway";
     homepage = "https://github.com/acrisci/i3ipc-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vanzef ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vanzef ];
   };
 }

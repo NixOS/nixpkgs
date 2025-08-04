@@ -107,12 +107,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

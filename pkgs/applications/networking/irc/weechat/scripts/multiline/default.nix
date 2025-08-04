@@ -37,9 +37,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-line edit box";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

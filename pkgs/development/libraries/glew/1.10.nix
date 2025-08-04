@@ -60,10 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL extension loading library for C(++)";
     homepage = "https://glew.sourceforge.net/";
-    license = licenses.free; # different files under different licenses
+    license = lib.licenses.free; # different files under different licenses
     #["BSD" "GLX" "SGI-B" "GPL2"]
     pkgConfigModules = [ "glew" ];
     inherit (mesa.meta) platforms;

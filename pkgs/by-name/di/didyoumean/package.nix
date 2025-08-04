@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
   # Clipboard doesn't exist in test environment
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI spelling corrector for when you're unsure";
     homepage = "https://github.com/hisbaan/didyoumean";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       evanjs
       wegank
     ];

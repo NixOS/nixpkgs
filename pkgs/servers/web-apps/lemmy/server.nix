@@ -65,11 +65,11 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
-  meta = with lib; {
+  meta = {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       billewanick
       georgyo

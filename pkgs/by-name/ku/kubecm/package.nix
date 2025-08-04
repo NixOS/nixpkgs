@@ -35,11 +35,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Manage your kubeconfig more easily";
     homepage = "https://github.com/sunny0826/kubecm/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       qjoly
       sailord
     ];

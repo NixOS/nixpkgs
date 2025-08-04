@@ -19,11 +19,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "BitTorrent DHT library";
     homepage = "https://github.com/transmission/dht";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
   };
 }

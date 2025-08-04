@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prometheus_api_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Prometheus HTTP API";
     longDescription = ''
       The prometheus-api-client library consists of multiple modules which
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/4n4nd/prometheus-api-client-python";
     changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

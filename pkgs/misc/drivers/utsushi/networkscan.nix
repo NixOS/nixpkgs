@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
       $out/libexec/utsushi/networkscan
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://support.epson.net/linux/en/imagescanv3.php";
     description = "Network scan plugin for ImageScan v3";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ abbradar ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" ];
   };
 }

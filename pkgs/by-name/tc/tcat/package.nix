@@ -16,11 +16,11 @@ buildGoModule rec {
   vendorHash = null;
   subPackages = ".";
 
-  meta = with lib; {
+  meta = {
     description = "Table cat";
     homepage = "https://github.com/rsc/tcat";
-    maintainers = with maintainers; [ mmlb ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmlb ];
+    license = lib.licenses.bsd3;
     mainProgram = "tcat";
   };
 }

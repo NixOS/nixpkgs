@@ -35,12 +35,12 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage git credentials using gopass";
     homepage = "https://github.com/gopasspw/git-credential-gopass";
     changelog = "https://github.com/gopasspw/git-credential-gopass/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ benneti ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ benneti ];
     mainProgram = "git-credential-gopass";
   };
 }

@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rollbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Error tracking and logging from Python to Rollbar";
     mainProgram = "rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Common ODB runtime library";
     longDescription = ''
       ODB is an object-relational mapping (ORM) system for C++. It provides
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.codesynthesis.com/products/odb/";
     changelog = "https://git.codesynthesis.com/cgit/odb/libodb/tree/NEWS";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ r-burns ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ r-burns ];
+    platforms = lib.platforms.all;
   };
 }

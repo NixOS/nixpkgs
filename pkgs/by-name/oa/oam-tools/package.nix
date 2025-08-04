@@ -22,10 +22,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Analysis and management tools for an Open Asset Model database";
     homepage = "https://github.com/owasp-amass/oam-tools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

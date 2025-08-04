@@ -19,11 +19,11 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "pywalfox" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Frewacom/pywalfox-native";
     description = "Native app used alongside the Pywalfox addon";
     mainProgram = "pywalfox";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ tsandrini ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ tsandrini ];
   };
 }

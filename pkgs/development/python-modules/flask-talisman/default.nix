@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP security headers for Flask";
     homepage = "https://github.com/wntrblm/flask-talisman";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.symphorien ];
   };
 }

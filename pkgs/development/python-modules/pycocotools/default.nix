@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Official APIs for the MS-COCO dataset";
     homepage = "https://github.com/cocodataset/cocoapi/tree/master/PythonAPI";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ piegames ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ piegames ];
   };
 }

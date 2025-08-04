@@ -27,12 +27,12 @@ stdenv.mkDerivation {
     install -Dm644 {.,$out/share/doc/regionset}/README
   '';
 
-  meta = with lib; {
+  meta = {
     inherit version;
     homepage = "http://linvdr.org/projects/regionset/";
     description = "Tool for changing the region code setting of DVD players";
     mainProgram = "regionset";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

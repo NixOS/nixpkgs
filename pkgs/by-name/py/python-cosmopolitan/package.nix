@@ -32,13 +32,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://justine.lol/cosmopolitan/";
     description = "Actually Portable Python using Cosmopolitan";
-    platforms = platforms.x86_64;
-    badPlatforms = platforms.darwin;
-    license = licenses.isc;
-    teams = [ teams.cosmopolitan ];
+    platforms = lib.platforms.x86_64;
+    badPlatforms = lib.platforms.darwin;
+    license = lib.licenses.isc;
+    teams = [ lib.teams.cosmopolitan ];
     mainProgram = "python.com";
   };
 }

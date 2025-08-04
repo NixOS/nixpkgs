@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "defang" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to defang and refang malicious URLs";
     homepage = "https://bitbucket.org/johannestaas/defang";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

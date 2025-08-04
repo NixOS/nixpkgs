@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
     "-DJAVA_HOME=${jdk_headless.passthru.home}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library designed to simplify the usage of the Java Native Interface";
     homepage = "https://github.com/facebookincubator/fbjni";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

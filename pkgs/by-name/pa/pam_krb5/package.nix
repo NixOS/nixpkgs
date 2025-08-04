@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     libkrb5
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.eyrie.org/~eagle/software/pam-krb5/";
     description = "PAM module allowing PAM-aware applications to authenticate users by performing an AS exchange with a Kerberos KDC";
     longDescription = ''
       pam_krb5 can optionally convert Kerberos 5 credentials to Kerberos IV
       credentials and/or use them to set up AFS tokens for a user's session.
     '';
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

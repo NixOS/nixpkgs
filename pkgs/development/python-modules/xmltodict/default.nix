@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmltodict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Makes working with XML feel like you are working with JSON";
     homepage = "https://github.com/martinblech/xmltodict";
     changelog = "https://github.com/martinblech/xmltodict/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

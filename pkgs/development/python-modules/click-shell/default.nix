@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   preCheck = "export HOME=$(mktemp -d)";
 
-  meta = with lib; {
+  meta = {
     description = "Extension to click that easily turns your click app into a shell utility";
     longDescription = ''
       This is an extension to click that easily turns your click app into a
@@ -40,7 +40,7 @@ buildPythonPackage rec {
       with command completion to any click app.
     '';
     homepage = "https://github.com/clarkperkins/click-shell";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ binsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ binsky ];
   };
 }

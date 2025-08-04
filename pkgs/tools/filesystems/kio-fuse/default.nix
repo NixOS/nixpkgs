@@ -28,11 +28,11 @@ mkDerivation rec {
     fuse3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FUSE Interface for KIO";
     homepage = "https://invent.kde.org/system/kio-fuse";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _1000teslas ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ _1000teslas ];
   };
 }

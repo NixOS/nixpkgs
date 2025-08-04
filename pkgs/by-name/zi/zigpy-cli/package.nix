@@ -50,13 +50,13 @@ python3.pkgs.buildPythonApplication rec {
     "zigpy_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for zigpy";
     mainProgram = "zigpy";
     homepage = "https://github.com/zigpy/zigpy-cli";
     changelog = "https://github.com/zigpy/zigpy-cli/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }

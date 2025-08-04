@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     freetype
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable ARIB STD-B24 Caption Decoder/Renderer";
     homepage = "https://github.com/xqq/libaribcaption";
     changelog = "https://github.com/xqq/libaribcaption/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chayleaf ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chayleaf ];
+    platforms = lib.platforms.all;
   };
 }

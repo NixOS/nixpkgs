@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mistral_common" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to help you work with Mistral models";
     homepage = "https://github.com/mistralai/mistral-common";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bgamari ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bgamari ];
   };
 }

@@ -28,11 +28,11 @@ buildGoModule rec {
     "-X main.builtBy=Nix"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "jq language server";
     homepage = "https://github.com/wader/jq-lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sysedwinistrator ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sysedwinistrator ];
     mainProgram = "jq-lsp";
   };
 }

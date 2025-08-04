@@ -88,11 +88,11 @@ buildPythonPackage rec {
 
   passthru.tests.qtile-extras = nixosTests.qtile-extras;
 
-  meta = with lib; {
+  meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
     changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arjan-s ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arjan-s ];
   };
 }

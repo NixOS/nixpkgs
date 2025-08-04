@@ -21,11 +21,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kazel" ];
 
-  meta = with lib; {
+  meta = {
     description = "BUILD file generator for go and bazel";
     homepage = "https://github.com/kubernetes/repo-infra";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "kazel";
   };
 }

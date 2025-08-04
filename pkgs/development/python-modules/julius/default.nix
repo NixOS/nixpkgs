@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "julius" ];
 
-  meta = with lib; {
+  meta = {
     description = "Nice DSP sweets: resampling, FFT Convolutions. All with PyTorch, differentiable and with CUDA support";
     homepage = "https://pypi.org/project/julius/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

@@ -18,11 +18,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON Merge Patch library";
     mainProgram = "json-merge-patch";
     homepage = "https://github.com/open-contracting/json-merge-patch";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminals served by Tornado websockets";
     homepage = "https://github.com/jupyter/terminado";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

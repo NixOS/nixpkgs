@@ -107,11 +107,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "kivy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kivy/kivy/releases/tag/${src.tag}";
     description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://github.com/kivy/kivy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ risson ];
   };
 }

@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
     } --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and fast dictionary lookup tool";
     mainProgram = "ding";
     homepage = "https://www-user.tu-chemnitz.de/~fri/ding/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux; # homepage says: unix-like except darwin
-    maintainers = [ maintainers.exi ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux; # homepage says: unix-like except darwin
+    maintainers = [ lib.maintainers.exi ];
   };
 }

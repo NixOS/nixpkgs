@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "enrich" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enrich adds few missing features to the wonderful rich library";
     homepage = "https://github.com/pycontribs/enrich";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

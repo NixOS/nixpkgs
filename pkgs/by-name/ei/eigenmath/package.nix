@@ -43,12 +43,12 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Computer algebra system written in C";
     mainProgram = "eigenmath";
     homepage = "https://georgeweigt.github.io";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.unix;
   };
 }

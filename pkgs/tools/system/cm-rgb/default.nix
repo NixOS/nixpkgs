@@ -47,7 +47,7 @@ buildPythonApplication rec {
       > $out/etc/udev/rules.d/60-cm-rgb.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control AMD Wraith Prism RGB LEDs";
     longDescription = ''
       cm-rgb controls AMD Wraith Prism RGB LEDS.
@@ -57,8 +57,8 @@ buildPythonApplication rec {
       in <filename>configuration.nix</filename>.
     '';
     homepage = "https://github.com/gfduszynski/cm-rgb";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

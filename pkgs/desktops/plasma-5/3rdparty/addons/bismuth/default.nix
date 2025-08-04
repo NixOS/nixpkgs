@@ -44,10 +44,10 @@ mkDerivation rec {
     systemsettings
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic tiling extension for KWin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pasqui23 ];
     homepage = "https://bismuth-forge.github.io/bismuth/";
     inherit (kwindowsystem.meta) platforms;
   };

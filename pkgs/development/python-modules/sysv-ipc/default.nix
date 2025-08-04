@@ -15,10 +15,10 @@ buildPythonPackage rec {
     sha256 = "0f063cbd36ec232032e425769ebc871f195a7d183b9af32f9901589ea7129ac3";
   };
 
-  meta = with lib; {
+  meta = {
     description = "SysV IPC primitives (semaphores, shared memory and message queues)";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://semanchuk.com/philip/sysv_ipc/";
-    maintainers = with maintainers; [ ris ];
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

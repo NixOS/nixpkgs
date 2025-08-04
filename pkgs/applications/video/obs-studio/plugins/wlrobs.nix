@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Obs-studio plugin that allows you to screen capture on wlroots based wayland compositors";
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
-    maintainers = with maintainers; [ grahamc ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ grahamc ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

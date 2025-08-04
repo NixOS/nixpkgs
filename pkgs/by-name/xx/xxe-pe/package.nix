@@ -77,10 +77,10 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Strictly validating, near WYSIWYG, XML editor with DocBook support";
     homepage = "https://www.xmlmind.com/xmleditor/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

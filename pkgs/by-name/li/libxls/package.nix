@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Extract Cell Data From Excel xls files";
     homepage = "https://github.com/libxls/libxls";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ abbradar ];
     mainProgram = "xls2csv";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

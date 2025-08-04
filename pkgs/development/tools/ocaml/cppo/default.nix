@@ -11,15 +11,15 @@
 let
   pname = "cppo";
 
-  meta = with lib; {
+  meta = {
     description = "C preprocessor for OCaml";
     mainProgram = "cppo";
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
     '';
     homepage = "https://github.com/ocaml-community/${pname}";
-    maintainers = [ maintainers.vbgl ];
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.bsd3;
   };
 
 in

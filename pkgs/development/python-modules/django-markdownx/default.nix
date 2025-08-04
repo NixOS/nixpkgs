@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markdownx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive Markdown plugin built for Django";
     homepage = "https://github.com/neutronX/django-markdownx/";
     changelog = "https://github.com/neutronX/django-markdownx/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

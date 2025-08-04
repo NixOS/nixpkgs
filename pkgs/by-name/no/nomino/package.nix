@@ -17,15 +17,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jXDbQEUzQ5E7lcutdvQMpyMfuILcJTFvQgq7rNI/XmM=";
 
-  meta = with lib; {
+  meta = {
     description = "Batch rename utility for developers";
     homepage = "https://github.com/yaa110/nomino";
     changelog = "https://github.com/yaa110/nomino/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "nomino";
   };
 }

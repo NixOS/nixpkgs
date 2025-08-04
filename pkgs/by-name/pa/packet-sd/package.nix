@@ -39,10 +39,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
   };

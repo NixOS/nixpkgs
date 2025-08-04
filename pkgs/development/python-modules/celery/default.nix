@@ -118,12 +118,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "celery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "celery";
   };
 }

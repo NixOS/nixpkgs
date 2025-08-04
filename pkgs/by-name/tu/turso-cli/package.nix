@@ -38,12 +38,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "This is the command line interface (CLI) to Turso";
     homepage = "https://turso.tech";
     mainProgram = "turso";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zestsystem
       kashw2
       fryuni
