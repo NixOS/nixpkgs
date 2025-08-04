@@ -254,11 +254,11 @@ let
                   inherit
                     lib
                     options
-                    config
                     specialArgs
                     ;
                   _class = class;
                   _prefix = prefix;
+                  config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. If you are trying to achieve a conditional import behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
                 }
                 // specialArgs
               );
@@ -651,7 +651,13 @@ let
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
-        name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
+        name: _:
+        addErrorContext (context name) (
+          args.${name} or (addErrorContext
+            "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
+            config._module.args.${name}
+          )
+        )
       ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
