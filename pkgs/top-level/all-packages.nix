@@ -11221,10 +11221,6 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis { };
 
-  spatialite-gui = callPackage ../by-name/sp/spatialite-gui/package.nix {
-    wxGTK = wxGTK32;
-  };
-
   ### APPLICATIONS
 
   _2bwm = callPackage ../applications/window-managers/2bwm {
