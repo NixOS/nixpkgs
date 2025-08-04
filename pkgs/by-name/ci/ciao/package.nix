@@ -23,8 +23,23 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./ciao-boot.sh install
+
+    runHook postInstall
   '';
+
+  # Replace broken symlinks with actual headers to avoid dead links
+  postInstall =
+    let
+      ver = lib.head (lib.split "-" version);
+    in
+    ''
+      rm -rf $out/ciao/${ver}/build/eng/ciaoengine/include/ciao/ $out/ciao/${ver}/build/eng/ciaoengine/include/ciao_prolog.h
+      cp -r core/engine $out/ciao/${ver}/build/eng/ciaoengine/include/ciao/
+      cp core/engine/ciao_prolog.h $out/ciao/${ver}/build/eng/ciaoengine/include/ciao_prolog.h
+    '';
 
   meta = with lib; {
     homepage = "https://ciao-lang.org/";
