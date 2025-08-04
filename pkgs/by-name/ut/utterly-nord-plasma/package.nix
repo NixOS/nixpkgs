@@ -2,29 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  breeze-icons,
-  kdeclarative,
-  kirigami,
-  plasma-framework,
-  plasma-workspace,
+  kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "utterly-nord-plasma";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "HimDek";
-    repo = pname;
+    repo = "utterly-nord-plasma";
     rev = "e513b4dfeddd587a34bfdd9ba6b1d1eac8ecadf5";
     hash = "sha256-moLgBFR+BgoiEBzV3y/LA6JZfLHrG1weL1+h8LN9ztA=";
   };
 
-  propagatedUserEnvPkgs = [
+  propagatedUserEnvPkgs = with kdePackages; [
     breeze-icons
     kdeclarative
     kirigami
-    plasma-framework
+    libplasma
     plasma-workspace
   ];
 
@@ -54,11 +50,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
     homepage = "https://himdek.com/Utterly-Nord-Plasma/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
