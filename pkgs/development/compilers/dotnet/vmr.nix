@@ -230,6 +230,8 @@ stdenv.mkDerivation rec {
       substituteInPlace \
         src/runtime/src/coreclr/ilasm/CMakeLists.txt \
         --replace-fail 'set_source_files_properties( prebuilt/asmparse.cpp PROPERTIES COMPILE_FLAGS "-O0" )' ""
+    ''
+    + lib.optionalString (lib.versionOlder version "10") ''
 
       # https://github.com/dotnet/source-build/issues/4444
       xmlstarlet ed \
@@ -237,8 +239,6 @@ stdenv.mkDerivation rec {
         -s '//Project/Target/MSBuild[@Targets="Restore"]' \
         -t attr -n Properties -v "NUGET_PACKAGES='\$(CurrentRepoSourceBuildPackageCache)'" \
         src/aspnetcore/eng/Tools.props
-    ''
-    + lib.optionalString (lib.versionOlder version "10") ''
       # patch packages installed from npm cache
       xmlstarlet ed \
         --inplace \
