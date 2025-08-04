@@ -9,14 +9,14 @@
 # In NixOS, simply add this package to services.udev.packages:
 #   services.udev.packages = [ pkgs.android-udev-rules ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "android-udev-rules";
   version = "20250525";
 
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4ODU9EoVYV+iSu6+M9ePed45QkOZgWkDUlFTlWJ8ttQ=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.abbradar ];
     teams = [ lib.teams.android ];
   };
-}
+})
