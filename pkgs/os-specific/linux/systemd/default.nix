@@ -64,6 +64,7 @@
   withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools,
   kexec-tools,
   bash,
+  bashNonInteractive,
   libmicrohttpd,
   libfido2,
   p11-kit,
@@ -907,6 +908,11 @@ stdenv.mkDerivation (finalAttrs: {
           builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
         )
       );
+
+  disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
 
   passthru = {
     # The `interfaceVersion` attribute below points out the incompatibilities
