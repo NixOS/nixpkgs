@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyobjc-core";
-  version = "11.0";
+  version = "11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ronaldoussoren";
     repo = "pyobjc";
     tag = "v${version}";
-    hash = "sha256-RhB0Ht6vyDxYwDGS+A9HZL9ySIjWlhdB4S+gHxvQQBg=";
+    hash = "sha256-vbw9F2CQRykP+042lTUL7hrJ2rVWnjk9JMKnUdPWTGQ=";
   };
 
   sourceRoot = "${src.name}/pyobjc-core";
