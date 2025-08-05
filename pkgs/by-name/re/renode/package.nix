@@ -102,7 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Virtual development framework for complex embedded systems";
     homepage = "https://renode.io";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ otavio ];
+    maintainers = with lib.maintainers; [
+      otavio
+      znaniye
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })
