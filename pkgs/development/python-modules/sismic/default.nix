@@ -13,7 +13,7 @@
 let
   version = "1.6.10";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "sismic";
   inherit version;
   pyproject = true;
