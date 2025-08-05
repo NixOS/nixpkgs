@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   catalog = ./docbook-ebnf.cat;
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p $out/xml/dtd/docbook-ebnf
     cd $out/xml/dtd/docbook-ebnf
+
+    runHook postUnpack
   '';
 
   installPhase = ''

@@ -112,9 +112,13 @@ stdenv.mkDerivation rec {
     );
 
   unpackPhase = ''
+    runHook preUnpack
+
     for srcFile in $srcs; do
       cp $srcFile $(stripHash $srcFile)
     done
+
+    runHook postUnpack
   '';
 
   nativeBuildInputs = [

@@ -14,7 +14,11 @@ stdenv.mkDerivation {
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     tar -zxf $src
+
+    runHook postUnpack
   '';
 
   installPhase = ''

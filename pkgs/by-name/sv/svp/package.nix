@@ -74,7 +74,11 @@ let
     dontFixup = true;
 
     unpackPhase = ''
+      runHook preUnpack
+
       tar xf ${src}
+
+      runHook postUnpack
     '';
 
     buildPhase = ''

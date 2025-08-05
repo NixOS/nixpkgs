@@ -33,8 +33,12 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip $src -d posterazor
     cd posterazor/src
+
+    runHook postUnpack
   '';
 
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=667328

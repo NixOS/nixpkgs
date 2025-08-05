@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     undmg $src
     xar -xf Karabiner-Elements.pkg
     cd Installer.pkg
@@ -36,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../Karabiner-DriverKit-VirtualHIDDevice.pkg
     zcat Payload | cpio -i
     cd ..
+
+    runHook postUnpack
   '';
 
   sourceRoot = ".";

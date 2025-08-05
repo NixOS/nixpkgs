@@ -21,10 +21,14 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   unpackPhase = ''
+    runHook preUnpack
+
     rpmextract $src
     for ppd in opt/OpenPrinting-Lexmark/ppds/Lexmark/*; do
       gzip -d $ppd
     done
+
+    runHook postUnpack
   '';
 
   installPhase = ''

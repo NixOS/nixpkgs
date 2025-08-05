@@ -74,10 +74,14 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       mkdir -p $out
       dpkg -x $src $out
       rm -rf $out/usr/lib/nautilus
       rm -rf $out/opt/Synology/SynologyDrive/package/cloudstation/icon-overlay
+
+      runHook postUnpack
     '';
 
     installPhase = ''

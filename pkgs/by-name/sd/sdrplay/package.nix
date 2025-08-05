@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     sh "$src" --noexec --target source
+
+    runHook postUnpack
   '';
 
   sourceRoot = "source";

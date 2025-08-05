@@ -52,7 +52,11 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     7z x $src
+
+    runHook postUnpack
   '';
 
   desktopItems = [
