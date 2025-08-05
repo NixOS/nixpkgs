@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "5.4.2";
+  version = "7.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "pinecone-io";
     repo = "pinecone-python-client";
     tag = "v${version}";
-    hash = "sha256-5BCjqcJ+xCTTF/Q+PrgNV4Y/GcT2cfNqvY1ydUL6EZ8=";
+    hash = "sha256-PT8Jr3sq5iZ9VFt6H6t4lLk72FXnHdyPUbcNGftg4QU=";
   };
 
   build-system = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pinecone python client";
     homepage = "https://www.pinecone.io/";
-    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/v${version}";
+    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
