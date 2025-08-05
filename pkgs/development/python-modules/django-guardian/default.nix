@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "django-guardian";
-  version = "2.4.0";
+  version = "3.0.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c58a68ae76922d33e6bdc0e69af1892097838de56e93e78a8361090bcd9f89a0";
+    sha256 = "sha256-TlnqtNg22loCfPDBdtFLwqTiLLvfdTFZoDlGwIyKGW0=";
   };
 
   propagatedBuildInputs = [ django ];
