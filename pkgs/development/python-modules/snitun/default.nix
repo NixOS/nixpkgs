@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.40.0";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "NabuCasa";
     repo = "snitun";
     tag = version;
-    hash = "sha256-wit0GVuWFMl1u+VC7Aw+dPcvqLGyviSz/DVUKXvSvAs=";
+    hash = "sha256-jZRA/UKamB5fUSvyaemN0Vq4GX6bNL8rsYCgToEkIL4=";
   };
 
   build-system = [ setuptools ];
