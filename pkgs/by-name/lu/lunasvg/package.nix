@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunasvg";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "sammycage";
     repo = "lunasvg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Cj6En0XedAeNPsLWCedxiiq8xPdJ4VpKmF4vYu4SC8=";
+    hash = "sha256-vaLqay86vb7ADPzqxE8959KX4BBJpGtDERhSerm2sNw=";
   };
 
   nativeBuildInputs = [

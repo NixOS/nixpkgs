@@ -1669,7 +1669,7 @@ with pkgs;
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
-  coconut = with python3Packages; toPythonApplication coconut;
+  coconut = with python312Packages; toPythonApplication coconut;
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
 
