@@ -940,7 +940,16 @@ in
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
               "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
         in
-        mkMerge (mapAttrsToList mapper config.containers);
+        [
+          (mkMerge (mapAttrsToList mapper config.containers))
+          {
+            assertion =
+              (lib.filterAttrs (
+                n: v: (lib.strings.hasPrefix "container@" n) && v.wantedBy != [ ] && !config.boot.enableContainers
+              ) config.systemd.services) == { };
+            message = "Service depends on `container@` service is defined, but `boot.enableContainers` is set to false.";
+          }
+        ];
     }
 
     (mkIf (config.boot.enableContainers) (
