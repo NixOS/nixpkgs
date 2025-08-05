@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "3.1.1";
+  version = "3.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Rt5cA0b/BKZExvfS6R5wewgD4OhQA4aL+tcK6e2+MQ=";
+    hash = "sha256-1L+sqaZA8Ifn/u6yymr9PQpkS845JbPUMESJicFnN3Q=";
   };
 
   build-system = [ setuptools-scm ];
