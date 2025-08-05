@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "statmake";
-  version = "0.6.0";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "daltonmaag";
     repo = "statmake";
     tag = "v${version}";
-    hash = "sha256-3BZ71JVvj7GCojM8ycu160viPj8BLJ1SiW86Df2fzsw=";
+    hash = "sha256-UqL3l27Icu5DoVvFYctbOF7gvKvVV6hK1R5A1y9SYkU=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     description = "Applies STAT information from a Stylespace to a variable font";
     mainProgram = "statmake";
     homepage = "https://github.com/daltonmaag/statmake";
-    changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
+    changelog = "https://github.com/daltonmaag/statmake/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };
