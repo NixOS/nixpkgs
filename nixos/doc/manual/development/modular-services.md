@@ -45,11 +45,18 @@ So note that the default value of `system.services.<name>` is not a complete ser
 It is possible to write service modules that are portable. This is done by either avoiding the `systemd` option tree, or by defining process-manager-specific definitions in an optional way:
 
 ```nix
-{ config, options, lib, ... }: {
+{
+  config,
+  options,
+  lib,
+  ...
+}:
+{
   _class = "service";
   config = {
     process.argv = [ (lib.getExe config.foo.program) ];
-  } // lib.optionalAttrs (options?systemd) {
+  }
+  // lib.optionalAttrs (options ? systemd) {
     # ... systemd-specific definitions ...
   };
 }
