@@ -19,7 +19,7 @@ let
   pname = "hassil";
   version = "3.1.0";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   inherit pname version;
   pyproject = true;
 
