@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
     tag = version;
-    hash = "sha256-WNr+zVrA4X2AjizsmMEau54Vv1Svey3LNsCo8Bm/W+A=";
+    hash = "sha256-uxf+1nmJ+YFS3zGu+0YP4zOdBlSCHPYC8euqZIGwb00=";
   };
 
   disabled = pythonOlder "3.8";
