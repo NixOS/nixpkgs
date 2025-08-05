@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "behave";
-  version = "1.2.7.dev5";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "behave";
     repo = "behave";
-    rev = "v${version}";
-    hash = "sha256-G1o0a57MRczwjGLl/tEYC+yx3nxpk6+E58RvR9kVJpA=";
+    tag = "v${version}";
+    hash = "sha256-jsgtDRfUSaWEJ7Qy2Ii1+DKFdcplG3zyestN6vO5E8k=";
   };
 
   patches = [
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/behave/behave/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/behave/behave/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/behave/behave";
     description = "Behaviour-driven development, Python style";
     mainProgram = "behave";
