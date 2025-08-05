@@ -1,13 +1,9 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  requests,
-  requests-cache,
-  setuptools,
 }:
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cryptop";
   version = "0.2.0";
   format = "setuptools";
@@ -17,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "0akrrz735vjfrm78plwyg84vabj0x3qficq9xxmy9kr40fhdkzpb";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     setuptools
     requests
     requests-cache
