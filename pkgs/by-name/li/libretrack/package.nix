@@ -1,11 +1,11 @@
 {
   lib,
+  flutter329,
   fetchFromGitHub,
-  flutterPackages-source,
   libappindicator,
 }:
 
-flutterPackages-source.v3_29.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "libretrack";
   version = "1.7.0";
 
@@ -17,33 +17,29 @@ flutterPackages-source.v3_29.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = {
-    "receive_sharing_intent" = "sha256-YsvnLOZvYZMyKx3J596Q3/hY2Fn/AFT6nhLTTHdMFOE=";
-  };
+
+  gitHashes.receive_sharing_intent = "sha256-YsvnLOZvYZMyKx3J596Q3/hY2Fn/AFT6nhLTTHdMFOE=";
 
   postPatch = ''
     substituteInPlace linux/CMakeLists.txt \
-     --replace-fail 'find_library(APPINDICATOR_LIBRARY NAMES appindicator3)' 'find_library(${libappindicator} NAMES appindicator3)' \
+     --replace-fail "find_library(APPINDICATOR_LIBRARY NAMES appindicator3)" "find_library(${libappindicator} NAMES appindicator3)" \
      --replace-fail 'target_link_libraries(''${BINARY_NAME} PRIVATE ''${APPINDICATOR_LIBRARY})' 'target_link_libraries(''${BINARY_NAME} PRIVATE ${libappindicator}/lib/libappindicator3.so)'
   '';
 
-  nativeBuildInputs = [
-    libappindicator
-  ];
+  buildInputs = [ libappindicator ];
 
   postInstall = ''
     substituteInPlace snap/gui/org.proninyaroslav.libretrack.desktop \
-      --replace-fail 'Icon=''${SNAP}/meta/gui/libretrack.png' 'Icon=libretrack' \
-
+      --replace-fail 'Icon=''${SNAP}/meta/gui/libretrack.png' "Icon=libretrack"
     install -Dm644 snap/gui/org.proninyaroslav.libretrack.desktop -t $out/share/applications
     install -Dm644 linux/icons/app-icon.svg $out/share/icons/hicolor/scalable/apps/libretrack.svg
   '';
 
   meta = {
-    description = "Private, cross-platform package tracking app";
+    description = "Track postal items directly on your device using accounts of postal services";
     homepage = "https://github.com/proninyaroslav/libretrack";
     changelog = "https://github.com/proninyaroslav/libretrack/releases/tag/${version}";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "libretrack";
     platforms = lib.platforms.linux;
