@@ -299,11 +299,24 @@ let
         [
           "--disable-libsanitizer"
         ]
-    ++ lib.optionals targetPlatform.isAlpha [
-      # Workaround build failures like:
-      #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
-      "--disable-werror"
-    ];
+    ++
+      lib.optionals
+        (
+          # The build extracts `-fmacro-prefix-map` options from
+          # `cc-wrapper` and passes them along to the built Fortran
+          # compiler, which prints warnings about them, which breaks
+          # the build.
+          #
+          # TODO: Someone please fix this to do things that make sense.
+          (!stdenv.cc.isGNU && langFortran)
+
+          # Workaround build failures like:
+          #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
+          || targetPlatform.isAlpha
+        )
+        [
+          "--disable-werror"
+        ];
 
 in
 configureFlags
