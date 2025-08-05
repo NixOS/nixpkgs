@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
+    hash = "sha256-KXb2zMWYmpZyAto0PqFFwhrtq74ANccIjWS6CqlyWmA=";
   };
 
   postPatch = ''
