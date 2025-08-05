@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "4.4.0";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dolhQqlApChTOQCNaSijbUvnSv7H5jRXfoQsnMXFaEQ=";
+    hash = "sha256-UWIOAcSI8GXSA2Qly8HLz4ppcilRBf0oUyHrR+ZqMZ8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
