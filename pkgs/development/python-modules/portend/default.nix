@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "3.2.0";
+  version = "3.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UlCjUsGclZ12fKyHi4Kdk+XcdiWlFDOZoqANxmKP+3I=";
+    hash = "sha256-qp1Aqx+eFL231AH0IhDfNdAXybl5kbrrGFaM7fuMZIk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
