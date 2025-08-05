@@ -71,14 +71,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2025.4.0";
+  version = "2025.7.0";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
     tag = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-20dqVXHPgSxBveTxlbHEjTtp9NI1oVCVpBTDbjDI2QA=";
+    hash = "sha256-AcxgsiP3p14b5AV2KWa+C4tTHFgzpliTxuRZmXwaOH0=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
