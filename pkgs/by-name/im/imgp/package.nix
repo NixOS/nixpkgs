@@ -33,7 +33,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/imgp --help
+
+    runHook postCheck
   '';
 
   meta = with lib; {

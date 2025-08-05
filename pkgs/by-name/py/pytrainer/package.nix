@@ -92,6 +92,8 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     env \
       HOME=$TEMPDIR \
       TZDIR=${tzdata}/share/zoneinfo \
@@ -99,6 +101,8 @@ python.pkgs.buildPythonApplication rec {
       LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
       ${python.interpreter} -m unittest
+
+    runHook postCheck
   '';
 
   meta = with lib; {

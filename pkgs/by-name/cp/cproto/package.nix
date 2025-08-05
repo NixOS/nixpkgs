@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     [ "$("$out/bin/cproto" -V 2>&1)" = '${version}' ]
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     OUTPUT="$(
       HOME="$(mktemp --directory)" \
       timeout 3 `# Use timeout because gk hangs instead of closing in the sandbox` \
@@ -57,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "$OUTPUT" | grep --quiet '^Git binary found: ✓$'
     echo "$OUTPUT" | grep --quiet '^CLI version: ${finalAttrs.version}$'
+
+    runHook postInstallCheck
   '';
 
   passthru = {

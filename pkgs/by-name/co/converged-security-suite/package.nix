@@ -33,7 +33,11 @@ buildGoModule (finalAttrs: {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     go test -v ./pkg/...
+
+    runHook postCheck
   '';
 
   meta = {

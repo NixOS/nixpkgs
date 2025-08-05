@@ -25,7 +25,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     ./test.bash
+
+    runHook postCheck
   '';
 
   meta = with lib; {

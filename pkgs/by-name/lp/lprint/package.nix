@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/lprint --help
+
+    runHook postInstallCheck
   '';
 
   enableParallelBuilding = true;

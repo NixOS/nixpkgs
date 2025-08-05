@@ -175,9 +175,13 @@ python311Packages.buildPythonApplication {
   # help catch issues like lack of a LOCALE_ARCHIVE setting (see GH PR #202760)
   doCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     echo -n "testing sapling version; should be \"$SAPLING_VERSION\"... "
     $out/bin/sl version | grep -qw "$SAPLING_VERSION"
     echo "OK!"
+
+    runHook postInstallCheck
   '';
 
   # Expose isl to nix repl as sapling.isl.

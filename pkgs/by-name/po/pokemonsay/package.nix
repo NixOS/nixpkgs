@@ -64,9 +64,13 @@ stdenvNoCC.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     (set -x
       test "$($out/bin/pokemonsay --list | wc -l)" -ge 891
     )
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

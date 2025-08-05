@@ -39,7 +39,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/pyradio --help
+
+    runHook postCheck
   '';
 
   postInstall = ''

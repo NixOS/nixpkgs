@@ -37,7 +37,11 @@ rustPlatform.buildRustPackage {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/teller --version 2>&1 | grep ${version};
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = nix-update-script { };

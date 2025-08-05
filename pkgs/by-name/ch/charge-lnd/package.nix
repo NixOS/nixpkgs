@@ -45,7 +45,11 @@ python3Packages.buildPythonApplication rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/charge-lnd --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   env = {

@@ -33,8 +33,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     doCheck = true;
     checkPhase = ''
+      runHook preCheck
+
       c++ bench/bench.cpp -o bench/bench
       ./bench/bench > $out
+
+      runHook postCheck
     '';
 
     meta.platforms = lib.platforms.x86_64;

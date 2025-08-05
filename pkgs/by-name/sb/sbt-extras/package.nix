@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/sbt -h >/dev/null
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = writeScript "update.sh" ''

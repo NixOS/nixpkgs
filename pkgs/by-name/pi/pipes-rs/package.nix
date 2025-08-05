@@ -20,12 +20,16 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     if [[ "$("$out/bin/pipes-rs" --version)" == "pipes-rs ${version}" ]]; then
       echo 'pipes-rs smoke check passed'
     else
       echo 'pipes-rs smoke check failed'
       return 1
     fi
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

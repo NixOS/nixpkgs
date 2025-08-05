@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     mkdir repo-hg
     pushd repo-hg
     hg init
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
       (git show | grep $s > /dev/null) && echo $s found
     done
     popd
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = nix-update-script { };
