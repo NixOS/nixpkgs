@@ -273,14 +273,14 @@ let
 
       passthru.tests.nixos = nixosTests.mpd;
 
-      meta = with lib; {
+      meta = {
         description = "Flexible, powerful daemon for playing music";
         homepage = "https://www.musicpd.org/";
-        license = licenses.gpl2Only;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl2Only;
+        maintainers = with lib.maintainers; [
           tobim
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
         mainProgram = "mpd";
 
         longDescription = ''
