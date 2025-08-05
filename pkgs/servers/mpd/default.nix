@@ -65,6 +65,8 @@
   # For tests
   gtest,
   zip,
+  # Features list
+  features ? null,
 }:
 
 let
@@ -152,11 +154,6 @@ let
     ];
   };
 
-  run =
-    {
-      features ? null,
-    }:
-    let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
@@ -197,8 +194,7 @@ let
             else
               features;
 
-    in
-    stdenv.mkDerivation (finalAttrs: {
+  mpd = stdenv.mkDerivation (finalAttrs: {
       pname = "mpd";
       version = "0.24.5";
 
@@ -292,6 +288,5 @@ let
     });
 in
 {
-  mpd = run { };
-  mpdWithFeatures = run;
+  inherit mpd;
 }

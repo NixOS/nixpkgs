@@ -10224,7 +10224,6 @@ with pkgs;
     (callPackages ../servers/mpd {
     })
     mpd
-    mpdWithFeatures
     ;
 
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };

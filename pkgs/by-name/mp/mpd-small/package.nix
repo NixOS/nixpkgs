@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  mpdWithFeatures,
+  mpd,
 }:
 
-mpdWithFeatures {
+mpd.override {
   features = [
     "webdav"
     "curl"
