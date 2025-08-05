@@ -36,7 +36,7 @@
 let
   dm-haiku = buildPythonPackage rec {
     pname = "dm-haiku";
-    version = "0.0.13";
+    version = "0.0.14";
     pyproject = true;
 
     # ImportError: `haiku.experimental.flax` features require `flax` to be installed.
@@ -46,7 +46,7 @@ let
       owner = "deepmind";
       repo = "dm-haiku";
       tag = "v${version}";
-      hash = "sha256-RJpQ9BzlbQ4X31XoJFnsZASiaC9fP2AdyuTAGINhMxs=";
+      hash = "sha256-8YAh+ypzImmrPaZIfOfIuq6Oemam/wcEWE5kOjFvv3Q=";
     };
 
     patches = [
