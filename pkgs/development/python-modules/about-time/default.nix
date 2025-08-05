@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "about-time";
-  version = "4.2.1";
+  version = "4.2.2";
   format = "setuptools";
 
   # PyPi release does not contain test files, but the repo has no release tags,
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # https://github.com/rsalmei/about-time/issues/15
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-alOIYtM85n2ZdCnRSZgxDh2/2my32bv795nEcJhH/s4=";
+    hash = "sha256-NWKIXVKNZqQOAr4LwOiTkg4jlqn0tjLrkUjgyP9HB48=";
   };
 
   doCheck = false;
