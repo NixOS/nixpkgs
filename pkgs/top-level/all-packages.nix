@@ -10220,8 +10220,6 @@ with pkgs;
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
-  mpd = callPackage ../servers/mpd { };
-
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
