@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.3.6";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "cli==${version}";
-    hash = "sha256-tBMdFOHSRjw0PtE19XytLU4MmjR3NBLJxUqWoG4L2F8=";
+    tag = "checkpoint==${version}";
+    hash = "sha256-UY3AChShKfOrtOQzOm5vi3Yy3rlBc+TAje9L2L6My/U=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   meta = {
     description = "Official CLI for LangGraph API";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
