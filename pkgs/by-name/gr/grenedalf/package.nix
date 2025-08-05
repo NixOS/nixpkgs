@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lczech";
     repo = "grenedalf";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DJ7nZjOvYFQlN/L+S2QcMVvH/M9Dhla4VXl2nxc22m4=";
     fetchSubmodules = true;
   };
