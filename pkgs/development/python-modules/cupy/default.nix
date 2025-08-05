@@ -58,7 +58,7 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.3.0";
+  version = "13.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     owner = "cupy";
     repo = "cupy";
     tag = "v${version}";
-    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
+    hash = "sha256-8RgyvsU3lnt6nO0J1tiLBOdYsX0jJkjPH/SpKQz4o7s=";
     fetchSubmodules = true;
   };
 
@@ -126,7 +126,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
-    changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
+    changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
     license = licenses.mit;
     platforms = [
       "aarch64-linux"
