@@ -136,7 +136,6 @@ dont-distribute-packages:
  - atlassian-connect-core
  - atmos-dimensional-tf
  - atom-msp430
- - atomic-css
  - atomic-primops-foreign
  - atp
  - attenuation-profunctors
@@ -201,7 +200,6 @@ dont-distribute-packages:
  - Barracuda
  - base32-bytestring
  - baserock-schema
- - base_4_21_0_0
  - BASIC
  - basic
  - batchd
@@ -293,6 +291,7 @@ dont-distribute-packages:
  - blink1
  - blip
  - Blobs
+ - blockio
  - blogination
  - BlogLiterately-diagrams
  - bloxorz
@@ -747,7 +746,6 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_2_0_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -955,7 +953,6 @@ dont-distribute-packages:
  - FirstOrderTheory
  - fishfood
  - fix-parser-simple
- - fixed-generic
  - fixed-point-vector
  - fixed-point-vector-space
  - fixhs
@@ -1083,7 +1080,6 @@ dont-distribute-packages:
  - getemx
  - ghc-debugger
  - ghc-dump-util
- - ghc-experimental
  - ghc-imported-from
  - ghc-instances
  - ghc-mod
@@ -1099,6 +1095,7 @@ dont-distribute-packages:
  - git-fmt
  - git-gpush
  - git-object
+ - git-phoenix
  - git-remote-ipfs
  - git-sanity
  - gitdo
@@ -1114,6 +1111,7 @@ dont-distribute-packages:
  - glazier-react
  - glazier-react-examples
  - glazier-react-widget
+ - glean
  - GLFW-OGL
  - GLFW-task
  - global
@@ -1157,10 +1155,6 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - gps
  - gps2htmlReport
- - gpu-vulkan
- - gpu-vulkan-khr-surface
- - gpu-vulkan-khr-surface-glfw
- - gpu-vulkan-khr-swapchain
  - GPX
  - grab-form
  - graflog
@@ -1194,7 +1188,6 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - grisette_0_13_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1563,6 +1556,7 @@ dont-distribute-packages:
  - hoppy-docs
  - hoppy-runtime
  - hoppy-std
+ - horde-ad
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -1581,7 +1575,6 @@ dont-distribute-packages:
  - HPong
  - hpqtypes-effectful
  - hpqtypes-extras
- - hpqtypes-extras_1_18_0_0
  - hprotoc
  - hprotoc-fork
  - hps
@@ -1609,6 +1602,7 @@ dont-distribute-packages:
  - hs-ix
  - hs-profunctors
  - hs-sdl-term-emulator
+ - hs-tree-sitter
  - hs2ats
  - hs2dot
  - Hs2lib
@@ -1935,7 +1929,6 @@ dont-distribute-packages:
  - knit-haskell
  - koji-install
  - koji-tool
- - koji-tool_1_3
  - korfu
  - ks-test
  - kubernetes-client
@@ -1995,6 +1988,7 @@ dont-distribute-packages:
  - layered-state
  - layouting
  - lazy-hash-cache
+ - lazy-scope
  - lda
  - ldap-scim-bridge
  - ldapply
@@ -2203,7 +2197,6 @@ dont-distribute-packages:
  - Michelangelo
  - micro-gateway
  - microformats2-types
- - MicroHs
  - MicrosoftTranslator
  - midimory
  - mig-server
@@ -2613,6 +2606,7 @@ dont-distribute-packages:
  - pms-domain-service
  - pms-infra-cmdrun
  - pms-infra-procspawn
+ - pms-infra-serial
  - pms-infra-socket
  - pms-infra-watch
  - pms-infrastructure
@@ -2798,7 +2792,6 @@ dont-distribute-packages:
  - random-extras
  - random-hypergeometric
  - range-space
- - ranged-list_0_1_2_3
  - Ranka
  - rasa
  - rasa-example-config
@@ -3412,7 +3405,6 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
- - telescope
  - ten-lens
  - ten-unordered-containers
  - terminal-text
@@ -3461,7 +3453,6 @@ dont-distribute-packages:
  - toboggan
  - todos
  - toktok
- - toml-reader_0_3_0_0
  - tomlcheck
  - tonatona
  - tonatona-google-server-api
@@ -3537,7 +3528,6 @@ dont-distribute-packages:
  - type-sets
  - type-structure
  - type-sub-th
- - typecheck-plugin-nat-simple_0_1_0_11
  - TypeClass
  - typed-encoding-encoding
  - typed-gui

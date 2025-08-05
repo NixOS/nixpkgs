@@ -5583,7 +5583,6 @@ broken-packages:
   - sjsp # failure in job https://hydra.nixos.org/build/233225141 at 2023-09-02
   - SJW # failure in job https://hydra.nixos.org/build/233209689 at 2023-09-02
   - skeletal-set # failure in job https://hydra.nixos.org/build/233254711 at 2023-09-02
-  - skeletest # failure in job https://hydra.nixos.org/build/270083279 at 2024-08-31
   - skell # failure in job https://hydra.nixos.org/build/233245484 at 2023-09-02
   - skemmtun # failure in job https://hydra.nixos.org/build/233223893 at 2023-09-02
   - sketch-frp-copilot # copilot >=4.3 && <4.4,
