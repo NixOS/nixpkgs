@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cons";
-  version = "0.4.6";
+  version = "0.4.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pythological";
     repo = "python-cons";
     tag = "v${version}";
-    hash = "sha256-XssERKiv4A8x7dZhLeFSciN6RCEfGs0or3PAQiYSPII=";
+    hash = "sha256-BS7lThnv+dxtztvw2aRhQa8yx2cRfrZLiXjcwvZ8QR0=";
   };
 
   propagatedBuildInputs = [ logical-unification ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of Lisp/Scheme-like cons in Python";
     homepage = "https://github.com/pythological/python-cons";
-    changelog = "https://github.com/pythological/python-cons/releases/tag/v${version}";
+    changelog = "https://github.com/pythological/python-cons/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Etjean ];
   };
