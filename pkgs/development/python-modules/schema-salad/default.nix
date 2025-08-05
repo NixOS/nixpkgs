@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.9.20250408123006";
+  version = "8.9.20250723145140";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = version;
-    hash = "sha256-sPPHz43zvqdQ3eruRlVxLLP1ZU/UoVdtDhtQRAo8vNg=";
+    hash = "sha256-FEdv0VORkvXhqXPrmyCZ1Ib5Lz4fKwRkEqEcEXpfGq8=";
   };
 
   pythonRelaxDeps = [ "mistune" ];
