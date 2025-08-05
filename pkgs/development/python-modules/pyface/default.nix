@@ -6,15 +6,12 @@
   importlib-resources,
   setuptools,
   traits,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyface";
   version = "8.0.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

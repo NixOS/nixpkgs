@@ -6,15 +6,12 @@
   pytestCheckHook,
   pyyaml,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "configargparse";
   version = "1.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bw2";

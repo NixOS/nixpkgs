@@ -11,7 +11,6 @@
   msldap-bad,
   pyasn1,
   pytestCheckHook,
-  pythonOlder,
   winacl,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "bloodyad";
   version = "2.1.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CravateRouge";

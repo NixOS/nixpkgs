@@ -10,7 +10,6 @@
   marshmallow-dataclass,
   poetry-core,
   pyjwt,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   syrupy,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "renault-api";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";

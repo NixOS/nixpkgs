@@ -11,7 +11,6 @@
   mock,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "google-cloud-storage";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_storage";

@@ -6,15 +6,12 @@
   pycodestyle,
   pylama,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-import-order";
   version = "0.18.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

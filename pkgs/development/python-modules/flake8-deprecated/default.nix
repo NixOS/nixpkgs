@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchPypi,
   buildPythonPackage,
   hatchling,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flake8-deprecated";
   version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "flake8_deprecated";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   poetry,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "poetry-audit-plugin";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "opeco17";

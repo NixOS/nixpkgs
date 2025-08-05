@@ -12,7 +12,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "google-api-core";
   version = "2.24.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "googleapis";

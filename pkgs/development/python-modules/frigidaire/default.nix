@@ -5,7 +5,6 @@
   chardet,
   fetchFromGitHub,
   idna,
-  pythonOlder,
   requests,
   setuptools,
   urllib3,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "frigidaire";
   version = "0.18.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bm1549";

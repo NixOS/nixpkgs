@@ -9,7 +9,6 @@
   oauthlib,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   six,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "databricks-cli";
   version = "0.18.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "databricks";

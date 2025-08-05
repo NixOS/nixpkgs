@@ -12,7 +12,6 @@
   pscript,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   uvicorn,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "timetagger";
   version = "25.06.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "almarklein";

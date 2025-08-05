@@ -4,15 +4,12 @@
   dmidecode,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-dmidecode";
   version = "0.1.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "py_dmidecode";

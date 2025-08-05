@@ -4,7 +4,6 @@
   fetchFromGitHub,
   future,
   pyjwt,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "webexteamssdk";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CiscoDevNet";

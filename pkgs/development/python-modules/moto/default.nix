@@ -27,7 +27,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -40,8 +39,6 @@ buildPythonPackage rec {
   pname = "moto";
   version = "5.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getmoto";

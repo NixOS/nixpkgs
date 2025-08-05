@@ -9,7 +9,6 @@
   pyserial,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typer,
   webcolors,
   udevCheckHook,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "busylight-for-humans";
   version = "0.35.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";

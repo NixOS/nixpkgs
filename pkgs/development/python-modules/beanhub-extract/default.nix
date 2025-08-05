@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   iso8601,
   poetry-core,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "beanhub-extract";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

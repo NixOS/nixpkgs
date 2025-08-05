@@ -13,7 +13,6 @@
   pandas,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   scipy,
   sybil,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "lifelines";
   version = "0.30.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";

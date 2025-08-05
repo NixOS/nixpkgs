@@ -10,7 +10,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   pyzmq,
   setproctitle,
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "powerapi";
   version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "powerapi-ng";

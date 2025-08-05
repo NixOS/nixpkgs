@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   setuptools,
   click-default-group,
   condense-json,
@@ -169,8 +167,6 @@ let
     pyproject = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";

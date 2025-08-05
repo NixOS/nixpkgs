@@ -4,7 +4,6 @@
   dissect-cstruct,
   dissect-util,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dissect-archive";
   version = "1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";

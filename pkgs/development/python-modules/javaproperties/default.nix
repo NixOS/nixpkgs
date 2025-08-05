@@ -5,15 +5,12 @@
   hatchling,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   version = "0.8.2";
   pname = "javaproperties";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jwodder";

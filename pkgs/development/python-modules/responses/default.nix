@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.25.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {

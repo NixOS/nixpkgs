@@ -5,7 +5,6 @@
   fetchPypi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "jug";
   version = "2.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Jug";

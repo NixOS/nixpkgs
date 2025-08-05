@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   click,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "vsure";
   version = "2.6.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

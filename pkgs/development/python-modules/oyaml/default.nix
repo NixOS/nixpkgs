@@ -5,7 +5,6 @@
 
   # pythonPackages
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage {
   pname = "oyaml";
   version = "unstable-2021-12-03";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wimglenn";

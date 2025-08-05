@@ -7,7 +7,6 @@
   fetchFromGitHub,
   olefile,
   pytestCheckHook,
-  pythonOlder,
   red-black-tree-mod,
   rtfde,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "extract-msg";
   version = "0.54.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";

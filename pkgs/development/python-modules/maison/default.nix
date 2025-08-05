@@ -6,7 +6,6 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "maison";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbatten5";

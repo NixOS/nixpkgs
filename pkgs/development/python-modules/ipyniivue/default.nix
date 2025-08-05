@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchNpmDeps,
-  pythonOlder,
   nodejs,
   npmHooks,
   hatchling,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ipyniivue";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "niivue";

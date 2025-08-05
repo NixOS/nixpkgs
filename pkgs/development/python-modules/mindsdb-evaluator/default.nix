@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   dataprep-ml,
   numpy,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "mindsdb-evaluator";
   version = "0.0.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # using PyPI as git repository does not have release tags or branches
   src = fetchPypi {

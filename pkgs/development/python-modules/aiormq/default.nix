@@ -3,7 +3,6 @@
   aiomisc-pytest,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pamqp,
   yarl,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aiormq";
   version = "6.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mosquito";

@@ -51,7 +51,6 @@ let
     python3Packages.callPackage (
       {
         buildPythonPackage,
-        pythonOlder,
         parver,
         pip,
         pulumi,
@@ -66,8 +65,6 @@ let
           version
           ;
         format = "pyproject";
-
-        disabled = pythonOlder "3.7";
 
         sourceRoot = "${src.name}/sdk/python";
 

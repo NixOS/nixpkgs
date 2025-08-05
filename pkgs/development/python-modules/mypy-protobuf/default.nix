@@ -6,7 +6,6 @@
   mypy-protobuf,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testers,
   types-protobuf,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "mypy-protobuf";
   version = "3.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

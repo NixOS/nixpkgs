@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   format = "setuptools";
   # TODO: typo; change to pyproject = true;
   pypropject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";

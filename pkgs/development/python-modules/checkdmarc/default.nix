@@ -11,7 +11,6 @@
   pyleri,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   timeout-decorator,
   xmltodict,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "checkdmarc";
   version = "5.8.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "domainaware";

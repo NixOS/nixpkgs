@@ -7,7 +7,6 @@
   dockerfile-parse,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "container-inspector";
   version = "33.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nexB";

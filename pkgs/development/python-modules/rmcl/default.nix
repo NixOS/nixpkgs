@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   poetry-core,
   asks,
@@ -12,8 +11,6 @@
 buildPythonPackage rec {
   pname = "rmcl";
   version = "0.4.2";
-
-  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 

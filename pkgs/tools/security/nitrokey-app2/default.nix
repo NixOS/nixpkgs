@@ -14,8 +14,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.3.3";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";

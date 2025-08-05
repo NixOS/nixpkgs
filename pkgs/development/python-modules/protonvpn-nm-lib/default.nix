@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   replaceVars,
   dbus-python,
   distro,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
   version = "3.16.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";

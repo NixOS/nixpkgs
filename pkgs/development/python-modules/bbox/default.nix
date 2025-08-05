@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   matplotlib,
   numpy,
   pendulum,
@@ -16,8 +15,6 @@ buildPythonPackage {
   pname = "bbox";
   version = "0.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "varunagrawal";

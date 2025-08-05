@@ -8,7 +8,6 @@
   geojson,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aio-geojson-generic-client";
   version = "0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

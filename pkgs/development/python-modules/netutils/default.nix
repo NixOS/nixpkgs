@@ -7,7 +7,6 @@
   napalm,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   toml,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "netutils";
   version = "1.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";

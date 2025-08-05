@@ -3,7 +3,6 @@
   buildPythonPackage,
   callPackage,
   fetchPypi,
-  pythonOlder,
   pbr,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "stevedore";
   version = "5.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

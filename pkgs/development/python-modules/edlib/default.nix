@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   edlib,
   cython,
   python,
@@ -10,8 +9,6 @@ buildPythonPackage {
   inherit (edlib) pname src meta;
   version = "1.3.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   sourceRoot = "${edlib.src.name}/bindings/python";
 

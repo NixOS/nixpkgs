@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   boto3,
   envs,
   python-jose,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "warrant-lite";
   version = "1.0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

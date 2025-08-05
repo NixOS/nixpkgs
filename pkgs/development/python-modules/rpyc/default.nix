@@ -6,15 +6,12 @@
   hatchling,
   plumbum,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rpyc";
   version = "6.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";

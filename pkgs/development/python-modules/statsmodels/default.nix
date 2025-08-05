@@ -7,7 +7,6 @@
   packaging,
   pandas,
   patsy,
-  pythonOlder,
   scipy,
   setuptools,
   setuptools-scm,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "statsmodels";
   version = "0.14.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

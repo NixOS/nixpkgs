@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiosenz";
   version = "1.0.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "milanmeu";

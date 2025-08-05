@@ -10,8 +10,6 @@
   pytest-cov-stub,
   pytest-docker-tools,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
   tenacity,
 }:
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "pytest-celery";
   version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";

@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zeroconf,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "hap-python";
   version = "4.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalchev";

@@ -10,7 +10,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   requests-oauthlib,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "kubernetes";
   version = "32.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes-client";

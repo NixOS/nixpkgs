@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   usb-devices,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
   version = "1.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";

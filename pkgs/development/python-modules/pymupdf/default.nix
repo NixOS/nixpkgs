@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   python,
@@ -48,8 +47,6 @@ buildPythonPackage rec {
   pname = "pymupdf";
   version = "1.26.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymupdf";

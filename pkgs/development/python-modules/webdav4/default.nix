@@ -12,7 +12,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   python-dateutil,
-  pythonOlder,
   wsgidav,
 }:
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "webdav4";
   version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "skshetry";

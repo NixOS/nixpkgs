@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   lark,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "bc-python-hcl2";
   version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

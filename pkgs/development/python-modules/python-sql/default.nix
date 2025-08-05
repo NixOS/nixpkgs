@@ -3,15 +3,12 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-sql";
   version = "1.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "python_sql";

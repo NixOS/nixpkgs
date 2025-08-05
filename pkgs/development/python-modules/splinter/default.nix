@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   urllib3,
@@ -17,8 +16,6 @@
 buildPythonPackage rec {
   pname = "splinter";
   version = "0.21.0";
-
-  disabled = pythonOlder "3.8";
 
   pyproject = true;
 

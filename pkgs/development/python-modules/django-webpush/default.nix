@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  pythonOlder,
   pywebpush,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "django-webpush";
   version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "safwanrahman";

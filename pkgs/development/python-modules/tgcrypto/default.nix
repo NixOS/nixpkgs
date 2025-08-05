@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -10,8 +9,6 @@
 buildPythonPackage rec {
   pname = "tgcrypto";
   version = "1.2.5";
-
-  disabled = pythonOlder "3.6";
 
   format = "pyproject";
 

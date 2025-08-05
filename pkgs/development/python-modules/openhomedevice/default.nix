@@ -6,7 +6,6 @@
   fetchFromGitHub,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "openhomedevice";
   version = "2.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bazwilliams";

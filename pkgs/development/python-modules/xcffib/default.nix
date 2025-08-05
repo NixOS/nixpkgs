@@ -4,7 +4,6 @@
   cffi,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   xorg,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "xcffib";
   version = "1.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -14,7 +14,6 @@
   wheel,
   zope-event,
   zope-interface,
-  pythonOlder,
   c-ares,
   libuv,
 
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "gevent";
   version = "24.11.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

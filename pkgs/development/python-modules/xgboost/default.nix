@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   cmake,
   numpy,
   scipy,
@@ -19,8 +18,6 @@ buildPythonPackage {
   pname = "xgboost";
   format = "pyproject";
   inherit (xgboost) version src meta;
-
-  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [
     cmake

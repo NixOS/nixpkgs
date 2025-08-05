@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-slugify,
-  pythonOlder,
   setuptools,
   tenacity,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "nibe";
   version = "2.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yozik04";

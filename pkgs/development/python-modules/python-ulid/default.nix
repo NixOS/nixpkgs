@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "python-ulid";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mdomke";

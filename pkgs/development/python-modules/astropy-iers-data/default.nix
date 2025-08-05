@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "astropy-iers-data";
   version = "0.2025.3.31.0.36.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "astropy";

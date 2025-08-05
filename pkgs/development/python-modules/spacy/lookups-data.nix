@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   spacy,
   pytestCheckHook,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "spacy-lookups-data";
   version = "1.0.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "explosion";

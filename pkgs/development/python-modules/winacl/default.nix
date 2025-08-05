@@ -3,7 +3,6 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "winacl";
   version = "0.1.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

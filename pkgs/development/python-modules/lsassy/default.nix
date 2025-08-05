@@ -6,7 +6,6 @@
   netaddr,
   poetry-core,
   pypykatz,
-  pythonOlder,
   rich,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "lsassy";
   version = "3.1.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Hackndo";

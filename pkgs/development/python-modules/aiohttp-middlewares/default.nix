@@ -7,7 +7,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiohttp-middlewares";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "playpauseandstop";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   aiohttp,
   sensor-state-data,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "anova-wifi";
   version = "0.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Lash-L";

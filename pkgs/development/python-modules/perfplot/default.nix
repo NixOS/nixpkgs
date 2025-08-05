@@ -9,15 +9,12 @@
   numpy,
   rich,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "perfplot";
   version = "0.10.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";

@@ -4,15 +4,12 @@
   fetchPypi,
   rtl-sdr,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
   version = "0.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

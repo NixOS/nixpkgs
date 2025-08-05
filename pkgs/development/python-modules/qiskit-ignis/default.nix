@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "qiskit-ignis";
   version = "0.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   # Pypi's tarball doesn't contain tests
   src = fetchFromGitHub {

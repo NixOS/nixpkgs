@@ -7,7 +7,6 @@
   hypothesis,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   trio,
   trio-asyncio,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pytest-aio";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klen";

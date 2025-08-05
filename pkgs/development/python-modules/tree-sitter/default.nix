@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   tree-sitter-python,
   tree-sitter-rust,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "tree-sitter";
   version = "0.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

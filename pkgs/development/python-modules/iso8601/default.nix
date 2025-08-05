@@ -6,15 +6,12 @@
   poetry-core,
   pytestCheckHook,
   pytz,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "iso8601";
   version = "2.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -5,7 +5,6 @@
   numpy,
   pandas,
   pyarrow,
-  pythonOlder,
   pytz,
   setuptools,
   tomlkit,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "neo4j";
   version = "5.28.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "neo4j";

@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   flit-core,
   fetchPypi,
   buildPythonPackage,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sigstore-protobuf-specs";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "sigstore_protobuf_specs";

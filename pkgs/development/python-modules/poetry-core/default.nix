@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   build,
   gitMinimal,
   pytest-cov-stub,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "poetry-core";
   version = "2.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";

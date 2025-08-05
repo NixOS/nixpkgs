@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication rec {
   version = "2.1.1";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.5";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";

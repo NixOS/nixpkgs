@@ -5,15 +5,12 @@
   setuptools,
   sphinx,
   plantuml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
   version = "0.30";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

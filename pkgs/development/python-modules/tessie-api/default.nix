@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   aiohttp,
-  pythonOlder,
   hatchling,
   pytz,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "tessie-api";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "andrewgierens";

@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   cython,
   setuptools,
@@ -19,7 +18,6 @@
 buildPythonPackage rec {
   pname = "nitime";
   version = "0.11";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {

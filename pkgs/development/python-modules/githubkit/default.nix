@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "githubkit";
   version = "0.12.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";

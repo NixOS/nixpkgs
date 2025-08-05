@@ -6,7 +6,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   tzdata,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aiozoneinfo";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";

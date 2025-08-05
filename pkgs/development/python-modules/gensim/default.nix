@@ -11,7 +11,7 @@
   smart-open,
   pyemd,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # C code generated with CPython3.12 does not work cython_0.
-  disabled = !(pythonOlder "3.12");
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

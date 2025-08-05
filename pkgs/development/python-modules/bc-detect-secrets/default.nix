@@ -7,7 +7,6 @@
   pkgs,
   pyahocorasick,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "bc-detect-secrets";
   version = "1.5.44";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";

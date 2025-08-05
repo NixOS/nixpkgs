@@ -3,7 +3,6 @@
   gitUpdater,
   fetchFromGitHub,
   buildPythonApplication,
-  pythonOlder,
   requests,
   filelock,
 }:
@@ -24,8 +23,6 @@ buildPythonApplication {
     requests
     filelock
   ];
-
-  disabled = pythonOlder "3.8";
 
   # no tests
   doCheck = false;

@@ -5,7 +5,6 @@
   pycryptodome,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   setuptools,
   zeep,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "total-connect-client";
   version = "2025.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "craigjmidwinter";

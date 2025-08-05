@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   nbformat,
   nbclient,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "testbook";
   version = "0.4.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nteract";

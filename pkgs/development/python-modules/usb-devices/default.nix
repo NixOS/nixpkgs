@@ -5,15 +5,12 @@
   poetry-core,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "usb-devices";
   version = "0.4.5";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";

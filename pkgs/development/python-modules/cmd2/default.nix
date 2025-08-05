@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   wcwidth,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "cmd2";
   version = "2.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

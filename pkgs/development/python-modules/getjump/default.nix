@@ -5,7 +5,6 @@
   fetchPypi,
   pillow,
   hatchling,
-  pythonOlder,
   requests,
   rich,
   uv-dynamic-versioning,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "getjump";
   version = "2.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

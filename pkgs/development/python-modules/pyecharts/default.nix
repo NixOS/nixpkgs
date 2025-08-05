@@ -8,7 +8,6 @@
   pillow,
   prettytable,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   simplejson,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyecharts";
   version = "2.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyecharts";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   tensorflow,
   torch,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "gin-config";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

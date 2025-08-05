@@ -6,15 +6,12 @@
   pysigma,
   pysigma-pipeline-sysmon,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-qradar";
   version = "0.3.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nNipsx-Sec";

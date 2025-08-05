@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "nameparser";
   version = "1.1.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

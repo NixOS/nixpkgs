@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   torch,
   torchvision,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "fickling";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "trailofbits";

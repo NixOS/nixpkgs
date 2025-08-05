@@ -136,8 +136,6 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  disabled = python.pythonOlder "3.9";
-
   meta = with lib; {
     changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";

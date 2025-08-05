@@ -5,15 +5,12 @@
   fetchFromGitHub,
   poetry-core,
   pyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "thelogrus";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "unixorn";

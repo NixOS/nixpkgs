@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   h11,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "asysocks";
   version = "0.2.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

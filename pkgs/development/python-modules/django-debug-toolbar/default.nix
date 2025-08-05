@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
 
   # build-system
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "django-debug-toolbar";
   version = "5.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";

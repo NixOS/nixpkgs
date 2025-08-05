@@ -3,7 +3,7 @@
   callPackage,
   fetchPypi,
   isPy27,
-  pythonOlder,
+  pythonAtLeast,
   lib,
   cryptography,
   grpcio,
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     grpcio
     pyyaml
   ]
-  ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
+  ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
   buildInputs = [ grpcio-tools ];
 
   preBuild = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     # Remove vendorized versioneer
     rm versioneer.py
   ''
-  + lib.optionalString (!pythonOlder "3.12") ''
+  + lib.optionalString (pythonAtLeast "3.12") ''
     substituteInPlace skein/utils.py \
       --replace-fail "distutils" "setuptools._distutils"
   '';

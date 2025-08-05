@@ -12,7 +12,6 @@
   paho-mqtt,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   requests-oauthlib,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "apprise";
   version = "1.9.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

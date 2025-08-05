@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
   poetry-core,
   grpclib,
   python-dateutil,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "betterproto";
   version = "2.0.0b6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";

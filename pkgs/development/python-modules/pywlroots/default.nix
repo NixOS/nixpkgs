@@ -8,7 +8,6 @@
   libxkbcommon,
   libinput,
   pixman,
-  pythonOlder,
   udev,
   wlroots,
   wayland,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "pywlroots";
   version = "0.17.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

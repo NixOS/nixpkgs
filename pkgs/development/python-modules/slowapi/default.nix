@@ -10,7 +10,6 @@
   poetry-core,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   redis,
   starlette,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "slowapi";
   version = "0.1.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laurentS";

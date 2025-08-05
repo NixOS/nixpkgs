@@ -10,15 +10,12 @@
   nbformat,
   sphinx,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
   version = "0.9.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

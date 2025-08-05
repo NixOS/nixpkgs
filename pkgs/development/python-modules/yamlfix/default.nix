@@ -8,7 +8,6 @@
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   ruyaml,
   setuptools,
   writableTmpDirAsHomeHook,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "yamlfix";
   version = "1.16.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lyz-code";

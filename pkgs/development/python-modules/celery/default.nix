@@ -27,7 +27,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   setuptools,
   vine,
@@ -37,8 +36,6 @@ buildPythonPackage rec {
   pname = "celery";
   version = "5.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

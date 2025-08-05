@@ -5,15 +5,12 @@
   python,
   cffi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "xattr";
   version = "1.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

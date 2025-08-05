@@ -9,7 +9,6 @@
   mock,
   nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "soco";
   version = "0.30.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SoCo";

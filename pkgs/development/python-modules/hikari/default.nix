@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   aiohttp,
   attrs,
   multidict,
@@ -58,8 +57,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "hikari" ];
-
-  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace hikari/_about.py \

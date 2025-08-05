@@ -6,7 +6,6 @@
   pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zigpy,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "zigpy-deconz";
   version = "0.25.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";

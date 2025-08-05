@@ -21,7 +21,6 @@
   pytest-asyncio,
   python-snappy,
   pytestCheckHook,
-  pythonOlder,
   service-identity,
   setuptools,
   twisted,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "autobahn";
   version = "24.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "crossbario";

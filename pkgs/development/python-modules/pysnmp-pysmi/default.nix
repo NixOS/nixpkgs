@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   ply,
   poetry-core,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysnmp-pysmi";
   version = "1.1.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pysnmp";

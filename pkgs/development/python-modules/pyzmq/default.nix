@@ -15,7 +15,6 @@
 
   # checks
   pytestCheckHook,
-  pythonOlder,
   tornado,
   libsodium,
   zeromq,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "pyzmq";
   version = "26.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

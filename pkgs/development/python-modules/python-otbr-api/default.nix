@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   voluptuous,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "python-otbr-api";
   version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

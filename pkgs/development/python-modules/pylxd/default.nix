@@ -7,7 +7,6 @@
   mock-services,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   urllib3,
   requests-toolbelt,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pylxd";
   version = "2.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "canonica";

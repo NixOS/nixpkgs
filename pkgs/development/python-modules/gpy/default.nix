@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   numpy,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "gpy";
   version = "1.13.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SheffieldML";

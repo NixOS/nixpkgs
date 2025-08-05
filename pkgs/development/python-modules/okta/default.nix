@@ -16,7 +16,6 @@
   pytest-recording,
   pytestCheckHook,
   python-jose,
-  pythonOlder,
   pyyaml,
   setuptools,
   xmltodict,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "okta";
   version = "2.9.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

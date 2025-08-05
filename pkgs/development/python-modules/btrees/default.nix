@@ -7,15 +7,12 @@
   transaction,
   zope-testrunner,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "btrees";
   version = "6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

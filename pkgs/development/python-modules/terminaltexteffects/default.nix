@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "terminaltexteffects";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # no tests on pypi, no tags on github
   src = fetchPypi {

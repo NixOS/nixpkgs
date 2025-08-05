@@ -12,7 +12,6 @@
   networkx,
   pydot,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   regex,
   sarif-om,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "cfn-lint";
   version = "1.32.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";

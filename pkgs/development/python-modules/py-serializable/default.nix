@@ -6,7 +6,6 @@
   lxml,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   xmldiff,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "py-serializable";
   version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "madpah";

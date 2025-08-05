@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   makePythonPath,
-  pythonOlder,
   python,
   click,
   dbus-python,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "maestral";
   version = "1.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SamSchott";

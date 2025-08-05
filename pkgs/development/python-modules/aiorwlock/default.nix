@@ -5,15 +5,12 @@
   pytest-asyncio,
   pytestCheckHook,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiorwlock";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";

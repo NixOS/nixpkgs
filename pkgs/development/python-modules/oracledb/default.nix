@@ -4,7 +4,6 @@
   cryptography,
   cython,
   fetchPypi,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "oracledb";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -15,7 +15,6 @@
   protobuf,
   pyarrow,
   pydeck,
-  pythonOlder,
   setuptools,
   requests,
   rich,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "streamlit";
   version = "1.46.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

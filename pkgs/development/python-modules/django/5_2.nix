@@ -3,8 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   replaceVars,
 
   # build-system
@@ -45,8 +43,6 @@ buildPythonPackage rec {
   pname = "django";
   version = "5.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "django";

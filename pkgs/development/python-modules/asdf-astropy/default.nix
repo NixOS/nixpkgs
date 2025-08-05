@@ -11,7 +11,6 @@
   packaging,
   pytest-astropy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "asdf-astropy";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "astropy";

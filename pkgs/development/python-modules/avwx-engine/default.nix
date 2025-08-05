@@ -10,7 +10,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   rapidfuzz,
   scipy,
   shapely,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "avwx-engine";
   version = "1.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "avwx-rest";

@@ -9,7 +9,6 @@
   pybind11,
   wheel,
   pytestCheckHook,
-  pythonOlder,
   graphviz,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyhepmc";
   version = "2.14.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";

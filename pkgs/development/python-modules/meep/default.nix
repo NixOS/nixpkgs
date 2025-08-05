@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  pythonAtLeast,
   setuptools,
   autoreconfHook,
   pkg-config,
@@ -82,7 +82,7 @@ buildPythonPackage rec {
     autograd
     mpi4py
   ]
-  ++ lib.optionals (!pythonOlder "3.12") [
+  ++ lib.optionals (pythonAtLeast "3.12") [
     setuptools # used in python/visualization.py
     distutils
   ];

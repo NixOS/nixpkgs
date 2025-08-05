@@ -11,7 +11,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "sqlmodel";
   version = "0.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";

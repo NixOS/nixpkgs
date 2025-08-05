@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdiomask,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "subarulink";
   version = "0.7.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "G-Two";

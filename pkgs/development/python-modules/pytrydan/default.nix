@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   respx,
   rich,
   syrupy,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pytrydan";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dgomes";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   withCExtensions ? true,
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "cbor2";
   version = "5.6.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

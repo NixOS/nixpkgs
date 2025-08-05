@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   ipython,
   ipython-genutils,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ipython-sql";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

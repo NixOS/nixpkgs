@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   urwid,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "urwidgets";
   version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "AnonymouX47";

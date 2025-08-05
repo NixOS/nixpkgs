@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromBitbucket,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "defang";
   version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromBitbucket {
     owner = "johannestaas";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "dictdiffer";
   version = "0.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "inveniosoftware";

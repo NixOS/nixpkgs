@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cwlformat";
   version = "2022.02.18";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rabix";

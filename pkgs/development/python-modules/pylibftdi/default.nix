@@ -4,7 +4,6 @@
   fetchPypi,
   libftdi1,
   libusb1,
-  pythonOlder,
   poetry-core,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pylibftdi";
   version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

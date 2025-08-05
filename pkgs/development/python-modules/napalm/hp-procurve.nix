@@ -6,15 +6,12 @@
   netmiko,
   pip,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "napalm-hp-procurve";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napalm-automation-community";

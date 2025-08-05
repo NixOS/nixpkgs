@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   django,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "django-timezone-field";
   version = "7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mfogel";

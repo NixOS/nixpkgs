@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   sure,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "py-partiql-parser";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "getmoto";

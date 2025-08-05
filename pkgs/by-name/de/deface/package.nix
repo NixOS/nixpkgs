@@ -11,8 +11,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.5.0";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ORB-HD";
     repo = "deface";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "executing";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";

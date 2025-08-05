@@ -10,7 +10,6 @@
   marisa-trie,
   mwparserfromhell,
   numpy,
-  pythonOlder,
   scipy,
   setuptools,
   tqdm,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "wikipedia2vec";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wikipedia2vec";

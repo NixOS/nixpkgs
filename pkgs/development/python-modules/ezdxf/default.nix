@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pyparsing,
   typing-extensions,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "ezdxf";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mozman";

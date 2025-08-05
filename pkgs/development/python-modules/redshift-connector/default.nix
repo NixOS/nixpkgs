@@ -8,7 +8,6 @@
   packaging,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   scramp,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "redshift-connector";
   version = "2.1.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aws";

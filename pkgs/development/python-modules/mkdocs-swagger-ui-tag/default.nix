@@ -6,15 +6,12 @@
   mkdocs,
   pathspec,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
   version = "0.6.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Blueswen";

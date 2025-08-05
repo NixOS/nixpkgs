@@ -6,7 +6,6 @@
   gevent,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
   watchdog,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "watchdog-gevent";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";

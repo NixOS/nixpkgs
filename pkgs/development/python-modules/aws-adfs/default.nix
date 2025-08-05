@@ -11,7 +11,6 @@
   poetry-core,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-kerberos,
   toml,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "aws-adfs";
   version = "2.11.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "venth";

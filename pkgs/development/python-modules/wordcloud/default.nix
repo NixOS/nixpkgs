@@ -8,7 +8,6 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -23,8 +22,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

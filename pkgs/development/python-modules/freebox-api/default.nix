@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "freebox-api";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";

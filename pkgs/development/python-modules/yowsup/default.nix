@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
+  pythonAtLeast,
   isPy3k,
   fetchFromGitHub,
   setuptools,
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     python-axolotl
     six
   ]
-  ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
+  ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
   meta = {
     homepage = "https://github.com/tgalal/yowsup";

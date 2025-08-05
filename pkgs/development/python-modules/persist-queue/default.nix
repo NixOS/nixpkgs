@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   nose2,
   msgpack,
   cbor2,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-P/t0aQLTAj/QnrRol2Cf3ubHexZB8Z4vyNmNdEvfyEU=";
   };
-
-  disabled = pythonOlder "3.6";
 
   nativeCheckInputs = [
     nose2

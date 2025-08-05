@@ -9,7 +9,6 @@
   more-itertools,
   poetry-core,
   pprintpp,
-  pythonOlder,
   tbm-utils,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "audio-metadata";
   version = "0.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thebigmunch";

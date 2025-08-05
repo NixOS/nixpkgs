@@ -6,7 +6,6 @@
   eth-utils,
   hypothesis,
   pytestCheckHook,
-  pythonOlder,
   pydantic,
 }:
 
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "hexbytes";
   version = "1.3.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
