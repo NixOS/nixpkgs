@@ -1,14 +1,12 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
   gitUpdater,
-  wrapQtAppsHook,
   cmake,
-  marble,
   libsForQt5,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "zombietrackergps";
   version = "1.15";
 
@@ -21,20 +19,18 @@ mkDerivation rec {
     hash = "sha256-z/LFNRFdQQFxEWyAjcuGezRbTsv8z6Q6fK8NLjP4HNM=";
   };
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     marble.dev
-  ]
-  ++ (with libsForQt5; [
     qtbase
     qtcharts
     qtsvg
     qtwebengine
     ldutils
-  ]);
+  ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   preConfigure = ''
