@@ -49,6 +49,7 @@
         which
         coreutils
       ];
+      libraryPathName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     };
   } ./dotnet-fixup-hook.sh;
 }
