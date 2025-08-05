@@ -48,11 +48,6 @@ let
   nevpt2Src = stdenv.mkDerivation {
     pname = "nevpt2-src";
     version = "unstable";
-    phases = [
-      "unpackPhase"
-      "patchPhase"
-      "installPhase"
-    ];
     src = fetchFromGitHub {
       owner = "qcscine";
       repo = "nevpt2";

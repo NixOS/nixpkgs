@@ -139,11 +139,11 @@ let
 
       structuredConfigFromPatches = map (
         {
-          extraStructuredConfig ? { },
+          structuredExtraConfig ? { },
           ...
         }:
         {
-          settings = extraStructuredConfig;
+          settings = structuredExtraConfig;
         }
       ) kernelPatches;
 
