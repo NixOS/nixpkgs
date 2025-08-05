@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.3.6";
+  version = "9.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SZg/m33cQ0OpUyaUqRGN0hbXpgBSCiGEmkO2wmjsbK0=";
+    hash = "sha256-IfrimG13d6bwULkEbcnqsRhS8cmpl9zJAy8+zCJ4Sko=";
   };
 
   build-system = [
