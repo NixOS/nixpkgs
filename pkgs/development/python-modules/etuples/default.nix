@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "etuples";
-  version = "0.3.9";
+  version = "0.3.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pythological";
     repo = "etuples";
     tag = "v${version}";
-    hash = "sha256-dl+exar98PnqEiCNX+Ydllp7aohsAYrFtxb2Q1Lxx6Y=";
+    hash = "sha256-h5MLj1z3qZiUXcNIDtUIbV5zeyTzxerbSezFD5Q27n0=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python S-expression emulation using tuple-like objects";
     homepage = "https://github.com/pythological/etuples";
-    changelog = "https://github.com/pythological/etuples/releases/tag/v${version}";
+    changelog = "https://github.com/pythological/etuples/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Etjean ];
   };
