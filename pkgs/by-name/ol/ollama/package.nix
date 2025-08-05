@@ -122,7 +122,7 @@ goBuild (finalAttrs: {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fBoSt/chnxnlD6/HsWeMX9TR7Du7RCOmWcqCKamyK7A=";
+    hash = "sha256-po7BxJAj9eOpOaXsLDmw6/1RyjXPtXza0YUv0pVojZ0=";
     fetchSubmodules = true;
   };
 
