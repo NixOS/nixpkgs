@@ -25,12 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-OXi5FCLcfhseNDerwHdsVHF31Jy+ZSz2RU05vqPxQis=";
   };
 
-  postPatch = ''
-    # don't write to Nix store
-    substituteInPlace tests/conftest.py \
-      --replace-fail 'if WORKER == "none":' "if False:"
-  '';
-
   build-system = [ setuptools ];
 
   optional-dependencies = {
