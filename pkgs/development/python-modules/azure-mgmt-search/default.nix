@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
-  version = "9.1.0";
+  version = "9.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U7xu6tsJdNIfEguyG7Xmgn321lDhc0dGD9g+LWiINZk=";
+    hash = "sha256-oNoOwzLR9D0PastjuM/YAIWwdeka/PgS+MdprZ/crYQ=";
   };
 
   propagatedBuildInputs = [
