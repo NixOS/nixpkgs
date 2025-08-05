@@ -91,21 +91,21 @@ let
     owner = "ibis-project";
     repo = "testing-data";
     # https://github.com/ibis-project/ibis/blob/10.5.0/nix/overlay.nix#L94-L100
-    rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
+    tag = version;
     hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "10.5.0";
+  version = "10.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
     tag = version;
-    hash = "sha256-KJPl5bkD/tQlHY2k0b9zok5YCPekaXw7Y9z8P4AD3FQ=";
+    hash = "sha256-Uuqm9Exu/oK3BGBL4ViUOGArMWhVutUn1gFRj1I4vt4=";
   };
 
   build-system = [
@@ -353,7 +353,7 @@ buildPythonPackage rec {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/blob/${src.tag}/docs/release_notes.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cpcloud
