@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-29/CC2yq+OXXpXC7G0Kia5pvjYI06R9cZfTb/gwOT1A=";
+    hash = "sha256-lwG7LBoV6y6AdMsuKMoAfGm5+lKWG4O5jHV+rWuA3u8=";
   };
 
   postPatch = ''
