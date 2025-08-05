@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hijri-converter";
-  version = "2.3.1";
+  version = "2.3.2.post1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BptniSkeCDD0hgp53NNPs87qO5VRbtQBAgK5ZWuhq2E=";
+    hash = "sha256-mGZXzNg6W+ryM85aIZZFdH6IXEXUgzvSqPobkn+jlXA=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
