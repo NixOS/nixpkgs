@@ -33,12 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-qqe/h633uEbJPpdsuCzZKW86Z6BQUmPdCju1vg7OLXc=";
   };
 
-  outputs = [
-    "out"
-    "doc"
-  ];
-
-  build-system = [ poetry-core ] ++ optional-dependencies.docs;
+  build-system = [ poetry-core ];
 
   optional-dependencies = {
     docs = [
