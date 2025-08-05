@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   patches = [
     (replaceVars ./clang.patch {
       clang = lib.getExe llvmPackages.clang;
-      libclang = "${lib.getLib llvmPackages.libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libclang_lib_dir = "${lib.getLib llvmPackages.libclang}/lib";
     })
   ];
 
@@ -95,15 +95,6 @@ python3Packages.buildPythonApplication rec {
     # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
     "test_index"
   ];
-
-  # Hardcode libclang paths
-  postPatch = ''
-    substituteInPlace hotdoc/extensions/c/c_extension.py \
-      --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
-  '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
   preCheck = ''
