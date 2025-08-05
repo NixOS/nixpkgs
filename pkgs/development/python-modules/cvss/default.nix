@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cvss";
-  version = "3.4";
+  version = "3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = "cvss";
     tag = "v${version}";
-    hash = "sha256-g6+ccoIgqs7gZPrTuKm3em+PzLvpupb9JXOGMqf2Uv0=";
+    hash = "sha256-udUs76wfvC9LfjlKyWmuPV0RT2P/COTwYw3hgDt3tPs=";
   };
 
   build-system = [ setuptools ];
