@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ipyniivue";
-  version = "2.1.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niivue";
     repo = "ipyniivue";
-    rev = "v${version}";
-    hash = "sha256-rgScBBJ0Jqr5REZ+YFJcKwWcV33RzJ/sn6RqTL/limo=";
+    tag = "v${version}";
+    hash = "sha256-APxxYflEYcjQGloLvdOGMlOnOL/0ttGVvTCLEMqp1W0=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Show a nifti image in a webgl 2.0 canvas within a jupyter notebook cell";
     homepage = "https://github.com/niivue/ipyniivue";
-    changelog = "https://github.com/niivue/ipyniivue/releases/tag/${version}";
+    changelog = "https://github.com/niivue/ipyniivue/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
