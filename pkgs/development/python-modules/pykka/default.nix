@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.1.1";
+  version = "4.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jodal";
     repo = "pykka";
     tag = "v${version}";
-    hash = "sha256-n9TgXcmUEIQdqtrY+9T+EtPys+7OzXCemRwNPj1xPDw=";
+    hash = "sha256-cxW6xKG0x7pPXvCanh0ZNMYRSdnCf8JrnJbjYgDUQSI=";
   };
 
   build-system = [ poetry-core ];
