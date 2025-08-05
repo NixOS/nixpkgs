@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "fnvhash";
-  version = "0.1.0";
+  version = "0.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "znerol";
     repo = "py-fnvhash";
-    rev = "v${version}";
-    sha256 = "00h8i70qd3dpsyf2dp7fkcb9m2prd6m3l33qv3wf6idpnqgjz6fq";
+    tag = "v${version}";
+    sha256 = "sha256-vAflKSvi0PD5r1q6GCTt6a4vTCsdBIebecRCKbbBphE=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
