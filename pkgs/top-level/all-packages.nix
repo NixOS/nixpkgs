@@ -10224,7 +10224,6 @@ with pkgs;
     (callPackages ../servers/mpd {
     })
     mpd
-    mpd-small
     mpdWithFeatures
     ;
 
