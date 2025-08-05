@@ -1600,7 +1600,6 @@ dont-distribute-packages:
  - hs-ix
  - hs-profunctors
  - hs-sdl-term-emulator
- - hs-tree-sitter
  - hs2ats
  - hs2dot
  - Hs2lib

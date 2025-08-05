@@ -424,6 +424,14 @@ builtins.intersectAttrs super {
   hasql-pool = dontCheck super.hasql-pool;
   hasql-transaction = dontCheck super.hasql-transaction;
 
+  # Test dependency tree-sitter-while is not uploaded to Hackage,
+  # so cabal2nix automatically marks it as broken
+  hs-tree-sitter-capi = lib.pipe super.hs-tree-sitter-capi [
+    dontCheck
+    doDistribute
+    unmarkBroken
+  ];
+
   # Avoid compiling twice by providing executable as a separate output (with small closure size),
   postgres-websockets = lib.pipe super.postgres-websockets [
     enableSeparateBinOutput
