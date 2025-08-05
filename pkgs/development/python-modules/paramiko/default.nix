@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "3.5.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ssZlvEWyshW9fX8DmQGxSwZ9oA86EeZkCZX9WPJmSCI=";
+    hash = "sha256-aiXwezgMycmojSuSCtNxZ6xGZ/jZiGzOvY+Q9lS11p8=";
   };
 
   patches = [
