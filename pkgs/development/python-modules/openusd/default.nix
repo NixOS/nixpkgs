@@ -51,14 +51,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.05.01";
+  version = "25.08";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
+    hash = "sha256-k+rmC/e8fJexZ++AAinuDJFOK/oqC90B4NriJvaX71w=";
   };
 
   stdenv = python.stdenv;
