@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "mezzanine";
-  version = "6.0.0";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7" || isPyPy;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Mezzanine";
     inherit version;
-    hash = "sha256-R/PB4PFQpVp6jnCasyPszgC294SKjLzq2oMkR2qV86s=";
+    hash = "sha256-RZ/9ltvZUz1eXxeaVqS9ZE69+a9XWt6fxMcss+yTVP4=";
   };
 
   buildInputs = [
