@@ -175,6 +175,8 @@ in
       # here we should use the default strongswan ipsec.secrets and
       # append to it (default one is empty so not a pb for now)
       environment.etc."ipsec.secrets".text = ipsecSecrets cfg.secrets;
+       # some environments like NetworkManager will be looking in /etc/strongswan.conf regardless of what the environment variable is
+      environment.etc."strongswan.conf".source = config.systemd.services.strongswan.environment.STRONGSWAN_CONF;
 
       systemd.services.strongswan = {
         description = "strongSwan IPSec Service";
