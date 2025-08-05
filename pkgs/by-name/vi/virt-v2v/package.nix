@@ -24,6 +24,7 @@
   withWindowsGuestSupport ? true,
   pkgsCross, # for rsrvany
   virtio-win,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -93,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/libguestfs/guestfs-tools";
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = {
     homepage = "https://github.com/libguestfs/virt-v2v";
