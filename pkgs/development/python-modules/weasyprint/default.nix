@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "65.1";
+  version = "66.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "Kozea";
     repo = "WeasyPrint";
     tag = "v${version}";
-    hash = "sha256-iSeuRX1dnnrGZbcb1yTxOJPD5kgIWY6oz/0v02QJqSs=";
+    hash = "sha256-wmEDVEbikBpOQ5394IBPWQRjWZOLfMzEGxTtq4tt2Tw=";
   };
 
   patches = [
@@ -108,7 +108,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/v${version}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${src.tag}";
     description = "Converts web documents to PDF";
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
