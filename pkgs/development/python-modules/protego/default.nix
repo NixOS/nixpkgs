@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "protego";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = "protego";
     tag = version;
-    hash = "sha256-2vyETqRYeof5CzOCXCGUYb5vSyV/eT5+lm2GNWiuaF0=";
+    hash = "sha256-70/DPap3FgLfh4ldYSve5Pt8o7gM1lME/OmRFaew/38=";
   };
 
   build-system = [ setuptools ];
