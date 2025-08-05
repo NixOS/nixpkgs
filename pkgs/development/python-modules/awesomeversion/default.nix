@@ -3,7 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  poetry-core,
+  hatchling,
+  pytest-codspeed,
   pytest-snapshot,
   pytestCheckHook,
 }:
@@ -28,11 +29,12 @@ buildPythonPackage rec {
       --replace-fail 'version = "0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ hatchling ];
 
   pythonImportsCheck = [ "awesomeversion" ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-snapshot
     pytestCheckHook
   ];
