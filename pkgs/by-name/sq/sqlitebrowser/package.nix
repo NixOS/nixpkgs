@@ -3,11 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qttools,
+  qt5,
   sqlcipher,
-  wrapQtAppsHook,
-  qtmacextras,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,15 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
   # -qt4 or -qt5 prefix while others do not.
   # We *really* should get that cleaned up.
   buildInputs = [
-    qtbase
+    qt5.qtbase
     sqlcipher
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
+  ++ lib.optional stdenv.hostPlatform.isDarwin qt5.qtmacextras;
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [
