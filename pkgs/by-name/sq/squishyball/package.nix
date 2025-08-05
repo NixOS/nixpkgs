@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation {
   pname = "squishyball";
-  version = "unstable-2020-11-23";
+  version = "unstable-2021-01-05";
 
   src = fetchFromGitLab {
     domain = "gitlab.xiph.org";
     owner = "xiph";
     repo = "squishyball";
-    rev = "27590fe6bac545e2dd3eacf048edbd969682263a";
-    sha256 = "07zs8wx1ahf3q505fk9b6cgzlkhnayfsscch46yy9s1wgxgphj7s";
+    rev = "d3525c015abf123d55a7a209a40976538be9d402";
+    hash = "sha256-2tzfTPwfC/FE+nsXIkIyHSKXNkGwVPfERkFW83py1Dk=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     cp squishyball.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to perform sample comparison testing on the command line";
     longDescription = ''
       squishyball is a simple command-line utility for performing
@@ -72,9 +72,9 @@ stdenv.mkDerivation {
       mode of operation.
     '';
     homepage = "https://gitlab.xiph.org/xiph/squishyball";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ michalrus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ michalrus ];
+    platforms = lib.platforms.linux;
     mainProgram = "squishyball";
   };
 }
