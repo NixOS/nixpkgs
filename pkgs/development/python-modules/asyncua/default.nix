@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.1.5";
+  version = "1.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     tag = "v${version}";
-    hash = "sha256-XXjzYDOEBdA4uk0VCzscHrPCY2Lgin0JBAVDdxmSOio=";
+    hash = "sha256-GxjEbzPvley0EL7xuZWr1jzR9Lpui1fVL2FOWnRL34Q=";
     fetchSubmodules = true;
   };
 
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "OPC UA / IEC 62541 Client and Server for Python";
     homepage = "https://github.com/FreeOpcUa/opcua-asyncio";
-    changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/v${version}";
+    changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/${src.tag}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ harvidsen ];
   };
