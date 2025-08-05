@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  attrs,
+  hatch-vcs,
   pytest-benchmark,
   pytestCheckHook,
-  setuptools-scm,
-  six,
+  setuptools,
 }:
 
 let
@@ -20,11 +19,9 @@ let
       hash = "sha256-ABdZGlR3Bm6Q0msOaW3cFDuq/Ye1iM+sgQC8a+ljTeA=";
     };
 
-    nativeBuildInputs = [ setuptools-scm ];
-
-    propagatedBuildInputs = [
-      six
-      attrs
+    build-system = [
+      setuptools
+      hatch-vcs
     ];
 
     nativeCheckInputs = [
