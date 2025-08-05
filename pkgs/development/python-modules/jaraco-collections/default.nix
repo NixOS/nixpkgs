@@ -20,8 +20,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # break dependency cycle
-    sed -i "/'jaraco.text',/d" setup.cfg
+    sed -i "/coherent\.licensed/d" pyproject.toml
   '';
 
   build-system = [
