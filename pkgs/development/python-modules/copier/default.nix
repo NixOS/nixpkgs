@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "copier";
-  version = "9.6.0";
+  version = "9.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-mezmXrOvfqbZGZadNZklQZt/OEKqRYnwugNkZc88t6o=";
+    hash = "sha256-pLGWAYlh3JKicOrKPB9PRzz46RyzyERN2aUI+tjdh9g=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
-    changelog = "https://github.com/copier-org/copier/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/copier-org/copier/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ greg ];
     mainProgram = "copier";
