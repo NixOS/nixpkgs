@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cyDcTPjY1am0yIo0O+k4NdoYdW4FMI01NlVL4MooiaU=";
+    hash = "sha256-kRqQCYBzLlCbhuBEP+O9zuSAdgpGDg9wLzYFZaIPOIg=";
   };
 
   build-system = [ setuptools ];
