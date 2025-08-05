@@ -6,7 +6,7 @@
   catch2_3,
   cmake,
   ninja,
-  fmt_11,
+  fmt,
   mimalloc,
   python3,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     mimalloc
     # though only used in tests, cmake will complain its absence when configuring
     catch2_3

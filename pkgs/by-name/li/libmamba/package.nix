@@ -3,7 +3,7 @@
   lib,
   stdenv,
   cmake,
-  fmt_11,
+  fmt,
   spdlog,
   tl-expected,
   nlohmann_json,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fmt_11
+    fmt
     spdlog
     tl-expected
     nlohmann_json
