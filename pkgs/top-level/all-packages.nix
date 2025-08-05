@@ -10218,14 +10218,6 @@ with pkgs;
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
-  inherit
-    (callPackages ../servers/mpd {
-    })
-    mpd
-    mpd-small
-    mpdWithFeatures
-    ;
-
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
 
   moodle = callPackage ../servers/web-apps/moodle { };

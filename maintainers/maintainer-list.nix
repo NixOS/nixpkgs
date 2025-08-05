@@ -20460,6 +20460,12 @@
     github = "provokateurin";
     githubId = 26026535;
   };
+  ProxyVT = {
+    email = "tikit.us@outlook.com";
+    github = "ProxyVT";
+    githubId = 86965169;
+    name = "Ulad Tiknyus";
+  };
   prrlvr = {
     email = "po@prrlvr.fr";
     github = "prrlvr";
