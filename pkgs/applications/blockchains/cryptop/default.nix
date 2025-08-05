@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/huwwp/cryptop";
     description = "Command line Cryptocurrency Portfolio";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bhipple ];
     mainProgram = "cryptop";
   };
