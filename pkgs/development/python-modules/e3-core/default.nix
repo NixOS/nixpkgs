@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.6.0";
+  version = "22.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "AdaCore";
     repo = "e3-core";
     tag = "v${version}";
-    hash = "sha256-6rClGDo8KhBbOg/Rw0nVISVtOAACf5cwSafNInlBGCw=";
+    hash = "sha256-LHWtgIvbS1PaF85aOpdhR0rWQGRUtbY0Qg1SZxQOsSc=";
   };
 
   build-system = [ setuptools ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/AdaCore/e3-core/releases/tag/v${version}";
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.tag}";
     homepage = "https://github.com/AdaCore/e3-core/";
     description = "Core framework for developing portable automated build systems";
     license = licenses.gpl3Only;
