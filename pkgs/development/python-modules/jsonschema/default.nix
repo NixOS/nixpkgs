@@ -7,6 +7,7 @@
   hatch-vcs,
   hatchling,
   importlib-resources,
+  jsonpath-ng,
   jsonschema-specifications,
   pkgutil-resolve-name,
   pip,
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   dependencies = [
     attrs
+    jsonpath-ng
     jsonschema-specifications
     referencing
     rpds-py
