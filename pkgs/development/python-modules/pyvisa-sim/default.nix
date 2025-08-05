@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-sim";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyVISA-sim";
     inherit version;
-    hash = "sha256-kHahaRKoEUtDxEsdMolPwfEy1DidiytxmvYiQeQhYcE=";
+    hash = "sha256-fVpnLKSK25SL5hbwYSuFMrHu5mSvZ8Gt8Qv/Tjv7+NA=";
   };
 
   nativeBuildInputs = [
