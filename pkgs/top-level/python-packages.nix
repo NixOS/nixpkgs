@@ -16510,6 +16510,8 @@ self: super: with self; {
 
   siphashc = callPackage ../development/python-modules/siphashc { };
 
+  sipsimple = callPackage ../development/python-modules/sipsimple { };
+
   sipyco = callPackage ../development/python-modules/sipyco { };
 
   sirius = toPythonModule (
