@@ -9,14 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.7";
+  version = "0.9.8";
   format = "setuptools";
   pname = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k7GOk5M3akURT5QJ18yhGftvT5o31LaXtQCvSLTFzw8=";
+    hash = "sha256-opbvR9jVpbXXtRjBE+ZQx9tuR2M7ManKgUU81I+vmAM=";
   };
 
   # requires special test data:
