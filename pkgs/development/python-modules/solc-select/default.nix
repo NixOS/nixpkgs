@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "solc-select";
-  version = "1.0.4";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-23ud4AmvbeOlQWuAu+W21ja/MUcDwBYxm4wSMeJIpsc=";
+    hash = "sha256-lPtvl2q1D/zMV1fVvq92QXsny+FUNs/iswzbg49cdRY=";
   };
 
   propagatedBuildInputs = [
