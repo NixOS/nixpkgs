@@ -11580,8 +11580,6 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  zombietrackergps = callPackage ../applications/gis/zombietrackergps { };
-
   ### APPLICATIONS
 
   _2bwm = callPackage ../applications/window-managers/2bwm {
