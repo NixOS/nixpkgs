@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.18.15";
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
     tag = version;
-    hash = "sha256-FUnD5JVS816XQYqXGSDnypqcYuKVhEeFIFcENf8BkcU=";
+    hash = "sha256-me62VPjKU+vh0vo4Fl86sEse1QZYD2zDpxchSiUcxTY=";
   };
 
   build-system = [ setuptools ];
