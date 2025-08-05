@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "gitingest";
-  version = "0.1.5";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyclotruc";
     repo = "gitingest";
     tag = "v${version}";
-    hash = "sha256-f/srwLhTXboSlW28qnShqTuc2yLMuHH3MyzfKpDIitQ=";
+    hash = "sha256-drsncGneZyOCC2GJbrDM+bf4QGI2luacxMhrmdk03l4=";
   };
 
   build-system = [
