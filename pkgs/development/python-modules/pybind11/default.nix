@@ -29,14 +29,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "3.0.0";
+  version = "2.13.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
     tag = "v${version}";
-    hash = "sha256-uyeBTZL38kXIoNxZBWcMRx046+tVJ4ZmCOwGz+D2XJA=";
+    hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
 
   build-system = [
@@ -103,7 +103,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
-    changelog = "https://github.com/pybind/pybind11/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
     mainProgram = "pybind11-config";
     longDescription = ''
