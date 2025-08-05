@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.2.5";
+  version = "3.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "graphql-core";
     tag = "v${version}";
-    hash = "sha256-xZOiQOFWnImDXuvHP9V6BDjIZwlwHSxN/os+UYV4A0M=";
+    hash = "sha256-RkVyoTSVmtKhs42IK+oOrOL4uBs3As3N5KY0Sz1VaDQ=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "graphql" ];
 
   meta = with lib; {
-    changelog = "https://github.com/graphql-python/graphql-core/releases/tag/v${version}";
+    changelog = "https://github.com/graphql-python/graphql-core/releases/tag/${src.tag}";
     description = "Port of graphql-js to Python";
     homepage = "https://github.com/graphql-python/graphql-core";
     license = licenses.mit;
