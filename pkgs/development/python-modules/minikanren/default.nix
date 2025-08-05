@@ -12,7 +12,7 @@
   pytest-html,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "minikanren";
   version = "1.0.5";
   format = "setuptools";
@@ -48,7 +48,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Relational programming in Python";
     homepage = "https://github.com/pythological/kanren";
-    changelog = "https://github.com/pythological/kanren/releases";
+    changelog = "https://github.com/pythological/kanren/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Etjean ];
   };
