@@ -41,14 +41,14 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "9.0.1";
+  version = "9.0.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-3VurTHOM7FMRJzmQ5tBmW4E0mw7hePCnff0vhxPsKfE=";
+    hash = "sha256-UjYi7+UAKvdz5FuElYGLfTYQD/E0vS1TJkUyPfUq7YA=";
   };
 
   vendorHash = "sha256-7R42Aa04wCba90xLTX2p6oNX58OpfDDKegqwDw3Ycbk=";
