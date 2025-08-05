@@ -4,7 +4,7 @@
   buildPythonPackage,
   build,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   pep517,
   pip,
   pytest-xdist,
@@ -19,14 +19,16 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.4.1";
+  version = "7.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hkgm9Qc4ZEUOJNvuuFzjkgzfsJhIo9aev1N7Uh8UvMk=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "pip-tools";
+    tag = "v${version}";
+    hash = "sha256-F2SuuY2tN0HEbkWMBdGVuWBwu2onOdMDcWLal8jke2s=";
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
@@ -82,6 +84,15 @@ buildPythonPackage rec {
     "test_no_candidates"
     "test_no_candidates_pre"
     "test_failure_of_legacy_resolver_prompts_for_backtracking"
+
+    # ValueError: I/O operation on closed file.
+    "test_indentation"
+
+    # unexpected warnings due to legacy resolver deprecation
+    "test_show_warning_on_default_strip_extras_option"
+
+    # generator fails to yield
+    "test_compile_build_targets_setuptools_no_wheel_dep"
   ];
 
   pythonImportsCheck = [ "piptools" ];
