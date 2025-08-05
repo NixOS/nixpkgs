@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-4WCsaprtAvrKFbPCa1bZJzT0Fo5F9sMYT2A+bolEmwk=";
+    hash = "sha256-GQVd81PHtAY9nr+YSVQli91AxbXSQFH0IALcZBMiu5o=";
   };
 
   postPatch = ''
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Lightning-AI/utilities/releases/tag/v${version}";
+    changelog = "https://github.com/Lightning-AI/utilities/releases/tag/${src.tag}";
     description = "Common Python utilities and GitHub Actions in Lightning Ecosystem";
     homepage = "https://github.com/Lightning-AI/utilities";
     license = lib.licenses.asl20;
