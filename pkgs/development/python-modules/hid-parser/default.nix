@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "hid-parser";
-  version = "0.0.3";
+  version = "0.1.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zbm+h+ieDmd1K0uH+9B8EWtYScxqYJXVpY9bXdBivA4=";
+    hash = "sha256-5+lt18kXcs8t5SjhIAxA5XHZpSd/9ObgT+gtzhvl25k=";
   };
 
   nativeBuildInputs = [ setuptools ];
