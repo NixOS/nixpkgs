@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "argon2-cffi-bindings";
-  version = "21.2.0";
+  version = "25.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb89ceffa6c791807d1305ceb77dbfacc5aa499891d2c55661c6459651fc39e3";
+    sha256 = "sha256-uVfz5upNVdgg5A/3b0UJUoBwE9Nhpl1/KKzArL8pIp0=";
   };
 
   buildInputs = [ libargon2 ];
