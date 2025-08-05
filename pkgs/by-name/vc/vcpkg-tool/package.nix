@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
 
-  passthru.tests = {
+  passthru.tests = lib.optionalAttrs doWrap {
     testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
       export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
       export VCPKG_ROOT=.
