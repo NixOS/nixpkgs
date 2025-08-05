@@ -29,7 +29,7 @@
 }:
 buildPythonPackage rec {
   pname = "nixpkgs-updaters-library";
-  version = "1.2.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "PerchunPak";
     repo = "nixpkgs-updaters-library";
     tag = "v${version}";
-    hash = "sha256-MCMqqAGl6OTOapC3K0DNTOmg2Lv2KqXenEgB5sIZR5U=";
+    hash = "sha256-0N88valEw+QElMjy84TBKGuqqh9anKhHdW0jQfQ4qd4=";
   };
 
   postPatch = ''
@@ -74,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Boilerplate-less updater library for Nixpkgs ecosystems";
     homepage = "https://github.com/PerchunPak/nixpkgs-updaters-library";
-    changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ perchun ];
   };
