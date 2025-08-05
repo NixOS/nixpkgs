@@ -19,7 +19,6 @@
   vmopts ? null,
   glibcLocales,
 }:
-
 {
   pname,
   product,
@@ -37,13 +36,11 @@
   extraBuildInputs ? [ ],
   ...
 }@args:
-
 let
   loName = lib.toLower productShort;
   hiName = lib.toUpper productShort;
   vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
 in
-
 with stdenv;
 lib.makeOverridable mkDerivation (
   rec {
@@ -94,14 +91,14 @@ lib.makeOverridable mkDerivation (
         fi
       fi
       echo -Djna.library.path=${
-        lib.makeLibraryPath ([
+        lib.makeLibraryPath [
           libsecret
           e2fsprogs
           libnotify
           # Required for Help -> Collect Logs
           # in at least rider and goland
           udev
-        ])
+        ]
       } >> $vmopts_file
     '';
 
