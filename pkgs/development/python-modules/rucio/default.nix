@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "rucio";
-  version = "32.8.6";
+  version = "37.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-VQQ4gy9occism1WDrlcHnB7b7D5/G68wKct2PhD59FA=";
+    hash = "sha256-PZ6g/ILs1ed+lxcH2GyV1YJyJqLgYb5/xQ31OXiXnBU=";
   };
 
   pythonRelaxDeps = [
@@ -107,7 +107,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tool for Scientific Data Management";
     homepage = "http://rucio.cern.ch/";
-    changelog = "https://github.com/rucio/rucio/releases/tag/${version}";
+    changelog = "https://github.com/rucio/rucio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
