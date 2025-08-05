@@ -1,0 +1,12 @@
+diff --git i/cmake/CMakeLists.txt w/cmake/CMakeLists.txt
+index af28df300..34561da6b 100644
+--- i/cmake/CMakeLists.txt
++++ w/cmake/CMakeLists.txt
+@@ -310,7 +310,6 @@ else()
+     # @todo review this, shouldn't this be all possible header-only now?
+     # ... or rewritten using C++17 features?
+     set(BOOST_COMPONENTS
+-        system
+         program_options
+         regex
+         thread
