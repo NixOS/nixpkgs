@@ -23,7 +23,7 @@
 let
   version = "2025.8.2";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "imagecodecs";
   inherit version;
   pyproject = true;
