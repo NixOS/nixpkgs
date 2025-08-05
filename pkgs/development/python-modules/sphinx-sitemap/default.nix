@@ -12,7 +12,7 @@ let
   pname = "sphinx-sitemap";
   version = "2.7.2";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   inherit pname version;
   pyproject = true;
 
