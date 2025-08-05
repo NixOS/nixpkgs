@@ -1,8 +1,8 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
   stdenv,
-  python,
   systemd,
   pandoc,
   kmod,
@@ -15,13 +15,6 @@
   libseccomp,
   replaceVars,
   udevCheckHook,
-
-  # Python packages
-  setuptools,
-  setuptools-scm,
-  wheel,
-  buildPythonApplication,
-  pytestCheckHook,
 
   # Optional dependencies
   withQemu ? false,
@@ -46,7 +39,7 @@ let
     withKernelInstall = true;
   };
 
-  pythonWithPefile = python.withPackages (ps: [ ps.pefile ]);
+  pythonWithPefile = python3Packages.python.withPackages (ps: [ ps.pefile ]);
 
   deps = [
     bash
@@ -63,7 +56,7 @@ let
     qemu
   ];
 in
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mkosi";
   version = "25.3-unstable-2025-04-01";
   format = "pyproject";
@@ -106,9 +99,9 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     pandoc
-    setuptools
-    setuptools-scm
-    wheel
+    python3Packages.setuptools
+    python3Packages.setuptools-scm
+    python3Packages.wheel
     udevCheckHook
   ];
 
@@ -119,7 +112,7 @@ buildPythonApplication rec {
   '';
 
   checkInputs = [
-    pytestCheckHook
+    python3Packages.pytestCheckHook
   ];
 
   postInstall = ''
