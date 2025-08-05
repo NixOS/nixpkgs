@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.18.1";
+  version = "9.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mYA18XqMH7p64msYPcp5fc+V24baan7LpW0xr8QPB8c=";
+    hash = "sha256-dk0vck6slPa/mQPk/q4HESZDqe/P3FyGjBtpvUjFLgk=";
   };
 
   build-system = [ hatchling ];
