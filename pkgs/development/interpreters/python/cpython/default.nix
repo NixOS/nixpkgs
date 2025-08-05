@@ -213,9 +213,11 @@ let
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
     autoreconfHook
   ]
-  ++ optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps) [
-    pkg-config
-  ]
+  ++
+    optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
+      [
+        pkg-config
+      ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonOnBuildForHost
