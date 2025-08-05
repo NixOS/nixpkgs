@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.45.0";
+  version = "0.45.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/8ENTQmQFRT0CNx09gpNffIcROvJv3dslHv9xzWUIc8=";
+    hash = "sha256-0PyBqIKO2/QwhDKzBAvwa7JrrZWruefUaQthGFUeduw=";
   };
   patches = [
     (fetchurl {
