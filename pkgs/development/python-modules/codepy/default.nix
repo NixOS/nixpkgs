@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "codepy";
-  version = "2019.1";
+  version = "2025.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "codepy";
-    rev = "v${version}";
-    hash = "sha256-viMfB/nDrvDA/IGRZEX+yXylxbbmqbh/fgdYXBzK0zM=";
+    tag = "v${version}";
+    hash = "sha256-PHIC3q9jQlRRoUoemVtyrl5hcZXMX28gRkI5Xpk9yBY=";
   };
 
   buildInputs = [
