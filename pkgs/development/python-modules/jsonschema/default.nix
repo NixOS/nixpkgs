@@ -7,6 +7,7 @@
   hatch-vcs,
   hatchling,
   importlib-resources,
+  jsonpath-ng,
   jsonschema-specifications,
   pkgutil-resolve-name,
   pip,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.23.0";
+  version = "4.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1xSX/vJjUaMyZTN/p3/+uCQj8+ohKDzZRnuwOZkma8Q=";
+    hash = "sha256-5jrPXBF2LA5mcv+2FIK99X8IdmhNjSScD+LXMNSLxV8=";
   };
 
   postPatch = ''
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   dependencies = [
     attrs
+    jsonpath-ng
     jsonschema-specifications
     referencing
     rpds-py
