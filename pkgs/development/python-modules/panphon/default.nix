@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "panphon";
-  version = "0.22.0";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iSdCZjzeZhxsrkaRYHpg60evmo9g09a9Fwr0I5WWd1A=";
+    hash = "sha256-OD1HfVh/66HKWoKHjiT+d8FkXW++ngHJ6X1JjYopujU=";
   };
 
   build-system = [ setuptools ];
