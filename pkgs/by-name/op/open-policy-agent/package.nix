@@ -61,6 +61,9 @@ buildGoModule (finalAttrs: {
         # Skip tests that require network, not available in the darwin sandbox
         "TestHTTPSClient"
         "TestHTTPSNoClientCerts"
+        "TestSocketHTTPGetRequest"
+
+        "TestBenchMainWithBundleRegoVersion"
       ]
       ++ lib.optionals (!enableWasmEval) [
         "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
