@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  attrs,
   buildPythonPackage,
-  colorama,
   fetchPypi,
   glibcLocales,
   gnureadline,
@@ -12,6 +10,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  rich-argparse,
   setuptools-scm,
   wcwidth,
 }:
@@ -31,9 +30,8 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    attrs
-    colorama
     pyperclip
+    rich-argparse
     wcwidth
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
