@@ -11580,7 +11580,7 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
+  zombietrackergps = callPackage ../applications/gis/zombietrackergps { };
 
   ### APPLICATIONS
 
