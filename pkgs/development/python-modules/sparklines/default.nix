@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sparklines";
-  version = "0.5.0";
+  version = "0.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deeplook";
     repo = "sparklines";
     tag = "v${version}";
-    sha256 = "sha256-oit1bDqP96wwfTRCV8V0N9P/+pkdW2WYOWT6u3lb4Xs=";
+    sha256 = "sha256-jiMrxZMWN+moap0bDH+uy66gF4XdGst9HJpnboJrQm4=";
   };
 
   propagatedBuildInputs = [ future ];
