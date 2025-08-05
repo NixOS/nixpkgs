@@ -1,0 +1,31 @@
+name: Merge Group
+
+on:
+  merge_group:
+
+permissions: {}
+
+jobs:
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
+    with:
+      mergedSha: ${{ github.event.merge_group.head_sha }}
+      targetSha: ${{ github.event.merge_group.base_sha }}
+
+  # This job's only purpose is to serve as a target for the "Required Status Checks" branch ruleset.
+  # It "needs" all the jobs that should block the Merge Queue.
+  # If they pass, it is skipped — which counts as "success" for purposes of the branch ruleset.
+  # However, if any of them fail, this job will also fail — thus blocking the branch ruleset.
+  no-pr-failures:
+    # Modify this list to add or remove jobs from required status checks.
+    needs:
+      - lint
+    # WARNING:
+    # Do NOT change the name of this job, otherwise the rule will not catch it anymore.
+    # This would prevent all PRs from passing the merge queue.
+    name: no PR failures
+    if: ${{ failure() }}
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - run: exit 1
