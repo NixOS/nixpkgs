@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.6.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-SWecaXiXp8DSOLVWzgPsbL7UGCtTBfNXYmuDQGdyqbQ=";
+    hash = "sha256-n7ZKTBXg66firbS34J41NrTM/PL/OrKMnS4iguRz4Ho=";
   };
 
   build-system = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       marenz
