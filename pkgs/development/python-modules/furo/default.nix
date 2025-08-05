@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2024.8.6";
+  version = "2025.7.19";
   format = "wheel";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-bNl8WLR4E9NhnmPpCBFpiA++Mx8MqIPIcf8fPxGBT1w=";
+    hash = "sha256-veqGmCLf0rSU6oTAlzk3410Vda8Ii2chopx/eHityeM=";
   };
 
   pythonRelaxDeps = [ "sphinx" ];
