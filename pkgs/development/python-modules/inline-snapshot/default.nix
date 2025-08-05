@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.23.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-UiVxG9W1lwvvoflVey4250iL8gL8Tm41LBo0ab0tTqk=";
+    hash = "sha256-gsMMcheYb5TfjQoRtmraQO6LUnf3rkUgJeXdZ3bmjI0=";
   };
 
   build-system = [ hatchling ];
