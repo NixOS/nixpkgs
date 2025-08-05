@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "azure-kusto-ingest";
-  version = "4.6.3";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "azure-kusto-python";
     tag = "v${version}";
-    hash = "sha256-VndOEvSi4OMf/yAjNl34X9IFF0T+wNfjlPW8NfdrwUo=";
+    hash = "sha256-DEHTxSvc6AeBMEJuAiDavFj2xVfPmWKpZBaZcpHWHak=";
   };
 
   sourceRoot = "${src.name}/${pname}";
