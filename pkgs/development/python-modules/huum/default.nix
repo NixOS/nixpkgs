@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "huum";
-  version = "0.7.12";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "frwickst";
     repo = "pyhuum";
     tag = version;
-    hash = "sha256-IyPsRtVaxsI9Y0BpzKCSsc2oAqdGQI92UqxaRGpGmak=";
+    hash = "sha256-8wldXJAdo1PK4bKX0rKJjNwwTS5FSgr9RcwiyVhESb8=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Huum saunas";
     homepage = "https://github.com/frwickst/pyhuum";
-    changelog = "https://github.com/frwickst/pyhuum/releases/tag/${version}";
+    changelog = "https://github.com/frwickst/pyhuum/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
