@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ttfautohint-py";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "ttfautohint-py";
     tag = "v${version}";
-    hash = "sha256-NTog461RpyHKo/Qpicj3tflehaKj9LlZEN9qeCMM6JQ=";
+    hash = "sha256-wA8su7HEQnDbCShrX9fiP/VKNMtMqeayHbQXHqy8iOA=";
   };
 
   postPatch = ''
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for ttfautohint, a free auto-hinter for TrueType fonts";
     homepage = "https://github.com/fonttools/ttfautohint-py";
-    changelog = "https://github.com/fonttools/ttfautohint-py/releases/tag/v${version}";
+    changelog = "https://github.com/fonttools/ttfautohint-py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
