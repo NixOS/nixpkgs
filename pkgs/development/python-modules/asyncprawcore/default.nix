@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "asyncprawcore";
-  version = "2.4.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "praw-dev";
     repo = "asyncprawcore";
     tag = "v${version}";
-    hash = "sha256-FDQdtnNjsbiEp9BUYdQFMC/hkyJDhCh2WHhQWSQwrFY=";
+    hash = "sha256-NnD71ZoO5iJdC1vEUbbNuO4NBTDgFcPCW6ZtvWBbCwE=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level asynchronous communication layer for Async PRAW";
     homepage = "https://asyncpraw.readthedocs.io/";
-    changelog = "https://github.com/praw-dev/asyncprawcore/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/praw-dev/asyncprawcore/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
