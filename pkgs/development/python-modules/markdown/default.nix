@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.8";
+  version = "3.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Python-Markdown";
     repo = "markdown";
     tag = version;
-    hash = "sha256-H1xvDM2ShiPbfcpW+XGrxCxtaRFVaquuMuGg1RhjeNA=";
+    hash = "sha256-L5OTjllMUrpsKZbK+EHcqlua/6I4onJvRC3povbHgfY=";
   };
 
   build-system = [ setuptools ];
