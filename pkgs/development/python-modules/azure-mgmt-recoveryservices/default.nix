@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3yEt+t+8xlnDEjHD4XCqt8IRRNFysPiCaKsPWtjpWII=";
+    hash = "sha256-fy25hAFwjPFFMi9QvEkcr3lnvsSvO/ewmEufB9MJJoc=";
   };
 
   propagatedBuildInputs = [
