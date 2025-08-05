@@ -1235,10 +1235,10 @@ in
       "services.postfix.lookupMX was removed. Use services.postfix.settings.main.relayhost and put the hostname in angled brackets, if you need to turn off MX and SRV lookups."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "relayHost" ]
-      "services.postfix.relayHost was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host/port."
+      "services.postfix.relayHost was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host:port."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "relayPort" ]
-      "services.postfix.relayPort was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host/port."
+      "services.postfix.relayPort was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host:port."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "extraConfig" ]
       "services.postfix.extraConfig was replaced by the structured freeform service.postfix.settings.main option."
