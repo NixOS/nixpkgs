@@ -124,8 +124,6 @@ rec {
     };
     officialRelease = false;
     inherit pkgs lib-tests;
-    # 2.28 / 2.29 take 9x longer than 2.30 or Lix.
-    # TODO: Switch back to nixVersions.latest
-    nix = pkgs.lix;
+    nix = pkgs.nixVersions.latest;
   };
 }
