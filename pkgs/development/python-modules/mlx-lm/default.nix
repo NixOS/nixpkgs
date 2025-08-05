@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "mlx-lm";
-  version = "0.26.0";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx-lm";
     tag = "v${version}";
-    hash = "sha256-J69XIqsjQ4sQqhx+EkjKcVXVlQ4A4PGJvICSiCfoSOA=";
+    hash = "sha256-D5csHfkmIM01PkCMT+DDJ2+6as6eVdKNvvHzXcVqdEY=";
   };
 
   build-system = [
