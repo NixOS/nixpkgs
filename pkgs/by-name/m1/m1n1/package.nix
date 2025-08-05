@@ -4,6 +4,7 @@
   fetchFromGitHub,
   imagemagick,
   source-code-pro,
+  python3Packages,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -45,6 +46,25 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 LICENSE -t $out/share/doc/m1n1/licenses/
 
     runHook postInstall
+  '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeCheckInputs = with python3Packages; [
+    pytest
+  ];
+
+  checkInputs = with python3Packages; [
+    construct
+    pyserial
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pytest
+
+    runHook postCheck
   '';
 
   passthru = {
