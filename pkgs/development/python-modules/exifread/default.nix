@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "exifread";
-  version = "3.0.0";
+  version = "3.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "ExifRead";
     inherit version;
-    hash = "sha256-CsWjZBadvfK9YvlPXAc5cKtmlKMWYXf15EixDJQ+LKQ=";
+    hash = "sha256-3H+Np3OWcJykFKDu4cJikC9xOvycBDuqi4IzfXYwb/w=";
   };
 
   meta = with lib; {
