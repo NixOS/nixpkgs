@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "square";
     repo = "pylink";
     tag = "v${version}";
-    hash = "sha256-Fjulh2wmcVO+/608uTO10orRz8Pq0I+ZhJ8zMa3YFC0=";
+    hash = "sha256-rkkdnpkl9UHcBDjp6lsFXR1zNn7tH1KeTQ7wV+yJ3m0=";
   };
 
   build-system = [ setuptools ];
