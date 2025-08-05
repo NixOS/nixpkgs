@@ -89,5 +89,12 @@ in
   fmt_11 = generic {
     version = "11.2.0";
     hash = "sha256-sAlU5L/olxQUYcv8euVYWTTB8TrVeQgXLHtXy8IMEnU=";
+    patches = [
+      # Fixes the build with libc++ ≥ 21.
+      (fetchpatch {
+        url = "https://github.com/fmtlib/fmt/commit/3cabf3757b6bc00330b55975317b2c145e4c689d.patch";
+        hash = "sha256-SJFzNNC0Bt2aEQJlHGc0nv9KOpPQ+TgDX5iuFMUs9tk=";
+      })
+    ];
   };
 }
