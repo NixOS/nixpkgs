@@ -15682,9 +15682,7 @@ with pkgs;
 
   kmonad = haskellPackages.kmonad.bin;
 
-  kompute = callPackage ../development/libraries/kompute {
-    fmt = fmt_10;
-  };
+  kompute = callPackage ../development/libraries/kompute { };
 
   # In general we only want keep the last three minor versions around that
   # correspond to the last three supported kubernetes versions:
