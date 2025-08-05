@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.20.2";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "holoviews";
     tag = "v${version}";
-    hash = "sha256-QCRVOBMKckPji5rH7iCSnmxbNwtGypMqdfBXilXmngE=";
+    hash = "sha256-JEGTfi4CaJaL/5AFtB92RV0DJvaIYVloukWKQSUFBZA=";
   };
 
   postPatch = ''
@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python data analysis and visualization seamless and simple";
-    changelog = "https://github.com/holoviz/holoviews/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/holoviews/releases/tag/${src.tag}";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
     license = lib.licenses.bsd3;
