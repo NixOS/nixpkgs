@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "5.5.2";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "tkem";
     repo = "cachetools";
     tag = "v${version}";
-    hash = "sha256-CWgl2UW7+rBXRQ6N/QY3vJiLsrPfmplmQbxPp2vcdU0=";
+    hash = "sha256-o3Ice6w7Ovot+nsmTpsl/toosZuVbi9RvRGs07W4H0Y=";
   };
 
   build-system = [ setuptools ];
