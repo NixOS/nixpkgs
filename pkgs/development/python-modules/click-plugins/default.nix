@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "click-plugins";
-  version = "1.1.1";
+  version = "1.1.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46ab999744a9d831159c3411bb0c79346d94a444df9a3a3742e9ed63645f264b";
+    sha256 = "sha256-1685hKmdJDwTGqGoKDMedjD0qIqXQf0FySeyBLz5ImE=";
   };
 
   propagatedBuildInputs = [ click ];
