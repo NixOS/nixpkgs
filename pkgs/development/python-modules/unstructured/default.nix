@@ -118,7 +118,7 @@
 let
   version = "0.18.12";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "unstructured";
   inherit version;
   pyproject = true;
