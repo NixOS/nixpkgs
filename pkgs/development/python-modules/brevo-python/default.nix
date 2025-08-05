@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "brevo-python";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getbrevo";
     repo = "brevo-python";
     tag = "v${version}";
-    hash = "sha256-XOUFyUrqVlI7Qr4uzeXr6GJuQ+QTVhsueT1xxVQMm14=";
+    hash = "sha256-VYj1r69pgKgNCXzxRqvwlj5w+y3IIu21bsZJAe/7zf8=";
   };
 
   build-system = [ setuptools ];
