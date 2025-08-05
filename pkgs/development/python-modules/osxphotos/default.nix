@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "osxphotos";
-  version = "0.69.2";
+  version = "0.72.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${version}";
-    hash = "sha256-uVcoGIfxz+jKirnE3giST/v20eA5pq+LHgrsRb5b+Lc=";
+    hash = "sha256-6BUdF2l/C0Zim7ei/t4DKs4RUIDMWikhZmhattYrXmg=";
   };
 
   build-system = [ setuptools ];
