@@ -783,6 +783,7 @@ broken-packages:
   - Checked # failure in job https://hydra.nixos.org/build/233257598 at 2023-09-02
   - checked-exceptions # failure in job https://hydra.nixos.org/build/295092260 at 2025-04-22
   - checkmate # failure in job https://hydra.nixos.org/build/233248012 at 2023-09-02
+  - chell-quickcheck # won't support QuickCheck >= 2.15 https://github.com/typeclasses/chell/issues/5#issuecomment-3152262118
   - chez-grater # failure in job https://hydra.nixos.org/build/233213537 at 2023-09-02
   - chiasma # failure in job https://hydra.nixos.org/build/295122809 at 2025-04-22
   - chiphunk # failure in job https://hydra.nixos.org/build/233232520 at 2023-09-02

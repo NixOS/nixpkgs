@@ -1815,6 +1815,7 @@ with haskellLib;
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
+  gnuidn = dontCheck super.gnuidn;
 
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
