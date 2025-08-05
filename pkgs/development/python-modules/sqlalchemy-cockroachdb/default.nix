@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-cockroachdb";
-  version = "2.0.2";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EZdW65BYVdahE0W5nP6FMDGj/lmKnEvzWo3ayfif6Mw=";
+    hash = "sha256-SLdj/9iypNydVkWZNKVtfV/61BXG5o0RS67l0Sz3nB0=";
   };
 
   nativeBuildInputs = [
