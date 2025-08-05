@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "allure-behave";
-  version = "2.13.5";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M4yizHOV0e491y9dfZLYkg8a3g4H3evGN7OOYeBtyNw=";
+    hash = "sha256-puJuaeA6uFJRF1ZS7jWY55Mmk2Y4SQiuhZGEGi7yexs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
