@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-services";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-services";
-    tag = version;
-    hash = "sha256-E/VcKcAb1ekypm5jP4lsSz1LYJTcTSed6i5OY5ihP30=";
+    tag = "v${version}";
+    hash = "sha256-kWgqb7+3/hZKUz7B3PnfxHZq6yU3JUeJ+mruqrMD/NE=";
   };
 
   patches = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
-    changelog = "https://github.com/pytest-dev/pytest-services/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-services/blob/${src.tag}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
