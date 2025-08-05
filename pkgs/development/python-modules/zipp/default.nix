@@ -11,14 +11,14 @@
 let
   zipp = buildPythonPackage rec {
     pname = "zipp";
-    version = "3.21.0";
+    version = "3.23.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-LJlY9kMKIEA0GlLrYI7W3ZPvQ5LgL/4hlBfBsotd0fQ=";
+      hash = "sha256-oHFXWIoSUYydQDTfP7vuCcgUdBoz/2PAX6KdJqJAQWY=";
     };
 
     nativeBuildInputs = [ setuptools-scm ];
