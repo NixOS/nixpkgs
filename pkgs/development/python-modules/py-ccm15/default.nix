@@ -9,9 +9,9 @@
   aiohttp,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "py-ccm15";
-  version = "0.0.9";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,8 +20,8 @@ buildPythonPackage {
     # Upstream does not have a tag for this release and this is the exact release commit
     # Therefore it should not be marked unstable
     # upstream issue: https://github.com/ocalvo/py-ccm15/issues/10
-    rev = "3891d840e69d241c85bf9486e7fe0bb3c7443980";
-    hash = "sha256-I2/AdG07PAvuC8rQKOIAUk7u3pJpANMaFpvEsejWeBU=";
+    tag = "v${version}";
+    hash = "sha256-QfitJzCFk0gnlcCvvKzuI4fS1lVm79q4xaDZFKKt458=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "ccm15" ];
 
   meta = {
+    changelog = "https://github.com/ocalvo/py-ccm15/releases/tag/${src.tag}";
     description = "Python Library to access a Midea CCM15 data converter";
     homepage = "https://github.com/ocalvo/py-ccm15";
     license = lib.licenses.mit;
