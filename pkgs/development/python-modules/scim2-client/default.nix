@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "scim2-client";
-  version = "0.5.2";
+  version = "0.6.1";
 
   pyproject = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "scim2_client";
-    hash = "sha256-viIriAFyfJVrJRr04GBD3dhaQ+iUVujigsx1ucSSeqA=";
+    hash = "sha256-5XOUOKf0vYHkewY22x5NQdhICXCd+EftKhsxtQurgHQ=";
   };
 
   build-system = [ hatchling ];
