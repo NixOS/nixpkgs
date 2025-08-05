@@ -73,18 +73,16 @@ python3Packages.buildPythonApplication rec {
     "hotdoc.extensions.gst.gst_extension"
   ];
 
+  # Only the installed hotdoc pacakge contains the CMARK ext module
+  # so we get rid of the hotdoc package in our cwd
+  preCheck = ''
+    rm -r hotdoc
+  '';
+
   pytestFlags = [
-    # Run the tests by package instead of current dir
+    # Run the tests in the installed hotdoc package
     "--pyargs"
     "hotdoc"
-  ];
-
-  disabledTestPaths = [
-    # Executing hotdoc exits with code 1
-    "tests/test_hotdoc.py::TestHotdoc::test_basic"
-    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
-    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
-    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
   ];
 
   disabledTests = [
@@ -95,14 +93,6 @@ python3Packages.buildPythonApplication rec {
     # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
     "test_index"
   ];
-
-  # Make pytest run from a temp dir to have it pick up installed package for cmark
-  preCheck = ''
-    pushd $TMPDIR
-  '';
-  postCheck = ''
-    popd
-  '';
 
   passthru.tests = {
     inherit (gst_all_1) gstreamer gst-plugins-base;
