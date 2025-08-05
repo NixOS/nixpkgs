@@ -198,14 +198,14 @@ let
               features;
 
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "mpd";
       version = "0.24.5";
 
       src = fetchFromGitHub {
         owner = "MusicPlayerDaemon";
         repo = "MPD";
-        rev = "v${version}";
+        rev = "v${finalAttrs.version}";
         sha256 = "sha256-MgepOQeOl+n65+7b8zXe2u0fCHFAviSqL1aNu2iSXiM=";
       };
 
@@ -289,7 +289,7 @@ let
           files while being controlled by its network protocol.
         '';
       };
-    };
+    });
 in
 {
   mpd = run { };
