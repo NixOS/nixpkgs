@@ -73,6 +73,7 @@ buildPythonPackage rec {
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
     # Exec format error during configure
     "-Dpython-exe=${python.pythonOnBuildForHost.interpreter}"
+    (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
   ];
 
   # TODO: Meson setup hook does not like buildPythonPackage
