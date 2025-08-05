@@ -1,7 +1,6 @@
 {
-  stdenv,
+  stdenvNoLibc,
   buildPackages,
-  fetchFromGitHub,
   lib,
   firefox-unwrapped,
   firefox-esr-unwrapped,
@@ -11,7 +10,7 @@ let
   pname = "wasilibc";
   version = "22-unstable-2024-10-16";
 in
-stdenv.mkDerivation {
+stdenvNoLibc.mkDerivation {
   inherit pname version;
 
   src = buildPackages.fetchFromGitHub {
