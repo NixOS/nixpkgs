@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "3.1.2";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Tbg+2Z9WsH2DlAvuNEXKRsoSDRO2swTNtftE5apO3sA=";
+    hash = "sha256-uRrX1z5z0hIg5pVA8gIT8rcpofmzXATp4Tfq8o0iFNo=";
   };
 
   build-system = [ hatchling ];
