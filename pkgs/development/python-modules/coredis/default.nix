@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.23.1";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "coredis";
     tag = version;
-    hash = "sha256-5Ho9X2VCOwKo079M2ReJ93jqEpG2ZV6vKM5/qrgzjxM=";
+    hash = "sha256-LDK/tVGBsuhf0WzGjdCJznUVh9vrtRrjtU0wKpsr/Ag=";
   };
 
   postPatch = ''
