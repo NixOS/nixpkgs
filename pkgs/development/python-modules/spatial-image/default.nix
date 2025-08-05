@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "spatial-image";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "spatial-image";
     repo = "spatial-image";
     tag = "v${version}";
-    hash = "sha256-PGc2uey2xcfE0PcYDaCp7U0lgeGL1I6MMP3vbTN+Alk=";
+    hash = "sha256-Frvr8uJ3dD2lZFfqrNnki+JUbjhBdRK3BBAtIRtFqvs=";
   };
 
   build-system = [ hatchling ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-dimensional spatial image data structure for scientific Python";
     homepage = "https://github.com/spatial-image/spatial-image";
-    changelog = "https://github.com/spatial-image/spatial-image/releases/tag/v${version}";
+    changelog = "https://github.com/spatial-image/spatial-image/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
