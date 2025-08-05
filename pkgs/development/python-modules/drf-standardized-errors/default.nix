@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "drf-standardized-errors";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ghazi-git";
     repo = "drf-standardized-errors";
     tag = "v${version}";
-    hash = "sha256-Gr4nj2dd0kZTc4IbLhb0i3CnY+VZaNnr3YJctyxIgQU=";
+    hash = "sha256-OM1bTqM3yQSPuerTrq5FKTf5eKpZsF6/QgupMtnnT4Q=";
   };
 
   patches = [
