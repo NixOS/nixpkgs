@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pillow-avif-plugin";
-  version = "1.4.6";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hVz1DQP2/Bbh/V42SzzqC3n0v5DTn/ISOWlzXYUeCLo=";
+    sha256 = "sha256-gR4NyL4eRDk9Ljhl7DMKiooRlLlOuM/Kb6d44/R21kk=";
   };
 
   nativeBuildInputs = [ setuptools ];
