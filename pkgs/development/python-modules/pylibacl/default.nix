@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pylibacl";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VsFehn/kxyRTG7+XQHWJy7+NvShajYT+fsyQ/DIjeNc=";
+    hash = "sha256-nZ/7WA4MWC1d5ZgIf3X2lARYsjgQxhVSkUPGGxcr+SI=";
   };
 
   # ERROR: testExtended (tests.test_acls.AclExtensions)
