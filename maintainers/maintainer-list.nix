@@ -9683,6 +9683,12 @@
     githubId = 28863828;
     name = "guserav";
   };
+  GustavoWidman = {
+    name = "Gustavo Widman";
+    email = "admin@r3dlust.com";
+    github = "GustavoWidman";
+    githubId = 123963822;
+  };
   guyonvarch = {
     github = "guyonvarch";
     githubId = 6768842;
