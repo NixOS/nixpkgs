@@ -9,7 +9,7 @@
   aiohttp,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "py-ccm15";
   version = "0.1.2";
   pyproject = true;
@@ -37,6 +37,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "ccm15" ];
 
   meta = {
+    changelog = "https://github.com/ocalvo/py-ccm15/releases/tag/${src.tag}";
     description = "Python Library to access a Midea CCM15 data converter";
     homepage = "https://github.com/ocalvo/py-ccm15";
     license = lib.licenses.mit;
