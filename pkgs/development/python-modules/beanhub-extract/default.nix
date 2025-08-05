@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-extract";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-extract";
     tag = version;
-    hash = "sha256-L3TM3scBJGlOXXxeJAkiqMkpBmhJZB6b+IQT2DGIfO0=";
+    hash = "sha256-N4LCMZRPbIzVUPDCW3mAVw6WwpuvxiJmMIoyk8VwXS0=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple library for extracting all kind of bank account transaction export files, mostly for beanhub-import to ingest and generate transactions";
     homepage = "https://github.com/LaunchPlatform/beanhub-extract/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-extract/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-extract/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
   };
