@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "qnapstats";
-  version = "0.5.0";
+  version = "0.6.0";
 
   format = "setuptools";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "colinodell";
     repo = "python-qnapstats";
     tag = version;
-    hash = "sha256-dpxl6a61h8zB7eS/2lxG+2//bOTzV6s4T1W+DVj0fnI=";
+    hash = "sha256-4zGCMwuPL9QFVLgyZ6/aV9YBQJBomPkX34C7ULEd4Fw=";
   };
 
   propagatedBuildInputs = [
