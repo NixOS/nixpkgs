@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       null;
 
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     xorg.libXcursor
     xorg.libXrandr
