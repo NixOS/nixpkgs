@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-random-order";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RHLX008fHF86NZxP/FwT7QZSMvMeyhnIhEwatAbnkIA=";
+    hash = "sha256-ErLU7pd+yZIrXjV1r+E8IsvbBuPQPlUKvEPfE3uQQ5o=";
   };
 
   nativeBuildInputs = [ setuptools ];
