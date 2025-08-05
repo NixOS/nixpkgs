@@ -37,6 +37,11 @@ let
       hatch-vcs
     ];
 
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace-fail ', "setuptools-scm>=8,<9"' ""
+    '';
+
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
