@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "nskeyedunarchiver";
-  version = "1.5";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "NSKeyedUnArchiver";
-    hash = "sha256-7toEgAIYFzNuD/6sqAN3wajwjsxfwGvkg7SMRLrUFPQ=";
+    hash = "sha256-2aLV1I6p4seNMb+/xKl8AnlBkvO0VINC1yfVS90gvro=";
   };
 
   build-system = [ setuptools ];
