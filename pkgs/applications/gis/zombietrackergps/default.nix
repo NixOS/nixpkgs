@@ -6,13 +6,13 @@
   cmake,
   libsForQt5,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zombietrackergps";
   version = "1.15";
 
   src = fetchFromGitLab {
     owner = "ldutils-projects";
-    repo = pname;
+    repo = "zombietrackergps";
     # latest revision is not tagged upstream, use commit sha in the meantime
     #rev = "v_${version}";
     rev = "cc75d5744965cc6973323f5bb77f00b0b0153dce";
