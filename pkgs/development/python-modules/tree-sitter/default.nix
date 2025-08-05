@@ -3,8 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+
+  # build-system
   setuptools,
+
+  # tests
   tree-sitter-python,
   tree-sitter-rust,
   tree-sitter-html,
@@ -14,14 +17,12 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.24.0";
+  version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q9la9lyi9Pfso1Y0M5HtZp52Tzd0i1NSlG8A9/x45zQ=";
+    hash = "sha256-zXYa0OTR/IiksbgIO64G1PlzrPb18pu/E+qWCcHeycE=";
   };
 
   # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
