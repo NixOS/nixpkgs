@@ -39,6 +39,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # infinite recursion with home-assistant.intents
+    "tests/test_fuzzy.py"
+  ];
+
   meta = with lib; {
     changelog = "https://github.com/home-assistant/hassil/blob/${src.tag}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
