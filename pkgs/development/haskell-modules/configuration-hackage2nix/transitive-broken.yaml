@@ -141,7 +141,6 @@ dont-distribute-packages:
  - attenuation-profunctors
  - AttoJson
  - attoparsec-enumerator
- - attoparsec-isotropic
  - attoparsec-iteratee
  - attoparsec-text-enumerator
  - atuin
@@ -1095,7 +1094,6 @@ dont-distribute-packages:
  - git-fmt
  - git-gpush
  - git-object
- - git-phoenix
  - git-remote-ipfs
  - git-sanity
  - gitdo
@@ -1988,7 +1986,6 @@ dont-distribute-packages:
  - layered-state
  - layouting
  - lazy-hash-cache
- - lazy-scope
  - lda
  - ldap-scim-bridge
  - ldapply
@@ -3467,7 +3464,6 @@ dont-distribute-packages:
  - toxcore-c
  - toysolver
  - tpb
- - trace-embrace
  - tracing-control
  - trajectory
  - trans-fx-data

@@ -2276,7 +2276,6 @@ broken-packages:
   - haddock-api # failure in job https://hydra.nixos.org/build/233216515 at 2023-09-02
   - haddock-leksah # failure in job https://hydra.nixos.org/build/233206878 at 2023-09-02
   - haddock-test # failure in job https://hydra.nixos.org/build/233246641 at 2023-09-02
-  - haddock-use-refs # failure in job https://hydra.nixos.org/build/295094009 at 2025-04-22
   - hadoop-formats # failure in job https://hydra.nixos.org/build/233224647 at 2023-09-02
   - hadoop-rpc # failure in job https://hydra.nixos.org/build/233247222 at 2023-09-02
   - hadoop-streaming # failure in job https://hydra.nixos.org/build/233229895 at 2023-09-02
