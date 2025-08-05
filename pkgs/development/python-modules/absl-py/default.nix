@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-U8doys7SoOhtUkF0dsCFKnM9ItOoi5a6cK6zGOe/U8s=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   # checks use bazel; should be revisited
   doCheck = false;
