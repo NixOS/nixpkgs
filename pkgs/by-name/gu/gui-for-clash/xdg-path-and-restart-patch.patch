@@ -1,5 +1,5 @@
---- a/bridge/bridge.go	2024-12-25 20:53:45.504021585 +0000
-+++ b/bridge/bridge.go	2024-12-25 21:02:20.318422528 +0000
+--- a/bridge/bridge.go
++++ b/bridge/bridge.go
 @@ -41,13 +41,13 @@
  }
 
@@ -25,7 +25,7 @@
 
  func (a *App) RestartApp() FlagResult {
 -	exePath := Env.BasePath + "/" + Env.AppName
-+	exePath := "@basepath@/bin" + "/" + Env.AppName
++	exePath := "@out@/bin" + "/" + Env.AppName
 
  	cmd := exec.Command(exePath)
  	SetCmdWindowHidden(cmd)
