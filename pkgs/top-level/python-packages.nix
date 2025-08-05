@@ -14125,13 +14125,13 @@ self: super: with self; {
 
   pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
 
-  pytest-asyncio_0 = callPackage ../development/python-modules/pytest-asyncio/0.nix { };
-
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytest-asyncio-cooperative =
     callPackage ../development/python-modules/pytest-asyncio-cooperative
       { };
+
+  pytest-asyncio_0 = callPackage ../development/python-modules/pytest-asyncio/0.nix { };
 
   pytest-asyncio_0_21 = pytest-asyncio.overridePythonAttrs (old: rec {
     version = "0.21.2";
