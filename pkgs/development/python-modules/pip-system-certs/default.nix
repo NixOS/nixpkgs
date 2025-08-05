@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pip-system-certs";
-  version = "4.0";
+  version = "5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pip_system_certs";
-    hash = "sha256-245qMTiNl5XskTmVffGon6UnT7ZhZEVv0JGl0+lMNQw=";
+    hash = "sha256-gLd2tc8XGRv5nTE2mbf84v24Tre7siX9E0EJqCcGQG8=";
   };
 
   nativeBuildInputs = [
