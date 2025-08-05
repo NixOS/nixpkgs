@@ -1497,6 +1497,7 @@
   ./services/security/vault-agent.nix
   ./services/security/vault.nix
   ./services/security/vaultwarden/default.nix
+  ./services/security/warpgate.nix
   ./services/security/yubikey-agent.nix
   ./services/system/automatic-timezoned.nix
   ./services/system/bpftune.nix
