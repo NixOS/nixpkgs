@@ -18,18 +18,20 @@ buildGoModule (finalAttrs: {
     hash = "sha256-SjrkQFSjJrPNynARE92uKA53hkstIUBSvQbqcYSsnaM=";
   };
 
+  # rename TestMain to prevent it from running, as it panics in the sandbox.
+  postPatch = ''
+    substituteInPlace internal/llm/provider/openai_test.go \
+      --replace-fail \
+        "func TestMain" \
+        "func DisabledTestMain"
+  '';
+
   vendorHash = "sha256-aI3MSaQYUOLJxBxwCoVg13HpxK46q6ZITrw1osx5tiE=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
   ];
-
-  # rename TestMain to prevent it from running, as it panics in the sandbox.
-  postPatch = ''
-    sed -i 's/func TestMain/func DisabledTestMain/' internal/llm/provider/openai_test.go
-  '';
 
   checkFlags =
     let
@@ -42,15 +44,20 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  doInstallCheck = true;
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";
     homepage = "https://github.com/charmbracelet/crush";
+    changelog = "https://github.com/charmbracelet/crush/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.fsl11Mit;
     maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "crush";
