@@ -14237,8 +14237,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  cryptop = callPackage ../applications/blockchains/cryptop { };
-
   elements = libsForQt5.callPackage ../applications/blockchains/elements {
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
