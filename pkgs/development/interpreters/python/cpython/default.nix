@@ -635,7 +635,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Get rid of retained dependencies on -dev packages, and remove
       # some $TMPDIR references to improve binary reproducibility.
       # Note that the .pyc file of _sysconfigdata.py should be regenerated!
-      for i in $out/lib/${libPrefix}/_sysconfigdata*.py $out/lib/${libPrefix}/config-${sourceVersion.major}${sourceVersion.minor}*/Makefile; do
+      for i in $out/lib/${libPrefix}/_sysconfigdata*.py $out/lib/${libPrefix}/config-${sourceVersion.major}.${sourceVersion.minor}*/Makefile; do
          sed -i $i -e "s|$TMPDIR|/no-such-path|g"
       done
 
