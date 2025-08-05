@@ -5039,9 +5039,7 @@ self: super: with self; {
 
   feedgen = callPackage ../development/python-modules/feedgen { };
 
-  feedgenerator = callPackage ../development/python-modules/feedgenerator {
-    inherit (pkgs) glibcLocales;
-  };
+  feedgenerator = callPackage ../development/python-modules/feedgenerator { };
 
   feedparser = callPackage ../development/python-modules/feedparser { };
 
