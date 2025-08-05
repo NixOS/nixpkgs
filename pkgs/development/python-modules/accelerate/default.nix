@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.7.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${version}";
-    hash = "sha256-nZoa2Uwd8cHl0H4LM8swHjce7HktpGdcD+6ykfoQ90M=";
+    hash = "sha256-h1XfBG7M8aAN9W09RgIowJ2vgWAjWbUnV1KBXa5aGJU=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -172,7 +172,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://huggingface.co/docs/accelerate";
     description = "Simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
-    changelog = "https://github.com/huggingface/accelerate/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/accelerate/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "accelerate";
