@@ -480,11 +480,11 @@
     "vendorHash": "sha256-ZbU2z7qUHPR7vDSflesSjgK7x3LYXVe/gnVsy19q6Bs="
   },
   "fortios": {
-    "hash": "sha256-N1GJNlvoy9TfI7S7TTnQyQkBdKz94cRT2Xza+gb7etw=",
+    "hash": "sha256-vQ5PYY2EJb7+O65YbyqmIPKiqsd9UysnZXYGzZvkTPQ=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "repo": "terraform-provider-fortios",
-    "rev": "1.22.0",
+    "rev": "1.22.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-9BBBmuj7rEX5h3LEZzw7C7AtwvJgo7yEGReQ38lfE6U="
   },
@@ -660,13 +660,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-cZ7j/bhXxhTIU7J9XB4M4N3zteRKybmOIEeVw9XM62o=",
+    "hash": "sha256-541obBfBV/odhFvJISxeBtBmaLGoUB7rYymA0U7rhpY=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.80.4",
+    "rev": "v1.81.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-lxd5op9QETBR7Q8ndgvYyYBy9URu16+DmtnFydpy3EA="
+    "vendorHash": "sha256-cWfISNNeVPb6BU2V3sLbvlnFKzf3fVniV5Lu1Kpb9f0="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -931,11 +931,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-xdVHJWEvap6Bp/r5hz/113kJF6SexsCROFkQgRTJgYA=",
+    "hash": "sha256-bfe55ApaalhJpQtkl8YD9k5U7uyuqMuzOcM/ksBRglw=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.11.0",
+    "rev": "v7.12.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

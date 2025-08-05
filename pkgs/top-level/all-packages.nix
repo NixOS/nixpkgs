@@ -1267,24 +1267,13 @@ with pkgs;
     python3Packages.callPackage ../applications/version-management/git-annex-remote-googledrive
       { };
 
-  git-archive-all = python3.pkgs.callPackage ../applications/version-management/git-archive-all { };
-
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
-
-  git-imerge = python3Packages.callPackage ../applications/version-management/git-imerge { };
-
-  git-publish = python3Packages.callPackage ../applications/version-management/git-publish { };
 
   git-recent = callPackage ../applications/version-management/git-recent {
     util-linux = if stdenv.hostPlatform.isLinux then util-linuxMinimal else util-linux;
   };
 
   gitRepo = git-repo;
-  git-repo-updater =
-    python3Packages.callPackage ../applications/version-management/git-repo-updater
-      { };
-
-  git-review = python3Packages.callPackage ../applications/version-management/git-review { };
 
   gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
 
@@ -1586,8 +1575,6 @@ with pkgs;
 
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
-
-  apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
@@ -2699,14 +2686,6 @@ with pkgs;
   # Top-level fix-point used in `cudaPackages`' internals
   _cuda = import ../development/cuda-modules/_cuda;
 
-  cudaPackages_11_0 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.0"; };
-  cudaPackages_11_1 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.1"; };
-  cudaPackages_11_2 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.2"; };
-  cudaPackages_11_3 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.3"; };
-  cudaPackages_11_4 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.4"; };
-  cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.5"; };
-  cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.6"; };
-  cudaPackages_11_7 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.7"; };
   cudaPackages_11_8 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.8"; };
   cudaPackages_11 = recurseIntoAttrs cudaPackages_11_8;
 
@@ -3970,8 +3949,6 @@ with pkgs;
 
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
   opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
-
-  orangefs = callPackage ../tools/filesystems/orangefs { };
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
     libclang = llvmPackages_19.libclang;
@@ -11472,8 +11449,6 @@ with pkgs;
     inherit (kdePackages) breeze-icons;
   };
 
-  material-kwin-decoration = libsForQt5.callPackage ../data/themes/material-kwin-decoration { };
-
   mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
   noto-fonts-cjk-serif-static = callPackage ../by-name/no/noto-fonts-cjk-serif/package.nix {
@@ -11580,11 +11555,6 @@ with pkgs;
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
-
-  utterly-nord-plasma = kdePackages.callPackage ../data/themes/utterly-nord-plasma {
-    # renamed in KF6
-    plasma-framework = kdePackages.libplasma;
-  };
 
   whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
