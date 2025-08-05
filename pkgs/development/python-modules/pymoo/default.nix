@@ -29,7 +29,7 @@ let
   pymoo_data = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo-data";
-    tag = version;
+    tag = "33f61a78182ceb211b95381dd6d3edee0d2fc0f3";
     hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
   };
 in
