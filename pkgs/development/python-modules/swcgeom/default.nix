@@ -28,7 +28,7 @@
 let
   version = "0.19.4";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "swcgeom";
   inherit version;
   pyproject = true;
