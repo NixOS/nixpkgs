@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     make CC=${stdenv.cc.targetPrefix}cc posix
+
+    runHook postBuild
   '';
 
   installPhase = ''

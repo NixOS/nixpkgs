@@ -22,7 +22,11 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   buildPhase = ''
+    runHook preBuild
+
     cc -O2 -o RunningX $(pkg-config --cflags --libs x11) $src
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -51,7 +51,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildPhase = ''
+    runHook preBuild
+
     cargo make --profile release build
+
+    runHook postBuild
   '';
 
   installPhase = ''

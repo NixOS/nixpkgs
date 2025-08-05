@@ -79,7 +79,11 @@ stdenvNoCC.mkDerivation rec {
   # substitutions, installers of this package will get only the outputs they
   # chose.
   buildPhase = ''
+    runHook preBuild
+
     ICONSDIR=$TMP/staged ./install-all
+
+    runHook postBuild
   '';
 
   installPhase = ''

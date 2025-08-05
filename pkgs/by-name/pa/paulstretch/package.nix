@@ -51,7 +51,11 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     bash compile_linux_fftw_jack.sh
+
+    runHook postBuild
   '';
 
   installPhase = ''

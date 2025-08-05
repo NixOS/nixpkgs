@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin
     sed -i \
       -e "/INSTALL_BINDIR=/s|/usr/bin|/bin|g" \
@@ -41,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
       -e "s|\$(INSTALL|$out/\$(INSTALL|g" \
       -e "/echo/s|echo $out/|echo |g" \
       Makefile
+
+    runHook postBuild
   '';
 
   postInstall = ''

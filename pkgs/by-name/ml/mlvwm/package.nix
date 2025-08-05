@@ -33,11 +33,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     (cd man && xmkmf)
     (cd sample_rc && xmkmf)
     (cd mlvwm && xmkmf)
     xmkmf
     make
+
+    runHook postBuild
   '';
 
   installPhase = ''

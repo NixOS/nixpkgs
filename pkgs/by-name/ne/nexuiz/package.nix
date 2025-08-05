@@ -78,12 +78,16 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cd sources/darkplaces/
     DP_FS_BASEDIR="$out/share/nexuiz"
     make DP_FS_BASEDIR=$DP_FS_BASEDIR cl-release
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sdl-release
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-release
     cd ../../
+
+    runHook postBuild
   '';
 
   installPhase = ''

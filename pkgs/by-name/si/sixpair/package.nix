@@ -23,7 +23,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cc -o sixpair sixpair.c -lusb
+
+    runHook postBuild
   '';
 
   installPhase = ''

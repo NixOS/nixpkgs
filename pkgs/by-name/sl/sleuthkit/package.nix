@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     dontConfigure = true;
 
     buildPhase = ''
+      runHook preBuild
+
       export IVY_HOME=$NIX_BUILD_TOP/.ant
       pushd bindings/java
       ant retrieve-deps
@@ -45,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       pushd case-uco/java
       ant get-ivy-dependencies
       popd
+
+      runHook postBuild
     '';
 
     installPhase = ''

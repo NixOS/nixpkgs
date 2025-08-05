@@ -66,7 +66,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   buildPhase = ''
+    runHook preBuild
+
     bash ./build.bash build
+
+    runHook postBuild
   '';
 
   installPhase = ''

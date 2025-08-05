@@ -23,7 +23,11 @@ stdenv.mkDerivation {
     makeWrapper
   ];
   buildPhase = ''
+    runHook preBuild
+
     ant
+
+    runHook postBuild
   '';
 
   installPhase = ''

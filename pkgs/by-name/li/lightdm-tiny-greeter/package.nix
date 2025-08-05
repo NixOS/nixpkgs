@@ -39,10 +39,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin $out/share/xgreeters
     make ${pname}
     mv ${pname} $out/bin/.
     mv lightdm-tiny-greeter.desktop $out/share/xgreeters
+
+    runHook postBuild
   '';
 
   installPhase = ''

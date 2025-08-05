@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     faust2jaqt -vec -time -t 99999 Tambura.dsp
     faust2lv2 -vec -time -gui -t 99999 Tambura.dsp
+
+    runHook postBuild
   '';
 
   installPhase = ''

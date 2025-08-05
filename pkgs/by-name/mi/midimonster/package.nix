@@ -47,7 +47,11 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     PLUGINS=$out/lib/midimonster make all
+
+    runHook postBuild
   '';
 
   installPhase = ''

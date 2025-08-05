@@ -19,9 +19,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin $out/share/mu
     cp -r lib $out/share/mu
     ${stdenv.cc.targetPrefix}cc -o $out/bin/mu-unwrapped bootstrap/mu64.c
+
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cc *.c -Wno-return-type \
       -o fairymax \
       -DINI_FILE='"'"$out/share/fairymax/fmax.ini"'"'
+
+    runHook postBuild
   '';
 
   # errors by default in GCC 14

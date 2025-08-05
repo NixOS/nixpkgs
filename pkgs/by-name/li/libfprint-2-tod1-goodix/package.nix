@@ -16,9 +16,13 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     patchelf \
       --set-rpath ${lib.makeLibraryPath [ libfprint-tod ]} \
       usr/lib/x86_64-linux-gnu/libfprint-2/tod-1/libfprint-tod-goodix-53xc-$version.so
+
+    runHook postBuild
   '';
 
   installPhase = ''

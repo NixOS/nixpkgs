@@ -31,7 +31,11 @@ buildNpmPackage {
   dontNpmBuild = true;
 
   buildPhase = ''
+    runHook preBuild
+
     gulp -LLLL app:package
+
+    runHook postBuild
   '';
 
   installPhase = ''

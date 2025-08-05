@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
+    runHook preBuild
+
     # lazarus tries to create files in $HOME/.lazarus
     export HOME=$(mktemp -d)
     pushd dev
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_peach.lpi
     popd
+
+    runHook postBuild
   '';
 
   # peazip looks for the "7z", not "7zz"
