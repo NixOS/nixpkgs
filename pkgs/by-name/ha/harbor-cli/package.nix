@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7Fi4FeWsLwTtNZhD8TfSBTMr/LKzUm6UO4aWC0eJFtQ=";
   };
 
