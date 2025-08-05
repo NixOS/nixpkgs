@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "bracex";
   version = "2.6";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
