@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.6.4";
+  version = "0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "soft-matter";
     repo = "trackpy";
     tag = "v${version}";
-    hash = "sha256-6i1IfdxgV6bpf//mXATpnsQ0zN26S8rlL0/1ql68sd8=";
+    hash = "sha256-3e+gHdn/4n8T78eA3Gjz1TdSI4Hd935U2pqd8wG+U0M=";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
-    changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
+    changelog = "https://github.com/soft-matter/trackpy/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = [ ];
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
