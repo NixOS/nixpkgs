@@ -9,6 +9,7 @@
   qt5,
   libiconv,
   spdlog,
+  fmt,
   sqlite,
 }:
 
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libiconv
     spdlog
+    fmt
     sqlite
   ]
   ++ lib.optionals (qt5 != null) (
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-Duse_sys_spdlog=ON"
+    "-Duse_sys_fmt=ON"
     "-Duse_sys_sqlite3=ON"
   ]
   ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
