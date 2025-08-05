@@ -14,13 +14,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orangefs";
   version = "2.9.8";
 
   src = fetchurl {
-    url = "http://download.orangefs.org/current/source/orangefs-${version}.tar.gz";
-    sha256 = "0c2yla615j04ygclfavh8g5miqhbml2r0zs2c5mvkacf9in7p7sq";
+    url = "http://download.orangefs.org/current/source/orangefs-${finalAttrs.version}.tar.gz";
+    hash = "sha256-WJ97bEyOqblrYUJ/kAWtC+JYy0NwK0fZ8wTIEoyiXjA=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fno-common.patch";
       url = "https://github.com/waltligon/orangefs/commit/f472beb50356bea657d1c32f1ca8a73e4718fd57.patch";
-      sha256 = "0jaq1ffdxgymjciddsy8h8r87nwbif4v5yv4wd7jxysn25a0hdai";
+      hash = "sha256-UTUIVBFW+y5P42T7somLi9uDMoLI69Yik9W/3pwLWEk=";
     })
   ];
 
@@ -83,10 +83,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) orangefs; };
 
-  meta = with lib; {
+  meta = {
     description = "Scale-out network file system for use on high-end computing systems";
     homepage = "http://www.orangefs.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       gpl2Only
@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
       openldap
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})
