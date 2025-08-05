@@ -6,7 +6,7 @@
   cmake,
   dnsmasq,
   fetchFromGitHub,
-  fmt_11,
+  fmt,
   git,
   grpc,
   gtest,
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DMULTIPASS_ENABLE_FLUTTER_GUI=false" ];
 
   buildInputs = [
-    fmt_11
+    fmt
     grpc
     gtest
     libapparmor
