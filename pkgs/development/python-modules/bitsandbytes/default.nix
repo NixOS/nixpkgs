@@ -113,7 +113,7 @@ buildPythonPackage {
   meta = {
     description = "8-bit CUDA functions for PyTorch";
     homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
-    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${src.tag}";
+    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
