@@ -10220,11 +10220,7 @@ with pkgs;
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
-  inherit
-    (callPackages ../servers/mpd {
-    })
-    mpd
-    ;
+  mpd = callPackage ../servers/mpd { };
 
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
 

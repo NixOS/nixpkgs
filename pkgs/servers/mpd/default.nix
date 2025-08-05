@@ -194,7 +194,8 @@ let
             else
               features;
 
-  mpd = stdenv.mkDerivation (finalAttrs: {
+in
+  stdenv.mkDerivation (finalAttrs: {
       pname = "mpd";
       version = "0.24.5";
 
@@ -285,8 +286,4 @@ let
           files while being controlled by its network protocol.
         '';
       };
-    });
-in
-{
-  inherit mpd;
-}
+    })
