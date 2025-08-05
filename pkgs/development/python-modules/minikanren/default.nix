@@ -14,14 +14,14 @@
 
 buildPythonPackage {
   pname = "minikanren";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "kanren";
-    rev = "5aa9b1734cbb3fe072a7c72b46e1b72a174d28ac";
-    hash = "sha256-daAtREgm91634Q0mc0/WZivDiyZHC7TIRoGRo8hMnGE=";
+    tag = "v${version}";
+    hash = "sha256-lCQ0mKT99zK5A74uoo/9bP+eFdm3MC43Fh8+P2krXrs=";
   };
 
   propagatedBuildInputs = [
