@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-common";
-  version = "1.17.4";
+  version = "1.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "snakemake";
     repo = "snakemake-interface-common";
     tag = "v${version}";
-    hash = "sha256-PMEs7yeVfSnZKbabLrbXfIKCIPteNV1wzbt9RIDG3qU=";
+    hash = "sha256-8QISVZZ/kwWBNFtndzysnxFuuemkDXcWqEtCdVVsANo=";
   };
 
   build-system = [ poetry-core ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Common functions and classes for Snakemake and its plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-common";
-    changelog = "https://github.com/snakemake/snakemake-interface-common/releases/tag/v${version}";
+    changelog = "https://github.com/snakemake/snakemake-interface-common/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];
   };
