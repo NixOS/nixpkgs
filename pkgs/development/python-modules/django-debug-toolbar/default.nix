@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "5.0.1";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-Q0joSIFXhoVmNQ+AfESdEWUGY1xmJzr4iR6Ak54YM7c=";
+    hash = "sha256-ZNevSqEpTdk0cZeMzOpbtatEiV9SAsVUlRb9YddcAGY=";
   };
 
   build-system = [ hatchling ];
