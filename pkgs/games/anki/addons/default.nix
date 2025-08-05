@@ -6,6 +6,8 @@
 
   anki-connect = callPackage ./anki-connect { };
 
+  anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
+
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
 
   passfail2 = callPackage ./passfail2 { };
