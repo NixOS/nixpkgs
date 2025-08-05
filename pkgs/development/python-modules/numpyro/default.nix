@@ -16,6 +16,7 @@
 
   # tests
   dm-haiku,
+  equinox,
   flax,
   funsor,
   graphviz,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = version;
-    hash = "sha256-0X/ta2yfzjf3JnZYdUAzQmXvbsDpwFCJe/bArMSWQgU=";
+    hash = "sha256-3kzaINsz1Mjk97ERQsQIYIBz7CVmXtVDn0edJFMHQWs=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
+    equinox
     flax
     funsor
     graphviz
@@ -92,11 +94,6 @@ buildPythonPackage rec {
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
-
-    # Failing since flax==0.11.0
-    # KeyError: "No RngStream named 'dropout' found in Rngs."
-    # https://github.com/pyro-ppl/numpyro/issues/2055
-    "test_nnx_state_dropout_smoke"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Not equal to tolerance rtol=0.06, atol=0
