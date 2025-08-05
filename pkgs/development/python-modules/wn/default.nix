@@ -53,6 +53,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/goodmami/wn";
     changelog = "https://github.com/goodmami/wn/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [
+      zendo
+      jk
+    ];
   };
 }
