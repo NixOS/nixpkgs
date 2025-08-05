@@ -7496,7 +7496,7 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/fmt { }) fmt_9 fmt_10 fmt_11;
 
-  fmt = fmt_10;
+  fmt = fmt_11;
 
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
