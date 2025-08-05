@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.17";
+  version = "0.20.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-kZCbQGIkWmlXl25UviPrSDo0swCjWnvTTkBnxGI0Y7U=";
+    hash = "sha256-fx3aExmRMbzXG2MVpWrsssH658Ll4x+FC2ARK6oIGBw=";
   };
 
   build-system = [
