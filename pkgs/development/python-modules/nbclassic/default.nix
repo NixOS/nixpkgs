@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c27FBIOlRIWXHbITvpIH405R/BRMeDQ2JbaZF0I2RLo=";
+    hash = "sha256-TFLaj8iPn3PvUSzDBQkdXOcmvcoZ9E7Wl8tboS3KrTw=";
   };
 
   build-system = [
