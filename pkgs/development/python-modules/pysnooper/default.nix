@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysnooper";
-  version = "1.2.1";
+  version = "1.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "PySnooper";
-    hash = "sha256-2DLd8myARAqUVrOmZNr/lX9zfnMTxAt2JQ69tczbajE=";
+    hash = "sha256-H6FCVESnr0UQiq7YYLXKi2KyW7olsLA3wFm6NT2PHnQ=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
