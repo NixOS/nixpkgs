@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   gtk3,
-  python3Packages,
+  buildPythonPackage,
   glibcLocales,
   intltool,
   gexiv2,
@@ -20,9 +20,21 @@
   graphviz,
   enableGhostscript ? true,
   ghostscript,
+
+  setuptools,
+  berkeleydb,
+  orjson,
+  pyicu,
+  pygobject3,
+  pycairo,
+
+  unittestCheckHook,
+  jsonschema,
+  mock,
+  lxml,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   version = "6.0.3";
   pname = "gramps";
   pyproject = true;
@@ -42,10 +54,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   build-system = [
-    python3Packages.setuptools
+    setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     berkeleydb
     orjson
     pyicu
@@ -58,18 +70,18 @@ python3Packages.buildPythonApplication rec {
     intltool
     gettext
     gobject-introspection
-  ];
-
-  nativeCheckInputs = [
-    glibcLocales
-    python3Packages.unittestCheckHook
-    python3Packages.jsonschema
-    python3Packages.mock
-    python3Packages.lxml
   ]
   # TODO: use JHBuild to build the Gramps' bundle
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
+  ];
+
+  nativeCheckInputs = [
+    glibcLocales
+    unittestCheckHook
+    jsonschema
+    mock
+    lxml
   ];
 
   buildInputs = [

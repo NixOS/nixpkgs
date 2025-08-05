@@ -3109,6 +3109,8 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
+  gramps = python3Packages.toPythonApplication python3Packages.gramps;
+
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
   inherit
