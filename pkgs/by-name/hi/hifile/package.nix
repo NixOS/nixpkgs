@@ -2,8 +2,8 @@
   lib,
   appimageTools,
   fetchurl,
-  version ? "0.9.11.0",
-  hash ? "sha256-I13NEku2oM9HYDhZZI7Sflwhnnjhe1mAr8Cuu9shvms=",
+  version ? "0.9.11.2",
+  hash ? "sha256-Go2KGEUu93jAxwFQ/yEOvePQpSjFW+dJxQ1tWQXr2fY=",
 }:
 
 let

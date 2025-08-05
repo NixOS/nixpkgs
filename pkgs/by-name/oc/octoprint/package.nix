@@ -210,7 +210,8 @@ let
 
           disabledTests = [
             "test_check_setup" # Why should it be able to call pip?
-          ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
           disabledTestPaths = [
             "tests/test_octoprint_setuptools.py" # fails due to distutils and python3.12
           ];

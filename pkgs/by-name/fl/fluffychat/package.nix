@@ -44,21 +44,20 @@ flutter332.buildFlutterApplication (
 
     inherit targetFlutterPlatform;
 
-    meta =
-      {
-        description = "Chat with your friends (matrix client)";
-        homepage = "https://fluffychat.im/";
-        license = lib.licenses.agpl3Plus;
-        maintainers = with lib.maintainers; [
-          mkg20001
-          tebriel
-          aleksana
-        ];
-        badPlatforms = lib.platforms.darwin;
-      }
-      // lib.optionalAttrs (targetFlutterPlatform == "linux") {
-        mainProgram = "fluffychat";
-      };
+    meta = {
+      description = "Chat with your friends (matrix client)";
+      homepage = "https://fluffychat.im/";
+      license = lib.licenses.agpl3Plus;
+      maintainers = with lib.maintainers; [
+        mkg20001
+        tebriel
+        aleksana
+      ];
+      badPlatforms = lib.platforms.darwin;
+    }
+    // lib.optionalAttrs (targetFlutterPlatform == "linux") {
+      mainProgram = "fluffychat";
+    };
   }
   // lib.optionalAttrs (targetFlutterPlatform == "linux") {
     nativeBuildInputs = [

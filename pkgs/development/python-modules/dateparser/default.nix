@@ -60,14 +60,15 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$TEMPDIR"
   '';
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # access network

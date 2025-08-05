@@ -61,21 +61,20 @@ py.pkgs.buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeCheckInputs =
-    [
-      git
-      valkey
-      redisTestHook
-      postgresql
-      postgresqlTestHook
-    ]
-    ++ (with py.pkgs; [
-      pytest-asyncio
-      pytest-freezegun
-      pytestCheckHook
-      smtpdfix
-      httpx
-    ]);
+  nativeCheckInputs = [
+    git
+    valkey
+    redisTestHook
+    postgresql
+    postgresqlTestHook
+  ]
+  ++ (with py.pkgs; [
+    pytest-asyncio
+    pytest-freezegun
+    pytestCheckHook
+    smtpdfix
+    httpx
+  ]);
 
   propagatedBuildInputs =
     with py.pkgs;

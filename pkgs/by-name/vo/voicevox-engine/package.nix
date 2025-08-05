@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.24.0";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
-    hash = "sha256-LFbKnNv+NNfA6dvgVGr8fGr+3o5/sAyZ8XFZan2EJUY=";
+    hash = "sha256-WoHTv4VjLFJPIi47WETMQM8JmgBctAWlue8yKmi1+6A=";
   };
 
   patches = [
@@ -26,27 +26,26 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      passthru.pyopenjtalk
-    ]
-    ++ (with python3Packages; [
-      fastapi
-      jinja2
-      kanalizer
-      numpy
-      platformdirs
-      pydantic
-      python-multipart
-      pyworld
-      pyyaml
-      semver
-      setuptools
-      soundfile
-      soxr
-      starlette
-      uvicorn
-    ]);
+  dependencies = [
+    passthru.pyopenjtalk
+  ]
+  ++ (with python3Packages; [
+    fastapi
+    jinja2
+    kanalizer
+    numpy
+    platformdirs
+    pydantic
+    python-multipart
+    pyworld
+    pyyaml
+    semver
+    setuptools
+    soundfile
+    soxr
+    starlette
+    uvicorn
+  ]);
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
@@ -99,7 +98,7 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
-      hash = "sha256-/L7gqskzg7NFBO6Jg2MEMYuQeZK58hTWrRypTE42nGg=";
+      hash = "sha256-4D9b5MjJQq+oCqSv8t7CILgFcotbNBH3m2F/up12pPE=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };

@@ -23,12 +23,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.13.4";
+  version = "0.14.3";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Ub6HjZChOhRUDYQ2TAnrwOtrW6ahP+k74vCAmLkYABA=";
+    hash = "sha256-B2gIRVeaTwYEnESMovwEJgdmLwRNA7/nJs7opNhiyyA=";
     fetchSubmodules = true;
   };
 
@@ -136,22 +136,24 @@ buildDotnetModule (finalAttrs: {
     "RequiresNetworking!=True"
   ];
 
-  disabledTests =
-    [
-      # Fails attempting to download game hashes DB from github:
-      # HttpRequestException : Resource temporarily unavailable (github.com:443)
-      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
+  disabledTests = [
+    # Fails attempting to download game hashes DB from github:
+    # HttpRequestException : Resource temporarily unavailable (github.com:443)
+    "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
+    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
+    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
+    "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
 
-      # Fails attempting to fetch SMAPI version data from github:
-      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
-      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
-    ]
-    ++ lib.optionals (!_7zz.meta.unfree) [
-      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-    ];
+    # Fails attempting to fetch SMAPI version data from github:
+    # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+    "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
+
+    # Fails attempting to fetch game info from NexusMods API
+    "NexusMods.Networking.NexusWebApi.Tests.LocalMappingCacheTests.Test_Parse"
+  ]
+  ++ lib.optionals (!_7zz.meta.unfree) [
+    "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+  ];
 
   doInstallCheck = true;
 

@@ -836,17 +836,34 @@ def test_switch_to_configuration_with_systemd_run(
     ],
 )
 @patch("pathlib.Path.is_dir", autospec=True, return_value=True)
-def test_upgrade_channels(mock_is_dir: Mock, mock_glob: Mock) -> None:
-    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(False)
-    mock_run.assert_called_once_with(["nix-channel", "--update", "nixos"], check=False)
+@patch("os.geteuid", autospec=True, return_value=1000)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_upgrade_channels(
+    mock_run: Mock,
+    mock_geteuid: Mock,
+    mock_is_dir: Mock,
+    mock_glob: Mock,
+) -> None:
+    with pytest.raises(m.NixOSRebuildError) as e:
+        n.upgrade_channels(all_channels=False, sudo=False)
+    assert str(e.value) == (
+        "error: if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+        "also pass '--sudo' or run the command as root (e.g., with sudo)"
+    )
 
-    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(True)
+    n.upgrade_channels(all_channels=False, sudo=True)
+    mock_run.assert_called_once_with(
+        ["nix-channel", "--update", "nixos"], check=False, sudo=True
+    )
+
+    mock_geteuid.return_value = 0
+    n.upgrade_channels(all_channels=True, sudo=False)
     mock_run.assert_has_calls(
         [
-            call(["nix-channel", "--update", "nixos"], check=False),
-            call(["nix-channel", "--update", "nixos-hardware"], check=False),
-            call(["nix-channel", "--update", "home-manager"], check=False),
+            call(["nix-channel", "--update", "nixos"], check=False, sudo=False),
+            call(
+                ["nix-channel", "--update", "nixos-hardware"], check=False, sudo=False
+            ),
+            call(["nix-channel", "--update", "home-manager"], check=False, sudo=False),
         ]
     )

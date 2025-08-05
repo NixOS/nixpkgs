@@ -346,17 +346,17 @@ in
         "listen.group" = group;
         "listen.mode" = "0660";
         "catch_workers_output" = "yes";
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     systemd.services.phpfpm-pixelfed.after = [ "pixelfed-data-setup.service" ];
-    systemd.services.phpfpm-pixelfed.requires =
-      [
-        "pixelfed-horizon.service"
-        "pixelfed-data-setup.service"
-      ]
-      ++ lib.optional cfg.database.createLocally dbUnit
-      ++ lib.optional cfg.redis.createLocally redisService;
+    systemd.services.phpfpm-pixelfed.requires = [
+      "pixelfed-horizon.service"
+      "pixelfed-data-setup.service"
+    ]
+    ++ lib.optional cfg.database.createLocally dbUnit
+    ++ lib.optional cfg.redis.createLocally redisService;
     # Ensure image optimizations programs are available.
     systemd.services.phpfpm-pixelfed.path = extraPrograms;
 
@@ -366,10 +366,11 @@ in
         "network.target"
         "pixelfed-data-setup.service"
       ];
-      requires =
-        [ "pixelfed-data-setup.service" ]
-        ++ (lib.optional cfg.database.createLocally dbUnit)
-        ++ (lib.optional cfg.redis.createLocally redisService);
+      requires = [
+        "pixelfed-data-setup.service"
+      ]
+      ++ (lib.optional cfg.database.createLocally dbUnit)
+      ++ (lib.optional cfg.redis.createLocally redisService);
       wantedBy = [ "multi-user.target" ];
       # Ensure image optimizations programs are available.
       path = extraPrograms;

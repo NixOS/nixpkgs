@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     gobject-introspection

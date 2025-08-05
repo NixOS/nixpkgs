@@ -35,17 +35,16 @@ mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      logLib
-      mpir
-      gmp
-      boost
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.pybind11
-      python.pkgs.numpy
-    ];
+  buildInputs = [
+    logLib
+    mpir
+    gmp
+    boost
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.pybind11
+    python.pkgs.numpy
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_PYTHON" (gnuradio.hasFeature "python-support"))

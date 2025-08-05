@@ -22,27 +22,26 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs =
-    [
-      aria2
-      mpv
-      nodejs
-    ]
-    ++ (with python3.pkgs; [
-      beautifulsoup4
-      cfscrape
-      click
-      coloredlogs
-      fuzzywuzzy
-      jsbeautifier
-      pycryptodome
-      pysmartdl
-      pyqt5
-      requests
-      requests-cache
-      selenium
-      tabulate
-    ]);
+  propagatedBuildInputs = [
+    aria2
+    mpv
+    nodejs
+  ]
+  ++ (with python3.pkgs; [
+    beautifulsoup4
+    cfscrape
+    click
+    coloredlogs
+    fuzzywuzzy
+    jsbeautifier
+    pycryptodome
+    pysmartdl
+    pyqt5
+    requests
+    requests-cache
+    selenium
+    tabulate
+  ]);
 
   preFixup = ''
     wrapQtApp "$out/bin/anime" --prefix PATH : ${lib.makeBinPath propagatedBuildInputs}

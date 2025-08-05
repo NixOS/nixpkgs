@@ -36,16 +36,15 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      argcomplete
-      colorlog
-      packaging
-      virtualenv
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
+  dependencies = [
+    argcomplete
+    colorlog
+    packaging
+    virtualenv
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
 
   optional-dependencies = {
     tox_to_nox = [

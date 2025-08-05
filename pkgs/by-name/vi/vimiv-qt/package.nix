@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "vimiv-qt";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karlch";
@@ -19,13 +19,14 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-28sk5qDVmrgXYX2wm5G8zv564vG6GwxNp+gjrFHCRfU=";
   };
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   nativeBuildInputs = [
     installShellFiles
     qt5.wrapQtAppsHook
-    python3.pkgs.setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pyqt5
     py3exiv2
   ];
@@ -43,6 +44,8 @@ python3.pkgs.buildPythonApplication rec {
       install -Dm644 icons/vimiv_''${i}x''${i}.png $out/icons/hicolor/''${i}x''${i}/apps/vimiv.png
     done
   '';
+
+  pythonImportsCheck = [ "vimiv" ];
 
   # Vimiv has to be wrapped manually because it is a non-ELF executable.
   dontWrapQtApps = true;

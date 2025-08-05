@@ -16,7 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
   version = "1.8.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cimbali";
@@ -28,6 +28,13 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [
     setuptools
     babel
+  ];
+
+  patches = [
+    # Workaround for a bug on Python >= 3.13+ and pygobject < 3.51.
+    # This can go away once nixpkgs is using pygobject >= 3.51.
+    # See <https://github.com/Cimbali/pympress/issues/330> for details.
+    ./issue-330-gprops-iter-actually-iterable.patch
   ];
 
   dependencies =
@@ -46,23 +53,24 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      gtk3
-      poppler_gi
-    ]
-    ++ lib.optionals withGstreamer [
-      libcanberra-gtk3
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-      gst_all_1.gst-libav
-      gst_all_1.gst-vaapi
-    ];
+  buildInputs = [
+    gtk3
+    poppler_gi
+  ]
+  ++ lib.optionals withGstreamer [
+    libcanberra-gtk3
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-vaapi
+  ];
 
   doCheck = false; # there are no tests
+
+  pythonImportsCheck = [ "pympress" ];
 
   meta = {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";

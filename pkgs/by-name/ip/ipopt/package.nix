@@ -52,17 +52,16 @@ stdenv.mkDerivation rec {
     pkg-config
     gfortran
   ];
-  buildInputs =
-    [
-      blas
-      lapack
-    ]
-    ++ lib.optionals enableAMPL [ libamplsolver ]
-    ++ lib.optionals enableMUMPS [
-      mumps
-      mpi
-    ]
-    ++ lib.optionals enableSPRAL [ spral ];
+  buildInputs = [
+    blas
+    lapack
+  ]
+  ++ lib.optionals enableAMPL [ libamplsolver ]
+  ++ lib.optionals enableMUMPS [
+    mumps
+    mpi
+  ]
+  ++ lib.optionals enableSPRAL [ spral ];
 
   enableParallelBuilding = true;
 

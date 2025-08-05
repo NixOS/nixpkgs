@@ -132,15 +132,14 @@ let
   pluginDbusDeps = concatPluginAttrs "networkManagerDbusDeps";
   pluginTmpfilesRules = concatPluginAttrs "networkManagerTmpfilesRules";
 
-  packages =
-    [
-      cfg.package
-    ]
-    ++ cfg.plugins
-    ++ pluginRuntimeDeps
-    ++ lib.optionals (!delegateWireless && !enableIwd) [
-      pkgs.wpa_supplicant
-    ];
+  packages = [
+    cfg.package
+  ]
+  ++ cfg.plugins
+  ++ pluginRuntimeDeps
+  ++ lib.optionals (!delegateWireless && !enableIwd) [
+    pkgs.wpa_supplicant
+  ];
 in
 {
 
@@ -550,38 +549,37 @@ in
 
     hardware.wirelessRegulatoryDatabase = true;
 
-    environment.etc =
-      {
-        "NetworkManager/NetworkManager.conf".source = configFile;
+    environment.etc = {
+      "NetworkManager/NetworkManager.conf".source = configFile;
 
-        # The networkmanager-l2tp plugin expects /etc/ipsec.secrets to include /etc/ipsec.d/ipsec.nm-l2tp.secrets;
-        # see https://github.com/NixOS/nixpkgs/issues/64965
-        "ipsec.secrets".text = ''
-          include ipsec.d/ipsec.nm-l2tp.secrets
-        '';
-      }
-      // builtins.listToAttrs (
-        map (
-          pkg:
-          nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
-            source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
-          }
-        ) cfg.plugins
-      )
-      // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ]) {
-        "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-      }
-      // listToAttrs (
-        lib.imap1 (i: s: {
-          name = "NetworkManager/dispatcher.d/${
-            dispatcherTypesSubdirMap.${s.type}
-          }03userscript${lib.fixedWidthNumber 4 i}";
-          value = {
-            mode = "0544";
-            inherit (s) source;
-          };
-        }) cfg.dispatcherScripts
-      );
+      # The networkmanager-l2tp plugin expects /etc/ipsec.secrets to include /etc/ipsec.d/ipsec.nm-l2tp.secrets;
+      # see https://github.com/NixOS/nixpkgs/issues/64965
+      "ipsec.secrets".text = ''
+        include ipsec.d/ipsec.nm-l2tp.secrets
+      '';
+    }
+    // builtins.listToAttrs (
+      map (
+        pkg:
+        nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+          source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
+        }
+      ) cfg.plugins
+    )
+    // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ]) {
+      "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+    }
+    // listToAttrs (
+      lib.imap1 (i: s: {
+        name = "NetworkManager/dispatcher.d/${
+          dispatcherTypesSubdirMap.${s.type}
+        }03userscript${lib.fixedWidthNumber 4 i}";
+        value = {
+          mode = "0544";
+          inherit (s) source;
+        };
+      }) cfg.dispatcherScripts
+    );
 
     environment.systemPackages = packages;
 
@@ -609,7 +607,8 @@ in
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
       # ppp isn't able to mkdir that directory at runtime
       "d /run/pppd/lock 0700 root root -"
-    ] ++ pluginTmpfilesRules;
+    ]
+    ++ pluginTmpfilesRules;
 
     systemd.services.NetworkManager = {
       wantedBy = [ "multi-user.target" ];

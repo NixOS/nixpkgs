@@ -52,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     bash # sh
     systemd
     python
-  ] ++ lib.optionals uuctlSupport [ dmenu ];
+  ]
+  ++ lib.optionals uuctlSupport [ dmenu ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"

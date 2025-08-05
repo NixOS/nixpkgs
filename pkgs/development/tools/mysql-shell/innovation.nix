@@ -75,44 +75,42 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      git
-      bison
-      makeWrapper
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.DarwinTools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    git
+    bison
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.DarwinTools
+  ];
 
-  buildInputs =
-    [
-      curl
-      libedit
-      libssh
-      lz4
-      openssl
-      protobuf
-      readline
-      zlib
-      zstd
-      libevent
-      icu
-      re2
-      ncurses
-      libfido2
-      cyrus_sasl
-      openldap
-      python3
-      antlr.runtime.cpp
-    ]
-    ++ pythonDeps
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+  buildInputs = [
+    curl
+    libedit
+    libssh
+    lz4
+    openssl
+    protobuf
+    readline
+    zlib
+    zstd
+    libevent
+    icu
+    re2
+    ncurses
+    libfido2
+    cyrus_sasl
+    openldap
+    python3
+    antlr.runtime.cpp
+  ]
+  ++ pythonDeps
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
   env = {
     ${if stdenv.cc.isGNU then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=maybe-uninitialized";

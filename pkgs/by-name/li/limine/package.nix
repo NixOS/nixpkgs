@@ -42,28 +42,27 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "9.3.4";
+  version = "9.5.1";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-GXArMxm7vDyUShTIM1O8/4M8h/ol/b8YcsXdodxJqeM=";
+    hash = "sha256-UgY8S+XGlSnO1k98JWBfSN0/IY3LANVFgJwI1kdPAcU=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs =
-    [
-      llvmPackages.clang-unwrapped
-      llvmPackages.libllvm
-      llvmPackages.lld
-    ]
-    ++ lib.optionals (enableAll || buildCDs) [
-      mtools
-    ]
-    ++ lib.optionals hasX86 [ nasm ];
+  nativeBuildInputs = [
+    llvmPackages.clang-unwrapped
+    llvmPackages.libllvm
+    llvmPackages.lld
+  ]
+  ++ lib.optionals (enableAll || buildCDs) [
+    mtools
+  ]
+  ++ lib.optionals hasX86 [ nasm ];
 
   outputs = [
     "out"

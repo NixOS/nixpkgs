@@ -31,16 +31,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
-  configureFlags =
-    [
-      "-config"
-      "release"
-    ]
-    # Build mixes up dylibs/frameworks if one is not explicitly specified.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-config"
-      "qt_framework"
-    ];
+  configureFlags = [
+    "-config"
+    "release"
+  ]
+  # Build mixes up dylibs/frameworks if one is not explicitly specified.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-config"
+    "qt_framework"
+  ];
 
   dontWrapQtApps = true;
 

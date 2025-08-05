@@ -22,16 +22,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lima";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmn5AQpFbugFOmeiPUNMkPkgV1cZSR3nli90tdFmF0A";
+    hash = "sha256-vrYsIYikoN4D3bxu/JTb9lMRcL5k9S6T473dl58SDW0=";
   };
 
-  vendorHash = "sha256-1+jWEZ4VvVjJ7tSL4vlkCrWxCoSu8hiXefKSm3GExNs=";
+  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -39,7 +39,8 @@ buildGoModule (finalAttrs: {
 
     # For checkPhase, and installPhase(required to build completion)
     writableTmpDirAsHomeHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
@@ -68,23 +69,22 @@ buildGoModule (finalAttrs: {
       runHook postBuild
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r _output/* $out
-      wrapProgram $out/bin/limactl \
-        --prefix PATH : ${lib.makeBinPath [ qemu ]}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd limactl \
-        --bash <($out/bin/limactl completion bash) \
-        --fish <($out/bin/limactl completion fish) \
-        --zsh <($out/bin/limactl completion zsh)
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -r _output/* $out
+    wrapProgram $out/bin/limactl \
+      --prefix PATH : ${lib.makeBinPath [ qemu ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd limactl \
+      --bash <($out/bin/limactl completion bash) \
+      --fish <($out/bin/limactl completion fish) \
+      --zsh <($out/bin/limactl completion zsh)
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   postInstall = lib.optionalString withAdditionalGuestAgents ''
     cp -rs '${lima-additional-guestagents}/share/lima/.' "$out/share/lima/"

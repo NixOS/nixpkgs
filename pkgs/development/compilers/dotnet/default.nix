@@ -121,13 +121,12 @@ let
           (old: {
             name = overlay.unwrapped.name;
             # resolve symlinks so DOTNET_ROOT is self-contained
-            postBuild =
-              ''
-                mv "$out"/share/dotnet{,~}
-                cp -Lr "$out"/share/dotnet{~,}
-                rm -r "$out"/share/dotnet~
-              ''
-              + old.postBuild;
+            postBuild = ''
+              mv "$out"/share/dotnet{,~}
+              cp -Lr "$out"/share/dotnet{~,}
+              rm -r "$out"/share/dotnet~
+            ''
+            + old.postBuild;
             passthru =
               old.passthru
               // (
@@ -171,10 +170,9 @@ pkgs
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_3xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_3xx-bin;
   sdk_8_0_4xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_4xx-bin;
-  sdk_9_0_2xx = combineSdk sdk_9_0_1xx pkgs.sdk_9_0_2xx-bin;
   sdk_9_0_3xx = combineSdk sdk_9_0_1xx pkgs.sdk_9_0_3xx-bin;
   sdk_8_0 = sdk_8_0_4xx;
-  sdk_9_0 = sdk_9_0_2xx;
+  sdk_9_0 = sdk_9_0_3xx;
   sdk_10_0 = sdk_10_0_1xx;
   sdk_8_0-source = sdk_8_0_1xx;
   sdk_9_0-source = sdk_9_0_1xx;

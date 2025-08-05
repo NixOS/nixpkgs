@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.9";
-  format = "setuptools";
+  format = "pyproject";
   pname = "canto-curses";
 
   src = fetchFromGitHub {
@@ -26,6 +26,10 @@ python3Packages.buildPythonApplication rec {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/canto-curses/-/raw/6daa56bc5baebb2444c368a8208666ef484a6fc0/fix-build.patch";
       hash = "sha256-2TMNmwjUAGyenSDqxfI+U2hNeDZaj2CivfTfpX7CKgY=";
     })
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   buildInputs = [

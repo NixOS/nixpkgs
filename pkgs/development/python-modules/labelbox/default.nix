@@ -111,7 +111,8 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.data;
+  ]
+  ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access

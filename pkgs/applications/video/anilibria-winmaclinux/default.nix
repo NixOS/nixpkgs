@@ -32,10 +32,11 @@ mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  qmakeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
-    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
+  qmakeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+  ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -69,22 +70,21 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtquickcontrols2
-      qtwebsockets
-      qtmultimedia
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-base
-      gst-libav
-      gstreamer
-    ])
-    ++ lib.optionals withVLC [ libvlc ]
-    ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
+  buildInputs = [
+    qtbase
+    qtquickcontrols2
+    qtwebsockets
+    qtmultimedia
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-base
+    gst-libav
+    gstreamer
+  ])
+  ++ lib.optionals withVLC [ libvlc ]
+  ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
     (makeDesktopItem (rec {

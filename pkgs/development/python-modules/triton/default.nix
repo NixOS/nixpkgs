@@ -41,25 +41,24 @@ buildPythonPackage rec {
     hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
   };
 
-  patches =
-    [
-      (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
-        ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
-      })
-      (replaceVars ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch {
-        libhipDir = if rocmSupport then "${lib.getLib rocmPackages.clr}/lib" else null;
-        libcudaStubsDir =
-          if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
-      })
-    ]
-    ++ lib.optionals cudaSupport [
-      (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
-        cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
-      })
-      (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
-        nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
-      })
-    ];
+  patches = [
+    (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
+      ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
+    })
+    (replaceVars ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch {
+      libhipDir = if rocmSupport then "${lib.getLib rocmPackages.clr}/lib" else null;
+      libcudaStubsDir =
+        if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
+    })
+  ]
+  ++ lib.optionals cudaSupport [
+    (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
+      cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
+    })
+    (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
+      nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
+    })
+  ];
 
   postPatch = ''
     # Use our `cmakeFlags` instead and avoid downloading dependencies
@@ -128,23 +127,22 @@ buildPythonPackage rec {
     cd python
   '';
 
-  env =
-    {
-      TRITON_BUILD_PROTON = "OFF";
-      TRITON_OFFLINE_BUILD = true;
-    }
-    // lib.optionalAttrs cudaSupport {
-      CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
-      CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
+  env = {
+    TRITON_BUILD_PROTON = "OFF";
+    TRITON_OFFLINE_BUILD = true;
+  }
+  // lib.optionalAttrs cudaSupport {
+    CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
+    CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
 
-      # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
-      TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-      TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
-      TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
-      TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
-      TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
-      TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
-    };
+    # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
+    TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+    TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
+    TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
+    TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
+    TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
+    TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
+  };
 
   pythonRemoveDeps = [
     # Circular dependency, cf. https://github.com/triton-lang/triton/issues/1374

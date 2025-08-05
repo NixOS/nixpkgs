@@ -32,7 +32,8 @@ buildPythonPackage rec {
   dependencies = [
     requests
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     progress_bar = [ rich ];

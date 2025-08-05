@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lWU1NrUwcAXQR6mEiCr6Ze3TzpDYvCx5/fBIef9ao5I=";
 
   postPatch =
@@ -68,15 +67,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      desktop-file-utils
-      pkg-config
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cargo-tauri_1.hook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    desktop-file-utils
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking

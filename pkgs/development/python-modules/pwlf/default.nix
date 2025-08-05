@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pwlf";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cjekel";
     repo = "piecewise_linear_fit_py";
     tag = "v${version}";
-    hash = "sha256-tUJSVMhnUdqpbiKzrpznCEgaGHGOLylFm6DzNTnvnQQ=";
+    hash = "sha256-gN4AOmtezJ1310TVcKLsJ6rOtv0rGkQ6LjVluIeYEGQ=";
   };
 
   nativeBuildInputs = [

@@ -62,7 +62,7 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "A JAX-based simulator for autonomous driving research";
+    description = "JAX-based simulator for autonomous driving research";
     homepage = "https://github.com/waymo-research/waymax";
     changelog = "https://github.com/waymo-research/waymax/blob/main/CHANGELOG.md";
     maintainers = with lib.maintainers; [ samuela ];

@@ -52,33 +52,32 @@ stdenv.mkDerivation rec {
     pkg-config
     gi-docgen
     gobject-introspection
-  ] ++ lib.optional enableViewer wrapGAppsHook3;
+  ]
+  ++ lib.optional enableViewer wrapGAppsHook3;
 
-  buildInputs =
+  buildInputs = [
+    glib
+    libxml2
+  ]
+  ++ lib.optional enableUsb libusb1
+  ++ lib.optionals (enableViewer || enableGstPlugin) (
+    with gst_all_1;
     [
-      glib
-      libxml2
+      gstreamer
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
     ]
-    ++ lib.optional enableUsb libusb1
-    ++ lib.optionals (enableViewer || enableGstPlugin) (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-base
-        (gst-plugins-good.override { gtkSupport = true; })
-        gst-plugins-bad
-      ]
-    )
-    ++ lib.optionals (enableViewer) [ gtk3 ];
+  )
+  ++ lib.optionals (enableViewer) [ gtk3 ];
 
-  mesonFlags =
-    [
-    ]
-    ++ lib.optional enableFastHeartbeat "-Dfast-heartbeat=enabled"
-    ++ lib.optional (!enableGstPlugin) "-Dgst-plugin=disabled"
-    ++ lib.optional (!enableViewer) "-Dviewer=disabled"
-    ++ lib.optional (!enableUsb) "-Dviewer=disabled"
-    ++ lib.optional (!enablePacketSocket) "-Dpacket-socket=disabled";
+  mesonFlags = [
+  ]
+  ++ lib.optional enableFastHeartbeat "-Dfast-heartbeat=enabled"
+  ++ lib.optional (!enableGstPlugin) "-Dgst-plugin=disabled"
+  ++ lib.optional (!enableViewer) "-Dviewer=disabled"
+  ++ lib.optional (!enableUsb) "-Dviewer=disabled"
+  ++ lib.optional (!enablePacketSocket) "-Dpacket-socket=disabled";
 
   doCheck = true;
 

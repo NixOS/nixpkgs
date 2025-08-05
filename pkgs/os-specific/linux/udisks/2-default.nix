@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "out"
     "man"
     "dev"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
+  ]
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   patches = [
     (replaceVars ./fix-paths.patch {

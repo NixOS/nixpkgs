@@ -169,14 +169,13 @@ let
         # Write the snapshot file to the `.install` folder
         cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
-      nativeBuildInputs =
-        [
-          python3
-          stdenv.cc.cc
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          autoPatchelfHook
-        ];
+      nativeBuildInputs = [
+        python3
+        stdenv.cc.cc
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        autoPatchelfHook
+      ];
       buildInputs = [
         libxcrypt-legacy
       ];

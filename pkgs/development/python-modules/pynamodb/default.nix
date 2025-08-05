@@ -40,7 +40,8 @@ buildPythonPackage rec {
     pytest-env
     pytest-mock
     pytestCheckHook
-  ] ++ optional-dependencies.signal;
+  ]
+  ++ optional-dependencies.signal;
 
   pythonImportsCheck = [ "pynamodb" ];
 

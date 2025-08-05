@@ -49,7 +49,7 @@ buildPythonPackage rec {
   # ];
 
   meta = with lib; {
-    description = "s3 plugin for dvc";
+    description = "S3 plugin for dvc";
     homepage = "https://pypi.org/project/dvc-s3/${version}";
     changelog = "https://github.com/iterative/dvc-s3/releases/tag/${version}";
     license = licenses.asl20;

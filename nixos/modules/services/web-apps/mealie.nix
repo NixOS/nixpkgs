@@ -77,7 +77,8 @@ in
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
         NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
-      } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
+      }
+      // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
         DynamicUser = true;

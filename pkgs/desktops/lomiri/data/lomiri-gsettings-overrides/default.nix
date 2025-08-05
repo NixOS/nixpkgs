@@ -28,7 +28,8 @@ let
 
   gsettingsOverridePackages = [
     lomiri-schemas
-  ] ++ extraGSettingsOverridePackages;
+  ]
+  ++ extraGSettingsOverridePackages;
 in
 runCommand "lomiri-gsettings-overrides" { preferLocalBuild = true; } ''
   dataDir="$out/share/gsettings-schemas/nixos-gsettings-overrides"

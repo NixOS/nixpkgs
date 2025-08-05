@@ -257,7 +257,12 @@ in
         dmConf = config.services.xserver.displayManager;
         noDmUsed =
           !(
-            cfg.gdm.enable || cfg.sddm.enable || dmConf.xpra.enable || dmConf.lightdm.enable || cfg.ly.enable
+            cfg.gdm.enable
+            || cfg.sddm.enable
+            || dmConf.xpra.enable
+            || dmConf.lightdm.enable
+            || cfg.ly.enable
+            || cfg.lemurs.enable
           );
       in
       lib.mkIf noDmUsed (lib.mkDefault false);
@@ -268,6 +273,10 @@ in
         "acpid.service"
         "systemd-logind.service"
         "systemd-user-sessions.service"
+        "autovt@tty1.service"
+      ];
+      conflicts = [
+        "autovt@tty1.service"
       ];
       restartIfChanged = false;
 

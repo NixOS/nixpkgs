@@ -84,11 +84,9 @@ stdenv.mkDerivation rec {
           hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
         };
         patches = lib.optional (old ? patches) (lib.head old.patches);
-        postPatch =
-          (old.postPatch or "")
-          + ''
-            patchShebangs src/box_drawing_generate.sh
-          '';
+        postPatch = (old.postPatch or "") + ''
+          patchShebangs src/box_drawing_generate.sh
+        '';
       }
       // lib.optionalAttrs sixelSupport {
         buildInputs = old.buildInputs ++ [ libsixel ];

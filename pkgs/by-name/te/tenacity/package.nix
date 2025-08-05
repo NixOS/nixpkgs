@@ -61,24 +61,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
   };
 
-  postPatch =
-    ''
-      # GIT_DESCRIBE is used for the version string and can't be passed in
-      # as an option, so we substitute it instead.
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set( GIT_DESCRIBE "unknown" )' 'set( GIT_DESCRIBE "${finalAttrs.version}" )'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace libraries/lib-files/FileNames.cpp \
-        --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Tenacity has special handling for ffmpeg library search on darwin,
-      # looking only in a few specific directories.
-      # Make sure it searches for our version of ffmpeg in the nix store.
-      substituteInPlace libraries/lib-ffmpeg-support/FFmpegFunctions.cpp \
-        --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg}/lib
-    '';
+  postPatch = ''
+    # GIT_DESCRIBE is used for the version string and can't be passed in
+    # as an option, so we substitute it instead.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set( GIT_DESCRIBE "unknown" )' 'set( GIT_DESCRIBE "${finalAttrs.version}" )'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace libraries/lib-files/FileNames.cpp \
+      --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Tenacity has special handling for ffmpeg library search on darwin,
+    # looking only in a few specific directories.
+    # Make sure it searches for our version of ffmpeg in the nix store.
+    substituteInPlace libraries/lib-ffmpeg-support/FFmpegFunctions.cpp \
+      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg}/lib
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/{bin,Applications}
@@ -117,61 +116,59 @@ stdenv.mkDerivation (finalAttrs: {
     "-lswscale"
   ]);
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      gettext
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      makeWrapper
-      linuxHeaders
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    gettext
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    makeWrapper
+    linuxHeaders
+  ];
 
-  buildInputs =
-    [
-      expat
-      ffmpeg
-      file
-      flac
-      glib
-      lame
-      libid3tag
-      libjack2
-      libmad
-      libopus
-      libsndfile
-      libvorbis
-      lilv
-      lv2
-      pcre
-      portaudio
-      serd
-      sord
-      soundtouch
-      soxr
-      sqlite
-      sratom
-      suil
-      twolame
-      wxGTK32
-      gtk3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      at-spi2-core
-      dbus
-      libepoxy
-      libXdmcp
-      libXtst
-      libpthreadstubs
-      libxkbcommon
-      libselinux
-      libsepol
-      util-linux
-    ];
+  buildInputs = [
+    expat
+    ffmpeg
+    file
+    flac
+    glib
+    lame
+    libid3tag
+    libjack2
+    libmad
+    libopus
+    libsndfile
+    libvorbis
+    lilv
+    lv2
+    pcre
+    portaudio
+    serd
+    sord
+    soundtouch
+    soxr
+    sqlite
+    sratom
+    suil
+    twolame
+    wxGTK32
+    gtk3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    at-spi2-core
+    dbus
+    libepoxy
+    libXdmcp
+    libXtst
+    libpthreadstubs
+    libxkbcommon
+    libselinux
+    libsepol
+    util-linux
+  ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/

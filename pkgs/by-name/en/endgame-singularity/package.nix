@@ -25,14 +25,19 @@ let
 in
 
 python3.pkgs.buildPythonApplication {
-  format = "setuptools";
+  format = "pyproject";
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
   sourceRoot = main_src.name;
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
-  propagatedBuildInputs = with python3.pkgs; [
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pygame
     numpy
     polib

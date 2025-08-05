@@ -49,15 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-    ]
-    ++ lib.optional finalAttrs.finalPackage.doCheck [
-      "-DINDI_BUILD_UNITTESTS=ON"
-      "-DINDI_BUILD_INTEGTESTS=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck [
+    "-DINDI_BUILD_UNITTESTS=ON"
+    "-DINDI_BUILD_INTEGTESTS=ON"
+  ];
 
   checkInputs = [ gtest ];
 

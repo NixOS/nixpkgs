@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.2.5";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "jaqx0r";
     repo = "mtail";
     rev = "v${version}";
-    hash = "sha256-T81eLshaHqbLj4X0feWJE+VEWItmOxcVCQX04zl3jeA=";
+    hash = "sha256-jRaIDYEzpSFOTPFks6lWMidxmcmHfym4kG71+byJ9vI=";
   };
 
-  vendorHash = "sha256-Q3Fj73sQAmZQ9OF5hI0t1iPkY8u189PZ4LlzW34NQx0=";
+  vendorHash = "sha256-KZOcmZGv1kI9eDhQdtQeQ3ITyEw9vEDPz4RAz30pP9s=";
 
   nativeBuildInputs = [
     gotools # goyacc

@@ -17,14 +17,14 @@
 let
   latestVersionForNc = {
     "31" = {
-      version = "9.0.0";
-      appHash = "sha256-hhHWCzaSfV41Ysuq4WXjy63mflgEsb2qdGapHE8fuA8=";
-      modelHash = "sha256-WzK9StICup/YuRcuM575DiPYHsvXGt9CRrAoBVGbXHI=";
+      version = "9.0.3";
+      appHash = "sha256-G7SDE72tszifozfT3vNxHW6WmMqQKhrSayQVANQaMbs=";
+      modelHash = "sha256-dB4ot/65xisR700kUXg3+Y+SkrpQO4mWrFfp+En0QEE=";
     };
     "30" = {
-      version = "8.2.0";
-      appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
-      modelHash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
+      version = "8.2.1";
+      appHash = "sha256-xSJbfL5HI1bo5KYvk/ssEjSUsWF1hFQkl5MOm/kXYDE=";
+      modelHash = "sha256-O1gh3d0MGQOHUbrIyX3f+R7lGJ7+i8tTmrnfKlczrsk=";
     };
   };
   currentVersionInfo =
@@ -35,36 +35,34 @@ stdenv.mkDerivation rec {
   pname = "nextcloud-app-recognize";
   inherit (currentVersionInfo) version;
 
-  srcs =
-    [
-      (fetchurl {
-        url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
-        hash = currentVersionInfo.appHash;
-      })
+  srcs = [
+    (fetchurl {
+      url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
+      hash = currentVersionInfo.appHash;
+    })
 
-      (fetchurl {
-        url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
-        hash = currentVersionInfo.modelHash;
-      })
-    ]
-    ++ lib.optionals useLibTensorflow [
-      (fetchurl {
-        # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
-        url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
-        hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
-      })
-    ];
+    (fetchurl {
+      url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
+      hash = currentVersionInfo.modelHash;
+    })
+  ]
+  ++ lib.optionals useLibTensorflow [
+    (fetchurl {
+      # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
+      url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
+      hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
+    })
+  ];
 
-  unpackPhase =
-    ''
-      # Merge the app and the models from github
-      tar -xzpf "${builtins.elemAt srcs 0}" recognize
-      tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
-    ''
-    + lib.optionalString useLibTensorflow ''
-      # Place the tensorflow lib at the right place for building
-      tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
-    '';
+  unpackPhase = ''
+    # Merge the app and the models from github
+    tar -xzpf "${builtins.elemAt srcs 0}" recognize
+    tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
+  ''
+  + lib.optionalString useLibTensorflow ''
+    # Place the tensorflow lib at the right place for building
+    tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
+  '';
 
   postPatch = ''
     # Make it clear we are not reading the node in settings

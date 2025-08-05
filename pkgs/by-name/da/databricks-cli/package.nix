@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.258.0";
+  version = "0.262.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8JVU0tn0KINBdEE0nS2VQ8v9TUn9h2euPGZELSCbcLA=";
+    hash = "sha256-grA7HI9gJFgeqNxmd6SboAn9z2QKLok7BayGj2RMYog=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
   '';
 
-  vendorHash = "sha256-veFhCZkkLnC6hVuHPiB+OjqsvUcxkp3B59lQikgjFbE=";
+  vendorHash = "sha256-sJyinqKX4irO4rquJ1hxDU/GH4XcyxPGw7qH0ZLgdxU=";
 
   excludedPackages = [
     "bundle/internal"

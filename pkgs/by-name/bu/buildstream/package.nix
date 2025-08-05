@@ -13,6 +13,9 @@
   addBinToPathHook,
   gitMinimal,
   versionCheckHook,
+
+  # Optional features
+  enableBuildstreamPlugins ? true,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -34,25 +37,29 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [ buildbox ]
-    ++ (with python3Packages; [
-      click
-      dulwich
-      grpcio
-      jinja2
-      markupsafe
-      packaging
-      pluginbase
-      protobuf
-      psutil
-      pyroaring
-      requests
-      ruamel-yaml
-      ruamel-yaml-clib
-      tomlkit
-      ujson
-    ]);
+  dependencies = [
+    buildbox
+  ]
+  ++ (with python3Packages; [
+    click
+    dulwich
+    grpcio
+    jinja2
+    markupsafe
+    packaging
+    pluginbase
+    protobuf
+    psutil
+    pyroaring
+    requests
+    ruamel-yaml
+    ruamel-yaml-clib
+    tomlkit
+    ujson
+  ])
+  ++ lib.optionals enableBuildstreamPlugins [
+    python3Packages.buildstream-plugins
+  ];
 
   buildInputs = [
     fuse3

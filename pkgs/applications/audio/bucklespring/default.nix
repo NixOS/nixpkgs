@@ -34,16 +34,15 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      openal
-      alure
-    ]
-    ++ optionals (legacy) [
-      libXtst
-      libX11
-    ]
-    ++ optionals (!legacy) [ libinput ];
+  buildInputs = [
+    openal
+    alure
+  ]
+  ++ optionals (legacy) [
+    libXtst
+    libX11
+  ]
+  ++ optionals (!legacy) [ libinput ];
 
   makeFlags = optionals (!legacy) [ "libinput=1" ];
 

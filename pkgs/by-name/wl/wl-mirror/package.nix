@@ -72,19 +72,18 @@ stdenv.mkDerivation rec {
     "-DWITH_GBM=ON"
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd wl-mirror \
-        --bash ../scripts/completions/bash-completions/_wl-mirror \
-        --zsh ../scripts/completions/zsh-completions/_wl-mirror
+  postInstall = ''
+    installShellCompletion --cmd wl-mirror \
+      --bash ../scripts/completions/bash-completions/_wl-mirror \
+      --zsh ../scripts/completions/zsh-completions/_wl-mirror
 
-      installShellCompletion --cmd wl-present \
-        --bash ../scripts/completions/bash-completions/_wl-present \
-        --zsh ../scripts/completions/zsh-completions/_wl-present
-    ''
-    + lib.optionalString installExampleScripts ''
-      wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
-    '';
+    installShellCompletion --cmd wl-present \
+      --bash ../scripts/completions/bash-completions/_wl-present \
+      --zsh ../scripts/completions/zsh-completions/_wl-present
+  ''
+  + lib.optionalString installExampleScripts ''
+    wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/wl-mirror";

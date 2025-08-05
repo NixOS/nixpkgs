@@ -104,7 +104,7 @@ in
           path = with pkgs; [
             procps
             openssh
-            nettools
+            net-tools
           ];
           description = "spark master service.";
           after = [ "network.target" ];
@@ -133,7 +133,7 @@ in
           path = with pkgs; [
             procps
             openssh
-            nettools
+            net-tools
             rsync
           ];
           description = "spark master service.";

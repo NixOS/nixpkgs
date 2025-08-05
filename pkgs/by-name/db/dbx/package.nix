@@ -25,7 +25,8 @@ let
         disabledTestPaths = [
           # Requires python-on-whales
           "tests/autobahn/test_autobahn.py"
-        ] ++ (old.disabledTestPaths or [ ]);
+        ]
+        ++ (old.disabledTestPaths or [ ]);
       });
 
       databricks-sdk = super.databricks-sdk.overridePythonAttrs (old: {
@@ -109,20 +110,19 @@ python.pkgs.buildPythonApplication rec {
     gcp = [ google-cloud-storage ];
   };
 
-  nativeCheckInputs =
-    [
-      addBinToPathHook
-      gitMinimal
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ (with python.pkgs; [
-      pytest-asyncio
-      pytest-mock
-      pytest-timeout
-      pytest-xdist
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    addBinToPathHook
+    gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python.pkgs; [
+    pytest-asyncio
+    pytest-mock
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "--version";
 
   disabledTests = [

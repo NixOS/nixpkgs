@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "epr";
   version = "2.4.13";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "wustho";
@@ -15,6 +15,10 @@ python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "sha256-1qsqYlqGlCRhl7HINrcTDt5bGlb7g5PmaERylT+UvEg=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   meta = with lib; {
     description = "CLI Epub Reader";

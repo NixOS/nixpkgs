@@ -174,7 +174,7 @@ makeScopeWithSplicing' {
 
         kreport = callPackage ../development/libraries/kreport { };
 
-        kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+        kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
@@ -320,8 +320,6 @@ makeScopeWithSplicing' {
         timed = callPackage ../applications/system/timed { };
 
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
-
-        xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
         xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
       }

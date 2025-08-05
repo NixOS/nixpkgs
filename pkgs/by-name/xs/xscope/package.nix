@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "program to monitor X11/Client conversations";
+    description = "Program to monitor X11/Client conversations";
     homepage = "https://cgit.freedesktop.org/xorg/app/xscope/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ crertel ];

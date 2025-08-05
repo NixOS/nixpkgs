@@ -17,18 +17,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MHvJRXAMV64GxGgCJjQPlaNyxVjBvyQXogbla9UMFL8=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;

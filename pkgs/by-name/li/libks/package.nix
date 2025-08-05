@@ -37,10 +37,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libuuid
-    ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libuuid
+  ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
 
   passthru = {
     tests.freeswitch = freeswitch;

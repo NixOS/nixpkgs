@@ -65,31 +65,31 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  ]
+  ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      SDL2
-      libX11
-      glew
-      libzip
-      zlib
-    ]
-    ++ lib.optionals useSystemFfmpeg [
-      ffmpeg_6
-    ]
-    ++ lib.optionals useSystemSnappy [
-      snappy
-    ]
-    ++ lib.optionals enableQt [
-      qtbase
-      qtmultimedia
-    ]
-    ++ lib.optionals enableVulkan [ vulkan-loader ]
-    ++ lib.optionals vulkanWayland [
-      wayland
-      libffi
-    ];
+  buildInputs = [
+    SDL2
+    libX11
+    glew
+    libzip
+    zlib
+  ]
+  ++ lib.optionals useSystemFfmpeg [
+    ffmpeg_6
+  ]
+  ++ lib.optionals useSystemSnappy [
+    snappy
+  ]
+  ++ lib.optionals enableQt [
+    qtbase
+    qtmultimedia
+  ]
+  ++ lib.optionals enableVulkan [ vulkan-loader ]
+  ++ lib.optionals vulkanWayland [
+    wayland
+    libffi
+  ];
 
   dontWrapQtApps = true;
 

@@ -78,8 +78,11 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath =
-        [ atomicparsley ] ++ lib.optional ffmpegSupport ffmpeg ++ lib.optional rtmpSupport rtmpdump;
+      packagesToBinPath = [
+        atomicparsley
+      ]
+      ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optional rtmpSupport rtmpdump;
     in
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 

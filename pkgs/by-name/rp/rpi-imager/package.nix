@@ -49,22 +49,21 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
   ];
 
-  buildInputs =
-    [
-      curl
-      libarchive
-      qt6.qtbase
-      qt6.qtdeclarative
-      qt6.qtsvg
-      qt6.qttools
-      xz
-      gnutls
-      zstd
-      libtasn1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    curl
+    libarchive
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qttools
+    xz
+    gnutls
+    zstd
+    libtasn1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   cmakeFlags =
     # Disable vendoring

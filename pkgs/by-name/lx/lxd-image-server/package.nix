@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "lxd-image-server";
   version = "0.0.4";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Avature";
@@ -24,8 +24,12 @@ python3.pkgs.buildPythonApplication rec {
     ./run.patch
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
+    setuptools # pkg_resources is imported during runtime
     attrs
     click
     inotify
@@ -44,6 +48,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   doCheck = false;
+
+  pythonImportsCheck = [ "lxd_image_server" ];
 
   passthru.tests.lxd-image-server = nixosTests.lxd-image-server;
 

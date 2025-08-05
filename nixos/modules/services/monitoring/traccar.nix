@@ -8,44 +8,62 @@ let
   cfg = config.services.traccar;
   stateDirectory = "/var/lib/traccar";
   configFilePath = "${stateDirectory}/config.xml";
-  expandCamelCase = lib.replaceStrings lib.upperChars (map (s: ".${s}") lib.lowerChars);
-  mkConfigEntry = key: value: "<entry key='${expandCamelCase key}'>${value}</entry>";
+
+  # Map leafs to XML <entry> elements as expected by traccar, using
+  # dot-separated keys for nested attribute paths.
+  mapLeafs = lib.mapAttrsRecursive (
+    path: value: "<entry key='${lib.concatStringsSep "." path}'>${value}</entry>"
+  );
+
+  mkConfigEntry = config: lib.collect builtins.isString (mapLeafs config);
+
   mkConfig =
     configurationOptions:
     pkgs.writeText "traccar.xml" ''
       <?xml version='1.0' encoding='UTF-8'?>
       <!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
       <properties>
-          ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkConfigEntry configurationOptions)}
+          ${builtins.concatStringsSep "\n" (mkConfigEntry configurationOptions)}
       </properties>
     '';
 
   defaultConfig = {
-    databaseDriver = "org.h2.Driver";
-    databasePassword = "";
-    databaseUrl = "jdbc:h2:${stateDirectory}/traccar";
-    databaseUser = "sa";
-    loggerConsole = "true";
-    mediaPath = "${stateDirectory}/media";
-    templatesRoot = "${stateDirectory}/templates";
+    database = {
+      driver = "org.h2.Driver";
+      password = "";
+      url = "jdbc:h2:${stateDirectory}/traccar";
+      user = "sa";
+    };
+    logger.console = "true";
+    media.path = "${stateDirectory}/media";
+    templates.root = "${stateDirectory}/templates";
   };
+
 in
 {
   options.services.traccar = {
     enable = lib.mkEnableOption "Traccar, an open source GPS tracking system";
+    settingsFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = ''
+        File used as configuration for traccar. When specified, {option}`settings` is ignored.
+      '';
+    };
     settings = lib.mkOption {
       apply = lib.recursiveUpdate defaultConfig;
       default = defaultConfig;
       description = ''
         {file}`config.xml` configuration as a Nix attribute set.
-        Attribute names are translated from camelCase to dot-separated strings. For instance:
-        {option}`mailSmtpPort = "25"`
-        would result in the following configuration property:
+        This option is ignored if `settingsFile` is set.
+
+        Nested attributes get translated to a properties entry in the traccar configuration.
+        For instance: `mail.smtp.port = "25"` results in the following entry:
         `<entry key='mail.smtp.port'>25</entry>`
-        Configuration options should match those described in
-        [Traccar - Configuration File](https://www.traccar.org/configuration-file/).
-        Secret tokens should be specified using {option}`environmentFile`
+
+        Secrets should be specified using {option}`environmentFile`
         instead of this world-readable attribute set.
+        [Traccar - Configuration File](https://www.traccar.org/configuration-file/).
       '';
     };
     environmentFile = lib.mkOption {
@@ -56,7 +74,7 @@ in
 
         Can be used for storing the secrets without making them available in the world-readable Nix store.
 
-        For example, you can set {option}`services.traccar.settings.databasePassword = "$TRACCAR_DB_PASSWORD"`
+        For example, you can set {option}`services.traccar.settings.database.password = "$TRACCAR_DB_PASSWORD"`
         and then specify `TRACCAR_DB_PASSWORD="<secret>"` in the environment file.
         This value will get substituted in the configuration file.
       '';
@@ -65,7 +83,7 @@ in
 
   config =
     let
-      configuration = mkConfig cfg.settings;
+      configuration = if cfg.settingsFile != null then cfg.settingsFile else mkConfig cfg.settings;
     in
     lib.mkIf cfg.enable {
       systemd.services.traccar = {
@@ -92,7 +110,7 @@ in
 
         serviceConfig = {
           DynamicUser = true;
-          EnvironmentFile = cfg.environmentFile;
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           ExecStart = "${lib.getExe pkgs.traccar} ${configFilePath}";
           LockPersonality = true;
           NoNewPrivileges = true;

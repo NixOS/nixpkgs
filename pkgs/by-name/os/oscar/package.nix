@@ -4,6 +4,7 @@
   qt5,
   fetchFromGitLab,
   libGLU,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "oscar";
@@ -49,6 +50,13 @@ stdenv.mkDerivation rec {
     install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://www.sleepfiles.com/OSCAR/";

@@ -91,7 +91,7 @@ let
     '';
 
     meta = {
-      description = "library used to integrate cuBLASDx and cuFFTDx into Warp";
+      description = "Library used to integrate cuBLASDx and cuFFTDx into Warp";
       homepage = "https://developer.nvidia.com/cublasdx-downloads";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = with lib.licenses; [

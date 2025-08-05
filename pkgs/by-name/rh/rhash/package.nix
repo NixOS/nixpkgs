@@ -42,14 +42,13 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-full";
 
-  installTargets =
-    [
-      "install"
-      "install-lib-headers"
-    ]
-    ++ lib.optionals (!enableStatic) [
-      "install-lib-so-link"
-    ];
+  installTargets = [
+    "install"
+    "install-lib-headers"
+  ]
+  ++ lib.optionals (!enableStatic) [
+    "install-lib-so-link"
+  ];
 
   meta = with lib; {
     homepage = "https://rhash.sourceforge.net/";

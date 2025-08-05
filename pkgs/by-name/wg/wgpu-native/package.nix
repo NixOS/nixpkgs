@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     "dev"
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iOnz//eHQ6WRPWOGcKOXyuwZS9WcbJWslRAz8yDamn8=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     vulkan-loader

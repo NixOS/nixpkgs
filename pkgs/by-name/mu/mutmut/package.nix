@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mutmut";
   version = "3.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mutmut";
@@ -24,7 +24,9 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     click
     parso
     junit-xml
@@ -32,8 +34,10 @@ python3Packages.buildPythonApplication rec {
     textual
   ];
 
+  pythonImportsCheck = [ "mutmut" ];
+
   meta = {
-    description = "mutation testing system for Python, with a strong focus on ease of use";
+    description = "Mutation testing system for Python, with a strong focus on ease of use";
     mainProgram = "mutmut";
     homepage = "https://github.com/boxed/mutmut";
     changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";

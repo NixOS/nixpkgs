@@ -11,13 +11,13 @@
 
 buildNpmPackage rec {
   pname = "ghostfolio";
-  version = "2.176.0";
+  version = "2.185.0";
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
     tag = version;
-    hash = "sha256-T14omi5NkMCrqiXF+gSi6ELEdfH4QMp7luJtuCWhGM4=";
+    hash = "sha256-jnC2u9ZZcOSux6UUzW9Ot02aFWeGYhrdCC9d4xM0efA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -27,7 +27,7 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-0vFH4gdrtaBca1lWxm2uZ1VerP4hJEJgBQzygDbja3I=";
+  npmDepsHash = "sha256-FCH0v9jRviH33mfIVX8967X1u494qToHraYVn5pbSPw=";
 
   nativeBuildInputs = [
     prisma

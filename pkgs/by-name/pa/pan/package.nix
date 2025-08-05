@@ -43,18 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      gtk3
-      gmime3
-      libnotify
-      gnutls
-    ]
-    ++ lib.optionals spellChecking [ gspell ]
-    ++ lib.optionals gnomeSupport [
-      libsecret
-      gcr
-    ];
+  buildInputs = [
+    gtk3
+    gmime3
+    libnotify
+    gnutls
+  ]
+  ++ lib.optionals spellChecking [ gspell ]
+  ++ lib.optionals gnomeSupport [
+    libsecret
+    gcr
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "WANT_GSPELL" spellChecking)
@@ -75,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://pan.rebelbase.com";
     maintainers = with lib.maintainers; [
       aleksana
-      emaryn
     ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [

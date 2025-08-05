@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vtracer";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "visioncortex";
     repo = "vtracer";
     rev = version;
-    hash = "sha256-n5AUc4C0eUfeVe3zTo0ZC/KWMS1/uW/+3Uoz8Q2qQI0=";
+    hash = "sha256-gU2LxUbgy2KgMCu7nyjfGkmBwnA9mjX4mUT9M9k1a4I=";
   };
 
   cargoLock = {

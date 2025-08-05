@@ -61,14 +61,13 @@ in
         # Override GSettings defaults
         sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-        systemPackages =
-          [
-            nixos-gsettings-overrides # GSettings default overrides
-          ]
-          ++ (with pkgs.lomiri; [
-            lomiri-wallpapers # default + additional wallpaper
-            suru-icon-theme # basic indicator icons
-          ]);
+        systemPackages = [
+          nixos-gsettings-overrides # GSettings default overrides
+        ]
+        ++ (with pkgs.lomiri; [
+          lomiri-wallpapers # default + additional wallpaper
+          suru-icon-theme # basic indicator icons
+        ]);
       };
 
       fonts.packages = with pkgs; [
@@ -276,19 +275,18 @@ in
 
       systemd.services = {
         "dbus-com.lomiri.UserMetrics" = {
-          serviceConfig =
-            {
-              Type = "dbus";
-              BusName = "com.lomiri.UserMetrics";
-              User = "usermetrics";
-              StandardOutput = "syslog";
-              SyslogIdentifier = "com.lomiri.UserMetrics";
-              ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
-            }
-            // lib.optionalAttrs (!config.security.apparmor.enable) {
-              # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
-              Environment = "USERMETRICS_NO_AUTH=1";
-            };
+          serviceConfig = {
+            Type = "dbus";
+            BusName = "com.lomiri.UserMetrics";
+            User = "usermetrics";
+            StandardOutput = "syslog";
+            SyslogIdentifier = "com.lomiri.UserMetrics";
+            ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
+          }
+          // lib.optionalAttrs (!config.security.apparmor.enable) {
+            # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
+            Environment = "USERMETRICS_NO_AUTH=1";
+          };
         };
       };
 

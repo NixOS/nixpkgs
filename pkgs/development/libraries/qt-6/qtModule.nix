@@ -24,8 +24,7 @@ stdenv.mkDerivation (
     patches = args.patches or patches.${pname} or [ ];
 
     buildInputs =
-      args.buildInputs or [ ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs;
+      args.buildInputs or [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs;
     nativeBuildInputs =
       (args.nativeBuildInputs or [ ])
       ++ [

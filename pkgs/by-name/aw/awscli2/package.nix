@@ -65,14 +65,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.49"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.61"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-fg4UMAsylJJ0Xy8s84Qr7OdiFrzMIP9RsAH+pYDThrU=";
+    hash = "sha256-2lcPqNrGAHvPPVZIQaDbI54sQQ7OsOiMxUx6qg6WeNU=";
   };
 
   postPatch = ''
@@ -81,7 +81,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
       --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
 
     substituteInPlace requirements-base.txt \
@@ -126,15 +126,14 @@ py.pkgs.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd aws \
-        --bash <(echo "complete -C $out/bin/aws_completer aws") \
-        --zsh $out/bin/aws_zsh_completer.sh
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      rm $out/bin/aws.cmd
-    '';
+  postInstall = ''
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/aws.cmd
+  '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.
@@ -145,7 +144,7 @@ py.pkgs.buildPythonApplication rec {
   # tests/unit/customizations/sso/test_utils.py uses sockets
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-Wignore::DeprecationWarning"
   ];
 

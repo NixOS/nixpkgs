@@ -93,11 +93,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-flax-vector-conversions";
 
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
 
     $out/share/duckstation/common-tests
 
-    runHook postCheck
+    runHook postInstallCheck
   '';
 
   installPhase = ''

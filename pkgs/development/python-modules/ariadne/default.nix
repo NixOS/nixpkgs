@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ariadne" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   disabledTests = [
     # TypeError: TestClient.request() got an unexpected keyword argument 'content'

@@ -34,16 +34,15 @@ buildGoModule (finalAttrs: {
 
   # To take advantage of the udev rule something like `services.udev.packages = [ nixpkgs.voxinput ]`
   # needs to be added to your configuration.nix
-  postInstall =
-    ''
-      mv $out/bin/VoxInput $out/bin/voxinput_tmp ; mv $out/bin/voxinput_tmp $out/bin/voxinput
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/voxinput \
-        --prefix PATH : ${lib.makeBinPath [ dotool ]}
-      mkdir -p $out/lib/udev/rules.d
-      echo 'KERNEL=="uinput", GROUP="input", MODE="0620", OPTIONS+="static_node=uinput"' > $out/lib/udev/rules.d/99-voxinput.rules
-    '';
+  postInstall = ''
+    mv $out/bin/VoxInput $out/bin/voxinput_tmp ; mv $out/bin/voxinput_tmp $out/bin/voxinput
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/voxinput \
+      --prefix PATH : ${lib.makeBinPath [ dotool ]}
+    mkdir -p $out/lib/udev/rules.d
+    echo 'KERNEL=="uinput", GROUP="input", MODE="0620", OPTIONS+="static_node=uinput"' > $out/lib/udev/rules.d/99-voxinput.rules
+  '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/.voxinput-wrapped \

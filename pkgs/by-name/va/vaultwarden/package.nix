@@ -19,29 +19,29 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.34.1";
+  version = "1.34.3";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     rev = version;
-    hash = "sha256-SVEQX+uAYb4/qFQZRm2khOi8ti76v3F5lRnUgoHk8wA=";
+    hash = "sha256-Dj0ySVRvBZ/57+UHas3VI8bi/0JBRqn0IW1Dq+405J0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Or259iQP89Ptf/XHpkHD08VDyCk/nQcFlyoKRUUQKt0=";
+  cargoHash = "sha256-4sDagd2XGamBz1XvDj4ycRVJ0F+4iwHOPlj/RglNDqE=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optional (dbBackend == "mysql") libmysqlclient
-    ++ lib.optional (dbBackend == "postgresql") libpq;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optional (dbBackend == "mysql") libmysqlclient
+  ++ lib.optional (dbBackend == "postgresql") libpq;
 
   buildFeatures = dbBackend;
 

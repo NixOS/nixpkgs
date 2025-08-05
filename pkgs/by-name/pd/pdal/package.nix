@@ -44,27 +44,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      gdal
-      hdf5-cpp
-      laszip
-      libgeotiff
-      libtiff
-      libxml2
-      openscenegraph
-      libpq
-      proj
-      sqlite
-      tiledb
-      xercesc
-      zlib
-      zstd
-    ]
-    ++ lib.optionals enableE57 [
-      libe57format
-    ];
+  buildInputs = [
+    curl
+    gdal
+    hdf5-cpp
+    laszip
+    libgeotiff
+    libtiff
+    libxml2
+    openscenegraph
+    libpq
+    proj
+    sqlite
+    tiledb
+    xercesc
+    zlib
+    zstd
+  ]
+  ++ lib.optionals enableE57 [
+    libe57format
+  ];
 
   strictDeps = true;
 

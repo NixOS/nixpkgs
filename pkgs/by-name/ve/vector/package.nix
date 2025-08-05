@@ -39,31 +39,29 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-t8mfZpLrzrxj1WUpJPqZWyfBf9XobcqZY/hAeVGzhcM=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      perl
-      git
-      rustPlatform.bindgenHook
-    ]
-    # Provides the mig command used by the build scripts
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
-  buildInputs =
-    [
-      oniguruma
-      openssl
-      protobuf
-      rdkafka
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rust-jemalloc-sys
-      libiconv
-      coreutils
-      zlib
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    perl
+    git
+    rustPlatform.bindgenHook
+  ]
+  # Provides the mig command used by the build scripts
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+  buildInputs = [
+    oniguruma
+    openssl
+    protobuf
+    rdkafka
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rust-jemalloc-sys
+    libiconv
+    coreutils
+    zlib
+  ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
   # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.

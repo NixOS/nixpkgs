@@ -54,8 +54,7 @@
 
 let
   runtimeLibs =
-    lib.optional withVulkan vulkan-loader
-    ++ lib.optional withGamemode (lib.getLib gamemode);
+    lib.optional withVulkan vulkan-loader ++ lib.optional withGamemode (lib.getLib gamemode);
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
@@ -68,68 +67,65 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optional withWayland wayland
-    ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
+  nativeBuildInputs = [
+    pkg-config
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optional withWayland wayland
+  ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
 
-  buildInputs =
-    [
-      ffmpeg
-      flac
-      freetype
-      libGL
-      libGLU
-      libxml2
-      mbedtls_2
-      python3
-      qt5.qtbase
-      SDL2
-      spirv-tools
-      zlib
-    ]
-    ++ lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit
-    ++ lib.optional withVulkan vulkan-loader
-    ++ lib.optionals withWayland [
-      wayland
-      wayland-scanner
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      dbus
-      libX11
-      libXdmcp
-      libXext
-      libXxf86vm
-      libdrm
-      libpulseaudio
-      libv4l
-      libxkbcommon
-      libgbm
-      pipewire
-      udev
-    ];
+  buildInputs = [
+    ffmpeg
+    flac
+    freetype
+    libGL
+    libGLU
+    libxml2
+    mbedtls_2
+    python3
+    qt5.qtbase
+    SDL2
+    spirv-tools
+    zlib
+  ]
+  ++ lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit
+  ++ lib.optional withVulkan vulkan-loader
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    dbus
+    libX11
+    libXdmcp
+    libXext
+    libXxf86vm
+    libdrm
+    libpulseaudio
+    libv4l
+    libxkbcommon
+    libgbm
+    pipewire
+    udev
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--disable-update_cores"
-      "--disable-builtinmbedtls"
-      "--enable-systemmbedtls"
-      "--disable-builtinzlib"
-      "--disable-builtinflac"
-      "--disable-update_assets"
-      "--disable-update_core_info"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-dbus"
-      "--enable-egl"
-      "--enable-kms"
-    ];
+  configureFlags = [
+    "--disable-update_cores"
+    "--disable-builtinmbedtls"
+    "--enable-systemmbedtls"
+    "--disable-builtinzlib"
+    "--disable-builtinflac"
+    "--disable-update_assets"
+    "--disable-update_core_info"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-dbus"
+    "--enable-egl"
+    "--enable-kms"
+  ];
 
   postInstall =
     lib.optionalString (runtimeLibs != [ ]) ''
@@ -170,7 +166,8 @@ stdenv.mkDerivation rec {
           assets_directory = "${retroarch-assets}/share/retroarch/assets";
           joypad_autoconfig_dir = "${retroarch-joypad-autoconfig}/share/libretro/autoconfig";
           libretro_info_path = "${libretro-core-info}/share/retroarch/cores";
-        } // settings;
+        }
+        // settings;
       };
   };
 

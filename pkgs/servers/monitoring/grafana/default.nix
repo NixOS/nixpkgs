@@ -14,6 +14,7 @@
   nixosTests,
   xcbuild,
   faketty,
+  nodejs,
 }:
 
 let
@@ -40,7 +41,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.2";
+  version = "12.1.0";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -52,12 +53,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-Nzx7QAAON/cWLqadL2IpdRunFNNoXE8PPYrquqPvWfk=";
+    hash = "sha256-yraCuPLe68ryCgFzOZPL1H/JYynEvxijjgxMmQvcPZE=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
+    PUPPETEER_SKIP_DOWNLOAD = 1;
 
     # The build OOMs on memory constrained aarch64 without this
     NODE_OPTIONS = "--max_old_space_size=4096";
@@ -66,14 +68,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-vQdiQyxebtVrO76Pl4oC3DM37owhtQgZqYWaiIyKysQ=";
+    hash = "sha256-+0L68wHR2nCp1g1PqyLIYatc+CIbvLqVUDa7CoyV/fo=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-cJxvZPJmf5YY+IWE7rdoGUkXxDeE6b0troGsdpsQzeU=";
+  vendorHash = "sha256-a31jJN1NIHihFwbtBuLzV4lRKYWv8GtIHh6EwVMWdbM=";
 
   proxyVendor = true;
 
@@ -85,9 +87,11 @@ buildGoModule rec {
     # required to run old node-gyp
     (python3.withPackages (ps: [ ps.distutils ]))
     faketty
+    nodejs
     yarn-berry_4
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   # We have to remove this setupHook, otherwise it also runs in the `goModules`
   # derivation and fails because `offlineCache` is missing there.

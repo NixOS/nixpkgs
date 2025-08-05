@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.7.1";
+  version = "2025.7.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -933,7 +933,8 @@
       ];
     "coinbase" =
       ps: with ps; [
-      ]; # missing inputs: coinbase coinbase-advanced-py
+        coinbase-advanced-py
+      ]; # missing inputs: coinbase
     "color_extractor" =
       ps: with ps; [
         colorthief
@@ -1221,7 +1222,8 @@
       ];
     "dlink" =
       ps: with ps; [
-      ]; # missing inputs: pyW215
+        pyw215
+      ];
     "dlna_dmr" =
       ps: with ps; [
         async-upnp-client
@@ -1847,7 +1849,8 @@
       ];
     "free_mobile" =
       ps: with ps; [
-      ]; # missing inputs: freesms
+        freesms
+      ];
     "freebox" =
       ps: with ps; [
         freebox-api
@@ -2743,7 +2746,8 @@
       ];
     "iperf3" =
       ps: with ps; [
-      ]; # missing inputs: iperf3
+        iperf3
+      ];
     "ipma" =
       ps: with ps; [
         pyipma
@@ -2848,7 +2852,8 @@
       ++ hdate.optional-dependencies.astral;
     "joaoapps_join" =
       ps: with ps; [
-      ]; # missing inputs: python-join-api
+        python-join-api
+      ];
     "juicenet" =
       ps: with ps; [
       ];
@@ -3037,7 +3042,8 @@
       ];
     "lacrosse_view" =
       ps: with ps; [
-      ]; # missing inputs: lacrosse-view
+        lacrosse-view
+      ];
     "lamarzocco" =
       ps: with ps; [
         aioesphomeapi
@@ -3563,7 +3569,8 @@
       ]; # missing inputs: microBeesPy
     "microsoft" =
       ps: with ps; [
-      ]; # missing inputs: pycsspeechtts
+        pycsspeechtts
+      ];
     "microsoft_face" =
       ps: with ps; [
         pyturbojpeg
@@ -3687,7 +3694,8 @@
       ];
     "monoprice" =
       ps: with ps; [
-      ]; # missing inputs: pymonoprice
+        pymonoprice
+      ];
     "monzo" =
       ps: with ps; [
         monzopy
@@ -3979,7 +3987,8 @@
       ];
     "noaa_tides" =
       ps: with ps; [
-      ]; # missing inputs: noaa-coops
+        noaa-coops
+      ];
     "nobo_hub" =
       ps: with ps; [
         pynobo
@@ -4005,7 +4014,8 @@
       ];
     "nsw_fuel_station" =
       ps: with ps; [
-      ]; # missing inputs: nsw-fuel-api-client
+        nsw-fuel-api-client
+      ];
     "nsw_rural_fire_service_feed" =
       ps: with ps; [
         aio-geojson-nsw-rfs-incidents
@@ -4052,7 +4062,8 @@
       ];
     "nzbget" =
       ps: with ps; [
-      ]; # missing inputs: pynzbgetapi
+        pynzbgetapi
+      ];
     "oasa_telematics" =
       ps: with ps; [
         oasatelematics
@@ -4453,8 +4464,9 @@
       ];
     "playstation_network" =
       ps: with ps; [
+        psnawp
         pyrate-limiter
-      ]; # missing inputs: PSNAWP
+      ];
     "plex" =
       ps: with ps; [
         plexapi
@@ -5084,7 +5096,8 @@
       ];
     "schluter" =
       ps: with ps; [
-      ]; # missing inputs: py-schluter
+        py-schluter
+      ];
     "scl" =
       ps: with ps; [
       ];
@@ -5650,7 +5663,8 @@
       ];
     "supla" =
       ps: with ps; [
-      ]; # missing inputs: asyncpysupla
+        asyncpysupla
+      ];
     "surepetcare" =
       ps: with ps; [
         surepy
@@ -5999,7 +6013,8 @@
       ];
     "tilt_pi" =
       ps: with ps; [
-      ]; # missing inputs: tilt-pi
+        tilt-pi
+      ];
     "time" =
       ps: with ps; [
       ];
@@ -6290,7 +6305,8 @@
       ];
     "vegehub" =
       ps: with ps; [
-      ]; # missing inputs: vegehub
+        vegehub
+      ];
     "velbus" =
       ps: with ps; [
         aiousbwatcher
@@ -6495,7 +6511,8 @@
       ];
     "wirelesstag" =
       ps: with ps; [
-      ]; # missing inputs: wirelesstagpy
+        wirelesstagpy
+      ];
     "withings" =
       ps: with ps; [
         aiohasupervisor
@@ -6962,6 +6979,7 @@
     "discovergy"
     "dlib_face_detect"
     "dlib_face_identify"
+    "dlink"
     "dlna_dmr"
     "dlna_dms"
     "dnsip"
@@ -7219,6 +7237,7 @@
     "kostal_plenticore"
     "kraken"
     "kulersky"
+    "lacrosse_view"
     "lamarzocco"
     "lametric"
     "landisgyr_heat_meter"
@@ -7287,6 +7306,7 @@
     "meteoclimatic"
     "metoffice"
     "mfi"
+    "microsoft"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
@@ -7303,6 +7323,7 @@
     "modem_callerid"
     "modern_forms"
     "mold_indicator"
+    "monoprice"
     "monzo"
     "moon"
     "mopeka"
@@ -7353,6 +7374,7 @@
     "notify"
     "notify_events"
     "notion"
+    "nsw_fuel_station"
     "nsw_rural_fire_service_feed"
     "ntfy"
     "nuheat"
@@ -7362,6 +7384,7 @@
     "nws"
     "nx584"
     "nyt_games"
+    "nzbget"
     "obihai"
     "octoprint"
     "ohme"
@@ -7415,6 +7438,7 @@
     "ping"
     "plaato"
     "plant"
+    "playstation_network"
     "plex"
     "plugwise"
     "point"
@@ -7628,6 +7652,7 @@
     "tibber"
     "tile"
     "tilt_ble"
+    "tilt_pi"
     "time"
     "time_date"
     "timer"
@@ -7679,6 +7704,7 @@
     "vacuum"
     "vallox"
     "valve"
+    "vegehub"
     "velbus"
     "velux"
     "venstar"

@@ -30,7 +30,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docloud
     requests
-  ] ++ lib.optional isPy27 futures;
+  ]
+  ++ lib.optional isPy27 futures;
 
   doCheck = false;
   pythonImportsCheck = [ "docplex" ];

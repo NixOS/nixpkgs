@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ldo/dvdauthor/commit/45705ece5ec5d7d6b9ab3e7a68194796a398e855.patch?full_index=1";
       hash = "sha256-tykCr2Axc1qhUvjlGyXQ6X+HwzuFTm5Va2gjGlOlSH0=";
     })
+    ./gettext-0.25.patch
   ];
 
   buildInputs = [

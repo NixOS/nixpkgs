@@ -19,17 +19,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-08IUMw/fCVrmsSL4a86dAbeG+DsS2d7jiVBNKfebVqk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cHQIW3TDxurrkT9FfGCBVG4PRgTg5+XkLXgnDL1rfG0=";
 
   nativeBuildInputs = [ pkg-config ];
 
   # TODO figure out how to use provided curl instead of compiling curl from curl-sys
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   # Requires network access
   doCheck = false;

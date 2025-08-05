@@ -29,13 +29,14 @@
   armTrustedFirmwareS905,
   opensbi,
   buildPackages,
+  darwin,
 }@pkgs:
 
 let
-  defaultVersion = "2025.01";
+  defaultVersion = "2025.07";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-ze99UHyT8bvZ8BXqm8IfoHQmhIFAVQGUWrxvhU1baG8=";
+    hash = "sha256-D5M/bFpCaJW/MG6T5qxTxghw5LVM2lbZUhG+yZ5jvsc=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -71,9 +72,7 @@ let
 
         src = if src == null then defaultSrc else src;
 
-        patches = [
-          ./0001-configs-rpi-allow-for-bigger-kernels.patch
-        ] ++ extraPatches;
+        patches = extraPatches;
 
         postPatch = ''
           ${lib.concatMapStrings (script: ''
@@ -98,8 +97,10 @@ let
           swig
           which # for scripts/dtc-version.sh
           perl # for oid build (secureboot)
-        ] ++ lib.optionals (!crossTools) toolsDeps;
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
+        ]
+        ++ lib.optionals (!crossTools) toolsDeps
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
+        depsBuildBuild = [ buildPackages.gccStdenv.cc ]; # gccStdenv is needed for Darwin buildPlatform
         buildInputs = lib.optionals crossTools toolsDeps;
 
         hardeningDisable = [ "all" ];
@@ -109,14 +110,16 @@ let
         makeFlags = [
           "DTC=${lib.getExe buildPackages.dtc}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-        ] ++ extraMakeFlags;
+          "HOSTCFLAGS=-fcommon"
+        ]
+        ++ extraMakeFlags;
 
         passAsFile = [ "extraConfig" ];
 
         configurePhase = ''
           runHook preConfigure
 
-          make ${defconfig}
+          make -j$NIX_BUILD_CORES ${defconfig}
 
           cat $extraConfigPath >> .config
 
@@ -148,7 +151,6 @@ let
             description = "Boot loader for embedded systems";
             license = licenses.gpl2Plus;
             maintainers = with maintainers; [
-              bartsch
               dezgeg
               lopsided98
             ];
@@ -222,7 +224,10 @@ in
 
   ubootAmx335xEVM = buildUBoot {
     defconfig = "am335x_evm_defconfig";
-    extraMeta.platforms = [ "armv7l-linux" ];
+    extraMeta = {
+      platforms = [ "armv7l-linux" ];
+      broken = true; # too big, exceeds memory size
+    };
     filesToInstall = [
       "MLO"
       "u-boot.img"
@@ -309,10 +314,12 @@ in
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in
-    assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
     buildUBoot {
       defconfig = "libretech-cc_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [ "u-boot.bin" ];
       postBuild = ''
         # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
@@ -462,6 +469,19 @@ in
 
   ubootOrangePi5 = buildUBoot {
     defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [
+      "u-boot.itb"
+      "idbloader.img"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
+  ubootOrangePi5Max = buildUBoot {
+    defconfig = "orangepi-5-max-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
     ROCKCHIP_TPL = rkbin.TPL_RK3588;
@@ -643,6 +663,18 @@ in
     ];
   };
 
+  ubootRadxaZero3W = buildUBoot {
+    defconfig = "radxa-zero-3-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3566;
+    filesToInstall = [
+      "idbloader.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+    ];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = [ "armv6l-linux" ];
@@ -752,13 +784,6 @@ in
   };
 
   ubootRockPro64 = buildUBoot {
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
-        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
-      })
-    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
@@ -781,7 +806,10 @@ in
 
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
-    extraMeta.platforms = [ "armv5tel-linux" ];
+    extraMeta = {
+      platforms = [ "armv5tel-linux" ];
+      broken = true; # too big, exceeds partition size
+    };
     filesToInstall = [ "u-boot.kwb" ];
   };
 

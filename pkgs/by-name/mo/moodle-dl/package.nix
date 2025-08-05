@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
   version = "2.3.13";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "C0D3D3V";
@@ -17,7 +17,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-6arwc72gu7XyT6HokSEs2TkvE2FG7mIvy4F+/i/0eJg=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     aiodns
     aiofiles
     aiohttp
@@ -34,6 +36,8 @@ python3Packages.buildPythonApplication rec {
 
   # upstream has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "moodle_dl" ];
 
   passthru.updateScript = gitUpdater { };
 

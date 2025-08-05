@@ -16,7 +16,6 @@
   python3,
   runCommand,
   rustPlatform,
-  unstableGitUpdater,
   vulkan-loader,
   wayland,
   wezterm,
@@ -29,63 +28,61 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-06-24";
+  version = "0-unstable-2025-07-10";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "2deb317ec069b8f94ec1282253faaa71a8d997fc";
+    rev = "85c587f9f3d8be49dfa252da116fc9ca290df113";
     fetchSubmodules = true;
-    hash = "sha256-danJcaG4ZyMbqR+4xaVOVM7a+4Sehq5cum40iRt/HQ8=";
+    hash = "sha256-hyyKC5BXeIbgP+bXxtvIz1LZUDoUJ6+em/PrX/TEg4k=";
   };
 
-  postPatch =
-    ''
-      echo ${version} > .tag
+  postPatch = ''
+    echo ${version} > .tag
 
-      # hash does not work well with NixOS
-      substituteInPlace assets/shell-integration/wezterm.sh \
-        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # many tests fail with: No such file or directory
-      rm -r wezterm-ssh/tests
-    '';
+    # hash does not work well with NixOS
+    substituteInPlace assets/shell-integration/wezterm.sh \
+      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # many tests fail with: No such file or directory
+    rm -r wezterm-ssh/tests
+  '';
 
   # dep: syntax causes build failures in rare cases
   # https://github.com/rust-secure-code/cargo-auditable/issues/124
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-uYx5OykWHN4B73rXWMYg3Sl7B+o7uFJMyAFiLMlLCsA=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-chMbDMT8UWaiGovlzYn1UD8VFqb9UYHMDDx/A62wQsY=";
 
   nativeBuildInputs = [
     installShellFiles
     ncurses # tic for terminfo
     pkg-config
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin perl;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin perl;
 
-  buildInputs =
-    [
-      fontconfig
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libxcb
-      libxkbcommon
-      wayland
-      xcbutil
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilwm # contains xcb-ewmh among others
-    ];
+  buildInputs = [
+    fontconfig
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libxcb
+    libxkbcommon
+    wayland
+    xcbutil
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilwm # contains xcb-ewmh among others
+  ];
 
   buildFeatures = [ "distro-defaults" ];
 
@@ -154,10 +151,7 @@ rustPlatform.buildRustPackage rec {
       #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
 
-    # upstream tags are composed with timestamp+commit, e.g.:
-    # 20240203-110809-5046fc22
-    # doesn't make much sense if we are following unstable
-    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {

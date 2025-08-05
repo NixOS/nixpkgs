@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bngblaster";
-  version = "0.9.15";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "bngblaster";
     rev = finalAttrs.version;
-    hash = "sha256-HqwyqUkLYoXTjx01pB8sL3hBXwLqe441M+LTqBhaZ58=";
+    hash = "sha256-vLvPiHwrFLqNV9ReeFAr0YBn8HUt6SazanpwZ1q09oU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     openssl
     cmocka
-  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [ libpcap ];
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [ libpcap ];
 
   cmakeFlags = [
     "-DBNGBLASTER_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"

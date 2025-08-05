@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtgreet";
-  version = "2.0.3.95";
+  version = "2.0.4";
 
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     dfl-utils
     dfl-applications
     dfl-login1
-  ] ++ lib.optionals mpvSupport [ mpv ];
+  ]
+  ++ lib.optionals mpvSupport [ mpv ];
 
   mesonFlags = [
     (lib.mesonOption "dynpath" "${placeholder "out"}/var/lib/qtgreet")

@@ -41,13 +41,13 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     tag = finalAttrs.version;
-    hash = "sha256-PHbBjwGxFxHnecuXXX2nT8SwmgJD0DzThiFEwKKDASU=";
+    hash = "sha256-ESq8ojGA5iF+VI4B+MIGWz7V2YIROorju8mJ4MV0gOo=";
   };
 
   strictDeps = true;

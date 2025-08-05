@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pywebpush,
   py-vapid,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ntfy-webpush";
   version = "0.1.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dschep";
@@ -21,10 +22,12 @@ buildPythonPackage rec {
   postPatch = ''
     # break dependency loop
     substituteInPlace setup.py \
-      --replace "'ntfy', " ""
+      --replace-fail "'ntfy', " ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pywebpush
     py-vapid
   ];
@@ -33,7 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "cloudbell webpush notification support for ntfy";
+    description = "Cloudbell webpush notification support for ntfy";
     homepage = "https://dschep.github.io/ntfy-webpush/";
     license = licenses.mit;
     maintainers = [ ];

@@ -20,15 +20,14 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-kTh0Y0C2pNB5Ul1rp77ets/5VeU1zw1WasGHkOaDMh8=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace cmake/AddPostgreSQLExtension.cmake \
-        --replace-fail "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
-    '';
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/AddPostgreSQLExtension.cmake \
+      --replace-fail "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
+  '';
 
   nativeBuildInputs = [
     cmake

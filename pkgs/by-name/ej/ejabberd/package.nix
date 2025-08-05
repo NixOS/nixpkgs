@@ -141,7 +141,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "25.04";
+  version = "25.07";
 
   nativeBuildInputs = [
     makeWrapper
@@ -154,23 +154,24 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs =
-    [ beamPackages.erlang ]
-    ++ builtins.attrValues beamDeps
-    ++ lib.optional withMysql allBeamDeps.p1_mysql
-    ++ lib.optional withPgsql allBeamDeps.p1_pgsql
-    ++ lib.optional withSqlite allBeamDeps.sqlite3
-    ++ lib.optional withPam allBeamDeps.epam
-    ++ lib.optional withZlib allBeamDeps.ezlib
-    ++ lib.optional withSip allBeamDeps.esip
-    ++ lib.optional withLua allBeamDeps.luerl
-    ++ lib.optional withRedis allBeamDeps.eredis;
+  buildInputs = [
+    beamPackages.erlang
+  ]
+  ++ builtins.attrValues beamDeps
+  ++ lib.optional withMysql allBeamDeps.p1_mysql
+  ++ lib.optional withPgsql allBeamDeps.p1_pgsql
+  ++ lib.optional withSqlite allBeamDeps.sqlite3
+  ++ lib.optional withPam allBeamDeps.epam
+  ++ lib.optional withZlib allBeamDeps.ezlib
+  ++ lib.optional withSip allBeamDeps.esip
+  ++ lib.optional withLua allBeamDeps.luerl
+  ++ lib.optional withRedis allBeamDeps.eredis;
 
   src = fetchFromGitHub {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-BIt5kLEtvMUlyntQ98Mgidmo6lJHbt/LJYrbxPaJxPo=";
+    hash = "sha256-DDvxmRennd9tAC9LqV8eAAzcF+kZemvgsOviWD9CHlM=";
   };
 
   passthru.tests = {
@@ -187,7 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
-  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  ]
+  ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
@@ -222,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
       sander
       abbradar
       chuangzhu
+      toastal
     ];
   };
 })

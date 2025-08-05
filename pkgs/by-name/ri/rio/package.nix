@@ -51,29 +51,27 @@ let
       wayland
     ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.19";
+  version = "0.2.24";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "v${version}";
-    hash = "sha256-qEJrsA6MmLs26cnLo83QkKMUm6XMDk/h0UirUZ3/xGg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-djKDi4ysRWtoMabJkEZ3jQ8hAE9JISi/ivjSFZmAwLY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+bGP8JDzOtpqggg3kvtPZuT0KFG2VdB15+bRsahQ6SA=";
+  cargoHash = "sha256-cdMIbip5fjDHewh/HiYzb/3QVRXUH7OeRQO+zfuGw6Q=";
 
-  nativeBuildInputs =
-    [
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      cmake
-      pkg-config
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cmake
+    pkg-config
+    autoPatchelfHook
+  ];
 
   runtimeDependencies = rlinkLibs;
 
@@ -96,23 +94,22 @@ rustPlatform.buildRustPackage rec {
     "--skip=sys::unix::eventedfd::EventedFd"
   ];
 
-  postInstall =
-    ''
-      install -D -m 644 misc/rio.desktop -t $out/share/applications
-      install -D -m 644 misc/logo.svg \
-                        $out/share/icons/hicolor/scalable/apps/rio.svg
+  postInstall = ''
+    install -D -m 644 misc/rio.desktop -t $out/share/applications
+    install -D -m 644 misc/logo.svg \
+                      $out/share/icons/hicolor/scalable/apps/rio.svg
 
-      install -dm 755 "$terminfo/share/terminfo/r/"
-      tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
-      mkdir -p $out/nix-support
-      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/Applications/
-      mv misc/osx/Rio.app/ $out/Applications/
-      mkdir $out/Applications/Rio.app/Contents/MacOS/
-      ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
-    '';
+    install -dm 755 "$terminfo/share/terminfo/r/"
+    tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications/
+    mv misc/osx/Rio.app/ $out/Applications/
+    mkdir $out/Applications/Rio.app/Contents/MacOS/
+    ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
+  '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -122,17 +119,16 @@ rustPlatform.buildRustPackage rec {
       ];
     };
 
-    tests =
-      {
-        version = testers.testVersion { package = rio; };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isLinux {
-        # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
-        # 'passthru.tests' nixosTests are failing on Darwin architectures.
-        #
-        # Ref: https://github.com/NixOS/nixpkgs/issues/345825
-        test = nixosTests.terminal-emulators.rio;
-      };
+    tests = {
+      version = testers.testVersion { package = rio; };
+    }
+    // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+      # 'passthru.tests' nixosTests are failing on Darwin architectures.
+      #
+      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+      test = nixosTests.terminal-emulators.rio;
+    };
   };
 
   meta = {
@@ -145,7 +141,7 @@ rustPlatform.buildRustPackage rec {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/blob/v${finalAttrs.version}/docs/docs/releases.md";
     mainProgram = "rio";
   };
-}
+})

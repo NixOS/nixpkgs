@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "generic";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3QcFbbWgCJcL37MwiK1Sv7LG6N60zsw93CupD4Xzp/w=";
+    hash = "sha256-Dvpiw6DRQczT5Tcj81II1cdZAIPbcWTIENLP/QQprpI=";
   };
 
   build-system = [ poetry-core ];

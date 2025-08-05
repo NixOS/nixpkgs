@@ -9,10 +9,7 @@
   libXt,
   openusd,
   tbb,
-  # There is a f3d overridden with EGL enabled vtk in top-level/all-packages.nix
-  # compiling with EGL enabled vtk will result in f3d running in headless mode
-  # See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
-  vtk_9,
+  vtk,
   autoPatchelfHook,
   python3Packages,
   opencascade-occt,
@@ -36,58 +33,55 @@ stdenv.mkDerivation rec {
     hash = "sha256-p1Cqam3sYDXJCU1A2sC/fV1ohxS3FGiVrxeGooNXVBQ=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withManual [
-      # manpage
-      help2man
-      gzip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isElf [
-      # https://github.com/f3d-app/f3d/pull/1217
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withManual [
+    # manpage
+    help2man
+    gzip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isElf [
+    # https://github.com/f3d-app/f3d/pull/1217
+    autoPatchelfHook
+  ];
 
-  buildInputs =
-    [
-      vtk_9
-      opencascade-occt
-      assimp
-      fontconfig
-    ]
-    ++ lib.optionals withPythonBinding [
-      python3Packages.python
-      # Using C++ header files, not Python import
-      python3Packages.pybind11
-    ]
-    ++ lib.optionals withUsd [
-      libXt
-      openusd
-      tbb
-    ];
+  buildInputs = [
+    vtk
+    opencascade-occt
+    assimp
+    fontconfig
+  ]
+  ++ lib.optionals withPythonBinding [
+    python3Packages.python
+    # Using C++ header files, not Python import
+    python3Packages.pybind11
+  ]
+  ++ lib.optionals withUsd [
+    libXt
+    openusd
+    tbb
+  ];
 
-  cmakeFlags =
-    [
-      # conflict between VTK and Nixpkgs;
-      # see https://github.com/NixOS/nixpkgs/issues/89167
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
-      "-DF3D_PLUGIN_BUILD_ASSIMP=ON"
-      "-DF3D_PLUGIN_BUILD_OCCT=ON"
-    ]
-    ++ lib.optionals withManual [
-      "-DF3D_LINUX_GENERATE_MAN=ON"
-    ]
-    ++ lib.optionals withPythonBinding [
-      "-DF3D_BINDINGS_PYTHON=ON"
-    ]
-    ++ lib.optionals withUsd [
-      "-DF3D_PLUGIN_BUILD_USD=ON"
-    ];
+  cmakeFlags = [
+    # conflict between VTK and Nixpkgs;
+    # see https://github.com/NixOS/nixpkgs/issues/89167
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
+    "-DF3D_PLUGIN_BUILD_ASSIMP=ON"
+    "-DF3D_PLUGIN_BUILD_OCCT=ON"
+  ]
+  ++ lib.optionals withManual [
+    "-DF3D_LINUX_GENERATE_MAN=ON"
+  ]
+  ++ lib.optionals withPythonBinding [
+    "-DF3D_BINDINGS_PYTHON=ON"
+  ]
+  ++ lib.optionals withUsd [
+    "-DF3D_PLUGIN_BUILD_USD=ON"
+  ];
 
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";

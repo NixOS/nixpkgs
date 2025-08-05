@@ -12,7 +12,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pulsemeeter";
   version = "1.2.14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theRealCarneiro";
@@ -46,6 +46,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dontWrapGApps = true;
+
+  pythonImportsCheck = [ "pulsemeeter" ];
 
   passthru.tests.version = callPackage ./version-test.nix { inherit version; };
 

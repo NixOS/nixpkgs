@@ -303,9 +303,7 @@ buildNpmPackage {
   version = "0.1.0";
   src = ./.;
 
-  npmDeps = importNpmLock {
-    npmRoot = ./.;
-  };
+  npmDeps = importNpmLock { npmRoot = ./.; };
 
   npmConfigHook = importNpmLock.npmConfigHook;
 }
@@ -443,6 +441,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
     hash = "...";
   };
 })
@@ -455,9 +454,7 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 `pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
 
 ```nix
-{
-  pnpm,
-}:
+{ pnpm }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
@@ -469,9 +466,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmInstallFlags = [ "--shamefully-hoist" ];
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pnpmInstallFlags;
-  };
+  pnpmDeps = pnpm.fetchDeps { inherit (finalAttrs) pnpmInstallFlags; };
 })
 ```
 
@@ -558,6 +553,41 @@ set `prePnpmInstall` to the right commands to run. For example:
 
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
 
+#### PNPM `fetcherVersion` {#javascript-pnpm-fetcherVersion}
+
+This is the version of the output of `pnpm.fetchDeps`, if you haven't set it already, you can use `1` with your current hash:
+
+```nix
+{
+  # ...
+  pnpmDeps = pnpm.fetchDeps {
+    # ...
+    fetcherVersion = 1;
+    hash = "..."; # you can use your already set hash here
+  };
+}
+```
+
+After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
+
+```nix
+{
+  # ...
+  pnpmDeps = pnpm.fetchDeps {
+    # ...
+    fetcherVersion = 2;
+    hash = "..."; # clear this hash and generate a new one
+  };
+}
+```
+
+This variable ensures that we can make changes to the output of `pnpm.fetchDeps` without breaking existing hashes.
+Changes can include workarounds or bug fixes to existing PNPM issues.
+
+##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
+
+- 1: Initial version, nothing special
+- 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
 
 ### Yarn {#javascript-yarn}
 
@@ -663,9 +693,7 @@ It's important to use the `--offline` flag. For example if you script is `"build
 
 ```nix
 {
-  nativeBuildInputs = [
-    writableTmpDirAsHomeHook
-  ];
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   buildPhase = ''
     runHook preBuild
@@ -680,9 +708,7 @@ It's important to use the `--offline` flag. For example if you script is `"build
 The `distPhase` is packing the package's dependencies in a tarball using `yarn pack`. You can disable it using:
 
 ```nix
-{
-  doDist = false;
-}
+{ doDist = false; }
 ```
 
 The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
@@ -801,8 +827,8 @@ It's recommended to ensure you're explicitly pinning the major version used, for
 
 let
   yarn-berry = yarn-berry_4;
-in
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";
@@ -856,8 +882,8 @@ To compensate for this, the `yarn-berry-fetcher missing-hashes` subcommand can b
 
 let
   yarn-berry = yarn-berry_4;
-in
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";

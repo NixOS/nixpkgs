@@ -12,6 +12,7 @@
   brotli,
   brotlicffi,
   pysocks,
+  zstandard,
 
   # tests
   pytestCheckHook,
@@ -39,6 +40,7 @@ let
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
+      zstd = [ zstandard ];
     };
 
     nativeCheckInputs = [
@@ -46,7 +48,8 @@ let
       pytestCheckHook
       tornado
       trustme
-    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ]
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

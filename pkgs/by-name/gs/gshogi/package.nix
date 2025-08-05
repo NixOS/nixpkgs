@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gshogi";
   version = "0.5.1";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "johncheetham";
@@ -30,7 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pygobject3
     pycairo
   ];

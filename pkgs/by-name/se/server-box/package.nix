@@ -84,6 +84,6 @@ flutter332.buildFlutterApplication rec {
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

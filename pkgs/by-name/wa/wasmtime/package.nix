@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-4ziMGmBbQ4anXvF6wwK1ezYXHY7JBvMRmPDreNME0H8=";
   cargoBuildFlags = [
     "--package"
@@ -59,14 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -r ''${!outputLib}/lib
 
       # copy the build.rs generated c-api headers
-      install -d -m0755 $dev/include/wasmtime
       # https://github.com/rust-lang/cargo/issues/9661
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/*.h \
-        $dev/include
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/wasmtime/*.h \
-        $dev/include/wasmtime
+      cp -r target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include $dev/include
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \

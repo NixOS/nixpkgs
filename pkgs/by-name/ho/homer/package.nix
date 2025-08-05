@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation rec {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash = "sha256-y1R+rlaOtFOHHAgEHPBl40536U10Ft0iUSfGcfXS08Y=";
   };
 

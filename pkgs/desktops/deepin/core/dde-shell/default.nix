@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A plugin system that integrates plugins developed on DDE";
+    description = "Plugin system that integrates plugins developed on DDE";
     homepage = "https://github.com/linuxdeepin/dde-shell";
     license = with lib.licenses; [ gpl3Plus ];
     platforms = lib.platforms.linux;

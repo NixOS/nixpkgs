@@ -43,7 +43,8 @@ buildPythonPackage rec {
     opentelemetry-sdk
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];

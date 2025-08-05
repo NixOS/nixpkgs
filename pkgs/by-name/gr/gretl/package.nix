@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     pkg-config

@@ -42,18 +42,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      libxslt
-      docbook-xsl-ns
-      glib # for glib-mkenums needed during the build
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    libxslt
+    docbook-xsl-ns
+    glib # for glib-mkenums needed during the build
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     gdk-pixbuf

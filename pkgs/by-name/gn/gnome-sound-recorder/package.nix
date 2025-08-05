@@ -39,20 +39,19 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      gjs
-      glib
-      gtk4
-      gdk-pixbuf
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad # for gstreamer-player-1.0
-    ]);
+  buildInputs = [
+    gjs
+    glib
+    gtk4
+    gdk-pixbuf
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad # for gstreamer-player-1.0
+  ]);
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

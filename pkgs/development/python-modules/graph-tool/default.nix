@@ -73,7 +73,8 @@ buildPythonPackage rec {
     pygobject3
     scipy
     sparsehash
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   pythonImportsCheck = [ "graph_tool" ];
 

@@ -29,31 +29,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      file
-      gettext
-      glib # for gdbus-codegen
-      pkg-config
-    ]
-    ++ lib.optionals withGnome [
-      gtk4 # for gtk4-builder-tool
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    file
+    gettext
+    glib # for gdbus-codegen
+    pkg-config
+  ]
+  ++ lib.optionals withGnome [
+    gtk4 # for gtk4-builder-tool
+  ];
 
-  buildInputs =
-    [
-      sstp
-      networkmanager
-      ppp
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    sstp
+    networkmanager
+    ppp
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   postPatch = ''
     sed -i 's#/sbin/pppd#${ppp}/bin/pppd#' src/nm-sstp-service.c

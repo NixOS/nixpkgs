@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2025-04";
+  version = "dev-2025-07";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-dVC7MgaNdgKy3X9OE5ZcNCPnuDwqXszX9iAoUglfz2k=";
+    hash = "sha256-4jhxvQHirNm4B4Wf5Ak0lhAbwaRw6ajWA0JhIn1NYwM=";
   };
 
   patches = [
@@ -29,7 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     # which can be provided by a pure Nix expression, for example in a shell.
     ./system-raylib.patch
   ];
+
   postPatch = ''
+    # Odin is still using 'arm64-apple-macos' as the target name on
+    # aarch64-darwin architectures. This results in a warning whenever the
+    # Odin compiler runs a build. Replacing the target in the Odin compiler
+    # removes the nix warning when the Odin compiler is ran on aarch64-darwin.
+    substituteInPlace src/build_settings.cpp \
+      --replace-fail "arm64-apple-macosx" "arm64-apple-darwin"
+
     rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
 
     patchShebangs --build build_odin.sh

@@ -56,32 +56,31 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      glib
-      glib-networking
-      gtksourceview5
-      json-glib
-      libxml2
-      libgee
-      libsoup_3
-      gtk4
-      libadwaita
-      libsecret
-      libwebp
-      libspelling
-      icu
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ])
-    ++ lib.optionals clapperSupport [
-      clapper-unwrapped
-    ];
+  buildInputs = [
+    glib
+    glib-networking
+    gtksourceview5
+    json-glib
+    libxml2
+    libgee
+    libsoup_3
+    gtk4
+    libadwaita
+    libsecret
+    libwebp
+    libspelling
+    icu
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ])
+  ++ lib.optionals clapperSupport [
+    clapper-unwrapped
+  ];
 
   mesonFlags = [
     (lib.mesonBool "clapper" clapperSupport)

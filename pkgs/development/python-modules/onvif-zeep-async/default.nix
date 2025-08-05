@@ -31,7 +31,8 @@ buildPythonPackage rec {
     ciso8601
     yarl
     zeep
-  ] ++ zeep.optional-dependencies.async;
+  ]
+  ++ zeep.optional-dependencies.async;
 
   pythonImportsCheck = [ "onvif" ];
 

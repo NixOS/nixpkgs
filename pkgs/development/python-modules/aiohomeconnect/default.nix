@@ -53,12 +53,13 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-httpx
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiohomeconnect" ];
 
   meta = {
-    description = "An asyncio client for the Home Connect API";
+    description = "asyncio client for the Home Connect API";
     homepage = "https://github.com/MartinHjelmare/aiohomeconnect";
     changelog = "https://github.com/MartinHjelmare/aiohomeconnect/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

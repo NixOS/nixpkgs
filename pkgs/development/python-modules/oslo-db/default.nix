@@ -22,21 +22,21 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "17.2.1";
+  version = "17.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_db";
     inherit version;
-    hash = "sha256-FHPfDAlc0HOVKG7WBSIgJcI3R3qhLGwpndQUqxT3t8Q=";
+    hash = "sha256-IzDiHVDqwVi8xVzmzR2XwZfVrFj5/TkmMRAJ2SKh1v0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     debtcollector
     oslo-config
@@ -57,7 +57,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run -e <(echo "oslo_db.tests.sqlalchemy.test_utils.TestModelQuery.test_project_filter_allow_none")
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "oslo_db" ];

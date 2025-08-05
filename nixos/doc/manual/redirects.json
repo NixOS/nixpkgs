@@ -11,6 +11,24 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
+  "modular-service-options-systemd": [
+    "index.html#modular-service-options-systemd"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-services": [
+    "index.html#modular-services"
+  ],
   "module-services-anubis": [
     "index.html#module-services-anubis"
   ],
@@ -587,6 +605,12 @@
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
   ],
+  "module-services-paisa": [
+    "index.html#module-services-paisa"
+  ],
+  "module-services-paisa-usage": [
+    "index.html#module-services-paisa-usage"
+  ],
   "module-services-plausible": [
     "index.html#module-services-plausible"
   ],
@@ -851,6 +875,12 @@
   "modules-services-akkoma-distributed-deployment": [
     "index.html#modules-services-akkoma-distributed-deployment"
   ],
+  "module-services-atalkd": [
+    "index.html#module-services-atalkd"
+  ],
+  "module-services-atalkd-basic-usage": [
+    "index.html#module-services-atalkd-basic-usage"
+  ],
   "module-services-systemd-lock-handler": [
     "index.html#module-services-systemd-lock-handler"
   ],
@@ -882,9 +912,7 @@
     "index.html#module-services-meilisearch-quickstart-search"
   ],
   "module-services-meilisearch-defaults": [
-    "index.html#module-services-meilisearch-defaults"
-  ],
-  "module-services-meilisearch-missing": [
+    "index.html#module-services-meilisearch-defaults",
     "index.html#module-services-meilisearch-missing"
   ],
   "module-services-networking-yggdrasil": [
@@ -1177,6 +1205,15 @@
   ],
   "module-services-mautrix-signal-migrate-configuration": [
     "index.html#module-services-mautrix-signal-migrate-configuration"
+  ],
+  "module-services-mautrix-whatsapp": [
+    "index.html#module-services-mautrix-whatsapp"
+  ],
+  "module-services-mautrix-whatsapp-configuration": [
+    "index.html#module-services-mautrix-whatsapp-configuration"
+  ],
+  "module-services-mautrix-whatsapp-migrate-configuration": [
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
   ],
   "module-services-maubot": [
     "index.html#module-services-maubot"
@@ -1896,6 +1933,9 @@
   "test-opt-sshBackdoor.vsockOffset": [
     "index.html#test-opt-sshBackdoor.vsockOffset"
   ],
+  "test-opt-enableDebugHook": [
+    "index.html#test-opt-enableDebugHook"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
@@ -2003,6 +2043,9 @@
   ],
   "sec-nixos-test-testing-hardware-features": [
     "index.html#sec-nixos-test-testing-hardware-features"
+  ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"

@@ -72,49 +72,49 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
   production = generic {
-    version = "570.169";
-    sha256_64bit = "sha256-XzKoR3lcxcP5gPeRiausBw2RSB1702AcAsKCndOHN2U=";
-    sha256_aarch64 = "sha256-s8jqaZPcMYo18N2RDu8zwMThxPShxz/BL+cUsJnszts=";
-    openSha256 = "sha256-oqY/O5fda+CVCXGVW2bX7LOa8jHJOQPO6mZ/EyleWCU=";
-    settingsSha256 = "sha256-0E3UnpMukGMWcX8td6dqmpakaVbj4OhhKXgmqz77XZc=";
-    persistencedSha256 = "sha256-dttFu+TmbFI+mt1MbbmJcUnc1KIJ20eHZDR7YzfWmgE=";
+    version = "570.172.08";
+    sha256_64bit = "sha256-AlaGfggsr5PXsl+nyOabMWBiqcbHLG4ij617I4xvoX0=";
+    sha256_aarch64 = "sha256-FVRyFvK1FKznckpatMMydmmQSkHK+41NkEjTybYJY9g=";
+    openSha256 = "sha256-aTV5J4zmEgRCOavo6wLwh5efOZUG+YtoeIT/tnrC1Hg=";
+    settingsSha256 = "sha256-N/1Ra8Teq93U3T898ImAT2DceHjDHZL1DuriJeTYEa4=";
+    persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
   };
 
   latest = selectHighestVersion production (generic {
-    version = "575.64.03";
-    sha256_64bit = "sha256-S7eqhgBLLtKZx9QwoGIsXJAyfOOspPbppTHUxB06DKA=";
-    sha256_aarch64 = "sha256-s2Jm2wjdmXZ2hPewHhi6hmd+V1YQ+xmVxRWBt68mLUQ=";
-    openSha256 = "sha256-SAl1+XH4ghz8iix95hcuJ/EVqt6ylyzFAao0mLeMmMI=";
-    settingsSha256 = "sha256-o8rPAi/tohvHXcBV+ZwiApEQoq+ZLhCMyHzMxIADauI=";
-    persistencedSha256 = "sha256-/3OAZx8iMxQLp1KD5evGXvp0nBvWriYapMwlMSc57h8=";
+    version = "575.64.05";
+    sha256_64bit = "sha256-hfK1D5EiYcGRegss9+H5dDr/0Aj9wPIJ9NVWP3dNUC0=";
+    sha256_aarch64 = "sha256-GRE9VEEosbY7TL4HPFoyo0Ac5jgBHsZg9sBKJ4BLhsA=";
+    openSha256 = "sha256-mcbMVEyRxNyRrohgwWNylu45vIqF+flKHnmt47R//KU=";
+    settingsSha256 = "sha256-o2zUnYFUQjHOcCrB0w/4L6xI1hVUXLAWgG2Y26BowBE=";
+    persistencedSha256 = "sha256-2g5z7Pu8u2EiAh5givP5Q1Y4zk4Cbb06W37rf768NFU=";
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "575.51.02";
-    sha256_64bit = "sha256-XZ0N8ISmoAC8p28DrGHk/YN1rJsInJ2dZNL8O+Tuaa0=";
-    sha256_aarch64 = "sha256-NNeQU9sPfH1sq3d5RUq1MWT6+7mTo1SpVfzabYSVMVI=";
-    openSha256 = "sha256-NQg+QDm9Gt+5bapbUO96UFsPnz1hG1dtEwT/g/vKHkw=";
-    settingsSha256 = "sha256-6n9mVkEL39wJj5FB1HBml7TTJhNAhS/j5hqpNGFQE4w=";
-    persistencedSha256 = "sha256-dgmco+clEIY8bedxHC4wp+fH5JavTzyI1BI8BxoeJJI=";
+    version = "580.65.06";
+    sha256_64bit = "sha256-BLEIZ69YXnZc+/3POe1fS9ESN1vrqwFy6qGHxqpQJP8=";
+    sha256_aarch64 = "sha256-4CrNwNINSlQapQJr/dsbm0/GvGSuOwT/nLnIknAM+cQ=";
+    openSha256 = "sha256-BKe6LQ1ZSrHUOSoV6UCksUE0+TIa0WcCHZv4lagfIgA=";
+    settingsSha256 = "sha256-9PWmj9qG/Ms8Ol5vLQD3Dlhuw4iaFtVHNC0hSyMCU24=";
+    persistencedSha256 = "sha256-ETRfj2/kPbKYX1NzE0dGr/ulMuzbICIpceXdCRDkAxA=";
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "570.123.18";
-    persistencedVersion = "550.142";
-    settingsVersion = "550.142";
-    sha256_64bit = "sha256-GoBNatVpits13a3xsJSUr9BFG+5xrUDROfHmvss2cSY=";
-    openSha256 = "sha256-AYl8En0ZAZXWlJ8J8LKbPvAEKX+y65L1aq4Hm+dJScs=";
-    settingsSha256 = "sha256-Wk6IlVvs23cB4s0aMeZzSvbOQqB1RnxGMv3HkKBoIgY=";
-    persistencedSha256 = "sha256-yQFrVk4i2dwReN0XoplkJ++iA1WFhnIkP7ns4ORmkFA=";
+    version = "570.123.19";
+    persistencedVersion = "570.169";
+    settingsVersion = "570.169";
+    sha256_64bit = "sha256-K1ElpoTBjlLUG7slBrAhKqnEjUFwupiF7TS/8ogCf7c=";
+    openSha256 = "sha256-uGH2lnnADf5AGl5ShcbCOULsCIWtJlbxgHiz7I2efVE=";
+    settingsSha256 = "sha256-0E3UnpMukGMWcX8td6dqmpakaVbj4OhhKXgmqz77XZc=";
+    persistencedSha256 = "sha256-dttFu+TmbFI+mt1MbbmJcUnc1KIJ20eHZDR7YzfWmgE=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
 
     broken = kernel.kernelAtLeast "6.15";
   };
 
   # data center driver compatible with current default cudaPackages
-  dc = dc_565;
+  dc = dc_570;
 
   dc_535 = generic rec {
     version = "535.154.05";
@@ -129,12 +129,24 @@ rec {
     patches = [ rcu_patch ];
   };
 
+  # Drop after next nixos release
   dc_565 = generic rec {
     version = "565.57.01";
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
     sha256_64bit = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
     persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
     fabricmanagerSha256 = "sha256-umhyehddbQ9+xhhoiKC7SOSVxscA5pcnqvkQOOLIdsM=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+  };
+
+  dc_570 = generic rec {
+    version = "570.172.08";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-AlaGfggsr5PXsl+nyOabMWBiqcbHLG4ij617I4xvoX0=";
+    persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
+    fabricmanagerSha256 = "sha256-jSTKzeRVTUcYma1Cb0ajSdXKCi6KzUXCp2OByPSWSR4=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;

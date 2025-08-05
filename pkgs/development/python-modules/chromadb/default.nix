@@ -33,7 +33,6 @@
   orjson,
   overrides,
   posthog,
-  pulsar-client,
   pydantic,
   pypika,
   pyyaml,
@@ -58,6 +57,7 @@
   pytestCheckHook,
   sqlite,
   starlette,
+  writableTmpDirAsHomeHook,
 
   # passthru
   nixosTests,
@@ -139,7 +139,6 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pulsar-client
     pydantic
     pypika
     pyyaml
@@ -167,6 +166,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sqlite
     starlette
+    writableTmpDirAsHomeHook
   ];
 
   # Disable on aarch64-linux due to broken onnxruntime
@@ -181,13 +181,11 @@ buildPythonPackage rec {
     SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
   };
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x" # these are slow tests, so stop on the first failure
     "-v"
-    "-W"
-    "ignore:DeprecationWarning"
-    "-W"
-    "ignore:PytestCollectionWarning"
+    "-Wignore:DeprecationWarning"
+    "-Wignore:PytestCollectionWarning"
   ];
 
   preCheck = ''
@@ -242,6 +240,10 @@ buildPythonPackage rec {
 
     # Cannot find protobuf file while loading test
     "chromadb/test/distributed/test_log_failover.py"
+
+    # ValueError: An instance of Chroma already exists for ephemeral with different settings
+    "chromadb/test/test_chroma.py"
+    "chromadb/test/ef/test_multimodal_ef.py"
   ];
 
   __darwinAllowLocalNetworking = true;

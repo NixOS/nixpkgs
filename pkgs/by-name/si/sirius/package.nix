@@ -65,88 +65,86 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     pkg-config
-  ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ]
+  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
-  buildInputs =
+  buildInputs = [
+    blas
+    lapack
+    gsl
+    libxc
+    hdf5
+    umpire
+    mpi
+    spglib
+    spfft
+    spla
+    costa
+    scalapack
+    boost
+    eigen
+    libvdwxc
+  ]
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_profiler_api
+    cudaPackages.cudatoolkit
+    cudaPackages.libcublas
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocblas
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals enablePython (
+    with pythonPackages;
     [
-      blas
-      lapack
-      gsl
-      libxc
-      hdf5
-      umpire
-      mpi
-      spglib
-      spfft
-      spla
-      costa
-      scalapack
-      boost
-      eigen
-      libvdwxc
+      python
+      pybind11
     ]
-    ++ lib.optionals (gpuBackend == "cuda") [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_profiler_api
-      cudaPackages.cudatoolkit
-      cudaPackages.libcublas
-    ]
-    ++ lib.optionals (gpuBackend == "rocm") [
-      rocmPackages.clr
-      rocmPackages.rocblas
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ]
-    ++ lib.optionals enablePython (
-      with pythonPackages;
-      [
-        python
-        pybind11
-      ]
-    );
+  );
 
-  propagatedBuildInputs =
+  propagatedBuildInputs = [
+    (lib.getBin mpi)
+  ]
+  ++ lib.optionals enablePython (
+    with pythonPackages;
     [
-      (lib.getBin mpi)
+      mpi4py
+      voluptuous
+      numpy
+      h5py
+      scipy
+      pyyaml
     ]
-    ++ lib.optionals enablePython (
-      with pythonPackages;
-      [
-        mpi4py
-        voluptuous
-        numpy
-        h5py
-        scipy
-        pyyaml
-      ]
-    );
+  );
 
   CXXFLAGS = [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
     "-include cstdint"
   ];
 
-  cmakeFlags =
-    [
-      "-DSIRIUS_USE_SCALAPACK=ON"
-      "-DSIRIUS_USE_VDWXC=ON"
-      "-DSIRIUS_CREATE_FORTRAN_BINDINGS=ON"
-      "-DSIRIUS_USE_OPENMP=ON"
-      "-DBUILD_TESTING=ON"
-    ]
-    ++ lib.optionals (gpuBackend == "cuda") [
-      "-DSIRIUS_USE_CUDA=ON"
-      "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ]
-    ++ lib.optionals (gpuBackend == "rocm") [
-      "-DSIRIUS_USE_ROCM=ON"
-      "-DHIP_ROOT_DIR=${rocmPackages.clr}"
-    ]
-    ++ lib.optionals enablePython [
-      "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
-    ];
+  cmakeFlags = [
+    "-DSIRIUS_USE_SCALAPACK=ON"
+    "-DSIRIUS_USE_VDWXC=ON"
+    "-DSIRIUS_CREATE_FORTRAN_BINDINGS=ON"
+    "-DSIRIUS_USE_OPENMP=ON"
+    "-DBUILD_TESTING=ON"
+  ]
+  ++ lib.optionals (gpuBackend == "cuda") [
+    "-DSIRIUS_USE_CUDA=ON"
+    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    "-DSIRIUS_USE_ROCM=ON"
+    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
+  ]
+  ++ lib.optionals enablePython [
+    "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
+  ];
 
   doCheck = true;
 

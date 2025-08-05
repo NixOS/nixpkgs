@@ -7,31 +7,30 @@
 let
 
   cfg = config.hardware.infiniband;
-  opensm-services =
-    {
-      "opensm@" = {
-        enable = true;
-        description = "Starts OpenSM Infiniband fabric Subnet Managers";
-        before = [ "network.target" ];
-        unitConfig = {
-          ConditionPathExists = "/sys/class/infiniband_mad/abi_version";
-        };
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${pkgs.opensm}/bin/opensm --guid %I --log_file /var/log/opensm.%I.log";
-        };
+  opensm-services = {
+    "opensm@" = {
+      enable = true;
+      description = "Starts OpenSM Infiniband fabric Subnet Managers";
+      before = [ "network.target" ];
+      unitConfig = {
+        ConditionPathExists = "/sys/class/infiniband_mad/abi_version";
       };
-    }
-    // (builtins.listToAttrs (
-      map (guid: {
-        name = "opensm@${guid}";
-        value = {
-          enable = true;
-          wantedBy = [ "machines.target" ];
-          overrideStrategy = "asDropin";
-        };
-      }) cfg.guids
-    ));
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.opensm}/bin/opensm --guid %I --log_file /var/log/opensm.%I.log";
+      };
+    };
+  }
+  // (builtins.listToAttrs (
+    map (guid: {
+      name = "opensm@${guid}";
+      value = {
+        enable = true;
+        wantedBy = [ "machines.target" ];
+        overrideStrategy = "asDropin";
+      };
+    }) cfg.guids
+  ));
 
 in
 

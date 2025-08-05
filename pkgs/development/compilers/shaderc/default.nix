@@ -60,15 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build utils/
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static

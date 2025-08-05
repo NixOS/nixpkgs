@@ -6,8 +6,8 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "usbrip";
-  version = "unstable-2021-07-02";
-  format = "setuptools";
+  version = "0-unstable-2021-07-02";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.6";
 
@@ -18,7 +18,9 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1vws8ybhv7szpqvlbmv0hrkys2fhhaa5bj9dywv3q2y1xmljl0py";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     termcolor
     terminaltables
     tqdm
@@ -27,9 +29,8 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     # Remove install helpers which we don't need
     substituteInPlace setup.py \
-      --replace "parse_requirements('requirements.txt')," "[]," \
-      --replace "resolve('wheel')" "" \
-      --replace "'install': LocalInstallCommand," ""
+      --replace-fail "resolve('wheel')" "" \
+      --replace-fail "'install': LocalInstallCommand," ""
   '';
 
   # Project has no tests

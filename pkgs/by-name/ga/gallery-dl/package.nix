@@ -8,7 +8,7 @@
 
 let
   pname = "gallery-dl";
-  version = "1.29.7";
+  version = "1.30.2";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "mikf";
     repo = "gallery-dl";
     tag = "v${version}";
-    hash = "sha256-OngtJ6E7Gvr+/5Vjv1vepPVVksNDRlXZkU9yMYRvh2k=";
+    hash = "sha256-/z4ozgukl54/GdZbf3aF+JxPsp5Fh/2/JzsYHdDcT5c=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -36,13 +36,13 @@ python3Packages.buildPythonApplication {
     "test_init"
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires network access
-    "--ignore=test/test_results.py"
-    "--ignore=test/test_downloader.py"
+    "test/test_results.py"
+    "test/test_downloader.py"
 
     # incompatible with pytestCheckHook
-    "--ignore=test/test_ytdl.py"
+    "test/test_ytdl.py"
   ];
 
   pythonImportsCheck = [ "gallery_dl" ];

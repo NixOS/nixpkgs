@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
       mic92
       mbbx6spp
     ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -120,37 +120,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      python3
-      gfortran
-      pkg-config
-      bison
-    ]
-    ++ lib.optional mpiSupport mpi
-    ++ lib.optionals pythonSupport [
-      python3Packages.setuptools
-      python3Packages.cython
-    ];
+  nativeBuildInputs = [
+    python3
+    gfortran
+    pkg-config
+    bison
+  ]
+  ++ lib.optional mpiSupport mpi
+  ++ lib.optionals pythonSupport [
+    python3Packages.setuptools
+    python3Packages.cython
+  ];
 
-  buildInputs =
-    [
-      petscPackages.blas
-      petscPackages.lapack
-    ]
-    ++ lib.optional withZlib zlib
-    ++ lib.optional withHdf5 petscPackages.hdf5
-    ++ lib.optional withP4est petscPackages.p4est
-    ++ lib.optional withMetis petscPackages.metis
-    ++ lib.optional withParmetis petscPackages.parmetis
-    ++ lib.optional withPtscotch petscPackages.scotch
-    ++ lib.optional withScalapack petscPackages.scalapack
-    ++ lib.optional withMumps petscPackages.mumps
-    ++ lib.optional withHypre petscPackages.hypre
-    ++ lib.optional withSuperLu petscPackages.superlu
-    ++ lib.optional withSuperLuDist petscPackages.superlu_dist
-    ++ lib.optional withFftw petscPackages.fftw
-    ++ lib.optional withSuitesparse petscPackages.suitesparse;
+  buildInputs = [
+    petscPackages.blas
+    petscPackages.lapack
+  ]
+  ++ lib.optional withZlib zlib
+  ++ lib.optional withHdf5 petscPackages.hdf5
+  ++ lib.optional withP4est petscPackages.p4est
+  ++ lib.optional withMetis petscPackages.metis
+  ++ lib.optional withParmetis petscPackages.parmetis
+  ++ lib.optional withPtscotch petscPackages.scotch
+  ++ lib.optional withScalapack petscPackages.scalapack
+  ++ lib.optional withMumps petscPackages.mumps
+  ++ lib.optional withHypre petscPackages.hypre
+  ++ lib.optional withSuperLu petscPackages.superlu
+  ++ lib.optional withSuperLuDist petscPackages.superlu_dist
+  ++ lib.optional withFftw petscPackages.fftw
+  ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
@@ -167,46 +165,45 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
-  configureFlags =
-    [
-      "--with-blaslapack=1"
-      "--with-scalar-type=${scalarType}"
-      "--with-precision=${precision}"
-      "--with-mpi=${if mpiSupport then "1" else "0"}"
-    ]
-    ++ lib.optionals (!mpiSupport) [
-      "--with-cc=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "gcc" else "clang"}"
-      "--with-cxx=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "g++" else "clang++"}"
-      "--with-fc=${gfortran}/bin/gfortran"
-    ]
-    ++ lib.optionals mpiSupport [
-      "--with-cc=${lib.getDev mpi}/bin/mpicc"
-      "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
-      "--with-fc=${lib.getDev mpi}/bin/mpif90"
-    ]
-    ++ lib.optionals (!debug) [
-      "--with-debugging=0"
-      "COPTFLAGS=-O3"
-      "FOPTFLAGS=-O3"
-      "CXXOPTFLAGS=-O3"
-      "CXXFLAGS=-O3"
-    ]
-    ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
-    ++ lib.optional pythonSupport "--with-petsc4py=1"
-    ++ lib.optional withMetis "--with-metis=1"
-    ++ lib.optional withParmetis "--with-parmetis=1"
-    ++ lib.optional withPtscotch "--with-ptscotch=1"
-    ++ lib.optional withScalapack "--with-scalapack=1"
-    ++ lib.optional withMumps "--with-mumps=1"
-    ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
-    ++ lib.optional withP4est "--with-p4est=1"
-    ++ lib.optional withZlib "--with-zlib=1"
-    ++ lib.optional withHdf5 "--with-hdf5=1"
-    ++ lib.optional withHypre "--with-hypre=1"
-    ++ lib.optional withSuperLu "--with-superlu=1"
-    ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
-    ++ lib.optional withFftw "--with-fftw=1"
-    ++ lib.optional withSuitesparse "--with-suitesparse=1";
+  configureFlags = [
+    "--with-blaslapack=1"
+    "--with-scalar-type=${scalarType}"
+    "--with-precision=${precision}"
+    "--with-mpi=${if mpiSupport then "1" else "0"}"
+  ]
+  ++ lib.optionals (!mpiSupport) [
+    "--with-cc=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "gcc" else "clang"}"
+    "--with-cxx=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "g++" else "clang++"}"
+    "--with-fc=${gfortran}/bin/gfortran"
+  ]
+  ++ lib.optionals mpiSupport [
+    "--with-cc=${lib.getDev mpi}/bin/mpicc"
+    "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
+    "--with-fc=${lib.getDev mpi}/bin/mpif90"
+  ]
+  ++ lib.optionals (!debug) [
+    "--with-debugging=0"
+    "COPTFLAGS=-O3"
+    "FOPTFLAGS=-O3"
+    "CXXOPTFLAGS=-O3"
+    "CXXFLAGS=-O3"
+  ]
+  ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
+  ++ lib.optional pythonSupport "--with-petsc4py=1"
+  ++ lib.optional withMetis "--with-metis=1"
+  ++ lib.optional withParmetis "--with-parmetis=1"
+  ++ lib.optional withPtscotch "--with-ptscotch=1"
+  ++ lib.optional withScalapack "--with-scalapack=1"
+  ++ lib.optional withMumps "--with-mumps=1"
+  ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
+  ++ lib.optional withP4est "--with-p4est=1"
+  ++ lib.optional withZlib "--with-zlib=1"
+  ++ lib.optional withHdf5 "--with-hdf5=1"
+  ++ lib.optional withHypre "--with-hypre=1"
+  ++ lib.optional withSuperLu "--with-superlu=1"
+  ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
+  ++ lib.optional withFftw "--with-fftw=1"
+  ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
   hardeningDisable = lib.optionals debug [
     "fortify"
@@ -253,14 +250,13 @@ stdenv.mkDerivation (finalAttrs: {
   # This test fails on the Darwin platform but is rarely a common use case for petsc4py.
   installCheckFlags = lib.optional stdenv.hostPlatform.isDarwin "PETSC4PY=no";
 
-  nativeInstallCheckInputs =
-    [
-      mpiCheckPhaseHook
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.pythonImportsCheckHook
-      python3Packages.unittestCheckHook
-    ];
+  nativeInstallCheckInputs = [
+    mpiCheckPhaseHook
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.pythonImportsCheckHook
+    python3Packages.unittestCheckHook
+  ];
 
   unittestFlagsArray = [
     "-s"
@@ -281,21 +277,20 @@ stdenv.mkDerivation (finalAttrs: {
         petsc = finalAttrs.finalPackage;
       }
     );
-    tests =
-      {
-        serial = petsc.override {
-          mpiSupport = false;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        fullDeps = petsc.override {
-          withFullDeps = true;
-          withParmetis = false;
-        };
-        mpich = petsc.override {
-          mpi = mpich;
-        };
+    tests = {
+      serial = petsc.override {
+        mpiSupport = false;
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      fullDeps = petsc.override {
+        withFullDeps = true;
+        withParmetis = false;
+      };
+      mpich = petsc.override {
+        mpi = mpich;
+      };
+    };
   };
 
   setupHook = ./setup-hook.sh;

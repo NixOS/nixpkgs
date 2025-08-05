@@ -29,9 +29,22 @@ let
 
   openjdk = jdk23.override { enableJavaFX = true; };
 
+  sparrowArch =
+    {
+      x86_64-linux = "x86_64";
+      aarch64-linux = "aarch64";
+    }
+    ."${stdenvNoCC.hostPlatform.system}";
+
+  # nixpkgs-update: no auto update
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-x86_64.tar.gz";
-    hash = "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
+    hash =
+      {
+        x86_64-linux = "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
+        aarch64-linux = "sha256-31x4Ck/+Fa6CvBb6o9ncVH99Zeh0DUVv/hqVN31ysHk=";
+      }
+      ."${stdenvNoCC.hostPlatform.system}";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
@@ -49,7 +62,7 @@ let
       mkdir -m 700 -p $GNUPGHOME
       ln -s ${manifest} ./manifest.txt
       ln -s ${manifestSignature} ./manifest.txt.asc
-      ln -s $downloadedFile ./sparrowwallet-${version}-x86_64.tar.gz
+      ln -s $downloadedFile ./sparrowwallet-${version}-${sparrowArch}.tar.gz
       gpg --import ${publicKey}
       gpg --verify manifest.txt.asc manifest.txt
       sha256sum -c --ignore-missing manifest.txt
@@ -165,7 +178,6 @@ let
 
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-x86-64
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-x86
-      rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-aarch64
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-arm
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-armel
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-mips64el
@@ -184,7 +196,6 @@ let
       rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_x86
       rm -fR openpnp.capture.java/darwin-aarch64
       rm -fR openpnp.capture.java/darwin-x86-64
-      rm -fR openpnp.capture.java/linux-aarch64
       rm -fR openpnp.capture.java/win32-x86-64
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_arm32_armel
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_armel
@@ -192,9 +203,9 @@ let
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_x86
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/sunos_x64
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/sunos_x86
-      rm -fR com.sparrowwallet.merged.module/linux-aarch64
       rm -fR com.sparrowwallet.merged.module/linux-arm
       rm -fR com.sparrowwallet.merged.module/linux-x86
+      rm -fR com.fazecast.jSerialComm/FreeBSD
       rm -fR com.fazecast.jSerialComm/OpenBSD
       rm -fR com.fazecast.jSerialComm/Android
       rm -fR com.fazecast.jSerialComm/Solaris
@@ -206,7 +217,7 @@ let
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
       gzip -c ${torWrapper}  > tor.gz
-      cp tor.gz modules/io.matthewnelson.kmp.tor.resource.exec.tor/io/matthewnelson/kmp/tor/resource/exec/tor/native/linux-libc/x86_64/tor.gz
+      cp tor.gz modules/io.matthewnelson.kmp.tor.resource.exec.tor/io/matthewnelson/kmp/tor/resource/exec/tor/native/linux-libc/${sparrowArch}/tor.gz
     '';
 
     installPhase = ''
@@ -294,7 +305,10 @@ stdenvNoCC.mkDerivation rec {
       msgilligan
       _1000101
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "sparrow-desktop";
   };
 }

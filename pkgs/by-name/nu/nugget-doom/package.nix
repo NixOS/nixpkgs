@@ -43,7 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     yyjson
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "nugget-doom-(.*)"
+    ];
+  };
 
   meta = {
     description = "Doom source port forked from Woof! with additional features";

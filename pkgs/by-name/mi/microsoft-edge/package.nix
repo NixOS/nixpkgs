@@ -109,81 +109,80 @@ let
 
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cacert
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-      libsecret
-      libuuid
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals libvaSupport [ libva ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cacert
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libX11
+    libxcb
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libxkbcommon
+    libXrandr
+    libXrender
+    libXScrnSaver
+    libxshmfence
+    libXtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+    libsecret
+    libuuid
+    gtk3
+    gtk4
+    qt6.qtbase
+    qt6.qtwayland
+  ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals libvaSupport [ libva ];
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "138.0.3351.65";
+  version = "138.0.3351.121";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-+8bV3pwoYvp4e0eJHj5/NSu15QiFwVJuGxFJkS76gwI=";
+    hash = "sha256-1Oi6Q2/2Pk0BG937Ij0zI7tgBSnwhPwGx34b+HlpXTU=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -293,6 +292,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       maeve-oake
       leleuvilela
       bricklou
+      jonhermansen
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

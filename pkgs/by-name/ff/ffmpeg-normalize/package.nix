@@ -8,13 +8,17 @@
 python3Packages.buildPythonApplication rec {
   pname = "ffmpeg-normalize";
   version = "1.31.3";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "ffmpeg_normalize";
     hash = "sha256-sewDSBUX6gCZSIHeRtpx5fQGtOKN8OWZKrtCF2bgI9Y=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   dependencies =
     with python3Packages;

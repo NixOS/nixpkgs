@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
     libmspack
     json_c
     check
-  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"

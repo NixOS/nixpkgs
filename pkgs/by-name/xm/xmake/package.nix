@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmake";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "xmake-io";
     repo = "xmake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JY94DaSZ12pRrcCPxoPaECRA8rMK6/fNNyr/F8Htu8A=";
+    hash = "sha256-PlSNeC5h2C+cQMHqN1dD6prfZIenZXEHa1nWD2SgMIU=";
     fetchSubmodules = true;
   };
 

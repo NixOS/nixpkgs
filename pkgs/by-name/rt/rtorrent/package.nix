@@ -52,12 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     openssl
     zlib
-  ] ++ lib.optionals withLua [ lua5_4_compat ];
+  ]
+  ++ lib.optionals withLua [ lua5_4_compat ];
 
   configureFlags = [
     "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
-  ] ++ lib.optionals withLua [ "--with-lua" ];
+  ]
+  ++ lib.optionals withLua [ "--with-lua" ];
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

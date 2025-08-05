@@ -32,27 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = args.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      (lib.getDev llvmPackages.llvm.dev)
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # provides xcode-select, which is required for SDK detection
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cmake
+    (lib.getDev llvmPackages.llvm.dev)
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # provides xcode-select, which is required for SDK detection
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      zlib
-    ]
-    ++ (with llvmPackages; [
-      libclang
-      lld
-      llvm
-    ]);
+  buildInputs = [
+    libxml2
+    zlib
+  ]
+  ++ (with llvmPackages; [
+    libclang
+    lld
+    llvm
+  ]);
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH

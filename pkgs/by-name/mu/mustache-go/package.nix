@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cbroglie";
     repo = "mustache";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-A7LIkidhpFmhIjiDu9KdmSIdqFNsV3N8J2QEo7yT+DE=";
   };

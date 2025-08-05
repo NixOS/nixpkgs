@@ -13,7 +13,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "xborders";
   version = "3.4"; # in version.txt
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deter0";
@@ -33,7 +33,9 @@ python3Packages.buildPythonPackage rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pycairo
     requests
     pygobject3

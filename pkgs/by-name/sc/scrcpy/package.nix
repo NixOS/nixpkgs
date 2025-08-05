@@ -63,18 +63,17 @@ stdenv.mkDerivation rec {
     echo -n > server/meson.build
   '';
 
-  postInstall =
-    ''
-      mkdir -p "$out/share/scrcpy"
-      ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
+  postInstall = ''
+    mkdir -p "$out/share/scrcpy"
+    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
-      # runtime dep on `adb` to push the server
-      wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $out/share/applications/scrcpy-console.desktop \
-        --replace "/bin/bash" "${runtimeShell}"
-    '';
+    # runtime dep on `adb` to push the server
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $out/share/applications/scrcpy-console.desktop \
+      --replace "/bin/bash" "${runtimeShell}"
+  '';
 
   meta = {
     description = "Display and control Android devices over USB or TCP/IP";

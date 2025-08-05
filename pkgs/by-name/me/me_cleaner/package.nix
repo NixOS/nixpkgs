@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "me_cleaner";
   version = "1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corna";
@@ -15,6 +15,8 @@ python3.pkgs.buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1bdj2clm13ir441vn7sv860xsc5gh71ja5lc2wn0gggnff0adxj4";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # https://github.com/fwestenberg/reolink/issues/83
   doCheck = false;
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   disabledTests = [
     # Tests require network access

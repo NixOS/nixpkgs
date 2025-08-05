@@ -66,7 +66,8 @@ buildPythonPackage rec {
     requests
     telepath
     willow
-  ] ++ willow.optional-dependencies.heif;
+  ]
+  ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)

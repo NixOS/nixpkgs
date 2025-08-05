@@ -42,7 +42,8 @@ buildPythonPackage rec {
     typing-extensions
     # Build includes the standard optional by default
     # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
-  ] ++ optional-dependencies.standard;
+  ]
+  ++ optional-dependencies.standard;
 
   optional-dependencies = {
     standard = [
@@ -51,28 +52,26 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      coverage # execs coverage in tests
-      pytest-xdist
-      pytestCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      procps
-    ];
+  nativeCheckInputs = [
+    coverage # execs coverage in tests
+    pytest-xdist
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    procps
+  ];
 
-  disabledTests =
-    [
-      "test_scripts"
-      # Likely related to https://github.com/sarugaku/shellingham/issues/35
-      # fails also on Linux
-      "test_show_completion"
-      "test_install_completion"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      "test_install_completion"
-    ];
+  disabledTests = [
+    "test_scripts"
+    # Likely related to https://github.com/sarugaku/shellingham/issues/35
+    # fails also on Linux
+    "test_show_completion"
+    "test_install_completion"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    "test_install_completion"
+  ];
 
   pythonImportsCheck = [ "typer" ];
 

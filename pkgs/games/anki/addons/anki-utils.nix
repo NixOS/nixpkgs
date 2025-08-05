@@ -102,11 +102,13 @@
                 ${processUserFiles}
               '';
             };
-        } // passthru;
+        }
+        // passthru;
 
         meta = {
           platforms = lib.platforms.all;
-        } // meta;
+        }
+        // meta;
       };
   };
 

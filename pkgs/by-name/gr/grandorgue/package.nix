@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };
@@ -43,19 +43,18 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      fftwFloat
-      zlib
-      wavpack
-      wxGTK32
-      yaml-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      udev
-    ]
-    ++ lib.optional jackaudioSupport libjack2;
+  buildInputs = [
+    fftwFloat
+    zlib
+    wavpack
+    wxGTK32
+    yaml-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    udev
+  ]
+  ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags =
     lib.optionals (!jackaudioSupport) [

@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     boost
     zlib
     openssl
-  ] ++ lib.optional upnpSupport miniupnpc;
+  ]
+  ++ lib.optional upnpSupport miniupnpc;
 
   nativeBuildInputs = [
     installShellFiles

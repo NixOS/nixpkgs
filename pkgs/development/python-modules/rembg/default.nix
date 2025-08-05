@@ -59,7 +59,8 @@ buildPythonPackage rec {
     scikit-image
     scipy
     tqdm
-  ] ++ lib.optionals withCli optional-dependencies.cli;
+  ]
+  ++ lib.optionals withCli optional-dependencies.cli;
 
   optional-dependencies = {
     cli = [

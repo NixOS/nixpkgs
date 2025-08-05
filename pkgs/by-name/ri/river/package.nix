@@ -43,7 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     xwayland
     zig_0_14.hook
-  ] ++ lib.optional withManpages scdoc;
+  ]
+  ++ lib.optional withManpages scdoc;
 
   buildInputs = [
     libGL
@@ -55,17 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_19
-  ] ++ lib.optional xwaylandSupport libX11;
+  ]
+  ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
 
-  zigBuildFlags =
-    [
-      "--system"
-      "${finalAttrs.deps}"
-    ]
-    ++ lib.optional withManpages "-Dman-pages"
-    ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ]
+  ++ lib.optional withManpages "-Dman-pages"
+  ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions

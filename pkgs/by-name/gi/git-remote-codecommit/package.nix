@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "git-remote-codecommit";
   version = "1.17";
-  format = "setuptools";
+  format = "pyproject";
   disabled = !python3Packages.isPy3k;
 
   # The check dependency awscli has some overrides
@@ -25,18 +25,19 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-8heI0Oyfhuvshedw+Eqmwd+e9cOHdDt4O588dplqv/k=";
   };
 
+  build-system = with python3Packages; [ setuptools ];
+
   dependencies = with python3Packages; [ botocore ];
 
-  nativeCheckInputs =
-    [
-      awscli
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-      mock
-      flake8
-      tox
-    ]);
+  nativeCheckInputs = [
+    awscli
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    mock
+    flake8
+    tox
+  ]);
 
   meta = {
     description = "Git remote prefix to simplify pushing to and pulling from CodeCommit";

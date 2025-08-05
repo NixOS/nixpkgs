@@ -36,18 +36,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libGLU
-      libsForQt5.poppler
-      libsForQt5.qtgraphicaleffects # imported, but not declared as a dependency
-      libsForQt5.qtmultimedia
-      libsForQt5.qtquickcontrols2
-      libunarr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libsForQt5.qtmacextras # can be removed when using qt6
-    ];
+  buildInputs = [
+    libGLU
+    libsForQt5.poppler
+    libsForQt5.qtgraphicaleffects # imported, but not declared as a dependency
+    libsForQt5.qtmultimedia
+    libsForQt5.qtquickcontrols2
+    libunarr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libsForQt5.qtmacextras # can be removed when using qt6
+  ];
 
   # custom Darwin install instructions taken from the upstream compileOSX.sh script
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''

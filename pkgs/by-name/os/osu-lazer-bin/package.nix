@@ -10,23 +10,23 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2025.607.0";
+  version = "2025.710.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-        hash = "sha256-rfWP6vF68mE+pnKvJjSgkxzTBj3sWDRlB9NZZkPOYOE=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
+        hash = "sha256-Wg/HlnVjEV7rSTRTzYxP4w41PDVq+vPRT/+MArpK6+U=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-        hash = "sha256-FpMugHVyhpyzCRp+EH/RSQDsgoUEQrAuIVCaMTucz88=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Intel.zip";
+        hash = "sha256-aHlcjubkai5B9k49ptjR3RImkbqHpvyfgueMPZNDmmM=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-        hash = "sha256-jG3KedllnVNd5TLSkKYae2V8CzN90g5lJhT4EKI+nuk=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
+        hash = "sha256-Tfm75+jkSAqyNBkN3cVrx3hyw+Ai3lKa6ZIo47x2Rns=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");

@@ -32,6 +32,12 @@ let
 
         ancient = callPackage ../development/ocaml-modules/ancient { };
 
+        amqp-client = callPackage ../development/ocaml-modules/amqp-client { };
+
+        amqp-client-async = callPackage ../development/ocaml-modules/amqp-client/async.nix { };
+
+        amqp-client-lwt = callPackage ../development/ocaml-modules/amqp-client/lwt.nix { };
+
         angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
         angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -158,6 +164,8 @@ let
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
         callipyge = callPackage ../development/ocaml-modules/callipyge { };
+
+        camlgpc = callPackage ../development/ocaml-modules/camlgpc { };
 
         camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -317,10 +325,6 @@ let
         ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
         ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
-
-        ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
-          inherit (pkgs) nodejs;
-        };
 
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
@@ -1138,6 +1142,7 @@ let
         melange = callPackage ../development/tools/ocaml/melange { };
 
         melange-json = callPackage ../development/ocaml-modules/melange-json { };
+        melange-json-native = callPackage ../development/ocaml-modules/melange-json/native.nix { };
 
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1508,7 +1513,15 @@ let
 
         ocsipersist-pgsql = callPackage ../development/ocaml-modules/ocsipersist/pgsql.nix { };
 
+        ocsipersist-pgsql-config =
+          callPackage ../development/ocaml-modules/ocsipersist/pgsql-config.nix
+            { };
+
         ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
+
+        ocsipersist-sqlite-config =
+          callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix
+            { };
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
@@ -1793,7 +1806,6 @@ let
         reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
         reason-react = callPackage ../development/ocaml-modules/reason-react { };
-
         reason-react-ppx = callPackage ../development/ocaml-modules/reason-react/ppx.nix { };
 
         rebez = callPackage ../development/ocaml-modules/rebez { };
@@ -1929,6 +1941,8 @@ let
 
         stdint = callPackage ../development/ocaml-modules/stdint { };
 
+        stdlib-random = callPackage ../development/ocaml-modules/stdlib-random { };
+
         stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
         stdune = callPackage ../development/ocaml-modules/stdune { };
@@ -1958,6 +1972,10 @@ let
         tar = callPackage ../development/ocaml-modules/tar { };
 
         tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix {
+          inherit (pkgs) git;
+        };
+
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
           inherit (pkgs) git;
         };
 

@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html5_parser" ];
 
-  pytestFlagsArray = [ "test/*.py" ];
+  enabledTestPaths = [ "test/*.py" ];
 
   meta = with lib; {
     description = "Fast C based HTML 5 parsing for python";

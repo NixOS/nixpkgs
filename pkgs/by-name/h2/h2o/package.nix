@@ -39,18 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      makeWrapper
-      ninja
-    ]
-    ++ lib.optionals withMruby [
-      bison
-      ruby
-    ]
-    ++ lib.optional withUring liburing;
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+    ninja
+  ]
+  ++ lib.optionals withMruby [
+    bison
+    ruby
+  ]
+  ++ lib.optional withUring liburing;
 
   buildInputs = [
     brotli

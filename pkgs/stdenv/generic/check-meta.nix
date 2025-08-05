@@ -26,7 +26,6 @@ let
     isAttrs
     isString
     mapAttrs
-    filterAttrs
     ;
 
   inherit (lib.lists)
@@ -576,6 +575,8 @@ let
     let
       outputs = attrs.outputs or [ "out" ];
       hasOutput = out: builtins.elem out outputs;
+      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -602,28 +603,25 @@ let
           else
             findFirst hasOutput null outputs
         )
-      ] ++ optional (hasOutput "man") "man";
-    }
-    // (filterAttrs (_: v: v != null) {
+      ]
+      ++ optional (hasOutput "man") "man";
+
       # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
       # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
-      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
-      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
-    })
-    // attrs.meta or { }
-    # Fill `meta.position` to identify the source location of the package.
-    // optionalAttrs (pos != null) {
-      position = pos.file + ":" + toString pos.line;
+      ${if maintainersPosition == null then null else "maintainersPosition"} = maintainersPosition;
+      ${if teamsPosition == null then null else "teamsPosition"} = teamsPosition;
     }
+    // attrs.meta or { }
     // {
+      # Fill `meta.position` to identify the source location of the package.
+      ${if pos == null then null else "position"} = pos.file + ":" + toString pos.line;
+
       # Maintainers should be inclusive of teams.
       # Note that there may be external consumers of this API (repology, for instance) -
       # if you add a new maintainer or team attribute please ensure that this expectation is still met.
       maintainers =
-        attrs.meta.maintainers or [ ]
-        ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
-    }
-    // {
+        attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;

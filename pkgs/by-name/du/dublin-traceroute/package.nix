@@ -23,6 +23,12 @@ stdenv.mkDerivation {
     hash = "sha256-UJeFPVi3423Jh72fVk8QbLX1tTNAQ504xYs9HwVCkZc=";
   };
 
+  # gtest requires C++17, while dublin-traceroute requires C++11
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "ENABLE_TESTING()" ""
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

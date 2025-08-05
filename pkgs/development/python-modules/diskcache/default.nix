@@ -31,9 +31,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Darwin sandbox causes most tests to fail
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   disabledTests = [
     # Very time sensitive, can fail on over subscribed machines
     "test_incr_update_keyerror"

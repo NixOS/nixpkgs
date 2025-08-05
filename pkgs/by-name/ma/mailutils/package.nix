@@ -16,7 +16,7 @@
   guile,
   libmysqlclient,
   mailcap,
-  nettools,
+  net-tools,
   pam,
   readline,
   ncurses,
@@ -56,23 +56,22 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  buildInputs =
-    [
-      fribidi
-      gdbm
-      gnutls
-      gss
-      libmysqlclient
-      mailcap
-      ncurses
-      pam
-      readline
-      gsasl
-      libxcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
-    ++ lib.optionals pythonSupport [ python3 ]
-    ++ lib.optionals guileSupport [ guile ];
+  buildInputs = [
+    fribidi
+    gdbm
+    gnutls
+    gss
+    libmysqlclient
+    mailcap
+    ncurses
+    pam
+    readline
+    gsasl
+    libxcrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ net-tools ]
+  ++ lib.optionals pythonSupport [ python3 ]
+  ++ lib.optionals guileSupport [ guile ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -96,18 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--with-gssapi"
-      "--with-gsasl"
-      "--with-mysql"
-      "--with-path-sendmail=${system-sendmail}/bin/sendmail"
-      "--with-mail-rc=/etc/mail.rc"
-      "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
-    ]
-    ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional (!guileSupport) "--without-guile";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-gssapi"
+    "--with-gsasl"
+    "--with-mysql"
+    "--with-path-sendmail=${system-sendmail}/bin/sendmail"
+    "--with-mail-rc=/etc/mail.rc"
+    "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
+  ]
+  ++ lib.optional (!pythonSupport) "--without-python"
+  ++ lib.optional (!guileSupport) "--without-guile";
 
   nativeCheckInputs = [
     dejagnu

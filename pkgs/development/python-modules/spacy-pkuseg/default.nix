@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "spacy_pkuseg";
-    hash = "sha256-M1MeqOE/wJ6+O0C9l+hNB8zVof5n+o6EFzdpolrAMVg=";
+    hash = "sha256-tIB4d1r/80kUN1NE1W9wo37ARBiMyuzj9wgG/TIqR+s=";
   };
 
   # Does not seem to have actual tests, but unittest discover

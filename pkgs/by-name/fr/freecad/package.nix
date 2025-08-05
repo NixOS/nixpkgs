@@ -62,7 +62,7 @@ freecad-utils.makeCustomizable (
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
       fetchSubmodules = true;
     };
@@ -78,31 +78,30 @@ freecad-utils.makeCustomizable (
       qt6.wrapQtAppsHook
     ];
 
-    buildInputs =
-      [
-        coin3d
-        eigen
-        fmt
-        gts
-        hdf5
-        libGLU
-        libXmu
-        medfile
-        mpi
-        ode
-        vtk
-        xercesc
-        yaml-cpp
-        zlib
-        opencascade-occt
-        qt6.qtbase
-        qt6.qtsvg
-        qt6.qttools
-        qt6.qtwayland
-        qt6.qtwebengine
-      ]
-      ++ pythonDeps
-      ++ lib.optionals spaceNavSupport [ libspnav ];
+    buildInputs = [
+      coin3d
+      eigen
+      fmt
+      gts
+      hdf5
+      libGLU
+      libXmu
+      medfile
+      mpi
+      ode
+      vtk
+      xercesc
+      yaml-cpp
+      zlib
+      opencascade-occt
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+      qt6.qtwayland
+      qt6.qtwebengine
+    ]
+    ++ pythonDeps
+    ++ lib.optionals spaceNavSupport [ libspnav ];
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch

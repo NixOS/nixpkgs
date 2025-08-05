@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "matrix-alertmanager-receiver";
-  version = "2025.7.2";
+  version = "2025.7.30";
 
   src = fetchFromGitHub {
     owner = "metio";
     repo = "matrix-alertmanager-receiver";
     tag = finalAttrs.version;
-    hash = "sha256-Dz2oP3lNxO75Lqmke0WprvI1yuuQIv3HffNxMYCSJso=";
+    hash = "sha256-2zTkRXXXMMphNyw/OeiIAmc4KP0LqN6M0vtpX/7fhoI=";
   };
 
-  vendorHash = "sha256-+tkxK3h6N45XA4OvdNYrRFNbqJLGflY2v8oF36Gpwm4=";
+  vendorHash = "sha256-zOaAvPCAEQkJMogJ6ly0jkHfj+SAlFqk5m+eQdsaxK4=";
 
   env.CGO_ENABLED = "0";
 

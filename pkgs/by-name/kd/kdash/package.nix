@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     xorg.xcbutil
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-72DuM64wj8WW6soagodOFIeHvVn1CPpb1T3Y7GQYsbs=";
 
   meta = with lib; {

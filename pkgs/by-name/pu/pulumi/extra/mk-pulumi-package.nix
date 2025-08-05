@@ -34,7 +34,8 @@ let
         ldflags = [
           "-s"
           "-w"
-        ] ++ extraLdflags;
+        ]
+        ++ extraLdflags;
       }
       // args
     );

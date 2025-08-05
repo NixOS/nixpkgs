@@ -86,7 +86,7 @@ buildGoModule rec {
   vendorHash = "sha256-gqiK96FnfvRAzT0RUpYnT7HftZ1YV9jxbjstcKtGBho=";
 
   meta = {
-    description = "Web application that lets you save the readable content of web pages you want to keep forever.";
+    description = "Web application that lets you save the readable content of web pages you want to keep forever";
     mainProgram = "readeck";
     homepage = "https://readeck.org/";
     changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";

@@ -95,34 +95,34 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      avahi
-      libgphoto2
-      libjpeg
-      libpng
-      libtiff
-      libusb1
-      curl
-      libxml2
-      poppler
-      gawk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libieee1284
-      libv4l
-      net-snmp
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    avahi
+    libgphoto2
+    libjpeg
+    libpng
+    libtiff
+    libusb1
+    curl
+    libxml2
+    poppler
+    gawk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libieee1284
+    libv4l
+    net-snmp
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [ "--with-lockdir=/var/lock/sane" ]
-    ++ lib.optional (avahi != null) "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb";
+  configureFlags = [
+    "--with-lockdir=/var/lock/sane"
+  ]
+  ++ lib.optional (avahi != null) "--with-avahi"
+  ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.

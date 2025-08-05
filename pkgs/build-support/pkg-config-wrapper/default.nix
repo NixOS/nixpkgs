@@ -61,31 +61,30 @@ stdenv.mkDerivation {
   # Additional flags passed to pkg-config.
   env.addFlags = optionalString stdenv.targetPlatform.isStatic "--static";
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/nix-support
+  installPhase = ''
+    mkdir -p $out/bin $out/nix-support
 
-      wrap() {
-        local dst="$1"
-        local wrapper="$2"
-        export prog="$3"
-        substituteAll "$wrapper" "$out/bin/$dst"
-        chmod +x "$out/bin/$dst"
-      }
+    wrap() {
+      local dst="$1"
+      local wrapper="$2"
+      export prog="$3"
+      substituteAll "$wrapper" "$out/bin/$dst"
+      chmod +x "$out/bin/$dst"
+    }
 
-      echo $pkg-config > $out/nix-support/orig-pkg-config
+    echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
-    ''
-    # symlink in share for autoconf to find macros
+    wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+  ''
+  # symlink in share for autoconf to find macros
 
-    # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
-    # propagated dep once we can rely on downstream deps coming first in
-    # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
-    # at this.)
-    + ''
-      ln -s ${pkg-config}/share $out/share
-    '';
+  # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
+  # propagated dep once we can rely on downstream deps coming first in
+  # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
+  # at this.)
+  + ''
+    ln -s ${pkg-config}/share $out/share
+  '';
 
   setupHooks = [
     ../setup-hooks/role.bash

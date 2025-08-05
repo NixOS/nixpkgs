@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-07-06";
+  version = "0-unstable-2025-07-11";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "825d3aa5d754b512f8cbde2cc504b1d00788022c";
-    hash = "sha256-ZjsRG+qIzRb+8FM7a4qSkahxQeq1ayXSgD/oo7jdi6w=";
+    rev = "13c0c2d2d307ab1f391aca9aec4efc4ac4ba43c5";
+    hash = "sha256-V9tKoSu1r8LZaIZUu1JSyZ0dM7/zblTDQZHu86/V3LE=";
   };
 
   missingHashes = ./missing-hashes.json;

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pytestFlagsArray = [ "tests/platformrest_tests.py" ];
+  enabledTestPaths = [ "tests/platformrest_tests.py" ];
 
   pythonImportsCheck = [ "platformrest" ];
 

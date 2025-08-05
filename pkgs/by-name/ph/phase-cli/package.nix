@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/*.py"
   ];
 

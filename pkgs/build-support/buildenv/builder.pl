@@ -9,8 +9,8 @@ use JSON::PP;
 
 STDOUT->autoflush(1);
 
-$SIG{__WARN__} = sub { warn "warning: ", @_ };
-$SIG{__DIE__}  = sub { die "error: ", @_ };
+$SIG{__WARN__} = sub { warn "pkgs.buildEnv warning: ", @_ };
+$SIG{__DIE__}  = sub { die "pkgs.buildEnv error: ", @_ };
 
 my $out = $ENV{"out"};
 my $extraPrefix = $ENV{"extraPrefix"};
@@ -109,7 +109,7 @@ sub findFiles($relName, $target, $baseName, $ignoreCollisions, $checkCollisionCo
     # The store path must not be a file when not ignoreSingleFileOutputs
     if (-f $target && isStorePath $target) {
         if ($ignoreSingleFileOutputs) {
-            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv";
+            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv, ignoring it";
             return;
         } else {
             die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
@@ -173,12 +173,12 @@ sub findFiles($relName, $target, $baseName, $ignoreCollisions, $checkCollisionCo
         my $oldTargetRef = prependDangling($oldTarget);
 
         if ($ignoreCollisions) {
-            warn "collision between $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
+            warn "colliding subpath (ignored): $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
             return;
         } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
             return;
         } else {
-            die "collision between $targetRef and $oldTargetRef\n";
+            die "two given paths contain a conflicting subpath:\n  $targetRef and\n  $oldTargetRef\nhint: this may be caused by two different versions of the same package in buildEnv's `paths` parameter\nhint: `pkgs.nix-diff` can be used to compare derivations\n";
         }
     }
 

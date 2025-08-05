@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xl8pKfAgaeEjtITMpp6urwPndIBXxSyYEcX0PpVK8nc=";
     leaveDotGit = true;
     postFetch = ''

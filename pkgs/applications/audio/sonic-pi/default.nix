@@ -78,33 +78,32 @@ stdenv.mkDerivation rec {
     beamPackages.hex
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qttools
-      qtwayland
-      qwt
-      qscintilla
-      kissfftFloat
-      catch2_3
-      crossguid
-      reproc
-      platform-folders
-      ruby
-      alsa-lib
-      rtmidi
-      boost
-      aubio
-    ]
-    ++ lib.optionals withTauWidget [
-      qtwebengine
-    ]
-    ++ lib.optionals withImGui [
-      gl3w
-      SDL2
-      fmt
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+    qwt
+    qscintilla
+    kissfftFloat
+    catch2_3
+    crossguid
+    reproc
+    platform-folders
+    ruby
+    alsa-lib
+    rtmidi
+    boost
+    aubio
+  ]
+  ++ lib.optionals withTauWidget [
+    qtwebengine
+  ]
+  ++ lib.optionals withImGui [
+    gl3w
+    SDL2
+    fmt
+  ];
 
   nativeCheckInputs = [
     parallel

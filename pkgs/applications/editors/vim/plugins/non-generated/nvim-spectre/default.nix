@@ -20,7 +20,6 @@ let
     inherit version src;
     sourceRoot = "${src.name}/spectre_oxi";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-0szVL45QRo3AuBMf+WQ0QF0CS1B9HWPxfF6l6TJtv6Q=";
 
     preCheck = ''

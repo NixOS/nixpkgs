@@ -92,7 +92,8 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     respx
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "confluent_kafka" ];
 

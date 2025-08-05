@@ -22,7 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DLIBDEFLATE_BUILD_TESTS=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ zlib ];

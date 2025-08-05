@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Jr6jZKsMhSpWVNpmhozI5DLONbwfIpcXwSlcbC9lLRM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CLnwzgDbHy6nTfVathycObArtEsF8tpMNoh19/uQqGA=";
 
   # tests do not find grcov path correctly

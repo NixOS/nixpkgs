@@ -128,19 +128,18 @@ buildDotnetModule {
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.
-  testFilters =
-    [
-      "TestCategory!=ManualTest"
-      "TestCategory!=IntegrationTest"
-      "TestCategory!=AutomationTest"
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
 
-      # makes real HTTP requests
-      "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-    ]
-    ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-      # fails on macOS
-      "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-    ];
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
 
   disabledTests = [
     # setgid tests

@@ -66,27 +66,26 @@ stdenv.mkDerivation rec {
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
-  configureFlags =
-    [
-      "--disable-setuid"
-      "--disable-cache-owner"
-      "--localstatedir=/var"
-      "--with-config-file=${placeholder "out"}/etc/man_db.conf"
-      "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-      "--with-pager=less"
-    ]
-    ++ lib.optionals util-linuxMinimal.hasCol [
-      "--with-col=${util-linuxMinimal}/bin/col"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "ac_cv_func__set_invalid_parameter_handler=no"
-      "ac_cv_func_posix_fadvise=no"
-      "ac_cv_func_mempcpy=no"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "--enable-mandirs="
-    ];
+  configureFlags = [
+    "--disable-setuid"
+    "--disable-cache-owner"
+    "--localstatedir=/var"
+    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-pager=less"
+  ]
+  ++ lib.optionals util-linuxMinimal.hasCol [
+    "--with-col=${util-linuxMinimal}/bin/col"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "ac_cv_func__set_invalid_parameter_handler=no"
+    "ac_cv_func_posix_fadvise=no"
+    "ac_cv_func_mempcpy=no"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "--enable-mandirs="
+  ];
 
   preConfigure = ''
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")

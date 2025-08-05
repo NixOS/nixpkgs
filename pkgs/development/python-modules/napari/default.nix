@@ -97,7 +97,8 @@ mkDerivationWith buildPythonPackage rec {
     typing-extensions
     vispy
     wrapt
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   postFixup = ''
     wrapQtApp $out/bin/napari

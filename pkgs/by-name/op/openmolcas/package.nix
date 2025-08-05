@@ -56,7 +56,7 @@ let
     src = fetchFromGitHub {
       owner = "qcscine";
       repo = "nevpt2";
-      rev = "e1484fd"; # Must match tag in cmake/custom/nevpt2.cmake
+      rev = "e1484fd4901ae93ab0188bde417cf5dc440a8a3b"; # Must match tag in cmake/custom/nevpt2.cmake
       hash = "sha256-Vl+FhwhJBbD/7U2CwsYE9BClSQYLJ8DKXV9EXxQUmz0=";
     };
     patches = [ ./nevpt2.patch ];
@@ -105,21 +105,20 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs =
-    [
-      hdf5-cpp
-      python
-      armadillo
-      libxc
-      gsl.dev
-      boost
-      blas-ilp64
-      lapack-ilp64
-    ]
-    ++ lib.optionals enableMpi [
-      mpi
-      globalarrays
-    ];
+  buildInputs = [
+    hdf5-cpp
+    python
+    armadillo
+    libxc
+    gsl.dev
+    boost
+    blas-ilp64
+    lapack-ilp64
+  ]
+  ++ lib.optionals enableMpi [
+    mpi
+    globalarrays
+  ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
@@ -139,13 +138,12 @@ stdenv.mkDerivation rec {
     (lib.strings.cmakeBool "MPI" enableMpi)
   ];
 
-  preConfigure =
-    ''
-      cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
-    ''
-    + lib.optionalString enableMpi ''
-      export GAROOT=${globalarrays};
-    '';
+  preConfigure = ''
+    cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
+  ''
+  + lib.optionalString enableMpi ''
+    export GAROOT=${globalarrays};
+  '';
 
   # The Makefile will install pymolcas during the build grrr.
   postConfigure = ''

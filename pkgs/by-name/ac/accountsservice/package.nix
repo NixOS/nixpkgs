@@ -55,20 +55,19 @@ stdenv.mkDerivation rec {
     ./get-dm-type-from-config.patch
   ];
 
-  nativeBuildInputs =
-    [
-      gettext
-      gobject-introspection
-      meson
-      ninja
-      pkg-config
-      python3
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     dbus

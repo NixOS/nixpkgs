@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mastodon-archive";
   version = "1.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kensanata";
@@ -16,7 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-b4bYQshz7mwxEfpRYV7ze4C8hz58R9cVp58wHvGFb0A=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     html2text
     mastodon-py
     progress
@@ -24,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # There is no test
   doCheck = false;
+
+  pythonImportsCheck = [ "mastodon_archive" ];
 
   meta = with lib; {
     description = "Utility for backing up your Mastodon content";

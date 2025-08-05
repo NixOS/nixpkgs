@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "strategy game engine";
+    description = "Strategy game engine";
     homepage = "https://wargus.github.io/stratagus.html";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.astro ];

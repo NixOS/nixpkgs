@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     libassuan
     libgpg-error
     pth
-  ] ++ lib.optionals (qtbase != null) [ qtbase ];
+  ]
+  ++ lib.optionals (qtbase != null) [ qtbase ];
 
   nativeCheckInputs = [ which ];
 
@@ -64,17 +65,16 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  configureFlags =
-    [
-      "--enable-fixed-path=${gnupg}/bin"
-      "--with-libgpg-error-prefix=${libgpg-error.dev}"
-      "--with-libassuan-prefix=${libassuan.dev}"
-    ]
-    # Tests will try to communicate with gpg-agent instance via a UNIX socket
-    # which has a path length limit. Nix on darwin is using a build directory
-    # that already has quite a long path and the resulting socket path doesn't
-    # fit in the limit. https://github.com/NixOS/nix/pull/1085
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gpg-test" ];
+  configureFlags = [
+    "--enable-fixed-path=${gnupg}/bin"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ]
+  # Tests will try to communicate with gpg-agent instance via a UNIX socket
+  # which has a path length limit. Nix on darwin is using a build directory
+  # that already has quite a long path and the resulting socket path doesn't
+  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gpg-test" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless

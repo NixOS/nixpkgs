@@ -559,7 +559,8 @@ rec {
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
-    ] ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     preBuild =
       # The legacy-option-headers target is not correctly empbedded in the build graph.

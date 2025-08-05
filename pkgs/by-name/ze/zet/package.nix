@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-WnB2kxfWdWZCRqlSUL0cV4l9dIUr+cm7QCXF6F1ktt0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EIj2BUVS1tbY+kxUnpu1C+0+n68gTFZbp45f5UNidtY=";
 
   # tests fail with `--release`

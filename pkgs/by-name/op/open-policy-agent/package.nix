@@ -44,21 +44,27 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests =
-        [
-          # Skip tests that require network, not available in the nix sandbox
-          "TestInterQueryCache_ClientError"
-          "TestIntraQueryCache_ClientError"
-          "TestSSOCredentialService"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # Skip tests that require network, not available in the darwin sandbox
-          "TestHTTPSClient"
-          "TestHTTPSNoClientCerts"
-        ]
-        ++ lib.optionals (!enableWasmEval) [
-          "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
-        ];
+      skippedTests = [
+        # Skip tests that require network, not available in the nix sandbox
+        "TestInterQueryCache_ClientError"
+        "TestIntraQueryCache_ClientError"
+        "TestSSOCredentialService"
+
+        # This test depends on the metrics available in go not changing. This is a bit
+        # too unstable for us updating go independently.
+        "TestJSONSerialization"
+
+        # Flaky
+        "TestGraphQLParseSchemaAlloc"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Skip tests that require network, not available in the darwin sandbox
+        "TestHTTPSClient"
+        "TestHTTPSNoClientCerts"
+      ]
+      ++ lib.optionals (!enableWasmEval) [
+        "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+      ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 

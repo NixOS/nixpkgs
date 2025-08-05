@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Coffee2CodeNL";
     repo = "gebaar-libinput";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1kqcgwkia1p195xr082838dvj1gqif9d63i8a52jb0lc32zzizh6";
     fetchSubmodules = true;
   };

@@ -37,25 +37,25 @@ stdenv.mkDerivation (finalAtts: {
   buildInputs = [
     lcms2
     tinyxml
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin boost;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin boost;
 
   postPatch = ''
     substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
     substituteInPlace src/pyglue/CMakeLists.txt --replace "-Werror" ""
   '';
 
-  cmakeFlags =
-    [
-      "-DUSE_EXTERNAL_LCMS=ON"
-      "-DUSE_EXTERNAL_TINYXML=ON"
-      # External yaml-cpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
-      "-DUSE_EXTERNAL_YAML=OFF"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF"
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) "-DCMAKE_OSX_ARCHITECTURES=arm64";
+  cmakeFlags = [
+    "-DUSE_EXTERNAL_LCMS=ON"
+    "-DUSE_EXTERNAL_TINYXML=ON"
+    # External yaml-cpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
+    "-DUSE_EXTERNAL_YAML=OFF"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
+  ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF"
+  ++ lib.optional (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  ) "-DCMAKE_OSX_ARCHITECTURES=arm64";
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     # yaml-cpp uses std::auto_ptr and std::binary_function which has

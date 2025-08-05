@@ -8,21 +8,29 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-subidy";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Prior99";
-    repo = pname;
-    rev = version;
+    repo = "mopidy-subidy";
+    tag = version;
     sha256 = "0c5ghhhrj5v3yp4zmll9ari6r5c6ha8c1izwqshvadn40b02q7xz";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
     pythonPackages.py-sonic
   ];
 
-  nativeCheckInputs = with pythonPackages; [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "mopidy_subidy" ];
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";

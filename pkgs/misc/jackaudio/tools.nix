@@ -40,19 +40,18 @@ stdenv.mkDerivation (final: {
     meson
     ninja
   ];
-  buildInputs =
-    [
-      jack
-      libopus
-      libsamplerate
-      libsndfile
-      readline
-    ]
-    ++ lib.optionals enableAlsa [
-      alsa-lib
-      zita-alsa-pcmi
-      zita-resampler
-    ];
+  buildInputs = [
+    jack
+    libopus
+    libsamplerate
+    libsndfile
+    readline
+  ]
+  ++ lib.optionals enableAlsa [
+    alsa-lib
+    zita-alsa-pcmi
+    zita-resampler
+  ];
 
   mesonFlags = [
     (lib.mesonEnable "alsa_in_out" enableAlsa)

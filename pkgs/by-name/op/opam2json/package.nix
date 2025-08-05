@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.all;
-    description = "convert opam file syntax to JSON";
+    description = "Convert opam file syntax to JSON";
     mainProgram = "opam2json";
     maintainers = [ maintainers.balsoft ];
     license = licenses.gpl3;

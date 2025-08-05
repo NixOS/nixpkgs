@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     libsForQt5.qttools
     libsForQt5.qtimageformats
     libsForQt5.qtsvg
-  ] ++ lib.optionals x11Support [ libsForQt5.qtx11extras ];
+  ]
+  ++ lib.optionals x11Support [ libsForQt5.qtx11extras ];
 
   meta = with lib; {
     description = "Practical and minimal image viewer";

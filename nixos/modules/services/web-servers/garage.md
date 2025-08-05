@@ -72,7 +72,7 @@ in NixOS for a safe upgrade-path before removing those. In that case we should k
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/tools/filesystem/garage/default.nix>`):
 ```nix
-/* ... */
+# ...
 {
   garage_1_2_0 = generic {
     version = "1.2.0";

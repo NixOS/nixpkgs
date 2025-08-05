@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "2048-in-terminal";
-  version = "unstable-2022-06-13";
+  version = "0-unstable-2022-06-13";
 
   src = fetchFromGitHub {
     owner = "alewmoose";

@@ -1,0 +1,13 @@
+diff --git a/build/moz.configure/toolchain.configure b/build/moz.configure/toolchain.configure
+index 37c00230c853..dd89bea24392 100644
+--- a/build/moz.configure/toolchain.configure
++++ b/build/moz.configure/toolchain.configure
+@@ -233,7 +233,7 @@ with only_when(host_is_osx | target_is_osx):
+     )
+ 
+     def mac_sdk_min_version():
+-        return "15.5"
++        return "15.2"
+ 
+     @depends(
+         "--with-macos-sdk",

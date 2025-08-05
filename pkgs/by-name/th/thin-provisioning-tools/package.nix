@@ -7,7 +7,6 @@
   fetchFromGitHub,
   nixosTests,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "thin-provisioning-tools";
   version = "1.2.0";
@@ -19,16 +18,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gjsURDzA4LRTTgKZPzzTcvTdi1mXx4FkWmyoPcpdPfU=";
   };
 
-  nativeBuildInputs = [
+  strictDeps = true;
+  depsBuildBuild = [
     pkg-config
+    lvm2
+    udev
+  ];
+  nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
   buildInputs = [
-    udev
     lvm2
+    udev
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-H5GRAZpFl2t/bH8THyPkZq5ptS70XkhSCxQ6ko+0RC8=";
 
   passthru.tests = {

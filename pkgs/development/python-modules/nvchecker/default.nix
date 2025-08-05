@@ -47,7 +47,8 @@ buildPythonPackage rec {
     platformdirs
     tornado
     pycurl
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -69,7 +70,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nvchecker" ];
 
-  pytestFlagsArray = [ "-m 'not needs_net'" ];
+  disabledTestMarks = [ "needs_net" ];
 
   optional-dependencies = {
     # vercmp = [ pyalpm ];

@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pyamlboot";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "superna9999";
@@ -24,9 +24,10 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     pyusb
-    wheel
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
+
+  pythonImportsCheck = [ "pyamlboot" ];
 
   passthru.tests.version = testers.testVersion {
     package = pyamlboot;

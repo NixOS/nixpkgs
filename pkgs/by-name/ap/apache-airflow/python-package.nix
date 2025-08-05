@@ -152,82 +152,81 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  propagatedBuildInputs =
-    [
-      alembic
-      argcomplete
-      asgiref
-      attrs
-      blinker
-      cached-property
-      cattrs
-      clickclick
-      colorlog
-      configupdater
-      connexion
-      cron-descriptor
-      croniter
-      cryptography
-      deprecated
-      dill
-      flask
-      flask-appbuilder
-      flask-caching
-      flask-session
-      flask-wtf
-      flask-login
-      gitpython
-      google-re2
-      graphviz
-      gunicorn
-      httpx
-      iso8601
-      importlib-resources
-      inflection
-      itsdangerous
-      jinja2
-      jsonschema
-      lazy-object-proxy
-      linkify-it-py
-      lockfile
-      markdown
-      markupsafe
-      marshmallow-oneofschema
-      mdit-py-plugins
-      numpy
-      openapi-spec-validator
-      opentelemetry-api
-      opentelemetry-exporter-otlp
-      pandas
-      pathspec
-      pendulum
-      psutil
-      pydantic
-      pygments
-      pyjwt
-      python-daemon
-      python-dateutil
-      python-nvd3
-      python-slugify
-      python3-openid
-      pyyaml
-      rich
-      rich-argparse
-      setproctitle
-      sqlalchemy
-      sqlalchemy-jsonfield
-      swagger-ui-bundle
-      tabulate
-      tenacity
-      termcolor
-      typing-extensions
-      unicodecsv
-      werkzeug
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-metadata
-    ]
-    ++ providerDependencies;
+  propagatedBuildInputs = [
+    alembic
+    argcomplete
+    asgiref
+    attrs
+    blinker
+    cached-property
+    cattrs
+    clickclick
+    colorlog
+    configupdater
+    connexion
+    cron-descriptor
+    croniter
+    cryptography
+    deprecated
+    dill
+    flask
+    flask-appbuilder
+    flask-caching
+    flask-session
+    flask-wtf
+    flask-login
+    gitpython
+    google-re2
+    graphviz
+    gunicorn
+    httpx
+    iso8601
+    importlib-resources
+    inflection
+    itsdangerous
+    jinja2
+    jsonschema
+    lazy-object-proxy
+    linkify-it-py
+    lockfile
+    markdown
+    markupsafe
+    marshmallow-oneofschema
+    mdit-py-plugins
+    numpy
+    openapi-spec-validator
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    pandas
+    pathspec
+    pendulum
+    psutil
+    pydantic
+    pygments
+    pyjwt
+    python-daemon
+    python-dateutil
+    python-nvd3
+    python-slugify
+    python3-openid
+    pyyaml
+    rich
+    rich-argparse
+    setproctitle
+    sqlalchemy
+    sqlalchemy-jsonfield
+    swagger-ui-bundle
+    tabulate
+    tenacity
+    termcolor
+    typing-extensions
+    unicodecsv
+    werkzeug
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
+  ]
+  ++ providerDependencies;
 
   buildInputs = [
     airflow-frontend
@@ -245,17 +244,16 @@ buildPythonPackage rec {
   # above
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
-  postPatch =
-    ''
-      # https://github.com/apache/airflow/issues/33854
-      substituteInPlace pyproject.toml \
-        --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fix failing test on Hydra
-      substituteInPlace airflow/utils/db.py \
-        --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
-    '';
+  postPatch = ''
+    # https://github.com/apache/airflow/issues/33854
+    substituteInPlace pyproject.toml \
+      --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix failing test on Hydra
+    substituteInPlace airflow/utils/db.py \
+      --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
+  '';
 
   pythonRelaxDeps = [
     "colorlog"
@@ -277,7 +275,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "airflow"
-  ] ++ providerImports;
+  ]
+  ++ providerImports;
 
   preCheck = ''
     export AIRFLOW_HOME=$HOME
@@ -290,7 +289,7 @@ buildPythonPackage rec {
     airflow db reset -y
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/core/test_core.py"
   ];
 

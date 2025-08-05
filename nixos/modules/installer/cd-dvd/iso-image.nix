@@ -797,7 +797,8 @@ in
       device = "/iso/nix-store.squashfs";
       options = [
         "loop"
-      ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
+      ]
+      ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
       neededForBoot = true;
     };
 
@@ -865,11 +866,12 @@ in
 
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
-    boot.loader.grub.enable = false;
+    boot.loader.grub.enable = lib.mkImageMediaOverride false;
 
     environment.systemPackages = [
       grubPkgs.grub2
-    ] ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
+    ]
+    ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
     system.extraDependencies = [ grubPkgs.grub2_efi ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -901,9 +903,10 @@ in
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
-    isoImage.storeContents =
-      [ config.system.build.toplevel ]
-      ++ lib.optional config.isoImage.includeSystemBuildDependencies config.system.build.toplevel.drvPath;
+    isoImage.storeContents = [
+      config.system.build.toplevel
+    ]
+    ++ lib.optional config.isoImage.includeSystemBuildDependencies config.system.build.toplevel.drvPath;
 
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.

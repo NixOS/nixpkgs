@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-scip";
-  version = "9.2.2";
+  version = "9.2.3";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
     tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-gxR308XrlmuUym/ujwGcD9a7Z+Z7vQNHaK4zO/PWPBQ=";
+    hash = "sha256-Zc1AXNpHQXXFO8jkMaJj6xYkmkQxAM8G+SiPiH9xCAw=";
   };
 
   nativeBuildInputs = [ cmake ];

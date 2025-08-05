@@ -48,17 +48,16 @@ buildPythonPackage rec {
   ];
   dontUseCmakeConfigure = true;
 
-  dependencies =
-    [
-      pydantic
-      sentencepiece
-      tiktoken
-      torch
-      transformers
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      triton
-    ];
+  dependencies = [
+    pydantic
+    sentencepiece
+    tiktoken
+    torch
+    transformers
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

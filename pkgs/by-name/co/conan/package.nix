@@ -54,21 +54,20 @@ python3Packages.buildPythonApplication rec {
     "distro"
   ];
 
-  nativeCheckInputs =
-    [
-      git
-      pkg-config
-      zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
-    ++ (with python3Packages; [
-      mock
-      parameterized
-      pytest-xdist
-      pytestCheckHook
-      webtest
-      cmake
-    ]);
+  nativeCheckInputs = [
+    git
+    pkg-config
+    zlib
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
+  ++ (with python3Packages; [
+    mock
+    parameterized
+    pytest-xdist
+    pytestCheckHook
+    webtest
+    cmake
+  ]);
 
   dontUseCmakeConfigure = true;
 
@@ -76,29 +75,28 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "conan" ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "TestFTP"
-      # Unstable test
-      "test_shared_windows_find_libraries"
-      # 'cmake' tool version 'Any' is not available
-      "test_build"
-      # 'cmake' tool version '3.27' is not available
-      "test_metabuild"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Rejects paths containing nix
-      "test_conditional_os"
-      # Requires Apple Clang
-      "test_detect_default_compilers"
-      "test_detect_default_in_mac_os_using_gcc_as_default"
-      # Incompatible with darwin.xattr and xcbuild from nixpkgs
-      "test_dot_files"
-      "test_xcrun"
-      "test_xcrun_in_required_by_tool_requires"
-      "test_xcrun_in_tool_requires"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "TestFTP"
+    # Unstable test
+    "test_shared_windows_find_libraries"
+    # 'cmake' tool version 'Any' is not available
+    "test_build"
+    # 'cmake' tool version '3.27' is not available
+    "test_metabuild"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Rejects paths containing nix
+    "test_conditional_os"
+    # Requires Apple Clang
+    "test_detect_default_compilers"
+    "test_detect_default_in_mac_os_using_gcc_as_default"
+    # Incompatible with darwin.xattr and xcbuild from nixpkgs
+    "test_dot_files"
+    "test_xcrun"
+    "test_xcrun_in_required_by_tool_requires"
+    "test_xcrun_in_tool_requires"
+  ];
 
   disabledTestPaths = [
     # Requires cmake, meson, autotools, apt-get, etc.

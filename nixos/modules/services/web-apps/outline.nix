@@ -166,6 +166,13 @@ in
             type = lib.types.str;
             description = "S3 access key.";
           };
+          accelerateUrl = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              URL for AWS S3 [transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html).
+            '';
+          };
           secretKeyFile = lib.mkOption {
             type = lib.types.path;
             description = "File path that contains the S3 secret key.";
@@ -632,10 +639,11 @@ in
       {
         description = "Outline wiki and knowledge base";
         wantedBy = [ "multi-user.target" ];
-        after =
-          [ "networking.target" ]
-          ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
-          ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
+        after = [
+          "networking.target"
+        ]
+        ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
+        ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
         requires =
           lib.optional (cfg.databaseUrl == "local") "postgresql.target"
           ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
@@ -679,6 +687,10 @@ in
             AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
             AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
             AWS_S3_ACL = cfg.storage.acl;
+          })
+
+          (lib.mkIf (cfg.storage.storageType == "s3" && cfg.storage.accelerateUrl != null) {
+            AWS_S3_ACCELERATE_URL = cfg.storage.accelerateUrl;
           })
 
           (lib.mkIf (cfg.slackAuthentication != null) {

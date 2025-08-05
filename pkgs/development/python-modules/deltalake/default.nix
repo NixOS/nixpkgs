@@ -40,22 +40,20 @@ buildPythonPackage rec {
     pyarrow-hotfix
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  nativeBuildInputs =
-    [
-      pkg-config # openssl-sys needs this
-    ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config # openssl-sys needs this
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
   pythonImportsCheck = [ "deltalake" ];
 
@@ -78,9 +76,12 @@ buildPythonPackage rec {
     rm -rf deltalake
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
-    "-m 'not integration'"
+  ];
+
+  disabledTestMarks = [
+    "integration"
   ];
 
   meta = with lib; {

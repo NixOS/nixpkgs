@@ -14,7 +14,8 @@ in
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
     ../../../modules/image/file-options.nix
-  ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
+  ]
+  ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   documentation.enable = copyChannel;
 

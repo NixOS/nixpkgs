@@ -32,19 +32,18 @@ stdenv.mkDerivation rec {
       --replace-fail 'git log' 'echo ${version} #'
   '';
 
-  configureFlags =
-    [
-      (lib.enableFeature true "dependency-tracking")
-      (lib.withFeature true "sdl2")
-      (lib.enableFeature true "sdl2-linking")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.enableFeature true "alsa")
-      (lib.enableFeature true "alsa-linking")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.enableFeature false "sdltest")
-    ];
+  configureFlags = [
+    (lib.enableFeature true "dependency-tracking")
+    (lib.withFeature true "sdl2")
+    (lib.enableFeature true "sdl2-linking")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.enableFeature true "alsa")
+    (lib.enableFeature true "alsa-linking")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.enableFeature false "sdltest")
+  ];
 
   strictDeps = true;
 
@@ -54,16 +53,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      libX11
-      utf8proc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libXext
-    ];
+  buildInputs = [
+    SDL2
+    libX11
+    utf8proc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libXext
+  ];
 
   enableParallelBuilding = true;
 

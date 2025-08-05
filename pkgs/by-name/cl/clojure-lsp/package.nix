@@ -5,6 +5,8 @@
   fetchurl,
   fetchFromGitHub,
   writeScript,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   testers,
 }:
 
@@ -25,21 +27,11 @@ buildGraalvmNativeImage (finalAttrs: {
     "--features=clj_easy.graal_build_time.InitClojureClasses"
   ];
 
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-
-    export HOME="$(mktemp -d)"
-    ./clojure-lsp --version | fgrep -q '${finalAttrs.version}'
-
-    runHook postCheck
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    inherit (finalAttrs) version;
-    package = finalAttrs.finalPackage;
-    command = "clojure-lsp --version";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell

@@ -122,70 +122,67 @@ stdenv.mkDerivation rec {
     outputHashMode = "recursive";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
+  nativeBuildInputs = [
+    cmake
+    git
 
-      ant
-      jdk
+    ant
+    jdk
 
-      nodejs
-      yarn
-      yarnConfigHook
-      zip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ]
-    ++ lib.optionals (!server) [
-      makeWrapper
-      (nodejs.python.withPackages (ps: [ ps.setuptools ]))
-      npmHooks.npmConfigHook
-    ];
+    nodejs
+    yarn
+    yarnConfigHook
+    zip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ]
+  ++ lib.optionals (!server) [
+    makeWrapper
+    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    npmHooks.npmConfigHook
+  ];
 
-  buildInputs =
-    [
-      boost187
-      libuuid
-      openssl
-      R
-      soci
-      sqlite.dev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ]
-    ++ lib.optionals (!server) [
-      fontconfig
-    ]
-    ++ lib.optionals server [
-      pam
-      zlib
-    ];
+  buildInputs = [
+    boost187
+    libuuid
+    openssl
+    R
+    soci
+    sqlite.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+  ]
+  ++ lib.optionals (!server) [
+    fontconfig
+  ]
+  ++ lib.optionals server [
+    pam
+    zlib
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "RSTUDIO_TARGET" (if server then "Server" else "Electron"))
+  cmakeFlags = [
+    (lib.cmakeFeature "RSTUDIO_TARGET" (if server then "Server" else "Electron"))
 
-      # don't try fetching the external dependencies already fetched in extSrcs
-      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    # don't try fetching the external dependencies already fetched in extSrcs
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
 
-      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_BOOST" true)
-      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_SOCI" true)
+    (lib.cmakeBool "RSTUDIO_USE_SYSTEM_BOOST" true)
+    (lib.cmakeBool "RSTUDIO_USE_SYSTEM_SOCI" true)
 
-      (lib.cmakeBool "RSTUDIO_DISABLE_CHECK_FOR_UPDATES" true)
-      (lib.cmakeBool "QUARTO_ENABLED" true)
-      (lib.cmakeBool "RSTUDIO_ENABLE_COPILOT" false) # copilot-language-server is unfree
-      (lib.cmakeBool "RSTUDIO_CRASHPAD_ENABLED" false) # This is a NOOP except on x86_64-darwin
+    (lib.cmakeBool "RSTUDIO_DISABLE_CHECK_FOR_UPDATES" true)
+    (lib.cmakeBool "QUARTO_ENABLED" true)
+    (lib.cmakeBool "RSTUDIO_ENABLE_COPILOT" false) # copilot-language-server is unfree
+    (lib.cmakeBool "RSTUDIO_CRASHPAD_ENABLED" false) # This is a NOOP except on x86_64-darwin
 
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (
-        (placeholder "out") + (if stdenv.hostPlatform.isDarwin then "/Applications" else "/lib/rstudio")
-      ))
-    ]
-    ++ lib.optionals (!server) [
-      (lib.cmakeBool "RSTUDIO_INSTALL_FREEDESKTOP" stdenv.hostPlatform.isLinux)
-    ];
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (
+      (placeholder "out") + (if stdenv.hostPlatform.isDarwin then "/Applications" else "/lib/rstudio")
+    ))
+  ]
+  ++ lib.optionals (!server) [
+    (lib.cmakeBool "RSTUDIO_INSTALL_FREEDESKTOP" stdenv.hostPlatform.isLinux)
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -249,108 +246,106 @@ stdenv.mkDerivation rec {
     hash = "sha256-64PJPUE/xwdQdxVGiKzy8ADnxXH/qGQtFMib0unZpoA=";
   };
 
-  preConfigure =
-    ''
-      # populate the directories used by cmake's FetchContent
-      mkdir -p build/_deps
-      cp -r "$extSrcs"/* build/_deps
-      chmod -R u+w build/_deps
+  preConfigure = ''
+    # populate the directories used by cmake's FetchContent
+    mkdir -p build/_deps
+    cp -r "$extSrcs"/* build/_deps
+    chmod -R u+w build/_deps
 
-      # set up node_modules directory inside quarto so that panmirror can be built
-      mkdir src/gwt/lib/quarto
-      cp -r --no-preserve=all ${quartoSrc}/* src/gwt/lib/quarto
-      pushd src/gwt/lib/quarto
-      yarnConfigHook
-      popd
+    # set up node_modules directory inside quarto so that panmirror can be built
+    mkdir src/gwt/lib/quarto
+    cp -r --no-preserve=all ${quartoSrc}/* src/gwt/lib/quarto
+    pushd src/gwt/lib/quarto
+    yarnConfigHook
+    popd
 
-      ### set up dependencies that will be copied into the result
-      # note: only the directory names have to match upstream, the actual versions don't
-      # note: symlinks are preserved
+    ### set up dependencies that will be copied into the result
+    # note: only the directory names have to match upstream, the actual versions don't
+    # note: symlinks are preserved
 
-      mkdir dependencies/dictionaries
-      for dict in ${builtins.concatStringsSep " " dictionaries}; do
-        for i in "$dict/share/hunspell/"*; do
-          ln -s $i dependencies/dictionaries/
-        done
+    mkdir dependencies/dictionaries
+    for dict in ${builtins.concatStringsSep " " dictionaries}; do
+      for i in "$dict/share/hunspell/"*; do
+        ln -s $i dependencies/dictionaries/
       done
+    done
 
-      ln -s ${quartoWrapper} dependencies/quarto
+    ln -s ${quartoWrapper} dependencies/quarto
 
-      # version in dependencies/common/install-mathjax
-      ln -s ${mathJaxSrc} dependencies/mathjax-27
+    # version in dependencies/common/install-mathjax
+    ln -s ${mathJaxSrc} dependencies/mathjax-27
 
-      mkdir -p dependencies/common/node
-      # node used by cmake
-      # version in cmake/globals.cmake (RSTUDIO_NODE_VERSION)
-      ln -s ${nodejs} dependencies/common/node/22.13.1
+    mkdir -p dependencies/common/node
+    # node used by cmake
+    # version in cmake/globals.cmake (RSTUDIO_NODE_VERSION)
+    ln -s ${nodejs} dependencies/common/node/22.13.1
 
-    ''
-    + lib.optionalString (!server) ''
-      pushd $npmRoot
+  ''
+  + lib.optionalString (!server) ''
+    pushd $npmRoot
 
-      substituteInPlace package.json \
-        --replace-fail "npm ci && " ""
+    substituteInPlace package.json \
+      --replace-fail "npm ci && " ""
 
-      # use electron's headers to make node-gyp compile against the electron ABI
-      export npm_config_nodedir="${electron.headers}"
+    # use electron's headers to make node-gyp compile against the electron ABI
+    export npm_config_nodedir="${electron.headers}"
 
-      ### override the detected electron version
-      substituteInPlace node_modules/@electron-forge/core-utils/dist/electron-version.js \
-        --replace-fail "return version" "return '${electron.version}'"
+    ### override the detected electron version
+    substituteInPlace node_modules/@electron-forge/core-utils/dist/electron-version.js \
+      --replace-fail "return version" "return '${electron.version}'"
 
-      ### create the electron archive to be used by electron-packager
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
+    ### create the electron archive to be used by electron-packager
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
-      pushd electron-dist
-      zip -0Xqr ../electron.zip .
-      popd
+    pushd electron-dist
+    zip -0Xqr ../electron.zip .
+    popd
 
-      rm -r electron-dist
+    rm -r electron-dist
 
-      # force @electron/packager to use our electron instead of downloading it
-      substituteInPlace node_modules/@electron/packager/dist/packager.js \
-        --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
+    # force @electron/packager to use our electron instead of downloading it
+    substituteInPlace node_modules/@electron/packager/dist/packager.js \
+      --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
 
-      # Work around known nan issue for electron_33 and above
-      # https://github.com/nodejs/nan/issues/978
-      substituteInPlace node_modules/nan/nan.h \
-        --replace-fail '#include "nan_scriptorigin.h"' ""
+    # Work around known nan issue for electron_33 and above
+    # https://github.com/nodejs/nan/issues/978
+    substituteInPlace node_modules/nan/nan.h \
+      --replace-fail '#include "nan_scriptorigin.h"' ""
 
-      # now that we patched everything, we still have to run the scripts we ignored with --ignore-scripts
-      npm rebuild
+    # now that we patched everything, we still have to run the scripts we ignored with --ignore-scripts
+    npm rebuild
 
-      popd
-    '';
+    popd
+  '';
 
-  postInstall =
-    ''
-      mkdir -p $out/bin
-    ''
-    + lib.optionalString (server && stdenv.hostPlatform.isLinux) ''
-      ln -s $out/lib/rstudio/bin/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
-    ''
-    + lib.optionalString (!server && stdenv.hostPlatform.isLinux) ''
-      # remove unneeded electron files, since we'll wrap the app with our own electron
-      shopt -s extglob
-      rm -r $out/lib/rstudio/!(locales|resources|resources.pak)
+  postInstall = ''
+    mkdir -p $out/bin
+  ''
+  + lib.optionalString (server && stdenv.hostPlatform.isLinux) ''
+    ln -s $out/lib/rstudio/bin/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
+  ''
+  + lib.optionalString (!server && stdenv.hostPlatform.isLinux) ''
+    # remove unneeded electron files, since we'll wrap the app with our own electron
+    shopt -s extglob
+    rm -r $out/lib/rstudio/!(locales|resources|resources.pak)
 
-      makeWrapper ${lib.getExe electron} "$out/bin/rstudio" \
-        --add-flags "$out/lib/rstudio/resources/app/" \
-        --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-        --suffix PATH : ${lib.makeBinPath [ gnumake ]}
+    makeWrapper ${lib.getExe electron} "$out/bin/rstudio" \
+      --add-flags "$out/lib/rstudio/resources/app/" \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --suffix PATH : ${lib.makeBinPath [ gnumake ]}
 
-      ln -s $out/lib/rstudio/resources/app/bin/{diagnostics,rpostback} $out/bin
-    ''
-    + lib.optionalString (server && stdenv.hostPlatform.isDarwin) ''
-      ln -s $out/Applications/RStudio.app/Contents/MacOS/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
-    ''
-    + lib.optionalString (!server && stdenv.hostPlatform.isDarwin) ''
-      # electron can't find its files if we use a symlink here
-      makeWrapper $out/Applications/RStudio.app/Contents/MacOS/RStudio $out/bin/rstudio
+    ln -s $out/lib/rstudio/resources/app/bin/{diagnostics,rpostback} $out/bin
+  ''
+  + lib.optionalString (server && stdenv.hostPlatform.isDarwin) ''
+    ln -s $out/Applications/RStudio.app/Contents/MacOS/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
+  ''
+  + lib.optionalString (!server && stdenv.hostPlatform.isDarwin) ''
+    # electron can't find its files if we use a symlink here
+    makeWrapper $out/Applications/RStudio.app/Contents/MacOS/RStudio $out/bin/rstudio
 
-      ln -s $out/Applications/RStudio.app/Contents/Resources/app/bin/{diagnostics,rpostback} $out/bin
-    '';
+    ln -s $out/Applications/RStudio.app/Contents/Resources/app/bin/{diagnostics,rpostback} $out/bin
+  '';
 
   passthru = {
     inherit server;

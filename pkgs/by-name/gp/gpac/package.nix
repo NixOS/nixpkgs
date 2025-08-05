@@ -20,13 +20,12 @@ stdenv.mkDerivation rec {
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
 
   buildInputs = [
     zlib

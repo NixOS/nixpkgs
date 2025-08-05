@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "torchmetrics";
-  version = "1.7.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     tag = "v${version}";
-    hash = "sha256-MpqpzfsT9cxyKHvcw2ue67gaqQfdsLARov50ivGYO98=";
+    hash = "sha256-zoKULi12vIKMzPRE6I4Rtq4dVQL/GfNFjHR+BId1ADg=";
   };
 
   dependencies = [

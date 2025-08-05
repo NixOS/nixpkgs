@@ -13,16 +13,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.20.0";
+  version = "1.21.3";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pdfe2D9KAg/vesTgOi+b5ZVkUkuWhmZC/xYXiiYzlPs=";
+    hash = "sha256-CMFd9che+D1ot1Iqk0VcJmna0xIqHlRIvNnzYo+q+RU=";
   };
 
-  vendorHash = "sha256-cOl+eVnj6aMKIJCjCM0aacp4/Jg5BhZqFwum+u9tOKE=";
+  vendorHash = "sha256-cWkC3Bqut5h3hHh5tPIPeHMnkwoqKMnG1x40uCtUIwI=";
 
   nativeBuildInputs = [
     esbuild
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     pname = "anubis-xess";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-kBnexaBAMgA7QdKevW3mmlSn+QEbkTW//hYVTRFLQeQ=";
+    npmDepsHash = "sha256-NJMUXGXcaY8l1WIbvCn+aIknVuagR7X8gRkme9xpYQ0=";
 
     buildPhase = ''
       runHook preBuild
@@ -55,7 +55,8 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X=github.com/TecharoHQ/anubis.Version=v${finalAttrs.version}"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
 
   postPatch = ''
     patchShebangs ./web/build.sh

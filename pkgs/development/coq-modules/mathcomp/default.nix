@@ -131,21 +131,20 @@ let
 
           buildFlags = lib.optional withDoc "doc";
 
-          preBuild =
-            ''
-              if [[ -f etc/utils/ssrcoqdep ]]
-              then patchShebangs etc/utils/ssrcoqdep
-              fi
-              if [[ -f etc/buildlibgraph ]]
-              then patchShebangs etc/buildlibgraph
-              fi
-            ''
-            + ''
-              # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
-              test -d mathcomp && cd mathcomp
-              cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
-            ''
-            + lib.optionalString (package == "all") pkgallMake;
+          preBuild = ''
+            if [[ -f etc/utils/ssrcoqdep ]]
+            then patchShebangs etc/utils/ssrcoqdep
+            fi
+            if [[ -f etc/buildlibgraph ]]
+            then patchShebangs etc/buildlibgraph
+            fi
+          ''
+          + ''
+            # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
+            test -d mathcomp && cd mathcomp
+            cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
+          ''
+          + lib.optionalString (package == "all") pkgallMake;
 
           meta = {
             homepage = "https://math-comp.github.io/";

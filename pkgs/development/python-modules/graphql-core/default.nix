@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphql" ];
 

@@ -92,33 +92,32 @@ in
     ];
 
     services.netbird.server.dashboard = {
-      settings =
-        {
-          # Due to how the backend and frontend work this secret will be templated into the backend
-          # and then served statically from your website
-          # This enables you to login without the normally needed indirection through the backend
-          # but this also means anyone that can reach your website can
-          # fetch this secret, which is why there is no real need to put it into
-          # special options as its public anyway
-          # As far as I know leaking this secret is just
-          # an information leak as one can fetch some basic app
-          # information from the IDP
-          # To actually do something one still needs to have login
-          # data and this secret so this being public will not
-          # suffice for anything just decreasing security
-          AUTH_CLIENT_SECRET = "";
+      settings = {
+        # Due to how the backend and frontend work this secret will be templated into the backend
+        # and then served statically from your website
+        # This enables you to login without the normally needed indirection through the backend
+        # but this also means anyone that can reach your website can
+        # fetch this secret, which is why there is no real need to put it into
+        # special options as its public anyway
+        # As far as I know leaking this secret is just
+        # an information leak as one can fetch some basic app
+        # information from the IDP
+        # To actually do something one still needs to have login
+        # data and this secret so this being public will not
+        # suffice for anything just decreasing security
+        AUTH_CLIENT_SECRET = "";
 
-          NETBIRD_MGMT_API_ENDPOINT = cfg.managementServer;
-          NETBIRD_MGMT_GRPC_API_ENDPOINT = cfg.managementServer;
-        }
-        // (mapAttrs (_: mkDefault) {
-          # Those values have to be easily overridable
-          AUTH_AUDIENCE = "netbird"; # must be set for your devices to be able to log in
-          AUTH_CLIENT_ID = "netbird";
-          AUTH_SUPPORTED_SCOPES = "openid profile email";
-          NETBIRD_TOKEN_SOURCE = "idToken";
-          USE_AUTH0 = false;
-        });
+        NETBIRD_MGMT_API_ENDPOINT = cfg.managementServer;
+        NETBIRD_MGMT_GRPC_API_ENDPOINT = cfg.managementServer;
+      }
+      // (mapAttrs (_: mkDefault) {
+        # Those values have to be easily overridable
+        AUTH_AUDIENCE = "netbird"; # must be set for your devices to be able to log in
+        AUTH_CLIENT_ID = "netbird";
+        AUTH_SUPPORTED_SCOPES = "openid profile email";
+        NETBIRD_TOKEN_SOURCE = "idToken";
+        USE_AUTH0 = false;
+      });
 
       # The derivation containing the templated dashboard
       finalDrv =
@@ -142,7 +141,8 @@ in
                 "$NETBIRD_TOKEN_SOURCE"
                 "$USE_AUTH0"
               ];
-            } // (mapAttrs (_: toStringEnv) cfg.settings);
+            }
+            // (mapAttrs (_: toStringEnv) cfg.settings);
           }
           ''
             cp -R ${cfg.package} build

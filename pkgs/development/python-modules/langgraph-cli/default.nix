@@ -4,10 +4,11 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   click,
+  langgraph-sdk,
 
   # testing
   pytest-asyncio,
@@ -20,21 +21,34 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.2.10";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-gSiyFjk1lXiCv7JpX4J00WAPoMv4VsXDuCswbFhP2kY=";
+    hash = "sha256-tBMdFOHSRjw0PtE19XytLU4MmjR3NBLJxUqWoG4L2F8=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ click ];
+  dependencies = [
+    click
+    langgraph-sdk
+  ];
+
+  # Not yet. Depemnds on `langgraph-runtime-inmem` which isn't in github yet
+  # https://github.com/langchain-ai/langgraph/issues/5802
+  # optional-dependencies = {
+  #   "inmem" = [
+  #     langgraph-api
+  #     langgraph-runtime-inmem
+  #     python-dotenv
+  #   ]
+  # }
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -42,7 +56,7 @@ buildPythonPackage rec {
     docker-compose
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langgraph_cli" ];
 
@@ -55,8 +69,13 @@ buildPythonPackage rec {
     "test_config_to_compose_end_to_end"
     "test_config_to_compose_simple_config"
     "test_config_to_compose_watch"
-    # Tests exit value, needs to happen in a passthru test
+
+    # Tests that require docker
     "test_dockerfile_command_with_docker_compose"
+    "test_build_command_with_api_version_and_base_image"
+    "test_build_command_with_api_version"
+    "test_build_generate_proper_build_context"
+    "test_build_command_shows_wolfi_warning"
   ];
 
   passthru.updateScript = gitUpdater {

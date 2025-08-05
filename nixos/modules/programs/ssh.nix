@@ -32,7 +32,8 @@ let
 
   knownHostsFiles = [
     "/etc/ssh/ssh_known_hosts"
-  ] ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
+  ]
+  ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
 
 in
 {
@@ -319,21 +320,20 @@ in
       || config.services.openssh.settings.X11Forwarding
     );
 
-    assertions =
-      [
-        {
-          assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
-          message = "cannot enable X11 forwarding without setting XAuth location";
-        }
-      ]
-      ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
-        name: data: {
-          assertion =
-            (data.publicKey == null && data.publicKeyFile != null)
-            || (data.publicKey != null && data.publicKeyFile == null);
-          message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
-        }
-      );
+    assertions = [
+      {
+        assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
+        message = "cannot enable X11 forwarding without setting XAuth location";
+      }
+    ]
+    ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
+      name: data: {
+        assertion =
+          (data.publicKey == null && data.publicKeyFile != null)
+          || (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      }
+    );
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.

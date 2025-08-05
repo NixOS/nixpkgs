@@ -77,17 +77,16 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/^875;/d" tests/testsuite
   '';
 
-  preConfigure =
-    ''
-      autoconf
-      aclocal
-      automake
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # when building with nix on darwin, configure will use GNU strip,
-      # which fails due to using --strip-unneeded, which is not supported
-      substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
-    '';
+  preConfigure = ''
+    autoconf
+    aclocal
+    automake
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # when building with nix on darwin, configure will use GNU strip,
+    # which fails due to using --strip-unneeded, which is not supported
+    substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
+  '';
 
   # error: call to undeclared function 'xmlCleanupParser'
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]

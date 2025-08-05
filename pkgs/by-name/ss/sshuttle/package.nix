@@ -8,7 +8,7 @@
   sphinx,
   coreutils,
   iptables,
-  nettools,
+  net-tools,
   openssh,
   procps,
 }:
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iptables
-            nettools
+            net-tools
           ]
         )
       }" \

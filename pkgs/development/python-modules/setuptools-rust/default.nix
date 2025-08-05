@@ -47,13 +47,14 @@ buildPythonPackage rec {
       format = "setuptools";
       buildAndTestSubdir = null;
 
-      nativeBuildInputs =
-        [ setuptools-rust ]
-        ++ [
-          rustPlatform.cargoSetupHook
-          cargo
-          rustc
-        ];
+      nativeBuildInputs = [
+        setuptools-rust
+      ]
+      ++ [
+        rustPlatform.cargoSetupHook
+        cargo
+        rustc
+      ];
 
       preConfigure = ''
         # sourceRoot puts Cargo.lock in the wrong place due to the

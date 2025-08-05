@@ -68,9 +68,9 @@ in
             echo "systemd 0" > $out/init-interface-version
           '';
 
-          modifiedSystemConf.configuration.systemd.extraConfig = ''
-            # Hello world!
-          '';
+          modifiedSystemConf.configuration.systemd.settings.Manager = {
+            DefaultEnvironment = "XXX_SYSTEM=foo";
+          };
 
           addedMount.configuration.virtualisation.fileSystems."/test" = {
             device = "tmpfs";

@@ -48,7 +48,9 @@ let
       extraLongDescription ? "",
       extraPatches ? [ ],
       rev ? "zfs-${version}",
-      kernelCompatible ? null,
+      kernelMinSupportedMajorMinor,
+      kernelMaxSupportedMajorMinor,
+      enableUnsupportedExperimentalKernel ? false, # allows building against unsupported Kernel versions
       maintainers ? (with lib.maintainers; [ amarshall ]),
       tests,
     }@innerArgs:
@@ -72,6 +74,22 @@ let
         "user"
         "all"
       ];
+      kernelIsCompatible =
+        kernel:
+        let
+          nextMajorMinor =
+            ver:
+            "${lib.versions.major ver}.${
+              lib.pipe ver [
+                lib.versions.minor
+                lib.toInt
+                (x: x + 1)
+                toString
+              ]
+            }";
+        in
+        (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
+        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxSupportedMajorMinor));
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
@@ -139,18 +157,25 @@ let
               "bashcompletiondir=$out/share/bash-completion/completions"
 
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
+        ''
+        + ''
+          echo 'Supported Kernel versions:'
+          grep '^Linux-' META
+          echo 'Checking kernelMinSupportedMajorMinor is correct...'
+          grep --quiet '^Linux-Minimum: *${lib.escapeRegex kernelMinSupportedMajorMinor}$' META
+          echo 'Checking kernelMaxSupportedMajorMinor is correct...'
+          grep --quiet '^Linux-Maximum: *${lib.escapeRegex kernelMaxSupportedMajorMinor}$' META
         '';
 
-      nativeBuildInputs =
-        [
-          autoreconfHook269
-          nukeReferences
-        ]
-        ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
-        ++ optionals buildUser [
-          pkg-config
-          udevCheckHook
-        ];
+      nativeBuildInputs = [
+        autoreconfHook269
+        nukeReferences
+      ]
+      ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
+      ++ optionals buildUser [
+        pkg-config
+        udevCheckHook
+      ];
       buildInputs =
         optionals buildUser [
           zlib
@@ -172,32 +197,32 @@ let
         "pic"
       ];
 
-      configureFlags =
+      configureFlags = [
+        "--with-config=${configFile}"
+        "--with-tirpc=1"
+        (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+      ]
+      ++ optional enableUnsupportedExperimentalKernel "--enable-linux-experimental"
+      ++ optionals buildUser [
+        "--with-dracutdir=$(out)/lib/dracut"
+        "--with-udevdir=$(out)/lib/udev"
+        "--with-systemdunitdir=$(out)/etc/systemd/system"
+        "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
+        "--with-mounthelperdir=$(out)/bin"
+        "--libexecdir=$(out)/libexec"
+        "--sysconfdir=/etc"
+        "--localstatedir=/var"
+        "--enable-systemd"
+        "--enable-pam"
+      ]
+      ++ optionals buildKernel (
         [
-          "--with-config=${configFile}"
-          "--with-tirpc=1"
-          (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+          "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+          "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
         ]
-        ++ optionals buildUser [
-          "--with-dracutdir=$(out)/lib/dracut"
-          "--with-udevdir=$(out)/lib/udev"
-          "--with-systemdunitdir=$(out)/etc/systemd/system"
-          "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
-          "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
-          "--with-mounthelperdir=$(out)/bin"
-          "--libexecdir=$(out)/libexec"
-          "--sysconfdir=/etc"
-          "--localstatedir=/var"
-          "--enable-systemd"
-          "--enable-pam"
-        ]
-        ++ optionals buildKernel (
-          [
-            "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-            "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-          ]
-          ++ kernelModuleMakeFlags
-        );
+        ++ kernelModuleMakeFlags
+      );
 
       makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
@@ -270,45 +295,43 @@ let
 
       outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
-      passthru =
-        {
-          inherit kernel;
-          inherit enableMail kernelModuleAttribute;
-          latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages;
+      passthru = {
+        inherit kernel;
+        inherit enableMail kernelModuleAttribute;
+        latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages;
 
-          # The corresponding userspace tools to this instantiation
-          # of the ZFS package set.
-          userspaceTools = genericBuild (
-            outerArgs
-            // {
-              configFile = "user";
-            }
-          ) innerArgs;
+        # The corresponding userspace tools to this instantiation
+        # of the ZFS package set.
+        userspaceTools = genericBuild (
+          outerArgs
+          // {
+            configFile = "user";
+          }
+        ) innerArgs;
 
-          inherit tests;
-        }
-        // lib.optionalAttrs (kernelModuleAttribute != "zfs_unstable") {
-          updateScript = nix-update-script {
-            extraArgs = [
-              "--version-regex=^zfs-(${lib.versions.major version}\\.${lib.versions.minor version}\\.[0-9]+)"
-              "--override-filename=pkgs/os-specific/linux/zfs/${lib.versions.major version}_${lib.versions.minor version}.nix"
-            ];
-          };
+        inherit tests;
+      }
+      // lib.optionalAttrs (kernelModuleAttribute != "zfs_unstable") {
+        updateScript = nix-update-script {
+          extraArgs = [
+            "--version-regex=^zfs-(${lib.versions.major version}\\.${lib.versions.minor version}\\.[0-9]+)"
+            "--override-filename=pkgs/os-specific/linux/zfs/${lib.versions.major version}_${lib.versions.minor version}.nix"
+          ];
         };
+      };
 
       meta = {
         description = "ZFS Filesystem Linux" + (if buildUser then " Userspace Tools" else " Kernel Module");
-        longDescription =
-          ''
-            ZFS is a filesystem that combines a logical volume manager with a
-            Copy-On-Write filesystem with data integrity detection and repair,
-            snapshotting, cloning, block devices, deduplication, and more.
+        longDescription = ''
+          ZFS is a filesystem that combines a logical volume manager with a
+          Copy-On-Write filesystem with data integrity detection and repair,
+          snapshotting, cloning, block devices, deduplication, and more.
 
-            ${
-              if buildUser then "This is the userspace tools package." else "This is the kernel module package."
-            }
-          ''
-          + extraLongDescription;
+          ${
+            if buildUser then "This is the userspace tools package." else "This is the kernel module package."
+          }
+        ''
+        + extraLongDescription;
         homepage = "https://github.com/openzfs/zfs";
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
@@ -334,7 +357,7 @@ let
 
         inherit maintainers;
         mainProgram = "zfs";
-        broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
+        broken = buildKernel && !((kernelIsCompatible kernel) || enableUnsupportedExperimentalKernel);
       };
     };
 in

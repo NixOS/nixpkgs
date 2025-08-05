@@ -89,7 +89,7 @@ let
         inherit fetchMixDeps mixRelease;
       };
 
-      elixir-ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
+      elixir-ls = callPackage ./elixir-ls { inherit elixir; };
 
       lfe = lfe_2_1;
       lfe_2_1 = lib'.callLFE ../interpreters/lfe/2.1.nix { inherit erlang buildRebar3 buildHex; };

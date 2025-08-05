@@ -16,37 +16,34 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "16.3.2";
+  version = "17.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-VKXEbgm3Oc4rq/F2p/kuhhhiyKvLU6KHnKnQMBX17XU=";
+    hash = "sha256-CMsvkASFVqmvIxvixoXYwvyAgp4Vq9rj17o50M8Fw1Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-AXYcDxKQ9p4deolcZFO5SmfwnQGxl1I03RK6tSTbjlo=";
+  cargoHash = "sha256-kp9liu8ZGL9Q+rH9XKWMgsA9hvkYEim90RdMp2+dVPg=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      installShellFiles
-      pkg-config
-      ronn
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    pkg-config
+    ronn
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
-  buildInputs =
-    [
-      libgit2
-      libssh2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libgit2
+    libssh2
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.

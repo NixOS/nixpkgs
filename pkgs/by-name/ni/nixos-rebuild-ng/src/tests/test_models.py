@@ -108,9 +108,9 @@ def test_flake_from_arg(
             return_value=True,
         ),
         patch(
-            "pathlib.Path.is_symlink",
+            "pathlib.Path.resolve",
             autospec=True,
-            return_value=False,
+            return_value=Path("/etc/nixos/flake.nix"),
         ),
     ):
         assert m.Flake.from_arg(None, None) == m.Flake(
@@ -120,11 +120,6 @@ def test_flake_from_arg(
     with (
         patch(
             "pathlib.Path.exists",
-            autospec=True,
-            return_value=True,
-        ),
-        patch(
-            "pathlib.Path.is_symlink",
             autospec=True,
             return_value=True,
         ),
