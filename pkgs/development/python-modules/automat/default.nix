@@ -11,13 +11,13 @@
 
 let
   automat = buildPythonPackage rec {
-    version = "24.8.1";
+    version = "25.4.16";
     format = "pyproject";
     pname = "automat";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-s0Inz2P2MluK0jme3ngGdQg+Q5sgwyPTdjc9juYwbYg=";
+      hash = "sha256-ABdZGlR3Bm6Q0msOaW3cFDuq/Ye1iM+sgQC8a+ljTeA=";
     };
 
     nativeBuildInputs = [ setuptools-scm ];
