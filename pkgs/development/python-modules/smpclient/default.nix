@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "4.5.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-Z0glcCy3JsL45iT8Q82Vtxozi3hv6xaRJvJ3BkHX4PQ=";
+    hash = "sha256-NQRVEvi/B+KdhPIzw8pm22uXpYPkoaatkCNFnEcibzo=";
   };
 
   build-system = [
