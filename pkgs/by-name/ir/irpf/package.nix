@@ -3,12 +3,12 @@
   stdenvNoCC,
   fetchzip,
   copyDesktopItems,
-  jdk11,
-  makeDesktopItem,
   makeWrapper,
   unzip,
-  xdg-utils,
+  jdk11,
+  makeDesktopItem,
   writeScript,
+  xdg-utils,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -26,27 +26,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       hash = "sha256-U2HweRi6acrmMT+9B1263mhGIn/84Z6JeqKP6XvTeXE=";
     };
 
-  passthru.updateScript = writeScript "update-irpf" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pup common-updater-scripts
-
-    set -eu -o pipefail
-    #parses the html with the install links for the containers that contain the instalation files of type 'file archive, gets the version number of each version, and sorts to get the latest one on the website
-    version="$(curl -s https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf | pup '.rfb_container .rfb_ositem:parent-of(.fa-file-archive) attr{href}' | grep -oP "IRPF\K(\d+)-[\d.]+\d" | sort -r |  head -1)"
-    update-source-version irpf "$version"
-  '';
-
   nativeBuildInputs = [
-    unzip
-    makeWrapper
     copyDesktopItems
+    makeWrapper
+    unzip
   ];
 
   desktopItems = [
     (makeDesktopItem {
       name = "irpf";
       exec = "irpf";
-      icon = "rfb64";
+      icon = "rfb";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
       categories = [ "Office" ];
@@ -62,8 +52,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
 
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
-
-    # make xdg-open overrideable at runtime
+  ''
+  # make xdg-open overrideable at runtime
+  + ''
     makeWrapper ${jdk11}/bin/java $out/bin/irpf \
       --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
       --add-flags "-Dswing.aatext=true" \
@@ -72,13 +63,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
 
-    mkdir -p $out/share/pixmaps
-    unzip -j lib/ppgd-icones-4.0.jar icones/rfb64.png -d $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/32x32/apps/
+    unzip -j lib/ppgd-icones-4.0.jar icones/rfb.png -d $out/share/icons/hicolor/32x32/apps/
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript =
+    writeScript "update-irpf" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pup common-updater-scripts
+
+      set -eu -o pipefail
+    ''
+    # parses the html with the install links for the containers that contain the instalation files of type 'file archive, gets the version number of each version, and sorts to get the latest one on the website
+    + ''
+      version="$(curl -s https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf | pup '.rfb_container .rfb_ositem:parent-of(.fa-file-archive) attr{href}' | grep -oP "IRPF\K(\d+)-[\d.]+\d" | sort -r |  head -1)"
+      update-source-version irpf "$version"
+    '';
+
+  meta = {
+    inherit (jdk11.meta) platforms;
     description = "Brazillian government application for reporting income tax";
     longDescription = ''
       Brazillian government application for reporting income tax.
@@ -86,13 +91,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
     '';
     homepage = "https://www.gov.br/receitafederal/pt-br";
-    license = licenses.unfree;
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [
-      atila
-      bryanasdev000
-    ];
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    maintainers = builtins.attrValues {
+      inherit (lib.maintainers)
+        atila
+        bryanasdev000
+        ;
+    };
     mainProgram = "irpf";
   };
 })
