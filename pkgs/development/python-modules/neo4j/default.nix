@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.28.1";
+  version = "5.28.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     tag = version;
-    hash = "sha256-6Qa6llM8ke9dOkZ7q057ruM0h7pByxAQ+I6Mus2ExVA=";
+    hash = "sha256-dQvQO+Re+ki9w+itzE6/WdiiLdMlU4yePt01vAPe4+M=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";
     homepage = "https://github.com/neo4j/neo4j-python-driver";
-    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${version}";
+    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
