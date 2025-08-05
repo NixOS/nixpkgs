@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     tag = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-AcxgsiP3p14b5AV2KWa+C4tTHFgzpliTxuRZmXwaOH0=";
+    hash = "sha256-SfhsM2RPghFPx0qtoHsXVymwmOWFiEGAyLx6FeB++dg=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
