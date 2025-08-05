@@ -1238,7 +1238,7 @@ in
       "services.postfix.relayHost was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host/port."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "relayPort" ]
-      "services.postfix.relayHost was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host/port."
+      "services.postfix.relayPort was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host/port."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "extraConfig" ]
       "services.postfix.extraConfig was replaced by the structured freeform service.postfix.settings.main option."
