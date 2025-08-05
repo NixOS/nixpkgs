@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "qt-material";
-  version = "2.14";
+  version = "2.17";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tdu1relyF8964za7fAR8kL6zncfyBIpJjJFq1fL3riM=";
+    hash = "sha256-tQCgwfXvj0aozwN9GqW9+epOthgYC2MyU5373QZHrQ0=";
   };
 
   propagatedBuildInputs = [ jinja2 ];
