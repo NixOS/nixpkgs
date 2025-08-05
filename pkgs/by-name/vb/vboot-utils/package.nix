@@ -12,24 +12,22 @@
   xz,
 }:
 let
-  version = "138.16295";
-  versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion version);
-
-  rev = "refs/heads/release-R${versionFormatted}.B";
-
+  version = "140.16371";
   flashrom_chromeos = flashrom.overrideAttrs (_prev: {
-    src = fetchFromGitiles {
-      url = "https://chromium.googlesource.com/chromiumos/third_party/flashrom";
-      rev = rev + "-master";
-      hash = "sha256-9A5Ewrjxv5XYZeobmnznTmf+h0yqLFcZNBLgZqnSeRA=";
-    };
+    src =
+      let
+        versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion version);
+      in
+      fetchFromGitiles {
+        url = "https://chromium.googlesource.com/chromiumos/third_party/flashrom";
+        rev = "refs/heads/release-R${versionFormatted}.B-master";
+        hash = "sha256-7ZpxGe8VqfyyOovuLlET6na0f1ejE9pxC+dHuYdwFww=";
+      };
 
-    mesonFlags = _prev.mesonFlags ++ [
-      # require git
-      (lib.mesonEnable "documentation" false)
-    ];
+    # requires git
+    mesonFlags = _prev.mesonFlags ++ [ (lib.mesonEnable "documentation" false) ];
 
-    # require specific hardware
+    # requires specific hardware
     doCheck = false;
   });
 in
@@ -37,16 +35,21 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vboot-utils";
   inherit version;
 
-  src = fetchFromGitiles {
-    inherit rev;
-    url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
-    hash = "sha256-QTc1uxObR7hzJJuUd9AktnRJn7QIMcAsKgu4XbrhJLU=";
-  };
+  src =
+    let
+      versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion finalAttrs.version);
+    in
+    fetchFromGitiles {
+      rev = "refs/heads/release-R${versionFormatted}.B";
+      url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
+      hash = "sha256-yW4g0bLeRByGv4UMyyd2nGN+x/WdlW8Yz9KZmfwVr4g=";
+    };
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
+
   buildInputs = [
     libuuid
     libyaml
@@ -93,15 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/vboot
     cp -r tests/devkeys* $out/share/vboot/
 
-    wrapProgram $out/bin/crossystem --prefix PATH : ${
-      lib.makeBinPath [
-        flashrom_chromeos
-      ]
-    }
+    wrapProgram $out/bin/crossystem --prefix PATH : ${lib.makeBinPath [ flashrom_chromeos ]}
   '';
 
   meta = {
     description = "Chrome OS partitioning and kernel signing tools";
+    homepage = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ moraxyc ];
