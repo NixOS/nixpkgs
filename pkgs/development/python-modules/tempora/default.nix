@@ -24,6 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-1Zeo8bUCHKPZ6I0HGT7bIh7IgbRL4j9Cv3t9FFiZ72s=";
   };
 
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
+
   build-system = [ setuptools-scm ];
 
   dependencies = [
