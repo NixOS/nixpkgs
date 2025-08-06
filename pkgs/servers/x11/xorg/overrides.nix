@@ -151,6 +151,33 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
+  libX11 = super.libX11.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "man"
+    ];
+    configureFlags =
+      attrs.configureFlags or [ ]
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      (xorg.buildPackages.libc.static or null)
+    ];
+    preConfigure = ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
+    postInstall = ''
+      # Remove useless DocBook XML files.
+      rm -rf $out/share/doc
+    '';
+    CPP = lib.optionalString stdenv.hostPlatform.isDarwin "clang -E -";
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
+  });
+
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
       autoreconfHook

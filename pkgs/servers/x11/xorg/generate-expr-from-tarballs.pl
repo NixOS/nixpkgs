@@ -39,8 +39,6 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
-$pcMap{"x11"} = "libX11";
-$pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
@@ -292,7 +290,6 @@ print OUT <<EOF;
   imake,
   libpciaccess,
   libpthread-stubs,
-  libx11,
   libxau,
   libxcb,
   libxcvt,
@@ -334,7 +331,6 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
-  libX11 = libx11;
   libXau = libxau;
   libXdmcp = libxdmcp;
   utilmacros = util-macros;

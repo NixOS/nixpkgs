@@ -719,16 +719,6 @@ lib.mapAttrs mkLicense (
       spdxId = "HPND-sell-variant";
     };
 
-    hpndDoc = {
-      fullName = "Historical Permission Notice and Disclaimer - documentation variant";
-      spdxId = "HPND-doc";
-    };
-
-    hpndDocSell = {
-      fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
-      spdxId = "HPND-doc-sell";
-    };
-
     hpndUc = {
       spdxId = "HPND-UC";
       fullName = "Historical Permission Notice and Disclaimer - University of California variant";
@@ -1319,14 +1309,6 @@ lib.mapAttrs mkLicense (
       #
       # Sincerly
       # Marc Weber (small nix contributor)
-    };
-
-    tekHvcLicense = {
-      fullName = "TekHVC License";
-      url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/7f8305c779ac6948d7261764f5ffb8ae9aa975b1/COPYING#L138-171";
-      # TODO: add spdxId when it gets accepted to spdx
-      # https://tools.spdx.org/app/license_requests/458
-      # https://github.com/spdx/license-list-XML/issues/2757
     };
 
     tsl = {

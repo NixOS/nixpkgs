@@ -8,7 +8,6 @@
   imake,
   libpciaccess,
   libpthread-stubs,
-  libx11,
   libxau,
   libxcb,
   libxcvt,
@@ -50,7 +49,6 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
-  libX11 = libx11;
   libXau = libxau;
   libXdmcp = libxdmcp;
   utilmacros = util-macros;
@@ -1912,6 +1910,49 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "windowswm" ];
+        platforms = lib.platforms.unix;
+      };
+    })
+  ) { };
+
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
+  libX11 = callPackage (
+    {
+      stdenv,
+      pkg-config,
+      fetchurl,
+      xorgproto,
+      libpthreadstubs,
+      libxcb,
+      xtrans,
+      testers,
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "libX11";
+      version = "1.8.12";
+      builder = ./builder.sh;
+      src = fetchurl {
+        url = "mirror://xorg/individual/lib/libX11-1.8.12.tar.xz";
+        sha256 = "16lspc3bw2pg3jal7zyq6mxmxmmaax0fz6lgh1n4skqjn2dny0ps";
+      };
+      hardeningDisable = [
+        "bindnow"
+        "relro"
+      ];
+      strictDeps = true;
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [
+        xorgproto
+        libpthreadstubs
+        libxcb
+        xtrans
+      ];
+      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      meta = {
+        pkgConfigModules = [
+          "x11"
+          "x11-xcb"
+        ];
         platforms = lib.platforms.unix;
       };
     })
