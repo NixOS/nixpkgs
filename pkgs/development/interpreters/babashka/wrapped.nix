@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       makeWrapper "${babashka-unwrapped}/bin/bb" "$out/bin/bb" \
         --inherit-argv0 \
         --set-default DEPS_CLJ_TOOLS_DIR $out/clojure_tools \
+        --set-default DEPS_CLJ_TOOLS_VERSION ${clojureToolsBabashka.version} \
         --set-default JAVA_HOME ${jdkBabashka}
 
       installShellCompletion --cmd bb --bash ${babashka-unwrapped}/share/bash-completion/completions/bb.bash
