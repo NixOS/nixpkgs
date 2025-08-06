@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doctest";
   version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "doctest";
     repo = "doctest";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Fxs1EWydhqN9whx+Cn4fnZ4fhCEQvFgL5e9TUiXlnq8=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/doctest/doctest";
     description = "Fastest feature-rich C++11/14/17/20 single-header testing framework";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
