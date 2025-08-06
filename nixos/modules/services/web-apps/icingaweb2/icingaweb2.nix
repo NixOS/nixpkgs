@@ -83,8 +83,8 @@ in
       type = nullOr attrs;
       default = null;
       example = {
-        general = {
-          showStacktraces = 1;
+        global = {
+          show_stacktraces = 1;
           config_resource = "icingaweb_db";
         };
         logging = {
