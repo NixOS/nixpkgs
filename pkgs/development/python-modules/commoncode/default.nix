@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.3.0";
+  version = "32.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "commoncode";
     tag = "v${version}";
-    hash = "sha256-FL9t8r53AJLR5D2XSEOq7qVHgvvHIbtPW5iVpSQCVsQ=";
+    hash = "sha256-dCiERdNVup95UnvmJEzkpQsRvpk2eKqvwD6jkEBrXfE=";
   };
 
   dontConfigure = true;
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
-    changelog = "https://github.com/nexB/commoncode/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = [ ];
   };
