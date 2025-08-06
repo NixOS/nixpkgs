@@ -36,9 +36,9 @@ let
       nixosTest = nixosTests.kafka.base.kafka_3_8;
     };
     "3_7" = {
-      kafkaVersion = "3.7.1";
+      kafkaVersion = "3.7.2";
       scalaVersion = "2.13";
-      sha256 = "sha256-YqyuShQ92YPcfrSATVdEugxQsZm1CPWZ7wAQIOJVj8k=";
+      sha256 = "sha256-eZgLcO2D8R4so3qU1k6+QS1ImeI+YKAsJdQILzooLW8=";
       jre = jdk17_headless;
       nixosTest = nixosTests.kafka.base.kafka_3_7;
     };
