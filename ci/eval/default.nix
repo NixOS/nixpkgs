@@ -31,6 +31,7 @@ let
           "doc"
           "lib"
           "maintainers"
+          "modules"
           "nixos"
           "pkgs"
           ".version"
