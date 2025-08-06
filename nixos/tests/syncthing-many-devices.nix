@@ -159,65 +159,64 @@ in
       settings = settingsWithoutId // settingsWithId;
     };
   };
-  testScript =
-    ''
-      machine.wait_for_unit("syncthing-init.service")
-    ''
-    + (lib.pipe settingsWithId [
-      # Check that folders and devices were added properly and that all IDs exist
-      (lib.mapAttrsRecursive (
-        path: id:
-        checkSettingWithId {
-          # plural -> solitary
-          t = (lib.removeSuffix "s" (builtins.elemAt path 0));
-          inherit id;
-        }
-      ))
-      # Get all the values we applied the above function upon
-      (lib.collect builtins.isString)
-      lib.concatStrings
-    ])
-    + (lib.pipe settingsWithoutId [
-      # Check that all other syncthing.settings were added properly with correct
-      # values
-      (lib.mapAttrsRecursive (
-        path: value:
-        checkSettingWithoutId {
-          t = (builtins.elemAt path 0);
-          n = (builtins.elemAt path 1);
-          v = (builtins.toString value);
-        }
-      ))
-      # Get all the values we applied the above function upon
-      (lib.collect builtins.isString)
-      lib.concatStrings
-    ])
-    + ''
-      # Run the script on the machine
-      machine.succeed("${addDeviceToDeleteScript}")
-    ''
-    + (checkSettingsToDelete {
-      not = false;
-    })
-    + ''
-      # Useful for debugging later
-      machine.copy_from_vm("${configPath}", "before")
+  testScript = ''
+    machine.wait_for_unit("syncthing-init.service")
+  ''
+  + (lib.pipe settingsWithId [
+    # Check that folders and devices were added properly and that all IDs exist
+    (lib.mapAttrsRecursive (
+      path: id:
+      checkSettingWithId {
+        # plural -> solitary
+        t = (lib.removeSuffix "s" (builtins.elemAt path 0));
+        inherit id;
+      }
+    ))
+    # Get all the values we applied the above function upon
+    (lib.collect builtins.isString)
+    lib.concatStrings
+  ])
+  + (lib.pipe settingsWithoutId [
+    # Check that all other syncthing.settings were added properly with correct
+    # values
+    (lib.mapAttrsRecursive (
+      path: value:
+      checkSettingWithoutId {
+        t = (builtins.elemAt path 0);
+        n = (builtins.elemAt path 1);
+        v = (builtins.toString value);
+      }
+    ))
+    # Get all the values we applied the above function upon
+    (lib.collect builtins.isString)
+    lib.concatStrings
+  ])
+  + ''
+    # Run the script on the machine
+    machine.succeed("${addDeviceToDeleteScript}")
+  ''
+  + (checkSettingsToDelete {
+    not = false;
+  })
+  + ''
+    # Useful for debugging later
+    machine.copy_from_vm("${configPath}", "before")
 
-      machine.systemctl("restart syncthing-init.service")
-      machine.wait_for_unit("syncthing-init.service")
-    ''
-    + (checkSettingsToDelete {
-      not = true;
-    })
-    + ''
-      # Useful for debugging later
-      machine.copy_from_vm("${configPath}", "after")
+    machine.systemctl("restart syncthing-init.service")
+    machine.wait_for_unit("syncthing-init.service")
+  ''
+  + (checkSettingsToDelete {
+    not = true;
+  })
+  + ''
+    # Useful for debugging later
+    machine.copy_from_vm("${configPath}", "after")
 
-      # Copy the systemd unit's bash script, to inspect it for debugging.
-      mergeScript = machine.succeed(
-          "systemctl cat syncthing-init.service | "
-          "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
-      ).strip() # strip from new lines
-      machine.copy_from_vm(mergeScript, "")
-    '';
+    # Copy the systemd unit's bash script, to inspect it for debugging.
+    mergeScript = machine.succeed(
+        "systemctl cat syncthing-init.service | "
+        "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
+    ).strip() # strip from new lines
+    machine.copy_from_vm(mergeScript, "")
+  '';
 }

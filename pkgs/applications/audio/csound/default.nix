@@ -36,13 +36,14 @@ stdenv.mkDerivation {
     sha256 = "sha256-NDYltwmjBsX1DWCjy8/4cXMSl3/mK+HaQHSKUmRR9TI=";
   };
 
-  cmakeFlags =
-    [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
-    ++ lib.optional stdenv.hostPlatform.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
-    # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
-    ++ lib.optional (
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
+  cmakeFlags = [
+    "-DBUILD_CSOUND_AC=0"
+  ] # fails to find Score.hpp
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
+  # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
+  ++ lib.optional (
+    stdenv.hostPlatform != stdenv.buildPlatform
+  ) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
 
   nativeBuildInputs = [
     cmake
@@ -50,29 +51,28 @@ stdenv.mkDerivation {
     bison
     gettext
   ];
-  buildInputs =
-    [
-      libsndfile
-      libsamplerate
-      boost
+  buildInputs = [
+    libsndfile
+    libsamplerate
+    boost
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    portaudio
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
+    builtins.filter (optional: optional != null) [
+      alsa-lib
+      libpulseaudio
+      libjack2
+      liblo
+      ladspa-sdk
+      fluidsynth
+      eigen
+      curl
+      tcltk
+      fltk
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      portaudio
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      builtins.filter (optional: optional != null) [
-        alsa-lib
-        libpulseaudio
-        libjack2
-        liblo
-        ladspa-sdk
-        fluidsynth
-        eigen
-        curl
-        tcltk
-        fltk
-      ]
-    );
+  );
 
   postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Library/Frameworks

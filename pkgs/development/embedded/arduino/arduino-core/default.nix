@@ -149,7 +149,8 @@ stdenv.mkDerivation rec {
     zlib
     ncurses5
     readline
-  ] ++ lib.optionals withTeensyduino [ upx ];
+  ]
+  ++ lib.optionals withTeensyduino [ upx ];
   downloadSrcList = builtins.attrValues externalDownloads;
   downloadDstList = builtins.attrNames externalDownloads;
 

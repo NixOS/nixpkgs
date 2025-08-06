@@ -9,10 +9,12 @@
   fetchgit,
   fetchFromGitHub,
   fetchFromGitea,
+  fetchpatch2,
   rustPlatform,
   editline,
   ncurses,
   clangStdenv,
+  nixpkgs-review,
   nix-direnv,
   nix-fast-build,
   colmena,
@@ -92,6 +94,10 @@ let
             stdenv = lixStdenv;
           };
 
+          nixpkgs-review = nixpkgs-review.override {
+            nix = self.lix;
+          };
+
           nix-direnv = nix-direnv.override {
             nix = self.lix;
           };
@@ -133,6 +139,10 @@ lib.makeExtensible (self: {
         sourceRoot = "${src.name or src}/lix-doc";
         hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
       };
+
+      knownVulnerabilities = [
+        "Lix 2.90 is vulnerable to CVE-2025-46415 and CVE-2025-46416 and will not receive updates."
+      ];
     };
 
     nix-eval-jobs-args = {
@@ -150,14 +160,23 @@ lib.makeExtensible (self: {
     attrName = "lix_2_91";
 
     lix-args = rec {
-      version = "2.91.1";
+      version = "2.91.3";
 
       src = fetchFromGitHub {
         owner = "lix-project";
         repo = "lix";
         rev = version;
-        hash = "sha256-hiGtfzxFkDc9TSYsb96Whg0vnqBVV7CUxyscZNhed0U=";
+        hash = "sha256-b5d+HnPcyHz0ZJW1+LZl4qm4LGTB/TiaDFQVlVL2xpE=";
       };
+
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-2.91-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/ecff59d77371b21fef229c33ebb629bc49a8fad5.patch";
+          sha256 = "sha256-2M5oId5kObwzpw67rddAPI2RbWPEVlGBrMUXZWqqmEo=";
+        })
+      ];
 
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
@@ -182,14 +201,23 @@ lib.makeExtensible (self: {
     attrName = "lix_2_92";
 
     lix-args = rec {
-      version = "2.92.0";
+      version = "2.92.3";
 
       src = fetchFromGitHub {
         owner = "lix-project";
         repo = "lix";
         rev = version;
-        hash = "sha256-CCKIAE84dzkrnlxJCKFyffAxP3yfsOAbdvydUGqq24g=";
+        hash = "sha256-iP2iUDxA99RcgQyZROs7bQw8pqxa1vFudRqjAIHg9Iw=";
       };
+
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+          hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+        })
+      ];
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
@@ -212,15 +240,24 @@ lib.makeExtensible (self: {
     attrName = "lix_2_93";
 
     lix-args = rec {
-      version = "2.93.0";
+      version = "2.93.3";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
         rev = version;
-        hash = "sha256-hsFe4Tsqqg4l+FfQWphDtjC79WzNCZbEFhHI8j2KJzw=";
+        hash = "sha256-Oqw04eboDM8rrUgAXiT7w5F2uGrQdt8sGX+Mk6mVXZQ=";
       };
+
+      patches = [
+        # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
+        (fetchpatch2 {
+          name = "lix-lowdown-1.4.0.patch";
+          url = "https://git.lix.systems/lix-project/lix/commit/858de5f47a1bfd33835ec97794ece339a88490f1.patch";
+          hash = "sha256-FfLO2dFSWV1qwcupIg8dYEhCHir2XX6/Hs89eLwd+SY=";
+        })
+      ];
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
@@ -234,14 +271,14 @@ lib.makeExtensible (self: {
     attrName = "git";
 
     lix-args = rec {
-      version = "2.94.0-pre-20250516_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0-pre-20250704_${builtins.substring 0 12 src.rev}";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "a7634f87aac545fa01fa19878cc5ad2c994e2116";
-        hash = "sha256-+yX+xF1cZUd1Pub7MJ7uGcC6JQ0FN+CsEmBg6rGLfjU=";
+        rev = "362bfd827f522b57062e4ebcb465bb51941632a4";
+        hash = "sha256-4CVRbeYExqIDpFH+QMZb5IeUGkP6kA/zHSuExYoZygk=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {

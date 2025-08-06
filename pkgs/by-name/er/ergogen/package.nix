@@ -32,7 +32,7 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Ergonomic keyboard layout generator.";
+    description = "Ergonomic keyboard layout generator";
     homepage = "https://ergogen.xyz";
     mainProgram = "ergogen";
     license = lib.licenses.mit;

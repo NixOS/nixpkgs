@@ -35,13 +35,12 @@ stdenv.mkDerivation rec {
       --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
   '';
 
-  configureFlags =
-    [
-      "--enable-shared"
-    ]
-    ++ lib.optionals curlSupport [
-      "--with-libcurl"
-    ];
+  configureFlags = [
+    "--enable-shared"
+  ]
+  ++ lib.optionals curlSupport [
+    "--with-libcurl"
+  ];
 
   enableParallelBuilding = true;
 

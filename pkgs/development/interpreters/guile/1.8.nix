@@ -29,17 +29,17 @@ stdenv.mkDerivation rec {
   setOutputFlags = false; # $dev gets into the library otherwise
 
   # GCC 4.6 raises a number of set-but-unused warnings.
-  configureFlags =
-    [
-      "--disable-error-on-warning"
-    ]
-    # Guile needs patching to preset results for the configure tests about
-    # pthreads, which work only in native builds.
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-threads=no";
+  configureFlags = [
+    "--disable-error-on-warning"
+  ]
+  # Guile needs patching to preset results for the configure tests about
+  # pthreads, which work only in native builds.
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-threads=no";
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_1_8;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_1_8;
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -69,17 +69,16 @@ stdenv.mkDerivation rec {
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-    ''
-    # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
-    # why `--with-libunistring-prefix' and similar options coming from
-    # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-    + ''
-      sed -i "$out/lib/pkgconfig/guile"-*.pc    \
-          -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
+  ''
+  # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+  # why `--with-libunistring-prefix' and similar options coming from
+  # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
+        -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
+  '';
 
   # One test fails.
   # ERROR: file: "libtest-asmobs", message: "file not found"

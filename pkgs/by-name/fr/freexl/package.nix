@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     expat
     minizip
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   enableParallelBuilding = true;
 

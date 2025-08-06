@@ -24,6 +24,7 @@
         roundcubePlugins
         sourceHanPackages
         zabbix60
+        windows
         ;
 
       # Make sure haskell.compiler is included, so alternative GHC versions show up,
@@ -42,5 +43,8 @@
       # show up in search results or repository tracking services that consume our
       # packages.json https://github.com/NixOS/nixpkgs/issues/244966
       minimal-bootstrap = { };
+
+      # This makes it so that tests are not appering on search.nixos.org
+      tests = { };
     };
 }

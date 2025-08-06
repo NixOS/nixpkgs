@@ -26,19 +26,19 @@
   xorg,
 }:
 let
-  version = "2.16.3";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-mtzr/rRzcYcZl9tUkhxEKoFQWm1QTToOYZJXhynwDmk=";
+    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
   };
 
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_5_1;
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -69,28 +69,27 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-Z7c+AstVnxbPnEhc51qSqOYhRXqNJVwTvgHFcFp+pYg=";
+        fetcherVersion = 1;
+        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
-      nativeBuildInputs =
-        [
-          node-gyp
-          nodejs_20
-          pkg-config
-          pnpm.configHook
-          python3
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          xcbuild
-        ];
+      nativeBuildInputs = [
+        node-gyp
+        nodejs_20
+        pkg-config
+        pnpm.configHook
+        python3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
-      buildInputs =
-        [
-          pango
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          giflib
-        ];
+      buildInputs = [
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        giflib
+      ];
 
       CYPRESS_INSTALL_BINARY = "0";
       NG_CLI_ANALYTICS = "false";
@@ -150,6 +149,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "redis"
   ];
 
   dependencies =
@@ -161,7 +161,17 @@ python.pkgs.buildPythonApplication rec {
       concurrent-log-handler
       dateparser
       django
-      django-allauth
+      # django-allauth version 65.9.X not yet supported
+      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
+      (django-allauth.overrideAttrs (
+        new: prev: rec {
+          version = "65.7.0";
+          src = prev.src.override {
+            tag = version;
+            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+          };
+        }
+      ))
       django-auditlog
       django-celery-results
       django-compression-middleware
@@ -267,7 +277,7 @@ python.pkgs.buildPythonApplication rec {
   # manually managed in postPatch
   dontUsePytestXdist = false;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "src"
   ];
 
@@ -293,6 +303,9 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
     # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
     "test_convert"
+    # Favicon tests fail due to static file handling in the test environment
+    "test_favicon_view"
+    "test_favicon_view_missing_file"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

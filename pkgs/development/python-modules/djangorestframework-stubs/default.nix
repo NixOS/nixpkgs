@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.15.3";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     tag = version;
-    hash = "sha256-6bs/FGCxxV1sE4J3aqzYS1wIr82mWlnGGXIuYOF5+dw=";
+    hash = "sha256-q/9tCMT79TMHIQ4KH8tiunaTt7L6IItwNYBFlbNxBcE=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -51,7 +51,8 @@ buildPythonPackage rec {
     py
     pytest-mypy-plugins
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all testsare failing with 3.14.5 and below
   doCheck = false;

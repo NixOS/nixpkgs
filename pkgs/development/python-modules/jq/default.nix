@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.6.0";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mwilliamson";
     repo = "jq.py";
     tag = version;
-    hash = "sha256-c6tJI/mPlBGIYTk5ObIQ1CUTq73HouQ2quMZVWG8FFg=";
+    hash = "sha256-rPc4qIs1lGfbv0ShxJ+uUfbTGchJ+Q0qWWRZVuABlU4=";
   };
 
   env.JQPY_USE_SYSTEM_LIBS = 1;
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # intentional behavior change in jq 1.7.1 not reflected upstream
-    "test_given_json_text_then_strings_containing_null_characters_are_preserved"
+    # tries to match exact error text, fails with jq 1.8
+    "test_value_error_is_raised_if_program_is_invalid"
   ];
 
   pythonImportsCheck = [ "jq" ];

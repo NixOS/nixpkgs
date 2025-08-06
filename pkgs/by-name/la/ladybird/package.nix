@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
-  cacert,
   unicode-emoji,
   unicode-character-database,
   unicode-idna,
@@ -13,7 +11,7 @@
   pkg-config,
   curl,
   libavif,
-  libGL,
+  angle, # libEGL
   libjxl,
   libpulseaudio,
   libwebp,
@@ -22,6 +20,7 @@
   python3,
   qt6Packages,
   woff2,
+  fast-float,
   ffmpeg,
   fontconfig,
   simdutf,
@@ -32,19 +31,15 @@
   libtommath,
 }:
 
-let
-  # Note: The cacert version is synthetic and must match the version in the package's CMake
-  cacert_version = "2023-12-12";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-06-03";
+  version = "0-unstable-2025-08-04";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "4c54a28c45be4e8185158d40a37e083e038a6465";
-    hash = "sha256-YHWkG2RJk6NaouRvis2L+njtYWKB7T569y1Tq+mYdz0=";
+    rev = "e4b2e7b131140072416d4301d5f60dea6d79b86d";
+    hash = "sha256-d3IRIzukntabRqWbOjjx8WgaiTMnFpFJT2tbMt5ws40=";
   };
 
   postPatch = ''
@@ -61,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
 
-    # Check that the versions match
-    grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
-
     mkdir -p build/Caches
 
     cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
@@ -72,10 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${unicode-idna}/share/unicode/idna/IdnaMappingTable.txt build/Caches/UCD
     echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
     chmod -w build/Caches/UCD
-
-    mkdir build/Caches/CACERT
-    cp ${cacert}/etc/ssl/certs/ca-bundle.crt build/Caches/CACERT/cacert-${cacert_version}.pem
-    echo -n ${cacert_version} > build/Caches/CACERT/version.txt
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
@@ -90,49 +78,48 @@ stdenv.mkDerivation (finalAttrs: {
     libtommath
   ];
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      fontconfig
-      libavif
-      libGL
-      libjxl
-      libwebp
-      libxcrypt
-      openssl
-      qt6Packages.qtbase
-      qt6Packages.qtmultimedia
-      simdutf
-      (skia.overrideAttrs (prev: {
-        gnFlags = prev.gnFlags ++ [
-          # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
-          # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
-          # Remove when/if this gets upstreamed in skia.
-          "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
-        ];
-      }))
-      woff2
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux [
-      libpulseaudio.dev
-      qt6Packages.qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ];
+  buildInputs = [
+    curl
+    fast-float
+    ffmpeg
+    fontconfig
+    libavif
+    angle # libEGL
+    libjxl
+    libwebp
+    libxcrypt
+    openssl
+    qt6Packages.qtbase
+    qt6Packages.qtmultimedia
+    simdutf
+    (skia.overrideAttrs (prev: {
+      gnFlags = prev.gnFlags ++ [
+        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
+        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
+        # Remove when/if this gets upstreamed in skia.
+        "extra_cflags+=[\"-DSKCMS_API=[[gnu::visibility(\\\"default\\\")]]\"]"
+      ];
+    }))
+    woff2
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux [
+    libpulseaudio.dev
+    qt6Packages.qtwayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ];
 
-  cmakeFlags =
-    [
-      # Takes an enormous amount of resources, even with mold
-      (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
-      # Disable network operations
-      "-DSERENITY_CACHE_DIR=Caches"
-      "-DENABLE_NETWORK_DOWNLOADS=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    ];
+  cmakeFlags = [
+    # Takes an enormous amount of resources, even with mold
+    (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
+    # Disable network operations
+    "-DLADYBIRD_CACHE_DIR=Caches"
+    "-DENABLE_NETWORK_DOWNLOADS=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+  ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
@@ -156,11 +143,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
     homepage = "https://ladybird.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      fgaz
+      jk
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -168,5 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

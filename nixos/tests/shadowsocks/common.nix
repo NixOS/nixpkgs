@@ -25,20 +25,19 @@ import ../make-test-python.nix (
         networking.firewall.rejectPackets = true;
         networking.firewall.allowedTCPPorts = [ 8488 ];
         networking.firewall.allowedUDPPorts = [ 8488 ];
-        services.shadowsocks =
-          {
-            enable = true;
-            encryptionMethod = "chacha20-ietf-poly1305";
-            password = "pa$$w0rd";
-            localAddress = [ "0.0.0.0" ];
-            port = 8488;
-            fastOpen = false;
-            mode = "tcp_and_udp";
-          }
-          // lib.optionalAttrs (plugin != null) {
-            inherit plugin;
-            pluginOpts = "server;${pluginOpts}";
-          };
+        services.shadowsocks = {
+          enable = true;
+          encryptionMethod = "chacha20-ietf-poly1305";
+          password = "pa$$w0rd";
+          localAddress = [ "0.0.0.0" ];
+          port = 8488;
+          fastOpen = false;
+          mode = "tcp_and_udp";
+        }
+        // lib.optionalAttrs (plugin != null) {
+          inherit plugin;
+          pluginOpts = "server;${pluginOpts}";
+        };
         services.nginx = {
           enable = true;
           virtualHosts.server = {

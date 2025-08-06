@@ -147,9 +147,7 @@ A string list of [Go build tags (also called build constraints)](https://pkg.go.
 Tags can also be set conditionally:
 
 ```nix
-{
-  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
-}
+{ tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ]; }
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -283,9 +281,7 @@ For example, only a selection of tests could be run with:
 ```nix
 {
   # -run and -skip accept regular expressions
-  checkFlags = [
-    "-run=^Test(Simple|Fast)$"
-  ];
+  checkFlags = [ "-run=^Test(Simple|Fast)$" ];
 }
 ```
 

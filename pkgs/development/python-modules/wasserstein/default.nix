@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "wasserstein/tests" ];
+  enabledTestPaths = [ "wasserstein/tests" ];
   disabledTestPaths = [
     "wasserstein/tests/test_emd.py" # requires "ot"
     # cyclic dependency on energyflow

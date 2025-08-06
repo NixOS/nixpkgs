@@ -38,9 +38,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeBuildInputs = [
-    patchRcPathFish
-  ];
+  nativeBuildInputs = [ patchRcPathFish ];
 
   postFixup = ''
     patchRcPathFish $out/bin/this-foo.fish ${

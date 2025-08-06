@@ -33,7 +33,7 @@ buildDunePackage {
   ];
 
   meta = {
-    description = "A high-performance, memory-efficient, and scalable web server for OCaml";
+    description = "High-performance, memory-efficient, and scalable web server for OCaml";
     homepage = "https://github.com/robur-coop/ocaml-h1";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.bsd3;

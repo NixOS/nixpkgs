@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai-like";
-  version = "0.3.5";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_openai_like";
     inherit version;
-    hash = "sha256-1TId/2bYHYuQCMdvROlcSZFTZDUyrMhZop5xRicvrNk=";
+    hash = "sha256-Fa4cFrAboL+oItU5APA+NcGf/ke1KJWCNL8ZQqkfWHw=";
   };
 
   build-system = [ hatchling ];

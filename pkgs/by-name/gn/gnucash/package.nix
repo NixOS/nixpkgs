@@ -9,6 +9,7 @@
   gettext,
   glib,
   glibcLocales,
+  gobject-introspection,
   gtest,
   guile,
   gwenhywfar,
@@ -23,25 +24,31 @@
   perlPackages,
   pkg-config,
   swig,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   python3,
-  replaceVars,
 }:
-
+let
+  py = python3.withPackages (
+    ps: with ps; [
+      pygobject3.out
+    ]
+  );
+in
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.11";
+  version = "5.12";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-a6QjE6qqmbXwf/bk28WLM/v19L5ukRN2cB1lwm/U3r4=";
+    hash = "sha256-s1tHVr4SvP2+1URo8wRD+lPyOFIKnOrVveLmxHc/vzk=";
   };
 
   nativeBuildInputs = [
     cmake
     gettext
+    gobject-introspection
     makeWrapper
     wrapGAppsHook3
     pkg-config
@@ -52,31 +59,30 @@ stdenv.mkDerivation rec {
     "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
 
-  buildInputs =
-    [
-      aqbanking
-      boost
-      glib
-      glibcLocales
-      gtest
-      guile
-      gwenhywfar
-      icu
-      libdbi
-      libdbiDrivers
-      libofx
-      libsecret
-      libxml2
-      libxslt
-      swig
-      webkitgtk_4_0
-      python3
-    ]
-    ++ (with perlPackages; [
-      JSONParse
-      FinanceQuote
-      perl
-    ]);
+  buildInputs = [
+    aqbanking
+    boost
+    glib
+    glibcLocales
+    gtest
+    guile
+    gwenhywfar
+    icu
+    libdbi
+    libdbiDrivers
+    libofx
+    libsecret
+    libxml2
+    libxslt
+    swig
+    webkitgtk_4_1
+    py
+  ]
+  ++ (with perlPackages; [
+    JSONParse
+    FinanceQuote
+    perl
+  ]);
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -120,7 +126,7 @@ stdenv.mkDerivation rec {
       owner = "Gnucash";
       repo = "gnucash-docs";
       rev = version;
-      hash = "sha256-uXpIAsucVUaAlqYTKfrfBg04Kb5Mza67l0ZU6fxkSUY=";
+      hash = "sha256-9hXOgHdNtTcPOf44L2RrfOTXAgJi2Xu6gWnjDU7gHjU=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -145,11 +151,16 @@ stdenv.mkDerivation rec {
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
+  # We could not find the python entrypoint and somehow it is used from PATH,
+  # so force to use the one with all dependencies
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
-    wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
-    wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash-cli \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
 
     wrapProgram $out/bin/finance-quote-wrapper \
       --prefix PERL5LIB : "${
@@ -159,6 +170,9 @@ stdenv.mkDerivation rec {
           FinanceQuote
         ]
       }"
+
+    chmod +x $out/share/gnucash/python/pycons/*.py
+    patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
 
   passthru.updateScript = ./update.sh;
@@ -188,8 +202,8 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      rski
       nevivurn
+      ryand56
     ];
     platforms = platforms.unix;
     mainProgram = "gnucash";

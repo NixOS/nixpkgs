@@ -36,7 +36,10 @@ else
     '';
 
     nativeBuildInputs = [ findlib ];
-    propagatedBuildInputs = [ zarith ];
+    propagatedBuildInputs = [
+      z3-with-ocaml.lib
+      zarith
+    ];
 
     strictDeps = true;
 

@@ -1,10 +1,11 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "das";
   version = "1.0.3";
   pyproject = true;
@@ -21,11 +22,12 @@ python3.pkgs.buildPythonApplication rec {
     "defusedxml"
     "netaddr"
     "networkx"
+    "plotly"
   ];
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     dash
     defusedxml
     dnspython
@@ -39,6 +41,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "das" ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Divide full port scan results and use it for targeted Nmap runs";

@@ -16,6 +16,7 @@ in
 buildPythonApplication rec {
   pname = "arandr";
   version = "0.1.11";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "arandr";

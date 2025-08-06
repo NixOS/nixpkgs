@@ -11,18 +11,19 @@
   pkg-config,
   brotli,
   zlib,
-  unstableGitUpdater,
+  gitUpdater,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0-unstable-2025-05-25";
+  version = "0.2.1";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "e571c8b1ede3a3c6dc4a5a4d0c6c8f48473076d2";
-    hash = "sha256-OBXc4jnB5Y+KXO9J7P1Z2HXkNCS+xnG+IGWw8wb66J8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-n0hyAT6XuNJTpjLlYiiDER1xrz8nwT+Q2kSkg28Y8zE=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -73,14 +74,21 @@ stdenv.mkDerivation {
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
-    license = lib.licenses.publicDomain;
+    changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ];
     mainProgram = "cha";
   };
-}
+})

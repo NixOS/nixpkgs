@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.11";
+  version = "4.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-wltoJsfHl5qtceG96oT5yqLiJl0zeX9IOw+eeKXfJb0=";
+    hash = "sha256-8g7pxAqEM3KTVxCfQSTPuadScoBLdw0xAony6H0EjJ8=";
   };
 
   build-system = [ setuptools ];
@@ -46,28 +46,27 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   optional-dependencies = {
-    easy =
-      [
-        colorlog
-        manifold3d
-        charset-normalizer
-        lxml
-        jsonschema
-        networkx
-        svg-path
-        pycollada
-        shapely
-        xxhash
-        rtree
-        httpx
-        scipy
-        pillow
-        # vhacdx # not packaged
-        mapbox-earcut
-      ]
-      ++ lib.optionals embreex.meta.available [
-        embreex
-      ];
+    easy = [
+      colorlog
+      manifold3d
+      charset-normalizer
+      lxml
+      jsonschema
+      networkx
+      svg-path
+      pycollada
+      shapely
+      xxhash
+      rtree
+      httpx
+      scipy
+      pillow
+      # vhacdx # not packaged
+      mapbox-earcut
+    ]
+    ++ lib.optionals embreex.meta.available [
+      embreex
+    ];
   };
 
   nativeCheckInputs = [
@@ -80,7 +79,7 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
   pythonImportsCheck = [
     "trimesh"

@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/NanoVNA-Saver/nanovna-saver";
-    description = "A tool for reading, displaying and saving data from the NanoVNA";
+    description = "Tool for reading, displaying and saving data from the NanoVNA";
     mainProgram = "NanoVNASaver";
     longDescription = ''
       A multiplatform tool to save Touchstone files from the NanoVNA, sweep

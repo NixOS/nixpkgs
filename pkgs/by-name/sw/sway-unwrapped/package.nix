@@ -50,24 +50,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xMrexVDpgkGnvAAglshsh7HjvcbU2/Q6JLUd5J487qg=";
   };
 
-  patches =
-    [
-      ./load-configuration-from-etc.patch
+  patches = [
+    ./load-configuration-from-etc.patch
 
-      (replaceVars ./fix-paths.patch {
-        inherit swaybg;
-      })
-    ]
-    ++ lib.optionals (!finalAttrs.isNixOS) [
-      # References to /nix/store/... will get GC'ed which causes problems when
-      # copying the default configuration:
-      ./sway-config-no-nix-store-references.patch
-    ]
-    ++ lib.optionals finalAttrs.isNixOS [
-      # Use /run/current-system/sw/share and /etc instead of /nix/store
-      # references:
-      ./sway-config-nixos-paths.patch
-    ];
+    (replaceVars ./fix-paths.patch {
+      inherit swaybg;
+    })
+  ]
+  ++ lib.optionals (!finalAttrs.isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ]
+  ++ lib.optionals finalAttrs.isNixOS [
+    # Use /run/current-system/sw/share and /etc instead of /nix/store
+    # references:
+    ./sway-config-nixos-paths.patch
+  ];
 
   strictDeps = true;
   depsBuildBuild = [
@@ -82,26 +81,25 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      libGL
-      wayland
-      libxkbcommon
-      pcre2
-      json_c
-      libevdev
-      pango
-      cairo
-      libinput
-      gdk-pixbuf
-      librsvg
-      wayland-protocols
-      libdrm
-      (wlroots.override { inherit (finalAttrs) enableXWayland; })
-    ]
-    ++ lib.optionals finalAttrs.enableXWayland [
-      xorg.xcbutilwm
-    ];
+  buildInputs = [
+    libGL
+    wayland
+    libxkbcommon
+    pcre2
+    json_c
+    libevdev
+    pango
+    cairo
+    libinput
+    gdk-pixbuf
+    librsvg
+    wayland-protocols
+    libdrm
+    (wlroots.override { inherit (finalAttrs) enableXWayland; })
+  ]
+  ++ lib.optionals finalAttrs.enableXWayland [
+    xorg.xcbutilwm
+  ];
 
   mesonFlags =
     let
@@ -138,7 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      primeos
       synthetica
     ];
     mainProgram = "sway";

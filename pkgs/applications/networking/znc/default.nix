@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "znc";
-  version = "1.9.1";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://znc.in/releases/archive/znc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6KfPgOGarVELTigur2G1a8MN+I6i4PZPrc3TA8SJTzw=";
+    hash = "sha256-Tm52hR2/JgYYWXK1PsXeytaP5TtjpW5N+LizwKbEaAA=";
   };
 
   postPatch = ''
@@ -44,25 +44,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional withPerl perl
-    ++ lib.optional withPython python3
-    ++ lib.optional withTcl tcl
-    ++ lib.optional withCyrus cyrus_sasl
-    ++ lib.optional withUnicode icu
-    ++ lib.optional withZlib zlib;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional withPerl perl
+  ++ lib.optional withPython python3
+  ++ lib.optional withTcl tcl
+  ++ lib.optional withCyrus cyrus_sasl
+  ++ lib.optional withUnicode icu
+  ++ lib.optional withZlib zlib;
 
-  configureFlags =
-    [
-      (lib.enableFeature withPerl "perl")
-      (lib.enableFeature withPython "python")
-      (lib.enableFeature withTcl "tcl")
-      (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
-      (lib.enableFeature withCyrus "cyrus")
-    ]
-    ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
-    ++ lib.optionals withDebug [ "--enable-debug" ];
+  configureFlags = [
+    (lib.enableFeature withPerl "perl")
+    (lib.enableFeature withPython "python")
+    (lib.enableFeature withTcl "tcl")
+    (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
+    (lib.enableFeature withCyrus "cyrus")
+  ]
+  ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
+  ++ lib.optionals withDebug [ "--enable-debug" ];
 
   enableParallelBuilding = true;
 

@@ -14,20 +14,3 @@ index 7721884..3011ae8 100644
  	<ItemGroup>
  		<TrimmerRootAssembly Include="Mesen" />
  		<TrimmerRootAssembly Include="AvaloniaEdit" />
-@@ -105,13 +100,13 @@
- 		<TrimmerRootAssembly Include="Dock.Settings" />
- 	</ItemGroup>
-   <ItemGroup>
--    <PackageReference Include="Avalonia" Version="11.3.999-cibuild0054047-alpha" />
-+    <PackageReference Include="Avalonia" Version="11.2.4" />
-     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.1.0" />
--    <PackageReference Include="Avalonia.Desktop" Version="11.3.999-cibuild0054047-alpha" />
-+    <PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
-     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.2.3" />
-     <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" Condition="'$(OptimizeUi)'!='true'" />
-     <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.3" />
--    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.999-cibuild0054047-alpha" />
-+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.4" />
-     <PackageReference Include="Dock.Avalonia" Version="11.2.0" />
-     <PackageReference Include="Dock.Model.Mvvm" Version="11.2.0" />
-     <PackageReference Include="Dotnet.Bundle" Version="*" />

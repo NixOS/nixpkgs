@@ -27,6 +27,6 @@ buildOctavePackage rec {
     homepage = "https://gnu-octave.github.io/packages/communications/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
-    description = " Digital Communications, Error Correcting Codes (Channel Code), Source Code functions, Modulation and Galois Fields";
+    description = "Digital Communications, Error Correcting Codes (Channel Code), Source Code functions, Modulation and Galois Fields";
   };
 }

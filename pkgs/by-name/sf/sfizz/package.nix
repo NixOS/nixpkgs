@@ -20,15 +20,15 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfizz";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = "sfizz";
-    rev = version;
-    hash = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
+    tag = finalAttrs.version;
+    hash = "sha256-347olgxCyCRmKX0jxgBkYkoBuy9TMbsQgWOIoMppUAo=";
     fetchSubmodules = true;
   };
 
@@ -55,33 +55,23 @@ stdenv.mkDerivation rec {
     freetype
     pango
   ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  # Fix missing include
-  patches = [ ./gcc13.patch ];
-
-  postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
-
-    substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
-      --replace 'zenitypath = "zenity"' 'zenitypath = "${zenity}/bin/zenity"'
-    substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
-      --replace '/usr/bin/zenity' '${zenity}/bin/zenity'
-  '';
-
-  cmakeFlags = [ "-DSFIZZ_TESTS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "SFIZZ_TESTS" true)
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sfztools/sfizz";
     description = "SFZ jack client and LV2 plugin";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
-}
+})

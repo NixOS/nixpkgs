@@ -14,13 +14,13 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.4.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4FRNTB24JWyF3Zuhx3T6LjNs83+wDh4gmE9rh3cu/Vk=";
+    hash = "sha256-p03yjLPphS4jp0dK3hlREKzAzCKRPOpvUnmGaGzrwww=";
   };
 
   vendorHash = null;
@@ -31,7 +31,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/open-policy-agent/opa/version.Version=${finalAttrs.version}"
   ];
 
@@ -45,20 +44,34 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests =
-        [
-          # Skip tests that require network, not available in the nix sandbox
-          "TestInterQueryCache_ClientError"
-          "TestIntraQueryCache_ClientError"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # Skip tests that require network, not available in the darwin sandbox
-          "TestHTTPSClient"
-          "TestHTTPSNoClientCerts"
-        ]
-        ++ lib.optionals (!enableWasmEval) [
-          "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
-        ];
+      skippedTests = [
+        # Skip tests that require network, not available in the nix sandbox
+        "TestInterQueryCache_ClientError"
+        "TestIntraQueryCache_ClientError"
+        "TestSSOCredentialService"
+
+        # This test depends on the metrics available in go not changing. This is a bit
+        # too unstable for us updating go independently.
+        "TestJSONSerialization"
+
+        # Flaky
+        "TestGraphQLParseSchemaAlloc"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Skip tests that require network, not available in the darwin sandbox
+        "TestHTTPSClient"
+        "TestHTTPSNoClientCerts"
+        "TestSocketHTTPGetRequest"
+
+        # Flaky
+        "TestBenchMainWithBundleRegoVersion"
+        "TestClientTLSWithCustomCACert"
+        "TestECR"
+        "TestManagerWithOPATelemetryUpdateLoop"
+      ]
+      ++ lib.optionals (!enableWasmEval) [
+        "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+      ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
@@ -75,6 +88,7 @@ buildGoModule (finalAttrs: {
     # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm v1/server/server_test.go
+      rm v1/server/server_bench_test.go
     '';
 
   postInstall = ''

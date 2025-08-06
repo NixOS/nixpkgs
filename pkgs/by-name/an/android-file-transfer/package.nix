@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
   };
 

@@ -12,18 +12,18 @@
   xorg,
   jq,
   moreutils,
-  gitUpdater,
+  nix-update-script,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.17.0";
+  version = "4.26.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-PXVfNYy1gzK1OqYOeGRxTRRrxNEQkEhAjE5J9yKcQ/w=";
+    hash = "sha256-7Z2MCG9YKwIkZ2eJucSgFr9R+rR+GFKiSXQX0xR5Xas=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -33,36 +33,39 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
-    hash = "sha256-OCxUhvPIPKSGTTeXaLmkErOBpYQ8mKmieUYj6qxuTK4=";
+    fetcherVersion = 2;
+    hash = "sha256-Gsiq0+PIA3rJ0D9JryqaO0ThQcY+hC02AtzxdS+wSPg=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
     jq 'del(.packageManager)' package.json | sponge package.json
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
-
-  buildInputs =
-    [
-      llvmPackages.libcxx
-      llvmPackages.libunwind
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      musl # not used, but requires extra work to remove
-      xorg.libX11 # for the clipboardy package
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=wrangler@(.*)"
     ];
+  };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      nodejs
-      pnpm_9.configHook
-      jq
-      moreutils
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      autoPatchelfHook
-    ];
+  buildInputs = [
+    llvmPackages.libcxx
+    llvmPackages.libunwind
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    musl # not used, but requires extra work to remove
+    xorg.libX11 # for the clipboardy package
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pnpm_9.configHook
+    jq
+    moreutils
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    autoPatchelfHook
+  ];
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it

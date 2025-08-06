@@ -12,6 +12,7 @@
 (buildPythonPackage rec {
   pname = "gfal2-util";
   version = "1.8.1";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-util";

@@ -15,17 +15,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.13.12";
+  version = "0.13.20";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5uokMl+ZgDKVoxnQ/her/Aq6c69Gv0ngZuTDH0jcyoE=";
+    hash = "sha256-XMOh7dYOyYPwzhf3+g2CeuZZ3nNr9ku3XO9V+WK0JHk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-GJJXTVm7hLmMaRJnpmslrpKNHnyhgo/6ZWXU//xl1Vc=";
+  cargoHash = "sha256-FRiN2xEI1JOXW4dFgCqvQ4aG1oAfQTPDFG0blkM35NQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Require internet access
     "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::fletcher"
     "--skip=docs::package::tests::tidy"
     "--skip=docs::package::tests::touying"
 

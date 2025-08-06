@@ -37,23 +37,22 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  makeFlags =
-    [
-      "T=$(out)"
-      "INCDIR="
-      "BINDIR=/bin"
-      "LIBDIR=/lib"
-      "CALC_SHAREDIR=/share/calc"
-      "CALC_INCDIR=/include"
-      "MANDIR=/share/man/man1"
+  makeFlags = [
+    "T=$(out)"
+    "INCDIR="
+    "BINDIR=/bin"
+    "LIBDIR=/lib"
+    "CALC_SHAREDIR=/share/calc"
+    "CALC_INCDIR=/include"
+    "MANDIR=/share/man/man1"
 
-      # Handle LDFLAGS defaults in calc
-      "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
-    ]
-    ++ lib.optionals enableReadline [
-      "READLINE_LIB=-lreadline"
-      "USE_READLINE=-DUSE_READLINE"
-    ];
+    # Handle LDFLAGS defaults in calc
+    "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
+  ]
+  ++ lib.optionals enableReadline [
+    "READLINE_LIB=-lreadline"
+    "USE_READLINE=-DUSE_READLINE"
+  ];
 
   meta = {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";

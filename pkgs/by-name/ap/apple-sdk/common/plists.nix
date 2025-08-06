@@ -299,9 +299,17 @@ let
   };
 in
 {
-  "Info.plist" = builtins.toFile "Info.plist" (toPlist { } Info);
-  "ToolchainInfo.plist" = builtins.toFile "ToolchainInfo.plist" (toPlist { } ToolchainInfo);
-  "Architectures.xcspec" = builtins.toFile "Architectures.xcspec" (toPlist { } Architectures);
-  "PackageTypes.xcspec" = builtins.toFile "PackageTypes.xcspec" (toPlist { } PackageTypes);
-  "ProductTypes.xcspec" = builtins.toFile "ProductTypes.xcspec" (toPlist { } ProductTypes);
+  "Info.plist" = builtins.toFile "Info.plist" (toPlist { escape = true; } Info);
+  "ToolchainInfo.plist" = builtins.toFile "ToolchainInfo.plist" (
+    toPlist { escape = true; } ToolchainInfo
+  );
+  "Architectures.xcspec" = builtins.toFile "Architectures.xcspec" (
+    toPlist { escape = true; } Architectures
+  );
+  "PackageTypes.xcspec" = builtins.toFile "PackageTypes.xcspec" (
+    toPlist { escape = true; } PackageTypes
+  );
+  "ProductTypes.xcspec" = builtins.toFile "ProductTypes.xcspec" (
+    toPlist { escape = true; } ProductTypes
+  );
 }

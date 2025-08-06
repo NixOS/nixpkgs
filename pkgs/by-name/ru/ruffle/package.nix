@@ -21,17 +21,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0-nightly-2025-06-11";
+  version = "0-nightly-2025-08-05";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = lib.strings.removePrefix "0-" finalAttrs.version;
-    hash = "sha256-7r81iw5Mt+3EOwf28fn/26DjK7g1VazCvDEjngBYq9o=";
+    hash = "sha256-1v/PnGYchauwSpYxP6mXNkkcK1bLF/u6VAYTPXk5bVc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cCZrI0KyTH/HBmjVXmL5cR6c839gXGLPTBi3HHTEI24=";
+  cargoHash = "sha256-xrlcn18ryK7PrR/KfBKN0ot+h06nj4cl2Gx4Dm1RyqU=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
@@ -46,13 +45,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       VERGEN_GIT_COMMIT_TIMESTAMP = "${versionDate}T00:00:00Z";
     };
 
-  nativeBuildInputs =
-    [ jre_minimal ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    jre_minimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -87,22 +87,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     finalAttrs.openh264-241
   ];
 
-  postInstall =
-    ''
-      mv $out/bin/ruffle_desktop $out/bin/ruffle
-      install -Dm644 LICENSE.md -t $out/share/doc/ruffle
-      install -Dm644 README.md -t $out/share/doc/ruffle
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
-                     -t $out/share/applications/
+  postInstall = ''
+    mv $out/bin/ruffle_desktop $out/bin/ruffle
+    install -Dm644 LICENSE.md -t $out/share/doc/ruffle
+    install -Dm644 README.md -t $out/share/doc/ruffle
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
+                   -t $out/share/applications/
 
-      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
-                     -t $out/share/icons/hicolor/scalable/apps/
+    install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
+                   -t $out/share/icons/hicolor/scalable/apps/
 
-      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
-                     -t $out/share/metainfo/
-    '';
+    install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
+                   -t $out/share/metainfo/
+  '';
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {

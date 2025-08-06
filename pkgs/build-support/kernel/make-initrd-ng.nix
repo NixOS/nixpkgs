@@ -96,7 +96,8 @@ runCommand name
     nativeBuildInputs = [
       makeInitrdNGTool
       cpio
-    ] ++ lib.optional makeUInitrd ubootTools;
+    ]
+    ++ lib.optional makeUInitrd ubootTools;
   })
   ''
     mkdir -p ./root/var/empty

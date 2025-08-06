@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ovn";
-  version = "25.03.0";
+  version = "25.03.1";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${version}";
-    hash = "sha256-UbCmXPft9SCsbPZ+GuTWIOUUhv+RaC55jNiTjsVBeRw=";
+    hash = "sha256-nDW3jwZ0RE9i+5+8eRKb7P7KQxiGd22dn/s7bzx/CjQ=";
     fetchSubmodules = true;
   };
 

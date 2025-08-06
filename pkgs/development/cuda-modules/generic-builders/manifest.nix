@@ -201,24 +201,23 @@ in
   # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
   dontBuild = true;
 
-  nativeBuildInputs =
-    [
-      autoPatchelfHook
-      # This hook will make sure libcuda can be found
-      # in typically /lib/opengl-driver by adding that
-      # directory to the rpath of all ELF binaries.
-      # Check e.g. with `patchelf --print-rpath path/to/my/binary
-      autoAddDriverRunpath
-      markForCudatoolkitRootHook
-    ]
-    # autoAddCudaCompatRunpath depends on cuda_compat and would cause
-    # infinite recursion if applied to `cuda_compat` itself (beside the fact
-    # that it doesn't make sense in the first place)
-    ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
-      # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
-      # See its documentation in ./setup-hooks/extension.nix.
-      autoAddCudaCompatRunpath
-    ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    # This hook will make sure libcuda can be found
+    # in typically /lib/opengl-driver by adding that
+    # directory to the rpath of all ELF binaries.
+    # Check e.g. with `patchelf --print-rpath path/to/my/binary
+    autoAddDriverRunpath
+    markForCudatoolkitRootHook
+  ]
+  # autoAddCudaCompatRunpath depends on cuda_compat and would cause
+  # infinite recursion if applied to `cuda_compat` itself (beside the fact
+  # that it doesn't make sense in the first place)
+  ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+    # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
+    # See its documentation in ./setup-hooks/extension.nix.
+    autoAddCudaCompatRunpath
+  ];
 
   buildInputs = [
     # autoPatchelfHook will search for a libstdc++ and we're giving it

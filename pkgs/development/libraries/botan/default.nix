@@ -66,59 +66,58 @@ let
         docutils
       ];
 
-      buildInputs =
-        [
-          bzip2
-          zlib
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
-          tpm2-tss
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
-          jitterentropy
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
-          esdm
-        ];
+      buildInputs = [
+        bzip2
+        zlib
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
+        tpm2-tss
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+        jitterentropy
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
+        esdm
+      ];
 
-      buildTargets =
-        [ "cli" ]
-        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
-        ++ lib.optionals static [ "static" ]
-        ++ lib.optionals (!static) [ "shared" ];
+      buildTargets = [
+        "cli"
+      ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
+      ++ lib.optionals static [ "static" ]
+      ++ lib.optionals (!static) [ "shared" ];
 
-      botanConfigureFlags =
-        [
-          "--prefix=${placeholder "out"}"
-          "--bindir=${placeholder "bin"}/bin"
-          "--docdir=${placeholder "doc"}/share/doc"
-          "--mandir=${placeholder "man"}/share/man"
-          "--no-install-python-module"
-          "--build-targets=${lib.concatStringsSep "," finalAttrs.buildTargets}"
-          "--with-bzip2"
-          "--with-zlib"
-          "--with-rst2man"
-          "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
-        ]
-        ++ lib.optionals stdenv.cc.isClang [
-          "--cc=clang"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
-          "--with-tpm2"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
-          "--enable-modules=jitter_rng"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
-          "--enable-modules=esdm_rng"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
-          "--module-policy=${policy}"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
-          "--enable-module=ffi"
-          "--enable-module=shake"
-        ];
+      botanConfigureFlags = [
+        "--prefix=${placeholder "out"}"
+        "--bindir=${placeholder "bin"}/bin"
+        "--docdir=${placeholder "doc"}/share/doc"
+        "--mandir=${placeholder "man"}/share/man"
+        "--no-install-python-module"
+        "--build-targets=${lib.concatStringsSep "," finalAttrs.buildTargets}"
+        "--with-bzip2"
+        "--with-zlib"
+        "--with-rst2man"
+        "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "--cc=clang"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
+        "--with-tpm2"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+        "--enable-modules=jitter_rng"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
+        "--enable-modules=esdm_rng"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
+        "--module-policy=${policy}"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
+        "--enable-module=ffi"
+        "--enable-module=shake"
+      ];
 
       configurePhase = ''
         runHook preConfigure

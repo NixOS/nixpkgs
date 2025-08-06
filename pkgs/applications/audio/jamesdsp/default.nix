@@ -52,23 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-build-on-qt6_9.diff
   ];
 
-  buildInputs =
-    [
-      glibmm
-      libarchive
-      qtbase
-      qtsvg
-      qtwayland
-    ]
-    ++ lib.optionals usePipewire [
-      pipewire
-    ]
-    ++ lib.optionals usePulseaudio [
-      pulseaudio
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gstreamer
-    ];
+  buildInputs = [
+    glibmm
+    libarchive
+    qtbase
+    qtsvg
+    qtwayland
+  ]
+  ++ lib.optionals usePipewire [
+    pipewire
+  ]
+  ++ lib.optionals usePulseaudio [
+    pulseaudio
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+  ];
 
   preFixup = lib.optionalString usePulseaudio ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

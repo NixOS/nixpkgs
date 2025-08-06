@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
   wheel,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "polyline";
-  version = "2.0.1";
+  version = "2.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,20 +20,18 @@ buildPythonPackage rec {
     owner = "frederickjansen";
     repo = "polyline";
     tag = "v${version}";
-    hash = "sha256-fbGGfZdme4OiIGNlXG1uVl1xP+rPVI9l5hjHM0gwAsE=";
+    hash = "sha256-HUdjebUMcYGW+7dyOpVgBnBcesmqDWpw1NgYigOxmQ8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=polyline --cov-report term-missing" ""
-  '';
 
   nativeBuildInputs = [
     setuptools
     wheel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "polyline" ];
 
@@ -43,7 +42,7 @@ buildPythonPackage rec {
       essentially a port of https://github.com/mapbox/polyline.
     '';
     homepage = "https://github.com/frederickjansen/polyline";
-    changelog = "https://github.com/frederickjansen/polyline/releases/tag/${version}";
+    changelog = "https://github.com/frederickjansen/polyline/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ ersin ];
   };

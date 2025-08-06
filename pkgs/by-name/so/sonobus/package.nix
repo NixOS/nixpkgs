@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sonosaurus";
     repo = "sonobus";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-NOdmHFKrV7lb8XbeG5GdLKYZ0c/vcz3fcqYj9JvE+/Q=";
     fetchSubmodules = true;
   };

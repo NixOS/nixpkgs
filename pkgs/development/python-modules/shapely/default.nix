@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.7";
+  version = "2.1.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "shapely";
     repo = "shapely";
     tag = version;
-    hash = "sha256-oq08nDeCdS6ARISai/hKM74v+ezSxO2PpSzas/ZFVaw=";
+    hash = "sha256-Co3acjWsGWjwzMoklRx2CqBDOlEpaj3wWenLWxopvKY=";
   };
 
   nativeBuildInputs = [

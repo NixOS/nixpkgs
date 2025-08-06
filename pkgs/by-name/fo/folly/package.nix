@@ -8,7 +8,7 @@
   cmake,
   ninja,
   pkg-config,
-  removeReferencesTo,
+  sanitiseHeaderPathsHook,
 
   double-conversion,
   fast-float,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    removeReferencesTo
+    sanitiseHeaderPathsHook
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
@@ -79,16 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
-  propagatedBuildInputs =
-    [
-      # `folly-config.cmake` pulls these in.
-      boost
-      fmt_11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # jemalloc headers are required in include/folly/portability/Malloc.h
-      jemalloc
-    ];
+  propagatedBuildInputs = [
+    # `folly-config.cmake` pulls these in.
+    boost
+    fmt_11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # jemalloc headers are required in include/folly/portability/Malloc.h
+    jemalloc
+  ];
 
   checkInputs = [
     gtest
@@ -190,18 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
     }
 
     runHook postCheck
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
   '';
 
   passthru = {

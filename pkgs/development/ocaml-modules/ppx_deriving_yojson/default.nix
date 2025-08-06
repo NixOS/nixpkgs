@@ -45,7 +45,8 @@ buildDunePackage rec {
     ppxlib
     ppx_deriving
     yojson
-  ] ++ param.propagatedBuildInputs or [ ];
+  ]
+  ++ param.propagatedBuildInputs or [ ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   inherit (param) checkInputs;

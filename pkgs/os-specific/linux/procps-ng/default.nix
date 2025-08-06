@@ -42,17 +42,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
-  configureFlags =
-    [
-      "--disable-modern-top"
-      "--enable-watch8bit"
-    ]
-    ++ lib.optional withSystemd "--with-systemd"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-w"
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "ac_cv_func_malloc_0_nonnull=yes"
-      "ac_cv_func_realloc_0_nonnull=yes"
-    ];
+  configureFlags = [
+    "--disable-modern-top"
+    "--enable-watch8bit"
+  ]
+  ++ lib.optional withSystemd "--with-systemd"
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-w"
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   installPhase = lib.optionalString watchOnly ''
     install -m 0755 -D src/watch $out/bin/watch

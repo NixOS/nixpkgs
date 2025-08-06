@@ -28,21 +28,21 @@
   glycin-loaders,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "11.1";
+  version = "11.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
-    tag = version;
-    hash = "sha256-G8vJvoOVVQ9cPnwoxNoKrQwGNxnA78HG285iSy6lSjk=";
+    tag = finalAttrs.version;
+    hash = "sha256-UE0TRC9DeP+fl85fzuQ8/3ioIPdeSqsJWnW1olB1gmo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-yxo1ZSOqjh2lrdmiCrKQGFHpSPRgye64rFNZpghZqI0=";
+    inherit (finalAttrs) src;
+    hash = "sha256-I+1pGZWxn9Q/CL8D6VxsaO3H4EdBek4wyykvNgCNRZI=";
   };
 
   patches = [
@@ -75,27 +75,26 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      gtksourceview5
-      lcms2
-      libadwaita
-      openssl
-      pipewire
-      libshumate
-      sqlite
-      xdg-desktop-portal
-      libseccomp
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-rs
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    gtksourceview5
+    lcms2
+    libadwaita
+    openssl
+    pipewire
+    libshumate
+    sqlite
+    xdg-desktop-portal
+    libseccomp
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -109,11 +108,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Matrix group messaging app";
-    homepage = "https://gitlab.gnome.org/GNOME/fractal";
-    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
+    homepage = "https://gitlab.gnome.org/World/fractal";
+    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     mainProgram = "fractal";
   };
-}
+})

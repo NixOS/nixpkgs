@@ -4,43 +4,50 @@
   fetchFromGitHub,
 
   # build system
-  poetry-core,
+  hatchling,
 
   # dependencies
   aiosqlite,
   langgraph-checkpoint,
+  sqlite-vec,
 
   # testing
   pytest-asyncio,
   pytestCheckHook,
+  sqlite,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.6";
+  version = "2.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointsqlite==${version}";
-    hash = "sha256-UUlrhQS0C2rPp//+LwU2rgR4R3AM5fM9X3CYvi/DAy8=";
+    hash = "sha256-v/gRYkiS4AR1epWwPdG/QYbnUYte894kHTn5F58pVGI=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiosqlite
     langgraph-checkpoint
+    sqlite-vec
   ];
 
   pythonRelaxDeps = [
     "aiosqlite"
+
+    # Bug: version is showing up as 0.0.0
+    # https://github.com/NixOS/nixpkgs/issues/427197
+    "sqlite-vec"
 
     # Checkpoint clients are lagging behind langgraph-checkpoint
     "langgraph-checkpoint"
@@ -51,17 +58,28 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    sqlite
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "checkpoint-sqlite==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  disabledTestPaths = [
+    # Failed: 'flaky' not found in `markers` configuration option
+    "tests/test_ttl.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: (fails object comparison due to extra runtime fields)
+    # https://github.com/langchain-ai/langgraph/issues/5604
+    "test_combined_metadata"
+    "test_asearch"
+    "test_search"
+  ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpointsqlite==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointsqlite==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     description = "Library with a SQLite implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-sqlite";
     license = lib.licenses.mit;

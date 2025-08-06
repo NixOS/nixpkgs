@@ -30,17 +30,16 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      scdoc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # GNOME Builder Plugin
-      gnome-builder
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # GNOME Builder Plugin
+    gnome-builder
+  ];
 
   buildInputs = [
     glib

@@ -13,7 +13,7 @@ prefetch() {
     url=$(NIX_PATH=.. nix-instantiate --eval -E "$expr" | jq -r)
 
     sha256=$(nix-prefetch-url "$url")
-    hash=$(nix hash convert --to sri --hash-algo sha256 "$sha256")
+    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$sha256")
 
     echo -e "  cp${1} = \"${hash}\";" >>$outfile
     echo

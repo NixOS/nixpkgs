@@ -53,11 +53,10 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Since jax 0.5.3:
     # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

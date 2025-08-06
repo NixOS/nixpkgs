@@ -27,7 +27,8 @@ stdenv.mkDerivation {
   buildInputs = [
     libnsl
     libtirpc
-  ] ++ lib.optional useSystemd systemd;
+  ]
+  ++ lib.optional useSystemd systemd;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${

@@ -75,16 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      jdk11
-      gradle
-      makeWrapper
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      writeDarwinBundle
-    ];
+  nativeBuildInputs = [
+    jdk11
+    gradle
+    makeWrapper
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    writeDarwinBundle
+  ];
 
   mitmCache = gradle.fetchDeps {
     inherit pname;

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Harlequin adapter for Google BigQuery";
+    description = "Harlequin adapter for Google BigQuery";
     homepage = "https://pypi.org/project/harlequin-bigquery/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];

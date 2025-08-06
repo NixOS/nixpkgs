@@ -1,1 +1,1 @@
-{ zigbee2mqtt_1 }: zigbee2mqtt_1
+{ zigbee2mqtt_2 }: zigbee2mqtt_2

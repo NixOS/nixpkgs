@@ -39,9 +39,8 @@ buildPythonPackage rec {
   ];
 
   # needs special invocation, copied from tox.ini
-  pytestFlagsArray = [
-    "-p"
-    "no:randomly"
+  pytestFlags = [
+    "-pno:randomly"
   ];
 
   pythonImportsCheck = [ "pytest_randomly" ];

@@ -6,17 +6,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scooter";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${version}";
-    hash = "sha256-/wl6xbAXfPUTSI38htgkWC3IlsxtFbPOpBHqcSVBGPk=";
+    hash = "sha256-WU3vPI6mvEbzGhuQLgtOfPdoxAT/3XZ7b/dQAnBjsho=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kPweKXAitvODNoKTr2iB+qM9qMWGoKEQCxpkgrpnewY=";
+  cargoHash = "sha256-fG3idOC3EO8WyazRrEWYQgtFbKtJG9jnqVm3EUcw4i8=";
+
+  # Ensure that only the `scooter` package is built (excluding `xtask`)
+  cargoBuildFlags = [
+    "--package"
+    "scooter"
+  ];
 
   # Many tests require filesystem writes which fail in Nix sandbox
   doCheck = false;

@@ -34,16 +34,16 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.34.0";
-    rev = "d7809ba2b07fd869d49bfb122b27f6a7977b4d94";
-    hash = "sha256-SKdUrBXe0E3fMo73NROFO9Ck5FZidF/awP+QRA5t3VM=";
+    version = "1.34.2";
+    rev = "c657e59fac461e406c8fdbe57ced833ddc236ee1";
+    hash = "sha256-f9JsgHEyOg1ZoEb7d3gy3+qoovpA3oOx6O8yL0U8mhI=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-CiP9qH8/+nNZM8BNz84eVwWphVyDNo2KOYcK0wOsXn0=";
-      aarch64-linux = "sha256-9HGg68R546JY1EOm22tg9CuPt0nU+FooFcLG9A2hkzE=";
+      x86_64-linux = "sha256-CczmVD/3tWR3LygXc3cTAyrMPZUTajqtRew85wBM5mY=";
+      aarch64-linux = "sha256-GemlfXHlaHPn1/aBxj2Ve9tuwsEdlQQCU1v57378Dgs=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -211,40 +211,39 @@ buildBazelPackage rec {
   removeLocalConfigCc = true;
   removeLocal = false;
   bazelTargets = [ "//source/exe:envoy-static" ];
-  bazelBuildFlags =
-    [
-      "-c opt"
-      "--spawn_strategy=standalone"
-      "--noexperimental_strict_action_env"
-      "--cxxopt=-Wno-error"
-      "--linkopt=-Wl,-z,noexecstack"
-      "--config=gcc"
-      "--verbose_failures"
+  bazelBuildFlags = [
+    "-c opt"
+    "--spawn_strategy=standalone"
+    "--noexperimental_strict_action_env"
+    "--cxxopt=-Wno-error"
+    "--linkopt=-Wl,-z,noexecstack"
+    "--config=gcc"
+    "--verbose_failures"
 
-      # Force use of system Java.
-      "--extra_toolchains=@local_jdk//:all"
-      "--java_runtime_version=local_jdk"
-      "--tool_java_runtime_version=local_jdk"
+    # Force use of system Java.
+    "--extra_toolchains=@local_jdk//:all"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
 
-      # Force use of system Rust.
-      "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
+    # Force use of system Rust.
+    "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
 
-      # undefined reference to 'grpc_core::*Metadata*::*Memento*
-      #
-      # During linking of the final binary, we see undefined references to grpc_core related symbols.
-      # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
-      # "ParseMemento" and "MementoToValue" are only implemented for some types
-      # and appear unused and unimplemented for the undefined cases reported by the linker.
-      "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
 
-      "--define=wasm=${wasmRuntime}"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
-      # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
-      #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
-      #       |         ^
-      "--define=tcmalloc=disabled"
-    ]);
+    "--define=wasm=${wasmRuntime}"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
+    # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
+    #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
+    #       |         ^
+    "--define=tcmalloc=disabled"
+  ]);
 
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"

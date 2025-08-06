@@ -27,6 +27,7 @@
   docbook_xsl_ns,
   docbook_xml_dtd_42,
   docbook_xml_dtd_45,
+  udevCheckHook,
 
   # Defaulting to false because usually the rationale for using elogind is to
   # use it in situation where a systemd dependency does not work (especially
@@ -63,6 +64,10 @@ stdenv.mkDerivation rec {
 
     python3Packages.python
     python3Packages.jinja2
+  ]
+  ++ lib.optionals enableSystemd [
+    # udevCheckHook introduces a dependency on systemdMinimal
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -73,7 +78,8 @@ stdenv.mkDerivation rec {
     libselinux
     pam
     util-linux
-  ] ++ (if enableSystemd then [ udev ] else [ eudev ]);
+  ]
+  ++ (if enableSystemd then [ udev ] else [ eudev ]);
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""

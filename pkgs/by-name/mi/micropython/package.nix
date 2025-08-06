@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yH5omiYs07ZKECI+DAnpYq4T+r2O/RuGdtN+dhYxePc=";
     fetchSubmodules = true;
 

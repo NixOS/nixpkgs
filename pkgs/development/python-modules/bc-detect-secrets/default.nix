@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bc-detect-secrets";
-  version = "1.5.43";
+  version = "1.5.44";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     tag = version;
-    hash = "sha256-A9qDkAi414wJ7cuAwr1r6FgIa1tOJb+EkAGsvFrw/Fo=";
+    hash = "sha256-cEhZo/HfCp6Cpx2zEX7THQQJH264NJvoCRrM+ci3RrE=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     pkgs.gitMinimal
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d);

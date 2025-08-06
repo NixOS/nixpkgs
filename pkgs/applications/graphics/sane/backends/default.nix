@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sane-backends";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sane-project";
     repo = "backends";
     rev = "refs/tags/${version}";
-    hash = "sha256-4mwPGeRsyzngDxBQ8/48mK+VR9LYV6082xr8lTrUZrk=";
+    hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
   postPatch = ''
@@ -95,34 +95,34 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      avahi
-      libgphoto2
-      libjpeg
-      libpng
-      libtiff
-      libusb1
-      curl
-      libxml2
-      poppler
-      gawk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libieee1284
-      libv4l
-      net-snmp
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    avahi
+    libgphoto2
+    libjpeg
+    libpng
+    libtiff
+    libusb1
+    curl
+    libxml2
+    poppler
+    gawk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libieee1284
+    libv4l
+    net-snmp
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [ "--with-lockdir=/var/lock/sane" ]
-    ++ lib.optional (avahi != null) "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb";
+  configureFlags = [
+    "--with-lockdir=/var/lock/sane"
+  ]
+  ++ lib.optional (avahi != null) "--with-avahi"
+  ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
@@ -177,6 +177,8 @@ stdenv.mkDerivation rec {
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569
   enableParallelInstalling = false;
+
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) sane;

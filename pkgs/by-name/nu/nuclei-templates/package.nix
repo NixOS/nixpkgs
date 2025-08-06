@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nuclei-templates";
-  version = "10.2.2";
+  version = "10.2.6";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei-templates";
     tag = "v${version}";
-    hash = "sha256-FWOfh/W2Hy01Z7oEItLtWidbvEfwVBDU9KAaCoFO0AI=";
+    hash = "sha256-76PtEYXvZxKEBky0fqdWmjWxrKHfYLBWe+3nqqXUNOw=";
   };
 
   installPhase = ''

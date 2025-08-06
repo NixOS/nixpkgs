@@ -14,6 +14,7 @@
   extraPythonPackages ? (_: [ ]),
   nixosTests,
 }:
+
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
@@ -32,21 +33,21 @@ python3Packages.buildPythonApplication {
       junit-xml
       ptpython
       ipython
+      remote-pdb
     ]
     ++ extraPythonPackages python3Packages;
 
-  propagatedBuildInputs =
-    [
-      coreutils
-      netpbm
-      qemu_pkg
-      socat
-      vde2
-    ]
-    ++ lib.optionals enableOCR [
-      imagemagick_light
-      tesseract4
-    ];
+  propagatedBuildInputs = [
+    coreutils
+    netpbm
+    qemu_pkg
+    socat
+    vde2
+  ]
+  ++ lib.optionals enableOCR [
+    imagemagick_light
+    tesseract4
+  ];
 
   passthru.tests = {
     inherit (nixosTests.nixos-test-driver) driver-timeout;

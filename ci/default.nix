@@ -18,7 +18,9 @@ let
 
   pkgs = import nixpkgs' {
     inherit system;
-    config = { };
+    config = {
+      permittedInsecurePackages = [ "nix-2.3.18" ];
+    };
     overlays = [ ];
   };
 
@@ -47,16 +49,48 @@ let
 
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt-rfc-style underneath,
+        # This uses nixfmt underneath,
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
+
+        programs.yamlfmt = {
+          enable = true;
+          settings.formatter = {
+            retain_line_breaks = true;
+          };
+        };
+        settings.formatter.yamlfmt.excludes = [
+          # Breaks helm templating
+          "nixos/tests/k3s/k3s-test-chart/templates/*"
+          # Aligns comments with whitespace
+          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
+          # TODO: Fix formatting for auto-generated file
+          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
+        ];
 
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
           options = [ "-disable-indent-size" ];
           includes = [ "*" ];
           priority = 1;
+        };
+
+        # TODO: Upstream this into treefmt-nix eventually:
+        #   https://github.com/numtide/treefmt-nix/issues/387
+        settings.formatter.markdown-code-runner = {
+          command = pkgs.lib.getExe pkgs.markdown-code-runner;
+          options =
+            let
+              config = pkgs.writers.writeTOML "markdown-code-runner-config" {
+                presets.nixfmt = {
+                  language = "nix";
+                  command = [ (pkgs.lib.getExe pkgs.nixfmt) ];
+                };
+              };
+            in
+            [ "--config=${config}" ];
+          includes = [ "*.md" ];
         };
       };
       fs = pkgs.lib.fileset;
@@ -72,7 +106,7 @@ let
     };
 
 in
-{
+rec {
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
@@ -93,7 +127,20 @@ in
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
+    # TODO: Raise nixVersions.minimum to 2.24 and flip back to it.
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
+  tarball = import ../pkgs/top-level/make-tarball.nix {
+    # Mirrored from top-level release.nix:
+    nixpkgs = {
+      outPath = pkgs.lib.cleanSource ../.;
+      revCount = 1234;
+      shortRev = "abcdef";
+      revision = "0000000000000000000000000000000000000000";
+    };
+    officialRelease = false;
+    inherit pkgs lib-tests;
+    nix = pkgs.nixVersions.latest;
+  };
 }

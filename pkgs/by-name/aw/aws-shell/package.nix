@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "aws-shell";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "awslabs";

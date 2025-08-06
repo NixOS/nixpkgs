@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 pngpaste $out/bin
+    install -Dm555 pngpaste $out/bin/pngpaste
     runHook postInstall
   '';
 

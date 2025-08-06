@@ -34,7 +34,7 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "plasTeX is a Python package to convert LaTeX markup to DOM";
+    description = "Python package to convert LaTeX markup to DOM";
     homepage = "https://plastex.github.io/plastex/";
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;

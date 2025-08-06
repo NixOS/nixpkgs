@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "blackbox_exporter";
-  version = "0.26.0";
+  version = "0.27.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "sha256-pdvYpu2EbcZIMyeWDWzb4TGlRE0cJgvIWJ62pHx7Xsk=";
+    sha256 = "sha256-oIsNqET3gHSajyWTxc+zoLiKQNCIXK77jtthOwYVtQg=";
   };
 
-  vendorHash = "sha256-Mw1+YQVmK4rqOLGIt6TSFgFsdMeL0h0A7ZJAtoL0klU=";
+  vendorHash = "sha256-UHm3iIQ6/clPx/VBUG4j/WLoOhFN44nbAEZk94L/9EY=";
 
   # dns-lookup is performed for the tests
   doCheck = false;

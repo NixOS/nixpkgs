@@ -28,7 +28,8 @@ buildPythonPackage rec {
     paho-mqtt
     pycryptodomex
     requests
-  ] ++ aiohttp.optional-dependencies.speedups;
+  ]
+  ++ aiohttp.optional-dependencies.speedups;
 
   # Test require network access
   doCheck = false;

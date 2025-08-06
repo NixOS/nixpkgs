@@ -24,20 +24,21 @@
   dirty-equals,
   nest-asyncio,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   respx,
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.52.2";
+  version = "0.59.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-vCIS2NDsScKESfYFHDTSRLb9ZhUsrEPHyfuubrbc+44=";
+    hash = "sha256-JUgJB0+9zfmj3asjn7FOozNB9STkKEvObbTP3KLDV+M=";
   };
 
   postPatch = ''
@@ -69,6 +70,7 @@ buildPythonPackage rec {
     dirty-equals
     nest-asyncio
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     respx
   ];
@@ -86,9 +88,8 @@ buildPythonPackage rec {
     "tests/lib/test_bedrock.py"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

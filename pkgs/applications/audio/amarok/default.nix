@@ -36,7 +36,6 @@
   lzo,
   lz4,
   mariadb-embedded,
-  pcre,
   snappy,
   taglib,
   taglib_extras,
@@ -93,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     lzo
     mariadb-embedded
-    pcre
     snappy
     taglib
     taglib_extras

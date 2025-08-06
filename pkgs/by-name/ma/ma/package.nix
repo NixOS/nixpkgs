@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "minimalistic variant of the Acme editor";
+    description = "Minimalistic variant of the Acme editor";
     homepage = "http://call-with-current-continuation.org/ma/ma.html";
     mainProgram = "ma";
     maintainers = with lib.maintainers; [ ehmry ];

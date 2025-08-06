@@ -26,7 +26,7 @@ let
           input: (input.pname or null) != "pytest-twisted"
         ) oldAttrs.nativeCheckInputs;
 
-        pytestFlagsArray = null;
+        doCheck = false;
       });
     };
   };

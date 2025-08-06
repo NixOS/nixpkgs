@@ -23,13 +23,15 @@ stdenv.mkDerivation rec {
     libpq
     openssl
     libxcrypt
-  ] ++ lib.optional withPam pam;
+  ]
+  ++ lib.optional withPam pam;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl"
-  ] ++ lib.optional withPam "--with-pam";
+  ]
+  ++ lib.optional withPam "--with-pam";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

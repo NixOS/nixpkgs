@@ -5,7 +5,7 @@
   copyDesktopItems,
   python3,
   xdg-utils,
-  electron,
+  electron_36,
   makeDesktopItem,
 }:
 
@@ -55,7 +55,7 @@ buildNpmPackage rec {
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron_36}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/

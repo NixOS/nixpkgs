@@ -318,6 +318,7 @@ in
         "/nix/store"
         "/run/wrappers"
       ];
+      serviceConfig.RestrictSUIDSGID = false;
       serviceConfig.Type = "oneshot";
       script = ''
         chmod 755 "${parentWrapperDir}"

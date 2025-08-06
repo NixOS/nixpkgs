@@ -21,7 +21,7 @@
   optipng,
   piper-tts,
   pkg-config,
-  podofo,
+  podofo_0_10,
   poppler-utils,
   python3Packages,
   qt6,
@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.4.0";
+  version = "8.6.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5uexcItbBgO2Tv52clS0N+IhplqpKwq43p2yqSxANek=";
+    hash = "sha256-FYWeUS78jvFV9nj/9RSRxPFYKYxSF04dIXZINSbn7WA=";
   };
 
   patches = [
@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
     })
-  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ]
+  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -90,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
     libusb1
     piper-tts
-    podofo
+    podofo_0_10
     poppler-utils
     qt6.qtbase
     qt6.qtwayland
@@ -144,7 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional speechSupport speechd-minimal;
+  ]
+  ++ lib.optional speechSupport speechd-minimal;
 
   installPhase = ''
     runHook preInstall
@@ -156,8 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo.lib}/lib
+    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo_0_10}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
     export PIPER_TTS_DIR=${piper-tts}/bin

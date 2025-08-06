@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "1.2.0";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LydP89zyqMGpWbC7nEAyPMx0ARDrYh4qL9sH1i8a88M=";
+    hash = "sha256-P6pA0760eo/dL1t5Jics4oSztM4F/C8lIuZ3dZ9x5C8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-U7FKU5WkU1EoXav+Q1i04uRSxBux/o4/9UzajT/hV/g=";
+  vendorHash = "sha256-8D7sSmxR+Fq4ouB9SuoEDplu6Znv3U0BIyYISSmF6Bs=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-+KmNWKe5k/WuQL9B6XYZWDCLICyGWIg/vHLZr9T7SOc=";
+    npmDepsHash = "sha256-FiFSnN6DOMr8XghvyGTWB/EMTNfvpqlAgx7FPnbGQxU=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     env.BUILD_OUTPUT_PATH = "dist";

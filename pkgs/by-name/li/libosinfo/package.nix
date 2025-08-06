@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
+  ]
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   nativeBuildInputs = [
     pkg-config

@@ -6,26 +6,30 @@ containerd. This can be done in a few lines of configuration.
 ## Configure Containerd
 
 ```nix
-virtualisation.containerd = {
-  enable = true;
-  settings.plugins."io.containerd.grpc.v1.cri".cni = {
-    bin_dir = "/var/lib/rancher/k3s/data/current/bin";
-    conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d";
+{
+  virtualisation.containerd = {
+    enable = true;
+    settings.plugins."io.containerd.grpc.v1.cri".cni = {
+      bin_dir = "/var/lib/rancher/k3s/data/current/bin";
+      conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d";
+    };
+    # Optionally, configure containerd to use the k3s pause image
+    settings.plugins."io.containerd.grpc.v1.cri" = {
+      sandbox_image = "docker.io/rancher/mirrored-pause:3.6";
+    };
   };
-  # Optionally, configure containerd to use the k3s pause image
-  settings.plugins."io.containerd.grpc.v1.cri" = {
-    sandbox_image = "docker.io/rancher/mirrored-pause:3.6";
-  };
-};
+}
 ```
 
 ## Configure k3s
 
 ```nix
-services.k3s = {
-  enable = true;
-  extraFlags = [ "--container-runtime-endpoint unix:///run/containerd/containerd.sock" ];
-};
+{
+  services.k3s = {
+    enable = true;
+    extraFlags = [ "--container-runtime-endpoint unix:///run/containerd/containerd.sock" ];
+  };
+}
 ```
 
 ## Importing Container Images

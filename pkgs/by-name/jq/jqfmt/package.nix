@@ -6,13 +6,13 @@
 }:
 buildGoModule {
   pname = "jqfmt";
-  version = "0-unstable-2024-08-15";
+  version = "0-unstable-2025-07-28";
 
   src = fetchFromGitHub {
     owner = "noperator";
     repo = "jqfmt";
-    rev = "8fc6f864c295e6bd6b08f36f503b3d809270da61";
-    hash = "sha256-tvFp1SJeosJdCHs3c+vceBfacypJc/aFYSj55mBfkB8=";
+    rev = "74b59e03caff3ac5a8c061088d2c228a5c27b171";
+    hash = "sha256-3PYIyjZm265atBAfuj5aHmWoAv4H29I7gN4/rjl1d0o=";
   };
 
   vendorHash = "sha256-avpZSgQKFZxLmYGj+2Gi+wSDHnAgF0/hyp4HtoQ0ZCo=";

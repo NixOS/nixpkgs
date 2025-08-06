@@ -26,21 +26,20 @@ let
   mkManifestTarget =
     name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
   # Produces a list containing all duplicate manifest names
-  duplicateManifests =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.manifests);
+  duplicateManifests = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.manifests
+  );
   # Produces a list containing all duplicate chart names
-  duplicateCharts =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.charts);
+  duplicateCharts = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.charts
+  );
 
   # Converts YAML -> JSON -> Nix
   fromYaml =
     path:
-    with builtins;
-    fromJSON (
-      readFile (
-        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ yq-go ]; } ''
+    builtins.fromJSON (
+      builtins.readFile (
+        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
           yq --no-colors --output-format json ${path} > $out
         ''
       )
@@ -782,7 +781,7 @@ in
       ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node")
       ++ (lib.optional (
         cfg.role == "agent" && cfg.configPath == null && cfg.serverAddr == ""
-      ) "k3s: ServerAddr or configPath (with 'server' key) should be set if role is 'agent'")
+      ) "k3s: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
       ++ (lib.optional
         (cfg.role == "agent" && cfg.configPath == null && cfg.tokenFile == null && cfg.token == "")
         "k3s: Token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"

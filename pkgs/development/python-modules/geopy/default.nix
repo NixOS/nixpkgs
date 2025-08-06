@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [ "test/test_init.py" ];
 
-  pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
+  pytestFlags = [ "--skip-tests-requiring-internet" ];
 
   pythonImportsCheck = [ "geopy" ];
 

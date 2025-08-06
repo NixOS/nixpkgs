@@ -142,38 +142,37 @@ buildFHSEnv rec {
     ln --symbolic --relative --target-directory ./bin ''${progs_wrapped[@]}
   '';
 
-  profile =
-    ''
-      # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
-      # starting most operations in many containerized environments, including WSL2, Docker, and LXC
-      # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
-      # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
-      #
-      # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
-      # compiling encrypted device libraries in Questa (with error
-      # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
-      # for non-Questa wrappers.
-      if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
-          export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
-      fi
+  profile = ''
+    # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
+    # starting most operations in many containerized environments, including WSL2, Docker, and LXC
+    # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
+    # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
+    #
+    # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
+    # compiling encrypted device libraries in Questa (with error
+    # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
+    # for non-Questa wrappers.
+    if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
+        export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
+    fi
 
-      # Implement the SOURCE_DATE_EPOCH specification for reproducible builds
-      # (https://reproducible-builds.org/specs/source-date-epoch).
-      # Require opt-in with NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD=1 for now, in case
-      # the blocklist is incomplete.
-      if [ -n "$SOURCE_DATE_EPOCH" ] && [ "$NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD" = 1 ] && [ "$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" = 1 ]; then
-          export LD_LIBRARY_PATH="${
-            lib.makeLibraryPath [
-              libfaketime
-              pkgsi686Linux.libfaketime
-            ]
-          }''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-          export LD_PRELOAD=libfaketime.so.1''${LD_PRELOAD:+:$LD_PRELOAD}
-          export FAKETIME_FMT="%s"
-          export FAKETIME="$SOURCE_DATE_EPOCH"
-      fi
-    ''
-    + extraProfile;
+    # Implement the SOURCE_DATE_EPOCH specification for reproducible builds
+    # (https://reproducible-builds.org/specs/source-date-epoch).
+    # Require opt-in with NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD=1 for now, in case
+    # the blocklist is incomplete.
+    if [ -n "$SOURCE_DATE_EPOCH" ] && [ "$NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD" = 1 ] && [ "$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" = 1 ]; then
+        export LD_LIBRARY_PATH="${
+          lib.makeLibraryPath [
+            libfaketime
+            pkgsi686Linux.libfaketime
+          ]
+        }''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        export LD_PRELOAD=libfaketime.so.1''${LD_PRELOAD:+:$LD_PRELOAD}
+        export FAKETIME_FMT="%s"
+        export FAKETIME="$SOURCE_DATE_EPOCH"
+    fi
+  ''
+  + extraProfile;
 
   # Run the wrappers directly, instead of going via bash.
   runScript = "";

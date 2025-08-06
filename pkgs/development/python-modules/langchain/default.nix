@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -38,18 +37,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.25";
+  version = "0.3.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-B2Kg8kC6Qlu89hZVMhgqPU32BwFvgAti0IIYUdosT1A=";
+    hash = "sha256-bqzJ0017Td65rhDCr2wfx+SCaJzPZTFzQpzy3RlaRj4=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -77,7 +79,8 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optional (pythonOlder "3.11") async-timeout;
+  ]
+  ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];
@@ -99,10 +102,13 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    "--only-core"
+  ];
+
+  enabledTestPaths = [
     # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
-    "--only-core"
   ];
 
   disabledTests = [
@@ -122,6 +128,9 @@ buildPythonPackage rec {
     "test_serializable_mapping"
     "test_person"
     "test_aliases_hidden"
+    # AssertionError: (failed string match due to terminal control chars in output)
+    # https://github.com/langchain-ai/langchain/issues/32150
+    "test_filecallback"
   ];
 
   disabledTestPaths = [
@@ -141,17 +150,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain==";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

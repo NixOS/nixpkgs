@@ -11,6 +11,7 @@ buildPythonPackage rec {
   version = "0.708.0";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
   src = fetchPypi {
     inherit version;
     pname = "nominal_api_protos";

@@ -81,41 +81,40 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      bzip2
-      openssl
-      pythonForPypy
-      libffi
-      ncurses
-      expat
-      sqlite
-      tk
-      tcl
-      libX11
-      gdbm
-      db
-    ]
-    ++ lib.optionals isPy3k [
-      xz
-    ]
-    ++ lib.optionals (stdenv ? cc && stdenv.cc.libc != null) [
-      stdenv.cc.libc
-    ]
-    ++ lib.optionals zlibSupport [
-      zlib
-    ]
-    ++
-      lib.optionals
-        (lib.any (l: l == optimizationLevel) [
-          "0"
-          "1"
-          "2"
-          "3"
-        ])
-        [
-          boehmgc
-        ];
+  buildInputs = [
+    bzip2
+    openssl
+    pythonForPypy
+    libffi
+    ncurses
+    expat
+    sqlite
+    tk
+    tcl
+    libX11
+    gdbm
+    db
+  ]
+  ++ lib.optionals isPy3k [
+    xz
+  ]
+  ++ lib.optionals (stdenv ? cc && stdenv.cc.libc != null) [
+    stdenv.cc.libc
+  ]
+  ++ lib.optionals zlibSupport [
+    zlib
+  ]
+  ++
+    lib.optionals
+      (lib.any (l: l == optimizationLevel) [
+        "0"
+        "1"
+        "2"
+        "3"
+      ])
+      [
+        boehmgc
+      ];
 
   # Remove bootstrap python from closure
   dontPatchShebangs = true;
@@ -209,117 +208,116 @@ stdenv.mkDerivation rec {
   # TODO: Investigate why so many tests are failing.
   checkPhase =
     let
-      disabledTests =
-        [
-          # disable shutils because it assumes gid 0 exists
-          "test_shutil"
-          # disable socket because it has two actual network tests that fail
-          "test_socket"
-        ]
-        ++ lib.optionals (!isPy3k) [
-          # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
-          "test_urllib2net"
-          "test_urllibnet"
-          "test_urllib2_localnet"
-          # test_subclass fails with "internal error"
-          # test_load_default_certs_env fails for unknown reason
-          "test_ssl"
-        ]
-        ++ lib.optionals isPy3k [
-          # disable asyncio due to https://github.com/NixOS/nix/issues/1238
-          "test_asyncio"
-          # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
-          "test_os"
-          # disable pathlib due to https://bitbucket.org/pypy/pypy/pull-requests/594
-          "test_pathlib"
-          # disable tarfile because it assumes gid 0 exists
-          "test_tarfile"
-          # disable __all__ because of spurious imp/importlib warning and
-          # warning-to-error test policy
-          "test___all__"
-          # fail for multiple reasons, TODO: investigate
-          "test__opcode"
-          "test_ast"
-          "test_audit"
-          "test_builtin"
-          "test_c_locale_coercion"
-          "test_call"
-          "test_class"
-          "test_cmd_line"
-          "test_cmd_line_script"
-          "test_code"
-          "test_code_module"
-          "test_codeop"
-          "test_compile"
-          "test_coroutines"
-          "test_cprofile"
-          "test_ctypes"
-          "test_embed"
-          "test_exceptions"
-          "test_extcall"
-          "test_frame"
-          "test_generators"
-          "test_grammar"
-          "test_idle"
-          "test_iter"
-          "test_itertools"
-          "test_list"
-          "test_marshal"
-          "test_memoryio"
-          "test_memoryview"
-          "test_metaclass"
-          "test_mmap"
-          "test_multibytecodec"
-          "test_opcache"
-          "test_pdb"
-          "test_peepholer"
-          "test_positional_only_arg"
-          "test_print"
-          "test_property"
-          "test_pyclbr"
-          "test_range"
-          "test_re"
-          "test_readline"
-          "test_regrtest"
-          "test_repl"
-          "test_rlcompleter"
-          "test_signal"
-          "test_sort"
-          "test_source_encoding"
-          "test_ssl"
-          "test_string_literals"
-          "test_structseq"
-          "test_subprocess"
-          "test_super"
-          "test_support"
-          "test_syntax"
-          "test_sys"
-          "test_sys_settrace"
-          "test_tcl"
-          "test_termios"
-          "test_threading"
-          "test_trace"
-          "test_tty"
-          "test_unpack_ex"
-          "test_utf8_mode"
-          "test_weakref"
-          "test_capi"
-          "test_concurrent_futures"
-          "test_dataclasses"
-          "test_doctest"
-          "test_future_stmt"
-          "test_importlib"
-          "test_inspect"
-          "test_pydoc"
-          "test_warnings"
-        ]
-        ++ lib.optionals isPy310 [
-          "test_contextlib_async"
-          "test_future"
-          "test_lzma"
-          "test_module"
-          "test_typing"
-        ];
+      disabledTests = [
+        # disable shutils because it assumes gid 0 exists
+        "test_shutil"
+        # disable socket because it has two actual network tests that fail
+        "test_socket"
+      ]
+      ++ lib.optionals (!isPy3k) [
+        # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
+        "test_urllib2net"
+        "test_urllibnet"
+        "test_urllib2_localnet"
+        # test_subclass fails with "internal error"
+        # test_load_default_certs_env fails for unknown reason
+        "test_ssl"
+      ]
+      ++ lib.optionals isPy3k [
+        # disable asyncio due to https://github.com/NixOS/nix/issues/1238
+        "test_asyncio"
+        # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
+        "test_os"
+        # disable pathlib due to https://bitbucket.org/pypy/pypy/pull-requests/594
+        "test_pathlib"
+        # disable tarfile because it assumes gid 0 exists
+        "test_tarfile"
+        # disable __all__ because of spurious imp/importlib warning and
+        # warning-to-error test policy
+        "test___all__"
+        # fail for multiple reasons, TODO: investigate
+        "test__opcode"
+        "test_ast"
+        "test_audit"
+        "test_builtin"
+        "test_c_locale_coercion"
+        "test_call"
+        "test_class"
+        "test_cmd_line"
+        "test_cmd_line_script"
+        "test_code"
+        "test_code_module"
+        "test_codeop"
+        "test_compile"
+        "test_coroutines"
+        "test_cprofile"
+        "test_ctypes"
+        "test_embed"
+        "test_exceptions"
+        "test_extcall"
+        "test_frame"
+        "test_generators"
+        "test_grammar"
+        "test_idle"
+        "test_iter"
+        "test_itertools"
+        "test_list"
+        "test_marshal"
+        "test_memoryio"
+        "test_memoryview"
+        "test_metaclass"
+        "test_mmap"
+        "test_multibytecodec"
+        "test_opcache"
+        "test_pdb"
+        "test_peepholer"
+        "test_positional_only_arg"
+        "test_print"
+        "test_property"
+        "test_pyclbr"
+        "test_range"
+        "test_re"
+        "test_readline"
+        "test_regrtest"
+        "test_repl"
+        "test_rlcompleter"
+        "test_signal"
+        "test_sort"
+        "test_source_encoding"
+        "test_ssl"
+        "test_string_literals"
+        "test_structseq"
+        "test_subprocess"
+        "test_super"
+        "test_support"
+        "test_syntax"
+        "test_sys"
+        "test_sys_settrace"
+        "test_tcl"
+        "test_termios"
+        "test_threading"
+        "test_trace"
+        "test_tty"
+        "test_unpack_ex"
+        "test_utf8_mode"
+        "test_weakref"
+        "test_capi"
+        "test_concurrent_futures"
+        "test_dataclasses"
+        "test_doctest"
+        "test_future_stmt"
+        "test_importlib"
+        "test_inspect"
+        "test_pydoc"
+        "test_warnings"
+      ]
+      ++ lib.optionals isPy310 [
+        "test_contextlib_async"
+        "test_future"
+        "test_lzma"
+        "test_module"
+        "test_typing"
+      ];
     in
     ''
       export TERMINFO="${ncurses.out}/share/terminfo/";
@@ -333,18 +331,17 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase =
     let
-      modules =
-        [
-          "curses"
-          "sqlite3"
-        ]
-        ++ lib.optionals (!isPy3k) [
-          "Tkinter"
-        ]
-        ++ lib.optionals isPy3k [
-          "tkinter"
-          "lzma"
-        ];
+      modules = [
+        "curses"
+        "sqlite3"
+      ]
+      ++ lib.optionals (!isPy3k) [
+        "Tkinter"
+      ]
+      ++ lib.optionals isPy3k [
+        "tkinter"
+        "lzma"
+      ];
       imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
     in
     ''

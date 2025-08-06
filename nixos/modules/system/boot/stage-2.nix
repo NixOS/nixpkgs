@@ -17,7 +17,8 @@ let
     replacements = {
       shell = "${pkgs.bash}/bin/bash";
       systemConfig = null; # replaced in ../activation/top-level.nix
-      inherit (config.boot) readOnlyNixStore systemdExecutable;
+      inherit (config.boot) systemdExecutable;
+      nixStoreMountOpts = lib.concatStringsSep " " (map lib.escapeShellArg config.boot.nixStoreMountOpts);
       inherit (config.system.nixos) distroName;
       inherit useHostResolvConf;
       inherit (config.system.build) earlyMountScript;
@@ -38,6 +39,16 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "boot"
+        "readOnlyNixStore"
+      ]
+      "Please use the `boot.nixStoreMountOpts' option to define mount options for the Nix store, including 'ro'"
+    )
+  ];
+
   options = {
 
     boot = {
@@ -51,14 +62,20 @@ in
         '';
       };
 
-      readOnlyNixStore = mkOption {
-        type = types.bool;
-        default = true;
+      nixStoreMountOpts = mkOption {
+        type = types.listOf types.nonEmptyStr;
+        default = [
+          "ro"
+          "nodev"
+          "nosuid"
+        ];
         description = ''
-          If set, NixOS will enforce the immutability of the Nix store
-          by making {file}`/nix/store` a read-only bind
-          mount.  Nix will automatically make the store writable when
-          needed.
+          Defines the mount options used on a bind mount for the {file}`/nix/store`.
+          This affects the whole system except the nix store daemon, which will undo the bind mount.
+
+          `ro` enforces immutability of the Nix store.
+          The store daemon should already not put device mappers or suid binaries in the store,
+          meaning `nosuid` and `nodev` enforce what should already be the case.
         '';
       };
 
@@ -85,6 +102,5 @@ in
   config = {
 
     system.build.bootStage2 = bootStage2;
-
   };
 }

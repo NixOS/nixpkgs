@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5oNhqiQYkzaNZ1vK3hV5vWQCNr6D9VPNoqkS8ZOLf/4=";
 
   env.YAZI_GEN_COMPLETIONS = true;

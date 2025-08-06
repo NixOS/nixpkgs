@@ -66,20 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-introspection-test.patch
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      makeWrapper
-      which # for locale detection
-      libxml2 # for xml-stripblanks
-      dbus # for dbus-run-session
-      gobject-introspection
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+    which # for locale detection
+    libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     cairo
@@ -90,31 +89,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ] ++ testDeps;
+  ]
+  ++ testDeps;
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags =
-    [
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
-      "-Dprofiler=disabled"
-    ];
+  mesonFlags = [
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
+    "-Dprofiler=disabled"
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postPatch =
-    ''
-      patchShebangs build/choose-tests-locale.sh
-      substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      substituteInPlace installed-tests/js/meson.build \
-        --replace "'Encoding'," "#'Encoding',"
-    '';
+  postPatch = ''
+    patchShebangs build/choose-tests-locale.sh
+    substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace installed-tests/js/meson.build \
+      --replace "'Encoding'," "#'Encoding',"
+  '';
 
   preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute

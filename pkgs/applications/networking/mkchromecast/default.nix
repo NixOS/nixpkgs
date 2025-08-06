@@ -28,12 +28,14 @@ let
     nodejs
     ffmpeg
     youtube-dl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
   version = "2022-10-31";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
@@ -77,16 +79,15 @@ python3Packages.buildPythonApplication {
     "--prefix PATH : ${lib.makeBinPath packages}"
   ];
 
-  postInstall =
-    ''
-      substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
-        --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install -Dm 755 -t $out/bin bin/audiodevice
-      substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
-        --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
-    '';
+  postInstall = ''
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
+      --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm 755 -t $out/bin bin/audiodevice
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
+      --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
+  '';
 
   meta = with lib; {
     homepage = "https://mkchromecast.com/";

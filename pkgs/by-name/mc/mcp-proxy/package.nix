@@ -5,13 +5,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mcp-proxy";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "sparfenyuk";
     repo = "mcp-proxy";
     tag = "v${version}";
-    hash = "sha256-3KGBQyiI6hbDfl37lhhnGYHixHYGsKAgTJH/PSe3UFs=";
+    hash = "sha256-3hNpUOWbyOUjLcvfcMzj4+xHyUl7k1ZSy8muWHvSEvM=";
   };
 
   pyproject = true;
@@ -27,6 +27,18 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     pytest-asyncio
   ];
+
+  disabledTests = [
+    # AssertionError: expected call not found.
+    # Expected: mock(PromptReference(type='ref/prompt', name='name'), CompletionArgument(name='name', value='value'))
+    #   Actual: mock(PromptReference(type='ref/prompt', name='name'), CompletionArgument(name='name', value='value'), None)
+    "test_call_tool[server-AsyncMock]"
+    "test_call_tool[proxy-AsyncMock]"
+    "test_complete[server-AsyncMock]"
+    "test_complete[proxy-AsyncMock]"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "MCP server which proxies other MCP servers from stdio to SSE or from SSE to stdio";

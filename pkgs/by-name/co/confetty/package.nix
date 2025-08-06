@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "confetty";
-  version = "unstable-2022-11-05";
+  version = "0-unstable-2022-11-05";
 
   src = fetchFromGitHub {
     owner = "maaslalani";

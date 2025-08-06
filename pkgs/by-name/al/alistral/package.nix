@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.10";
+  version = "0.5.13";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O19Btz6jLJJnCbAusRHKfUa6II8mofzifW+cbPOaHVI=";
+    hash = "sha256-z9YuoppOYghsiYhoa6nfbP+VMrdN5oY55+pS6p2pBX0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-zQvPgigUQW9dpyLe7fgW8i9I4nm38bQKDLwezeSYx9Q=";
+  cargoHash = "sha256-TyxeuDMmoRvIVaapA/KstFnARPpPv9h19Bg3/XnwQWs=";
 
   nativeBuildInputs = [
     pkg-config

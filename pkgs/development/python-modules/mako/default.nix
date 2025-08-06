@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.9";
+  version = "1.3.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "mako";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-BC1PSmMG9KzD+w8tDUW9WXJS25HNsELgwDpkTHYO9j0=";
+    hash = "sha256-lxGlYyKbrDpr2LHcsqTow+s2l8+g+63M5j8xJt++tGo=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315

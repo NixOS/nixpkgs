@@ -12,7 +12,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_5_1;
 
       django-extensions = prev.django-extensions.overridePythonAttrs {
         # Compat issues with Django 5.1
@@ -81,8 +81,9 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "bleach"
+    "beautifulsoup4"
     "celery"
-    "css-inline"
+    "css_inline"
     "cssutils"
     "defusedxml"
     "django-compressor"

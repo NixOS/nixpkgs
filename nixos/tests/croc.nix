@@ -13,6 +13,7 @@ in
     maintainers = [
       equirosa
       SuperSandro2000
+      ryan4yin
     ];
   };
 

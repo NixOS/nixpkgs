@@ -31,17 +31,16 @@ stdenv.mkDerivation rec {
       --replace "-DGLEW_STATIC" "-DGLEW_STATIC -Wno-narrowing"
   '';
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_CPU_DEMOS=OFF"
-      "-DINSTALL_EXTRA_LIBS=ON"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DBUILD_BULLET2_DEMOS=OFF"
-      "-DBUILD_UNIT_TESTS=OFF"
-      "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_CPU_DEMOS=OFF"
+    "-DINSTALL_EXTRA_LIBS=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DBUILD_BULLET2_DEMOS=OFF"
+    "-DBUILD_UNIT_TESTS=OFF"
+    "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 

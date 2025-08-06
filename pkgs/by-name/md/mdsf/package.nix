@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-KHTWE3ENRc/VHrgwAag6DsnEU3c8Nqw15jR5jWlNrk4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kgqRwYjDc/eV9wv1G6aAhfrGpoYDPCFfqaTm+T2p7uw=";
 
   checkFlags = [

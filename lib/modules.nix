@@ -254,10 +254,11 @@ let
                   inherit
                     lib
                     options
-                    config
                     specialArgs
                     ;
                   _class = class;
+                  _prefix = prefix;
+                  config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. If you are trying to achieve a conditional import behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
                 }
                 // specialArgs
               );
@@ -388,6 +389,7 @@ let
                 value = m;
                 _type = m._type;
                 expectedClass = class;
+                prefix = args._prefix;
               }
             )
         else if isList m then
@@ -649,7 +651,13 @@ let
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
-        name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
+        name: _:
+        addErrorContext (context name) (
+          args.${name} or (addErrorContext
+            "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
+            config._module.args.${name}
+          )
+        )
       ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
@@ -884,19 +892,18 @@ let
       path = showOption loc;
       depth = length loc;
 
-      paragraphs =
-        [
-          "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
-        ]
-        ++ optional (actualTag == "option-type") ''
-          When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
-              ${comment}
-              ${name} = lib.mkOption {
-                description = ...;
-                type = <the type you wrote for ${name}>;
-                ...
-              };
-        '';
+      paragraphs = [
+        "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
+      ]
+      ++ optional (actualTag == "option-type") ''
+        When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
+            ${comment}
+            ${name} = lib.mkOption {
+              description = ...;
+              type = <the type you wrote for ${name}>;
+              ...
+            };
+      '';
 
       # Ideally we'd know the exact syntax they used, but short of that,
       # we can only reliably repeat the last. However, we repeat the
@@ -1625,25 +1632,24 @@ let
         ) from
       );
 
-      config =
-        {
-          warnings = filter (x: x != "") (
-            map (
-              f:
-              let
-                val = getAttrFromPath f config;
-                opt = getAttrFromPath f options;
-              in
-              optionalString (val != "_mkMergedOptionModule")
-                "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
-            ) from
-          );
-        }
-        // setAttrByPath to (
-          mkMerge (
-            optional (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from) (mergeFn config)
-          )
+      config = {
+        warnings = filter (x: x != "") (
+          map (
+            f:
+            let
+              val = getAttrFromPath f config;
+              opt = getAttrFromPath f options;
+            in
+            optionalString (val != "_mkMergedOptionModule")
+              "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
+          ) from
         );
+      }
+      // setAttrByPath to (
+        mkMerge (
+          optional (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from) (mergeFn config)
+        )
+      );
     };
 
   /**
@@ -1976,6 +1982,10 @@ let
           file != null && file != unknownModule
         ) ", while trying to load a module into ${toString file}";
 
+      into_prefix_maybe =
+        prefix:
+        optionalString (prefix != [ ]) ", while trying to load a module into ${code (showOption prefix)}";
+
       /**
         Format text with one line break between each list item.
       */
@@ -2023,12 +2033,13 @@ let
           value,
           _type,
           expectedClass ? null,
+          prefix,
         }:
         paragraphs (
           [
             ''
-              Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}.
-              A module is typically loaded by adding it the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
+              Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}${into_prefix_maybe prefix}.
+              A module is typically loaded by adding it to the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
               Please make sure that each of the list items is a module, and not a different kind of value.
             ''
           ]
@@ -2057,7 +2068,7 @@ let
                 '')
               ]
               ++ optionalMatch {
-                # We'll no more than 5 custom suggestions here.
+                # We'll add no more than 5 custom suggestions here.
                 # Please switch to `.modules.${class}` in your Module System application.
                 "nixos" = trim ''
                   or

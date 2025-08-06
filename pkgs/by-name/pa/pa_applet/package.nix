@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "pa-applet";
-  version = "unstable-2012-04-11";
+  version = "0-unstable-2012-04-11";
 
   src = fetchFromGitHub {
     owner = "fernandotcl";

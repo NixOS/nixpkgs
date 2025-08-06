@@ -46,7 +46,8 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.requests;
+  ]
+  ++ optional-dependencies.requests;
 
   preCheck = ''
     # prevent shadowing imports

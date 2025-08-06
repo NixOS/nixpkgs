@@ -14,34 +14,34 @@
   nixosTests,
   xcbuild,
   faketty,
+  nodejs,
 }:
 
 let
   # Grafana seems to just set it to the latest version available
   # nowadays.
-  # NOTE: sometimes, this is a no-op (i.e. `--replace-fail "X" "X"`).
-  # This is because Grafana raises the Go version above the patch-level we have
-  # on master if a security fix landed in Go (and our go may go through staging first).
+  # NOTE: I(Ma27) leave this in, even if it's technically dead code because
+  # it doesn't make sense to pull this out of the history on every other release.
   #
-  # I(Ma27) decided to leave the code a no-op if this is not the case because
-  # pulling it out of the Git history every few months and checking which files
-  # we need to update now is slightly annoying.
+  # Please make sure to always set a Go version to `.0`: it may happen that
+  # stable is on an older patch-release of Go and then the build would fail
+  # after a backport.
   patchGoVersion = ''
     find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.3" "go 1.24.2"
+        --replace-fail "go 1.24.4" "go 1.24.0"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.3" "go 1.24.2"
+        --replace-fail "go 1.24.4" "go 1.24.0"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.3" "GO_VERSION = 1.24.2"
+      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.0"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.1+security-01";
+  version = "12.1.0";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -53,12 +53,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-cYEWNXuIrTrtXR3XHqizDJ17QyBYkaccIThSorWO5GA=";
+    hash = "sha256-yraCuPLe68ryCgFzOZPL1H/JYynEvxijjgxMmQvcPZE=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
+    PUPPETEER_SKIP_DOWNLOAD = 1;
 
     # The build OOMs on memory constrained aarch64 without this
     NODE_OPTIONS = "--max_old_space_size=4096";
@@ -67,14 +68,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-Vjr/jyXqHoM/3o49IDJ2aT1s1tMkP90H+2E+yUiviF4=";
+    hash = "sha256-+0L68wHR2nCp1g1PqyLIYatc+CIbvLqVUDa7CoyV/fo=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-Vlao6eNEHtl1+6vAAjDOxINuGxSwAqdi6Hc8oVniTO8=";
+  vendorHash = "sha256-a31jJN1NIHihFwbtBuLzV4lRKYWv8GtIHh6EwVMWdbM=";
 
   proxyVendor = true;
 
@@ -86,9 +87,11 @@ buildGoModule rec {
     # required to run old node-gyp
     (python3.withPackages (ps: [ ps.distutils ]))
     faketty
+    nodejs
     yarn-berry_4
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   # We have to remove this setupHook, otherwise it also runs in the `goModules`
   # derivation and fails because `offlineCache` is missing there.
@@ -161,6 +164,7 @@ buildGoModule rec {
       globin
       ma27
       Frostman
+      ryan4yin
     ];
     platforms = [
       "x86_64-linux"

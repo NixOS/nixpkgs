@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tenant-schemas-celery";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maciej-gol";
     repo = "tenant-schemas-celery";
     tag = version;
-    hash = "sha256-rGLrP8rE9SACMDVpNeBU85U/Sb2lNhsgEgHJhAsdKNM=";
+    hash = "sha256-HJBSUS75Zk/b1i4QTaAOFO34Pstg5tEpeNBiTADpN+I=";
   };
 
   build-system = [ setuptools ];

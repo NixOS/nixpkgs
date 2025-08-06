@@ -28,21 +28,21 @@ stdenv.mkDerivation rec {
       --replace "include(qt6.cmake)" " "
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      libsForQt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals buildDocs [
-      doxygen
-      libsForQt5.qttools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    libsForQt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals buildDocs [
+    doxygen
+    libsForQt5.qttools
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DPROJECT_VERSION=${version}"
-  ] ++ lib.optionals (!buildDocs) [ "-DBUILD_DOCS=OFF" ];
+  ]
+  ++ lib.optionals (!buildDocs) [ "-DBUILD_DOCS=OFF" ];
 
   propagatedBuildInputs = [ glibmm ];
 

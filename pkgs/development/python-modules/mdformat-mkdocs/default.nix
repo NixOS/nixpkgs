@@ -3,18 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  mdformat,
+  mdformat-beautysh,
+  mdformat-footnote,
+  mdformat-frontmatter,
   mdformat-gfm,
+  mdformat-simple-breaks,
+  mdformat-tables,
+  mdformat,
   mdit-py-plugins,
   more-itertools,
-  pythonOlder,
   pytest-snapshot,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "4.1.2";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +28,7 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${version}";
-    hash = "sha256-+2w7UrOPSCUDc6jnLAW0/njq+aJ4y+H8n7gshxLj8/Q=";
+    hash = "sha256-SZcXYSmGvhXNP4keQPfnhVg9icHJnH2IfTXaKaJ+qLU=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -34,6 +39,20 @@ buildPythonPackage rec {
     mdit-py-plugins
     more-itertools
   ];
+
+  optional-dependencies = {
+    recommended = [
+      mdformat-beautysh
+      # mdformat-config
+      mdformat-footnote
+      mdformat-frontmatter
+      # mdformat-ruff
+      mdformat-simple-breaks
+      mdformat-tables
+      # mdformat-web
+      # mdformat-wikilink
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-snapshot

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "delayarchitect";
-  version = "unstable-2022-01-16";
+  version = "0-unstable-2022-01-16";
 
   src = fetchFromGitHub {
     owner = "jpcima";

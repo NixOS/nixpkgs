@@ -54,13 +54,12 @@ let
       xrandr
     ])
   );
-  programs =
-    [
-      ps
-      dnsutils
-    ] # Core programs
-    ++ recommendedSystemPrograms
-    ++ recommendedDisplayInformationPrograms;
+  programs = [
+    ps
+    dnsutils
+  ] # Core programs
+  ++ recommendedSystemPrograms
+  ++ recommendedDisplayInformationPrograms;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";

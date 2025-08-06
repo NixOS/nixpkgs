@@ -8,17 +8,13 @@ supporting features.
 Use the `android-studio-full` attribute for a very complete Android SDK, including system images:
 
 ```nix
-{
-  buildInputs = [ android-studio-full ];
-}
+{ buildInputs = [ android-studio-full ]; }
 ```
 
 This is identical to:
 
 ```nix
-{
-  buildInputs = [ androidStudioPackages.stable.full ];
-}
+{ buildInputs = [ androidStudioPackages.stable.full ]; }
 ```
 
 Alternatively, you can pass composeAndroidPackages to the `withSdk` passthru:
@@ -26,11 +22,7 @@ Alternatively, you can pass composeAndroidPackages to the `withSdk` passthru:
 ```nix
 {
   buildInputs = [
-    (android-studio.withSdk
-      (androidenv.composeAndroidPackages {
-        includeNDK = true;
-      }).androidsdk
-    )
+    (android-studio.withSdk (androidenv.composeAndroidPackages { includeNDK = true; }).androidsdk)
   ];
 }
 ```
@@ -58,9 +50,7 @@ let
       "arm64-v8a"
     ];
     includeNDK = true;
-    includeExtras = [
-      "extras;google;auto"
-    ];
+    includeExtras = [ "extras;google;auto" ];
   };
 in
 androidComposition.androidsdk

@@ -14,6 +14,7 @@
   gtest,
   miniz,
   yaml-cpp,
+  udevCheckHook,
   # List of targets to build simulators for
   targetsToBuild ? import ./targets.nix,
 }:
@@ -39,14 +40,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edgetx";
-  version = "2.11.0-rc3";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = "edgetx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ipiGkc+R7/itmnRRrlrc4iXn+fLWm4OKc227NfevFhI=";
+    hash = "sha256-F3T1lX0FSSUIQxSlqLQHj7JrfF+20Ndv63zDA0sRzFQ=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
     libsForQt5.qttools
     libsForQt5.wrapQtAppsHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -84,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|'
     patchShebangs companion/util radio/util
   '';
+
+  doInstallCheck = true;
 
   cmakeFlags = [
     # Unvendoring these libraries is infeasible. At least lets reuse the same sources.

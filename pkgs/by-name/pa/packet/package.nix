@@ -20,21 +20,22 @@
   blueprint-compiler,
   desktop-file-utils,
   appstream,
+  python3Packages,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "packet";
-  version = "0.4.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "nozwock";
     repo = "packet";
     tag = finalAttrs.version;
-    hash = "sha256-MnDXwgzSnz8bLEAZE4PORKKIP8Ao5ZiImRqRzlQzYU8=";
+    hash = "sha256-zR2WZER49xsxaiZbFGFOukHE3w0odxVi9WJTI4FSWJ0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-LlqJoxAWHAQ47VlYB/sOtk/UkNa+E5CQS/3FQnAYFsI=";
+    hash = "sha256-ODrM8oGQpi+DpG4YQYibtVHbicuHOjZAlZ1wW2Gulec=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libadwaita
     pango
+    python3Packages.wrapPython
   ];
+
+  postFixup = ''
+    buildPythonPath ${python3Packages.dbus-python}
+    patchPythonScript $out/share/packet/plugins/packet_nautilus.py
+    # install the nautilus extension in the expected location
+    mkdir -p $out/share/nautilus-python
+    ln -s $out/share/packet/plugins $out/share/nautilus-python/extensions
+  '';
 
   meta = {
     description = "Quick Share client for Linux";

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flac,
   fluidsynth,
-  libmodplug,
   libogg,
   libvorbis,
   mpg123,
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     flac
     fluidsynth
-    libmodplug
     libogg
     libvorbis
     mpg123

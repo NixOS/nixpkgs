@@ -54,15 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
       libusb-compat-0_1
       zlib
     ];
-  nativeBuildInputs =
-    [
-      bison
-      flex
-    ]
-    ++ (with qt6; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    bison
+    flex
+  ]
+  ++ (with qt6; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
   patches = [
     # allow building with bison 3.7

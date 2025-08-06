@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0.20250519";
+  version = "2.3.0.20250717";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "87e2aa634f2c0d9f3d9429f7a3cf273f98db0058";
-    sha256 = "sha256-/9YnaOqvYmFme4/mFq8Sx78FMDyGwnErEW45qPVELjU=";
+    rev = "db98b59ba7abfcd1dc9b43ea4b9ad1052aba775e";
+    sha256 = "sha256-vBA5TWyvtaaBZV4RmfAAA7F34fXNkROS0rbZRpEJgrc=";
   };
 
   outputs = [
@@ -39,18 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      makeWrapper
-      ninja
-    ]
-    ++ lib.optionals withMruby [
-      bison
-      ruby
-    ]
-    ++ lib.optional withUring liburing;
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+    ninja
+  ]
+  ++ lib.optionals withMruby [
+    bison
+    ruby
+  ]
+  ++ lib.optional withUring liburing;
 
   buildInputs = [
     brotli

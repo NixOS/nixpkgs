@@ -46,7 +46,8 @@ buildPythonPackage rec {
   dependencies = [
     markdown-it-py
     pygments
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   optional-dependencies = {
     jupyter = [ ipywidgets ];

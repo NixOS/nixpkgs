@@ -75,16 +75,15 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_connect_extensions"
-      "test_connect_prql"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      # Test incorrectly tries to load a dylib/so compiled for x86_64
-      "test_load_extension"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # Test incorrectly tries to load a dylib/so compiled for x86_64
+    "test_load_extension"
+  ];
 
   disabledTestPaths = [
     # Tests requires more setup

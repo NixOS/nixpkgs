@@ -25,7 +25,7 @@
   pytestCheckHook,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -72,11 +72,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-tests==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-tests==";
   };
 
   meta = {

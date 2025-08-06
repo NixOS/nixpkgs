@@ -34,6 +34,8 @@ localPython.pkgs.buildPythonApplication rec {
     hash = "sha256-gORrscY+Bgmz2FrKdSBd56jP0yuEklytMeA3wr8tTZU=";
   };
 
+  pythonRelaxDeps = [ "aws-encryption-sdk" ];
+
   build-system = with localPython.pkgs; [
     setuptools
   ];
@@ -60,9 +62,8 @@ localPython.pkgs.buildPythonApplication rec {
   ];
 
   # Upstream did not adapt to pytest 8 yet.
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn8Warning"
   ];
 
   passthru = {

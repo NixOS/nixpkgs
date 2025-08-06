@@ -39,21 +39,20 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      curl
-      libnotify
-      libappindicator-gtk3
-      gtk3
-      (lib.getLib dconf)
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ])
-    ++ (lib.optional aria2Support aria2);
+  buildInputs = [
+    openssl
+    curl
+    libnotify
+    libappindicator-gtk3
+    gtk3
+    (lib.getLib dconf)
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ])
+  ++ (lib.optional aria2Support aria2);
 
   enableParallelBuilding = true;
 

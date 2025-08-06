@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.8.1";
+  version = "2.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,27 +30,27 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-KUz/OaFZwJPVNCZ1j73SrpWknQmrvwfr5MLVYxOojZc=";
+    hash = "sha256-VXdvRJvmozrDsUu1J5Jz9I2733Cwe8OBbafc1fCEuGw=";
   };
 
   build-system = [ pdm-backend ];
 
-  dependencies =
-    [
-      annotated-types
-      packaging
-      logfury
-      requests
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  dependencies = [
+    annotated-types
+    packaging
+    logfury
+    requests
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-lazy-fixtures
     pytest-mock
     pytestCheckHook
     tqdm
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth

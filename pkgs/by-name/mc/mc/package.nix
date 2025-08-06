@@ -34,33 +34,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      unzip
-    ]
-    # The preFixup hook rewrites the binary, which invaliates the code
-    # signature. Add the fixup hook to sign the output.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    unzip
+  ]
+  # The preFixup hook rewrites the binary, which invaliates the code
+  # signature. Add the fixup hook to sign the output.
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
+  ];
 
-  buildInputs =
-    [
-      file
-      gettext
-      glib
-      libICE
-      libssh2
-      openssl
-      slang
-      zip
-    ]
-    ++ lib.optionals x11Support [ libX11 ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      e2fsprogs
-      gpm
-    ];
+  buildInputs = [
+    file
+    gettext
+    glib
+    libICE
+    libssh2
+    openssl
+    slang
+    zip
+  ]
+  ++ lib.optionals x11Support [ libX11 ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    e2fsprogs
+    gpm
+  ];
 
   enableParallelBuilding = true;
 

@@ -94,7 +94,7 @@ class Redirects:
           - The first element of an identifier's redirects list must denote its current location.
         """
         xref_targets = {}
-        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-")
+        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-", "service-opt-", "systemd-service-opt")
         for id, target in initial_xref_targets.items():
             # filter out automatically generated identifiers from module options and library documentation
             if id.startswith(ignored_identifier_patterns):

@@ -21,12 +21,10 @@ let
     fallback_local_ip=${boolToStr cfg.fallbackLocalIP}
   '';
 
-  configFileLogin =
-    configFilePam
-    + ''
-      motd=${boolToStr cfg.motd}
-      accept_env_factor=${boolToStr cfg.acceptEnvFactor}
-    '';
+  configFileLogin = configFilePam + ''
+    motd=${boolToStr cfg.motd}
+    accept_env_factor=${boolToStr cfg.acceptEnvFactor}
+  '';
 in
 {
   imports = [

@@ -32,6 +32,12 @@ let
 
         ancient = callPackage ../development/ocaml-modules/ancient { };
 
+        amqp-client = callPackage ../development/ocaml-modules/amqp-client { };
+
+        amqp-client-async = callPackage ../development/ocaml-modules/amqp-client/async.nix { };
+
+        amqp-client-lwt = callPackage ../development/ocaml-modules/amqp-client/lwt.nix { };
+
         angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
         angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -45,6 +51,8 @@ let
         ao = callPackage ../development/ocaml-modules/ao { };
 
         apron = callPackage ../development/ocaml-modules/apron { };
+
+        argon2 = callPackage ../development/ocaml-modules/argon2 { };
 
         arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
 
@@ -139,6 +147,8 @@ let
 
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
+        bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
+
         bytestring = callPackage ../development/ocaml-modules/bytestring { };
 
         bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -154,6 +164,8 @@ let
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
         callipyge = callPackage ../development/ocaml-modules/callipyge { };
+
+        camlgpc = callPackage ../development/ocaml-modules/camlgpc { };
 
         camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -195,6 +207,8 @@ let
         caqti-driver-sqlite3 = callPackage ../development/ocaml-modules/caqti/driver-sqlite3.nix { };
 
         caqti-dynload = callPackage ../development/ocaml-modules/caqti/dynload.nix { };
+
+        caqti-eio = callPackage ../development/ocaml-modules/caqti/eio.nix { };
 
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
 
@@ -311,10 +325,6 @@ let
         ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
         ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
-
-        ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
-          inherit (pkgs) nodejs;
-        };
 
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
@@ -749,6 +759,8 @@ let
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+        hc = callPackage ../development/ocaml-modules/hc { };
+
         hex = callPackage ../development/ocaml-modules/hex { };
 
         hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -914,80 +926,6 @@ let
             import ../development/ocaml-modules/janestreet {
             };
 
-        janeStreet_0_15 =
-          (lib.makeScope self.newScope (
-            self': with self'; {
-
-              # ocamlPackages that janestreet v0.15 packages depend on.
-              jsDeps =
-                let
-                  uri-sexp = self.uri-sexp.override { inherit (self') ppx_sexp_conv sexplib0; };
-                  cohttp = self.cohttp.override {
-                    inherit (self') ppx_sexp_conv;
-                    inherit uri-sexp;
-                  };
-                  ipaddr-sexp = self.ipaddr-sexp.override { inherit (self') ppx_sexp_conv; };
-                  conduit = self.conduit.override {
-                    inherit (self') ppx_sexp_conv sexplib;
-                    inherit ipaddr-sexp;
-                  };
-                  conduit-async = self.conduit-async.override {
-                    inherit (self')
-                      async
-                      ppx_sexp_conv
-                      ppx_here
-                      core
-                      sexplib
-                      async_ssl
-                      ;
-                    inherit conduit ipaddr-sexp;
-                  };
-                in
-                {
-                  inherit (self)
-                    dune-configurator
-                    alcotest
-                    re
-                    num
-                    octavius
-                    uutf
-                    ounit
-                    ctypes
-                    ctypes-foreign
-                    ;
-                  ppxlib = self.ppxlib.override { inherit (self') stdio; };
-                  cohttp-async = self.cohttp-async.override {
-                    inherit (self')
-                      ppx_sexp_conv
-                      base
-                      async
-                      async_kernel
-                      async_unix
-                      core_unix
-                      sexplib0
-                      core
-                      ;
-                    inherit uri-sexp cohttp conduit-async;
-                  };
-                  janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix { };
-                };
-
-              janeStreet = import ../development/ocaml-modules/janestreet/0.15.nix {
-                self = self' // jsDeps;
-                inherit ocaml;
-                inherit (pkgs)
-                  bash
-                  fetchpatch
-                  fzf
-                  lib
-                  openssl
-                  zstd
-                  ;
-              };
-            }
-          )).overrideScope
-            liftJaneStreet;
-
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
         jingoo = callPackage ../development/ocaml-modules/jingoo { };
@@ -1018,6 +956,8 @@ let
 
         jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+        jsont = callPackage ../development/ocaml-modules/jsont { };
+
         jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
 
         junit = callPackage ../development/ocaml-modules/junit { };
@@ -1035,6 +975,8 @@ let
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
         kdf = callPackage ../development/ocaml-modules/kdf { };
+
+        kdl = callPackage ../development/ocaml-modules/kdl { };
 
         ke = callPackage ../development/ocaml-modules/ke { };
 
@@ -1112,6 +1054,8 @@ let
 
         linol = callPackage ../development/ocaml-modules/linol { };
 
+        linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
+
         linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
 
         llvm = callPackage ../development/ocaml-modules/llvm {
@@ -1121,6 +1065,8 @@ let
         lo = callPackage ../development/ocaml-modules/lo { };
 
         logs = callPackage ../development/ocaml-modules/logs { };
+
+        logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
 
         lru = callPackage ../development/ocaml-modules/lru { };
 
@@ -1198,6 +1144,7 @@ let
         melange = callPackage ../development/tools/ocaml/melange { };
 
         melange-json = callPackage ../development/ocaml-modules/melange-json { };
+        melange-json-native = callPackage ../development/ocaml-modules/melange-json/native.nix { };
 
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1568,7 +1515,15 @@ let
 
         ocsipersist-pgsql = callPackage ../development/ocaml-modules/ocsipersist/pgsql.nix { };
 
+        ocsipersist-pgsql-config =
+          callPackage ../development/ocaml-modules/ocsipersist/pgsql-config.nix
+            { };
+
         ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
+
+        ocsipersist-sqlite-config =
+          callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix
+            { };
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
@@ -1651,6 +1606,8 @@ let
         patch = callPackage ../development/ocaml-modules/patch { };
 
         path_glob = callPackage ../development/ocaml-modules/path_glob { };
+
+        patricia-tree = callPackage ../development/ocaml-modules/patricia-tree { };
 
         pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
@@ -1766,6 +1723,8 @@ let
 
         pratter = callPackage ../development/ocaml-modules/pratter { };
 
+        prelude = callPackage ../development/ocaml-modules/prelude { };
+
         prettym = callPackage ../development/ocaml-modules/prettym { };
 
         printbox = callPackage ../development/ocaml-modules/printbox { };
@@ -1773,6 +1732,8 @@ let
         printbox-text = callPackage ../development/ocaml-modules/printbox/text.nix { };
 
         process = callPackage ../development/ocaml-modules/process { };
+
+        processor = callPackage ../development/ocaml-modules/processor { };
 
         prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
@@ -1847,10 +1808,13 @@ let
         reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
         reason-react = callPackage ../development/ocaml-modules/reason-react { };
-
         reason-react-ppx = callPackage ../development/ocaml-modules/reason-react/ppx.nix { };
 
         rebez = callPackage ../development/ocaml-modules/rebez { };
+
+        redis = callPackage ../development/ocaml-modules/redis/default.nix { };
+
+        redis-lwt = callPackage ../development/ocaml-modules/redis/lwt.nix { };
 
         reperf = callPackage ../development/ocaml-modules/reperf { };
 
@@ -1913,6 +1877,8 @@ let
 
         sawja = callPackage ../development/ocaml-modules/sawja { };
 
+        scfg = callPackage ../development/ocaml-modules/scfg { };
+
         secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
           inherit (pkgs) secp256k1;
         };
@@ -1945,6 +1911,10 @@ let
 
         slug = callPackage ../development/ocaml-modules/slug { };
 
+        smtml = callPackage ../development/ocaml-modules/smtml {
+          mdx = mdx.override { inherit logs; };
+        };
+
         sodium = callPackage ../development/ocaml-modules/sodium { };
 
         sosa = callPackage ../development/ocaml-modules/sosa { };
@@ -1972,6 +1942,8 @@ let
         stdcompat = callPackage ../development/ocaml-modules/stdcompat { };
 
         stdint = callPackage ../development/ocaml-modules/stdint { };
+
+        stdlib-random = callPackage ../development/ocaml-modules/stdlib-random { };
 
         stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
@@ -2002,6 +1974,10 @@ let
         tar = callPackage ../development/ocaml-modules/tar { };
 
         tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix {
+          inherit (pkgs) git;
+        };
+
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
           inherit (pkgs) git;
         };
 

@@ -45,24 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  buildInputs =
-    [
-      gtk4
-      glib
-      gsettings-desktop-schemas
-      gdk-pixbuf
-      gnome-desktop
-      geocode-glib_2
-      geoclue2
-      libgweather
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      # GStreamer plugins needed for Alarms
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    gtk4
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    gnome-desktop
+    geocode-glib_2
+    geoclue2
+    libgweather
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    # GStreamer plugins needed for Alarms
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   doCheck = true;
 

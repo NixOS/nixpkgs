@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "parsero";
   version = "0.81";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "behindthefirewalls";
@@ -15,7 +16,13 @@ python3Packages.buildPythonApplication {
     sha256 = "rqupeJxslL3AfQ+CzBWRb4ZS32VoYd8hlA+eACMKGPY=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonRemoveDeps = [
+    "pip" # this dependency is never actually used
+  ];
+
+  dependencies = with python3Packages; [
     beautifulsoup4
     urllib3
   ];

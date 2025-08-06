@@ -19,30 +19,29 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.5.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-5kCYKktD71LdknIITSXzl/r5IRUyBUCKL9mmjsMwYRI=";
+    hash = "sha256-+Ce9jjOZH0kFj4EfRgAabUDA9iRmHq7umVD9pOqGBbw=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-AA+f6xVd1hmZUum7AlhHivqNez7xP1kEd/GXd798QCI=";
+  npmDepsHash = "sha256-+ecdxq5YwZdWRATl1Jc3BaDfyVW5n4T4flCLqzFoVIQ=";
   npmFlags = [ "--legacy-peer-deps" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      makeWrapper
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [
     pixman

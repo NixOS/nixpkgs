@@ -16,16 +16,16 @@ let
   variants = {
     # ./update-zen.py zen
     zen = {
-      version = "6.15.2"; # zen
+      version = "6.15.8"; # zen
       suffix = "zen1"; # zen
-      sha256 = "196vc361fqpiwqgpxa0kp1nfqs6gplah2qw48yrwlzxp08q9sfqn"; # zen
+      sha256 = "010k50c9anjbcrwh9cgc6wn91hh3xa1x3mpxbaa2x1v8f5773vd4"; # zen
       isLqx = false;
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.14.11"; # lqx
+      version = "6.15.8"; # lqx
       suffix = "lqx1"; # lqx
-      sha256 = "0gpg1rad2ljnnszpz78shsm98zw5bj6arr3xnsb2nanvx6axwbbw"; # lqx
+      sha256 = "1z85h8k49acw5w1m7z6lclnr62rgr6dbi2sci7in59qkq1zfvkb9"; # lqx
       isLqx = true;
     };
   };
@@ -145,7 +145,7 @@ let
             UCLAMP_TASK_GROUP = mkKernelOverride (option no);
           };
 
-        passthru.updateScript = [
+        extraPassthru.updateScript = [
           ./update-zen.py
           (if isLqx then "lqx" else "zen")
         ];

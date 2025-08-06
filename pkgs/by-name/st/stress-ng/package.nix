@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.19.00";
+  version = "0.19.02";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
     rev = "V${version}";
-    hash = "sha256-CbGbGGWZDil7l04KNuizlAu9IACdtbHR5rrn39AAhio=";
+    hash = "sha256-QEj+JC3l6O8UqK08+X2CIs/GNHdV7hn2bem3xx1jgjQ=";
   };
 
   postPatch = ''
@@ -32,23 +32,22 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs =
-    [
-      judy
-      libbsd
-      libgcrypt
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr
-      keyutils
-      libaio
-      libapparmor
-      libcap
-      lksctp-tools
-      libglvnd
-      libgbm
-    ];
+  buildInputs = [
+    judy
+    libbsd
+    libgcrypt
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    attr
+    keyutils
+    libaio
+    libapparmor
+    libcap
+    lksctp-tools
+    libglvnd
+    libgbm
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"

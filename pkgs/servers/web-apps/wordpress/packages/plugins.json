@@ -143,6 +143,12 @@
     "sha256": "1kqgmmaw99b164v554siygrxa3z7lxqhn0bwg7s01cm5fdg6i3dl",
     "version": "4.0.2"
   },
+  "sqlite-database-integration": {
+    "path": "sqlite-database-integration/tags/2.2.3",
+    "rev": "3322285",
+    "sha256": "1fggp3qpcdjk6a92wlv41kqmvnhs7dg1pb1ahan9n9wyja48acn8",
+    "version": "2.2.3"
+  },
   "static-mail-sender-configurator": {
     "path": "static-mail-sender-configurator/tags/0.10.0",
     "rev": "2941521",

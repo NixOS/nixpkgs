@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "An extension for colcon-core to provide command line completion using argcomplete";
+    description = "Extension for colcon-core to provide command line completion using argcomplete";
     homepage = "https://github.com/colcon/colcon-argcomplete";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];

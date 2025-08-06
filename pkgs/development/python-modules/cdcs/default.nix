@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cdcs";
-  version = "0.2.5";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
     tag = "v${version}";
-    hash = "sha256-u3txoe8ZfofMqhDB1ZhNF0mq9fYgwotRguVUezhDvwk=";
+    hash = "sha256-P6fFL9yqnVbeUNBejnTcFowcf9xZP6XwheHwNUZKKlM=";
   };
 
   build-system = [ setuptools ];

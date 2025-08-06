@@ -14,7 +14,7 @@
 
 buildPythonPackage {
   pname = "rmrl";
-  version = "0.2.1-unstable-2023-06-1";
+  version = "0.2.1-unstable-2023-06-01";
 
   disabled = pythonOlder "3.10";
 

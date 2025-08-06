@@ -63,9 +63,9 @@ symlinkJoin {
 
   postBuild = ''
     wrapProgram $out/bin/olympus \
-      --set OLYMPUS_CELESTE_WRAPPER "${wrapper-to-env celesteWrapper}" \
-      --set OLYMPUS_LOENN_WRAPPER "${wrapper-to-env loennWrapper}"  \
-      --set OLYMPUS_MINIINSTALLER_WRAPPER "${miniinstaller-wrapper}" \
-      --set OLYMPUS_SKIP_SCHEME_HANDLER_CHECK "${if skipHandlerCheck then "1" else "0"}"
+      --set-default OLYMPUS_CELESTE_WRAPPER "${wrapper-to-env celesteWrapper}" \
+      --set-default OLYMPUS_LOENN_WRAPPER "${wrapper-to-env loennWrapper}"  \
+      --set-default OLYMPUS_MINIINSTALLER_WRAPPER "${miniinstaller-wrapper}" \
+      --set-default OLYMPUS_SKIP_SCHEME_HANDLER_CHECK "${if skipHandlerCheck then "1" else "0"}"
   '';
 }

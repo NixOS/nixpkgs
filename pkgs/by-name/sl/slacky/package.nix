@@ -9,21 +9,30 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "slacky";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "andirsun";
     repo = "Slacky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nDxmzZqi7xEe4hnY6iXJg+613lSKElWxvF3w8bRDW90=";
+    hash = "sha256-70mexW+8+0hvVr2PYGtQuBiTh6xo2WFDqLzeCZilgaE=";
   };
 
-  npmDepsHash = "sha256-9+4cxeQw2Elug+xIgzNvpaSMgDVlBFz/+TW1jJwDm40=";
+  npmDepsHash = "sha256-Vqpg+j2mIv5XKzX//ptt9gT+SWPXpVSKSCM+E5cmuCQ=";
 
-  npmPackFlags = [ "--ignore-scripts" ];
+  npmPackFlags = [
+    "--ignore-scripts"
+  ];
+
+  makeCacheWritable = true;
+
+  npmFlags = [
+    "--legacy-peer-deps"
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    electron
     copyDesktopItems
   ];
 
@@ -32,7 +41,8 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/icons
     ln -s $out/lib/node_modules/slacky/build/icons/icon.png $out/share/icons/slacky.png
-    makeWrapper ${electron}/bin/electron $out/bin/slacky \
+    makeWrapper ${lib.getExe electron} $out/bin/slacky \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/node_modules/slacky/
   '';
 
@@ -61,7 +71,7 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/andirsun/Slacky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ awwpotato ];
-    platforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "slacky";
   };
 })

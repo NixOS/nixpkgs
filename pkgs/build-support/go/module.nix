@@ -394,11 +394,13 @@ lib.extendMkDerivation {
         # `passthru.overrideModAttrs` will be overridden
         # when users want to override `goModules`.
         overrideModAttrs = lib.toExtension overrideModAttrs;
-      } // passthru;
+      }
+      // passthru;
 
       meta = {
         # Add default meta information.
         platforms = go.meta.platforms or lib.platforms.all;
-      } // meta;
+      }
+      // meta;
     };
 }

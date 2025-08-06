@@ -61,9 +61,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yamlfix" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

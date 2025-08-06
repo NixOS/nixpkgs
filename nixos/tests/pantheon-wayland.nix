@@ -78,6 +78,8 @@
           machine.succeed(f"{cmd} | grep 'XDG_DATA_DIRS' | grep 'gsettings-schemas/pantheon-agent-geoclue2'")
           # Hopefully from login shell.
           machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
+          # Hopefully from gcr-ssh-agent.
+          machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Wait for elementary videos autostart"):
           machine.wait_until_succeeds("pgrep -f io.elementary.videos")

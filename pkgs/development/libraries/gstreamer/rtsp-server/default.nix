@@ -31,27 +31,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6YPAOUluP3XjlpZVTOdNtBIOJGXeF6ocw3FgVo6bQLw=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      gobject-introspection
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    gobject-introspection
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      gst-plugins-base
-      gst-plugins-bad
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    gst-plugins-base
+    gst-plugins-bad
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   mesonFlags = [
     "-Dglib_debug=disabled" # cast checks should be disabled on stable releases

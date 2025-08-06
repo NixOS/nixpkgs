@@ -31,19 +31,19 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "5.3.0";
+  version = "5.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-6iD35ql3/vUzILh5VMWiFwBKPoGPfCUgEKD4g7s55Y0=";
+    hash = "sha256-kG4PskJpRX4U8wLsye8z+P9+IzbUgC7iWYon2awXTJ8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.8.0" "setuptools"
+      --replace-fail "setuptools==75.9.1" "setuptools"
 
       substituteInPlace craft_application/git/_utils.py \
         --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
@@ -98,40 +98,53 @@ buildPythonPackage rec {
     # derivation. Once charmcraft has moved to craft-application >= 5, `--replace-fail` can be added.
     substituteInPlace tests/conftest.py \
       --replace "include_lsb=False, include_uname=False, include_oslevel=False" "include_lsb=False, include_uname=False, include_oslevel=False, os_release_file='$HOME/os-release'"
+
+    # The project attempts to write into the user's runtime directory, usually
+    # '/run/user/<uid>', which fails in the build environment. By setting this
+    # variable, we redirect the runtime directory lookup to the temp directory
+    # created by the 'writableTmpDirAsHomeHook'.
+    export XDG_RUNTIME_DIR="$HOME"
   '';
 
   pythonImportsCheck = [ "craft_application" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
-  disabledTests =
-    [
-      "test_to_yaml_file"
-      # Tests expecting pytest-time
-      "test_monitor_builds_success"
-      # Temporary fix until new release to support Python 3.13
-      "test_grammar_aware_part_error"
-      "test_grammar_aware_part_error[part2]"
-      "test_grammar_aware_project_error[project0]"
-      # Temp fix - asserts fail against error messages which have changed
-      # slightly in a later revision of craft-platforms. No functional error.
-      "test_platform_invalid_arch"
-      "test_platform_invalid_build_arch"
-      # Asserts against string output which fails when not on Ubuntu.
-      "test_run_error_with_docs_url"
-      # Asserts a fallback path for SSL certs that we override in a patch.
-      "test_import_fallback_wrong_metadata"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # These tests have hardcoded "amd64" strings which fail on aarch64
-      "test_process_grammar_build_for"
-      "test_process_grammar_platform"
-      "test_process_grammar_default"
-    ];
+  disabledTests = [
+    "test_to_yaml_file"
+    # Tests expecting pytest-time
+    "test_monitor_builds_success"
+    # Temporary fix until new release to support Python 3.13
+    "test_grammar_aware_part_error"
+    "test_grammar_aware_part_error[part2]"
+    "test_grammar_aware_project_error[project0]"
+    # Temp fix - asserts fail against error messages which have changed
+    # slightly in a later revision of craft-platforms. No functional error.
+    "test_platform_invalid_arch"
+    "test_platform_invalid_build_arch"
+    # Asserts against string output which fails when not on Ubuntu.
+    "test_run_error_with_docs_url"
+    # Asserts a fallback path for SSL certs that we override in a patch.
+    "test_import_fallback_wrong_metadata"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # These tests have hardcoded "amd64" strings which fail on aarch64
+    "test_process_grammar_build_for"
+    "test_process_grammar_platform"
+    "test_process_grammar_default"
+    "test_create_craft_manifest"
+    "test_create_project_manifest"
+    "test_from_packed_artifact"
+    "test_teardown_session_create_manifest"
+  ];
 
   disabledTestPaths = [
     # These tests assert outputs of commands that assume Ubuntu-related output.
     "tests/unit/services/test_lifecycle.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Hard-coded assumptions around use of "amd64" arch strings.
+    "tests/unit/services/test_project.py"
   ];
 
   passthru.updateScript = nix-update-script { };

@@ -32,27 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = args.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      (lib.getDev llvmPackages.llvm.dev)
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # provides xcode-select, which is required for SDK detection
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cmake
+    (lib.getDev llvmPackages.llvm.dev)
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # provides xcode-select, which is required for SDK detection
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      zlib
-    ]
-    ++ (with llvmPackages; [
-      libclang
-      lld
-      llvm
-    ]);
+  buildInputs = [
+    libxml2
+    zlib
+  ]
+  ++ (with llvmPackages; [
+    libclang
+    lld
+    llvm
+  ]);
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
@@ -142,28 +140,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru = {
-    hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
-
-    bintools-unwrapped = callPackage ./bintools.nix { zig = finalAttrs.finalPackage; };
-    bintools = wrapBintoolsWith { bintools = finalAttrs.finalPackage.bintools-unwrapped; };
-
-    cc-unwrapped = callPackage ./cc.nix { zig = finalAttrs.finalPackage; };
-    cc = wrapCCWith {
-      cc = finalAttrs.finalPackage.cc-unwrapped;
-      bintools = finalAttrs.finalPackage.bintools;
-      extraPackages = [ ];
-      nixSupport.cc-cflags =
-        [
-          "-target"
-          "${stdenv.targetPlatform.system}-${stdenv.targetPlatform.parsed.abi.name}"
-        ]
-        ++ lib.optional (
-          stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-        ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
-    };
-
-    stdenv = overrideCC stdenv finalAttrs.finalPackage.cc;
+  passthru = import ./passthru.nix {
+    inherit
+      lib
+      stdenv
+      callPackage
+      wrapCCWith
+      wrapBintoolsWith
+      overrideCC
+      targetPackages
+      ;
+    zig = finalAttrs.finalPackage;
   };
 
   meta = {

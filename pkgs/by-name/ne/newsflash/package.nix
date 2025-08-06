@@ -27,18 +27,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "3.3.5";
+  version = "4.1.3";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-H2/qKnsByidziUldX5MZBrMyMHfuQ4SN9wXizJUGQ8I=";
+    hash = "sha256-Ll1w6gWwlGq7pG/S/PZYujG6SqhThg4gLkdBdu/8czI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hyu1sk/VcRLjxUFYiFeTvwlFVYq5crMMg+4Afb34Hvc=";
+    hash = "sha256-GJzBdJIa1KNZax4FSns/IfNLnAdpOfkEi/lFLuNmHVs=";
   };
 
   postPatch = ''
@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4
 
@@ -64,31 +65,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   ];
 
-  buildInputs =
-    [
-      clapper-unwrapped
-      gtk4
-      libadwaita
-      libxml2
-      openssl
-      sqlite
-      webkitgtk_6_0
+  buildInputs = [
+    clapper-unwrapped
+    gtk4
+    libadwaita
+    libxml2
+    openssl
+    sqlite
+    webkitgtk_6_0
 
-      # TLS support for loading external content in webkitgtk WebView
-      glib-networking
+    # TLS support for loading external content in webkitgtk WebView
+    glib-networking
 
-      # SVG support for gdk-pixbuf
-      librsvg
-    ]
-    ++ (with gst_all_1; [
-      # Audio & video support for webkitgtk WebView
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # SVG support for gdk-pixbuf
+    librsvg
+  ]
+  ++ (with gst_all_1; [
+    # Audio & video support for webkitgtk WebView
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v."; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v.";
+    ignoredVersions = "(alpha|beta|rc)";
+  };
 
   meta = {
     description = "Modern feed reader designed for the GNOME desktop";

@@ -9,25 +9,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.36.0";
+  version = "3.36.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
-    repo = pname;
+    repo = "git-machete";
     rev = "v${version}";
-    hash = "sha256-iSuOiQC+dKqcDCS4nTPMrNFpo3ipPUQhfoofM11UInI=";
+    hash = "sha256-WjyRTtUDgw+luSzHvsJLPCkxWQldqA8idYrbLwWHScQ=";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs =
-    [
-      git
-    ]
-    ++ (with python3.pkgs; [
-      pytest-mock
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3.pkgs; [
+    pytest-mock
+    pytestCheckHook
+  ]);
 
   disabledTests = [
     # Requires fully functioning shells including zsh modules and bash

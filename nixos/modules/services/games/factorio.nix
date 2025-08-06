@@ -38,7 +38,8 @@ let
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
     non_blocking_saving = cfg.nonBlockingSaving;
-  } // cfg.extraSettings;
+  }
+  // cfg.extraSettings;
   serverSettingsString = builtins.toJSON (lib.filterAttrsRecursive (n: v: v != null) serverSettings);
   serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
   playerListOption =

@@ -7,13 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "virtnbdbackup";
-  version = "2.29";
+  version = "2.32";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "virtnbdbackup";
     tag = "v${version}";
-    hash = "sha256-KIxRYD+GogYpZnUaBdhFd52sO51Two2vzY4LYRJRCto=";
+    hash = "sha256-SCt+RvtY17wTGeCcMbmK7q7cLz17upTEgoKZM4pDh7s=";
   };
 
   build-system = with python3Packages; [
@@ -36,6 +37,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   versionCheckProgramArg = "-V";
+
+  pythonImportsCheck = [ "libvirtnbdbackup" ];
 
   meta = {
     description = "Backup utility for Libvirt/qemu/kvm";

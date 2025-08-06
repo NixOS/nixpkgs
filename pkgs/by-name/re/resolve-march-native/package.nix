@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "resolve-march-native";
   version = "6.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hartwork";

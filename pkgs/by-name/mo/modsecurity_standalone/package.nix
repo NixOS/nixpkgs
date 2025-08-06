@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     apr
     aprutil
     libxml2
-  ] ++ optional luaSupport lua5;
+  ]
+  ++ optional luaSupport lua5;
 
   configureFlags = [
     "--enable-standalone-module"

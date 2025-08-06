@@ -18,19 +18,18 @@
   # TODO: confirm the whole solution is working end-to-end when netbird server is implemented
   testScript = ''
     start_all()
-    def did_start(node, name):
+    def did_start(node, name, interval=0.5, timeout=10):
       node.wait_for_unit(f"{name}.service")
       node.wait_for_file(f"/var/run/{name}/sock")
-      output = node.succeed(f"{name} status")
+      # `netbird status` returns a full "Disconnected" status during initialization
+      # only after a while passes it starts returning "NeedsLogin" help message
 
-      # not sure why, but it can print either of:
-      #  - Daemon status: NeedsLogin
-      #  - Management: Disconnected
-      expected = [
-        "Disconnected",
-        "NeedsLogin",
-      ]
-      assert any(msg in output for msg in expected)
+      start = time.time()
+      output = node.succeed(f"{name} status")
+      while "Disconnected" in output and (time.time() - start) < timeout:
+        time.sleep(interval)
+        output = node.succeed(f"{name} status")
+      assert "NeedsLogin" in output
 
     did_start(clients, "netbird")
     did_start(clients, "netbird-custom")

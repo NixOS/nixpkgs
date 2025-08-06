@@ -5,6 +5,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   multidict,
   xmljson,
 }:
@@ -27,14 +28,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     multidict
     xmljson
   ];
-
-  # Disable code coverage in check phase
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
 
   pythonImportsCheck = [ "latex2mathml" ];
 

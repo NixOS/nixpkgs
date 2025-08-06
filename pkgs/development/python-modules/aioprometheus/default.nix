@@ -46,7 +46,8 @@ buildPythonPackage rec {
     httpx
     fastapi
     uvicorn
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aioprometheus" ];
 

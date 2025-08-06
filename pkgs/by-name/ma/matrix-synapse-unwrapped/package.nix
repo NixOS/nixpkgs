@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   openssl,
   libiconv,
@@ -17,19 +18,28 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.131.0";
+  version = "1.135.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-nXDVkuV5GCk0Lp4LfyiModKdO30PJ40B5mXdm5tMHQo=";
+    hash = "sha256-ygLWjI6HzBMTPDhEmf1rT18UhoRekzpG8DkeZXo2dts=";
   };
+
+  patches = [
+    # Skip broken HTML preview test case with libxml >= 2.14
+    # https://github.com/element-hq/synapse/pull/18413
+    (fetchpatch {
+      url = "https://github.com/element-hq/synapse/commit/8aad32965888476b4660bf8228d2d2aa9ccc848b.patch";
+      hash = "sha256-EUEbF442nOAybMI8EL6Ee0ib3JqSlQQ04f5Az3quKko=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-9VJnn8aPkShqK2wYGFr+S5koIjma7VOr+LkLXwStL1E=";
+    hash = "sha256-4J92s6cSgsEIYQpbU6OOLI/USIJX2Gc7UdEHgWQgmXc=";
   };
 
   postPatch = ''
@@ -59,13 +69,12 @@ python3.pkgs.buildPythonApplication rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -138,20 +147,16 @@ python3.pkgs.buildPythonApplication rec {
     cache-memory = [
       pympler
     ];
-    user-search = [
-      pyicu
-    ];
   };
 
-  nativeCheckInputs =
-    [
-      openssl
-    ]
-    ++ (with python3.pkgs; [
-      mock
-      parameterized
-    ])
-    ++ builtins.filter (p: !p.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+  nativeCheckInputs = [
+    openssl
+  ]
+  ++ (with python3.pkgs; [
+    mock
+    parameterized
+  ])
+  ++ builtins.filter (p: !p.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

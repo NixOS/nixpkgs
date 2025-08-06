@@ -45,9 +45,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ];
-  pytestFlagsArray = [
-    "-p"
-    "no:postgresql"
+  pytestFlags = [
+    "-pno:postgresql"
   ];
   disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ]; # requires Docker
   disabledTests = [

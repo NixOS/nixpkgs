@@ -366,13 +366,11 @@ in
             type = "rsa";
             bits = 4096;
             path = "/etc/ssh/ssh_host_rsa_key";
-            rounds = 100;
             openSSHFormat = true;
           }
           {
             type = "ed25519";
             path = "/etc/ssh/ssh_host_ed25519_key";
-            rounds = 100;
             comment = "key comment";
           }
         ];
@@ -768,6 +766,7 @@ in
         restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
 
         serviceConfig = {
+          Type = "notify-reload";
           Restart = "always";
           ExecStart = lib.concatStringsSep " " [
             (lib.getExe' cfg.package "sshd")
@@ -798,7 +797,6 @@ in
               ssh-keygen \
                 -t "${k.type}" \
                 ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
-                ${lib.optionalString (k ? rounds) "-a ${toString k.rounds}"} \
                 ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
                 ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
                 -f "${k.path}" \
@@ -880,54 +878,53 @@ in
       )
     ];
 
-    assertions =
-      [
+    assertions = [
+      {
+        assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
+        message = "cannot enable X11 forwarding without setting xauth location";
+      }
+      {
+        assertion =
+          (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
+          != null
+          -> cfgc.package.withKerberos;
+        message = "cannot enable Kerberos authentication without using a package with Kerberos support";
+      }
+      {
+        assertion =
+          (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
+          != null
+          -> cfgc.package.withKerberos;
+        message = "cannot enable GSSAPI authentication without using a package with Kerberos support";
+      }
+      (
+        let
+          duplicates =
+            # Filter out the groups with more than 1 element
+            lib.filter (l: lib.length l > 1) (
+              # Grab the groups, we don't care about the group identifiers
+              lib.attrValues (
+                # Group the settings that are the same in lower case
+                lib.groupBy lib.strings.toLower (lib.attrNames cfg.settings)
+              )
+            );
+          formattedDuplicates = lib.concatMapStringsSep ", " (
+            dupl: "(${lib.concatStringsSep ", " dupl})"
+          ) duplicates;
+        in
         {
-          assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
-          message = "cannot enable X11 forwarding without setting xauth location";
+          assertion = lib.length duplicates == 0;
+          message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
         }
-        {
-          assertion =
-            (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
-            != null
-            -> cfgc.package.withKerberos;
-          message = "cannot enable Kerberos authentication without using a package with Kerberos support";
-        }
-        {
-          assertion =
-            (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
-            != null
-            -> cfgc.package.withKerberos;
-          message = "cannot enable GSSAPI authentication without using a package with Kerberos support";
-        }
-        (
-          let
-            duplicates =
-              # Filter out the groups with more than 1 element
-              lib.filter (l: lib.length l > 1) (
-                # Grab the groups, we don't care about the group identifiers
-                lib.attrValues (
-                  # Group the settings that are the same in lower case
-                  lib.groupBy lib.strings.toLower (lib.attrNames cfg.settings)
-                )
-              );
-            formattedDuplicates = lib.concatMapStringsSep ", " (
-              dupl: "(${lib.concatStringsSep ", " dupl})"
-            ) duplicates;
-          in
-          {
-            assertion = lib.length duplicates == 0;
-            message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
-          }
-        )
-      ]
-      ++ lib.forEach cfg.listenAddresses (
-        { addr, ... }:
-        {
-          assertion = addr != null;
-          message = "addr must be specified in each listenAddresses entry";
-        }
-      );
+      )
+    ]
+    ++ lib.forEach cfg.listenAddresses (
+      { addr, ... }:
+      {
+        assertion = addr != null;
+        message = "addr must be specified in each listenAddresses entry";
+      }
+    );
   };
 
 }

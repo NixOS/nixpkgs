@@ -26,6 +26,6 @@ for i in \
     "x86_64-darwin darwin_amd64" \
     "aarch64-darwin darwin_arm64"; do
     set -- $i
-    hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/$latestVersion/confluent_${latestVersion}_$2.tar.gz"))
+    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/$latestVersion/confluent_${latestVersion}_$2.tar.gz"))
     update-source-version confluent-cli $latestVersion $hash --system=$1 --ignore-same-version
 done

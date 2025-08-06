@@ -619,15 +619,14 @@ rec {
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
-      contents =
-        [
-          pkgs.bash
-          pkgs.coreutils
-        ]
-        ++ nonRootShadowSetup {
-          uid = 999;
-          user = "somebody";
-        };
+      contents = [
+        pkgs.bash
+        pkgs.coreutils
+      ]
+      ++ nonRootShadowSetup {
+        uid = 999;
+        user = "somebody";
+      };
     };
 
   # basic example, with cross compilation

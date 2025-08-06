@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "py-scrypt";
   version = "0.8.27";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "scrypt";

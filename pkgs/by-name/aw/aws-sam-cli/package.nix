@@ -105,11 +105,13 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  pytestFlagsArray = [
-    "tests"
+  pytestFlags = [
     # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
+  ];
+
+  enabledTestPaths = [
+    "tests"
   ];
 
   disabledTestPaths = [

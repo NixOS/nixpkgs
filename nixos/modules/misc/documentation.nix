@@ -77,7 +77,8 @@ let
             {
               _module.check = false;
             }
-          ] ++ docModules.eager;
+          ]
+          ++ docModules.eager;
           class = "nixos";
           specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;

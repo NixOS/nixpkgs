@@ -33,7 +33,6 @@
   orjson,
   overrides,
   posthog,
-  pulsar-client,
   pydantic,
   pypika,
   pyyaml,
@@ -58,6 +57,7 @@
   pytestCheckHook,
   sqlite,
   starlette,
+  writableTmpDirAsHomeHook,
 
   # passthru
   nixosTests,
@@ -139,7 +139,6 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pulsar-client
     pydantic
     pypika
     pyyaml
@@ -167,27 +166,26 @@ buildPythonPackage rec {
     pytestCheckHook
     sqlite
     starlette
+    writableTmpDirAsHomeHook
   ];
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals (stdenv.hostPlatform.system != "aarch64-linux") [ "chromadb" ];
+  pythonImportsCheck = lib.optionals doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
-  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
+  doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
   };
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x" # these are slow tests, so stop on the first failure
     "-v"
-    "-W"
-    "ignore:DeprecationWarning"
-    "-W"
-    "ignore:PytestCollectionWarning"
+    "-Wignore:DeprecationWarning"
+    "-Wignore:PytestCollectionWarning"
   ];
 
   preCheck = ''
@@ -242,6 +240,10 @@ buildPythonPackage rec {
 
     # Cannot find protobuf file while loading test
     "chromadb/test/distributed/test_log_failover.py"
+
+    # ValueError: An instance of Chroma already exists for ephemeral with different settings
+    "chromadb/test/test_chroma.py"
+    "chromadb/test/ef/test_multimodal_ef.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -255,7 +257,7 @@ buildPythonPackage rec {
       # we have to update both the python hash and the cargo one,
       # so use nix-update-script
       extraArgs = [
-        "--versionRegex"
+        "--version-regex"
         "([0-9].+)"
       ];
     };

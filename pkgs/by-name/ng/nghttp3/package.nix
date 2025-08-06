@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "nghttp3";
     rev = "v${version}";
-    hash = "sha256-CTra8vmpIig8LX7RWqRzhWhX9yn0RnFrnV/kYPgZgJk=";
+    hash = "sha256-8WQfXzzF3K0IJNectrE1amQ6Njq4pZslrcVun6Uhi6E=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/nghttp3";
-    description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C";
+    description = "Implementation of HTTP/3 mapping over QUIC and QPACK in C";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];

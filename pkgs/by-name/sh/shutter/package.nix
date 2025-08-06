@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     libwnck
     libappindicator-gtk3
     hicolor-icon-theme
-  ] ++ perlModules;
+  ]
+  ++ perlModules;
 
   makeFlags = [
     "prefix=${placeholder "out"}"

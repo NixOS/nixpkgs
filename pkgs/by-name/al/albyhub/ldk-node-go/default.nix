@@ -5,15 +5,15 @@
   ldkNode,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "ldk-node-go";
-  version = "0-unstable-2025-05-21";
+  version = "0-unstable-2025-06-30";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "ldk-node-go";
-    rev = "ca26307fa2d8ee4d30da9affd0b202897f9919f6";
-    hash = "sha256-UdsfN6UL9lKPQSCfF8oA89U0M3pqj/TcFcs01E7WoXs=";
+    rev = "fc4853954f5259762ec91e6627f371a7a1241b08";
+    hash = "sha256-M96Yx4jEIKa83gKx4ofWh19QZFUxSdwH2J8h1aIrbys=";
   };
 
   vendorHash = null;

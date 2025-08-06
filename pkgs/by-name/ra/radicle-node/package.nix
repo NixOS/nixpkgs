@@ -19,13 +19,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.2.0";
+  version = "1.2.1";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
-    hash = "sha256-AWgLhL6GslE3r2FcZu2imV5ZtEKlUD+a4C5waRGO2lM=";
+    hash = "sha256-pqYV3n/aKNbEDEp8v4oQUMMlsSiJZq/nh5gFP4KpZbM=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -33,8 +33,8 @@ rustPlatform.buildRustPackage rec {
       rm -rf $out/.git
     '';
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
+
+  cargoHash = "sha256-T457lXW0M2eO9R+8XyobUFVj4NOiXVSvtDztp1i0PS4=";
 
   nativeBuildInputs = [
     asciidoctor

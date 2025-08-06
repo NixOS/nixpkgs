@@ -1,67 +1,89 @@
 {
   lib,
   stdenv,
-  accelerate,
   buildPythonPackage,
-  boto3,
-  docker,
-  duckduckgo-search,
   fetchFromGitHub,
-  gradio,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   huggingface-hub,
   jinja2,
-  ipython,
-  litellm,
-  markdownify,
-  mcp,
-  mcpadapt,
-  openai,
-  pandas,
   pillow,
-  pytest-datadir,
-  pytestCheckHook,
   python-dotenv,
   requests,
   rich,
-  setuptools,
+
+  # optional-dependencies
+  # audio
   soundfile,
+  # bedrock
+  boto3,
+  # docker
+  docker,
+  websocket-client,
+  # gradio
+  gradio,
+  # litellm
+  litellm,
+  # mcp
+  mcp,
+  mcpadapt,
+  # openai
+  openai,
+  # toolkit
+  duckduckgo-search,
+  markdownify,
+  # torch
+  numpy,
   torch,
   torchvision,
+  # transformers
+  accelerate,
   transformers,
-  websocket-client,
+
+  # tests
+  ipython,
+  pytest-datadir,
+  pytestCheckHook,
   wikipedia-api,
 }:
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.17.0";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-BMyLN8eNGBhywpN/EEE8hFf4Wb5EDpZvqBbX0ojRYec=";
+    hash = "sha256-ING+C2MACKFto+1FON5OGFgzLf8SM99ViTdADzNzQLw=";
   };
+
+  # TODO: remove at the next release
+  # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+  # Caused by: https://github.com/huggingface/transformers/commit/1ecd52e50a31e7c344c32564e0484d7e9a0f2256
+  # Fixed in: https://github.com/huggingface/smolagents/pull/1625
+  postPatch = ''
+    substituteInPlace tests/test_types.py \
+      --replace-fail "require_soundfile" "require_torchcodec"
+  '';
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "pillow" ];
-
   dependencies = [
-    duckduckgo-search
     huggingface-hub
     jinja2
-    markdownify
-    pandas
     pillow
     python-dotenv
     requests
     rich
   ];
 
-  optional-dependencies = {
-    audio = [ soundfile ];
+  optional-dependencies = lib.fix (self: {
+    audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
     docker = [
       docker
@@ -85,14 +107,20 @@ buildPythonPackage rec {
     #   opentelemetry-exporter-otlp
     #   opentelemetry-sdk
     # ];
+    toolkit = [
+      duckduckgo-search
+      markdownify
+    ];
     torch = [
+      numpy
       torch
       torchvision
     ];
     transformers = [
       accelerate
       transformers
-    ];
+    ]
+    ++ self.torch;
     # vision = [
     #   helium
     #   selenium
@@ -101,49 +129,55 @@ buildPythonPackage rec {
     #   torch
     #   vllm
     # ];
-  };
+  });
 
   nativeCheckInputs = [
     ipython
     pytest-datadir
     pytestCheckHook
     wikipedia-api
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "smolagents" ];
 
-  disabledTests =
-    [
-      # Missing dependencies
-      "test_ddgs_with_kwargs"
-      "test_e2b_executor_instantiation"
-      "test_flatten_messages_as_text_for_all_models"
-      "mcp"
-      "test_import_smolagents_without_extras"
-      "test_vision_web_browser_main"
-      "test_multiple_servers"
-      # Tests require network access
-      "test_agent_type_output"
-      "test_call_different_providers_without_key"
-      "test_can_import_sklearn_if_explicitly_authorized"
-      "test_transformers_message_no_tool"
-      "test_transformers_message_vl_no_tool"
-      "test_transformers_toolcalling_agent"
-      "test_visit_webpage"
-      "test_wikipedia_search"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Missing dependencies
-      "test_get_mlx"
+  disabledTestPaths = [
+    # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+    "tests/test_types.py"
+  ];
 
-      # Fatal Python error: Aborted
-      # thread '<unnamed>' panicked, Attempted to create a NULL object.
-      # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
-      "TestDuckDuckGoSearchTool"
-      "test_init_agent_with_different_toolsets"
-      "test_multiagents_save"
-      "test_new_instance"
-    ];
+  disabledTests = [
+    # Missing dependencies
+    "test_cleanup"
+    "test_ddgs_with_kwargs"
+    "test_e2b_executor_instantiation"
+    "test_flatten_messages_as_text_for_all_models"
+    "mcp"
+    "test_import_smolagents_without_extras"
+    "test_vision_web_browser_main"
+    "test_multiple_servers"
+    # Tests require network access
+    "test_agent_type_output"
+    "test_call_different_providers_without_key"
+    "test_can_import_sklearn_if_explicitly_authorized"
+    "test_transformers_message_no_tool"
+    "test_transformers_message_vl_no_tool"
+    "test_transformers_toolcalling_agent"
+    "test_visit_webpage"
+    "test_wikipedia_search"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Missing dependencies
+    "test_get_mlx"
+
+    # Fatal Python error: Aborted
+    # thread '<unnamed>' panicked, Attempted to create a NULL object.
+    # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
+    "TestDuckDuckGoSearchTool"
+    "test_init_agent_with_different_toolsets"
+    "test_multiagents_save"
+    "test_new_instance"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

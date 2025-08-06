@@ -36,13 +36,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-z4viQZLgC2bIJ3VrzQnR+q2F3gAOEQpU1H5xHtX/2fs=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   postPatch = ''
     patchShebangs resources/niri-session
     substituteInPlace resources/niri.service \
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8ltuI94yIhff7JxIfe1mog4bDJ/7VFgLooMWOnSTREs=";
 
   strictDeps = true;
@@ -53,21 +57,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      libdisplay-info
-      libglvnd # For libEGL
-      libinput
-      libxkbcommon
-      libgbm
-      pango
-      seatd
-      wayland # For libwayland-client
-    ]
-    ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
-    ++ lib.optional withScreencastSupport pipewire
-    ++ lib.optional withSystemd systemd # Includes libudev
-    ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
+  buildInputs = [
+    libdisplay-info
+    libglvnd # For libEGL
+    libinput
+    libxkbcommon
+    libgbm
+    pango
+    seatd
+    wayland # For libwayland-client
+  ]
+  ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
+  ++ lib.optional withScreencastSupport pipewire
+  ++ lib.optional withSystemd systemd # Includes libudev
+  ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
   buildFeatures =
     lib.optional withDbus "dbus"
@@ -76,28 +79,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optional withSystemd "systemd";
   buildNoDefaultFeatures = true;
 
-  postInstall =
-    ''
-      install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
-    ''
-    + lib.optionalString withDbus ''
-      install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
-    ''
-    + lib.optionalString (withSystemd || withDinit) ''
-      install -Dm0755 resources/niri-session -t $out/bin
-    ''
-    + lib.optionalString withSystemd ''
-      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
-    ''
-    + lib.optionalString withDinit ''
-      install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd $pname \
-        --bash <($out/bin/niri completions bash) \
-        --fish <($out/bin/niri completions fish) \
-        --zsh <($out/bin/niri completions zsh)
-    '';
+  postInstall = ''
+    install -Dm0644 README.md resources/default-config.kdl -t $doc/share/doc/niri
+    mv wiki $doc/share/doc/niri/wiki
+
+    install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
+  ''
+  + lib.optionalString withDbus ''
+    install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
+  ''
+  + lib.optionalString (withSystemd || withDinit) ''
+    install -Dm0755 resources/niri-session -t $out/bin
+  ''
+  + lib.optionalString withSystemd ''
+    install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+  ''
+  + lib.optionalString withDinit ''
+    install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd $pname \
+      --bash <($out/bin/niri completions bash) \
+      --fish <($out/bin/niri completions fish) \
+      --zsh <($out/bin/niri completions zsh)
+  '';
 
   env = {
     # Force linking with libEGL and libwayland-client
@@ -110,6 +115,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-Wl,--pop-state"
       ]
     );
+
+    # Upstream recommends setting the commit hash manually when in a
+    # build environment where the Git repository is unavailable.
+    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];

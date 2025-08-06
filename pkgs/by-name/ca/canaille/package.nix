@@ -58,7 +58,7 @@ python.pkgs.buildPythonApplication rec {
       coverage
       flask-webtest
       pyquery
-      pytest-cov
+      pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
       pytest-smtpd
@@ -123,7 +123,8 @@ python.pkgs.buildPythonApplication rec {
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    ]
+    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
     otp = [
       otpauth
       pillow

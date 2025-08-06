@@ -12,14 +12,14 @@
 
 let
   pname = "flclash";
-  version = "0.8.85";
+  version = "0.8.87";
 
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-bMx9yQkzUZ8cJpT1WBIqmYKoUvkPND9qg26HoRiY5kM=";
+      hash = "sha256-vGRq9Kc6XU6r3huIGAKoh5x46fFS8jmXgus9WgpvG3A=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -32,7 +32,7 @@ let
     description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
     homepage = "https://github.com/chen08209/FlClash";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   libclash = buildGoModule {
@@ -41,7 +41,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-pc0TnYnY6QWpGdO7IGAquuyS+NXbq7Xkr+dOo8uLPQU=";
+    vendorHash = "sha256-Uc+RvpW3vndPFnM7yhqrNTEexAPaolCk8YK8u/+55RQ=";
 
     env.CGO_ENABLED = 0;
 
@@ -62,7 +62,10 @@ flutter332.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes.flutter_js = "sha256-4PgiUL7aBnWVOmz2bcSxKt81BRVMnopabj5LDbtPYk4=";
+  gitHashes = {
+    flutter_js = "sha256-4PgiUL7aBnWVOmz2bcSxKt81BRVMnopabj5LDbtPYk4=";
+    re_editor = "sha256-PuaXoByTmkov2Dsz0kBHBHr/o63+jgPrnY9gpK7AOhA=";
+  };
 
   nativeBuildInputs = [
     copyDesktopItems

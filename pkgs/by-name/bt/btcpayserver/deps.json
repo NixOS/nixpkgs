@@ -51,8 +51,8 @@
   },
   {
     "pname": "BTCPayServer.Lightning.All",
-    "version": "1.6.10",
-    "hash": "sha256-v2D43E9aEFKN/oMP4W98BST+WBMRDLDBD6AKJZey7PA="
+    "version": "1.6.11",
+    "hash": "sha256-HId8axtrx8i205y1uytHp/04/DyKsXzJwSEMzpr7Mzk="
   },
   {
     "pname": "BTCPayServer.Lightning.Charge",
@@ -96,8 +96,8 @@
   },
   {
     "pname": "BTCPayServer.Lightning.Phoenixd",
-    "version": "1.5.7",
-    "hash": "sha256-kDl8tDEzrwNwyFRp77NSFw0WkHwudeS5pefJNSvq/IM="
+    "version": "1.5.8",
+    "hash": "sha256-pISNuSZW/B0MZ5VkW8nHAENTOUoFI+YfvrubD/vh74w="
   },
   {
     "pname": "BTCPayServer.NETCore.Plugins",

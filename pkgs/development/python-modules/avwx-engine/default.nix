@@ -61,7 +61,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     time-machine
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "avwx" ];
 

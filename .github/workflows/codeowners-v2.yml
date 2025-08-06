@@ -30,7 +30,7 @@ on:
     types: [opened, ready_for_review, synchronize, reopened]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  group: codeowners-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 permissions: {}
@@ -59,7 +59,7 @@ jobs:
           merged-as-untrusted: true
           target-as-trusted: true
 
-      - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+      - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -79,6 +79,12 @@ jobs:
           permission-administration: read
           permission-members: read
 
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Validate codeowners
         if: steps.app-token.outputs.token
         env:
@@ -90,12 +96,18 @@ jobs:
           EXPERIMENTAL_CHECKS: "avoid-shadowing"
         run: result/bin/codeowners-validator
 
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
   # Request reviews from code owners
   request:
     name: Request
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+      - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
       # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
       # This is intentional, because we need to request the review of owners as declared in the base branch.
@@ -116,8 +128,20 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Request reviews
         if: steps.app-token.outputs.token
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq

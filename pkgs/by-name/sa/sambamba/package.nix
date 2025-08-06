@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "biod";
     repo = "sambamba";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3O9bHGpMuCgdR2Wm7Dv1VUjMT1QTn8K1hdwgjvwhFDw=";
     fetchSubmodules = true;
   };

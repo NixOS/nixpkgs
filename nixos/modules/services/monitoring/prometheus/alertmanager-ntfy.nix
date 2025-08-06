@@ -53,6 +53,11 @@ in
               topic = lib.mkOption {
                 type = lib.types.str;
                 description = ''
+                  __Note:__ when using ntfy.sh and other public instances
+                  it is recommended to set this option to an empty string and set the actual topic via
+                  [](#opt-services.prometheus.alertmanager-ntfy.extraConfigFiles) since
+                  the `topic` in `ntfy.sh` is essentially a password.
+
                   The topic to which alerts should be published.
                   Can either be a hardcoded string or a gval expression that evaluates to a string.
                 '';

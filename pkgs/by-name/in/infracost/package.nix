@@ -7,15 +7,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.10.38";
+  version = "0.10.42";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
+    sha256 = "sha256-o6QVD6zZUs8eGTavxBhlcdiiBgG8w5fiYsb3ohHh+Vg=";
   };
-  vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
+  vendorHash = "sha256-So2D6FNX0SETgC1B0tKVDy0JlImHokJWB2roklonuMY=";
 
   ldflags = [
     "-s"
@@ -36,6 +36,7 @@ buildGoModule rec {
     # remove tests that require networking
     rm cmd/infracost/{breakdown,comment,diff,hcl,run,upload}_test.go
     rm cmd/infracost/comment_{azure_repos,bitbucket,github,gitlab}_test.go
+    rm internal/providers/terraform/hcl_provider_test.go
   '';
 
   checkFlags = [
