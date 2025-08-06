@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
   version = "1.20250430";
@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-U41EgEDny1R+JFktSC/3CE+2Qi7GJludj929ft49Nm0=";
   };
 
@@ -25,13 +25,13 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  meta = with lib; {
+  meta = {
     description = "Firmware for the Raspberry Pi board";
     homepage = "https://github.com/raspberrypi/firmware";
-    license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
-    maintainers = with maintainers; [ dezgeg ];
+    license = lib.licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
+    maintainers = with lib.maintainers; [ dezgeg ];
     # Hash mismatch on source, mystery.
     # Maybe due to https://github.com/NixOS/nix/issues/847
     broken = stdenvNoCC.hostPlatform.isDarwin;
   };
-}
+})
