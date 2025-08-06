@@ -165,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libcanberra
     xorg.libX11
+    xorg.libxcb
     xorg.libXfixes
   ]
   ++ lib.optionals bluezSupport [
