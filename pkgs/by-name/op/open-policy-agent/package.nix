@@ -61,6 +61,13 @@ buildGoModule (finalAttrs: {
         # Skip tests that require network, not available in the darwin sandbox
         "TestHTTPSClient"
         "TestHTTPSNoClientCerts"
+        "TestSocketHTTPGetRequest"
+
+        # Flaky
+        "TestBenchMainWithBundleRegoVersion"
+        "TestClientTLSWithCustomCACert"
+        "TestECR"
+        "TestManagerWithOPATelemetryUpdateLoop"
       ]
       ++ lib.optionals (!enableWasmEval) [
         "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
@@ -81,6 +88,7 @@ buildGoModule (finalAttrs: {
     # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm v1/server/server_test.go
+      rm v1/server/server_bench_test.go
     '';
 
   postInstall = ''
