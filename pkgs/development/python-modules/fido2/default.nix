@@ -5,7 +5,6 @@
   fetchPypi,
   poetry-core,
   pyscard,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "fido2";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,7 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  pytestFlags = [
+    "-v"
+    "--no-device"
+  ];
 
   pythonImportsCheck = [ "fido2" ];
 
