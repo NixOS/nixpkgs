@@ -15,7 +15,7 @@
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.36.0";
+    version = "1.34.0";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ let
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       tag = "v${version}";
-      hash = "sha256-z8b9QuxkKKx0GTsqB0KLnclhFhc0raG6Irfs5vBB0qY=";
+      hash = "sha256-fAXcS2VyDMk+UDW3ru5ZvwzXjydsY1uFcT2GvZuiGWw=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
