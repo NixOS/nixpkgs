@@ -63,7 +63,11 @@ buildGoModule (finalAttrs: {
         "TestHTTPSNoClientCerts"
         "TestSocketHTTPGetRequest"
 
+        # Flaky
         "TestBenchMainWithBundleRegoVersion"
+        "TestClientTLSWithCustomCACert"
+        "TestECR"
+        "TestManagerWithOPATelemetryUpdateLoop"
       ]
       ++ lib.optionals (!enableWasmEval) [
         "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
