@@ -49,7 +49,7 @@ in
         type = listOfMaintainers;
         internal = true;
         default = [ ];
-        example = lib.literalExpression ''[ lib.maintainers.all ]'';
+        example = lib.literalExpression ''[ lib.maintainers.alice ]'';
         description = ''
           List of maintainers of each module.  This option should be defined at
           most once per module.
