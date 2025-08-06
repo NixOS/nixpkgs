@@ -1222,8 +1222,8 @@ rec {
       "sha256-9lCTZdXU/jJgcDutzvWhxFRV7UVOXwPzVzpQI8wXZkQ=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.40.0"
-      "sha256-GMplq6ieQG/dToRm88z/3wsDe9F2vn2uD9dqj+UO4v0=";
+    buildMypyBoto3Package "securityhub" "1.40.1"
+      "sha256-wNGHpSbcxVrb4UYCLDQHJKZ0+2qB7PKaBM9GSN9dF/k=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.40.0"
