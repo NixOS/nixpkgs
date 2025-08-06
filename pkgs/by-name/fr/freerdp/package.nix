@@ -46,6 +46,8 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
+  sdl3,
+  sdl3-ttf,
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -137,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     SDL2_image
+    sdl3
+    sdl3-ttf
     uriparser
     zlib
   ]
