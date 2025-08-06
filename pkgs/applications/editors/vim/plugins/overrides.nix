@@ -2746,7 +2746,13 @@ in
 
   nvim-unception = super.nvim-unception.overrideAttrs {
     # Attempt rpc socket connection
-    nvimSkipModules = "client.client";
+    nvimSkipModules = [
+      "client.client"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "server.server"
+      "unception"
+    ];
   };
 
   nvim-vtsls = super.nvim-vtsls.overrideAttrs {
