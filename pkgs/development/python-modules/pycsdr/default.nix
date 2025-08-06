@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pycsdr" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/luarvique/pycsdr";
     description = "Bindings for the csdr library";
     license = lib.licenses.gpl3Only;
