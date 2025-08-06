@@ -42,7 +42,10 @@ let
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
   inherit (stdenv.hostPlatform) isMusl isWindows isAndroid;
-  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
+  # On Android there's a weird error stating SSIZE_MAX doesn't exist.
+  # https://github.com/NixOS/nixpkgs/issues/380604#issuecomment-3159316203
+  # TODO: Figure out how to build sanitizers for Android
+  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows || isAndroid;
 in
 
 stdenv.mkDerivation (finalAttrs: {
