@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doctest";
-  version = "2.4.11";
+  version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "doctest";
     repo = "doctest";
     rev = "v${version}";
-    sha256 = "sha256-hotO6QVpPn8unYTaQHFgi40A3oLUd++I3aTe293e4Aw=";
+    sha256 = "sha256-Fxs1EWydhqN9whx+Cn4fnZ4fhCEQvFgL5e9TUiXlnq8=";
   };
 
   patches = [
