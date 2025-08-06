@@ -151,6 +151,53 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
+  libxcb = super.libxcb.overrideAttrs (attrs: {
+    # $dev/include/xcb/xcb.h includes pthread.h
+    propagatedBuildInputs =
+      attrs.propagatedBuildInputs or [ ]
+      ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+    configureFlags = [
+      "--enable-xkb"
+      "--enable-xinput"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+    outputs = [
+      "out"
+      "dev"
+      "man"
+      "doc"
+    ];
+    meta = attrs.meta // {
+      pkgConfigModules = [
+        "xcb-composite"
+        "xcb-damage"
+        "xcb-dpms"
+        "xcb-dri2"
+        "xcb-dri3"
+        "xcb-glx"
+        "xcb-present"
+        "xcb-randr"
+        "xcb-record"
+        "xcb-render"
+        "xcb-res"
+        "xcb-screensaver"
+        "xcb-shape"
+        "xcb-shm"
+        "xcb-sync"
+        "xcb-xf86dri"
+        "xcb-xfixes"
+        "xcb-xinerama"
+        "xcb-xinput"
+        "xcb-xkb"
+        "xcb-xtest"
+        "xcb-xv"
+        "xcb-xvmc"
+        "xcb"
+      ];
+      platforms = lib.platforms.unix ++ lib.platforms.windows;
+    };
+  });
+
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [
       "out"
