@@ -3331,6 +3331,8 @@ self: super: with self; {
 
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
+  datamapplot = callPackage ../development/python-modules/datamapplot { };
+
   datamodel-code-generator = callPackage ../development/python-modules/datamodel-code-generator { };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
