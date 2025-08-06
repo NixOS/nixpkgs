@@ -7,8 +7,6 @@
   mock,
   pyjwt,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
 
   # for passthru.tests
@@ -22,8 +20,6 @@ buildPythonPackage rec {
   pname = "oauthlib";
   version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "oauthlib";
@@ -48,6 +44,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [
+    # too narrow time comparison issues
+    "test_fetch_access_token"
+  ];
 
   pythonImportsCheck = [ "oauthlib" ];
 
