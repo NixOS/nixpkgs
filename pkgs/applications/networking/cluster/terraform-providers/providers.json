@@ -1354,11 +1354,11 @@
     "vendorHash": null
   },
   "tfe": {
-    "hash": "sha256-Gut7HzjBZIrv9PLNBkSwnGfBKymlJ07GTFKtwiLIGSg=",
+    "hash": "sha256-wKHlkU/MmLoLjl3LbzYWK10Xl8c5Sb5ItvzoeJ1R/d0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tfe",
     "owner": "hashicorp",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.68.1",
+    "rev": "v0.68.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-tf78FT9JD5IVswgDB3Yug1NZQvo8NDqjPEAfF3gg93w="
   },
