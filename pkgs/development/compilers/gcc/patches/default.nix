@@ -245,11 +245,9 @@ in
     "13" = [
       (fetchpatch {
         name = "gcc-13-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
-        sha256 = "sha256-RBTCBXIveGwuQGJLzMW/UexpUZdDgdXprp/G2NHkmQo=";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/698885df7f624d0ce15bceb79a4d9760a473b502/gcc/gcc-13.4.0.diff";
+        hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
       })
-      # Needed to build LLVM>18
-      ./cfi_startproc-reorder-label-2.diff
     ];
     # Patches from https://github.com/iains/gcc-12-branch/compare/2bada4bc59bed4be34fab463bdb3c3ebfd2b41bb..gcc-12-4-darwin
     "12" = [
