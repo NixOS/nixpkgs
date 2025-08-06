@@ -218,7 +218,8 @@ let
           reduce .[] as $item ({}; {
             added: (.added + $item.added),
             changed: (.changed + $item.changed),
-            removed: (.removed + $item.removed)
+            removed: (.removed + $item.removed),
+            rebuilds: (.rebuilds + $item.rebuilds)
           })
         ' > $out/combined-diff.json
 
