@@ -1811,6 +1811,8 @@ self: super: with self; {
 
   berkeleydb = callPackage ../development/python-modules/berkeleydb { };
 
+  bertopic = callPackage ../development/python-modules/bertopic { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
