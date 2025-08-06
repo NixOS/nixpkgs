@@ -70,6 +70,9 @@ self: super: {
   # Becomes a core package in GHC >= 9.10
   os-string = doDistribute self.os-string_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+
   # Only required for ghc >= 9.2
   nothunks = super.nothunks.override {
     wherefrom-compat = null;
