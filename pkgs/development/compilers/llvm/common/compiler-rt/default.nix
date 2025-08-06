@@ -45,7 +45,12 @@ let
     stdenv.hostPlatform.isDarwin
     && stdenv.hostPlatform.isStatic
     && lib.versionAtLeast release_version "16";
-  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
+  inherit (stdenv.hostPlatform)
+    isMusl
+    isAarch64
+    isWindows
+    isAndroid
+    ;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 in
 
@@ -313,7 +318,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString (stdenv.hostPlatform.isDarwin) ''
       ln -s "$out/lib"/*/* "$out/lib"
     ''
-    + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
+    # `!isAndroid`: CRT isn't built with compiler-rt on Android
+    + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux && !isAndroid) ''
       ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
       ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
       # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:
