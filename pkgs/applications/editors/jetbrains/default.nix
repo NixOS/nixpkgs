@@ -135,7 +135,13 @@ let
     mkJetBrainsProduct (
       args
       // {
-        extraLdPath = [ zlib ];
+        extraLdPath = [
+          zlib
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+          # Gemini Plugin uses skiko which requires libGL
+          libGL
+        ];
         extraWrapperArgs = [
           ''--set M2_HOME "${maven}/maven"''
           ''--set M2 "${maven}/maven/bin"''
