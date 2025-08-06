@@ -13666,6 +13666,8 @@ self: super: with self; {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
+  pyqtree = callPackage ../development/python-modules/pyqtree { };
+
   pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine { };
 
   pyquaternion = callPackage ../development/python-modules/pyquaternion { };
