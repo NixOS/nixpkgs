@@ -316,6 +316,20 @@ self: super:
     };
   });
 
+  libXext = super.libXext.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "man"
+      "doc"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+      xorg.xorgproto
+      xorg.libXau
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+  });
+
   libXfixes = super.libXfixes.overrideAttrs (attrs: {
     outputs = [
       "out"

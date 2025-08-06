@@ -13,7 +13,6 @@
   libxcb,
   libxcvt,
   libxdmcp,
-  libxext,
   lndir,
   luit,
   makedepend,
@@ -54,7 +53,6 @@ self: with self; {
   libX11 = libx11;
   libXau = libxau;
   libXdmcp = libxdmcp;
-  libXext = libxext;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
@@ -2155,6 +2153,42 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xdamage" ];
+        platforms = lib.platforms.unix;
+      };
+    })
+  ) { };
+
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
+  libXext = callPackage (
+    {
+      stdenv,
+      pkg-config,
+      fetchurl,
+      libX11,
+      xorgproto,
+      testers,
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "libXext";
+      version = "1.3.6";
+      builder = ./builder.sh;
+      src = fetchurl {
+        url = "mirror://xorg/individual/lib/libXext-1.3.6.tar.xz";
+        sha256 = "0lwpx0b7lid47pff6dagp5h63bi0b3gsy05lqpyhbr4l76i9zdgd";
+      };
+      hardeningDisable = [
+        "bindnow"
+        "relro"
+      ];
+      strictDeps = true;
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [
+        libX11
+        xorgproto
+      ];
+      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      meta = {
+        pkgConfigModules = [ "xext" ];
         platforms = lib.platforms.unix;
       };
     })

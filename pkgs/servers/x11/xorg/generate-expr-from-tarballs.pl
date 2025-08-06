@@ -45,7 +45,6 @@ $pcMap{"xau"} = "libXau";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xdmcp"} = "libXdmcp";
-$pcMap{"xext"} = "libXext";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
@@ -298,7 +297,6 @@ print OUT <<EOF;
   libxcb,
   libxcvt,
   libxdmcp,
-  libxext,
   lndir,
   luit,
   makedepend,
@@ -339,7 +337,6 @@ self: with self; {
   libX11 = libx11;
   libXau = libxau;
   libXdmcp = libxdmcp;
-  libXext = libxext;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
