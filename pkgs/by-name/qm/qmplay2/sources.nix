@@ -5,13 +5,13 @@
     let
       self = {
         pname = "qmplay2";
-        version = "25.01.19";
+        version = "25.06.27";
 
         src = fetchFromGitHub {
           owner = "zaps166";
           repo = "QMPlay2";
           tag = self.version;
-          hash = "sha256-Of/zEQ6o2J/wXfAoY10IPtCaMaSk8ux8L6MrimeMWVA=";
+          hash = "sha256-ouP9E9nk8T0EZr9D354hc/QKpyv7h3xpY1UCbo8Kw4k=";
         };
       };
     in
