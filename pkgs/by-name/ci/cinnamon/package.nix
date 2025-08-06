@@ -73,9 +73,8 @@ let
     ]
   );
 in
-# TODO (after 25.05 branch-off): Rename to pkgs.cinnamon
 stdenv.mkDerivation rec {
-  pname = "cinnamon-common";
+  pname = "cinnamon";
   version = "6.4.10";
 
   src = fetchFromGitHub {

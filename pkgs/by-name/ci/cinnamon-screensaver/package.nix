@@ -9,7 +9,7 @@
   dbus,
   gettext,
   cinnamon-desktop,
-  cinnamon-common,
+  cinnamon,
   intltool,
   libxslt,
   gtk3,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     pam
     cairo
     cinnamon-desktop
-    cinnamon-common
+    cinnamon
     libgnomekbd
     caribou
   ];
