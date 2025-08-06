@@ -6,6 +6,8 @@
   source-code-pro,
   python3Packages,
   nix-update-script,
+  nixos-icons,
+  withBranding ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
@@ -17,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-J1PZVaEdI6gx/qzsoVW1ehRQ/ZDKzdC1NgIGgBqxQ+0=";
   };
+
+  postPatch = lib.optionalString withBranding ''
+    ln -s ${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png data/custom_128.png
+    ln -s ${nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png data/custom_256.png
+  '';
 
   nativeBuildInputs = [
     imagemagick
@@ -33,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"
     "RELEASE=1"
+    (lib.optionalString withBranding "LOGO=custom")
   ];
 
   enableParallelBuilding = true;
@@ -73,6 +81,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Bootloader to bridge the Apple (XNU) boot to Linux boot";
+    longDescription = ''
+      m1n1 is the bootloader developed by the Asahi Linux project to
+      bridge the Apple (XNU) boot ecosystem to the Linux boot ecosystem.
+
+      What it does:
+
+      - Initializes hardware
+      - Puts up a pretty Nix logo
+      - Loads embedded (appended) payloads, which can be:
+         - Device Trees (FDTs), with automatic selection based on the platform
+         - Initramfs images (compressed CPIO archives)
+         - Kernel images in Linux ARM64 boot format (optionally compressed)
+         - Configuration statements
+    '';
     homepage = "https://github.com/AsahiLinux/m1n1";
     changelog = "https://github.com/AsahiLinux/m1n1/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
