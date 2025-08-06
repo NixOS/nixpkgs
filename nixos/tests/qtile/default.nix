@@ -31,7 +31,6 @@
       services.xserver.windowManager.qtile = {
         enable = true;
         configFile = "${config-deriv}/config.py";
-        extraPackages = ps: [ ps.qtile-extras ];
       };
 
       services.displayManager.defaultSession = lib.mkForce "qtile";
