@@ -224,6 +224,9 @@ stdenv.mkDerivation {
     # Disable valgrind on targets where it's not available
     (lib.mesonEnable "valgrind" withValgrind)
 
+    # Enable Intel RT stuff when available
+    (lib.mesonEnable "intel-rt" (stdenv.hostPlatform.isx86_64 or stdenv.hostPlatform.isAarch64))
+
     # meson auto_features enables these, but we do not want them
     (lib.mesonEnable "gallium-mediafoundation" false) # Windows only
     (lib.mesonEnable "android-libbacktrace" false) # Android only
