@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoLibc,
   fetchurl,
   buildPackages,
   lib,
@@ -11,7 +11,7 @@
   nanoizeNewlib ? false,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "newlib";
   version = "4.5.0.20241231";
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     # "normal" view to the outside world: the binaries in $out will
     # execute on `stdenv.hostPlatform`.  We then fool newlib's build
     # process into doing the right thing.
-    "--host=${stdenv.targetPlatform.config}"
+    "--host=${stdenvNoLibc.targetPlatform.config}"
 
   ]
   ++ (
@@ -134,8 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
     + ''[ "$(find $out -type f | wc -l)" -gt 0 ] || (echo '$out is empty' 1>&2 && exit 1)'';
 
   passthru = {
-    incdir = "/${stdenv.targetPlatform.config}/include";
-    libdir = "/${stdenv.targetPlatform.config}/lib";
+    incdir = "/${stdenvNoLibc.targetPlatform.config}/include";
+    libdir = "/${stdenvNoLibc.targetPlatform.config}/lib";
   };
 
   meta = with lib; {

@@ -8905,8 +8905,6 @@ self: super: with self; {
 
   materialyoucolor = callPackage ../development/python-modules/materialyoucolor { };
 
-  mathlibtools = callPackage ../development/python-modules/mathlibtools { };
-
   mathutils = callPackage ../development/python-modules/mathutils { };
 
   matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
@@ -16386,8 +16384,6 @@ self: super: with self; {
 
   shiny = callPackage ../development/python-modules/shiny { };
 
-  shippai = callPackage ../development/python-modules/shippai { };
-
   shippinglabel = callPackage ../development/python-modules/shippinglabel { };
 
   shiv = callPackage ../development/python-modules/shiv { };
@@ -16509,6 +16505,8 @@ self: super: with self; {
   siphash24 = callPackage ../development/python-modules/siphash24 { };
 
   siphashc = callPackage ../development/python-modules/siphashc { };
+
+  sipsimple = callPackage ../development/python-modules/sipsimple { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 

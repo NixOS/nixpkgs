@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoLibc,
   fetchurl,
   automake,
   autoconf,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "avr-libc";
   version = "2.2.1";
 
