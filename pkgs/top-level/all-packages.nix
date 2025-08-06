@@ -15059,7 +15059,7 @@ with pkgs;
   # standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
 
-  inherit (callPackage ../development/libraries/science/math/magma { }) magma;
+  magma = callPackage ../development/libraries/science/math/magma { };
 
   magma-cuda = magma.override {
     cudaSupport = true;
