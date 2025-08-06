@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  importlib-metadata,
   pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications
@@ -16,28 +17,26 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.2.2";
+  version = "8.1.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-cBvibVZKCppFJiRS8MNc3YT1JxmlXhRci7LHsrd4JGs=";
+    hash = "sha256-pAAqf8jZbDfVZUoltwIFpov/1ys6HSYMyw3WV2qcE/M=";
   };
 
   build-system = [ flit-core ];
+  dependencies = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # for some reason the tests fail to execute cat, even though they run with less just fine,
-    # even adding coreutils to nativeCheckInputs explicitly does not change anything
-    "test_echo_via_pager"
+    # test fails with filename normalization on zfs
+    "test_file_surrogates"
   ];
 
   passthru.tests = {
