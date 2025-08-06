@@ -95,6 +95,8 @@ makeScopeWithSplicing' {
 
       qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
 
+      qt-color-widgets = callPackage ../development/libraries/qt-color-widgets { };
+
       qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
       qtkeychain = callPackage ../development/libraries/qtkeychain { };
