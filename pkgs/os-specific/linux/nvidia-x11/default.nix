@@ -226,8 +226,8 @@ rec {
       aurPatches = fetchFromGitHub {
         owner = "archlinux-jerry";
         repo = "nvidia-340xx";
-        rev = "7616dfed253aa93ca7d2e05caf6f7f332c439c90";
-        hash = "sha256-1qlYc17aEbLD4W8XXn1qKryBk2ltT6cVIv5zAs0jXZo=";
+        rev = "09154c494dbaa6368bf85c24d1d07956a4bf789a";
+        hash = "sha256-O6UaPV03c0XcN5F5yIGXDb0fBfhtAIzuj/PbKeSMjmg=";
       };
       patchset = [
         "0001-kernel-5.7.patch"
@@ -245,6 +245,10 @@ rec {
         "0013-kernel-6.3.patch"
         "0014-kernel-6.5.patch"
         "0015-kernel-6.6.patch"
+        "0016-kernel-6.8.patch"
+        "0017-gcc-14.patch"
+        "0018-gcc-15.patch"
+        "0019-kernel-6.15.patch"
       ];
     in
     generic {
@@ -255,7 +259,6 @@ rec {
       persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
       useGLVND = false;
 
-      broken = kernel.kernelAtLeast "6.7";
       patches = map (patch: "${aurPatches}/${patch}") patchset;
 
       # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
