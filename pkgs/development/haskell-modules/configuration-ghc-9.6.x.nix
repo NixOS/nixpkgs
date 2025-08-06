@@ -69,6 +69,9 @@ in
 
   # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
   ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
 
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
