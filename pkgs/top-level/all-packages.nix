@@ -1418,10 +1418,6 @@ with pkgs;
     stdenv = gcc14Stdenv;
   };
 
-  snes9x-gtk = snes9x.override {
-    withGtk = true;
-  };
-
   winetricks = callPackage ../applications/emulators/wine/winetricks.nix { };
 
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
@@ -6646,10 +6642,6 @@ with pkgs;
 
   h3 = h3_3;
 
-  avrlibc = callPackage ../development/misc/avr/libc {
-    stdenv = stdenvNoLibc;
-  };
-
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix { };
 
   jruby = callPackage ../development/interpreters/jruby { };
@@ -8005,12 +7997,6 @@ with pkgs;
     withGd = true;
   };
 
-  musl = callPackage ../by-name/mu/musl/package.nix (
-    lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-      stdenv = stdenvNoLibc;
-    }
-  );
-
   # These are used when building compiler-rt / libgcc, prior to building libc.
   preLibcHeaders =
     let
@@ -8081,10 +8067,6 @@ with pkgs;
         # For win32 or posix set this to null
         package = windows.mcfgthreads;
       };
-
-  wasilibc = callPackage ../development/libraries/wasilibc {
-    stdenv = stdenvNoLibc;
-  };
 
   # Only supported on Linux and only on glibc
   glibcLocales =
@@ -12603,22 +12585,6 @@ with pkgs;
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
-  kid3-cli = kid3.override {
-    withCLI = true;
-    withKDE = false;
-    withQt = false;
-  };
-  kid3-kde = kid3.override {
-    withCLI = true;
-    withKDE = true;
-    withQt = false;
-  };
-  kid3-qt = kid3.override {
-    withCLI = true;
-    withKDE = false;
-    withQt = true;
-  };
-
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
@@ -15332,7 +15298,6 @@ with pkgs;
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
   lean3 = lean;
-  mathlibtools = with python3Packages; toPythonApplication mathlibtools;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
@@ -16287,12 +16252,9 @@ with pkgs;
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
-  newlib = callPackage ../development/misc/newlib {
-    stdenv = stdenvNoLibc;
-  };
+  newlib = callPackage ../development/misc/newlib { };
 
   newlib-nano = callPackage ../development/misc/newlib {
-    stdenv = stdenvNoLibc;
     nanoizeNewlib = true;
   };
 

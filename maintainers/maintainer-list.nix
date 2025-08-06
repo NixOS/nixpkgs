@@ -16655,6 +16655,12 @@
     githubId = 1776903;
     name = "Andrew Abbott";
   };
+  mirror230469 = {
+    email = "mirror230469@disroot.org";
+    github = "mirror230469";
+    githubId = 215964377;
+    name = "mirror";
+  };
   mirrorwitch = {
     email = "mirrorwitch@transmom.love";
     github = "mirrorwitch";

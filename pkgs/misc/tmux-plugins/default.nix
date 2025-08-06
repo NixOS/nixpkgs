@@ -808,12 +808,12 @@ in
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.5.3";
+    version = "1.6.6";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
-      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
+      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
     };
     meta = with lib; {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
