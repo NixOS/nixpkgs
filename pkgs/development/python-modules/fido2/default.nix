@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
     "--no-device"
   ];
