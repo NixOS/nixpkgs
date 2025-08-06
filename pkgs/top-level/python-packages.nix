@@ -16971,6 +16971,8 @@ self: super: with self; {
 
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
 
+  sphinx-theme-builder = callPackage ../development/python-modules/sphinx-theme-builder { };
+
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
   sphinx-version-warning = callPackage ../development/python-modules/sphinx-version-warning { };
