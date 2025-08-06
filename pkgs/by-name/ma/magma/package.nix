@@ -1,10 +1,3 @@
-# Type aliases
-# Release = {
-#  version: String
-#  hash: String
-#  supportedGpuTargets: List String
-# }
-
 {
   autoPatchelfHook,
   blas,
@@ -13,14 +6,12 @@
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchurl,
-  fetchpatch,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
   rocmPackages,
   lapack,
   lib,
   libpthreadstubs,
-  magmaRelease,
   ninja,
   python3,
   config,
@@ -40,9 +31,36 @@ let
     strings
     trivial
     ;
-  inherit (magmaRelease) version hash supportedGpuTargets;
 
   inherit (cudaPackages) cudaAtLeast flags cudaOlder;
+
+  supportedGpuTargets = [
+    "700"
+    "701"
+    "702"
+    "703"
+    "704"
+    "705"
+    "801"
+    "802"
+    "803"
+    "805"
+    "810"
+    "900"
+    "902"
+    "904"
+    "906"
+    "908"
+    "909"
+    "90c"
+    "1010"
+    "1011"
+    "1012"
+    "1030"
+    "1031"
+    "1032"
+    "1033"
+  ];
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -95,12 +113,11 @@ assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magma";
-  inherit version;
+  version = "2.9.0";
 
   src = fetchurl {
-    name = "magma-${version}.tar.gz";
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    inherit hash;
+    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${finalAttrs.version}.tar.gz";
+    hash = "sha256-/3f9Nyaz3+w7+1V5CwZICqXMOEOWwts1xW/a5KgsZBw=";
   };
 
   # Magma doesn't have anything which could be run under doCheck, but it does build test suite executables.
@@ -363,13 +380,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix Algebra on GPU and Multicore Architectures";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://icl.utk.edu/magma/";
-    changelog = "https://github.com/icl-utk-edu/magma/blob/v${version}/ReleaseNotes";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ connorbaker ];
+    changelog = "https://github.com/icl-utk-edu/magma/blob/v${finalAttrs.version}/ReleaseNotes";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ connorbaker ];
 
     # Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L24-L31
     broken =

@@ -5,7 +5,6 @@
   kernel,
   elfutils,
   python3,
-  perl,
   newt,
   slang,
   asciidoc,
@@ -137,7 +136,6 @@ stdenv.mkDerivation {
     openssl
     numactl
     python3
-    perl
     babeltrace
   ]
   ++ (
@@ -177,7 +175,7 @@ stdenv.mkDerivation {
   doCheck = false; # requires "sparse"
 
   installTargets = [
-    "install"
+    "install-tools" # don't install tests, as those depend on perl
     "install-man"
   ];
 
