@@ -6,6 +6,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-bongocat";
@@ -44,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Package information
   meta = {
