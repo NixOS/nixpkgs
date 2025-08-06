@@ -6,25 +6,29 @@
   fetchFromGitHub,
   hatchling,
   hypothesis,
+  ibis-framework,
+  packaging,
   pandas,
   polars,
+  pyarrow-hotfix,
   pyarrow,
   pyspark,
   pytest-env,
   pytestCheckHook,
+  rich,
   sqlframe,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.38.2";
+  version = "1.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-zqtYTqirAXLcpFA2sXczl0HPWL/3cYWws2yUfE8I8NY=";
+    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
   };
 
   build-system = [ hatchling ];
@@ -37,6 +41,12 @@ buildPythonPackage rec {
     polars = [ polars ];
     pyarrow = [ pyarrow ];
     pyspark = [ pyspark ];
+    ibis = [
+      ibis-framework
+      rich
+      packaging
+      pyarrow-hotfix
+    ];
     sqlframe = [ sqlframe ];
   };
 
@@ -45,7 +55,8 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -54,11 +65,13 @@ buildPythonPackage rec {
     "test_rolling_var_hypothesis"
     # Missing file
     "test_pyspark_connect_deps_2517"
+    # Timezone issue
+    "test_to_datetime"
+    "test_unary_two_elements"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

@@ -8,6 +8,7 @@
   libmpc,
   mpfr,
   notcurses,
+  windows,
 
   gsl,
   man,
@@ -15,27 +16,34 @@
 
   unstableGitUpdater,
   writeScript,
+
+  static ? false,
+  withGMP ? !static,
+  withArb ? !static,
+  withNrepl ? if stdenv.hostPlatform.isMinGW then false else true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.2-unstable-2024-12-19";
+  version = "11.5-unstable-2025-07-31";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "a5515d455f5aca49d5275a5a35ac88935f3ad401";
-    hash = "sha256-Ik3edzpO9hIhJBZHyzL/CsTVKGbDdGVfE9pNrBeSjp8=";
+    rev = "71e547b1a210d1ff06daeb4dee5247cd949d0178";
+    hash = "sha256-gMZCmpGPSgM73PRbRY5BgyaTeRnojduNnZntvr75jzw=";
   };
 
-  buildInputs = [
-    notcurses
-    gmp
-    mpfr
-    libmpc
-    flint3
-  ];
+  buildInputs =
+    lib.optional withArb flint3
+    ++ lib.optionals withGMP [
+      gmp
+      mpfr
+      libmpc
+    ]
+    ++ lib.optional withNrepl notcurses
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   # The following scripts are modified from [Guix's](https://packages.guix.gnu.org/packages/s7/).
 
@@ -43,44 +51,83 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace s7.c \
         --replace-fail libc_s7.so $out/lib/libc_s7.so
   '';
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-I."
+      "-O2"
+    ]
+    ++ lib.optionals withGMP [
+      "-DWITH_GMP"
+    ]
+    ++ lib.optional static "-static"
+  );
+  env.NIX_LDFLAGS = toString (
+    [
+      "-lm"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "-ldl"
+      "--export-dynamic"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+      "-lpthread"
+      "--export-all-symbols"
+    ]
+    ++ lib.optional (!static && stdenv.hostPlatform.isMinGW) [ "--out-implib,libs7dll.a" ]
+    ++ lib.optional withArb "-lflint"
+    ++ lib.optionals withGMP [
+      "-lgmp"
+      "-lmpfr"
+      "-lmpc"
+    ]
+  );
 
   buildPhase = ''
     runHook preBuild
 
     # The older REPL
-    cc s7.c -o s7-repl \
-        -O2 -I. \
-        -Wl,-export-dynamic \
-        -lm -ldl \
+    $CC s7.c -o s7-repl \
         -DWITH_MAIN \
         -DS7_LOAD_PATH=\"$out/share/s7/scm\"
+
+    $CC s7.c -c -o s7.o
+
+    # Static library (Unix: .a, Windows: .a)
+    ${lib.optionalString static ''
+      $AR rcs libs7.a s7.o
+    ''}
+
+    # Dynamic library (Unix: .so, Windows: .dll)
+    ${lib.optionalString (!static && stdenv.hostPlatform.isLinux) ''
+      $CC s7.o -o libs7.so \
+        -shared -fPIC
+    ''}
+    ${lib.optionalString (!static && stdenv.hostPlatform.isMinGW) ''
+      $CC s7.o -o libs7.dll \
+        -shared
+    ''}
+
+    ${lib.optionalString withArb ''
+      $CC libarb_s7.c s7.o -o libarb_s7.so \
+          -shared -fPIC
+    ''}
 
     # The newer REPL powered by Notcurses
-    cc s7.c -o s7-nrepl \
-        -O2 -I. \
-        -Wl,-export-dynamic \
-        -lm -ldl \
-        -DWITH_MAIN \
-        -DWITH_NOTCURSES -lnotcurses-core \
-        -DS7_LOAD_PATH=\"$out/share/s7/scm\"
+    ${lib.optionalString withNrepl ''
+      $CC s7.c -o s7-nrepl \
+          -DWITH_MAIN \
+          -DWITH_NOTCURSES -lnotcurses-core \
+          -DS7_LOAD_PATH=\"$out/share/s7/scm\"
 
-    cc libarb_s7.c -o libarb_s7.so \
-        -O2 -I. \
-        -shared \
-        -lflint -lmpc \
-        -fPIC
+      $CC notcurses_s7.c -o libnotcurses_s7.so \
+          -Wno-error=implicit-function-declaration \
+          -lnotcurses-core \
+          -shared -fPIC
+    ''}
 
-    cc notcurses_s7.c -o libnotcurses_s7.so \
-        -O2 -I. \
-        -shared \
-        -lnotcurses-core \
-        -fPIC
-
-    cc s7.c -c -o s7.o \
-        -O2 -I. \
-        -ldl -lm
-
-    ./s7-repl libc.scm
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      ./s7-repl libc.scm
+    ''}
 
     runHook postBuild
   '';
@@ -96,9 +143,33 @@ stdenv.mkDerivation (finalAttrs: {
     dst_doc=$out/share/doc/s7
     mkdir -p $dst_bin $dst_lib $dst_inc $dst_share $dst_scm $dst_doc
 
-    mv -t $dst_bin s7-repl s7-nrepl
-    ln -s s7-nrepl $dst_bin/s7
-    mv -t $dst_lib libarb_s7.so libnotcurses_s7.so libc_s7.so
+    ${lib.optionalString static ''
+      mv -t $dst_lib libs7.a
+    ''}
+    ${lib.optionalString (!static && stdenv.hostPlatform.isLinux) ''
+      mv -t $dst_lib libs7.so
+    ''}
+    ${lib.optionalString (!static && stdenv.hostPlatform.isMinGW) ''
+      mv -t $dst_lib libs7.dll libs7dll.a
+    ''}
+
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      mv -t $dst_bin s7-repl
+      mv -t $dst_lib libc_s7.so
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isMinGW ''
+      mv -t $dst_bin s7-repl.exe
+    ''}
+
+    ${lib.optionalString withArb ''
+      mv -t $dst_lib libarb_s7.so
+    ''}
+    ${lib.optionalString withNrepl ''
+      mv -t $dst_bin s7-nrepl
+      ln -s s7-nrepl $dst_bin/s7
+      mv -t $dst_lib libnotcurses_s7.so
+    ''}
+
     cp -pr -t $dst_share s7.c
     cp -pr -t $dst_inc s7.h
     cp -pr -t $dst_scm *.scm
@@ -127,13 +198,18 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    cc ffitest.c s7.o -o ffitest \
-        -I. \
-        -Wl,-export-dynamic \
-        -ldl -lm
+    $CC s7.c -c -o s7.o
+    $CC ffitest.c s7.o -o ffitest
     mv ffitest $dst_bin
     mkdir -p nix-build/home
     ln -sr . nix-build/home/cl
+
+    ${lib.optionalString withArb ''
+      substituteInPlace s7test.scm \
+          --replace-fail '(system "gcc -fPIC -c libarb_s7.c")' "" \
+          --replace-fail '(system "gcc libarb_s7.o -shared -o libarb_s7.so -lflint -larb")' ""
+      cp $out/lib/libarb_s7.so .
+    ''}
 
     USER=nix-s7-builder PATH="$dst_bin:$PATH" HOME=$PWD/nix-build/home \
         s7-repl s7test.scm
@@ -175,8 +251,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://ccrma.stanford.edu/software/s7/";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ rc-zb ];
+    maintainers = with lib.maintainers; [
+      rc-zb
+      jinser
+    ];
     mainProgram = "s7";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.windows;
   };
 })

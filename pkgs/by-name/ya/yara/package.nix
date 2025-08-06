@@ -33,13 +33,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      protobufc
-    ]
-    ++ lib.optionals withCrypto [ openssl ]
-    ++ lib.optionals enableMagic [ file ]
-    ++ lib.optionals enableCuckoo [ jansson ];
+  buildInputs = [
+    protobufc
+  ]
+  ++ lib.optionals withCrypto [ openssl ]
+  ++ lib.optionals enableMagic [ file ]
+  ++ lib.optionals enableCuckoo [ jansson ];
 
   preConfigure = "./bootstrap.sh";
 
@@ -55,13 +54,13 @@ stdenv.mkDerivation rec {
 
   doCheck = enableStatic;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
     changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yara";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

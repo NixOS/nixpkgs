@@ -92,7 +92,8 @@ let
         libxml2
         pcre2
         libargon2
-      ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux systemd;
     }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
@@ -103,11 +104,11 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.6.3";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-XAte+pabhzxL5YIBmxhSPuQD50MLgiOCW820Son1gV0=";
+    hash = "sha256-RdwDlgYMhjFphoNJ7CgK8cb0rFJKpJJYDhoGXhQsLNg=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -116,43 +117,43 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "man"
-  ] ++ map (p: p.name) enabledPlugins;
+  ]
+  ++ map (p: p.name) enabledPlugins;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "ENABLE_MAN" true)
-      (lib.cmakeBool "ENABLE_DOC" true)
-      (lib.cmakeBool "ENABLE_DOC_INCOMPLETE" true)
-      (lib.cmakeBool "ENABLE_TESTS" enableTests)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "ICONV_LIBRARY" "${libiconv}/lib/libiconv.dylib")
-    ]
-    ++ map (p: lib.cmakeBool p.cmakeFlag p.enabled) plugins;
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_MAN" true)
+    (lib.cmakeBool "ENABLE_DOC" true)
+    (lib.cmakeBool "ENABLE_DOC_INCOMPLETE" true)
+    (lib.cmakeBool "ENABLE_TESTS" enableTests)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "ICONV_LIBRARY" "${libiconv}/lib/libiconv.dylib")
+  ]
+  ++ map (p: lib.cmakeBool p.cmakeFlag p.enabled) plugins;
 
   nativeBuildInputs = [
     cmake
     pkg-config
     asciidoctor
-  ] ++ lib.optional enableTests cpputest;
+  ]
+  ++ lib.optional enableTests cpputest;
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-      aspell
-      cjson
-      gnutls
-      gettext
-      zlib
-      curl
-      libgcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libresolv
-    ]
-    ++ lib.concatMap (p: p.buildInputs) enabledPlugins
-    ++ extraBuildInputs;
+  buildInputs = [
+    ncurses
+    openssl
+    aspell
+    cjson
+    gnutls
+    gettext
+    zlib
+    curl
+    libgcrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libresolv
+  ]
+  ++ lib.concatMap (p: p.buildInputs) enabledPlugins
+  ++ extraBuildInputs;
 
   hardeningEnable = [ "pie" ];
 

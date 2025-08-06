@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "environs";
-  version = "14.1.1";
+  version = "14.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "sloria";
     repo = "environs";
     tag = version;
-    hash = "sha256-yWGLCUMnmk+d6o4OmBxuSTdImse8ikNs0rDXLZgFU6k=";
+    hash = "sha256-DGcYIir2ckzCJ9423OiFwSi0xMXyox6RNYnhOGQhOuc=";
   };
 
   nativeBuildInputs = [ flit-core ];

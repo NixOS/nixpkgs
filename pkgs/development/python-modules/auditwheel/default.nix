@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "6.3.0";
+  version = "6.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BccKI0+hTBQKptkHYTXZVQli2VhJkRuNXQQZo63QnwA=";
+    hash = "sha256-t6Ya/JGDtrXGYd5ZylhvnHIARFpAnFjN8gSdb3FjbVE=";
   };
 
   build-system = [ setuptools-scm ];

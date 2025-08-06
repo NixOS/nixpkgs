@@ -5,17 +5,17 @@
 }:
 mkYaziPlugin {
   pname = "vcs-files.yazi";
-  version = "25.4.8-unstable-2025-04-08";
+  version = "25.5.31-unstable-2025-06-18";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "a1738e8088366ba73b33da5f45010796fb33221e";
-    hash = "sha256-eiLkIWviGzG9R0XP1Cik3Bg0s6lgk3nibN6bZvo8e9o=";
+    rev = "86d28e4fb4f25f36cc501b8cb0badb37a6b14263";
+    hash = "sha256-m/gJTDm0cVkIdcQ1ZJliPqBhNKoCW1FciLkuq7D1mxo=";
   };
 
   meta = {
-    description = "Previewing archive contents with vcs-files";
+    description = "Show Git file changes in Yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

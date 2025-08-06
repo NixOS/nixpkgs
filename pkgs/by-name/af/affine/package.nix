@@ -43,17 +43,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.21.6";
+  version = "0.23.2";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xiOfy3uskqYv5b0U2s1Zpc4/ydsRhhUd8M33IH0BJ10=";
+    hash = "sha256-4WPnS+ZaiNgtib70ii/XfWkn2tNg2OsSAglD+mpnDvg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-1BTSvHaSPE55v6awnvRry1Exms+zeGug3PNldZ2v2HY=";
+    hash = "sha256-OdzjT6ktxvQNIk0Um9iru7Wm5LcBE3f5vrO4rsksf5U=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -98,33 +98,32 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-XpVygLwK/vjQJ5cDckIRM3Uo5hcahTz/XV1WjBQmOac=";
+    outputHash = "sha256-tpn+TlSrGIABmSM9B3iQc39nZmGEf5MliKyaKOsM7yM=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
     apple-sdk_15
   ];
 
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn-berry
-      cargo
-      rustc
-      findutils
-      zip
-      jq
-      rsync
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals hostPlatform.isLinux [
-      copyDesktopItems
-      makeWrapper
-    ]
-    ++ lib.optionals hostPlatform.isDarwin [
-      # bindgenHook is needed to build `coreaudio-sys` on darwin
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+    cargo
+    rustc
+    findutils
+    zip
+    jq
+    rsync
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
+    copyDesktopItems
+    makeWrapper
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # bindgenHook is needed to build `coreaudio-sys` on darwin
+    rustPlatform.bindgenHook
+  ];
 
   env = {
     # force yarn install run in CI mode

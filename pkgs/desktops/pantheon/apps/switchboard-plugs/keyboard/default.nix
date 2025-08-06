@@ -8,6 +8,7 @@
   ninja,
   pkg-config,
   vala,
+  elementary-settings-daemon,
   libadwaita,
   libgee,
   gettext,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "8.0.2";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-keyboard";
     rev = version;
-    sha256 = "sha256-j2D6NSwHTZQJaHm664fHF4VkcExpYwoq/J3SXus30nw=";
+    sha256 = "sha256-8lgoR7nYqUJfLr9UhqnFJWw9x9l97RxgIkAwodHgrzI=";
   };
 
   patches = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-settings-daemon # io.elementary.settings-daemon.applications
     gnome-settings-daemon # media-keys
     granite7
     gsettings-desktop-schemas

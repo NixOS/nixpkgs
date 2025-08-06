@@ -37,33 +37,31 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      kronosnet
-      nss
-      nspr
-      libqb
-      systemd.dev
-    ]
-    ++ optional enableDbus dbus
-    ++ optional enableInfiniBandRdma rdma-core
-    ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net-snmp;
+  buildInputs = [
+    kronosnet
+    nss
+    nspr
+    libqb
+    systemd.dev
+  ]
+  ++ optional enableDbus dbus
+  ++ optional enableInfiniBandRdma rdma-core
+  ++ optional enableMonitoring libstatgrab
+  ++ optional enableSnmp net-snmp;
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-      "--with-logdir=/var/log/corosync"
-      "--enable-watchdog"
-      "--enable-qdevices"
-      # allows Type=notify in the systemd service
-      "--enable-systemd"
-    ]
-    ++ optional enableDbus "--enable-dbus"
-    ++ optional enableInfiniBandRdma "--enable-rdma"
-    ++ optional enableMonitoring "--enable-monitoring"
-    ++ optional enableSnmp "--enable-snmp";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--with-logdir=/var/log/corosync"
+    "--enable-watchdog"
+    "--enable-qdevices"
+    # allows Type=notify in the systemd service
+    "--enable-systemd"
+  ]
+  ++ optional enableDbus "--enable-dbus"
+  ++ optional enableInfiniBandRdma "--enable-rdma"
+  ++ optional enableMonitoring "--enable-monitoring"
+  ++ optional enableSnmp "--enable-snmp";
 
   installFlags = [
     "sysconfdir=$(out)/etc"

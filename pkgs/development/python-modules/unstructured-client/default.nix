@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "unstructured-client";
-  version = "0.35.0";
+  version = "0.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
     tag = "v${version}";
-    hash = "sha256-f1sJei3OnLxVahsirZFUzdIpkEEMc8rZR3+8JfihCuM=";
+    hash = "sha256-gzNPzS//7MU6nX3cA0p6dPqIG273VlGMU0ePyObn4d4=";
   };
 
   preBuild = ''
@@ -62,10 +62,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # see test-unit in Makefile
+  # see test-unit in Makefile
+  enabledTestPaths = [
     "_test_unstructured_client"
-    "-k"
+  ];
+  enabledTests = [
     "unit"
   ];
 

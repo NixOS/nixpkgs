@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "container2wasm";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "ktock";
     repo = "container2wasm";
     tag = "v${version}";
-    hash = "sha256-detM0A8pm65VmEuEh7Xc+LcXfz4aq9p46NvJtdzfzAA=";
+    hash = "sha256-cE/cKMMslu4GGVV3aRcdsu7cTdsVABZLs8GX6ihgW38=";
   };
 
-  vendorHash = "sha256-G75YojD+GR1C++crDkWS3A4nrUI9HwZfxmKpdNZ7qYY=";
+  vendorHash = "sha256-vKvQyrdmtPAjcaXU374eYPll5+Samo+zbaiMjOtGp7I=";
 
   ldflags = [
     "-s"
@@ -27,12 +27,12 @@ buildGoModule rec {
     "cmd/c2w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Container to WASM converter";
     homepage = "https://github.com/ktock/container2wasm";
     changelog = "https://github.com/ktock/container2wasm/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "c2w";
   };
 }

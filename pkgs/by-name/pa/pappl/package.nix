@@ -34,23 +34,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cups
-      libjpeg
-      libpng
-      libusb1
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # upstream mentions these are not needed for Mac
-      # see: https://github.com/michaelrsweet/pappl#requirements
-      avahi
-      gnutls
-    ]
-    ++ lib.optionals withPAMSupport [
-      pam
-    ];
+  buildInputs = [
+    cups
+    libjpeg
+    libpng
+    libusb1
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # upstream mentions these are not needed for Mac
+    # see: https://github.com/michaelrsweet/pappl#requirements
+    avahi
+    gnutls
+  ]
+  ++ lib.optionals withPAMSupport [
+    pam
+  ];
 
   # testing requires some networking
   # doCheck = true;

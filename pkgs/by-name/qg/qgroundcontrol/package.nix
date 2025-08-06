@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.4.4";
+  version = "4.4.5";
 
   propagatedBuildInputs = with libsForQt5; [
     qtbase
@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with libsForQt5; [
-      qmake
-      qttools
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
   preConfigure = ''
     mkdir build
@@ -86,8 +87,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mavlink";
     repo = "qgroundcontrol";
-    rev = "v${version}";
-    hash = "sha256-+BsI79p0XJ1nCjEtaCVgHbD+jseVGLQZOll79xZ5THo=";
+    tag = "v${version}";
+    hash = "sha256-wjrfwE97J+UzBPIARQ6cPadN6xIdqR8i+ZKbtiDproM=";
     fetchSubmodules = true;
   };
 

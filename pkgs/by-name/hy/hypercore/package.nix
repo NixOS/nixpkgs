@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "hypercore";
-  version = "11.7.0";
+  version = "11.11.2";
 
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "hypercore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZAKWFSOIAQysK9+4YxbUiL0fVsqnGFqhwe9ps6ZXYv0=";
+    hash = "sha256-vDI1j5seR6OBp64wq9oy4eVrtlJF7OCiQb+2EEdOGXw=";
   };
 
   npmDepsHash = "sha256-ZJxVmQWKgHyKkuYfGIlANXFcROjI7fibg6mxIhDZowM=";

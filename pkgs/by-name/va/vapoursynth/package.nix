@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "71";
+  version = "72";
 
   src = fetchFromGitHub {
     owner = "vapoursynth";
     repo = "vapoursynth";
     rev = "R${version}";
-    hash = "sha256-gFfkZaYIpQnDckYk6a8hGJCjBQxjjMIgzPZ4k2sVab4=";
+    hash = "sha256-LRRz4471Rl/HwJ14zAkU/f2Acuofja8c0pGkuWihhsM=";
   };
 
   nativeBuildInputs = [

@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "httpx";
     tag = version;
     hash = "sha256-tB8uZm0kPRnmeOvsDdrkrHcMVIYfGanB4l/xHsTKpgE=";
   };
@@ -78,18 +78,17 @@ buildPythonPackage rec {
     pytest-trio
     trustme
     uvicorn
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [

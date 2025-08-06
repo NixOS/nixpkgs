@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  doInstallCheck = true;
+
   postInstall = ''
     # Don't use 70-yubikey.rules because it depends on ConsoleKit
     install -D -t $out/lib/udev/rules.d 69-yubikey.rules

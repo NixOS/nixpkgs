@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "test_search"
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module to interact with the WAQI API";

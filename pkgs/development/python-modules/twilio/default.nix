@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.6.1";
+  version = "9.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     tag = version;
-    hash = "sha256-6prKi6gMEBA0kxY/57Uyc56Kf54tEQOlEf8nL0wivXA=";
+    hash = "sha256-QVrV6drHVZhjMnwlNYe6NaK8TzRImZfDWLMwDDBZolk=";
   };
 
   build-system = [ setuptools ];

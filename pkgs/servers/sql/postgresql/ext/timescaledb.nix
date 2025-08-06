@@ -13,13 +13,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.20.0";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
     tag = finalAttrs.version;
-    hash = "sha256-CdunXknZoOnxYK3i37TMSR+ma2JAXLsRVSVaa0giJMA=";
+    hash = "sha256-oZaEUz6g/8oVdVyPCkAE0quzYBxO911MZcgd8rFFA3c=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -53,7 +53,7 @@ postgresqlBuildExtension (finalAttrs: {
     inherit (finalAttrs) finalPackage;
     withPackages = [ "timescaledb_toolkit" ];
     postgresqlExtraSettings = ''
-      shared_preload_libraries='timescaledb,timescaledb_toolkit'
+      shared_preload_libraries='timescaledb'
     '';
     sql = ''
       CREATE EXTENSION timescaledb;

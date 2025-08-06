@@ -5,20 +5,25 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  features = [
+    "rustls-webpki"
+    "geosparql"
+  ];
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxigraph";
-  version = "0.4.9";
+  version = "0.4.11";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-sv9LpAoPQ4oFrGI6j6NgVZwEwpM1wt93lHkUwnvmhIY=";
+    owner = "oxigraph";
+    repo = "oxigraph";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M5C+SNZYXKfcosnRe9a+Zicyjuo6wli2uWv/SJxufJc=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nVlvmYOxZDMLvxP8JaKTyKMgW6+48B8B+UzlwgthJS0=";
+  cargoHash = "sha256-TgeHmCMwXK+OlTGIyzus/N+MY29lgK+JuzUBwVFbpsI=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -27,10 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "cli";
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "rustls-webpki"
-    "geosparql"
-  ];
+  buildFeatures = features;
 
   # Man pages and autocompletion
   postInstall = ''
@@ -43,9 +45,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoCheckNoDefaultFeatures = true;
-  cargoCheckFeatures = buildFeatures;
+  cargoCheckFeatures = features;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/oxigraph/oxigraph";
     description = "SPARQL graph database";
     platforms = [
@@ -53,11 +55,14 @@ rustPlatform.buildRustPackage rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ astro ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [
+      astro
+      tnias
+    ];
+    license = with lib.licenses; [
       asl20
       mit
     ];
     mainProgram = "oxigraph";
   };
-}
+})

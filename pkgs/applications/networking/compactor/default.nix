@@ -90,12 +90,12 @@ stdenv.mkDerivation rec {
     wireshark-cli
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
     homepage = "https://dns-stats.org/";
     changelog = "https://github.com/dns-stats/compactor/raw/${version}/ChangeLog.txt";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fdns ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fdns ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -719,7 +719,8 @@ rec {
               jshon
               jq
               moreutils
-            ] ++ compress.nativeInputs;
+            ]
+            ++ compress.nativeInputs;
             # Image name must be lowercase
             imageName = lib.toLower name;
             imageTag = lib.optionalString (tag != null) tag;
@@ -893,14 +894,13 @@ rec {
     runCommand "merge-docker-images"
       {
         inherit images;
-        nativeBuildInputs =
-          [
-            file
-            jq
-          ]
-          ++ compressors.none.nativeInputs
-          ++ compressors.gz.nativeInputs
-          ++ compressors.zstd.nativeInputs;
+        nativeBuildInputs = [
+          file
+          jq
+        ]
+        ++ compressors.none.nativeInputs
+        ++ compressors.gz.nativeInputs
+        ++ compressors.zstd.nativeInputs;
       }
       ''
         mkdir image inputs
@@ -1061,13 +1061,12 @@ rec {
         paths = contentsList;
         extraCommands = (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
         inherit fakeRootCommands;
-        nativeBuildInputs =
-          [
-            fakeroot
-          ]
-          ++ optionals enableFakechroot [
-            proot
-          ];
+        nativeBuildInputs = [
+          fakeroot
+        ]
+        ++ optionals enableFakechroot [
+          proot
+        ];
         postBuild = ''
           mv $out old_out
           (cd old_out; eval "$extraCommands" )
@@ -1296,51 +1295,50 @@ rec {
         };
 
       # Environment variables set in the image
-      envVars =
-        {
+      envVars = {
 
-          # Root certificates for internet access
-          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        # Root certificates for internet access
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
-          # PATH = "/path-not-set";
-          # Allows calling bash and `buildDerivation` as the Cmd
-          PATH = staticPath;
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
+        # PATH = "/path-not-set";
+        # Allows calling bash and `buildDerivation` as the Cmd
+        PATH = staticPath;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
-          HOME = homeDirectory;
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
+        HOME = homeDirectory;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
-          NIX_STORE = storeDir;
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
+        NIX_STORE = storeDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
-          # TODO: Make configurable?
-          NIX_BUILD_CORES = "1";
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
+        # TODO: Make configurable?
+        NIX_BUILD_CORES = "1";
 
-        }
-        // drvEnv
-        // {
+      }
+      // drvEnv
+      // {
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1008-L1010
-          NIX_BUILD_TOP = sandboxBuildDir;
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1008-L1010
+        NIX_BUILD_TOP = sandboxBuildDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
-          TMPDIR = sandboxBuildDir;
-          TEMPDIR = sandboxBuildDir;
-          TMP = sandboxBuildDir;
-          TEMP = sandboxBuildDir;
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
+        TMPDIR = sandboxBuildDir;
+        TEMPDIR = sandboxBuildDir;
+        TMP = sandboxBuildDir;
+        TEMP = sandboxBuildDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
-          PWD = sandboxBuildDir;
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
+        PWD = sandboxBuildDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1071-L1074
-          # We don't set it here because the output here isn't handled in any special way
-          # NIX_LOG_FD = "2";
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1071-L1074
+        # We don't set it here because the output here isn't handled in any special way
+        # NIX_LOG_FD = "2";
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
-          TERM = "xterm-256color";
-        };
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
+        TERM = "xterm-256color";
+      };
 
     in
     streamLayeredImage {

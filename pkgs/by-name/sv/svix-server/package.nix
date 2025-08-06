@@ -10,19 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svix-server";
-  version = "1.65.0";
+  version = "1.70.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-SmNiQeVoTASMW6T5mcInZLlNok32olWRr2+daq/c684=";
+    hash = "sha256-82QB+EmZf1v3L5zTLydaa4WlIUK5IJT0ghOpmIC1nRE=";
   };
 
   sourceRoot = "${src.name}/server";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vpPWEYVKEboubbWeuxyXz/M53Ura8gSpuneH/L7Qtmw=";
+  cargoHash = "sha256-f6nU5i9Dhy9inqqpHlNjR1M2E781398xo/T7hVGuCvk=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,13 +39,13 @@ rustPlatform.buildRustPackage rec {
   # disable tests because they require postgres and redis to be running
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "svix-server";
     description = "Enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
     changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
     broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }

@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-llw97jjfPsDd4nYi6lb9ug6sApPoD54WlzpJswvdbRs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OswilwabVfoKIeHxo7sxCvgGH5dRfyTmnKED+TcxSV8=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -36,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Live cryptocurrency prices CLI";
     homepage = "https://github.com/mayeranalytics/coinlive";
     changelog = "https://github.com/mayeranalytics/coinlive/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "coinlive";
   };
 }

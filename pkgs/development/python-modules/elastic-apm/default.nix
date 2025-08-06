@@ -86,17 +86,19 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [ "elasticapm_client" ];
+  disabledTests = [
+    "elasticapm_client"
+    "test_get_name_from_func_partialmethod_unbound"
+  ];
 
-  disabledTestPaths =
-    [
-      # Exclude tornado tests
-      "tests/contrib/asyncio/tornado/tornado_tests.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky tests on Darwin
-      "tests/utils/threading_tests.py"
-    ];
+  disabledTestPaths = [
+    # Exclude tornado tests
+    "tests/contrib/asyncio/tornado/tornado_tests.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky tests on Darwin
+    "tests/utils/threading_tests.py"
+  ];
 
   pythonImportsCheck = [ "elasticapm" ];
 

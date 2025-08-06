@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "cerca";
-  version = "0-unstable-2025-05-06";
+  version = "0-unstable-2025-05-21";
 
   src = fetchFromGitHub {
     owner = "cblgh";
     repo = "cerca";
-    rev = "a2706a35e3efc8b816b4374e24493548429041db";
-    hash = "sha256-FDlASFjI+D/iOH0r2Yd638aS0na19TxkN7Z1kD/o/fY";
+    rev = "722c38d96160ccf69dd7a8122b62660102b64a59";
+    hash = "sha256-M5INnik/TIzH0Afi8/6/PnhwsAhd+kFaDHejfsmuhn0=";
   };
 
   vendorHash = "sha256-yfsI0nKfzyzmtbS9bSHRaD2pEgxN6gOKAA/FRDxJx40=";

@@ -32,18 +32,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.2";
+  version = "19.3";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-7moxTdoUTOpAHDT0LNNG6ccHeXKxd6ND+GRcgchWVSI=";
+    hash = "sha256-8mCkzZPdLFGIlOkMiNDOxiQeEHa+k0BX9PMIPbjmW5k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
     hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
@@ -60,33 +59,32 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  buildInputs =
+  buildInputs = [
+    curl
+    libnotify
+    pcre
+    python3
+    sqlite
+  ]
+  ++ lib.optionals buildClient (
     [
-      curl
-      libnotify
-      pcre
-      python3
-      sqlite
+      freetype
+      libGLU
+      libogg
+      opusfile
+      SDL2
+      wavpack
+      ffmpeg
+      x264
+      vulkan-loader
+      vulkan-headers
+      glslang
+      spirv-tools
     ]
-    ++ lib.optionals buildClient (
-      [
-        freetype
-        libGLU
-        libogg
-        opusfile
-        SDL2
-        wavpack
-        ffmpeg
-        x264
-        vulkan-loader
-        vulkan-headers
-        glslang
-        spirv-tools
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libX11
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+    ]
+  );
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \

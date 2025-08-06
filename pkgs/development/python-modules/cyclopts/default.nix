@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "3.16.1";
+  version = "3.22.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-Y9CTsKj7E2P6ZhN1k1VqiFbMhsB1dgDmfhlmbTxrszM=";
+    hash = "sha256-QBB6HhkMLnoFAbXeKnqZ/C4b7fmH/Y7sR9YX06Cha+I=";
   };
 
   build-system = [
@@ -52,7 +52,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     pyyaml
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 

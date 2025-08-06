@@ -15,7 +15,6 @@ let
   inherit (lib)
     any
     concatMap
-    filterOverrides
     isList
     literalExpression
     mergeEqualOption
@@ -56,13 +55,10 @@ rec {
     name = "systemd option";
     merge =
       loc: defs:
-      let
-        defs' = filterOverrides defs;
-      in
-      if any (def: isList def.value) defs' then
-        concatMap (def: toList def.value) defs'
+      if any (def: isList def.value) defs then
+        concatMap (def: toList def.value) defs
       else
-        mergeEqualOption loc defs';
+        mergeEqualOption loc defs;
   };
 
   sharedOptions = {

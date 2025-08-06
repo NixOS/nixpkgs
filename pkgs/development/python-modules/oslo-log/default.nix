@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.log";
     tag = version;
-    hash = "sha256-ybWrNwP9L7iOzft10TgRFxA4mCRDVozVC2ZAopgITqo=";
+    hash = "sha256-d5U3zvymIoGYfXfHFp7+gQuDOLHy/q4c+NOlUoCmikU=";
   };
 
   # Manually set version because prb wants to get it from the git upstream repository (and we are
@@ -49,7 +49,8 @@ buildPythonPackage rec {
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
 
   nativeCheckInputs = [
     eventlet
@@ -60,8 +61,9 @@ buildPythonPackage rec {
   disabledTests = [
     # not compatible with sandbox
     "test_logging_handle_error"
-    # File which is used doesn't seem not to be present
-    "test_log_config_append_invalid"
+    # Incompatible Exception Representation, displaying natively
+    "test_rate_limit"
+    "test_rate_limit_except_level"
   ];
 
   pythonImportsCheck = [ "oslo_log" ];

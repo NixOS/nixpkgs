@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2025.4.2";
+  version = "2025.7.1";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-wtCZ3/7JvygSCka4i3Il2ajpSuuTPTwHeVJa4gGFDPw=";
+        hash = "sha256-qyTvvEEiZFtiRvPM8IcuRlzBKOO40Fe9g8l9wrsIY84=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-+1aTq7XKacsi/gzUpeZvSuwpKPDMo6H3C81pxWCC4w8=";
+        hash = "sha256-y34WlQtGZNBn1StoWhQh02EHbCVxYMoOQMH4cGbviXg=";
       };
 
   src = fetchurl {
@@ -36,7 +36,7 @@ let
   };
 
   pname = "burpsuite";
-  description = "An integrated platform for performing security testing of web applications";
+  description = "Integrated platform for performing security testing of web applications";
   desktopItem = makeDesktopItem {
     name = "burpsuite";
     exec = pname;
@@ -90,6 +90,8 @@ buildFHSEnv {
     ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     inherit description;

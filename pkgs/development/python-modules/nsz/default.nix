@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nicoboss";
-    repo = pname;
+    repo = "nsz";
     tag = version;
     hash = "sha256-ch4HzQFa95o3HMsi7R0LpPWmhN/Z9EYfrmCdUZLwPSE=";
   };
@@ -28,7 +28,8 @@ buildPythonPackage rec {
     pycryptodome
     enlighten
     zstandard
-  ] ++ lib.optional withGUI kivy;
+  ]
+  ++ lib.optional withGUI kivy;
 
   # do not check, as nsz requires producation keys
   # dumped from a Nintendo Switch.

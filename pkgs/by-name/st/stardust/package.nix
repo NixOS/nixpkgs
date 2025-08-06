@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.13";
 
   src = fetchurl {
-    url = "http://iwar.free.fr/spip/IMG/gz/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "http://iwar.free.fr/spip/IMG/gz/stardust-${finalAttrs.version}.tar.gz";
     hash = "sha256-t5cykB5zHYYj4tlk9QDhL7YQVgEScBZw9OIVXz5NOqc=";
   };
 

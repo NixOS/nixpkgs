@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     webkitgtk_6_0
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and modern GTK eBook reader";
     homepage = "https://johnfactotum.github.io/foliate";
     changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       onny
       aleksana
     ];

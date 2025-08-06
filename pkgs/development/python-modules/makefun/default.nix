@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.15.6";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JrxjRCphgvt17+2LUXQd0tHbLxdr7Ixk4gpYYla48Uk=";
+    hash = "sha256-4UYBgxVwv/H21+aIKLzTDS9YVvJLrV3gzLIpIc7ryUc=";
   };
 
   postPatch = ''

@@ -30,22 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-      ispc
-    ]
-    ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    ispc
+  ]
+  ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
-  buildInputs =
-    [ tbb ]
+  buildInputs = [
+    tbb
+  ]
 
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ];
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)
@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "TBB_ROOT" "${tbb}")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openimagedenoise.org";
     description = "High-Performance Denoising Library for Ray Tracing";
-    license = licenses.asl20;
-    maintainers = [ maintainers.leshainc ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/RenderKit/oidn/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.leshainc ];
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/RenderKit/oidn/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
 })

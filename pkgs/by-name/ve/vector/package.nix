@@ -25,46 +25,43 @@
 
 let
   pname = "vector";
-  version = "0.46.1";
+  version = "0.48.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
-    repo = pname;
+    repo = "vector";
     rev = "v${version}";
-    hash = "sha256-ouPCBaG/wwjIyzXA5PgBRpAtOJ5IuOrS+k4p6/KRzzY=";
+    hash = "sha256-qgf3aMZc1cgPlsAzgtaXLUx99KwN5no1amdkwFVyl4Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Bl/dgkoF9Hx1hLt9+kZiyK42GNr+5UGJYy5QZOnHDV4=";
+  cargoHash = "sha256-t8mfZpLrzrxj1WUpJPqZWyfBf9XobcqZY/hAeVGzhcM=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      perl
-      git
-      rustPlatform.bindgenHook
-    ]
-    # Provides the mig command used by the build scripts
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
-  buildInputs =
-    [
-      oniguruma
-      openssl
-      protobuf
-      rdkafka
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rust-jemalloc-sys
-      libiconv
-      coreutils
-      zlib
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    perl
+    git
+    rustPlatform.bindgenHook
+  ]
+  # Provides the mig command used by the build scripts
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+  buildInputs = [
+    oniguruma
+    openssl
+    protobuf
+    rdkafka
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rust-jemalloc-sys
+    libiconv
+    coreutils
+    zlib
+  ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
   # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.

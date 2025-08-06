@@ -49,7 +49,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "azure.kusto.ingest" ];
 

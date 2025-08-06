@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A simple pytest plugin to run tests concurrently";
+    description = "Simple pytest plugin to run tests concurrently";
     homepage = "https://github.com/Quansight-Labs/pytest-run-parallel";
     changelog = "https://github.com/Quansight-Labs/pytest-run-parallel/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

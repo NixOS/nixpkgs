@@ -5,13 +5,13 @@
   raylib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "raylib-games";
   version = "2022-10-24";
 
   src = fetchFromGitHub {
     owner = "raysan5";
-    repo = pname;
+    repo = "raylib-games";
     rev = "e00d77cf96ba63472e8316ae95a23c624045dcbe";
     hash = "sha256-N9ip8yFUqXmNMKcvQuOyxDI4yF/w1YaoIh0prvS4Xr4=";
   };
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     mkdir -p $out/bin $out/resources
     find . -type f -executable -exec cp {} $out/bin \;
     for d in *; do
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         cp -ar "$d/src/resources" "$out/resources/$d"
       fi
     done
-    runHook postBuild
+    runHook postInstall
   '';
 
   meta = with lib; {

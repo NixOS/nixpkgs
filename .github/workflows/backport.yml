@@ -9,7 +9,14 @@ on:
   pull_request_target:
     types: [closed, labeled]
 
-permissions: {}
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   backport:
@@ -32,9 +39,14 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
 
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@436145e922f9561fc5ea157ff406f21af2d6b363 # v3.2.0
+        uses: korthout/backport-action@0193454f0c5947491d348f33a275c119f30eb736 # v3.2.1
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'
@@ -45,14 +57,20 @@ jobs:
             * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
               * Even as a non-committer, if you find that it is not acceptable, leave a comment.
 
-      - name: "Add 'has: port to stable' label"
-        if: steps.backport.outputs.created_pull_numbers != ''
+      - name: Log current API rate limits
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          gh api \
-            --method POST \
-            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            -f "labels[]=8.has: port to stable"
+        run: gh api /rate_limit | jq
+
+      - name: "Add 'has: port to stable' label"
+        if: steps.backport.outputs.created_pull_numbers != ''
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [ '8.has: port to stable' ]
+            })

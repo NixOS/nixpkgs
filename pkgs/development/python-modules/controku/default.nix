@@ -25,23 +25,23 @@ buildPythonPackage rec {
     hash = "sha256-sye2GtL3a77pygllZc6ylaIP7faPb+NFbyKKyqJzIXw=";
   };
 
-  nativeBuildInputs =
-    [ setuptools ]
-    ++ lib.optionals buildApplication [
-      gobject-introspection
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    setuptools
+  ]
+  ++ lib.optionals buildApplication [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
 
-  propagatedBuildInputs =
-    [
-      requests
-      ssdpy
-    ]
-    ++ lib.optionals buildApplication [
-      gtk3
-      appdirs
-      pygobject3
-    ];
+  propagatedBuildInputs = [
+    requests
+    ssdpy
+  ]
+  ++ lib.optionals buildApplication [
+    gtk3
+    appdirs
+    pygobject3
+  ];
 
   pythonImportsCheck = [ "controku" ];
 

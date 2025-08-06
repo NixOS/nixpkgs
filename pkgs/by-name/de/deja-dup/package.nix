@@ -22,19 +22,20 @@
   json-glib,
   duplicity,
   rclone,
+  restic,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "47.0";
+  version = "48.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = finalAttrs.version;
-    hash = "sha256-MjZ+NkNAzwEnC9R48Q5Cb3+c5jM7ooOv7+5TQ6Xo4LM=";
+    hash = "sha256-3tjJljCdugfjfysd0afUYY7Gc1UcaP4w4jgxVDr5tBM=";
   };
 
   patches = [
@@ -68,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dduplicity_command=${lib.getExe duplicity}"
     "-Drclone_command=${lib.getExe rclone}"
+    "-Denable_restic=true"
+    "-Drestic_command=${lib.getExe restic}"
   ];
 
   preFixup = ''
@@ -89,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       and uses duplicity as the backend.
     '';
     homepage = "https://apps.gnome.org/DejaDup/";
+    changelog = "https://gitlab.gnome.org/World/deja-dup/-/releases/${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     teams = [ teams.gnome-circle ];

@@ -73,7 +73,8 @@ rec {
 
         meta = {
           sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        } // meta;
+        }
+        // meta;
       }
       // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
     );
@@ -121,6 +122,7 @@ rec {
         xorg.xrandr
         which
         perl
+        xdg-user-dirs # flutter desktop apps
         xdg-utils
         iana-etc
         krb5
@@ -149,7 +151,6 @@ rec {
         xorg.libpciaccess
 
         glib
-        gtk2
         bzip2
         zlib
         gdk-pixbuf
@@ -218,7 +219,6 @@ rec {
         speex
         SDL2_ttf
         SDL2_mixer
-        libappindicator-gtk2
         libcaca
         libcanberra
         libgcrypt

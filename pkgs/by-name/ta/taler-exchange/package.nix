@@ -19,17 +19,18 @@
   gettext,
   texinfo,
   libtool,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  version = "0.14.6-unstable-2025-03-02";
+  version = "1.0.4";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "13e058a902a3dbee9d7fe327030b88c2d126675b";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-fqlYpFggQkB/IqD6V01ec+G4EtoNaA/FXigM+jqIMe0=";
+    hash = "sha256-k2e9pzy7vSIjCVGOVif9ntYvLcvoJA6J63vB/lg3iwA=";
   };
 
   patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
@@ -109,6 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "check";
 
+  passthru.tests = nixosTests.taler.basic;
+
   meta = {
     description = "Exchange component for the GNU Taler electronic payment system";
     longDescription = ''
@@ -125,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

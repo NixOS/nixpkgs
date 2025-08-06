@@ -116,10 +116,15 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
 
 def get_bootspec(profile: str | None, generation: int) -> BootSpec:
     system_directory = system_dir(profile, generation, None)
-    boot_json_path = os.path.realpath("%s/%s" % (system_directory, "boot.json"))
+    boot_json_path = os.path.join(system_directory, "boot.json")
     if os.path.isfile(boot_json_path):
-        boot_json_f = open(boot_json_path, 'r')
-        bootspec_json = json.load(boot_json_f)
+        with open(boot_json_path, 'r') as boot_json_f:
+            # check if json is well-formed, else throw error with filepath
+            try:
+                bootspec_json = json.load(boot_json_f)
+            except ValueError as e:
+                print(f"error: Malformed Json: {e}, in {boot_json_path}", file=sys.stderr)
+                sys.exit(1)
     else:
         boot_json_str = run(
             [
@@ -335,7 +340,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         available_match = re.search(r"^\((.*)\)$", available_out)
 
         if installed_match is None:
-            raise Exception("could not find any previously installed systemd-boot")
+            raise Exception("Could not find any previously installed systemd-boot. If you are switching to systemd-boot from a different bootloader, you need to run `nixos-rebuild switch --install-bootloader`")
 
         if available_match is None:
             raise Exception("could not determine systemd-boot version")

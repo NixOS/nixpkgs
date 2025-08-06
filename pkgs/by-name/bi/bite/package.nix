@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gio4J+V8achSuR2vQa2dnvOR/u4Zbb5z0UE0xP0gGCU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ESGX1hnDnU2taKQXre4AQRzQxTC7W+0cEIoQPPC9Lfs=";
 
   nativeBuildInputs = [
@@ -40,32 +39,30 @@ rustPlatform.buildRustPackage rec {
     imagemagick
   ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      libxkbcommon
-      pango
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    libxkbcommon
+    pango
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
-  runtimeDependencies =
-    [
-      libxkbcommon
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ];
+  runtimeDependencies = [
+    libxkbcommon
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/bite \

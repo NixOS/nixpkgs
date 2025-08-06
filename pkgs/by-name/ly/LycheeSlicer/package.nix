@@ -7,11 +7,11 @@
 }:
 let
   pname = "LycheeSlicer";
-  version = "7.3.2";
+  version = "7.4.2";
 
   src = fetchurl {
     url = "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-CmN4Q4gTGYeICIoLz0UuVlSyOstXW/yYVb4s1dT5EOc=";
+    hash = "sha256-RTLlNB6eiesXZayC69hpnXQsAgmPuaJTC+18Q6KzAP0=";
   };
 
   desktopItem = makeDesktopItem {
@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
-  buildInputs = [
+  extraLibraries = [
     xorg.libxshmfence
   ];
 

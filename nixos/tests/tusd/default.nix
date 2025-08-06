@@ -43,6 +43,7 @@ in
     client.succeed("${pkgs.coreutils}/bin/truncate --size=100M file-100M.bin")
 
     # Upload it.
+    client.wait_for_unit("network.target")
     client.succeed("${./tus-curl-upload.sh} file-100M.bin http://server:${toString port}/files/")
 
     print("Upload succeeded")

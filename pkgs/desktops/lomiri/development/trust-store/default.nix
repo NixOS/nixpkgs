@@ -58,20 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./1001-treewide-Switch-to-glog-CMake-module.patch
   ];
 
-  postPatch =
-    ''
-      # pkg-config patching hook expects prefix variable
-      substituteInPlace data/trust-store.pc.in \
-        --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  postPatch = ''
+    # pkg-config patching hook expects prefix variable
+    substituteInPlace data/trust-store.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
 
-      substituteInPlace src/core/trust/terminal_agent.h \
-        --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests)' ""
-    '';
+    substituteInPlace src/core/trust/terminal_agent.h \
+      --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' ""
+  '';
 
   strictDeps = true;
 

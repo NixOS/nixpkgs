@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "onnxslim";
-  version = "0.1.51";
+  version = "0.1.57";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RH0UnMRJvs+lT/YblJcSE1TflAosJLB3XwD8XhqSdsw=";
+    hash = "sha256-VI1OaNMHuL2AhYxZ/n5zrwlqnfcCbjY39QXHX8gcdw8=";
   };
 
   build-system = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Toolkit to Help Optimize Onnx Model";
+    description = "Toolkit to Help Optimize Onnx Model";
     homepage = "https://pypi.org/project/onnxslim/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ferrine ];

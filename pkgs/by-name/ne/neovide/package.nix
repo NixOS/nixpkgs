@@ -24,19 +24,18 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
-    tag = version;
-    hash = "sha256-MLiLddF53OXDPYuJbTAscezxN09mxZkuSOZtQz07JSE=";
+    tag = finalAttrs.version;
+    hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1ni8AZIwAz5R2Ejt9Fj5qmybvL4KZV/M3BMqQx4HFLU=";
+  cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
 
   SKIA_SOURCE_DIR =
     let
@@ -64,16 +63,15 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   SKIA_GN_COMMAND = "${gn}/bin/gn";
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      python3 # skia
-      removeReferencesTo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -122,15 +120,17 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
 
   meta = {
     description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://neovide.dev/";
-    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ck3d ];
+    changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ck3d
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

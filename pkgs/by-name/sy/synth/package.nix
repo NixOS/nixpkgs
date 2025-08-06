@@ -10,12 +10,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
-    repo = pname;
+    repo = "synth";
     rev = "v${version}";
     sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-sJSU85f4bLh89qo8fojWJNfJ9t7i/Hlg5pnLcxcwKt4=";
 
   checkFlags = [

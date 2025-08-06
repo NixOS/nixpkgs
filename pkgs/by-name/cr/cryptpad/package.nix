@@ -120,6 +120,8 @@ buildNpmPackage {
     # Move to install directory manually.
     npm run install:components
     mv www/components "$out_cryptpad/www/"
+    # and fix absolute symlink to /build...
+    ln -Tfs ../../src/tweetnacl "$out_cryptpad/www/components/tweetnacl"
 
     # install OnlyOffice (install-onlyoffice.sh without network)
     mkdir -p "$out_cryptpad/www/common/onlyoffice/dist"
@@ -149,7 +151,7 @@ buildNpmPackage {
   passthru.tests.cryptpad = nixosTests.cryptpad;
 
   meta = {
-    description = "Collaborative office suite, end-to-end encrypted and open-source.";
+    description = "Collaborative office suite, end-to-end encrypted and open-source";
     homepage = "https://cryptpad.org/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "cryptpad";

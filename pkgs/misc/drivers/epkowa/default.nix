@@ -554,26 +554,24 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/iscan
     ln -s ${plugins.network}/lib/iscan/network $out/lib/iscan/network
   '';
-  postFixup =
-    ''
-      # iscan-registry is a shell script requiring getopt
-      wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
-      registry=$out/bin/iscan-registry;
-    ''
-    + lib.concatStrings (
-      lib.mapAttrsToList (name: value: ''
-        plugin=${value};
-        ${value.passthru.registrationCommand}
-      '') plugins
-    );
+  postFixup = ''
+    # iscan-registry is a shell script requiring getopt
+    wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
+    registry=$out/bin/iscan-registry;
+  ''
+  + lib.concatStrings (
+    lib.mapAttrsToList (name: value: ''
+      plugin=${value};
+      ${value.passthru.registrationCommand}
+    '') plugins
+  );
   meta = common_meta // {
     description = "sane-epkowa backend for some epson scanners";
-    longDescription =
-      ''
-        Includes gui-less iscan (aka. Image Scan! for Linux).
-        Supported hardware: at least :
-      ''
-      + lib.concatStringsSep ", " (lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
+    longDescription = ''
+      Includes gui-less iscan (aka. Image Scan! for Linux).
+      Supported hardware: at least :
+    ''
+    + lib.concatStringsSep ", " (lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
     maintainers = with lib.maintainers; [
       symphorien
       dominikh

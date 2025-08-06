@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) paperless;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.flameeyes.eu/projects/unpaper";
     changelog = "https://github.com/unpaper/unpaper/blob/unpaper-${version}/NEWS";
     description = "Post-processing tool for scanned sheets of paper";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
     mainProgram = "unpaper";
-    maintainers = [ maintainers.rycee ];
+    maintainers = [ lib.maintainers.rycee ];
   };
 }

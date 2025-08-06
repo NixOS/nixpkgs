@@ -9,6 +9,7 @@
   flit-core,
 
   # dependencies
+  aiofiles,
   etils,
   humanize,
   importlib-resources,
@@ -23,7 +24,6 @@
   typing-extensions,
 
   # tests
-  aiofiles,
   chex,
   google-cloud-logging,
   mock,
@@ -31,18 +31,19 @@
   portpicker,
   pytest-xdist,
   pytestCheckHook,
+  safetensors,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.13";
+  version = "0.11.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-qmq0Kz8wXUFFE4CqsdFwKXAIvysFbv7JomQSrNj1QCc=";
+    hash = "sha256-ZZTmWW0PZHk8Evhk6JnbAyl7RQOAxN4GwXUv5M6GfIQ=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -55,6 +56,7 @@ buildPythonPackage rec {
 
   dependencies = [
     absl-py
+    aiofiles
     etils
     humanize
     importlib-resources
@@ -70,7 +72,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aiofiles
     chex
     google-cloud-logging
     mock
@@ -78,6 +79,7 @@ buildPythonPackage rec {
     portpicker
     pytest-xdist
     pytestCheckHook
+    safetensors
   ];
 
   pythonImportsCheck = [
@@ -85,7 +87,13 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # Flaky
+    # AssertionError: 2 not greater than 2.0046136379241943
+    "test_async_mkdir_parallel"
+    "test_async_mkdir_sequential"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
@@ -105,6 +113,7 @@ buildPythonPackage rec {
     "orbax/checkpoint/_src/metadata/tree_test.py"
     "orbax/checkpoint/_src/testing/test_tree_utils.py"
     "orbax/checkpoint/_src/tree/parts_of_test.py"
+    "orbax/checkpoint/_src/tree/structure_utils_test.py"
     "orbax/checkpoint/_src/tree/utils_test.py"
     "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"

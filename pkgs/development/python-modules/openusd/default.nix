@@ -23,7 +23,7 @@
   ninja,
   numpy,
   opencolorio,
-  openimageio_2,
+  openimageio,
   opensubdiv,
   osl,
   ptex,
@@ -51,14 +51,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.02a";
+  version = "25.05.01";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-QFwG6kOLM+R+QIAozk/Dbldj8LRt9kCJv0W/EGHkq6Q=";
+    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
 
   stdenv = python.stdenv;
@@ -69,8 +69,14 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "port-to-embree-4.patch";
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/a07a6b4d1da19bfc499db49641d74fb7c1a71e9b.patch?full_index=1";
-      hash = "sha256-Gww6Ll2nKwpcxMY9lnf5BZ3eqUWz1rik9P3mPKDOf+Y=";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
+      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
+    })
+    (fetchpatch {
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      name = "propagate-dependencies-opengl.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
+      hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
     })
   ];
 
@@ -95,72 +101,72 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      setuptools
-    ]
-    ++ lib.optionals withDocs [
-      git
-      graphviz-nox
-      doxygen
-    ]
-    ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    setuptools
+    opensubdiv.dev
+    opensubdiv.static
+  ]
+  ++ lib.optionals withDocs [
+    git
+    graphviz-nox
+    doxygen
+  ]
+  ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      alembic.dev
-      bison
-      draco
-      embree
-      flex
-      imath
-      materialx
-      opencolorio
-      openimageio_2
-      opensubdiv
-      ptex
-      tbb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXt
-    ]
-    ++ lib.optionals withOsl [ osl ]
-    ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
+  buildInputs = [
+    alembic.dev
+    bison
+    draco
+    embree
+    flex
+    imath
+    materialx
+    opencolorio
+    openimageio
+    ptex
+    tbb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXt
+  ]
+  ++ lib.optionals withOsl [ osl ]
+  ++ lib.optionals withUsdView [ qt6.qtbase ]
+  ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
-  propagatedBuildInputs =
-    [
-      boost
-      jinja2
-      numpy
-      pyopengl
-      distutils
-    ]
-    ++ lib.optionals (withTools || withUsdView) [
-      pyside-tools-uic
-      pyside6
-    ]
-    ++ lib.optionals withUsdView [ pyqt6 ];
+  propagatedBuildInputs = [
+    boost
+    jinja2
+    numpy
+    opensubdiv
+    pyopengl
+    distutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+  ]
+  ++ lib.optionals (withTools || withUsdView) [
+    pyside-tools-uic
+    pyside6
+  ]
+  ++ lib.optionals withUsdView [ pyqt6 ];
 
   pythonImportsCheck = [
     "pxr"
     "pxr.Usd"
   ];
 
-  postInstall =
-    ''
-      # Make python lib properly accessible
-      target_dir=$out/${python.sitePackages}
-      mkdir -p $(dirname $target_dir)
-      mv $out/lib/python $target_dir
-    ''
-    + lib.optionalString withDocs ''
-      mv $out/docs $doc
-    '';
+  postInstall = ''
+    # Make python lib properly accessible
+    target_dir=$out/${python.sitePackages}
+    mkdir -p $(dirname $target_dir)
+    mv $out/lib/python $target_dir
+  ''
+  + lib.optionalString withDocs ''
+    mv $out/docs $doc
+  '';
 
   meta = {
     description = "Universal Scene Description";

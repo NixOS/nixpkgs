@@ -6,7 +6,7 @@
 
   # build-system
   cymem,
-  cython_0,
+  cython,
   murmurhash,
   numpy,
   preshed,
@@ -47,19 +47,19 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.5";
+  version = "3.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${version}";
-    hash = "sha256-rgMstGSscUBACA5+veXD9H/lHuvWKs7hJ6hz6aKOB/0=";
+    hash = "sha256-mRra5/4W3DFVI/KbReTg2Ey9mOC6eQQ31/QDt7Pw0fU=";
   };
 
   build-system = [
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
@@ -106,13 +106,18 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = [ "-m 'slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # touches network
     "test_download_compatibility"
     "test_validate_compatibility_table"
     "test_project_assets"
+    "test_find_available_port"
+
+    # Tests for presence of outdated (and thus missing) spacy models
+    # https://github.com/explosion/spaCy/issues/13856
+    "test_registry_entries"
   ];
 
   pythonImportsCheck = [ "spacy" ];
@@ -129,7 +134,7 @@ buildPythonPackage rec {
         ]
       }
 
-      nix-update python3Packages.spacy
+      nix-update python3Packages.spacy --version-regex 'release-v([0-9.]+)'
 
       # update spacy models as well
       echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
@@ -137,12 +142,14 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
+  __darwinAllowLocalNetworking = true; # needed for test_find_available_port
+
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";
   };
 }

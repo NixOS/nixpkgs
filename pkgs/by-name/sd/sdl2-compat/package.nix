@@ -2,22 +2,30 @@
   cmake,
   lib,
   fetchFromGitHub,
-  monado,
   ninja,
+  sdl3,
+  stdenv,
+  testers,
+  libX11,
+  libGL,
   nix-update-script,
+
+  # passthru tests
   SDL2_ttf,
   SDL2_net,
   SDL2_gfx,
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
-  sdl3,
-  stdenv,
-  testers,
-  libX11,
-  libGL,
+  SDL_compat,
+  ffmpeg,
+  qemu,
 }:
-
+let
+  # tray support on sdl3 pulls in gtk3, which is quite an expensive dependency.
+  # sdl2 does not support the tray, so we can just disable that requirement.
+  sdl3' = sdl3.override { traySupport = false; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
   version = "2.32.56";
@@ -35,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    sdl3
+    sdl3'
     libX11
   ];
 
@@ -53,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "SDL2COMPAT_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3 ]))
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3' ]))
   ];
 
   # skip timing-based tests as those are flaky
@@ -71,22 +79,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests =
-      {
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-        inherit
-          SDL2_ttf
-          SDL2_net
-          SDL2_gfx
-          SDL2_sound
-          SDL2_mixer
-          SDL2_image
-          ;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit monado;
-      };
+      inherit
+        SDL_compat
+        SDL2_ttf
+        SDL2_net
+        SDL2_gfx
+        SDL2_sound
+        SDL2_mixer
+        SDL2_image
+        ffmpeg
+        ;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit qemu;
+    };
 
     updateScript = nix-update-script {
       extraArgs = [

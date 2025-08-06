@@ -158,7 +158,7 @@
 
     meta = {
       homepage = "https://github.com/stenzek/lunasvg";
-      description = "lunasvg is a standalone SVG rendering library in C++";
+      description = "Standalone SVG rendering library in C++";
       license = lib.licenses.mit;
       platforms = lib.platforms.linux;
     };

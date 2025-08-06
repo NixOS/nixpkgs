@@ -45,24 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  buildInputs =
-    [
-      gtk4
-      glib
-      gsettings-desktop-schemas
-      gdk-pixbuf
-      gnome-desktop
-      geocode-glib_2
-      geoclue2
-      libgweather
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      # GStreamer plugins needed for Alarms
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    gtk4
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    gnome-desktop
+    geocode-glib_2
+    geoclue2
+    libgweather
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    # GStreamer plugins needed for Alarms
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   doCheck = true;
 
@@ -72,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://apps.gnome.org/Clocks/";
-    description = "A simple and elegant clock application for GNOME";
+    description = "Simple and elegant clock application for GNOME";
     longDescription = ''
       A simple and elegant clock application. It includes world clocks, alarms,
       a stopwatch, and timers.

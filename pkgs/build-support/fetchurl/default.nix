@@ -6,6 +6,7 @@
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
   cacert ? null,
+  rewriteURL,
 }:
 
 let
@@ -122,7 +123,7 @@ in
 }@args:
 
 let
-  urls_ =
+  preRewriteUrls =
     if urls != [ ] && url == "" then
       (
         if lib.isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}"
@@ -136,6 +137,12 @@ let
       )
     else
       throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
+
+  urls_ =
+    let
+      u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+    in
+    if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
   hash_ =
     if
@@ -185,6 +192,21 @@ let
       }
     else
       throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty urls_}";
+
+  resolvedUrl =
+    let
+      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorName = lib.head mirrorSplit;
+      mirrorList =
+        if lib.hasAttr mirrorName mirrors then
+          mirrors."${mirrorName}"
+        else
+          throw "unknown mirror:// site ${mirrorName}";
+    in
+    if mirrorSplit == null || mirrorName == null then
+      url
+    else
+      "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
 in
 
 assert
@@ -272,7 +294,8 @@ stdenvNoCC.mkDerivation (
 
     inherit meta;
     passthru = {
-      inherit url;
-    } // passthru;
+      inherit url resolvedUrl;
+    }
+    // passthru;
   }
 )

@@ -35,28 +35,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "velocity";
-  version = "3.4.0-unstable-2025-05-09";
+  version = "3.4.0-unstable-2025-06-11";
 
   src = fetchFromGitHub {
     owner = "PaperMC";
     repo = "Velocity";
-    rev = "e13c8c340f242d270b16ec6931d1ba94a9e8f1f3";
-    hash = "sha256-CJVUEwYnpXDaYgXoi1Qk0uyB/CHM3UDQzQfhtDxDKdE=";
+    rev = "669fda298c670c55686f34d868383052b192518d";
+    hash = "sha256-UI6SqVAaM4NANf9cGvsIgYO1jSkWDOk5ysyufrPWTgg=";
   };
 
-  nativeBuildInputs =
-    [
-      gradle_jdk17
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals withVelocityNative [
-      # libraries for velocity-native
-      openssl
-      libdeflate
+  nativeBuildInputs = [
+    gradle_jdk17
+    makeBinaryWrapper
+  ];
 
-      # needed for building velocity-native jni
-      jdk17
-    ];
+  buildInputs = lib.optionals withVelocityNative [
+    # libraries for velocity-native
+    openssl
+    libdeflate
+
+    # needed for building velocity-native jni
+    jdk17
+  ];
+
+  strictDeps = true;
 
   mitmCache = gradle_jdk17.fetchDeps {
     inherit (finalAttrs) pname;
@@ -98,6 +100,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe jre_headless} "$out/bin/velocity" \
       --append-flags "-jar $out/share/velocity/velocity.jar"
+
+    ${lib.optionalString withVelocityNative ''
+      # Nix doesn't pick up references in compressed JAR file
+      mkdir $out/nix-support
+      echo ${lib.getLib openssl} >> $out/nix-support/runtime-dependencies
+      echo ${lib.getLib libdeflate} >> $out/nix-support/runtime-dependencies
+    ''}
 
     runHook postInstall
   '';

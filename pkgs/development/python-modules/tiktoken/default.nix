@@ -42,8 +42,12 @@ buildPythonPackage {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src postPatch;
-    name = "${pname}-${version}";
+    inherit
+      pname
+      version
+      src
+      postPatch
+      ;
     hash = "sha256-MfTTRbSM+KgrYrWHYlJkGDc1qn3oulalDJM+huTaJ0g=";
   };
 
@@ -68,7 +72,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "tiktoken" ];
 
   meta = with lib; {
-    description = "tiktoken is a fast BPE tokeniser for use with OpenAI's models";
+    description = "Fast BPE tokeniser for use with OpenAI's models";
     homepage = "https://github.com/openai/tiktoken";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "symfpu";
-  version = "unstable-2019-05-17";
+  version = "0-unstable-2019-05-17";
 
   src = fetchFromGitHub {
     owner = "martin-cs";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A (concrete or symbolic) implementation of IEEE-754 / SMT-LIB floating-point";
+    description = "(concrete or symbolic) implementation of IEEE-754 / SMT-LIB floating-point";
     homepage = "https://github.com/martin-cs/symfpu";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

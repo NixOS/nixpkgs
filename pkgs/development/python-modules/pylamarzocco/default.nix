@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "2.0.3";
+  version = "2.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-zQbE+GMXwmdUSOd4xqgiC2QENFdLvcUS3JLKTz4rq8s=";
+    hash = "sha256-g0qhNBhcU7Dogcw9WiEk+APk2McU7woXBqgeUS9D8iQ=";
   };
 
   build-system = [ setuptools ];

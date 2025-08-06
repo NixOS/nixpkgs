@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-T8OG6jmUILeRmvPLjGDFlJyBm87Xdgy4bw4n7V0BQMk=";
 
   # Fail for unclear reasons (only on darwin)

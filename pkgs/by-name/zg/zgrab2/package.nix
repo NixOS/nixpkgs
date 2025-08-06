@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "zgrab2";
   version = "unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "zmap";
-    repo = pname;
+    repo = "zgrab2";
     rev = "911c86f13080ceae98f8d63d1ae0e85c4a8f7f61";
     hash = "sha256-VOWkBM/SziY3jiIaYYWq+LRzG4vKitiscqdIDfRUkYY=";
   };

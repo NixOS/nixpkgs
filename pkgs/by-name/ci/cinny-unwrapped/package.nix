@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.7.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
-    rev = "v${version}";
-    hash = "sha256-x4cRZ0XfyvRqOWIqtsVBiIPDxC3J9SUdoReiWNUB/X8=";
+    tag = "v${version}";
+    hash = "sha256-1F49KHAfCtvcqMeRYI8r6Ke7oz+EQqOfkgdgn5E1DU4=";
   };
 
-  npmDepsHash = "sha256-s8dKMGwg6DL+aEq0Sk04VF1pSDpAW18Dok113xDWb8Q=";
+  npmDepsHash = "sha256-Tx+08NrbFolI7agC6AtNvkOgCJWJa4fsY0CFC02h4r0=";
 
   nativeBuildInputs = [
     python3
@@ -33,7 +33,8 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall

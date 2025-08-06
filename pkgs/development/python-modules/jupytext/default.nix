@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.17.1";
+  version = "1.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${version}";
-    hash = "sha256-Rkz2rite0hKcts4+3SmFsDF6tH2kQa4d2DtyZsAx3rA=";
+    hash = "sha256-xMmtppXect+PRlEp2g0kJurALVvcfza+FBbZbK2SbHc=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,8 @@ buildPythonPackage rec {
     nbformat
     packaging
     pyyaml
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     jupyter-client

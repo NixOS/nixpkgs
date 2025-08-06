@@ -7,17 +7,17 @@
   heatshrink,
   zlib,
   boost,
-  catch2,
+  catch2_3,
 }:
 stdenv.mkDerivation {
   pname = "libbgcode";
-  version = "2023-11-16";
+  version = "0-unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "libbgcode";
-    rev = "bc390aab4427589a6402b4c7f65cf4d0a8f987ec";
-    hash = "sha256-TZShYeDAh+fNdmTr1Xqctji9f0vEGpNZv1ba/IY5EoY=";
+    rev = "5041c093b33e2748e76d6b326f2251310823f3df";
+    hash = "sha256-EaxVZerH2v8b1Yqk+RW/r3BvnJvrAelkKf8Bd+EHbEc=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     heatshrink
     zlib
     boost
-    catch2
+    catch2_3
   ];
 
   meta = with lib; {

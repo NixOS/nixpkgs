@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kdash-rs";
-    repo = pname;
+    repo = "kdash";
     rev = "v${version}";
     sha256 = "sha256-fFpdWVoeWycnp/hRw2S+hYpnXYmCs+rLqcZdmSSMGwI=";
   };
@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     xorg.xcbutil
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-72DuM64wj8WW6soagodOFIeHvVn1CPpb1T3Y7GQYsbs=";
 
   meta = with lib; {

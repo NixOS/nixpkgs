@@ -49,9 +49,7 @@ Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
 in
-mkShell {
-  packages = [ sbcl' ];
-}
+mkShell { packages = [ sbcl' ]; }
 ```
 
 Such a Lisp can be now used e.g. to compile your sources:
@@ -59,7 +57,11 @@ Such a Lisp can be now used e.g. to compile your sources:
 ```nix
 {
   buildPhase = ''
+    runHook preBuild
+
     ${sbcl'}/bin/sbcl --load my-build-file.lisp
+
+    runHook postBuild
   '';
 }
 ```
@@ -188,11 +190,7 @@ let
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
-  sbcl' = sbcl.withOverrides (
-    self: super: {
-      inherit alexandria;
-    }
-  );
+  sbcl' = sbcl.withOverrides (self: super: { inherit alexandria; });
 in
 sbcl'.pkgs.alexandria
 ```

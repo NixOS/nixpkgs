@@ -19,25 +19,25 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EjfW2qeq0ehGhjE2Psz5g/suYMZPvtQi2gaYb+NCa2U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wMgFkzgoHjvE+5t+cA5OW2COXbUj/5tWXz0Zp9cd5lw=";
 
   env.TOOL_VERSION = "v${version}";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libgit2
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libgit2
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for determining the time a print will take using the Klipper firmware";
     homepage = "https://github.com/Annex-Engineering/klipper_estimator";
     changelog = "https://github.com/Annex-Engineering/klipper_estimator/releases/tag/v${version}";
     mainProgram = "klipper_estimator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tmarkus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

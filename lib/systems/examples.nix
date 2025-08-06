@@ -21,9 +21,14 @@ rec {
     config = "powerpc64le-unknown-linux-musl";
   };
 
-  ppc64 = {
+  ppc64-elfv1 = {
+    config = "powerpc64-unknown-linux-gnuabielfv1";
+    rust.rustcTarget = "powerpc64-unknown-linux-gnu";
+  };
+  ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";
   };
+  ppc64 = ppc64-elfv2;
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
     gcc = {
@@ -33,23 +38,28 @@ rec {
 
   sheevaplug = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.sheevaplug;
+  }
+  // platforms.sheevaplug;
 
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
-  } // platforms.raspberrypi;
+  }
+  // platforms.raspberrypi;
 
   bluefield2 = {
     config = "aarch64-unknown-linux-gnu";
-  } // platforms.bluefield2;
+  }
+  // platforms.bluefield2;
 
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-gravitas;
+  }
+  // platforms.zero-gravitas;
 
   remarkable2 = {
     config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-sugar;
+  }
+  // platforms.zero-sugar;
 
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
@@ -65,7 +75,8 @@ rec {
     androidSdkVersion = "33";
     androidNdkVersion = "26";
     useAndroidPrebuilt = true;
-  } // platforms.armv7a-android;
+  }
+  // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
@@ -86,39 +97,48 @@ rec {
 
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.pogoplug4;
+  }
+  // platforms.pogoplug4;
 
   ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";
-  } // platforms.ben_nanonote;
+  }
+  // platforms.ben_nanonote;
 
   fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
-  } // platforms.fuloong2f_n32;
+  }
+  // platforms.fuloong2f_n32;
 
   # can execute on 32bit chip
   mips-linux-gnu = {
     config = "mips-unknown-linux-gnu";
-  } // platforms.gcc_mips32r2_o32;
+  }
+  // platforms.gcc_mips32r2_o32;
   mipsel-linux-gnu = {
     config = "mipsel-unknown-linux-gnu";
-  } // platforms.gcc_mips32r2_o32;
+  }
+  // platforms.gcc_mips32r2_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
   mips64-linux-gnuabin32 = {
     config = "mips64-unknown-linux-gnuabin32";
-  } // platforms.gcc_mips64r2_n32;
+  }
+  // platforms.gcc_mips64r2_n32;
   mips64el-linux-gnuabin32 = {
     config = "mips64el-unknown-linux-gnuabin32";
-  } // platforms.gcc_mips64r2_n32;
+  }
+  // platforms.gcc_mips64r2_n32;
 
   # 64bit pointers
   mips64-linux-gnuabi64 = {
     config = "mips64-unknown-linux-gnuabi64";
-  } // platforms.gcc_mips64r2_64;
+  }
+  // platforms.gcc_mips64r2_64;
   mips64el-linux-gnuabi64 = {
     config = "mips64el-unknown-linux-gnuabi64";
-  } // platforms.gcc_mips64r2_64;
+  }
+  // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -170,8 +190,16 @@ rec {
     libc = "newlib";
   };
 
-  loongarch64-linux = {
+  # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
+  loongarch64-linux = lib.recursiveUpdate platforms.loongarch64-multiplatform {
     config = "loongarch64-unknown-linux-gnu";
+  };
+  loongarch64-linux-embedded = lib.recursiveUpdate platforms.loongarch64-multiplatform {
+    config = "loongarch64-unknown-linux-gnu";
+    gcc = {
+      arch = "loongarch64";
+      strict-align = true;
+    };
   };
 
   mmix = {
@@ -341,6 +369,17 @@ rec {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
+    useLLVM = true;
+  };
+
+  # Target the MSVC ABI
+  x86_64-windows = {
+    config = "x86_64-pc-windows-msvc";
+    useLLVM = true;
+  };
+
+  aarch64-windows = {
+    config = "aarch64-pc-windows-msvc";
     useLLVM = true;
   };
 

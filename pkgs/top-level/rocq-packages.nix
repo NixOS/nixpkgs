@@ -37,6 +37,8 @@ let
       mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
 
       bignums = callPackage ../development/rocq-modules/bignums { };
+      hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
+      parseque = callPackage ../development/rocq-modules/parseque { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
 
@@ -86,8 +88,10 @@ rec {
     self.filterPackages (!rocq-core.dontFilter or false);
 
   rocq-core_9_0 = mkRocq "9.0";
+  rocq-core_9_1 = mkRocq "9.1";
 
   rocqPackages_9_0 = mkRocqPackages rocq-core_9_0;
+  rocqPackages_9_1 = mkRocqPackages rocq-core_9_1;
 
   rocqPackages = recurseIntoAttrs rocqPackages_9_0;
   rocq-core = rocqPackages.rocq-core;

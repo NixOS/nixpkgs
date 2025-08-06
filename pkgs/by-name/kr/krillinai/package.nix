@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "krillinai";
-  version = "1.1.5";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "krillinai";
-    repo = "KrillinAI";
+    repo = "KlicStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jQlgkpQ+UTzn6MqGa+yVQ9v04IGGlMQQim3s0Oc9Zts=";
+    hash = "sha256-LLVm5L8usGoMBbeU/eQMNv/+WMQcdyiOQmj3NM/D9TU=";
   };
 
-  vendorHash = "sha256-mpvypCZmvVVljftGpcV1aea3s7Xmhr0jLfKZIZ0nkX8=";
+  vendorHash = "sha256-bAKLNpt0K06egScyn7ImHV0csDsMQGUm92kU1PVQK+I=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -46,10 +46,10 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Video translation and dubbing tool";
-    homepage = "https://github.com/krillinai/KrillinAI";
-    changelog = "https://github.com/krillinai/KrillinAI/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/krillinai/KlicStudio";
+    changelog = "https://github.com/krillinai/KlicStudio/releases/tag/v${finalAttrs.version}";
     mainProgram = "krillinai-desktop";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

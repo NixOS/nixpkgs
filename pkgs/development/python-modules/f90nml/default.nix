@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "marshallward";
-    repo = pname;
+    repo = "f90nml";
     rev = "v" + version;
     hash = "sha256-nSpVBAS2VvXIQwYK/qVVzEc13bicAQ+ScXpO4Rn2O+8=";
   };

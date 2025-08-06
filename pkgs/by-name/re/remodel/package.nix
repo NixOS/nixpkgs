@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tZ6ptGeNBULJaoFomMFN294wY8YUu1SrJh4UfOL/MnI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-41EkXciQZ7lGlD+gVlZEahrGPeEMmaIaiF7tYff9xXw=";
 
   nativeBuildInputs = [
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Roblox file manipulation tool";
     mainProgram = "remodel";
     longDescription = ''
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rojo-rbx/remodel";
     downloadPage = "https://github.com/rojo-rbx/remodel/releases/tag/v${version}";
     changelog = "https://github.com/rojo-rbx/remodel/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wackbyte ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wackbyte ];
   };
 }

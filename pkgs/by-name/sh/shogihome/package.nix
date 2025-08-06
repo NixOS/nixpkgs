@@ -3,41 +3,35 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
-  electron_35,
+  electron_37,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
   nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
+  gnugrep,
 }:
 
 let
-  electron = electron_35;
+  electron = electron_37;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.22.1";
+  version = "1.24.3";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vVKdaFKOx4xm4BK+AjVr4cEDOHpOjOe58k2wUAhB9XA=";
+    hash = "sha256-q0d+SKCLtT/gv9mrx0o8qIdWYVwNM2x8/LfRsG4J4rw=";
   };
 
-  npmDepsHash = "sha256-OS5DR+24F98ICgQ6zL4VD231Rd5JB/gJKl+qNfnP3PE=";
-
-  patches = [
-    # Make it possible to load the electron-builder config without sideeffects.
-    # PR at https://github.com/sunfish-shogi/shogihome/pull/1184
-    # Should be removed next 1.22.X ShogiHome update or possibly 1.23.X.
-    (fetchpatch {
-      url = "https://github.com/sunfish-shogi/shogihome/commit/a075571a3bf4f536487e1212a2e7a13802dc7ec7.patch";
-      sha256 = "sha256-dJyaoWOC+fEufzpYenmfnblgd2C9Ymv4Cl8Y/hljY6c=";
-    })
-  ];
+  npmDepsHash = "sha256-mCECqh2iRVD4lsCWYdf15VMuaH8dqpDfWWs/6q4H6Lo=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -46,6 +40,11 @@ buildNpmPackage (finalAttrs: {
 
     substituteInPlace .electron-builder.config.mjs \
       --replace-fail 'AppImage' 'dir'
+  ''
+  # Workaround for https://github.com/electron/electron/issues/31121
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/background/window/path.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 
   env = {
@@ -62,53 +61,54 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
-    ''
-    # Electron builder complains about symlink in electron-dist
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      rm electron-dist/libvulkan.so.1
-      cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-    ''
-    + ''
-      npm run electron:pack
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  ''
+  # Electron builder complains about symlink in electron-dist
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    rm electron-dist/libvulkan.so.1
+    cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
+  ''
+  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+  # See: https://github.com/electron-userland/electron-builder/pull/9007
+  + ''
+    npm run electron:pack
 
-      ./node_modules/.bin/electron-builder \
-          --dir \
-          --config .electron-builder.config.mjs \
-          -c.electronDist=electron-dist \
-          -c.electronVersion=${electron.version}
+    ./node_modules/.bin/electron-builder \
+        --dir \
+        --config .electron-builder.config.mjs \
+        -c.mac.identity=null \
+        -c.electronDist=electron-dist \
+        -c.electronVersion=${electron.version}
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p "$out/share/lib/shogihome"
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p "$out/share/lib/shogihome"
+    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
 
-      install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
+    install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
 
-      makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
-        --add-flags "$out/share/lib/shogihome/resources/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArgs commandLineArgs} \
-        --inherit-argv0
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv dist/mac*/ShogiHome.app "$out/Applications"
-    ''
-    + ''
-      runHook postInstall
-    '';
+    makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
+      --add-flags "$out/share/lib/shogihome/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArgs commandLineArgs} \
+      --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv dist/mac*/ShogiHome.app "$out/Applications"
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -119,16 +119,39 @@ buildNpmPackage (finalAttrs: {
       genericName = "Shogi Frontend";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
-      startupWMClass = "ShogiHome";
+
+      # The project was renamed "shogihome" from "electron-shogi."
+      # Some references to "electron-shogi" remain for compatibility.
+      # ref: https://github.com/sunfish-shogi/shogihome/commit/e5bbc4d43d231df23ac31c655adb64e11890993e
+      startupWMClass = "electron-shogi";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex=^v([\\d\\.]+)$"
-      ];
-    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex=^v([\\d\\.]+)$"
+        ];
+      })
+      (lib.getExe (writeShellApplication {
+        name = "${finalAttrs.pname}-electron-updater";
+        runtimeInputs = [
+          nix
+          jq
+          gnugrep
+        ];
+        runtimeEnv = {
+          PNAME = finalAttrs.pname;
+          PKG_FILE = builtins.toString ./package.nix;
+        };
+        text = ''
+          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+        '';
+      }))
+    ];
   };
 
   meta = {

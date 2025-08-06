@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.18.5";
+  version = "1.18.6";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NlnT8dGh05dDjSMxjaBnW7x/KjLgf2Ma0nbaiR7MpiY=";
+    hash = "sha256-KII0Rnas0H3iODEn89DD5BN96Ao7Aq0cTC4uhtuvNt4=";
   };
 
   nativeBuildInputs = [
@@ -37,22 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
     zip
   ];
 
-  buildInputs =
-    [
-      the-foundation
-      fribidi
-      harfbuzz
-      libogg
-      libwebp
-      libX11
-      mpg123
-      opusfile
-      SDL2
-    ]
-    ++ lib.optionals enableTUI [
-      ncurses
-      sealcurses
-    ];
+  buildInputs = [
+    the-foundation
+    fribidi
+    harfbuzz
+    libogg
+    libwebp
+    libX11
+    mpg123
+    opusfile
+    SDL2
+  ]
+  ++ lib.optionals enableTUI [
+    ncurses
+    sealcurses
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TUI" enableTUI)

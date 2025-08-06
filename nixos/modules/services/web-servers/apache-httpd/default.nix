@@ -78,40 +78,39 @@ let
   enableUserDir = any (vhost: vhost.enableUserDir) vhosts;
 
   # NOTE: generally speaking order of modules is very important
-  modules =
-    [
-      # required apache modules our httpd service cannot run without
-      "authn_core"
-      "authz_core"
-      "log_config"
-      "mime"
-      "autoindex"
-      "negotiation"
-      "dir"
-      "alias"
-      "rewrite"
-      "unixd"
-      "slotmem_shm"
-      "socache_shmcb"
-      "mpm_${cfg.mpm}"
-    ]
-    ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
-    ++ optional enableHttp2 "http2"
-    ++ optional enableSSL "ssl"
-    ++ optional enableUserDir "userdir"
-    ++ optional cfg.enableMellon {
-      name = "auth_mellon";
-      path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so";
-    }
-    ++ optional cfg.enablePHP {
-      name = phpModuleName;
-      path = "${php}/modules/lib${phpModuleName}.so";
-    }
-    ++ optional cfg.enablePerl {
-      name = "perl";
-      path = "${mod_perl}/modules/mod_perl.so";
-    }
-    ++ cfg.extraModules;
+  modules = [
+    # required apache modules our httpd service cannot run without
+    "authn_core"
+    "authz_core"
+    "log_config"
+    "mime"
+    "autoindex"
+    "negotiation"
+    "dir"
+    "alias"
+    "rewrite"
+    "unixd"
+    "slotmem_shm"
+    "socache_shmcb"
+    "mpm_${cfg.mpm}"
+  ]
+  ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
+  ++ optional enableHttp2 "http2"
+  ++ optional enableSSL "ssl"
+  ++ optional enableUserDir "userdir"
+  ++ optional cfg.enableMellon {
+    name = "auth_mellon";
+    path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so";
+  }
+  ++ optional cfg.enablePHP {
+    name = phpModuleName;
+    path = "${php}/modules/lib${phpModuleName}.so";
+  }
+  ++ optional cfg.enablePerl {
+    name = "perl";
+    path = "${mod_perl}/modules/mod_perl.so";
+  }
+  ++ cfg.extraModules;
 
   loggingConf = (
     if cfg.logFormat != "none" then
@@ -742,51 +741,51 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions =
-      [
-        {
-          assertion = all (hostOpts: !hostOpts.enableSSL) vhosts;
-          message = ''
-            The option `services.httpd.virtualHosts.<name>.enableSSL` no longer has any effect; please remove it.
-            Select one of `services.httpd.virtualHosts.<name>.addSSL`, `services.httpd.virtualHosts.<name>.forceSSL`,
-            or `services.httpd.virtualHosts.<name>.onlySSL`.
-          '';
-        }
-        {
-          assertion = all (
-            hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)
-          ) vhosts;
-          message = ''
-            Options `services.httpd.virtualHosts.<name>.addSSL`,
-            `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
-            are mutually exclusive.
-          '';
-        }
-        {
-          assertion = all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
-          message = ''
-            Options `services.httpd.virtualHosts.<name>.enableACME` and
-            `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
-          '';
-        }
-        {
-          assertion = cfg.enablePHP -> php.ztsSupport;
-          message = ''
-            The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
-            ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
-          '';
-        }
-      ]
-      ++ map (
-        name:
-        mkCertOwnershipAssertion {
-          cert = config.security.acme.certs.${name};
-          groups = config.users.groups;
-          services = [
-            config.systemd.services.httpd
-          ] ++ lib.optional (vhostCertNames != [ ]) config.systemd.services.httpd-config-reload;
-        }
-      ) vhostCertNames;
+    assertions = [
+      {
+        assertion = all (hostOpts: !hostOpts.enableSSL) vhosts;
+        message = ''
+          The option `services.httpd.virtualHosts.<name>.enableSSL` no longer has any effect; please remove it.
+          Select one of `services.httpd.virtualHosts.<name>.addSSL`, `services.httpd.virtualHosts.<name>.forceSSL`,
+          or `services.httpd.virtualHosts.<name>.onlySSL`.
+        '';
+      }
+      {
+        assertion = all (
+          hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)
+        ) vhosts;
+        message = ''
+          Options `services.httpd.virtualHosts.<name>.addSSL`,
+          `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
+          are mutually exclusive.
+        '';
+      }
+      {
+        assertion = all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
+        message = ''
+          Options `services.httpd.virtualHosts.<name>.enableACME` and
+          `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
+        '';
+      }
+      {
+        assertion = cfg.enablePHP -> php.ztsSupport;
+        message = ''
+          The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
+          ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
+        '';
+      }
+    ]
+    ++ map (
+      name:
+      mkCertOwnershipAssertion {
+        cert = config.security.acme.certs.${name};
+        groups = config.users.groups;
+        services = [
+          config.systemd.services.httpd
+        ]
+        ++ lib.optional (vhostCertNames != [ ]) config.systemd.services.httpd-config-reload;
+      }
+    ) vhostCertNames;
 
     warnings = mapAttrsToList (name: hostOpts: ''
       Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
@@ -850,16 +849,15 @@ in
       };
     };
 
-    services.httpd.phpOptions =
-      ''
-        ; Don't advertise PHP
-        expose_php = off
-      ''
-      + optionalString (config.time.timeZone != null) ''
+    services.httpd.phpOptions = ''
+      ; Don't advertise PHP
+      expose_php = off
+    ''
+    + optionalString (config.time.timeZone != null) ''
 
-        ; Apparently PHP doesn't use $TZ.
-        date.timezone = "${config.time.timeZone}"
-      '';
+      ; Apparently PHP doesn't use $TZ.
+      date.timezone = "${config.time.timeZone}"
+    '';
 
     services.httpd.extraModules = mkBefore [
       # HTTP authentication mechanisms: basic and digest.
@@ -917,10 +915,11 @@ in
       description = "Apache HTTPD";
       wantedBy = [ "multi-user.target" ];
       wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
-      after =
-        [ "network.target" ]
-        ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
+      after = [
+        "network.target"
+      ]
+      ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+      ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
       before = map (certName: "acme-${certName}.service") dependentCertNames;
       restartTriggers = [ cfg.configFile ];
 

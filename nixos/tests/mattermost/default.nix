@@ -148,11 +148,9 @@ import ../make-test-python.nix (
         package = pkgs.mattermost.overrideAttrs (prev: {
           webapp = prev.webapp.overrideAttrs (prevWebapp: {
             # Ensure that users can add patches.
-            postPatch =
-              prevWebapp.postPatch or ""
-              + ''
-                substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
-              '';
+            postPatch = prevWebapp.postPatch or "" + ''
+              substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
+            '';
           });
         });
         mutableConfig = false;
@@ -569,7 +567,7 @@ import ../make-test-python.nix (
             shutdown_queue.task_done()
         threading.Thread(target=shutdown_worker, daemon=True).start()
 
-        ${pkgs.lib.optionalString pkgs.stdenv.isx86_64 ''
+        ${pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
           # Only run the MySQL tests on x86_64 so we don't have to debug MySQL ARM issues.
           run_mattermost_tests(
             shutdown_queue,

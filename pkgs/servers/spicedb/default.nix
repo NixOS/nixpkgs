@@ -2,26 +2,36 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "spicedb";
-  version = "1.43.0";
+  version = "1.45.1";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
     rev = "v${version}";
-    hash = "sha256-UWd9N64nkoZTDI61Mv6afqsMiqyOkT3+UByzhsGz7yM=";
+    hash = "sha256-cKCAA9C0vsCa0BszspvPfrKbdWyaccrMtiO6UWhLIh4=";
   };
 
-  vendorHash = "sha256-zJ/bSY9AKCJlq2+AIhbz5sOS1w94zLs2qxflgIAoJho=";
+  vendorHash = "sha256-R4lOmHIBgnlvOukMjXdVx5e9Oneo1EizhsrDXiTbwTc=";
 
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
   ];
 
   subPackages = [ "cmd/spicedb" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd spicedb \
+      --bash <($out/bin/spicedb completion bash) \
+      --fish <($out/bin/spicedb completion fish) \
+      --zsh <($out/bin/spicedb completion zsh)
+  '';
 
   meta = with lib; {
     description = "Open source permission database";
@@ -31,7 +41,10 @@ buildGoModule rec {
     '';
     homepage = "https://authzed.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [
+      squat
+      thoughtpolice
+    ];
     mainProgram = "spicedb";
   };
 }

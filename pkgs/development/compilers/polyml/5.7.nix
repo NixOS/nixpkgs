@@ -12,17 +12,16 @@ stdenv.mkDerivation rec {
   pname = "polyml";
   version = "5.7.1";
 
-  postPatch =
-    ''
-      substituteInPlace configure.ac \
-        --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
-      AH_TEMPLATE([_Static_assert])
-      AC_DEFINE([_Static_assert], [static_assert])
-      "
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure.ac --replace-fail stdc++ c++
-    '';
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
+    AH_TEMPLATE([_Static_assert])
+    AC_DEFINE([_Static_assert], [static_assert])
+    "
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac --replace-fail stdc++ c++
+  '';
 
   patches = [
     ./5.7-new-libffi-FFI_SYSV.patch

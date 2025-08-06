@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail 'setuptools>=68.0,<79.1' setuptools
   '';
 
   build-system = [ setuptools ];

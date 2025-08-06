@@ -13,7 +13,7 @@
   makeWrapper,
   ninja,
   mpi,
-  python3,
+  python312,
   tbb,
   libGLU,
   libGL,
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs = [
-    (python3.withPackages (
+    (python312.withPackages (
       ps: with ps; [
         numpy
         matplotlib
@@ -122,6 +122,9 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  # 23k objects, >4h on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     homepage = "https://www.paraview.org";

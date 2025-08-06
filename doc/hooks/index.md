@@ -35,6 +35,7 @@ python.section.md
 scons.section.md
 tauri.section.md
 tetex-tex-live.section.md
+udevCheckHook.section.md
 unzip.section.md
 validatePkgConfig.section.md
 versionCheckHook.section.md

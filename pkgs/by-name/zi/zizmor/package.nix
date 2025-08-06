@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   rustPlatform,
   versionCheckHook,
@@ -8,23 +10,35 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.7.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HDQDaIZVxMTkVTwCNyevSdVZELw8e6hIN/NhaHLcT24=";
+    hash = "sha256-zxEF76zpqwLroC5GjSkwIC3+XdXmErvabIEqhVe0zCA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-hr/1RFXvbsRLxlmXNPuU3x+i41byE+v5k2aBg5UIbvM=";
+  cargoHash = "sha256-vxDyao9pX/CfS08vFmq3vXtgDIg5NXlEwpzroGW48dA=";
+
+  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd zizmor \
+      --bash <("$out/bin/zizmor" --completions bash) \
+      --zsh <("$out/bin/zizmor" --completions zsh) \
+      --fish <("$out/bin/zizmor" --completions fish)
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+\.[0-9.]+\.[0-9.])+$" ];
+  };
 
   meta = {
     description = "Tool for finding security issues in GitHub Actions setups";

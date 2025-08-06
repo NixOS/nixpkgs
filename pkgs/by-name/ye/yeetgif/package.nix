@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sgreben";
-    repo = pname;
+    repo = "yeetgif";
     rev = version;
     hash = "sha256-Z05GhtEPj3PLXpjF1wK8+pNUY3oDjbwZWQsYlTX14Rc=";
   };
@@ -33,7 +33,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "gif effects CLI. single binary, no dependencies. linux, osx, windows. #1 workplace productivity booster. #yeetgif #eggplant #golang";
+    description = "GIF effects CLI";
     homepage = "https://github.com/sgreben/yeetgif";
     license = with licenses; [
       mit

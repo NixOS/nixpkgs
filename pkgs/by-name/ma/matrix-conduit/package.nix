@@ -10,23 +10,22 @@
   rust-jemalloc-sys,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-conduit";
-  version = "0.9.0";
+  version = "0.10.6";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
-    rev = "v${version}";
-    hash = "sha256-mQLfRAun2G/LDnw3jyFGJbOqpxh2PL8IGzFELRfAgAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VefM22YY00yOJpk6S6RRoRDbOhTRZ7MfeZHzI0MCPKQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-r7fOzTug0cKQUGrpXDn1JKb6/lLQDgnA3/colmldA4c=";
+  cargoHash = "sha256-4Lf6OHWwpNMQGXHp5UFJjQlS/FpKq+pM5Lao+AVzwYs=";
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
   preBuild = ''
-    substituteInPlace Cargo.toml --replace "features = [\"bundled\"]" "features = []"
+    substituteInPlace Cargo.toml --replace-fail "features = [\"bundled\"]" "features = []"
     cargo update --offline -p rusqlite
   '';
 
@@ -38,6 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     rust-jemalloc-sys
+    rocksdb
   ];
 
   env = {
@@ -52,14 +52,14 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) matrix-conduit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       pstn
-      pimeys
+      SchweGELBin
     ];
     mainProgram = "conduit";
   };
-}
+})

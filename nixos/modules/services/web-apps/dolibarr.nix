@@ -56,26 +56,25 @@ let
     '';
 
   # see https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/install/install.forced.sample.php for all possible values
-  install =
-    {
-      force_install_noedit = 2;
-      force_install_main_data_root = "${cfg.stateDir}/documents";
-      force_install_nophpinfo = true;
-      force_install_lockinstall = "444";
-      force_install_distrib = "nixos";
-      force_install_type = "mysqli";
-      force_install_dbserver = cfg.database.host;
-      force_install_port = toString cfg.database.port;
-      force_install_database = cfg.database.name;
-      force_install_databaselogin = cfg.database.user;
+  install = {
+    force_install_noedit = 2;
+    force_install_main_data_root = "${cfg.stateDir}/documents";
+    force_install_nophpinfo = true;
+    force_install_lockinstall = "444";
+    force_install_distrib = "nixos";
+    force_install_type = "mysqli";
+    force_install_dbserver = cfg.database.host;
+    force_install_port = toString cfg.database.port;
+    force_install_database = cfg.database.name;
+    force_install_databaselogin = cfg.database.user;
 
-      force_install_mainforcehttps = vhostCfg.forceSSL or false;
-      force_install_createuser = false;
-      force_install_dolibarrlogin = null;
-    }
-    // optionalAttrs (cfg.database.passwordFile != null) {
-      force_install_databasepass = ''file_get_contents("${cfg.database.passwordFile}")'';
-    };
+    force_install_mainforcehttps = vhostCfg.forceSSL or false;
+    force_install_createuser = false;
+    force_install_dolibarrlogin = null;
+  }
+  // optionalAttrs (cfg.database.passwordFile != null) {
+    force_install_databasepass = ''file_get_contents("${cfg.database.passwordFile}")'';
+  };
 in
 {
   # interface
@@ -328,7 +327,8 @@ in
           "listen.mode" = "0660";
           "listen.owner" = cfg.user;
           "listen.group" = cfg.group;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
 
       # there are several challenges with dolibarr and NixOS which we can address here

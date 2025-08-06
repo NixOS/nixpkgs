@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cobang";
-  version = "1.6.2";
+  version = "1.7.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${version}";
-    hash = "sha256-M32bGVPOkbx93gDPQcin+Dv9P8zfx1Ory+DTJY+bypI=";
+    hash = "sha256-rBGz9g6+6jguJggBQKlyOWoME3VHOP8Gq4VtYywoVdI=";
   };
 
   # https://github.com/hongquan/CoBang/issues/117

@@ -2,28 +2,49 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kdlfmt";
-  version = "0.0.17";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "kdlfmt";
-    rev = "v${version}";
-    hash = "sha256-9bn5GHlM7nYJgulNIQh1rQYuvRr5Bloyzgj2oGvBzdE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xDv93cxCEaBybexleyTtcCCKHy2OL3z/BG2gJ7uqIrU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BaPfYXR8aYBBspnRtL2HYikCaG7YD2bqY0dKl2lQ/YA=";
+  cargoHash = "sha256-TwZ/0G3lTCoj01e/qGFRxJCfe4spOpG/55GKhoI0img=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd kdlfmt \
+      --bash <($out/bin/kdlfmt completions bash) \
+      --fish <($out/bin/kdlfmt completions fish) \
+      --zsh <($out/bin/kdlfmt completions zsh)
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Formatter for kdl documents";
-    homepage = "https://github.com/hougesen/kdlfmt.git";
-    changelog = "https://github.com/hougesen/kdlfmt/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/hougesen/kdlfmt";
+    changelog = "https://github.com/hougesen/kdlfmt/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ airrnot ];
+    maintainers = with lib.maintainers; [
+      airrnot
+      defelo
+    ];
     mainProgram = "kdlfmt";
   };
-}
+})

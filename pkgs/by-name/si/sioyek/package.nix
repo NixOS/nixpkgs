@@ -15,29 +15,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2025-05-13";
+  version = "2.0.0-unstable-2025-07-09";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "eb03410682f70fa27cbe2f9ec3bf59ac086457d7";
-    hash = "sha256-iLGgiHQ5MiTvKcSgT3Kqw4lCFFkuAHoZhT+mpIdlBkQ=";
+    rev = "8d173d993738d78559da035cc051f2eb40df41e6";
+    hash = "sha256-ZjITJ26zV6QOZ8qLHUyKza6YZAPxzV5k3pOVyqRCoIE=";
   };
 
-  buildInputs =
-    [
-      gumbo
-      harfbuzz
-      jbig2dec
-      mujs
-      mupdf
-      openjpeg
-      qt6.qt3d
-      qt6.qtbase
-      qt6.qtspeech
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
+  buildInputs = [
+    gumbo
+    harfbuzz
+    jbig2dec
+    mujs
+    mupdf
+    openjpeg
+    qt6.qt3d
+    qt6.qtbase
+    qt6.qtspeech
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles

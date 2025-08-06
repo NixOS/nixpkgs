@@ -72,30 +72,30 @@ let
         wayland-scanner
         glslang
         hwdata
-      ] ++ extraNativeBuildInputs;
+      ]
+      ++ extraNativeBuildInputs;
 
-      buildInputs =
-        [
-          libliftoff
-          libdisplay-info
-          libGL
-          libcap
-          libinput
-          libxkbcommon
-          libgbm
-          pixman
-          seatd
-          vulkan-loader
-          wayland
-          wayland-protocols
-          xorg.libX11
-          xorg.xcbutilerrors
-          xorg.xcbutilimage
-          xorg.xcbutilrenderutil
-          xorg.xcbutilwm
-        ]
-        ++ lib.optional finalAttrs.enableXWayland xwayland
-        ++ extraBuildInputs;
+      buildInputs = [
+        libliftoff
+        libdisplay-info
+        libGL
+        libcap
+        libinput
+        libxkbcommon
+        libgbm
+        pixman
+        seatd
+        vulkan-loader
+        wayland
+        wayland-protocols
+        xorg.libX11
+        xorg.xcbutilerrors
+        xorg.xcbutilimage
+        xorg.xcbutilrenderutil
+        xorg.xcbutilwm
+      ]
+      ++ lib.optional finalAttrs.enableXWayland xwayland
+      ++ extraBuildInputs;
 
       mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
 
@@ -130,7 +130,6 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [
-          primeos
           synthetica
           rewine
         ];
@@ -169,5 +168,11 @@ rec {
     ];
   };
 
-  wlroots = wlroots_0_18;
+  wlroots_0_19 = generic {
+    version = "0.19.0";
+    hash = "sha256-I8z50yA/ukvXEC5TksG84+GrQpfC4drBJDRGw0R8RLk=";
+    extraBuildInputs = [
+      lcms2
+    ];
+  };
 }

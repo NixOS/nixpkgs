@@ -25,22 +25,22 @@ stdenv.mkDerivation {
   version = "${version}${suffix}";
   inherit src patches;
   sourceRoot = if lib.versionAtLeast version "2.93" then "source/subprojects/nix-eval-jobs" else null;
-  buildInputs =
-    [
-      nlohmann_json
-      lix
-      boost
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.93") [
-      capnproto
-    ];
+  buildInputs = [
+    nlohmann_json
+    lix
+    boost
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.93") [
+    capnproto
+  ];
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
     # nlohmann_json can be only discovered via cmake files
     cmake
-  ] ++ (lib.optional stdenv.cc.isClang [ buildPackages.clang-tools ]);
+  ]
+  ++ (lib.optional stdenv.cc.isClang [ buildPackages.clang-tools ]);
 
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.

@@ -40,7 +40,7 @@ buildPythonPackage rec {
     in
     lib.concatMapStrings copyFontCmd checkFonts;
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "ziafont" ];
 

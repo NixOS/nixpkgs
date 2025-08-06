@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sorah";
-    repo = pname;
+    repo = "envchain";
     rev = "v${version}";
     sha256 = "sha256-QUy38kJzMbYOyT86as4/yq2ctcszSnB8a3eVWxgd4Fo=";
   };
@@ -26,15 +26,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libsecret
-      readline
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libedit
-      ncurses
-    ];
+  buildInputs = [
+    libsecret
+    readline
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libedit
+    ncurses
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

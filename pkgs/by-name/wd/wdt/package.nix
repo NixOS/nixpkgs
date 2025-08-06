@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2024-12-06";
+  version = "1.27.1612021-unstable-2025-07-23";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wdt";
-    rev = "7e56c871be706cc96df48be7c4017bff7c6fc7c8";
-    sha256 = "sha256-mvfJUiOI7Cre90hIaBJcmfTbTV5M+Hf+p6VKNYEc5WU=";
+    rev = "9294400cb0f5f7a0eef7fdf009cc01f00a5917c1";
+    sha256 = "sha256-uDsHdha8JA2oue/SBej4lYFWEtaKcsVeNBhtZZBEPZI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,6 +36,10 @@ stdenv.mkDerivation {
   postUnpack = ''
     ln -s $sourceRoot wdt
   '';
+
+  patches = [
+    ./fix-glog-include.patch
+  ];
 
   cmakeFlags = [
     "-DWDT_USE_SYSTEM_FOLLY=ON"

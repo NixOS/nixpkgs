@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sbom4python";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "sbom4python";
     tag = "v${version}";
-    hash = "sha256-H96M/X6WKSrA3zs0uLUHqY2zmsXLNZ8OtekC1MDfF1s=";
+    hash = "sha256-eiizZEc5OIBfyGlSCer2zcrEFd2qpxmMjxV8e9W3gdk=";
   };
 
   build-system = with python3Packages; [
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     changelog = "https://github.com/anthonyharrison/sbom4python/releases/tag/${src.tag}";
-    description = "A tool to generate a SBOM (Software Bill of Materials) for an installed Python module";
+    description = "Tool to generate a SBOM (Software Bill of Materials) for an installed Python module";
     homepage = "https://github.com/anthonyharrison/sbom4python";
     license = lib.licenses.asl20;
     mainProgram = "sbom4python";

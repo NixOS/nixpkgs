@@ -60,12 +60,12 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich interactive Jira command line";
     homepage = "https://github.com/ankitpokhrel/jira-cli";
     changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bryanasdev000
       anthonyroussel
     ];

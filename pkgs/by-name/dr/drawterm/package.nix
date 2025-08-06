@@ -13,7 +13,7 @@
   wayland,
   wayland-protocols,
   libxkbcommon,
-  wlr-protocols,
+  libdecor,
   pulseaudio,
   nixosTests,
   withWayland ? false,
@@ -23,26 +23,25 @@ let
 in
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "0-unstable-2025-03-18";
+  version = "0-unstable-2025-06-29";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "0b43ac046ca81d78e9eca535ab1e92971d30405a";
-    hash = "sha256-L0a81zwzIKwnRK/Mu/kW1oHoJCroa+VDNGj7CI90WMQ=";
+    rev = "903bcd8dba9cb9dfc70707a28089c469e5302539";
+    hash = "sha256-gZAPNRzAuvpIAV7ArPGsqVv6SYBJkqA+Okf6FmStvsU=";
   };
 
   enableParallelBuilding = true;
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeWrapper
-    ]
-    ++ lib.optionals withWayland [
-      pkg-config
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ]
+  ++ lib.optionals withWayland [
+    pkg-config
+    wayland-scanner
+  ];
 
   buildInputs =
     lib.optionals withWayland [
@@ -50,7 +49,7 @@ stdenv.mkDerivation {
       wayland
       wayland-protocols
       libxkbcommon
-      wlr-protocols
+      libdecor
     ]
     ++ lib.optionals withXorg [
       xorg.libX11
@@ -66,25 +65,24 @@ stdenv.mkDerivation {
       "CC=clang"
     ];
 
-  installPhase =
-    ''
-      installManPage drawterm.1
-    ''
-    + lib.optionalString withWayland ''
-      install -Dm755 -t $out/bin/ drawterm
-    ''
-    + lib.optionalString (!(withWayland || stdenv.hostPlatform.isDarwin)) ''
-      # wrapping the oss output with pulse seems to be the easiest
-      mv drawterm drawterm.bin
-      install -Dm755 -t $out/bin/ drawterm.bin
-      makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv gui-cocoa/drawterm.app $out/Applications/
-      mv drawterm $out/Applications/drawterm.app/
-      ln -s $out/Applications/drawterm.app/drawterm $out/bin/
-    '';
+  installPhase = ''
+    installManPage drawterm.1
+  ''
+  + lib.optionalString withWayland ''
+    install -Dm755 -t $out/bin/ drawterm
+  ''
+  + lib.optionalString (!(withWayland || stdenv.hostPlatform.isDarwin)) ''
+    # wrapping the oss output with pulse seems to be the easiest
+    mv drawterm drawterm.bin
+    install -Dm755 -t $out/bin/ drawterm.bin
+    makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv gui-cocoa/drawterm.app $out/Applications/
+    mv drawterm $out/Applications/drawterm.app/
+    ln -s $out/Applications/drawterm.app/drawterm $out/bin/
+  '';
 
   passthru = {
     updateScript = unstableGitUpdater { shallowClone = false; };

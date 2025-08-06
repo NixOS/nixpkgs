@@ -1163,7 +1163,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
+      (path: x: x.name)
       attrs
     ```
     :::
@@ -1747,7 +1747,7 @@ rec {
 
   /**
     Get the first of the `outputs` provided by the package, or the default.
-    This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    This function is aligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
     Like `getOutput`, the function is idempotent.
 
     # Inputs

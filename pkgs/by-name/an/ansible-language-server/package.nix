@@ -34,12 +34,12 @@ buildNpmPackage rec {
   npmPackFlags = [ "--ignore-scripts" ];
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ansible/ansible-language-server/releases/tag/v${version}";
     description = "Ansible Language Server";
     mainProgram = "ansible-language-server";
     homepage = "https://github.com/ansible/ansible-language-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

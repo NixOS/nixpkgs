@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   nodejs,
   closurecompiler,
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.8";
+  version = "4.0.11";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-fGlBtXsYOQ5V4/PRPPIpL3nxb+hUAuj9q7Jw0kL7ph0=";
+    npmDepsHash = "sha256-Pos7pSboTIpGKtlBm56hJPYb1lDydmUwW1urHetFfeQ=";
 
     dontBuild = true;
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-xiqi3SMmlfV7NaA61QZAW7BFHu9xOVN9QMWwwDInBeE=";
+    hash = "sha256-QNbXgTkzI0fqvg3nU2TAE8A8h6MNMm2TsTzOXBdpqYA=";
     rev = version;
   };
 
@@ -102,15 +103,22 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
-    mkdir -p $appdir/node_modules
+    mkdir -p $appdir/node_modules/.bin
     cp -r ${nodeModules}/* $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules/.bin
+
+    cp ${./locate_cache.sh} $appdir/locate_cache.sh
+    chmod +x $appdir/locate_cache.sh
+
+    export EM_CACHE=$out/share/emscripten/cache
 
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
     done
 
     # precompile libc (etc.) in all variants:

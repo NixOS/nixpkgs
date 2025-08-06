@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tdf";
-    repo = pname;
+    repo = "libcmis";
     rev = "v${version}";
     sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
   };
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-werror"
     "DOCBOOK2MAN=${docbook2x}/bin/docbook2man"
+    "--with-boost=${boost.dev}"
   ];
 
   doCheck = true;

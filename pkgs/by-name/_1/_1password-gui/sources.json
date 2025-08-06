@@ -1,38 +1,58 @@
 {
   "stable": {
-    "x86_64-linux": {
-      "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.10.76.x64.tar.gz",
-      "hash": "sha256-vEbmZP0WQ0Ha92V/owFKtxavahWMpV73vRiflZ1dpzQ="
+    "linux": {
+      "version": "8.11.4",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.11.4.x64.tar.gz",
+          "hash": "sha256-s/CV1hA8j3ivWEmKfwMd6Hh74BY86C0MZLDwjm6ROd4="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.11.4.arm64.tar.gz",
+          "hash": "sha256-qljiVRVO0HlteI5oRQPLb6+JL282CwcbRydANUmNcRM="
+        }
+      }
     },
-    "aarch64-linux": {
-      "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.10.76.arm64.tar.gz",
-      "hash": "sha256-4GHFLlpThIJ5oAVgwXUAy4Gb0569RLXK1kdLErOr6j8="
-    },
-    "x86_64-darwin": {
-      "url": "https://downloads.1password.com/mac/1Password-8.10.76-x86_64.zip",
-      "hash": "sha256-hAIVQ7QVpZzQqW5ikCjp6HsskQWH5bbzM85DNyY0hFQ="
-    },
-    "aarch64-darwin": {
-      "url": "https://downloads.1password.com/mac/1Password-8.10.76-aarch64.zip",
-      "hash": "sha256-jfdtLBsd1IvntJHZOJ0pxIrwjIUOcG3thfyjTMNIMK4="
+    "darwin": {
+      "version": "8.11.4",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.11.4-x86_64.zip",
+          "hash": "sha256-kv+TSoZcoCkL1Gr0dwgqtYK532wEnergVAwCMCv44/A="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.11.4-aarch64.zip",
+          "hash": "sha256-AhWPz/cwhBwSozZx6WrDPvCj73OIvBxXlsimM+FDFlA="
+        }
+      }
     }
   },
   "beta": {
-    "x86_64-linux": {
-      "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.10.76-32.BETA.x64.tar.gz",
-      "hash": "sha256-149kU1CKQ0iLlD6O7jOjrcwwlxMdd5iAm53ILK2mv2o="
+    "linux": {
+      "version": "8.11.4-21.BETA",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.11.4-21.BETA.x64.tar.gz",
+          "hash": "sha256-HWPeTCtjHH8vngDX0+tGbiDMj1FoW8a4RCu34RqJXmI="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.11.4-21.BETA.arm64.tar.gz",
+          "hash": "sha256-yPjzweuJPvvOkJcIElaAogzBpWPvYch6DQarRoaZojc="
+        }
+      }
     },
-    "aarch64-linux": {
-      "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.10.76-32.BETA.arm64.tar.gz",
-      "hash": "sha256-xHurzI8OcooSOCkQlSgtOH1Bgdur2oO1sNwKUOvSckA="
-    },
-    "x86_64-darwin": {
-      "url": "https://downloads.1password.com/mac/1Password-8.10.76-32.BETA-x86_64.zip",
-      "hash": "sha256-LgDl5DLUdn4bSRXrx11QOv0J6VXyns+KQgbU/Y0JxDU="
-    },
-    "aarch64-darwin": {
-      "url": "https://downloads.1password.com/mac/1Password-8.10.76-32.BETA-aarch64.zip",
-      "hash": "sha256-mJFuejGiUKV0PEJF8ajiL3cMRQTRghoaCRyP8afatgY="
+    "darwin": {
+      "version": "8.11.4-21.BETA",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.11.4-21.BETA-x86_64.zip",
+          "hash": "sha256-FozwWYQCrqWbfw9qaPRLbaUVWa5hTwG3NHjtZc4smdk="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.11.4-21.BETA-aarch64.zip",
+          "hash": "sha256-0eXtLqknEPG+G+mxa7QYWkUVPu13/KAdkOb9fklZIqg="
+        }
+      }
     }
   }
 }

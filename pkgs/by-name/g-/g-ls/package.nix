@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "g-ls";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "Equationzhao";
     repo = "g";
     tag = "v${version}";
-    hash = "sha256-OaYWorybwUxG452b0vEKwryxmRaNTQ5xDWe9GmEWuGE=";
+    hash = "sha256-cHB9oW4vF00hvhZ7KNY5TUjIjLjEoiJb/psMSq+kSHU=";
   };
 
-  vendorHash = "sha256-E/4iB1apLCOEtijCZymObz0Zjlf0+dQC37ALSbl1tr0=";
+  vendorHash = "sha256-5ksa0AJ7JbQPzBypDDMUvnXtIeXNEm9zKL5JetHWnrs=";
 
   subPackages = [ "." ];
 

@@ -5,6 +5,9 @@
   pkg-config,
   openssl,
   cmake,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
+
   # deps for audio backends
   alsa-lib,
   libpulseaudio,
@@ -46,51 +49,51 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.5";
+  version = "0.20.7";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-NlMQgVkMVCVrMv4IyFtPmRkAmf2k4F0dp6e8s63aBHg=";
+    hash = "sha256-g+SU6qDnafLiNOzZ75HUPgifuC8A+rb+KoqJoMHBJ04=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-glQh6PzwJp5o35aXRW4+Pq2iSeGg9vjR5fJQomPpSOc=";
+  cargoHash = "sha256-rwWSKJMI/4fY60m+vGqTqrTijJN6d0PfQH417Ku9+0E=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rustPlatform.bindgenHook
+    installShellFiles
+    # Tries to access $HOME when installing shell files, and on Darwin
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      fontconfig
-    ]
-    ++ lib.optionals withSixel [ libsixel ]
-    ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
-    ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
-    ++ lib.optionals (withAudioBackend == "rodiojack") [
-      alsa-lib
-      libjack2
-    ]
-    ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
-    ++ lib.optionals (withAudioBackend == "gstreamer") [
-      gst_all_1.gstreamer
-      gst_all_1.gst-devtools
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ];
+  buildInputs = [
+    openssl
+    dbus
+    fontconfig
+  ]
+  ++ lib.optionals withSixel [ libsixel ]
+  ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
+  ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
+  ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
+  ++ lib.optionals (withAudioBackend == "rodiojack") [
+    alsa-lib
+    libjack2
+  ]
+  ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
+  ++ lib.optionals (withAudioBackend == "gstreamer") [
+    gst_all_1.gstreamer
+    gst_all_1.gst-devtools
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 
   buildNoDefaultFeatures = true;
 
@@ -105,16 +108,21 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withSixel [ "sixel" ]
     ++ lib.optionals withFuzzy [ "fzf" ];
 
-  # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    export HOME=$TMPDIR
-  '';
-
-  # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionals (stdenv.hostPlatform.isDarwin && withSixel) ''
-    wrapProgram $out/bin/spotify_player \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
-  '';
+  postInstall =
+    let
+      inherit (lib.strings) optionalString;
+    in
+    # sixel-sys is dynamically linked to libsixel
+    optionalString (stdenv.hostPlatform.isDarwin && withSixel) ''
+      wrapProgram $out/bin/spotify_player \
+        --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
+    ''
+    + optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd spotify_player \
+        --bash <($out/bin/spotify_player generate bash) \
+        --fish <($out/bin/spotify_player generate fish) \
+         --zsh <($out/bin/spotify_player generate zsh)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };

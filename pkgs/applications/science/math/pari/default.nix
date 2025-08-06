@@ -26,23 +26,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-fTBXj1z5exN6KB9FSNExqvwM3oa8/RDMHhvXKoHmUGE=";
   };
 
-  buildInputs =
-    [
-      gmp
-      libX11
-      perl
-      readline
-      texliveBasic
-    ]
-    ++ lib.optionals withThread [
-      libpthreadstubs
-    ];
+  buildInputs = [
+    gmp
+    libX11
+    perl
+    readline
+    texliveBasic
+  ]
+  ++ lib.optionals withThread [
+    libpthreadstubs
+  ];
 
   configureScript = "./Configure";
   configureFlags = [
     "--with-gmp=${lib.getDev gmp}"
     "--with-readline=${lib.getDev readline}"
-  ] ++ lib.optional withThread "--mt=pthread";
+  ]
+  ++ lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC

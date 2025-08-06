@@ -24,7 +24,7 @@
   tomli-w,
   werkzeug,
 
-  # coupled downsteam dependencies
+  # coupled downstream dependencies
   pip-tools,
 }:
 
@@ -36,7 +36,7 @@ let
 
     src = fetchFromGitHub {
       owner = "pypa";
-      repo = pname;
+      repo = "pip";
       tag = version;
       hash = "sha256-V069rAL6U5KBnSc09LRCu0M7qQCH5NbMghVttlmIoRY=";
     };

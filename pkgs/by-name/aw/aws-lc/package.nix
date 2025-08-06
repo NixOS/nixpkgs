@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.51.2";
+  version = "1.56.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Of4zXFO2+2uvu5xi4tmzUK9F5pJ+VyKQOrLpdYPvhSA=";
+    hash = "sha256-h7GrR86h/Z9pfJowABJFwBf/TlQzsMMG2x0/dsepbmQ=";
   };
 
   outputs = [
@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
     version = testers.testVersion {

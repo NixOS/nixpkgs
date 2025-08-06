@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "bsync";
-  version = "unstable-2023-12-21";
+  version = "0-unstable-2023-12-21";
 
   src = fetchFromGitHub {
     owner = "dooblem";

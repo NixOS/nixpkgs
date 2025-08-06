@@ -14,14 +14,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
-  version = "5.1.0";
+  version = "5.1.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
     tag = version;
-    hash = "sha256-viRRPccw0C1GmZFXWAtg008HfDmnTwEjg2TqVlIiICY=";
+    hash = "sha256-+gdrcEOUrMZw4nTO4bFLGanD4f7OumxTE99hpXlo69w=";
   };
 
   postPatch = ''
@@ -49,19 +49,18 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  propagatedBuildInputs =
-    [
-      pulseaudio
-      sound-theme-freedesktop
-    ]
-    ++ (with python3.pkgs; [
-      psutil
-      pyqt5
-      requests
-      setproctitle
-      setuptools
-      yt-dlp
-    ]);
+  propagatedBuildInputs = [
+    pulseaudio
+    sound-theme-freedesktop
+  ]
+  ++ (with python3.pkgs; [
+    psutil
+    pyqt5
+    requests
+    setproctitle
+    setuptools
+    yt-dlp
+  ]);
 
   meta = with lib; {
     description = "Download manager GUI written in Python";

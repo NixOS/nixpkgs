@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
     tag = "v${version}";
-    hash = "sha256-+d5dBhB0ABYrGQHZ5ta5hxsAqQop7H/5P4pxNF4MIc0=";
+    hash = "sha256-ND0SFB0xj4WK6okNzChZWfK5bhNc4PTWuZoq/PodTW0=";
   };
 
   vendorHash = "sha256-oc85xNPMFeaPC7TMcSh3i3Msd8sCJ5QGFmi2fKjcyvk=";
@@ -30,10 +30,10 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tunneling/pivoting tool that uses a TUN interface";
     homepage = "https://github.com/tnpitsecurity/ligolo-ng";
     changelog = "https://github.com/nicocha30/ligolo-ng/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 }

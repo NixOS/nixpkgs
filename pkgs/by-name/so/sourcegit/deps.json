@@ -105,6 +105,11 @@
     "hash": "sha256-0su/ylZ68+FDZ6mgfp3qsm7qpfPtD5SW75HXbVhs5qk="
   },
   {
+    "pname": "BitMiracle.LibTiff.NET",
+    "version": "2.4.660",
+    "hash": "sha256-J3nFOSYvXGizfrGdYiIOF/zKvMQJ/KaUi+lSmmD/9Xo="
+  },
+  {
     "pname": "CommunityToolkit.Mvvm",
     "version": "8.4.0",
     "hash": "sha256-a0D550q+ffreU9Z+kQPdzJYPNaj1UjgyPofLzUg02ZI="
@@ -173,6 +178,11 @@
     "pname": "OpenAI",
     "version": "2.2.0-beta.4",
     "hash": "sha256-kkNb9Jp7djvE2060+HIGoqnkFpOzQ5l/PK5oH4FO3e4="
+  },
+  {
+    "pname": "Pfim",
+    "version": "0.11.3",
+    "hash": "sha256-SNngIsloTjRymY64AGw+agXeG4U3kIgE+Pk8NqxMBO8="
   },
   {
     "pname": "SkiaSharp",

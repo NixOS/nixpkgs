@@ -16,7 +16,7 @@ interface Replacer {
 const log = logger("src");
 
 const prefetchHash = (nixpkgs: string, version: string) =>
-  run("nurl", ["https://github.com/denoland/deno", version, "-H", "-n", nixpkgs]);
+  run("nurl", ["https://github.com/denoland/deno", version, "-H", "-n", nixpkgs, "-S"]);
 const prefetchCargoHash = (nixpkgs: string) =>
   run(
     "nurl",

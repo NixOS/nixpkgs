@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "condense-json";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "condense-json";
     tag = version;
-    hash = "sha256-eZ8d8N7k8VL7dFkORHmp7JmHM1/11Km8BCriWw/LiwE=";
+    hash = "sha256-vMh6GLWqae0Ave3FmrGQuVCgFzYMGCIe76mGNDMrBdU=";
   };
 
   build-system = [

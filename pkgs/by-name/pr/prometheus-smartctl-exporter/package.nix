@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
-    repo = pname;
+    repo = "smartctl_exporter";
     tag = "v${version}";
     hash = "sha256-9woQgqkPYKMu8p35aeSv3ua1l35BuMzFT4oCVpmyG2E=";
   };

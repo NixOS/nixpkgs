@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cadaver";
-  version = "0.26";
+  version = "0.27";
 
   src = fetchurl {
     url = "https://notroj.github.io/cadaver/cadaver-${version}.tar.gz";
-    hash = "sha256-kjbkPN81BdnvBhhf2kMlKEAQXAwC2TcLbhB32GY1e1U=";
+    hash = "sha256-Eq/GKyPhKRJw6V6CHcqw1XRrpEYcv8hNCMKuursqtU8=";
   };
 
   configureFlags = [
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line WebDAV client";
     homepage = "https://notroj.github.io/cadaver/";
     changelog = "https://github.com/notroj/cadaver/blob/${version}/NEWS";
-    maintainers = with maintainers; [ ianwookim ];
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ freebsd ++ openbsd;
+    maintainers = with lib.maintainers; [ ianwookim ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ freebsd ++ openbsd;
     mainProgram = "cadaver";
   };
 }

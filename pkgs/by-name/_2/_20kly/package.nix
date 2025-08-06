@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "20kly";
     repo = "20kly";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1zxsxg49a02k7zidx3kgk2maa0vv0n1f9wrl5vch07sq3ghvpphx";
   };
 
@@ -38,11 +38,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 lightyears "$out/bin/lightyears"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Steampunk-themed strategy game where you have to manage a steam supply network";
     mainProgram = "lightyears";
     homepage = "http://jwhitham.org.uk/20kly/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

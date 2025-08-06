@@ -28,6 +28,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
+        format = "setuptools";
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -99,6 +100,7 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
+        format = "setuptools";
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";
@@ -168,6 +170,16 @@ let
       azure-mgmt-media =
         overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
           "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.monitor.operations'
+      azure-mgmt-monitor = super.azure-mgmt-monitor.overridePythonAttrs (attrs: rec {
+        version = "7.0.0b1";
+        src = fetchPypi {
+          pname = "azure_mgmt_monitor"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-WR4YZMw4njklpARkujsRnd6nwTZ8M5vXFcy9AfL9oj4=";
+        };
+      });
 
       # AttributeError: module 'azure.mgmt.rdbms.postgresql_flexibleservers.operations' has no attribute 'BackupsOperations'
       azure-mgmt-rdbms =

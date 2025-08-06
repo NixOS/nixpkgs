@@ -14,8 +14,12 @@
 }:
 
 let
-  source = builtins.fromJSON (builtins.readFile ./source.json);
-  pname = "audiobookshelf";
+  source = {
+    version = "2.27.0";
+    hash = "sha256-FKWK/yYMNBrGgfWtdUC9DpQ2y8mBn3/5G+buQNzzot4=";
+    npmDepsHash = "sha256-FpRO7lhgQNZ5wHQwHFIxkrYfmivgTopXKFcrQ48B20w=";
+    clientNpmDepsHash = "sha256-GHN49bo7m9pzvwNvkVtA0cwTv+rWSAKpBHG7jqXm/vo=";
+  };
 
   src = fetchFromGitHub {
     owner = "advplyr";
@@ -37,7 +41,7 @@ let
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
-    npmDepsHash = source.clientDepsHash;
+    npmDepsHash = source.clientNpmDepsHash;
   };
 
   wrapper = import ./wrapper.nix {
@@ -51,15 +55,16 @@ let
 
 in
 buildNpmPackage {
-  inherit pname src;
-  inherit (source) version;
+  pname = "audiobookshelf";
+
+  inherit src;
+  inherit (source) npmDepsHash version;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--only-production" ];
-  npmDepsHash = source.depsHash;
 
   installPhase = ''
     mkdir -p $out/opt/client
@@ -75,7 +80,7 @@ buildNpmPackage {
 
   passthru = {
     tests.basic = nixosTests.audiobookshelf;
-    updateScript = ./update.nu;
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -86,6 +91,7 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [
       jvanbruegge
       adamcstephens
+      tebriel
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";

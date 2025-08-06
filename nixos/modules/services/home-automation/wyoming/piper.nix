@@ -96,6 +96,10 @@ in
                 apply = toString;
               };
 
+              streaming = mkEnableOption "audio streaming on sentence boundaries" // {
+                default = true;
+              };
+
               extraArgs = mkOption {
                 type = listOf str;
                 default = [ ];
@@ -157,6 +161,9 @@ in
                 options.noiseScale
                 "--noise-w"
                 options.noiseWidth
+              ]
+              ++ lib.optionals options.streaming [
+                "--streaming"
               ]
               ++ options.extraArgs
             );

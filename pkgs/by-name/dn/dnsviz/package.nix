@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dnsviz";
   version = "0.11.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dnsviz";
@@ -24,6 +25,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace dnsviz/config.py.in \
       --replace-fail '@out@' $out
   '';
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   dependencies = with python3Packages; [
     dnspython

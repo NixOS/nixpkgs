@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiokem";
-  version = "0.5.10";
+  version = "1.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "kohlerlibs";
     repo = "aiokem";
     tag = "v${version}";
-    hash = "sha256-C9px2Gooh6Ob3rGGhKtRdScuA+PCU93xDvOjk7+q3e8=";
+    hash = "sha256-4LbpTov81LMr4V8jMgttlUCyHWJoR6tExOvt8X4Telc=";
   };
 
   build-system = [ setuptools ];

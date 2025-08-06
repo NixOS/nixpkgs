@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "linkedin";
-    repo = pname;
+    repo = "oncall";
     #tag = "v${version}";
     rev = "030f5d0286b253e4300d36de1954c7b2a7490a76";
     hash = "sha256-Lox9aqYKsl/vg6mNwr0MoLmJQkC+kEf7AqvCCKhgo94=";
@@ -100,8 +100,8 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "A calendar web-app designed for scheduling and managing on-call shifts";
-    homepage = "http://oncall.tools";
+    description = "Calendar web-app designed for scheduling and managing on-call shifts";
+    homepage = "https://oncall.tools";
     changelog = "https://github.com/linkedin/oncall/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ onny ];

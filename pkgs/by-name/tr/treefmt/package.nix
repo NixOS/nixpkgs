@@ -6,13 +6,13 @@
 }:
 buildGoModule rec {
   pname = "treefmt";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    hash = "sha256-tDezwRWEfPz+u/i9Wz7MZULMmmIUwnl+5gcFU+dDj6Y=";
+    hash = "sha256-Z1AGLaGrRrUd75aQJc/UKwzMGb9gI/p5WxQ5XUgp98o=";
   };
 
   vendorHash = "sha256-9yAvqz99YlBfFU/hGs1PB/sH0iOyWaVadqGhfXMkj5E=";
@@ -45,7 +45,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "one CLI to format the code tree";
+    description = "One CLI to format the code tree";
     longDescription = ''
       [treefmt](${meta.homepage}) streamlines the process of applying formatters
       to your project, making it a breeze with just one command line.

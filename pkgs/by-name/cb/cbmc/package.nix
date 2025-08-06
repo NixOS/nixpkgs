@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.4.1";
+  version = "6.7.1";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-O8aZTW+Eylshl9bmm9GzbljWB0+cj2liZHs2uScERkM=";
+    hash = "sha256-GUY4Evya0GQksl0R4b01UDSvoxUEOOeq4oOIblmoF5o=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -51,35 +51,28 @@ stdenv.mkDerivation (finalAttrs: {
       cudd = cudd.src;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
-    # Fixes build with libc++ >= 19 due to the removal of std::char_traits<unsigned>.
-    # Remove for versions > 6.4.1.
-    (fetchpatch {
-      url = "https://github.com/diffblue/cbmc/commit/684bf4221c8737952e6469304f5a360dc3d5439d.patch";
-      hash = "sha256-3hHu6FcyHjfeFjNxhyhxxk7I/SK98BXT+xy7NgtEt50=";
-    })
   ];
 
-  postPatch =
-    ''
-      # fix library_check.sh interpreter error
-      patchShebangs .
+  postPatch = ''
+    # fix library_check.sh interpreter error
+    patchShebangs .
 
-      mkdir -p srccadical
-      cp -r ${finalAttrs.srccadical}/* srccadical
+    mkdir -p srccadical
+    cp -r ${finalAttrs.srccadical}/* srccadical
 
-      mkdir -p srcglucose
-      cp -r ${finalAttrs.srcglucose}/* srcglucose
-      find -exec chmod +w {} \;
+    mkdir -p srcglucose
+    cp -r ${finalAttrs.srcglucose}/* srcglucose
+    find -exec chmod +w {} \;
 
-      substituteInPlace src/solvers/CMakeLists.txt \
-       --replace-fail "@srccadical@" "$PWD/srccadical" \
-       --replace-fail "@srcglucose@" "$PWD/srcglucose"
-    ''
-    + lib.optionalString (!stdenv.cc.isGNU) ''
-      # goto-gcc rely on gcc
-      substituteInPlace "regression/CMakeLists.txt" \
-        --replace-fail "add_subdirectory(goto-gcc)" ""
-    '';
+    substituteInPlace src/solvers/CMakeLists.txt \
+     --replace-fail "@srccadical@" "$PWD/srccadical" \
+     --replace-fail "@srcglucose@" "$PWD/srcglucose"
+  ''
+  + lib.optionalString (!stdenv.cc.isGNU) ''
+    # goto-gcc rely on gcc
+    substituteInPlace "regression/CMakeLists.txt" \
+      --replace-fail "add_subdirectory(goto-gcc)" ""
+  '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH

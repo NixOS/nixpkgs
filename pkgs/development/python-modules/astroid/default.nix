@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "3.3.8"; # Check whether the version is compatible with pylint
+  version = "3.3.10"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "astroid";
     tag = "v${version}";
-    hash = "sha256-KKQuLomCHhVYMX1gE9WuqbXOfsf2izGlLE0Ml62gY3k=";
+    hash = "sha256-q4ZPXz2xaKJ39q6g1c9agktKSCfbRp+3INDfXg/wP8k=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -31,6 +31,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pip
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires mypy
+    "tests/test_raw_building.py"
   ];
 
   passthru.tests = {

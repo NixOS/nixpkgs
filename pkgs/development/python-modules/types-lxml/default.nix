@@ -55,7 +55,8 @@ buildPythonPackage rec {
     pytestCheckHook
     typeguard
     urllib3
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "lxml-stubs" ];
 

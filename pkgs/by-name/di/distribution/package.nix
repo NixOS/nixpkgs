@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to pack, ship, store, and deliver container content";
     longDescription = ''
       Distribution is a Open Source Registry implementation for storing and distributing container
@@ -44,10 +44,10 @@ buildGoModule (finalAttrs: {
       or running a simple private registry.
     '';
     homepage = "https://distribution.github.io/distribution/";
-    changelog = "https://github.com/distribution/distribution/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/distribution/distribution/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "registry";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

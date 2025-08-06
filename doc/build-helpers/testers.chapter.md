@@ -15,9 +15,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 ```nix
 {
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta.pkgConfigModules = [ "libfoo" ];
 }
@@ -40,6 +38,26 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 :::
 
+## `hasCmakeConfigModules` {#tester-hasCmakeConfigModules}
+
+Checks whether a package exposes a given list of `*config.cmake` modules.
+Note the moduleNames used in cmake find_package are case sensitive.
+
+:::{.example #ex-hascmakeconfigmodules}
+
+# Check that `*config.cmake` modules are exposed using explicit module names
+
+```nix
+{
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    package = finalAttrs.finalPackage;
+    moduleNames = [ "Foo" ];
+  };
+}
+```
+
+:::
+
 ## `lycheeLinkCheck` {#tester-lycheeLinkCheck}
 
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
@@ -54,9 +72,7 @@ If you have a static site that can be built with Nix, you can use `lycheeLinkChe
 # Check hyperlinks in the `nix` documentation
 
 ```nix
-testers.lycheeLinkCheck {
-  site = nix.doc + "/share/doc/nix/manual";
-}
+testers.lycheeLinkCheck { site = nix.doc + "/share/doc/nix/manual"; }
 ```
 
 :::
@@ -249,9 +265,7 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-{
-  passthru.tests.version = testers.testVersion { package = hello; };
-}
+{ passthru.tests.version = testers.testVersion { package = hello; }; }
 ```
 
 :::

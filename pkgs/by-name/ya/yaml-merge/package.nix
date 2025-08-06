@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "yaml-merge";
-  version = "unstable-2022-01-12";
+  version = "0-unstable-2022-01-12";
 
   src = fetchFromGitHub {
     owner = "abbradar";

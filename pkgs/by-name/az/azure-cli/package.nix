@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.72.0";
+  version = "2.75.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-LuQhGrAYVgv+OH214A4xz4LV+xwIshNAH8nAlQL4mDc=";
+    hash = "sha256-u6umAqRUfiACt23mxTtfosLdxKSPvDVJMkVjPCtxr24=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -58,7 +58,8 @@ let
           passthru = {
             updateScript = extensionUpdateScript { inherit pname; };
             tests.azWithExtension = testAzWithExts [ self ];
-          } // args.passthru or { };
+          }
+          // args.passthru or { };
           meta = {
             inherit description;
             inherit (azure-cli.meta) platforms maintainers;
@@ -66,7 +67,8 @@ let
             changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
             license = lib.licenses.mit;
             sourceProvenance = [ lib.sourceTypes.fromSource ];
-          } // args.meta or { };
+          }
+          // args.meta or { };
         }
         // (removeAttrs args [
           "url"
@@ -142,6 +144,7 @@ py.pkgs.toPythonApplication (
   py.pkgs.buildAzureCliPackage rec {
     pname = "azure-cli";
     inherit version src;
+    format = "setuptools";
 
     sourceRoot = "${src.name}/src/azure-cli";
 
@@ -168,6 +171,7 @@ py.pkgs.toPythonApplication (
         azure-keyvault-certificates
         azure-keyvault-keys
         azure-keyvault-secrets
+        azure-keyvault-securitydomain
         azure-mgmt-advisor
         azure-mgmt-apimanagement
         azure-mgmt-appconfiguration
@@ -292,19 +296,18 @@ py.pkgs.toPythonApplication (
 
     # wrap the executable so that the python packages are available
     # it's just a shebang script which calls `python -m azure.cli "$@"`
-    postFixup =
-      ''
-        wrapProgram $out/bin/az \
-      ''
-      + lib.optionalString withImmutableConfig ''
-        --set AZURE_IMMUTABLE_DIR $out/etc/azure \
-      ''
-      + lib.optionalString (withExtensions != [ ]) ''
-        --set AZURE_EXTENSION_DIR ${extensionDir} \
-      ''
-      + ''
-        --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
-      '';
+    postFixup = ''
+      wrapProgram $out/bin/az \
+    ''
+    + lib.optionalString withImmutableConfig ''
+      --set AZURE_IMMUTABLE_DIR $out/etc/azure \
+    ''
+    + lib.optionalString (withExtensions != [ ]) ''
+      --set AZURE_EXTENSION_DIR ${extensionDir} \
+    ''
+    + ''
+      --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
+    '';
 
     doInstallCheck = true;
     installCheckPhase = ''

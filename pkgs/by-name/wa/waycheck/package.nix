@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-w6JasxkxwWrkWECsW/dCMj2HcnmeM/VVMnkOXzwNWCQ=";
+    hash = "sha256-wO3+Vwi4wM/NfRdHUt0AVEE6UPr7wkY12JBVzLFqM4c=";
   };
 
   nativeBuildInputs = [

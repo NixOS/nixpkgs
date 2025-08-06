@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.75.1";
+  version = "2.78.2";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     tag = "v${version}";
-    hash = "sha256-2vJiT0gr+Ix91KeM+wlldDHkrWN4Zug7RmuxJ5XfSGQ=";
+    hash = "sha256-E6UjHtLJ8wgAM9CPtFLsBOKaIaF+exjegBBnP0aBcvA=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-1SLzXB9lw5U9xJtUqI5nSoeDEa2IT8FbRH11yEY8kS4=";
+  vendorHash = "sha256-8Aaxwysbuzo2n2w4OPn7jooqrjEGwrZAlgec3j/pN2A=";
 
   checkFlags = "-skip=^TestReleaseBundle";
 
@@ -34,13 +34,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jfrog/jfrog-cli";
     description = "Client for accessing to JFrog's Artifactory and Mission Control through their respective REST APIs";
     changelog = "https://github.com/jfrog/jfrog-cli/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       detegr
       aidalgol
     ];

@@ -1,187 +1,80 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
+  callPackage,
+  vscode-generic,
   fetchurl,
-
-  # build
   appimageTools,
-
-  # linux dependencies
-  alsa-lib,
-  at-spi2-atk,
-  autoPatchelfHook,
-  cairo,
-  cups,
-  curlWithGnuTls,
-  egl-wayland,
-  expat,
-  fontconfig,
-  freetype,
-  ffmpeg,
-  glib,
-  glibc,
-  glibcLocales,
-  gtk3,
-  libappindicator-gtk3,
-  libdrm,
-  libgbm,
-  libGL,
-  libnotify,
-  libva-minimal,
-  libxkbcommon,
-  libxkbfile,
-  makeWrapper,
-  nspr,
-  nss,
-  pango,
-  pciutils,
-  pulseaudio,
-  vivaldi-ffmpeg-codecs,
-  vulkan-loader,
-  wayland,
-
-  # linux installation
-  rsync,
-  commandLineArgs ? "",
-
-  # darwin build
   undmg,
+  commandLineArgs ? "",
+  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
-let
-  pname = "cursor";
-  version = "0.49.6";
 
-  inherit (stdenvNoCC) hostPlatform;
+let
+  inherit (stdenv) hostPlatform;
+  finalCommandLineArgs = "--update=false " + commandLineArgs;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/x64/Cursor-0.49.6-x86_64.AppImage";
-      hash = "sha256-WH4/Zw0VJmRGyRzMlkThkhZ4fGysMKBUSIPCTsyGS4w=";
+      url = "https://downloads.cursor.com/production/a1fa6fc7d2c2f520293aad84aaa38d091dee6fef/linux/x64/Cursor-1.3.8-x86_64.AppImage";
+      hash = "sha256-qR1Wu3H0JUCKIoUP/QFC1YyYiRaQ9PVN7ZT9TjHwn1k=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/arm64/Cursor-0.49.6-aarch64.AppImage";
-      hash = "sha256-cpNoff6mDRkT2RicaDlxzqVP9BNe6UEGgJVHr1xMiv0=";
+      url = "https://downloads.cursor.com/production/a1fa6fc7d2c2f520293aad84aaa38d091dee6fef/linux/arm64/Cursor-1.3.8-aarch64.AppImage";
+      hash = "sha256-UrUstEFP8W8Y9WUCR5kt3434bKCBBK/NaSu2UK8+gII=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-fAaLY9YTIuNThFl5OsIMHavy2xwDgYooL4xTSp4Cwzw=";
+      url = "https://downloads.cursor.com/production/a1fa6fc7d2c2f520293aad84aaa38d091dee6fef/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-FGjqbOdr1HSjVlDYP/+vp4bVQoqdJww3U4t59QLg1kk=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-DNN2+gfs9u0tZmh75J258d2TL6ErIYludMgPJZcgfb8=";
+      url = "https://downloads.cursor.com/production/a1fa6fc7d2c2f520293aad84aaa38d091dee6fef/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-tsVPS48APst7kbEh7cjhJ2zYKcKBDdjH+NXMpAe4Ixs=";
     };
   };
 
   source = sources.${hostPlatform.system};
-
-  # Linux -- build from AppImage
-  appimageContents = appimageTools.extractType2 {
-    inherit version pname;
-    src = source;
-  };
-
-  wrappedAppimage = appimageTools.wrapType2 {
-    inherit version pname;
-    src = source;
-  };
-
 in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+(callPackage vscode-generic rec {
+  inherit useVSCodeRipgrep;
+  commandLineArgs = finalCommandLineArgs;
 
-  src = if hostPlatform.isLinux then wrappedAppimage else source;
+  version = "1.3.8";
+  pname = "cursor";
 
-  nativeBuildInputs =
-    lib.optionals hostPlatform.isLinux [
-      autoPatchelfHook
-      glibcLocales
-      makeWrapper
-      rsync
-    ]
-    ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+  # You can find the current VSCode version in the About dialog:
+  # workbench.action.showAboutDialog (Help: About)
+  vscodeVersion = "1.99.3";
 
-  buildInputs = lib.optionals hostPlatform.isLinux [
-    alsa-lib
-    at-spi2-atk
-    cairo
-    cups
-    curlWithGnuTls
-    egl-wayland
-    expat
-    ffmpeg
-    glib
-    gtk3
-    libdrm
-    libgbm
-    libGL
-    libva-minimal
-    libxkbcommon
-    libxkbfile
-    nspr
-    nss
-    pango
-    pulseaudio
-    vivaldi-ffmpeg-codecs
-    vulkan-loader
-    wayland
-  ];
+  executableName = "cursor";
+  longName = "Cursor";
+  shortName = "cursor";
+  libraryName = "cursor";
+  iconName = "cursor";
 
-  runtimeDependencies = lib.optionals hostPlatform.isLinux [
-    egl-wayland
-    ffmpeg
-    glibc
-    libappindicator-gtk3
-    libnotify
-    libxkbfile
-    pciutils
-    pulseaudio
-    wayland
-    fontconfig
-    freetype
-  ];
+  src =
+    if hostPlatform.isLinux then
+      appimageTools.extract {
+        inherit pname version;
+        src = source;
+      }
+    else
+      source;
 
-  sourceRoot = lib.optionalString hostPlatform.isDarwin ".";
+  sourceRoot =
+    if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
-  # Don't break code signing
-  dontUpdateAutotoolsGnuConfigScripts = hostPlatform.isDarwin;
-  dontConfigure = hostPlatform.isDarwin;
-  dontFixup = hostPlatform.isDarwin;
+  tests = { };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/
+  updateScript = ./update.sh;
 
-    ${lib.optionalString hostPlatform.isLinux ''
-      cp -r bin $out/bin
-      # mkdir -p $out/share/cursor
-      # cp -ar ${appimageContents}/usr/share $out/
+  # Editing the `cursor` binary within the app bundle causes the bundle's signature
+  # to be invalidated, which prevents launching starting with macOS Ventura, because Cursor is notarized.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = stdenv.hostPlatform.isDarwin;
 
-      rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
-
-      # Fix the desktop file to point to the correct location
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
-
-      wrapProgram $out/bin/cursor \
-        --add-flags "--update=false" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
-    ''}
-
-    ${lib.optionalString hostPlatform.isDarwin ''
-      APP_DIR="$out/Applications"
-      mkdir -p "$APP_DIR"
-      cp -Rp Cursor.app "$APP_DIR"
-      mkdir -p "$out/bin"
-      ln -s "$APP_DIR/Cursor.app/Contents/Resources/app/bin/cursor" "$out/bin/cursor"
-    ''}
-
-    runHook postInstall
-  '';
-
-  passthru = {
-    inherit sources;
-    updateScript = ./update.sh;
-  };
+  # Cursor has no wrapper script.
+  patchVSCodePath = false;
 
   meta = {
     description = "AI-powered code editor built on vscode";
@@ -191,8 +84,21 @@ stdenvNoCC.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       aspauldingcode
+      prince213
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ]
+    ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    nativeBuildInputs =
+      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+
+    passthru = (oldAttrs.passthru or { }) // {
+      inherit sources;
+    };
+  })

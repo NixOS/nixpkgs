@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+SnwxmNQDj6acr2nEKJkNmR5PqnTIvyMApyZOmCld2U=";
 
   nativeBuildInputs = [
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     # Related to https://github.com/stepchowfun/typical/pull/501
-    # Commiting a slightly different patch because the upstream one doesn't apply cleanly
+    # Committing a slightly different patch because the upstream one doesn't apply cleanly
     ./lifetime.patch
   ];
 

@@ -21,7 +21,7 @@
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "clickhouse";
-  version = "25.3.3.42";
+  version = "25.3.5.42";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
@@ -29,7 +29,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}-lts";
     fetchSubmodules = true;
     name = "clickhouse-${tag}.tar.gz";
-    hash = "sha256-VYT6Rnq7LaV9fZc4LJ9YtbWQDgEARYok8MjVfg8itIg=";
+    hash = "sha256-LvGl9XJK6Emt7HnV/Orp7qEmJSr3TBJZtApL6GrWIMg=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -55,69 +55,65 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      python3
-      perl
-      llvmPackages_19.lld
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      nasm
-      yasm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages_19.bintools
-      findutils
-      darwin.bootstrap_cmds
-    ]
-    ++ lib.optionals rustSupport [
-      rustc
-      cargo
-      rustPlatform.cargoSetupHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+    perl
+    llvmPackages_19.lld
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    nasm
+    yasm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages_19.bintools
+    findutils
+    darwin.bootstrap_cmds
+  ]
+  ++ lib.optionals rustSupport [
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dontCargoSetupPostUnpack = true;
 
-  postPatch =
-    ''
-      patchShebangs src/
-      patchShebangs utils/
+  postPatch = ''
+    patchShebangs src/
+    patchShebangs utils/
 
-      sed -i 's|/usr/bin/env perl|"${lib.getExe perl}"|' contrib/openssl-cmake/CMakeLists.txt
+    sed -i 's|/usr/bin/env perl|"${lib.getExe perl}"|' contrib/openssl-cmake/CMakeLists.txt
 
-      substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
-        --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
-      substituteInPlace utils/check-style/check-ungrouped-includes.sh \
-        --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
-      substituteInPlace utils/list-licenses/list-licenses.sh \
-        --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i 's|gfind|find|' cmake/tools.cmake
-      sed -i 's|ggrep|grep|' cmake/tools.cmake
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+      --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
+    substituteInPlace utils/check-style/check-ungrouped-includes.sh \
+      --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
+    substituteInPlace utils/list-licenses/list-licenses.sh \
+      --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i 's|gfind|find|' cmake/tools.cmake
+    sed -i 's|ggrep|grep|' cmake/tools.cmake
 
-      # Make sure Darwin invokes lld.ld64 not lld.
-      substituteInPlace cmake/tools.cmake \
-        --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
-    ''
-    + lib.optionalString rustSupport ''
-      cargoSetupPostPatchHook() { true; }
-    '';
+    # Make sure Darwin invokes lld.ld64 not lld.
+    substituteInPlace cmake/tools.cmake \
+      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
+  ''
+  + lib.optionalString rustSupport ''
+    cargoSetupPostPatchHook() { true; }
+  '';
 
-  cmakeFlags =
-    [
-      "-DENABLE_TESTS=OFF"
-      "-DENABLE_DELTA_KERNEL_RS=0"
-      "-DCOMPILER_CACHE=disabled"
-      "-DENABLE_EMBEDDED_COMPILER=ON"
-    ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
-    ) "-DNO_ARMV81_OR_HIGHER=1";
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DENABLE_DELTA_KERNEL_RS=0"
+    "-DCOMPILER_CACHE=disabled"
+  ]
+  ++ lib.optional (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+  ) "-DNO_ARMV81_OR_HIGHER=1";
 
   env = {
     CARGO_HOME = "$PWD/../.cargo/";
@@ -143,6 +139,12 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace-fail "<level>trace</level>" "<level>warning</level>"
+  '';
+
+  # Basic smoke test
+  doCheck = true;
+  checkPhase = ''
+    $NIX_BUILD_TOP/$sourceRoot/build/programs/clickhouse local --query 'SELECT 1' | grep 1
   '';
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.

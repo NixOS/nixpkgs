@@ -10,6 +10,7 @@
   fixDarwinDylibNames,
   libiconv,
   libxcrypt,
+  sanitiseHeaderPathsHook,
   makePkgconfigItem,
   copyPkgconfigItems,
   boost-build,
@@ -169,6 +170,7 @@ stdenv.mkDerivation {
       lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
     ) ./darwin-no-system-python.patch
     ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+    ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
@@ -346,34 +348,34 @@ stdenv.mkDerivation {
     which
     boost-build
     copyPkgconfigItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      zlib
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
+    sanitiseHeaderPathsHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    zlib
+    bzip2
+    libiconv
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.69") zstd
+  ++ [ xz ]
+  ++ lib.optional enableIcu icu
+  ++ lib.optionals enablePython [
+    libxcrypt
+    python
+  ]
+  ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
-  configureFlags =
-    [
-      "--includedir=$(dev)/include"
-      "--libdir=$(out)/lib"
-      "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-    ]
-    ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
+  configureFlags = [
+    "--includedir=$(dev)/include"
+    "--libdir=$(out)/lib"
+    "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
+  ]
+  ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
+  ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild
@@ -394,15 +396,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup =
-    ''
-      # Make boost header paths relative so that they are not runtime dependencies
-      cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-        -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      $RANLIB "$out/lib/"*.a
-    '';
+  preFixup = ''
+    # Strip UTF‐8 BOMs for `sanitiseHeaderPathsHook`.
+    cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
+      -exec sed '1s/^\xef\xbb\xbf//' -i '{}' \;
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    $RANLIB "$out/lib/"*.a
+  '';
 
   outputs = [
     "out"

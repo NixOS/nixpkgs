@@ -6,13 +6,19 @@
   pname,
   version,
   meta,
+  passthru,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    meta
+    passthru
+    ;
 
   src = fetchurl {
     url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}-universal-mac.zip";
-    hash = "sha256-0FT4JHGJKy6UapuV2tXKzWm0Esr6DPqu38PllUbUtrY=";
+    hash = "sha256-tEkiVbhX14RkK5Q61CYOxmnhMqM6XkHvCy9M060oJvI=";
   };
 
   sourceRoot = ".";

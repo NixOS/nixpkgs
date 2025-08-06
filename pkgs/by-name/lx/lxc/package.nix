@@ -17,6 +17,7 @@
   pkg-config,
   systemd,
 
+  fetchpatch,
   nix-update-script,
 }:
 
@@ -57,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix hardcoded path of lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
+
+    # Fixes https://github.com/zabbly/incus/issues/81
+    (fetchpatch {
+      name = "4536.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/lxc/lxc/pull/4536.patch";
+      hash = "sha256-yEqK9deO2MhfPROPfBw44Z752Mc5bR8DBKl1KrGC+5c=";
+    })
   ];
 
   mesonFlags = [

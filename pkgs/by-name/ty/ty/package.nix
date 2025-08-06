@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.5";
+  version = "0.0.1-alpha.16";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-F3q6IpS7dk0jISG+aREKpPxwWHO5UdSfslOnclYa0R8=";
+    hash = "sha256-hpDzl1TJRCfr5l76HwK90WAbAgeDR48eRNs9knj87lk=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-NXhO+xYHCz269jxEuiB8yMgaX21Z8wAySVl9XOc7W60=";
+  cargoHash = "sha256-/SoF87aZHypzEsetgmALmNTheEH/CodZEPW2I5+F/a4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export CARGO_BIN_EXE_ty="$PWD"/target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/ty
   '';
 
-  # All the packages referenced in `crates/ty/README.md`, plus `crates/ty` itself.
   cargoTestFlags = [
     "--package=ty" # CLI tests; file-watching tests only on Linux platforms
     "--package=ty_python_semantic" # core type checking tests
@@ -83,6 +82,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/astral-sh/ty/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "ty";
-    maintainers = [ lib.maintainers.bengsparks ];
+    maintainers = with lib.maintainers; [
+      bengsparks
+      GaetanLepage
+    ];
   };
 })

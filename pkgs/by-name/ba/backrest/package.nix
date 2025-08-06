@@ -8,6 +8,7 @@
   restic,
   stdenv,
   util-linux,
+  makeBinaryWrapper,
 }:
 let
   pname = "backrest";
@@ -32,6 +33,7 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
       hash = "sha256-q7VMQb/FRT953yT2cyGMxUPp8p8XkA9mvqGI7S7Eifg=";
     };
 
@@ -53,9 +55,19 @@ in
 buildGoModule {
   inherit pname src version;
 
+  postPatch = ''
+    sed -i -e \
+      '/func installRestic(targetPath string) error {/a\
+        return fmt.Errorf("installing restic from an external source is prohibited by nixpkgs")' \
+      internal/resticinstaller/resticinstaller.go
+  '';
+
   vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
 
-  nativeBuildInputs = [ gzip ];
+  nativeBuildInputs = [
+    gzip
+    makeBinaryWrapper
+  ];
 
   preBuild = ''
     mkdir -p ./webui/dist
@@ -68,16 +80,15 @@ buildGoModule {
 
   checkFlags =
     let
-      skippedTests =
-        [
-          "TestMultihostIndexSnapshots"
-          "TestRunCommand"
-          "TestSnapshot"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "TestBackup" # relies on ionice
-          "TestCancelBackup"
-        ];
+      skippedTests = [
+        "TestMultihostIndexSnapshots"
+        "TestRunCommand"
+        "TestSnapshot"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestBackup" # relies on ionice
+        "TestCancelBackup"
+      ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
@@ -87,12 +98,17 @@ buildGoModule {
     export HOME=$(pwd)
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/backrest \
+      --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
+  '';
+
   meta = {
     description = "Web UI and orchestrator for restic backup";
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ interdependence ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

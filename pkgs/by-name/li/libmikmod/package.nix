@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString stdenv.hostPlatform.isLinux "-lasound";
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     moveToOutput bin/libmikmod-config "$dev"
   '';
@@ -41,7 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mikmod.shlomifish.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [
-      astsmtl
       lovek323
     ];
     platforms = platforms.unix;

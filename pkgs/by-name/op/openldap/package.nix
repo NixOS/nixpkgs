@@ -53,40 +53,38 @@ stdenv.mkDerivation rec {
     groff
   ];
 
-  buildInputs =
-    [
-      (cyrus_sasl.override {
-        inherit openssl;
-      })
-      libtool
-      openssl
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      libxcrypt # causes linking issues on *-darwin
-    ]
-    ++ lib.optionals withModules [
-      libsodium
-    ]
-    ++ lib.optionals withSystemd [
-      systemdMinimal
-    ];
+  buildInputs = [
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
+    libtool
+    openssl
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
+  ]
+  ++ lib.optionals withModules [
+    libsodium
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+  ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
-  configureFlags =
-    [
-      "--enable-crypt"
-      "--enable-overlays"
-      (lib.enableFeature withModules "argon2")
-      (lib.enableFeature withModules "modules")
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--with-yielding_select=yes"
-      "ac_cv_func_memcmp_working=yes"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  configureFlags = [
+    "--enable-crypt"
+    "--enable-overlays"
+    (lib.enableFeature withModules "argon2")
+    (lib.enableFeature withModules "modules")
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-yielding_select=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 

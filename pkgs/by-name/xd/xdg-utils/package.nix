@@ -21,8 +21,8 @@
   glib,
   gnugrep,
   gnused,
+  hostname,
   jq,
-  nettools,
   procps,
   which,
   xdg-user-dirs,
@@ -166,7 +166,7 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname
         glib.bin
         "${placeholder "out"}/bin"
       ];
@@ -206,7 +206,7 @@ let
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname
         perl
         procps
       ];
@@ -340,7 +340,6 @@ stdenv.mkDerivation (self: {
         preferLocalBuild = true;
         xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
           "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
-            "https://staging.cohostcdn.org/attachment/0f5d9832-0cda-4d07-b35f-832b287feb6c/kernelkisser.png"
             "https://static1.e621.net/data/0e/76/0e7672980d48e48c2d1373eb2505db5a.png"
           ];
           "sha256-Si9AtB7J9o6rK/oftv+saST77CNaeWomWU5ECfbRioM=" = [

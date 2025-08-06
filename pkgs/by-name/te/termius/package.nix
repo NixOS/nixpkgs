@@ -16,8 +16,8 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "9.19.4";
-  revision = "225";
+  version = "9.26.0";
+  revision = "232";
 
   src = fetchurl {
     # find the latest version with
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
     url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
-    hash = "sha512-lArp7yoQrQKc84zh8/EdLv5FuKbwQka9uy1JgeZzA7kbZzV3evcpav67HNSqp+BhUxp9ViD8TK1USGViJN5Tpg==";
+    hash = "sha512-PBwZS1CcvGFfodM3bqM/YWDJxoF/thZvTWIIPQI1ShjVWbvJUq29J/xeaNyncgQCfowgR8xWIOVpmAjCjjyQ0A==";
   };
 
   desktopItem = makeDesktopItem {
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
 
         revision=$(jq -r .revision <<<"$data")
-        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+        hash=$(nix --extra-experimental-features nix-command hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
 
         update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
         update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"

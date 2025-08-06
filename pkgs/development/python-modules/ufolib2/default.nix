@@ -31,7 +31,8 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     fonttools
-  ] ++ fonttools.optional-dependencies.ufo;
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   optional-dependencies = {
     lxml = [ lxml ];
@@ -48,7 +49,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "ufoLib2" ];
 

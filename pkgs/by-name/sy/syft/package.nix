@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "1.24.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
     tag = "v${version}";
-    hash = "sha256-7Fav9tTcPFpAQnKMXOeD9Ho5rADDwGvLD3f9VzV82NU=";
+    hash = "sha256-X+7X71M7nJKEAvAm0L9hh/zamJTGb+OyYNFWfiYlyew=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-+7tqC6I8zFbGVHFulIbeLBdy3br2ifrEEXM5hZZe3/8=";
+  vendorHash = "sha256-xgjnPTeSB+AWFLfXYLW3bveJowVje81lVvO30ZiCLxI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -73,7 +73,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
     changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
@@ -82,8 +82,8 @@ buildGoModule rec {
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       developer-guy
       jk
       kashw2

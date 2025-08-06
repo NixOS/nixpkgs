@@ -5,6 +5,7 @@
   cmake,
   llvmPackages,
   z3,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     llvmPackages.libllvm
     z3
+  ];
+
+  checkInputs = [
+    python3
   ];
 
   doCheck = true;

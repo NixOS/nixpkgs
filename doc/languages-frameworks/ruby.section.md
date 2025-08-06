@@ -172,7 +172,9 @@ let
   myRuby = pkgs.ruby.override {
     defaultGemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
-        buildFlags = [ "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config" ];
+        buildFlags = [
+          "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config"
+        ];
       };
     };
   };
@@ -193,7 +195,9 @@ let
     gemdir = ./.;
     gemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
-        buildFlags = [ "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config" ];
+        buildFlags = [
+          "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config"
+        ];
       };
     };
   };

@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.11";
+  version = "0.7.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-WL61XQGBkTXHQBMEbw/pr+PrkinUGT8cPGhquduPgRY=";
+    hash = "sha256-yuVBQYP0YlvAIWF/+oSfCLbfj1GLtnYajU3WoolyTjY=";
   };
 
   # 'rich' is also somehow checked when building the wheel,
@@ -125,6 +125,9 @@ buildPythonPackage rec {
     "test_state_with_invalid_yield"
     # tries to run bun or npm
     "test_output_system_info"
+    # Comparison with magic string
+    # TODO Recheck on next update as it appears to be fixed in 8.0.x
+    "test_background_task_no_block"
   ];
 
   disabledTestPaths = [

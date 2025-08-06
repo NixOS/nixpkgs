@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "scarvalhojr";
-    repo = pname;
+    repo = "aoc-cli";
     rev = version;
     hash = "sha256-UdeCKhEWr1BjQ6OMLP19OLWPlvvP7FGAO+mi+bQUPQA=";
   };
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cm8yt7PRjar21EVFIjXYgDkO7+VpHGIB3tJ8hkK+Phw=";
 
   meta = with lib; {

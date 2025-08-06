@@ -41,12 +41,12 @@ buildGoModule rec {
     $out/bin/assh --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
     homepage = "https://github.com/moul/assh";
     changelog = "https://github.com/moul/assh/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

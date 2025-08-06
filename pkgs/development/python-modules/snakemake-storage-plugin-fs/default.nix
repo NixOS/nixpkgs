@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-fs";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
+    repo = "snakemake-storage-plugin-fs";
     tag = "v${version}";
-    hash = "sha256-Y+Fofz4D/CWgdG3lOneadRu/VfJ23D4Dz751j9rUKNo=";
+    hash = "sha256-bTkT1D2GJGS+zWvK/BUGLGE8ArZQikHHcdQjREJhldg=";
   };
 
   build-system = [ poetry-core ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ ];
 
   meta = with lib; {
-    description = "A Snakemake storage plugin that reads and writes from a locally mounted filesystem using rsync";
+    description = "Snakemake storage plugin that reads and writes from a locally mounted filesystem using rsync";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-fs";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

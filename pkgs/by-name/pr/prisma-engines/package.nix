@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Ty8BqWjZluU6a5xhSAVb2VoTVY91UUj6zoVXMKeLO4o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HjDoWa/JE6izUd+hmWVI1Yy3cTBlMcvD9ANsvqAoHBI=";
 
   # Use system openssl.
@@ -63,6 +62,8 @@ rustPlatform.buildRustPackage rec {
   # Tests are long to compile
   doCheck = false;
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "Collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
@@ -70,7 +71,6 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
     mainProgram = "prisma";
     maintainers = with maintainers; [
-      pimeys
       tomhoule
       aqrln
     ];

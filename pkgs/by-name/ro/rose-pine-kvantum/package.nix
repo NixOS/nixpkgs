@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rose-pine-kvantum";
-  version = "0-unstable-2025-03-26";
+  version = "0-unstable-2025-04-16";
 
   src = fetchFromGitHub {
     owner = "rose-pine";
     repo = "kvantum";
-    rev = "5a51f5892ba752088dee062a6188b9f0bb59324b";
-    hash = "sha256-lUO3Bg9+KbPkllKu2sv9ueV1dcZu4qRn32N/+4+2B4A=";
+    rev = "48edf9e2d772b166ed50af3e182a19196e5d3fe6";
+    hash = "sha256-0xSMYYPsW7Rw5O8FL0iAt63Hya8GkI2VuOZf64PewyQ=";
   };
 
   dontBuild = true;
@@ -31,6 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rose-pine/kvantum";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ amadaluzia ];
-    license = lib.licenses.unfree; # rose-pine/kvantum#1
+    license = lib.licenses.mit;
   };
 })

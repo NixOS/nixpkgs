@@ -12,26 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "2.2.0";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-asg8ATzM2cwh+crnzqjWMsee1I9BPm9an8d3lzj6yS4=";
+    hash = "sha256-zwte2YzjEMW1wVti02tOa2IZMd2Z8amYUB9RHevx5bg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DFAlFEJfR6jUplQ50AK4SszdBIw0jbxFRgYNHg3sN8c=";
+  cargoHash = "sha256-wOOcIkEgyR5Af78uMuCksalVH8VPFXptg232It/ilXE=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+  ];
 
   checkFlags = [
     # doctest that requires access outside sandbox

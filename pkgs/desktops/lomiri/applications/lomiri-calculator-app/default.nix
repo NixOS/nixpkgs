@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -16,36 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-calculator-app";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-calculator-app";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NyLEis+rIx2ELUiGrGCeFX/tlt43UgPBkb9aUs1tkgk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RLg2B8LtYE3b7dRRvhPqIA4RAlwNO585q+02wBEedj8=";
   };
-
-  patches = [
-    # Remove when version > 4.0.2
-    (fetchpatch {
-      name = "0001-lomiri-calculator-app-Fix-GNUInstallDirs-variable-concatenations.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app/-/commit/0bd6ef6c3470bcecf90a88e1e5568a5ce5ad6d06.patch";
-      hash = "sha256-2FCLZ/LY3xTPGDmX+M8LiqlbcNQJu5hulkOf+V+3hWY=";
-    })
-
-    # Remove when version > 4.0.2
-    # Must apply separately because merge has hunk with changes to new file before hunk that inits said file
-    (fetchpatch {
-      name = "0002-lomiri-calculator-app-Migrate-to-C++-app.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app/-/commit/035e5b8000ad1c8149a6b024fa8fed2667fbb659.patch";
-      hash = "sha256-2BTFOrH/gjIzXBmnTPMi+mPpUA7e/+6O/E3pdxhjZYQ=";
-    })
-    (fetchpatch {
-      name = "0003-lomiri-calculator-app-Call-i18n.bindtextdomain.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app/-/commit/7cb5e56958e41a8f7a51e00d81d9b2bc24de32b0.patch";
-      hash = "sha256-k/Civ0+SCNDDok9bUdb48FKC+LPlM13ASFP6CbBvBVs=";
-    })
-  ];
 
   postPatch =
     # We don't want absolute paths in desktop files
@@ -99,7 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Powerful and easy to use calculator for Ubuntu Touch, with calculations history and formula validation";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app/-/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-calculator-app";
     teams = [ lib.teams.lomiri ];

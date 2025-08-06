@@ -1,54 +1,64 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitLab,
   buildPythonPackage,
   isPy27,
+  fetchPypi,
   pythonAtLeast,
+
+  # build-system
   setuptools,
-  numpy,
-  scipy,
-  matplotlib,
+
+  # dependencies
   flask,
+  matplotlib,
+  numpy,
   pillow,
   psycopg2,
+  scipy,
   tkinter,
+
+  # tests
+  addBinToPathHook,
   pytestCheckHook,
   pytest-mock,
   pytest-xdist,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.24.0";
+  version = "3.25.0-unstable-2025-06-24";
   pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-msyT1tqvSM0nuETFb4v0lCi52wVC+qPMMNnVuOGEIZU=";
+  src = fetchFromGitLab {
+    owner = "ase";
+    repo = "ase";
+    rev = "4e22dabfbe7ae2329e50260ca1b6f08a83527ac3";
+    hash = "sha256-ehMyVtPxfTxT8T418VyLGnUEyYip4LPTTaGL0va7qgM=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      numpy
-      scipy
-      matplotlib
-      flask
-      pillow
-      psycopg2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      tkinter
-    ];
+  dependencies = [
+    flask
+    matplotlib
+    numpy
+    pillow
+    psycopg2
+    scipy
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    tkinter
+  ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     pytest-mock
     pytest-xdist
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -62,18 +72,15 @@ buildPythonPackage rec {
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
     "test_ipi_protocol" # flaky
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   pythonImportsCheck = [ "ase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

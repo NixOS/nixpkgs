@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "yara-x";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${version}";
-    hash = "sha256-C8wBGmilouNcNN3HkwvSTWcZY1fe0jVc2TeWDN4w5xA=";
+    hash = "sha256-fbuh/SMfOygnuvG9zTZqem4oLaS+5uXScXPhU3aVDjM=";
   };
 
   buildAndTestSubdir = "py";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-afCBuWr12trjEIDvE0qnGFxTXU7LKZCzZB8RqgqperY=";
+    hash = "sha256-+dPIujaxDJ7JrtNvX4VjGHFmgtCb1BJpFQL4c3E1/GY=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "The official Python library for YARA-X";
+    description = "Official Python library for YARA-X";
     homepage = "https://github.com/VirusTotal/yara-x/tree/main/py";
     changelog = "https://github.com/VirusTotal/yara-x/tree/v${version}/py";
     license = lib.licenses.bsd3;

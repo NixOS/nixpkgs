@@ -13,12 +13,11 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "9999years";
-    repo = pname;
+    repo = "git-upstream";
     tag = "v${version}";
     hash = "sha256-rdxpo1OZD/fpBm76zD7U/YeZOBpliKXJN87LJkw6A28=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7h0aWb7xJjDJedQp9xXc+deW0hM+qBJcG36Sd8fo+Fg=";
 
   meta = {

@@ -31,7 +31,7 @@ python.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "lektor";
-    repo = pname;
+    repo = "lektor";
     tag = "v${version}";
     # fix for case-insensitive filesystems
     postFetch = ''

@@ -3,8 +3,8 @@
   lib,
   makeWrapper,
   patchelf,
-  stdenv,
   stdenvNoCC,
+  bintools,
 
   # Linked dynamic libraries.
   alsa-lib,
@@ -103,79 +103,78 @@ let
 
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-    ]
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional libvaSupport libva
-    ++ [
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libX11
+    libxcb
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libxkbcommon
+    libXrandr
+    libXrender
+    libXScrnSaver
+    libxshmfence
+    libXtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+  ]
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional libvaSupport libva
+  ++ [
+    gtk3
+    gtk4
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
-  linux = stdenv.mkDerivation (finalAttrs: {
+  linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "136.0.7103.113";
+    version = "138.0.7204.183";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-BnKKu7X34g+zg4rDqjVXT3Kx2E8Gn5ELqs3LQS3GCkg=";
+      hash = "sha256-GxdfHU6pskOL0i/rmN7kwGsuLYTotL1mEw6RV7qfl50=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -199,7 +198,7 @@ let
 
     unpackPhase = ''
       runHook preUnpack
-      ar x $src
+      ${lib.getExe' bintools "ar"} x $src
       tar xf data.tar.xz
       runHook postUnpack
     '';
@@ -267,7 +266,7 @@ let
 
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+        patchelf --set-interpreter ${bintools.dynamicLinker} $elf
       done
 
       runHook postInstall
@@ -276,11 +275,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "136.0.7103.114";
+    version = "138.0.7204.184";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/iwktnyywqpn7dye3zjzgosvevq_136.0.7103.114/GoogleChrome-136.0.7103.114.dmg";
-      hash = "sha256-myJawlgVBQlLtgBfSfCL5XfdnH8d7xd+j8JV2+2MZ/s=";
+      url = "http://dl.google.com/release2/chrome/acvbvqaeyyrjo6kygs27pc5y27ea_138.0.7204.184/GoogleChrome-138.0.7204.184.dmg";
+      hash = "sha256-KM9fK5zaXNCdVfCRN9b0RxIvH7VxCln4Eo9YgOEd8PY=";
     };
 
     dontPatch = true;
@@ -327,4 +326,9 @@ let
     mainProgram = "google-chrome-stable";
   };
 in
-if stdenvNoCC.hostPlatform.isDarwin then darwin else linux
+if stdenvNoCC.hostPlatform.isDarwin then
+  darwin
+else if stdenvNoCC.hostPlatform.isLinux then
+  linux
+else
+  throw "Unsupported platform ${stdenvNoCC.hostPlatform.system}"

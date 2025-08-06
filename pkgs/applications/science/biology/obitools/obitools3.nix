@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "obitools3";
   version = "3.0.1b11";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://git.metabarcoding.org/obitools/${pname}/repository/v${version}/archive.tar.gz";

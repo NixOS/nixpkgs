@@ -38,7 +38,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   meta = with lib; {
     changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";

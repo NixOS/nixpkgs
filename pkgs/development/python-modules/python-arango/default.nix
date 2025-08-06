@@ -33,7 +33,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "8.1.6";
+  version = "8.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
-    hash = "sha256-y+ECfrLoenjXl71hty7snNdu6tN5q8XTGtBlXtkSg7g=";
+    hash = "sha256-ZLjCcH6cSG+LcoeSifBm6HGjnRFJwYNTXbcw9b/BeQY=";
   };
 
   nativeBuildInputs = [
@@ -98,15 +98,11 @@ buildPythonPackage rec {
       --foxx.api=false &
   '';
 
-  pytestFlagsArray = [
-    "--host"
-    testDBOpts.host
-    "--port"
-    testDBOpts.port
-    "--passwd"
-    testDBOpts.password
-    "--secret"
-    testDBOpts.secret
+  pytestFlags = [
+    "--host=${testDBOpts.host}"
+    "--port=${testDBOpts.port}"
+    "--passwd=${testDBOpts.password}"
+    "--secret=${testDBOpts.secret}"
   ];
 
   disabledTests = [

@@ -46,7 +46,9 @@ let
       };
       extraPatches = [
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-        ./no-buildconfig.patch
+        (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
+      ]
+      ++ lib.optionals (lib.versionOlder version "139") [
         # clang-19 fixes for char_traits build issue
         # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
         # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
@@ -60,21 +62,21 @@ let
         icu77 = icu77';
       };
 
-      meta = with lib; {
+      meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
         homepage = "https://thunderbird.net/";
         mainProgram = "thunderbird";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           lovesegfault
           pierron
           vcunat
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
         broken = stdenv.buildPlatform.is32bit;
         # since Firefox 60, build on 32-bit platforms fails with "out of memory".
         # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-        license = licenses.mpl20;
+        license = lib.licenses.mpl20;
       };
     }).override
       {
@@ -92,8 +94,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "138.0.1";
-    sha512 = "2e71ee537292ec1a49237e93c43ed4c1a9eae58becfc7fa9ca0daf1e982c38704cb6d44e92b1bf7b45c5b8c27b23eb3aa7f48b375580f49ee60884dadc5d85b5";
+    version = "141.0";
+    sha512 = "cd747c0831532f90685975567102d1bdb90a780e21209fe4b7bddf2d84ac88576766706e95e22043a30a8a89b6d3daffb56a68c3ccc4a300b8236b20d4fca675";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -106,8 +108,8 @@ rec {
   thunderbird-128 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "128.10.1esr";
-    sha512 = "09b54450928c6e0d948cd79a56c28bdb5fe5a81d7c710470a1ec195dd295c433b872682102c74930f19b1184391c30115293dadcd7dc8a08ae8baeb12770ef9c";
+    version = "128.13.0esr";
+    sha512 = "0439ff3bf8549c68778a2bf715da82b45a9e97c2ff4a8d06147d1b65c13031489a4126889a5a561484af385c428595f9d343fb6e266beeb923d4671665f2dbdc";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

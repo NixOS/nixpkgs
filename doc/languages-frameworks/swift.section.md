@@ -80,8 +80,8 @@ expression. The next step is to write that expression:
 let
   # Pass the generated files to the helper.
   generated = swiftpm2nix.helpers ./nix;
-in
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "myproject";
   version = "0.0.0";
@@ -103,7 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The helper provides a configure snippet that will prepare all dependencies
   # in the correct place, where SwiftPM expects them.
-  configurePhase = generated.configure;
+  configurePhase = ''
+    runHook preConfigure
+
+    ${generated.configure}
+
+    runHook postConfigure
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -125,17 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
 If you'd like to build a different configuration than `release`:
 
 ```nix
-{
-  swiftpmBuildConfig = "debug";
-}
+{ swiftpmBuildConfig = "debug"; }
 ```
 
 It is also possible to provide additional flags to `swift build`:
 
 ```nix
-{
-  swiftpmFlags = [ "--disable-dead-strip" ];
-}
+{ swiftpmFlags = [ "--disable-dead-strip" ]; }
 ```
 
 The default `buildPhase` already passes `-j` for parallel building.
@@ -149,9 +151,7 @@ Including `swiftpm` in your `nativeBuildInputs` also provides a default
 `checkPhase`, but it must be enabled with:
 
 ```nix
-{
-  doCheck = true;
-}
+{ doCheck = true; }
 ```
 
 This essentially runs: `swift test -c release`
@@ -168,11 +168,17 @@ with a writable copy:
 
 ```nix
 {
-  configurePhase = generated.configure ++ ''
+  configurePhase = ''
+    runHook preConfigure
+
+    ${generated.configure}
+
     # Replace the dependency symlink with a writable copy.
     swiftpmMakeMutable swift-crypto
     # Now apply a patch.
     patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
+
+    runHook postConfigure
   '';
 }
 ```

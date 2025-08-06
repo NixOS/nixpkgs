@@ -163,6 +163,8 @@ Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automaticall
 
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
 
+To use a temporary Tor instance as a proxy for fetching from `.onion` addresses, add `nativeBuildInputs = [ tor.proxyHook ];` to the fetcher parameters.
+
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
@@ -795,6 +797,10 @@ Additionally, the following optional arguments can be given:
 : Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
 
+*`fetchTags`* (Boolean)
+
+: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
+
 *`sparseCheckout`* (List of String)
 
 : Prevent git from fetching unnecessary blobs from server.
@@ -836,7 +842,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `hash`.
+Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 

@@ -17,6 +17,7 @@
   lark,
   pandas,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pytest-mock,
   pytest-socket,
@@ -26,33 +27,28 @@
   toml,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.17";
+  version = "0.3.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-JsPdG62vvM8b/u5bo6FyXQhhGua/Sd74L/8CtMI7Fjc=";
+    hash = "sha256-HpAdCHxmfGJcqXArvtlYagNuEBGBjrbICIwh9nI0qMQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
-
-  preConfigure = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=langchain_openai" ""
-  '';
 
   build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
   ];
 
@@ -68,6 +64,7 @@ buildPythonPackage rec {
     lark
     pandas
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     pytest-mock
     pytest-socket
@@ -77,7 +74,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   disabledTests = [
     # These tests require network access
@@ -97,17 +94,20 @@ buildPythonPackage rec {
     "test_openai_get_num_tokens"
   ];
 
+  disabledTestPaths = [
+    # TODO recheck on next update. Langchain has been working on Pydantic errors.
+    # ValidationError from pydantic
+    "tests/unit_tests/chat_models/test_responses_stream.py"
+  ];
+
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-openai==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-openai==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;

@@ -20,10 +20,10 @@
    "jar": "sha256-At4T7JOk5Ary/jGDErygVFkglIQ37CdG98idweqySAQ=",
    "pom": "sha256-aEgGw0Vfw3gG0B4RCADfpb1wmQBtXY4c0jwryNaS3yY="
   },
-  "loucass003#EspflashKotlin/v0.10.0": {
-   "jar": "sha256-ORIPUdeqSAhXBuXmPkmyZ6gS8EFnwYkvUtgXFttKIwU=",
-   "module": "sha256-6IMNElGmZLIg/qqVYFdFoHxZIK+YYsT4rBTzyM86FW8=",
-   "pom": "sha256-4ni1oElb85tIe9C0diwh20pgxVUA0c8PX1JZhgomdgo="
+  "loucass003#EspflashKotlin/v0.11.0": {
+   "jar": "sha256-JjFP8WfEvQA8QfKwSQ3EL+LcihGOEsEobFnCfLz/wK8=",
+   "module": "sha256-M9dHPREom7PongBx9lIIJYNAxh3ed9nCcFsqjSfa2ng=",
+   "pom": "sha256-5dGKuzEH67lOmuyc2CJdxWhWyS7tZVMFTvaKw+IBZT8="
   }
  },
  "https://oss.sonatype.org/content/repositories/snapshots": {
@@ -595,15 +595,15 @@
    "module": "sha256-tJZEwfTNkvRk844MXEwqFJp7s+0VsyrJCO5XypCHfqg=",
    "pom": "sha256-qRWJAaDp8uNB+jtHPwK7mOIC+gkY1Fxo3/n602z+X2Y="
   },
-  "com/melloware#jintellitype/1.5.0": {
-   "jar": "sha256-jf+mMUTxKiDf70/Zm9OeyQSxS0TPR8CeGOy3G4Hze1g=",
-   "pom": "sha256-e1E2mFo87oyeK/FQR1K/++7WyQwTCLsrX5//sNwBvao="
+  "com/melloware#jintellitype/1.5.6": {
+   "jar": "sha256-Ocg8asI4sopzRAiIhBYr+MmY3z5ipGteBtq0y08Q+1s=",
+   "pom": "sha256-oHvWfANoBK+t3hnGbtlCSQdjxnRqSTdlQB0LxPlY40s="
   },
   "com/melloware/jintellitype/maven-metadata": {
    "xml": {
     "groupId": "com.melloware",
-    "lastUpdated": "20250413134243",
-    "release": "1.5.0"
+    "lastUpdated": "20250523184542",
+    "release": "1.5.6"
    }
   },
   "com/typesafe#config/1.4.3": {

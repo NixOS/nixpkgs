@@ -1,0 +1,487 @@
+diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
+index 667c8b7..440d72a 100644
+--- a/src-tauri/Cargo.lock
++++ b/src-tauri/Cargo.lock
+@@ -38,12 +38,6 @@ version = "1.0.68"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "2cb2f989d18dd141ab8ae82f64d1a8cdd37e0840f73a406896cf5e99502fab61"
+ 
+-[[package]]
+-name = "assert-cmp"
+-version = "0.2.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "737bf4aa6df38f69a17efc233b4d0343cc5aa0d2c3b53e7007bd4c9866038ffd"
+-
+ [[package]]
+ name = "atk"
+ version = "0.15.1"
+@@ -252,64 +246,6 @@ version = "1.0.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+ 
+-[[package]]
+-name = "clap"
+-version = "4.1.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f13b9c79b5d1dd500d20ef541215a6423c75829ef43117e1b4d17fd8af0b5d76"
+-dependencies = [
+- "bitflags",
+- "clap_derive",
+- "clap_lex",
+- "is-terminal",
+- "once_cell",
+- "strsim",
+- "termcolor",
+-]
+-
+-[[package]]
+-name = "clap-utilities"
+-version = "0.2.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "15bcff807ef65113605e59223ac0ce77adc2cc0976e3ece014e0f2c17e4a7798"
+-dependencies = [
+- "clap",
+- "clap_complete",
+- "pipe-trait",
+- "thiserror",
+-]
+-
+-[[package]]
+-name = "clap_complete"
+-version = "4.1.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3d6540eedc41f8a5a76cf3d8d458057dcdf817be4158a55b5f861f7a5483de75"
+-dependencies = [
+- "clap",
+-]
+-
+-[[package]]
+-name = "clap_derive"
+-version = "4.1.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "684a277d672e91966334af371f1a7b5833f9aa00b07c84e92fbce95e00208ce8"
+-dependencies = [
+- "heck 0.4.0",
+- "proc-macro-error",
+- "proc-macro2",
+- "quote",
+- "syn",
+-]
+-
+-[[package]]
+-name = "clap_lex"
+-version = "0.3.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "783fe232adfca04f90f56201b26d79682d4cd2625e0bc7290b95123afe558ade"
+-dependencies = [
+- "os_str_bytes",
+-]
+-
+ [[package]]
+ name = "cocoa"
+ version = "0.24.1"
+@@ -518,38 +454,14 @@ version = "0.2.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b365fabc795046672053e29c954733ec3b05e4be654ab130fe8f1f94d7051f35"
+ 
+-[[package]]
+-name = "darling"
+-version = "0.12.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5f2c43f534ea4b0b049015d00269734195e6d3f0f6635cb692251aca6f9f8b3c"
+-dependencies = [
+- "darling_core 0.12.4",
+- "darling_macro 0.12.4",
+-]
+-
+ [[package]]
+ name = "darling"
+ version = "0.13.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a01d95850c592940db9b8194bc39f4bc0e89dee5c4265e4b1807c34a9aba453c"
+ dependencies = [
+- "darling_core 0.13.4",
+- "darling_macro 0.13.4",
+-]
+-
+-[[package]]
+-name = "darling_core"
+-version = "0.12.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8e91455b86830a1c21799d94524df0845183fa55bafd9aa137b01c7d1065fa36"
+-dependencies = [
+- "fnv",
+- "ident_case",
+- "proc-macro2",
+- "quote",
+- "strsim",
+- "syn",
++ "darling_core",
++ "darling_macro",
+ ]
+ 
+ [[package]]
+@@ -566,24 +478,13 @@ dependencies = [
+  "syn",
+ ]
+ 
+-[[package]]
+-name = "darling_macro"
+-version = "0.12.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "29b5acf0dea37a7f66f7b25d2c5e93fd46f8f6968b1a5d7a3e02e97768afc95a"
+-dependencies = [
+- "darling_core 0.12.4",
+- "quote",
+- "syn",
+-]
+-
+ [[package]]
+ name = "darling_macro"
+ version = "0.13.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "9c972679f83bdf9c42bd905396b6c3588a843a17f0f16dfcfa3e2c5d57441835"
+ dependencies = [
+- "darling_core 0.13.4",
++ "darling_core",
+  "quote",
+  "syn",
+ ]
+@@ -599,37 +500,6 @@ dependencies = [
+  "winapi",
+ ]
+ 
+-[[package]]
+-name = "derive_builder"
+-version = "0.10.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d13202debe11181040ae9063d739fa32cfcaaebe2275fe387703460ae2365b30"
+-dependencies = [
+- "derive_builder_macro",
+-]
+-
+-[[package]]
+-name = "derive_builder_core"
+-version = "0.10.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "66e616858f6187ed828df7c64a6d71720d83767a7f19740b2d1b6fe6327b36e5"
+-dependencies = [
+- "darling 0.12.4",
+- "proc-macro2",
+- "quote",
+- "syn",
+-]
+-
+-[[package]]
+-name = "derive_builder_macro"
+-version = "0.10.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "58a94ace95092c5acb1e97a7e846b310cfbd499652f72297da7493f618a98d73"
+-dependencies = [
+- "derive_builder_core",
+- "syn",
+-]
+-
+ [[package]]
+ name = "derive_more"
+ version = "0.99.17"
+@@ -722,27 +592,6 @@ dependencies = [
+  "cfg-if",
+ ]
+ 
+-[[package]]
+-name = "errno"
+-version = "0.2.8"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f639046355ee4f37944e44f60642c6f3a7efa3cf6b78c78a0d989a8ce6c396a1"
+-dependencies = [
+- "errno-dragonfly",
+- "libc",
+- "winapi",
+-]
+-
+-[[package]]
+-name = "errno-dragonfly"
+-version = "0.1.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "aa68f1b12764fab894d2755d2518754e71b4fd80ecfb822714a1206c2aab39bf"
+-dependencies = [
+- "cc",
+- "libc",
+-]
+-
+ [[package]]
+ name = "fastrand"
+ version = "1.8.0"
+@@ -784,16 +633,6 @@ dependencies = [
+  "miniz_oxide",
+ ]
+ 
+-[[package]]
+-name = "fmt-iter"
+-version = "0.2.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d0b9289d76691c7084d8830f1d0a29ddefbad768f8b5f276e012840bb0fca610"
+-dependencies = [
+- "derive_more",
+- "itertools",
+-]
+-
+ [[package]]
+ name = "fnv"
+ version = "1.0.7"
+@@ -1329,37 +1168,6 @@ dependencies = [
+  "cfg-if",
+ ]
+ 
+-[[package]]
+-name = "io-lifetimes"
+-version = "1.0.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e7d6c6f8c91b4b9ed43484ad1a938e393caf35960fce7f82a040497207bd8e9e"
+-dependencies = [
+- "libc",
+- "windows-sys 0.42.0",
+-]
+-
+-[[package]]
+-name = "is-terminal"
+-version = "0.4.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "28dfb6c8100ccc63462345b67d1bbc3679177c75ee4bf59bf29c8b1d110b8189"
+-dependencies = [
+- "hermit-abi",
+- "io-lifetimes",
+- "rustix",
+- "windows-sys 0.42.0",
+-]
+-
+-[[package]]
+-name = "itertools"
+-version = "0.10.5"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
+-dependencies = [
+- "either",
+-]
+-
+ [[package]]
+ name = "itoa"
+ version = "0.4.8"
+@@ -1477,12 +1285,6 @@ dependencies = [
+  "safemem",
+ ]
+ 
+-[[package]]
+-name = "linux-raw-sys"
+-version = "0.1.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f051f77a7c8e6957c0696eac88f26b0117e54f52d3fc682ab19397a8812846a4"
+-
+ [[package]]
+ name = "lock_api"
+ version = "0.4.9"
+@@ -1892,12 +1694,6 @@ dependencies = [
+  "windows-sys 0.42.0",
+ ]
+ 
+-[[package]]
+-name = "os_str_bytes"
+-version = "6.4.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9b7820b9daea5457c9f21c69448905d723fbd21136ccf521748f23fd49e723ee"
+-
+ [[package]]
+ name = "overload"
+ version = "0.1.1"
+@@ -1929,31 +1725,6 @@ dependencies = [
+  "system-deps 6.0.3",
+ ]
+ 
+-[[package]]
+-name = "parallel-disk-usage"
+-version = "0.8.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e42b33f85d6d5a345c243fff616265c2b8263a44641e88e4afd80f32dbd7279b"
+-dependencies = [
+- "assert-cmp",
+- "clap",
+- "clap-utilities",
+- "clap_complete",
+- "derive_more",
+- "fmt-iter",
+- "itertools",
+- "pipe-trait",
+- "rayon",
+- "rounded-div",
+- "serde",
+- "serde_json",
+- "smart-default",
+- "terminal_size",
+- "text-block-macros",
+- "thiserror",
+- "zero-copy-pads",
+-]
+-
+ [[package]]
+ name = "parking_lot"
+ version = "0.12.1"
+@@ -2115,12 +1886,6 @@ version = "0.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
+ 
+-[[package]]
+-name = "pipe-trait"
+-version = "0.4.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c1be1ec9e59f0360aefe84efa6f699198b685ab0d5718081e9f72aa2344289e2"
+-
+ [[package]]
+ name = "pkg-config"
+ version = "0.3.26"
+@@ -2432,12 +2197,6 @@ dependencies = [
+  "windows 0.37.0",
+ ]
+ 
+-[[package]]
+-name = "rounded-div"
+-version = "0.1.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "464c8fb0a126d6a0326baf6abf1aa62c2da0d5780aa781a81451d64f543f5e2f"
+-
+ [[package]]
+ name = "rustc_version"
+ version = "0.3.3"
+@@ -2456,20 +2215,6 @@ dependencies = [
+  "semver 1.0.16",
+ ]
+ 
+-[[package]]
+-name = "rustix"
+-version = "0.36.7"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d4fdebc4b395b7fbb9ab11e462e20ed9051e7b16e42d24042c776eca0ac81b03"
+-dependencies = [
+- "bitflags",
+- "errno",
+- "io-lifetimes",
+- "libc",
+- "linux-raw-sys",
+- "windows-sys 0.42.0",
+-]
+-
+ [[package]]
+ name = "rustversion"
+ version = "1.0.11"
+@@ -2658,7 +2403,7 @@ version = "1.5.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "e182d6ec6f05393cc0e5ed1bf81ad6db3a8feedf8ee515ecdd369809bcce8082"
+ dependencies = [
+- "darling 0.13.4",
++ "darling",
+  "proc-macro2",
+  "quote",
+  "syn",
+@@ -2747,17 +2492,6 @@ version = "1.10.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a507befe795404456341dfab10cef66ead4c041f62b8b11bbb92bffe5d0953e0"
+ 
+-[[package]]
+-name = "smart-default"
+-version = "0.6.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "133659a15339456eeeb07572eb02a91c91e9815e9cbc89566944d2c8d3efdbf6"
+-dependencies = [
+- "proc-macro2",
+- "quote",
+- "syn",
+-]
+-
+ [[package]]
+ name = "soup2"
+ version = "0.2.1"
+@@ -2792,7 +2526,6 @@ version = "0.0.0"
+ dependencies = [
+  "cocoa",
+  "objc",
+- "parallel-disk-usage",
+  "raw-window-handle",
+  "regex",
+  "serde",
+@@ -3200,31 +2933,6 @@ dependencies = [
+  "utf-8",
+ ]
+ 
+-[[package]]
+-name = "termcolor"
+-version = "1.2.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "be55cf8942feac5c765c2c993422806843c9a9a45d4d5c407ad6dd2ea95eb9b6"
+-dependencies = [
+- "winapi-util",
+-]
+-
+-[[package]]
+-name = "terminal_size"
+-version = "0.2.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cb20089a8ba2b69debd491f8d2d023761cbf196e999218c591fa1e7e15a21907"
+-dependencies = [
+- "rustix",
+- "windows-sys 0.42.0",
+-]
+-
+-[[package]]
+-name = "text-block-macros"
+-version = "0.1.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7f8b59b4da1c1717deaf1de80f0179a9d8b4ac91c986d5fd9f4a8ff177b84049"
+-
+ [[package]]
+ name = "thin-slice"
+ version = "0.1.1"
+@@ -3452,12 +3160,6 @@ version = "1.10.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "0fdbf052a0783de01e944a6ce7a8cb939e295b1e7be835a1112c3b9a7f047a5a"
+ 
+-[[package]]
+-name = "unicode-width"
+-version = "0.1.10"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
+-
+ [[package]]
+ name = "url"
+ version = "2.3.1"
+@@ -4036,18 +3738,6 @@ dependencies = [
+  "libc",
+ ]
+ 
+-[[package]]
+-name = "zero-copy-pads"
+-version = "0.2.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5649a5dce1370c707880332f781f6566883736a41861a5749890f4671d5746b6"
+-dependencies = [
+- "derive_builder",
+- "derive_more",
+- "fmt-iter",
+- "unicode-width",
+-]
+-
+ [[package]]
+ name = "zip"
+ version = "0.6.3"
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index c930949..3ae2c83 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -22,7 +22,6 @@ window-vibrancy = "0.3.2"
+ window-shadows = { git = "https://github.com/adileo/window-shadows" }
+ raw-window-handle = "0.5.0"
+ walkdir = "2"
+-parallel-disk-usage = "0.8.3"
+ regex = "1"
+ 
+ [target."cfg(target_os = \"windows\")".dependencies]
+

@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.11.1";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
-    hash = "sha256-b/+siNzmM6RUJ3jv/2dNJJFueejChKde0D5r8J0lTqM=";
+    hash = "sha256-Fkr0oabFSkgUkqO3cqZANP3xUSD0uO2F8I/VEzkhvis=";
   };
 
   pythonRelaxDeps = [
@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     "pydantic"
     "textual"
     "typer"
+    "fastmcp"
   ];
 
   build-system = with python3Packages; [ hatchling ];
@@ -37,8 +38,8 @@ python3Packages.buildPythonApplication rec {
     aiohttp
     aiosql
     aiosqlite
+    fastmcp
     httpx
-    jinja2
     mcp
     ollama
     packaging

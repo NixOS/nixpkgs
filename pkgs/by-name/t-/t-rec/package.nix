@@ -24,11 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-AgSYM2a9XGH2X4dcp5CSMnt0Bq/5XT8C3g1R2UX4mLY=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs =
-    [ imagemagick ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    imagemagick
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/t-rec" --prefix PATH : "${

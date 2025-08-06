@@ -58,79 +58,77 @@ let
       (lib.cmakeBool "LIBCXXABI_ENABLE_SHARED" false)
     ];
 
-  cxxCMakeFlags =
-    [
-      (lib.cmakeFeature "LIBCXX_CXX_ABI" cxxabiName)
-      (lib.cmakeBool "LIBCXX_ENABLE_SHARED" enableShared)
-      # https://github.com/llvm/llvm-project/issues/55245
-      (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" stdenv.hostPlatform.isWindows)
-    ]
-    ++ lib.optionals (cxxabi == null && lib.versionAtLeast release_version "16") [
-      # Note: llvm < 16 doesn't support this flag (or it's broken); handled in postInstall instead.
-      # Include libc++abi symbols within libc++.a for static linking libc++;
-      # dynamic linking includes them through libc++.so being a linker script
-      # which includes both shared objects.
-      (lib.cmakeBool "LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY" true)
-    ]
-    ++ lib.optionals (cxxabi != null) [
-      (lib.cmakeFeature "LIBCXX_CXX_ABI_INCLUDE_PATHS" "${lib.getDev cxxabi}/include")
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
-      (lib.cmakeFeature "LIBCXX_HAS_MUSL_LIBC" "1")
-    ]
-    ++
-      lib.optionals
-        (
-          lib.versionAtLeast release_version "18"
-          && !useLLVM
-          && stdenv.hostPlatform.libc == "glibc"
-          && !stdenv.hostPlatform.isStatic
-        )
-        [
-          (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
-        ]
-    ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
-      # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
-      # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
-      (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
-    ]
-    ++ lib.optionals useLLVM [
-      (lib.cmakeBool "LIBCXX_USE_COMPILER_RT" true)
-    ]
-    ++
-      lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16")
-        [
-          (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "unwind")
-        ]
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
-      (lib.cmakeBool "LIBCXX_ENABLE_THREADS" false)
-      (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
-      (lib.cmakeBool "LIBCXX_ENABLE_EXCEPTIONS" false)
-    ]
-    ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
-      (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
-    ];
+  cxxCMakeFlags = [
+    (lib.cmakeFeature "LIBCXX_CXX_ABI" cxxabiName)
+    (lib.cmakeBool "LIBCXX_ENABLE_SHARED" enableShared)
+    # https://github.com/llvm/llvm-project/issues/55245
+    (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" stdenv.hostPlatform.isWindows)
+  ]
+  ++ lib.optionals (cxxabi == null && lib.versionAtLeast release_version "16") [
+    # Note: llvm < 16 doesn't support this flag (or it's broken); handled in postInstall instead.
+    # Include libc++abi symbols within libc++.a for static linking libc++;
+    # dynamic linking includes them through libc++.so being a linker script
+    # which includes both shared objects.
+    (lib.cmakeBool "LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY" true)
+  ]
+  ++ lib.optionals (cxxabi != null) [
+    (lib.cmakeFeature "LIBCXX_CXX_ABI_INCLUDE_PATHS" "${lib.getDev cxxabi}/include")
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
+    (lib.cmakeFeature "LIBCXX_HAS_MUSL_LIBC" "1")
+  ]
+  ++
+    lib.optionals
+      (
+        lib.versionAtLeast release_version "18"
+        && !useLLVM
+        && stdenv.hostPlatform.libc == "glibc"
+        && !stdenv.hostPlatform.isStatic
+      )
+      [
+        (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
+      ]
+  ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
+    # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
+    # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
+    (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.cmakeBool "LIBCXX_USE_COMPILER_RT" true)
+  ]
+  ++
+    lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16")
+      [
+        (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "unwind")
+      ]
+  ++ lib.optionals stdenv.hostPlatform.isWasm [
+    (lib.cmakeBool "LIBCXX_ENABLE_THREADS" false)
+    (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
+    (lib.cmakeBool "LIBCXX_ENABLE_EXCEPTIONS" false)
+  ]
+  ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
+    (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" (lib.concatStringsSep ";" runtimes))
-    ]
-    ++
-      lib.optionals
-        (
-          stdenv.hostPlatform.isWasm
-          || (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin)
-        )
-        [
-          (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
-        ]
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
-      (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
-      (lib.cmakeBool "UNIX" true) # Required otherwise libc++ fails to detect the correct linker
-    ]
-    ++ cxxCMakeFlags
-    ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" (lib.concatStringsSep ";" runtimes))
+  ]
+  ++
+    lib.optionals
+      (
+        stdenv.hostPlatform.isWasm
+        || (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin)
+      )
+      [
+        (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+      ]
+  ++ lib.optionals stdenv.hostPlatform.isWasm [
+    (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (lib.cmakeBool "UNIX" true) # Required otherwise libc++ fails to detect the correct linker
+  ]
+  ++ cxxCMakeFlags
+  ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags
+  ++ devExtraCmakeFlags;
 
 in
 
@@ -211,20 +209,20 @@ stdenv.mkDerivation (
       })
     );
 
-    nativeBuildInputs =
-      [
-        cmake
-        ninja
-        python3
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-      ++ lib.optional (cxxabi != null) lndir;
+    nativeBuildInputs = [
+      cmake
+      ninja
+      python3
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
+    ++ lib.optional (cxxabi != null) lndir;
 
-    buildInputs =
-      [ cxxabi ]
-      ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [
-        libunwind
-      ];
+    buildInputs = [
+      cxxabi
+    ]
+    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [
+      libunwind
+    ];
 
     # libc++.so is a linker script which expands to multiple libraries,
     # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't

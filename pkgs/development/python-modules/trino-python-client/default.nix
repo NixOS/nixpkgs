@@ -23,7 +23,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "trino-python-client";
     owner = "trinodb";
     tag = version;
     hash = "sha256-Nr7p7x5cxxuPv2NUh1uMth97OQ+H2KBlu0SHVJ7Zu1M=";
@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "trino" ];
 
@@ -58,7 +59,7 @@ buildPythonPackage rec {
     "tests/integration/test_sqlalchemy_integration.py"
   ];
 
-  pytestFlagsArray = [ "-k 'not auth'" ];
+  disabledTestMarks = [ "auth" ];
 
   meta = with lib; {
     changelog = "https://github.com/trinodb/trino-python-client/blob/${version}/CHANGES.md";

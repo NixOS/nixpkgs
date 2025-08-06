@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -36,18 +35,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.24";
+  version = "0.3.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-community";
     tag = "libs/community/v${version}";
-    hash = "sha256-4Rcczuz7tCb10HPvO15n48DBKjVBLXNPdRfD4lRKNGk=";
+    hash = "sha256-rGU8AYe7993+zMAtHLkNiK+wA+UtZnGkUQsOPMtUQ8w=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -56,7 +58,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest langchain and -core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain"
     "langchain-core"
     "numpy"
@@ -102,7 +104,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit_tests"
   ];
 
@@ -111,6 +113,9 @@ buildPythonPackage rec {
   disabledTests = [
     # requires bs4, aka BeautifulSoup
     "test_importable_all"
+    # flaky
+    "test_llm_caching"
+    "test_llm_caching_async"
   ];
 
   disabledTestPaths = [
@@ -118,17 +123,14 @@ buildPythonPackage rec {
     "tests/unit_tests/document_loaders/test_gitbook.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "libs/community/v([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
   };
 
   meta = {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain-community";
-    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/libs%2Fcommunity%2fv${version}";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

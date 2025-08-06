@@ -17,13 +17,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-yvclqE4+2R9q/UJU9W95U1/xVJeNj+5eKvT6VQel9k8=";
   };
 
-  propagatedBuildInputs =
-    [
-      openjdk
-    ]
-    ++ (with python3.pkgs; [
-      pyyaml
-    ]);
+  propagatedBuildInputs = [
+    openjdk
+  ]
+  ++ (with python3.pkgs; [
+    pyyaml
+  ]);
 
   nativeCheckInputs = with python3.pkgs; [
     hacking
@@ -34,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool that tests files for HTML5 validity";
     mainProgram = "html5validator";
     homepage = "https://github.com/svenkreiss/html5validator";
     changelog = "https://github.com/svenkreiss/html5validator/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ phunehehe ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phunehehe ];
   };
 }

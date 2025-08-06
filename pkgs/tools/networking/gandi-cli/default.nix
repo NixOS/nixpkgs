@@ -11,6 +11,7 @@
 buildPythonApplication rec {
   pname = "gandi-cli";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Gandi";

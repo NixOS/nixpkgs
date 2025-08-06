@@ -31,11 +31,7 @@ pkgs.foo.override (previous: {
 
 ```nix
 import pkgs.path {
-  overlays = [
-    (self: super: {
-      foo = super.foo.override { barSupport = true; };
-    })
-  ];
+  overlays = [ (self: super: { foo = super.foo.override { barSupport = true; }; }) ];
 }
 ```
 
@@ -67,9 +63,7 @@ Example usages:
 ```nix
 {
   helloBar = pkgs.hello.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      pname = previousAttrs.pname + "-bar";
-    }
+    finalAttrs: previousAttrs: { pname = previousAttrs.pname + "-bar"; }
   );
 }
 ```
@@ -85,11 +79,7 @@ If only a one-argument function is written, the argument has the meaning of `pre
 Function arguments can be omitted entirely if there is no need to access `previousAttrs` or `finalAttrs`.
 
 ```nix
-{
-  helloWithDebug = pkgs.hello.overrideAttrs {
-    separateDebugInfo = true;
-  };
-}
+{ helloWithDebug = pkgs.hello.overrideAttrs { separateDebugInfo = true; }; }
 ```
 
 In the above example, the `separateDebugInfo` attribute is overridden to be true, thus building debug info for `helloWithDebug`.

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.14.4";
+  version = "1.14.8";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_adapters";
     inherit version;
-    hash = "sha256-6UYXUGZIzHYxd8J+avmnIfdigtgoVU0lE28ng2b0Q8M=";
+    hash = "sha256-lowoP5Ny5kObKMuscecSUuqQXG7GxEDlbp8HQkLifBc=";
   };
 
   build-system = [ hatchling ];
@@ -38,7 +38,8 @@ buildPythonPackage rec {
     protobuf
     pytz
     typing-extensions
-  ] ++ mashumaro.optional-dependencies.msgpack;
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
 
   pythonImportsCheck = [ "dbt.adapters" ];
 

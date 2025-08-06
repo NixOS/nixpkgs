@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codefresh";
-  version = "0.88.5";
+  version = "0.89.2";
 
   src = fetchFromGitHub {
     owner = "codefresh-io";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u0K3I65JDu6v4mE0EU6Rv6uJOmC6VuZbIVyreHPH9QE=";
+    hash = "sha256-Cf3I+w0rVsjsu+m+vE/pOcASYTmsRi0yAQVpJkYbzUU=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-cMCJ/ANpHsEuO0SNtvf7zlS0HXp328oBP5aXnHSbpDI=";
+    hash = "sha256-wD3BmWjrFGkNqUhbo2TrWLwgo2o2MiQn7X3fyDYt5dw=";
   };
   nativeBuildInputs = [
     yarnConfigHook

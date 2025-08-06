@@ -3,41 +3,44 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm_9,
+  # Pinned, because our FODs are not guaranteed to be stable between major versions.
+  pnpm_10,
   nodejs,
   python3,
   makeWrapper,
-  # Upstream uses EOL Electron 31.  Use next oldest version.
-  electron_34,
+  # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
+  electron_36,
   vulkan-helper,
   gogdl,
   legendary-heroic,
   nile,
   comet-gog,
+  umu-launcher,
 }:
 
 let
-  electron = electron_34;
+  electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.16.1";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BnBzbbyi9cdO6W59cnY13hnhH+tjrTryTp9XIcERwh4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x792VA4PZleqUUgarh59JxJVXrvT95/rINYk8t9i3X0=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-2IQyXULgFoz0rFQ8SwERgMDzzo7pZ3DbqhwrWNYSwRo=";
+    fetcherVersion = 1;
+    hash = "sha256-F8H0eYltIJ0S8AX+2S3cR+v8dvePw09VWToVOLM8qII=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     python3
     makeWrapper
   ];
@@ -88,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --suffix PATH ":" "${umu-launcher}/bin" \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

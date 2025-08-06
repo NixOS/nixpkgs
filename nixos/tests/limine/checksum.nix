@@ -1,11 +1,10 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "checksum";
-  meta.maintainers = with lib.maintainers; [
-    lzcunt
-    phip1611
-    programmerlexi
-  ];
+  meta = {
+    inherit (pkgs.limine.meta) maintainers;
+  };
+
   nodes.machine =
     { ... }:
     {

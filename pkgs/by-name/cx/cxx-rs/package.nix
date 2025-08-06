@@ -8,22 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cxx-rs";
-  version = "1.0.131";
+  version = "1.0.158";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";
     rev = version;
-    sha256 = "sha256-KQlbJvULdc94SM0sx6JtukZPpaX4Gojc6Qgr20V3/VI=";
+    sha256 = "sha256-cihF9VWAvqQxwvRJRfDIVxf56ajgFaOEv0vBvSQd2WY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-JxSWct7lx1oDVQ4QnqC9qRJg86XNppn+s4n5ZX0JXIQ=";
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoPatches = [
+    ./add-Cargo.lock.patch
+  ];
 
   cargoBuildFlags = [
     "--workspace"

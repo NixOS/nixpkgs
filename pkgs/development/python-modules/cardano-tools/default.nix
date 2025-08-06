@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Python module for interfacing with the Cardano blockchain";
     homepage = "https://gitlab.com/viperscience/cardano-tools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ t4ccer ];
+    maintainers = with maintainers; [ aciceri ];
   };
 }

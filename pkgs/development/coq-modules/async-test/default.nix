@@ -36,7 +36,7 @@ mkCoqDerivation {
   ];
 
   meta = {
-    description = "From interaction trees to asynchronous tests.";
+    description = "From interaction trees to asynchronous tests";
     license = lib.licenses.mpl20;
   };
 }

@@ -42,28 +42,27 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "9.3.1";
+  version = "9.5.1";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KRHWXrsJ1l9gFq0j2gB/MQobqNe3Z8rknrs4m7WMRFU=";
+    hash = "sha256-UgY8S+XGlSnO1k98JWBfSN0/IY3LANVFgJwI1kdPAcU=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs =
-    [
-      llvmPackages.clang-unwrapped
-      llvmPackages.libllvm
-      llvmPackages.lld
-    ]
-    ++ lib.optionals (enableAll || buildCDs) [
-      mtools
-    ]
-    ++ lib.optionals hasX86 [ nasm ];
+  nativeBuildInputs = [
+    llvmPackages.clang-unwrapped
+    llvmPackages.libllvm
+    llvmPackages.lld
+  ]
+  ++ lib.optionals (enableAll || buildCDs) [
+    mtools
+  ]
+  ++ lib.optionals hasX86 [ nasm ];
 
   outputs = [
     "out"
@@ -111,8 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
       zlib # tinf
     ];
     maintainers = with lib.maintainers; [
+      johnrtitor
       lzcunt
       phip1611
+      prince213
+      programmerlexi
       surfaceflinger
     ];
   };

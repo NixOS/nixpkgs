@@ -11,15 +11,14 @@
 }:
 
 let
-  packageFlags =
-    [
-      "-p"
-      "nix-doc"
-    ]
-    ++ lib.optionals withPlugin [
-      "-p"
-      "nix-doc-plugin"
-    ];
+  packageFlags = [
+    "-p"
+    "nix-doc"
+  ]
+  ++ lib.optionals withPlugin [
+    "-p"
+    "nix-doc-plugin"
+  ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";
@@ -57,7 +56,6 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-C relro-level=partial";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EC+Wps6u1qXpv7ByM3NkRVCKRKCaBtC1o2vK8cKqzyU=";
 
   meta = with lib; {

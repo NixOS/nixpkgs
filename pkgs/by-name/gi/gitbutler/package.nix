@@ -59,11 +59,11 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wzSRUZeB5f9Z/D+Sa5Nl77jh7GDnnUehcmwanPcaSKM=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = "sha256-5NtfstUuIYyntt09Mu9GAFAOImfO6VMmJ7g15kvGaLE=";
   };
 
@@ -80,18 +80,18 @@ rustPlatform.buildRustPackage rec {
     turbo
     wrapGAppsHook4
     yq # For `tomlq`
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin curl
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin curl
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   tauriBuildFlags = [
     "--config"
@@ -102,24 +102,23 @@ rustPlatform.buildRustPackage rec {
 
   # `gitbutler-git`'s checks do not support release mode
   checkType = "debug";
-  cargoTestFlags =
-    [
-      "--workspace"
-    ]
-    ++ lib.concatMap excludeSpec [
-      # Requires Git directories
-      "but-core"
-      "but-rebase"
-      "but-workspace"
-      # Fails due to the issues above and below
-      "but-hunk-dependency"
-      # Errors with "Lazy instance has previously been poisoned"
-      "gitbutler-branch-actions"
-      "gitbutler-stack"
-      # `Expecting driver to be located at "../../target/debug/gitbutler-cli" - we also assume a certain crate location`
-      # We're not (usually) building in debug mode and always have a different target directory, so...
-      "gitbutler-edit-mode"
-    ];
+  cargoTestFlags = [
+    "--workspace"
+  ]
+  ++ lib.concatMap excludeSpec [
+    # Requires Git directories
+    "but-core"
+    "but-rebase"
+    "but-workspace"
+    # Fails due to the issues above and below
+    "but-hunk-dependency"
+    # Errors with "Lazy instance has previously been poisoned"
+    "gitbutler-branch-actions"
+    "gitbutler-stack"
+    # `Expecting driver to be located at "../../target/debug/gitbutler-cli" - we also assume a certain crate location`
+    # We're not (usually) building in debug mode and always have a different target directory, so...
+    "gitbutler-edit-mode"
+  ];
 
   env = {
     # Make sure `crates/gitbutler-tauri/inject-git-binaries.sh` can find our

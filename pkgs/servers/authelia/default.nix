@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   nodejs,
   pnpm,
   fetchFromGitHub,
@@ -62,7 +63,8 @@ buildGoModule rec {
   postInstall = ''
     mkdir -p $out/etc/authelia
     cp config.template.yml $out/etc/authelia
-
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd authelia \
       --bash <($out/bin/authelia completion bash) \
       --fish <($out/bin/authelia completion fish) \

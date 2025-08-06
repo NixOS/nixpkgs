@@ -32,66 +32,53 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.40.1";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-WdnwdH25A5oMNNY3uWG2hxnaAT+S1hNuP7LElH3uuuk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6LcpY3LSFK4KgEiGrFp/LONu5Vr+/+vI04wEEpF3s+s=";
     fetchSubmodules = true;
   };
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  # Fix output programs segfaulting on macOS Sequoia 15.4 - see:
-  # https://github.com/NixOS/nixpkgs/issues/398443
-  # https://github.com/ldc-developers/ldc/issues/4899
-  # TODO: Remove this when upgrading to a fixed version (>= 1.41.0-beta2)
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ldc-developers/ldc/commit/60079c3b596053b1a70f9f2e0cf38a287089df56.patch";
-      hash = "sha256-Y/5+zt5ou9rzU7rLJq2OqUxMDvC7aSFS6AsPeDxNATQ=";
-    })
+  postPatch = ''
+    patchShebangs runtime tools tests
+
+    rm tests/dmd/fail_compilation/mixin_gc.d
+    rm tests/dmd/runnable/xtest46_gc.d
+    rm tests/dmd/runnable/testptrref_gc.d
+
+    # test depends on current year
+    rm tests/dmd/compilable/ddocYear.d
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace runtime/phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace runtime/phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
+
+    # https://github.com/NixOS/nixpkgs/issues/34817
+    rm -r tests/plugins/addFuncEntryCall
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    ldcBootstrap
+    lit
+    lit.python
+    llvm_18.dev
+    makeWrapper
+    ninja
+    unzip
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
+    gdb
   ];
-
-  postPatch =
-    ''
-      patchShebangs runtime tools tests
-
-      rm tests/dmd/fail_compilation/mixin_gc.d
-      rm tests/dmd/runnable/xtest46_gc.d
-      rm tests/dmd/runnable/testptrref_gc.d
-
-      # test depends on current year
-      rm tests/dmd/compilable/ddocYear.d
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace runtime/phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace runtime/phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
-
-      # https://github.com/NixOS/nixpkgs/issues/34817
-      rm -r tests/plugins/addFuncEntryCall
-    '';
-
-  nativeBuildInputs =
-    [
-      cmake
-      ldcBootstrap
-      lit
-      lit.python
-      llvm_18.dev
-      makeWrapper
-      ninja
-      unzip
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
-      gdb
-    ];
 
   buildInputs = [
     curl

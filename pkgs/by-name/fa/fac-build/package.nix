@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     crateName = "fac";
     hash = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-+2j6xH1Ww1WOLfbjknUPvCmYLAl4W3Zp/mQTaL0qnv0=";
 
   # fac includes a unit test called ls_files_works which assumes it's

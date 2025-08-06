@@ -19,6 +19,7 @@
   srcOverride ? callPackage ./source.nix { inherit patches; },
   gemset ? ./. + "/gemset.nix",
   yarnHash ? srcOverride.yarnHash,
+  yarnMissingHashes ? srcOverride.yarnMissingHashes,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,13 +33,15 @@ stdenv.mkDerivation rec {
     gemdir = src;
   };
 
-  mastodonModules = stdenv.mkDerivation {
+  mastodonModules = stdenv.mkDerivation (finalAttrs: {
     pname = "${pname}-modules";
     inherit src version;
 
+    missingHashes = yarnMissingHashes;
     yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
       inherit src;
       hash = yarnHash;
+      missingHashes = yarnMissingHashes;
     };
 
     nativeBuildInputs = [
@@ -77,8 +80,9 @@ stdenv.mkDerivation rec {
       find public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
         -exec gzip --best --keep --force {} ';' \
         -exec brotli --best --keep {} ';'
-      gzip --best --keep public/packs/report.html
-      brotli --best --keep public/packs/report.html
+
+      gzip --best --keep public/packs/sw.js
+      brotli --best --keep public/packs/sw.js
 
       runHook postBuild
     '';
@@ -93,7 +97,7 @@ stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
-  };
+  });
 
   propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
   nativeBuildInputs = [ brotli ];
@@ -132,8 +136,6 @@ stdenv.mkDerivation rec {
     ln -s assets/500.html.br public/500.html.br
     ln -s packs/sw.js.gz public/sw.js.gz
     ln -s packs/sw.js.br public/sw.js.br
-    ln -s packs/sw.js.map.gz public/sw.js.map.gz
-    ln -s packs/sw.js.map.br public/sw.js.map.br
 
     rm -rf log
     ln -s /var/log/mastodon log

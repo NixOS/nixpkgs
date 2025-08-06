@@ -20,9 +20,9 @@ A complete list of options for the Athens module may be found
 A very basic configuration for Athens that acts as a caching and forwarding HTTP proxy is:
 ```nix
 {
-    services.athens = {
-      enable = true;
-    };
+  services.athens = {
+    enable = true;
+  };
 }
 ```
 
@@ -30,10 +30,10 @@ If you want to prevent Athens from writing to disk, you can instead configure it
 
 ```nix
 {
-    services.athens = {
-      enable = true;
-      storageType = "memory";
-    };
+  services.athens = {
+    enable = true;
+    storageType = "memory";
+  };
 }
 ```
 
@@ -52,9 +52,7 @@ To also use the local proxy for Go builds happening in `nix` (with `buildGoModul
 This can either be done via the nix-daemon systemd unit:
 
 ```nix
-{
-  systemd.services.nix-daemon.environment.GOPROXY = "http://localhost:3000";
-}
+{ systemd.services.nix-daemon.environment.GOPROXY = "http://localhost:3000"; }
 ```
 
 or via the [impure-env experimental feature](https://nix.dev/manual/nix/2.24/command-ref/conf-file#conf-impure-env):

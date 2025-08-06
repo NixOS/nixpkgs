@@ -32,7 +32,7 @@ in
       '';
       description = ''
         The homebox configuration as Environment variables. For definitions and available options see the upstream
-        [documentation](https://homebox.software/en/configure-homebox.html).
+        [documentation](https://homebox.software/en/configure/#configure-homebox).
       '';
     };
     database = {
@@ -81,8 +81,8 @@ in
       ];
     };
     systemd.services.homebox = {
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
-      after = lib.optional cfg.database.createLocally "postgresql.service";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = lib.optional cfg.database.createLocally "postgresql.target";
       environment = cfg.settings;
       serviceConfig = {
         User = "homebox";

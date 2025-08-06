@@ -10,12 +10,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "NilsIrl";
-    repo = pname;
+    repo = "MozWire";
     rev = "v${version}";
     hash = "sha256-2i8C1XgfI3MXnwXZzY6n8tIcw45G9h3vZqRlFaVoLH0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UEo/CSRg1hS/BIEQTEgqfwwz1LAMDdjKwV8bDyspX7o=";
 
   meta = with lib; {

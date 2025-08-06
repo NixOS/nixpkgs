@@ -10,12 +10,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "bbqsrc";
-    repo = pname;
+    repo = "cargo-ndk";
     rev = "v${version}";
     sha256 = "sha256-tzjiq1jjluWqTl+8MhzFs47VRp3jIRJ7EOLhUP8ydbM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Kt4GLvbGK42RjivLpL5W5z5YBfDP5B83mCulWz6Bisw=";
 
   meta = with lib; {

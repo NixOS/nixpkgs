@@ -11,18 +11,18 @@ GEM
     artifactory (3.0.17)
     atomos (0.1.3)
     aws-eventstream (1.3.2)
-    aws-partitions (1.1075.0)
-    aws-sdk-core (3.221.0)
+    aws-partitions (1.1107.0)
+    aws-sdk-core (3.224.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.99.0)
+    aws-sdk-kms (1.101.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.182.0)
+    aws-sdk-s3 (1.186.1)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -71,7 +71,7 @@ GEM
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
     fastimage (2.4.0)
-    fastlane (2.227.0)
+    fastlane (2.227.2)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
@@ -111,7 +111,7 @@ GEM
       tty-spinner (>= 0.8.0, < 1.0.0)
       word_wrap (~> 1.0.0)
       xcodeproj (>= 1.13.0, < 2.0.0)
-      xcpretty (~> 0.4.0)
+      xcpretty (~> 0.4.1)
       xcpretty-travis-formatter (>= 0.0.3, < 2.0.0)
     fastlane-sirp (1.0.0)
       sysrandom (~> 1.0)
@@ -158,7 +158,7 @@ GEM
     httpclient (2.9.0)
       mutex_m
     jmespath (1.6.2)
-    json (2.10.2)
+    json (2.12.2)
     jwt (2.10.1)
       base64
     logger (1.7.0)
@@ -173,7 +173,7 @@ GEM
     optparse (0.6.0)
     os (1.1.4)
     plist (3.7.2)
-    public_suffix (6.0.1)
+    public_suffix (6.0.2)
     rake (13.2.1)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -185,7 +185,7 @@ GEM
     ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
     security (0.1.5)
-    signet (0.19.0)
+    signet (0.20.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
@@ -228,4 +228,4 @@ DEPENDENCIES
   xcode-install
 
 BUNDLED WITH
-   2.6.2
+   2.6.6

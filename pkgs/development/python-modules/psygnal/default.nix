@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
-    repo = pname;
+    repo = "psygnal";
     tag = "v${version}";
     hash = "sha256-ZEN8S2sI1usXl5A1Ow1+l4BBB6qNnlVt/nvFtAX4maY=";
   };
@@ -48,9 +48,8 @@ buildPythonPackage rec {
     attrs
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   pythonImportsCheck = [ "psygnal" ];

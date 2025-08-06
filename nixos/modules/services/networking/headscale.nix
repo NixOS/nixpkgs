@@ -406,14 +406,6 @@ in
                 '';
                 example = [ "alice@example.com" ];
               };
-
-              strip_email_domain = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-                description = ''
-                  Whether the domain part of the email address should be removed when generating namespaces.
-                '';
-              };
             };
 
             tls_letsencrypt_hostname = lib.mkOption {
@@ -585,6 +577,11 @@ in
         "dns_config"
         "nameservers"
       ] "Use `dns.nameservers.global` instead.")
+      (assertRemovedOption [
+        "settings"
+        "oidc"
+        "strip_email_domain"
+      ] "The strip_email_domain option got removed upstream")
     ];
 
     services.headscale.settings = lib.mkMerge [

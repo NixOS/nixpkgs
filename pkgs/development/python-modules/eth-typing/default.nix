@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "5.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-typing";
     tag = "v${version}";
-    hash = "sha256-IOWd6WFPAYO+VZwlMilRVHtudEjHt5p8Xu4WloFB/ww=";
+    hash = "sha256-w/xYqDmtlNs9dk4lTX0zxjdlUc7l7vi8ZnSE62W0m8o=";
   };
 
   build-system = [ setuptools ];

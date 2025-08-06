@@ -45,13 +45,13 @@
 let
   wemeet-wayland-screenshare = stdenv.mkDerivation {
     pname = "wemeet-wayland-screenshare";
-    version = "0-unstable-2025-01-06";
+    version = "0-unstable-2025-05-31";
 
     src = fetchFromGitHub {
       owner = "xuwd1";
       repo = "wemeet-wayland-screenshare";
-      rev = "ab226c63380c4233e2f490ba17e6ea8f393999e2";
-      hash = "sha256-nBkbyy0VGOaPNVsEA02bSlTI6eQoVr/QVpEEpCuFdUw=";
+      rev = "7f338966e162612b09d838512b11af5901414d05";
+      hash = "sha256-UtPcgEa+9KrF4CblC8D4oClvVJs+a5DWtwH/fD7puVs=";
       fetchSubmodules = true;
     };
 
@@ -83,8 +83,8 @@ let
     };
   };
 
+  # for mitigating file transfer crashes
   libwemeetwrap = stdenv.mkDerivation {
-    # for mitigating file transfer crashes
     pname = "libwemeetwrap";
     version = "0-unstable-2023-12-14";
 
@@ -96,9 +96,7 @@ let
 
     dontWrapQtApps = true;
 
-    nativeBuildInputs = [
-      pkg-config
-    ];
+    nativeBuildInputs = [ pkg-config ];
 
     buildInputs = [
       openssl

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wfview";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitLab {
     owner = "eliggett";
     repo = "wfview";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bFTblsDtFAakbSJfSfKgvoxd1DTSv++rxU6R3/uWo+4=";
+    hash = "sha256-oPgQnldJA3IEZ0FuigdBpArhVcWE0GR8oa/kyYWDvEo=";
   };
 
   patches = [
@@ -29,22 +29,21 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-hard-encodings.patch
   ];
 
-  buildInputs =
-    [
-      eigen
-      hidapi
-      libopus
-      portaudio
-      rtaudio
-      qt6.qtbase
-      qt6.qtserialport
-      qt6.qtmultimedia
-      qt6.qtwebsockets
-      qt6Packages.qcustomplot
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-    ];
+  buildInputs = [
+    eigen
+    hidapi
+    libopus
+    portaudio
+    rtaudio
+    qt6.qtbase
+    qt6.qtserialport
+    qt6.qtmultimedia
+    qt6.qtwebsockets
+    qt6Packages.qcustomplot
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+  ];
 
   nativeBuildInputs = with qt6; [
     wrapQtAppsHook

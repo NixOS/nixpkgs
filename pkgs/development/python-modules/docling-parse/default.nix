@@ -23,15 +23,23 @@
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${version}";
-    hash = "sha256-Po+0IepSTy4ChJVjjTuTZqt8/iLoSJK63bTkH+Xgtl8=";
+    hash = "sha256-1vl5Ij25NXAwhoXLJ35lcr5r479jrdKd9DxWhYbCApw=";
   };
+
+  patches = [
+    # Fixes test_parse unit tests
+    # export_to_textlines in docling-core >= 2.38.2 includes text direction
+    # by default, which is not included in upstream's groundtruth data.
+    # TODO: remove when docling-core version gets bumped in upstream's uv.lock
+    ./test_parse.patch
+  ];
 
   dontUseCmakeConfigure = true;
 

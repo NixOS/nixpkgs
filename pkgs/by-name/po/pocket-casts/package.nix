@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "pocket-casts";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
-    hash = "sha256-IhH5nZ2kXVW2D8cMmVyMX4xZLnzfMAp2gwQgZgHOItY=";
+    hash = "sha256-Wg08X0GPdWDgVNK7na14hU+3WCeEBRviWyL7K3MOrfY=";
   };
 
-  npmDepsHash = "sha256-oLZ81SA+eO20sUc2cwba3cc6vu1Qf/lNkIfzK2CQdrw=";
+  npmDepsHash = "sha256-64O3NTWxMN9fxYlBao5COeMFwDnKfbyKI5+/quRb8O0=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

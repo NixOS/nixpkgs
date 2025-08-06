@@ -1,22 +1,24 @@
 {
-  buildGo124Module,
+  buildGoModule,
+  buildPackages,
   fetchFromGitHub,
-  lib,
   installShellFiles,
+  lib,
+  stdenv,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "golangci-lint";
-  version = "2.1.6";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
-    rev = "v${version}";
-    hash = "sha256-L0TsVOUSU+nfxXyWsFLe+eU4ZxWbW3bHByQVatsTpXA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TuMIDKs8g1oYT4nQoUjwW0wEMaGxN+3YyWsbWTGy+tE=";
   };
 
-  vendorHash = "sha256-tYoAUumnHgA8Al3jKjS8P/ZkUlfbmmmBcJYUR7+5u9w=";
+  vendorHash = "sha256-1jnunHTVtqeDoljOC6JVq1pOxtZ/njqIRyQHRzctxgI=";
 
   subPackages = [ "cmd/golangci-lint" ];
 
@@ -24,27 +26,36 @@ buildGo124Module rec {
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
-    "-X main.commit=v${version}"
+    "-w"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
     "-X main.date=19700101-00:00:00"
   ];
 
-  postInstall = ''
-    for shell in bash zsh fish; do
-      HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
-      installShellCompletion golangci-lint.$shell
-    done
-  '';
+  postInstall =
+    let
+      golangcilintBin =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out"
+        else
+          lib.getBin buildPackages.golangci-lint;
+    in
+    ''
+      installShellCompletion --cmd golangci-lint \
+        --bash <(${golangcilintBin}/bin/golangci-lint completion bash) \
+        --fish <(${golangcilintBin}/bin/golangci-lint completion fish) \
+        --zsh <(${golangcilintBin}/bin/golangci-lint completion zsh)
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
-    changelog = "https://github.com/golangci/golangci-lint/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/golangci/golangci-lint/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "golangci-lint";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       mic92
     ];
   };
-}
+})

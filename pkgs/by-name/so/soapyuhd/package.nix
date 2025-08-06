@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "soapyuhd";
-  version = "0.4.1";
+  version = "0.4.1-unstable-2025-02-13";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyUHD";
-    rev = "soapy-uhd-${version}";
-    sha256 = "14rk9ap9ayks2ma6mygca08yfds9bgfmip8cvwl87l06hwhnlwhj";
+    rev = "6b521393cc45c66770f3d4bc69eac7dda982174c";
+    sha256 = "qg0mbw3S973cnok6tVx7Y38ijOQcJdHtPLi889uo7tI=";
   };
 
   nativeBuildInputs = [

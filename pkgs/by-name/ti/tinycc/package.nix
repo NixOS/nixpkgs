@@ -59,21 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
       (makePkgconfigItem libtcc-pcitem)
     ];
 
-  configureFlags =
-    [
-      "--cc=$CC"
-      "--ar=$AR"
-      "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-      "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
-      # The first libpath will be the one in which tcc will look for libtcc1.a,
-      # which is need for its tests.
-      "--libpaths=$lib/lib/tcc:$lib/lib:${lib.getLib stdenv.cc.libc}/lib"
-      # build cross compilers
-      "--enable-cross"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "--config-musl"
-    ];
+  configureFlags = [
+    "--cc=$CC"
+    "--ar=$AR"
+    "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
+    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+    # The first libpath will be the one in which tcc will look for libtcc1.a,
+    # which is need for its tests.
+    "--libpaths=$lib/lib/tcc:$lib/lib:${lib.getLib stdenv.cc.libc}/lib"
+    # build cross compilers
+    "--enable-cross"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--config-musl"
+  ];
 
   enableParallelBuilding = true;
 

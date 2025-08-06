@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "libspelling";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Spellcheck library for GTK 4";
     homepage = "https://gitlab.gnome.org/GNOME/libspelling";
-    license = licenses.lgpl21Plus;
-    changelog = "https://gitlab.gnome.org/GNOME/libspelling/-/raw/${version}/NEWS";
-    maintainers = with maintainers; [ chuangzhu ];
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    changelog = "https://gitlab.gnome.org/GNOME/libspelling/-/raw/${finalAttrs.version}/NEWS";
+    maintainers = with lib.maintainers; [ chuangzhu ];
+    teams = [ lib.teams.gnome ];
   };
 })

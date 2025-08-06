@@ -37,79 +37,84 @@
 
 stdenv.mkDerivation rec {
   pname = "rawtherapee";
-  version = "5.11";
+  version = "5.12";
 
   src = fetchFromGitHub {
-    owner = "Beep6581";
+    owner = "RawTherapee";
     repo = "RawTherapee";
-    rev = version;
-    hash = "sha256-jIAbguwF2aqRTk72ro5oHNTawA7biPSFC41YHgRR730=";
+    tag = version;
+    hash = "sha256-h8eWnw9I1R0l9WAI/DylsdA241qU9NhYGEPYz+JlE18=";
     # The developers ask not to use the tarball from Github releases, see
     # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
     forceFetchGit = true;
   };
 
   postPatch = ''
-    echo "set(HG_VERSION ${version})" > ReleaseInfo.cmake
+    cat <<EOF > ReleaseInfo.cmake
+    set(GIT_DESCRIBE ${version})
+    set(GIT_BRANCH ${version})
+    set(GIT_VERSION ${version})
+    # Missing GIT_COMMIT and GIT_COMMIT_DATE, which are not easy to obtain.
+    set(GIT_COMMITS_SINCE_TAG 0)
+    set(GIT_COMMITS_SINCE_BRANCH 0)
+    set(GIT_VERSION_NUMERIC_BS ${version})
+    EOF
     substituteInPlace tools/osx/Info.plist.in rtgui/config.h.in \
       --replace "/Applications" "${placeholder "out"}/Applications"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      util-linux
-      libselinux
-      libsepol
-      lerc
-      libthai
-      libdatrie
-      libxkbcommon
-      libepoxy
-      libXtst
-      pixman
-      libpthreadstubs
-      gtkmm3
-      libXau
-      libXdmcp
-      lcms2
-      libiptcdata
-      fftw
-      expat
-      pcre2
-      libsigcxx
-      lensfun
-      librsvg
-      exiv2
-      libraw
-      libjxl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcanberra-gtk3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gtk-mac-integration
-    ];
+  buildInputs = [
+    util-linux
+    libselinux
+    libsepol
+    lerc
+    libthai
+    libdatrie
+    libxkbcommon
+    libepoxy
+    libXtst
+    pixman
+    libpthreadstubs
+    gtkmm3
+    libXau
+    libXdmcp
+    lcms2
+    libiptcdata
+    fftw
+    expat
+    pcre2
+    libsigcxx
+    lensfun
+    librsvg
+    exiv2
+    libraw
+    libjxl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcanberra-gtk3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration
+  ];
 
-  cmakeFlags =
-    [
-      "-DPROC_TARGET_NUMBER=2"
-      "-DCACHE_NAME_SUFFIX=\"\""
-      "-DWITH_SYSTEM_LIBRAW=\"ON\""
-      "-DWITH_JXL=\"ON\""
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  cmakeFlags = [
+    "-DPROC_TARGET_NUMBER=2"
+    "-DCACHE_NAME_SUFFIX=\"\""
+    "-DWITH_SYSTEM_LIBRAW=\"ON\""
+    "-DWITH_JXL=\"ON\""
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   CMAKE_CXX_FLAGS = toString [
     "-std=c++11"

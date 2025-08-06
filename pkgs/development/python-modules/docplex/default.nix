@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.29.241";
+  version = "2.29.245";
   pyproject = true;
 
   # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rVJQOWvgzqArcycQeVu540XZkju7C/ZlIPZuuPHpiK0=";
+    hash = "sha256-pCb+P6WQUPX+dzFfe6Hcfao1fH2NDtBmpYNWRx2FPko=";
   };
 
   postPatch = ''
@@ -30,7 +30,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docloud
     requests
-  ] ++ lib.optional isPy27 futures;
+  ]
+  ++ lib.optional isPy27 futures;
 
   doCheck = false;
   pythonImportsCheck = [ "docplex" ];

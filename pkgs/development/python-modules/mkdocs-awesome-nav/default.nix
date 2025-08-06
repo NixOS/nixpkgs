@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "mkdocs-awesome-nav";
-  version = "3.1.1";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-nav";
     tag = "v${version}";
-    hash = "sha256-K7W8RHLzVx3wvLPjDEHLhednxViWWfez/w1tbDfcvrA=";
+    hash = "sha256-F52LG5kdrZvQbVhV++0SwRYKLg6kgBY4ycomfr/bG/0=";
   };
 
   build-system = [ flit-core ];

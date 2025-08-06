@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  fetchFromGitHub,
   fetchpatch,
   callPackages,
   cmake,
@@ -24,22 +23,13 @@
   onnxruntime,
 }:
 let
-  glog-lock = glog.overrideAttrs (oldAttrs: rec {
-    version = "0.6.0";
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "glog";
-      rev = "v${version}";
-      sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
-    };
-  });
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2025-04-14";
+    version = "2025-06-30";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "51d198884cde2ecda643071a1a6cb4ec0e09d881";
-      sha256 = "sha256-kDVEAttSqa8l7qcRs7MQiBgPbAKBExEQvIE8tc7PLpM=";
+      rev = "689f172c726c3934d49577f09adb5b09804f11e5";
+      sha256 = "sha256-JJePIn+NUScb+3o67vT31BoKHcfBuE9osV4SrcicFds=";
     };
 
     patches = [
@@ -47,17 +37,22 @@ let
       # and remove some libs or path that they hard-coded in the source code.
       # Should be removed after we upstream these changes.
       (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/e899b432776010048b558a939ad9ba17452cb44f.patch";
-        hash = "sha256-fLKsb/dgbT1mFCWEldFwhyrA1HSkKGMAbAs/IxV9pwM=";
+        url = "https://github.com/Emin017/iEDA/commit/c17e42a3673afd9c7ace9374f85290a85354bb78.patch";
+        hash = "sha256-xa1oSy3OZ5r0TigGywzpVPvpPnA7L6RIcNktfFen4AA=";
       })
       # This patch is to fix the compile error on the newer version of gcc/g++
-      # which is caused by some incorrect declarations and usages of the Boost library.
+      # We remove some forward declarations which are not allowed in newer versions of gcc/g++
       # Should be removed after we upstream these changes.
       (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/3a2c7e27a5bd349d72b3a7198358cd640c678802.patch";
-        hash = "sha256-2YROkQ92jGOJZr+4+LrwRJKxhA39Bypb1xFdo6aftu8=";
+        url = "https://github.com/Emin017/iEDA/commit/f5464cc40a2c671c5d405f16b509e2fa8d54f7f1.patch";
+        hash = "sha256-uVMV/CjkX9oLexHJbQvnEDOET/ZqsEPreI6EQb3Z79s=";
       })
     ];
+
+    postPatch = ''
+      # Comment out the iCTS test cases that will fail due to some linking issues on aarch64-linux
+      sed -i '17,28s/^/# /' src/operation/iCTS/test/CMakeLists.txt
+    '';
 
     dontBuild = true;
     dontFixup = true;
@@ -71,7 +66,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0-unstable-2025-04-14";
+  version = "0-unstable-2025-06-30";
 
   src = rootSrc;
 
@@ -102,7 +97,7 @@ stdenv.mkDerivation {
     rustpkgs.verilog-parser
     rustpkgs.liberty-parser
     gtest
-    glog-lock
+    glog
     gflags
     boost
     onnxruntime

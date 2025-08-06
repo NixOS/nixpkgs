@@ -49,11 +49,11 @@ buildGoModule rec {
     installManPage doc/dotool.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command to simulate input anywhere";
     homepage = "https://git.sr.ht/~geb/dotool";
     changelog = "https://git.sr.ht/~geb/dotool/tree/${version}/item/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

@@ -13,7 +13,7 @@
   libiconv,
   libstaden-read,
   pkg-config,
-  tbb_2021_11,
+  tbb_2021,
   xz,
   zlib,
 }:
@@ -55,10 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     libgff
     libstaden-read
-    tbb_2021_11
+    tbb_2021
     xz
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     cmake

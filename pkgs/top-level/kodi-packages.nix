@@ -137,6 +137,8 @@ let
 
     robotocjksc = callPackage ../applications/video/kodi/addons/robotocjksc { };
 
+    screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
+
     skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 
     svtplay = callPackage ../applications/video/kodi/addons/svtplay { };

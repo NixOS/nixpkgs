@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
-  version = "0.13.7";
+  version = "0.13.17";
 
   src = fetchFromGitHub {
-    owner = "Enter-tainer";
+    owner = "typstyle-rs";
     repo = "typstyle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vk/u5Q1MN6JlZuY4PnDEw52SSVYCciJUAbBduf2JiZQ=";
+    hash = "sha256-JsRMs6ARiXs/S/ybkzNo4giR3BvGbOm8X/UH08kvznU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XYBkfyomZiTjZccux72dc4Ku4Zec4ms6m5U2xwFgjEY=";
+  cargoHash = "sha256-G7X5FoWHEWFoLqfHmbuSylG7/xp4aXrSugnGc20oZcE=";
 
   # Disabling tests requiring network access
   checkFlags = [
@@ -36,9 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/Enter-tainer/typstyle/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/typstyle-rs/typstyle/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Format your typst source code";
-    homepage = "https://github.com/Enter-tainer/typstyle";
+    homepage = "https://github.com/typstyle-rs/typstyle";
     license = lib.licenses.asl20;
     mainProgram = "typstyle";
     maintainers = with lib.maintainers; [
