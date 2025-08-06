@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "1.0.0";
+  version = "1.0.0"; # test with `nix-build pkgs/pkgs-lib/format`
   pyproject = true;
 
   src = fetchFromGitHub {
