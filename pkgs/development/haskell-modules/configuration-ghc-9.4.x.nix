@@ -61,6 +61,9 @@ self: super: {
 
   # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
   ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
 
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
