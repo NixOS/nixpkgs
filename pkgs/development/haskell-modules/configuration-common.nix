@@ -834,10 +834,6 @@ with haskellLib;
   # 2024-01-15: too strict bound on free < 5.2
   hnix = doJailbreak (dontCheck super.hnix);
 
-  # 2025-08-03: Too strict bound on filepath (<1.5)
-  # https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/pull/29
-  nix-derivation = doJailbreak super.nix-derivation;
-
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
