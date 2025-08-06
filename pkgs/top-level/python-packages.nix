@@ -8663,6 +8663,8 @@ self: super: with self; {
 
   lomond = callPackage ../development/python-modules/lomond { };
 
+  london-tube-status = callPackage ../development/python-modules/london-tube-status { };
+
   loompy = callPackage ../development/python-modules/loompy { };
 
   loopy = callPackage ../development/python-modules/loopy { };
