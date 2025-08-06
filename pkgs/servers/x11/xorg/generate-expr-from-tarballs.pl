@@ -41,7 +41,6 @@ $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
-$pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
@@ -284,7 +283,6 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libxcvt,
-  libxdmcp,
   lndir,
   luit,
   makedepend,
@@ -321,7 +319,6 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
-  libXdmcp = libxdmcp;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;

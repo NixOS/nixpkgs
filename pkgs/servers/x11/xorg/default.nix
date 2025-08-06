@@ -9,7 +9,6 @@
   libpciaccess,
   libpthread-stubs,
   libxcvt,
-  libxdmcp,
   lndir,
   luit,
   makedepend,
@@ -46,7 +45,6 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
-  libXdmcp = libxdmcp;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
@@ -2222,6 +2220,38 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xdamage" ];
+        platforms = lib.platforms.unix;
+      };
+    })
+  ) { };
+
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
+  libXdmcp = callPackage (
+    {
+      stdenv,
+      pkg-config,
+      fetchurl,
+      xorgproto,
+      testers,
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "libXdmcp";
+      version = "1.1.5";
+      builder = ./builder.sh;
+      src = fetchurl {
+        url = "mirror://xorg/individual/lib/libXdmcp-1.1.5.tar.xz";
+        sha256 = "1312l8x3asib77wgf123w3nbabnky61mb6pnmmqapbf350l259fq";
+      };
+      hardeningDisable = [
+        "bindnow"
+        "relro"
+      ];
+      strictDeps = true;
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [ xorgproto ];
+      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      meta = {
+        pkgConfigModules = [ "xdmcp" ];
         platforms = lib.platforms.unix;
       };
     })
