@@ -58,9 +58,7 @@ let
             microsoft-security-utilities-secret-masker
             msal-extensions
             msal
-            msrestazure
             packaging
-            paramiko
             pkginfo
             psutil
             py-deviceid
@@ -70,7 +68,10 @@ let
           ]
           ++ requests.optional-dependencies.socks;
 
-        nativeCheckInputs = with self; [ pytest ];
+        nativeCheckInputs = with self; [
+          pytest
+          msrestazure
+        ];
 
         doCheck = stdenv.hostPlatform.isLinux;
 

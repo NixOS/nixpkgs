@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.75.0";
+  version = "2.76.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-u6umAqRUfiACt23mxTtfosLdxKSPvDVJMkVjPCtxr24=";
+    hash = "sha256-4ENYdL5A95+mrI1iijW/YEYlLqxPXUNIx+b0VKyhDJA=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -192,7 +192,6 @@ py.pkgs.toPythonApplication (
         azure-mgmt-databoxedge
         azure-mgmt-datalake-store
         azure-mgmt-datamigration
-        azure-mgmt-dns
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
         azure-mgmt-extendedlocation
@@ -221,6 +220,10 @@ py.pkgs.toPythonApplication (
         azure-mgmt-redis
         azure-mgmt-redhatopenshift
         azure-mgmt-resource
+        azure-mgmt-resource-deployments
+        azure-mgmt-resource-deploymentscripts
+        azure-mgmt-resource-deploymentstacks
+        azure-mgmt-resource-templatespecs
         azure-mgmt-search
         azure-mgmt-security
         azure-mgmt-servicebus
@@ -344,7 +347,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.containerservice"
       "azure.mgmt.cosmosdb"
       "azure.mgmt.datamigration"
-      "azure.mgmt.dns"
       "azure.mgmt.eventgrid"
       "azure.mgmt.eventhub"
       "azure.mgmt.hdinsight"
@@ -369,6 +371,7 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.recoveryservicesbackup"
       "azure.mgmt.redis"
       "azure.mgmt.resource"
+      "azure.mgmt.resource.deployments"
       "azure.mgmt.search"
       "azure.mgmt.security"
       "azure.mgmt.servicebus"
