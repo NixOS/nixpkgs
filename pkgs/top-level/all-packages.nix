@@ -2996,8 +2996,6 @@ with pkgs;
     gitlabEnterprise = true;
   };
 
-  gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
-
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
