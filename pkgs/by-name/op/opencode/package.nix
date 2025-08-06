@@ -7,7 +7,6 @@
   models-dev,
   nix-update-script,
   testers,
-  tree-sitter,
   writableTmpDirAsHomeHook,
 }:
 
@@ -108,8 +107,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     outputHashMode = "recursive";
   };
 
-  buildInputs = [ tree-sitter ];
-
   nativeBuildInputs = [
     bun
     models-dev
@@ -135,13 +132,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     bun build \
+      --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
       --define OPENCODE_VERSION="'${finalAttrs.version}'" \
       --compile \
-      --minify \
       --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
       --outfile=opencode \
       ./packages/opencode/src/index.ts \
-      ${finalAttrs.tui}/bin/tui
 
     runHook postBuild
   '';
