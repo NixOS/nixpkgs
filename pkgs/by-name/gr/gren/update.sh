@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cabal2nix curl jq nixfmt-rfc-style
+#!nix-shell -i bash -p cabal2nix curl jq nix-update nixfmt-rfc-style
 
 set -euo pipefail
 
@@ -22,3 +22,7 @@ cabal2nix 'https://github.com/gren-lang/compiler.git' --revision "${latest_versi
 nixfmt "${backend_derivation_file}"
 
 echo 'Finished backend generation.'
+
+echo "Updating frontend to version ${latest_version}"
+
+nix-update gren --version "${latest_version}"

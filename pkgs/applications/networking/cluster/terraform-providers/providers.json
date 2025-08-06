@@ -153,11 +153,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-2QWaPwqjgtzOoqGB91k2mKnMqhZ559rp4KJWQdkOjHE=",
+    "hash": "sha256-mYADF+vzpYt9RMxjNrZnEnBgpF4s0h2qBxize52DLw8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.37.0",
+    "rev": "v4.38.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -372,11 +372,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "digitalocean": {
-    "hash": "sha256-tR4qN0N+tJu1fmiFIwTTIQyOTsqrVi2DSWJjU6oVdwE=",
+    "hash": "sha256-Bdc28nkev+i91ze/oyPSPeVegw/+eEn2FleaosCvDE0=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.61.0",
+    "rev": "v2.62.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -444,11 +444,11 @@
     "vendorHash": "sha256-OzFNqWCAIvFQQ/4bi52doASkjo/zoxlS2ueiV1rww1M="
   },
   "exoscale": {
-    "hash": "sha256-V/+7qjE1r49cbF1+N5E7/jWFTSvqjhO8jxjneTJjjmQ=",
+    "hash": "sha256-TA8mMMeelnkvGcvRy9+QLiRegQYf8xo6vRZ+kb+DY5A=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.64.3",
+    "rev": "v0.65.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -516,13 +516,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-1OzHzYnNlpHSVX3Q0JfjTTHJ1ux+YeRTe7ImtAsP8JU=",
+    "hash": "sha256-0+zBgoLpdIn20QVygVfwZXn6CKmjBku5mOzjSJV7LYo=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v18.1.1",
+    "rev": "v18.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-G325isVj6JKs58i59V/A51vE8mzgxk/1EqSVvb6TiH4="
+    "vendorHash": "sha256-eE9AY/79xQSbRl5kA0rwS8Oz8I9jaxT/KlVd0v0GAa8="
   },
   "google": {
     "hash": "sha256-YwSl33ST8kvnVg5hr7PCSfEO0xRDRVvTEU3KEMfiIIg=",

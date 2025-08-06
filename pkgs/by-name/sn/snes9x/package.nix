@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         Version build with ${interface} interface.
       '';
       license = lib.licenses.unfreeRedistributable // {
-        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.rev}/LICENSE";
+        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.tag}/LICENSE";
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [

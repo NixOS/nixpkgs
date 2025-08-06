@@ -6,12 +6,13 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
   version = "0.32.0";
 
   src = fetchCrate {
-    inherit pname version;
+    pname = "jsonschema-cli";
+    inherit (finalAttrs) version;
     hash = "sha256-ZcavZSHf2eT65f7HbtZmD2mYUtrXEL/l1opXCvdn1O0=";
   };
 
@@ -21,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast command-line tool for JSON Schema validation";
     homepage = "https://github.com/Stranger6667/jsonschema";
-    changelog = "https://github.com/Stranger6667/jsonschema/releases/tag/rust-v${version}";
+    changelog = "https://github.com/Stranger6667/jsonschema/releases/tag/rust-v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kachick
     ];
     mainProgram = "jsonschema-cli";
   };
-}
+})

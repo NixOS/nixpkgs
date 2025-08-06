@@ -16655,6 +16655,12 @@
     githubId = 1776903;
     name = "Andrew Abbott";
   };
+  mirror230469 = {
+    email = "mirror230469@disroot.org";
+    github = "mirror230469";
+    githubId = 215964377;
+    name = "mirror";
+  };
   mirrorwitch = {
     email = "mirrorwitch@transmom.love";
     github = "mirrorwitch";
@@ -20459,6 +20465,12 @@
     name = "Kate Döen";
     github = "provokateurin";
     githubId = 26026535;
+  };
+  ProxyVT = {
+    email = "tikit.us@outlook.com";
+    github = "ProxyVT";
+    githubId = 86965169;
+    name = "Ulad Tiknyus";
   };
   prrlvr = {
     email = "po@prrlvr.fr";
