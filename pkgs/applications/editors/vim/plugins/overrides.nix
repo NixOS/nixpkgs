@@ -1006,6 +1006,13 @@ in
     dependencies = [ self.nvim-yarp ];
   };
 
+  demicolon-nvim = super.demicolon-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      nvim-treesitter-textobjects
+    ];
+  };
+
   denops-vim = super.denops-vim.overrideAttrs {
     postPatch = ''
       # Use Nix's Deno instead of an arbitrary install
