@@ -12,7 +12,6 @@
           repo = "QMPlay2";
           tag = self.version;
           hash = "sha256-Of/zEQ6o2J/wXfAoY10IPtCaMaSk8ux8L6MrimeMWVA=";
-          fetchSubmodules = true;
         };
       };
     in
