@@ -16,7 +16,6 @@
   libspnav,
   libXmu,
   medfile,
-  mpi,
   ninja,
   ode,
   opencascade-occt,
@@ -87,7 +86,6 @@ freecad-utils.makeCustomizable (
       libGLU
       libXmu
       medfile
-      mpi
       ode
       vtk
       xercesc
