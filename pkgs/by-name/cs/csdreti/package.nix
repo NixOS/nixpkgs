@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A simple DSP library and command-line tool for Software Defined Radio";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = teams.c3d2.members ++ [ maintainers.mafo ];
   };
 }
