@@ -4,8 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   buildGoModule,
-  formats,
-  libnvidia-container,
   autoAddDriverRunpath,
 }:
 
