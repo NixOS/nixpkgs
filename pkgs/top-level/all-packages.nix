@@ -3027,8 +3027,6 @@ with pkgs;
 
   gnucap-full = gnucap.withPlugins (p: [ p.verilog ]);
 
-  gnugrep = callPackage ../tools/text/gnugrep { };
-
   gnupatch = callPackage ../tools/text/gnupatch { };
 
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
