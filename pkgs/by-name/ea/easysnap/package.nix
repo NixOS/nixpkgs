@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "easysnap";
-  version = "unstable-2025-05-20";
+  version = "0-unstable-2025-05-20";
 
   src = fetchFromGitHub {
     owner = "sjau";
