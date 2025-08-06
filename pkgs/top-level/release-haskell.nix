@@ -378,7 +378,7 @@ let
         uusi
         uqm
         uuagc
-        # vaultenv: broken by connection on 2024-03-16
+        vaultenv
         xmobar
         xmonadctl
         xmonad-with-packages

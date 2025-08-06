@@ -2816,9 +2816,6 @@ with haskellLib;
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.git ];
   }) super.kmonad;
 
-  # 2024-03-17: broken
-  vaultenv = dontDistribute super.vaultenv;
-
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [
     (fetchpatch {
