@@ -53,7 +53,7 @@ mkDerivation {
     # https://gitlab.haskell.org/ghc/ghc/-/issues/24382
     # https://gitlab.haskell.org/ghc/ghc/-/commit/a2c033cf82635c83f3107706634bebee43297b99
     (lib.versionAtLeast ghcVersion "9.6.7" && lib.versionOlder ghcVersion "9.7")
-    || (lib.versionAtLeast ghcVersion "9.12" && lib.versionOlder ghcVersion "9.15");
+    || lib.versionAtLeast ghcVersion "9.12";
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
