@@ -68,6 +68,9 @@ self: super: {
   # os-string >= 2 is incompatible with bytestring < 0.11
   os-string = doDistribute self.os-string_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+
   # Becomes a core package in GHC >= 9.0
   ghc-bignum = lib.pipe self.ghc-bignum_1_0 [
     # ghc-bignum is not buildable if none of the three backends
