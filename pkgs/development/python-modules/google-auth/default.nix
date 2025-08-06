@@ -64,6 +64,8 @@ buildPythonPackage rec {
     requests = [ requests ];
   };
 
+  pythonRelaxDeps = [ "cachetools" ];
+
   nativeCheckInputs = [
     aioresponses
     flask
