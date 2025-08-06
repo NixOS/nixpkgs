@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "portend";
   version = "3.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,9 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-qp1Aqx+eFL231AH0IhDfNdAXybl5kbrrGFaM7fuMZIk=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml;
+  '';
 
-  propagatedBuildInputs = [ tempora ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ tempora ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
