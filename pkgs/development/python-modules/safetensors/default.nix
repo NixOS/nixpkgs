@@ -26,25 +26,27 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-wAr/jvr0w+vOHjjqE7cPcAM/IMz+58YhfoJ2XC4987M=";
+    hash = "sha256-GHeulf1LNl6vxu0mQLdU4FhMWMLxo34HmTdIMtHz+so=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-2s5cdhR2KO6qBw9ZJmo/zW8+dIBN3kccUpOMfm8vKmA=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
