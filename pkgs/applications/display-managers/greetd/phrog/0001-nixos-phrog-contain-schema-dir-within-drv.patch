@@ -1,0 +1,25 @@
+From 6e8d04051ef4e40e64b3daba998a57f66a224cf7 Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Mon, 19 May 2025 12:02:37 +0200
+Subject: [PATCH] nixos/phrog: contain schema dir within drv
+
+---
+ build.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build.rs b/build.rs
+index 4cecdb0..0f8d8ea 100644
+--- a/build.rs
++++ b/build.rs
+@@ -9,7 +9,7 @@ fn main() {
+     );
+ 
+     let schema_path =
+-        PathBuf::from(std::env::var("HOME").unwrap()).join(".local/share/glib-2.0/schemas");
++        PathBuf::from("{interp}");
+     std::fs::create_dir_all(&schema_path).expect("failed to create schema dir");
+ 
+     let phrog_gschema = PathBuf::from("data/mobi.phosh.phrog.gschema.xml");
+-- 
+2.49.0
+

@@ -11966,6 +11966,7 @@ with pkgs;
       regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };
       tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
       wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
+      phrog = callPackage ../applications/display-managers/greetd/phrog/package.nix { };
     }
     // lib.optionalAttrs config.allowAliases {
       dlm = throw "greetd.dlm has been removed as it is broken and abandoned upstream"; # Added 2024-07-15

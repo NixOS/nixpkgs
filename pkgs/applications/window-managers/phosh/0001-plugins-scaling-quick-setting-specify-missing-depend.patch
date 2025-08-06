@@ -1,0 +1,24 @@
+From d54a6ffc50354a975491f1aa672f44a17babe6e0 Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Sun, 18 May 2025 15:20:31 +0200
+Subject: [PATCH] plugins/scaling-quick-setting: specify missing dependency
+
+---
+ plugins/meson.build | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/plugins/meson.build b/plugins/meson.build
+index e9fffe64..1937e7c0 100644
+--- a/plugins/meson.build
++++ b/plugins/meson.build
+@@ -87,6 +87,7 @@ if get_option('lockscreen-plugins') or get_option('quick-setting-plugins')
+       libhandy_dep,
+       libnm_dep,
+       phosh_plugins_dep,
++      gio_unix_dep
+     ],
+   )
+ 
+-- 
+2.49.0
+
