@@ -6,16 +6,17 @@
   gcc-unwrapped,
   wayland,
   libxkbcommon,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlgreet";
   version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
-    repo = pname;
-    rev = version;
+    repo = "wlgreet";
+    rev = finalAttrs.version;
     hash = "sha256-TQTHFBOTxtSuzrAG4cjZ9oirl80xc0rPdYeLJ0t39DQ=";
   };
 
@@ -30,12 +31,14 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Raw wayland greeter for greetd, to be run under sway or similar";
     mainProgram = "wlgreet";
     homepage = "https://git.sr.ht/~kennylevinsen/wlgreet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})
