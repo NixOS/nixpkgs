@@ -39,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     xtrans
   ];
 
-  propagatedBuildInputs = [ xorgproto ];
+  propagatedBuildInputs = [
+    xorgproto
+    libxcb
+  ];
 
   configureFlags =
     lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-malloc0returnsnull"
