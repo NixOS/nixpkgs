@@ -705,11 +705,11 @@
     "vendorHash": "sha256-ctd9V5EXL0c9b4aJ47nfjhqCMTewL55IkjkQ39ShoUk="
   },
   "kafka": {
-    "hash": "sha256-Onyy+KgmgLYk3J1P4rhHDJ7uEb+9jbywkY7lbfdQ2Vs=",
+    "hash": "sha256-Z+WRuLumEjN6fGa91pKrFzc4I/5XwNFLh3rJ9Dob3x8=",
     "homepage": "https://registry.terraform.io/providers/Mongey/kafka",
     "owner": "Mongey",
     "repo": "terraform-provider-kafka",
-    "rev": "v0.12.0",
+    "rev": "v0.12.1",
     "spdx": "MIT",
     "vendorHash": "sha256-kkaNv+c6IGAW+amSSycjBmUCFXBeQrcF5Jmvtl8bXAE="
   },
