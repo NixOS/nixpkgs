@@ -7890,6 +7890,8 @@ self: super: with self; {
 
   langgraph-prebuilt = callPackage ../development/python-modules/langgraph-prebuilt { };
 
+  langgraph-runtime-inmem = callPackage ../development/python-modules/langgraph-runtime-inmem { };
+
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
 
   langid = callPackage ../development/python-modules/langid { };
