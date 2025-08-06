@@ -23,14 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-chPmwJ+tUJoRK5xX9+r6mbYf95ZbX4Z3mP6Ra19nBxM=";
   };
 
-  # 1.5.24 (now 1.5.25) only affects non-cpython builds
-  # upgrade: https://github.com/NixOS/nixpkgs/pull/431547
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "blockbuster>=1.5.24,<2.0.0" \
-     "blockbuster>=1.5.23,<2.0.0"
-  '';
-
   build-system = [
     hatchling
   ];
@@ -42,6 +34,12 @@ buildPythonPackage rec {
     sse-starlette
     starlette
     structlog
+  ];
+
+  # Can remove after blockbuster version bump
+  # https://github.com/NixOS/nixpkgs/pull/431547
+  pythonRelaxDeps = [
+    "blockbuster"
   ];
 
   pythonImportsCheck = [

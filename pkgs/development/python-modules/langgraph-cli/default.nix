@@ -8,7 +8,10 @@
 
   # dependencies
   click,
+  langgraph,
+  langgraph-runtime-inmem,
   langgraph-sdk,
+  python-dotenv,
 
   # testing
   pytest-asyncio,
@@ -40,21 +43,20 @@ buildPythonPackage rec {
     langgraph-sdk
   ];
 
-  # Not yet. Depemnds on `langgraph-runtime-inmem` which isn't in github yet
-  # https://github.com/langchain-ai/langgraph/issues/5802
-  # optional-dependencies = {
-  #   "inmem" = [
-  #     langgraph-api
-  #     langgraph-runtime-inmem
-  #     python-dotenv
-  #   ]
-  # }
+  optional-dependencies = {
+    "inmem" = [
+      langgraph
+      langgraph-runtime-inmem
+      python-dotenv
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     docker-compose
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
