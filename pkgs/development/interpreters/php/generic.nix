@@ -220,6 +220,7 @@ let
       };
     in
     stdenv.mkDerivation (
+      finalAttrs:
       let
         attrs = {
           pname = "php";
@@ -390,6 +391,7 @@ let
 
             services.default = {
               imports = [ ./service.nix ];
+              php-fpm.package = lib.mkDefault finalAttrs.finalPackage;
             };
           };
 
