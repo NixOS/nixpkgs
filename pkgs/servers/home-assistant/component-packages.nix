@@ -3323,7 +3323,8 @@
       ];
     "london_underground" =
       ps: with ps; [
-      ]; # missing inputs: london-tube-status
+        london-tube-status
+      ];
     "lookin" =
       ps: with ps; [
         aiolookin
@@ -7273,6 +7274,7 @@
     "logentries"
     "logger"
     "london_air"
+    "london_underground"
     "lookin"
     "loqed"
     "lovelace"
