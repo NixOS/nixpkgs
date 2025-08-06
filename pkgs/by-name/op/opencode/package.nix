@@ -7,7 +7,6 @@
   models-dev,
   nix-update-script,
   testers,
-  tree-sitter,
   writableTmpDirAsHomeHook,
 }:
 
@@ -27,12 +26,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.3.122";
+  version = "0.3.132";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JsyUXRfMQ40qQwtaW0Ebh/HlHqzb2D8AvsyJm5Yjm8E=";
+    hash = "sha256-g++ByI4akYfOTHLhrgm3us77N0jeZwuQIt1mHOLh0GM=";
   };
 
   tui = buildGoModule {
@@ -41,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     modRoot = "packages/tui";
 
-    vendorHash = "sha256-nBwYVaBau1iTnPY3d5F/5/ENyjMCikpQYNI5whEJwBk=";
+    vendorHash = "sha256-qsOL6gsZwEm7YcYO/zoyJAnVmciCjPYqPavV77psybU=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -108,8 +107,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     outputHashMode = "recursive";
   };
 
-  buildInputs = [ tree-sitter ];
-
   nativeBuildInputs = [
     bun
     models-dev
@@ -135,13 +132,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     bun build \
+      --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
       --define OPENCODE_VERSION="'${finalAttrs.version}'" \
       --compile \
-      --minify \
       --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
       --outfile=opencode \
       ./packages/opencode/src/index.ts \
-      ${finalAttrs.tui}/bin/tui
 
     runHook postBuild
   '';
