@@ -2475,35 +2475,8 @@ with haskellLib;
     })
   ] super.krank;
 
-  hermes-json = overrideCabal (drv: {
-    # 2025-02-11: Upper bounds on hedgehog < 1.5 too strict.
-    jailbreak = true;
-
-    # vendored simdjson breaks with clang-19. apply patches that work with
-    # a more recent simdjson so we can un-vendor it
-    patches = drv.patches or [ ] ++ [
-      (fetchpatch {
-        url = "https://github.com/velveteer/hermes/commit/6fd9904d93a5c001aadb27c114345a6958904d71.patch";
-        hash = "sha256-Pv09XP0/VjUiAFp237Adj06PIZU21mQRh7guTlKksvA=";
-        excludes = [
-          ".github/*"
-          "hermes-bench/*"
-        ];
-      })
-      (fetchpatch {
-        url = "https://github.com/velveteer/hermes/commit/ca8dddbf52f9d7788460a056fefeb241bcd09190.patch";
-        hash = "sha256-tDDGS0QZ3YWe7+SP09wnxx6lIWL986ce5Zhqr7F2sBk=";
-        excludes = [
-          "README.md"
-          ".github/*"
-          "hermes-bench/*"
-        ];
-      })
-    ];
-    postPatch = drv.postPatch or "" + ''
-      ln -fs ${pkgs.simdjson.src} simdjson
-    '';
-  }) super.hermes-json;
+  # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
+  hermes-json = doJailbreak super.hermes-json;
 
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
@@ -2657,13 +2630,6 @@ with haskellLib;
   # Too strict bounds on tasty <1.5 and tasty-quickcheck <0.11
   # https://github.com/phadej/aeson-extra/issues/62
   aeson-extra = doJailbreak super.aeson-extra;
-
-  # Fixes build of test suite: not yet released
-  primitive-unlifted = appendPatch (fetchpatch {
-    url = "https://github.com/haskell-primitive/primitive-unlifted/commit/26922952ef20c4771d857f3e96c9e710cb3c2df9.patch";
-    sha256 = "0h9xxrv78spqi93l9206398gmsliaz0w6xy37nrvx3daqr1y4big";
-    excludes = [ "*.cabal" ];
-  }) super.primitive-unlifted;
 
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
@@ -2874,12 +2840,6 @@ with haskellLib;
 
   # 2024-03-25: HSH broken because of the unix-2.8.0.0 breaking change
   HSH = appendPatches [ ./patches/HSH-unix-openFd.patch ] super.HSH;
-
-  # Support unix < 2.8 to build in older ghc than 9.6
-  linux-namespaces = appendPatch (fetchpatch {
-    url = "https://github.com/redneb/hs-linux-namespaces/commit/f4a3546541bb6c7172fdd03e177a961da60e3951.patch";
-    sha256 = "sha256-6Qv7NWIbzR3ktMGFogw5597bIqPH7Z4hoFvvBQAoquY=";
-  }) super.linux-namespaces;
 
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
