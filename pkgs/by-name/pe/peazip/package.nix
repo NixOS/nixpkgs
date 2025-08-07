@@ -15,17 +15,24 @@
   writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation rec {
+let
+  # peazip looks for the "7z", not "7zz"
+  _7z = runCommand "7z" { } ''
+    mkdir -p $out/bin
+    ln -s ${_7zz}/bin/7zz $out/bin/7z
+  '';
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
   version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-oRgsT2j5P6jbaBAgLMGArJ+pCVSgC/CJcHM45mRw6Bs=";
   };
-  sourceRoot = "${src.name}/peazip-sources";
+  sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
   postPatch = ''
     # set it to use compression programs from $PATH
@@ -48,7 +55,7 @@ stdenv.mkDerivation rec {
     libqtpas
   ]);
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   buildPhase = ''
     pushd dev
@@ -56,12 +63,6 @@ stdenv.mkDerivation rec {
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_peach.lpi
     popd
-  '';
-
-  # peazip looks for the "7z", not "7zz"
-  _7z = runCommand "7z" { } ''
-    mkdir -p $out/bin
-    ln -s ${_7zz}/bin/7zz $out/bin/7z
   '';
 
   installPhase = ''
@@ -122,4 +123,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "peazip";
   };
-}
+})
