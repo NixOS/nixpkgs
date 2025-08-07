@@ -84,5 +84,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/mpenning/ciscoconfparse2/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+    # https://github.com/mpenning/ciscoconfparse2/issues/19
+    broken = lib.versionAtLeast hier-config.version "3";
   };
 }
