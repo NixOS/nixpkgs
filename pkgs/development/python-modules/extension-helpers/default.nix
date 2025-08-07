@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pip,
+  build,
+  cython,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
   setuptools,
   tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -32,8 +34,10 @@ buildPythonPackage rec {
   dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
+    build
+    cython
     pytestCheckHook
-    pip
+    wheel
   ];
 
   pythonImportsCheck = [ "extension_helpers" ];
@@ -43,6 +47,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_only_pyproject"
+    # ModuleNotFoundError
+    "test_no_setup_py"
   ];
 
   meta = with lib; {
