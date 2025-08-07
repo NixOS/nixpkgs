@@ -5,25 +5,24 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osqp";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oxfordcontrol";
     repo = "osqp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BOAytzJzHcggncQzeDrXwJOq8B3doWERJ6CKIVg1yJY=";
-    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Quadratic programming solver using operator splitting";
     homepage = "https://osqp.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ taktoa ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ taktoa ];
+    platforms = lib.platforms.all;
   };
-}
+})
