@@ -31828,6 +31828,23 @@ with self;
     };
   };
 
+  SubCurrent = buildPerlPackage {
+    pname = "Sub-Current";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RG/RGARCIA/Sub-Current-0.03.tar.gz";
+      hash = "sha256-xqgATQAVlbHPdkueQJxfJFyD2qJJDuG7vlcM58aV5hA=";
+    };
+    meta = {
+      description = "Get the current subroutine";
+      homepage = "https://github.com/rgs/p5-Sub-Current";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   SubExporter = buildPerlPackage {
     pname = "Sub-Exporter";
     version = "0.990";
