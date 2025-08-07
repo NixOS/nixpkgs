@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "python-pkcs11";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danni";
