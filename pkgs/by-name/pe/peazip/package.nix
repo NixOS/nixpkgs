@@ -12,6 +12,7 @@
   upx,
   zpaq,
   zstd,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
     lazarus
     fpc
+    # lazarus tries to create files in $HOME/.lazarus
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -48,8 +51,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
-    # lazarus tries to create files in $HOME/.lazarus
-    export HOME=$(mktemp -d)
     pushd dev
     lazbuild --lazarusdir=${lazarus}/share/lazarus --add-package metadarkstyle/metadarkstyle.lpk
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
