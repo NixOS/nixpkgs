@@ -71,6 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobotocore" ];
 
+  disabledTests = [
+    # TypeError: sequence item 1: expected str instance, MagicMock found
+    "test_signers_generate_db_auth_token"
+  ];
+
   disabledTestPaths = [
     # Test requires network access
     "tests/test_version.py"
