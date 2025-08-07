@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  jinja2,
   mock,
   packaging,
   ply,
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    jinja2
     ply
     six
     packaging
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stone" ];
 
   meta = with lib; {
-    description = "Official Api Spec Language for Dropbox";
+    description = "Official API Spec Language for Dropbox API V2";
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
     license = licenses.mit;
