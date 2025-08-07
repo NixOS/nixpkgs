@@ -258,6 +258,32 @@ with self;
     };
   };
 
+  AlgorithmCombinatorics = buildPerlPackage {
+    pname = "Algorithm-Combinatorics";
+    version = "0.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FX/FXN/Algorithm-Combinatorics-0.27.tar.gz";
+      hash = "sha256-g3jaOezbN9XMicwTCjsTU/111Wx2kJBWc0c/5MJc0TI=";
+    };
+    buildInputs = [
+      ExtUtilsMakeMaker
+    ];
+    propagatedBuildInputs = [
+      ScalarListUtils
+    ];
+    checkInputs = [
+      TestPod
+      TestPodCoverage
+    ];
+    meta = {
+      description = "Efficient generation of combinatorial sequences";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   AlgorithmDiff = buildPerlPackage {
     pname = "Algorithm-Diff";
     version = "1.1903";
