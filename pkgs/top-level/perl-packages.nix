@@ -23706,6 +23706,26 @@ with self;
     };
   };
 
+  MooseXArrayRef = buildPerlPackage {
+    pname = "MooseX-ArrayRef";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooseX-ArrayRef-0.005.tar.gz";
+      hash = "sha256-jyGAq8vBEL7dkYLk6j54Ut8V85rkncPa3QILCB/86gg=";
+    };
+    propagatedBuildInputs = [
+      Moose
+    ];
+    meta = {
+      description = "Blessed arrayrefs with Moose";
+      homepage = "https://github.com/tobyink/p5-moosex-arrayref";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   MooseXStorageFormatJSONpm = buildPerlPackage {
     pname = "MooseX-Storage-Format-JSONpm";
     version = "0.093094";
