@@ -3280,6 +3280,44 @@ with self;
     };
   };
 
+  CassandraClient = buildPerlPackage {
+    pname = "Cassandra-Client";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TV/TVDW/Cassandra-Client-0.21.tar.gz";
+      hash = "sha256-csKllW4ezxCLZkb9XdSgM4CaBElkEzBXMz6qZ1+7vgQ=";
+    };
+    propagatedBuildInputs = [
+      AnyEvent
+      AnyEventXSPromises
+      Clone
+      DevelGlobalDestruction
+      EV
+      Encode
+      IO
+      IOSocketINET6
+      NetSSLeay
+      RefUtil
+      ScalarListUtils
+      SubCurrent
+    ];
+    checkInputs = [
+      AnyEvent
+      CompressLZ4
+      CompressSnappy
+      DevelCycle
+      TestException
+    ];
+    meta = {
+      description = "Perl library for accessing Cassandra using its binary network protocol";
+      homepage = "https://github.com/tvdw/perl-dbd-cassandra";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CatalystActionRenderView = buildPerlPackage {
     pname = "Catalyst-Action-RenderView";
     version = "0.16";
