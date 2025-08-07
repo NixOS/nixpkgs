@@ -22,7 +22,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_jenkins";
+    inherit version;
     hash = "sha256-j0dhw5GsEejB8j93EBCSDBBEBJdwWrcXXVI1j1oS3Jg=";
   };
 
