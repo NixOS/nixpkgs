@@ -35,6 +35,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # broken import; https://github.com/getbrevo/brevo-python/issues/2
+    "test/test_configuration.py"
+  ];
+
   pythonImportsCheck = [ "brevo_python" ];
 
   meta = {
