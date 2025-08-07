@@ -8,6 +8,7 @@
   aiohttp,
   attrs,
   defusedxml,
+  pytest-asyncio_0,
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio_0
     pytest-aiohttp
     pytest-mock
     pytestCheckHook
