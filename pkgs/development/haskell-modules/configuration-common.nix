@@ -871,7 +871,6 @@ with haskellLib;
   DigitalOcean = dontCheck super.DigitalOcean;
   directory-layout = dontCheck super.directory-layout;
   dom-selector = dontCheck super.dom-selector; # http://hydra.cryp.to/build/497670/log/raw
-  dotenv = dontCheck super.dotenv; # Tests fail because of missing test file on version 0.8.0.2 fixed on version 0.8.0.4
   dotfs = dontCheck super.dotfs; # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG; # http://hydra.cryp.to/build/498245/nixlog/1/raw
   ed25519 = dontCheck super.ed25519;
