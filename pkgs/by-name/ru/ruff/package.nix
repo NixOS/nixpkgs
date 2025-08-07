@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.12.5";
+  version = "0.12.8";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-A+ivcL8c1K+IXbtrL1v4i0iRU6urBMvPbs01ZJNRLpM=";
+    hash = "sha256-ypYtAUQBFSf+cgly9K5eRMegtWrRmLmqrgfRmCJvXEk=";
   };
 
   # Patch out test that fails due to ANSI escape codes being written as-is,
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  cargoHash = "sha256-pnYXqJ2Za8Y5RqSB4UL/VITCmY4EGQDTTLklyqJdB5w=";
+  cargoHash = "sha256-0iYwS8Ssi4JDxwr0Q2+iKvYHb179L6BiiuXa2D4qiOA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
