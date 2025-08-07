@@ -124,6 +124,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
     description = "NVIDIA Container Toolkit";
+    mainProgram = "nvidia-ctk";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [
