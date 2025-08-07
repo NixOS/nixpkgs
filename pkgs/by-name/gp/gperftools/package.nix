@@ -10,21 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gperftools";
-  version = "2.15";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "gperftools";
     repo = "gperftools";
     rev = "gperftools-${version}";
-    sha256 = "sha256-3ibr8AHzo7txX1U+9oOWA60qeeJs/OGeevv+sgBwQa0=";
+    hash = "sha256-Tm+sYKwFSHAxOALgr9UGv7vBMlWqUymXsvNu7Sku6Kk=";
   };
 
   patches = [
     # Add the --disable-general-dynamic-tls configure option:
     # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gperftools/raw/f62d87a34f56f64fb8eb86727e34fbc2d3f5294a/f/gperftools-2.7.90-disable-generic-dynamic-tls.patch";
-      sha256 = "02falhpaqkl27hl1dib4yvmhwsddmgbw0krb46w31fyf3awb2ydv";
+      url = "https://src.fedoraproject.org/rpms/gperftools/raw/88ce8ee43a12b1a8146781a1b4d9abbd8df8af0e/f/gperftools-2.17-disable-generic-dynamic-tls.patch";
+      hash = "sha256-IOLUf9mCEA+fVSJKU94akcnXTIm7+t+S9cjBHsEDwFA=";
     })
   ];
 
