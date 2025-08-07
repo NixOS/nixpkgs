@@ -6659,6 +6659,23 @@ with self;
     };
   };
 
+  CookieBakerXS = buildPerlPackage {
+    pname = "Cookie-Baker-XS";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Cookie-Baker-XS-0.12.tar.gz";
+      hash = "sha256-coK9uDb3pvtkU1eM9nS8YWhA4he+FtuEEGCvPb/Ze+s=";
+    };
+    meta = {
+      description = "Boost Cookie::Baker's crush_cookie";
+      homepage = "https://github.com/kazeburo/Cookie-Baker-XS";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CookieXS = buildPerlPackage {
     pname = "Cookie-XS";
     version = "0.11";
