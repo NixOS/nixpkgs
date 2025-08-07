@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.8.1";
+  version = "3.9.1";
   pname = "asgiref";
   format = "setuptools";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "asgiref";
     tag = version;
-    hash = "sha256-xepMbxglBpHL7mnJYlnvNUgixrFwf/Tc6b1zL4Wy+to=";
+    hash = "sha256-VD8OQP+Xq3JpUz3fZRl6g+SL7mGZjeHjOU9Cd+scYzc=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];
