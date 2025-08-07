@@ -7,23 +7,15 @@
 
 stdenv.mkDerivation rec {
   pname = "osqp";
-  version = "0.6.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oxfordcontrol";
     repo = "osqp";
     tag = "v${version}";
-    hash = "sha256-enkK5EFyAeLaUnHNYS3oq43HsHY5IuSLgsYP0k/GW8c=";
+    hash = "sha256-BOAytzJzHcggncQzeDrXwJOq8B3doWERJ6CKIVg1yJY=";
     fetchSubmodules = true;
   };
-
-  # ref https://github.com/osqp/osqp/pull/481
-  # but this patch does not apply directly on v0.6.3
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "$<INSTALL_PREFIX>/\''${CMAKE_INSTALL_INCLUDEDIR}" \
-      "\''${CMAKE_INSTALL_FULL_INCLUDEDIR}"
-  '';
 
   nativeBuildInputs = [ cmake ];
 
