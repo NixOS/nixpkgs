@@ -3060,6 +3060,25 @@ with self;
     };
   };
 
+  CacheLRU = buildPerlPackage {
+    pname = "Cache-LRU";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAZUHO/Cache-LRU-0.04.tar.gz";
+      hash = "sha256-GjjWI2Xe2JMVVoqAwx9b938TML8gRjzhGjWmSJpqvcQ=";
+    };
+    checkInputs = [
+      TestRequires
+    ];
+    meta = {
+      description = "A simple, fast implementation of LRU cache in pure perl";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CacheMemcached = buildPerlPackage {
     pname = "Cache-Memcached";
     version = "1.30";
