@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   hatch-fancy-pypi-readme,
@@ -80,6 +81,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_copy_build_request"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs
+    # https://github.com/anthropics/anthropic-sdk-python/issues/1008
+    "test_get_platform"
   ];
 
   disabledTestPaths = [

@@ -57,6 +57,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # assert 1.0000000000000004 == 1.0000000000000002
+    # https://github.com/langchain-ai/langgraph/issues/5845
+    "test_embed_with_path"
+  ];
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "checkpoint==";
   };

@@ -102,6 +102,7 @@ let
         NetAmazonS3
         NetPrometheus
         NetStatsd
+        NumberBytesHuman
         PadWalker
         ParallelForkManager
         PerlCriticCommunity
@@ -130,14 +131,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-07-17";
+  version = "0-unstable-2025-08-05";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "b812bb5017cac055fa56ffeac5440b6365830d67";
-    hash = "sha256-XmoecWRUvUX8jf0U0cGyP4AfLHb0D2D4Ec69jqwrWVI=";
+    rev = "79ba8fdd04ba53826aa9aaba6e25fd0d6952b3b3";
+    hash = "sha256-h8UNR3LVrD313iX1OazDwIcMLksh0p6oJv9msEfjS0E=";
   };
 
   outputs = [
