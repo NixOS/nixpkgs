@@ -5,6 +5,7 @@
   pythonOlder,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-SMdILvCVXMe3Tlf3kK54VfEKsQ/KvpBZK3xZ4zVwcfo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
