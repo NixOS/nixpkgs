@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   packaging,
   pycryptodome,
 }:
@@ -9,14 +10,18 @@
 buildPythonPackage rec {
   pname = "solc-select";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lPtvl2q1D/zMV1fVvq92QXsny+FUNs/iswzbg49cdRY=";
+  src = fetchFromGitHub {
+    owner = "crytic";
+    repo = "solc-select";
+    tag = "v${version}";
+    hash = "sha256-ZB9WM6YTWEqfs5y1DqxbSADiFw997PHIR9uVSjJg1/E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     pycryptodome
   ];
