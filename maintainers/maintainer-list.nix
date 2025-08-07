@@ -20315,6 +20315,17 @@
     github = "ppenguin";
     githubId = 17690377;
   };
+  ppentchev = {
+    name = "Peter Pentchev";
+    email = "roam@ringlet.net";
+    github = "ppentchev";
+    githubId = 453114;
+    keys = [
+      {
+        fingerprint = "2EE7 A7A5 17FC 124C F115  C354 651E EFB0 2527 DF13";
+      }
+    ];
+  };
   ppom = {
     name = "ppom";
     email = "ppom@ecomail.fr";
