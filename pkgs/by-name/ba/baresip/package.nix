@@ -29,21 +29,29 @@
   zlib,
   dbusSupport ? true,
 }:
+
 stdenv.mkDerivation rec {
-  version = "3.10.1";
+  version = "3.24.0";
   pname = "baresip";
+
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    hash = "sha256-0huZP1hopHaN5R1Hki6YutpvoASfIHzHMl/Y4czHHMo=";
+    hash = "sha256-32XyMblHF+ST+TpIbdyPFdRtWnIugYMr4lYZnfeFm/c=";
   };
+
+  patches = [
+    ./fix-modules-path.patch
+  ];
+
   prePatch = ''
     substituteInPlace cmake/FindGTK3.cmake --replace-fail GTK3_CFLAGS_OTHER ""
   ''
   + lib.optionalString (!dbusSupport) ''
     substituteInPlace cmake/modules.cmake --replace-fail 'list(APPEND MODULES ctrl_dbus)' ""
   '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -102,72 +110,75 @@ stdenv.mkDerivation rec {
     -D__need_timeval -D__need_timespec -D__need_time_t
   '';
 
-  doInstallCheck = true;
   # CMake feature detection is prone to breakage between upgrades:
   # spot-check that the optional modules we care about were compiled
-  postInstallCheck = lib.concatMapStringsSep "\n" (m: "test -x $out/lib/baresip/modules/${m}.so") [
-    "account"
-    "alsa"
-    "aubridge"
-    "auconv"
-    "aufile"
-    "auresamp"
-    "ausine"
-    "avcodec"
-    "avfilter"
-    "avformat"
-    "cons"
-    "contact"
-    "ctrl_dbus"
-    "ctrl_tcp"
-    "debug_cmd"
-    "dtls_srtp"
-    "ebuacip"
-    "echo"
-    "evdev"
-    "fakevideo"
-    "g711"
-    "g722"
-    "g726"
-    "gst"
-    "gtk"
-    "httpd"
-    "httpreq"
-    "ice"
-    "l16"
-    "menu"
-    "mixausrc"
-    "mixminus"
-    "multicast"
-    "mwi"
-    "natpmp"
-    "netroam"
-    "pcp"
-    "pipewire"
-    "plc"
-    "portaudio"
-    "presence"
-    "rtcpsummary"
-    "sdl"
-    "selfview"
-    "serreg"
-    "snapshot"
-    "sndfile"
-    "srtp"
-    "stdio"
-    "stun"
-    "swscale"
-    "syslog"
-    "turn"
-    "uuid"
-    "v4l2"
-    "vidbridge"
-    "vidinfo"
-    "vp8"
-    "vp9"
-    "vumeter"
-    "x11"
-  ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+    ${lib.concatMapStringsSep "\n" (m: "test -x $out/lib/baresip/modules/${m}.so") [
+      "account"
+      "alsa"
+      "aubridge"
+      "auconv"
+      "aufile"
+      "auresamp"
+      "ausine"
+      "avcodec"
+      "avfilter"
+      "avformat"
+      "cons"
+      "contact"
+      "ctrl_dbus"
+      "ctrl_tcp"
+      "debug_cmd"
+      "dtls_srtp"
+      "ebuacip"
+      "echo"
+      "evdev"
+      "fakevideo"
+      "g711"
+      "g722"
+      "g726"
+      "gst"
+      "gtk"
+      "httpd"
+      "httpreq"
+      "ice"
+      "l16"
+      "menu"
+      "mixausrc"
+      "mixminus"
+      "multicast"
+      "mwi"
+      "natpmp"
+      "netroam"
+      "pcp"
+      "pipewire"
+      "plc"
+      "portaudio"
+      "presence"
+      "rtcpsummary"
+      "sdl"
+      "selfview"
+      "serreg"
+      "snapshot"
+      "sndfile"
+      "srtp"
+      "stdio"
+      "stun"
+      "swscale"
+      "syslog"
+      "turn"
+      "uuid"
+      "v4l2"
+      "vidbridge"
+      "vidinfo"
+      "vp8"
+      "vp9"
+      "vumeter"
+      "x11"
+    ]}
+    runHook postInstallCheck
+  '';
 
   meta = {
     description = "Modular SIP User-Agent with audio and video support";
@@ -175,6 +186,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       raskin
       ehmry
+      rnhmjoj
     ];
     mainProgram = "baresip";
     license = lib.licenses.bsd3;
