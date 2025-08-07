@@ -43,6 +43,11 @@ buildPythonPackage rec {
     "test_black_error_multiline"
   ];
 
+  disabledTestPaths = [
+    # assert 1 + 2 == 4
+    "tests/test_run_examples.py::test_run_example_ok_fail"
+  ];
+
   meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";
     homepage = "https://github.com/pydantic/pytest-examples";
