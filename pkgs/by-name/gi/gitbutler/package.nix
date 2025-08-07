@@ -34,14 +34,14 @@ let
   ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
   version = "0.15.10";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
-    tag = "release/${version}";
+    tag = "release/${finalAttrs.version}";
     hash = "sha256-6sRSH7OSprOsRMoORjy9HI8SoOAXqPak2kqtgRx2bWI=";
   };
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   # Deactivate the built-in updater
   postPatch = ''
     tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
-    jq '.version = "${version}" | .bundle.createUpdaterArtifacts = false' "$tauriConfRelease" | sponge "$tauriConfRelease"
+    jq '.version = "${finalAttrs.version}" | .bundle.createUpdaterArtifacts = false' "$tauriConfRelease" | sponge "$tauriConfRelease"
 
     tomlq -ti 'del(.lints) | del(.workspace.lints)' "$cargoDepsCopy"/gix*/Cargo.toml
 
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-H8YR+euwMGiGckURAWJIE9fOcu/ddJ6ENcnA1gHD9B8=";
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-I55RNWP6csT08SBIFEyUp9JTC5EzQXjKIPPSxkSpg7Y=";
   };
@@ -174,7 +174,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Git client for simultaneous branches on top of your existing workflow";
     homepage = "https://gitbutler.com";
-    changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${version}";
+    changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${finalAttrs.version}";
     license = lib.licenses.fsl11Mit;
     maintainers = with lib.maintainers; [
       getchoo
@@ -183,4 +183,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gitbutler-tauri";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
