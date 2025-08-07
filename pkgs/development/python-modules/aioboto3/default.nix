@@ -26,6 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-Z4tUwTFaXC3BGUKc1FPY0xoaUViAEiZNeP5REWotw2M=";
   };
 
+  # https://github.com/terricain/aioboto3/pull/377
+  patches = [ ./boto3-compat.patch ];
+
   pythonRelaxDeps = [
     "aiobotocore"
   ];
