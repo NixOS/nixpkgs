@@ -18348,6 +18348,8 @@ self: super: with self; {
 
   trie = callPackage ../development/python-modules/trie { };
 
+  triggercmd = callPackage ../development/python-modules/triggercmd { };
+
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trino-python-client = callPackage ../development/python-modules/trino-python-client { };
