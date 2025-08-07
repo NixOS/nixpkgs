@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "meerk40t";
-    repo = pname;
+    repo = "MeerK40t";
     tag = version;
     hash = "sha256-7igY6qEHDUAyyKK+T0WFNfGPYy8VnMLYaWHyBE8EMSs=";
   };
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   # https://github.com/meerk40t/meerk40t/blob/main/setup.py
-  propagatedBuildInputs =
+  dependencies =
     with python3Packages;
     [
       meerk40t-camera
@@ -75,12 +75,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${src.tag}";
+  meta = {
+    changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${version}";
     description = "MeerK40t LaserCutter Software";
     mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }
