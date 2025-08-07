@@ -27,7 +27,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/komari-monitor/komari-agent";
-    description = "A lightweight server probe for simple, efficient monitoring";
+    description = "Lightweight server probe for simple, efficient monitoring";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mlyxshi
