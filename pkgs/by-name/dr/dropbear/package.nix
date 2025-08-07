@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     (lib.concatStringsSep " ")
   ];
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--enable-wtmp=no"
+    "--enable-wtmpx=no"
+  ];
+
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlagsArray=(
