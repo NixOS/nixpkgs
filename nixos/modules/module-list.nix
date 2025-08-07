@@ -1683,6 +1683,7 @@
   ./services/web-apps/simplesamlphp.nix
   ./services/web-apps/slskd.nix
   ./services/web-apps/snipe-it.nix
+  ./services/web-apps/snips-sh.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/stash.nix
   ./services/web-apps/stirling-pdf.nix
