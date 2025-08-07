@@ -12649,8 +12649,6 @@ with pkgs;
 
   lenovo-legion = libsForQt5.callPackage ../os-specific/linux/lenovo-legion/app.nix { };
 
-  leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
-
   libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
 
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };

@@ -1,14 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   python3,
   fetchFromGitHub,
   makeWrapper,
-  wrapQtAppsHook,
   makeDesktopItem,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "leo-editor";
   version = "6.8.6.1";
 
@@ -22,7 +22,7 @@ mkDerivation rec {
   dontBuild = true;
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     makeWrapper
     python3
   ];
