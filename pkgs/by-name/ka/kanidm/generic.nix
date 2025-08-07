@@ -22,7 +22,7 @@
   pam,
   bashInteractive,
   rust-jemalloc-sys,
-  kanidm,
+  kanidmWithSecretProvisioning,
   # If this is enabled, kanidm will be built with two patches allowing both
   # oauth2 basic secrets and admin credentials to be provisioned.
   # This is NOT officially supported (and will likely never be),
@@ -35,14 +35,8 @@
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 
-  versionUnderscored = builtins.replaceStrings [ "." ] [ "_" ] (
-    lib.versions.majorMinor kanidm.version
-  );
-
-  provisionPatches = [
-    (./. + "/provision-patches/${versionUnderscored}/oauth2-basic-secret-modify.patch")
-    (./. + "/provision-patches/${versionUnderscored}/recover-account.patch")
-  ];
+  versionUnderscored =
+    finalAttrs: lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor finalAttrs.version);
 
   upgradeNote = ''
     Please upgrade by verifying `kanidmd domain upgrade-check` and choosing the
@@ -60,13 +54,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kanidm";
     repo = "kanidm";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     inherit hash;
   };
 
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
-  patches = lib.optionals enableSecretProvisioning provisionPatches;
+  patches = lib.optionals enableSecretProvisioning [
+    (./. + "/provision-patches/${versionUnderscored finalAttrs}/oauth2-basic-secret-modify.patch")
+    (./. + "/provision-patches/${versionUnderscored finalAttrs}/recover-account.patch")
+  ];
 
   postPatch =
     let
@@ -75,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       profile = {
         cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
       }
-      // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
+      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.5") {
         client_config_path = "/etc/kanidm/config";
         resolver_config_path = "/etc/kanidm/unixd";
         resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
@@ -136,24 +133,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      kanidm = nixosTests.kanidm versionUnderscored;
-      kanidm-provisioning = nixosTests.kanidm-provisioning versionUnderscored;
+      kanidm = nixosTests.kanidm (versionUnderscored finalAttrs);
+      kanidm-provisioning = nixosTests.kanidm-provisioning (versionUnderscored finalAttrs);
     };
 
     updateScript = lib.optionals (!enableSecretProvisioning) (nix-update-script {
       extraArgs = [
         "-vr"
-        "v(${lib.versions.major kanidm.version}\\.${lib.versions.minor kanidm.version}\\.[0-9]*)"
+        "v(${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\.[0-9]*)"
         "--override-filename"
-        "pkgs/by-name/ka/kanidm/${versionUnderscored}.nix"
+        "pkgs/by-name/ka/kanidm/${versionUnderscored finalAttrs}.nix"
       ];
     });
 
     inherit enableSecretProvisioning;
-    withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
+    # Unfortunately there is no such thing as finalAttrs.finalPackage.override,
+    # so we have to resort to this.
+    withSecretProvisioning = kanidmWithSecretProvisioning;
 
     eolMessage = lib.optionalString (eolDate != null) ''
-      kanidm ${lib.versions.majorMinor version} is deprecated and will reach end-of-life on ${eolDate}
+      kanidm ${lib.versions.majorMinor finalAttrs.version} is deprecated and will reach end-of-life on ${eolDate}
 
       ${upgradeNote}
     '';
@@ -163,7 +162,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
+    changelog = "https://github.com/kanidm/kanidm/releases/tag/v${finalAttrs.version}";
     description = "Simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = lib.licenses.mpl20;
@@ -174,7 +173,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     knownVulnerabilities = lib.optionals unsupported [
       ''
-        kanidm ${lib.versions.majorMinor version} has reached end-of-life.
+        kanidm ${lib.versions.majorMinor finalAttrs.version} has reached end-of-life.
 
         ${upgradeNote}
       ''
