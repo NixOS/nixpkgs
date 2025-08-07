@@ -6525,6 +6525,36 @@ with self;
     };
   };
 
+  ConvertPEM = buildPerlPackage {
+    pname = "Convert-PEM";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Convert-PEM-0.13.tar.gz";
+      hash = "sha256-eZ+jLCcAgfTmKSsN31GAlScQqKS+Ey6Qe9oxdqe9HCM=";
+    };
+    propagatedBuildInputs = [
+      ClassErrorHandler
+      ConvertASN1
+      CryptDES_EDE3
+      CryptX
+    ];
+    checkInputs = [
+      pkgs.openssl
+      CryptCamellia
+      CryptCamellia_PP
+      CryptIDEA
+      TestException
+    ];
+    meta = {
+      description = "Read/write encrypted ASN.1 PEM files";
+      homepage = "https://github.com/perl-Crypt-OpenPGP/Convert-PEM";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ConvertUU = buildPerlPackage {
     pname = "Convert-UU";
     version = "0.5201";
