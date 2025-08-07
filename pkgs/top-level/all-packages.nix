@@ -7486,8 +7486,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
-
   sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
 
   sqlmap = with python3Packages; toPythonApplication sqlmap;
