@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
-  importlib-metadata,
-  importlib-resources,
   mako,
   sqlalchemy,
   typing-extensions,
 
   # tests
-  pytest7CheckHook,
+  black,
+  pytestCheckHook,
   pytest-xdist,
   python-dateutil,
 }:
@@ -24,8 +22,6 @@ buildPythonPackage rec {
   pname = "alembic";
   version = "1.16.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,16 +34,13 @@ buildPythonPackage rec {
     mako
     sqlalchemy
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "alembic" ];
 
   nativeCheckInputs = [
-    pytest7CheckHook
+    black
+    pytestCheckHook
     pytest-xdist
     python-dateutil
   ];
