@@ -35,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = true; # incompatible with paramiko 4.0 https://github.com/pahaz/sshtunnel/issues/299
     description = "Pure python SSH tunnels";
     mainProgram = "sshtunnel";
     homepage = "https://github.com/pahaz/sshtunnel";
