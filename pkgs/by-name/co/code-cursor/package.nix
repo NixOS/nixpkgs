@@ -40,7 +40,7 @@ in
   commandLineArgs = finalCommandLineArgs;
 
   version = "1.3.9";
-  pname = "cursor";
+  pname = "code-cursor";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
