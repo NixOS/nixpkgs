@@ -39057,6 +39057,23 @@ with self;
     };
   };
 
+  XMLNamespaceFactory = buildPerlPackage {
+    pname = "XML-NamespaceFactory";
+    version = "1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERIGRIN/XML-NamespaceFactory-1.02.tar.gz";
+      hash = "sha256-lLbdDfSo3IzoNiPl0jQTQz/xoBowLoIVQlIZsewZuyM=";
+    };
+    meta = {
+      description = "Simple factory objects for SAX namespaced names";
+      homepage = "https://github.com/perigrin/xml-namespacefactory";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   XMLNamespaceSupport = buildPerlPackage {
     pname = "XML-NamespaceSupport";
     version = "1.12";
