@@ -38785,6 +38785,25 @@ with self;
     };
   };
 
+  XMLCommonNS = buildPerlPackage {
+    pname = "XML-CommonNS";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERIGRIN/XML-CommonNS-0.06.tar.gz";
+      hash = "sha256-5bQvoAI1tBtjBlaTU1mq7np7pkpq+NRdguQKqP7zGaE=";
+    };
+    propagatedBuildInputs = [
+      XMLNamespaceFactory
+    ];
+    meta = {
+      description = "A list of commonly used namespaces";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   XMLDescent = buildPerlModule {
     pname = "XML-Descent";
     version = "1.04";
