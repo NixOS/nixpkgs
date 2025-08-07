@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   psutil,
   pylibmc,
   pytest,
@@ -28,15 +27,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-kWgqb7+3/hZKUz7B3PnfxHZq6yU3JUeJ+mruqrMD/NE=";
   };
-
-  patches = [
-    # Replace distutils.spawn.find_executable with shutil.which, https://github.com/pytest-dev/pytest-services/pull/46
-    (fetchpatch {
-      name = "replace-distutils.patch";
-      url = "https://github.com/pytest-dev/pytest-services/commit/e0e2a85434a2dcbcc0584299c5b2b751efe0b6db.patch";
-      hash = "sha256-hvr7EedfjfonHDn6v2slwUBqz1xQoF7Ez/kqAhZRXEc=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools-scm
