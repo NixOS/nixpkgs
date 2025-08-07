@@ -504,6 +504,18 @@ self: super:
           # TODO(@sternenseemann): submit upstreamable patch resolving this
           # (this should be possible by also taking PREFIX into account).
           ./patches/git-annex-no-usr-prefix.patch
+
+          # Pick fix for git 2.50 related test suite failures from 10.20250630
+          # https://git-annex.branchable.com/bugs/test_suite_fail_with_git_2.50/
+          (pkgs.fetchpatch {
+            name = "git-annex-workaround-for-git-2.50.patch";
+            url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=fb155b1e3e59cc1f9cf8a4fe7d47cba49d1c81af";
+            sha256 = "sha256-w6eXW0JqshXTd0/tNPZ0fOW2SVmA90G5eFhsd9y05BI=";
+            excludes = [
+              "doc/**"
+              "CHANGELOG"
+            ];
+          })
         ];
 
         postPatch = ''
@@ -2809,6 +2821,15 @@ self: super:
 
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
+
+  # 2024-01-24: https://github.com/haskellari/tree-diff/issues/79
+  # exprParser fails to parse pretty printed structure correctly when the randomizer uses newlines (?)
+  tree-diff = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/parsec-ansi-wl-pprint/"
+    ];
+  }) super.tree-diff;
 
   # base <4.19
   # https://github.com/well-typed/large-records/issues/168
