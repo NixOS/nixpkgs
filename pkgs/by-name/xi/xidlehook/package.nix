@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     xorg.libX11
+    xorg.libxcb
     xorg.libXScrnSaver
     libpulseaudio
   ];
