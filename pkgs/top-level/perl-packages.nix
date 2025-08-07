@@ -18946,6 +18946,41 @@ with self;
     };
   };
 
+  LemonldapNGManager = buildPerlPackage {
+    pname = "Lemonldap-NG-Manager";
+    version = "2.21.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COUDOT/Lemonldap-NG-Manager-2.21.2.tar.gz";
+      hash = "sha256-lm0tRzd3+3r7cj3ALqu1agpW0jDolcAQkR/s86JVwgc=";
+    };
+    buildInputs = [
+      EmailSender
+      HashMergeSimple
+      IOString
+      NetSSLeay
+      RegexpCommon
+      TestOutput
+      TestPod
+    ];
+    propagatedBuildInputs = [
+      ConvertPEM
+      CryptOpenSSLRSA
+      HTMLTemplate
+      LWP
+      LWPProtocolHttps
+      LemonldapNGCommon
+      LemonldapNGHandler
+      MIMETools
+    ];
+    meta = {
+      description = "Perl extension for managing Lemonldap::NG Web-SSO system";
+      homepage = "https://lemonldap-ng.org/";
+      license = with lib.licenses; [
+        gpl2Plus
+      ];
+    };
+  };
+
   LEOCHARRECLI = buildPerlPackage {
     pname = "LEOCHARRE-CLI";
     version = "1.19";
