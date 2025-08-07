@@ -68,19 +68,22 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D dev/{pea,peazip} -t $out/lib/peazip
-    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
-      lib.makeBinPath [
-        _7z
-        brotli
-        upx
-        zpaq
-        zstd
-      ]
-    }
     mkdir -p $out/bin
-    ln -s $out/lib/peazip/{pea,peazip} $out/bin/
+    makeWrapper $out/lib/peazip/peazip $out/bin/peazip \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          _7z
+          brotli
+          upx
+          zpaq
+          zstd
+        ]
+      } \
+      ''${qtWrapperArgs[@]} # putting this here as to not have double wrapping
+    makeWrapper $out/lib/peazip/pea $out/bin/pea \
+      ''${qtWrapperArgs[@]} # putting this here as to not have double wrapping
 
-    mkdir -p $out/share/peazip $out/lib/peazip/res/share
+    mkdir -p $out/share/peazip $out/lib/peazip/res
     ln -s $out/share/peazip $out/lib/peazip/res/share
     cp -r res/share/{icons,lang,themes,presets} $out/share/peazip/
     # Install desktop entries
@@ -101,6 +104,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "File and archive manager";
