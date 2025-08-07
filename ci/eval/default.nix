@@ -14,10 +14,9 @@
   runCommand,
   writeShellScript,
   symlinkJoin,
-  time,
-  procps,
-  nix,
+  busybox,
   jq,
+  nix,
 }:
 
 let
@@ -48,9 +47,10 @@ let
     runCommand "attrpaths-superset.json"
       {
         src = nixpkgs;
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           nix
-          time
         ];
       }
       ''
@@ -131,11 +131,11 @@ let
     in
     runCommand "nixpkgs-eval-${evalSystem}"
       {
-        nativeBuildInputs = [
-          nix
-          time
-          procps
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           jq
+          nix
         ];
         env = {
           inherit evalSystem chunkSize;
@@ -206,7 +206,8 @@ let
     }:
     runCommand "combined-eval"
       {
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
           jq
         ];
       }
