@@ -37,6 +37,7 @@ buildPythonPackage {
   ];
   dontUseCmakeConfigure = true;
   env = {
+    FOO = "BAR";
     SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
       cmakeFlags
       ++ [
