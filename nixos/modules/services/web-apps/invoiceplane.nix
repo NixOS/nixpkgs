@@ -70,7 +70,7 @@ let
       postPatch = ''
         # Patch index.php file to load additional config file
         substituteInPlace index.php \
-          --replace-fail "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
+          --replace-fail "require __DIR__ . '/vendor/autoload.php';" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
       '';
 
       installPhase = ''
