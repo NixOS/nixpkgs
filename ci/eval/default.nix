@@ -160,9 +160,9 @@ let
         # Record and print stats on free memory and swap in the background
         (
           while true; do
-            availMemory=$(free -b | grep Mem | awk '{print $7}')
-            freeSwap=$(free -b | grep Swap | awk '{print $4}')
-            echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
+            availMemory=$(free -m | grep Mem | awk '{print $7}')
+            freeSwap=$(free -m | grep Swap | awk '{print $4}')
+            echo "Available memory: $(( availMemory )) MiB, free swap: $(( freeSwap )) MiB"
 
             if [[ ! -f "$out/${evalSystem}/min-avail-memory" ]] || (( availMemory < $(<$out/${evalSystem}/min-avail-memory) )); then
               echo "$availMemory" > $out/${evalSystem}/min-avail-memory
