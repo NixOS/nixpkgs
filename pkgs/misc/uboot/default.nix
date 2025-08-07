@@ -845,25 +845,15 @@ in
     # sf probe; sf update $loadaddr 0 80000
   };
 
-  ubootVisionFive2 =
-    let
-      opensbi_vf2 = opensbi.overrideAttrs (attrs: {
-        makeFlags = attrs.makeFlags ++ [
-          # Matches u-boot documentation: https://docs.u-boot.org/en/latest/board/starfive/visionfive2.html
-          "FW_TEXT_START=0x40000000"
-          "FW_OPTIONS=0"
-        ];
-      });
-    in
-    buildUBoot {
-      defconfig = "starfive_visionfive2_defconfig";
-      extraMeta.platforms = [ "riscv64-linux" ];
-      OPENSBI = "${opensbi_vf2}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
-      filesToInstall = [
-        "spl/u-boot-spl.bin.normal.out"
-        "u-boot.itb"
-      ];
-    };
+  ubootVisionFive2 = buildUBoot {
+    defconfig = "starfive_visionfive2_defconfig";
+    extraMeta.platforms = [ "riscv64-linux" ];
+    OPENSBI = "${opensbi}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
+    filesToInstall = [
+      "spl/u-boot-spl.bin.normal.out"
+      "u-boot.itb"
+    ];
+  };
 
   ubootWandboard = buildUBoot {
     defconfig = "wandboard_defconfig";

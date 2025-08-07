@@ -1721,8 +1721,6 @@ with pkgs;
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
 
-  grc = python3Packages.callPackage ../tools/misc/grc { };
-
   gremlin-console = callPackage ../applications/misc/gremlin-console {
     openjdk = openjdk11;
   };
@@ -10134,6 +10132,7 @@ with pkgs;
 
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
   kanidm_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix { kanidm = kanidm_1_6; };
+  kanidm_1_7 = callPackage ../by-name/ka/kanidm/1_7.nix { kanidm = kanidm_1_7; };
 
   kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
 
@@ -10142,6 +10141,10 @@ with pkgs;
   };
 
   kanidmWithSecretProvisioning_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix {
+    enableSecretProvisioning = true;
+  };
+
+  kanidmWithSecretProvisioning_1_7 = callPackage ../by-name/ka/kanidm/1_7.nix {
     enableSecretProvisioning = true;
   };
 
