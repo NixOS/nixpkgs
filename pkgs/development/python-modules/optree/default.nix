@@ -41,6 +41,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Fails because the 'test_treespec' module can't be found
     "test_treespec_pickle_missing_registration"
+    # optree import during tests raises CalledProcessError
+    "test_warn_deprecated_import"
+    "test_import_no_warnings"
+    "test_treespec_construct"
   ];
   pythonImportsCheck = [ "optree" ];
 
