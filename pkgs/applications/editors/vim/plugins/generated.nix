@@ -15103,6 +15103,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tiny-glimmer-nvim = buildVimPlugin {
+    pname = "tiny-glimmer.nvim";
+    version = "2025-07-01";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-glimmer.nvim";
+      rev = "60a632536e0741c9cecb892f89fbe65a270dc7c7";
+      sha256 = "0xa3ma6ps1q5766ib2iksc7bw8rpqn96llynb75njwj2kpadfcis";
+    };
+    meta.homepage = "https://github.com/rachartier/tiny-glimmer.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   tiny-inline-diagnostic-nvim = buildVimPlugin {
     pname = "tiny-inline-diagnostic.nvim";
     version = "2025-07-16";
