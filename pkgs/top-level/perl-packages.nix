@@ -29807,6 +29807,42 @@ with self;
     };
   };
 
+  RedisFast = buildPerlModule {
+    pname = "Redis-Fast";
+    version = "0.37";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHOGO/Redis-Fast-0.37.tar.gz";
+      hash = "sha256-9FZctiL4YR5K0q/eSAw1mAmVywZLfsUvk0/8wE2D1eI=";
+    };
+    buildInputs = [
+      pkgs.openssl
+      FileWhich
+      ModuleBuildXSUtil
+    ];
+    propagatedBuildInputs = [
+      TryTiny
+      IOSocketSSL
+    ];
+    checkInputs = [
+      pkgs.redis
+      ParallelForkManager
+      TestDeep
+      TestFatal
+      TestLeakTrace
+      TestSharedFork
+      TestTCP
+      TestUNIXSock
+    ];
+    meta = {
+      description = "Perl binding for Redis database";
+      homepage = "https://github.com/shogo82148/Redis-Fast";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   RefUtil = buildPerlPackage {
     pname = "Ref-Util";
     version = "0.204";
