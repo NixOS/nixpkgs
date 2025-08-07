@@ -13130,8 +13130,6 @@ with pkgs;
 
   parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
 
-  paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
-
   pekwm = callPackage ../by-name/pe/pekwm/package.nix {
     awk = gawk;
     grep = gnugrep;
