@@ -7,9 +7,7 @@
   ifaddr,
   lxml,
   mock,
-  nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "soco";
   version = "0.30.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SoCo";
@@ -49,12 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "soco" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "CLI and library to control Sonos speakers";
     homepage = "http://python-soco.com/";
-    changelog = "https://github.com/SoCo/SoCo/releases/tag/v${version}";
+    changelog = "https://github.com/SoCo/SoCo/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
   };
