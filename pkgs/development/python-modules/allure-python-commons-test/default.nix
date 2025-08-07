@@ -16,7 +16,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "allure_python_commons_test";
+    inherit version;
     hash = "sha256-5l/9K6ToYEGaYXOmVxB188wu9gQ+2cMHxfVNlX8Rz9g=";
   };
 
