@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "linkchecker";
-  version = "10.2.1";
+  version = "10.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linkchecker";
     repo = "linkchecker";
     tag = "v${version}";
-    hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
+    hash = "sha256-CzDShtqcGO2TP5qNVf2zkI3Yyh80I+pSVIFzmi3AaGQ=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -44,11 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_internet" # uses network, fails on Darwin (not sure why it doesn't fail on linux)
     "test_markdown" # uses sys.version_info for conditional testing
     "test_itms_services" # uses sys.version_info for conditional testing
-  ];
-
-  disabledTestPaths = [
-    "tests/checker/telnetserver.py"
-    "tests/checker/test_telnet.py"
   ];
 
   __darwinAllowLocalNetworking = true;
