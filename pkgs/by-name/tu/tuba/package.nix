@@ -12,6 +12,7 @@
   gtk4,
   libadwaita,
   json-glib,
+  gexiv2,
   glib,
   glib-networking,
   gnome,
@@ -24,25 +25,27 @@
   libsecret,
   libwebp,
   libspelling,
+  webkitgtk_6_0,
   webp-pixbuf-loader,
   icu,
   gst_all_1,
   clapper-unwrapped,
-  # clapper support is still experimental and has bugs.
-  # See https://github.com/GeopJr/Tuba/pull/931
-  clapperSupport ? false,
+  # TODO: Probably deprecate
+  # Clapper is the default as of v0.10.0
+  # See https://github.com/GeopJr/Tuba/releases/tag/v0.10.0
+  clapperSupport ? true,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-SQrk6zsn3zZQTIruqVfjzs5cNyT2pAvM8XNI8SmyFM0=";
+    hash = "sha256-q+AwtmvLf0AFrCK2YlRFrrXakULHLh749TV/iwapIlw=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gexiv2
     glib
     glib-networking
     gtksourceview5
@@ -70,6 +74,7 @@ stdenv.mkDerivation rec {
     libwebp
     libspelling
     icu
+    webkitgtk_6_0
   ]
   ++ (with gst_all_1; [
     gstreamer
