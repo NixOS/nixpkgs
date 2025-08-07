@@ -101,10 +101,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-    description = "Cross-platform file and archive manager";
   meta = {
+    description = "File and archive manager";
     longDescription = ''
-      Free Zip / Unzip software and Rar file extractor. Cross-platform file and archive manager.
+      Free Zip / Unzip software and Rar file extractor. File and archive manager.
 
       Features volume spanning, compression, authenticated encryption.
 
