@@ -20252,6 +20252,34 @@ with self;
     };
   };
 
+  LWPProtocolPSGI = buildPerlModule {
+    pname = "LWP-Protocol-PSGI";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/LWP-Protocol-PSGI-0.11.tar.gz";
+      hash = "sha256-pLxy9DdoQ/z7Je1UMjLokhM00TYp8kUYWZxEGUwacxI=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+    ];
+    propagatedBuildInputs = [
+      LWP
+      Parent
+      Plack
+    ];
+    checkInputs = [
+      TestRequires
+    ];
+    meta = {
+      description = "Override LWP's HTTP/HTTPS backend with your own PSGI application";
+      homepage = "https://github.com/miyagawa/LWP-Protocol-PSGI";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   LWPUserAgentCached = buildPerlPackage {
     pname = "LWP-UserAgent-Cached";
     version = "0.08";
