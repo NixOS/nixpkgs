@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   dependencies = [
     attrs
+    typing-extensions
   ]
   ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -60,7 +60,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     tomlkit
-    typing-extensions
     ujson
   ];
 
