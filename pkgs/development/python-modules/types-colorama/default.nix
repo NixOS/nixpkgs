@@ -11,7 +11,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "types_colorama";
+    inherit version;
     hash = "sha256-AlZdE9aJY9EiN9PzMPXs1iKjF597WxTufxYUYnDDV/U=";
   };
 
