@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  qdldl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BOAytzJzHcggncQzeDrXwJOq8B3doWERJ6CKIVg1yJY=";
   };
 
+  postPatch = ''
+    substituteInPlace algebra/_common/lin_sys/qdldl/qdldl.cmake --replace-fail \
+      "GIT_REPOSITORY https://github.com/osqp/qdldl.git" \
+      "URL ${qdldl.src}"
+  '';
+
   nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ qdldl ];
 
   meta = {
     description = "Quadratic programming solver using operator splitting";
