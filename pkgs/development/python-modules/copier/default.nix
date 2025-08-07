@@ -6,6 +6,8 @@
   fetchFromGitHub,
   funcy,
   git,
+  hatchling,
+  hatch-vcs,
   iteration-utilities,
   jinja2,
   jinja2-ansible-filters,
@@ -17,8 +19,6 @@
   packaging,
   pathspec,
   plumbum,
-  poetry-core,
-  poetry-dynamic-versioning,
   pydantic,
   pygments,
   pyyaml,
@@ -39,14 +39,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-pLGWAYlh3JKicOrKPB9PRzz46RyzyERN2aUI+tjdh9g=";
+    hash = "sha256-J+8MSlVKJb6Dr48pgy2OCBZpctGsVm23BcV4B9nk7o4=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
