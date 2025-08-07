@@ -12,7 +12,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyter_lsp";
+    inherit version;
     hash = "sha256-BWa9m7BP2eZ3SpN+0BUitVW6eL43vr73h8irIt5MA2E=";
   };
 
