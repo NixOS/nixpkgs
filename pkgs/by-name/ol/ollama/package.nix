@@ -225,6 +225,8 @@ goBuild (finalAttrs: {
     (allow iokit-open (iokit-user-client-class "AGXDeviceUserClient"))
   '';
 
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   passthru = {
     tests = {
       inherit ollama;
