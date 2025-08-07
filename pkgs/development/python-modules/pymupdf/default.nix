@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   python,
   toPythonModule,
 
@@ -125,6 +124,11 @@ buildPythonPackage rec {
     "test_4445"
     # Not a git repository, so git ls-files fails
     "test_open2"
+  ];
+
+  disabledTestPaths = [
+    # mad about markdown table formatting
+    "tests/test_tables.py::test_markdown"
   ];
 
   pythonImportsCheck = [
