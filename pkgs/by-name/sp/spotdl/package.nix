@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.11";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     tag = "v${version}";
-    hash = "sha256-9PlqnpUlV5b8g+lctGjVL1Xgf25SS5xqkDaa1bSlxpk=";
+    hash = "sha256-M+f7oenurB1zhEDu+d40gBW5Ld/Y8Q9Rr8amadwZA+Q=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
       websockets
       yt-dlp
       ytmusicapi
+      hatchling
     ]
     ++ python-slugify.optional-dependencies.unidecode;
 
