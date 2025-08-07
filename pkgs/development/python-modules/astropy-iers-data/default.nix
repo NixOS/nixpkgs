@@ -2,17 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "astropy-iers-data";
   version = "0.2025.8.4.0.42.59";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "astropy";
@@ -22,8 +19,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   pythonImportsCheck = [ "astropy_iers_data" ];
