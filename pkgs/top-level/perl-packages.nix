@@ -18859,6 +18859,61 @@ with self;
     };
   };
 
+  LemonldapNGCommon = buildPerlPackage {
+    pname = "Lemonldap-NG-Common";
+    version = "2.21.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COUDOT/Lemonldap-NG-Common-2.21.2.tar.gz";
+      hash = "sha256-E2UXnTepQ4fyp4i8vu7BB2hGppiqfmGnNP3/OxNHlkE=";
+    };
+    propagatedBuildInputs = [
+      ApacheSession
+      ApacheSessionBrowseable
+      CacheCache
+      ConfigIniFiles
+      ConvertBase32
+      ConvertPEM
+      CookieBakerXS
+      CryptOpenSSLRSA
+      CryptOpenSSLX509
+      CryptRijndael
+      CryptURandom
+      DBI
+      DigestHMAC
+      EmailAddressXS
+      JSON
+      JSONXS
+      LWP
+      LWPProtocolHttps
+      LogLog4perl
+      Mouse
+      NetCIDR
+      NetSSLeay
+      Plack
+      SOAPLite
+      StringRandom
+      TimeDate
+      URI
+      perlldap
+      XMLLibXML
+    ];
+    buildInputs = [
+      IOString
+      LWPProtocolPSGI
+      MIMETools
+      TestOutput
+      TestPod
+      TimeFake
+    ];
+    meta = {
+      description = "Common files for Lemonldap::NG infrastructure";
+      homepage = "https://lemonldap-ng.org/";
+      license = with lib.licenses; [
+        gpl2Plus
+      ];
+    };
+  };
+
   LEOCHARRECLI = buildPerlPackage {
     pname = "LEOCHARRE-CLI";
     version = "1.19";
