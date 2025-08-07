@@ -99,7 +99,7 @@ with lib;
         Compared to `listen` this only sets the addresses
         and the ports are chosen automatically.
 
-        Note: This option overrides `enableIPv6`
+        Note: This option overrides `networking.enableIPv6`
       '';
       default = [ ];
       example = [
