@@ -1,11 +1,12 @@
 {
+  python3Packages,
   lib,
   fetchFromGitHub,
-  python3,
   gettext,
+  pdfSupport ? true,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "linkchecker";
   version = "10.6.0";
   pyproject = true;
@@ -19,31 +20,36 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ gettext ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     hatchling
     hatch-vcs
     polib # translations
   ];
 
-  dependencies = with python3.pkgs; [
-    argcomplete
-    beautifulsoup4
-    dnspython
-    requests
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      argcomplete
+      beautifulsoup4
+      dnspython
+      requests
+    ]
+    ++ lib.optional pdfSupport pdfminer-six;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pyopenssl
     parameterized
     pytestCheckHook
+    pyftpdlib
   ];
 
+  # Needed for tests to be able to create a ~/.local/share/linkchecker/plugins directory
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   disabledTests = [
-    "TestLoginUrl"
     "test_timeit2" # flakey, and depends sleep being precise to the milisecond
-    "test_internet" # uses network, fails on Darwin (not sure why it doesn't fail on linux)
-    "test_markdown" # uses sys.version_info for conditional testing
-    "test_itms_services" # uses sys.version_info for conditional testing
   ];
 
   __darwinAllowLocalNetworking = true;
