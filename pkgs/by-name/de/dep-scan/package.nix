@@ -5,6 +5,7 @@
   writableTmpDirAsHomeHook,
   makeWrapper,
   cdxgen,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -67,6 +68,8 @@ python3Packages.buildPythonApplication rec {
       ]
     }"
   ];
+
+  passthru.tests = { inherit (nixosTests) dep-scan; };
 
   meta = {
     description = "Security and risk audit tool based on known vulnerabilities, advisories, and license limitations for project dependencies";
