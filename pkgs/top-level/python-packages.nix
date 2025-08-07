@@ -6584,6 +6584,8 @@ self: super: with self; {
 
   hkavr = callPackage ../development/python-modules/hkavr { };
 
+  hko = callPackage ../development/python-modules/hko { };
+
   hledger-utils = callPackage ../development/python-modules/hledger-utils { };
 
   hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
