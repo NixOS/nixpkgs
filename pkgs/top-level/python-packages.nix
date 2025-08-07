@@ -19903,6 +19903,8 @@ self: super: with self; {
 
   xarray = callPackage ../development/python-modules/xarray { };
 
+  xarray-dataclass = callPackage ../development/python-modules/xarray-dataclass { };
+
   xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
 
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
