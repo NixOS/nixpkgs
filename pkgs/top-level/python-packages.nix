@@ -10329,6 +10329,8 @@ self: super: with self; {
 
   nexusformat = callPackage ../development/python-modules/nexusformat { };
 
+  nexusrpc = callPackage ../development/python-modules/nexusrpc { };
+
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
   nftables = callPackage ../os-specific/linux/nftables/python.nix { inherit (pkgs) nftables; };
