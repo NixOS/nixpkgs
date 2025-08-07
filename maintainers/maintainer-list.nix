@@ -5966,6 +5966,12 @@
     githubId = 58050402;
     name = "Jost Alemann";
   };
+  DDoSolitary = {
+    email = "DDoSolitary@gmail.com";
+    github = "DDoSolitary";
+    githubId = 25856103;
+    name = "DDoSolitary";
+  };
   dduan = {
     email = "daniel@duan.ca";
     github = "dduan";
