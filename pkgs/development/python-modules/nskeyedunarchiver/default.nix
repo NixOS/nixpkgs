@@ -11,8 +11,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "NSKeyedUnArchiver";
+    inherit pname version;
     hash = "sha256-2aLV1I6p4seNMb+/xKl8AnlBkvO0VINC1yfVS90gvro=";
   };
 
