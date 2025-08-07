@@ -1,0 +1,29 @@
+#   SPDX-FileCopyrightText: no
+#   SPDX-License-Identifier: CC0-1.0
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+trim_trailing_whitespace = true
+
+[CMakeLists.txt]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+[*.cmake]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+[*.{py,cpp,h}]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+[*.sh]
+indent_style = tab
+insert_final_newline = true
+

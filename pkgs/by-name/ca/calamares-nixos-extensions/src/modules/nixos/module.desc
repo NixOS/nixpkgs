@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: no
+# SPDX-License-Identifier: CC0-1.0
+---
+type:       "job"
+name:       "nixos"
+interface:  "python"
+script:     "main.py"
