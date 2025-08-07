@@ -17,7 +17,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   rust,
   rustPlatform,
   turbo,
@@ -27,6 +27,7 @@
 }:
 
 let
+  pnpm = pnpm_10;
   excludeSpec = spec: [
     "--exclude"
     spec
@@ -35,14 +36,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.14.19";
+  version = "0.15.10";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${version}";
-    hash = "sha256-NopuZbgF2jdwuf/p/JzubS0IM5xBnlkh9Tj234auBnE=";
+    hash = "sha256-6sRSH7OSprOsRMoORjy9HI8SoOAXqPak2kqtgRx2bWI=";
   };
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/359340
+  cargoPatches = [ ./gix-from-crates-io.patch ];
 
   # Let Tauri know what version we're building
   #
@@ -59,12 +63,12 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
   '';
 
-  cargoHash = "sha256-wzSRUZeB5f9Z/D+Sa5Nl77jh7GDnnUehcmwanPcaSKM=";
+  cargoHash = "sha256-H8YR+euwMGiGckURAWJIE9fOcu/ddJ6ENcnA1gHD9B8=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-5NtfstUuIYyntt09Mu9GAFAOImfO6VMmJ7g15kvGaLE=";
+    fetcherVersion = 2;
+    hash = "sha256-I55RNWP6csT08SBIFEyUp9JTC5EzQXjKIPPSxkSpg7Y=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    pnpm.configHook
     turbo
     wrapGAppsHook4
     yq # For `tomlq`
@@ -140,6 +144,11 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
     LIBGIT2_NO_VENDOR = 1;
   };
+
+  preBuild = ''
+    turbo run --filter @gitbutler/svelte-comment-injector build
+    pnpm build:desktop -- --mode production
+  '';
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
