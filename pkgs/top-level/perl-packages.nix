@@ -2225,6 +2225,36 @@ with self;
     };
   };
 
+  AuthenWebAuthn = buildPerlPackage {
+    pname = "Authen-WebAuthn";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MB/MBESSON/Authen-WebAuthn-0.005.tar.gz";
+      hash = "sha256-1YO/Xay0/vGTeaskNIv+ojDMqXxOB44YNq0KQhIAAU4=";
+    };
+    buildInputs = [
+      CryptURandom
+    ];
+    propagatedBuildInputs = [
+      CBORXS
+      CryptOpenSSLX509
+      CryptX
+      HashMergeSimple
+      JSON
+      Mouse
+      NetSSLeay
+      URI
+    ];
+    meta = {
+      description = "A library to add Web Authentication support to server applications";
+      homepage = "https://github.com/LemonLDAPNG/Authen-WebAuthn";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   autobox = buildPerlPackage {
     pname = "autobox";
     version = "3.0.1";
