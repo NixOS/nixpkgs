@@ -7072,6 +7072,24 @@ with self;
     };
   };
 
+  CryptCamellia = buildPerlPackage {
+    pname = "Crypt-Camellia";
+    version = "2.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OY/OYAMA/Crypt-Camellia-2.02.tar.gz";
+      hash = "sha256-fDo3VJF3cdmz0N/7cVDQ+yYiLk+ag8PIp3m4sAA5E9I=";
+    };
+    meta = {
+      description = "Perl Camellia encryption module";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+        gpl2Only
+        mit
+      ];
+    };
+  };
+
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
     version = "2.33";
