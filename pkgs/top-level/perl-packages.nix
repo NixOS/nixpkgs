@@ -39076,6 +39076,22 @@ with self;
     };
   };
 
+  XMLNamespace = buildPerlPackage {
+    pname = "XML-Namespace";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AB/ABW/XML-Namespace-0.02.tar.gz";
+      hash = "sha256-n6KVP3GFeV6z7EAg0Zrbdath/Vj0Nakim+5yfpHUWaM=";
+    };
+    meta = {
+      description = "Simple support for XML Namespaces";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   XMLNamespaceFactory = buildPerlPackage {
     pname = "XML-NamespaceFactory";
     version = "1.02";
