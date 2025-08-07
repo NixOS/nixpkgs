@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "py-scrypt";
-  version = "0.8.27";
+  version = "0.9.4";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "scrypt";
     inherit version;
-    hash = "sha256-p7Y3hI7VGMHqKzGp7Kqj9JYWWY2EQt6HBs8fAfur8Kc=";
+    hash = "sha256-DSEgELqMLlVHW6YljzDO5NoEMgF1FNj26FW38fjFXHc=";
   };
 
   buildInputs = [ openssl ];
