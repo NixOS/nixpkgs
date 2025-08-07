@@ -119,7 +119,7 @@ with pkgs;
     You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
-  tests = callPackages ../test { };
+  tests = lib.recurseIntoAttrs (callPackages ../test { });
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
@@ -382,8 +382,6 @@ with pkgs;
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
 
   inherit (gridlock) nyarr;
-
-  inspec = callPackage ../tools/misc/inspec { };
 
   lshw-gui = lshw.override { withGUI = true; };
 
@@ -1723,8 +1721,6 @@ with pkgs;
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
 
-  grc = python3Packages.callPackage ../tools/misc/grc { };
-
   gremlin-console = callPackage ../applications/misc/gremlin-console {
     openjdk = openjdk11;
   };
@@ -2995,8 +2991,6 @@ with pkgs;
   gitlab-ee = callPackage ../by-name/gi/gitlab/package.nix {
     gitlabEnterprise = true;
   };
-
-  gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
@@ -10131,6 +10125,7 @@ with pkgs;
 
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
   kanidm_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix { kanidm = kanidm_1_6; };
+  kanidm_1_7 = callPackage ../by-name/ka/kanidm/1_7.nix { kanidm = kanidm_1_7; };
 
   kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
 
@@ -10139,6 +10134,10 @@ with pkgs;
   };
 
   kanidmWithSecretProvisioning_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix {
+    enableSecretProvisioning = true;
+  };
+
+  kanidmWithSecretProvisioning_1_7 = callPackage ../by-name/ka/kanidm/1_7.nix {
     enableSecretProvisioning = true;
   };
 
@@ -11948,20 +11947,6 @@ with pkgs;
     };
   };
   gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
-
-  greetd = recurseIntoAttrs (
-    {
-      greetd = callPackage ../applications/display-managers/greetd { };
-      gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
-      qtgreet = callPackage ../applications/display-managers/greetd/qtgreet.nix { };
-      regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };
-      tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
-      wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
-    }
-    // lib.optionalAttrs config.allowAliases {
-      dlm = throw "greetd.dlm has been removed as it is broken and abandoned upstream"; # Added 2024-07-15
-    }
-  );
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
   goldendict-ng = qt6Packages.callPackage ../applications/misc/goldendict-ng { };
@@ -15049,8 +15034,6 @@ with pkgs;
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
-
-  inherit (callPackage ../development/libraries/science/math/magma { }) magma;
 
   magma-cuda = magma.override {
     cudaSupport = true;

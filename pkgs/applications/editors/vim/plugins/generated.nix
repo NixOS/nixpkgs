@@ -3950,6 +3950,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  demicolon-nvim = buildVimPlugin {
+    pname = "demicolon.nvim";
+    version = "2025-04-25";
+    src = fetchFromGitHub {
+      owner = "mawkler";
+      repo = "demicolon.nvim";
+      rev = "8d79e527dbbef9de06405a30258b8d752c0638c4";
+      sha256 = "1mcn8pidpnh0fhyigzc4y4a349lgarry082y2nx39qzm2pvw0g2i";
+    };
+    meta.homepage = "https://github.com/mawkler/demicolon.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   denite-extra = buildVimPlugin {
     pname = "denite-extra";
     version = "2019-03-29";
@@ -13781,19 +13794,6 @@ final: prev: {
       sha256 = "1a3467q4wx7j2v60vvs9p5mzbra9dyq2p583y0bsf0rr33zvmi2x";
     };
     meta.homepage = "https://github.com/FireIsGood/spaceman.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  sparkup = buildVimPlugin {
-    pname = "sparkup";
-    version = "2012-06-11";
-    src = fetchFromGitHub {
-      owner = "chrisgeo";
-      repo = "sparkup";
-      rev = "6fbfceef890e705c47b42b27be743ffed6f9296e";
-      sha256 = "17jgpvl879ik53rr3razfnbpfx63mzpp1rlvxxjsvvrk4g45dssm";
-    };
-    meta.homepage = "https://github.com/chrisgeo/sparkup/";
     meta.hydraPlatforms = [ ];
   };
 

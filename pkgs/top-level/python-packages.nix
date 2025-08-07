@@ -8663,6 +8663,8 @@ self: super: with self; {
 
   lomond = callPackage ../development/python-modules/lomond { };
 
+  london-tube-status = callPackage ../development/python-modules/london-tube-status { };
+
   loompy = callPackage ../development/python-modules/loompy { };
 
   loopy = callPackage ../development/python-modules/loopy { };
@@ -14482,6 +14484,8 @@ self: super: with self; {
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
   python-daemon = callPackage ../development/python-modules/python-daemon { };
+
+  python-dali = callPackage ../development/python-modules/python-dali { };
 
   python-datemath = callPackage ../development/python-modules/python-datemath { };
 

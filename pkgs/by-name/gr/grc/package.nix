@@ -1,18 +1,18 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
   installShellFiles,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "grc";
   version = "1.13";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "garabik";
-    repo = pname;
+    repo = "grc";
     rev = "v${version}";
     sha256 = "1h0h88h484a9796hai0wasi1xmjxxhpyxgixn6fgdyc5h69gv8nl";
   };
@@ -39,20 +39,20 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
     description = "Generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for
       beautifying your logfiles or output of commands.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       azahi
       lovek323
       peterhoeg
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "grc";
   };
 }

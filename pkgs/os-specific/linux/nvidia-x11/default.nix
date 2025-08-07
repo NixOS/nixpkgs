@@ -72,12 +72,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
   production = generic {
-    version = "570.172.08";
-    sha256_64bit = "sha256-AlaGfggsr5PXsl+nyOabMWBiqcbHLG4ij617I4xvoX0=";
-    sha256_aarch64 = "sha256-FVRyFvK1FKznckpatMMydmmQSkHK+41NkEjTybYJY9g=";
-    openSha256 = "sha256-aTV5J4zmEgRCOavo6wLwh5efOZUG+YtoeIT/tnrC1Hg=";
-    settingsSha256 = "sha256-N/1Ra8Teq93U3T898ImAT2DceHjDHZL1DuriJeTYEa4=";
-    persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
+    version = "570.181";
+    sha256_64bit = "sha256-8G0lzj8YAupQetpLXcRrPCyLOFA9tvaPPvAWurjj3Pk=";
+    sha256_aarch64 = "sha256-1pUDdSm45uIhg0HEhfhak9XT/IE/XUVbdtrcpabZ3KU=";
+    openSha256 = "sha256-U/uqAhf83W/mns/7b2cU26B7JRMoBfQ3V6HiYEI5J48=";
+    settingsSha256 = "sha256-iBx/X3c+1NSNmG+11xvGyvxYSMbVprijpzySFeQVBzs=";
+    persistencedSha256 = "sha256-RoAcutBf5dTKdAfkxDPtMsktFVQt5uPIPtkAkboQwcQ=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -159,12 +159,12 @@ rec {
   # Last one without the bug reported here:
   # https://bbs.archlinux.org/viewtopic.php?pid=2155426#p2155426
   legacy_535 = generic {
-    version = "535.216.01";
-    sha256_64bit = "sha256-Xd6hFHgQAS4zlnwxgTQbzWYkvT1lTGP4Rd+DO07Oavc=";
-    sha256_aarch64 = "sha256-SGmuA0W1iSsqUK7VZsgibT4HgT0RkKpGb+ul6eIbM7k=";
-    openSha256 = "sha256-ey96oMbY32ahcHSOj1+MykvJrep6mhHPVl+V8+B2ZDk=";
-    settingsSha256 = "sha256-9PgaYJbP1s7hmKCYmkuLQ58nkTruhFdHAs4W84KQVME=";
-    persistencedSha256 = "sha256-ckF/BgDA6xSFqFk07rn3HqXuR0iGfwA4PRxpP38QZgw=";
+    version = "535.261.03";
+    sha256_64bit = "sha256-10th0R6cm5BS9AQtbsRDfxPR3vMOlk4jLUfl1lnRHWg=";
+    sha256_aarch64 = "sha256-mkEtOsAcmdLKAhAKcTlZf86IBMUr9TPRG2BDcoaDSpM=";
+    openSha256 = "sha256-qUn0Kk9t6TZA6ZmUSPzqclOsU6n4Tp4dXkgGa1ZF+OA=";
+    settingsSha256 = "sha256-E05oCGuMdE3KhVrDl2ZQspaPqPHoVSwdaftoPKItYTE";
+    persistencedSha256 = "sha256-pnOq9+6l3BbIEKHboGeTwEcEcYhtESzmroUfCahqn0U=";
   };
 
   # Last one supporting Kepler architecture
