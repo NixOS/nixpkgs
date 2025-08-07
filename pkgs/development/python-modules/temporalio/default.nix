@@ -5,9 +5,10 @@
   cargo,
   fetchFromGitHub,
   maturin,
+  nexusrpc,
   pythonOlder,
   poetry-core,
-  protobuf,
+  protobuf5,
   python-dateutil,
   rustc,
   rustPlatform,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.12.0";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "temporalio";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-u74zbzYNVxMi0sdiPlBoEU+wAa24JmMksz7hGvraDeM=";
+    hash = "sha256-NY7+ryldTV60K1Ky9Q1iNEmXqXlZgSMEE4f6PGeZ5BE=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +40,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-OIapL1+g6gIgyVzdB68PuK2K2RIr01DSm/UbCdt9kNY=";
+    hash = "sha256-Z0LxIGY7af1tcRTcMe4FDCH1zxzX1J9AJuZfZUMAAUI=";
   };
 
   cargoRoot = "temporalio/bridge";
@@ -54,7 +55,8 @@ buildPythonPackage rec {
   '';
 
   dependencies = [
-    protobuf
+    nexusrpc
+    protobuf5
     types-protobuf
     typing-extensions
   ]
