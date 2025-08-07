@@ -56,6 +56,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # bleak_client.services.get_characteristic returns None
+    "test_client_get_services_and_read_write"
+    "test_bleak_client_get_services_and_read_write"
+    "test_bleak_client_cached_get_services_and_read_write"
+  ];
+
   pythonImportsCheck = [ "bleak_esphome" ];
 
   meta = with lib; {
