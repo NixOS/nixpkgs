@@ -3523,6 +3523,8 @@ self: super: with self; {
 
   dep-logic = callPackage ../development/python-modules/dep-logic { };
 
+  dependency-groups = callPackage ../development/python-modules/dependency-groups { };
+
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   deploykit = callPackage ../development/python-modules/deploykit { };
