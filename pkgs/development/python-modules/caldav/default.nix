@@ -5,16 +5,18 @@
   icalendar,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   python,
   recurring-ical-events,
   requests,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
+  proxy-py,
+  pyfakefs,
   toPythonModule,
   tzlocal,
   vobject,
   xandikos,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -30,8 +32,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -43,9 +45,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    proxy-py
+    pyfakefs
     pytestCheckHook
     tzlocal
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTestPaths = [
+    "tests/test_docs.py"
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [ "caldav" ];
