@@ -6602,6 +6602,12 @@
     githubId = 129093;
     name = "Desmond O. Chang";
   };
+  DoctorDalek1963 = {
+    email = "dyson.dyson@icloud.com";
+    github = "DoctorDalek1963";
+    githubId = 69600500;
+    name = "Dyson Dyson";
+  };
   dod-101 = {
     email = "david.thievon@proton.me";
     github = "DOD-101";
