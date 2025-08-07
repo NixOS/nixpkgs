@@ -1,8 +1,10 @@
 {
   lib,
   argcomplete,
+  attrs,
   buildPythonPackage,
   colorlog,
+  dependency-groups,
   fetchFromGitHub,
   hatchling,
   jinja2,
@@ -29,16 +31,13 @@ buildPythonPackage rec {
     hash = "sha256-qH8oh7tmiJkXOobyDZMRZ62w2sRHJF8sh4PX+6s7M70=";
   };
 
-  patches = [
-    # Backport of https://github.com/wntrblm/nox/pull/903, which can be removed on next release
-    ./fix-broken-mock-on-cpython-3.12.8.patch
-  ];
-
   build-system = [ hatchling ];
 
   dependencies = [
     argcomplete
+    attrs
     colorlog
+    dependency-groups
     packaging
     virtualenv
   ]
@@ -67,6 +66,9 @@ buildPythonPackage rec {
     "test__create_venv_options"
     # Assertion errors
     "test_uv"
+    # calls to naked python
+    "test_noxfile_script_mode"
+    "test_noxfile_script_mode_url_req"
   ];
 
   disabledTestPaths = [
