@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-VBdHI6aGfhcgDdwspToHp3iNFQRT0Z+Fseq0eNdUwTo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];
