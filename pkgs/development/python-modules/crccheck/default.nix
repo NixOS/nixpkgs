@@ -2,8 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
   unittestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 let
@@ -12,9 +13,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinScharrer";
@@ -22,6 +21,11 @@ buildPythonPackage {
     tag = "v${version}";
     hash = "sha256-hT+8+moni7turn5MK719b4Xy336htyWWmoMnhgxKkYo=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
