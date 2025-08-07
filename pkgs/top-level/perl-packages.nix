@@ -1054,6 +1054,37 @@ with self;
     };
   };
 
+  ApacheSessionBrowseable = buildPerlModule {
+    pname = "Apache-Session-Browseable";
+    version = "1.3.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GU/GUIMARD/Apache-Session-Browseable-1.3.17.tar.gz";
+      hash = "sha256-QE3Mk91hkKXe1R8EGVlJQCRCSomW2vWL1X0oLtnYtzY=";
+    };
+    propagatedBuildInputs = [
+      ApacheSession
+      DBDCassandra
+      DBI
+      JSON
+      RedisFast
+      perlldap
+    ];
+    checkInputs = [
+      DBDPg
+      DBDSQLite
+      DBDmysql
+      DBI
+      Redis
+    ];
+    meta = {
+      description = "Add index and search methods to Apache::Session";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ApacheTest = buildPerlPackage {
     pname = "Apache-Test";
     version = "1.43";
