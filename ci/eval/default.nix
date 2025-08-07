@@ -72,11 +72,11 @@ let
       # The system to evaluate.
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
-      evalSystem,
+      evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
+      chunkSize ? 5000,
       checkMeta ? true,
 
       # Don't try to eval packages marked as broken.
