@@ -885,6 +885,28 @@ with self;
     };
   };
 
+  AnyEventXSPromises = buildPerlPackage {
+    pname = "AnyEvent-XSPromises";
+    version = "0.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TV/TVDW/AnyEvent-XSPromises-0.006.tar.gz";
+      hash = "sha256-FgiKZCDUwdTGKKm3zfenKG3n399rQI61cYRvZ4C8dOY=";
+    };
+    buildInputs = [
+      ExtUtilsMakeMaker
+    ];
+    propagatedBuildInputs = [
+      AnyEvent
+    ];
+    meta = {
+      description = "Another Promises library, this time implemented in XS for performance";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   AnyMoose = buildPerlPackage {
     pname = "Any-Moose";
     version = "0.27";
