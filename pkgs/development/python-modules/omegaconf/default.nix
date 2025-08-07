@@ -9,7 +9,7 @@
   jre_minimal,
   pydevd,
   pytest-mock,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonAtLeast,
   pythonOlder,
   pyyaml,
@@ -60,13 +60,14 @@ buildPythonPackage rec {
     attrs
     pydevd
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [ "omegaconf" ];
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
+    "-Wignore::UserWarning"
   ];
 
   disabledTests = [
