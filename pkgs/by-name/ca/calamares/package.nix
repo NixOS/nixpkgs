@@ -19,10 +19,8 @@
   os-prober,
   xkeyboard_config,
 
-  nixos-extensions ? false,
   # passthru.tests
   calamares-nixos,
-  calamares-nixos-extensions,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,11 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
         util-linux
       ]
     }"
-  ]
-  ++ lib.optionals nixos-extensions [
-    "--prefix XDG_DATA_DIRS : ${calamares-nixos-extensions}/share"
-    "--prefix XDG_CONFIG_DIRS : ${calamares-nixos-extensions}/etc"
-    "--add-flag --xdg-config"
   ];
 
   passthru.tests = {
