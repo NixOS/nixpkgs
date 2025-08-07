@@ -24,6 +24,7 @@ let
     mkMerge
     mkOption
     mkOptionDefault
+    mkOverride
     mkPackageOption
     nameValuePair
     optional
@@ -111,6 +112,23 @@ in
       '';
     };
     ui.package = mkPackageOption pkgs "netbird-ui" { };
+
+    useRoutingFeatures = mkOption {
+      type = enum [
+        "none"
+        "client"
+        "server"
+        "both"
+      ];
+      default = "none";
+      example = "server";
+      description = ''
+        Enables settings required for Netbird's routing features like subnet routers and exit nodes.
+
+        When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
+        When set to `server` or `both`, IP forwarding will be enabled.
+      '';
+    };
 
     clients = mkOption {
       type = attrsOf (
@@ -467,19 +485,30 @@ in
       networking.dhcpcd.denyInterfaces = toClientList (client: client.interface);
       networking.networkmanager.unmanaged = toClientList (client: "interface-name:${client.interface}");
 
-      networking.firewall.allowedUDPPorts = concatLists (
-        toClientList (client: optional client.openFirewall client.port)
-      );
+      # Required for the routing ("Exit node") feature(s) to work
+      boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
+        "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
+        "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
+      };
 
-      # Ports opened on a specific
-      networking.firewall.interfaces = listToAttrs (
-        toClientList (client: {
-          name = client.interface;
-          value.allowedUDPPorts = optionals client.openFirewall [
-            5353 # required for the DNS forwarding/routing to work
-          ];
-        })
-      );
+      networking.firewall = {
+        allowedUDPPorts = concatLists (toClientList (client: optional client.openFirewall client.port));
+
+        # Required for the routing ("Exit node") feature(s) to work
+        checkReversePath = mkIf (
+          cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
+        ) "loose";
+
+        # Ports opened on a specific
+        interfaces = listToAttrs (
+          toClientList (client: {
+            name = client.interface;
+            value.allowedUDPPorts = optionals client.openFirewall [
+              5353 # required for the DNS forwarding/routing to work
+            ];
+          })
+        );
+      };
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
         toClientAttrs (
