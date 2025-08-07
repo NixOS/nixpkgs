@@ -2292,7 +2292,8 @@
       ];
     "hko" =
       ps: with ps; [
-      ]; # missing inputs: hko
+        hko
+      ];
     "hlk_sw16" =
       ps: with ps; [
         hlk-sw16
@@ -6159,7 +6160,8 @@
       ];
     "triggercmd" =
       ps: with ps; [
-      ]; # missing inputs: triggercmd
+        triggercmd
+      ];
     "tts" =
       ps: with ps; [
         ha-ffmpeg
@@ -7142,6 +7144,7 @@
     "history"
     "history_stats"
     "hive"
+    "hko"
     "hlk_sw16"
     "holiday"
     "home_connect"
@@ -7681,6 +7684,7 @@
     "transmission"
     "transport_nsw"
     "trend"
+    "triggercmd"
     "tts"
     "tuya"
     "twentemilieu"
