@@ -116,6 +116,16 @@ A nominal type marker, always `"configuration"`.
 
 The [`class` argument](#module-system-lib-evalModules-param-class).
 
+#### `graph` {#module-system-lib-evalModules-return-value-graph}
+
+Represents all the modules that took part in the evaluation.
+It is a list of `ModuleGraph` where `ModuleGraph` is defined as an attribute set with the following attributes:
+
+- `key`: `string` for the purpose of module deduplication and `disabledModules`
+- `file`: `string` for the purpose of error messages and warnings
+- `imports`: `[ ModuleGraph ]`
+- `disabled`: `bool`
+
 ## Module arguments {#module-system-module-arguments}
 
 Module arguments are the attribute values passed to modules when they are evaluated.
