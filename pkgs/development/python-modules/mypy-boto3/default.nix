@@ -130,8 +130,8 @@ rec {
       "sha256-xrpy1Eq+Kleg0oYEQY/UDXvUUdZp9B6rz4OrXo/A9bA=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.40.0"
-      "sha256-TuIQx9qeu+JL1+Y3Gp83J4am1IYua7Ps40mqN8YLln8=";
+    buildMypyBoto3Package "appstream" "1.40.4"
+      "sha256-AgYaQp4AQUly5DO83NgCojU7cKOP5LdStYr1X3lMAE0=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.40.0"
@@ -178,8 +178,8 @@ rec {
       "sha256-YZKJblhTzoW0I/ozKw+RzELF9nJ0+3Z/zjZhb/lEd80=";
 
   mypy-boto3-budgets =
-    buildMypyBoto3Package "budgets" "1.40.0"
-      "sha256-nY9RvXgjyeNsiuVtM+2pWsc0kGuAggZNpkF7SXkHVwk=";
+    buildMypyBoto3Package "budgets" "1.40.4"
+      "sha256-6kCRDur13G+GTZK8R7gknc1J3L/E3YA4/xi+9qQhVp0=";
 
   mypy-boto3-ce =
     buildMypyBoto3Package "ce" "1.40.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-p+NFAi4x4J6S4v0f2u0awDG+lb2V7r3XwgYwl5CvhHo=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.40.0"
-      "sha256-iyPAkVpfnqz2RX12klUOTH2NaFO/tAfiWFXLF+FHGe0=";
+    buildMypyBoto3Package "ec2" "1.40.4"
+      "sha256-fotmSGj+r85lJZPKq4UOc3OvCdnX0pO+qSQVQozxGJw=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.40.0"
@@ -974,8 +974,8 @@ rec {
       "sha256-DduRVsWhYZPX+mQAj1j1kA00rilUHKA4SnmehgS4hYU=";
 
   mypy-boto3-opensearchserverless =
-    buildMypyBoto3Package "opensearchserverless" "1.40.0"
-      "sha256-IKxLTdH0V590cXVZ1JNdp3Hg4sFEs2ZAiAir4eicpZ4=";
+    buildMypyBoto3Package "opensearchserverless" "1.40.4"
+      "sha256-nkt68bkNRfKMeO9TJV/P5PGzy8ps4CZpYcF2LmDUs2c=";
 
   mypy-boto3-opsworks =
     buildMypyBoto3Package "opsworks" "1.40.0"
