@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     udev
     xorg.libX11
+    xorg.libxcb
     xorg.libXext
     xorg.libXv
     xorg.libXrandr
