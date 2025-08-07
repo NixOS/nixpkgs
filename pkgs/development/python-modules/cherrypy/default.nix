@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [
