@@ -201,11 +201,9 @@ let
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = lib.optionals (
+          stdenv.hostPlatform.linux-kernel ? makeFlags
+        ) stdenv.hostPlatform.linux-kernel.makeFlags;
 
         postPatch = kernel.postPatch + ''
           # Patch kconfig to print "###" after every question so that
@@ -216,6 +214,8 @@ let
         preUnpack = kernel.preUnpack or "";
 
         inherit (kernel) src patches;
+
+        preConfigure = lib.concatStringsSep "\n" (map (flag: "makeFlagsArray+=(${flag})") extraMakeFlags);
 
         buildPhase = ''
           export buildRoot="''${buildRoot:-build}"
