@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "komari-monitor";
     repo = "komari-agent";
-    rev = version;
+    tag = version;
     hash = "sha256-Zh1YYDMZXw2KILhMemGWO/BcOxNaeJ1gCoDCkRQ/kAw=";
   };
 
