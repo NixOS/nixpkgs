@@ -1,4 +1,4 @@
-{ kanidmVersion, pkgs, ... }:
+{ kanidmPackage, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
@@ -13,12 +13,12 @@ let
   provisionAdminPassword = "very-strong-password-for-admin";
   provisionIdmAdminPassword = "very-strong-password-for-idm-admin";
   provisionIdmAdminPassword2 = "very-strong-alternative-password-for-idm-admin";
-
-  kanidmPackage = pkgs."kanidmWithSecretProvisioning_${kanidmVersion}";
 in
 {
-  name = "kanidm-provisioning";
+  name = "kanidm-provisioning-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
+
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning;
 
   nodes.provision =
     { pkgs, lib, ... }:

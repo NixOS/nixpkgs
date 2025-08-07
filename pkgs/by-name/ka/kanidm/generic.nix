@@ -133,8 +133,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      kanidm = nixosTests.kanidm (versionUnderscored finalAttrs);
-      kanidm-provisioning = nixosTests.kanidm-provisioning (versionUnderscored finalAttrs);
+      kanidm = nixosTests.kanidm.extend {
+        modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage; } ];
+      };
+      kanidm-provisioning = nixosTests.kanidm-provisioning.extend {
+        modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage.withSecretProvisioning; } ];
+      };
     };
 
     updateScript = lib.optionals (!enableSecretProvisioning) (nix-update-script {
