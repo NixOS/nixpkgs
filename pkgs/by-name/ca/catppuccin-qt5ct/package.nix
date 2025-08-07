@@ -25,7 +25,10 @@ stdenvNoCC.mkDerivation {
     description = "Soothing pastel theme for qt5ct";
     homepage = "https://github.com/catppuccin/qt5ct";
     license = licenses.mit;
-    maintainers = with maintainers; [ pluiedev ];
+    maintainers = with maintainers; [
+      pluiedev
+      nullcube
+    ];
     platforms = platforms.all;
   };
 }
