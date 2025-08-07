@@ -12256,8 +12256,6 @@ self: super: with self; {
 
   py-schluter = callPackage ../development/python-modules/py-schluter { };
 
-  py-scrypt = callPackage ../development/python-modules/py-scrypt { };
-
   py-serializable = callPackage ../development/python-modules/py-serializable { };
 
   py-slvs = callPackage ../development/python-modules/py-slvs { };
