@@ -7,6 +7,7 @@
   setuptools-scm,
   filelock,
   requests,
+  platformdirs,
   unicode-character-database,
 }:
 
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   dependencies = [
     filelock
     requests
+    platformdirs
   ];
 
   # Package has no unit tests, but we can check an example as per README.rst:
