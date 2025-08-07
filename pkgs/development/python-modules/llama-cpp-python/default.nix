@@ -52,7 +52,7 @@ buildPythonPackage rec {
   # src = /home/gaetan/llama-cpp-python;
 
   dontUseCmakeConfigure = true;
-  SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
+  cmakeFlags = [
     # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
     # -march=native* which is either a no-op (if cc-wrapper is able to ignore
     # it), or an attempt to build a non-reproducible binary.
@@ -61,16 +61,14 @@ buildPythonPackage rec {
     # -mcpu, breaking linux build as follows:
     #
     # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
-    [
-      "-DGGML_NATIVE=off"
-      "-DGGML_BUILD_NUMBER=1"
-    ]
-    ++ lib.optionals cudaSupport [
-      "-DGGML_CUDA=on"
-      "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
-      "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
-    ]
-  );
+    "-DGGML_NATIVE=off"
+    "-DGGML_BUILD_NUMBER=1"
+  ]
+  ++ lib.optionals cudaSupport [
+    "-DGGML_CUDA=on"
+    "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
+    "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
+  ];
 
   enableParallelBuilding = true;
 
