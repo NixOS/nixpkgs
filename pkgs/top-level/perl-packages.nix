@@ -4371,6 +4371,27 @@ with self;
     };
   };
 
+  CBORXS = buildPerlPackage {
+    pname = "CBOR-XS";
+    version = "1.87";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/CBOR-XS-1.87.tar.gz";
+      hash = "sha256-6sFecwqvYS7dnt9x5qqVRlNhG65aEEO5YK/1qbHlcf8=";
+    };
+    buildInputs = [
+      CanaryStability
+      ExtUtilsMakeMaker
+    ];
+    propagatedBuildInputs = [
+      commonsense
+      TypesSerialiser
+    ];
+    meta = {
+      description = "Concise Binary Object Representation (CBOR, RFC7049)";
+      license = [ ];
+    };
+  };
+
   CDB_File = buildPerlPackage {
     pname = "CDB_File";
     version = "1.05";
