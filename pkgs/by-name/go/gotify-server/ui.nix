@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NODE_OPTIONS = "--openssl-legacy-provider";
+  env.FOO = "BAR";
 
   installPhase = ''
     runHook preInstall
