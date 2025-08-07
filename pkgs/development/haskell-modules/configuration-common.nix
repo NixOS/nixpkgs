@@ -821,6 +821,10 @@ with haskellLib;
   # https://github.com/lierdakil/pandoc-crossref/issues/478
   pandoc-crossref = doJailbreak super.pandoc-crossref;
 
+  # Too strict upper bound on data-default-class (< 0.2)
+  # https://github.com/stackbuilders/dotenv-hs/issues/203
+  dotenv = doJailbreak super.dotenv;
+
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
