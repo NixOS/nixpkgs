@@ -6,6 +6,7 @@
   fetchFromGitHub,
   maturin,
   nexusrpc,
+  nix-update-script,
   pythonOlder,
   poetry-core,
   protobuf5,
@@ -77,6 +78,8 @@ buildPythonPackage rec {
     "temporalio.client"
     "temporalio.worker"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Temporal Python SDK";
