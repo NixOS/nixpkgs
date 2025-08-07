@@ -5873,6 +5873,27 @@ with self;
     };
   };
 
+  CompressSnappy = buildPerlPackage {
+    pname = "Compress-Snappy";
+    version = "0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRAY/Compress-Snappy-0.25.tar.gz";
+      hash = "sha256-VElkjBSGEk8j5WHtsIbrrUDhsc1Q5jkl0qXuib6WhWE=";
+    };
+    buildInputs = [
+      TestSimple13
+      DevelChecklib
+    ];
+    meta = {
+      description = "Perl interface to Google's Snappy (de)compressor";
+      homepage = "http://github.com/gray/compress-snappy";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CompressUnLZMA = buildPerlPackage {
     pname = "Compress-unLZMA";
     version = "0.05";
