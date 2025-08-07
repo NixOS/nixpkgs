@@ -37288,6 +37288,22 @@ with self;
     };
   };
 
+  TimeFake = buildPerlPackage {
+    pname = "Time-Fake";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROSULEK/Time-Fake-0.11.tar.gz";
+      hash = "sha256-19J+0vlZUGIkKXHYXdpGbvI9NCC41LL1TVsDRAl6+As=";
+    };
+    meta = {
+      description = "Simulate different times without changing your system clock";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   TimeLocal = buildPerlPackage {
     pname = "Time-Local";
     version = "1.35";
