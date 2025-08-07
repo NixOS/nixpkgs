@@ -18281,6 +18281,33 @@ with self;
     };
   };
 
+  IRI = buildPerlPackage {
+    pname = "IRI";
+    version = "0.013";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GW/GWILLIAMS/IRI-0.013.tar.gz";
+      hash = "sha256-XAJJdfKmwgtQ/Csx/jbMJ2/9U5YN+8mwUXVSvIhm2gA=";
+    };
+    buildInputs = [
+      ExtUtilsMakeMaker
+      TryTiny
+      URI
+    ];
+    propagatedBuildInputs = [
+      Moo
+      MooXHandlesVia
+      TypeTiny
+    ];
+    meta = {
+      description = "Internationalized Resource Identifiers";
+      homepage = "http://github.com/kasei/perl-iri/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ImageExifTool = callPackage ../development/perl-modules/ImageExifTool { };
 
   Inline = buildPerlPackage {
