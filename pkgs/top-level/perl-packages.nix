@@ -25639,6 +25639,37 @@ with self;
     };
   };
 
+  NetFacebookOauth2 = buildPerlPackage {
+    pname = "Net-Facebook-Oauth2";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAMOD/Net-Facebook-Oauth2-0.12.tar.gz";
+      hash = "sha256-+XqXoct+sfuOXRFadMBYtGJkaht+pDIn7SzYAR9YAiU=";
+    };
+    buildInputs = [
+      Plack
+      TestException
+      TestMockModule
+      TestMockObject
+      TestRequires
+      TestTCP
+    ];
+    propagatedBuildInputs = [
+      JSONMaybeXS
+      LWP
+      LWPProtocolHttps
+      URI
+    ];
+    meta = {
+      description = "A simple Perl wrapper around Facebook OAuth 2.0 protocol";
+      homepage = "https://github.com/mamod/Net-Facebook-Oauth2";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   NetFastCGI = buildPerlPackage {
     pname = "Net-FastCGI";
     version = "0.14";
