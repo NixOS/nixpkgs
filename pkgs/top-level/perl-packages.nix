@@ -27020,6 +27020,27 @@ with self;
     };
   };
 
+  NetOpenIDServer = buildPerlPackage {
+    pname = "Net-OpenID-Server";
+    version = "1.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBN/Net-OpenID-Server-1.09.tar.gz";
+      hash = "sha256-SpYv9ZP2bydlAFNdvHoBjAmN/RZhaN84y+3bPCAShhc=";
+    };
+    propagatedBuildInputs = [
+      NetOpenIDCommon
+      URI
+    ];
+    meta = {
+      description = "Library for building your own OpenID server/provider";
+      homepage = "http://github.com/robn/Net-OpenID-Server";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   NetOpenSSH = buildPerlPackage {
     pname = "Net-OpenSSH";
     version = "0.84";
