@@ -5759,6 +5759,26 @@ with self;
     };
   };
 
+  CompressLZ4 = buildPerlPackage {
+    pname = "Compress-LZ4";
+    version = "0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRAY/Compress-LZ4-0.25.tar.gz";
+      hash = "sha256-T0iFPsv5gUPN6gGbRVgLlTfEkp3W/BCdkNLw2kPdDog=";
+    };
+    buildInputs = [
+      TestSimple13
+    ];
+    meta = {
+      description = "Perl interface to the LZ4 (de)compressor";
+      homepage = "https://github.com/gray/compress-lz4";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CompressLZF = buildPerlPackage rec {
     pname = "Compress-LZF";
     version = "3.8";
