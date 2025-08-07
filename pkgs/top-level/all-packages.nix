@@ -15002,7 +15002,7 @@ with pkgs;
         };
       });
     in
-    grimmeCmake.callPackage ../by-name/cp/cp2k/package.nix {
+    grimmeCmake.callPackage ../applications/science/chemistry/cp2k/default.nix {
       libxc = pkgs.libxc_7;
     };
 
