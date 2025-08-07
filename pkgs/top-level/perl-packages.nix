@@ -9762,6 +9762,31 @@ with self;
     };
   };
 
+  DBDCassandra = buildPerlPackage {
+    pname = "DBD-Cassandra";
+    version = "0.57";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TV/TVDW/DBD-Cassandra-0.57.tar.gz";
+      hash = "sha256-098XDQbDrhgIaPfYHgAMABVjRQlIn7YPx/SeYmsaRmU=";
+    };
+    propagatedBuildInputs = [
+      CassandraClient
+      DBI
+      DevelGlobalDestruction
+    ];
+    checkInputs = [
+      RefUtil
+    ];
+    meta = {
+      description = "DBI database backend for Cassandra";
+      homepage = "https://github.com/tvdw/perl-dbd-cassandra";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   DBDCSV = buildPerlPackage {
     pname = "DBD-CSV";
     version = "0.60";
