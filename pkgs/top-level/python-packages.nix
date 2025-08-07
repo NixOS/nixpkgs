@@ -6546,7 +6546,7 @@ self: super: with self; {
 
   hightime = callPackage ../development/python-modules/hightime { };
 
-  hijri-converter = callPackage ../development/python-modules/hijri-converter { };
+  hijridate = callPackage ../development/python-modules/hijridate { };
 
   hikari = callPackage ../development/python-modules/hikari { };
 
