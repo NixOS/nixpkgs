@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tektoncd-cli";
   version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WB3XsXT8bXo2GpHC6hGKilRwloy31y18JD09cQklsV0=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}"
+    "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -55,13 +55,13 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/tkn --help
-    $out/bin/tkn version | grep "Client version: ${version}"
+    $out/bin/tkn version | grep "Client version: ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://tekton.dev";
-    changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
+    changelog = "https://github.com/tektoncd/cli/releases/tag/v${finalAttrs.version}";
     description = "Provides a CLI for interacting with Tekton - tkn";
     longDescription = ''
       The Tekton Pipelines cli project provides a CLI for interacting with
@@ -77,4 +77,4 @@ buildGoModule rec {
     ];
     mainProgram = "tkn";
   };
-}
+})
