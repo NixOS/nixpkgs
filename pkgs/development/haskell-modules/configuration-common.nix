@@ -829,6 +829,10 @@ with haskellLib;
   # https://github.com/lierdakil/pandoc-crossref/issues/478
   pandoc-crossref = doJailbreak super.pandoc-crossref;
 
+  # Too strict upper bound on data-default-class (< 0.2)
+  # https://github.com/stackbuilders/dotenv-hs/issues/203
+  dotenv = doJailbreak super.dotenv;
+
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
@@ -875,7 +879,6 @@ with haskellLib;
   DigitalOcean = dontCheck super.DigitalOcean;
   directory-layout = dontCheck super.directory-layout;
   dom-selector = dontCheck super.dom-selector; # http://hydra.cryp.to/build/497670/log/raw
-  dotenv = dontCheck super.dotenv; # Tests fail because of missing test file on version 0.8.0.2 fixed on version 0.8.0.4
   dotfs = dontCheck super.dotfs; # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG; # http://hydra.cryp.to/build/498245/nixlog/1/raw
   ed25519 = dontCheck super.ed25519;
@@ -2820,9 +2823,6 @@ with haskellLib;
   kmonad = overrideCabal (drv: {
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.git ];
   }) super.kmonad;
-
-  # 2024-03-17: broken
-  vaultenv = dontDistribute super.vaultenv;
 
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [

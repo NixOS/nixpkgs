@@ -756,6 +756,15 @@ builtins.intersectAttrs super {
   # Break infinite recursion cycle with criterion and network-uri.
   js-flot = dontCheck super.js-flot;
 
+  # Test suite unsets PATH, but wants to be able to run `whoami`
+  # https://github.com/stackbuilders/dotenv-hs/commit/6125dc2d260c5042f5416c1431882d1c2c91d3c8#issuecomment-3163926427
+  dotenv = overrideCabal (drv: {
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace spec/fixtures/.dotenv spec/Configuration/DotenvSpec.hs \
+        --replace-fail "whoami" "$(type -p whoami)"
+    '';
+  }) super.dotenv;
+
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
   splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
