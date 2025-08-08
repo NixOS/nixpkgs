@@ -38078,6 +38078,36 @@ with self;
     };
   };
 
+  TypesURI = buildPerlPackage {
+    pname = "Types-URI";
+    version = "0.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Types-URI-0.007.tar.gz";
+      hash = "sha256-TBWf9TxcOD647t+T1jELJrzIOuBUdWCWjmXFeSbfAwQ=";
+    };
+    propagatedBuildInputs = [
+      TypesPathTiny
+      TypeTiny
+      TypesUUID
+      URI
+      URIFromHash
+    ];
+    checkInputs = [
+      IRI
+      Moose
+      RDFTrine
+      TestRequires
+    ];
+    meta = {
+      description = "Type constraints and coercions for URIs";
+      homepage = "https://github.com/tobyink/p5-types-uri";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   UNIVERSALcan = buildPerlPackage {
     pname = "UNIVERSAL-can";
     version = "1.20140328";
