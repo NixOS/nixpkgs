@@ -13,13 +13,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "plr";
-  version = "8.4.7";
+  version = "8.4.8";
 
   src = fetchFromGitHub {
     owner = "postgres-plr";
     repo = "plr";
     tag = "REL${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-PdvFEmtKfLT/xfaf6obomPR5hKC9F+wqpfi1heBphRk=";
+    hash = "sha256-FLL61HsZ6WaWBP9NqrJjhMFSVyVBIpVO0wv+kXMuAaU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
