@@ -24,7 +24,11 @@
 assert cudaSupport -> (cudaPackages ? cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+
+stdenv'.mkDerivation rec {
   pname = "librealsense";
   version = "2.56.3";
 
