@@ -14077,6 +14077,11 @@ with pkgs;
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
+  inherit (callPackage ../applications/misc/xppen { })
+    xppen_3
+    xppen_4
+    ;
+
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
