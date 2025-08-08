@@ -24,6 +24,7 @@ let
     mkMerge
     mkOption
     mkOptionDefault
+    mkOverride
     mkPackageOption
     nameValuePair
     optional
@@ -83,7 +84,7 @@ in
       type = bool;
       default = false;
       description = ''
-        Enables backwards compatible Netbird client service.
+        Enables backward-compatible NetBird client service.
 
         This is strictly equivalent to:
 
@@ -112,6 +113,23 @@ in
     };
     ui.package = mkPackageOption pkgs "netbird-ui" { };
 
+    useRoutingFeatures = mkOption {
+      type = enum [
+        "none"
+        "client"
+        "server"
+        "both"
+      ];
+      default = "none";
+      example = "server";
+      description = ''
+        Enables settings required for NetBird's routing features: Network Resources, Network Routes & Exit Nodes.
+
+        When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
+        When set to `server` or `both`, IP forwarding will be enabled.
+      '';
+    };
+
     clients = mkOption {
       type = attrsOf (
         submodule (
@@ -125,7 +143,7 @@ in
                 type = port;
                 example = literalExpression "51820";
                 description = ''
-                  Port the Netbird client listens on.
+                  Port the NetBird client listens on.
                 '';
               };
 
@@ -146,9 +164,9 @@ in
                 default = null;
                 example = "127.0.0.123";
                 description = ''
-                  An explicit address that Netbird will serve `*.netbird.cloud.` (usually) entries on.
+                  An explicit address that NetBird will serve `*.netbird.cloud.` (usually) entries on.
 
-                  Netbird serves DNS on it's own (dynamic) client address by default.
+                  NetBird serves DNS on it's own (dynamic) client address by default.
                 '';
               };
 
@@ -200,7 +218,7 @@ in
                 description = ''
                   Start the service with the system.
 
-                  As of 2024-02-13 it is not possible to start a Netbird client daemon without immediately
+                  As of 2024-02-13 it is not possible to start a NetBird client daemon without immediately
                   connecting to the network, but it is [planned for a near future](https://github.com/netbirdio/netbird/projects/2#card-91718018).
                 '';
               };
@@ -209,7 +227,7 @@ in
                 type = bool;
                 default = true;
                 description = ''
-                  Opens up firewall `port` for communication between Netbird peers directly over LAN or public IP,
+                  Opens up firewall `port` for communication between NetBird peers directly over LAN or public IP,
                   without using (internet-hosted) TURN servers as intermediaries.
                 '';
               };
@@ -247,7 +265,7 @@ in
                   "trace"
                 ];
                 default = "info";
-                description = "Log level of the Netbird daemon.";
+                description = "Log level of the NetBird daemon.";
               };
 
               ui.enable = mkOption {
@@ -255,7 +273,7 @@ in
                 default = nixosConfig.services.netbird.ui.enable;
                 defaultText = literalExpression ''client.ui.enable'';
                 description = ''
-                  Controls presence of `netbird-ui` wrapper for this Netbird client.
+                  Controls presence of `netbird-ui` wrapper for this NetBird client.
                 '';
               };
 
@@ -292,7 +310,7 @@ in
                         mkdir -p "$out/share/applications"
                         substitute ${cfg.ui.package}/share/applications/netbird.desktop \
                             "$out/share/applications/${mkBin "netbird"}.desktop" \
-                          --replace-fail 'Name=Netbird' "Name=Netbird @ ${client.service.name}" \
+                          --replace-fail 'Name=NetBird' "Name=NetBird @ ${client.service.name}" \
                           --replace-fail '${lib.getExe cfg.ui.package}' "$out/bin/${mkBin "netbird-ui"}"
                       '')
                     ];
@@ -348,14 +366,14 @@ in
                 type = path;
                 default = "/var/lib/${client.dir.baseName}";
                 description = ''
-                  A state directory used by Netbird client to store `config.json`, `state.json` & `resolv.conf`.
+                  A state directory used by NetBird client to store `config.json`, `state.json` & `resolv.conf`.
                 '';
               };
               dir.runtime = mkOption {
                 type = path;
                 default = "/var/run/${client.dir.baseName}";
                 description = ''
-                  A runtime directory used by Netbird client.
+                  A runtime directory used by NetBird client.
                 '';
               };
               service.name = mkOption {
@@ -415,11 +433,11 @@ in
       );
       default = { };
       description = ''
-        Attribute set of Netbird client daemons, by default each one will:
+        Attribute set of NetBird client daemons, by default each one will:
 
         1. be manageable using dedicated tooling:
           - `netbird-<name>` script,
-          - `Netbird - netbird-<name>` graphical interface when appropriate (see `ui.enable`),
+          - `NetBird - netbird-<name>` graphical interface when appropriate (see `ui.enable`),
         2. run as a `netbird-<name>.service`,
         3. listen for incoming remote connections on the port `51820` (`openFirewall` by default),
         4. manage the `netbird-<name>` wireguard interface,
@@ -467,19 +485,30 @@ in
       networking.dhcpcd.denyInterfaces = toClientList (client: client.interface);
       networking.networkmanager.unmanaged = toClientList (client: "interface-name:${client.interface}");
 
-      networking.firewall.allowedUDPPorts = concatLists (
-        toClientList (client: optional client.openFirewall client.port)
-      );
+      # Required for the routing ("Exit node") feature(s) to work
+      boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
+        "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
+        "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
+      };
 
-      # Ports opened on a specific
-      networking.firewall.interfaces = listToAttrs (
-        toClientList (client: {
-          name = client.interface;
-          value.allowedUDPPorts = optionals client.openFirewall [
-            5353 # required for the DNS forwarding/routing to work
-          ];
-        })
-      );
+      networking.firewall = {
+        allowedUDPPorts = concatLists (toClientList (client: optional client.openFirewall client.port));
+
+        # Required for the routing ("Exit node") feature(s) to work
+        checkReversePath = mkIf (
+          cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
+        ) "loose";
+
+        # Ports opened on a specific
+        interfaces = listToAttrs (
+          toClientList (client: {
+            name = client.interface;
+            value.allowedUDPPorts = optionals client.openFirewall [
+              5353 # required for the DNS forwarding/routing to work
+            ];
+          })
+        );
+      };
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
         toClientAttrs (
@@ -601,7 +630,7 @@ in
       # see https://github.com/systemd/systemd/blob/17f3e91e8107b2b29fe25755651b230bbc81a514/src/resolve/org.freedesktop.resolve1.policy#L43-L43
       # see all actions used at https://github.com/netbirdio/netbird/blob/13e7198046a0d73a9cd91bf8e063fafb3d41885c/client/internal/dns/systemd_linux.go#L29-L32
       security.polkit.extraConfig = mkIf config.services.resolved.enable ''
-        // systemd-resolved access for Netbird clients
+        // systemd-resolved access for NetBird clients
         polkit.addRule(function(action, subject) {
           var actions = [
             "org.freedesktop.resolve1.revert",
