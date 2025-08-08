@@ -49,7 +49,6 @@
   openexr,
   openjpeg,
   osm-gps-map,
-  pcre,
   pcre2,
   perlPackages,
   pkg-config,
@@ -157,7 +156,6 @@ stdenv.mkDerivation {
     openexr
     openjpeg
     osm-gps-map
-    pcre
     pcre2
     perlPackages.Po4a
     pugixml
