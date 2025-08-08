@@ -32,11 +32,16 @@ jobs:
     outputs:
       targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     steps:
-      # We'd rather fail than run slow eval on swap.
-      # Failing allows us to adjust the chunkSize to remain fast.
-      - name: Disable swap
+      # This is not supposed to be used and just acts as a fallback.
+      # Without swap, when Eval runs OOM, it will fail badly with a
+      # job that is sometimes not interruptible anymore.
+      # If Eval starts swapping, decrease chunkSize to keep it fast.
+      - name: Enable swap
         run: |
-          sudo swapoff -a
+          sudo fallocate -l 10G /swap
+          sudo chmod 600 /swap
+          sudo mkswap /swap
+          sudo swapon /swap
 
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
