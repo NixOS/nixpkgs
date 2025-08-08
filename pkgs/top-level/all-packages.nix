@@ -13553,10 +13553,6 @@ with pkgs;
     pythonBindings = true;
   };
 
-  surge = callPackage ../applications/audio/surge {
-    git = gitMinimal;
-  };
-
   supersonic-wayland = supersonic.override {
     waylandSupport = true;
   };
