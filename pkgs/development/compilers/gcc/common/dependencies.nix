@@ -76,8 +76,8 @@ in
     gmp
     mpfr
     libmpc
+    libxcrypt
   ]
-  ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
   ++ [
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ]

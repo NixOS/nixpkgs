@@ -6,7 +6,6 @@ let
     "12" = "12.4.0";
     "11" = "11.5.0";
     "10" = "10.5.0";
-    "9" = "9.5.0";
   };
 
   fromMajorMinor = majorMinorVersion: majorMinorToVersionMap."${majorMinorVersion}";
@@ -23,7 +22,6 @@ let
       "12.4.0" = "sha256-cE9lJgTMvMsUvavzR4yVEciXiLEss7v/3tNzQZFqkXU=";
       "11.5.0" = "sha256-puIYaOrVRc+H8MAfhCduS1KB1nIJhZHByJYkHwk2NHg=";
       "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
-      "9.5.0" = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
     }
     ."${version}";
 

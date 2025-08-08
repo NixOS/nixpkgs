@@ -53,7 +53,6 @@
   callPackage,
   majorMinorVersion,
   apple-sdk,
-  cctools,
   darwin,
 }:
 
@@ -84,13 +83,11 @@ let
   atLeast13 = versionAtLeast version "13";
   atLeast12 = versionAtLeast version "12";
   atLeast11 = versionAtLeast version "11";
-  atLeast10 = versionAtLeast version "10";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
   is10 = majorVersion == "10";
-  is9 = majorVersion == "9";
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
   # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
@@ -326,11 +323,9 @@ pipe
         depsTargetTarget
         ;
 
-      preConfigure =
-        (callFile ./common/pre-configure.nix { })
-        + optionalString atLeast10 ''
-          ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
-        '';
+      preConfigure = (callFile ./common/pre-configure.nix { }) + ''
+        ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+      '';
 
       dontDisableStatic = true;
 
@@ -465,12 +460,6 @@ pipe
         badPlatforms =
           if (!lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
       };
-    }
-    // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
-      # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
-      preBuild = ''
-        makeFlagsArray+=('STRIP=${getBin cctools}/bin/${stdenv.cc.targetPrefix}strip')
-      '';
     }
     // optionalAttrs enableMultilib {
       dontMoveLib64 = true;

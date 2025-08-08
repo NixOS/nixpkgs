@@ -32,14 +32,12 @@ let
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
-  atLeast10 = lib.versionAtLeast version "10";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
   is10 = majorVersion == "10";
-  is9 = majorVersion == "9";
 
   # We only apply these patches when building a native toolchain for
   # aarch64-darwin, as it breaks building a foreign one:
@@ -99,7 +97,6 @@ in
       ];
       "11" = [ ./no-sys-dirs-riscv.patch ];
       "10" = [ ./no-sys-dirs-riscv.patch ];
-      "9" = [ ./no-sys-dirs-riscv-gcc9.patch ];
     }
     ."${majorVersion}" or [ ]
   )
@@ -283,14 +280,6 @@ in
   .${majorVersion} or [ ]
 )
 
-# Work around newer AvailabilityInternal.h when building older versions of GCC.
-++ optionals (stdenv.hostPlatform.isDarwin) (
-  {
-    "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
-  }
-  .${majorVersion} or [ ]
-)
-
 ## Windows
 
 # Backported mcf thread model support from gcc13:
@@ -321,7 +310,7 @@ in
 ## gcc 10.0 and older ##############################################################################
 
 # Probably needed for gnat wrapper https://github.com/NixOS/nixpkgs/pull/62314
-++ optional (langAda && (is9 || is10)) ./gnat-cflags.patch
+++ optional (langAda && is10) ./gnat-cflags.patch
 ++
   # Backport native aarch64-darwin compilation fix from gcc12
   # https://github.com/NixOS/nixpkgs/pull/167595
@@ -341,15 +330,3 @@ in
 ++ optional (
   !atLeast11 && stdenv.cc.isClang && stdenv.hostPlatform.isDarwin
 ) ./clang-genconditions.patch
-
-## gcc 9.0 and older ##############################################################################
-
-++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
-# Needed for NetBSD cross comp in older versions
-# https://gcc.gnu.org/pipermail/gcc-patches/2020-January/thread.html#537548
-# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98d56ea8900fdcff8f1987cf2bf499a5b7399857
-++ optional (!atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
-
-# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
-# which is not supported by the clang integrated assembler used by default on Darwin.
-++ optional (is9 && hostPlatform.isDarwin) ./9/gcc9-darwin-as-gstabs.patch
