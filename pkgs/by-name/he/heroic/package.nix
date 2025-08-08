@@ -5,7 +5,7 @@
   extraLibraries ? pkgs: [ ],
 }:
 
-steam.buildRuntimeEnv {
+(steam.override { privateTmp = false; }).buildRuntimeEnv {
   pname = "heroic";
   inherit (heroic-unwrapped) version meta;
 
