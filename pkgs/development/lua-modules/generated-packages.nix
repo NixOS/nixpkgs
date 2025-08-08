@@ -4338,8 +4338,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-lua";
         repo = "plenary.nvim";
-        rev = "857c5ac632080dba10aae49dba902ce3abf91b35";
-        hash = "sha256-8FV5RjF7QbDmQOQynpK7uRKONKbPRYbOPugf9ZxNvUs=";
+        rev = "b9fd5226c2f76c951fc8ed5923d85e4de065e509";
+        hash = "sha256-9Un7ekhBxcnmFE1xjCCFTZ7eqIbmXvQexpnhduAg4M0=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.4";
