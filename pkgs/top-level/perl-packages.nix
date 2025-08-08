@@ -18714,6 +18714,56 @@ with self;
     };
   };
 
+  Lasso = stdenv.mkDerivation {
+    pname = "Lasso";
+    version = "unstable-2025-08-06";
+    src = pkgs.fetchgit {
+      url = "https://git.entrouvert.org/entrouvert/lasso.git";
+      rev = "1aaf190b2f3d273017c1e1ba42c357843fc2e41d";
+      hash = "sha256-PID1qQKv/rs22ZFIQZ/1QXBpo8fMlwja/pkz99La6dA=";
+    };
+    buildInputs = [
+      pkgs.autoconf
+      pkgs.automake
+      pkgs.glib
+      pkgs.gnum4
+      pkgs.gtk-doc
+      pkgs.libtool
+      pkgs.libxml2
+      pkgs.libxslt
+      pkgs.openssl
+      pkgs.perl
+      pkgs.pkg-config
+      pkgs.python3
+      pkgs.which
+      pkgs.xmlsec
+      pkgs.zlib
+    ];
+    prePatch = ''
+      substituteInPlace autogen.sh \
+        --replace-fail 'AUTOMAKE=""' 'AUTOMAKE="automake"'
+      substituteInPlace configure.ac \
+        --replace-fail "LT_AC_PROG_RC" "LT_PROG_RC" \
+        --replace-fail 'enable_python="yes"' 'enable_python="no"' \
+        --replace-fail 'enable_php5="yes"' 'enable_php5="no"' \
+        --replace-fail 'enable_php7="yes"' 'enable_php7="no"'
+
+      echo "2025.8.6" > .tarball-version
+    '';
+    preConfigure = ''
+      ./autogen.sh
+    '';
+    postInstall = ''
+      mkdir -p $out/lib/perl5/site_perl/${pkgs.perl.version}
+      cp -r $out/lib/perl5/${pkgs.perl.version}/* $out/lib/perl5/site_perl/${pkgs.perl.version}
+    '';
+    meta = {
+      description = "A free (GNU GPL) implementation of the Liberty Alliance specifications";
+      homepage = "https://git.entrouvert.org/entrouvert/lasso.git";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   LatexIndent = buildPerlPackage rec {
     pname = "latexindent.pl";
     version = "3.21";
