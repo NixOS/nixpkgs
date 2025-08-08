@@ -1943,6 +1943,7 @@
   ./tasks/stratis.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
+  ./testing/hardcodedSecret.nix
   ./testing/service-runner.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/appvm.nix
