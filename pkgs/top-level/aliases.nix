@@ -955,6 +955,8 @@ mapAliases {
   gcc10StdenvCompat = throw "gcc10StdenvCompat has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gcc11 = throw "gcc11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gcc11Stdenv = throw "gcc11Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  gcc12 = throw "gcc12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  gcc12Stdenv = throw "gcc12Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gcc-arm-embedded-6 = throw "gcc-arm-embedded-6 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
   gcc-arm-embedded-7 = throw "gcc-arm-embedded-7 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
   gcc-arm-embedded-8 = throw "gcc-arm-embedded-8 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
@@ -962,6 +964,7 @@ mapAliases {
   gcc-arm-embedded-10 = throw "gcc-arm-embedded-10 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
   gcc-arm-embedded-11 = throw "gcc-arm-embedded-11 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
   gcc-arm-embedded-12 = throw "gcc-arm-embedded-12 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gccgo12 = throw "gccgo12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gcj = gcj6; # Added 2024-09-13
   gcj6 = throw "gcj6 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   gcolor2 = throw "'gcolor2' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gcolor3' or 'eyedropper' instead"; # Added 2024-09-15
@@ -979,6 +982,7 @@ mapAliases {
   gfortran9 = throw "gfortran9 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gfortran10 = throw "gfortran10 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gfortran11 = throw "gfortran11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  gfortran12 = throw "gfortran12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gg = go-graft; # Added 2025-03-07
   ggobi = throw "'ggobi' has been removed from Nixpkgs, as it is unmaintained and broken"; # Added 2025-05-18
   ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
@@ -1029,7 +1033,10 @@ mapAliases {
   gnat11 = throw "gnat11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnat-bootstrap11 = throw "gnat-bootstrap11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnatboot11 = throw "gnatboot11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
-  gnatboot12 = gnat-bootstrap12;
+  gnat12 = throw "gnat12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  gnat-bootstrap12 = throw "gnat-bootstrap12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  gnatboot12 = throw "gnatboot12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
+  gnat12Packages = throw "gnat12Packages has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnatboot = gnat-bootstrap;
   gnatcoll-core = gnatPackages.gnatcoll-core; # Added 2024-02-25
   gnatcoll-gmp = gnatPackages.gnatcoll-gmp; # Added 2024-02-25

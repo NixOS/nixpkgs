@@ -17943,7 +17943,7 @@ self: super: with self; {
       #
       # We use the nixpkgs' default libstdc++ to stay compatible with other
       # python modules
-      stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
+      #stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
     };
 
   tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };

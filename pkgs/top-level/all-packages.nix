@@ -4861,7 +4861,6 @@ with pkgs;
         extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
       };
 
-  gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
   gcc13Stdenv = overrideCC gccStdenv buildPackages.gcc13;
   gcc14Stdenv = overrideCC gccStdenv buildPackages.gcc14;
   gcc15Stdenv = overrideCC gccStdenv buildPackages.gcc15;
@@ -4963,7 +4962,6 @@ with pkgs;
       });
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
-    gcc12
     gcc13
     gcc14
     gcc15
@@ -4982,34 +4980,6 @@ with pkgs;
   };
 
   gnat = gnat13; # When changing this, update also gnatPackages
-
-  gnat12 = wrapCC (
-    gcc12.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap12
-        else
-          buildPackages.gnat12;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-          && stdenv.buildPlatform.isx86_64
-        then
-          overrideCC stdenv gnat-bootstrap12
-        else
-          stdenv;
-    }
-  );
 
   gnat13 = wrapCC (
     gcc13.cc.override {
@@ -5096,14 +5066,6 @@ with pkgs;
   );
 
   gnat-bootstrap = gnat-bootstrap13;
-  gnat-bootstrap12 = wrapCCWith (
-    {
-      cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "12"; };
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
-      bintools = bintoolsDualAs;
-    }
-  );
   gnat-bootstrap13 = wrapCCWith (
     {
       cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "13"; };
@@ -5121,7 +5083,6 @@ with pkgs;
     }
   );
 
-  gnat12Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat12; });
   gnat13Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat13; });
   gnat14Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat14; });
   gnat15Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat15; });
@@ -5134,21 +5095,6 @@ with pkgs;
 
   gccgo = wrapCC (
     gcc.cc.override {
-      name = "gccgo";
-      langCC = true; # required for go.
-      langC = true;
-      langGo = true;
-      langJit = true;
-      profiledCompiler = false;
-    }
-    // {
-      # not supported on darwin: https://github.com/golang/go/issues/463
-      meta.broken = stdenv.hostPlatform.isDarwin;
-    }
-  );
-
-  gccgo12 = wrapCC (
-    gcc12.cc.override {
       name = "gccgo";
       langCC = true; # required for go.
       langC = true;

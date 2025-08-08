@@ -28,11 +28,9 @@
 let
   atLeast15 = lib.versionAtLeast version "15";
   atLeast14 = lib.versionAtLeast version "14";
-  atLeast13 = lib.versionAtLeast version "13";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
-  is12 = majorVersion == "12";
 
   # We only apply these patches when building a native toolchain for
   # aarch64-darwin, as it breaks building a foreign one:
@@ -77,10 +75,6 @@ in
       "13" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
-      ];
-      "12" = [
-        ./no-sys-dirs-riscv.patch
-        ./12/mangle-NIX_STORE-in-__FILE__.patch
       ];
     }
     ."${majorVersion}" or [ ]
@@ -186,7 +180,6 @@ in
     "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
-    "12" = [ ./gnat-darwin-dylib-install-name.patch ];
   }
   .${majorVersion} or [ ]
 )
@@ -223,24 +216,6 @@ in
         hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
       })
     ];
-    # Patches from https://github.com/iains/gcc-12-branch/compare/2bada4bc59bed4be34fab463bdb3c3ebfd2b41bb..gcc-12-4-darwin
-    "12" = [
-      (fetchurl {
-        name = "gcc-12-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
-        sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
-      })
-      # Needed to build LLVM>18
-      ./cfi_startproc-reorder-label-2.diff
-    ];
   }
   .${majorVersion} or [ ]
 )
-
-## Windows
-
-# Backported mcf thread model support from gcc13:
-# https://github.com/gcc-mirror/gcc/commit/f036d759ecee538555fa8c6b11963e4033732463
-++ optional (
-  !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf"
-) (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
