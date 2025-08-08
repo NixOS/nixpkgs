@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mcp";
-  version = "0.3.7";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tadata-org";
     repo = "fastapi_mcp";
     tag = "v${version}";
-    hash = "sha256-WQ+Y/TM5fz0lHjCKvEuYGY6hzxo2ePcgRnq7piNC+KQ=";
+    hash = "sha256-TCmM5n6BF3CWEuGVSZnUL2rTYitKtn4vSCkiQvKFLKw=";
   };
 
   build-system = [
@@ -74,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Expose your FastAPI endpoints as Model Context Protocol (MCP) tools, with Auth";
     homepage = "https://github.com/tadata-org/fastapi_mcp";
-    changelog = "https://github.com/tadata-org/fastapi_mcp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tadata-org/fastapi_mcp/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

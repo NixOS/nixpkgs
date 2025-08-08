@@ -2292,7 +2292,8 @@
       ];
     "hko" =
       ps: with ps; [
-      ]; # missing inputs: hko
+        hko
+      ];
     "hlk_sw16" =
       ps: with ps; [
         hlk-sw16
@@ -3405,7 +3406,8 @@
       ];
     "marytts" =
       ps: with ps; [
-      ]; # missing inputs: speak2mary
+        speak2mary
+      ];
     "mastodon" =
       ps: with ps; [
         mastodon-py
@@ -6159,7 +6161,8 @@
       ];
     "triggercmd" =
       ps: with ps; [
-      ]; # missing inputs: triggercmd
+        triggercmd
+      ];
     "tts" =
       ps: with ps; [
         ha-ffmpeg
@@ -7142,6 +7145,7 @@
     "history"
     "history_stats"
     "hive"
+    "hko"
     "hlk_sw16"
     "holiday"
     "home_connect"
@@ -7287,6 +7291,7 @@
     "mailgun"
     "manual"
     "manual_mqtt"
+    "marytts"
     "mastodon"
     "matrix"
     "matter"
@@ -7681,6 +7686,7 @@
     "transmission"
     "transport_nsw"
     "trend"
+    "triggercmd"
     "tts"
     "tuya"
     "twentemilieu"

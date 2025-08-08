@@ -5966,6 +5966,12 @@
     githubId = 58050402;
     name = "Jost Alemann";
   };
+  DDoSolitary = {
+    email = "DDoSolitary@gmail.com";
+    github = "DDoSolitary";
+    githubId = 25856103;
+    name = "DDoSolitary";
+  };
   dduan = {
     email = "daniel@duan.ca";
     github = "dduan";
@@ -6601,6 +6607,12 @@
     github = "dochang";
     githubId = 129093;
     name = "Desmond O. Chang";
+  };
+  DoctorDalek1963 = {
+    email = "dyson.dyson@icloud.com";
+    github = "DoctorDalek1963";
+    githubId = 69600500;
+    name = "Dyson Dyson";
   };
   dod-101 = {
     email = "david.thievon@proton.me";
@@ -11947,6 +11959,12 @@
     githubId = 51518420;
     name = "jitwit";
   };
+  jjacke13 = {
+    email = "vaios.k@pm.me";
+    github = "jjacke13";
+    githubId = 156372486;
+    name = "Vaios Karastathis";
+  };
   jjjollyjim = {
     email = "jamie@kwiius.com";
     github = "JJJollyjim";
@@ -16156,6 +16174,13 @@
     github = "meebey";
     githubId = 318066;
     name = "Mirco Bauer";
+  };
+  meenzen = {
+    name = "Samuel Meenzen";
+    email = "samuel@meenzen.net";
+    matrix = "@samuel:mnzn.dev";
+    github = "meenzen";
+    githubId = 22305878;
   };
   megheaiulian = {
     email = "iulian.meghea@gmail.com";

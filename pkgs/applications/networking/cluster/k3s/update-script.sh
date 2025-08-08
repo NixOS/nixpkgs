@@ -61,17 +61,19 @@ fi
 cd "${NIXPKGS_K3S_PATH}/${MAJOR_VERSION}_${MINOR_VERSION}"
 
 CHARTS_URL=https://k3s.io/k3s-charts/assets
+TRAEFIK_CRD_CHART_SHA256=$(nix-hash --type sha256 --base32 --flat <(curl -o - "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}"))
+TRAEFIK_CHART_SHA256=$(nix-hash --type sha256 --base32 --flat <(curl -o - "${CHARTS_URL}/traefik/${CHART_FILES[1]}"))
 # Get metadata for both files
 rm -f chart-versions.nix.update
 cat > chart-versions.nix.update <<EOF
 {
   traefik-crd = {
     url = "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}";
-    sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}")";
+    sha256 = "$TRAEFIK_CRD_CHART_SHA256";
   };
   traefik = {
     url = "${CHARTS_URL}/traefik/${CHART_FILES[1]}";
-    sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik/${CHART_FILES[1]}")";
+    sha256 = "$TRAEFIK_CHART_SHA256";
   };
 }
 EOF

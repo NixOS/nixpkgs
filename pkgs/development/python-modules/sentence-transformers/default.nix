@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-7HdeNyB3hMJEwHenN2hUEGG2MdQ++nF3nyAYJv7jhyA=";
+    hash = "sha256-snowpTdHelcFjo1+hvqpoVt5ROB0f91yt0GsIvA5cso=";
   };
 
   build-system = [ setuptools ];
@@ -122,6 +122,7 @@ buildPythonPackage rec {
     "tests/test_pretrained_stsb.py"
     "tests/test_sentence_transformer.py"
     "tests/test_train_stsb.py"
+    "tests/util/test_hard_negatives.py"
   ];
 
   # Sentence-transformer needs a writable hf_home cache
