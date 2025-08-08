@@ -114,7 +114,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   patches = [
     # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `api.json` from the file bundled with `bun build`.
+    # `_api.json` from the file bundled with `bun build`.
     ./local-models-dev.patch
   ];
 
@@ -126,7 +126,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/api.json";
+  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
 
   buildPhase = ''
     runHook preBuild
