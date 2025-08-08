@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.10.0";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
-    hash = "sha256-Frrx3FXtz4GCCv106t/pMpfsPSCINH74Ner+WlccbgQ=";
+    hash = "sha256-bwTc2tzgGNcsDDeHkjq9ZeTuYLc7u76WbMvzOmzOTI4=";
   };
 
   build-system = [ setuptools ];
