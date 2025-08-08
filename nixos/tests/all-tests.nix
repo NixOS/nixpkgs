@@ -772,18 +772,8 @@ in
   k3s = handleTest ./k3s { };
   kafka = handleTest ./kafka { };
   kanboard = runTest ./web-apps/kanboard.nix;
-  kanidm =
-    kanidmVersion:
-    runTest {
-      imports = [ ./kanidm.nix ];
-      _module.args = { inherit kanidmVersion; };
-    };
-  kanidm-provisioning =
-    kanidmVersion:
-    runTest {
-      imports = [ ./kanidm-provisioning.nix ];
-      _module.args = { inherit kanidmVersion; };
-    };
+  kanidm = runTest ./kanidm.nix;
+  kanidm-provisioning = runTest ./kanidm-provisioning.nix;
   karma = runTest ./karma.nix;
   kavita = runTest ./kavita.nix;
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;

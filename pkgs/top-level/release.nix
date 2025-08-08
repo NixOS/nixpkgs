@@ -395,8 +395,6 @@ let
                 haskell-language-server
                 ;
             });
-        idrisPackages = packagePlatforms pkgs.idrisPackages;
-        agdaPackages = packagePlatforms pkgs.agdaPackages;
 
         pkgsLLVM.stdenv = [
           "x86_64-linux"
@@ -419,16 +417,8 @@ let
           "aarch64-linux"
         ];
 
-        # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
-
-        #emacsPackages = packagePlatforms pkgs.emacsPackages;
-        #rPackages = packagePlatforms pkgs.rPackages;
+        # Fails CI in its current state
         ocamlPackages = { };
-        perlPackages = { };
-
-        darwin = packagePlatforms pkgs.darwin // {
-          xcode = { };
-        };
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in

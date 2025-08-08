@@ -1103,12 +1103,12 @@ final: prev: {
 
   augment-vim = buildVimPlugin {
     pname = "augment.vim";
-    version = "2025-03-18";
+    version = "2025-07-30";
     src = fetchFromGitHub {
       owner = "augmentcode";
       repo = "augment.vim";
-      rev = "97418c9dfc1918fa9bdd23863ea3d2e49130727f";
-      sha256 = "1sq4lpwzd2xc97l4h7zyglhg0jwg3xfw9qfidi26rz28dd1v2ivs";
+      rev = "b35cda0dab3b729e2eee3d792dcdb0ca7bb2482e";
+      sha256 = "05lwi6wp77dgaa9fn719piab3k8s5x7djfbzmbvmypp8zk8az6wx";
     };
     meta.homepage = "https://github.com/augmentcode/augment.vim/";
     meta.hydraPlatforms = [ ];
