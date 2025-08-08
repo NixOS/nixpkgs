@@ -519,7 +519,7 @@ isELF() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
@@ -530,7 +530,7 @@ isMachO() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
 
     # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
@@ -559,7 +559,7 @@ isScript() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 2 -u "$fd" magic
+    LANG=C read -r -n 2 -u "$fd" magic
     exec {fd}<&-
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
