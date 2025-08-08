@@ -357,6 +357,13 @@ stdenv.mkDerivation rec {
       (storage "scsi" true)
       (storage "vstorage" isLinux)
       (storage "zfs" enableZfs)
+
+      (lib.mesonOption "firewall_backend_priority" (
+        lib.concatStringsSep "," [
+          "iptables"
+          "nftables"
+        ]
+      ))
     ];
 
   doCheck = true;
