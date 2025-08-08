@@ -30107,6 +30107,43 @@ with self;
     };
   };
 
+  RDFQuery = buildPerlPackage {
+    pname = "RDFQuery";
+    version = "2.919";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GW/GWILLIAMS/RDF-Query-2.919.tar.gz";
+      hash = "sha256-H+WzAoAI9ukI54WLGWItk/jUbf7gRQU13I5wLcfxL0k=";
+    };
+    buildInputs = [
+      TestException
+      TestJSON
+      YAML
+    ];
+    propagatedBuildInputs = [
+      DataUUID
+      DateTimeFormatW3CDTF
+      Error
+      GetoptSimple
+      JSON
+      LWP
+      ModulePluggable
+      ParseRecDescent
+      PathTools
+      RDFTrine
+      ScalarListUtils
+      SetScalar
+      URI
+    ];
+    meta = {
+      description = "A complete SPARQL 1.1 Query and Update implementation for use with RDF::Trine";
+      homepage = "https://github.com/kasei/perlrdf";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   RDFTrine = buildPerlPackage {
     pname = "RDFTrine";
     version = "1.109";
