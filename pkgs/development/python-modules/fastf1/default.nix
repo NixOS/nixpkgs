@@ -21,19 +21,11 @@
   scipy,
   timple,
   websockets,
-}: let
-  websockets13 = websockets.overrideDerivation (oldAttrs: {
-    src = fetchFromGitHub {
-      owner = "aaugustin";
-      repo = "websockets";
-      tag = "13.1";
-      hash = "sha256-Y0HDZw+H7l8+ywLLzFk66GNDCI0uWOZYypG86ozLo7c";
-    };
-  });
-in
-buildPythonPackage {
+}:
+
+buildPythonPackage rec {
   pname = "fastf1";
-  version = "3.5.3";
+  version = "3.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,8 +33,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "theOehrly";
     repo = "Fast-F1";
-    rev = "bc032923c5ccb5ccb693fc238a0949d8afaae139";
-    hash = "sha256-lXXTD++mnG1iMP2r6y7czf9hXtC4niDiCVMitPGHQ5c";
+    tag = "v${version}";
+    hash = "sha256-BGA84g3TrBaiRNJqJ3+vWAzVMCwU9nLMSDgs1BbcZD8=";
   };
 
   build-system = [
@@ -60,8 +52,9 @@ buildPythonPackage {
     requests-cache
     scipy
     timple
-    websockets13
+    websockets
   ];
+  pythonRelaxDeps = [ "websockets" ];
 
   pythonImportsCheck = [ "fastf1" ];
 
