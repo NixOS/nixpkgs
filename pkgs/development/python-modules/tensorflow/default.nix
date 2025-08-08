@@ -1,6 +1,7 @@
 {
   stdenv,
-  bazel_5,
+  #bazel_5,
+  bazel,
   buildBazelPackage,
   lib,
   fetchFromGitHub,
@@ -285,7 +286,8 @@ let
 
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
     name = "${pname}-${version}";
-    bazel = bazel_5;
+    #bazel = bazel_5;
+    bazel = bazel;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
