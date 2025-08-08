@@ -1,32 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  python-can,
   canmatrix,
+  fetchPypi,
   pytestCheckHook,
-  pythonOlder,
+  python-can,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "canopen";
   version = "2.4.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-IKhLxJizTa3XnOzkZ9O74ZWRwcAqjzkzG8xgZcTYsus=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    python-can
-    canmatrix
-  ];
+  dependencies = [ python-can ];
+
+  optional-dependencies = {
+    db_export = [ canmatrix ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
