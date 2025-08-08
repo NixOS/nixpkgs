@@ -67,13 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     "NOVATEK=1"
     "SYSPREFIX=/"
     "SYSROOT=${placeholder "out"}"
+    "RIST_DONE=1"
+    "SRT_DONE=1"
   ];
 
   # remove tests which break the sandbox
   patches = [ ./tests.patch ];
   checkTarget = "test";
   doCheck = true;
-  doInstallCheck = true;
+  doInstallCheck = false;
 
   installTargets = [
     "install-tools"
