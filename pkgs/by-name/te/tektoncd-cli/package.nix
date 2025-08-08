@@ -3,6 +3,9 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+
+  stdenv,
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -44,12 +47,22 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     installManPage docs/man/man1/*
-
-    installShellCompletion --cmd tkn \
-      --bash <($out/bin/tkn completion bash) \
-      --fish <($out/bin/tkn completion fish) \
-      --zsh <($out/bin/tkn completion zsh)
-  '';
+  ''
+  + (
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}"
+        else
+          lib.getExe buildPackages.tektoncd-cli;
+    in
+    ''
+      installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    ''
+  );
 
   doInstallCheck = true;
   installCheckPhase = ''
