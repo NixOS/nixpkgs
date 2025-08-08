@@ -30147,6 +30147,29 @@ with self;
     };
   };
 
+  RDFNS = buildPerlModule {
+    pname = "RDF-NS";
+    version = "20230619";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VO/VOJ/RDF-NS-20230619.tar.gz";
+      hash = "sha256-WFYxLf2ohSsQ6TVLlWX1BsH/KE6cI0nJyy1tghvGal0=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+    ];
+    propagatedBuildInputs = [
+      FileShareDir
+      RDFTrine
+    ];
+    meta = {
+      description = "Just use popular RDF namespace prefixes from prefix.cc";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   RDFQuery = buildPerlPackage {
     pname = "RDFQuery";
     version = "2.919";
