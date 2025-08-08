@@ -5411,8 +5411,8 @@ let
         mktplcRef = {
           name = "php-debug";
           publisher = "xdebug";
-          version = "1.36.1";
-          hash = "sha256-4r3mf7q6n1b/cVYIGZyRNK5nEAJYzTz4cJrKNH+R01s=";
+          version = "1.36.2";
+          hash = "sha256-9fGdxJaCWUUNSwPz+Ase9iW+EEXo+s1i8ryUW/ZCjbw=";
         };
         meta = {
           description = "PHP Debug Adapter";
