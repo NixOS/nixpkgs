@@ -30187,6 +30187,26 @@ with self;
     };
   };
 
+  RDFPrefixes = buildPerlPackage {
+    pname = "RDF-Prefixes";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/RDF-Prefixes-0.005.tar.gz";
+      hash = "sha256-BYtyMr4Iyju7ei2sYYTmRpwZ0hJIkQ/p80lARVc0abg=";
+    };
+    checkInputs = [
+      TestWarn
+    ];
+    meta = {
+      description = "Simple way to turn URIs into QNames";
+      homepage = "https://github.com/tobyink/p5-rdf-prefixes";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   RDFQuery = buildPerlPackage {
     pname = "RDFQuery";
     version = "2.919";
