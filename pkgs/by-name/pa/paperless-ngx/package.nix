@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPypi,
   node-gyp,
   nodejs_20,
   nixosTests,
@@ -39,6 +40,18 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = prev.django_5_1;
+
+      fido2 = prev.fido2.overridePythonAttrs {
+        version = "1.2.0";
+
+        src = fetchPypi {
+          pname = "fido2";
+          version = "1.2.0";
+          hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
+        };
+
+        pytestFlags = [ ];
+      };
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
