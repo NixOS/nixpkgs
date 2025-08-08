@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitea,
+  fetchpatch,
   pythonOlder,
   python,
 
@@ -54,6 +55,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-pwWrdWk3bARM4dKbEnUWXuyjw/rTcOjk3YXowDa+Hm8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "dj-rest-auth-compat.patch";
+      url = "https://github.com/pennersr/django-allauth/commit/d50a9b09bada6753b52e52571d0830d837dc08ee.patch";
+      hash = "sha256-cFj9HEAlAITbRcR23ptzUYamoLmdtFEUVkDtv4+BBY0=";
+    })
+  ];
 
   nativeBuildInputs = [ gettext ];
 

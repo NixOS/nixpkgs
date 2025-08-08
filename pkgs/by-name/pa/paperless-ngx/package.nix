@@ -170,6 +170,7 @@ python.pkgs.buildPythonApplication rec {
             tag = version;
             hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
           };
+          patches = [ ];
         }
       ))
       django-auditlog
