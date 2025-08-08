@@ -16082,6 +16082,12 @@
       { fingerprint = "838A FE0D 55DC 074E 360F  943A 84B6 9CE6 F3F6 B767"; }
     ];
   };
+  mcuste = {
+    email = "github@muratcanuste.com";
+    github = "mcuste";
+    githubId = 10829864;
+    name = "Murat Can Üste";
+  };
   mcwitt = {
     email = "mcwitt@gmail.com";
     github = "mcwitt";
