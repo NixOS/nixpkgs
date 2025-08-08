@@ -35083,6 +35083,42 @@ with self;
     };
   };
 
+  TestModern = buildPerlPackage {
+    pname = "Test-Modern";
+    version = "0.013";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Test-Modern-0.013.tar.gz";
+      hash = "sha256-Y+vAS3YcV0ihIQBtDiZypoNtOc+54LQt2oDIFh96EkY=";
+    };
+    propagatedBuildInputs = [
+      ExporterTiny
+      ImportInto
+      ModuleRuntime
+      TestAPI
+      TestDeep
+      TestFatal
+      TestLongString
+      TestPod
+      TestPodCoverage
+      TestVersion
+      TestWarnings
+      TryTiny
+    ];
+    checkInputs = [
+      LWP
+      Moose
+      namespaceclean
+    ];
+    meta = {
+      description = "Precision testing for modern perl";
+      homepage = "https://github.com/tobyink/p5-test-modern";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   TestMojibake = buildPerlPackage {
     pname = "Test-Mojibake";
     version = "1.3";
