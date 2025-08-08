@@ -24,8 +24,9 @@
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
+  stdenv' = if withCUDA then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "ctranslate2";
   version = "4.6.0";
 
