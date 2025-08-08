@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alkimia";
-  version = "8.2.0";
+  version = "8.2.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "alkimia";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1unlpGTJaAMhYacMO2totq0JFNaYffgieJsYa18DtkY=";
+    hash = "sha256-v5DfnnzOMsoCXr074ydXxBIrSsnbex6G/OqF6psTvPs=";
   };
 
   nativeBuildInputs = [
