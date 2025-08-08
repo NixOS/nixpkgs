@@ -25338,6 +25338,35 @@ with self;
     };
   };
 
+  namespacesweep = buildPerlPackage {
+    pname = "namespace-sweep";
+    version = "0.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FRIEDO/namespace-sweep-0.006.tar.gz";
+      hash = "sha256-3pnOkVqw+TeBWA40M9fcnCWFoniWJxc7KAxgMKwLGVM=";
+    };
+    propagatedBuildInputs = [
+      BHooksEndOfScope
+      PackageStash
+      ScalarListUtils
+      SubIdentify
+    ];
+    checkInputs = [
+      Moo
+      Moose
+      Mouse
+      SubName
+    ];
+    meta = {
+      description = "Sweep up imported subs in your classes";
+      homepage = "http://github.com/friedo/perl-namespace-sweep";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   NeovimExt = buildPerlPackage rec {
     pname = "Neovim-Ext";
     version = "0.06";
