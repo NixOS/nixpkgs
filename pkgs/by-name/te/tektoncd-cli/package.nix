@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-WB3XsXT8bXo2GpHC6hGKilRwloy31y18JD09cQklsV0=";
   };
 
@@ -61,7 +61,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://tekton.dev";
-    changelog = "https://github.com/tektoncd/cli/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/tektoncd/cli/releases/tag/${finalAttrs.src.tag}";
     description = "Provides a CLI for interacting with Tekton - tkn";
     longDescription = ''
       The Tekton Pipelines cli project provides a CLI for interacting with
