@@ -20966,6 +20966,22 @@ with self;
     };
   };
 
+  MathCartesianProduct = buildPerlModule {
+    pname = "Math-Cartesian-Product";
+    version = "1.009";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PRBRENAN/Math-Cartesian-Product-1.009.tar.gz";
+      hash = "sha256-0L8k5WquvkfJ220Jwle8O/WvLQ1p8GD+M8GAqccZnzI=";
+    };
+    meta = {
+      description = "Generate the Cartesian product of zero or more lists";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   MathBigInt = buildPerlPackage {
     pname = "Math-BigInt";
     version = "1.999842";
