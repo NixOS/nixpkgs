@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${version}";
-    hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
+    hash = "sha256-78s9ke6UV7Tnx3yCr0QZcVDqQELR4XoGgJY7olNJmjk=";
   };
 
   patches = [
@@ -60,20 +60,28 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
+  postPatch =
+    # Avoid downloading dependencies remove any downloads
+    ''
+      substituteInPlace setup.py \
+        --replace-fail "[get_json_package_info()]" "[]" \
+        --replace-fail "[get_llvm_package_info()]" "[]" \
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
+        --replace-fail "curr_version.group(1) != version" "False"
+    ''
     # Use our `cmakeFlags` instead and avoid downloading dependencies
-    # remove any downloads
-    substituteInPlace python/setup.py \
-      --replace-fail "[get_json_package_info()]" "[]"\
-      --replace-fail "[get_llvm_package_info()]" "[]"\
-      --replace-fail 'packages += ["triton/profiler"]' "pass"\
-      --replace-fail "curr_version.group(1) != version" "False"
-
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "cmake_args.extend(thirdparty_cmake_args)" \
+          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
+    ''
     # Don't fetch googletest
-    substituteInPlace cmake/AddTritonUnitTest.cmake \
-      --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
-      --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
-  '';
+    + ''
+      substituteInPlace cmake/AddTritonUnitTest.cmake \
+        --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
+        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    '';
 
   build-system = [ setuptools ];
 
@@ -90,6 +98,10 @@ buildPythonPackage rec {
 
     # Upstream's setup.py tries to write cache somewhere in ~/
     writableTmpDirAsHomeHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
   ];
 
   buildInputs = [
@@ -113,19 +125,11 @@ buildPythonPackage rec {
     "-Wno-stringop-overread"
   ];
 
-  # Avoid GLIBCXX mismatch with other cuda-enabled python packages
-  preConfigure = ''
+  preConfigure =
     # Ensure that the build process uses the requested number of cores
-    export MAX_JOBS="$NIX_BUILD_CORES"
-
-    # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
-    echo "
-    [build_ext]
-    base-dir=$PWD" >> python/setup.cfg
-
-    # The rest (including buildPhase) is relative to ./python/
-    cd python
-  '';
+    ''
+      export MAX_JOBS="$NIX_BUILD_CORES"
+    '';
 
   env = {
     TRITON_BUILD_PROTON = "OFF";
