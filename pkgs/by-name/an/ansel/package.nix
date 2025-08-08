@@ -11,7 +11,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libxslt,
   libxml2,
   cmake,
   exiftool,
@@ -45,7 +44,6 @@
   isocodes,
   libpsl,
   libepoxy,
-  libsoup_2_4,
   exiv2,
   libXtst,
   libthai,
@@ -61,6 +59,7 @@
   libgcrypt,
   graphicsmagick,
   unstableGitUpdater,
+  saxon,
 }:
 
 let
@@ -103,11 +102,11 @@ stdenv.mkDerivation {
     desktop-file-utils
     exiftool
     intltool
-    libxml2
     pkg-config
     perlPackages.perl
     python3Packages.jsonschema
     wrapGAppsHook3
+    saxon
   ];
 
   buildInputs = [
@@ -142,13 +141,12 @@ stdenv.mkDerivation {
     libsecret
     libselinux
     libsepol
-    libsoup_2_4
     libsysprof-capture
     libthai
     libwebp
     libXdmcp
     libxkbcommon
-    libxslt
+    libxml2
     libXtst
     openexr
     openjpeg
@@ -173,11 +171,6 @@ stdenv.mkDerivation {
     # Tags inherited from Darktable, + a "nightly" 0.0.0 tag that new artefacts get attached to
     hardcodeZeroVersion = true;
   };
-
-  # cmake can't find the binary itself
-  cmakeFlags = [
-    (lib.cmakeFeature "Xsltproc_BIN" (lib.getExe' libxslt "xsltproc"))
-  ];
 
   meta = {
     description = "Darktable fork minus the bloat plus some design vision";
