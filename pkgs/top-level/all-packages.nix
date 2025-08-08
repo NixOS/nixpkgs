@@ -1457,10 +1457,6 @@ with pkgs;
 
   ### APPLICATIONS/FILE-MANAGERS
 
-  doublecmd = callPackage ../by-name/do/doublecmd/package.nix {
-    inherit (libsForQt5) libqtpas wrapQtAppsHook;
-  };
-
   vifm-full = vifm.override {
     mediaSupport = true;
     inherit lib udisks2 python3;
@@ -12647,8 +12643,6 @@ with pkgs;
 
   lenovo-legion = libsForQt5.callPackage ../os-specific/linux/lenovo-legion/app.nix { };
 
-  leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
-
   libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
 
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
@@ -13549,10 +13543,6 @@ with pkgs;
     bdbSupport = false;
     perlBindings = true;
     pythonBindings = true;
-  };
-
-  surge = callPackage ../applications/audio/surge {
-    git = gitMinimal;
   };
 
   supersonic-wayland = supersonic.override {
@@ -15068,8 +15058,6 @@ with pkgs;
 
   p4est-dbg = p4est.override { debug = true; };
 
-  sageWithDoc = sage.override { withDoc = true; };
-
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
   };
@@ -15378,8 +15366,6 @@ with pkgs;
   openems = callPackage ../applications/science/electronics/openems {
     qcsxcad = libsForQt5.qcsxcad;
   };
-
-  qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
   xyce-parallel = callPackage ../by-name/xy/xyce/package.nix {
     withMPI = true;

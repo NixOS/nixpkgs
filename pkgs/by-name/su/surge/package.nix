@@ -5,7 +5,7 @@
   fetchpatch,
   fetchFromGitHub,
   cmake,
-  git,
+  gitMinimal,
   pkg-config,
   python3,
   cairo,
@@ -20,13 +20,13 @@
   rsync,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surge";
   version = "1.9.0";
 
   src = fetchurl {
-    url = "https://github.com/surge-synthesizer/releases/releases/download/${version}/SurgeSrc_${version}.tgz";
-    sha256 = "00af4lfcipl0rn0dn4gfipx7nbk8ym1mrmji8v0ar98frsrpxg4k";
+    url = "https://github.com/surge-synthesizer/releases/releases/download/${finalAttrs.version}/SurgeSrc_${finalAttrs.version}.tgz";
+    hash = "sha256-k7x+s84OpazARlHWXEP1aC57+o3uEduAzYDeyBwlTgE=";
   };
 
   extraContent = fetchFromGitHub {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     # or: https://github.com/surge-synthesizer/surge/blob/main/cmake/stage-extra-content.cmake
     # SURGE_EXTRA_CONTENT_HASH
     rev = "afc591cc06d9adc3dc8dc515a55c66873fa10296";
-    sha256 = "1wqv86l70nwlrb10n47rib80f47a96j9qqg8w5dv46ys1sq2nz7z";
+    hash = "sha256-/3wrsA7aG7Jb4ehhnKRJ6hAH0Ir5EAvCypRbcKhBG/M=";
   };
 
   patches = [
@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
     # Patch: https://github.com/surge-synthesizer/surge/pull/4845
     (fetchpatch {
       url = "https://github.com/surge-synthesizer/surge/commit/7a552038bab4b000d188ae425aa97963dc91db17.patch";
-      sha256 = "sha256-5Flf0uJqEK6e+sadB+vr6phdvvdZYXcFFfm4ywhAeW0=";
+      hash = "sha256-5Flf0uJqEK6e+sadB+vr6phdvvdZYXcFFfm4ywhAeW0=";
       name = "glibc_build_fix.patch";
     })
   ];
 
   nativeBuildInputs = [
     cmake
-    git
+    gitMinimal
     pkg-config
     python3
   ];
@@ -92,17 +92,17 @@ stdenv.mkDerivation rec {
     build/surge-headless
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       LV2 & VST3 synthesizer plug-in (previously released as Vember Audio
       Surge)
     '';
     homepage = "https://surge-synthesizer.github.io";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       magnetophon
       orivej
     ];
   };
-}
+})
