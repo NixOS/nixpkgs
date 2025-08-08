@@ -7,6 +7,7 @@
   caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
   nextcloud30Packages,
   nextcloud31Packages,
+  compressDrvWeb,
 }:
 
 let
@@ -18,44 +19,56 @@ let
       extraVulnerabilities ? [ ],
       packages,
     }:
-    stdenvNoCC.mkDerivation rec {
-      pname = "nextcloud";
-      inherit version;
+    let
+      basePackage = stdenvNoCC.mkDerivation rec {
+        pname = "nextcloud";
+        inherit version;
 
-      src = fetchurl {
-        url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
-        inherit hash;
+        src = fetchurl {
+          url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
+          inherit hash;
+        };
+
+        passthru = {
+          tests = lib.filterAttrs (
+            key: _: (lib.hasSuffix (lib.versions.major version) key)
+          ) nixosTests.nextcloud;
+          inherit packages;
+          compressed = compressed;
+        };
+
+        postPatch = ''
+          cp ${caBundle} resources/config/ca-bundle.crt
+        '';
+
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/
+          cp -R . $out/
+          runHook postInstall
+        '';
+
+        meta = {
+          changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
+          description = "Sharing solution for files, calendars, contacts and more";
+          homepage = "https://nextcloud.com";
+          teams = [ lib.teams.nextcloud ];
+          license = lib.licenses.agpl3Plus;
+          platforms = lib.platforms.linux;
+          knownVulnerabilities =
+            extraVulnerabilities ++ (lib.optional eol "Nextcloud version ${version} is EOL");
+        };
       };
-
-      passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
-        inherit packages;
-      };
-
-      postPatch = ''
-        cp ${caBundle} resources/config/ca-bundle.crt
-      '';
-
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/
-        cp -R . $out/
-        runHook postInstall
-      '';
-
-      meta = {
-        changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
-        description = "Sharing solution for files, calendars, contacts and more";
-        homepage = "https://nextcloud.com";
-        teams = [ lib.teams.nextcloud ];
-        license = lib.licenses.agpl3Plus;
-        platforms = lib.platforms.linux;
-        knownVulnerabilities =
-          extraVulnerabilities ++ (lib.optional eol "Nextcloud version ${version} is EOL");
-      };
-    };
+      compressed = (compressDrvWeb basePackage { }).overrideAttrs (
+        { passthru, ... }:
+        {
+          passthru = passthru // {
+            override = compressed;
+          };
+        }
+      );
+    in
+    basePackage;
 in
 {
   nextcloud30 = generic {
