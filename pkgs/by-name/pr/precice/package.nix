@@ -7,7 +7,7 @@
   eigen,
   libxml2,
   mpi,
-  python3,
+  python3Packages,
   petsc,
   pkg-config,
 }:
@@ -26,15 +26,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     (lib.cmakeBool "PRECICE_PETScMapping" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    (lib.cmakeFeature "PYTHON_LIBRARIES" python3.libPrefix)
-    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
-    python3.pkgs.numpy
   ];
 
   buildInputs = [
@@ -43,6 +39,8 @@ stdenv.mkDerivation rec {
     libxml2
     mpi
     petsc
+    python3Packages.python
+    python3Packages.numpy
   ];
 
   meta = {
