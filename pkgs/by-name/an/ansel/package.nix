@@ -170,6 +170,9 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" "$out/lib/ansel"
     )
   '';
+  cmakeFlags = [
+    "-DBINARY_PACKAGE_BUILD=1"
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     # Tags inherited from Darktable, + a "nightly" 0.0.0 tag that new artefacts get attached to
