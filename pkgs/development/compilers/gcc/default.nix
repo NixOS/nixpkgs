@@ -11,7 +11,6 @@
   langAda ? false,
   langObjC ? stdenv.targetPlatform.isDarwin,
   langObjCpp ? stdenv.targetPlatform.isDarwin,
-  langD ? false,
   langGo ? false,
   reproducibleBuild ? true,
   profiledCompiler ? false,
@@ -154,7 +153,6 @@ let
       langAda
       langC
       langCC
-      langD
       langFortran
       langGo
       langJit
@@ -194,10 +192,6 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
-
-# TODO: fixup D bootstrapping, probably by using gdc11 (and maybe other changes).
-#   error: GDC is required to build d
-assert atLeast12 -> !langD;
 
 # threadsCross is just for MinGW
 assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
@@ -409,7 +403,6 @@ pipe
           langAda
           langFortran
           langGo
-          langD
           version
           ;
         isGNU = true;

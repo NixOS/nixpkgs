@@ -5,7 +5,6 @@
   langAda,
   langObjC,
   langObjCpp,
-  langD,
   langFortran,
   langGo,
   reproducibleBuild,
@@ -109,11 +108,6 @@ in
 # Do not pass a default include dir on PowerPC+Musl
 # See https://github.com/NixOS/nixpkgs/pull/45340/commits/d6bb7d45162ac93e017cc9b665ae4836f6410710
 ++ [ ./ppc-musl.patch ]
-# Patches for libphobos, the standard library of the D language
-# - Forces libphobos to be built with -j1, as libtool misbehaves in parallel
-# - Gets rid of -idirafter flags added by our gcc wrappers, as gdc does not understand them
-# See https://github.com/NixOS/nixpkgs/pull/69144#issuecomment-535176453
-++ optional langD ./libphobos.patch
 # Moves the .cfi_starproc instruction to after the function label
 # Needed to build llvm-18 and later
 # See https://github.com/NixOS/nixpkgs/pull/354107/commits/2de1b4b14e17f42ba8b4bf43a29347c91511e008

@@ -5251,19 +5251,6 @@ with pkgs;
 
   gcc-arm-embedded = gcc-arm-embedded-14;
 
-  # It would be better to match the default gcc so that there are no linking errors
-  # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
-  gdc = gdc11;
-  gdc11 = wrapCC (
-    gcc11.cc.override {
-      name = "gdc";
-      langCC = false;
-      langC = false;
-      langD = true;
-      profiledCompiler = false;
-    }
-  );
-
   # Haskell and GHC
 
   haskell = callPackage ./haskell-packages.nix { };

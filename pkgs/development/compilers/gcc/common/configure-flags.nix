@@ -23,7 +23,6 @@
 
   langC,
   langCC,
-  langD ? false,
   langFortran,
   langAda ? false,
   langGo,
@@ -207,7 +206,6 @@ let
         lib.concatStringsSep "," (
           lib.optional langC "c"
           ++ lib.optional langCC "c++"
-          ++ lib.optional langD "d"
           ++ lib.optional langFortran "fortran"
           ++ lib.optional langAda "ada"
           ++ lib.optional langGo "go"
@@ -286,9 +284,6 @@ let
     ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
-    ]
-    ++ lib.optionals (langD) [
-      "--with-target-system-zlib=yes"
     ]
     # On mips64-unknown-linux-gnu libsanitizer defines collide with
     # glibc's definitions and fail the build. It was fixed in gcc-13+.
