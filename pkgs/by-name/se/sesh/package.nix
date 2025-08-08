@@ -26,7 +26,10 @@ buildGoModule rec {
     homepage = "https://github.com/joshmedeski/sesh";
     changelog = "https://github.com/joshmedeski/sesh/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gwg313 ];
+    maintainers = with lib.maintainers; [
+      gwg313
+      t-monaghan
+    ];
     mainProgram = "sesh";
   };
 }
