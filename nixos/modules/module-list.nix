@@ -50,6 +50,7 @@
   ./contracts/default.nix
   ./contracts/fileBackup.nix
   ./contracts/secret.nix
+  ./contracts/streamingBackup.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
