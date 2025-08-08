@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
   pname = "reiserfsprogs";
   version = "3.6.27";
 
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
+
   src = fetchurl {
     url = "https://www.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/v${version}/${pname}-${version}.tar.xz";
     hash = "sha256-DpW2f6d0ajwtWRRem5wv60pr5ShT6DtJexgurlCOYuM=";
