@@ -50,7 +50,7 @@ buildPythonPackage {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas
