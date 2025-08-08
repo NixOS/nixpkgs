@@ -114,7 +114,6 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? !stdenv.hostPlatform.isMusl,
-  withIptables ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -427,7 +426,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
   ++ lib.optional withLibseccomp libseccomp
-  ++ lib.optional withIptables iptables
   ++ lib.optional withPam pam
   ++ lib.optional withPCRE2 pcre2
   ++ lib.optional withSelinux libselinux
@@ -566,7 +564,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libcurl" wantCurl)
     (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
-    (lib.mesonEnable "libiptc" withIptables)
+    (lib.mesonEnable "libiptc" false)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
