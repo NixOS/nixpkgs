@@ -61,7 +61,8 @@ buildPythonPackage rec {
   '';
 
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # https://github.com/python-websockets/websockets/issues/1648
+  doCheck = pythonOlder "3.13" && !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "websockets" ];
 
