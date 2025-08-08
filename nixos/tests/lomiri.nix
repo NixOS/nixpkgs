@@ -64,52 +64,16 @@ let
         ];
       }
       ''
-        magick -size 640x480 canvas:white -pointsize 30 -fill black -annotate +100+100 '${wallpaperText}' $out
+        magick -size 640x480 canvas:black -pointsize 30 -fill white -annotate +100+100 '${wallpaperText}' $out
       '';
-  # gsettings tool with access to wallpaper schema
-  lomiri-gsettings =
-    pkgs:
-    pkgs.stdenv.mkDerivation {
-      name = "lomiri-gsettings";
-      dontUnpack = true;
-      nativeBuildInputs = with pkgs; [
-        glib
-        wrapGAppsHook3
-      ];
-      buildInputs = with pkgs; [
-        # Not using the Lomiri-namespaced setting yet
-        # lomiri.lomiri-schemas
-        gsettings-desktop-schemas
-      ];
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/bin
-        ln -s ${pkgs.lib.getExe' pkgs.glib "gsettings"} $out/bin/lomiri-gsettings
-        runHook postInstall
-      '';
-    };
-  setLomiriWallpaperService =
-    pkgs:
-    let
-      lomiriServices = [
-        "lomiri.service"
-        "lomiri-full-greeter.service"
-        "lomiri-full-shell.service"
-        "lomiri-greeter.service"
-        "lomiri-shell.service"
-      ];
-    in
-    rec {
-      description = "Set Lomiri wallpaper to something OCR-able";
-      wantedBy = lomiriServices;
-      before = lomiriServices;
-      serviceConfig = {
-        Type = "oneshot";
-        # Not using the Lomiri-namespaed settings yet
-        # ExecStart = "${lomiri-gsettings pkgs}/bin/lomiri-gsettings set com.lomiri.Shell background-picture-uri file://${wallpaperFile pkgs}";
-        ExecStart = "${lomiri-gsettings pkgs}/bin/lomiri-gsettings set org.gnome.desktop.background picture-uri file://${wallpaperFile pkgs}";
+
+  lomiriWallpaperDconfSettings = pkgs: {
+    settings = {
+      "org/gnome/desktop/background" = {
+        picture-uri = "file://${wallpaperFile pkgs}";
       };
     };
+  };
 
   sharedTestFunctions = ''
     def wait_for_text(text):
@@ -413,12 +377,14 @@ in
             ];
           };
 
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
+
           # Help with OCR
           systemd.tmpfiles.settings = {
             "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
-
-          systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
         };
 
       enableOCR = true;
@@ -562,12 +528,14 @@ in
             ];
           };
 
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
+
           # Help with OCR
           systemd.tmpfiles.settings = {
             "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
-
-          systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
         };
 
       enableOCR = true;
@@ -710,7 +678,9 @@ in
 
             environment.etc."${wallpaperName}".source = wallpaperFile pkgs;
 
-            systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
+            programs.dconf.profiles.user.databases = [
+              (lomiriWallpaperDconfSettings pkgs)
+            ];
 
             # Help with OCR
             systemd.tmpfiles.settings = {
@@ -733,7 +703,8 @@ in
                 machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
 
                 # Start page shows current time
-                wait_for_text(r"(AM|PM)")
+                # And the greeter *actually* renders our wallpaper!
+                wait_for_text(r"(AM|PM|Lorem|ipsum)")
                 machine.screenshot("lomiri_greeter_launched")
 
                 # Advance to login part
@@ -747,6 +718,7 @@ in
 
                 # Output rendering from Lomiri has started when it starts printing performance diagnostics
                 machine.wait_for_console_text("Last frame took")
+                # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
                 # Look for datetime's clock, one of the last elements to load
                 wait_for_text(r"(AM|PM)")
                 machine.screenshot("lomiri_launched")
@@ -849,7 +821,7 @@ in
       ocr = [ "Log Out" ];
       extraCheck = ''
         # We should be able to log out and return to the greeter
-        mouse_click(600, 280) # "Log Out"
+        mouse_click(600, 250) # "Log Out"
         mouse_click(340, 220) # confirm logout
         machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
       '';

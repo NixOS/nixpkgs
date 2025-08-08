@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "gauge";
-  version = "1.6.19";
+  version = "1.6.20";
 
   patches = [
     # adds a check which adds an error message when trying to
@@ -18,10 +18,10 @@ buildGoModule rec {
     owner = "getgauge";
     repo = "gauge";
     tag = "v${version}";
-    hash = "sha256-bfmzRZliLU6p/pbKhdXrwukwp0ApsPeOMRUWvovIZ3Q=";
+    hash = "sha256-Ynyi2ph1L9SfxDwgXqw55nieP5o9LyHxKw4HYQEhXEo=";
   };
 
-  vendorHash = "sha256-c9uYVxlC2YEgSsNkte3yJpX8HmTnTMjw2PJAe5IROmY=";
+  vendorHash = "sha256-vv77sD+H2PI06iaJWNGoT4Oe53Shc7QxlSL1nX4i4+Y=";
 
   excludedPackages = [
     "build"
