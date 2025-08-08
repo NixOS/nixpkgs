@@ -24570,6 +24570,12 @@
     githubId = 143103;
     name = "Attila Sztupak";
   };
+  t-monaghan = {
+    email = "tomaghan@gmail.com";
+    github = "t-monaghan";
+    githubId = 62273348;
+    name = "Thomas Monaghan";
+  };
   t184256 = {
     email = "monk@unboiled.info";
     github = "t184256";
