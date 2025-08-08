@@ -406,6 +406,7 @@ in
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
   contracts-fileBackup-restic = runTest ./contracts/fileBackup/restic.nix;
   contracts-secret-hardcodedSecret = runTest ./contracts/secret/hardcodedSecret.nix;
+  contracts-streamingBackup-restic = runTest ./contracts/streamingBackup/restic.nix;
   convos = runTest ./convos.nix;
   corerad = runTest ./corerad.nix;
   corteza = runTest ./corteza.nix;
