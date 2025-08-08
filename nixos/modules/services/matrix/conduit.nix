@@ -26,6 +26,22 @@ in
 
     package = lib.mkPackageOption pkgs "matrix-conduit" { };
 
+    secretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/matrix-conduit.env";
+      description = ''
+        Path to file containing sensitive environment variables.
+        Some variables that can be considered secrets are:
+
+        - CONDUIT_JWT_SECRET:
+          The secret used in the JWT to enable JWT login without it a 400 error will be returned
+
+        - CONDUIT_TURN_SECRET:
+          The TURN secret
+      '';
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
@@ -112,6 +128,7 @@ in
         <https://docs.conduit.rs/configuration.html>
         for details on supported values.
         Note that database_path can not be edited because the service's reliance on systemd StateDir.
+        For secrets use secretFile option instead.
       '';
     };
   };
@@ -158,6 +175,9 @@ in
         Restart = "on-failure";
         RestartSec = 10;
         UMask = "077";
+      }
+      // lib.optionalAttrs (cfg.secretFile != null) {
+        EnvironmentFile = cfg.secretFile;
       };
       unitConfig = {
         StartLimitBurst = 5;
