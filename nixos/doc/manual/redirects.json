@@ -1468,6 +1468,9 @@
   "module-security-acme-fix-jws": [
     "index.html#module-security-acme-fix-jws"
   ],
+  "module-security-acme-reload-dependencies": [
+    "index.html#module-security-acme-reload-dependencies"
+  ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"
   ],
