@@ -14,18 +14,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.14.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-qpYkD8fpnlTJ7RLAQrfswLFc58l/KY0x8NgGl/msG/I=";
+    hash = "sha256-s7gN1fsk/PRiVVzlrtmAUd2Vu8hhKtlCesLOVrzJ/58=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-oPWkxEMnffDZ7cmjWmmYGurYnHn4vYu64BhG7NhrxhE=";
+  cargoHash = "sha256-zgmiWyWB08v1WQVFzxpC/LGwF+XXbs8iW1d7i9Iw0Q4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,25 +34,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-    python3 # Required because of codex-rs/login/src/login_with_chatgpt.py
+    # Required because of codex-rs/login/src/login_with_chatgpt.py
+    python3
   ];
 
   nativeCheckInputs = [ gitMinimal ];
 
   __darwinAllowLocalNetworking = true;
   env = {
-    CODEX_SANDBOX = "seatbelt"; # Disables sandbox tests which want to access /usr/bin/touch
-    CODEX_SANDBOX_NETWORK_DISABLED = 1; # Skips tests that require networking
+    # Disables sandbox tests which want to access /usr/bin/touch
+    CODEX_SANDBOX = "seatbelt";
+    # Skips tests that require networking
+    CODEX_SANDBOX_NETWORK_DISABLED = 1;
   };
   checkFlags = [
-    "--skip=shell::tests::test_run_with_profile_escaping_and_execution" # Wants to access /bin/zsh
-    "--skip=includes_base_instructions_override_in_request" # Fails with 'stream ended unexpectedly: InternalAgentDied'
-    "--skip=includes_user_instructions_message_in_request" # Fails with 'stream ended unexpectedly: InternalAgentDied'
-    "--skip=originator_config_override_is_used" # Fails with 'stream ended unexpectedly: InternalAgentDied'
-    "--skip=azure_overrides_assign_properties_used_for_responses_url" # Panics
-    "--skip=test_conversation_create_and_send_message_ok" # Version 0.0.0 hardcoded
-    "--skip=test_send_message_session_not_found" # Version 0.0.0 hardcoded
-    "--skip=test_send_message_success" # Version 0.0.0 hardcoded
+    # Wants to access /bin/zsh
+    "--skip=shell::tests::test_run_with_profile_escaping_and_execution"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=includes_base_instructions_override_in_request"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=includes_user_instructions_message_in_request"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=originator_config_override_is_used"
+    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
+    "--skip=azure_overrides_assign_properties_used_for_responses_url"
+    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
+    "--skip=env_var_overrides_loaded_auth"
+    # Version 0.0.0 hardcoded
+    "--skip=test_conversation_create_and_send_message_ok"
+    # Version 0.0.0 hardcoded
+    "--skip=test_send_message_session_not_found"
+    # Version 0.0.0 hardcoded
+    "--skip=test_send_message_success"
   ];
 
   postInstall = lib.optionalString installShellCompletions ''

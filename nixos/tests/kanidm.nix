@@ -1,4 +1,4 @@
-{ kanidmVersion, pkgs, ... }:
+{ kanidmPackage, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
@@ -13,15 +13,15 @@ let
     cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
     cp ${certs."${serverDomain}".key} $out/snakeoil.key
   '';
-
-  kanidmPackage = pkgs."kanidm_${kanidmVersion}";
 in
 {
-  name = "kanidm";
+  name = "kanidm-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [
     Flakebi
     oddlama
   ];
+
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm;
 
   nodes.server =
     { pkgs, ... }:
