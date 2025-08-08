@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsduck";
-  version = "3.40-4165";
+  version = "3.41-4299";
 
   src = fetchFromGitHub {
     owner = "tsduck";
     repo = "tsduck";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bFnsGoElXeStIX5KwonJuF0x7DDzhzq+3oygkUOmZE0=";
+    sha256 = "sha256-nBPYKzb6GeBC7tTZgHLp1nAQM9SKpGhU/nHUJqT5TrY=";
   };
 
   nativeBuildInputs = [
