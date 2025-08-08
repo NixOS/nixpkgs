@@ -7,11 +7,6 @@
   crt ? stdenv.hostPlatform.libc,
 }:
 
-assert lib.assertOneOf "crt" crt [
-  "msvcrt"
-  "ucrt"
-];
-
 stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit (mingw_w64_headers) version src meta;
