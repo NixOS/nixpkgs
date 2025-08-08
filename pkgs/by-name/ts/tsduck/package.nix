@@ -18,6 +18,8 @@
   librist,
   openssl,
   srt,
+  editline,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,12 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    editline
     glibcLocales
     jdk
     libedit
     librist
     openssl
     srt
+    zlib
   ];
 
   enableParallelBuilding = true;
