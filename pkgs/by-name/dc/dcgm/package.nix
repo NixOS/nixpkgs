@@ -10,7 +10,6 @@
   mpi,
   mpiCheckPhaseHook,
   ninja,
-  cudaPackages_11,
   cudaPackages_12,
   boost186,
   fmt_10,
@@ -27,11 +26,10 @@
   yaml-cpp,
 }:
 let
-  # DCGM depends on 2 different versions of CUDA at the same time.
+  # DCGM can depend on multiple versions of CUDA at the same time.
   # The runtime closure, thankfully, is quite small as it does not
   # include the CUDA libraries.
   cudaPackageSets = [
-    cudaPackages_11
     cudaPackages_12
   ];
 
@@ -86,6 +84,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./remove-cuda-11.patch
     ./dynamic-libs.patch
     (replaceVars ./fix-paths.patch {
       inherit coreutils;
