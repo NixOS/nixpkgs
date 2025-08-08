@@ -251,6 +251,7 @@ goBuild (finalAttrs: {
     changelog = "https://github.com/ollama/ollama/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     platforms = if (rocmRequested || cudaRequested) then platforms.linux else platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin; # TODO: Remove after upstream issue is fixed, see issue #431464 and comments.
     mainProgram = "ollama";
     maintainers = with maintainers; [
       abysssol
