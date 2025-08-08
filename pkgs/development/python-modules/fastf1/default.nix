@@ -45,7 +45,7 @@ buildPythonPackage {
     hash = "sha256-lXXTD++mnG1iMP2r6y7czf9hXtC4niDiCVMitPGHQ5c";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
