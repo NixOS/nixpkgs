@@ -5706,11 +5706,6 @@ with pkgs;
     enableGui = true;
   };
 
-  obliv-c = callPackage ../development/compilers/obliv-c {
-    stdenv = gcc10Stdenv;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
 
