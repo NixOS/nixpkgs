@@ -37884,6 +37884,35 @@ with self;
     };
   };
 
+  TypesDateTime = buildPerlPackage {
+    pname = "Types-DateTime";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Types-DateTime-0.002.tar.gz";
+      hash = "sha256-rNS7tVzI466nYFLN65QwHrh1OxiCDcOXldOu3Mqqip0=";
+    };
+    propagatedBuildInputs = [
+      DateTime
+      DateTimeLocale
+      DateTimeTimeZone
+      ModuleRuntime
+      TypeTiny
+    ];
+    checkInputs = [
+      DateTimeFormatISO8601
+      Moose
+      TestModern
+    ];
+    meta = {
+      description = "Type constraints and coercions for datetime objects";
+      homepage = "https://github.com/tobyink/p5-types-datetime";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   TypesSerialiser = buildPerlPackage {
     pname = "Types-Serialiser";
     version = "1.01";
