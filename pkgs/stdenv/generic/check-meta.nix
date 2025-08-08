@@ -119,7 +119,7 @@ let
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
-  # Alow granular checks to allow only some unfree packages
+  # Allow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
   # {
@@ -280,7 +280,7 @@ let
 
       however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
 
-      and is missing the following ouputs:
+      and is missing the following outputs:
 
       ${concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
     '';
@@ -629,7 +629,7 @@ let
           else if valid == "warn" then
             (handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; })
           else
-            throw "Unknown validitiy: '${valid}'"
+            throw "Unknown validity: '${valid}'"
         );
       };
 
