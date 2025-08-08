@@ -30170,6 +30170,23 @@ with self;
     };
   };
 
+  RDFNSCurated = buildPerlPackage {
+    pname = "RDF-NS-Curated";
+    version = "1.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KJ/KJETILK/RDF-NS-Curated-1.006.tar.gz";
+      hash = "sha256-OtAJkzN6Rc6w3vholMu3zE5Mom33K8q9Vc0QakoIzbs=";
+    };
+    meta = {
+      description = "A curated set of RDF prefixes";
+      homepage = "https://github.com/perlrdf/p5-rdf-ns-curated";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   RDFQuery = buildPerlPackage {
     pname = "RDFQuery";
     version = "2.919";
