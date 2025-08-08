@@ -103,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./docbook2texi.patch
     ./git-sh-i18n.patch
     ./git-send-email-honor-PATH.patch
-    ./installCheck-path.patch
   ]
   ++ lib.optionals withSsh [
     ./ssh-path.patch
@@ -474,9 +473,6 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t1301-shared-repo
     # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
     disable_test t9902-completion
-
-    # Our patched gettext never fallbacks
-    disable_test t0201-gettext-fallbacks
   ''
   + lib.optionalString (!sendEmailSupport) ''
     # Disable sendmail tests
