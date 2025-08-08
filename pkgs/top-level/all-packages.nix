@@ -5095,7 +5095,7 @@ with pkgs;
     }
   );
 
-  gnat-bootstrap = gnat-bootstrap12;
+  gnat-bootstrap = gnat-bootstrap13;
   gnat-bootstrap12 = wrapCCWith (
     {
       cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "12"; };
