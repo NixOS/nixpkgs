@@ -20884,6 +20884,26 @@ with self;
     };
   };
 
+  matchsimpleXS = buildPerlPackage {
+    pname = "match-simple-XS";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/match-simple-XS-0.002.tar.gz";
+      hash = "sha256-WZc+SEnkb/hEhKvXT46/hfRvz6h2ewGDJp0ZB+NdHEE=";
+    };
+    checkInputs = [
+      TestFatal
+    ];
+    meta = {
+      description = "XS backend for match::simple";
+      homepage = "https://github.com/tobyink/p5-match-simple-xs";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   MathBase85 = buildPerlPackage {
     pname = "Math-Base85";
     version = "0.5";
