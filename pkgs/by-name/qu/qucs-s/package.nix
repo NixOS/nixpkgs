@@ -4,32 +4,27 @@
   fetchFromGitHub,
   flex,
   bison,
-  qtbase,
-  qtcharts,
-  qttools,
-  qtsvg,
-  qtwayland,
-  wrapQtAppsHook,
   libX11,
   cmake,
   gperf,
   adms,
   ngspice,
   qucsator-rf,
+  qt6Packages,
   kernels ? [
     ngspice
     qucsator-rf
   ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qucs-s";
   version = "25.1.2";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-+xPhHmuogNuolmMFcUAP2hMfJh1D+O4DrPkcuR6+mR8=";
   };
 
@@ -55,22 +50,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     flex
     bison
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     cmake
   ];
-  buildInputs = [
-    qtbase
-    qttools
-    qtcharts
-    qtsvg
-    gperf
-    adms
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-    libX11
-  ]
-  ++ kernels;
+  buildInputs =
+    with qt6Packages;
+    [
+      qtbase
+      qttools
+      qtcharts
+      qtsvg
+    ]
+    ++ [
+      gperf
+      adms
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+      libX11
+    ]
+    ++ kernels;
 
   cmakeFlags = [
     "-DWITH_QT6=ON"
@@ -84,27 +83,27 @@ stdenv.mkDerivation rec {
     (lib.makeBinPath kernels)
   ];
 
-  QTDIR = qtbase.dev;
+  QTDIR = qt6Packages.qtbase.dev;
 
   doInstallCheck = true;
   installCheck = ''
     $out/bin/qucs-s --version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Spin-off of Qucs that allows custom simulation kernels";
     longDescription = ''
       Spin-off of Qucs that allows custom simulation kernels.
       Default version is installed with ngspice.
     '';
     homepage = "https://ra3xdh.github.io/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "qucs-s";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mazurel
       kashw2
       thomaslepoix
     ];
-    platforms = with platforms; unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
