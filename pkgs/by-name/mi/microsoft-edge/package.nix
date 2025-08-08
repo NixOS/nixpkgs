@@ -178,11 +178,11 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "138.0.3351.121";
+  version = "139.0.3405.86";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-1Oi6Q2/2Pk0BG937Ij0zI7tgBSnwhPwGx34b+HlpXTU=";
+    hash = "sha256-S1/RUSwRQsBQno/I31xjw1CGs0tJpl5HRatat+wOqmE=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
