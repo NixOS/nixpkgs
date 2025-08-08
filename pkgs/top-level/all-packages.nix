@@ -10714,8 +10714,6 @@ with pkgs;
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
-  linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
-  linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
