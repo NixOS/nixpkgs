@@ -734,18 +734,14 @@ in
   immich = runTest ./web-apps/immich.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   incron = runTest ./incron.nix;
-  incus = pkgs.recurseIntoAttrs (
-    import ./incus {
-      inherit runTest;
-      lts = false;
-    }
-  );
-  incus-lts = pkgs.recurseIntoAttrs (
-    import ./incus {
-      inherit runTest;
-      lts = true;
-    }
-  );
+  incus = import ./incus {
+    inherit runTest;
+    lts = false;
+  };
+  incus-lts = import ./incus {
+    inherit runTest;
+    lts = true;
+  };
   influxdb = runTest ./influxdb.nix;
   influxdb2 = runTest ./influxdb2.nix;
   initrd-luks-empty-passphrase = runTest ./initrd-luks-empty-passphrase.nix;
