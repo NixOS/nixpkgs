@@ -36,6 +36,7 @@ let
             inherit url hash;
           };
           inherit version;
+          dontCheckForBrokenSymlinks = true;
         };
       }
       // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix)

@@ -25,7 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-NQRVEvi/B+KdhPIzw8pm22uXpYPkoaatkCNFnEcibzo=";
   };
 
-  pythonRelaxDeps = [ "smp" ];
+  pythonRelaxDeps = [
+    "bleak"
+    "smp"
+  ];
 
   build-system = [
     poetry-core
@@ -44,6 +47,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  patches = [ ./bleak-compat.patch ];
 
   pythonImportsCheck = [ "smpclient" ];
 
