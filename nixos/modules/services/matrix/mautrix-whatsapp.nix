@@ -267,6 +267,7 @@ in
     maintainers = with lib.maintainers; [
       pentane
       frederictobiasc
+      SchweGELBin
     ];
   };
 }
