@@ -23,6 +23,11 @@ let
       rev = "v${version}";
       hash = "sha256-kk8BbPl/UBW1gaO/cuOQ9OsiNTEk0TkvRDLKUAh6exk=";
     };
+    "20" = rec {
+      version = "20.1.5";
+      rev = "v${version}";
+      hash = "sha256-GdlC/Vl61nTNdua2s+CW2YOvkSKK6MNOvBc/393iths=";
+    };
     "19" = rec {
       version = "19.1.6";
       rev = "v${version}";
