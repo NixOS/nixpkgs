@@ -11,7 +11,10 @@ let
   configFile = format.generate "conduit.toml" cfg.settings;
 in
 {
-  meta.maintainers = with lib.maintainers; [ pstn ];
+  meta.maintainers = with lib.maintainers; [
+    pstn
+    SchweGELBin
+  ];
   options.services.matrix-conduit = {
     enable = lib.mkEnableOption "matrix-conduit";
 
