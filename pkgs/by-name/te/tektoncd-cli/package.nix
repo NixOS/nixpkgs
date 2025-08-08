@@ -4,6 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
 
+  writableTmpDirAsHomeHook,
+
   stdenv,
   buildPackages,
 }:
@@ -31,10 +33,11 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/tkn" ];
 
-  preCheck = ''
-    # some tests try to write to the home dir
-    export HOME="$TMPDIR"
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
+  preCheck = ''
     # run all tests
     unset subPackages
 
