@@ -38054,6 +38054,30 @@ with self;
     };
   };
 
+  TypesUUID = buildPerlPackage {
+    pname = "Types-UUID";
+    version = "0.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Types-UUID-0.004.tar.gz";
+      hash = "sha256-eTfkt0wxN9yd8OnWkaXq5wQWTrbmCIx7qOLvy8DHIjc=";
+    };
+    propagatedBuildInputs = [
+      TypeTiny
+      UUIDTiny
+    ];
+    checkInputs = [
+      URI
+    ];
+    meta = {
+      description = "Type constraints for UUIDs";
+      homepage = "https://github.com/tobyink/p5-types-uuid";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   UNIVERSALcan = buildPerlPackage {
     pname = "UNIVERSAL-can";
     version = "1.20140328";
