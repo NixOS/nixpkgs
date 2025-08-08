@@ -24,56 +24,32 @@ let
   # Since that service is a oneshot with RemainAfterExit,
   # the folder will exist during all renewal services.
   lockdir = "/run/acme/";
-  concurrencyLockfiles = map (n: "${toString n}.lock") (lib.range 1 cfg.maxConcurrentRenewals);
-  # Assign elements of `baseList` to each element of `needAssignmentList`, until the latter is exhausted.
-  # returns: [{fst = "element of baseList"; snd = "element of needAssignmentList"}]
-  roundRobinAssign =
-    baseList: needAssignmentList:
-    if baseList == [ ] then [ ] else _rrCycler baseList baseList needAssignmentList;
-  _rrCycler =
-    with builtins;
-    origBaseList: workingBaseList: needAssignmentList:
-    if (workingBaseList == [ ] || needAssignmentList == [ ]) then
-      [ ]
-    else
-      [
-        {
-          fst = head workingBaseList;
-          snd = head needAssignmentList;
-        }
-      ]
-      ++ _rrCycler origBaseList (
-        if (tail workingBaseList == [ ]) then origBaseList else tail workingBaseList
-      ) (tail needAssignmentList);
-  attrsToList = lib.mapAttrsToList (
-    attrname: attrval: {
-      name = attrname;
-      value = attrval;
-    }
-  );
-  # for an AttrSet `funcsAttrs` having functions as values, apply single arguments from
-  # `argsList` to them in a round-robin manner.
-  # Returns an attribute set with the applied functions as values.
-  roundRobinApplyAttrs =
-    funcsAttrs: argsList:
-    lib.listToAttrs (
-      map (x: {
-        inherit (x.snd) name;
-        value = x.snd.value x.fst;
-      }) (roundRobinAssign argsList (attrsToList funcsAttrs))
-    );
+
   wrapInFlock =
-    lockfilePath: script:
+    script:
     # explainer: https://stackoverflow.com/a/60896531
     ''
-      exec {LOCKFD}> ${lockfilePath}
-      echo "Waiting to acquire lock ${lockfilePath}"
-      ${pkgs.flock}/bin/flock ''${LOCKFD} || exit 1
-      echo "Acquired lock ${lockfilePath}"
+      maxConcurrentRenewals=${toString cfg.maxConcurrentRenewals}
+
+      acquireLock() {
+        echo "Waiting to acquire lock in ${lockdir}"
+        while true; do
+          for i in $(seq 1 $maxConcurrentRenewals); do
+            exec {LOCKFD}> "${lockdir}/$i.lock"
+            if ${pkgs.flock}/bin/flock -n ''${LOCKFD}; then
+              return 0
+            fi
+            exec {LOCKFD}>&-
+          done
+          sleep 1;
+        done
+      }
+
+      if [ "$maxConcurrentRenewals" -gt "0" ]; then
+        acquireLock
+      fi
     ''
-    + script
-    + "\n"
-    + ''echo "Releasing lock ${lockfilePath}"  # only released after process exit'';
+    + script;
 
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
@@ -356,7 +332,7 @@ let
         };
       };
 
-      baseService = lockfileName: {
+      baseService = {
         description = "Ensure certificate for ${cert}";
 
         wantedBy = [ "multi-user.target" ];
@@ -399,7 +375,7 @@ let
         # Working directory will be /tmp
         # minica will output to a folder sharing the name of the first domain
         # in the list, which will be ${data.domain}
-        script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
+        script = wrapInFlock ''
           set -ex
 
           # Regenerate self-signed certificates (in case the SANs change) until we
@@ -447,7 +423,7 @@ let
         '';
       };
 
-      orderRenewService = lockfileName: {
+      orderRenewService = {
         description = "Order (and renew) ACME certificate for ${cert}";
         after = [
           "network.target"
@@ -528,7 +504,7 @@ let
               };
 
         # Working directory will be /tmp
-        script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
+        script = wrapInFlock ''
           ${lib.optionalString data.enableDebugLogs "set -x"}
           set -euo pipefail
 
@@ -1179,22 +1155,12 @@ in
 
       systemd.services =
         let
-          orderRenewServiceFunctions = lib.mapAttrs' (
+          orderRenewServices = lib.mapAttrs' (
             cert: conf: lib.nameValuePair "acme-order-renew-${cert}" conf.orderRenewService
           ) certConfigs;
-          orderRenewServices =
-            if cfg.maxConcurrentRenewals > 0 then
-              roundRobinApplyAttrs orderRenewServiceFunctions concurrencyLockfiles
-            else
-              lib.mapAttrs (_: f: f null) orderRenewServiceFunctions;
-          baseServiceFunctions = lib.mapAttrs' (
+          baseServices = lib.mapAttrs' (
             cert: conf: lib.nameValuePair "acme-${cert}" conf.baseService
           ) certConfigs;
-          baseServices =
-            if cfg.maxConcurrentRenewals > 0 then
-              roundRobinApplyAttrs baseServiceFunctions concurrencyLockfiles
-            else
-              lib.mapAttrs (_: f: f null) baseServiceFunctions;
         in
         {
           acme-setup = setupService;
