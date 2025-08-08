@@ -38013,6 +38013,30 @@ with self;
     };
   };
 
+  TypesPathTiny = buildPerlPackage {
+    pname = "Types-Path-Tiny";
+    version = "0.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Types-Path-Tiny-0.006.tar.gz";
+      hash = "sha256-WT/J+u28aSgGWcDM6FFo+OehcUys346ea3SJvhjf4oA=";
+    };
+    propagatedBuildInputs = [
+      PathTiny
+      TypeTiny
+    ];
+    checkInputs = [
+      ExtUtilsMakeMaker
+      Filepushd
+      PathTools
+    ];
+    meta = {
+      description = "Path::Tiny types and coercions for Moose and Moo";
+      license = with lib.licenses; [
+        asl20
+      ];
+    };
+  };
+
   TypesSerialiser = buildPerlPackage {
     pname = "Types-Serialiser";
     version = "1.01";
