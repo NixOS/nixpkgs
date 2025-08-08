@@ -1,0 +1,35 @@
+{
+  "sha": "0cf1c5688708ec4a910c007d7f151c617b722268",
+  "node_id": "C_kwDOCUcpPNoAKDBjZjFjNTY4ODcwOGVjNGE5MTBjMDA3ZDdmMTUxYzYxN2I3MjIyNjg",
+  "url": "https://api.github.com/repos/smallstep/certificates/git/commits/0cf1c5688708ec4a910c007d7f151c617b722268",
+  "html_url": "https://github.com/smallstep/certificates/commit/0cf1c5688708ec4a910c007d7f151c617b722268",
+  "author": {
+    "name": "max furman",
+    "email": "mx.furman@gmail.com",
+    "date": "2025-03-18T01:52:31Z"
+  },
+  "committer": {
+    "name": "max furman",
+    "email": "mx.furman@gmail.com",
+    "date": "2025-03-18T01:56:02Z"
+  },
+  "tree": {
+    "sha": "6a4b9e306f8354dd98268d43165cfdacc525a3d2",
+    "url": "https://api.github.com/repos/smallstep/certificates/git/trees/6a4b9e306f8354dd98268d43165cfdacc525a3d2"
+  },
+  "message": "empty commit",
+  "parents": [
+    {
+      "sha": "78745ba9ff05d489f4bb95789f163217818adf26",
+      "url": "https://api.github.com/repos/smallstep/certificates/git/commits/78745ba9ff05d489f4bb95789f163217818adf26",
+      "html_url": "https://github.com/smallstep/certificates/commit/78745ba9ff05d489f4bb95789f163217818adf26"
+    }
+  ],
+  "verification": {
+    "verified": true,
+    "reason": "valid",
+    "signature": "-----BEGIN SSH SIGNATURE-----\nU1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgA8ntr7PdJsl4k9y5+5PSPGHxF9\nApcOp8nX+7zWn4lrUAAAADZ2l0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5\nAAAAQOPQaCIYk9phX7ma1OBeeDWTACwsa65QcrHD39sD5UYyjkU7WS9ZGYuQNLH+ltXXnV\nMqoymAxogsWE8qt7Yopgk=\n-----END SSH SIGNATURE-----",
+    "payload": "tree 6a4b9e306f8354dd98268d43165cfdacc525a3d2\nparent 78745ba9ff05d489f4bb95789f163217818adf26\nauthor max furman <mx.furman@gmail.com> 1742262751 -0700\ncommitter max furman <mx.furman@gmail.com> 1742262962 -0700\n\nempty commit\n",
+    "verified_at": "2025-03-18T01:56:22Z"
+  }
+}
