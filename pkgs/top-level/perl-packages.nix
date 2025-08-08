@@ -32646,6 +32646,26 @@ with self;
     };
   };
 
+  SubInfix = buildPerlPackage {
+    pname = "Sub-Infix";
+    version = "0.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-Infix-0.004.tar.gz";
+      hash = "sha256-XK6q2marSv39rlbAI+CZiAVDqafB+THyCoNNWIHBXss=";
+    };
+    checkInputs = [
+      TestFatal
+    ];
+    meta = {
+      description = "Create a fake infix operator";
+      homepage = "https://github.com/tobyink/p5-sub-infix";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   SubInfo = buildPerlPackage {
     pname = "Sub-Info";
     version = "0.002";
