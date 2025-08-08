@@ -1,10 +1,9 @@
 {
   runTest,
   lts ? true,
-  ...
 }:
 let
-  incusTest =
+  incusRunTest =
     config:
     runTest {
       imports = [
@@ -19,18 +18,18 @@ let
     };
 in
 {
-  all = incusTest { all = true; };
+  all = incusRunTest { all = true; };
 
-  appArmor = incusTest {
+  appArmor = incusRunTest {
     all = true;
     appArmor = true;
   };
 
-  container = incusTest { instance.container = true; };
+  container = incusRunTest { instance.container = true; };
 
-  lvm = incusTest { storage.lvm = true; };
+  lvm = incusRunTest { storage.lvm = true; };
 
-  openvswitch = incusTest { network.ovs = true; };
+  openvswitch = incusRunTest { network.ovs = true; };
 
   ui = runTest {
     imports = [ ./ui.nix ];
@@ -38,7 +37,7 @@ in
     _module.args = { inherit lts; };
   };
 
-  virtual-machine = incusTest { instance.virtual-machine = true; };
+  virtual-machine = incusRunTest { instance.virtual-machine = true; };
 
-  zfs = incusTest { storage.zfs = true; };
+  zfs = incusRunTest { storage.zfs = true; };
 }
