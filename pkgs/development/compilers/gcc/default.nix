@@ -80,11 +80,9 @@ let
   majorVersion = versions.major version;
   atLeast14 = versionAtLeast version "14";
   atLeast13 = versionAtLeast version "13";
-  atLeast12 = versionAtLeast version "12";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
-  is11 = majorVersion == "11";
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
   # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
@@ -98,7 +96,7 @@ let
   #   "14.2.0" -> "14.2.0"
   baseVersion = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
 
-  disableBootstrap = !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
+  disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
   targetConfig =
@@ -216,7 +214,7 @@ pipe
             "mirror://gcc/snapshots/${majorVersion}-${snapDate}/gcc-${majorVersion}-${snapDate}.tar.xz"
           else
             "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-        ${if is11 || is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
+        ${if is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
       };
 
       inherit patches;
@@ -236,8 +234,7 @@ pipe
         "format"
         "pie"
         "stackclashprotection"
-      ]
-      ++ optionals (is11 && langAda) [ "fortify3" ];
+      ];
 
       postPatch = ''
         configureScripts=$(find . -name configure)
@@ -258,7 +255,7 @@ pipe
       # This should kill all the stdinc frameworks that gcc and friends like to
       # insert into default search paths.
       + optionalString hostPlatform.isDarwin ''
-        substituteInPlace gcc/config/darwin-c.c${optionalString atLeast12 "c"} \
+        substituteInPlace gcc/config/darwin-c.cc \
           --replace 'if (stdinc)' 'if (0)'
 
         substituteInPlace libgcc/config/t-slibgcc-darwin \
@@ -333,7 +330,7 @@ pipe
 
       buildFlags =
         # we do not yet have Nix-driven profiling
-        assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
+        assert profiledCompiler -> !disableBootstrap;
         let
           target =
             optionalString (profiledCompiler) "profiled"
@@ -354,45 +351,38 @@ pipe
       # https://gcc.gnu.org/PR109898
       enableParallelInstalling = false;
 
-      env = mapAttrs (_: v: toString v) (
-        {
+      env = mapAttrs (_: v: toString v) {
 
-          NIX_NO_SELF_RPATH = true;
+        NIX_NO_SELF_RPATH = true;
 
-          # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-          ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
+        # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+        ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
-          # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-          # library headers and binaries, regardless of the language being compiled.
-          #
-          # The LTO code doesn't find zlib, so we just add it to $CPATH and
-          # $LIBRARY_PATH in this case.
-          #
-          # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-          # compiler (after the specs for the cross-gcc are created). Having
-          # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+        # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+        # library headers and binaries, regardless of the language being compiled.
+        #
+        # The LTO code doesn't find zlib, so we just add it to $CPATH and
+        # $LIBRARY_PATH in this case.
+        #
+        # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+        # compiler (after the specs for the cross-gcc are created). Having
+        # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-          CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
-            makeSearchPathOutput "dev" "include" ([ ] ++ optional (zlib != null) zlib)
-          );
+        CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
+          makeSearchPathOutput "dev" "include" ([ ] ++ optional (zlib != null) zlib)
+        );
 
-          LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
-            makeLibraryPath (optional (zlib != null) zlib)
-          );
+        LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
+          makeLibraryPath (optional (zlib != null) zlib)
+        );
 
-          NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
+        NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
 
-          inherit (callFile ./common/extra-target-flags.nix { })
-            EXTRA_FLAGS_FOR_TARGET
-            EXTRA_LDFLAGS_FOR_TARGET
-            ;
-        }
-        //
-          optionalAttrs (!atLeast12 && stdenv.cc.isClang && (!lib.systems.equals targetPlatform hostPlatform))
-            {
-              NIX_CFLAGS_COMPILE = "-Wno-register";
-            }
-      );
+        inherit (callFile ./common/extra-target-flags.nix { })
+          EXTRA_FLAGS_FOR_TARGET
+          EXTRA_LDFLAGS_FOR_TARGET
+          ;
+      };
 
       passthru = {
         inherit
@@ -407,11 +397,7 @@ pipe
           ;
         isGNU = true;
         hardeningUnsupportedFlags =
-          optionals (!atLeast12) [
-            "fortify3"
-            "trivialautovarinit"
-          ]
-          ++ optionals (!atLeast13) [
+          optionals (!atLeast13) [
             "strictflexarrays1"
             "strictflexarrays3"
           ]

@@ -29,12 +29,10 @@ let
   atLeast15 = lib.versionAtLeast version "15";
   atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
-  atLeast12 = lib.versionAtLeast version "12";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
-  is11 = majorVersion == "11";
 
   # We only apply these patches when building a native toolchain for
   # aarch64-darwin, as it breaks building a foreign one:
@@ -49,28 +47,20 @@ let
 in
 
 #
-#  Patches below are organized into three general categories:
-#  1. Patches relevant to gcc>=12 on every platform
-#  2. Patches relevant to gcc>=12 on specific platforms
-#  3. Patches relevant only to gcc<12
+#  Patches below are organized into two general categories:
+#  1. Patches relevant on every platform
+#  2. Patches relevant on specific platforms
 #
 
-## 1. Patches relevant to gcc>=12 on every platform ####################################
+## 1. Patches relevant on every platform ####################################
 
 [ ]
-# Backport "c++: conversion to base of vbase in NSDMI"
-# Fixes https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
-++ optional (!atLeast12) (fetchpatch {
-  name = "gcc-bug80431-fix";
-  url = "https://github.com/gcc-mirror/gcc/commit/de31f5445b12fd9ab9969dc536d821fe6f0edad0.patch";
-  hash = "sha256-bnHKJP5jR8rNJjRTi58/N/qZ5fPkuFBk7WblJWQpKOs=";
-})
 # Pass the path to a C++ compiler directly in the Makefile.in
 ++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
-    (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)
+    ./gcc-12-no-sys-dirs.patch
   ]
   ++ (
     {
@@ -92,19 +82,17 @@ in
         ./no-sys-dirs-riscv.patch
         ./12/mangle-NIX_STORE-in-__FILE__.patch
       ];
-      "11" = [ ./no-sys-dirs-riscv.patch ];
     }
     ."${majorVersion}" or [ ]
   )
 )
 # Pass CFLAGS on to gnat
-++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
+++ optional langAda ./gnat-cflags-11.patch
 ++ optional langFortran (
   # Fix interaction of gfortran and libtool
   # Fixes the output of -v
   # See also https://github.com/nixOS/nixpkgs/commit/cc6f814a8f0e9b70ede5b24192558664fa1f98a2
-  if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch
-)
+  ./gcc-12-gfortran-driving.patch)
 # Do not pass a default include dir on PowerPC+Musl
 # See https://github.com/NixOS/nixpkgs/pull/45340/commits/d6bb7d45162ac93e017cc9b665ae4836f6410710
 ++ [ ./ppc-musl.patch ]
@@ -114,12 +102,12 @@ in
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
 
-## 2. Patches relevant to gcc>=12 on specific platforms ####################################
+## 2. Patches relevant on specific platforms ####################################
 
 ### Musl+Go+gcc12
 
 # backport fixes to build gccgo with musl libc
-++ optionals (stdenv.hostPlatform.isMusl && langGo && atLeast12) [
+++ optionals (stdenv.hostPlatform.isMusl && langGo) [
   # libgo: handle stat st_atim32 field and SYS_SECCOMP
   # syscall: gofmt
   # Add blank lines after //sys comments where needed, and then run gofmt
@@ -185,9 +173,7 @@ in
 ) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-++ optional (
-  atLeast12 && stdenv.hostPlatform.isDarwin && langAda
-) ./ada-cctools-as-detection-configure.patch
+++ optional (stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
 # Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
 ++ optional (
@@ -247,16 +233,6 @@ in
       # Needed to build LLVM>18
       ./cfi_startproc-reorder-label-2.diff
     ];
-    "11" = [
-      (fetchpatch {
-        # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
-        # 5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.5.0
-        url = "https://github.com/iains/gcc-11-branch/compare/5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6..gcc-11.5-darwin-r0.diff";
-        hash = "sha256-7lH+GkgkrE6nOp9PMdIoqlQNWK31s6oW+lDt1LIkadE=";
-      })
-      # Needed to build LLVM>18
-      ./cfi_startproc-reorder-label-2.diff
-    ];
   }
   .${majorVersion} or [ ]
 )
@@ -268,22 +244,3 @@ in
 ++ optional (
   !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf"
 ) (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
-
-##############################################################################
-##
-##  3. Patches relevant only to gcc<12
-##
-##  Above this point are patches which might potentially be applied
-##  to gcc version 12 or newer.  Below this point are patches which
-##  will *only* be used for gcc versions older than gcc12.
-##
-##############################################################################
-
-## gcc 11.0 and older ##############################################################################
-
-# openjdk build fails without this on -march=opteron; is upstream in gcc12
-++ optional is11 (fetchpatch {
-  name = "darwin-aarch64-self-host-driver.patch";
-  url = "https://github.com/gcc-mirror/gcc/commit/d243f4009d8071b734df16cd70f4c5d09a373769.patch";
-  sha256 = "sha256-H97GZs2wwzfFGiFOgds/5KaweC+luCsWX3hRFf7+Sm4=";
-})
