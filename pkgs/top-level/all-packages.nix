@@ -7594,12 +7594,6 @@ with pkgs;
 
   ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
 
-  catboost = callPackage ../by-name/ca/catboost/package.nix {
-    # https://github.com/catboost/catboost/issues/2540
-    cudaPackages = cudaPackages_11;
-    llvmPackagesCuda = llvmPackages_14;
-  };
-
   cctag = callPackage ../development/libraries/cctag {
     stdenv = clangStdenv;
     tbb = tbb_2021;
