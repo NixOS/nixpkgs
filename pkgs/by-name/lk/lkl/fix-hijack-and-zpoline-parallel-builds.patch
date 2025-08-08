@@ -1,0 +1,48 @@
+From 4ee5d9b78ca1425b4473ede98602b656f28027e8 Mon Sep 17 00:00:00 2001
+From: David Disseldorp <ddiss@suse.de>
+Date: Fri, 4 Jul 2025 15:51:14 +1000
+Subject: [PATCH] lkl: fix hijack and zpoline parallel builds
+
+This is a follow up change for commit 3c97822a40cb1 ("lkl: add tests
+build barrier") tracked via https://github.com/lkl/linux/issues/558.
+The hijack and zpoline libraries also share object files, so need a
+barrier to avoid parallel build failures.
+
+Signed-off-by: David Disseldorp <ddiss@suse.de>
+---
+ tools/lkl/Makefile | 7 ++++---
+ tools/lkl/Targets  | 2 ++
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/tools/lkl/Makefile b/tools/lkl/Makefile
+index 9ca22b7605e3ad..dfe7f6aef5fe02 100644
+--- a/tools/lkl/Makefile
++++ b/tools/lkl/Makefile
+@@ -176,10 +176,11 @@ headers_install: $(TARGETS)
+ 	      include/lkl_config.h $(DESTDIR)$(INCDIR) ; \
+ 	    cp -r $(OUTPUT)include/lkl $(DESTDIR)$(INCDIR)
+ 
+-libraries_install: $(libs-y:%=$(OUTPUT)%$(SOSUF)) $(OUTPUT)liblkl.a
+-	$(call QUIET_INSTALL, libraries) \
++libraries_install: $(call expand-targets,$(libs-y),$(SOSUF)) $(OUTPUT)liblkl.a
++	# filter out special .WAIT targets from install
++	$(if $(filter .%,$^),,$(call QUIET_INSTALL, libraries) \
+ 	    install -d $(DESTDIR)$(LIBDIR) ; \
+-	    install -m 644 $^ $(DESTDIR)$(LIBDIR)
++	    install -m 644 $^ $(DESTDIR)$(LIBDIR))
+ 
+ programs_install: $(call expand-targets,$(progs-y),$(EXESUF))
+ 	$(call QUIET_INSTALL, programs) \
+diff --git a/tools/lkl/Targets b/tools/lkl/Targets
+index 3d30bd8be3c840..089a832ee23627 100644
+--- a/tools/lkl/Targets
++++ b/tools/lkl/Targets
+@@ -2,6 +2,8 @@ libs-y += lib/liblkl
+ 
+ ifneq ($(LKL_HOST_CONFIG_BSD),y)
+ libs-$(LKL_HOST_CONFIG_POSIX) += lib/hijack/liblkl-hijack
++# hijack and zpoline targets share object files, breaking parallel builds
++libs-$(LKL_HOST_CONFIG_POSIX) += .WAIT
+ libs-$(LKL_HOST_CONFIG_POSIX) += lib/hijack/liblkl-zpoline
+ endif
+ LDFLAGS_lib/hijack/liblkl-hijack-y += -shared -nodefaultlibs

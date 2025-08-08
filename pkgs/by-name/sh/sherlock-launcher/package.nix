@@ -13,6 +13,7 @@
   gdk-pixbuf,
   librsvg,
   nix-update-script,
+  wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     glib
+    wrapGAppsHook4
   ];
 
   buildInputs = [
