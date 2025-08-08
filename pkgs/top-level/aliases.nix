@@ -665,6 +665,12 @@ mapAliases {
   cudaPackages_11_7 = throw "CUDA 11.7 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
   cudaPackages_11_8 = throw "CUDA 11.8 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
   cudaPackages_11 = throw "CUDA 11 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cudaPackages_12_0 = throw "CUDA 12.0 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cudaPackages_12_1 = throw "CUDA 12.1 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cudaPackages_12_2 = throw "CUDA 12.2 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cudaPackages_12_3 = throw "CUDA 12.3 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cudaPackages_12_4 = throw "CUDA 12.4 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cudaPackages_12_5 = throw "CUDA 12.5 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
   cutemarked-ng = throw "'cutemarked-ng' has been removed due to lack of maintenance upstream. Consider using 'kdePackages.ghostwriter' instead"; # Added 2024-12-27
   cvs_fast_export = throw "'cvs_fast_export' has been renamed to/replaced by 'cvs-fast-export'"; # Converted to throw 2024-10-17

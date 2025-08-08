@@ -148,14 +148,12 @@ backendStdenv.mkDerivation {
       qtwebengine
     ])
   )
-  ++ lib.optionals (cudaAtLeast "12.6") [
+  ++ [
     # libcrypt.so.1
     libxcrypt-legacy
     ncurses6
     python310
     python311
-  ]
-  ++ lib.optionals (cudaAtLeast "12.9") [
     # Replace once https://github.com/NixOS/nixpkgs/pull/421740 is merged.
     (libxml2.overrideAttrs rec {
       version = "2.13.8";
@@ -299,7 +297,7 @@ backendStdenv.mkDerivation {
   ''
   # Python 3.8 and 3.9 are not in nixpkgs anymore, delete Python 3.{8,9} cuda-gdb support
   # to avoid autopatchelf failing to find libpython3.{8,9}.so.
-  + lib.optionalString (cudaAtLeast "12.6") ''
+  + ''
     find $out -name '*python3.8*' -delete
     find $out -name '*python3.9*' -delete
   ''

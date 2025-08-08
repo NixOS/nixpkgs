@@ -226,9 +226,6 @@ let
         releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
         shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
       })
-      (import ../development/cuda-modules/cuda-samples/extension.nix {
-        inherit cudaMajorMinorVersion lib stdenv;
-      })
       (import ../development/cuda-modules/cuda-library-samples/extension.nix { inherit lib stdenv; })
     ]
     ++ lib.optionals config.allowAliases [
@@ -241,10 +238,4 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-# We want to warn users about the upcoming deprecation of old CUDA
-# versions, without breaking Nixpkgs CI with evaluation warnings. This
-# gross hack ensures that the warning only triggers if aliases are
-# enabled, which is true by default, but not for ofborg.
-lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
-  "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
-  cudaPackages
+cudaPackages

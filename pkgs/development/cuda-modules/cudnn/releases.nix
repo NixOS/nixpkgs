@@ -15,13 +15,6 @@
         hash = "sha256-BJH3sC9VwiB362eL8xTB+RdSS9UHz1tlgjm/mKRyM6E=";
       }
       {
-        version = "9.3.0.75";
-        minCudaVersion = "12.0";
-        maxCudaVersion = "12.6";
-        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-aarch64/cudnn-linux-aarch64-9.3.0.75_cuda12-archive.tar.xz";
-        hash = "sha256-Gq5L/O1j+TC0Z3+eko4ZeHjezi7dUcqPp6uDY9Dm7WA=";
-      }
-      {
         version = "9.7.1.26";
         minCudaVersion = "12.0";
         maxCudaVersion = "12.8";
@@ -40,13 +33,6 @@
     linux-ppc64le = [ ];
     # server-grade arm
     linux-sbsa = [
-      {
-        version = "8.8.1.3";
-        minCudaVersion = "12.0";
-        maxCudaVersion = "12.0";
-        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-sbsa/cudnn-linux-sbsa-8.8.1.3_cuda12-archive.tar.xz";
-        hash = "sha256-njl3qhudBuuGC1gqyJM2MGdaAkMCnCWb/sW7VpmGfSA=";
-      }
       {
         version = "8.9.7.29";
         minCudaVersion = "12.0";

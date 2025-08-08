@@ -35,13 +35,6 @@ in
       (qt6.qtwebengine or qt6.full)
       rdma-core
     ]
-    ++ lib.optionals (cudaMajorMinorVersion == "12.0" && stdenv.hostPlatform.isAarch64) [
-      libjpeg8
-    ]
-    ++ lib.optionals (cudaAtLeast "12.1" && cudaOlder "12.4") [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-    ]
     ++ lib.optionals (cudaOlder "12.7") [
       e2fsprogs
       ucx

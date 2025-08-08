@@ -142,16 +142,6 @@
           dontDefaultAfterCudaMajorMinorVersion = "12.5";
         };
 
-        # Jetson AGX Xavier, Drive AGX Pegasus, Xavier NX
-        "7.2" = {
-          archName = "Volta";
-          minCudaMajorMinorVersion = "10.0";
-          # Note: without `cuda_compat`, maxCudaMajorMinorVersion is 11.8
-          # https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html#deployment-considerations-for-cuda-upgrade-package
-          maxCudaMajorMinorVersion = "12.2";
-          isJetson = true;
-        };
-
         # GTX/RTX Turing – GTX 1660 Ti, RTX 2060, RTX 2070, RTX 2080, Titan RTX, Quadro RTX 4000,
         # Quadro RTX 5000, Quadro RTX 6000, Quadro RTX 8000, Quadro T1000/T2000, Tesla T4
         "7.5" = {

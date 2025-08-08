@@ -11,14 +11,6 @@
     # server-grade arm
     linux-sbsa = [
       {
-        version = "8.6.1.6";
-        minCudaVersion = "12.0";
-        maxCudaVersion = "12.0";
-        cudnnVersion = null;
-        filename = "TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz";
-        hash = "sha256-Lc4+v/yBr17VlecCSFMLUDlXMTYV68MGExwnUjGme5E=";
-      }
-      {
         version = "10.8.0.43";
         minCudaVersion = "12.8";
         maxCudaVersion = "12.8";
@@ -37,22 +29,6 @@
     ];
     # x86_64
     linux-x86_64 = [
-      {
-        version = "8.6.1.6";
-        minCudaVersion = "12.0";
-        maxCudaVersion = "12.1";
-        cudnnVersion = "8.9";
-        filename = "TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz";
-        hash = "sha256-D4FXpfxTKZQ7M4uJNZE3M1CvqQyoEjnNrddYDNHrolQ=";
-      }
-      {
-        version = "10.3.0.26";
-        minCudaVersion = "12.0";
-        maxCudaVersion = "12.5";
-        cudnnVersion = "9.3";
-        filename = "TensorRT-10.3.0.26.Linux.x86_64-gnu.cuda-12.5.tar.gz";
-        hash = "sha256-rf8c1avl2HATgGFyNR5Y/QJOW/D8YdSe9LhM047ZkIE=";
-      }
       {
         version = "10.8.0.43";
         minCudaVersion = "12.0";
