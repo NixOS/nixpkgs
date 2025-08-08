@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pythonAtLeast,
   pythonOlder,
   replaceVars,
 
@@ -70,6 +71,11 @@ buildPythonPackage rec {
       url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
       hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
     })
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://code.djangoproject.com/ticket/36499
+    # https://github.com/django/django/pull/19639
+    ./3.13.6-html-parser.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {

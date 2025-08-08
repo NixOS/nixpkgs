@@ -79,6 +79,12 @@ buildPythonPackage rec {
       includes = [ "django/*" ]; # tests don't apply
       hash = "sha256-8YwdOBNJq6+GNoxzdLyN9HEEIWRXGQk9YbyfPwYVkwU=";
     })
+
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://code.djangoproject.com/ticket/36499
+    # https://github.com/django/django/pull/19639
+    ./3.13.6-html-parser.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_4_set_geos_gdal_lib.patch {
