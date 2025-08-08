@@ -33956,6 +33956,26 @@ with self;
     };
   };
 
+  TestAPI = buildPerlPackage {
+    pname = "Test-API";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-API-0.010.tar.gz";
+      hash = "sha256-fmA08OspMU0x0zVIKBBqzidF8hYM08FEOim2j1PKIxM=";
+    };
+    checkInputs = [
+      ExtUtilsMakeMaker
+      PathTools
+    ];
+    meta = {
+      description = "Test a list of subroutines provided by a module";
+      homepage = "https://github.com/dagolden/Test-API";
+      license = with lib.licenses; [
+        asl20
+      ];
+    };
+  };
+
   TestAssert = buildPerlModule {
     pname = "Test-Assert";
     version = "0.0504";
