@@ -23512,6 +23512,30 @@ with self;
     };
   };
 
+  MooXLogAny = buildPerlPackage {
+    pname = "MooX-Log-Any";
+    version = "0.004004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CAZADOR/MooX-Log-Any-0.004004.tar.gz";
+      hash = "sha256-Khr6DzpBHiipJYzKvixbXWR6vCny+/W+n/ryKG6DBTQ=";
+    };
+    propagatedBuildInputs = [
+      LogAny
+      Moo
+    ];
+    checkInputs = [
+      IO
+      PathTools
+    ];
+    meta = {
+      description = "Role to add Log::Any";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   MooXOptions = buildPerlPackage {
     pname = "MooX-Options";
     version = "4.103";
