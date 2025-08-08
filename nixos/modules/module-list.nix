@@ -38,6 +38,7 @@
   ./config/users-groups.nix
   ./config/vte.nix
   ./config/xdg/autostart.nix
+  ./config/xdg/directories.nix
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
