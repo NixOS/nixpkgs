@@ -396,6 +396,10 @@ with haskellLib;
     };
   }) super.leveldb-haskell;
 
+  # 2025-08-08: Allow inspection-testing >= 0.6 in fused-effects' test-suite
+  # https://github.com/fused-effects/fused-effects/pull/466
+  fused-effects = doJailbreak super.fused-effects;
+
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
   # https://github.com/vincenthz/hs-hourglass/pull/56
