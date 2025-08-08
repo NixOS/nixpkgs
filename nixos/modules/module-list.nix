@@ -250,6 +250,7 @@
   ./programs/kubeswitch.nix
   ./programs/ladybird.nix
   ./programs/lazygit.nix
+  ./programs/ld-audit-search-mod.nix
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
