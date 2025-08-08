@@ -506,7 +506,6 @@ in
   fanout = runTest ./fanout.nix;
   fcitx5 = runTest ./fcitx5;
   fedimintd = runTest ./fedimintd.nix;
-  fenics = runTest ./fenics.nix;
   ferm = runTest ./ferm.nix;
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
