@@ -20884,6 +20884,32 @@ with self;
     };
   };
 
+  matchsimple = buildPerlPackage {
+    pname = "match-simple";
+    version = "0.012";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/match-simple-0.012.tar.gz";
+      hash = "sha256-tzSan6km1QNHKZjR4LjDp/yuDtx84wraTudWzbJSo3w=";
+    };
+    propagatedBuildInputs = [
+      ExporterTiny
+      matchsimpleXS
+      ScalarListUtils
+      SubInfix
+    ];
+    checkInputs = [
+      TestFatal
+    ];
+    meta = {
+      description = "Simplified clone of smartmatch operator";
+      homepage = "https://github.com/tobyink/p5-match-simple";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   matchsimpleXS = buildPerlPackage {
     pname = "match-simple-XS";
     version = "0.002";
