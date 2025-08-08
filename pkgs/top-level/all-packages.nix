@@ -2751,15 +2751,6 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
-  dmd = callPackage ../by-name/dm/dmd/package.nix (
-    {
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      # https://github.com/NixOS/nixpkgs/pull/206907#issuecomment-1527034123
-      stdenv = gcc11Stdenv;
-    }
-  );
-
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
