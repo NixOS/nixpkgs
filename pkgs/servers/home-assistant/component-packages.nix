@@ -2878,7 +2878,8 @@
       ];
     "kaiterra" =
       ps: with ps; [
-      ]; # missing inputs: kaiterra-async-client
+        kaiterra-async-client
+      ];
     "kaleidescape" =
       ps: with ps; [
         pykaleidescape
