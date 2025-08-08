@@ -127,7 +127,7 @@ stdenv.mkDerivation {
     lcms
     lensfun
     libaom
-    libavif_0_11
+    libavif
     libdatrie
     libde265
     libepoxy
