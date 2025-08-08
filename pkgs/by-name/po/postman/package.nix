@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  writeScript,
   callPackage,
 }:
 
@@ -33,6 +34,22 @@ let
       };
     };
 
+  passthru.updateScript = writeScript "update-postman" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p nix curl jq common-updater-scripts
+    set -eou pipefail
+    latestVersion=$(curl --fail --silent 'https://dl.pstmn.io/update/status?currentVersion=11.0.0&platform=osx_arm64' | jq --raw-output .version)
+    if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then
+      exit 0
+    fi
+    update-source-version postman $latestVersion
+    systems=$(nix eval --json -f . postman.meta.platforms | jq --raw-output '.[]')
+    for system in $systems; do
+      hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . postman.src.url --system "$system")))
+      update-source-version postman $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
+    done
+  '';
+
   meta = {
     changelog = "https://www.postman.com/release-notes/postman-app/#${
       lib.replaceStrings [ "." ] [ "-" ] version
@@ -62,6 +79,7 @@ if stdenvNoCC.hostPlatform.isDarwin then
       pname
       version
       src
+      passthru
       meta
       ;
   }
@@ -71,6 +89,7 @@ else
       pname
       version
       src
+      passthru
       meta
       ;
   }
