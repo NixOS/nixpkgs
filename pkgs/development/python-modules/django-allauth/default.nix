@@ -7,6 +7,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # build-time dependencies
   gettext,
@@ -41,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.9.0";
+  version = "65.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,12 +52,15 @@ buildPythonPackage rec {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-gusA9TnsgSSnWBPwHsNYeESD9nX5DWh4HqMgcsoJRw0=";
+    hash = "sha256-pwWrdWk3bARM4dKbEnUWXuyjw/rTcOjk3YXowDa+Hm8=";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     asgiref
