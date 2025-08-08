@@ -18981,6 +18981,76 @@ with self;
     };
   };
 
+  LemonldapNGPortal = buildPerlPackage {
+    pname = "Lemonldap-NG-Portal";
+    version = "2.21.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COUDOT/Lemonldap-NG-Portal-2.21.2.tar.gz";
+      hash = "sha256-7LIibGvPL8kdN4Vrv1yiH0ZBAp4yU04Ac31Mwy7JdsI=";
+    };
+    buildInputs = [
+      HashMergeSimple
+      IOString
+      LWPProtocolPSGI
+      NetSSLeay
+      TimeFake
+      XMLLibXML
+    ];
+    propagatedBuildInputs = [
+      AuthenRadius
+      AuthenWebAuthn
+      Clone
+      ConvertBase32
+      ConvertPEM
+      CryptJWT
+      CryptOpenSSLBignum
+      DBI
+      EmailSender
+      GDSecurityImage
+      Glib
+      HTMLFormatTextWithLinks
+      HTMLTemplate
+      HTTPMessage
+      IOSocketTimeout
+      IPCRun
+      ImageMagick
+      LWP
+      LWPProtocolHttps
+      Lasso
+      LemonldapNGHandler
+      ListMoreUtils
+      MIMETools
+      NetFacebookOauth2
+      NetOAuth
+      NetOpenIDConsumer
+      NetOpenIDServer
+      RegexpAssemble
+      SOAPLite
+      TextUnidecode
+      WebID
+      perlldap
+    ];
+    checkInputs = [
+      pkgs.gnupg
+      pkgs.which
+    ];
+    prePatch = ''
+      find t -type f -exec sed -i 's|/bin/true|${lib.getExe' pkgs.coreutils "true"}|g' {} \;
+      find t -type f -exec sed -i 's|t/sendOTP\.pl|${lib.getExe pkgs.perl} t/sendOTP\.pl|g' {} \;
+      find t -type f -exec sed -i 's|t/sendCode\.pl|${lib.getExe pkgs.perl} t/sendCode\.pl|g' {} \;
+      find t -type f -exec sed -i 's|t/vrfyOTP\.pl|${lib.getExe pkgs.perl} t/vrfyOTP\.pl|g' {} \;
+
+      rm t/20-Auth-and-password-DBI-encrypt.t
+    '';
+    meta = {
+      description = "The authentication portal part of Lemonldap::NG Web-SSO system";
+      homepage = "https://lemonldap-ng.org/";
+      license = with lib.licenses; [
+        gpl2Plus
+      ];
+    };
+  };
+
   LEOCHARRECLI = buildPerlPackage {
     pname = "LEOCHARRE-CLI";
     version = "1.19";
