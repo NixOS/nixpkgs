@@ -82,12 +82,10 @@ let
   atLeast14 = versionAtLeast version "14";
   atLeast13 = versionAtLeast version "13";
   atLeast12 = versionAtLeast version "12";
-  atLeast11 = versionAtLeast version "11";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
-  is10 = majorVersion == "10";
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
   # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
@@ -101,7 +99,7 @@ let
   #   "14.2.0" -> "14.2.0"
   baseVersion = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
 
-  disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
+  disableBootstrap = !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
   targetConfig =
@@ -224,7 +222,7 @@ pipe
             "mirror://gcc/snapshots/${majorVersion}-${snapDate}/gcc-${majorVersion}-${snapDate}.tar.xz"
           else
             "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-        ${if is10 || is11 || is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
+        ${if is11 || is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
       };
 
       inherit patches;
@@ -342,21 +340,16 @@ pipe
       buildFlags =
         # we do not yet have Nix-driven profiling
         assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
-        if atLeast11 then
-          let
-            target =
-              optionalString (profiledCompiler) "profiled"
-              + optionalString (
-                (lib.systems.equals targetPlatform hostPlatform)
-                && (lib.systems.equals hostPlatform buildPlatform)
-                && !disableBootstrap
-              ) "bootstrap";
-          in
-          optional (target != "") target
-        else
-          optional (
-            (lib.systems.equals targetPlatform hostPlatform) && (lib.systems.equals hostPlatform buildPlatform)
-          ) (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+        let
+          target =
+            optionalString (profiledCompiler) "profiled"
+            + optionalString (
+              (lib.systems.equals targetPlatform hostPlatform)
+              && (lib.systems.equals hostPlatform buildPlatform)
+              && !disableBootstrap
+            ) "bootstrap";
+        in
+        optional (target != "") target;
 
       inherit (callFile ./common/strip-attributes.nix { })
         stripDebugList
@@ -421,8 +414,7 @@ pipe
           ;
         isGNU = true;
         hardeningUnsupportedFlags =
-          optional (!atLeast11) "zerocallusedregs"
-          ++ optionals (!atLeast12) [
+          optionals (!atLeast12) [
             "fortify3"
             "trivialautovarinit"
           ]
@@ -452,36 +444,25 @@ pipe
           platforms
           teams
           ;
-      }
-      // optionalAttrs (!atLeast11) {
-        badPlatforms = [ "aarch64-darwin" ];
-      }
-      // optionalAttrs is10 {
-        badPlatforms =
-          if (!lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
       };
     }
     // optionalAttrs enableMultilib {
       dontMoveLib64 = true;
     }
   ))
-  (
-    [
-      (callPackage ./common/libgcc.nix {
-        inherit
-          version
-          langC
-          langCC
-          langJit
-          targetPlatform
-          hostPlatform
-          withoutTargetLibc
-          enableShared
-          libcCross
-          ;
-      })
-    ]
-    ++ optionals atLeast11 [
-      (callPackage ./common/checksum.nix { inherit langC langCC; })
-    ]
-  )
+  ([
+    (callPackage ./common/libgcc.nix {
+      inherit
+        version
+        langC
+        langCC
+        langJit
+        targetPlatform
+        hostPlatform
+        withoutTargetLibc
+        enableShared
+        libcCross
+        ;
+    })
+    (callPackage ./common/checksum.nix { inherit langC langCC; })
+  ])

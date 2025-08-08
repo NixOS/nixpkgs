@@ -31,13 +31,11 @@ let
   atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
-  atLeast11 = lib.versionAtLeast version "11";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
-  is10 = majorVersion == "10";
 
   # We only apply these patches when building a native toolchain for
   # aarch64-darwin, as it breaks building a foreign one:
@@ -96,7 +94,6 @@ in
         ./12/mangle-NIX_STORE-in-__FILE__.patch
       ];
       "11" = [ ./no-sys-dirs-riscv.patch ];
-      "10" = [ ./no-sys-dirs-riscv.patch ];
     }
     ."${majorVersion}" or [ ]
   )
@@ -266,16 +263,6 @@ in
       # Needed to build LLVM>18
       ./cfi_startproc-reorder-label-2.diff
     ];
-    "10" = [
-      (fetchpatch {
-        # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
-        # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
-        url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
-        hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
-      })
-      # Needed to build LLVM>18
-      ./cfi_startproc-reorder-label-2.diff
-    ];
   }
   .${majorVersion} or [ ]
 )
@@ -306,27 +293,3 @@ in
   url = "https://github.com/gcc-mirror/gcc/commit/d243f4009d8071b734df16cd70f4c5d09a373769.patch";
   sha256 = "sha256-H97GZs2wwzfFGiFOgds/5KaweC+luCsWX3hRFf7+Sm4=";
 })
-
-## gcc 10.0 and older ##############################################################################
-
-# Probably needed for gnat wrapper https://github.com/NixOS/nixpkgs/pull/62314
-++ optional (langAda && is10) ./gnat-cflags.patch
-++
-  # Backport native aarch64-darwin compilation fix from gcc12
-  # https://github.com/NixOS/nixpkgs/pull/167595
-  optional
-    (
-      is10
-      && buildPlatform.system == "aarch64-darwin"
-      && (!lib.systems.equals targetPlatform buildPlatform)
-    )
-    (fetchpatch {
-      name = "0008-darwin-aarch64-self-host-driver.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/834c8749ced550af3f17ebae4072fb7dfb90d271.diff";
-      sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
-    })
-
-# Fix undefined symbol errors when building older versions with clang
-++ optional (
-  !atLeast11 && stdenv.cc.isClang && stdenv.hostPlatform.isDarwin
-) ./clang-genconditions.patch
