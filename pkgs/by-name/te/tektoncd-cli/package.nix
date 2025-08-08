@@ -31,6 +31,9 @@ buildGoModule (finalAttrs: {
     "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${finalAttrs.version}"
   ];
 
+  # tests bind to ::1
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/tkn" ];
@@ -45,9 +48,6 @@ buildGoModule (finalAttrs: {
 
     # the tests expect the clientVersion ldflag not to be set
     unset ldflags
-
-    # remove tests with networking
-    rm pkg/cmd/version/version_test.go
   '';
 
   postInstall = ''
