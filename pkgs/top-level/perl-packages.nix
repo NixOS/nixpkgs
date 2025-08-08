@@ -15033,6 +15033,27 @@ with self;
     };
   };
 
+  GetoptSimple = buildPerlPackage {
+    pname = "Getopt-Simple";
+    version = "1.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Getopt-Simple-1.52.tgz";
+      hash = "sha256-kq6lBCFxL8vDaibh1ghVqhANRGso1U/iSIoPo9Z3SLs=";
+    };
+    buildInputs = [
+      TestPod
+    ];
+    propagatedBuildInputs = [
+      GetoptLong
+    ];
+    meta = {
+      description = "Provide a simple wrapper around Getopt::Long";
+      license = with lib.licenses; [
+        artistic1
+      ];
+    };
+  };
+
   GetoptTabular = buildPerlPackage {
     pname = "Getopt-Tabular";
     version = "0.3";
