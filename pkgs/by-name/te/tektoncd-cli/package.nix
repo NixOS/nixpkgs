@@ -8,6 +8,8 @@
 
   stdenv,
   buildPackages,
+
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -67,13 +69,11 @@ buildGoModule (finalAttrs: {
     ''
   );
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/tkn --help
-    $out/bin/tkn version | grep "Client version: ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  versionCheckProgramArg = "version";
 
   meta = {
     homepage = "https://tekton.dev";
