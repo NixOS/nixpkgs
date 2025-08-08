@@ -42,7 +42,7 @@ in
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
     ]
-    ++ lib.optionals (cudaAtLeast "12.0" && cudaOlder "12.7") [
+    ++ lib.optionals (cudaOlder "12.7") [
       e2fsprogs
       ucx
     ]
@@ -70,7 +70,7 @@ in
       wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
     ''
     # NOTE(@connorbaker): No idea what this platform is or how to patchelf for it.
-    + lib.optionalString (flags.isJetsonBuild && cudaAtLeast "11.8" && cudaOlder "12.9") ''
+    + lib.optionalString (flags.isJetsonBuild && cudaOlder "12.9") ''
       nixLog "Removing QNX 700 target directory for Jetson builds"
       rm -rfv "''${!outputBin}/target/qnx-700-t210-a64"
     ''

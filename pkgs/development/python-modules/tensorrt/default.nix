@@ -14,7 +14,6 @@ let
   wheelVersion = lib.optionalString (cudaPackages ? tensorrt) (
     if
       (builtins.elem buildVersion [
-        "8.6.1.6"
         "10.3.0.26"
       ])
     then

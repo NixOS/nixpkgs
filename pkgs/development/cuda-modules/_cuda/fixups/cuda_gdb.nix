@@ -13,8 +13,7 @@
 prevAttrs: {
   buildInputs =
     prevAttrs.buildInputs or [ ]
-    # x86_64 only needs gmp from 12.0 and on
-    ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ]
+    ++ [ gmp ]
     # Additional dependencies for CUDA 12.5 and later, which
     # support multiple Python versions.
     ++ lib.lists.optionals (cudaAtLeast "12.5") [

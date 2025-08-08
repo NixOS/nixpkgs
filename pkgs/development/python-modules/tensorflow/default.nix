@@ -111,7 +111,8 @@ let
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
-  cudnnAttribute = "cudnn_8_6";
+  #cudnnAttribute = "cudnn_8_6";
+  cudnnAttribute = "cudnn";
   cudnnMerged = symlinkJoin {
     name = "cudnn-merged";
     paths = [
@@ -584,7 +585,11 @@ let
       maintainers = with lib.maintainers; [ abbradar ];
       platforms = with lib.platforms; linux ++ darwin;
       broken =
-        stdenv.hostPlatform.isDarwin
+        # Dependencies are EOL and have been removed; an update
+        # to a newer TensorFlow version will be required to fix the
+        # source build.
+        true
+        || stdenv.hostPlatform.isDarwin
         || !(xlaSupport -> cudaSupport)
         || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
         || !(cudaSupport -> cudaPackages ? cudatoolkit);

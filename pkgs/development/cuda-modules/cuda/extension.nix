@@ -7,7 +7,6 @@ let
   # https://developer.download.nvidia.com/compute/cuda/redist/
   # Maps a cuda version to the specific version of the manifest.
   cudaVersionMap = {
-    "11.8" = "11.8.0";
     "12.0" = "12.0.1";
     "12.1" = "12.1.1";
     "12.2" = "12.2.2";

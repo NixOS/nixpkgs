@@ -28,19 +28,6 @@
       ```
   */
   nvccCompatibilities = {
-    # Added support for Clang 14
-    # https://docs.nvidia.com/cuda/archive/11.8.0/cuda-installation-guide-linux/index.html#system-requirements
-    "11.8" = {
-      clang = {
-        maxMajorVersion = "14";
-        minMajorVersion = "7";
-      };
-      gcc = {
-        maxMajorVersion = "11";
-        minMajorVersion = "6";
-      };
-    };
-
     # Added support for GCC 12
     # https://docs.nvidia.com/cuda/archive/12.0.1/cuda-installation-guide-linux/index.html#system-requirements
     "12.0" = {

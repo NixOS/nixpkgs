@@ -100,22 +100,6 @@
         }
       )
       {
-        # Tesla K40
-        "3.5" = {
-          archName = "Kepler";
-          minCudaMajorMinorVersion = "10.0";
-          dontDefaultAfterCudaMajorMinorVersion = "11.0";
-          maxCudaMajorMinorVersion = "11.8";
-        };
-
-        # Tesla K80
-        "3.7" = {
-          archName = "Kepler";
-          minCudaMajorMinorVersion = "10.0";
-          dontDefaultAfterCudaMajorMinorVersion = "11.0";
-          maxCudaMajorMinorVersion = "11.8";
-        };
-
         # Tesla/Quadro M series
         "5.0" = {
           archName = "Maxwell";
