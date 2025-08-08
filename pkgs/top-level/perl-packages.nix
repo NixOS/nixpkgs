@@ -38785,6 +38785,46 @@ with self;
     };
   };
 
+  WebID = buildPerlPackage {
+    pname = "Web-ID";
+    version = "1.927";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Web-ID-1.927.tar.gz";
+      hash = "sha256-7hEab/PiLgcKZS4IZ/3T2xg6SeQ2/v/B/4nKPIdsRFw=";
+    };
+    prePatch = ''
+      substituteInPlace lib/Web/ID/Util/FindOpenSSL.pm \
+        --replace-fail "/usr/bin/openssl" "${lib.getExe pkgs.openssl}"
+    '';
+    propagatedBuildInputs = [
+      pkgs.openssl
+      CryptX509
+      DateTime
+      ExporterTiny
+      FileShareDir
+      ListMoreUtils
+      Moose
+      PathTiny
+      Plack
+      RDFQuery
+      RDFTrine
+      TypesDateTime
+      TypesURI
+      TypeTiny
+      URI
+      matchsimple
+      namespacesweep
+    ];
+    meta = {
+      description = "Implementation of WebID (a.k.a. FOAF+SSL)";
+      homepage = "https://github.com/tobyink/p5-web-id";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   WWWCurl = buildPerlPackage rec {
     pname = "WWW-Curl";
     version = "4.17";
