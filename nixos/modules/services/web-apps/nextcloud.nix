@@ -1019,6 +1019,10 @@ in
         The value can be customized for `nextcloud-cron.service` using this option.
       '';
     };
+
+    fileBackup = lib.mkOption {
+      type = config.contracts.fileBackup.consumer;
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -1555,6 +1559,18 @@ in
             rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
           ''}
         '';
+      };
+    }
+
+    {
+      services.nextcloud.fileBackup.input = {
+        user = "nextcloud";
+        sourceDirectories = [
+          cfg.datadir
+        ];
+        excludePatterns = [
+          ".rnd"
+        ];
       };
     }
   ]);
