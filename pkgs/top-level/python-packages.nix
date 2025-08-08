@@ -18522,6 +18522,8 @@ self: super: with self; {
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
+  typedmonarchmoney = callPackage ../development/python-modules/typedmonarchmoney { };
+
   typedunits = callPackage ../development/python-modules/typedunits { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
