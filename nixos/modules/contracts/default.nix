@@ -2,7 +2,9 @@
 let
   inherit (lib) mkOption;
   inherit (lib.types)
+    attrs
     lazyAttrsOf
+    functionTo
     submodule
     listOf
     str
@@ -24,6 +26,9 @@ in
       To use the `<name>` contract, declare an option with either the
       `config.contracts.<name>.consumer` or `config.contracts.<name>.provider`
       type.
+
+      The `behaviorTest` option is used to ensure all `provider` of a contract
+      behave the same way.
     '';
     type = lazyAttrsOf (
       submodule (interface: {
@@ -144,6 +149,12 @@ in
                 };
               };
             });
+            behaviorTest = mkOption {
+              # The type should be more precise of course.
+              # There should actually be a NixOSTest type.
+              # And we can probably do something fancy with the `input` and `output` deferred modules.
+              type = functionTo attrs;
+            };
           };
         };
       })
