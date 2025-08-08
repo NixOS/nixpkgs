@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
-  gtk3,
+  gtk4,
   vala,
   enchant2,
   wrapGAppsHook3,
@@ -21,12 +21,11 @@
   libxml2,
   gettext,
   sqlite,
-  gcr,
   json-glib,
   itstool,
   libgee,
   gnome,
-  webkitgtk_4_1,
+  webkitgtk_6_0,
   python3,
   gnutls,
   cacert,
@@ -43,15 +42,22 @@
   libytnef,
   libhandy,
   gsound,
+  cmake,
+  gcr_4,
+  libspelling,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "46.0";
+  version = "0-unstable-2025-07-17";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/geary/${lib.versions.major version}/geary-${version}.tar.xz";
-    hash = "sha256-r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "geary";
+    rev = "fd11f578ec0e26b94f9e7155b6da37351f95c33f";
+    hash = "sha256-j8ETKBj5zABQMiMC10oe7ypnbhXV9f51fXQO7idduMQ=";
   };
 
   nativeBuildInputs = [
@@ -66,20 +72,20 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook3
+    cmake
   ];
 
   buildInputs = [
     adwaita-icon-theme
     enchant2
     folks
-    gcr
     glib-networking
     gmime3
     gnome-online-accounts
     gsettings-desktop-schemas
     gsound
     gspell
-    gtk3
+    gtk4
     isocodes
     icu
     json-glib
@@ -92,7 +98,10 @@ stdenv.mkDerivation rec {
     libxml2
     libytnef
     sqlite
-    webkitgtk_4_1
+    webkitgtk_6_0
+    gcr_4
+    libspelling
+    libadwaita
   ];
 
   nativeCheckInputs = [
@@ -117,8 +126,8 @@ stdenv.mkDerivation rec {
 
     # Only used for generating .pot file
     # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/856
-    substituteInPlace meson.build \
-      --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
+    #substituteInPlace meson.build \
+    #  --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
 
     chmod +x desktop/geary-attach
   '';
