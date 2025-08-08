@@ -20,6 +20,7 @@
   json-glib,
   lcms,
   lensfun,
+  lerc,
   lib,
   libaom,
   libavif,
@@ -36,6 +37,7 @@
   libsecret,
   libselinux,
   libsepol,
+  libsoup_3,
   libsysprof-capture,
   libthai,
   libwebp,
@@ -43,6 +45,7 @@
   libxkbcommon,
   libxml2,
   libXtst,
+  llvmPackages,
   openexr,
   openjpeg,
   osm-gps-map,
@@ -99,6 +102,7 @@ stdenv.mkDerivation {
     desktop-file-utils
     exiftool
     intltool
+    llvmPackages.llvm
     pkg-config
     perlPackages.perl
     python3Packages.jsonschema
@@ -123,6 +127,7 @@ stdenv.mkDerivation {
     jasper
     lcms
     lensfun
+    lerc
     libaom
     libavif
     libdatrie
@@ -138,6 +143,7 @@ stdenv.mkDerivation {
     libsecret
     libselinux
     libsepol
+    libsoup_3
     libsysprof-capture
     libthai
     libwebp
