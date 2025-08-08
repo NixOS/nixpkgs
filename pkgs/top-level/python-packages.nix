@@ -9453,6 +9453,8 @@ self: super: with self; {
 
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
 
+  monarchmoney = callPackage ../development/python-modules/monarchmoney { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
