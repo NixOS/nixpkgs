@@ -318,7 +318,7 @@ can be applied to any service.
 
   # Now you must augment OpenSMTPD's systemd service to load
   # the certificate files.
-  systemd.services.opensmtpd.requires = [ "acme-finished-mail.example.com.target" ];
+  systemd.services.opensmtpd.requires = [ "acme-mail.example.com.service" ];
   systemd.services.opensmtpd.serviceConfig.LoadCredential =
     let
       certDir = config.security.acme.certs."mail.example.com".directory;
