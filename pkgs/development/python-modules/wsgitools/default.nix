@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # the built-in asyncore library was removed in python 3.12
-  dependencies = lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
+  # the built-in asyncore library was removed in python 3.13
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ pyasyncore ];
 
   pythonImportsCheck = [ "wsgitools" ];
 
