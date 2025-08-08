@@ -24,4 +24,16 @@
     ext = "tgz";
     hash = "sha256-mLl/qNtxMfFOe/M0fCZnnebei7E2ON4gvE9Q7XIufag=";
   };
+  aarch64-darwin = {
+    os = "MacOSX";
+    name = "arm64";
+    ext = "pkg";
+    hash = "sha256-GKlWof4XdxEwW7G8YmhdfjjJpXEXICqWapI7fly8Uvg=";
+  };
+  x86_64-darwin = {
+    os = "MacOSX";
+    name = "x86_64";
+    ext = "pkg";
+    hash = "sha256-LWLUdzNVkN60qET7vhvLCoepg7kuHPqs2bZspRzZkGo=";
+  };
 }

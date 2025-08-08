@@ -4,6 +4,11 @@
   fetchurl,
   callPackage,
   autoPatchelfHook,
+  cpio,
+  gzip,
+  makeWrapper,
+  rsync,
+  xar,
   udev,
   config,
   acceptLicense ? config.segger-jlink.acceptLicense or false,
@@ -148,7 +153,58 @@ let
     '';
   };
 
-  buildAttrs = if stdenv.isLinux then buildAttrsLinux else throw "platform not supported";
+  buildAttrsDarwin = {
+    nativeBuildInputs = [
+      cpio
+      gzip # gunzip
+      makeWrapper
+      rsync
+      xar
+    ];
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      xar -xf $src
+
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      # segger package
+      mkdir JLINK
+      pushd JLINK
+      cat ../JLink.pkg/Payload | gunzip -dc | cpio -i
+      rsync -rtl ./Applications $out/
+      popd
+
+      # By default, the package unpacks a symlink to an absolute path:
+      # JLink -> /Applications/SEGGER/JLink_V824
+      # ... replace with a relative symlink to the package contents themselves.
+      ln -rsf $out/Applications/SEGGER/{JLink_V${version},JLink}
+
+      # autoPatchelfHook is broken, manually wrap binaries before linking them into $out/bin
+      LDPATH=$out/Applications/SEGGER/JLink_V${version}
+      mkdir -p $out/bin
+      find $out -type f -executable ! -name "*.dylib" -print0 | while read -d $'\0' e; do
+        wrapProgram "$e" --set LD_LIBRARY_PATH $LDPATH --set DYLD_LIBRARY_PATH $LDPATH
+        ln -rs "$e" $out/bin/
+      done
+
+      runHook postInstall
+    '';
+
+  };
+
+  buildAttrs =
+    if stdenv.isLinux then
+      buildAttrsLinux
+    else if stdenv.isDarwin then
+      buildAttrsDarwin
+    else
+      throw "platform not supported";
 
 in
 stdenv.mkDerivation (
