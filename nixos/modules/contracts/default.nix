@@ -129,12 +129,13 @@ in
               default = submodule (provider: {
                 options = {
                   consumer = mkOption {
-                    type = interface.config.consumer;
+                    type = lib.types.nullOr interface.config.consumer;
+                    default = null;
                   };
                   input = mkOption {
-                    type = submodule interface.config.input;
+                    type = lib.types.nullOr (submodule interface.config.input);
                     readOnly = true;
-                    default = provider.config.consumer.input;
+                    default = provider.config.consumer.input or null;
                   };
                   output = mkOption {
                     type = submodule interface.config.output;
