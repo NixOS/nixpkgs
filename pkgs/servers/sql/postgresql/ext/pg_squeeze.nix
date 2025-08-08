@@ -9,13 +9,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_squeeze";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
     tag = "REL${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-Kh1wSOvV5Rd1CG/na3yzbWzvaR8SJ6wmTZOnM+lbgik=";
+    hash = "sha256-RrG7qeX0NQ4cq6N+9uVfalNW+HfiSt4wcjeZjInnfgE=";
   };
 
   passthru.updateScript = nix-update-script {
