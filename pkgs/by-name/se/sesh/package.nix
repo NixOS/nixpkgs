@@ -34,6 +34,7 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gwg313
+      randomdude
       t-monaghan
     ];
     mainProgram = "sesh";
