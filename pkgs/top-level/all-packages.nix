@@ -5457,9 +5457,7 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
-  falcon = callPackage ../development/interpreters/falcon {
-    stdenv = gcc10Stdenv;
-  };
+  falcon = callPackage ../development/interpreters/falcon { };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
