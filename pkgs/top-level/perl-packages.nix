@@ -30086,6 +30086,56 @@ with self;
     };
   };
 
+  RDFTrine = buildPerlPackage {
+    pname = "RDFTrine";
+    version = "1.109";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GW/GWILLIAMS/RDF-Trine-1.019.tar.gz";
+      hash = "sha256-G7B9qhB4Fziu7djnAVaGjJpw+9MQ8F8uwfbqAthpcGA=";
+    };
+    buildInputs = [
+      ExtUtilsMakeMaker
+      TestDeep
+      TestDifferences
+      TestException
+      TestJSON
+    ];
+    propagatedBuildInputs = [
+      AlgorithmCombinatorics
+      CacheLRU
+      DBDSQLite
+      DBI
+      DBIxConnector
+      DataUUID
+      Error
+      HTTPNegotiate
+      IRI
+      JSON
+      LWP
+      LogLog4perl
+      MathBigInt
+      MooseXArrayRef
+      Mouse
+      ScalarListUtils
+      SetScalar
+      TextCSV_XS
+      TextTable
+      URI
+      XMLCommonNS
+      XMLLibXML
+      XMLNamespace
+      XMLSAX
+    ];
+    meta = {
+      description = "An RDF Framework for Perl";
+      homepage = "https://github.com/kasei/perlrdf";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   Readonly = buildPerlModule {
     pname = "Readonly";
     version = "2.05";
