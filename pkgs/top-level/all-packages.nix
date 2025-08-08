@@ -7471,7 +7471,6 @@ with pkgs;
   ### DEVELOPMENT / LIBRARIES
 
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
-  abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix { };
   abseil-cpp_202401 = callPackage ../development/libraries/abseil-cpp/202401.nix { };
   abseil-cpp_202407 = callPackage ../development/libraries/abseil-cpp/202407.nix { };
   abseil-cpp = abseil-cpp_202501;

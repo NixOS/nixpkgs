@@ -17884,7 +17884,8 @@ self: super: with self; {
   tensorflow-build =
     let
       compat = rec {
-        protobufTF = pkgs.protobuf_21.override { abseil-cpp = pkgs.abseil-cpp_202301; };
+        #protobufTF = pkgs.protobuf_21.override { abseil-cpp = pkgs.abseil-cpp_202301; };
+        protobufTF = pkgs.protobuf;
         # https://www.tensorflow.org/install/source#gpu
         #cudaPackagesTF = pkgs.cudaPackages_11;
         cudaPackagesTF = pkgs.cudaPackages;
@@ -17926,7 +17927,7 @@ self: super: with self; {
       grpc = compat.grpcTF;
       grpcio = compat.grpcioTF;
       tensorboard = compat.tensorboardTF;
-      abseil-cpp = pkgs.abseil-cpp_202301;
+      #abseil-cpp = pkgs.abseil-cpp_202301;
       snappy-cpp = pkgs.snappy;
 
       # Tensorflow 2.13 doesn't support gcc13:
