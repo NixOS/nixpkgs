@@ -288,3 +288,6 @@ b4532efe93882ae2e3fc579929a42a5a56544146
 
 # systemd: nixfmt
 b1c5cd3e794cdf89daa5e4f0086274a416a1cded
+
+# treewide: Format all Nix files
+374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt
