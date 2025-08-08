@@ -400,6 +400,10 @@ with haskellLib;
   # https://github.com/fused-effects/fused-effects/pull/466
   fused-effects = doJailbreak super.fused-effects;
 
+  # 2025-08-08: Allow QuickCheck > 2.16 in selective's test-suite
+  # https://github.com/snowleopard/selective/pull/81
+  selective = doJailbreak super.selective;
+
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
   # https://github.com/vincenthz/hs-hourglass/pull/56
