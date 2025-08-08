@@ -5,6 +5,7 @@
   stdenv,
   installShellFiles,
   testers,
+  tests,
   callPackage,
 }:
 
@@ -41,10 +42,16 @@ buildGoModule (finalAttrs: {
   passthru =
     let
       cue = finalAttrs.finalPackage;
+      writeCueValidator = callPackage ./validator.nix { inherit cue; };
     in
     {
-      writeCueValidator = callPackage ./validator.nix { inherit cue; };
+      inherit writeCueValidator;
+
       tests = {
+        validation = tests.cue-validation.override {
+          callPackage = (path: attrs: callPackage path (attrs // { inherit writeCueValidator; }));
+        };
+
         test-001-all-good = callPackage ./tests/001-all-good.nix { inherit cue; };
         version = testers.testVersion {
           package = cue;
