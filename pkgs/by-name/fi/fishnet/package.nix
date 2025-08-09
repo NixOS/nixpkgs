@@ -28,13 +28,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.9.5";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+JkqxO7wwYZHwWRMboKGe8uo/F223efR+9pIsAIoFpU=";
+    hash = "sha256-BtOPLqfE6SjCr8/HS5oev1j3R26+wkWw051gZwDyCM0=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  cargoHash = "sha256-WjBrv4GApT7LTnexLDhY7Zni5kLtvUzaGs2YuA3UiHE=";
+  cargoHash = "sha256-1Pk9vXo1ivE8H6ctS8PEsCEv/EKFxFtgnmrvik6Gwug=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
