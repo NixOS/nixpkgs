@@ -31,6 +31,7 @@ jobs:
     name: Trigger jobs
     runs-on: ubuntu-24.04
     if: github.event.changes.base.ref.from && github.event.changes.base.ref.from != github.event.pull_request.base.ref
+    timeout-minutes: 2
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
