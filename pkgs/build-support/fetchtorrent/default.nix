@@ -18,11 +18,7 @@ in
       "bittorrent"
     else
       "bittorrent-" + builtins.head (builtins.match urlRegexp url),
-  config ?
-    if (backend == "transmission") then
-      { }
-    else
-      throw "json config for configuring fetchFromBitorrent only works with the transmission backend",
+  config ? { },
   hash,
   backend ? "transmission",
   recursiveHash ? true,
@@ -44,6 +40,9 @@ let
   '';
   jsonConfig = (formats.json { }).generate "jsonConfig" config;
 in
+assert lib.assertMsg (config != { } -> backend == "transmission") ''
+  json config for configuring fetchtorrent only works with the transmission backend
+'';
 runCommand name
   {
     inherit meta;
