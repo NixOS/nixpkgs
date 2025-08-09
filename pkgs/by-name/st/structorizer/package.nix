@@ -5,6 +5,7 @@
   jdk11,
   makeDesktopItem,
   makeWrapper,
+  wrapGAppsHook3,
   copyDesktopItems,
   nix-update-script,
 }:
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     jdk11
     makeWrapper
+    wrapGAppsHook3
     copyDesktopItems
   ];
 
@@ -85,7 +87,8 @@ stdenv.mkDerivation rec {
     install -D ${pname}.jar -t $out/share/java/
       makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}.jar" \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
+      ''${gappsWrapperArgs[@]}
 
     cat << EOF > $out/share/mime/packages/structorizer.xml
     <?xml version="1.0" encoding="UTF-8"?>
@@ -106,6 +109,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  dontWrapGApps = true;
 
   passthru.updateScript = nix-update-script { };
 
