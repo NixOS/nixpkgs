@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   patchPhase = ''
-    substituteInPlace setup.py --replace '"argparse",' ""
+    substituteInPlace setup.py --replace-fail '"argparse",' ""
   '';
 
   # ImportError: No module named tests

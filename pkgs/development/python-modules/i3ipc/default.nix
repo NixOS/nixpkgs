@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace test/i3.config \
-      --replace /bin/true ${coreutils}/bin/true
+      --replace-fail /bin/true ${coreutils}/bin/true
   '';
 
   checkPhase = ''

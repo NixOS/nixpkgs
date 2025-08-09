@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
-      --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
+      --replace-fail "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
   '';
 
   nativeCheckInputs = [

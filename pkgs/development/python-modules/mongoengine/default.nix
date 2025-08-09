@@ -36,12 +36,6 @@ buildPythonPackage rec {
     blinker
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "coverage==4.2" "coverage" \
-      --replace "pymongo>=3.4,<=4.0" "pymongo"
-  '';
-
   # tests require mongodb running in background
   doCheck = false;
 

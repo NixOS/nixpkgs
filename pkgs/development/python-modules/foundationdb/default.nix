@@ -14,7 +14,7 @@ buildPythonPackage {
 
   patchPhase = ''
     substituteInPlace ./fdb/impl.py \
-      --replace libfdb_c.so "${foundationdb.lib}/lib/libfdb_c.so"
+      --replace-fail libfdb_c.so "${foundationdb.lib}/lib/libfdb_c.so"
   '';
 
   doCheck = false;

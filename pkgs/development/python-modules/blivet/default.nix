@@ -48,7 +48,7 @@ buildPythonPackage rec {
   postPatch = ''
     find blivet -name '*.py' | while IFS= read -r i ; do
       substituteInPlace "$i" \
-        --replace \
+        --replace-quiet \
           'gi.require_version("BlockDev",' \
           'import gi.repository
     gi.require_version("GIRepository", "2.0")

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
   nativeBuildInputs = [ setuptools ];

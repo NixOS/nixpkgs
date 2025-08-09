@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace docs/README.md README.md
+      --replace-fail docs/README.md README.md
   '';
 
   nativeCheckInputs = [

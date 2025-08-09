@@ -34,8 +34,8 @@ buildPythonPackage rec {
     # https://github.com/wolever/parameterized/issues/167
     # https://github.com/wolever/parameterized/pull/162
     substituteInPlace parameterized/test.py \
-      --replace 'assert_equal(missing, [])' "" \
-      --replace "assertRaisesRegexp" "assertRaisesRegex"
+      --replace-fail 'assert_equal(missing, [])' "" \
+      --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
   nativeBuildInputs = [ setuptools ];

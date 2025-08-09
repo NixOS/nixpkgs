@@ -29,7 +29,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/PyFilesystem/pyfilesystem2/pull/591
     substituteInPlace tests/test_ftpfs.py \
-      --replace ThreadedTestFTPd FtpdThreadWrapper
+      --replace-fail ThreadedTestFTPd FtpdThreadWrapper
   '';
 
   build-system = [ setuptools ];

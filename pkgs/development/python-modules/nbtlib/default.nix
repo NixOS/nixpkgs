@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace pyproject.toml \
-    --replace "poetry>=0.12" "poetry-core" \
-    --replace "poetry.masonry" "poetry.core.masonry"
+    --replace-fail "poetry>=0.12" "poetry-core" \
+    --replace-fail "poetry.masonry" "poetry.core.masonry"
   '';
 
   nativeBuildInputs = [ poetry-core ];

@@ -55,10 +55,10 @@ buildPythonPackage rec {
         exit 1
     fi
     substituteInPlace "scapy/libs/winpcapy.py" \
-        --replace "@libpcap_file@" "$libpcap_file"
+        --replace-fail "@libpcap_file@" "$libpcap_file"
   ''
   + lib.optionalString withManufDb ''
-    substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
+    substituteInPlace scapy/data.py --replace-fail "/opt/wireshark" "${wireshark}"
   '';
 
   buildInputs = lib.optional withVoipSupport sox;

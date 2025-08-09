@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyparsing~=2.0" "pyparsing>=2.0"
+      --replace-fail "pyparsing~=2.0" "pyparsing>=2.0"
   '';
 
   pythonImportsCheck = [ "pyhocon" ];

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "regex>=2022.3.15" "regex"
+      --replace-fail "regex>=2022.3.15" "regex"
   '';
 
   pythonImportsCheck = [

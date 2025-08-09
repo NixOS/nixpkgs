@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/pymediainfo/__init__.py \
-      --replace "libmediainfo.0.dylib" \
+      --replace-fail "libmediainfo.0.dylib" \
                 "${libmediainfo}/lib/libmediainfo.0${stdenv.hostPlatform.extensions.sharedLibrary}" \
-      --replace "libmediainfo.dylib" \
+      --replace-fail "libmediainfo.dylib" \
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}" \
-      --replace "libmediainfo.so.0" \
+      --replace-fail "libmediainfo.so.0" \
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 

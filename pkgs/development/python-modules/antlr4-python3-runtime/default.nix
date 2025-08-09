@@ -18,11 +18,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace tests/TestIntervalSet.py \
-      --replace "assertEquals" "assertEqual"
-  '';
-
   # We use an asterisk because this expression is used also for old antlr
   # versions, where there the tests directory is `test` and not `tests`.
   # See e.g in package `baserow`.

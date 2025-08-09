@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ msrest ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "msrest>=0.6.0,<0.7.0" "msrest"
+    substituteInPlace setup.py --replace-fail "msrest>=0.6.0,<0.7.0" "msrest"
   '';
 
   # Tests are highly impure

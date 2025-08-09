@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace packaging/pep517_backend/_backend.py \
-      --replace "Cython ~= 3.0.12" Cython
+      --replace-fail "Cython ~= 3.0.12" Cython
   '';
 
   build-system = [

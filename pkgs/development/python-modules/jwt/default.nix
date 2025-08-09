@@ -24,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-Cv64SmhkETm8mx1Kj5u0WZpCPjPNvC+KS6/XaMzxCho=";
   };
 
-  postPatch = ''
-    # pytest-flake8 is incompatible flake8 6.0.0 and currently unmaintained
-    substituteInPlace setup.cfg --replace "--flake8" ""
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [ cryptography ];

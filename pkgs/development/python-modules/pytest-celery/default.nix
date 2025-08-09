@@ -33,7 +33,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Avoid infinite recursion with celery
     substituteInPlace pyproject.toml \
-      --replace 'celery = { version = "*" }' ""
+      --replace-fail 'celery = { version = "*" }' ""
   '';
 
   pythonRelaxDeps = [

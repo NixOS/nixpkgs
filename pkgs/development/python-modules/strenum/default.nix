@@ -33,9 +33,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
+      --replace-fail '"pytest-runner"' ""
     substituteInPlace pytest.ini \
-      --replace " --cov=strenum --cov-report term-missing --black --pylint" ""
+      --replace-fail " --cov=strenum --cov-report term-missing --black --pylint" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

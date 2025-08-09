@@ -23,7 +23,7 @@ buildPythonPackage {
 
   patchPhase = ''
     substituteInPlace soundcard/pulseaudio.py \
-      --replace "'pulse'" "'${libpulseaudio}/lib/libpulse.so'"
+      --replace-fail "'pulse'" "'${libpulseaudio}/lib/libpulse.so'"
   '';
 
   build-system = [ setuptools ];

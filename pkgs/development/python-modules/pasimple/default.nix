@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pasimple/pa_simple.py --replace \
+    substituteInPlace pasimple/pa_simple.py --replace-fail \
       "_libpulse_simple = ctypes.CDLL('libpulse-simple.so.0')" \
       "_libpulse_simple = ctypes.CDLL('${lib.getLib pulseaudio}/lib/libpulse-simple.so.0')"
   '';

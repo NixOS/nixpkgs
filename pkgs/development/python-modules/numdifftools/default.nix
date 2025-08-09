@@ -31,11 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-    # Remove optional dependencies
-    substituteInPlace requirements.txt \
-      --replace "algopy>=0.4" "" \
-      --replace "statsmodels>=0.6" ""
+      --replace-fail '"pytest-runner"' ""
   '';
 
   pythonImportsCheck = [ "numdifftools" ];

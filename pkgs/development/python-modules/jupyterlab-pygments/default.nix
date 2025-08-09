@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # jupyterlab is not necessary since we get the source from pypi
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"jupyterlab>=4.0.0,<5",' ""
+      --replace-fail '"jupyterlab>=4.0.0,<5",' ""
   '';
 
   nativeBuildInputs = [

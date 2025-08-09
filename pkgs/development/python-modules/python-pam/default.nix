@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/pam/__internals.py \
-      --replace 'find_library("pam")' '"${pam}/lib/libpam.so"' \
-      --replace 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
+      --replace-fail 'find_library("pam")' '"${pam}/lib/libpam.so"' \
+      --replace-fail 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
   '';
 
   nativeBuildInputs = [ setuptools ];

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
+      --replace-fail 'version="main",' 'version="${version}",'
   '';
 
   pythonImportsCheck = [ "pyaftership" ];

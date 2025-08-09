@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace sphinx_automodapi/tests/{helpers,test_cases}.py \
-      --replace ", None)" ", (None, '${testInventory}'))"
+      --replace-fail ", None)" ", (None, '${testInventory}'))"
   '';
 
   nativeCheckInputs = [

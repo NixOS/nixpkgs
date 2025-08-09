@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-    --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
+    --replace-fail "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
   '';
 
   build-system = [ setuptools-scm ];

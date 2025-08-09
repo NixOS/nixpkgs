@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace wand/api.py --replace \
+    substituteInPlace wand/api.py --replace-fail \
       "magick_home = os.environ.get('MAGICK_HOME')" \
       "magick_home = '${imagemagickBig}'"
   '';

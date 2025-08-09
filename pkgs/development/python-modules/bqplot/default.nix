@@ -27,8 +27,8 @@ buildPythonPackage rec {
   # jupyter_packaging to hatch, so let's patch instead of fixing upstream
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "jupyter_packaging~=" "jupyter_packaging>=" \
-      --replace "jupyterlab~=" "jupyterlab>="
+      --replace-fail "jupyter_packaging~=" "jupyter_packaging>=" \
+      --replace-fail "jupyterlab~=" "jupyterlab>="
   '';
 
   build-system = [

@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-rys9Noa3+w4phttfcI1OGEDfHMy8s80bm8kM8TzssQA=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "argparse" ""
-  '';
-
   propagatedBuildInputs = [
     requests
     configparser

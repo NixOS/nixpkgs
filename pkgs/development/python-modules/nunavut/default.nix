@@ -20,11 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-23C3biUUs10Po5qzn3EFaq4+HeWCXIC6WzxOKy59VgM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pydsdl ~= 1.16" "pydsdl"
-  '';
-
   propagatedBuildInputs = [
     importlib-resources
     pydsdl

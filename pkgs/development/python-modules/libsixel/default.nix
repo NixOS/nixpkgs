@@ -14,7 +14,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   prePatch = ''
-    substituteInPlace libsixel/__init__.py --replace \
+    substituteInPlace libsixel/__init__.py --replace-fail \
       'from ctypes.util import find_library' \
       'find_library = lambda _x: "${lib.getLib libsixel}/lib/libsixel${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';

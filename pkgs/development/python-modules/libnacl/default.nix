@@ -30,10 +30,10 @@ buildPythonPackage rec {
     in
     ''
       substituteInPlace "./libnacl/__init__.py" \
-        --replace \
+        --replace-fail \
           "l_path = ctypes.util.find_library('sodium')" \
           "l_path = None" \
-        --replace \
+        --replace-fail \
           "ctypes.cdll.LoadLibrary('libsodium${soext}')" \
           "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
     '';

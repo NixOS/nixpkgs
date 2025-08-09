@@ -26,7 +26,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set version in the repo
     substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
+      --replace-fail 'version="main",' 'version="${version}",'
   '';
 
   propagatedBuildInputs = [ aiohttp ];

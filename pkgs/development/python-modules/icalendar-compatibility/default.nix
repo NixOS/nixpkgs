@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # hatch-vcs tries to read the current git commit hash
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["urls", "version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["urls", "version"]' 'version = "${version}"'
   '';
 
   build-system = [

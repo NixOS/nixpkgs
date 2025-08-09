@@ -33,11 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
-
   dependencies = [ sly ];
 
   optional-dependencies = {

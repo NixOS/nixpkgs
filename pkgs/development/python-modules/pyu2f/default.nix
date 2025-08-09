@@ -22,7 +22,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-
   postPatch = ''
     for path in \
       customauthenticator_test.py \
@@ -36,9 +35,11 @@ buildPythonPackage rec {
     do
       # https://docs.python.org/3/whatsnew/3.12.html#id3
       substituteInPlace pyu2f/tests/$path \
-        --replace "assertEquals" "assertEqual" \
-        --replace "assertRaisesRegexp" "assertRaisesRegex"
+        --replace-fail "assertEquals" "assertEqual"
     done
+
+    substituteInPlace pyu2f/tests/hidtransport_test.py \
+      --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
   nativeCheckInputs = [

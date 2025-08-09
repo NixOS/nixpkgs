@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --benchmark-skip" ""
+      --replace-fail " --benchmark-skip" ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

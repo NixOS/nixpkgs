@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "~=" ">="
+      --replace-fail "~=" ">="
   '';
 
   nativeBuildInputs = [ setuptools ];

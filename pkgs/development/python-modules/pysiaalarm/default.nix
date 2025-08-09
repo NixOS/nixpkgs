@@ -25,11 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-q42bsBeAwU9lt7wtYGFJv23UBND+aMXZJlSWyTfZDQE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "==" ">="
-  '';
-
   build-system = [ setuptools-scm ];
 
   propagatedBuildInputs = [

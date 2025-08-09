@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "name='py-radix'" "name='py-radix-sr'"
+      --replace-fail "name='py-radix'" "name='py-radix-sr'"
 
     substituteInPlace tests/test_{compat,regression}.py \
       --replace-fail assertEquals assertEqual \

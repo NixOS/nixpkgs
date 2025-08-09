@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace piano_transcription_inference/inference.py --replace \
+    substituteInPlace piano_transcription_inference/inference.py --replace-fail \
       "checkpoint_path='{}/piano_transcription_inference_data/note_F1=0.9677_pedal_F1=0.9186.pth'.format(str(Path.home()))" \
       "checkpoint_path='$out/share/checkpoint.pth'"
   '';

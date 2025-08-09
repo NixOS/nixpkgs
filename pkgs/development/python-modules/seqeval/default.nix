@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "use_scm_version=True," "version='${version}'," \
-      --replace "setup_requires=['setuptools_scm']," "setup_requires=[],"
+      --replace-fail "use_scm_version=True," "version='${version}'," \
+      --replace-fail "setup_requires=['setuptools_scm']," "setup_requires=[],"
   '';
 
   propagatedBuildInputs = [

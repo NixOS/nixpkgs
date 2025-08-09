@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version_from_git()" "version='${version}'"
+      --replace-fail "version=version_from_git()" "version='${version}'"
   '';
 
   pythonImportsCheck = [ "rflink.protocol" ];

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   # unable to find ninja although it is available, most likely because it looks for its pip version
   postPatch = ''
-    substituteInPlace setup.cfg --replace "ninja" ""
+    substituteInPlace setup.cfg --replace-fail "ninja" ""
 
     # Adding ninja to the path forcibly
     mv src/deepwave/__init__.py tmp

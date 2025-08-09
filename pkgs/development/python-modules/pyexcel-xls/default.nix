@@ -48,10 +48,6 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "xlrd<2" "xlrd<3"
-  '';
-
   meta = {
     description = "Wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
     homepage = "http://docs.pyexcel.org/";

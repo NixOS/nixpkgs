@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace ', "flake8"' ""
+      --replace-fail ', "flake8"' ""
   '';
 
   nativeBuildInputs = [

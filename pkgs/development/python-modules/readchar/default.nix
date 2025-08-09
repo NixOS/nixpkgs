@@ -31,7 +31,7 @@ buildPythonPackage rec {
     # run Linux tests on Darwin as well
     # see https://github.com/magmax/python-readchar/pull/99 for why this is not upstreamed
     substituteInPlace tests/linux/conftest.py \
-      --replace 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
+      --replace-fail 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
   '';
 
   build-system = [ setuptools ];

@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'attrs<=' 'attrs>=' \
-      --replace 'colorama==' 'colorama>=' \
-      --replace 'gql[requests]==3.0.0a6' 'gql' \
-      --replace 'PyYAML==5.*' 'PyYAML' \
-      --replace 'marshmallow<' 'marshmallow>=' \
-      --replace 'websocket-client==0.57.*' 'websocket-client'
+      --replace-fail 'attrs<=' 'attrs>=' \
+      --replace-fail 'colorama==' 'colorama>=' \
+      --replace-fail 'gql[requests]==3.0.0a6' 'gql' \
+      --replace-fail 'PyYAML==5.*' 'PyYAML' \
+      --replace-fail 'marshmallow<' 'marshmallow>=' \
+      --replace-fail 'websocket-client==0.57.*' 'websocket-client'
   '';
 
   propagatedBuildInputs = [

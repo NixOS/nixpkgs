@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_extra.py \
-      --replace "assert_exc.traceback[-1].path.strpath" "str(assert_exc.traceback[-1].path)"
+      --replace-fail "assert_exc.traceback[-1].path.strpath" "str(assert_exc.traceback[-1].path)"
   '';
 
   propagatedBuildInputs = [ six ];

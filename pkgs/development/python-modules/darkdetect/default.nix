@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace darkdetect/_linux_detect.py \
-      --replace "'gsettings'" "'${glib.bin}/bin/gsettings'"
+      --replace-fail "'gsettings'" "'${glib.bin}/bin/gsettings'"
   '';
 
   meta = with lib; {

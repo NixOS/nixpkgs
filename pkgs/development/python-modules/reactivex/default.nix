@@ -35,7 +35,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for their GitHub releases
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   pythonImportsCheck = [ "reactivex" ];

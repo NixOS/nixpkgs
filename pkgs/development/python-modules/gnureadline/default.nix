@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.ncurses ];
   patchPhase = ''
-    substituteInPlace setup.py --replace "/bin/bash" "${pkgs.bash}/bin/bash"
+    substituteInPlace setup.py --replace-fail "/bin/bash" "${pkgs.bash}/bin/bash"
   '';
 
   meta = with lib; {

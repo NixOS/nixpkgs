@@ -22,7 +22,7 @@ buildPythonPackage rec {
   postPatch = ''
     rm -rf libusbsio/bin
     substituteInPlace libusbsio/libusbsio.py \
-        --replace "dllpath = LIBUSBSIO._lookup_dll_path(dfltdir, dllname)" 'dllpath = "${libusbsio}/lib/" + dllname'
+        --replace-fail "dllpath = LIBUSBSIO._lookup_dll_path(dfltdir, dllname)" 'dllpath = "${libusbsio}/lib/" + dllname'
   '';
 
   buildInputs = [ libusbsio ];

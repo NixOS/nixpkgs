@@ -17,11 +17,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nmap ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "universal=3" "universal=1"
-  '';
-
   # Tests requires sudo and performs scans
   doCheck = false;
 

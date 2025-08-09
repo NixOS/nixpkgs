@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
 
   postPatch = ''
-    substituteInPlace ./pycoin/cmds/tx.py --replace '"gpg"' '"${gnupg}/bin/gpg"'
+    substituteInPlace ./pycoin/cmds/tx.py --replace-fail '"gpg"' '"${gnupg}/bin/gpg"'
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

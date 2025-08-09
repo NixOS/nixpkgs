@@ -37,8 +37,8 @@ buildPythonPackage rec {
     sed -i '/pytest-runner/d' setup.py
 
     substituteInPlace setup.py \
-      --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
-      --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
+      --replace-fail 'importlib-metadata<5.0.0' 'importlib-metadata' \
+      --replace-fail "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';
 
   # setup-requires requirements
@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   # disable custom pytest report generation
   preCheck = ''
-    substituteInPlace setup.cfg --replace 'addopts' '#addopts'
+    substituteInPlace setup.cfg --replace-fail 'addopts' '#addopts'
     export TEST_TRANSACTIONS='false'
   '';
 

@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0-dev"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0-dev"' 'version = "${version}"'
   '';
 
   propagatedBuildInputs = [ snowballstemmer ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];

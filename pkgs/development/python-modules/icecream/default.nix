@@ -26,11 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-WHVeWDl9U1CnbyWXbe57YH9f67PG4c3f5rGVGJbpFXM=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_icecream.py \
-      --replace assertRegexpMatches assertRegex
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
