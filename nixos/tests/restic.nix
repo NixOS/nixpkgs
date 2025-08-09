@@ -1,5 +1,4 @@
 { pkgs, ... }:
-
 let
   remoteRepository = "/root/restic-backup";
   remoteFromFileRepository = "/root/restic-backup-from-file";
@@ -38,6 +37,11 @@ let
     "--keep-weekly 1"
     "--keep-monthly 1"
     "--keep-yearly 99"
+  ];
+  command = [
+    "echo"
+    "-n"
+    "testing"
   ];
 in
 {
@@ -79,6 +83,15 @@ in
             dynamicFilesFrom = ''
               find /opt -mindepth 1 -maxdepth 1 ! -name a_dir # all files in /opt except for a_dir
             '';
+          };
+          remote-from-command-backup = {
+            inherit
+              passwordFile
+              pruneOpts
+              command
+              ;
+            initialize = true;
+            repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
           };
           inhibit-test = {
             inherit
