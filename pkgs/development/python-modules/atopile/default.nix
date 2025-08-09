@@ -12,7 +12,6 @@
   nanobind,
   # deps
   antlr4-python3-runtime,
-  attrs,
   atopile-easyeda2kicad,
   black,
   case-converter,
@@ -24,9 +23,11 @@
   gitpython,
   kicadcliwrapper,
   matplotlib,
+  mcp,
   more-itertools,
   natsort,
   numpy,
+  ordered-set,
   pathvalidate,
   pint,
   posthog,
@@ -55,7 +56,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.9.6";
+  version = "0.10.15";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -64,7 +65,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-U+Hw+Dl+47RVl9U6dVZIBo0F7Y7b64P/iyNCDhQoJXU=";
+    hash = "sha256-18+hPvVSKgYnjpreJLs4ZeeA1T8gCDtoXWznOFjMEwA=";
   };
 
   build-system = [
@@ -83,7 +84,6 @@ buildPythonPackage rec {
 
   dependencies = [
     antlr4-python3-runtime
-    attrs
     atopile-easyeda2kicad
     black # used as a dependency
     case-converter
@@ -95,9 +95,11 @@ buildPythonPackage rec {
     gitpython
     kicadcliwrapper
     matplotlib
+    mcp
     more-itertools
     natsort
     numpy
+    ordered-set
     pathvalidate
     pint
     posthog
@@ -117,7 +119,10 @@ buildPythonPackage rec {
     zstd
   ];
 
-  pythonRelaxDeps = [ "zstd" ];
+  pythonRelaxDeps = [
+    "posthog"
+    "zstd"
+  ];
 
   postPatch = ''
     substituteInPlace src/atopile/telemetry.py \
