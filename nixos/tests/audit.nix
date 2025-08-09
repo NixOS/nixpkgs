@@ -16,6 +16,7 @@
           rules = [
             "-a always,exit -F exe=${lib.getExe pkgs.hello} -k nixos-test"
           ];
+          backlogLimit = 512;
         };
         security.auditd = {
           enable = true;
@@ -34,7 +35,9 @@
     machine.wait_for_unit("auditd.service")
 
     with subtest("Audit subsystem gets enabled"):
-      assert "enabled 1" in machine.succeed("auditctl -s")
+      audit_status = machine.succeed("auditctl -s")
+      t.assertIn("enabled 1", audit_status)
+      t.assertIn("backlog_limit 512", audit_status)
 
     with subtest("unix socket plugin activated"):
       machine.succeed("stat /var/run/audispd_events")
@@ -45,7 +48,7 @@
 
     with subtest("Stopping audit-rules.service disables the audit subsystem"):
       machine.succeed("systemctl stop audit-rules.service")
-      assert "enabled 0" in machine.succeed("auditctl -s")
+      t.assertIn("enabled 0", machine.succeed("auditctl -s"))
   '';
 
 }

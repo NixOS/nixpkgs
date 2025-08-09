@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   setuptools,
-  futures ? null,
   docloud,
   requests,
 }:
@@ -14,7 +12,6 @@ buildPythonPackage rec {
   version = "2.30.251";
   pyproject = true;
 
-  # No source available from official repo
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ZQMhn1tRJ1p+TnfKQzKQOw+Akl0gUDCkjT9qp8oNvyo=";
@@ -27,13 +24,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docloud
     requests
-  ]
-  ++ lib.optional isPy27 futures;
+  ];
 
+  # PypI release does not include tests
   doCheck = false;
+
   pythonImportsCheck = [ "docplex" ];
 
   meta = with lib; {
