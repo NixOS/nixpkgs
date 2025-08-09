@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     ./update-outdated-lockfile.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-I08mqyogEuadp+V10svMmCm0i0zOZWiocOpM9E3lgag=";
 
   nativeBuildInputs = [

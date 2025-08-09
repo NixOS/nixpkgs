@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     ./fix_gnused_detection.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
   preConfigure = ''

@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     libxml2
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XzxkSzbjJdJaUmXK2nwd9naIDCsfXiLLlTyf8AFSvzA=";
 
   meta = {

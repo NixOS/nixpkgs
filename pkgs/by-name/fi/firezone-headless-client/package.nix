@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3iU7AHu3GupqiZEDkuOEb+rFPA2KB1fjVNX1BY4abXc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-p2zLhLFL6NbHvVojQU5+1amf+Kh0jRAbIESPt2vqWwg=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "headless-client";

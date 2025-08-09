@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YfSxjlpUyRwpSoKmHOZrULGIIWTQ14JJwbsNB807WYQ=";
 
   postFixup = ''

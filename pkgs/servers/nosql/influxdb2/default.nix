@@ -59,7 +59,7 @@ let
         --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
     '';
     sourceRoot = "${src.name}/libflux";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-wJVvpjaBUae3FK3lQaQov4t0UEsH86tB8B8bsSFGGBU=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;

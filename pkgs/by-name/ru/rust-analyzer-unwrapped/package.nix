@@ -13,7 +13,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
   version = "2025-05-12";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-Y6/1xr08KXj+KQVJgLO7LhwsNGE2ooFdTR9GoAgAwKk=";
 
   src = fetchFromGitHub {

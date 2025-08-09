@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lWU1NrUwcAXQR6mEiCr6Ze3TzpDYvCx5/fBIef9ao5I=";
 
   postPatch =

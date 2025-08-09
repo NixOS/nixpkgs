@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-n2h+sgqNZhFgUa4MFp501W4YPtlWN94GhP9Rlu5plBA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ffqTzu8/ra6SwvqDne/g9EgISGlEBSleEGn6gQ/DWAY=";
 
   # Tests require network access

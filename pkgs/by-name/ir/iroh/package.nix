@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-kOqmkuKOP2dWrUVaGwHckWjaFVZkSoXqqUgn+2KaWkc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-O/j+/sRyMtqd4GaER2trn9SEFpZuSlc5q1MTXU+rwLg=";
 
   # Some tests require network access which is not available in nix build sandbox.

@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Lu3/qVTi5Eedcm+3XlHAAJ1nPHm9hW4HZncQKmzDdoo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-T/ehLSPJmEuQYhotK12iqXQSe5Ke8+dkr9PVDe4Kmis=";
 
   # used for "Server Installed" version in admin panel

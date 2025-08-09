@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "sixel"
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MOX5QWxN7uEnvm9JU9jRW8Z2D2LMle+H1rOmfMxz100=";
 
   env = lib.optionalAttrs (isDarwin && isx86_64) {

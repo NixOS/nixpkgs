@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hVeBrfZxqkxzUeuut0XgU4qph1z4gPzV/9mS7X9byto=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EDXzpHrdaHd3FQEuVnkQzqsYAjShsGc4XLhDAfmVXK8=";
 
   nativeBuildInputs = [

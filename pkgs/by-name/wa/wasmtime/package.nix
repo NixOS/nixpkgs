@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-m9TsTTx/ExqE9/W3xVkYxtgKh8AlGUJTlGPMIDK2xog=";
   cargoBuildFlags = [
     "--package"

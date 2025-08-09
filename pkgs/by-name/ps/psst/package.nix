@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-BkGoaYflCTiElTj47r2j/ngUrZ9wIe0q4pl+zhoattA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gt2EDrZ+XXig5JUsmQksSLaFd7UArnttOT4UiTVASXw=";
 
   # specify the subdirectory of the binary crate to build from the workspace

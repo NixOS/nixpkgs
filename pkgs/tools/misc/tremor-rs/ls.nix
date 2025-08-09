@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Hl0TY/xZaDybYjrGiRftZhFx8dns+ONuNcxzl8lBUMM=";
 
   meta = with lib; {

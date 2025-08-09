@@ -138,7 +138,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
     '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YhdwCNTbBphWugguoWQqrGf2fRB5Jv40MElW6hbcxtk=";
 
   nativeBuildInputs = [

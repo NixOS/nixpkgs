@@ -41,7 +41,7 @@ let
 
   rdpClient = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "teleport-rdpclient";
-    useFetchCargoVendor = true;
+
     inherit cargoHash;
     inherit version src;
 

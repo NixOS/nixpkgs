@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ze/PEML1buh3HlVgz6ifMPWfZnr6eT3VpIXf7jR68jw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-dp5m/PLVG8xUM6LCq48NKK0P8di44keB/YZ9ocfL0Bg=";
 
   cargoBuildFlags = [ "--package=clorinde" ];

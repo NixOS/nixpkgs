@@ -81,7 +81,6 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fqIlN+6SEY0LVrUk47U12TuVoRte0oCGJhO7DHovzBM=";
 
   # set `HOME` to a temp dir for write access

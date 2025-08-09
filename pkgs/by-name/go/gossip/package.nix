@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nv/NMLAka62u0WzvHMEW9XBVXpg9T8bNJiUegS/oj48=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.

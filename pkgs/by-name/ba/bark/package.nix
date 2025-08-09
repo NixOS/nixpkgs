@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (final: {
     hash = "sha256-JaUIWGCYhasM0DgqL+DiG2rE1OWVg/N66my/4RWDN1E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LcmX8LbK8UHDDeqwLTFEUuRBv9GgDiCpXP4bmIR3gME=";
 
   # Broken rustdoc comment

@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     leaveDotGit = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-We5yNF8gtHWAUAead0uc99FIoMcicDWdGbTzPgpiFyY=";
 
   cargoPatches = [

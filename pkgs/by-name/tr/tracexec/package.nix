@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
   # remove if updating to rust 1.85
   env.RUSTC_BOOTSTRAP = 1;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XuuLuIeD/S60by/hg1fR+ML3PtIyX9JNrEvgGzI3UiM=";
 
   hardeningDisable = [ "zerocallusedregs" ];

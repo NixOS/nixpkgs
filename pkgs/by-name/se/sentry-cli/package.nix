@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-RnFsV9m9ChmUW1PcxSNR5i6lwKBfqp9XXUNpezjCfeY=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

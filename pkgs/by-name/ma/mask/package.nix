@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xGD23pso5iS+9dmfTMNtR6YqUqKnzJTzMl+OnRGpL3g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JaYr6J3NOwVIHzGO4wLkke5O/T/9WUDENPgLP5Fwyhg=";
 
   # tests require mask to be installed
