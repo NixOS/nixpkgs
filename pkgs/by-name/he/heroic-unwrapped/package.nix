@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
-    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
