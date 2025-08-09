@@ -15677,6 +15677,8 @@ self: super: with self; {
 
   rfc3987 = callPackage ../development/python-modules/rfc3987 { };
 
+  rfc3987-syntax = callPackage ../development/python-modules/rfc3987-syntax { };
+
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
