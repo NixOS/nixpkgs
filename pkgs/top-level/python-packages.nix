@@ -7737,6 +7737,8 @@ self: super: with self; {
 
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
 
+  kicad-python = callPackage ../development/python-modules/kicad-python { };
+
   kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
 
   kinparse = callPackage ../development/python-modules/kinparse { };
