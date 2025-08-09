@@ -3,18 +3,17 @@
   stdenv,
   fetchurl,
   ocaml,
-  findlib,
-  ocamlbuild,
   topkg,
-  result,
-  lwt,
-  cmdliner,
-  fmt,
-  fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
-  js_of_ocaml-compiler,
-  jsooSupport ? true,
-  lwtSupport ? true,
+  buildTopkgPackage,
   cmdlinerSupport ? true,
+  cmdliner,
+  fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
+  fmt,
+  jsooSupport ? true,
+  js_of_ocaml-compiler,
+  lwtSupport ? true,
+  lwt,
+  result,
 }:
 let
   pname = "logs";
@@ -49,39 +48,29 @@ let
   optional_buildInputs = map (d: d.pkg) (lib.filter (d: d.enabled) optional_deps);
 in
 
-if lib.versionOlder ocaml.version "4.03" then
-  throw "logs is not available for OCaml ${ocaml.version}"
-else
+buildTopkgPackage rec {
+  inherit pname;
+  version = "0.8.0";
 
-  stdenv.mkDerivation rec {
-    name = "ocaml${ocaml.version}-${pname}-${version}";
-    version = "0.8.0";
+  minimalOCamlVersion = "4.03";
 
-    src = fetchurl {
-      url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
-    };
+  src = fetchurl {
+    url = "${webpage}/releases/${pname}-${version}.tbz";
+    hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
+  };
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      ocamlbuild
-      topkg
-    ];
-    buildInputs = [ topkg ] ++ optional_buildInputs;
-    propagatedBuildInputs = [ result ];
+  buildInputs = [ topkg ] ++ optional_buildInputs;
+  propagatedBuildInputs = [ result ];
 
-    strictDeps = true;
+  strictDeps = true;
 
-    buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
+  buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
 
-    inherit (topkg) installPhase;
-
-    meta = with lib; {
-      description = "Logging infrastructure for OCaml";
-      homepage = webpage;
-      inherit (ocaml.meta) platforms;
-      maintainers = [ maintainers.sternenseemann ];
-      license = licenses.isc;
-    };
-  }
+  meta = with lib; {
+    description = "Logging infrastructure for OCaml";
+    homepage = webpage;
+    inherit (ocaml.meta) platforms;
+    maintainers = [ maintainers.sternenseemann ];
+    license = licenses.isc;
+  };
+}
