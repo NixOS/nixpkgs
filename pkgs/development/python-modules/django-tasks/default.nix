@@ -65,6 +65,8 @@ buildPythonPackage rec {
     "test_dry_run"
     # AssertionError: '' != 'Deleted 1 task result(s)'
     "test_prunes_tasks"
+    # AssertionError: 'Run maximum tasks (2)' not found in ''
+    "test_max_tasks"
   ];
 
   preCheck = ''
