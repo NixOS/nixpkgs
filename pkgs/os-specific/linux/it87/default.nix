@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "it87-${version}-${kernel.version}";
-  version = "unstable-2025-03-27";
+  version = "0-unstable-2025-03-27";
 
   # Original is no longer maintained.
   # This is the same upstream as the AUR uses.
