@@ -6778,7 +6778,6 @@ with pkgs;
     inherit (darwin) sigtool;
     buildJdk = jdk21_headless;
     runJdk = jdk21_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
     bazel_self = bazel_7;
   };
 
