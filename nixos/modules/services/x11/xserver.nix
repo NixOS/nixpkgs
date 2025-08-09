@@ -913,7 +913,7 @@ in
         }
         ''
           ${optionalString (
-            config.environment.sessionVariables ? XKB_CONFIG_ROOT
+            config.environment.sessionVariables.XKB_CONFIG_ROOT or null != null
           ) "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"}
           XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
           touch "$out"

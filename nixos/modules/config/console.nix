@@ -145,7 +145,7 @@ in
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
               ${
                 lib.optionalString (
-                  config.environment.sessionVariables ? XKB_CONFIG_ROOT
+                  config.environment.sessionVariables.XKB_CONFIG_ROOT or null != null
                 ) "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
               } \
               -model '${xkb.model}' -layout '${xkb.layout}' \
