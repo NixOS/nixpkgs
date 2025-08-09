@@ -361,22 +361,23 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (name: backup: [
-      {
-        assertion = (backup.repository == null) != (backup.repositoryFile == null);
-        message = "services.restic.backups.${name}: exactly one of repository or repositoryFile should be set";
-
-      }
-      {
-        assertion =
-          let
-            fileBackup = (backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null;
-            commandBackup = backup.command != [ ];
-          in
-          !(fileBackup && commandBackup);
-        message = "services.restic.backups.${name}: cannot do both a command backup and a file backup at the same time.";
-      }
-    ]) config.services.restic.backups;
+    assertions = lib.flatten (
+      lib.mapAttrsToList (name: backup: [
+        {
+          assertion = (backup.repository == null) != (backup.repositoryFile == null);
+          message = "services.restic.backups.${name}: exactly one of repository or repositoryFile should be set";
+        }
+        {
+          assertion =
+            let
+              fileBackup = (backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null;
+              commandBackup = backup.command != [ ];
+            in
+            !(fileBackup && commandBackup);
+          message = "services.restic.backups.${name}: cannot do both a command backup and a file backup at the same time.";
+        }
+      ]) config.services.restic.backups
+    );
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
@@ -473,11 +474,9 @@ in
             ${lib.optionalString (backup.paths != null && backup.paths != [ ]) ''
               cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}
             ''}
-            ${
-              lib.optionalString backup.dynamicFilesFrom != null ''
-                ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
-              ''
-            }
+            ${lib.optionalString (backup.dynamicFilesFrom != null) ''
+              ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
+            ''}
           '';
         }
         // lib.optionalAttrs (doBackup || backup.backupCleanupCommand != null) {

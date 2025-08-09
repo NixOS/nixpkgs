@@ -206,6 +206,13 @@ in
         "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-3",
         "diff -ru ${testDir} /tmp/restore-3/opt",
 
+        # test that remote-from-command-backup produces a snapshot
+        "systemctl start restic-backups-remote-from-command-backup.service",
+        'restic-backups-remote-from-command-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        "mkdir /tmp/restore-4",
+        "restic-remote-from-file-backup restore latest -t /tmp/restore-4",
+        "diff -ru ${testDir} /tmp/restore-4/opt",
+
         # test that rclonebackup produces a snapshot
         "systemctl start restic-backups-rclonebackup.service",
         'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
