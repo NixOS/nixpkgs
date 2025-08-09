@@ -22,7 +22,9 @@ buildPythonPackage rec {
 
   prePatch = ''
     # pythonRelaxDeps doesn't work here
-    substituteInPlace pyproject.toml --replace-fail "setuptools >= 61.2, < 72" "setuptools"
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 61.2, < 72" "setuptools" \
+      --replace-fail "cython >= 3, < 3.1" cython
   '';
 
   nativeBuildInputs = [
