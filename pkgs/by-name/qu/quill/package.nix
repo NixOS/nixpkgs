@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rpsbQYA6RBYSo2g+YhYG02CYlboRQvIwMqPAybayCOs=";
 
   nativeBuildInputs = [

@@ -33,7 +33,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uiua";
   inherit (versionInfo) version cargoHash;
-  useFetchCargoVendor = true;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";

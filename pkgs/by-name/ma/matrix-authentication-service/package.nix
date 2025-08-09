@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-BLEbEDZRh7fgcnkH/YUHPPdKM1FtZdjvsL1rJ57BP3w=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1jLiCCZUj/rBHd1huqZdmgKayoSZoOt3tptyZlOcWJA=";
 
   npmDeps = fetchNpmDeps {

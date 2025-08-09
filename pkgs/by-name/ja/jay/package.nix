@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-dUp3QYno2rB3wuJmSvBpCqowSpfMQIJqUYc0lDVqVPA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ovQxpUrRZAP1lHlsObfbIsgIjgMp+BLf6Ul+mzDVN5o=";
 
   SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";

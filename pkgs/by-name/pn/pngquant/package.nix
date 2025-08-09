@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-W+/y79KkSVHqBybouUazGVfTQAuelXvn6EXtu+TW7j4=";
   cargoPatches = [
     # https://github.com/kornelski/pngquant/issues/347

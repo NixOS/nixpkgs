@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-A0cmjllyhKkYsMyjeuuMCax0uVnaDp9OwJPY7peDjPM=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-9zuD3korJGIcarBV0bSSV/g/Q0niWAMqgRfwpPXCuBU=";
 
   sourceRoot = "${src.name}/windSend-rs";

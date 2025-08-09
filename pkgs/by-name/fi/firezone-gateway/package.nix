@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-C5zCo9G21xrrPzabD/8Tiil8D1RlRG8+3/jLTf5/pTQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eJfRTtLHYOc3M3dOP/VvrC6Qm2ovoR6LQSgCPwntc1M=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gateway";

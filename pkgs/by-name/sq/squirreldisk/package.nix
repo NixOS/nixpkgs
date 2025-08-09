@@ -51,7 +51,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-dFTdbMX355klZ2wY160bYcgMiOiOGplEU7/e6Btv5JI=";
 
   # copy the frontend static resources to final build directory

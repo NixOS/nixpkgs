@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
   auditable = false;
 
   cargoHash = "sha256-9pdkXpkIbe5HeVGvgusRaI4A6ZjDGssO5k0ULVnO6k8=";
-  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     installShellFiles

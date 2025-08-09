@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SjpfM963Zux+H5QhK8prvDLuI56fP5PqX5gcVbthRx4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Da9ei4yAOfhSQmQgrUDZCmMeJXTfGnYhI1+L0JT/ECs=";
 
   # https://github.com/leptos-rs/cargo-leptos#dependencies

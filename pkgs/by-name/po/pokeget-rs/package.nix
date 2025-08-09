@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nP5NPBnqEaGo1QvhdMHSPtDjJqOxF+TodvqmMgTfQ8M=";
 
   meta = with lib; {

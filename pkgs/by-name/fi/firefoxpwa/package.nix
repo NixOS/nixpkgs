@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-elVthXdjlI9DSQgaIRzu3M72dgGNXGgMiUXEICaBJCQ=";
 
   preConfigure = ''

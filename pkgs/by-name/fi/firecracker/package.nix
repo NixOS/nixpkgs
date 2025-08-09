@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-joypOLe/cagPT+sNd9LEY5ueCPYjK47/RzNZBOZBbHQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/ko1WjJ2Z7B00hcTfqNiOqWj0QmDNDroT9HoaySoeYU=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.

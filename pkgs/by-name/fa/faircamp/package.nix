@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-68wo95SjiCBS8cikMGZpnpYx7AqyIQ/szXMorirwVPk=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-YyzzkWgjEKl46CfAkbFdum+AWCO0YGTXDh86mtHtCQs=";
 
   buildFeatures = [ "libvips" ];

@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+PaSLq++tKA6dy4CI1EYrEDdXi2TI9XHjvMLfwDp/HA=";
 
   cargoBuildFlags = [ "--package trippy" ];

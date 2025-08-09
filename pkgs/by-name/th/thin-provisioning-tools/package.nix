@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     lvm2
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cjNgp+StWkqtR1Y4caLv8EWhHsinSpbc/hgUUG7CGtE=";
 
   passthru.tests = {

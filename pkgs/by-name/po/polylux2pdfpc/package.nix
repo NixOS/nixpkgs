@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
   };
   sourceRoot = "${src.name}/${dirname}";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9nA18f+Dwps45M/OIY0jtx7QgyJDTVUsPndFdNBKHCQ=";
 
   passthru.updateScript = nix-update-script { };

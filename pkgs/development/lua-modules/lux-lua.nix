@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ luaFeature ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CWPHE+j6RDtVrnYzakKecIM5dXuHuWaWK+T9xFEdmz8=";
 
   nativeBuildInputs = [
