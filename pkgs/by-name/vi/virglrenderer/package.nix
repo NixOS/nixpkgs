@@ -11,13 +11,13 @@
   libX11,
   libdrm,
   libgbm,
-  nativeContextSupport ? stdenv.hostPlatform.isLinux,
-  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
   vulkan-headers,
   vulkan-loader,
   nix-update-script,
+  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  nativeContextSupport ? stdenv.hostPlatform.isLinux,
+  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,21 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  buildInputs = [
-    libepoxy
-  ]
-  ++ lib.optionals vaapiSupport [ libva ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-headers
-    vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGLU
-    libX11
-    libdrm
-    libgbm
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -58,12 +43,34 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
+  buildInputs = [
+    libepoxy
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libX11
+    libdrm
+    libgbm
+  ]
+  ++ lib.optionals vaapiSupport [
+    libva
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ];
+
   mesonFlags = [
     (lib.mesonBool "video" vaapiSupport)
     (lib.mesonBool "venus" vulkanSupport)
-  ]
-  ++ lib.optionals nativeContextSupport [
-    (lib.mesonOption "drm-renderers" "amdgpu-experimental,msm")
+    (lib.mesonOption "drm-renderers" (
+      lib.optionalString nativeContextSupport (
+        lib.concatStringsSep "," [
+          "amdgpu-experimental"
+          "msm"
+        ]
+      )
+    ))
   ];
 
   passthru = {
