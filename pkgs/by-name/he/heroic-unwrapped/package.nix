@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
@@ -18,6 +19,7 @@
 }:
 
 let
+  epic-integration = callPackage ./epic-integration.nix { };
   electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -78,7 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
     rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
-    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    mkdir -p \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
     ln -s \
       "${lib.getExe gogdl}" \
       "${lib.getExe legendary-heroic}" \
@@ -86,6 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
+    cp \
+      "${comet-gog.dummy-service}/GalaxyCommunication.exe" \
+      "${epic-integration}/EpicGamesLauncher.exe" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
@@ -102,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.epic-integration = epic-integration;
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
