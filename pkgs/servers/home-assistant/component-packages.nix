@@ -4153,8 +4153,9 @@
       ];
     "onkyo" =
       ps: with ps; [
+        aioonkyo
         ifaddr
-      ]; # missing inputs: aioonkyo
+      ];
     "onvif" =
       ps: with ps; [
         ha-ffmpeg
@@ -7432,6 +7433,7 @@
     "ondilo_ico"
     "onedrive"
     "onewire"
+    "onkyo"
     "onvif"
     "open_meteo"
     "openai_conversation"
