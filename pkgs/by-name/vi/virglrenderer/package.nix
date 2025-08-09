@@ -70,15 +70,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
-    description = "Virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
-    mainProgram = "virgl_test_server";
-    homepage = "https://virgil3d.github.io/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [
-      maintainers.xeji
-      maintainers.normalcea
+  meta = {
+    description = "Virtual 3D GPU for use inside QEMU virtual machines";
+    homepage = "https://docs.mesa3d.org/drivers/virgl";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      normalcea
     ];
+    mainProgram = "virgl_test_server";
+    platforms = lib.platforms.unix;
   };
 }
