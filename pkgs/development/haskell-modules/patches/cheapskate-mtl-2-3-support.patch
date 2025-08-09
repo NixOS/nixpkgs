@@ -1,0 +1,23 @@
+diff --git a/Cheapskate/Parse.hs b/Cheapskate/Parse.hs
+index b90d8e5..2925132 100644
+--- a/Cheapskate/Parse.hs
++++ b/Cheapskate/Parse.hs
+@@ -1,4 +1,5 @@
+ {-# LANGUAGE OverloadedStrings #-}
++{-# LANGUAGE CPP #-}
+ module Cheapskate.Parse (
+          markdown
+        ) where
+@@ -21,6 +22,12 @@ import Control.Applicative
+ import qualified Data.Map as M
+ import Data.List (intercalate)
+ 
++#if MIN_VERSION_mtl(2, 3, 0)
++import Control.Monad (guard, unless, replicateM)
++#else
++#endif
++
++
+ import Debug.Trace
+ 
+ -- | Parses the input as a markdown document.  Note that 'Doc' is an instance

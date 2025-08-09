@@ -1,0 +1,20 @@
+--- a/configure.ac	2017-03-07 13:31:46.074580930 +0100
++++ b/configure.ac	2017-03-07 13:33:25.640924331 +0100
+@@ -347,7 +347,7 @@
+     AC_DEFINE([LIBCW_WITH_PULSEAUDIO], [1], [Define as 1 if your build machine can support PulseAudio.])
+ fi
+ 
+-
++PKG_PROG_PKG_CONFIG
+ 
+ if test "$enable_cwcp" = "no" ; then
+    WITH_CWCP='no'
+@@ -355,6 +355,7 @@
+     AC_CHECK_LIB(curses, initscr)
+-    if test $ac_cv_lib_curses_initscr = 'yes' ; then
++    if true ; then
+ 	WITH_CWCP='yes'
++	PKG_CHECK_MODULES(ncurses, ncurses, [NCURSES_LIB="$ncurses_LIBS"], )
+     else
+ 	WITH_CWCP='no'
+ 	AC_MSG_WARN([Cannot find libcurses - unable to build cwcp])

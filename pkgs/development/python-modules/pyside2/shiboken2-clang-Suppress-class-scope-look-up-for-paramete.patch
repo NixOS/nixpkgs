@@ -1,0 +1,96 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Thu, 27 Apr 2023 13:00:37 +0200
+Subject: shiboken2/clang: Suppress class scope look up for parameters with
+ scope resolution
+
+Add a flag to AbstractMetaBuilderPrivate::findTypeEntriesHelper()
+to suppress the class scope look in case scope resolution.
+
+Task-number: PYSIDE-2288
+Pick-to: 6.5 5.15
+Change-Id: I04a4810d03845fb48393c5efed3641220bd12d87
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+---
+ sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp | 16 ++++++++++++----
+ sources/shiboken2/ApiExtractor/abstractmetabuilder.h   |  3 ++-
+ sources/shiboken2/ApiExtractor/abstractmetabuilder_p.h |  1 +
+ 3 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp b/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp
+index 2f34e16..4bf4ab4 100644
+--- a/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp
++++ b/sources/shiboken2/ApiExtractor/abstractmetabuilder.cpp
+@@ -1845,7 +1845,10 @@ AbstractMetaFunction *AbstractMetaBuilderPrivate::traverseFunction(const Functio
+             return nullptr;
+         }
+ 
+-        AbstractMetaType *type = translateType(returnType, currentClass, {}, &errorMessage);
++        TranslateTypeFlags flags;
++        if (functionItem->scopeResolution())
++            flags.setFlag(AbstractMetaBuilder::NoClassScopeLookup);
++        AbstractMetaType *type = translateType(returnType, currentClass, flags, &errorMessage);
+         if (!type) {
+             const QString reason = msgUnmatchedReturnType(functionItem, errorMessage);
+             qCWarning(lcShiboken, "%s",
+@@ -1880,7 +1883,10 @@ AbstractMetaFunction *AbstractMetaBuilderPrivate::traverseFunction(const Functio
+             return nullptr;
+         }
+ 
+-        AbstractMetaType *metaType = translateType(arg->type(), currentClass, {}, &errorMessage);
++        TranslateTypeFlags flags;
++        if (arg->scopeResolution())
++            flags.setFlag(AbstractMetaBuilder::NoClassScopeLookup);
++        AbstractMetaType *metaType = translateType(arg->type(), currentClass, flags, &errorMessage);
+         if (!metaType) {
+             // If an invalid argument has a default value, simply remove it
+             // unless the function is virtual (since the override in the
+@@ -2073,11 +2079,13 @@ static const TypeEntry* findTypeEntryUsingContext(const AbstractMetaClass* metaC
+ // Helper for translateTypeStatic()
+ TypeEntries AbstractMetaBuilderPrivate::findTypeEntries(const QString &qualifiedName,
+                                                         const QString &name,
++                                                        TranslateTypeFlags flags,
+                                                         AbstractMetaClass *currentClass,
+                                                         AbstractMetaBuilderPrivate *d)
+ {
+     // 5.1 - Try first using the current scope
+-    if (currentClass) {
++    if (currentClass != nullptr
++        && !flags.testFlag(AbstractMetaBuilder::NoClassScopeLookup)) {
+         if (auto type = findTypeEntryUsingContext(currentClass, qualifiedName))
+             return {type};
+ 
+@@ -2278,7 +2286,7 @@ AbstractMetaType *AbstractMetaBuilderPrivate::translateTypeStatic(const TypeInfo
+         typeInfo.clearInstantiations();
+     }
+ 
+-    TypeEntries types = findTypeEntries(qualifiedName, name, currentClass, d);
++    TypeEntries types = findTypeEntries(qualifiedName, name, flags, currentClass, d);
+     if (!flags.testFlag(AbstractMetaBuilder::TemplateArgument)) {
+         // Avoid clashes between QByteArray and enum value QMetaType::QByteArray
+         // unless we are looking for template arguments.
+diff --git a/sources/shiboken2/ApiExtractor/abstractmetabuilder.h b/sources/shiboken2/ApiExtractor/abstractmetabuilder.h
+index 8916eaf..f333ad5 100644
+--- a/sources/shiboken2/ApiExtractor/abstractmetabuilder.h
++++ b/sources/shiboken2/ApiExtractor/abstractmetabuilder.h
+@@ -94,7 +94,8 @@ public:
+ 
+     enum TranslateTypeFlag {
+         DontResolveType = 0x1,
+-        TemplateArgument = 0x2
++        TemplateArgument = 0x2,
++        NoClassScopeLookup = 0x4
+     };
+     Q_DECLARE_FLAGS(TranslateTypeFlags, TranslateTypeFlag);
+ 
+diff --git a/sources/shiboken2/ApiExtractor/abstractmetabuilder_p.h b/sources/shiboken2/ApiExtractor/abstractmetabuilder_p.h
+index 8468950..8ddd369 100644
+--- a/sources/shiboken2/ApiExtractor/abstractmetabuilder_p.h
++++ b/sources/shiboken2/ApiExtractor/abstractmetabuilder_p.h
+@@ -154,6 +154,7 @@ public:
+                                                  TranslateTypeFlags flags = {},
+                                                  QString *errorMessageIn = nullptr);
+     static TypeEntries findTypeEntries(const QString &qualifiedName, const QString &name,
++                                       TranslateTypeFlags flags = {},
+                                        AbstractMetaClass *currentClass = nullptr,
+                                        AbstractMetaBuilderPrivate *d = nullptr);
+ 

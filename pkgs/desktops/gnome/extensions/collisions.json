@@ -1,0 +1,43 @@
+{
+  "applications-menu": [
+    "Applications_Menu@rmy.pobox.com",
+    "apps-menu@gnome-shell-extensions.gcampax.github.com"
+  ],
+  "battery-time": [
+    "batime@martin.zurowietz.de",
+    "battery-time@eetumos.github.com",
+    "batterytime@typeof.pw"
+  ],
+  "eur-usd": [
+    "eur-usd-gshell@vezza.github.com",
+    "usd-mxn-gshell@kinduff.github.com"
+  ],
+  "fullscreen-to-empty-workspace": [
+    "fullscreen-to-empty-workspace2@corgijan.dev",
+    "fullscreen-to-empty-workspace@aiono.dev"
+  ],
+  "fuzzy-clock": [
+    "FuzzyClock@fire-man-x",
+    "FuzzyClock@johngoetz"
+  ],
+  "mouse-follows-focus": [
+    "mouse-follows-focus@crisidev.org",
+    "mousefollowsfocus@matthes.biz"
+  ],
+  "nepali-calendar": [
+    "nepali-calendar-gs-extension@subashghimire.info.np",
+    "nepali-date@biplab"
+  ],
+  "persian-calendar": [
+    "PersianCalendar@oxygenws.com",
+    "persian-calendar@iamrezamousavi.gmail.com"
+  ],
+  "power-profile-indicator": [
+    "power-profile-indicator@laux.wtf",
+    "power-profile@fthx"
+  ],
+  "system-monitor": [
+    "System_Monitor@bghome.gmail.com",
+    "system-monitor@gnome-shell-extensions.gcampax.github.com"
+  ]
+}

@@ -1,0 +1,83 @@
+#!@shell@
+
+rootdb="/etc/pki/nssdb"
+userdb="$HOME/.pki/nssdb"
+dbentry="Belgium eID"
+libfile="/run/current-system/sw/lib/libbeidpkcs11.so"
+
+dbdir="$userdb"
+
+while true; do
+	case "$1" in
+	--help|"")	cat << EOF
+(Un)register $dbentry with NSS-compatible browsers.
+
+Usage: `basename "$0"` [OPTION] ACTION [LIBRARY]
+
+Options:
+  --db PATH	use custom NSS database directory PATH
+  --user	use user NSS database $userdb (default)
+  --system	use global NSS database $rootdb
+  --help	show this message
+
+Actions:
+  add		add $dbentry to NSS database
+  remove	remove $dbentry from NSS database
+  show		show $dbentry NSS database entry
+
+Default arguments if unspecified:
+  LIBRARY	$libfile
+EOF
+		exit ;;
+	--db)	dbdir="$2"
+		shift 2 ;;
+	--user)	dbdir="$userdb"
+		shift ;;
+	--system)
+		dbdir="$rootdb"
+		shift ;;
+	-*)	echo "$0: unknown option: '$1'" >&2
+		echo "Try --help for usage information."
+		exit 1 ;;
+	*)	break ;;
+	esac
+done
+
+if [ "$2" ]; then
+	libfile="$2"
+	if ! [ -f "$libfile" ]; then
+		echo "$0: error: '$libfile' not found" >&2
+		exit 1
+	fi
+fi
+
+mkdir -p "$dbdir"
+if ! [ -d "$dbdir" ]; then
+	echo "$0: error: '$dbdir' must be a writable directory" >&2
+	exit 1
+fi
+
+dbdir="sql:$dbdir"
+
+echo "NSS database: $dbdir"
+echo "BEID library: $libfile"
+
+case "$1" in
+add)	echo "Adding $dbentry to database:"
+	modutil -dbdir "$dbdir" -add "$dbentry" -libfile "$libfile" ||
+		echo "Tip: try removing the module before adding it again." ;;
+remove) echo "Removing $dbentry from database:"
+	modutil -dbdir "$dbdir" -delete "$dbentry" ;;
+show)	echo "Displaying $dbentry database entry, if any:"
+	echo "Note: this may fail if you don't have the correct permissions." ;;
+'')	exec "$0" --help ;;
+*)	echo "$0: unknown action: '$1'" >&2
+	echo "Try --help for usage information."
+	exit 1 ;;
+esac
+
+ret=$?
+
+modutil -dbdir "$dbdir" -list "$dbentry" 2>/dev/null
+
+exit $ret

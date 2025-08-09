@@ -1,0 +1,8 @@
+--- a/plug-ins/python/pygimp.interp.in
++++ b/plug-ins/python/pygimp.interp.in
+@@ -2,4 +2,4 @@ python=@PYTHON_EXE@
+ python3=@PYTHON_EXE@
+ /usr/bin/python=@PYTHON_EXE@
+ /usr/bin/python3=@PYTHON_EXE@
+-:Python:E::py::python3:
++:Python:E::py::@python_interpreter@:

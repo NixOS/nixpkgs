@@ -1,0 +1,29 @@
+diff --git a/setup.py b/setup.py
+index 219583b..3ca5f88 100644
+--- a/setup.py
++++ b/setup.py
+@@ -170,23 +170,7 @@ class CMakeBuild(build_ext):
+         subprocess.check_call(cmake_build, cwd=build_folder)
+ 
+ def num_available_cpu_cores(ram_per_build_process_in_gb):
+-    if 'TRAVIS' in os.environ and os.environ['TRAVIS']=='true':
+-        # When building on travis-ci, just use 2 cores since travis-ci limits
+-        # you to that regardless of what the hardware might suggest.
+-        return 2
+-    elif 'CMAKE_BUILD_PARALLEL_LEVEL' in os.environ and os.environ['CMAKE_BUILD_PARALLEL_LEVEL'].isnumeric():
+-        return int(os.environ['CMAKE_BUILD_PARALLEL_LEVEL'])
+-    try:
+-        mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')  
+-        mem_gib = mem_bytes/(1024.**3)
+-        num_cores = multiprocessing.cpu_count() 
+-        # make sure we have enough ram for each build process.
+-        mem_cores = int(floor(mem_gib/float(ram_per_build_process_in_gb)+0.5));
+-        # We are limited either by RAM or CPU cores.  So pick the limiting amount
+-        # and return that.
+-        return max(min(num_cores, mem_cores), 1)
+-    except ValueError:
+-        return 2 # just assume 2 if we can't get the os to tell us the right answer.
++    return os.getenv("NIX_BUILD_CORES", 1)
+ 
+ 
+ from setuptools.command.test import test as TestCommand

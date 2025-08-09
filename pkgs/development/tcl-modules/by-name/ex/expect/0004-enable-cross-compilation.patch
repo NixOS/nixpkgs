@@ -1,0 +1,295 @@
+From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Subject: [PATCH] enable cross compilation for expect
+
+This patch was created by running ./configure on a modern Linux machine
+and inserting the results into the cross compilation section of
+each AC_MSG_CHECKING that bombed out with an error.
+
+Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+
+--
+
+The original patch, and description above, is originally from
+https://github.com/buildroot/buildroot/blob/master/package/expect/0001-enable-cross-compilation.patch
+
+This patch has been further modified to not hard-code Linux assumptions.
+
+---
+
+Index: expect-5.45/configure.in
+===================================================================
+--- expect-5.45.orig/configure.in	2013-11-14 07:59:58.732100595 -0600
++++ expect-5.45/configure.in	2013-11-14 07:59:58.732100595 -0600
+@@ -6,10 +6,12 @@
+ AC_INIT([expect],[5.45.4])
+ 
+ TEA_INIT([3.9])
+ 
+ AC_CONFIG_AUX_DIR(tclconfig)
++
++AC_LANG([C])
+ 
+ #--------------------------------------------------------------------
+ # Configure script for package 'Expect'.
+ # TEA compliant.
+ #--------------------------------------------------------------------
+@@ -465,26 +467,20 @@
+ # Some systems only define WNOHANG if _POSIX_SOURCE is defined
+ # The following merely tests that sys/wait.h can be included
+ # and if so that WNOHANG is not defined.  The only place I've
+ # seen this is ISC.
+ AC_MSG_CHECKING([if WNOHANG requires _POSIX_SOURCE])
+-AC_TRY_RUN([
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ #include <sys/wait.h>
+-int
+-main() {
+ #ifndef WNOHANG
+-	return 0;
+-#else
+-	return 1;
++#  error "WNOHANG requires _POSIX_SOURCE to be defined"
+ #endif
+-}],
++]])],
+ 	AC_MSG_RESULT(yes)
+ 	AC_DEFINE(WNOHANG_REQUIRES_POSIX_SOURCE)
+ ,
+ 	AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+ AC_MSG_CHECKING([if any value exists for WNOHANG])
+ rm -rf wnohang
+ AC_TRY_RUN([
+@@ -504,11 +501,12 @@
+ 	rm -f wnohang
+ ,
+ 	AC_MSG_RESULT(no)
+ 	AC_DEFINE(WNOHANG_BACKUP_VALUE, 1)
+ ,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
++	AC_MSG_RESULT(yes)
++	AC_DEFINE(WNOHANG_BACKUP_VALUE, 1)
+ )
+ 
+ #
+ # check how signals work
+ #
+@@ -572,11 +570,11 @@
+ }],
+ 	AC_MSG_RESULT(yes)
+ 	AC_DEFINE(REARM_SIG)
+ ,
+ 	AC_MSG_RESULT(no)
+-, AC_MSG_WARN([Expect can't be cross compiled])
++, AC_MSG_RESULT(no)
+ )
+ 
+ # HPUX7 has trouble with the big cat so split it
+ # Owen Rees <rtor@ansa.co.uk> 29Mar93 
+ SEDDEFS="${SEDDEFS}CONFEOF
+@@ -710,25 +708,19 @@
+     AC_DEFINE(POSIX)
+ fi
+ 
+ # first check for the pure bsd
+ AC_MSG_CHECKING([for struct sgttyb])
+-AC_TRY_RUN([
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ #include <sgtty.h>
+-int
+-main()
+-{
+-  struct sgttyb tmp;
+-  return 0;
+-}],
++static struct sgttyb tmp;
++]])],
+         AC_MSG_RESULT(yes)
+         AC_DEFINE(HAVE_SGTTYB)
+         PTY_TYPE=sgttyb
+ ,
+         AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+ # mach systems have include files for unimplemented features
+ # so avoid doing following test on those systems
+ if test $mach -eq 0 ; then
+@@ -735,116 +728,88 @@
+   # next check for the older style ttys
+   # note that if we detect termio.h (only), we still set PTY_TYPE=termios
+   # since that just controls which of pty_XXXX.c file is use and
+   # pty_termios.c is set up to handle pty_termio.
+   AC_MSG_CHECKING([for struct termio])
+-  AC_TRY_RUN([#include <termio.h>
+-  int
+-  main()
+-  {
+-    struct termio tmp;
+-    return 0;
+-  }],
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++#include <termio.h>
++static struct termio tmp;
++]])],
+         AC_DEFINE(HAVE_TERMIO)
+         PTY_TYPE=termios
+         AC_MSG_RESULT(yes)
+ ,
+         AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+   # now check for the new style ttys (not yet posix)
+   AC_MSG_CHECKING([for struct termios])
+-  AC_TRY_RUN([
+-  /* including termios.h on Solaris 5.6 fails unless inttypes.h included */
+-#  ifdef HAVE_INTTYPES_H
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++/* including termios.h on Solaris 5.6 fails unless inttypes.h included */
++#ifdef HAVE_INTTYPES_H
+ #  include <inttypes.h>
+-#  endif
+-#  include <termios.h>
+-  int
+-  main()
+-  {
+-    struct termios tmp;
+-    return 0;
+-  }],
++#endif
++#include <termios.h>
++static struct termios tmp;
++]])],
+         AC_DEFINE(HAVE_TERMIOS)
+         PTY_TYPE=termios
+         AC_MSG_RESULT(yes)
+   ,
+         AC_MSG_RESULT(no)
+-  ,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+   )
+ fi
+ 
+ AC_MSG_CHECKING([if TCGETS or TCGETA in termios.h])
+-AC_TRY_RUN([
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ /* including termios.h on Solaris 5.6 fails unless inttypes.h included */
+ #ifdef HAVE_INTTYPES_H
+-#include <inttypes.h>
++#  include <inttypes.h>
+ #endif
+ #include <termios.h>
+-int
+-main() {
+-#if defined(TCGETS) || defined(TCGETA)
+-	return 0;
+-#else
+-	return 1;
++#
++#if !(defined(TCGETS) || defined(TCGETA))
++#  error "missing both of TCGETS and TCGETA"
+ #endif
+-}],
++]])],
+ 	AC_DEFINE(HAVE_TCGETS_OR_TCGETA_IN_TERMIOS_H)
+ 	AC_MSG_RESULT(yes)
+ ,
+ 	AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+ AC_MSG_CHECKING([if TIOCGWINSZ in termios.h])
+-AC_TRY_RUN([
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ /* including termios.h on Solaris 5.6 fails unless inttypes.h included */
+ #ifdef HAVE_INTTYPES_H
+-#include <inttypes.h>
++#  include <inttypes.h>
+ #endif
+ #include <termios.h>
+-int
+-main() {
+-#ifdef TIOCGWINSZ
+-	return 0;
+-#else
+-	return 1;
++
++#ifndef TIOCGWINSZ
++#  error "missing TIOCGWINSZ"
+ #endif
+-}],
++]])],
+ 	AC_DEFINE(HAVE_TIOCGWINSZ_IN_TERMIOS_H)
+ 	AC_MSG_RESULT(yes)
+ ,
+ 	AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+ # finally check for Cray style ttys
+ AC_MSG_CHECKING([for Cray-style ptys])
+ SETUID=":"
+-AC_TRY_RUN([
+-int
+-main(){
+-#ifdef CRAY
+-	return 0;
+-#else
+-	return 1;
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++#ifndef CRAY
++#  error "CRAY is not defined"
+ #endif
+-}
+-],
++]])],
+ 	PTY_TYPE=unicos
+ 	SETUID="chmod u+s"
+ 	AC_MSG_RESULT(yes)
+ ,
+ 	AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+ #
+ # Check for select and/or poll. If both exist, we prefer select.
+ # if neither exists, define SIMPLE_EVENT.
+@@ -873,26 +842,24 @@
+ 
+ #
+ # check for timezones
+ #
+ AC_MSG_CHECKING([for SV-style timezone])
+-AC_TRY_RUN([
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ extern char *tzname[2];
+ extern int daylight;
+ int
+ main()
+ {
+   int *x = &daylight;
+   char **y = tzname;
+ 
+   return 0;
+-}],
++}]])],
+ 	AC_DEFINE(HAVE_SV_TIMEZONE)
+ 	AC_MSG_RESULT(yes),
+ 	AC_MSG_RESULT(no)
+-,
+-	AC_MSG_ERROR([Expect can't be cross compiled])
+ )
+ 
+ 
+ # Following comment stolen from Tcl's configure.in:
+ #   Note:  in the following variable, it's important to use the absolute
+

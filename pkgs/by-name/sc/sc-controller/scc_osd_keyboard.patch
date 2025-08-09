@@ -1,0 +1,21 @@
+diff --git a/scc/bin/scc_osd_keyboard.py b/scc/bin/scc_osd_keyboard.py
+index 832d6e0..29e0cda 100755
+--- a/scc/bin/scc_osd_keyboard.py
++++ b/scc/bin/scc_osd_keyboard.py
+@@ -5,7 +5,7 @@ def sigint(*a):
+ 	print("\n*break*")
+ 	sys.exit(0)
+ 
+-if __name__ == "__main__":
++def main():
+ 	signal.signal(signal.SIGINT, sigint)
+ 
+ 	import gi
+@@ -23,3 +23,6 @@ if __name__ == "__main__":
+ 		sys.exit(1)
+ 	k.run()
+ 	sys.exit(k.get_exit_code())
++
++if __name__ == "__main__":
++	main()
+

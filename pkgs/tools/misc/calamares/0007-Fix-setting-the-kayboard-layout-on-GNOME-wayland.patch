@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Victor Fuentes <vmfuentes64@gmail.com>
+Date: Thu, 31 Oct 2024 10:34:25 -0700
+Subject: [PATCH] Fix setting the kayboard layout on GNOME wayland.
+
+By default the module uses the setxkbmap, which will not change the
+keyboard
+---
+ src/modules/keyboard/Config.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/modules/keyboard/Config.cpp b/src/modules/keyboard/Config.cpp
+index 54ee7649c..60fe2d7d0 100644
+--- a/src/modules/keyboard/Config.cpp
++++ b/src/modules/keyboard/Config.cpp
+@@ -306,6 +306,10 @@ Config::applyXkb()
+                                                   m_additionalLayoutInfo.groupSwitcher ) );
+         QProcess::execute( "setxkbmap", basicArguments );
+ 
++        QString xkbmap = QString( "[('xkb','%1\%2'),('xkb','%3\%4')]").arg(
++                                  m_selectedLayout, ((!m_selectedVariant.isEmpty()) ? "+" + m_selectedVariant : ""),
++                                  m_additionalLayoutInfo.additionalLayout, ((!m_additionalLayoutInfo.additionalVariant.isEmpty()) ? "+" + m_additionalLayoutInfo.additionalVariant : ""));
++        QProcess::execute( "sh", { "-c", "if command -v gsettings; then gsettings set org.gnome.desktop.input-sources sources \"$0\"; fi", xkbmap });
+         cDebug() << "xkbmap selection changed to: " << m_selectedLayout << '-' << m_selectedVariant << "(added "
+                  << m_additionalLayoutInfo.additionalLayout << "-" << m_additionalLayoutInfo.additionalVariant
+                  << " since current layout is not ASCII-capable)";
+@@ -314,6 +318,8 @@ Config::applyXkb()
+     {
+         basicArguments.append( xkbmap_layout_args( m_selectedLayout, m_selectedVariant ) );
+         QProcess::execute( "setxkbmap", basicArguments );
++        QString xkbmap = QString( "[('xkb','%1\%2')]").arg( m_selectedLayout, ((!m_selectedVariant.isEmpty()) ? "+" + m_selectedVariant : "") );
++        QProcess::execute( "sh", { "-c", "if command -v gsettings; then gsettings set org.gnome.desktop.input-sources sources \"$0\"; fi", xkbmap });
+         cDebug() << "xkbmap selection changed to: " << m_selectedLayout << '-' << m_selectedVariant;
+     }
+     m_applyTimer.stop();

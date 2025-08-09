@@ -1,0 +1,51 @@
+From 7dbff0777c4364eec68cf90488d99f06b11dfa98 Mon Sep 17 00:00:00 2001
+From: Felix Buehler <account@buehler.rocks>
+Date: Tue, 8 Oct 2024 23:49:40 +0200
+Subject: [PATCH] build: Bump time from 0.3.34 to 0.3.36 in /backend
+
+---
+ backend/Cargo.lock | 8 ++++----
+ backend/Cargo.toml | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/backend/Cargo.lock b/backend/Cargo.lock
+index dc3ac0d4..571bd845 100644
+--- a/backend/Cargo.lock
++++ b/backend/Cargo.lock
+@@ -4771,9 +4771,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.34"
++version = "0.3.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c8248b6521bb14bc45b4067159b9b6ad792e2d6d754d6c41fb50e29fefe38749"
++checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
+ dependencies = [
+  "deranged",
+  "itoa 1.0.10",
+@@ -4792,9 +4792,9 @@ checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.17"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7ba3a3ef41e6672a2f0f001392bb5dcd3ff0a9992d618ca761a11c3121547774"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
+  "num-conv",
+  "time-core",
+diff --git a/backend/Cargo.toml b/backend/Cargo.toml
+index 2a689961..3d198dff 100644
+--- a/backend/Cargo.toml
++++ b/backend/Cargo.toml
+@@ -49,7 +49,7 @@ r2d2 = "0.8.10"
+ r2d2_sqlite = "0.21.0"
+ toml = "0.7"
+ rand = "0.8.5"
+-time = "0.3.34"
++time = "0.3.36"
+ sys-locale = "0.3.0"
+ uuid = "1.4.1"
+ rlimit = "0.10.1"

@@ -1,0 +1,38 @@
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
+index 802b08b5..c4cada1d 100644
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -102,29 +102,15 @@ class BottlesWindow(Adw.ApplicationWindow):
+ 
+             def response(dialog, response, *args):
+                 if response == "close":
+-                    quit(1)
++                    return
+ 
+-            body = _(
+-                "Bottles is only supported within a sandboxed environment. Official sources of Bottles are available at"
+-            )
+-            download_url = "usebottles.com/download"
+-
+-            error_dialog = Adw.AlertDialog.new(
+-                _("Unsupported Environment"),
+-                f"{body} <a href='https://{download_url}' title='https://{download_url}'>{download_url}.</a>",
+-            )
+-
+-            error_dialog.add_response("close", _("Close"))
+-            error_dialog.set_body_use_markup(True)
+-            error_dialog.connect("response", response)
+-            error_dialog.present(self)
+-            logging.error(
++            logging.warn(
+                 _(
+                     "Bottles is only supported within a sandboxed format. Official sources of Bottles are available at:"
+                 )
+             )
+-            logging.error("https://usebottles.com/download/")
+-            return
++            logging.warn("https://usebottles.com/download/")
++            logging.warn("Please report any issues at: https://github.com/NixOS/nixpkgs/issues")
+ 
+         # Loading view
+         self.page_loading = LoadingView()

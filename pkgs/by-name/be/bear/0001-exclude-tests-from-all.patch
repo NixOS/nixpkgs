@@ -1,0 +1,23 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -85,8 +85,9 @@
+             ${CMAKE_CACHE_ARGS_EXTRA}
+         BUILD_ALWAYS
+             1
+-        TEST_BEFORE_INSTALL
++        TEST_EXCLUDE_FROM_MAIN
+             1
++        STEP_TARGETS test
+         TEST_COMMAND
+             ctest # or `ctest -T memcheck`
+         )
+@@ -102,7 +103,8 @@
+                 -DCMAKE_INSTALL_LIBDIR:PATH=${CMAKE_INSTALL_LIBDIR}
+                 -DCMAKE_INSTALL_BINDIR:PATH=${CMAKE_INSTALL_BINDIR}
+                 -DSTAGED_INSTALL_PREFIX:PATH=${STAGED_INSTALL_PREFIX}
+-            TEST_BEFORE_INSTALL
++            TEST_EXCLUDE_FROM_MAIN
++            STEP_TARGETS test
+                 1
+             INSTALL_COMMAND
+                 ""

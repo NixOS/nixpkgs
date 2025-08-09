@@ -1,0 +1,14 @@
+Specifying `-platform_version` targeting macos before 10.15 causes cctools ld
+to link with `@rpath`. This may have something to do with Swift ABI stability.
+
+--- a/products/llbuildSwift/CMakeLists.txt
++++ b/products/llbuildSwift/CMakeLists.txt
+@@ -22,7 +17,7 @@ endif()
+
+ # TODO(compnerd) move both of these outside of the CMake into the invocation
+ if(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+-  add_compile_options(-target ${CMAKE_OSX_ARCHITECTURES}-apple-macosx10.10)
++  add_compile_options(-target ${CMAKE_OSX_ARCHITECTURES}-apple-macosx10.15)
+   if(NOT CMAKE_OSX_SYSROOT STREQUAL "")
+     add_compile_options(-sdk ${CMAKE_OSX_SYSROOT})
+   endif()

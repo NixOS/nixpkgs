@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index ae08308..5262e56 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -32,7 +32,6 @@ AC_TYPE_SIZE_T
+ AC_TYPE_UID_T
+ 
+ # Checks for library functions.
+-AC_FUNC_MALLOC
+ AC_CHECK_FUNCS([alarm getcwd memset mkdir setlocale strdup strncasecmp
+                 fileno flock lockf getopt getopt_long])
+ 

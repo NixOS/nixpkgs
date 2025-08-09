@@ -1,0 +1,13 @@
+diff --git a/lib/libelf/Makefile b/lib/libelf/Makefile
+index c15ce2798a91..d6d8754e2b4f 100644
+--- a/lib/libelf/Makefile
++++ b/lib/libelf/Makefile
+@@ -80,7 +80,7 @@ INCS=		libelf.h gelf.h
+ SRCS+=	sys/elf32.h sys/elf64.h sys/elf_common.h
+ 
+ # Allow bootstrapping elftoolchain on Linux:
+-.if defined(BOOTSTRAPPING) && ${.MAKE.OS} == "Linux"
++.if defined(BOOTSTRAPPING)
+ native-elf-format.h:
+ 	${ELFTCDIR}/common/native-elf-format > ${.TARGET} || rm ${.TARGET}
+ SRCS+=	native-elf-format.h

@@ -1,0 +1,24 @@
+Avoid build-only store references embedding into 'mutt -v'.
+--- a/txt2c.sh
++++ b/txt2c.sh
+@@ -21,8 +21,18 @@ txt2c_fallback () {
+ 	echo ";"
+ }
+ 
++nix_store_mangle() {
++	# consume stdin
++
++	# Avoid build-only references to nix store. These are usually
++	# 'gcc -v' output embedded into 'mutt -v'. But also might be
++	# ./configure-passed arguments.
++	sed \
++	    -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g"
++}
++
+ if ./txt2c test </dev/null >/dev/null 2>&1; then
+-    ./txt2c "$1"
++    nix_store_mangle | ./txt2c "$1"
+ else
+-    txt2c_fallback "$1"
++    nix_store_mangle | txt2c_fallback "$1"
+ fi

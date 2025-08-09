@@ -1,0 +1,18 @@
+diff --git a/sbin/mount/mount.c b/sbin/mount/mount.c
+index 2fcc94e40818..7de6da1bb20e 100644
+--- a/sbin/mount/mount.c
++++ b/sbin/mount/mount.c
+@@ -155,12 +155,9 @@ exec_mountprog(const char *name, const char *execname, char *const argv[])
+ 		EXIT(1);
+ 	case 0:					/* Child. */
+ 		/* Go find an executable. */
+-		execvP(execname, _PATH_SYSPATH, argv);
++		execvp(execname, argv);
+ 		if (errno == ENOENT) {
+ 			xo_warn("exec %s not found", execname);
+-			if (execname[0] != '/') {
+-				xo_warnx("in path: %s", _PATH_SYSPATH);
+-			}
+ 		}
+ 		EXIT(1);
+ 	default:				/* Parent. */
