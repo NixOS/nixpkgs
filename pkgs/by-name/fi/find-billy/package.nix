@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "find-billy";
-  version = "1.1.0";
+  version = "1.0.13";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "Find-Billy";
     rev = "v${version}";
-    hash = "sha256-jKN3lEnLy0aN98S8BN3dcoOgc0RrxNoqfQdeCawKQaU=";
+    hash = "sha256-VpQpAODasJpHLU1UQ3NoVnrO+tvwdMNpPDNkg/NDM+4=";
   };
 
   strictDeps = true;
