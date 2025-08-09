@@ -17,11 +17,11 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "hensm";
     repo = "fx_cast";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hB4NVJW2exHoKsMp0CKzHerYgj8aR77rV+ZsCoWA1Dg=";
   };
 
-  sourceRoot = "${src.name}/app";
+  sourceRoot = "source/app";
 
   patches = [
     # to support later versions of nodejs

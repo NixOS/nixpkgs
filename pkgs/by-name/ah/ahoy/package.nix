@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-HBR35sr5WY8bnGmFm5V4ut7AJJj+nSRiJUri4XxycCI=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/v2";
+  sourceRoot = "source/v2";
 
   # vendor folder exists
   vendorHash = null;

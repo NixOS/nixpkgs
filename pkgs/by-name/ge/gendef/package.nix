@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/mingw-w64/mingw-w64.git";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0vbAHSN+uwxoXXZtbuycP67PxjcB8Ftxd/Oij1gqE3Y=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/mingw-w64-tools/gendef";
+  sourceRoot = "mingw-w64/mingw-w64-tools/gendef";
 
   meta = {
     description = "Tool which generate def files from DLLs";

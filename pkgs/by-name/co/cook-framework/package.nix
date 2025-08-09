@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-DK0kbvM11t64nGkrzThZgSruHTCHAPP374YPWmoM50g=";
   };
 
-  sourceRoot = "${src.name}/v2";
+  sourceRoot = "source/v2";
 
   vendorHash = "sha256-VpNr06IiVKpMsJXzcKCuNfJ+T+zeA9dMBMp6jeCRgn8=";
 
