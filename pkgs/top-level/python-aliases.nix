@@ -347,6 +347,7 @@ mapAliases ({
   ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years"; # added 2024-05-21
   ipython_genutils = ipython-genutils; # added 2023-10-12
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
+  inlinestyler = throw "inlinestyler has been removed because it is no longer maintained"; # added 2025-08-09
   itanium_demangler = itanium-demangler; # added 2022-10-17
   jaeger-client = throw "jaeger-client was removed because it is deprecated upstream. OpenTelemetry is recommended instead."; # Added 2024-12-09
   jaraco_classes = jaraco-classes; # added 2023-07-14
