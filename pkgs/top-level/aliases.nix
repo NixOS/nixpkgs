@@ -502,6 +502,7 @@ mapAliases {
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
   cutemarked-ng = throw "'cutemarked-ng' has been removed due to lack of maintenance upstream. Consider using 'kdePackages.ghostwriter' instead"; # Added 2024-12-27
   cvs_fast_export = throw "'cvs_fast_export' has been renamed to/replaced by 'cvs-fast-export'"; # Converted to throw 2024-10-17
+  cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
 
   # these are for convenience, not for backward compat and shouldn't expire
   clang9Stdenv = throw "clang9Stdenv has been removed from nixpkgs"; # Added 2024-04-08
