@@ -15,6 +15,8 @@
   legendary-heroic,
   nile,
   comet-gog,
+  galaxy-dummy-service,
+  heroic-epic-integration,
   umu-launcher,
 }:
 
@@ -79,7 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
     rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
-    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    mkdir -p \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
     ln -s \
       "${lib.getExe gogdl}" \
       "${lib.getExe legendary-heroic}" \
@@ -87,6 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
+    cp \
+      "${galaxy-dummy-service}/GalaxyCommunication.exe" \
+      "${heroic-epic-integration}/EpicGamesLauncher.exe" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
