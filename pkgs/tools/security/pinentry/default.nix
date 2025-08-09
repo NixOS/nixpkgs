@@ -67,11 +67,11 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "pinentry-${pinentryExtraPname}";
-      version = "1.3.1";
+      version = "1.3.2";
 
       src = fetchurl {
         url = "mirror://gnupg/pinentry/pinentry-${version}.tar.bz2";
-        hash = "sha256-vHLuJ8cjkAerGJbDwvrlOwduLJvSSD3CdpoWkCvOjAQ=";
+        hash = "sha256-jphu2IVhtNpunv4MVPpMqJIwNcmSZN8LBGRJfF+5Tp4=";
       };
 
       nativeBuildInputs = [
