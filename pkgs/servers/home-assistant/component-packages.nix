@@ -2878,7 +2878,8 @@
       ];
     "kaiterra" =
       ps: with ps; [
-      ]; # missing inputs: kaiterra-async-client
+        kaiterra-async-client
+      ];
     "kaleidescape" =
       ps: with ps; [
         pykaleidescape
@@ -3698,7 +3699,8 @@
       ];
     "monarch_money" =
       ps: with ps; [
-      ]; # missing inputs: typedmonarchmoney
+        typedmonarchmoney
+      ];
     "monessen" =
       ps: with ps; [
       ];
@@ -7356,6 +7358,7 @@
     "modem_callerid"
     "modern_forms"
     "mold_indicator"
+    "monarch_money"
     "monoprice"
     "monzo"
     "moon"

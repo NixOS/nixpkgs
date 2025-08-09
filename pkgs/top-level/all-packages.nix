@@ -11378,10 +11378,6 @@ with pkgs;
     kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
       { };
 
-  kora-icon-theme = callPackage ../data/icons/kora-icon-theme {
-    inherit (libsForQt5.kdeFrameworks) breeze-icons;
-  };
-
   la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
     inherit (plasma5Packages) breeze-icons;
     inherit (pantheon) elementary-icon-theme;

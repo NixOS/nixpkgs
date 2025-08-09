@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-GHeulf1LNl6vxu0mQLdU4FhMWMLxo34HmTdIMtHz+so=";
+    hash = "sha256-IyKk29jMAbYW+16mrpqQWjnsmNFEvUwkB048AAx/Cvw=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-2s5cdhR2KO6qBw9ZJmo/zW8+dIBN3kccUpOMfm8vKmA=";
+    hash = "sha256-+92fCILZwk/TknGXgR9lRN55WnmkgUJfCszFthstzXs=";
   };
 
   nativeBuildInputs = [

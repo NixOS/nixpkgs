@@ -5055,8 +5055,6 @@ self: super: with self; {
 
   feedparser = callPackage ../development/python-modules/feedparser { };
 
-  fenics = callPackage ../development/python-modules/fenics { hdf5 = pkgs.hdf5_1_10; };
-
   fenics-basix = callPackage ../development/python-modules/fenics-basix { };
 
   fenics-dolfinx = callPackage ../development/python-modules/fenics-dolfinx { };
@@ -7635,6 +7633,8 @@ self: super: with self; {
 
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
 
+  kaiterra-async-client = callPackage ../development/python-modules/kaiterra-async-client { };
+
   kajiki = callPackage ../development/python-modules/kajiki { };
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
@@ -9455,6 +9455,8 @@ self: super: with self; {
 
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
 
+  monarchmoney = callPackage ../development/python-modules/monarchmoney { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
@@ -10574,6 +10576,8 @@ self: super: with self; {
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
 
   oath = callPackage ../development/python-modules/oath { };
+
+  oathtool = callPackage ../development/python-modules/oathtool { };
 
   oauth2-client = callPackage ../development/python-modules/oauth2-client { };
 
@@ -18520,6 +18524,8 @@ self: super: with self; {
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
+  typedmonarchmoney = callPackage ../development/python-modules/typedmonarchmoney { };
+
   typedunits = callPackage ../development/python-modules/typedunits { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
@@ -19259,6 +19265,8 @@ self: super: with self; {
   uvcclient = callPackage ../development/python-modules/uvcclient { };
 
   uvicorn = callPackage ../development/python-modules/uvicorn { };
+
+  uvicorn-worker = callPackage ../development/python-modules/uvicorn-worker { };
 
   uvloop = callPackage ../development/python-modules/uvloop { };
 
