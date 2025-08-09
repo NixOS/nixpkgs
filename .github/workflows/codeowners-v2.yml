@@ -49,6 +49,7 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -106,6 +107,7 @@ jobs:
   request:
     name: Request
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
     steps:
       - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
