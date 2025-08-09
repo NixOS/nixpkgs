@@ -120,6 +120,11 @@ buildPythonPackage rec {
     "psutil"
   ];
 
+  postPatch = ''
+    substituteInPlace src/atopile/telemetry.py \
+      --replace-fail "api_key=" "project_api_key="
+  '';
+
   pythonImportsCheck = [ "atopile" ];
 
   preCheck = ''
