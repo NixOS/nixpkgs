@@ -21,6 +21,7 @@
   fastapi-github-oidc,
   freetype-py,
   gitpython,
+  kicad-python,
   kicadcliwrapper,
   matplotlib,
   mcp,
@@ -56,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.10.15";
+  version = "0.10.23";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -65,7 +66,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-18+hPvVSKgYnjpreJLs4ZeeA1T8gCDtoXWznOFjMEwA=";
+    hash = "sha256-dwlST3Cf4SLSYvuaPBbpkwHG0c57NZ+9tIWXcXsI1wQ=";
   };
 
   build-system = [
@@ -93,6 +94,7 @@ buildPythonPackage rec {
     fastapi-github-oidc
     freetype-py
     gitpython
+    kicad-python
     kicadcliwrapper
     matplotlib
     mcp
@@ -123,11 +125,6 @@ buildPythonPackage rec {
     "posthog"
     "zstd"
   ];
-
-  postPatch = ''
-    substituteInPlace src/atopile/telemetry.py \
-      --replace-fail "api_key=" "project_api_key="
-  '';
 
   pythonImportsCheck = [ "atopile" ];
 
