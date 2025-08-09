@@ -1775,7 +1775,7 @@ with pkgs;
 
   androidenv = callPackage ../development/mobile/androidenv { };
 
-  androidndkPkgs = androidndkPkgs_26;
+  androidndkPkgs = androidndkPkgs_27;
   androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs { })."21";
   androidndkPkgs_23 = (callPackage ../development/androidndk-pkgs { })."23";
   androidndkPkgs_24 = (callPackage ../development/androidndk-pkgs { })."24";
