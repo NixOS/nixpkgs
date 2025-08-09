@@ -40,6 +40,11 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  pythonRelaxDeps = [
+    "azure-storage-blob"
+    "azure-storage-queue"
+  ];
+
   optional-dependencies = {
     pandas = [ pandas ];
   };
