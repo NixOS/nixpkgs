@@ -65,6 +65,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isStatic;
+    broken = lib.versionOlder version "2.94" && stdenv.hostPlatform.isStatic;
   };
 }
