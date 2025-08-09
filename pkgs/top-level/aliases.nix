@@ -698,12 +698,10 @@ mapAliases {
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
 
   # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
-  clang16Stdenv = lowPrio llvmPackages_16.stdenv; # preserve, reason: see above
   clang17Stdenv = lowPrio llvmPackages_17.stdenv; # preserve, reason: see above
   clang18Stdenv = lowPrio llvmPackages_18.stdenv; # preserve, reason: see above
   clang19Stdenv = lowPrio llvmPackages_19.stdenv; # preserve, reason: see above
 
-  clang-tools_16 = llvmPackages_16.clang-tools; # Added 2024-04-22
   clang-tools_17 = llvmPackages_17.clang-tools; # Added 2024-04-22
   clang-tools_18 = llvmPackages_18.clang-tools; # Added 2024-04-22
   clang-tools_19 = llvmPackages_19.clang-tools; # Added 2024-08-21
@@ -1512,6 +1510,15 @@ mapAliases {
   clang_15 = throw "clang_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   clang15Stdenv = throw "clang15Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   clang-tools_15 = throw "clang-tools_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
+
+  llvmPackages_16 = throw "llvmPackages_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  llvm_16 = throw "llvm_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  lld_16 = throw "lld_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  lldb_16 = throw "lldb_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  mlir_16 = throw "mlir_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  clang_16 = throw "clang_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  clang16Stdenv = throw "clang16Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  clang-tools_16 = throw "clang-tools_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
 
   lobster-two = throw "'lobster-two' has been renamed to/replaced by 'google-fonts'"; # Converted to throw 2024-10-17
   loc = throw "'loc' has been removed due to lack of upstream maintenance. Consider 'tokei' as an alternative."; # Added 2025-01-25
