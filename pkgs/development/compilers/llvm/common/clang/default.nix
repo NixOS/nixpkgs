@@ -52,27 +52,12 @@ stdenv.mkDerivation (
       # libraries. eg: `clang -munsupported hello.c -lc`
       ./clang-unsupported-option.patch
     ]
-    ++ lib.optional (lib.versionOlder release_version "17") (fetchpatch {
-      name = "ignore-nostd-link.patch";
-      url = "https://github.com/llvm/llvm-project/commit/5b77e752dcd073846b89559d6c0e1a7699e58615.patch";
-      relative = "clang";
-      hash = "sha256-qzSAmoGY+7POkDhcGgQRPaNQ3+7PIcIc9cZuiE/eLkc=";
-    })
     # Pass the correct path to libllvm
     ++ [
       (replaceVars ./clang-at-least-16-LLVMgold-path.patch {
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ]
-    # Backport `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` support from Clang 17.
-    # This is needed by newer SDKs (14+).
-    ++ lib.optional (lib.versionOlder (lib.versions.major release_version) "17") (fetchpatch {
-      name = "clang-darwin-An-OS-version-preprocessor-define.patch";
-      url = "https://github.com/llvm/llvm-project/commit/c8e2dd8c6f490b68e41fe663b44535a8a21dfeab.patch?full_index=1";
-      includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
-      stripLen = 1;
-      hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
-    })
     # Fixes a bunch of lambda-related crashes
     # https://github.com/llvm/llvm-project/pull/93206
     ++ lib.optional (lib.versions.major release_version == "18") (fetchpatch {
@@ -116,7 +101,8 @@ stdenv.mkDerivation (
     ++ lib.optionals (lib.versionAtLeast release_version "21") [
       (lib.cmakeFeature "CLANG_RESOURCE_DIR" "${placeholder "lib"}/lib/clang/${lib.versions.major release_version}")
     ]
-    ++ lib.optionals (lib.versionAtLeast release_version "17") [
+    # TODO: Clean up on `staging`.
+    ++ [
       (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
     ]
     ++ lib.optionals enableManpages [

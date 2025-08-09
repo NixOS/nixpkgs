@@ -71,28 +71,12 @@ stdenv.mkDerivation (
     sourceRoot = "${finalAttrs.src.name}/lldb";
 
     patches =
-      let
-        resourceDirPatch =
-          (replaceVars (getVersionFile "lldb/resource-dir.patch") {
-            clangLibDir = "${lib.getLib libclang}/lib";
-          }).overrideAttrs
-            (_: _: { name = "resource-dir.patch"; });
-      in
       lib.optional (lib.versionOlder release_version "18") (fetchpatch {
         name = "libcxx-19-char_traits.patch";
         url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
         stripLen = 1;
         hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
       })
-      ++ lib.optionals (lib.versionOlder release_version "17") [
-        resourceDirPatch
-        (fetchpatch {
-          name = "add-cstdio.patch";
-          url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
-          stripLen = 1;
-          hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
-        })
-      ]
       ++ [ ./gnu-install-dirs.patch ];
 
     nativeBuildInputs = [
@@ -147,7 +131,8 @@ stdenv.mkDerivation (
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
     ]
-    ++ lib.optionals (lib.versionAtLeast release_version "17") [
+    # TODO: Clean up on `staging`.
+    ++ [
       (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
     ]
     ++ lib.optionals enableManpages [

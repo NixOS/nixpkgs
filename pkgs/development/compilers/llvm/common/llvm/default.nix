@@ -178,15 +178,6 @@ stdenv.mkDerivation (
               stripLen = 1;
             }
           )
-      ++ lib.optionals (lib.versionOlder (lib.versions.major release_version) "17") [
-        # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
-        # See also: https://github.com/numba/numba/issues/9109
-        (fetchpatch {
-          url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
-          relative = "llvm";
-          hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
-        })
-      ]
       ++
         lib.optional (lib.versions.major release_version == "17")
           # Fixes a crash with -fzero-call-used-regs=used-gpr
@@ -216,16 +207,14 @@ stdenv.mkDerivation (
           hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
         })
       ]
-      ++
-        lib.optionals (lib.versionAtLeast release_version "17" && lib.versionOlder release_version "19")
-          [
-            # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
-            (fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
-              hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
-              stripLen = 1;
-            })
-          ]
+      ++ lib.optionals (lib.versionOlder release_version "19") [
+        # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+          hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
+          stripLen = 1;
+        })
+      ]
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
@@ -391,12 +380,6 @@ stdenv.mkDerivation (
         # modifies the atime when run. See #284056.
         ''
           rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
-        ''
-      +
-        # timing-based tests are trouble
-        lib.optionalString (lib.versionOlder release_version "17") ''
-
-          rm utils/lit/tests/googletest-timeout.py
         ''
       +
         # valgrind unhappy with musl or glibc, but fails w/musl only
