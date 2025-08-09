@@ -6,8 +6,6 @@
   pkg-config,
   docutils,
   pandoc,
-  ethtool,
-  iproute2,
   libnl,
   udev,
   udevCheckHook,
@@ -44,8 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ethtool
-    iproute2
     libnl
     perl
     udev
