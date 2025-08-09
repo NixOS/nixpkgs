@@ -552,6 +552,8 @@ self: super: with self; {
 
   airly = callPackage ../development/python-modules/airly { };
 
+  airos = callPackage ../development/python-modules/airos { };
+
   airportsdata = callPackage ../development/python-modules/airportsdata { };
 
   airthings-ble = callPackage ../development/python-modules/airthings-ble { };
