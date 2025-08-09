@@ -20,7 +20,7 @@
 
   # tests
   numpy,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-socket,
   pytestCheckHook,
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-benchmark
     pytest-codspeed
     pytest-recording
