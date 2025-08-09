@@ -116,12 +116,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.doronbehar ];
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }
