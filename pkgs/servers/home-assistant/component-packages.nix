@@ -3693,7 +3693,8 @@
       ];
     "moehlenhoff_alpha2" =
       ps: with ps; [
-      ]; # missing inputs: moehlenhoff-alpha2
+        moehlenhoff-alpha2
+      ];
     "mold_indicator" =
       ps: with ps; [
       ];
@@ -7358,6 +7359,7 @@
     "modbus"
     "modem_callerid"
     "modern_forms"
+    "moehlenhoff_alpha2"
     "mold_indicator"
     "monarch_money"
     "monoprice"
