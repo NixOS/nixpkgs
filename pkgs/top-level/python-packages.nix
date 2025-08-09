@@ -7522,6 +7522,8 @@ self: super: with self; {
 
   israel-rail-api = callPackage ../development/python-modules/israel-rail-api { };
 
+  issubclass = callPackage ../development/python-modules/issubclass { };
+
   itables = callPackage ../development/python-modules/itables { };
 
   itanium-demangler = callPackage ../development/python-modules/itanium-demangler { };
