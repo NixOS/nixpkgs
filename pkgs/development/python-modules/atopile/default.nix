@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.9.0";
+  version = "0.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-kmoOP9Dp3wBiabq022uKnN/UtpBfH6oSUOd0HC2f0I0=";
+    hash = "sha256-U+Hw+Dl+47RVl9U6dVZIBo0F7Y7b64P/iyNCDhQoJXU=";
   };
 
   build-system = [
@@ -117,12 +117,7 @@ buildPythonPackage rec {
     zstd
   ];
 
-  pythonRelaxDeps = [
-    "black"
-    "rich"
-    "psutil"
-    "zstd"
-  ];
+  pythonRelaxDeps = [ "zstd" ];
 
   postPatch = ''
     substituteInPlace src/atopile/telemetry.py \
