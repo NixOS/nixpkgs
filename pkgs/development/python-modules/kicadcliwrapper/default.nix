@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "kicadcliwrapper";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "kicadcliwrapper";
     tag = "v${version}";
-    hash = "sha256-D9uvNwNLi9zz/TW+uAOXve/JFjeol1IbZSeunFWCEZA=";
+    hash = "sha256-s1j0k6SvZiIHu8PKGTR+GaYUZIlFq5TKYuxoCsvsvUY=";
   };
 
   build-system = [
