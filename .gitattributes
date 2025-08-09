@@ -30,11 +30,11 @@ ci/OWNERS linguist-language=CODEOWNERS
 # - `text=auto` means "Git should try to work out if this file is a text file.
 #   If it is, it should do the line-ending munging as for `text`, and if it
 #   isn't, it should leave the file alone."
-# - `eol=lf` or `eol=crlf` means "Ignore any local configuration about how line
+# - `eol=lf` means "Ignore any local configuration about how line
 #   endings normally work on this platform. This file should always and only
 #   have LF line endings in the repo (so if there's a CR in the repo, it's
 #   meant to be there in addition to any end-of-line mark), and the selected
-#   attribute is how the file should appear in the working directory.
+#   attribute is how the file should appear in the working directory."
 #
 # See https://github.com/NixOS/nixpkgs/issues/423762 for historical context.
 * text=auto eol=lf
