@@ -67,7 +67,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.25.0";
+  version = "2.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
