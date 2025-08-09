@@ -51,12 +51,12 @@ stdenv.mkDerivation {
     cp backlight.rules $out/etc/udev/rules.d/81-backlight.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for controlling RGB lighting on OMEN laptops for Linux";
     homepage = "https://github.com/lemogne/omenrgb";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ern775 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ern775 ];
     mainProgram = "omenrgb";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

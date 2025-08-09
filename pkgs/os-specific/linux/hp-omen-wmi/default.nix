@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ranisalt";
     repo = "hp-omen-linux-module";
-    rev = "${version}";
+    tag = "${version}";
     hash = "sha256-IOXHzcCB0n1InMjeIu3XYEJ4bhbHS3NIlS8/+4XIwkQ=";
   };
 
