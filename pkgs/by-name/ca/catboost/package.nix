@@ -44,10 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
       sed -i "s/OpenSSL::OpenSSL/OpenSSL::SSL/g" $cmakelists
-      ${lib.optionalString (cudaPackages.cudaOlder "11.8") ''
-        sed -i 's/-gencode=arch=compute_89,code=sm_89//g' $cmakelists
-        sed -i 's/-gencode=arch=compute_90,code=sm_90//g' $cmakelists
-      ''}
     done
   '';
 
