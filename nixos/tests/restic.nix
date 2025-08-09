@@ -1,8 +1,8 @@
 { pkgs, ... }:
-
 let
   remoteRepository = "/root/restic-backup";
   remoteFromFileRepository = "/root/restic-backup-from-file";
+  remoteFromCommandRepository = "/root/restic-backup-from-command";
   remoteInhibitTestRepository = "/root/restic-backup-inhibit-test";
   remoteNoInitRepository = "/root/restic-backup-no-init";
   rcloneRepository = "rclone:local:/root/restic-rclone-backup";
@@ -38,6 +38,12 @@ let
     "--keep-weekly 1"
     "--keep-monthly 1"
     "--keep-yearly 99"
+  ];
+  commandString = "testing";
+  command = [
+    "echo"
+    "-n"
+    commandString
   ];
 in
 {
@@ -79,6 +85,15 @@ in
             dynamicFilesFrom = ''
               find /opt -mindepth 1 -maxdepth 1 ! -name a_dir # all files in /opt except for a_dir
             '';
+          };
+          remote-from-command-backup = {
+            inherit
+              passwordFile
+              pruneOpts
+              command
+              ;
+            initialize = true;
+            repository = remoteFromCommandRepository;
           };
           inhibit-test = {
             inherit
@@ -192,6 +207,11 @@ in
         "mkdir /tmp/restore-3",
         "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-3",
         "diff -ru ${testDir} /tmp/restore-3/opt",
+
+        # test that remote-from-command-backup produces a snapshot, with the expected contents
+        "systemctl start restic-backups-remote-from-command-backup.service",
+        'restic-remote-from-command-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        '[[ $(restic-remote-from-command-backup dump --path /stdin latest stdin) == ${commandString} ]]',
 
         # test that rclonebackup produces a snapshot
         "systemctl start restic-backups-rclonebackup.service",
