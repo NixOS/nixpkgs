@@ -24,6 +24,8 @@ buildPythonPackage rec {
   prePatch = ''
     # patch fails to apply because of line endings
     dos2unix ldap3/utils/asn1.py
+    substituteInPlace _version.json \
+      --replace-fail '"version": "2.9",' '"version": "${version}",'
   '';
 
   patches = [
