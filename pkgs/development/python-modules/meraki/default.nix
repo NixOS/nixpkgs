@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.56.0";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-OMoi4t7lMQF/fMV/lWg+GwSmKg5cXwiVSROfpZRtXJM=";
+    hash = "sha256-dAy295DB213TotVkVGvLYIzzHk1M9PycMNgyX+wD7ms=";
   };
 
   pythonRelaxDeps = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cisco Meraki cloud-managed platform dashboard API python library";
     homepage = "https://github.com/meraki/dashboard-api-python";
-    changelog = "https://github.com/meraki/dashboard-api-python/releases/tag/${version}";
+    changelog = "https://github.com/meraki/dashboard-api-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dylanmtaylor ];
   };

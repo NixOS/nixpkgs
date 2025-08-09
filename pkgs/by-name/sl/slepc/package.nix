@@ -16,13 +16,13 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.0";
+  version = "3.23.2";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z9CVZQ/Ezb1S2EkTb9amAPxaN4tiUnKrbvQIc3BnVuU=";
+    hash = "sha256-nRY8ARc31Q2Qi8Tf7921vBf5nPpI4evSjmpTYUTUigQ=";
   };
 
   postPatch = ''
@@ -42,14 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     export SLEPC_DIR=$PWD
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.setuptools
-      python3Packages.cython
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.setuptools
+    python3Packages.cython
+  ];
 
   configureFlags =
     lib.optionals withArpack [
@@ -59,13 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-slepc4py=1"
     ];
 
-  buildInputs =
-    [
-      mpi
-    ]
-    ++ lib.optionals withArpack [
-      arpack-mpi
-    ];
+  buildInputs = [
+    mpi
+  ]
+  ++ lib.optionals withArpack [
+    arpack-mpi
+  ];
 
   propagatedBuildInputs = [
     petsc
@@ -75,14 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
-  nativeInstallCheckInputs =
-    [
-      mpiCheckPhaseHook
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.pythonImportsCheckHook
-      python3Packages.unittestCheckHook
-    ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    mpiCheckPhaseHook
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.pythonImportsCheckHook
+    python3Packages.unittestCheckHook
+  ];
 
   doInstallCheck = true;
 

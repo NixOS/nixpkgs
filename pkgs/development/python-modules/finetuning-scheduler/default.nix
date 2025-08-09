@@ -37,6 +37,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<77.0.0" "setuptools"
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
@@ -52,7 +57,7 @@ buildPythonPackage rec {
   env.PACKAGE_NAME = "pytorch";
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
   disabledTests =
     lib.optionals (pythonOlder "3.12") [
       # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:

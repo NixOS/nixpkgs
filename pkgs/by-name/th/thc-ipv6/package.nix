@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
-    repo = pname;
+    repo = "thc-ipv6";
     rev = "v${version}";
     sha256 = "07kwika1zdq62s5p5z94xznm77dxjxdg8k0hrg7wygz50151nzmx";
   };

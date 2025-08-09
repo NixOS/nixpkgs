@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "jx";
-  version = "3.11.76";
+  version = "3.16.16";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-XoLJ1YabI3UZpfqIudH8a1rhSr/RI0oYKYHPx2FHAJQ=";
+    sha256 = "sha256-42PqWzRCgA0DmCxUYs8pvOwwdXVdiUTQ59JKFWHgg8A=";
   };
 
-  vendorHash = "sha256-8I4yTzLAL7E0ozHcBZDNsJLHkTh+SjT0SjDSECGRYIc=";
+  vendorHash = "sha256-qCcwCsinzkjN+g7wxn60JoFBGk6Swydi93w3dZNpsZY=";
 
   subPackages = [ "cmd" ];
 
@@ -39,7 +39,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
     mainProgram = "jx";
@@ -50,8 +50,8 @@ buildGoModule rec {
       Environments on Pull Requests using using Cloud Native pipelines
       from Tekton.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

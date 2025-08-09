@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     curl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lisp implementation installer/manager and launcher";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hiro98 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hiro98 ];
+    platforms = lib.platforms.unix;
     homepage = "https://github.com/roswell/roswell";
     changelog = "https://github.com/roswell/roswell/blob/v${version}/ChangeLog";
     mainProgram = "ros";

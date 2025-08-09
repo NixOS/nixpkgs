@@ -5,6 +5,7 @@
   fetchurl,
   llvmPackages,
   cmake,
+  pkg-config,
   gfortran,
   blas,
   lapack,
@@ -13,7 +14,7 @@
   metis,
   parmetis,
   withExamples ? false,
-  fortranSupport ? stdenv.hostPlatform.isLinux,
+  fortranSupport ? true,
   enableOpenMP ? true,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
@@ -49,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "LargeDiag_MC64" "NOROWPERM"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals fortranSupport [
-      gfortran
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals fortranSupport [
+    gfortran
+  ];
 
   buildInputs =
     lib.optionals (enableOpenMP && stdenv.cc.isClang) [
@@ -69,25 +70,28 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withParmetis [
       metis
       parmetis
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      gfortran.cc.lib
     ];
 
   propagatedBuildInputs = [ blas ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "enable_examples" withExamples)
-      (lib.cmakeBool "enable_openmp" enableOpenMP)
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-      (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
-      (lib.cmakeBool "XSDK_ENABLE_Fortran" fortranSupport)
-      (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
-      (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
-      (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
-    ]
-    ++ lib.optionals withParmetis [
-      (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
-      (lib.cmakeFeature "TPL_PARMETIS_INCLUDE_DIRS" "${lib.getDev parmetis}/include")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "enable_examples" withExamples)
+    (lib.cmakeBool "enable_openmp" enableOpenMP)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "XSDK_ENABLE_Fortran" fortranSupport)
+    (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
+    (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
+    (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
+    (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
+  ]
+  ++ lib.optionals withParmetis [
+    (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
+    (lib.cmakeFeature "TPL_PARMETIS_INCLUDE_DIRS" "${lib.getDev parmetis}/include")
+  ];
 
   doCheck = true;
 

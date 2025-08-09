@@ -3,7 +3,6 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 postgresqlBuildExtension (finalAttrs: {
   pname = "system_stats";

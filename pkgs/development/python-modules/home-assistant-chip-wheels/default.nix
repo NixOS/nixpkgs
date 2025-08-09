@@ -281,7 +281,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
     changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 
 }

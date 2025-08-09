@@ -23,15 +23,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.72.0";
+  version = "1.84.0";
   pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
-    rev = "v${version}";
-    hash = "sha256-Kdt4nEWdxfZB7rmPbCegbj4abfv1nMSvAAC6mmUcv44=";
+    tag = "v${version}";
+    hash = "sha256-bzz49ILpqzOStBdRGMhBKkxI4RlVuDjCqhcIjQGGQmk=";
   };
 
   nativeBuildInputs = [
@@ -54,18 +54,17 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
-    colorthief
     dateparser
     emoji
     keyring
     lxml
+    modern-colorthief
     natsort
     piexif
     pillow
-    pillow-heif
     curl-cffi
     pygobject3
     python-magic
@@ -92,12 +91,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-    )
-  '';
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -109,12 +103,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Komikku/";
     license = lib.licenses.gpl3Plus;
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
-    maintainers =
-      with lib.maintainers;
-      [
-        chuangzhu
-        Gliczy
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      Gliczy
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

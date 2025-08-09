@@ -58,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       bsd3
     ];
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ das-g ]);
+    maintainers = with lib.maintainers; [ das-g ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "osmium";
   };
 })

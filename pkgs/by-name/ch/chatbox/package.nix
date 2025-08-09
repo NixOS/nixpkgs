@@ -2,14 +2,15 @@
   lib,
   appimageTools,
   fetchurl,
+  writeScript,
 }:
 let
   pname = "chatbox";
-  version = "1.11.3";
+  version = "1.15.2";
 
   src = fetchurl {
     url = "https://download.chatboxai.app/releases/Chatbox-${version}-x86_64.AppImage";
-    hash = "sha256-YMZsgbCkG/cZd77DOVZj6jVJDzWMcrt92soxyLNr2QI=";
+    hash = "sha256-KxL073BIfZfjFndwtkDNXwlt1xny76BMV9CQF3x7ATQ=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -25,7 +26,7 @@ appimageTools.wrapType2 {
       --replace-fail 'Icon=xyz.chatboxapp.app' 'Icon=chatbox'
   '';
 
-  passthru.updateScript = ''
+  passthru.updateScript = writeScript "update-chatbox" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     version=$(curl -I -X GET https://chatboxai.app/install_chatbox/linux | grep -oP 'Chatbox-\K[0-9]+\.[0-9]+\.[0-9]+')

@@ -8,7 +8,7 @@
   meta,
   stdenv,
   lib,
-  patchelf,
+  passthru,
 }:
 let
   src = fetchurl { inherit url hash; };
@@ -21,6 +21,7 @@ appimageTools.wrapType2 {
     pname
     version
     src
+    passthru
     ;
 
   extraPkgs = pkgs: [ pkgs.ocl-icd ];

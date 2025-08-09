@@ -23,48 +23,45 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hamlib";
-  version = "4.6";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/hamlib/hamlib-${version}.tar.gz";
-    hash = "sha256-b4c1ebxODvTlQDE+wqzU8Zi1UQ192Tl6SuaP6P8g0Wc=";
+    hash = "sha256-sqxz9E3RFh6V/e5slSdhRHV2R7+S1/2zae4v5B7Ueug=";
   };
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs =
-    [
-      swig
-      pkg-config
-      libtool
-    ]
-    ++ lib.optionals pythonBindings [ python3 ]
-    ++ lib.optionals tclBindings [ tcl ]
-    ++ lib.optionals perlBindings [ perl ];
+  nativeBuildInputs = [
+    swig
+    pkg-config
+    libtool
+  ]
+  ++ lib.optionals pythonBindings [ python3 ]
+  ++ lib.optionals tclBindings [ tcl ]
+  ++ lib.optionals perlBindings [ perl ];
 
-  buildInputs =
-    [
-      gd
-      libxml2
-      libusb-compat-0_1
-      boost
-    ]
-    ++ lib.optionals pythonBindings [
-      python3
-      ncurses
-    ]
-    ++ lib.optionals tclBindings [ tcl ];
+  buildInputs = [
+    gd
+    libxml2
+    libusb-compat-0_1
+    boost
+  ]
+  ++ lib.optionals pythonBindings [
+    python3
+    ncurses
+  ]
+  ++ lib.optionals tclBindings [ tcl ];
 
-  configureFlags =
-    [
-      "CC_FOR_BUILD=${stdenv.cc.targetPrefix}cc"
-    ]
-    ++ lib.optionals perlBindings [ "--with-perl-binding" ]
-    ++ lib.optionals tclBindings [
-      "--with-tcl-binding"
-      "--with-tcl=${tcl}/lib/"
-    ]
-    ++ lib.optionals pythonBindings [ "--with-python-binding" ];
+  configureFlags = [
+    "CC_FOR_BUILD=${stdenv.cc.targetPrefix}cc"
+  ]
+  ++ lib.optionals perlBindings [ "--with-perl-binding" ]
+  ++ lib.optionals tclBindings [
+    "--with-tcl-binding"
+    "--with-tcl=${tcl}/lib/"
+  ]
+  ++ lib.optionals pythonBindings [ "--with-python-binding" ];
 
   meta = with lib; {
     description = "Runtime library to control radio transceivers and receivers";

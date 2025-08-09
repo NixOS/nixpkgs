@@ -1,8 +1,6 @@
 {
   stdenv,
   lib,
-  overrideSDK,
-  darwin,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -18,20 +16,16 @@
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-
-stdenv'.mkDerivation {
+stdenv.mkDerivation {
   pname = "flameshot";
   # wlr screenshotting is currently only available on unstable version (>12.1.0)
-  version = "12.1.0-unstable-2025-03-10";
+  version = "12.1.0-unstable-2025-05-04";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "1997aed8a332eeb3b468559bf454c5d78b4d2cbb";
-    hash = "sha256-liiL0/H70XfsG2zM7N+GuIdvd6RE29QXYQLExiYCuvc=";
+    rev = "f4cde19c63473f8fadd448ad2056c22f0f847f34";
+    hash = "sha256-B/piB8hcZR11vnzvue/1eR+SFviTSGJoek1w4abqsek=";
   };
 
   patches = [
@@ -44,31 +38,29 @@ stdenv'.mkDerivation {
     })
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
-      (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
-      (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
+    (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
+    (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      libsForQt5.qttools
-      libsForQt5.qtsvg
-      libsForQt5.wrapQtAppsHook
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns
-    ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.qttools
+    libsForQt5.qtsvg
+    libsForQt5.wrapQtAppsHook
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ];
 
   buildInputs = [
     libsForQt5.qtbase

@@ -1,41 +1,41 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
+  nixosTests,
+
   arrow-glib,
   bison,
   c-ares,
   cmake,
-  curl,
-  fetchFromGitHub,
   flex,
   jemalloc,
   libbacktrace,
   libbpf,
-  libnghttp2,
   libpq,
   libyaml,
   luajit,
+  msgpack-c,
+  nghttp2,
   nix-update-script,
-  nixosTests,
   openssl,
   pkg-config,
   rdkafka,
+  sqlite,
   systemd,
   versionCheckHook,
-  zlib,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  # FIXME: We are deliberately on 3.2.6 as 3.2.7 and above are causing segfaults (https://github.com/fluent/fluent-bit/issues/10139)
-  version = "3.2.6";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0sb954n17z+zrVNkYd6yiV01aNbOLJLOV+34PRkSXQ=";
+    hash = "sha256-wxis93xdSVRHpBfl06DlOkDnch58iSpXFMAFCtOXzbU=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -49,15 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Fortunately, there's the undocumented `FLB_PREFER_SYSTEM_LIBS` CMake option to link against system libraries for
   # some dependencies.
   #
-  # See https://github.com/fluent/fluent-bit/blob/v3.2.6/CMakeLists.txt#L211-L218.
-  #
-  # Like `FLB_PREFER_SYSTEM_LIBS`, several CMake options aren't documented.
-  #
-  # See https://github.com/fluent/fluent-bit/blob/v3.2.6/CMakeLists.txt#L111-L157.
-  #
-  # The CMake options may differ across target platforms. We'll stick to the minimum.
-  #
-  # See https://github.com/fluent/fluent-bit/tree/v3.2.6/packaging/distros.
+  # https://github.com/fluent/fluent-bit/blob/v4.0.2/CMakeLists.txt#L245
 
   strictDeps = true;
 
@@ -68,40 +60,35 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      arrow-glib
-      c-ares
-      # Needed by rdkafka.
-      curl
-      jemalloc
-      libbacktrace
-      libnghttp2
-      libpq
-      libyaml
-      luajit
-      openssl
-      rdkafka
-      # Needed by rdkafka.
-      zlib
-      # Needed by rdkafka.
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # libbpf doesn't build for Darwin yet.
-      libbpf
-      systemd
-    ];
+  buildInputs = [
+    arrow-glib
+    c-ares
+    jemalloc
+    libbacktrace
+    libpq
+    libyaml
+    luajit
+    msgpack-c
+    nghttp2.dev
+    openssl
+    rdkafka
+    sqlite.dev
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # libbpf doesn't build for Darwin yet.
+    libbpf
+    systemd
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "FLB_RELEASE" true)
-      (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      # `FLB_SECURITY` causes bad linker options for Clang to be set.
-      (lib.cmakeBool "FLB_SECURITY" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "FLB_RELEASE" true)
+    (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # `FLB_SECURITY` causes bad linker options for Clang to be set.
+    (lib.cmakeBool "FLB_SECURITY" false)
+  ];
 
   # `src/CMakeLists.txt` installs fluent-bit's systemd unit files at the path in the `SYSTEMD_UNITDIR` CMake variable.
   #
@@ -129,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.isLinux {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) fluent-bit;
     };
 

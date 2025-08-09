@@ -1,12 +1,10 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   perl,
   pkg-config,
   openssl,
   rustPlatform,
-  stdenv,
   nix-update-script,
 }:
 
@@ -21,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sRi0CpdaPCH54m2XojicARLXZELB4PFcLLw0KB0j6jE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-U9NAfColVKbLsEf3HXS4Vu2eNvCjG0+koESFUWP9vMk=";
 
   nativeBuildInputs = [
@@ -29,14 +26,7 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   passthru.updateScript = nix-update-script { };
 

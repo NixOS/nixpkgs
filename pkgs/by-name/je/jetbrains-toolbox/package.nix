@@ -1,25 +1,25 @@
 {
   lib,
-  stdenv,
-  appimageTools,
+  stdenvNoCC,
+  buildFHSEnv,
   fetchzip,
   fetchurl,
-  makeWrapper,
-  icu,
+  appimageTools,
   undmg,
 }:
 
 let
   pname = "jetbrains-toolbox";
-  version = "2.5.4.38621";
+  version = "2.7.0.48109";
 
-  passthru.updateScript = ./update.sh;
+  updateScript = ./update.sh;
 
   meta = {
-    description = "Jetbrains Toolbox";
-    homepage = "https://jetbrains.com/";
+    description = "JetBrains Toolbox";
+    homepage = "https://www.jetbrains.com/toolbox-app";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ AnatolyPopov ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ ners ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
@@ -30,71 +30,82 @@ let
   };
 
   selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    let
+      inherit (stdenvNoCC.hostPlatform) system;
+    in
+    attrs: attrs.${system} or (throw "Unsupported system: ${system}");
 
-  linux = appimageTools.wrapAppImage rec {
-    inherit
-      pname
-      version
-      passthru
-      meta
-      ;
+  selectKernel =
+    let
+      inherit (stdenvNoCC.hostPlatform.parsed) kernel;
+    in
+    attrs: attrs.${kernel.name} or (throw "Unsupported kernel: ${kernel.name}");
 
-    src = appimageTools.extractType2 {
-      inherit pname version;
-      src =
-        let
-          arch = selectSystem {
-            x86_64-linux = "";
-            aarch64-linux = "-arm64";
-          };
-        in
-        fetchzip {
-          url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${arch}.tar.gz";
-          hash = selectSystem {
-            x86_64-linux = "sha256-rq0Hn9g+/u9C8vbEVH2mv62c1dvxr+t9tBhf26swQgI=";
-            aarch64-linux = "sha256-52wFejaKBSg/eeJu3NDGl1AdZLsJdi/838YeROD4Loc=";
-          };
-        }
-        + "/jetbrains-toolbox";
-      postExtract = ''
-        patchelf --add-rpath ${lib.makeLibraryPath [ icu ]} $out/jetbrains-toolbox
+  selectCpu =
+    let
+      inherit (stdenvNoCC.hostPlatform.parsed) cpu;
+    in
+    attrs: attrs.${cpu.name} or (throw "Unsupported CPU: ${cpu.name}");
+
+  sourceForVersion =
+    version:
+    let
+      archSuffix = selectCpu {
+        x86_64 = "";
+        aarch64 = "-arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-ZEtkWKKX4XAd8LujuVVy+lFcgqhhxkEh6F75vl2hRgs=";
+        aarch64-linux = "sha256-qAftn6bx8JUtym37PNFsxnyt3twSxWsewKA/XDU/WeY=";
+        x86_64-darwin = "sha256-OVg4qDhoHN2eV3grPjM33fzXxw1tI4rA+T/3vDGuLHc=";
+        aarch64-darwin = "sha256-/MjoMH06m4aXesKr2VKoiDlhyWlA5MIlYJdqjBcxTnA=";
+      };
+    in
+    selectKernel {
+      linux = fetchzip {
+        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.tar.gz";
+        inherit hash;
+      };
+      darwin = fetchurl {
+        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.dmg";
+        inherit hash;
+      };
+    };
+in
+selectKernel {
+  linux =
+    let
+      src = sourceForVersion version;
+    in
+    buildFHSEnv {
+      inherit pname version meta;
+      passthru = {
+        inherit src updateScript;
+      };
+      multiPkgs =
+        pkgs:
+        with pkgs;
+        [
+          icu
+          libappindicator-gtk3
+        ]
+        ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
+      runScript = "${src}/bin/jetbrains-toolbox --update-failed";
+
+      extraInstallCommands = ''
+        install -Dm0644 ${src}/bin/jetbrains-toolbox.desktop -t $out/share/applications
+        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/pixmaps/jetbrains-toolbox.png
       '';
     };
 
-    nativeBuildInputs = [ makeWrapper ];
-
-    extraInstallCommands = ''
-      install -Dm644 ${src}/jetbrains-toolbox.desktop $out/share/applications/jetbrains-toolbox.desktop
-      install -Dm644 ${src}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-      wrapProgram $out/bin/jetbrains-toolbox \
-        --append-flags "--update-failed"
-    '';
-  };
-
-  darwin = stdenv.mkDerivation (finalAttrs: {
+  darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit
       pname
       version
-      passthru
       meta
       ;
 
-    src =
-      let
-        arch = selectSystem {
-          x86_64-darwin = "";
-          aarch64-darwin = "-arm64";
-        };
-      in
-      fetchurl {
-        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${finalAttrs.version}${arch}.dmg";
-        hash = selectSystem {
-          x86_64-darwin = "sha256-y0zXQEqY5lj/e440dRtyBfaw8CwqqgzO3Ujreb37Z/I=";
-          aarch64-darwin = "sha256-9Bj5puG9NUHO53oXBRlB5DvX9jGTmrkDgjV2QPH9qg0=";
-        };
-      };
+    src = sourceForVersion finalAttrs.version;
 
     nativeBuildInputs = [ undmg ];
 
@@ -109,6 +120,9 @@ let
 
       runHook postInstall
     '';
+
+    passthru = {
+      inherit updateScript;
+    };
   });
-in
-if stdenv.hostPlatform.isDarwin then darwin else linux
+}

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   beautifulsoup4,
   certifi,
   docling-core,
@@ -35,6 +35,8 @@
   rtree,
   scipy,
   tesserocr,
+  tqdm,
+  transformers,
   typer,
 
   # optional dependencies
@@ -50,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.28.4";
+  version = "2.42.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-vc2skcPno6cyRKb3qQ2cfLipxdBicjxUNqII5lRPzKw=";
+    hash = "sha256-9HUomW55Yg5N7u3Wb4imzRUYECeGkb3lkHPLEGzuAnA=";
   };
 
   build-system = [
@@ -65,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     beautifulsoup4
     certifi
     docling-core
@@ -92,12 +95,13 @@ buildPythonPackage rec {
     rtree
     scipy
     tesserocr
+    tqdm
+    transformers
     typer
   ];
 
   pythonRelaxDeps = [
     "pillow"
-    "typer"
   ];
 
   optional-dependencies = {
@@ -155,10 +159,14 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
+    "test_formula_conversion_with_page_range"
 
     # requires network access
     "test_page_range"
     "test_parser_backends"
+    "test_confidence"
+    "test_e2e_webp_conversions"
+    "test_asr_pipeline_conversion"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

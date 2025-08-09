@@ -19,8 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
     rocm-cmake
   ];
+
+  strictDeps = true;
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -31,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Common files shared by hipBLAS and hipBLASLt";
     homepage = "https://github.com/ROCm/hipBLASlt";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

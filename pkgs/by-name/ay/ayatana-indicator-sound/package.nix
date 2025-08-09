@@ -62,23 +62,22 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      accountsservice
-      glib
-      gobject-introspection
-      libayatana-common
-      libgee
-      libnotify
-      libpulseaudio
-      libxml2
-      systemd
-    ]
-    ++ (with lomiri; [
-      cmake-extras
-      lomiri-api
-      lomiri-schemas
-    ]);
+  buildInputs = [
+    accountsservice
+    glib
+    gobject-introspection
+    libayatana-common
+    libgee
+    libnotify
+    libpulseaudio
+    libxml2
+    systemd
+  ]
+  ++ (with lomiri; [
+    cmake-extras
+    lomiri-api
+    lomiri-schemas
+  ]);
 
   nativeCheckInputs = [
     dbus
@@ -115,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests.vm = nixosTests.ayatana-indicators;
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-sound;
+    };
     updateScript = gitUpdater { };
   };
 

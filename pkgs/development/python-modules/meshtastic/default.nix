@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -43,11 +43,12 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "python";
     tag = version;
-    hash = "sha256-FcvshADZVXIqq9dfNIozzhWT9h+3/b9BIOsveETVO74=";
+    hash = "sha256-7VBT4W0TWAEyjAEOA0FPOECS1JxFEpNLkWNHVFiWL1E=";
   };
 
   pythonRelaxDeps = [
     "bleak"
+    "packaging"
     "protobuf"
   ];
 
@@ -92,7 +93,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";

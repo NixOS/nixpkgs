@@ -17,12 +17,11 @@ rustPlatform.buildRustPackage {
     hash = "sha256-OLEXy9MCrPQu1KWICsYhe/ayVqxkYIFwyJoJhgiNDz4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CVg7kcOTRa8KfDwiJHQhTPQfK6g3jOMa4h/BCUo3ehw=";
 
   meta = {
     homepage = "https://github.com/catppuccin/whiskers";
-    description = "A templating tool to simplify the creation of Catppuccin ports";
+    description = "Templating tool to simplify the creation of Catppuccin ports";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Name ];
     mainProgram = "whiskers";

@@ -12,9 +12,9 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.1.6";
-  virtualboxSubVersion = "a";
-  virtualboxSha256 = "5a7b13066ec71990af0cc00a5eea9c7ec3c71ca5ed99bb549c85494ce2ea395d";
+  virtualboxVersion = "7.1.12";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
 
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
     inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
@@ -70,7 +70,8 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildPhase = ''
     runHook preBuild
@@ -150,7 +151,7 @@ stdenv.mkDerivation {
       host/guest clipboard support.
     '';
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     maintainers = [
       lib.maintainers.sander
       lib.maintainers.friedrichaltheide

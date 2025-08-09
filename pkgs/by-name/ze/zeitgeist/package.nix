@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
     "lib"
     "dev"
     "man"
-  ] ++ lib.optional pythonSupport "py";
+  ]
+  ++ lib.optional pythonSupport "py";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
+    teams = [ teams.freedesktop ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

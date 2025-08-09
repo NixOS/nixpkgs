@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nix-update-source";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     hash = "sha256-+49Yb+rZ3CzFnwEpwj5xrcMUVBiYOJtCk9YeZ15IM/U=";

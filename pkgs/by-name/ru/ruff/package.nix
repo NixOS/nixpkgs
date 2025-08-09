@@ -10,24 +10,24 @@
   versionCheckHook,
 
   # passthru
-  ruff-lsp,
   nixosTests,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.11.5";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-7R913Dt395qsyJCp7eXGQ9BcAAvV7GrJqoZAsXn6CTs=";
+    hash = "sha256-XuHVKxzXYlm3iEhdAVCyd62uNyb3jeJRl3B0hnvUzX0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-dA2OEogzEBTu2c5OVoxU4dj5TuMWpxmHk7r63lFsEjU=";
+  cargoBuildFlags = [ "--package=ruff" ];
+
+  cargoHash = "sha256-cyjaGI7JoreAmHtUrRKNyiCaE8zveP/dFJROC2iIXr4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -55,12 +55,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # This causes errors like "error: linker `cc` not found" on static builds
   doCheck = !stdenv.hostPlatform.isStatic;
 
-  # Failing on darwin for an unclear reason, but probably due to sandbox.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  # Exclude tests from `ty`-related crates, run everything else.
+  # Ordinarily we would run all the tests, but there is significant overlap with the `ty` package in nixpkgs,
+  # which ruff shares a monorepo with.
+  # As such, we leave running `ty` tests to the `ty` package, and concentrate on everything else.
+  cargoTestFlags = [
     "--workspace"
-    "--exclude=red_knot"
+    "--exclude=ty"
+    "--exclude=ty_ide"
+    "--exclude=ty_project"
+    "--exclude=ty_python_semantic"
+    "--exclude=ty_server"
+    "--exclude=ty_test"
+    "--exclude=ty_vendored"
+    "--exclude=ty_wasm"
   ];
 
   nativeInstallCheckInputs = [
@@ -70,13 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests =
-      {
-        inherit ruff-lsp;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
-      };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+    };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
@@ -87,6 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
+      bengsparks
       figsoda
       GaetanLepage
     ];

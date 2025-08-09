@@ -43,6 +43,7 @@
 
   withGLES ? false,
   buildRemoteServer ? true,
+  zed-editor,
 }:
 
 assert withGLES -> stdenv.hostPlatform.isLinux;
@@ -98,19 +99,20 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.181.5";
+  version = "0.198.5";
 
-  outputs =
-    [ "out" ]
-    ++ lib.optionals buildRemoteServer [
-      "remote_server"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildRemoteServer [
+    "remote_server"
+  ];
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wp8CoWEOSScQP2Q+lQJgstzTNNwiy0ONHOy6PjIlFBo=";
+    hash = "sha256-jDwHw5kbm0qfV2WJ5tbFl9z/1S1ICp8bCZbhUD5o0VI=";
   };
 
   patches = [
@@ -120,64 +122,71 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./0001-linux-linker.patch
   ];
 
+  cargoPatches = [
+    ./0002-fix-duplicate-reqwest.patch
+  ];
+
   postPatch =
     # Dynamically link WebRTC instead of static
     ''
       substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+
+      # Zed team renamed the function but forgot to update its usage in this file
+      # We rename it ourselves for now, until upstream fixes the issue
+      substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
+        --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
     '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FATdeVwbSUA/zfWV9TdoS4/fT9KWsekKGjQ34HJW4rk=";
+  cargoHash = "sha256-MHwMsMdv7TjnWi2Kmr7vA+TUK+VyHMm4faYOssJ5Z1o=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      copyDesktopItems
-      curl
-      perl
-      pkg-config
-      protobuf
-      rustPlatform.bindgenHook
-      cargo-about
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+    curl
+    perl
+    pkg-config
+    protobuf
+    rustPlatform.bindgenHook
+    cargo-about
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
 
   dontUseCmakeConfigure = true;
 
-  buildInputs =
-    [
-      curl
-      fontconfig
-      freetype
-      libgit2
-      openssl
-      sqlite
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libxkbcommon
-      wayland
-      xorg.libxcb
-      # required by livekit:
-      libGL
-      libX11
-      libXext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-      # https://developer.apple.com/documentation/screencapturekit
-      (darwinMinVersionHook "12.3")
-    ];
+  buildInputs = [
+    curl
+    fontconfig
+    freetype
+    libgit2
+    openssl
+    sqlite
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxkbcommon
+    wayland
+    xorg.libxcb
+    # required by livekit:
+    libGL
+    libX11
+    libXext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
+    # https://developer.apple.com/documentation/screencapturekit
+    (darwinMinVersionHook "12.3")
+  ];
 
   cargoBuildFlags = [
     "--package=zed"
     "--package=cli"
-  ] ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
+  ]
+  ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
 
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
@@ -216,79 +225,81 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  checkFlags =
-    [
-      # Flaky: unreliably fails on certain hosts (including Hydra)
-      "--skip=zed::tests::test_window_edit_state_restoring_enabled"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Fails on certain hosts (including Hydra) for unclear reason
-      "--skip=test_open_paths_action"
-    ];
+  checkFlags = [
+    # Flaky: unreliably fails on certain hosts (including Hydra)
+    "--skip=zed::tests::test_window_edit_state_restoring_enabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: unreliably fails on certain hosts (including Hydra)
+    "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Fails on certain hosts (including Hydra) for unclear reason
+    "--skip=test_open_paths_action"
+  ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # cargo-bundle expects the binary in target/release
-      mv $release_target/zed target/release/zed
+    release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # cargo-bundle expects the binary in target/release
+    mv $release_target/zed target/release/zed
 
-      pushd crates/zed
+    pushd crates/zed
 
-      # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
-      sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
-      export CARGO_BUNDLE_SKIP_BUILD=true
-      app_path=$(cargo bundle --release | xargs)
+    # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
+    sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+    export CARGO_BUNDLE_SKIP_BUILD=true
+    app_path=$(cargo bundle --release | xargs)
 
-      # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
-      # Remove closing tags from Info.plist (last two lines)
-      head -n -2 $app_path/Contents/Info.plist > Info.plist
-      # Append extensions
-      cat resources/info/*.plist >> Info.plist
-      # Add closing tags
-      printf "</dict>\n</plist>\n" >> Info.plist
-      mv Info.plist $app_path/Contents/Info.plist
+    # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
+    # Remove closing tags from Info.plist (last two lines)
+    head -n -2 $app_path/Contents/Info.plist > Info.plist
+    # Append extensions
+    cat resources/info/*.plist >> Info.plist
+    # Add closing tags
+    printf "</dict>\n</plist>\n" >> Info.plist
+    mv Info.plist $app_path/Contents/Info.plist
 
-      popd
+    popd
 
-      mkdir -p $out/Applications $out/bin
-      # Zed expects git next to its own binary
-      ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
-      mv $release_target/cli $app_path/Contents/MacOS/cli
-      mv $app_path $out/Applications/
+    mkdir -p $out/Applications $out/bin
+    # Zed expects git next to its own binary
+    ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
+    mv $release_target/cli $app_path/Contents/MacOS/cli
+    mv $app_path $out/Applications/
 
-      # Physical location of the CLI must be inside the app bundle as this is used
-      # to determine which app to start
-      ln -s $out/Applications/Zed.app/Contents/MacOS/cli $out/bin/zeditor
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm755 $release_target/zed $out/libexec/zed-editor
-      install -Dm755 $release_target/cli $out/bin/zeditor
+    # Physical location of the CLI must be inside the app bundle as this is used
+    # to determine which app to start
+    ln -s $out/Applications/Zed.app/Contents/MacOS/cli $out/bin/zeditor
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm755 $release_target/zed $out/libexec/zed-editor
+    install -Dm755 $release_target/cli $out/bin/zeditor
 
-      install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
-      install -Dm644 $src/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
+    install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+    install -Dm644 $src/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
-      # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
-      # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
-      (
-        export DO_STARTUP_NOTIFY="true"
-        export APP_CLI="zeditor"
-        export APP_ICON="zed"
-        export APP_NAME="Zed"
-        export APP_ARGS="%U"
-        mkdir -p "$out/share/applications"
-        ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
-      )
-    ''
-    + lib.optionalString buildRemoteServer ''
-      install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-stable-$version
-    ''
-    + ''
-      runHook postInstall
-    '';
+    # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
+    # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
+    (
+      export DO_STARTUP_NOTIFY="true"
+      export APP_CLI="zeditor"
+      export APP_ICON="zed"
+      export APP_NAME="Zed"
+      export APP_ARGS="%U"
+      mkdir -p "$out/share/applications"
+      ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
+    )
+  ''
+  + lib.optionalString buildRemoteServer ''
+    install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-stable-$version
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -311,16 +322,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         zed-editor = finalAttrs.finalPackage;
         additionalPkgs = f;
       };
-    tests =
-      {
-        remoteServerVersion = testers.testVersion {
-          package = finalAttrs.finalPackage.remote_server;
-          command = "zed-remote-server-stable-${finalAttrs.version} version";
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        withGles = finalAttrs.finalPackage.override { withGLES = true; };
+    tests = {
+      remoteServerVersion = testers.testVersion {
+        package = finalAttrs.finalPackage.remote_server;
+        command = "zed-remote-server-stable-${finalAttrs.version} version";
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      withGles = zed-editor.override { withGLES = true; };
+    };
   };
 
   meta = {

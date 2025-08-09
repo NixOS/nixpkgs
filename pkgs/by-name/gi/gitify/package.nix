@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_10,
   nodejs,
   electron,
   makeDesktopItem,
@@ -14,34 +14,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.1.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3vpt8irwDYdWqX4Vt7WdmQfePqIRkv07LootFLaQGZI=";
+    hash = "sha256-nFOlzHrtkIYB2shaGnSboqI0HKycTBlu7IkmKwudP5w=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HW8v5DhbWXmMU2vD2NutbY7eMVzeW1FzYXOs3NRsUw0=";
+    fetcherVersion = 1;
+    hash = "sha256-GEUI44QDi1ooq0qXP3lTFp7mVyVJY+TJKv3D1UCe8NI=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail '"Emmanouil Konstantinidis (3YP8SXP3BF)"' null \
-      --replace-fail '"scripts/notarize.js"' null
+    substituteInPlace config/electron-builder.js \
+      --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
+      --replace-fail "'scripts/afterSign.js'" "null"
   '';
 
   buildPhase = ''
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
+        --config config/electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \
@@ -94,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Gitify";
       exec = "gitify %U";
       icon = "gitify";
-      comment = "GitHub Notifications on your menu bar.";
+      comment = "GitHub notifications on your menu bar";
       categories = [ "Development" ];
       startupWMClass = "Gitify";
     })
@@ -103,9 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://www.gitify.io/";
+    homepage = "https://gitify.io/";
     changelog = "https://github.com/gitify-app/gitify/releases/tag/v${finalAttrs.version}";
-    description = "GitHub Notifications on your menu bar";
+    description = "GitHub notifications on your menu bar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;

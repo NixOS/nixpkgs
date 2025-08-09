@@ -91,6 +91,7 @@ let
     range
     recursiveUpdateUntil
     removePrefix
+    replaceString
     replicate
     runTests
     setFunctionArgs
@@ -497,6 +498,11 @@ runTests {
     expected = "/usr/include:/usr/local/include";
   };
 
+  testReplaceStringString = {
+    expr = strings.replaceString "." "_" "v1.2.3";
+    expected = "v1_2_3";
+  };
+
   testReplicateString = {
     expr = strings.replicate 5 "hello";
     expected = "hellohellohellohellohello";
@@ -628,6 +634,101 @@ runTests {
     expected = [
       "A"
       "B"
+    ];
+  };
+
+  testSplitStringBySimpleDelimiter = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      builtins.elem curr [
+        "."
+        "-"
+      ]
+    ) false "foo.bar-baz";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByLeadingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false ".foo.bar.baz";
+    expected = [
+      ""
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByTrailingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo.bar.baz.";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+      ""
+    ];
+  };
+
+  testSplitStringByMultipleConsecutiveDelimiters = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo...bar";
+    expected = [
+      "foo"
+      ""
+      ""
+      "bar"
+    ];
+  };
+
+  testSplitStringByKeepingSplitChar = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) true "foo.bar.baz";
+    expected = [
+      "foo"
+      ".bar"
+      ".baz"
+    ];
+  };
+
+  testSplitStringByCaseTransition = {
+    expr = strings.splitStringBy (
+      prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null
+    ) true "fooBarBaz";
+    expected = [
+      "foo"
+      "Bar"
+      "Baz"
+    ];
+  };
+
+  testSplitStringByEmptyString = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "";
+    expected = [ "" ];
+  };
+
+  testSplitStringByComplexPredicate = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      prev != ""
+      && curr != ""
+      && builtins.match "[0-9]" prev != null
+      && builtins.match "[a-z]" curr != null
+    ) true "123abc456def";
+    expected = [
+      "123"
+      "abc456"
+      "def"
+    ];
+  };
+
+  testSplitStringByUpperCaseStart = {
+    expr = strings.splitStringBy (prev: curr: builtins.match "[A-Z]" curr != null) true "FooBarBaz";
+    expected = [
+      ""
+      "Foo"
+      "Bar"
+      "Baz"
     ];
   };
 
@@ -851,8 +952,8 @@ runTests {
   };
 
   testEscapeC = {
-    expr = strings.escapeC [ " " ] "Hello World";
-    expected = "Hello\\x20World";
+    expr = strings.escapeC [ "\n" " " ] "Hello World\n";
+    expected = "Hello\\x20World\\x0a";
   };
 
   testEscapeURL = testAllTrue [
@@ -873,6 +974,28 @@ runTests {
   };
 
   testToSentenceCasePath = testingThrow (strings.toSentenceCase ./.);
+
+  testToCamelCase = {
+    expr = strings.toCamelCase "hello world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromKebab = {
+    expr = strings.toCamelCase "hello-world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromSnake = {
+    expr = strings.toCamelCase "hello_world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromPascal = {
+    expr = strings.toCamelCase "HelloWorld";
+    expected = "helloWorld";
+  };
+
+  testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
 
   testToInt = testAllTrue [
     # Naive
@@ -1262,6 +1385,69 @@ runTests {
     )
   ];
 
+  testTakeEnd =
+    let
+      inherit (lib) takeEnd;
+    in
+    testAllTrue [
+      (
+        takeEnd 0 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        takeEnd 1 [
+          1
+          2
+          3
+        ] == [ 3 ]
+      )
+      (
+        takeEnd 2 [
+          1
+          2
+          3
+        ] == [
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 3 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 4 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (takeEnd 0 [ ] == [ ])
+      (takeEnd 1 [ ] == [ ])
+      (
+        takeEnd (-1) [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (takeEnd (-1) [ ] == [ ])
+    ];
+
   testDrop =
     let
       inherit (lib) drop;
@@ -1546,6 +1732,11 @@ runTests {
       2
       6
     ];
+  };
+
+  testReplaceString = {
+    expr = replaceString "world" "Nix" "Hello, world!";
+    expected = "Hello, Nix!";
   };
 
   testReplicate = {
@@ -3967,6 +4158,34 @@ runTests {
     };
   };
 
+  # Make sure that passing a string for the `directory` works.
+  #
+  # See: https://github.com/NixOS/nixpkgs/pull/361424#discussion_r1934813568
+  # See: https://github.com/NixOS/nix/issues/9428
+  testPackagesFromDirectoryRecursiveStringDirectory = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      # Do NOT remove the `builtins.toString` call here!!!
+      directory = builtins.toString ./packages-from-directory/plain;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
   # Check that `packagesFromDirectoryRecursive` can process a directory with a
   # top-level `package.nix` file into a single package.
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
@@ -4064,4 +4283,50 @@ runTests {
         };
       };
     };
+
+  testFilesystemResolveDefaultNixFile1 = {
+    expr = lib.filesystem.resolveDefaultNix ./foo.nix;
+    expected = ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2 = {
+    expr = lib.filesystem.resolveDefaultNix ./default.nix;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1 = {
+    expr = lib.filesystem.resolveDefaultNix ./.;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./foo.nix);
+    expected = toString ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./default.nix);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString2 = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./. + "/default.nix";
+  };
+
+  testFilesystemResolveDefaultNixNonExistent = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+  };
+
+  testFilesystemResolveDefaultNixNonExistentDir = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
+  };
+
 }

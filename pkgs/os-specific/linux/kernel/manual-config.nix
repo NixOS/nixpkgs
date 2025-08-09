@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   runCommand,
-  nettools,
   bc,
   bison,
   flex,
@@ -102,6 +101,7 @@ lib.makeOverridable (
       optionalString
       optionalAttrs
       maintainers
+      teams
       platforms
       ;
 
@@ -160,19 +160,18 @@ lib.makeOverridable (
         buildDTBs = kernelConf.DTB or false;
 
         # Dependencies that are required to build kernel modules
-        moduleBuildDependencies =
-          [
-            pahole
-            perl
-            elfutils
-            # module makefiles often run uname commands to find out the kernel version
-            (buildPackages.deterministic-uname.override { inherit modDirVersion; })
-          ]
-          ++ optional (lib.versionAtLeast version "5.13") zstd
-          ++ optionals withRust [
-            rustc
-            rust-bindgen
-          ];
+        moduleBuildDependencies = [
+          pahole
+          perl
+          elfutils
+          # module makefiles often run uname commands to find out the kernel version
+          (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+        ]
+        ++ optional (lib.versionAtLeast version "5.13") zstd
+        ++ optionals withRust [
+          rustc
+          rust-bindgen
+        ];
 
       in
       (optionalAttrs isModular {
@@ -207,34 +206,32 @@ lib.makeOverridable (
         inherit src;
 
         depsBuildBuild = [ buildPackages.stdenv.cc ];
-        nativeBuildInputs =
-          [
-            bison
-            flex
-            perl
-            bc
-            nettools
-            openssl
-            rsync
-            gmp
-            libmpc
-            mpfr
-            elfutils
-            zstd
-            python3Minimal
-            kmod
-            hexdump
-          ]
-          ++ optional needsUbootTools ubootTools
-          ++ optionals (lib.versionAtLeast version "5.2") [
-            cpio
-            pahole
-            zlib
-          ]
-          ++ optionals withRust [
-            rustc
-            rust-bindgen
-          ];
+        nativeBuildInputs = [
+          bison
+          flex
+          perl
+          bc
+          openssl
+          rsync
+          gmp
+          libmpc
+          mpfr
+          elfutils
+          zstd
+          python3Minimal
+          kmod
+          hexdump
+        ]
+        ++ optional needsUbootTools ubootTools
+        ++ optionals (lib.versionAtLeast version "5.2") [
+          cpio
+          pahole
+          zlib
+        ]
+        ++ optionals withRust [
+          rustc
+          rust-bindgen
+        ];
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
@@ -324,28 +321,26 @@ lib.makeOverridable (
           cd $buildRoot
         '';
 
-        buildFlags =
-          [
-            "KBUILD_BUILD_VERSION=1-NixOS"
-            kernelConf.target
-            "vmlinux" # for "perf" and things like that
-          ]
-          ++ optional isModular "modules"
-          ++ optionals buildDTBs [
-            "dtbs"
-            "DTC_FLAGS=-@"
-          ]
-          ++ extraMakeFlags;
+        buildFlags = [
+          "KBUILD_BUILD_VERSION=1-NixOS"
+          kernelConf.target
+          "vmlinux" # for "perf" and things like that
+        ]
+        ++ optional isModular "modules"
+        ++ optionals buildDTBs [
+          "dtbs"
+          "DTC_FLAGS=-@"
+        ]
+        ++ extraMakeFlags;
 
-        installFlags =
-          [
-            "INSTALL_PATH=$(out)"
-          ]
-          ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-          ++ optionals buildDTBs [
-            "dtbs_install"
-            "INSTALL_DTBS_PATH=$(out)/dtbs"
-          ];
+        installFlags = [
+          "INSTALL_PATH=$(out)"
+        ]
+        ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+        ++ optionals buildDTBs [
+          "dtbs_install"
+          "INSTALL_DTBS_PATH=$(out)/dtbs"
+        ];
 
         preInstall =
           let
@@ -411,9 +406,17 @@ lib.makeOverridable (
             if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
               "uinstall"
             else if
-              kernelConf.target == "zImage"
-              || kernelConf.target == "Image.gz"
-              || kernelConf.target == "vmlinuz.efi"
+              (
+                kernelConf.target == "zImage"
+                || kernelConf.target == "Image.gz"
+                || kernelConf.target == "vmlinuz.efi"
+              )
+              && builtins.elem stdenv.hostPlatform.linuxArch [
+                "arm"
+                "arm64"
+                "parisc"
+                "riscv"
+              ]
             then
               "zinstall"
             else
@@ -514,9 +517,8 @@ lib.makeOverridable (
             );
           license = lib.licenses.gpl2Only;
           homepage = "https://www.kernel.org/";
-          maintainers = lib.teams.linux-kernel.members ++ [
-            maintainers.thoughtpolice
-          ];
+          maintainers = [ maintainers.thoughtpolice ];
+          teams = [ teams.linux-kernel ];
           platforms = platforms.linux;
           badPlatforms =
             lib.optionals (lib.versionOlder version "4.15") [
@@ -525,24 +527,24 @@ lib.makeOverridable (
             ]
             ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
           timeout = 14400; # 4 hours
-        } // extraMeta;
+        }
+        // extraMeta;
       };
 
     # Absolute paths for compilers avoid any PATH-clobbering issues.
-    commonMakeFlags =
-      [
-        "ARCH=${stdenv.hostPlatform.linuxArch}"
-        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      ]
-      ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
-        # The wrapper for ld.lld breaks linking the kernel. We use the
-        # unwrapped linker as workaround. See:
-        #
-        # https://github.com/NixOS/nixpkgs/issues/321667
-        "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
-      ]
-      ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
-      ++ extraMakeFlags;
+    commonMakeFlags = [
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ]
+    ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
+      # The wrapper for ld.lld breaks linking the kernel. We use the
+      # unwrapped linker as workaround. See:
+      #
+      # https://github.com/NixOS/nixpkgs/issues/321667
+      "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
+    ]
+    ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
+    ++ extraMakeFlags;
   in
 
   stdenv.mkDerivation (
@@ -564,7 +566,8 @@ lib.makeOverridable (
 
         makeFlags = [
           "O=$(buildRoot)"
-        ] ++ commonMakeFlags;
+        ]
+        ++ commonMakeFlags;
 
         passthru = { inherit commonMakeFlags; };
 

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.44.0";
+  version = "0.45.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OEu0y9F47g50AVMRt7H58sN342huA/oHCz7C9JRnHA8=";
+    hash = "sha256-/8ENTQmQFRT0CNx09gpNffIcROvJv3dslHv9xzWUIc8=";
   };
   patches = [
     (fetchurl {
@@ -35,16 +35,16 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ];
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-        "-Wno-error=implicit-function-declaration"
-        "-Wno-error=incompatible-pointer-types"
-      ]);
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-      CPP = "${stdenv.cc.targetPrefix}cpp";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+    ]);
+    OPENSSL_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "${openssl.dev}";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    CPP = "${stdenv.cc.targetPrefix}cpp";
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

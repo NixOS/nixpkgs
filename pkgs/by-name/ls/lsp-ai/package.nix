@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   pkg-config,
   cmake,
   openssl,
@@ -49,7 +47,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_refactor_action_sequence"
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KR6BmYj3q9w0yGHFq9+l1x989XjiG3mkaZiyDGCYWPA=";
 
   nativeBuildInputs = [
@@ -58,15 +55,10 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

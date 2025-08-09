@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pyscss";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "pyScss";

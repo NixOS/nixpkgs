@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartgit";
-  version = "24.1.3";
+  version = "24.1.4";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
-    hash = "sha256-YhgE1Y0L8lzefJnvswKwIFnx6XIo40DszAr/cxOoOds=";
+    hash = "sha256-1JKFSIGUE8b1yWBg41x+HRWgmg5prZF2+ND/SId4NVs=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -48,9 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
           libXtst
         ]
       } \
-      --prefix JRE_HOME : ${jre} \
-      --prefix JAVA_HOME : ${jre} \
-      --prefix SMARTGITHG_JAVA_HOME : ${jre} \
+      --prefix SMARTGIT_JAVA_HOME : ${jre} \
     )
     # add missing shebang for start script
     sed -i $out/bin/smartgit \
@@ -106,9 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
       Command line Git is required.
     '';
     homepage = "https://www.syntevo.com/smartgit/";
-    changelog = "https://www.syntevo.com/smartgit/changelog.txt";
+    changelog = "https://www.syntevo.com/smartgit/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
     license = lib.licenses.unfree;
+    mainProgram = "smartgit";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jraygauthier ];
+    maintainers = with lib.maintainers; [
+      jraygauthier
+      tmssngr
+    ];
   };
 })

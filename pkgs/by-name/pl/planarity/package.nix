@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Library for implementing graph algorithms";
     mainProgram = "planarity";
     license = licenses.bsd3;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

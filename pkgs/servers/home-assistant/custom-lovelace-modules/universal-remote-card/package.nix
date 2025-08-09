@@ -6,18 +6,18 @@
 
 buildNpmPackage rec {
   pname = "universal-remote-card";
-  version = "4.3.12";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "android-tv-card";
     rev = version;
-    hash = "sha256-93qPYFr7qNDlQH28dT461EQjWKZJOpL3EpfBBGt4acw=";
+    hash = "sha256-ciIWo2m4Cvktzqz6fPLdvBEfGoxH98L/AtzWsrIJmgg=";
   };
 
   patches = [ ./dont-call-git.patch ];
 
-  npmDepsHash = "sha256-xr8Cd+icpUNWxUPCfHYQfCr5Z39y2m628Q4qlDp3bRg=";
+  npmDepsHash = "sha256-NHt0CB8DCcMMaNvH4eERcSxMar2Uhc3BoUqy1KnqYqQ=";
 
   installPhase = ''
     runHook preInstall

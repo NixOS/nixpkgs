@@ -69,16 +69,17 @@ buildPythonPackage rec {
     pytz
     shapely
     snuggs
-  ] ++ optional-dependencies.s3;
+  ]
+  ++ optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # Tests with gdal marker do not test the functionality of Fiona,
     # but they are used to check GDAL driver capabilities.
-    "-m 'not gdal'"
+    "gdal"
   ];
 
   disabledTests = [
@@ -101,6 +102,6 @@ buildPythonPackage rec {
     mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

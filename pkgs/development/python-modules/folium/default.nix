@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

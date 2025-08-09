@@ -9,7 +9,6 @@
   buildPythonPackage,
   cleanlab,
   datasets,
-  deprecated,
   elasticsearch8,
   evaluate,
   factory-boy,
@@ -28,9 +27,10 @@
   packaging,
   pandas,
   passlib,
-  setuptools,
+  pdm-backend,
   peft,
   pgmpy,
+  pillow,
   plotly,
   prodict,
   psutil,
@@ -53,6 +53,7 @@
   spacy-transformers,
   spacy,
   sqlalchemy,
+  standardwebhooks,
   tqdm,
   transformers,
   typer,
@@ -67,16 +68,16 @@
 
 buildPythonPackage rec {
   pname = "argilla";
-  version = "2.6.0";
+  version = "2.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "argilla-io";
     repo = "argilla";
     tag = "v${version}";
-    hash = "sha256-2e2AIhrCJoPDn6EnO4IGSd2YNV/iSY39nmzbcHNwtOU=";
+    hash = "sha256-8j7/Gtn4FnAZA3oIV7dLxKwNtigqB7AweHtQ/kzLwm4=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -89,49 +90,51 @@ buildPythonPackage rec {
     "wrapt"
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     httpx
-    deprecated
+    datasets
     packaging
     pandas
     pydantic
     wrapt
     numpy
     tqdm
-    backoff
+    pillow
+    huggingface-hub
     monotonic
     rich
     typer
+    standardwebhooks
   ];
 
   optional-dependencies = {
-    server =
-      [
-        aiofiles
-        aiosqlite
-        alembic
-        brotli-asgi
-        elasticsearch8
-        fastapi
-        greenlet
-        luqum
-        opensearch-py
-        passlib
-        psutil
-        python-jose
-        python-multipart
-        pyyaml
-        scikit-learn
-        smart-open
-        sqlalchemy
-        uvicorn
-      ]
-      ++ elasticsearch8.optional-dependencies.async
-      ++ uvicorn.optional-dependencies.standard
-      ++ python-jose.optional-dependencies.cryptography
-      ++ passlib.optional-dependencies.bcrypt;
+    server = [
+      aiofiles
+      aiosqlite
+      alembic
+      backoff
+      brotli-asgi
+      elasticsearch8
+      fastapi
+      greenlet
+      luqum
+      opensearch-py
+      passlib
+      psutil
+      python-jose
+      python-multipart
+      pyyaml
+      scikit-learn
+      smart-open
+      sqlalchemy
+      uvicorn
+    ]
+    ++ elasticsearch8.optional-dependencies.async
+    ++ uvicorn.optional-dependencies.standard
+    ++ python-jose.optional-dependencies.cryptography
+    ++ passlib.optional-dependencies.bcrypt;
     postgresql = [
       asyncpg
       psycopg2
@@ -142,11 +145,9 @@ buildPythonPackage rec {
     ];
     integrations = [
       cleanlab
-      datasets
       evaluate
       faiss
       flyingsquid
-      huggingface-hub
       openai
       peft
       pgmpy
@@ -163,7 +164,8 @@ buildPythonPackage rec {
       # span_marker
       # trl
       # spacy-huggingface-hub
-    ] ++ transformers.optional-dependencies.torch;
+    ]
+    ++ transformers.optional-dependencies.torch;
   };
 
   # Still quite a bit of optional dependencies missing
@@ -178,7 +180,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-asyncio
     factory-boy
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 

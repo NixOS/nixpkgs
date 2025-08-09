@@ -24,6 +24,7 @@
   rustc,
   rustfmt,
   xdotool,
+  xdg-user-dirs,
   pipewire,
   cargo-expand,
   yq,
@@ -45,7 +46,6 @@ let
       ./update-flutter-dev-path.patch
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-4khuq/DK4sP98AMHyr/lEo1OJdqLujOIi8IgbKBY60Y=";
     cargoBuildFlags = [
       "--package"
@@ -63,14 +63,14 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.3.8";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-m1bFljZL8vNaugepVs8u1EWNpDLtxgSSZqKGQmgrmsA=";
+    hash = "sha256-fuS2ENrMlzk1AIZGZp4M3ZbsHks5TFW2pRQEGzsTThQ=";
   };
 
   strictDeps = true;
@@ -78,13 +78,13 @@ flutter.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.8/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.9/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
     desktop_multi_window = "sha256-NOe0jMcH02c0TDTtv62OMTR/qDPnRQrRe73vXDuEq8Q=";
     dynamic_layouts = "sha256-eFp1YVI6vI2HRgtE5nTqGZIylB226H0O8kuxy9ypuf8=";
-    flutter_gpu_texture_renderer = "sha256-6m34FB9Zi4wWbpQQ7uwtMnjUBvdCQnqlkHtWcZddtqU=";
+    flutter_gpu_texture_renderer = "sha256-EZa1FOMbcwdVs/m0vsUvlHv+MifPby4I97ZFe1bqmwQ=";
     window_manager = "sha256-40mwj4D8W2xW8C7RshTjOhelOiLPM7uU9rsF4NvQn8c=";
     window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
     texture_rgba_renderer = "sha256-V/bmT/5x+Bt7kdjLTkgkoXdBcFVXxPyp9kIUhf+Rnt4=";
@@ -100,7 +100,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-uuoyEGmGkpPFeHDUX3dLT/VWhBRWum5CcQ7bGq+z/8w=";
+    hash = "sha256-9DjfGfTs8/J9XPZmWXCibyRib1/abnWzznQn6A5Tw2I=";
   };
 
   dontCargoBuild = true;
@@ -152,8 +152,6 @@ flutter.buildFlutterApplication rec {
 
   patches = [
     ./make-build-reproducible.patch
-    # Multiple version of core-foundation-sys will make fetchCargoVendor unhappy. Keep one of it.
-    ./update-cargo-lock.patch
   ];
 
   prepareBuildRunner = ''
@@ -205,6 +203,10 @@ flutter.buildFlutterApplication rec {
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "rustdesk";
@@ -246,7 +248,7 @@ flutter.buildFlutterApplication rec {
     homepage = "https://rustdesk.com";
     changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.helsinki-systems.members;
+    teams = [ lib.teams.helsinki-systems ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };

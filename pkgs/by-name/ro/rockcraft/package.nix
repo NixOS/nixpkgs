@@ -4,25 +4,28 @@
   fetchFromGitHub,
   dpkg,
   nix-update-script,
-  testers,
-  rockcraft,
-  cacert,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.10.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = version;
-    hash = "sha256-LrUs6/YRQYU0o1kmNdBhafvDIyw91FnW8+9i0Jj5f+Y=";
+    hash = "sha256-pIOCgOC969Fj3lNnmsb6QTEV8z1KWxrUSsdl6Aogd4Q=";
   };
 
   pyproject = true;
+
   build-system = with python3Packages; [ setuptools-scm ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "setuptools~=80.8.0" "setuptools"
+  '';
 
   dependencies = with python3Packages; [
     craft-application
@@ -30,6 +33,10 @@ python3Packages.buildPythonApplication rec {
     craft-platforms
     spdx-lookup
     tabulate
+  ];
+
+  pythonRelaxDeps = [
+    "craft-providers"
   ];
 
   nativeCheckInputs =
@@ -40,32 +47,30 @@ python3Packages.buildPythonApplication rec {
       pytest-mock
       pytest-subprocess
       pytestCheckHook
+      versionCheckHook
       writableTmpDirAsHomeHook
     ]
     ++ [ dpkg ];
+
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_project_all_platforms_invalid"
     "test_run_init_flask"
     "test_run_init_django"
+    # Mock is broken for Unix FHS reasons.
+    "test_run_pack_services"
+    # Later version of craft-application is being used, which adds an
+    # additional kind of file to be ignored, and invalidates a somewhat
+    # static assertion. Can be removed in a later version once rockcraft
+    # catches up with craft-application version.
+    "test_lifecycle_args"
   ];
 
-  disabledTestPaths = [
-    # Relies upon info in the .git directory which is stripped by fetchFromGitHub,
-    # and the version is overridden anyway.
-    "tests/integration/test_version.py"
-    # Tests non-Nix native packaging
-    "tests/integration/test_setuptools.py"
-  ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = rockcraft;
-      command = "env SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt HOME=$(mktemp -d) rockcraft --version";
-      version = "rockcraft ${version}";
-    };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "rockcraft";

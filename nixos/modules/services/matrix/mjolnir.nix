@@ -40,7 +40,7 @@ let
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
+    "${pkgs.mjolnir}/lib/node_modules/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 
@@ -214,10 +214,12 @@ in
       description = "mjolnir - a moderation tool for Matrix";
       wants = [
         "network-online.target"
-      ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

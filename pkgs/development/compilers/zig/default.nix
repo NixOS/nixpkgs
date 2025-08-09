@@ -1,7 +1,6 @@
 {
   lib,
   callPackage,
-  llvmPackages_16,
   llvmPackages_17,
   llvmPackages_18,
   llvmPackages_19,
@@ -9,10 +8,6 @@
 }:
 let
   versions = {
-    "0.11.0" = {
-      llvmPackages = llvmPackages_16;
-      hash = "sha256-iuU1fzkbJxI+0N1PiLQM013Pd1bzrgqkbIyTxo5gB2I=";
-    };
     "0.12.1" = {
       llvmPackages = llvmPackages_17;
       hash = "sha256-C56jyVf16Co/XCloMLSRsbG9r/gBc8mzCdeEMHV2T2s=";
@@ -21,11 +16,12 @@ let
       llvmPackages = llvmPackages_18;
       hash = "sha256-5qSiTq+UWGOwjDVZMIrAt2cDKHkyNPBSAEjpRQUByFM=";
     };
-    "0.14.0" = {
+    "0.14.1" = {
       llvmPackages = llvmPackages_19;
-      hash = "sha256-VyteIp5ZRt6qNcZR68KmM7CvN2GYf8vj5hP+gHLkuVk=";
+      hash = "sha256-DhVJIY/z12PJZdb5j4dnCRb7k1CmeQVOnayYRP8azDI=";
     };
-  } // zigVersions;
+  }
+  // zigVersions;
 
   mkPackage =
     {

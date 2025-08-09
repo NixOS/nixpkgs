@@ -1,19 +1,37 @@
-diff --git a/app/ding.js b/app/ding.js
-index 1062bc7..c312d48 100755
+diff --git a/app/adw-ding.js b/app/adw-ding.js
+index 42cb878c..929ddce2 100755
 --- a/app/adw-ding.js
 +++ b/app/adw-ding.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env -S gjs -m
 +#!@gjs@/bin/gjs -m
  
- /* DING: Desktop Icons New Generation for GNOME Shell
+ /* ADW-DING: Desktop Icons New Generation for GNOME Shell
   *
+@@ -535,7 +535,7 @@ const adWDingApp = GObject.registerClass(
+                 ]);
+ 
+                 const updated = await GLib.spawn_command_line_async(
+-                    'gtk-update-icon-cache ' +
++                    '@gtk_update_icon_cache@ ' +
+                     '-q -t -f ' +
+                     `${iconCachePath}`
+                 );
+@@ -566,7 +566,7 @@ const adWDingApp = GObject.registerClass(
+                 // and we need to do it manually for the app to be
+                 // available sooner
+                 const updated = await GLib.spawn_command_line_async(
+-                    'update-desktop-database -q ' +
++                    '@update_desktop_database@ -q ' +
+                     `${GLib.path_get_dirname(appDesktopFile)}`
+                 );
+ 
 diff --git a/app/enums.js b/app/enums.js
-index 2b541f3..594d288 100644
+index 5434fa7a..e36d3670 100644
 --- a/app/enums.js
 +++ b/app/enums.js
-@@ -124,7 +124,8 @@ export const THUMBNAILS_DIR = '.cache/thumbnails';
- export const DND_HOVER_TIMEOUT = 500; // In milliseconds
+@@ -134,7 +134,8 @@ export const THUMBNAILS_DIR = '.cache/thumbnails';
+ export const DND_HOVER_TIMEOUT = 1500; // In milliseconds
  export const DND_SHELL_HOVER_POLL = 200; // In milliseconds
  export const TOOLTIP_HOVER_TIMEOUT = 1000; // In milliseconds
 -export const XDG_EMAIL_CMD = 'xdg-email';
@@ -23,40 +41,40 @@ index 2b541f3..594d288 100644
  export const ZIP_CMD = 'zip';
  export const ZIP_CMD_OPTIONS = '-r';
 diff --git a/app/preferences.js b/app/preferences.js
-index 6849a86..83a7247 100644
+index 95ffe60b..75370403 100644
 --- a/app/preferences.js
 +++ b/app/preferences.js
-@@ -29,6 +29,7 @@ const Preferences = class {
-         this._programVersion = Data.programversion;
+@@ -30,6 +30,7 @@ const Preferences = class {
+         this._mainApp = Data.mainApp;
          this._Enums = Data.Enums;
          let schemaSource = GioSSS.get_default();
 +        const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
          this._desktopManager = null;
  
-         // Gtk
-@@ -36,7 +37,7 @@ const Preferences = class {
-         this.gtkSettings = new Gio.Settings({settings_schema: schemaGtk});
+         // Adw Style Manager
+@@ -52,7 +53,7 @@ const Preferences = class {
  
          // Gnome Files
--        let schemaObj = schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS, true);
-+        let schemaObj = schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS, true);
+         const schemaObj =
+-            schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS, true);
++            schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS, true);
+ 
          if (!schemaObj) {
              this.nautilusSettings = null;
-             this.CLICK_POLICY_SINGLE = false;
-@@ -48,7 +49,7 @@ const Preferences = class {
- 
+@@ -69,7 +70,7 @@ const Preferences = class {
  
          // Compression
--        const compressionSchema = schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
-+        const compressionSchema = schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
-         if (!compressionSchema)
+         const compressionSchema =
+-            schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
++            schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
+ 
+         if (!compressionSchema) {
              this.nautilusCompression = null;
-         else
 diff --git a/dingManager.js b/dingManager.js
-index f1b497f..29f2156 100644
+index 7a0de9e3..bbc23704 100644
 --- a/dingManager.js
 +++ b/dingManager.js
-@@ -401,7 +401,7 @@ const DingManager = class {
+@@ -482,7 +482,7 @@ const DingManager = class {
      async _doKillAllOldDesktopProcesses() {
          const procFolder = Gio.File.new_for_path('/proc');
          const processes = await FileUtils.enumerateDir(procFolder);
@@ -64,21 +82,21 @@ index f1b497f..29f2156 100644
 +        const thisPath = `@gjs@/bin/gjs ${GLib.build_filenamev([
              this.path,
              'app',
-             'ding.js',
-@@ -425,7 +425,7 @@ const DingManager = class {
-                 }
+             'adw-ding.js',
+@@ -510,7 +510,7 @@ const DingManager = class {
  
                  if (contents.startsWith(thisPath)) {
--                    let proc = new Gio.Subprocess({argv: ['/bin/kill', filename]});
-+                    let proc = new Gio.Subprocess({argv: ['@util_linux@/bin/kill', filename]});
+                     let proc =
+-                        new Gio.Subprocess({argv: ['/bin/kill', filename]});
++                        new Gio.Subprocess({argv: ['@util_linux@/bin/kill', filename]});
+ 
                      proc.init(null);
                      console.log(`Killing old DING process ${filename}`);
-                     await proc.wait_async_promise(null);
 diff --git a/prefs.js b/prefs.js
-index 5ed03f6..5302836 100644
+index 50430fa5..82fca2e3 100644
 --- a/prefs.js
 +++ b/prefs.js
-@@ -30,7 +30,8 @@ export default class dingPreferences extends ExtensionPreferences {
+@@ -34,7 +34,8 @@ export default class dingPreferences extends ExtensionPreferences {
          const schemaSource = GioSSS.get_default();
          const schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
          const gtkSettings = new Gio.Settings({settings_schema: schemaGtk});
@@ -86,5 +104,5 @@ index 5ed03f6..5302836 100644
 +        const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
 +		const schemaNautilus = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
          const version = this.metadata['version-name'];
+ 
          let nautilusSettings;
-         if (!schemaNautilus)

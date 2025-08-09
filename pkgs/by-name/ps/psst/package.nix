@@ -33,17 +33,16 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "psst";
-  version = "0-unstable-2025-02-22";
+  version = "0-unstable-2025-04-20";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = "psst";
-    rev = "dd47c302147677433d70b398b1bcd7f1ade87638";
-    hash = "sha256-EMjY8Tu+ssO30dD2qsvi3FAkt/UlXwM/ss2/FcyNNgI=";
+    rev = "86169f8b05c1b3502261cfe1fae9af2487b8f1bb";
+    hash = "sha256-BkGoaYflCTiElTj47r2j/ngUrZ9wIe0q4pl+zhoattA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0UllCmIe6oEl2Ecl4nqSk9ODdgso5ucX8T5nG3dVwbE=";
+  cargoHash = "sha256-gt2EDrZ+XXig5JUsmQksSLaFd7UArnttOT4UiTVASXw=";
 
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
@@ -54,19 +53,18 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      dbus
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    dbus
+  ];
 
   patches = [
     # Use a fixed build time, hard-code upstream URL instead of trying to read `.git`

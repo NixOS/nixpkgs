@@ -14,7 +14,10 @@
   git,
   glib,
   glib-networking,
+  gnused,
   gnutls,
+  hostname,
+  iproute2,
   json-glib,
   krb5,
   libssh,
@@ -30,6 +33,7 @@
   pkg-config,
   polkit,
   python3Packages,
+  sscg,
   systemd,
   udev,
   xmlto,
@@ -37,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "336.2";
+  version = "343";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-QRtKxrOIGZuAj+NrnXDpnejJQ/lm0hP/JqZyVZn/VL0=";
+    hash = "sha256-Yov8C1zpSYkkK5U7Lly6jGqvtfIZVH4modd2mLZRrGs=";
     fetchSubmodules = true;
   };
 
@@ -76,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     python3Packages.pygobject3
     python3Packages.pip
+    bashInteractive
   ];
 
   postPatch = ''
@@ -92,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/common/cockpitconf.c \
       --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+
+    substituteInPlace src/**/*.c \
+      --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
 
     # instruct users with problems to create a nixpkgs issue instead of nagging upstream directly
     substituteInPlace configure.ac \
@@ -160,13 +168,28 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
+          sscg
           openssl
         ]
       } \
       --run 'cd $(mktemp -d)'
 
-    wrapProgram $out/bin/cockpit-bridge \
-      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+    for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
+      chmod +x $binary
+      wrapProgram $binary \
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+    done
+
+    patchShebangs $out/share/cockpit/issue/update-issue
+    wrapProgram $out/share/cockpit/issue/update-issue \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gnused
+          hostname
+          iproute2
+        ]
+      }
+
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
       --replace-warn libsystemd.so.0 ${systemd}/lib/libsystemd.so.0

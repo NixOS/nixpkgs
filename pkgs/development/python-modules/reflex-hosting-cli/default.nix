@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   charset-normalizer,
   httpx,
   pipdeptree,
@@ -18,19 +18,22 @@
 
 buildPythonPackage rec {
   pname = "reflex-hosting-cli";
-  version = "0.1.36";
+  version = "0.1.50";
   pyproject = true;
 
   # source is not published https://github.com/reflex-dev/reflex/issues/3762
   src = fetchPypi {
     pname = "reflex_hosting_cli";
     inherit version;
-    hash = "sha256-adLv5f9ikjTWvyC1UGfgocbSBFhhqTeo4JL8tLO1jyw=";
+    hash = "sha256-1ZTTc09P/0rTNhiqsNDB2RMLcUjKt1rIWtufakkFWkg=";
   };
 
-  pythonRelaxDeps = [ "pipdeptree" ];
+  pythonRelaxDeps = [
+    "rich"
+    "pipdeptree"
+  ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     charset-normalizer

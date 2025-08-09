@@ -10,7 +10,8 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
-  version = "1.26";
+  version = "1.29";
+  format = "setuptools";
 
   # Two data sources. One for the code, another for the test data
   srcs = [
@@ -19,16 +20,25 @@ python3Packages.buildPythonApplication rec {
       owner = "MultiQC";
       repo = "MultiQC";
       tag = "v${version}";
-      hash = "sha256-MPAw6gG/3LzdskkDXOTDEM1NpG0sH9GvklYFQ1ZXWIs=";
+      hash = "sha256-KKLdDNf889lEbCyNpJFZoE8rNO50CRzNP4hKpKHRAcE=";
     })
     (fetchFromGitHub {
       owner = "MultiQC";
       repo = "test-data";
-      rev = "67435083a8bfa228dca3dda7d835facef15fc2c7";
-      hash = "sha256-oYmPIJSy6dOKPcMr3B4foGoWcerA29x0XeGoU4dSYsA=";
+      rev = "d775b73c106d48726653f2fd02e473b7acbd93d8";
+      hash = "sha256-uxBpMx22gWJmnbF9tVuVIdYdiqUh7n51swzu5hnfZQ0=";
       name = "test-data";
     })
   ];
+
+  # Multiqc cannot remove temporary directories in some case.
+  # Default is 10 retries, lower it to 2
+  postPatch = ''
+    substituteInPlace multiqc/utils/util_functions.py \
+      --replace-fail \
+        "max_retries: int = 10," \
+        "max_retries: int = 2,"
+  '';
 
   sourceRoot = "multiqc";
 
@@ -43,6 +53,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     packaging
     requests
+    polars
     pillow
     plotly
     pyyaml
@@ -53,6 +64,8 @@ python3Packages.buildPythonApplication rec {
     pydantic
     typeguard
     tqdm
+    python-dotenv
+    jsonschema
   ];
 
   optional-dependencies = {

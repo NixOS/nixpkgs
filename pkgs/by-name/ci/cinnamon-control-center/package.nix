@@ -90,6 +90,6 @@ stdenv.mkDerivation rec {
     mainProgram = "cinnamon-control-center";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

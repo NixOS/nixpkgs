@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.17";
+  version = "0.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
     tag = "v${version}";
-    hash = "sha256-gPae04hgzUJrY0wshp25ojWrbi+7EYaWoR8wxoEJB30=";
+    hash = "sha256-ZnDl0B7/oLX6PANrqsWtVJwe4E/+7inCgOpo7oSeZlw=";
   };
 
   build-system = [

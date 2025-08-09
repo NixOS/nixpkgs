@@ -75,7 +75,7 @@ let
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
-  # Note that individual attributes can be overriden if needed.
+  # Note that individual attributes can be overridden if needed.
   elemTypeFunctor =
     name:
     { elemType, ... }@payload:
@@ -678,7 +678,14 @@ let
             check =
               x:
               let
-                isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+                isInStore = lib.path.hasStorePathPrefix (
+                  if builtins.isPath x then
+                    x
+                  # Discarding string context is necessary to convert the value to
+                  # a path and safe as the result is never used in any derivation.
+                  else
+                    /. + builtins.unsafeDiscardStringContext x
+                );
                 isAbsolute = builtins.substring 0 1 (toString x) == "/";
                 isExpectedType = (
                   if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
@@ -912,12 +919,7 @@ let
           description = "attribute-tagged union";
           descriptionClass = "noun";
           getSubOptions =
-            prefix:
-            mapAttrs (tagName: tagOption: {
-              "${lib.showOption prefix}" = tagOption // {
-                loc = prefix ++ [ tagName ];
-              };
-            }) tags;
+            prefix: mapAttrs (tagName: tagOption: tagOption // { loc = prefix ++ [ tagName ]; }) tags;
           check = v: isAttrs v && length (attrNames v) == 1 && tags ? ${head (attrNames v)};
           merge =
             loc: defs:
@@ -1208,7 +1210,8 @@ let
                 # It shouldn't cause an issue since this is cosmetic for the manual.
                 _module.args.name = lib.mkOptionDefault "‹name›";
               }
-            ] ++ modules;
+            ]
+            ++ modules;
           };
 
           freeformType = base._module.freeformType;
@@ -1448,8 +1451,14 @@ let
           nestedTypes.coercedType = coercedType;
           nestedTypes.finalType = finalType;
         };
+      /**
+        Augment the given type with an additional type check function.
 
-      # Augment the given type with an additional type check function.
+        :::{.warning}
+        This function has some broken behavior see: [#396021](https://github.com/NixOS/nixpkgs/issues/396021)
+        Fixing is not trivial, we appreciate any help!
+        :::
+      */
       addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
     };

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "has";
   version = "1.5.0";
 
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm0555 ${pname} -t $out/bin
+    install -Dm0555 has -t $out/bin
     runHook postInstall
   '';
 

@@ -21,6 +21,7 @@
   pkg-config,
   sqlite,
   udev,
+  udevCheckHook,
   installShellFiles,
   nix-update-script,
   nixosTests,
@@ -85,6 +86,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
     pkg-config
     docsPython
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -129,6 +131,8 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     installShellCompletion --cmd incus \
       --bash <($out/bin/incus completion bash) \
@@ -172,7 +176,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://linuxcontainers.org/incus";
     changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
     mainProgram = "incus";
   };

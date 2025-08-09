@@ -7,7 +7,7 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-tornasync";
   version = "0.6.0.post2";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "eukaryote";
-    repo = pname;
+    repo = "pytest-tornasync";
     # upstream does not keep git tags in sync with pypy releases
     # https://github.com/eukaryote/pytest-tornasync/issues/9
     rev = "c5f013f1f727f1ca1fcf8cc748bba7f4a2d79e56";

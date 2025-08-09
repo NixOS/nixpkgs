@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "25.3.3";
+  version = "25.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "pontos";
     tag = "v${version}";
-    hash = "sha256-jupd56zLx7tdsiklX0y8WNH0UkPeFtD/TLtzuoRefuI=";
+    hash = "sha256-WLU/FYiaVCbm/dlsI6aIGOV3EjW+Ijtq90JX2tePyT0=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     shtab
     rich
     tomlkit
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     git

@@ -97,7 +97,7 @@ let
         };
       });
 
-      av = super.av.overridePythonAttrs (rec {
+      av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
@@ -105,27 +105,14 @@ let
           tag = "v${version}";
           hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
-      });
+      };
 
-      brother = super.brother.overridePythonAttrs (rec {
-        version = "4.3.1";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "brother";
-          tag = version;
-          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
-        };
-      });
-
-      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = fetchFromGitHub {
-          owner = "EuleMitKeule";
-          repo = "eq3btsmart";
-          tag = version;
-          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
-        };
-        build-system = with self; [ poetry-core ];
+      imageio = super.imageio.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # broken by pyav pin
+          "test_keyframe_intervals"
+          "test_lagging_video_stream"
+        ];
       });
 
       google-genai = super.google-genai.overridePythonAttrs (old: rec {
@@ -151,35 +138,17 @@ let
         ];
       });
 
-      # Pinned due to home-assistant still needing 1.10.0 verison
-      # Remove this when home-assistant upates the jellyfin-apiclient-python version
-      jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
-        version = "1.10.0";
-        src = fetchFromGitHub {
-          owner = "jellyfin";
-          repo = "jellyfin-apiclient-python";
-          tag = "v${version}";
-          hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
-        };
-      });
-
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
+      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+          tag = "v${version}";
+          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
-      });
-
-      pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
-        version = "2.5.9";
-        src = fetchFromGitHub {
-          owner = "vilppuvuorinen";
-          repo = "pymelcloud";
-          rev = "33a827b6cd0b34f276790faa49bfd0994bb7c2e4"; # 2.5.x branch
-          sha256 = "sha256-Q3FIo9YJwtWPHfukEBjBANUQ1N1vr/DMnl1dgiN7vYg=";
-        };
+        pytestFlagsArray = [
+          "-W"
+          "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+        ];
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
@@ -202,6 +171,25 @@ let
         ];
 
         doCheck = false; # no tests
+      });
+
+      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+        };
+      });
+
+      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
+        version = "4.15.16";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          tag = version;
+          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
+        };
       });
 
       # Pinned due to API changes in 0.1.0
@@ -257,44 +245,6 @@ let
         };
       });
 
-      pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.12";
-        src = fetchFromGitHub {
-          owner = "rfleming71";
-          repo = "pyoctoprintapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
-        };
-      });
-
-      # snmp component does not support pysnmp 7.0+
-      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.6";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmp";
-          tag = "v${version}";
-          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
-        };
-      });
-
-      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmpcrypto";
-          tag = "v${version}";
-          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
-        };
-        build-system = with self; [ setuptools ];
-        postPatch = ''
-          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-          substituteInPlace setup.py --replace \
-            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
-            "observed_version = [36, 2, 0]"
-        '';
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -303,6 +253,8 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
+        patches = [ ];
+        doCheck = false;
       });
 
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
@@ -317,12 +269,13 @@ let
         doCheck = false;
       });
 
-      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.2";
+      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
+        version = "21.5";
+
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
+          tag = version;
+          hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
         };
       });
 
@@ -377,7 +330,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.4.2";
+  hassVersion = "2025.8.0";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -388,7 +341,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.11";
+  disabled = python.pythonOlder "3.13";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -398,13 +351,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-7OwkZ2KF1IxSNCXvr7Ex0nIKWWr78Zvma2WGaKM5cJE=";
+    hash = "sha256-o8NZ06GorRmICeu8GQzomkCuE2aALnodT5UuiJ4EOEc=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-IBJxyPZgFrCiARgOzYEcC6Eu/hwoOFTH87lkb+6UYJ4=";
+    hash = "sha256-U06ttXEWe46h8O2wurYyaCN78EdSCvOs10VbnyOQdsM=";
   };
 
   build-system = with python.pkgs; [
@@ -423,6 +376,9 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -432,12 +388,14 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
-    sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==78.1.1" setuptools
   '';
 
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -514,7 +472,6 @@ python.pkgs.buildPythonApplication rec {
       pytest-aiohttp
       pytest-freezer
       pytest-mock
-      pytest-rerunfailures
       pytest-socket
       pytest-timeout
       pytest-unordered
@@ -536,18 +493,14 @@ python.pkgs.buildPythonApplication rec {
       "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
-    # retry racy tests that end in "RuntimeError: Event loop is closed"
-    "--reruns 3"
-    "--only-rerun RuntimeError"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
-    # AssertionError: assert 1 == 0
-    "--deselect tests/test_config.py::test_merge"
-    # checks whether pip is installed
-    "--deselect=tests/util/test_package.py::test_check_package_fragment"
+  ];
+
+  enabledTestPaths = [
     # tests are located in tests/
     "tests"
   ];
@@ -561,6 +514,18 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
+    # AssertionError: assert 1 == 0
+    "tests/test_config.py::test_merge"
+    # checks whether pip is installed
+    "tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "tests/test_test_fixtures.py::test_evict_faked_translations"
+    "tests/helpers/test_backup.py::test_async_get_manager"
+    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
+    "tests/helpers/test_event.py::test_track_time_interval_name"
+    # (2025.7.2) Exception string mismatch (non-blocking vs non blocking)
+    "tests/test_core.py::test_services_call_return_response_requires_blocking"
   ];
 
   preCheck = ''
@@ -603,7 +568,7 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
     platforms = platforms.linux;
     mainProgram = "hass";
   };

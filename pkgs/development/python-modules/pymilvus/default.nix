@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.5.6";
+  version = "2.5.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milvus-io";
     repo = "pymilvus";
     tag = "v${version}";
-    hash = "sha256-ejbzsiFd0kZKV3PEDDxDpl2wI0cwWEJjRcUmtvk59Jo=";
+    hash = "sha256-h+HjDM+uhmcz7fKXE4RWtqD2+Evd9rqG3Zd5jsDyCNE=";
   };
 
   build-system = [

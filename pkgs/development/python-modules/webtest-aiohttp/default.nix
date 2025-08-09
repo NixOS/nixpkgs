@@ -38,10 +38,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ webtest ];
+  dependencies = [
+    aiohttp
+    webtest
+  ];
 
   nativeCheckInputs = [
-    aiohttp
     pytest-aiohttp
     pytestCheckHook
   ];

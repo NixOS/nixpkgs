@@ -1,7 +1,7 @@
 {
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter327,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,37 +12,24 @@
   gitUpdater,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.2.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-QmEjPTpiN74srRyNL9eZFxntV2F7CJuVgewe2tqA9pc=";
+    hash = "sha256-WGzgx+QbAurv9yOJjO40R8t4WtSt/iIkkBuBizT94lQ=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    desktop_webview_window = "sha256-15tw3gLN9e886QjBFuYP34KLD1lN8AmQYXVza5Bvs40=";
-    flutter_qjs = "sha256-nbXKfiCvG6JT570RNVq3gec+JFw3H7XG4g/QSNkDw18=";
-    flutter_7zip = "sha256-KHDq4XG3l+dq1NPW84wOK5kKbXJ8qCK8voGeTnX/Krw=";
-    lodepng_flutter = "sha256-bGc9uXD1EQ/19OIZmR7a/YL9w93fNWdQF5S19LSwxZw=";
-    photo_view = "sha256-Z+9xgvk8YS+bgCbBW7BBY72tV6JUq2kCX5OwKFK4YPE=";
-    scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
-    webdav_client = "sha256-Dz/4qW+cYGyNtK8S/abFslwQNroidgrHl7oJw3uXIqM=";
-    flutter_saf = "sha256-haY4eabTwUUBTpwenK0ILKpLggrtjVQszcmlpirEeTU=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [
-    webkitgtk_4_1
-  ];
+  buildInputs = [ webkitgtk_4_1 ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -63,7 +50,7 @@ flutter327.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    install -Dm0644 ./debian/gui/venera.png $out/share/pixmaps/venera.png
+    install -Dm0644 debian/gui/venera.png $out/share/pixmaps/venera.png
   '';
 
   extraWrapProgramArgs = ''
@@ -83,6 +70,10 @@ flutter327.buildFlutterApplication rec {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       (_experimental-update-script-combinators.copyAttrOutputToFile "venera.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [ ./update-gitHashes.py ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
   };
 

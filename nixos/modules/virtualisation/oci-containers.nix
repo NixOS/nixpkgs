@@ -98,20 +98,16 @@ let
           type = with types; listOf str;
           default = [ ];
           description = "Commandline arguments to pass to the image's entrypoint.";
-          example = literalExpression ''
-            ["--port=9000"]
-          '';
+          example = [ "--port=9000" ];
         };
 
         labels = mkOption {
           type = with types; attrsOf str;
           default = { };
           description = "Labels to attach to the container at runtime.";
-          example = literalExpression ''
-            {
-              "traefik.https.routers.example.rule" = "Host(`example.container`)";
-            }
-          '';
+          example = {
+            "traefik.https.routers.example.rule" = "Host(`example.container`)";
+          };
         };
 
         entrypoint = mkOption {
@@ -125,24 +121,20 @@ let
           type = with types; attrsOf str;
           default = { };
           description = "Environment variables to set for this container.";
-          example = literalExpression ''
-            {
-              DATABASE_HOST = "db.example.com";
-              DATABASE_PORT = "3306";
-            }
-          '';
+          example = {
+            DATABASE_HOST = "db.example.com";
+            DATABASE_PORT = "3306";
+          };
         };
 
         environmentFiles = mkOption {
           type = with types; listOf path;
           default = [ ];
           description = "Environment files for this container.";
-          example = literalExpression ''
-            [
-              /path/to/.env
-              /path/to/.env.secret
-            ]
-          '';
+          example = [
+            /path/to/.env
+            /path/to/.env.secret
+          ];
         };
 
         log-driver = mkOption {
@@ -223,12 +215,10 @@ let
             field; please refer to the
             [docker engine documentation](https://docs.docker.com/engine/storage/volumes/) for details.
           '';
-          example = literalExpression ''
-            [
-              "volume_name:/path/inside/container"
-              "/path/on/host:/path/inside/container"
-            ]
-          '';
+          example = [
+            "volume_name:/path/inside/container"
+            "/path/on/host:/path/inside/container"
+          ];
         };
 
         workdir = mkOption {
@@ -249,10 +239,8 @@ let
           example = literalExpression ''
             virtualisation.oci-containers.containers = {
               node1 = {};
-              node2 = {
-                dependsOn = [ "node1" ];
-              }
-            }
+              node2.dependsOn = [ "node1" ];
+            };
           '';
         };
 
@@ -277,9 +265,7 @@ let
           type = with types; listOf str;
           default = [ ];
           description = "Extra options for {command}`${defaultBackend} run`.";
-          example = literalExpression ''
-            ["--network=host"]
-          '';
+          example = [ "--network=host" ];
         };
 
         autoStart = mkOption {
@@ -352,12 +338,10 @@ let
             When set to false, capability is dropped from the container.
             When null, default runtime settings apply.
           '';
-          example = literalExpression ''
-            {
-              SYS_ADMIN = true;
-              SYS_WRITE = false;
-            {
-          '';
+          example = {
+            SYS_ADMIN = true;
+            SYS_WRITE = false;
+          };
         };
 
         devices = mkOption {
@@ -366,11 +350,9 @@ let
           description = ''
             List of devices to attach to this container.
           '';
-          example = literalExpression ''
-            [
-              "/dev/dri:/dev/dri"
-            ]
-          '';
+          example = [
+            "/dev/dri:/dev/dri"
+          ];
         };
 
         privileged = mkOption {
@@ -416,7 +398,7 @@ let
             # try logging in, if it fails, check if image exists locally
             ${cfg.backend} login \
             ${container.login.registry} \
-            --username ${container.login.username} \
+            --username ${escapeShellArg container.login.username} \
             --password-stdin < ${container.login.passwordFile} \
             || ${cfg.backend} image inspect ${container.image} >/dev/null \
             || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
@@ -434,6 +416,7 @@ let
       };
 
       effectiveUser = container.podman.user or "root";
+      inherit (config.users.users.${effectiveUser}) uid;
       dependOnLingerService =
         cfg.backend == "podman" && effectiveUser != "root" && config.users.users.${effectiveUser}.linger;
     in
@@ -441,7 +424,7 @@ let
       wantedBy = [ ] ++ optional (container.autoStart) "multi-user.target";
       wants =
         lib.optional (container.imageFile == null && container.imageStream == null) "network-online.target"
-        ++ lib.optional dependOnLingerService "linger-users.service";
+        ++ lib.optionals dependOnLingerService [ "linger-users.service" ];
       after =
         lib.optionals (cfg.backend == "docker") [
           "docker.service"
@@ -452,8 +435,15 @@ let
           "network-online.target"
         ]
         ++ dependsOn
-        ++ lib.optional dependOnLingerService "linger-users.service";
-      requires = dependsOn;
+        ++ lib.optionals dependOnLingerService [ "linger-users.service" ]
+        ++ lib.optionals (effectiveUser != "root" && container.podman.sdnotify == "healthy") [
+          "user@${toString uid}.service"
+        ];
+      requires =
+        dependsOn
+        ++ lib.optionals (effectiveUser != "root" && container.podman.sdnotify == "healthy") [
+          "user@${toString uid}.service"
+        ];
       environment = lib.mkMerge [
         proxy_env
         (mkIf (cfg.backend == "podman" && container.podman.user != "root") {
@@ -523,36 +513,39 @@ let
         else
           "${cfg.backend} rm -f ${name} || true";
 
-      serviceConfig =
-        {
-          ### There is no generalized way of supporting `reload` for docker
-          ### containers. Some containers may respond well to SIGHUP sent to their
-          ### init process, but it is not guaranteed; some apps have other reload
-          ### mechanisms, some don't have a reload signal at all, and some docker
-          ### images just have broken signal handling.  The best compromise in this
-          ### case is probably to leave ExecReload undefined, so `systemctl reload`
-          ### will at least result in an error instead of potentially undefined
-          ### behaviour.
-          ###
-          ### Advanced users can still override this part of the unit to implement
-          ### a custom reload handler, since the result of all this is a normal
-          ### systemd service from the perspective of the NixOS module system.
-          ###
-          # ExecReload = ...;
-          ###
-          ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
-          TimeoutStartSec = 0;
-          TimeoutStopSec = 120;
-          Restart = "always";
-        }
-        // optionalAttrs (cfg.backend == "podman") {
-          Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
-          Type = "notify";
-          NotifyAccess = "all";
-          Delegate = mkIf (container.podman.sdnotify == "healthy") true;
-          User = effectiveUser;
-          RuntimeDirectory = escapedName;
-        };
+      unitConfig = mkIf (effectiveUser != "root") {
+        RequiresMountsFor = "/run/user/${toString uid}/containers";
+      };
+
+      serviceConfig = {
+        ### There is no generalized way of supporting `reload` for docker
+        ### containers. Some containers may respond well to SIGHUP sent to their
+        ### init process, but it is not guaranteed; some apps have other reload
+        ### mechanisms, some don't have a reload signal at all, and some docker
+        ### images just have broken signal handling.  The best compromise in this
+        ### case is probably to leave ExecReload undefined, so `systemctl reload`
+        ### will at least result in an error instead of potentially undefined
+        ### behaviour.
+        ###
+        ### Advanced users can still override this part of the unit to implement
+        ### a custom reload handler, since the result of all this is a normal
+        ### systemd service from the perspective of the NixOS module system.
+        ###
+        # ExecReload = ...;
+        ###
+        ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
+        TimeoutStartSec = 0;
+        TimeoutStopSec = 120;
+        Restart = "always";
+      }
+      // optionalAttrs (cfg.backend == "podman") {
+        Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+        Type = "notify";
+        NotifyAccess = "all";
+        Delegate = mkIf (container.podman.sdnotify == "healthy") true;
+        User = effectiveUser;
+        RuntimeDirectory = escapedName;
+      };
     };
 
 in
@@ -615,6 +608,15 @@ in
                 {
                   assertion = cfg.backend == "docker" -> podman == null;
                   message = "virtualisation.oci-containers.containers.${name}: Cannot set `podman` option if backend is `docker`.";
+                }
+                {
+                  assertion =
+                    cfg.backend == "podman" && podman.sdnotify == "healthy" && podman.user != "root"
+                    -> config.users.users.${podman.user}.uid != null;
+                  message = ''
+                    Rootless container ${name} (with podman and sdnotify=healthy)
+                    requires that its running user ${podman.user} has a statically specified uid.
+                  '';
                 }
               ];
           in

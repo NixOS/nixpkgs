@@ -56,7 +56,8 @@ buildPythonPackage rec {
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
@@ -87,7 +88,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl

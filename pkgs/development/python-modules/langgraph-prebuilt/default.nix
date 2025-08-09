@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -21,28 +21,29 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  syrupy,
   xxhash,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
 buildPythonPackage rec {
   pname = "langgraph-prebuilt";
-  version = "0.1.8";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "prebuilt==${version}";
-    hash = "sha256-mYcj7HRbB5H6G0CVLOICKgdtR5Wlv9WeTIBjQJqlhOE=";
+    hash = "sha256-bASxPjOElhJhOAc0XiSqZ+i+dKETYi1KTFgamlJHA9Y=";
   };
 
   sourceRoot = "${src.name}/libs/prebuilt";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -66,6 +67,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+    syrupy
     xxhash
   ];
 
@@ -73,30 +75,28 @@ buildPythonPackage rec {
     export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestDeprecationWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestDeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
     # psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 5442 failed: Connection refused
     # Is the server running on that host and accepting TCP/IP connections?
     "tests/test_react_agent.py"
+
+    # Utilities to import
+    "tests/conftest.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "prebuilt==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "prebuilt==";
   };
 
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
-    homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

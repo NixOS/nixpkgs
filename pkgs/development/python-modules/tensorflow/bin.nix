@@ -46,14 +46,11 @@
 # - the source build is currently brittle and not easy to maintain
 # - the source build doesn't work on NVIDIA Jetson platforms
 
-# unsupported combination
-assert !(stdenv.hostPlatform.isDarwin && cudaSupport);
-
 let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
 
-  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
 buildPythonPackage rec {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
@@ -99,7 +96,8 @@ buildPythonPackage rec {
     termcolor
     typing-extensions
     wrapt
-  ] ++ lib.optional (!isPy3k) mock;
+  ]
+  ++ lib.optional (!isPy3k) mock;
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -229,9 +227,10 @@ buildPythonPackage rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      jyp
       abbradar
     ];
     badPlatforms = [ "x86_64-darwin" ];
+    # unsupported combination
+    broken = stdenv.hostPlatform.isDarwin && cudaSupport;
   };
 }

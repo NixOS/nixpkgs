@@ -4,13 +4,13 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   python,
   buildPythonPackage,
   setuptools,
   numpy,
   numpy_1,
   llvmlite,
-  libcxx,
   replaceVars,
   writers,
   numba,
@@ -33,7 +33,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.61.0";
+  version = "0.61.2";
   pname = "numba";
   pyproject = true;
 
@@ -48,14 +48,10 @@ buildPythonPackage rec {
     #
     # - https://git-scm.com/docs/gitattributes#_export_subst and
     # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
-    #
-    # Hence this hash may change if GitHub / Git will change it's behavior.
-    # Hopefully this will not happen until the next release. We are fairly sure
-    # that upstream relies on those strings to be valid, that's why we don't
-    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
-    # changes too often, we can always use forceFetchGit, and inject the
-    # relevant strings ourselves, using `substituteInPlace`, in postFetch.
-    hash = "sha256-4CaTJPaQduJqD0NQOPp1qsDr/BeCjbfZhulVW/x2ZAU=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
+    '';
+    hash = "sha256-Qa2B5pOWrLb/1V3PSyiwS1x9ueXwDKRhDMDecBCAN+8=";
   };
 
   postPatch = ''
@@ -65,16 +61,12 @@ buildPythonPackage rec {
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
 
     substituteInPlace setup.py \
-      --replace-fail \
-        'max_numpy_run_version = "2.2"' \
-        'max_numpy_run_version = "3"'
+      --replace-fail 'max_numpy_run_version = "2.3"' 'max_numpy_run_version = "2.4"'
     substituteInPlace numba/__init__.py \
-      --replace-fail \
-        'numpy_version > (2, 1)' \
-        'numpy_version >= (3, 0)'
+      --replace-fail "numpy_version > (2, 2)" "numpy_version > (2, 3)"
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   build-system = [
     setuptools
@@ -95,7 +87,14 @@ buildPythonPackage rec {
     llvmlite
   ];
 
-  patches = lib.optionals cudaSupport [
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/numba/numba/commit/e2c8984ba60295def17e363a926d6f75e7fa9f2d.patch";
+      includes = [ "numba/core/bytecode.py" ];
+      hash = "sha256-HIVbp3GSmnq6W7zrRIirIbhGjJsFN3PNyHSfAE8fdDw=";
+    })
+  ]
+  ++ lib.optionals cudaSupport [
     (replaceVars ./cuda_path.patch {
       cuda_toolkit_path = cudatoolkit;
       cuda_toolkit_lib_path = lib.getLib cudatoolkit;
@@ -112,7 +111,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = lib.optionals (!doFullCheck) [
+  enabledTestPaths = lib.optionals (!doFullCheck) [
     # These are the most basic tests. Running all tests is too expensive, and
     # some of them fail (also differently on different platforms), so it will
     # be too hard to maintain such a `disabledTests` list.

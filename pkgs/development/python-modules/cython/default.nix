@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   gdb,
+  isPyPy,
   ncurses,
   numpy,
   pkg-config,
@@ -36,7 +37,9 @@ buildPythonPackage rec {
     ncurses
   ];
 
-  env.LC_ALL = "en_US.UTF-8";
+  env = lib.optionalAttrs (!isPyPy) {
+    LC_ALL = "en_US.UTF-8";
+  };
 
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
@@ -46,22 +49,23 @@ buildPythonPackage rec {
 
   checkPhase =
     let
-      excludedTests =
-        [ "reimport_from_subinterpreter" ]
-        # cython's testsuite is not working very well with libc++
-        # We are however optimistic about things outside of testsuite still working
-        ++ lib.optionals (stdenv.cc.isClang or false) [
-          "cpdef_extern_func"
-          "libcpp_algo"
-        ]
-        # Some tests in the test suite aren't working on aarch64.
-        # Disable them for now until upstream finds a workaround.
-        # Upstream issue: https://github.com/cython/cython/issues/2308
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
-        ++ lib.optionals stdenv.hostPlatform.isi686 [
-          "future_division"
-          "overflow_check_longlong"
-        ];
+      excludedTests = [
+        "reimport_from_subinterpreter"
+      ]
+      # cython's testsuite is not working very well with libc++
+      # We are however optimistic about things outside of testsuite still working
+      ++ lib.optionals (stdenv.cc.isClang or false) [
+        "cpdef_extern_func"
+        "libcpp_algo"
+      ]
+      # Some tests in the test suite aren't working on aarch64.
+      # Disable them for now until upstream finds a workaround.
+      # Upstream issue: https://github.com/cython/cython/issues/2308
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
+      ++ lib.optionals stdenv.hostPlatform.isi686 [
+        "future_division"
+        "overflow_check_longlong"
+      ];
       commandline = builtins.concatStringsSep " " (
         [
           "-j$NIX_BUILD_CORES"

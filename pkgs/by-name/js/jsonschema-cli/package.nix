@@ -6,23 +6,22 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
-  version = "0.29.1";
+  version = "0.32.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-HHS8dt3bJZ3dPWqB5K0h5KQTn/wHRYvIROfYmqfxolw=";
+    pname = "jsonschema-cli";
+    inherit (finalAttrs) version;
+    hash = "sha256-ZcavZSHf2eT65f7HbtZmD2mYUtrXEL/l1opXCvdn1O0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-RIt+b1Yokc4UMFPxOzO5GARsI32wL71ZmcoN+P/KE5c=";
+  cargoHash = "sha256-ivD1dvz2xxNei77Dq6myE4zivWD8LZoEqq8E7QhgP9s=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
@@ -30,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast command-line tool for JSON Schema validation";
     homepage = "https://github.com/Stranger6667/jsonschema";
-    changelog = "https://github.com/Stranger6667/jsonschema/releases/tag/rust-v${version}";
+    changelog = "https://github.com/Stranger6667/jsonschema/releases/tag/rust-v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kachick
     ];
     mainProgram = "jsonschema-cli";
   };
-}
+})

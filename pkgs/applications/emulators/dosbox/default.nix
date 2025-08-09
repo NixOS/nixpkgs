@@ -11,8 +11,8 @@
   graphicsmagick,
   libGL,
   libGLU,
-  OpenGL,
   libpng,
+  binutils,
   makeDesktopItem,
 }:
 
@@ -33,30 +33,29 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     copyDesktopItems
     graphicsmagick
+    SDL # for sdl-config during build time
   ];
 
-  buildInputs =
-    [
-      SDL
-      SDL_net
-      SDL_sound
-      libpng
-    ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          OpenGL
-        ]
-      else
-        [
-          libGL
-          libGLU
-        ]
-    );
+  depsBuildBuild = [
+    binutils # build calls `ar`
+  ];
+
+  buildInputs = [
+    SDL
+    SDL_net
+    SDL_sound
+    libpng
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+  ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL_net}/include/SDL";

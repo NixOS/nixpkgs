@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   alsa-lib,
   callPackage,
   cmake,
@@ -19,7 +20,6 @@
   pkg-config,
   qt5,
   qt6,
-  stdenv,
   taglib,
   vulkan-headers,
   vulkan-tools,
@@ -43,46 +43,46 @@ stdenv.mkDerivation (finalAttrs: {
     cp -va ${sources.qmvk.src}/* qmvk/
     chmod --recursive 744 qmvk
     popd
+    substituteInPlace src/qmplay2/vulkan/VulkanWindow.cpp \
+      --replace-fail "getSubmitInfo()" "getSubmitInfo(0)"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
-    ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
+  ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      alsa-lib
-      ffmpeg
-      fribidi
-      game-music-emu
-      libXdmcp
-      libXv
-      libass
-      libcddb
-      libcdio
-      libpulseaudio
-      libsidplayfp
-      libva
-      libxcb
-      taglib
-      vulkan-headers
-      vulkan-tools
-    ]
-    ++ lib.optionals (qtVersion == "6") [
-      qt6.qt5compat
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-    ]
-    ++ lib.optionals (qtVersion == "5") [
-      qt5.qtbase
-      qt5.qttools
-    ];
+  buildInputs = [
+    alsa-lib
+    ffmpeg
+    fribidi
+    game-music-emu
+    libXdmcp
+    libXv
+    libass
+    libcddb
+    libcdio
+    libpulseaudio
+    libsidplayfp
+    libva
+    libxcb
+    taglib
+    vulkan-headers
+    vulkan-tools
+  ]
+  ++ lib.optionals (qtVersion == "6") [
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+  ]
+  ++ lib.optionals (qtVersion == "5") [
+    qt5.qtbase
+    qt5.qttools
+  ];
 
   strictDeps = true;
 

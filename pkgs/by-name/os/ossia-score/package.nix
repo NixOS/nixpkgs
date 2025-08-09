@@ -44,13 +44,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.4.1";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-PpIGlw3MmJYiLaKX+oHM7QUjlk6Bw/W2GwdkLgPK1Hg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-khVWoHsxezQjU6O+OX7t1zuzLJpIVTim1rMswD7TaQU=";
     fetchSubmodules = true;
   };
 

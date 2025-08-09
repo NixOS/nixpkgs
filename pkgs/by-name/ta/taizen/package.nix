@@ -6,13 +6,11 @@
   pkg-config,
   ncurses,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "taizen";
-  version = "unstable-2023-06-05";
+  version = "0-unstable-2023-06-05";
 
   src = fetchFromGitHub {
     owner = "NerdyPepper";
@@ -30,19 +28,14 @@ rustPlatform.buildRustPackage {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kK9na2Pk3Hl4TYYVVUfeBv6DDDkrD7mIv7eVHXkS5QY=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    ncurses
+    openssl
+  ];
 
   meta = with lib; {
     description = "curses based mediawiki browser";

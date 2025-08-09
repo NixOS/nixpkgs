@@ -4,6 +4,7 @@
   src,
   officialRelease,
   maintainers,
+  teams,
   version,
 }:
 
@@ -43,12 +44,12 @@ let
     preConfigure =
       prevAttrs.preConfigure or ""
       +
-        # Update the repo-global .version file.
-        # Symlink ./.version points there, but by default only workDir is writable.
-        ''
-          chmod u+w ./.version
-          echo ${finalAttrs.version} > ./.version
-        '';
+      # Update the repo-global .version file.
+      # Symlink ./.version points there, but by default only workDir is writable.
+      ''
+        chmod u+w ./.version
+        echo ${finalAttrs.version} > ./.version
+      '';
   };
 
   localSourceLayer =
@@ -137,7 +138,8 @@ let
     nativeBuildInputs = [
       meson
       ninja
-    ] ++ prevAttrs.nativeBuildInputs or [ ];
+    ]
+    ++ prevAttrs.nativeBuildInputs or [ ];
     mesonCheckFlags = prevAttrs.mesonCheckFlags or [ ] ++ [
       "--print-errorlogs"
     ];
@@ -154,6 +156,7 @@ let
       // lib.optionalAttrs (
         stdenv.isLinux
         && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
+        && !(stdenv.system == "loongarch64-linux")
         && !(stdenv.hostPlatform.useLLVM or false)
       ) { LDFLAGS = "-fuse-ld=gold"; };
   };
@@ -186,6 +189,7 @@ let
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
       maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
+      teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
   };
@@ -209,6 +213,7 @@ in
 {
   inherit version;
   inherit maintainers;
+  inherit teams;
 
   inherit filesetToSource;
 

@@ -19,8 +19,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-NLPei6ajR55mLyFhsjzUpXB/TsqqeDvP8yKE74t0ufk=";
   };
 
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wilsonzlin/minify-html/tree/master/minify-html-python";
     changelog = "https://github.com/wilsonzlin/minify-html/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

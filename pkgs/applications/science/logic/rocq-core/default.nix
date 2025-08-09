@@ -23,6 +23,7 @@ let
 
   release = {
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
+    "9.1+rc1".sha256 = "sha256-GShKHQ9EdvyNe9WlkzF6KLYybc5dPeVrh4bpkVy6pY4=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -161,7 +162,7 @@ let
     '';
 
     meta = with lib; {
-      description = "The Rocq Prover";
+      description = "Rocq Prover";
       longDescription = ''
         The Rocq Prover is an interactive theorem prover, or proof assistant. It provides
         a formal language to write mathematical definitions, executable

@@ -27,13 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  buildInputs =
-    [
-      readline
-    ]
-    ++ lib.optionals enableCurrenciesUpdater [
-      pythonEnv
-    ];
+  buildInputs = [
+    readline
+  ]
+  ++ lib.optionals enableCurrenciesUpdater [
+    pythonEnv
+  ];
 
   prePatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \

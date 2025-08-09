@@ -5,7 +5,6 @@
   rustPlatform,
   makeWrapper,
   protobuf,
-  darwin,
   imagemagick,
   ffmpeg,
   exiftool,
@@ -14,25 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pict-rs";
-  version = "0.5.16";
+  version = "0.5.19";
 
   src = fetchFromGitea {
     domain = "git.asonix.dog";
     owner = "asonix";
-    repo = pname;
+    repo = "pict-rs";
     rev = "v${version}";
-    sha256 = "sha256-q0h+H3260CSpZemVuyaiwSHDi8yKXUX8Df9ih3IzAWo=";
+    sha256 = "sha256-ifuN3Kb7Hhq8H/eoZcumO5yyrxOCA+nWQQvAdFk7w2Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JJB5d9N2/tu2SYudNNguQGocQdyFAMvBea/Q3V7pYOw=";
+  cargoHash = "sha256-wZRWusETLl32BJy5lza4Bvix500VkpXLUpQb5aO8yJ0=";
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \

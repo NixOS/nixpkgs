@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
@@ -9,19 +9,19 @@
 }:
 let
   pname = "workout-tracker";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     tag = "v${version}";
-    hash = "sha256-m/mQRFBIlffw+o0exBCejU3F5nSQhGEu3PGrw/M9l7M=";
+    hash = "sha256-CJiUSN0QmZD5B/KPlHY2SySQC3D/+aVdydS4mYTabz0=";
   };
 
   assets = buildNpmPackage {
     pname = "${pname}-assets";
     inherit version src;
-    npmDepsHash = "sha256-rUW7wdJg5AhcDxIaH74YXzQS3Pav2fOraw8Rhb+IgCc=";
+    npmDepsHash = "sha256-kzHISDTACtqTJWyjMaXb5HtuM1oaBaSscDZl9EOuRV8=";
     dontNpmBuild = true;
     makeCacheWritable = true;
     postPatch = ''
@@ -34,7 +34,7 @@ let
     '';
   };
 in
-buildGo124Module {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = null;

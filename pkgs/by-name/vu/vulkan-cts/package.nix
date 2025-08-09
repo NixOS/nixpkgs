@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.10.0";
+  version = "1.4.3.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-owa4Z/gu9+plPxeSfduS3gUk9WTOHSDoXLTBju6tTGc=";
+    hash = "sha256-Ahp8Wcil0IWSMXXA0Hlm/4KtBCo4HFSQtYAjIlFGtgA=";
   };
 
   prePatch = ''
@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
       --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
+
+    substituteInPlace external/vulkan-video-samples/src/cmake/FindVulkanSDK.cmake \
+      --replace-fail 'GIT_TAG main' 'GIT_TAG main FIND_PACKAGE_ARGS NAMES VulkanHeaders'
 
     chmod u+w -R external
   '';
@@ -107,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     # For vulkan-validation-layers
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
+    "-DSELECTED_BUILD_TARGETS=deqp-vk"
   ];
 
   postInstall = ''
@@ -114,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     ! test -e $out
 
     mkdir -p $out/bin $out/archive-dir
-    cp -a external/vulkancts/modules/vulkan/deqp-vk external/vulkancts/modules/vulkan/deqp-vksc $out/bin/
+    cp -a external/vulkancts/modules/vulkan/deqp-vk $out/bin/
     cp -a external/vulkancts/modules/vulkan/vulkan $out/archive-dir/
     cp -a external/vulkancts/modules/vulkan/vk-default $out/
 

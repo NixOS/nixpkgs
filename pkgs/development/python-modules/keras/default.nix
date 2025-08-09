@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -35,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.9.2";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-mxQHqApyxO57zo/lK8p9xWEdEgkXF89yX/+pPBUlbwE=";
+    hash = "sha256-jyNOL5u+XVVqChD7Fs3yJCcW14bTvitiQa4H4DTeja0=";
   };
 
   build-system = [
@@ -62,7 +63,8 @@ buildPythonPackage rec {
     rich
     scikit-learn
     tensorflow
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [
     "keras"
@@ -81,18 +83,26 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # NameError: name 'MockRemat' is not defined
-    # https://github.com/keras-team/keras/issues/21126
-    "test_functional_model_with_remat"
+    # Require unpackaged `grain`
+    "test_fit_with_data_adapter_grain_dataloader"
+    "test_fit_with_data_adapter_grain_datast"
+    "test_fit_with_data_adapter_grain_datast_with_len"
 
     # Tries to install the package in the sandbox
     "test_keras_imports"
 
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "test_reloading_default_saved_model"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Hangs forever
+    "test_fit_with_data_adapter"
   ];
 
   disabledTestPaths = [
+    # Require unpackaged `grain`
+    "keras/src/trainers/data_adapters/grain_dataset_adapter_test.py"
+
     # These tests succeed when run individually, but crash within the full test suite:
     # ImportError: /nix/store/4bw0x7j3wfbh6i8x3plmzknrdwdzwfla-abseil-cpp-20240722.1/lib/libabsl_cord_internal.so.2407.0.0:
     # undefined symbol: _ZN4absl12lts_2024072216strings_internal13StringifySink6AppendESt17basic_string_viewIcSt11char_traitsIcEE

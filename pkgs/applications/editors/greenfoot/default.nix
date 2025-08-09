@@ -10,16 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "greenfoot";
-  version = "3.8.2";
+  version = "3.9.0";
 
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
-    url = "https://www.greenfoot.org/download/files/Greenfoot-linux-${
+    url = "https://www.greenfoot.org/download/files/Greenfoot-linux-arm64-${
       builtins.replaceStrings [ "." ] [ "" ] version
     }.deb";
-    hash = "sha256-wpmgWtx2jTDjt+7p6HcjU/uy1PRmnAHpJ1rOYb+hV+U=";
+    hash = "sha256-d5bkK+teTA4fxFb46ovbZE28l8WILGStv3Vg3nJZfv0=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${openjdk}/bin/java $out/bin/greenfoot \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
                    -cp $out/share/greenfoot/boot.jar bluej.Boot \
                    -greenfoot=true -bluej.compiler.showunchecked=false \

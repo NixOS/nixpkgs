@@ -14,20 +14,22 @@
 
   # runtime dependencies
   bzip2,
+  withExpat ? true,
   expat,
   libffi,
   libuuid,
   libxcrypt,
+  withMpdecimal ? true,
   mpdecimal,
   ncurses,
   openssl,
   sqlite,
   xz,
   zlib,
+  zstd,
 
   # platform-specific dependencies
   bashNonInteractive,
-  darwin,
   windows,
 
   # optional dependencies
@@ -72,6 +74,7 @@
   enableFramework ? false,
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
   enableGIL ? true,
+  enableDebug ? false,
 
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -92,6 +95,9 @@
 
   # tests
   testers,
+
+  # allow pythonMinimal to prevent accidental dependencies it doesn't want
+  allowedReferenceNames ? [ ],
 
 }@inputs:
 
@@ -157,7 +163,8 @@ let
         pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
           override pkgsTargetTarget.${pythonAttr}
         );
-      } // __splices;
+      }
+      // __splices;
       override =
         attr:
         let
@@ -190,53 +197,58 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
-  nativeBuildInputs =
-    [
-      nukeReferences
-    ]
-    ++ optionals (!stdenv.hostPlatform.isDarwin) [
-      autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
-      autoreconfHook
-      pkg-config
-    ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      buildPackages.stdenv.cc
-      pythonOnBuildForHost
-    ]
-    ++
-      optionals
-        (
-          stdenv.cc.isClang
-          && (!stdenv.hostPlatform.useAndroidPrebuilt or false)
-          && (enableLTO || enableOptimizations)
-        )
-        [
-          stdenv.cc.cc.libllvm.out
-        ];
+  nativeBuildInputs = [
+    nukeReferences
+  ]
+  ++ optionals (!stdenv.hostPlatform.isDarwin) [
+    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
+    autoreconfHook
+  ]
+  ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
+    pkg-config
+  ]
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    buildPackages.stdenv.cc
+    pythonOnBuildForHost
+  ]
+  ++
+    optionals
+      (
+        stdenv.cc.isClang
+        && (!stdenv.hostPlatform.useAndroidPrebuilt or false)
+        && (enableLTO || enableOptimizations)
+      )
+      [
+        stdenv.cc.cc.libllvm.out
+      ];
 
   buildInputs = lib.filter (p: p != null) (
     [
       bzip2
-      expat
       libffi
       libuuid
       libxcrypt
-      mpdecimal
       ncurses
       openssl
       sqlite
       xz
       zlib
     ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
+    ]
+    ++ optionals withMpdecimal [
+      mpdecimal
+    ]
+    ++ optionals withExpat [
+      expat
+    ]
     ++ optionals bluezSupport [
       bluez
     ]
-    ++ optionals enableFramework [
-      darwin.apple_sdk.frameworks.Cocoa
-    ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
-      windows.mingw_w64_pthreads
+      windows.pthreads
     ]
     ++ optionals tzdataSupport [
       tzdata
@@ -313,111 +325,97 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
   '';
 
-  patches =
-    [
-      # Disable the use of ldconfig in ctypes.util.find_library (since
-      # ldconfig doesn't work on NixOS), and don't use
-      # ctypes.util.find_library during the loading of the uuid module
-      # (since it will do a futile invocation of gcc (!) to find
-      # libuuid, slowing down program startup a lot).
-      noldconfigPatch
-    ]
-    ++ optionals (pythonOlder "3.12") [
-      # https://www.cve.org/CVERecord?id=CVE-2025-0938
-      ./CVE-2025-0938.patch
-    ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
-      # Cross compilation only supports a limited number of "known good"
-      # configurations. If you're reading this and it's been a long time
-      # since this diff, consider submitting this patch upstream!
-      ./freebsd-cross.patch
-    ]
-    ++ optionals (pythonOlder "3.13") [
-      # Make sure that the virtualenv activation scripts are
-      # owner-writable, so venvs can be recreated without permission
-      # errors.
-      ./virtualenv-permissions.patch
-    ]
-    ++ optionals (pythonAtLeast "3.13") [
-      ./3.13/virtualenv-permissions.patch
-    ]
-    ++ optionals mimetypesSupport [
-      # Make the mimetypes module refer to the right file
-      ./mimetypes.patch
-    ]
-    ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
-      # Stop checking for TCL/TK in global macOS locations
-      ./3.9/darwin-tcl-tk.patch
-    ]
-    ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
-      # Fix for http://bugs.python.org/issue1222585
-      # Upstream distutils is calling C compiler to compile C++ code, which
-      # only works for GCC and Apple Clang. This makes distutils to call C++
-      # compiler when needed.
-      (
-        if pythonAtLeast "3.7" && pythonOlder "3.11" then
-          ./3.7/python-3.x-distutils-C++.patch
-        else if pythonAtLeast "3.11" then
-          ./3.11/python-3.x-distutils-C++.patch
-        else
-          fetchpatch {
-            url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
-            sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
-          }
-      )
-    ]
-    ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.12") [
-      # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
-      ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
-      # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
-      ./3.7/fix-finding-headers-when-cross-compiling.patch
-    ]
-    ++ optionals (pythonOlder "3.12") [
-      # https://github.com/python/cpython/issues/90656
-      ./loongarch-support.patch
-      # fix failing tests with openssl >= 3.4
-      # https://github.com/python/cpython/pull/127361
-    ]
-    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
-      ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
-    ]
-    ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
-        sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
-      })
-    ]
-    ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
-      # backport fix for https://github.com/python/cpython/issues/95855
-      ./platform-triplet-detection.patch
-    ]
-    ++ optionals (stdenv.hostPlatform.isMinGW) (
-      let
-        # https://src.fedoraproject.org/rpms/mingw-python3
-        mingw-patch = fetchgit {
-          name = "mingw-python-patches";
-          url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
-          rev = "3edecdbfb4bbf1276d09cd5e80e9fb3dd88c9511"; # for python 3.11.9 at the time of writing.
-          hash = "sha256-kpXoIHlz53+0FAm/fK99ZBdNUg0u13erOr1XP2FSkQY=";
-        };
-      in
-      (builtins.map (f: "${mingw-patch}/${f}") [
-        # The other patches in that repo are already applied to 3.11.10
-        "mingw-python3_distutils.patch"
-        "mingw-python3_frozenmain.patch"
-        "mingw-python3_make-sysconfigdata.py-relocatable.patch"
-        "mingw-python3_mods-failed.patch"
-        "mingw-python3_module-select.patch"
-        "mingw-python3_module-socket.patch"
-        "mingw-python3_modules.patch"
-        "mingw-python3_platform-mingw.patch"
-        "mingw-python3_posix-layout.patch"
-        "mingw-python3_pthread_threadid.patch"
-        "mingw-python3_pythonw.patch"
-        "mingw-python3_setenv.patch"
-        "mingw-python3_win-modules.patch"
-      ])
-    );
+  patches = [
+    # Disable the use of ldconfig in ctypes.util.find_library (since
+    # ldconfig doesn't work on NixOS), and don't use
+    # ctypes.util.find_library during the loading of the uuid module
+    # (since it will do a futile invocation of gcc (!) to find
+    # libuuid, slowing down program startup a lot).
+    noldconfigPatch
+  ]
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
+    # Cross compilation only supports a limited number of "known good"
+    # configurations. If you're reading this and it's been a long time
+    # since this diff, consider submitting this patch upstream!
+    ./freebsd-cross.patch
+  ]
+  ++ optionals (pythonOlder "3.13") [
+    # Make sure that the virtualenv activation scripts are
+    # owner-writable, so venvs can be recreated without permission
+    # errors.
+    ./virtualenv-permissions.patch
+  ]
+  ++ optionals (pythonAtLeast "3.13") [
+    ./3.13/virtualenv-permissions.patch
+  ]
+  ++ optionals mimetypesSupport [
+    # Make the mimetypes module refer to the right file
+    ./mimetypes.patch
+  ]
+  ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
+    # Stop checking for TCL/TK in global macOS locations
+    ./3.9/darwin-tcl-tk.patch
+  ]
+  ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
+    # Fix for http://bugs.python.org/issue1222585
+    # Upstream distutils is calling C compiler to compile C++ code, which
+    # only works for GCC and Apple Clang. This makes distutils to call C++
+    # compiler when needed.
+    (
+      if pythonAtLeast "3.7" && pythonOlder "3.11" then
+        ./3.7/python-3.x-distutils-C++.patch
+      else if pythonAtLeast "3.11" then
+        ./3.11/python-3.x-distutils-C++.patch
+      else
+        fetchpatch {
+          url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
+          sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
+        }
+    )
+  ]
+  ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.12") [
+    # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
+    ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
+    # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
+    ./3.7/fix-finding-headers-when-cross-compiling.patch
+  ]
+  ++ optionals (pythonOlder "3.12") [
+    # https://github.com/python/cpython/issues/90656
+    ./loongarch-support.patch
+    # fix failing tests with openssl >= 3.4
+    # https://github.com/python/cpython/pull/127361
+  ]
+  ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
+    # backport fix for https://github.com/python/cpython/issues/95855
+    ./platform-triplet-detection.patch
+  ]
+  ++ optionals (stdenv.hostPlatform.isMinGW) (
+    let
+      # https://src.fedoraproject.org/rpms/mingw-python3
+      mingw-patch = fetchgit {
+        name = "mingw-python-patches";
+        url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
+        rev = "3edecdbfb4bbf1276d09cd5e80e9fb3dd88c9511"; # for python 3.11.9 at the time of writing.
+        hash = "sha256-kpXoIHlz53+0FAm/fK99ZBdNUg0u13erOr1XP2FSkQY=";
+      };
+    in
+    (builtins.map (f: "${mingw-patch}/${f}") [
+      # The other patches in that repo are already applied to 3.11.10
+      "mingw-python3_distutils.patch"
+      "mingw-python3_frozenmain.patch"
+      "mingw-python3_make-sysconfigdata.py-relocatable.patch"
+      "mingw-python3_mods-failed.patch"
+      "mingw-python3_module-select.patch"
+      "mingw-python3_module-socket.patch"
+      "mingw-python3_modules.patch"
+      "mingw-python3_platform-mingw.patch"
+      "mingw-python3_posix-layout.patch"
+      "mingw-python3_pthread_threadid.patch"
+      "mingw-python3_pythonw.patch"
+      "mingw-python3_setenv.patch"
+      "mingw-python3_win-modules.patch"
+    ])
+  );
 
   postPatch =
     optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -437,7 +435,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
     LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin) "-lcrypt"}";
+    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin && libxcrypt != null) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
       {
         "glibc" = "-lgcc_s";
@@ -450,134 +448,140 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # https://docs.python.org/3/using/configure.html
-  configureFlags =
-    [
-      "--without-ensurepip"
-      "--with-system-expat"
-      "--with-system-libmpdec"
-    ]
-    ++ optionals (openssl != null) [
-      "--with-openssl=${openssl.dev}"
-    ]
-    ++ optionals tzdataSupport [
-      "--with-tzpath=${tzdata}/share/zoneinfo"
-    ]
-    ++ optionals (execSuffix != "") [
-      "--with-suffix=${execSuffix}"
-    ]
-    ++ optionals enableLTO [
-      "--with-lto"
-    ]
-    ++ optionals (!static && !enableFramework) [
-      "--enable-shared"
-    ]
-    ++ optionals enableFramework [
-      "--enable-framework=${placeholder "out"}/Library/Frameworks"
-    ]
-    ++ optionals (pythonAtLeast "3.13") [
-      (enableFeature enableGIL "gil")
-    ]
-    ++ optionals enableOptimizations [
-      "--enable-optimizations"
-    ]
-    ++ optionals (sqlite != null) [
-      "--enable-loadable-sqlite-extensions"
-    ]
-    ++ optionals (libxcrypt != null) [
-      "CFLAGS=-I${libxcrypt}/include"
-      "LIBS=-L${libxcrypt}/lib"
-    ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "ac_cv_buggy_getaddrinfo=no"
-      # Assume little-endian IEEE 754 floating point when cross compiling
-      "ac_cv_little_endian_double=yes"
-      "ac_cv_big_endian_double=no"
-      "ac_cv_mixed_endian_double=no"
-      "ac_cv_x87_double_rounding=yes"
-      "ac_cv_tanh_preserves_zero_sign=yes"
-      # Generally assume that things are present and work
-      "ac_cv_posix_semaphores_enabled=yes"
-      "ac_cv_broken_sem_getvalue=no"
-      "ac_cv_wchar_t_signed=yes"
-      "ac_cv_rshift_extends_sign=yes"
-      "ac_cv_broken_nice=no"
-      "ac_cv_broken_poll=no"
-      "ac_cv_working_tzset=yes"
-      "ac_cv_have_long_long_format=yes"
-      "ac_cv_have_size_t_format=yes"
-      "ac_cv_computed_gotos=yes"
-      # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
-      "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-      "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-    ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
-      "--with-build-python=${pythonOnBuildForHostInterpreter}"
-    ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      # Never even try to use lchmod on linux,
-      # don't rely on detecting glibc-isms.
-      "ac_cv_func_lchmod=no"
-    ]
-    ++ optionals static [
-      "LDFLAGS=-static"
-      "MODULE_BUILDTYPE=static"
-    ]
-    ++ optionals (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl) [
-      # dlopen is a no-op in static musl builds, and since we build everything without -fPIC it's better not to pretend.
-      "ac_cv_func_dlopen=no"
-    ];
+  configureFlags = [
+    "--without-ensurepip"
+  ]
+  ++ optionals withExpat [
+    "--with-system-expat"
+  ]
+  ++ optionals withMpdecimal [
+    "--with-system-libmpdec"
+  ]
+  ++ optionals (openssl != null) [
+    "--with-openssl=${openssl.dev}"
+  ]
+  ++ optionals tzdataSupport [
+    "--with-tzpath=${tzdata}/share/zoneinfo"
+  ]
+  ++ optionals (execSuffix != "") [
+    "--with-suffix=${execSuffix}"
+  ]
+  ++ optionals enableLTO [
+    "--with-lto"
+  ]
+  ++ optionals (!static && !enableFramework) [
+    "--enable-shared"
+  ]
+  ++ optionals enableFramework [
+    "--enable-framework=${placeholder "out"}/Library/Frameworks"
+  ]
+  ++ optionals (pythonAtLeast "3.13") [
+    (enableFeature enableGIL "gil")
+  ]
+  ++ optionals enableOptimizations [
+    "--enable-optimizations"
+  ]
+  ++ optionals enableDebug [
+    "--with-pydebug"
+  ]
+  ++ optionals (sqlite != null) [
+    "--enable-loadable-sqlite-extensions"
+  ]
+  ++ optionals (libxcrypt != null) [
+    "CFLAGS=-I${libxcrypt}/include"
+    "LIBS=-L${libxcrypt}/lib"
+  ]
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
+    "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+    "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+  ]
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
+    "--with-build-python=${pythonOnBuildForHostInterpreter}"
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+    "ac_cv_func_lchmod=no"
+  ]
+  ++ optionals static [
+    "--disable-test-modules"
+    "LDFLAGS=-static"
+    "MODULE_BUILDTYPE=static"
+  ]
+  ++ optionals (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl) [
+    # dlopen is a no-op in static musl builds, and since we build everything without -fPIC it's better not to pretend.
+    "ac_cv_func_dlopen=no"
+  ];
 
-  preConfigure =
-    ''
-      # Attempt to purify some of the host info collection
-      sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
-      sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
-    ''
-    + optionalString (pythonOlder "3.12") ''
-      # Improve purity
-      for path in /usr /sw /opt /pkg; do
-        substituteInPlace ./setup.py --replace-warn $path /no-such-path
-      done
-    ''
-    + optionalString (stdenv.hostPlatform.isDarwin && pythonOlder "3.12") ''
-      # Fix _ctypes module compilation
-      export NIX_CFLAGS_COMPILE+=" -DUSING_APPLE_OS_LIBFFI=1"
-    ''
-    + optionalString stdenv.hostPlatform.isDarwin ''
-      # Override the auto-detection in setup.py, which assumes a universal build
-      export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}
-      # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
-      sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
-    ''
-    + optionalString (pythonAtLeast "3.11") ''
-      # Also override the auto-detection in `configure`.
-      substituteInPlace configure \
-        --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${
-          if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"
-        }'
-    ''
-    + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
-      export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
-      export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
-    ''
-    + optionalString stdenv.hostPlatform.isWindows ''
-      export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
-    ''
-    + optionalString stdenv.hostPlatform.isMusl ''
-      export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
-    ''
-    +
+  preConfigure = ''
+    # Attempt to purify some of the host info collection
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
+  ''
+  + optionalString (pythonOlder "3.12") ''
+    # Improve purity
+    for path in /usr /sw /opt /pkg; do
+      substituteInPlace ./setup.py --replace-warn $path /no-such-path
+    done
+  ''
+  + optionalString (stdenv.hostPlatform.isDarwin && pythonOlder "3.12") ''
+    # Fix _ctypes module compilation
+    export NIX_CFLAGS_COMPILE+=" -DUSING_APPLE_OS_LIBFFI=1"
+  ''
+  + optionalString stdenv.hostPlatform.isDarwin ''
+    # Override the auto-detection in setup.py, which assumes a universal build
+    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}
+    # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
+    sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
+  ''
+  + optionalString (pythonAtLeast "3.11") ''
+    # Also override the auto-detection in `configure`.
+    substituteInPlace configure \
+      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${
+        if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"
+      }'
+  ''
+  + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
+    export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
+    export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+  ''
+  + optionalString stdenv.hostPlatform.isWindows ''
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
+  ''
+  + optionalString stdenv.hostPlatform.isMusl ''
+    export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
+  ''
+  +
 
-      # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
-      # which changes how symbols are looked up. This essentially means we can't override
-      # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
-      # that uses --enable-optimizations has the same "issue".
-      #
-      # The Fedora wiki has a good article about their journey towards enabling this flag:
-      # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
-      optionalString enableNoSemanticInterposition ''
-        export CFLAGS_NODIST="-fno-semantic-interposition"
-      '';
+    # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
+    # which changes how symbols are looked up. This essentially means we can't override
+    # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
+    # that uses --enable-optimizations has the same "issue".
+    #
+    # The Fedora wiki has a good article about their journey towards enabling this flag:
+    # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+    optionalString enableNoSemanticInterposition ''
+      export CFLAGS_NODIST="-fno-semantic-interposition"
+    '';
 
   setupHook = python-setup-hook sitePackages;
 
@@ -610,7 +614,11 @@ stdenv.mkDerivation (finalAttrs: {
           echo $item
         fi
       done
+    ''
+    + lib.optionalString (!static) ''
       touch $out/lib/${libPrefix}/test/__init__.py
+    ''
+    + ''
 
       # Determinism: Windows installers were not deterministic.
       # We're also not interested in building Windows installers.
@@ -760,7 +768,21 @@ stdenv.mkDerivation (finalAttrs: {
       buildPackages.bashNonInteractive
     ];
 
+  # Optionally set allowedReferences to guarantee minimal dependencies
+  # Allows python3Minimal to stay minimal and not have deps added by accident
+  # Doesn't do anything if allowedReferenceNames is empty (was not set)
+  ${if allowedReferenceNames != [ ] then "allowedReferences" else null} =
+    # map allowed names to their derivations
+    (map (name: inputs.${name}) allowedReferenceNames) ++ [
+      # any version of python depends on libc and libgcc
+      stdenv.cc.cc.lib
+      stdenv.cc.libc
+      # allows python referring to its own store path
+      "out"
+    ];
+
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   passthru = passthru // {
     doc = stdenv.mkDerivation {
@@ -820,7 +842,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
-    maintainers = lib.teams.python.members;
+    teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:
     # configure: error: C compiler cannot create executables
 

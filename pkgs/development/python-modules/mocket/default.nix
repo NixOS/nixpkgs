@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  stdenv,
   fetchPypi,
 
   # build-system
@@ -71,12 +72,13 @@ buildPythonPackage rec {
     redisTestHook
     requests
     sure
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
 
-  _darwinAllowLocalNetworking = true;
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # tests that require network access (like DNS lookups)
@@ -86,6 +88,10 @@ buildPythonPackage rec {
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
+    "test_httprettish_httpx_session"
   ];
 
   pythonImportsCheck = [ "mocket" ];

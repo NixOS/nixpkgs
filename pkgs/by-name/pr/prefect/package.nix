@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.3.4";
+  version = "3.4.5";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ii5AqUeo2asSY3oA2PYqGhRev42KInSrn/plDp4Q90Q=";
+    hash = "sha256-jS/r5LskvgWLIiMSVMM6jgxVbuolI+w+g5Xq/xPYXOU=";
   };
 
   pythonRelaxDeps = [
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
       ujson
       uvicorn
       websockets
+      whenever
       uv
     ]
     ++ sqlalchemy.optional-dependencies.asyncio

@@ -268,7 +268,7 @@ let
       };
 
       meta = with lib; {
-        description = " Fancy indexes module";
+        description = "Fancy indexes module";
         homepage = "https://github.com/aperezdc/ngx-fancyindex";
         license = with licenses; [ bsd2 ];
         maintainers = with maintainers; [ aneeshusa ];
@@ -340,7 +340,7 @@ let
       inputs = [ libbsd ];
 
       meta = with lib; {
-        description = " IP address anonymizer";
+        description = "IP address anonymizer";
         homepage = "https://github.com/masonicboom/ipscrub";
         license = with licenses; [ bsd3 ];
         maintainers = [ ];
@@ -824,7 +824,7 @@ let
         description = "SPNEGO HTTP Authentication Module";
         homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
         license = with licenses; [ bsd2 ];
-        maintainers = teams.deshaw.members;
+        teams = [ teams.deshaw ];
       };
     };
 
@@ -1026,10 +1026,12 @@ let
         owner = "kaltura";
         repo = "nginx-vod-module";
         rev = "1.33";
-        hash = "sha256-xcdbaogJV/vSzFfP55uK2+zw3zF5j9AHaJI0QItTSss=";
+        hash = "sha256-pForXU1VBxa4F3F7xK+DJtMKC4wgcykJImlQjxz5GnE=";
         postFetch = ''
           substituteInPlace $out/vod/media_set.h \
             --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+          substituteInPlace $out/vod/subtitle/dfxp_format.c \
+            --replace-fail '(!ctxt->wellFormed && !ctxt->recovery))' '!ctxt->wellFormed)'
         '';
       };
 
@@ -1082,7 +1084,7 @@ let
         homepage = "https://github.com/evanmiller/mod_zip";
         license = with licenses; [ bsd3 ];
         broken = stdenv.hostPlatform.isDarwin;
-        maintainers = teams.apm.members;
+        teams = [ teams.apm ];
       };
     };
 

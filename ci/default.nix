@@ -1,5 +1,5 @@
 let
-  pinnedNixpkgs = builtins.fromJSON (builtins.readFile ./pinned-nixpkgs.json);
+  pinned = (builtins.fromJSON (builtins.readFile ./pinned.json)).pins;
 in
 {
   system ? builtins.currentSystem,
@@ -10,24 +10,25 @@ let
   nixpkgs' =
     if nixpkgs == null then
       fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/${pinnedNixpkgs.rev}.tar.gz";
-        sha256 = pinnedNixpkgs.sha256;
+        inherit (pinned.nixpkgs) url;
+        sha256 = pinned.nixpkgs.hash;
       }
     else
       nixpkgs;
 
   pkgs = import nixpkgs' {
     inherit system;
-    config = { };
+    config = {
+      permittedInsecurePackages = [ "nix-2.3.18" ];
+    };
     overlays = [ ];
   };
 
   fmt =
     let
       treefmtNixSrc = fetchTarball {
-        # Master at 2025-02-12
-        url = "https://github.com/numtide/treefmt-nix/archive/4f09b473c936d41582dd744e19f34ec27592c5fd.tar.gz";
-        sha256 = "051vh6raskrxw5k6jncm8zbk9fhbzgm1gxpq9gm5xw1b6wgbgcna";
+        inherit (pinned.treefmt-nix) url;
+        sha256 = pinned.treefmt-nix.hash;
       };
       treefmtEval = (import treefmtNixSrc).evalModule pkgs {
         # Important: The auto-rebase script uses `git filter-branch --tree-filter`,
@@ -44,18 +45,58 @@ let
         # By default it's info, which is too noisy since we have many unmatched files
         settings.on-unmatched = "debug";
 
-        # This uses nixfmt-rfc-style underneath,
+        programs.actionlint.enable = true;
+
+        programs.keep-sorted.enable = true;
+
+        # This uses nixfmt underneath,
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
+
+        programs.yamlfmt = {
+          enable = true;
+          settings.formatter = {
+            retain_line_breaks = true;
+          };
+        };
+        settings.formatter.yamlfmt.excludes = [
+          # Breaks helm templating
+          "nixos/tests/k3s/k3s-test-chart/templates/*"
+          # Aligns comments with whitespace
+          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
+          # TODO: Fix formatting for auto-generated file
+          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
+        ];
+
+        settings.formatter.editorconfig-checker = {
+          command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
+          options = [ "-disable-indent-size" ];
+          includes = [ "*" ];
+          priority = 1;
+        };
+
+        # TODO: Upstream this into treefmt-nix eventually:
+        #   https://github.com/numtide/treefmt-nix/issues/387
+        settings.formatter.markdown-code-runner = {
+          command = pkgs.lib.getExe pkgs.markdown-code-runner;
+          options =
+            let
+              config = pkgs.writers.writeTOML "markdown-code-runner-config" {
+                presets.nixfmt = {
+                  language = "nix";
+                  command = [ (pkgs.lib.getExe pkgs.nixfmt) ];
+                };
+              };
+            in
+            [ "--config=${config}" ];
+          includes = [ "*.md" ];
+        };
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
         root = ../.;
-        fileset = fs.difference (fs.unions [
-          (fs.fileFilter (file: file.hasExt "nix") ../.)
-          ../.git-blame-ignore-revs
-        ]) (fs.maybeMissing ../.git);
+        fileset = fs.difference ../. (fs.maybeMissing ../.git);
       };
     in
     {
@@ -65,9 +106,41 @@ let
     };
 
 in
-{
+rec {
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
-  eval = pkgs.callPackage ./eval { };
+
+  # FIXME(lf-): it might be useful to test other Nix implementations
+  # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
+  # have eval divergence.
+  eval = pkgs.callPackage ./eval {
+    nix = pkgs.nixVersions.latest;
+  };
+
+  # CI jobs
+  lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
+  manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
+  manual-nixpkgs = (import ../doc { });
+  manual-nixpkgs-tests = (import ../doc { }).tests;
+  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix { };
+  parse = pkgs.lib.recurseIntoAttrs {
+    latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
+    lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
+    # TODO: Raise nixVersions.minimum to 2.24 and flip back to it.
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
+  };
+  shell = import ../shell.nix { inherit nixpkgs system; };
+  tarball = import ../pkgs/top-level/make-tarball.nix {
+    # Mirrored from top-level release.nix:
+    nixpkgs = {
+      outPath = pkgs.lib.cleanSource ../.;
+      revCount = 1234;
+      shortRev = "abcdef";
+      revision = "0000000000000000000000000000000000000000";
+    };
+    officialRelease = false;
+    inherit pkgs lib-tests;
+    nix = pkgs.nixVersions.latest;
+  };
 }

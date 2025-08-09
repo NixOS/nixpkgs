@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/AbstractUmbra/audioop/releases/tag/${version}";
-    description = "An LTS port of Python's `audioop` module";
+    description = "LTS port of Python's `audioop` module";
     homepage = "https://github.com/AbstractUmbra/audioop";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ hexa ];

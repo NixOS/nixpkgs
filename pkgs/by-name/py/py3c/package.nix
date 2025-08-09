@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python311,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    python311
+    python3
+    python3.pkgs.distutils
   ];
 
   checkTarget = "test-python";

@@ -47,25 +47,24 @@ let
 
   downloadsUrl = "https://downloads.haskell.org/ghc";
 
-  runtimeDeps =
-    [
-      targetPackages.stdenv.cc
-      targetPackages.stdenv.cc.bintools
-      coreutils # for cat
-    ]
-    ++
-      lib.optionals
-        (
-          assert useLLVM -> !(llvmPackages == null);
-          useLLVM
-        )
-        [
-          (lib.getBin llvmPackages.llvm)
-        ]
-    # On darwin, we need unwrapped bintools as well (for otool)
-    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-      targetPackages.stdenv.cc.bintools.bintools
-    ];
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++
+    lib.optionals
+      (
+        assert useLLVM -> !(llvmPackages == null);
+        useLLVM
+      )
+      [
+        (lib.getBin llvmPackages.llvm)
+      ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
@@ -165,18 +164,26 @@ stdenv.mkDerivation rec {
       '';
 
   configurePlatforms = [ ];
-  configureFlags =
-    [
-      "--with-gmp-includes=${lib.getDev gmp}/include"
-      # Note `--with-gmp-libraries` does nothing for GHC bindists:
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  configureFlags = [
+    "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''
@@ -253,11 +260,9 @@ stdenv.mkDerivation rec {
     ];
     # build segfaults, use ghc8107Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
-    maintainers =
-      with lib.maintainers;
-      [
-        guibou
-      ]
-      ++ lib.teams.haskell.members;
+    maintainers = with lib.maintainers; [
+      guibou
+    ];
+    teams = [ lib.teams.haskell ];
   };
 }

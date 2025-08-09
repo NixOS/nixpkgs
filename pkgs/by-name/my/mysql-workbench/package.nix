@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
 
   cmake,
@@ -50,11 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.41";
+  version = "8.0.43";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-H/u1nwizZ9pCEu9JPXRcKshxjvc/efcZ//6ankHcGGk=";
+    hash = "sha256-E9fn72r35WrGzIOoDouIvJFZdpfw9sgDNHwEe/0DdUI=";
   };
 
   patches = [
@@ -73,6 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
     ./dont-search-for-antlr-jar.patch
+
+    # fixes the build with python 3.13
+    (fetchpatch {
+      name = "python3.13.patch";
+      url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
+      hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
+    })
   ];
 
   postPatch = ''
@@ -81,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs tools/get_wb_version.sh
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -106,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     libsecret
     libiodbc
+
+    bash # for shebangs
 
     # python dependencies:
     paramiko

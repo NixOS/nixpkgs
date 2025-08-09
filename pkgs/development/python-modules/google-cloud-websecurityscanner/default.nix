@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.17.1";
+  version = "1.17.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_websecurityscanner";
     inherit version;
-    hash = "sha256-nDjk29d1V19fUNei6lJLtmJDwfLcBSnXm4jZQV2s+vI=";
+    hash = "sha256-Bmi8LH4HtxlnLsDtpSG1BQYp5yg4gEaKzLxPIUwPemM=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +31,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

@@ -264,8 +264,8 @@ with self;
 
   base = janePackage {
     pname = "base";
-    version = "0.17.1";
-    hash = "sha256-5wqBpOHhiIy9JUuxb3OnpZHrHSM7VODuLSihaIyeFn0=";
+    version = "0.17.2";
+    hash = "sha256-GMUlo77IKXwsldZYK5uRcmjj2RyaDhdfFo1KRCJl9Dc=";
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [
@@ -498,7 +498,8 @@ with self;
 
   core_unix = janePackage {
     pname = "core_unix";
-    hash = "sha256-eqBMiEJ5xUrgFJTMZoEDxqkhedQxxbbf0DedZKHprww=";
+    version = "0.17.1";
+    hash = "sha256-xJoBW6TBBnzR5n38E5LHBFYO2CRIsME7OTdEZKn8EqU=";
     meta.description = "Unix-specific portions of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [
@@ -514,12 +515,6 @@ with self;
     '';
     doCheck = false; # command_validate_parsing.exe is not specified in test build deps
 
-    # Compatibility with OCaml 5.3
-    patches = lib.optional (lib.versionAtLeast ocaml.version "5.3") (fetchpatch {
-      url = "https://github.com/janestreet/core_unix/commit/ebce389ac68e098f542e34400e114ac992f415af.patch";
-      includes = [ "bigstring_unix/src/bigstring_unix_stubs.c" ];
-      hash = "sha256-FGg2zlyp3aZFu1VeFdm7pgSPiW0HAkLYgMGTj+tqju8=";
-    });
   };
 
   csvfields = janePackage {
@@ -940,14 +935,23 @@ with self;
     meta.description = "A library of intrinsics for OCaml";
     buildInputs = [
       dune-configurator
+    ];
+    propagatedBuildInputs = [
       ocaml_intrinsics_kernel
+    ];
+    patches = [
+      # This patch is needed because of an issue with the aarch64 CRC32
+      # intrinsics that was introduced with ocaml_intrinsics v0.17. It should
+      # be removed as soon as
+      # https://github.com/janestreet/ocaml_intrinsics/pull/11 is merged.
+      ./ocaml_intrinsics-fix-aarch64-crc32-intrinsics.patch
     ];
   };
 
   ocaml_openapi_generator = janePackage {
     pname = "ocaml_openapi_generator";
     hash = "sha256-HCq9fylcVjBMs8L6E860nw+EonWEQadlyEKpQI6mynU=";
-    meta.description = " An OpenAPI 3 to OCaml client generator";
+    meta.description = "OpenAPI 3 to OCaml client generator";
     buildInputs = [
       async
       core
@@ -1147,6 +1151,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {
@@ -1227,7 +1232,8 @@ with self;
 
   ppx_expect = janePackage {
     pname = "ppx_expect";
-    hash = "sha256-m4Nr48ZET632I6vw5RjpNA0elW3lpN3aPmfA3RzsEn8=";
+    version = "0.17.2";
+    hash = "sha256-na9n/+shkiHIIUQ2ZitybQ6NNsSS9gWFNAFxij+JNVo=";
     meta.description = "Cram like framework for OCaml";
     propagatedBuildInputs = [
       ppx_here
@@ -1975,6 +1981,7 @@ with self;
     pname = "virtual_dom";
     hash = "sha256-5T+/N1fELa1cR9mhWLUgS3Fwr1OQXJ3J6T3YaHT9q7U=";
     meta.description = "OCaml bindings for the virtual-dom library";
+    meta.broken = lib.versionAtLeast ocaml.version "5.3";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [
       base64

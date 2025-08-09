@@ -6,13 +6,11 @@ For local development, it's recommended to use nix-shell to create a dotnet envi
 
 ```nix
 # shell.nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 mkShell {
   name = "dotnet-env";
-  packages = [
-    dotnet-sdk
-  ];
+  packages = [ dotnet-sdk ];
 }
 ```
 
@@ -21,15 +19,18 @@ mkShell {
 It's very likely that more than one sdk will be needed on a given project. Dotnet provides several different frameworks (E.g dotnetcore, aspnetcore, etc.) as well as many versions for a given framework. Normally, dotnet is able to fetch a framework and install it relative to the executable. However, this would mean writing to the nix store in nixpkgs, which is read-only. To support the many-sdk use case, one can compose an environment using `dotnetCorePackages.combinePackages`:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 mkShell {
   name = "dotnet-env";
   packages = [
-    (with dotnetCorePackages; combinePackages [
-      sdk_8_0
-      sdk_9_0
-    ])
+    (
+      with dotnetCorePackages;
+      combinePackages [
+        sdk_8_0
+        sdk_9_0
+      ]
+    )
   ];
 }
 ```
@@ -137,11 +138,19 @@ When packaging a new application, you need to fetch its dependencies. Create an 
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
-{ lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  ffmpeg,
+}:
 
 let
-  referencedProject = import ../../bar { /* ... */ };
-in buildDotnetModule rec {
+  referencedProject = import ../../bar {
+    # ...
+  };
+in
+buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";
 
@@ -150,13 +159,15 @@ in buildDotnetModule rec {
   projectFile = "src/project.sln";
   nugetDeps = ./deps.json; # see "Generating and updating NuGet dependencies" section for details
 
-  buildInputs = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
+  buildInputs = [
+    referencedProject
+  ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
-  executables = []; # Don't install any executables.
+  executables = [ ]; # Don't install any executables.
 
   packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
 

@@ -2,37 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "httptap";
-  version = "0.0.8";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "monasticacademy";
     repo = "httptap";
-    tag = "v${version}";
-    hash = "sha256-1BtV5ao5dAKSINdUdJD/wxTMFXXiP8Vy1A7gQfVIsUQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cn5u6q0r06SJp4uhF7j5K6yNZv8Q3WNxlDd5Vxmshhw=";
   };
 
-  patches = [
-    # this patch updates go.mod to include missing dependencies
-    # https://github.com/monasticacademy/httptap/pull/13
-    (fetchpatch {
-      name = "update-go-mod";
-      url = "https://github.com/monasticacademy/httptap/commit/3b520725c784d6435be6a51c58ae847bae729962.patch";
-      hash = "sha256-0dPq0Ldu1m8YZKctFtoUcbQdmx6sqjA8EVhTeMwNWx8=";
-    })
-  ];
-
-  vendorHash = "sha256-+TtHw2KdeNHCgnMnkxJJ9shqsrlbeTzYwbPH0dJmCjM=";
+  vendorHash = "sha256-yTtUt+kfDwN6W4caHCAYFjpYzhaqZUbLe+Nz7JKAXu8=";
 
   env.CGO_ENABLED = 0;
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -46,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jpetrucciani ];
     mainProgram = "httptap";
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   docling-core,
   huggingface-hub,
   jsonlines,
@@ -15,6 +15,7 @@
   opencv-python-headless,
   pillow,
   pydantic,
+  rtree,
   safetensors,
   torch,
   torchvision,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.4.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-IgKP+4en0N6xLBjzwmddDk8z5P3J1vo+UMW+65a01Ww=";
+    hash = "sha256-UmgxEPEm6fNf4FbZ7CIcSEIaJg4sReI0pnkWwPdrJvQ=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     docling-core
     huggingface-hub
     jsonlines
@@ -51,6 +53,7 @@ buildPythonPackage rec {
     opencv-python-headless
     pillow
     pydantic
+    rtree
     safetensors
     torch
     torchvision

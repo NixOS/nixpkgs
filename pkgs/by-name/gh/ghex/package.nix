@@ -8,7 +8,6 @@
   ninja,
   gnome,
   desktop-file-utils,
-  appstream-glib,
   gettext,
   itstool,
   gtk4,
@@ -22,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "46.2";
+  version = "48.beta2";
 
   outputs = [
     "out"
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qPJ2o2OXpw0guGL/fGZCQ9nPKJHeub4G10Wk8axmHzE=";
+    hash = "sha256-4vIgRVGNgWtG0wluCp075lTdggMBVGX8ck/okWrY70E=";
   };
 
   nativeBuildInputs = [
@@ -55,20 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  nativeCheckInputs = [
-    appstream-glib
-    desktop-file-utils
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
   ];
-
-  mesonFlags =
-    [
-      "-Dgtk_doc=true"
-      "-Dvapi=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # mremap does not exist on darwin
-      "-Dmmap-buffer-backend=false"
-    ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -88,6 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ghex";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

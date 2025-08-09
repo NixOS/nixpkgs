@@ -3,19 +3,19 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  gitUpdater,
   llvmPackages,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luau";
-  version = "0.667";
+  version = "0.685";
 
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
-    rev = version;
-    hash = "sha256-AEPUdqQ+uIWxSTOwwbZ8tWSz3VKKHa1D08o6oeEREkg=";
+    tag = finalAttrs.version;
+    hash = "sha256-7yyWJLTVp4Ni5H+jJwaPNDgq9DrRgGG8hNVkEAV4c5A=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -43,15 +43,18 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, small, safe, gradually typed embeddable scripting language derived from Lua";
     homepage = "https://luau-lang.org/";
-    changelog = "https://github.com/luau-lang/luau/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ ];
+    changelog = "https://github.com/luau-lang/luau/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      prince213
+      HeitorAugustoLN
+    ];
     mainProgram = "luau";
   };
-}
+})

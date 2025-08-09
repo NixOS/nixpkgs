@@ -4,6 +4,7 @@
   nixDependencies,
   pkgs,
   maintainers,
+  teams,
   otherSplices,
   version,
   src,
@@ -27,6 +28,7 @@ let
           inherit
             lib
             maintainers
+            teams
             officialRelease
             pkgs
             src

@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
     opencc
     qtwebengine
     fmt
-  ] ++ lib.optional luaSupport fcitx5-lua;
+  ]
+  ++ lib.optional luaSupport fcitx5-lua;
 
   cmakeFlags = [
     (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))

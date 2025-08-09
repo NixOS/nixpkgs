@@ -131,9 +131,9 @@ in
       description = "evremap - keyboard input remapper";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${lib.getExe pkgs.evremap} remap ${configFile}";
-
       serviceConfig = {
+        ExecStart = "${lib.getExe pkgs.evremap} remap ${configFile}";
+
         DynamicUser = true;
         User = "evremap";
         SupplementaryGroups = [

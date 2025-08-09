@@ -80,15 +80,14 @@ let
 
   # Those settings are automatically set based on other parts
   # of this module.
-  automaticallySetPluginSettings =
-    [
-      "sieve_plugins"
-      "sieve_extensions"
-      "sieve_global_extensions"
-      "sieve_pipe_bin_dir"
-    ]
-    ++ (builtins.attrNames sieveScriptSettings)
-    ++ (builtins.attrNames imapSieveMailboxSettings);
+  automaticallySetPluginSettings = [
+    "sieve_plugins"
+    "sieve_extensions"
+    "sieve_global_extensions"
+    "sieve_pipe_bin_dir"
+  ]
+  ++ (builtins.attrNames sieveScriptSettings)
+  ++ (builtins.attrNames imapSieveMailboxSettings);
 
   # The idea is to match everything that looks like `$term =`
   # but not `# $term something something`
@@ -295,6 +294,20 @@ in
     };
 
     enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
+
+    hasNewUnitName = mkOption {
+      type = types.bool;
+      default = true;
+      readOnly = true;
+      internal = true;
+      description = ''
+        Inspectable option to confirm that the dovecot module uses the new
+        `dovecot.service` name, instead of `dovecot2.service`.
+
+        This is a helper added for the nixos-mailserver project and can be
+        removed after branching off nixos-25.11.
+      '';
+    };
 
     protocols = mkOption {
       type = types.listOf types.str;
@@ -657,101 +670,145 @@ in
       );
     };
 
-    users.users =
-      {
-        dovenull = {
-          uid = config.ids.uids.dovenull2;
-          description = "Dovecot user for untrusted logins";
-          group = "dovenull";
-        };
-      }
-      // optionalAttrs (cfg.user == "dovecot2") {
-        dovecot2 = {
-          uid = config.ids.uids.dovecot2;
-          description = "Dovecot user";
-          group = cfg.group;
-        };
-      }
-      // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
-        ${cfg.mailUser} = {
-          description = "Virtual Mail User";
-          isSystemUser = true;
-        } // optionalAttrs (cfg.mailGroup != null) { group = cfg.mailGroup; };
+    users.users = {
+      dovenull = {
+        uid = config.ids.uids.dovenull2;
+        description = "Dovecot user for untrusted logins";
+        group = "dovenull";
       };
+    }
+    // optionalAttrs (cfg.user == "dovecot2") {
+      dovecot2 = {
+        uid = config.ids.uids.dovecot2;
+        description = "Dovecot user";
+        group = cfg.group;
+      };
+    }
+    // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
+      ${cfg.mailUser} = {
+        description = "Virtual Mail User";
+        isSystemUser = true;
+      }
+      // optionalAttrs (cfg.mailGroup != null) { group = cfg.mailGroup; };
+    };
 
-    users.groups =
-      {
-        dovenull.gid = config.ids.gids.dovenull2;
-      }
-      // optionalAttrs (cfg.group == "dovecot2") {
-        dovecot2.gid = config.ids.gids.dovecot2;
-      }
-      // optionalAttrs (cfg.createMailUser && cfg.mailGroup != null) {
-        ${cfg.mailGroup} = { };
-      };
+    users.groups = {
+      dovenull.gid = config.ids.gids.dovenull2;
+    }
+    // optionalAttrs (cfg.group == "dovecot2") {
+      dovecot2.gid = config.ids.gids.dovecot2;
+    }
+    // optionalAttrs (cfg.createMailUser && cfg.mailGroup != null) {
+      ${cfg.mailGroup} = { };
+    };
 
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
-    systemd.services.dovecot2 = {
+    systemd.services.dovecot = {
+      aliases = [ "dovecot2.service" ];
       description = "Dovecot IMAP/POP3 server";
+      documentation = [
+        "man:dovecot(1)"
+        "https://doc.dovecot.org"
+      ];
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [
-        cfg.configFile
-      ];
+      restartTriggers = [ cfg.configFile ];
 
       startLimitIntervalSec = 60; # 1 min
       serviceConfig = {
         Type = "notify";
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
+
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
+          "CAP_KILL" # Required for child process management
+          "CAP_NET_BIND_SERVICE"
+          "CAP_SETGID"
+          "CAP_SETUID"
+          "CAP_SYS_CHROOT"
+          "CAP_SYS_RESOURCE"
+        ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = false; # e.g for sendmail
+        OOMPolicy = "continue";
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = lib.mkDefault false;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        PrivateDevices = true;
         Restart = "on-failure";
         RestartSec = "1s";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK" # e.g. getifaddrs in sieve handling
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = false; # sets sgid on maildirs
         RuntimeDirectory = [ "dovecot2" ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service @resources"
+          "~@privileged"
+          "@chown @setuid capset chroot"
+        ];
       };
 
       # When copying sieve scripts preserve the original time stamp
       # (should be 0) so that the compiled sieve script is newer than
       # the source file and Dovecot won't try to compile it.
-      preStart =
-        ''
-          rm -rf ${stateDir}/sieve ${stateDir}/imapsieve
-        ''
-        + optionalString (cfg.sieve.scripts != { }) ''
-          mkdir -p ${stateDir}/sieve
-          ${concatStringsSep "\n" (
-            mapAttrsToList (to: from: ''
-              if [ -d '${from}' ]; then
-                mkdir '${stateDir}/sieve/${to}'
-                cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
-              else
-                cp -p '${from}' '${stateDir}/sieve/${to}'
-              fi
-              ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
-            '') cfg.sieve.scripts
-          )}
-          chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
-        ''
-        + optionalString (cfg.imapsieve.mailbox != [ ]) ''
-          mkdir -p ${stateDir}/imapsieve/{before,after}
+      preStart = ''
+        rm -rf ${stateDir}/sieve ${stateDir}/imapsieve
+      ''
+      + optionalString (cfg.sieve.scripts != { }) ''
+        mkdir -p ${stateDir}/sieve
+        ${concatStringsSep "\n" (
+          mapAttrsToList (to: from: ''
+            if [ -d '${from}' ]; then
+              mkdir '${stateDir}/sieve/${to}'
+              cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
+            else
+              cp -p '${from}' '${stateDir}/sieve/${to}'
+            fi
+            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
+          '') cfg.sieve.scripts
+        )}
+        chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
+      ''
+      + optionalString (cfg.imapsieve.mailbox != [ ]) ''
+        mkdir -p ${stateDir}/imapsieve/{before,after}
 
-          ${concatMapStringsSep "\n" (
-            el:
-            optionalString (el.before != null) ''
-              cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}
-              ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/before/${baseNameOf el.before}'
-            ''
-            + optionalString (el.after != null) ''
-              cp -p ${el.after} ${stateDir}/imapsieve/after/${baseNameOf el.after}
-              ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/after/${baseNameOf el.after}'
-            ''
-          ) cfg.imapsieve.mailbox}
+        ${concatMapStringsSep "\n" (
+          el:
+          optionalString (el.before != null) ''
+            cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}
+            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/before/${baseNameOf el.before}'
+          ''
+          + optionalString (el.after != null) ''
+            cp -p ${el.after} ${stateDir}/imapsieve/after/${baseNameOf el.after}
+            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/after/${baseNameOf el.after}'
+          ''
+        ) cfg.imapsieve.mailbox}
 
-          ${optionalString (
-            cfg.mailUser != null && cfg.mailGroup != null
-          ) "chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/imapsieve'"}
-        '';
+        ${optionalString (
+          cfg.mailUser != null && cfg.mailGroup != null
+        ) "chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/imapsieve'"}
+      '';
     };
 
     environment.systemPackages = [ dovecotPkg ];
@@ -772,6 +829,12 @@ in
       {
         assertion = cfg.sieve.scripts != { } -> (cfg.mailUser != null && cfg.mailGroup != null);
         message = "dovecot requires mailUser and mailGroup to be set when `sieve.scripts` is set";
+      }
+      {
+        assertion = config.systemd.services ? dovecot2 == false;
+        message = ''
+          Your configuration sets options on the `dovecot2` systemd service. These have no effect until they're migrated to the `dovecot` service.
+        '';
       }
     ];
 

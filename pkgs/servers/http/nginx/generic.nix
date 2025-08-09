@@ -97,84 +97,83 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     installShellFiles
     removeReferencesTo
-  ] ++ nativeBuildInputs;
+  ]
+  ++ nativeBuildInputs;
 
-  buildInputs =
-    [
-      openssl
-      zlib-ng
-      pcre2
-      libxml2
-      libxslt
-      perl
-    ]
-    ++ buildInputs
-    ++ mapModules "inputs"
-    ++ lib.optional withGeoIP geoip
-    ++ lib.optional withImageFilter gd;
+  buildInputs = [
+    openssl
+    zlib-ng
+    pcre2
+    libxml2
+    libxslt
+    perl
+  ]
+  ++ buildInputs
+  ++ mapModules "inputs"
+  ++ lib.optional withGeoIP geoip
+  ++ lib.optional withImageFilter gd;
 
-  configureFlags =
-    [
-      "--sbin-path=bin/nginx"
-      "--with-http_ssl_module"
-      "--with-http_v2_module"
-      "--with-http_realip_module"
-      "--with-http_addition_module"
-      "--with-http_xslt_module"
-      "--with-http_sub_module"
-      "--with-http_dav_module"
-      "--with-http_flv_module"
-      "--with-http_mp4_module"
-      "--with-http_gunzip_module"
-      "--with-http_gzip_static_module"
-      "--with-http_auth_request_module"
-      "--with-http_random_index_module"
-      "--with-http_secure_link_module"
-      "--with-http_degradation_module"
-      "--with-http_stub_status_module"
-      "--with-threads"
-      "--with-pcre-jit"
-      "--http-log-path=/var/log/nginx/access.log"
-      "--error-log-path=/var/log/nginx/error.log"
-      "--pid-path=/var/log/nginx/nginx.pid"
-      "--http-client-body-temp-path=/tmp/nginx_client_body"
-      "--http-proxy-temp-path=/tmp/nginx_proxy"
-      "--http-fastcgi-temp-path=/tmp/nginx_fastcgi"
-      "--http-uwsgi-temp-path=/tmp/nginx_uwsgi"
-      "--http-scgi-temp-path=/tmp/nginx_scgi"
-    ]
-    ++ lib.optionals withDebug [
-      "--with-debug"
-    ]
-    ++ lib.optionals withKTLS [
-      "--with-openssl-opt=enable-ktls"
-    ]
-    ++ lib.optionals withStream [
-      "--with-stream"
-      "--with-stream_realip_module"
-      "--with-stream_ssl_module"
-      "--with-stream_ssl_preread_module"
-    ]
-    ++ lib.optionals withMail [
-      "--with-mail"
-      "--with-mail_ssl_module"
-    ]
-    ++ lib.optionals withPerl [
-      "--with-http_perl_module"
-      "--with-perl=${perl}/bin/perl"
-      "--with-perl_modules_path=lib/perl5"
-    ]
-    ++ lib.optional withImageFilter "--with-http_image_filter_module"
-    ++ lib.optional withSlice "--with-http_slice_module"
-    ++ lib.optionals withGeoIP (
-      [ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module"
-    )
-    ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
-    ++ lib.optional (
-      stdenv.buildPlatform != stdenv.hostPlatform
-    ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
-    ++ configureFlags
-    ++ map (mod: "--add-module=${mod.src}") modules;
+  configureFlags = [
+    "--sbin-path=bin/nginx"
+    "--with-http_ssl_module"
+    "--with-http_v2_module"
+    "--with-http_realip_module"
+    "--with-http_addition_module"
+    "--with-http_xslt_module"
+    "--with-http_sub_module"
+    "--with-http_dav_module"
+    "--with-http_flv_module"
+    "--with-http_mp4_module"
+    "--with-http_gunzip_module"
+    "--with-http_gzip_static_module"
+    "--with-http_auth_request_module"
+    "--with-http_random_index_module"
+    "--with-http_secure_link_module"
+    "--with-http_degradation_module"
+    "--with-http_stub_status_module"
+    "--with-threads"
+    "--with-pcre-jit"
+    "--http-log-path=/var/log/nginx/access.log"
+    "--error-log-path=/var/log/nginx/error.log"
+    "--pid-path=/var/log/nginx/nginx.pid"
+    "--http-client-body-temp-path=/tmp/nginx_client_body"
+    "--http-proxy-temp-path=/tmp/nginx_proxy"
+    "--http-fastcgi-temp-path=/tmp/nginx_fastcgi"
+    "--http-uwsgi-temp-path=/tmp/nginx_uwsgi"
+    "--http-scgi-temp-path=/tmp/nginx_scgi"
+  ]
+  ++ lib.optionals withDebug [
+    "--with-debug"
+  ]
+  ++ lib.optionals withKTLS [
+    "--with-openssl-opt=enable-ktls"
+  ]
+  ++ lib.optionals withStream [
+    "--with-stream"
+    "--with-stream_realip_module"
+    "--with-stream_ssl_module"
+    "--with-stream_ssl_preread_module"
+  ]
+  ++ lib.optionals withMail [
+    "--with-mail"
+    "--with-mail_ssl_module"
+  ]
+  ++ lib.optionals withPerl [
+    "--with-http_perl_module"
+    "--with-perl=${perl}/bin/perl"
+    "--with-perl_modules_path=lib/perl5"
+  ]
+  ++ lib.optional withImageFilter "--with-http_image_filter_module"
+  ++ lib.optional withSlice "--with-http_slice_module"
+  ++ lib.optionals withGeoIP (
+    [ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module"
+  )
+  ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
+  ++ lib.optional (
+    stdenv.buildPlatform != stdenv.hostPlatform
+  ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
+  ++ configureFlags
+  ++ map (mod: "--add-module=${mod.src}") modules;
 
   env.NIX_CFLAGS_COMPILE = toString (
     [
@@ -207,12 +206,11 @@ stdenv.mkDerivation {
 
   # Disable _multioutConfig hook which adds --bindir=$out/bin into configureFlags,
   # which breaks build, since nginx does not actually use autoconf.
-  preConfigure =
-    ''
-      setOutputFlags=
-    ''
-    + preConfigure
-    + lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+  preConfigure = ''
+    setOutputFlags=
+  ''
+  + preConfigure
+  + lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
   patches =
     map fixPatch (
@@ -220,18 +218,6 @@ stdenv.mkDerivation {
         ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
-      ++
-        lib.optionals
-          (lib.elem pname [
-            "nginx"
-            "nginxQuic"
-            "tengine"
-          ])
-          [
-            # https://github.com/NixOS/nixpkgs/issues/357522
-            # https://github.com/zlib-ng/patches/blob/5a036c0a00120c75ee573b27f4f44ade80d82ff2/nginx/README.md
-            ./nginx-zlib-ng.patch
-          ]
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
@@ -260,18 +246,17 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  preInstall =
-    ''
-      mkdir -p $doc
-      cp -r ${nginx-doc}/* $doc
+  preInstall = ''
+    mkdir -p $doc
+    cp -r ${nginx-doc}/* $doc
 
-      # TODO: make it unconditional when `openresty` and `nginx` are not
-      # sharing this code.
-      if [[ -e man/nginx.8 ]]; then
-        installManPage man/nginx.8
-      fi
-    ''
-    + preInstall;
+    # TODO: make it unconditional when `openresty` and `nginx` are not
+    # sharing this code.
+    if [[ -e man/nginx.8 ]]; then
+      installManPage man/nginx.8
+    fi
+  ''
+  + preInstall;
 
   disallowedReferences = map (m: m.src) modules;
 
@@ -301,7 +286,8 @@ stdenv.mkDerivation {
         ;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme.nginx;
-    } // passthru.tests;
+    }
+    // passthru.tests;
   };
 
   meta =
@@ -316,13 +302,13 @@ stdenv.mkDerivation {
         license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = platforms.all;
-        maintainers =
-          with maintainers;
-          [
-            fpletz
-            raitobezarius
-          ]
-          ++ teams.helsinki-systems.members
-          ++ teams.stridtech.members;
+        maintainers = with maintainers; [
+          fpletz
+          raitobezarius
+        ];
+        teams = with teams; [
+          helsinki-systems
+          stridtech
+        ];
       };
 }

@@ -13,6 +13,16 @@
 let
   # Coerces a string to an int.
   coerceInt = val: if lib.isInt val then val else lib.toIntBase10 val;
+
+  # Parses a single version, substituting "latest" with the latest version.
+  parseVersion =
+    repo: key: version:
+    if version == "latest" then repo.latest.${key} else version;
+
+  # Parses a list of versions, substituting "latest" with the latest version.
+  parseVersions =
+    repo: key: versions:
+    lib.unique (map (parseVersion repo key) versions);
 in
 {
   repoJson ? ./repo.json,
@@ -21,7 +31,7 @@ in
     # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
     if repoXmls != null then
       let
-        # Uses mkrepo.rb to create a repo spec.
+        # Uses update.rb to create a repo spec.
         mkRepoJson =
           {
             packages ? [ ],
@@ -33,6 +43,7 @@ in
               ruby.withPackages (
                 pkgs: with pkgs; [
                   slop
+                  curb
                   nokogiri
                 ]
               )
@@ -58,7 +69,7 @@ in
             preferLocalBuild = true;
             unpackPhase = "true";
             buildPhase = ''
-              ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
+              env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json
             '';
             installPhase = ''
               mv repo.json $out
@@ -74,27 +85,31 @@ in
     else
       lib.importJSON repoJson
   ),
-  cmdLineToolsVersion ? repo.latest.cmdline-tools,
-  toolsVersion ? repo.latest.tools,
-  platformToolsVersion ? repo.latest.platform-tools,
-  buildToolsVersions ? [ repo.latest.build-tools ],
+  cmdLineToolsVersion ? "latest",
+  toolsVersion ? "latest",
+  platformToolsVersion ? "latest",
+  buildToolsVersions ? [ "latest" ],
   includeEmulator ? false,
-  emulatorVersion ? repo.latest.emulator,
+  emulatorVersion ? "latest",
   minPlatformVersion ? null,
-  maxPlatformVersion ? coerceInt repo.latest.platforms,
+  maxPlatformVersion ? "latest",
   numLatestPlatformVersions ? 1,
   platformVersions ?
     if minPlatformVersion != null && maxPlatformVersion != null then
       let
-        minPlatformVersionInt = coerceInt minPlatformVersion;
-        maxPlatformVersionInt = coerceInt maxPlatformVersion;
+        minPlatformVersionInt = coerceInt (parseVersion repo "platforms" minPlatformVersion);
+        maxPlatformVersionInt = coerceInt (parseVersion repo "platforms" maxPlatformVersion);
       in
       lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
         lib.max minPlatformVersionInt maxPlatformVersionInt
       )
     else
       let
-        minPlatformVersionInt = if minPlatformVersion == null then 1 else coerceInt minPlatformVersion;
+        minPlatformVersionInt =
+          if minPlatformVersion == null then
+            1
+          else
+            coerceInt (parseVersion repo "platforms" minPlatformVersion);
         latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
@@ -115,9 +130,9 @@ in
   ],
   # cmake has precompiles on x86_64 and Darwin platforms. Default to true there for compatibility.
   includeCmake ? stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin,
-  cmakeVersions ? [ repo.latest.cmake ],
+  cmakeVersions ? [ "latest" ],
   includeNDK ? false,
-  ndkVersion ? repo.latest.ndk,
+  ndkVersion ? "latest",
   ndkVersions ? [ ndkVersion ],
   useGoogleAPIs ? false,
   useGoogleTVAddOns ? false,
@@ -126,6 +141,9 @@ in
 }:
 
 let
+  # Resolve all the platform versions.
+  platformVersions' = map coerceInt (parseVersions repo "platforms" platformVersions);
+
   # Determine the Android os identifier from Nix's system identifier
   os =
     {
@@ -420,7 +438,9 @@ lib.recurseIntoAttrs rec {
       arch
       meta
       ;
-    package = checkVersion allArchives.packages "platform-tools" platformToolsVersion;
+    package = checkVersion allArchives.packages "platform-tools" (
+      parseVersion repo "platform-tools" platformToolsVersion
+    );
   };
 
   tools = callPackage ./tools.nix {
@@ -430,7 +450,7 @@ lib.recurseIntoAttrs rec {
       arch
       meta
       ;
-    package = checkVersion allArchives.packages "tools" toolsVersion;
+    package = checkVersion allArchives.packages "tools" (parseVersion repo "tools" toolsVersion);
 
     postInstall = ''
       ${linkPlugin {
@@ -464,7 +484,7 @@ lib.recurseIntoAttrs rec {
         }}
       '';
     }
-  ) buildToolsVersions;
+  ) (parseVersions repo "build-tools" buildToolsVersions);
 
   emulator = callPackage ./emulator.nix {
     inherit
@@ -473,7 +493,9 @@ lib.recurseIntoAttrs rec {
       arch
       meta
       ;
-    package = checkVersion allArchives.packages "emulator" emulatorVersion;
+    package = checkVersion allArchives.packages "emulator" (
+      parseVersion repo "emulator" emulatorVersion
+    );
 
     postInstall = ''
       ${linkSystemImages {
@@ -483,21 +505,21 @@ lib.recurseIntoAttrs rec {
     '';
   };
 
-  inherit platformVersions;
+  platformVersions = platformVersions';
 
   platforms = map (
     version:
     deployAndroidPackage {
       package = checkVersion allArchives.packages "platforms" version;
     }
-  ) platformVersions;
+  ) platformVersions';
 
   sources = map (
     version:
     deployAndroidPackage {
       package = checkVersion allArchives.packages "sources" version;
     }
-  ) platformVersions;
+  ) platformVersions';
 
   system-images = lib.flatten (
     map (
@@ -538,7 +560,7 @@ lib.recurseIntoAttrs rec {
           patchesInstructions = instructions;
         })
       ) systemImageTypes
-    ) platformVersions
+    ) platformVersions'
   );
 
   cmake = map (
@@ -552,7 +574,7 @@ lib.recurseIntoAttrs rec {
         ;
       package = checkVersion allArchives.packages "cmake" version;
     }
-  ) cmakeVersions;
+  ) (parseVersions repo "cmake" cmakeVersions);
 
   # All NDK bundles.
   ndk-bundles =
@@ -576,11 +598,11 @@ lib.recurseIntoAttrs rec {
         version:
         let
           package = makeNdkBundle (
-            allArchives.packages.ndk-bundle.${ndkVersion} or allArchives.packages.ndk.${ndkVersion}
+            allArchives.packages.ndk-bundle.${version} or allArchives.packages.ndk.${version}
           );
         in
         lib.optional (shouldLink includeNDK [ package ]) package
-      ) ndkVersions
+      ) (parseVersions repo "ndk" ndkVersions)
     );
 
   # The "default" NDK bundle.
@@ -592,7 +614,7 @@ lib.recurseIntoAttrs rec {
     deployAndroidPackage {
       package = (checkVersion allArchives "addons" version).google_apis;
     }
-  ) (lib.filter (hasVersion allArchives "addons") platformVersions);
+  ) (lib.filter (hasVersion allArchives "addons") platformVersions');
 
   # Makes a Google TV addons bundle from supported versions.
   google-tv-addons = map (
@@ -600,39 +622,41 @@ lib.recurseIntoAttrs rec {
     deployAndroidPackage {
       package = (checkVersion allArchives "addons" version).google_tv_addon;
     }
-  ) (lib.filter (hasVersion allArchives "addons") platformVersions);
+  ) (lib.filter (hasVersion allArchives "addons") platformVersions');
 
-  cmdline-tools-package = checkVersion allArchives.packages "cmdline-tools" cmdLineToolsVersion;
+  cmdline-tools-package = checkVersion allArchives.packages "cmdline-tools" (
+    parseVersion repo "cmdline-tools" cmdLineToolsVersion
+  );
 
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
-  androidsdk =
-    if !licenseAccepted then
-      throw ''
-        ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
+  androidsdk = callPackage ./cmdline-tools.nix {
+    inherit
+      deployAndroidPackage
+      os
+      arch
+      meta
+      ;
 
-        You must accept the following licenses:
-        ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
+    package = cmdline-tools-package;
 
-        a)
-          by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-        b)
-          by an environment variable for a single invocation of the nix tools.
-            $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
-      ''
-    else
-      callPackage ./cmdline-tools.nix {
-        inherit
-          deployAndroidPackage
-          os
-          arch
-          meta
-          ;
+    postInstall =
+      if !licenseAccepted then
+        throw ''
+          ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
 
-        package = cmdline-tools-package;
+          You must accept the following licenses:
+          ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-        postInstall = ''
+          a)
+            by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+          b)
+            by an environment variable for a single invocation of the nix tools.
+              $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
+        ''
+      else
+        ''
           # Symlink all requested plugins
           ${linkPlugin {
             name = "platform-tools";
@@ -745,5 +769,5 @@ lib.recurseIntoAttrs rec {
             ''
           ) licenseNames}
         '';
-      };
+  };
 }

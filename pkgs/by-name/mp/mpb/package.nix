@@ -54,9 +54,12 @@ stdenv.mkDerivation rec {
     "--with-libctl=${libctl}"
     "--enable-maintainer-mode"
     "--disable-dependency-tracking"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   doCheck = true;
+
+  preCheck = "export OMP_NUM_THREADS=2";
 
   meta = {
     description = "MIT Photonic-Bands: computation of photonic band structures in periodic media";

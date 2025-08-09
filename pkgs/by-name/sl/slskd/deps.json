@@ -781,8 +781,8 @@
   },
   {
     "pname": "Soulseek",
-    "version": "7.0.1",
-    "hash": "sha256-sGs+AomE20UILH0+RcArkMAR/Xk7yewppMnvg2YZ1WQ="
+    "version": "7.1.0",
+    "hash": "sha256-n6LUNuPmmy9QYNNALR0ObYyR9LJalf0H8P+SKnoqfFc="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",

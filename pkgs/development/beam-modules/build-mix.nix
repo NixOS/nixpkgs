@@ -25,11 +25,14 @@
   meta ? { },
   enableDebugInfo ? false,
   mixEnv ? "prod",
+  removeConfig ? true,
   # A config directory that is considered for all the dependencies of an app, typically in $src/config/
   # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
   appConfigPath ? null,
   ...
 }@attrs:
+
+assert appConfigPath != null -> removeConfig;
 
 let
   shell =
@@ -57,8 +60,8 @@ let
           in
           "[${lib.concatStringsSep "," options}]";
 
-        LANG = if stdenv.isLinux then "C.UTF-8" else "C";
-        LC_CTYPE = if stdenv.isLinux then "C.UTF-8" else "UTF-8";
+        LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
+        LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
 
         # add to ERL_LIBS so other modules can find at runtime.
         # http://erlang.org/doc/man/code.html#code-path
@@ -79,10 +82,17 @@ let
             runHook preConfigure
 
             ${./mix-configure-hook.sh}
+            ${lib.optionalString (removeConfig && isNull appConfigPath)
+              # By default, we don't want to include whatever config a dependency brings; per
+              # https://hexdocs.pm/elixir/main/Config.html, config is application specific.
+              ''
+                rm -rf config
+                mkdir config
+              ''
+            }
             ${lib.optionalString (!isNull appConfigPath)
-              # Due to https://hexdocs.pm/elixir/main/Config.html the config directory
-              # of a library seems to be not considered, as config is always
-              # application specific. So we can safely delete it.
+              # Some more tightly-coupled dependencies do depend on the config of the application
+              # they're being built for.
               ''
                 rm -rf config
                 cp -r ${appConfigPath} config
@@ -124,7 +134,7 @@ let
             # phoenix applications need the source of phoenix and phoenix_html to
             # build javascript and css assets.
             mkdir -p $out/src
-            cp -r $src/* "$out/src"
+            cp -r "$src/." "$out/src"
 
             runHook postInstall
           '';

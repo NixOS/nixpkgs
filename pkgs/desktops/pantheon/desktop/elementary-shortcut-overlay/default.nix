@@ -16,18 +16,19 @@
   granite7,
   libgee,
   mutter,
+  pantheon-wayland,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "shortcut-overlay";
     rev = version;
-    sha256 = "sha256-RWFzs4rw/KC0MXkNfA178FejMbuIBh5FVox1RxmxCJA=";
+    sha256 = "sha256-oGExG7eWiZqXEPBRuLRTnbgo3hRVKo8vO51vMBPoQb0=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     gtk4
     libgee
     mutter # org.gnome.mutter.keybindings
+    pantheon-wayland
   ];
 
   passthru = {
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.shortcut-overlay";
   };
 }

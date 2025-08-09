@@ -61,7 +61,7 @@ writeScript "update-standardnotes" ''
     upstreamPlatform="$2"
     url=$(getDownloadUrl "$upstreamPlatform")
     hash=$(nix-prefetch-url "$url" --type sha512)
-    sriHash=$(nix hash to-sri --type sha512 $hash)
+    sriHash=$(nix --extra-experimental-features nix-command hash to-sri --type sha512 $hash)
     setJsonKey .deb[\""$nixPlatform"\"].url "$url"
     setJsonKey .deb[\""$nixPlatform"\"].hash "$sriHash"
   }

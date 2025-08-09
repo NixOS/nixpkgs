@@ -6,24 +6,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terraform-compliance";
-  version = "1.3.50";
-  format = "setuptools";
+  version = "1.3.52";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
     tag = version;
-    hash = "sha256-FwePzXXxwiV5tWY1a+mG5pcv6XB801qG6Lx+XUe662E=";
+    hash = "sha256-M6u1P1UxOrP9bNPjPB0V15DUj+Y/1dFIjf/GCnYoCwc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "IPython==7.16.1" "IPython" \
-      --replace "diskcache==5.1.0" "diskcache>=5.1.0" \
-      --replace "radish-bdd==0.13.1" "radish-bdd" \
-  '';
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "radish-bdd"
+    "IPython"
+  ];
+
+  dependencies = with python3.pkgs; [
     diskcache
     emoji
     filetype

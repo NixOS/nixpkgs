@@ -163,8 +163,7 @@ let
         optionalString (dev.header != null) "--header=${dev.header}"
       }";
       fido2luksCredentials =
-        dev.fido2.credentials
-        ++ optional (dev.fido2.credential != null) dev.fido2.credential;
+        dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
     in
     ''
       # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
@@ -408,13 +407,12 @@ let
                 return
             fi
 
-            if [ ! -z "$k_user" ]; then
-                new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+            if [ -n "$k_user" ]; then
+                echo -n $k_user
             else
-                new_k_luks="$(echo | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
-            fi
+                echo
+            fi | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response > /crypt-ramfs/new_key
 
-            echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
             echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
 
             if [ $? == 0 ]; then
@@ -1134,17 +1132,16 @@ in
     ];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.availableKernelModules =
-      [
-        "dm_mod"
-        "dm_crypt"
-        "cryptd"
-        "input_leds"
-      ]
-      ++ luks.cryptoModules
-      # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
-      # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-      ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
+    boot.initrd.availableKernelModules = [
+      "dm_mod"
+      "dm_crypt"
+      "cryptd"
+      "input_leds"
+    ]
+    ++ luks.cryptoModules
+    # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
+    # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+    ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands =
@@ -1226,14 +1223,13 @@ in
         "cryptsetup.target"
         "remote-cryptsetup.target"
       ];
-      storePaths =
-        [
-          "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
-          "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
-        ]
-        ++ lib.optionals config.boot.initrd.systemd.tpm2.enable [
-          "${config.boot.initrd.systemd.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
-        ];
+      storePaths = [
+        "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
+        "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
+      ]
+      ++ lib.optionals config.boot.initrd.systemd.tpm2.enable [
+        "${config.boot.initrd.systemd.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
+      ];
 
     };
     # We do this because we need the udev rules from the package
@@ -1266,7 +1262,8 @@ in
             after = [
               "systemd-modules-load.service"
               "tpm2.target"
-            ] ++ optional clevis.useTang "network-online.target";
+            ]
+            ++ optional clevis.useTang "network-online.target";
             script = ''
               mkdir -p /clevis-${name}
               mount -t ramfs none /clevis-${name}

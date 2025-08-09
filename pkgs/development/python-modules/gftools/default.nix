@@ -15,6 +15,7 @@
   bumpfontversion,
   coreutils,
   diffenator2,
+  ffmpeg-python,
   font-v,
   fontbakery,
   fontfeatures,
@@ -61,14 +62,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.79";
+  version = "0.9.88";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-u1GnV+2Mg/I7plD6v2uk2pc44JHKzB3sHn9YjhrmIeo=";
+    hash = "sha256-eCMjxqMxJ2xzPyLHoby0gmrcJVTECzUZmLywpKarDXI=";
   };
 
   postPatch = ''
@@ -91,7 +92,7 @@ buildPythonPackage rec {
 
     substituteInPlace \
       Lib/gftools/builder/operations/autohintOTF.py \
-      --replace-fail '"otfautohint' '"${lib.getExe' afdko "otfautohint"}'
+      --replace-fail 'otfautohint' '${lib.getExe' afdko "otfautohint"}'
 
     substituteInPlace \
       Lib/gftools/builder/operations/paintcompiler.py \
@@ -106,7 +107,7 @@ buildPythonPackage rec {
       --replace-fail '"cp' '"${lib.getExe' coreutils "cp"}'
 
     substituteInPlace \
-      Lib/gftools/builder/operations/{fix,remap,autohint,buildStat,addSubset,remapLayout,buildVTT}.py \
+      Lib/gftools/builder/operations/{fix,remap,autohint,buildStat,addSubset,remapLayout,buildVTT,buildAvar2}.py \
       --replace-fail '"gftools' '"${placeholder "out"}/bin/gftools'
 
     substituteInPlace \
@@ -126,50 +127,50 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      absl-py
-      afdko
-      axisregistry
-      babelfont
-      beautifulsoup4
-      brotli
-      bumpfontversion
-      font-v
-      fontfeatures
-      fontmake
-      fonttools
-      gflanguages
-      gfsubsets
-      glyphsets
-      glyphslib
-      jinja2
-      nanoemoji
-      networkx
-      ninja
-      ots-python
-      packaging
-      pillow
-      protobuf
-      pygit2
-      pygithub
-      pyyaml
-      requests
-      rich
-      ruamel-yaml
-      setuptools
-      skia-pathops
-      statmake
-      strictyaml
-      tabulate
-      ttfautohint-py
-      ufomerge
-      unidecode
-      vharfbuzz
-      vttlib
-    ]
-    ++ fonttools.optional-dependencies.ufo
-    ++ fontmake.optional-dependencies.json;
+  dependencies = [
+    absl-py
+    afdko
+    axisregistry
+    babelfont
+    beautifulsoup4
+    brotli
+    bumpfontversion
+    ffmpeg-python
+    font-v
+    fontfeatures
+    fontmake
+    fonttools
+    gflanguages
+    gfsubsets
+    glyphsets
+    glyphslib
+    jinja2
+    nanoemoji
+    networkx
+    ninja
+    ots-python
+    packaging
+    pillow
+    protobuf
+    pygit2
+    pygithub
+    pyyaml
+    requests
+    rich
+    ruamel-yaml
+    setuptools
+    skia-pathops
+    statmake
+    strictyaml
+    tabulate
+    ttfautohint-py
+    ufomerge
+    unidecode
+    vharfbuzz
+    vttlib
+  ]
+  ++ fonttools.optional-dependencies.ufo
+  ++ fontmake.optional-dependencies.json;
 
   optional-dependencies = {
     qa = [

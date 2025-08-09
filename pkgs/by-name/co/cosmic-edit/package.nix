@@ -21,21 +21,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-mKVZI/x8+LrwFHGnJOzOq/vFkGev7sM9xJQOTA7uZGA=";
+    hash = "sha256-mgUSkYtc+i9pXv0n3zLHwBXFxfeWlhbsFJKa7X+mI98=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+b8pSSBUMs1EJDlldgR1UqLLH0sLU/djMOtE3JsDpkQ=";
+  cargoHash = "sha256-qfPLDgGeYGSO0ZKJooXRK0NnTqzJ6zq6RhBpTTUusQY=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2025-02-20";
+  env.VERGEN_GIT_COMMIT_DATE = "2025-04-17";
   env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   postPatch = ''
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = teams.cosmic.members;
+    teams = [ teams.cosmic ];
     platforms = platforms.linux;
   };
 })

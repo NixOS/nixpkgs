@@ -6,15 +6,16 @@
   jdk21,
   wrapGAppsHook3,
   glib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "5.2.9";
+  version = "5.3.1";
 
   src = fetchurl {
-    url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    hash = "sha256-ZLVO2VD0XUVUG/GSot21c6nJ2N8h39vDzyzAzk1pQ6c=";
+    url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam-basic_${version}-1_amd64.deb";
+    hash = "sha256-Fhj/MJnnm8nsuJmSb6PigJT6Qm+CkGg8lV0NaUMfur0=";
   };
 
   unpackPhase = ''
@@ -47,6 +48,8 @@ stdenv.mkDerivation rec {
     categories = [ "Office" ];
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     homepage = "https://github.com/torakiki/pdfsam";
     description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
@@ -56,7 +59,7 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ _1000101 ];
   };
 }

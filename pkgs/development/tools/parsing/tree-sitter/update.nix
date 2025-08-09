@@ -144,7 +144,7 @@ let
       repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
-      orga = "cstrahan";
+      orga = "nix-community";
       repo = "tree-sitter-nix";
     };
     "tree-sitter-latex" = {
@@ -277,7 +277,7 @@ let
       repo = "tree-sitter-scss";
     };
     "tree-sitter-erlang" = {
-      orga = "abstractmachineslab";
+      orga = "WhatsApp";
       repo = "tree-sitter-erlang";
     };
     "tree-sitter-elixir" = {
@@ -335,6 +335,10 @@ let
     "tree-sitter-gdscript" = {
       orga = "prestonknopp";
       repo = "tree-sitter-gdscript";
+    };
+    "tree-sitter-gemini" = {
+      orga = "blessanabraham";
+      repo = "tree-sitter-gemini";
     };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";
@@ -480,7 +484,30 @@ let
       orga = "uncenter";
       repo = "tree-sitter-tera";
     };
+    "tree-sitter-netlinx" = {
+      orga = "norgate-av";
+      repo = "tree-sitter-netlinx";
+    };
+    "tree-sitter-crystal" = {
+      orga = "crystal-lang-tools";
+      repo = "tree-sitter-crystal";
+    };
   };
+
+  pinnedGrammars = [
+    "tree-sitter-bash"
+    "tree-sitter-bibtex"
+    "tree-sitter-c"
+    "tree-sitter-comment"
+    "tree-sitter-fortran"
+    "tree-sitter-hcl"
+    "tree-sitter-hyprlang"
+    "tree-sitter-llvm"
+    "tree-sitter-markdown"
+    "tree-sitter-query"
+    "tree-sitter-rust"
+  ];
+  pinnedGrammarsJson = jsonFile pinnedGrammars;
 
   allGrammars =
     let
@@ -511,6 +538,7 @@ let
         inherit
           knownTreeSitterOrgGrammarRepos
           ignoredTreeSitterOrgRepos
+          pinnedGrammars
           ;
       }
       (
@@ -570,15 +598,13 @@ let
      }
      ${updateImpl} print-all-grammars-nix-file "$(< ${
        jsonFile "all-grammars.json" {
-         allGrammars = (
-           lib.mapAttrsToList (
-             nixRepoAttrName: attrs:
-             attrs
-             // {
-               inherit nixRepoAttrName;
-             }
-           ) allGrammars
-         );
+         allGrammars = lib.mapAttrsToList (
+           nixRepoAttrName: attrs:
+           attrs
+           // {
+             inherit nixRepoAttrName;
+           }
+         ) allGrammars;
          inherit outputDir;
        }
      })"

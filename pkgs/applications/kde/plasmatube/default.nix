@@ -22,22 +22,21 @@ mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      kcoreaddons
-      kdeclarative
-      ki18n
-      kirigami2
-      mpv
-      qtmultimedia
-      qtquickcontrols2
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ]);
+  buildInputs = [
+    kcoreaddons
+    kdeclarative
+    ki18n
+    kirigami2
+    mpv
+    qtmultimedia
+    qtquickcontrols2
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   qtWrapperArgs = [
     "--prefix"

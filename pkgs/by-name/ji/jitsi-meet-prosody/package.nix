@@ -8,10 +8,10 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-prosody";
-  version = "1.0.8499";
+  version = "1.0.8737";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "U+Xy0uFdH4vYx9GYuwWD5o/K6pMRlqM0QJdWFBJXNls=";
+    sha256 = "fZs1ng1mtxwXgJAQqxAlrNrqUQJc9fGlxJKwuTJLENc=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jitsi/jitsi-meet/";
     license = licenses.asl20;
-    maintainers = teams.jitsi.members;
+    teams = [ teams.jitsi ];
     platforms = platforms.linux;
   };
 }

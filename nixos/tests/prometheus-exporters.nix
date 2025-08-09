@@ -407,6 +407,20 @@ let
         '';
       };
 
+    ebpf = {
+      exporterConfig = {
+        enable = true;
+        names = [ "timers" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ebpf-exporter.service")
+        wait_for_open_port(9435)
+        succeed(
+            "curl -sSf http://localhost:9435/metrics | grep 'ebpf_exporter_enabled_configs{name=\"timers\"} 1'"
+        )
+      '';
+    };
+
     fastly = {
       exporterConfig = {
         enable = true;
@@ -1107,7 +1121,7 @@ let
         };
       };
       exporterTest = ''
-        wait_for_unit("postgresql.service")
+        wait_for_unit("postgresql.target")
         wait_for_unit("pgbouncer.service")
         wait_for_unit("prometheus-pgbouncer-exporter.service")
         wait_for_open_port(9127)
@@ -1240,18 +1254,18 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-postgres-exporter.service")
         wait_for_open_port(9187)
-        wait_for_unit("postgresql.service")
+        wait_for_unit("postgresql.target")
         succeed(
             "curl -sSf http://localhost:9187/metrics | grep 'pg_exporter_last_scrape_error 0'"
         )
         succeed("curl -sSf http://localhost:9187/metrics | grep 'pg_up 1'")
-        systemctl("stop postgresql.service")
+        systemctl("stop postgresql")
         succeed(
             "curl -sSf http://localhost:9187/metrics | grep -v 'pg_exporter_last_scrape_error 0'"
         )
         succeed("curl -sSf http://localhost:9187/metrics | grep 'pg_up 0'")
-        systemctl("start postgresql.service")
-        wait_for_unit("postgresql.service")
+        systemctl("start postgresql")
+        wait_for_unit("postgresql.target")
         succeed(
             "curl -sSf http://localhost:9187/metrics | grep 'pg_exporter_last_scrape_error 0'"
         )
@@ -1595,7 +1609,7 @@ let
             GRANT SELECT ON points TO "prometheus-sql-exporter";
           '';
         };
-        systemd.services.prometheus-sql-exporter.after = [ "postgresql.service" ];
+        systemd.services.prometheus-sql-exporter.after = [ "postgresql.target" ];
       };
       exporterTest = ''
         wait_for_unit("prometheus-sql-exporter.service")
@@ -1891,9 +1905,7 @@ mapAttrs (
         ${nodeName}.shutdown()
       '';
 
-      meta = with maintainers; {
-        maintainers = [ willibutz ];
-      };
+      meta.maintainers = [ ];
     }
   ))
 ) exporterTests

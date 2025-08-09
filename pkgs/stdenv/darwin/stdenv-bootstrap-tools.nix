@@ -292,6 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    maintainers = [ lib.maintainers.copumpkin ];
+    teams = [ lib.teams.darwin ];
   };
 })

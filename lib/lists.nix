@@ -1463,6 +1463,40 @@ rec {
   take = count: sublist 0 count;
 
   /**
+    Return the last (at most) N elements of a list.
+
+    # Inputs
+
+    `count`
+
+    : Maximum number of elements to pick
+
+    `list`
+
+    : Input list
+
+    # Type
+
+    ```
+    takeEnd :: int -> [a] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.takeEnd` usage example
+
+    ```nix
+    takeEnd 2 [ "a" "b" "c" "d" ]
+    => [ "c" "d" ]
+    takeEnd 2 [ ]
+    => [ ]
+    ```
+
+    :::
+  */
+  takeEnd = n: xs: drop (max 0 (length xs - n)) xs;
+
+  /**
     Remove the first (at most) N elements of a list.
 
     # Inputs

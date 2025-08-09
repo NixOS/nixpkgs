@@ -29,19 +29,18 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qt6integration
-      qt6platform-plugins
-      dtk6declarative
-      dde-shell
-    ]
-    ++ (with qt6Packages; [
-      qtbase
-      qtsvg
-      qtwayland
-      appstream-qt
-    ]);
+  buildInputs = [
+    qt6integration
+    qt6platform-plugins
+    dtk6declarative
+    dde-shell
+  ]
+  ++ (with qt6Packages; [
+    qtbase
+    qtsvg
+    qtwayland
+    appstream-qt
+  ]);
 
   cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
@@ -51,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-launchpad";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

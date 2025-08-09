@@ -9,7 +9,6 @@
   pkg-config,
   openssl,
   xz,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,14 +46,10 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      openssl
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    openssl
+    xz
+  ];
 
   # update Cargo.lock to work with openssl 3
   postPatch = ''

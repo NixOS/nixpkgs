@@ -8,7 +8,6 @@
   pkg-config,
   cmake,
   xclip,
-  darwin,
   nix-update-script,
 }:
 let
@@ -25,7 +24,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Le/dD8bTd5boz1IeEq4ItJZYC3MRW8uiT/3Zy1yv5L0=";
 
   nativeBuildInputs = [
@@ -33,14 +31,13 @@ rustPlatform.buildRustPackage {
     cmake
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isLinux xclip
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux xclip
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postPatch = ''
     # The cargo config overrides linkers for some targets, breaking the build

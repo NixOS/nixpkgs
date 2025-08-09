@@ -11,7 +11,7 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "influxdb3";
-  version = "0-unstable-2025-02-17";
+  version = "3.0.1";
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-tHnLD5W3KQ1cILRHNmXAi4lvQQSBVUPxYCXmXLMLwIs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KnmaIbK/2tRXjCpOLHcadIX8Od7lVDOwZ+FgE+yFE+Q=";
 
   nativeBuildInputs = [
@@ -68,8 +67,10 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   passthru.updateScript = nix-update-script {
-    # Switch to "--version-regex" "v(3.*)" once the first real release tag is added
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version-regex"
+      "v(3.*)"
+    ];
   };
 
   meta = {

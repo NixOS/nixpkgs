@@ -11,27 +11,32 @@
   pkg-config,
   scdoc,
   stdenv,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.2.0-unstable-2025-03-16";
+  version = "3.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "56a9867e90ece88596e330774da64cf277069b59";
-    hash = "sha256-4lSgswcvvV6W1KN6QhsjeHY8MMXXC4fRYBmPE/hb0vA=";
+    rev = "dce41a6f07a2b63c3136409b7bcd0078299fadf9";
+    hash = "sha256-n5RQg7kGS+lg7sRe5Defl3nDEha0vhc/FbwywD5wBsg=";
   };
 
   patches = [
     (fetchpatch2 {
-      # https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/42
-      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/commit/1f0c30e88dc61b8b508696cd890393c3b7911b58.patch?full_index=1";
-      hash = "sha256-hQ6Hjfyj059j2cRfrFz9Se6xRowIGW1HVHULLYtHcS8=";
+      # This fixes a bug that might annoy you if you use something like PKCS#11
+      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/commit/d8214b522a3cc72cd4639a1dd114103a02e9218c.patch";
+      hash = "sha256-WxKuioJ1Fo5ARRYF/R4yULDVB4pq11phljzVGdWTV6s=";
+    })
+    (fetchpatch2 {
+      # Fixes up UB
+      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/commit/4e13c312241420cbb3e5cc7d4f0dd3e5d17449be.patch";
+      hash = "sha256-7yX6gGsptwijx+ZedSJWJKhwaoBVpxIbGK+ZiMLsIhc=";
     })
   ];
 
@@ -57,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A suite of graphical applications for the terminal";
+    description = "Suite of graphical applications for the terminal";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
     license = licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];

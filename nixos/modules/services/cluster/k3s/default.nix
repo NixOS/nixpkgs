@@ -26,28 +26,31 @@ let
   mkManifestTarget =
     name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
   # Produces a list containing all duplicate manifest names
-  duplicateManifests =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.manifests);
+  duplicateManifests = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.manifests
+  );
   # Produces a list containing all duplicate chart names
-  duplicateCharts =
-    with builtins;
-    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.charts);
+  duplicateCharts = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
+    builtins.attrNames cfg.charts
+  );
 
   # Converts YAML -> JSON -> Nix
   fromYaml =
     path:
-    with builtins;
-    fromJSON (
-      readFile (
-        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ yq-go ]; } ''
+    builtins.fromJSON (
+      builtins.readFile (
+        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
           yq --no-colors --output-format json ${path} > $out
         ''
       )
     );
 
-  # Replace characters that are problematic in file names
+  # Replace prefixes and characters that are problematic in file names
   cleanHelmChartName =
+    name:
+    let
+      woPrefix = lib.removePrefix "https://" (lib.removePrefix "oci://" name);
+    in
     lib.replaceStrings
       [
         "/"
@@ -56,7 +59,8 @@ let
       [
         "-"
         "-"
-      ];
+      ]
+      woPrefix;
 
   # Fetch a Helm chart from a public registry. This only supports a basic Helm pull.
   fetchHelm =
@@ -66,7 +70,12 @@ let
       version,
       hash ? lib.fakeHash,
     }:
-    pkgs.runCommand (cleanHelmChartName "${lib.removePrefix "https://" repo}-${name}-${version}.tgz")
+    let
+      isOci = lib.hasPrefix "oci://" repo;
+      pullCmd = if isOci then repo else "--repo ${repo} ${name}";
+      name' = if isOci then "${repo}-${version}" else "${repo}-${name}-${version}";
+    in
+    pkgs.runCommand (cleanHelmChartName "${name'}.tgz")
       {
         inherit (lib.fetchers.normalizeHash { } { inherit hash; }) outputHash outputHashAlgo;
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
@@ -76,9 +85,7 @@ let
         ];
       }
       ''
-        export HOME="$PWD"
-        helm repo add repository ${repo}
-        helm pull repository/${name} --version ${version}
+        helm pull ${pullCmd} --version ${version}
         mv ./*.tgz $out
       '';
 
@@ -131,7 +138,7 @@ let
       [
         (yamlFormat.generate "helm-chart-manifest-${name}.yaml" (mkHelmChartCR name value))
       ]
-      # alternate the YAML doc seperator (---) and extraDeploy manifests to create
+      # alternate the YAML doc separator (---) and extraDeploy manifests to create
       # multi document YAMLs
       ++ (lib.concatMap (x: [
         yamlDocSeparator
@@ -190,6 +197,7 @@ let
         hash = lib.mkOption {
           type = lib.types.str;
           example = "sha256-ej+vpPNdiOoXsaj1jyRpWLisJgWo8EqX+Z5VbpSjsPA=";
+          default = "";
           description = ''
             The hash of the packaged Helm chart. Only has an effect if `package` is not set.
             The Helm chart is fetched during build time and placed as a `.tgz` archive on the
@@ -723,7 +731,11 @@ in
               };
             };
           };
-
+          nginx = {
+            repo = "oci://registry-1.docker.io/bitnamicharts/nginx";
+            version = "20.0.0";
+            hash = "sha256-sy+tzB+i9jIl/tqOMzzuhVhTU4EZVsoSBtPznxF/36c=";
+          };
           custom-chart = {
             package = ../charts/my-chart.tgz;
             values = ../values/my-values.yaml;
@@ -769,7 +781,7 @@ in
       ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node")
       ++ (lib.optional (
         cfg.role == "agent" && cfg.configPath == null && cfg.serverAddr == ""
-      ) "k3s: ServerAddr or configPath (with 'server' key) should be set if role is 'agent'")
+      ) "k3s: serverAddr or configPath (with 'server' key) should be set if role is 'agent'")
       ++ (lib.optional
         (cfg.role == "agent" && cfg.configPath == null && cfg.tokenFile == null && cfg.token == "")
         "k3s: Token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"

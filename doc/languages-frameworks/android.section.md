@@ -8,23 +8,23 @@ supporting features.
 Use the `android-studio-full` attribute for a very complete Android SDK, including system images:
 
 ```nix
-buildInputs = [ android-studio-full ];
+{ buildInputs = [ android-studio-full ]; }
 ```
 
 This is identical to:
 
 ```nix
-buildInputs = [ androidStudioPackages.stable.full ];
+{ buildInputs = [ androidStudioPackages.stable.full ]; }
 ```
 
 Alternatively, you can pass composeAndroidPackages to the `withSdk` passthru:
 
 ```nix
-buildInputs = [
-  (android-studio.withSdk (androidenv.composeAndroidPackages {
-    includeNDK = true;
-  }).androidsdk)
-];
+{
+  buildInputs = [
+    (android-studio.withSdk (androidenv.composeAndroidPackages { includeNDK = true; }).androidsdk)
+  ];
+}
 ```
 
 These will export `ANDROID_SDK_ROOT` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
@@ -35,17 +35,22 @@ in the specified Android build environment.
 Alternatively, you can deploy the SDK separately with a desired set of plugins, or subsets of an SDK.
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 let
   androidComposition = androidenv.composeAndroidPackages {
-    platformVersions = [ "34" "35" ];
-    systemImageTypes = [ "google_apis_playstore" ];
-    abiVersions = [ "armeabi-v7a" "arm64-v8a" ];
-    includeNDK = true;
-    includeExtras = [
-      "extras;google;auto"
+    platformVersions = [
+      "34"
+      "35"
+      "latest"
     ];
+    systemImageTypes = [ "google_apis_playstore" ];
+    abiVersions = [
+      "armeabi-v7a"
+      "arm64-v8a"
+    ];
+    includeNDK = true;
+    includeExtras = [ "extras;google;auto" ];
   };
 in
 androidComposition.androidsdk
@@ -116,7 +121,8 @@ For each requested system image we can specify the following options:
   be included. Defaults to `armeabi-v7a` and `arm64-v8a`.
 
 Most of the function arguments have reasonable default settings, preferring the latest
-versions of tools when possible.
+versions of tools when possible. You can additionally specify "latest" for any plugin version
+that you do not care about, and just want the latest of.
 
 You can specify license names:
 
@@ -165,7 +171,7 @@ We can also deploy subsets of the Android SDK. For example, to only the
 `platform-tools` package, you can evaluate the following expression:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 let
   androidComposition = androidenv.composeAndroidPackages {
@@ -183,7 +189,7 @@ to use a predefined composition that contains a fairly complete set of Android p
 The following Nix expression can be used to deploy the entire SDK:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.androidPkgs.androidsdk
 ```
@@ -191,7 +197,7 @@ androidenv.androidPkgs.androidsdk
 It is also possible to use one plugin only:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.androidPkgs.platform-tools
 ```
@@ -205,7 +211,7 @@ An emulator spawn script can be configured by invoking the `emulateApp {}`
 function:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
@@ -221,7 +227,7 @@ It is also possible to specify an APK to deploy inside the emulator
 and the package and activity names to launch it:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
@@ -344,7 +350,7 @@ requires. Most newer Android projects use Gradle, and this is included for histo
 purposes.
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.buildApp {
   name = "MyAndroidApp";

@@ -13,77 +13,64 @@
   libxkbcommon,
   libglvnd,
   mpv-unwrapped,
-  darwin,
   waylandSupport ? false,
 }:
 
-assert waylandSupport -> stdenv.hostPlatform.isLinux;
-
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-U6J1L2KDAEhIrSpbS5wMSc1Q9y5YMahhFNe6ArbwV2s=";
+    hash = "sha256-+MgDCI/wz5yfdpSy0Gh85ZWUAuL2wijixYskx/jH7Vw=";
   };
 
-  vendorHash = "sha256-fc86z8bvdFI3LdlyHej2G42O554hpRszqre+e3WUOKI=";
+  vendorHash = "sha256-v6tPGjeJhRdSJpVPQAERRM7cpXO7Ut7kLF3EdNcDFgM=";
 
-  nativeBuildInputs =
-    [
-      copyDesktopItems
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   # go-glfw doesn't support both X11 and Wayland in single build
   tags = lib.optionals waylandSupport [ "wayland" ];
 
-  buildInputs =
-    [
-      libglvnd
-      mpv-unwrapped
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libXxf86vm
-      xorg.libX11
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
-      xorg.libXrandr
-      xorg.libXinerama
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXext
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
-      wayland
-      wayland-protocols
-      libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.Kernel
-      darwin.apple_sdk_11_0.frameworks.OpenGL
-      darwin.apple_sdk_11_0.frameworks.UserNotifications
-      darwin.apple_sdk_11_0.frameworks.MediaPlayer
-    ];
+  buildInputs = [
+    libglvnd
+    mpv-unwrapped
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libXxf86vm
+    xorg.libX11
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXext
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ];
 
-  postInstall =
-    ''
-      for dimension in 128 256 512;do
-          dimensions=''${dimension}x''${dimension}
-          mkdir -p $out/share/icons/hicolor/$dimensions/apps
-          cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
-      done
-    ''
-    + lib.optionalString waylandSupport ''
-      mv $out/bin/supersonic $out/bin/${meta.mainProgram}
-    '';
+  postInstall = ''
+    for dimension in 128 256 512;do
+        dimensions=''${dimension}x''${dimension}
+        mkdir -p $out/share/icons/hicolor/$dimensions/apps
+        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
+    done
+  ''
+  + lib.optionalString waylandSupport ''
+    mv $out/bin/supersonic $out/bin/${meta.mainProgram}
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -103,9 +90,9 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
-    description = "A lightweight cross-platform desktop client for Subsonic music servers";
+    description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ lib.optionals (!waylandSupport) platforms.darwin;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       zane

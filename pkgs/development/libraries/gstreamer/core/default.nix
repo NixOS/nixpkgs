@@ -14,9 +14,6 @@
   elfutils, # for libdw
   bash-completion,
   lib,
-  Cocoa,
-  CoreServices,
-  xpc,
   testers,
   rustc,
   withRust ?
@@ -35,6 +32,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -62,50 +60,46 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      bison
-      flex
-      python3
-      makeWrapper
-      glib
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap # for setcap binary
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals withRust [
-      rustc
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    bison
+    flex
+    python3
+    makeWrapper
+    glib
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap # for setcap binary
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withRust [
+    rustc
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-    ]
-    ++ lib.optionals hasElfutils [
-      elfutils
-    ]
-    ++ lib.optionals withLibunwind [
-      libunwind
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreServices
-      xpc
-    ];
+  buildInputs = [
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+  ]
+  ++ lib.optionals hasElfutils [
+    elfutils
+  ]
+  ++ lib.optionals withLibunwind [
+    libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     glib

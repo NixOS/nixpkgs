@@ -15,7 +15,7 @@
 
 buildGoModule rec {
   pname = "mautrix-meta";
-  version = "0.4.5";
+  version = "0.5.2";
 
   subPackages = [ "cmd/mautrix-meta" ];
 
@@ -23,13 +23,13 @@ buildGoModule rec {
     owner = "mautrix";
     repo = "meta";
     rev = "v${version}";
-    hash = "sha256-UWW5h4e6usxVkMH1TDGt62/ThlAhbeqivnYFIKPOqXE=";
+    hash = "sha256-S/HWCN9d3Nhbl73RoFD684OG3CbdNWXU8QReJoSYJK0=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-fJuCNhbm6930zPyfXA8mbjyJmRdv0Zn0ZZ+ULImXjKU=";
+  vendorHash = "sha256-m0s99gl49NzGEpuDPB5tL92krt2Zho36NsIEXJk+nCw=";
 
   passthru = {
     tests = {

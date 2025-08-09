@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msolve";
-  version = "0.7.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "algebraic-solving";
     repo = "msolve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3AP3qrFZX2JZveONtmG0CLpdwSCwlrW86D8QLRTW5kI=";
+    hash = "sha256-6TU/h6ewQreomjStHZRViYTrrDG3+MZXa8mLg1NvvZg=";
   };
 
   postPatch = ''
@@ -28,15 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      flint3
-      gmp
-      mpfr
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    flint3
+    gmp
+    mpfr
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   doCheck = true;
 

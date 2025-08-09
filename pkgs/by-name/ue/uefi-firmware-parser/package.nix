@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.wheel
   ];
 
-  dependencies = [ python3.pkgs.future ];
+  pythonRemoveDeps = [ "future" ];
 
   pythonImportsCheck = [ "uefi_firmware" ];
 

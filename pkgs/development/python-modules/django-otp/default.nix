@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-otp";
-  version = "1.5.4";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-otp";
     repo = "django-otp";
     tag = "v${version}";
-    hash = "sha256-Hwi0Z5/e91peGbp+GvL/gCtUI4hcJ4kevJMWe9sFvYk=";
+    hash = "sha256-kK7aU2W89557vrzJF6XtmItIZlOsxibciyMlbRDT93c=";
   };
 
   build-system = [ hatchling ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pytestFlagsArray = [ "src/django_otp/test.py" ];
+  enabledTestPaths = [ "src/django_otp/test.py" ];
 
   pythonImportsCheck = [ "django_otp" ];
 

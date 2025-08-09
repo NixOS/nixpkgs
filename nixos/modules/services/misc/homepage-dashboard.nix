@@ -4,7 +4,6 @@
   lib,
   ...
 }:
-
 let
   cfg = config.services.homepage-dashboard;
   # Define the settings format used for this program
@@ -27,6 +26,19 @@ in
         type = lib.types.int;
         default = 8082;
         description = "Port for Homepage to bind to.";
+      };
+
+      allowedHosts = lib.mkOption {
+        type = lib.types.str;
+        default = "localhost:8082,127.0.0.1:8082";
+        example = "example.com";
+        description = ''
+          Hosts that homepage-dashboard will be running under.
+          You will want to change this in order to acess homepage from anything other than localhost.
+          see the upsream documentation:
+
+          <https://gethomepage.dev/installation/#homepage_allowed_hosts>
+        '';
       };
 
       environmentFile = lib.mkOption {
@@ -215,16 +227,55 @@ in
         NIXPKGS_HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
         PORT = toString cfg.listenPort;
         LOG_TARGETS = "stdout";
+        HOMEPAGE_ALLOWED_HOSTS = cfg.allowedHosts;
       };
 
       serviceConfig = {
         Type = "simple";
-        DynamicUser = true;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "homepage-dashboard";
         CacheDirectory = "homepage-dashboard";
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
+
+        # hardening
+        DynamicUser = true;
+        DevicePolicy = "closed";
+        CapabilityBoundingSet = "";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        DeviceAllow = "";
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        LockPersonality = true;
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources"
+        ];
+        ProtectProc = "invisible";
+        ProtectHostname = true;
+        UMask = "0077";
+        # cpu widget requires access to /proc
+        ProcSubset = if lib.any (widget: widget.resources.cpu or false) cfg.widgets then "all" else "pid";
       };
 
       enableStrictShellChecks = true;

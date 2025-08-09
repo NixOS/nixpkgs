@@ -18,18 +18,19 @@
   pytest-mock,
   pytest-instafail,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "25.1.2";
+  version = "25.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-compat";
     tag = "v${version}";
-    hash = "sha256-AElonUB2zXB3ZcRTwuaYpEQJYHtPw2lD3tBNMEqwuKo=";
+    hash = "sha256-OobW7dlj++SzTrX4tWMS5E0C32gDJWFbZwpGskjnCCQ=";
   };
 
   build-system = [
@@ -38,23 +39,24 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    ansible-core
     pyyaml
     subprocess-tee
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    substituteInPlace test/test_runtime.py \
-      --replace-fail "printenv" "${lib.getExe' coreutils "printenv"}"
-  '';
-
   nativeCheckInputs = [
-    ansible-core
+    ansible-core # ansible-config
     flaky
     pytest-mock
     pytest-instafail
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    substituteInPlace test/test_runtime.py \
+      --replace-fail "printenv" "${lib.getExe' coreutils "printenv"}"
+  '';
 
   disabledTests = [
     # require network
@@ -74,6 +76,7 @@ buildPythonPackage rec {
     "test_runtime_example"
     "test_scan_sys_path"
     "test_upgrade_collection"
+    "test_ro_venv"
   ];
 
   pythonImportsCheck = [ "ansible_compat" ];

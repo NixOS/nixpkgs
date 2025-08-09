@@ -30,6 +30,7 @@ let
   inherit (lib.attrsets)
     attrByPath
     optionalAttrs
+    showAttrPath
     ;
   inherit (lib.strings)
     concatMapStrings
@@ -40,6 +41,7 @@ let
     ;
   inherit (lib.lists)
     last
+    toList
     ;
   prioritySuggestion = ''
     Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
@@ -168,8 +170,8 @@ rec {
 
             config.foo.enable = true;
           }
-        ]:
-      }
+        ];
+      };
     in
     eval.config
     => { foo.enable = true; }
@@ -310,14 +312,14 @@ rec {
     }:
     let
       name' = if isList name then last name else name;
-      default' = if isList default then default else [ default ];
-      defaultText = concatStringsSep "." default';
+      default' = toList default;
+      defaultText = showAttrPath default';
       defaultValue = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
       defaults =
         if default != null then
           {
             default = defaultValue;
-            defaultText = literalExpression ("${pkgsText}." + defaultText);
+            defaultText = literalExpression "${pkgsText}.${defaultText}";
           }
         else
           optionalAttrs nullable {
@@ -333,7 +335,7 @@ rec {
       }
       // optionalAttrs (example != null) {
         example = literalExpression (
-          if isList example then "${pkgsText}." + concatStringsSep "." example else example
+          if isList example then "${pkgsText}.${showAttrPath example}" else example
         );
       }
     );
@@ -402,7 +404,7 @@ rec {
     ```nix
     myType = mkOptionType {
       name = "myType";
-      merge = mergeDefaultOption; # <- This line is redundant. It is the default aready.
+      merge = mergeDefaultOption; # <- This line is redundant. It is the default already.
     };
     ```
 
@@ -468,7 +470,7 @@ rec {
     args@{
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
-      #   - type checked beyond what .check does (which should be very litte; only on the value head; not attribute values, etc)
+      #   - type checked beyond what .check does (which should be very little; only on the value head; not attribute values, etc)
       #   - if you want attribute values to be checked, or list items
       #   - if you want coercedTo-like behavior to work
       merge ? loc: defs: (head defs).value,
@@ -570,30 +572,29 @@ rec {
       opt:
       let
         name = showOption opt.loc;
-        docOption =
-          {
-            loc = opt.loc;
-            inherit name;
-            description = opt.description or null;
-            declarations = filter (x: x != unknownModule) opt.declarations;
-            internal = opt.internal or false;
-            visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
-            readOnly = opt.readOnly or false;
-            type = opt.type.description or "unspecified";
-          }
-          // optionalAttrs (opt ? example) {
-            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-              renderOptionValue opt.example
-            );
-          }
-          // optionalAttrs (opt ? defaultText || opt ? default) {
-            default = builtins.addErrorContext "while evaluating the ${
-              if opt ? defaultText then "defaultText" else "default value"
-            } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-          }
-          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-            inherit (opt) relatedPackages;
-          };
+        docOption = {
+          loc = opt.loc;
+          inherit name;
+          description = opt.description or null;
+          declarations = filter (x: x != unknownModule) opt.declarations;
+          internal = opt.internal or false;
+          visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
+          readOnly = opt.readOnly or false;
+          type = opt.type.description or "unspecified";
+        }
+        // optionalAttrs (opt ? example) {
+          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+            renderOptionValue opt.example
+          );
+        }
+        // optionalAttrs (opt ? defaultText || opt ? default) {
+          default = builtins.addErrorContext "while evaluating the ${
+            if opt ? defaultText then "defaultText" else "default value"
+          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
+        }
+        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+          inherit (opt) relatedPackages;
+        };
 
         subOptions =
           let

@@ -1,12 +1,17 @@
 src: version:
 {
   lib,
+  fetchFromGitHub,
   fetchYarnDeps,
-  nodejs_18,
+  dart-sass,
+  nodePackages_latest,
   fixup-yarn-lock,
   stdenv,
   yarn,
 }:
+let
+  nodejs = nodePackages_latest.nodejs;
+in
 stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
@@ -14,23 +19,28 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-a2kIOQHaMzaMWId6+SSYN+SPQM2Ipa+F1ztFZgo3R6A=";
+    hash = "sha256-712mc/xksjXgnc0inthxE+ztSDl/4107oXw3vKcZD2g=";
   };
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_18
-    (yarn.override { nodejs = nodejs_18; })
+    nodejs
+    (yarn.override { inherit nodejs; })
   ];
 
   configurePhase = ''
     runHook preConfigure
+
+    sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
     yarn install --frozen-lockfile --offline --no-progress --non-interactive
     patchShebangs node_modules/
+
+    mkdir -p node_modules/sass-embedded/dist/lib/src/vendor/dart-sass
+    ln -s ${dart-sass}/bin/dart-sass node_modules/sass-embedded/dist/lib/src/vendor/dart-sass/sass
 
     runHook postConfigure
   '';
@@ -47,7 +57,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mv dist $out
+    mv .output/public $out
     runHook postInstall
   '';
 

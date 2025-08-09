@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ACS script compiler for use with ZDoom and Hexen";
     homepage = "https://zdoom.org/wiki/ACC";
-    license = licenses.activision;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    license = lib.licenses.activision;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.all;
     mainProgram = "acc";
   };
 })

@@ -63,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
   };
 }

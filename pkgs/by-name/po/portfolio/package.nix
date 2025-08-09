@@ -9,7 +9,7 @@
   makeDesktopItem,
   openjdk21,
   stdenvNoCC,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -21,6 +21,7 @@ let
     comment = "Calculate Investment Portfolio Performance";
     desktopName = "Portfolio Performance";
     categories = [ "Office" ];
+    startupWMClass = "Portfolio Performance";
   };
 
   runtimeLibs = lib.makeLibraryPath [
@@ -28,16 +29,16 @@ let
     glib-networking
     gtk3
     libsecret
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.74.2";
+  version = "0.78.1";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-RPoEby12DiJwdM2ejVfOQyrJjy/qgQ9BbqYyaV9KMD0=";
+    hash = "sha256-R6Z201767c61S/KAMtArzIuPjQbXMVym8KLZKMVdr+M=";
   };
 
   nativeBuildInputs = [

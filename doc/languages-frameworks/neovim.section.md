@@ -59,7 +59,7 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `neovimRcContent`: Extra vimL code sourced by the generated `init.lua`.
 - `wrapperArgs`: Extra arguments forwarded to the `makeWrapper` call.
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
-  generated Neovim configuration via its  `-u` argument, i.e. : `-u /nix/store/...generatedInit.lua`. This has side effects like preventing Neovim from reading your config in `$XDG_CONFIG_HOME` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#_initialization) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse while reusing the logic of the nixpkgs wrapper and access the generated config via `neovim.passthru.initRc`.
+  generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
 
 ```
@@ -91,8 +91,8 @@ wrapNeovimUnstable neovim-unwrapped {
 You can explore the configuration with`nix repl` to discover these options and
 override them. For instance:
 ```nix
-neovim.overrideAttrs(oldAttrs: {
-   autowrapRuntimeDeps = false;
+neovim.overrideAttrs (oldAttrs: {
+  autowrapRuntimeDeps = false;
 })
 ```
 
@@ -116,9 +116,9 @@ top-level while luarocks installs them in various subfolders by default.
 
 For instance:
 ```nix
-rtp-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.rtp-nvim;
-};
+{
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rtp-nvim; };
+}
 ```
 To update these packages, you should use the lua updater rather than vim's.
 
@@ -164,16 +164,19 @@ The check hook will fail the build if any modules cannot be loaded. This encoura
 To only check a specific module, add it manually to the plugin definition [overrides](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
 
 ```nix
+{
   gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "gitsigns";
   };
+}
 ```
 Some plugins will have lua modules that require a user configuration to function properly or can contain optional lua modules that we dont want to test requiring.
 We can skip specific modules using `nvimSkipModules`. Similar to `nvimRequireCheck`, it accepts a list of strings.
 - `nvimSkipModules = [ MODULE1 MODULE2 ];`
 
 ```nix
+{
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     nvimSkipModules = [
       # vim plugin with optional toggleterm integration
@@ -181,14 +184,17 @@ We can skip specific modules using `nvimSkipModules`. Similar to `nvimRequireChe
       "asyncrun.toggleterm2"
     ];
   };
+}
 ```
 
 In rare cases, we might not want to actually test loading lua modules for a plugin. In those cases, we can disable `neovimRequireCheck` with `doCheck = false;`.
 
 This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
 ```nix
+{
   vim-test = super.vim-test.overrideAttrs {
     # Vim plugin with a test lua file
     doCheck = false;
   };
+}
 ```

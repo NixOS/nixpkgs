@@ -363,7 +363,7 @@ in
               chmod 640 ${runConfig}
             '';
             serviceConfig = rec {
-              Type = "simple";
+              Type = "notify";
               ExecStart = utils.escapeSystemdExecArgs [
                 (lib.getExe' pkgs.coturn "turnserver")
                 "-c"
@@ -409,15 +409,15 @@ in
               ProtectProc = "invisible";
               ProtectSystem = "strict";
               RemoveIPC = true;
-              RestrictAddressFamilies =
-                [
-                  "AF_INET"
-                  "AF_INET6"
-                ]
-                ++ lib.optionals (cfg.listening-ips == [ ]) [
-                  # only used for interface discovery when no listening ips are configured
-                  "AF_NETLINK"
-                ];
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ]
+              ++ lib.optionals (cfg.listening-ips == [ ]) [
+                # only used for interface discovery when no listening ips are configured
+                "AF_NETLINK"
+              ];
               RestrictNamespaces = true;
               RestrictRealtime = true;
               RestrictSUIDSGID = true;

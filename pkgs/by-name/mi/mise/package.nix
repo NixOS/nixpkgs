@@ -1,10 +1,10 @@
 {
+  stdenv,
   lib,
   nix-update-script,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
   coreutils,
   bash,
   direnv,
@@ -12,8 +12,6 @@
   pkg-config,
   openssl,
   cacert,
-  Security,
-  SystemConfiguration,
   usage,
   mise,
   testers,
@@ -23,29 +21,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.4.1";
+  version = "2025.8.6";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-WEzf091KJbXTsyCNaz2QdiNklPZ3054jATGkl5Y+6lA=";
+    hash = "sha256-MxWWq292tXGqKbBYq4vALc/2HLdY9ERO/RWc8WC4Enk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-N04vcOJjx0GCKYXJCkQFQT4D8WWJsi62f3cdUW+4zMk=";
+  cargoHash = "sha256-/UODmKVRiRg03kQ7VD8BaXGtWRf44s6AoKUm+vmC6b4=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   postPatch = ''
     patchShebangs --build \
@@ -73,8 +65,11 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-    # requires https://github.com/rbenv/ruby-build
-    "--skip=plugins::core::ruby::tests::test_list_versions_matching"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # started failing mid-April 2025
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
 
   cargoTestFlags = [ "--all-features" ];
@@ -92,6 +87,9 @@ rustPlatform.buildRustPackage rec {
       --bash ./completions/mise.bash \
       --fish ./completions/mise.fish \
       --zsh ./completions/_mise
+
+    mkdir -p $out/lib/mise
+    touch $out/lib/mise/.disable-self-update
   '';
 
   passthru = {

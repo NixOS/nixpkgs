@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.6";
+  version = "4.8.8";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-PvxzG4VPhCmwc/Kh5g85fV/Mc7ih08pt/zUNBgldZiI=";
+    hash = "sha256-e3kQnWjOe5dkFslDZ+pUgsMB0twDZEcQXYUaPtd+jHA=";
   };
 
   nativeBuildInputs = [
@@ -26,20 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
     pkg-config
   ];
-  buildInputs =
-    [
-      hunspell
-      qt6.qt5compat
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-      qt6Packages.poppler
-      qt6Packages.quazip
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    hunspell
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6Packages.poppler
+    qt6Packages.quazip
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"

@@ -17,14 +17,15 @@
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
-  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
+  cudaArches ? cudaPackages.flags.realArches or [ ],
 
   clblastSupport ? stdenv.hostPlatform.isLinux,
   clblast,
   ocl-icd,
 
-  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
+  vulkanSupport ? true,
   vulkan-loader,
+  shaderc,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
 }:
@@ -40,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.86.2";
+  version = "1.96.2";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zB/X4tfygpf3ZrQ9FtQCd3sxN11Ewlxz1+YCiw7iUZU=";
+    hash = "sha256-OSAFJ2z6vSTTOovgcF/TZvug51uydmZmkjamN/xv2dc=";
   };
 
   enableParallelBuilding = true;
@@ -58,21 +59,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
-  buildInputs =
-    [ tk ]
-    ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals cublasSupport [
-      cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ]
-    ++ lib.optionals clblastSupport [
-      clblast
-      ocl-icd
-    ]
-    ++ lib.optionals vulkanSupport [ vulkan-loader ];
+  buildInputs = [
+    tk
+  ]
+  ++ finalAttrs.pythonInputs
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+  ++ lib.optionals cublasSupport [
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ]
+  ++ lib.optionals clblastSupport [
+    clblast
+    ocl-icd
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
+    shaderc
+  ];
 
   pythonPath = finalAttrs.pythonInputs;
 

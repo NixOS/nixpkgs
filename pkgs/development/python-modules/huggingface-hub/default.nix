@@ -9,6 +9,7 @@
   # dependencies
   filelock,
   fsspec,
+  hf-xet,
   packaging,
   pyyaml,
   requests,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.30.2";
+  version = "0.34.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-6nE6iKIC6ymI+NMOw/xQT4l5nshDyPdGI0YhqK7tQRE=";
+    hash = "sha256-rK9Y+hpjk7AOcTPNUcbyqbiEmH6xVG0fy+pUQop422M=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   dependencies = [
     filelock
     fsspec
+    hf-xet
     packaging
     pyyaml
     requests
@@ -74,7 +76,8 @@ buildPythonPackage rec {
     torch = [
       torch
       safetensors
-    ] ++ safetensors.optional-dependencies.torch;
+    ]
+    ++ safetensors.optional-dependencies.torch;
     hf_transfer = [
       hf-transfer
     ];
@@ -93,7 +96,7 @@ buildPythonPackage rec {
       keras
     ];
     hf_xet = [
-      # hf-xet (unpackaged)
+      hf-xet
     ];
   };
 

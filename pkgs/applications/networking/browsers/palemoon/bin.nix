@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.7.0";
+  version = "33.8.1.2";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -37,17 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      dbus-glib
-      gtk2-x11
-      libXt
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ lib.optionals withGTK3 [
-      gtk3
-    ];
+  buildInputs = [
+    alsa-lib
+    dbus-glib
+    gtk2-x11
+    libXt
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -174,11 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         gtk3 = fetchzip {
           urls = urlRegionVariants "gtk3";
-          hash = "sha256-pWqBcYBSRFI67Q4A38qf7KibZQ1vRlDnTEhJJbTw1Yg=";
+          hash = "sha256-qgabtZ/8nBaOGP0pIXd/byd9XCxulT8w+7uczJE4SAg=";
         };
         gtk2 = fetchzip {
           urls = urlRegionVariants "gtk2";
-          hash = "sha256-hZhhWIuRu1329VNArT7bsaDqcw/NCopZ5/x5rXVE6y4=";
+          hash = "sha256-qeA8EYRY9STsezWrvlVt73fgxPB0mynkxtTV71HFMgU=";
         };
       };
 

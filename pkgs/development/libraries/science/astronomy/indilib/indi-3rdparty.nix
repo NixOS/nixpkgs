@@ -9,6 +9,7 @@
   coreutils,
   cfitsio,
   fetchFromGitHub,
+  fetchpatch,
   gtest,
   libusb1,
   libusb-compat-0_1,
@@ -37,6 +38,7 @@
   limesuite,
   pkg-config,
   zeromq,
+  udevCheckHook,
 }:
 
 let
@@ -45,7 +47,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-WYvinfAbMxgF5Q9iB/itQTMsVmG83lY45JriUo3kzFg=";
+    hash = "sha256-zd88QHYhqxAQlzozXZMKXCFWKYqvGsPHhNxmkdexOOE=";
   };
 
   buildIndi3rdParty =
@@ -69,24 +71,25 @@ let
 
         sourceRoot = "${src.name}/${pname}";
 
-        cmakeFlags =
-          [
-            "-DCMAKE_INSTALL_LIBDIR=lib"
-            "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DINDI_DATA_DIR=share/indi/"
-          ]
-          ++ lib.optional doCheck [
-            "-DINDI_BUILD_UNITTESTS=ON"
-            "-DINDI_BUILD_INTEGTESTS=ON"
-          ]
-          ++ cmakeFlags;
+        cmakeFlags = [
+          "-DCMAKE_INSTALL_LIBDIR=lib"
+          "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DINDI_DATA_DIR=share/indi/"
+        ]
+        ++ lib.optional doCheck [
+          "-DINDI_BUILD_UNITTESTS=ON"
+          "-DINDI_BUILD_INTEGTESTS=ON"
+        ]
+        ++ cmakeFlags;
 
         nativeBuildInputs = [
           cmake
           ninja
           pkg-config
-        ] ++ nativeBuildInputs;
+          udevCheckHook
+        ]
+        ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
 
@@ -102,6 +105,8 @@ let
           done
           ${postInstall}
         '';
+
+        doInstallCheck = true;
 
         meta =
           with lib;
@@ -120,29 +125,6 @@ let
           // meta;
       }
     );
-
-  libahp-gt = buildIndi3rdParty {
-    pname = "libahp-gt";
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
-    };
-  };
-
-  # broken: needs libdfu
-  libahp-xc = buildIndi3rdParty {
-    pname = "libahp-xc";
-    buildInputs = [
-      libusb-compat-0_1
-      urjtag
-      libftdi1
-    ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      broken = true;
-      platforms = [ ];
-    };
-  };
 
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
@@ -505,13 +487,12 @@ in
     buildInputs = [
       cfitsio
       indilib
-      libahp-xc
       libnova
       zlib
     ];
     meta = {
-      platforms = libahp-xc.meta.platforms;
-      # libahc-xc needs libdfu, which is not packaged
+      platforms = [ ];
+      # libahc-xc not packaged
       broken = true;
     };
   };
@@ -677,11 +658,9 @@ in
       indilib
       gsl
       gtest
-      libahp-gt
       libnova
       zlib
     ];
-    meta.platforms = libahp-gt.meta.platforms;
   };
 
   indi-ffmv = buildIndi3rdParty {
@@ -993,6 +972,14 @@ in
   indi-shelyak = buildIndi3rdParty {
     pname = "indi-shelyak";
     buildInputs = [ indilib ];
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/indilib/indi-3rdparty/commit/db8106a9a03e0cfb700e02841d46f8b97b5513e0.patch";
+        hash = "sha256-JJatmu/dxFEni6CdR6QUn7+EiPe18EwE7OmrCT8Nk2c=";
+        stripLen = 1;
+      })
+    ];
   };
 
   indi-starbook = buildIndi3rdParty {

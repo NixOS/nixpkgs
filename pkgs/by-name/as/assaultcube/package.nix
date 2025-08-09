@@ -10,6 +10,8 @@
   libvorbis,
   SDL2,
   SDL2_image,
+  libGL,
+  libX11,
   makeWrapper,
   zlib,
   file,
@@ -34,18 +36,19 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      file
-      zlib
-    ]
-    ++ lib.optionals client [
-      openal
-      SDL2
-      SDL2_image
-      libogg
-      libvorbis
-    ];
+  buildInputs = [
+    file
+    zlib
+  ]
+  ++ lib.optionals client [
+    openal
+    SDL2
+    SDL2_image
+    libGL
+    libX11
+    libogg
+    libvorbis
+  ];
 
   targets = (lib.optionalString server "server") + (lib.optionalString client " client");
   makeFlags = [

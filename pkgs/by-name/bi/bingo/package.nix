@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bingo";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bzh6P+J8EoewjOofwWXMgtSXAhESetD3y9EiqLNOT54=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
   };
-}
+})

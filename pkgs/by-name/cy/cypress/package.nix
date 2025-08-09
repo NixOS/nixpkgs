@@ -13,26 +13,25 @@
   udev,
   unzip,
   xorg,
-  darwin,
 }:
 
 let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-1W13AfXVRWTmDSRdsaPfSSJNlf59JXdI92tXBbYwdDI=";
+      hash = "sha256-3zuKJ99/AJ2bG2MWs6J4YPznNeW+Cf5vkdM+wpfFZb0=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
+      hash = "sha256-73MtXLJLPUdrYKpdna4869f9JjDYhjlCkjKrv9qw5yk=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-L2rhtB/DIK7Qum2YNoWVBn4mf+DA3rbcBUfZEEa/C8c=";
+      hash = "sha256-c8acBIdTVInl6C+BCegu91jTfc5Ug1hG7yXAvDnyuuQ=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-glJscAp0oHS1pqBt6fsQm0I5anl2HQ5YawIJuPG33II=";
+      hash = "sha256-7pGw2AP2T4PtYhQdWzdP0oKzDCPiJqnkR70cj8382Y4=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -42,7 +41,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.17.0";
+  version = "14.5.3";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -53,46 +52,23 @@ stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs =
-    [
-      unzip
-      makeShellWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
-      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
-    ];
+  nativeBuildInputs = [
+    unzip
+    makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+  ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        libXScrnSaver
-        libXdamage
-        libXtst
-        libxshmfence
-        nss
-        gtk2
-        alsa-lib
-        gtk3
-        libgbm
-      ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-        CoreServices
-        CoreMedia
-        CoreAudio
-        AudioToolbox
-        AVFoundation
-        Foundation
-        ApplicationServices
-      ]
-    );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    nss
+    alsa-lib
+    gtk3
+    libgbm
+  ];
 
   runtimeDependencies = lib.optional stdenv.hostPlatform.isLinux (lib.getLib udev);
 
@@ -150,6 +126,7 @@ stdenv.mkDerivation rec {
       tweber
       mmahut
       Crafter
+      jonhermansen
     ];
   };
 }

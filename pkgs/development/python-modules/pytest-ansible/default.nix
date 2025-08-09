@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "25.1.0";
+  version = "25.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "pytest-ansible";
     tag = "v${version}";
-    hash = "sha256-8Lwr8n2zMztE13ExQk+QYsS7lcLxj7hqpRWMACthXZs=";
+    hash = "sha256-k6JFaB5VbUCwknN8SkNotdPRvSvW1tFmTx5p3hGfesg=";
   };
 
   postPatch = ''
@@ -52,44 +52,42 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  disabledTests =
-    [
-      # Host unreachable in the inventory
-      "test_become"
-      # [Errno -3] Temporary failure in name resolution
-      "test_connection_failure_v2"
-      "test_connection_failure_extra_inventory_v2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # These tests fail in the Darwin sandbox
-      "test_ansible_facts"
-      "test_func"
-      "test_param_override_with_marker"
-    ];
+  disabledTests = [
+    # Host unreachable in the inventory
+    "test_become"
+    # [Errno -3] Temporary failure in name resolution
+    "test_connection_failure_v2"
+    "test_connection_failure_extra_inventory_v2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "test_ansible_facts"
+    "test_func"
+    "test_param_override_with_marker"
+  ];
 
-  disabledTestPaths =
-    [
-      # Test want s to execute pytest in a subprocess
-      "tests/integration/test_molecule.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # These tests fail in the Darwin sandbox
-      "tests/test_adhoc.py"
-      "tests/test_adhoc_result.py"
-    ]
-    ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
-      # Test fail in the NixOS environment
-      "tests/test_adhoc.py"
-    ];
+  disabledTestPaths = [
+    # Test want s to execute pytest in a subprocess
+    "tests/integration/test_molecule.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "tests/test_adhoc.py"
+    "tests/test_adhoc_result.py"
+  ]
+  ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
+    # Test fail in the NixOS environment
+    "tests/test_adhoc.py"
+  ];
 
   pythonImportsCheck = [ "pytest_ansible" ];
 
   meta = with lib; {
     description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
-    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
+    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ tjni ];
   };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  ctestCheckHook,
   fetchFromGitHub,
   testers,
 
@@ -43,27 +44,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      gdal
-      hdf5-cpp
-      laszip
-      libgeotiff
-      libtiff
-      libxml2
-      openscenegraph
-      libpq
-      proj
-      sqlite
-      tiledb
-      xercesc
-      zlib
-      zstd
-    ]
-    ++ lib.optionals enableE57 [
-      libe57format
-    ];
+  buildInputs = [
+    curl
+    gdal
+    hdf5-cpp
+    laszip
+    libgeotiff
+    libtiff
+    libxml2
+    openscenegraph
+    libpq
+    proj
+    sqlite
+    tiledb
+    xercesc
+    zlib
+    zstd
+  ]
+  ++ lib.optionals enableE57 [
+    libe57format
+  ];
 
   strictDeps = true;
 
@@ -92,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # tests are flaky and they seem to fail less often when they don't run in
+  # parallel
+  enableParallelChecking = false;
 
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
@@ -112,19 +115,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Failure
     "pdal_app_plugin_test"
+
+    # Removed in GDAL 3.11
+    "pdal_io_gdal_writer_test"
   ];
 
   nativeCheckInputs = [
     gdal # gdalinfo
+    ctestCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    # tests are flaky and they seem to fail less often when they don't run in
-    # parallel
-    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
-    runHook postCheck
-  '';
 
   postInstall = ''
     patchShebangs --update --build $out/bin/pdal-config
@@ -146,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     platforms = platforms.all;
     pkgConfigModules = [ "pdal" ];
   };

@@ -13,7 +13,6 @@
   pkg-config,
   libgcrypt,
   cmake,
-  libobjc,
   libresolv,
   libiconv,
   asciidoctor, # manpages
@@ -38,6 +37,7 @@
   pcre2,
   libargon2,
   extraBuildInputs ? [ ],
+  writeScript,
 }:
 
 let
@@ -92,22 +92,23 @@ let
         libxml2
         pcre2
         libargon2
-      ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux systemd;
     }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
 in
-assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
-stdenv.mkDerivation rec {
-  version = "4.5.1";
-  pname = "weechat";
 
-  hardeningEnable = [ "pie" ];
+assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
+
+stdenv.mkDerivation rec {
+  pname = "weechat";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-Z8FDx7xw5om56obfZ0yan/PPRMzJzf8hvmpWHV6vxSg=";
+    hash = "sha256-RdwDlgYMhjFphoNJ7CgK8cb0rFJKpJJYDhoGXhQsLNg=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -116,41 +117,45 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "man"
-  ] ++ map (p: p.name) enabledPlugins;
+  ]
+  ++ map (p: p.name) enabledPlugins;
 
-  cmakeFlags =
-    [
-      "-DENABLE_MAN=ON"
-      "-DENABLE_DOC=ON"
-      "-DENABLE_DOC_INCOMPLETE=ON"
-      "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" ]
-    ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins;
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_MAN" true)
+    (lib.cmakeBool "ENABLE_DOC" true)
+    (lib.cmakeBool "ENABLE_DOC_INCOMPLETE" true)
+    (lib.cmakeBool "ENABLE_TESTS" enableTests)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "ICONV_LIBRARY" "${libiconv}/lib/libiconv.dylib")
+  ]
+  ++ map (p: lib.cmakeBool p.cmakeFlag p.enabled) plugins;
 
   nativeBuildInputs = [
     cmake
     pkg-config
     asciidoctor
-  ] ++ lib.optional enableTests cpputest;
-  buildInputs =
-    [
-      ncurses
-      openssl
-      aspell
-      cjson
-      gnutls
-      gettext
-      zlib
-      curl
-      libgcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-      libresolv
-    ]
-    ++ lib.concatMap (p: p.buildInputs) enabledPlugins
-    ++ extraBuildInputs;
+  ]
+  ++ lib.optional enableTests cpputest;
+
+  buildInputs = [
+    ncurses
+    openssl
+    aspell
+    cjson
+    gnutls
+    gettext
+    zlib
+    curl
+    libgcrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libresolv
+  ]
+  ++ lib.concatMap (p: p.buildInputs) enabledPlugins
+  ++ extraBuildInputs;
+
+  hardeningEnable = [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE =
     "-I${python}/include/${python.libPrefix}"
@@ -167,13 +172,28 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/weechat --version
   '';
 
+  passthru.updateScript = writeScript "update-weechat" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p coreutils gawk git gnugrep common-updater-scripts
+    set -eu -o pipefail
+
+    version="$(git ls-remote --refs https://github.com/weechat/weechat | \
+      awk '{ print $2 }' | \
+      grep "refs/tags/v" | \
+      sed -E -e 's,refs/tags/v(.*)$,\1,' | \
+      sort --version-sort --reverse | \
+      head -n1)"
+    update-source-version weechat-unwrapped "$version"
+  '';
+
   meta = {
     homepage = "https://weechat.org/";
-    changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
+    changelog = "https://github.com/weechat/weechat/releases/tag/v${version}";
     description = "Fast, light and extensible chat client";
     longDescription = ''
       You can find more documentation as to how to customize this package

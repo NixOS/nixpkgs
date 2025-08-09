@@ -2,7 +2,6 @@
   lib,
   stdenv,
   icu,
-  expat,
   zlib,
   bzip2,
   zstd,
@@ -11,6 +10,7 @@
   fixDarwinDylibNames,
   libiconv,
   libxcrypt,
+  sanitiseHeaderPathsHook,
   makePkgconfigItem,
   copyPkgconfigItems,
   boost-build,
@@ -87,8 +87,6 @@ let
       "variant=${variant}"
       "threading=${threading}"
       "link=${link}"
-      "-sEXPAT_INCLUDE=${expat.dev}/include"
-      "-sEXPAT_LIBPATH=${expat.out}/lib"
     ]
     ++ lib.optionals (lib.versionAtLeast version "1.85") [
       (
@@ -168,8 +166,11 @@ stdenv.mkDerivation {
 
   patches =
     patches
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-no-system-python.patch
-    ++ [ ./cmake-paths-173.patch ]
+    ++ lib.optional (
+      lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
+    ) ./darwin-no-system-python.patch
+    ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+    ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
@@ -212,7 +213,10 @@ stdenv.mkDerivation {
         extraPrefix = "libs/python/";
       })
     ]
-    ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
+
+    ++ lib.optional (
+      lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
+    ) ./fix-clang-target.patch
     ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
       # Backport fix for NumPy 2 support.
       (fetchpatch {
@@ -223,13 +227,20 @@ stdenv.mkDerivation {
         hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
       })
     ]
-    ++ lib.optional (lib.versionAtLeast version "1.87") [
+    ++ lib.optional (version == "1.87.0") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
       (fetchpatch {
         url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
         relative = "include";
         hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
+      })
+      # Fixes ABI detection on some platforms (like loongarch64)
+      (fetchpatch {
+        url = "https://github.com/boostorg/context/commit/63996e427b4470c7b99b0f4cafb94839ea3670b6.patch";
+        stripLen = 1;
+        extraPrefix = "libs/context/";
+        hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
       })
     ];
 
@@ -301,7 +312,7 @@ stdenv.mkDerivation {
   # Fix compilation to 32-bit ARM with clang in downstream packages
   # https://github.com/ned14/outcome/pull/308
   # https://github.com/boostorg/json/pull/1064
-  postPatch = lib.optionalString (lib.versionAtLeast version "1.87") ''
+  postPatch = lib.optionalString (version == "1.87.0") ''
     substituteInPlace \
       boost/outcome/outcome_gdb.h \
       boost/outcome/experimental/status-code/status_code.hpp \
@@ -337,35 +348,34 @@ stdenv.mkDerivation {
     which
     boost-build
     copyPkgconfigItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      expat
-      zlib
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
+    sanitiseHeaderPathsHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    zlib
+    bzip2
+    libiconv
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.69") zstd
+  ++ [ xz ]
+  ++ lib.optional enableIcu icu
+  ++ lib.optionals enablePython [
+    libxcrypt
+    python
+  ]
+  ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
-  configureFlags =
-    [
-      "--includedir=$(dev)/include"
-      "--libdir=$(out)/lib"
-      "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-    ]
-    ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
+  configureFlags = [
+    "--includedir=$(dev)/include"
+    "--libdir=$(out)/lib"
+    "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
+  ]
+  ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
+  ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild
@@ -386,15 +396,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup =
-    ''
-      # Make boost header paths relative so that they are not runtime dependencies
-      cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-        -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      $RANLIB "$out/lib/"*.a
-    '';
+  preFixup = ''
+    # Strip UTF‐8 BOMs for `sanitiseHeaderPathsHook`.
+    cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
+      -exec sed '1s/^\xef\xbb\xbf//' -i '{}' \;
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    $RANLIB "$out/lib/"*.a
+  '';
 
   outputs = [
     "out"

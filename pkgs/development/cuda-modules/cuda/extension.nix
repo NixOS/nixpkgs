@@ -1,4 +1,4 @@
-{ cudaVersion, lib }:
+{ cudaMajorMinorVersion, lib }:
 let
   inherit (lib) attrsets modules trivial;
   redistName = "cuda";
@@ -7,10 +7,6 @@ let
   # https://developer.download.nvidia.com/compute/cuda/redist/
   # Maps a cuda version to the specific version of the manifest.
   cudaVersionMap = {
-    "11.4" = "11.4.4";
-    "11.5" = "11.5.2";
-    "11.6" = "11.6.2";
-    "11.7" = "11.7.1";
     "11.8" = "11.8.0";
     "12.0" = "12.0.1";
     "12.1" = "12.1.1";
@@ -20,13 +16,14 @@ let
     "12.5" = "12.5.1";
     "12.6" = "12.6.3";
     "12.8" = "12.8.1";
+    "12.9" = "12.9.1";
   };
 
   # Check if the current CUDA version is supported.
-  cudaVersionMappingExists = builtins.hasAttr cudaVersion cudaVersionMap;
+  cudaVersionMappingExists = builtins.hasAttr cudaMajorMinorVersion cudaVersionMap;
 
   # fullCudaVersion : String
-  fullCudaVersion = cudaVersionMap.${cudaVersion};
+  fullCudaVersion = cudaVersionMap.${cudaMajorMinorVersion};
 
   evaluatedModules = modules.evalModules {
     modules = [
@@ -43,7 +40,7 @@ let
   };
 
   # Generally we prefer to do things involving getting attribute names with feature_manifest instead
-  # of redistrib_manifest because the feature manifest will have *only* the redist architecture
+  # of redistrib_manifest because the feature manifest will have *only* the redist system
   # names as the keys, whereas the redistrib manifest will also have things like version, name, license,
   # and license_path.
   featureManifest = evaluatedModules.config.cuda.manifests.feature;
@@ -53,42 +50,13 @@ let
   # buildRedistPackage : callPackage -> PackageName -> Derivation
   buildRedistPackage =
     callPackage: pname:
-    let
+    callPackage ../generic-builders/manifest.nix {
+      inherit pname redistName;
+      # We pass the whole release to the builder because it has logic to handle
+      # the case we're trying to build on an unsupported platform.
       redistribRelease = redistribManifest.${pname};
       featureRelease = featureManifest.${pname};
-      drv =
-        let
-          # get `autoAddDriverRunpath` from pkgs instead of cudaPackages' alias to avoid warning
-          inherit (callPackage ({ pkgs }: pkgs) { }) autoAddDriverRunpath;
-        in
-        (callPackage ../generic-builders/manifest.nix {
-          # We pass the whole release to the builder because it has logic to handle
-          # the case we're trying to build on an unsupported platform.
-          inherit
-            pname
-            redistName
-            redistribRelease
-            featureRelease
-            autoAddDriverRunpath
-            ;
-        }).overrideAttrs
-          (prevAttrs: {
-            # Add the package-specific license.
-            meta = prevAttrs.meta // {
-              license =
-                let
-                  licensePath =
-                    if redistribRelease.license_path != null then
-                      redistribRelease.license_path
-                    else
-                      "${pname}/LICENSE.txt";
-                  url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
-                in
-                lib.licenses.nvidiaCudaRedist // { inherit url; };
-            };
-          });
-    in
-    drv;
+    };
 
   # Build all the redist packages given final and prev.
   redistPackages =

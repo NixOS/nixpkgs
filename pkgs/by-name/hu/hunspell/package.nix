@@ -58,13 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   passthru = {
+    withDicts = callPackage ./wrapper.nix { hunspell = finalAttrs.finalPackage; };
     tests = {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
       version = testers.testVersion { package = finalAttrs.finalPackage; };
-      wrapper = callPackage ./wrapper.nix {
-        hunspell = finalAttrs.finalPackage;
-        dicts = [ hunspellDicts.en_US ];
-      };
+      wrapper = finalAttrs.finalPackage.withDicts (d: [ d.en_US ]);
     };
 
     updateScript = nix-update-script { };
@@ -95,11 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://hunspell.github.io/";
     changelog = "https://github.com/hunspell/hunspell/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
-      gpl2
-      lgpl21
+      gpl2Plus
+      lgpl21Plus
       mpl11
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      RossSmyth
+    ];
     mainProgram = "hunspell";
     platforms = lib.platforms.all;
     pkgConfigModules = [ "hunspell" ];

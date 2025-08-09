@@ -6,7 +6,7 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
+  sanitiseHeaderPathsHook,
 
   folly,
   fizz,
@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2025.02.10.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IlMdYOQH0iqxObyFM1F4cZqOgSbCs4cOFtcsPWG8cWk=";
+    hash = "sha256-t3b+R2tb4VTsjDL9Jzjcaehs5k+BLNLilm3+nXxyjj0=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
+    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [
@@ -107,18 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     }
 
     runHook postCheck
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -65,6 +65,23 @@ let
     source ${./update-lib.sh}
   '';
 
+  # Needed for wine versions < 10.2 to fix compatibility with binutils 2.44
+  # https://github.com/NixOS/nixpkgs/issues/399714
+  # https://bugs.winehq.org/show_bug.cgi?id=57819
+  # https://gitlab.winehq.org/wine/wine/-/merge_requests/7328
+  patches-binutils-2_44-fix-wine-older-than-10_2 = [
+    (pkgs.fetchpatch {
+      name = "ntdll-use-signed-type";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/fd59962827a715d321f91c9bdb43f3e61f9ebbc.patch";
+      hash = "sha256-PvFom9NJ32XZO1gYor9Cuk8+eaRFvmG572OAtNx1tks=";
+    })
+    (pkgs.fetchpatch {
+      name = "winebuild-avoid using-idata-section";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/c9519f68ea04915a60704534ab3afec5ec1b8fd7.patch";
+      hash = "sha256-vA58SfAgCXoCT+NB4SRHi85AnI4kj9S2deHGp4L36vI=";
+    })
+  ];
+
   inherit (pkgs) writeShellScript;
 in
 rec {
@@ -96,7 +113,8 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ];
+    ]
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
     updateScript = writeShellScript "update-wine-stable" (''
       ${updateScriptPreamble}
@@ -115,15 +133,19 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "10.5";
+    version = "10.12";
     url = "https://dl.winehq.org/wine/source/10.x/wine-${version}.tar.xz";
-    hash = "sha256-wDbsHvR2dHdKX5lFgwIuni62j+j8GLOox55oWzvsibw=";
-    inherit (stable) patches;
+    hash = "sha256-zVcscaPXLof5hJCyKMfCaq6z/eON2eefw7VjkdWZ1r8=";
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+    ];
 
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
-      hash = "sha256-rXA/55rwQSJR247E4H7cQdTtXRmjomRbls7THV3jfcE=";
+      hash = "sha256-a5Vw9UVawx/vvTeu6SGxf4C1GwvdmpPJDyuW0PCUob8=";
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";
@@ -146,9 +168,9 @@ rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "10.0.0";
+      version = "10.1.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-26ynPl0J96OnwVetBCia+cpHw87XAS1GVEpgcEaQK4c=";
+      hash = "sha256-yIwkMYkLwyys7I1+pw5Tpa5LlcjFXKbnXvjbDkzPEHA=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''
@@ -177,7 +199,12 @@ rec {
     version = "9.21";
     url = "https://dl.winehq.org/wine/source/9.x/wine-${version}.tar.xz";
     hash = "sha256-REK0f/2bLqRXEA427V/U5vTYKdnbeaJeYFF1qYjKL/8=";
-    inherit (stable) patches;
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+    ]
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {

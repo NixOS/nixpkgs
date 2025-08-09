@@ -83,7 +83,8 @@ let
           kamilchm
           illustris
         ];
-      } // extraMeta;
+      }
+      // extraMeta;
     });
 in
 {
@@ -97,8 +98,8 @@ in
   # a new NixOS release.
   spark_3_5 = spark {
     pname = "spark";
-    version = "3.5.4";
-    hash = "sha256-rSr7UH1dZIkUYW6ehc/dYxlmN9yVjEKwrwLMT+uMd/0=";
+    version = "3.5.5";
+    hash = "sha256-vzcWgIfHPhN3nyrxdk3f0p4fW3MpQ+FuEPnWPw0xNPg=";
   };
   spark_3_4 = spark rec {
     pname = "spark";

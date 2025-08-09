@@ -49,6 +49,7 @@ let
         description = "Script used to obtain source hashes for fetch${tool}";
         maintainers = with maintainers; [ bennofs ];
         platforms = platforms.unix;
+        mainProgram = "nix-prefetch-${tool}";
       };
     };
 in

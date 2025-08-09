@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "rembg";
-  version = "2.0.65";
+  version = "2.0.67";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${version}";
-    hash = "sha256-o6M3DSW1GL3xvEx4lsE325J3XcmRrhhPszS5MkaynsE=";
+    hash = "sha256-QHx1qa1tErneLC1H6df6mTbKTWPh3BzJUqeE65D2c4E=";
   };
 
   build-system = [
@@ -59,7 +59,8 @@ buildPythonPackage rec {
     scikit-image
     scipy
     tqdm
-  ] ++ lib.optionals withCli optional-dependencies.cli;
+  ]
+  ++ lib.optionals withCli optional-dependencies.cli;
 
   optional-dependencies = {
     cli = [
@@ -90,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to remove background from images";
     homepage = "https://github.com/danielgatis/rembg";
-    changelog = "https://github.com/danielgatis/rembg/releases/tag/v${version}";
+    changelog = "https://github.com/danielgatis/rembg/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";

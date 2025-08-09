@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
     rev = "v${version}";
-    hash = "sha256-A1Y+7CqzoQ6xoTwWU8gfq+dYJ+PiIpqtOOZSL0uVby4=";
+    hash = "sha256-A7a0kg9JRiNNKJbLJu5Fbu6ZgCwv3+3oDhZr3jwNXmM=";
   };
 
   nativeBuildInputs = [ cmake ];

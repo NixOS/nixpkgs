@@ -5,56 +5,80 @@
   testers,
   paretosecurity,
   nixosTests,
+  pkg-config,
+  gtk3,
+  webkitgtk_4_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    gtk3
+    webkitgtk_4_1
+  ];
   pname = "paretosecurity";
-  version = "0.1.3";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
-    rev = version;
-    hash = "sha256-ovyfHqLCf5U3UR1HfoA+UQhqLZ6IaILcpqptPRQsb60=";
+    rev = finalAttrs.version;
+    hash = "sha256-TXKymCFr2lrbgmbCxI3vIKx61nbOaRmuUTwNn7k0Hm0=";
   };
 
-  vendorHash = "sha256-7mKAFkKGpBOjXc3J/sfF3k3pJF53tFybXZgbfJInuSY=";
+  vendorHash = "sha256-DlCGCheJHa4HPM7kfX/UbOfLukAiaoP7QZnabkZVASM=";
   proxyVendor = true;
+
+  # Skip building the Windows installer
+  preBuild = ''
+    rm -rf cmd/paretosecurity-installer
+  '';
 
   ldflags = [
     "-s"
-    "-X=github.com/ParetoSecurity/agent/shared.Version=${version}"
-    "-X=github.com/ParetoSecurity/agent/shared.Commit=${src.rev}"
+    "-X=github.com/ParetoSecurity/agent/shared.Version=${finalAttrs.version}"
+    "-X=github.com/ParetoSecurity/agent/shared.Commit=${finalAttrs.src.rev}"
     "-X=github.com/ParetoSecurity/agent/shared.Date=1970-01-01T00:00:00Z"
   ];
 
   postInstall = ''
     # Install global systemd files
-    install -Dm400 ${src}/apt/paretosecurity.socket $out/lib/systemd/system/paretosecurity.socket
-    install -Dm400 ${src}/apt/paretosecurity.service $out/lib/systemd/system/paretosecurity.service
+    install -Dm400 ${finalAttrs.src}/apt/paretosecurity.socket $out/lib/systemd/system/paretosecurity.socket
+    install -Dm400 ${finalAttrs.src}/apt/paretosecurity.service $out/lib/systemd/system/paretosecurity.service
     substituteInPlace $out/lib/systemd/system/paretosecurity.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
 
     # Install user systemd files
-    install -Dm444 ${src}/apt/paretosecurity-user.timer $out/lib/systemd/user/paretosecurity-user.timer
-    install -Dm444 ${src}/apt/paretosecurity-user.service $out/lib/systemd/user/paretosecurity-user.service
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-user.timer $out/lib/systemd/user/paretosecurity-user.timer
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-user.service $out/lib/systemd/user/paretosecurity-user.service
     substituteInPlace $out/lib/systemd/user/paretosecurity-user.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
-    install -Dm444 ${src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
     substituteInPlace $out/lib/systemd/user/paretosecurity-trayicon.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install .desktop files
+    install -Dm444 ${finalAttrs.src}/apt/ParetoSecurity.desktop $out/share/applications/ParetoSecurity.desktop
+    substituteInPlace $out/share/applications/ParetoSecurity.desktop \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+    install -Dm444 ${finalAttrs.src}/apt/ParetoSecurityLink.desktop $out/share/applications/ParetoSecurityLink.desktop
+    substituteInPlace $out/share/applications/ParetoSecurityLink.desktop \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install icon
+    install -Dm444 ${finalAttrs.src}/assets/icon.png $out/share/icons/hicolor/512x512/apps/ParetoSecurity.png
   '';
 
   passthru.tests = {
     version = testers.testVersion {
-      version = "${version}";
+      inherit (finalAttrs) version;
       package = paretosecurity;
     };
     integration_test = nixosTests.paretosecurity;
   };
 
   meta = {
-    description = "Pareto Security agent makes sure your laptop is correctly configured for security.";
+    description = "Agent that makes sure your laptop is correctly configured for security";
     longDescription = ''
       The Pareto Security agent is a free and open source app to help you make
       sure that your laptop is configured for security.
@@ -66,10 +90,11 @@ buildGoModule rec {
       root helper that allows you to run the checker in userspace. Some checks
       require root permissions, and the checker asks the helper to run those.
 
-      Additionally, if you enable `services.paretosecurity.trayIcon`, you get a
-      little Vilfredo Pareto living in your systray showing your the current
-      status of checks. This will also enable a systemd timer to update the
-      status of checks once per hour.
+      Additionally, using the NixOS module gets you a little Vilfredo Pareto
+      living in your systray showing your the current status of checks. The
+      NixOS Module also installs a systemd timer to update the status of checks
+      once per hour. If you want to use just the CLI mode, set
+      `services.paretosecurity.trayIcon` to `false`.
 
       Finally, you can run `paretosecurity link` to configure the agent
       to send the status of checks to https://dash.paretosecurity.com to make
@@ -80,4 +105,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zupo ];
     mainProgram = "paretosecurity";
   };
-}
+})

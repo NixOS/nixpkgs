@@ -2,32 +2,30 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtsvg,
-  qttools,
-  exiv2,
-  wrapQtAppsHook,
   cmake,
+  qt6Packages,
+  exiv2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pineapple-pictures";
-  version = "0.9.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = finalAttrs.version;
-    hash = "sha256-NWh0+DEfKT1iZY6tXVGuxgaXF5U+UB9S5BlWyD+1Bko=";
+    hash = "sha256-bJOBqxJ5pl1O0QEFQtkPn55y4g5I7Zwb3S0PTJ1SoFk=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtsvg
+    qt6Packages.qtsvg
     exiv2
   ];
 

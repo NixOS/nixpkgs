@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-anything";
-  version = "6.1.9";
+  version = "6.2.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-anything";
     rev = version;
-    hash = "sha256-OYPsUXMjuU6gG+EzyYl640+2/59n8D5V906CVGwn6Bo=";
+    hash = "sha256-eGel+pLAYHYkPXQxzTz+lMPSlgNiDFAev2bzGjj4ZFw=";
   };
 
   postPatch = ''
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     udisks2-qt5
     util-linux
     libnl
+    libsForQt5.polkit-qt
     glib
     pcre
   ];
@@ -50,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-anything";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

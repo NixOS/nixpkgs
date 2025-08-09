@@ -91,6 +91,12 @@ in
           The input method method package.
         '';
       };
+
+      enableGtk2 = lib.mkEnableOption "Gtk2 support";
+
+      enableGtk3 = lib.mkEnableOption "Gtk3 support" // {
+        default = true;
+      };
     };
   };
 
@@ -100,13 +106,13 @@ in
         "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
     environment.systemPackages = [
       cfg.package
-      gtk2_cache
-      gtk3_cache
-    ];
+    ]
+    ++ lib.optional cfg.enableGtk2 gtk2_cache
+    ++ lib.optional cfg.enableGtk3 gtk3_cache;
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ericsagnes ];
+    maintainers = with lib.maintainers; [ ];
     doc = ./default.md;
   };
 

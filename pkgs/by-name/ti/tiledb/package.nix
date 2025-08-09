@@ -8,7 +8,7 @@
   bzip2,
   zstd,
   spdlog,
-  tbb,
+  tbb_2022,
   openssl,
   boost,
   libpqxx,
@@ -22,7 +22,6 @@
   libpng,
   file,
   runCommand,
-  catch2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
@@ -32,16 +31,18 @@ let
     chmod -R +w $out
     cp -r ${rapidcheck.dev}/* $out
   '';
+  catch2 = catch2_3;
+  tbb = tbb_2022;
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.27.2";
+  version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     tag = version;
-    hash = "sha256-zk4jkXJMh6wpuEKaCvuKUDod+F8B/6W5Lw8gwelcPEM=";
+    hash = "sha256-Cs3Lr8I/Mu02x78d7IySG0XX4u/VAjBs4p4b00XDT5k=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
@@ -64,15 +65,17 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
+  ]
+  ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
-    catch2_3
+    catch2
     clang-tools
     cmake
     python3
     doxygen
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     zlib
@@ -89,9 +92,6 @@ stdenv.mkDerivation rec {
     rapidcheck'
     catch2
   ];
-
-  # fatal error: catch.hpp: No such file or directory
-  doCheck = false;
 
   nativeCheckInputs = [
     gtest

@@ -4,40 +4,30 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
-  openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tui-journal";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
     rev = "v${version}";
-    hash = "sha256-XbOKC+utKt53iFzNbm861tMGsNMZ2GQc+/J0Dm/SYS8=";
+    hash = "sha256-crrh7lV5ZMKaxsrFmhXsUgBMbN5nmbf8wQ6croTqUKI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gleNWRs9oCI9TH5ALS/wvC88OooMfSTJvz+UVWFYrs4=";
+  cargoHash = "sha256-PmQDLGOXvI0OJ+gMsYa/XLc0WgSH6++23X/b1+iU3JQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    zlib
+  ];
 
   meta = with lib; {
     description = "Your journal app if you live in a terminal";

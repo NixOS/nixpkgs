@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     libpq.pg_config
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     curl
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gaia-gis.it/fossil/spatialite_gui";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     mainProgram = "spatialite_gui";
   };
 }

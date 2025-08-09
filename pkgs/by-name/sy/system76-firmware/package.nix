@@ -12,13 +12,13 @@
 rustPlatform.buildRustPackage rec {
   pname = "system76-firmware";
   # Check Makefile when updating, make sure postInstall matches make install
-  version = "1.0.70";
+  version = "1.0.71";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-firmware";
     rev = version;
-    sha256 = "sha256-6c2OTHCTIYl/ezkWjmyb60FAdasOrV9hjd0inDc44wI=";
+    sha256 = "sha256-z4n1olvOSiJfHnEixUaWfz86519SntHfECOtWSeI4vk=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--workspace" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mLk4EhaRaJvZk27BmjuvNy7PWbqYjUZ9uDikWmBEaz8=";
+  cargoHash = "sha256-YgDWaxrEfG1xxZOqa7tk2NaPVfMIqoMNZdjejkY6Jow=";
 
   # Purposefully don't install systemd unit file, that's for NixOS
   postInstall = ''

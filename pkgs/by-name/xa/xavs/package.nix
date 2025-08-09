@@ -16,26 +16,25 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase =
-    ''
-      patchShebangs configure
-      patchShebangs config.sub
-      patchShebangs version.sh
-      patchShebangs tools/countquant_xavs.pl
-      patchShebangs tools/patcheck
-      patchShebangs tools/regression-test.pl
-      patchShebangs tools/xavs-format
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace config.guess --replace 'uname -p' 'uname -m'
-      substituteInPlace configure \
-        --replace '-O4' '-O3' \
-        --replace ' -s ' ' ' \
-        --replace 'LDFLAGS -s' 'LDFLAGS' \
-        --replace '-dynamiclib' ' ' \
-        --replace '-falign-loops=16' ' '
-      substituteInPlace Makefile --replace '-Wl,-soname,' ' '
-    '';
+  patchPhase = ''
+    patchShebangs configure
+    patchShebangs config.sub
+    patchShebangs version.sh
+    patchShebangs tools/countquant_xavs.pl
+    patchShebangs tools/patcheck
+    patchShebangs tools/regression-test.pl
+    patchShebangs tools/xavs-format
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace config.guess --replace 'uname -p' 'uname -m'
+    substituteInPlace configure \
+      --replace '-O4' '-O3' \
+      --replace ' -s ' ' ' \
+      --replace 'LDFLAGS -s' 'LDFLAGS' \
+      --replace '-dynamiclib' ' ' \
+      --replace '-falign-loops=16' ' '
+    substituteInPlace Makefile --replace '-Wl,-soname,' ' '
+  '';
 
   configureFlags = [
     "--enable-pic"

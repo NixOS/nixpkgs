@@ -49,6 +49,22 @@ in
         ];
       };
 
+      # Override GSettings defaults
+      programs.dconf = {
+        enable = true;
+        profiles.user.databases = [
+          {
+            settings = {
+              "com/lomiri/shell/launcher" = {
+                logo-picture-uri = "file://${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
+                home-button-background-color = "#5277C3";
+              };
+            };
+            lockAll = true;
+          }
+        ];
+      };
+
       fonts.packages = with pkgs; [
         ubuntu-classic # Ubuntu is default font
       ];
@@ -62,9 +78,11 @@ in
         packages = (
           with pkgs;
           [
-            ayatana-indicator-datetime # Clock
             ayatana-indicator-session # Controls for shutting down etc
           ]
+          ++ (with lomiri; [
+            lomiri-indicator-datetime # Clock
+          ])
         );
       };
     })
@@ -133,7 +151,6 @@ in
       # Copy-pasted basic stuff
       hardware.graphics.enable = lib.mkDefault true;
       fonts.enableDefaultPackages = lib.mkDefault true;
-      programs.dconf.enable = lib.mkDefault true;
 
       services.accounts-daemon.enable = true;
 
@@ -252,19 +269,18 @@ in
 
       systemd.services = {
         "dbus-com.lomiri.UserMetrics" = {
-          serviceConfig =
-            {
-              Type = "dbus";
-              BusName = "com.lomiri.UserMetrics";
-              User = "usermetrics";
-              StandardOutput = "syslog";
-              SyslogIdentifier = "com.lomiri.UserMetrics";
-              ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
-            }
-            // lib.optionalAttrs (!config.security.apparmor.enable) {
-              # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
-              Environment = "USERMETRICS_NO_AUTH=1";
-            };
+          serviceConfig = {
+            Type = "dbus";
+            BusName = "com.lomiri.UserMetrics";
+            User = "usermetrics";
+            StandardOutput = "syslog";
+            SyslogIdentifier = "com.lomiri.UserMetrics";
+            ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
+          }
+          // lib.optionalAttrs (!config.security.apparmor.enable) {
+            # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
+            Environment = "USERMETRICS_NO_AUTH=1";
+          };
         };
       };
 

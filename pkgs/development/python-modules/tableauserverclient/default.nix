@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.37";
+  version = "0.38";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3jQtEuKABN0P2AmQ7NEKsabbokd73RIjFvbBpa52pfg=";
+    hash = "sha256-Td2QW10vsKojhk9eeO90QbArdIuNn+hbNk9LvCYwgyo=";
   };
 
   pythonRelaxDeps = [

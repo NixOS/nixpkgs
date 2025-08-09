@@ -51,6 +51,10 @@ buildPythonPackage rec {
     hash = "sha256-mGLg6Kgur2LAcujFzO/rkSPAC2t3wR5CO2AeOO0+bFI=";
   };
 
+  pythonRelaxDeps = [
+    "rich"
+  ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -67,7 +71,8 @@ buildPythonPackage rec {
     rich
     starlette-wtf
     uvicorn
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   optional-dependencies = {
     login = [
@@ -93,7 +98,8 @@ buildPythonPackage rec {
     pytest-httpx
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "beanhub_cli" ];
 

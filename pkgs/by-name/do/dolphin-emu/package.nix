@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   qt6,
+  wrapGAppsHook3,
   # darwin-only
   xcbuild,
 
@@ -53,91 +54,99 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2503";
+  version = "2506a";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
+    hash = "sha256-xYGq2Yt4Gqb/QDA6HZajs7JCwETufuqigk3bZbsgdEM=";
     fetchSubmodules = true;
-    hash = "sha256-oqJKXFcsFgoYjUqdk3Z/CIFhOa8w0drcF4JwtHRI1Hs=";
+    leaveDotGit = true;
+    postFetch = ''
+      pushd $out
+      git rev-parse HEAD 2>/dev/null >$out/COMMIT
+      find $out -name .git -print0 | xargs -0 rm -rf
+      popd
+    '';
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild # for plutil
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild # for plutil
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      cubeb
-      curl
-      enet
-      ffmpeg
-      fmt_10
-      gtest
-      hidapi
-      libXdmcp
-      libpulseaudio
-      libspng
-      libusb1
-      lz4
-      lzo
-      mbedtls_2
-      miniupnpc
-      minizip-ng
-      openal
-      pugixml
-      qt6.qtbase
-      qt6.qtsvg
-      SDL2
-      sfml
-      xxHash
-      xz
-      # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
-      #zlib-ng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      bluez
-      libGL
-      libXext
-      libXrandr
-      libevdev
-      # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
-      #mgba # Derivation doesn't support Darwin
-      udev
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    bzip2
+    cubeb
+    curl
+    enet
+    ffmpeg
+    fmt_10
+    gtest
+    hidapi
+    libXdmcp
+    libpulseaudio
+    libspng
+    libusb1
+    lz4
+    lzo
+    mbedtls_2
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qt6.qtbase
+    qt6.qtsvg
+    SDL2
+    sfml
+    xxHash
+    xz
+    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
+    #zlib-ng
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    bluez
+    libGL
+    libXext
+    libXrandr
+    libevdev
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
+    #mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
-      (lib.cmakeFeature "DOLPHIN_WC_REVISION" finalAttrs.src.rev)
-      (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
-      (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
-      (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
-      (lib.cmakeBool "MACOS_CODE_SIGNING" false)
-      # Bundles the application folder into a standalone executable, so we cannot devendor libraries
-      (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
-      # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
-      # Note: The updater isn't available on linux, so we don't need to disable it there.
-      (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
+    (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
+    (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
+    (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
+    (lib.cmakeBool "MACOS_CODE_SIGNING" false)
+    # Bundles the application folder into a standalone executable, so we cannot devendor libraries
+    (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
+    # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
+    (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
+  ];
+  preConfigure = ''
+    appendToVar cmakeFlags "-DDOLPHIN_WC_REVISION=$(cat COMMIT)"
+    rm COMMIT
+  '';
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
@@ -145,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
     # The .desktop file should already set this, but Dolphin may be launched in other ways
     "--set QT_QPA_PLATFORM xcb"
   ];
+
+  doInstallCheck = true;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -156,6 +167,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ./Binaries/Dolphin.app $out/Applications
       ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
     '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests = {

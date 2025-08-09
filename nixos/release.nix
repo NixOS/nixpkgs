@@ -339,32 +339,6 @@ rec {
 
   );
 
-  # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
-  # automatic sizing without blocking the channel.
-  amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
-          (
-            { ... }:
-            {
-              virtualisation.diskSize = "auto";
-            }
-          )
-        ];
-      }).config.system.build.amazonImage
-    )
-
-  );
-
   # An image that can be imported into incus and used for container creation
   incusContainerImage =
     forMatchingSystems
@@ -636,8 +610,8 @@ rec {
       { ... }:
       {
         services.xserver.enable = true;
-        services.xserver.displayManager.gdm.enable = true;
-        services.xserver.desktopManager.gnome.enable = true;
+        services.displayManager.gdm.enable = true;
+        services.desktopManager.gnome.enable = true;
       }
     );
 

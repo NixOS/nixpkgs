@@ -52,15 +52,9 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  prePatch = ''
-    sed -i 's#aiofiles = ".*"#aiofiles = "*"#' pyproject.toml
-    sed -i 's#deezer-py = ".*"#deezer-py = "*"#' pyproject.toml
-    sed -i 's#m3u8 = ".*"#m3u8 = "*"#' pyproject.toml
-    sed -i 's#pathvalidate = ".*"#pathvalidate = "*"#' pyproject.toml
-    sed -i 's#Pillow = ".*"#Pillow = "*"#' pyproject.toml
-    sed -i 's#pytest-asyncio = ".*"#pytest-asyncio = "*"#' pyproject.toml
-    sed -i 's#tomlkit = ".*"#tomlkit = "*"#' pyproject.toml
+  pythonRelaxDeps = true;
 
+  prePatch = ''
     sed -i 's#"ffmpeg"#"${lib.getBin ffmpeg}/bin/ffmpeg"#g' streamrip/client/downloadable.py
   '';
 
@@ -72,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     description = "Scriptable music downloader for Qobuz, Tidal, SoundCloud, and Deezer";
     homepage = "https://github.com/nathom/streamrip";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
     mainProgram = "rip";
   };
 }

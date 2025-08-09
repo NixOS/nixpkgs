@@ -1,6 +1,6 @@
 { fetchgit, ... }:
 fetchgit {
   url = "https://gerrit.libreoffice.org/help";
-  rev = "refs/tags/cp-24.04.13-2";
-  hash = "sha256-lyBuj7FI1jwVLLBkB6JJcmQVtm1FKExYWvRUoGqRbJ0=";
+  rev = "refs/tags/cp-25.04.1-1";
+  hash = "sha256-jKcrkvdxpebCTeILrjA7bKfcsWw8VFjS7eimJI1dgFQ=";
 }

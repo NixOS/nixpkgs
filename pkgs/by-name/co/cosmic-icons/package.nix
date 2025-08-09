@@ -9,13 +9,14 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-icons";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-j5H2+BOWxq2jShN15QCvj9rY6OK+vlUbyR9R07Ka2rA=";
+    hash = "sha256-KDmEYeuiDTYvqg2XJK8pMDfsmROKtN+if5Qxz57H5xs=";
   };
 
   nativeBuildInputs = [ just ];
@@ -48,6 +49,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       cc-by-sa-40
     ];
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
   };
 })

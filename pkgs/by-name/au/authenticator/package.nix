@@ -92,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "authenticator";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ austinbutler ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ austinbutler ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGo124Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -16,25 +16,25 @@
   ffmpegSupport ? true,
 }:
 
-buildGo123Module rec {
+buildGo124Module rec {
   pname = "navidrome";
-  version = "0.55.1";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-BkgHUX2kQ7OMnb9vOIwsQ9eNcqCzekz2IVMtG0IMUaA=";
+    hash = "sha256-MwFACp2RKXz6zTzjknC5nKzaTEG1NWtvYggRZRiX5t0=";
   };
 
-  vendorHash = "sha256-IF2RaEsuHADnwONrvwbL6KZVrE3bZx1sX03zpmtQZq8=";
+  vendorHash = "sha256-CrZqVhvDYemnaCuveOXySqHZhW+nrgzdxaiJRuZfSaI=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/ui";
-    hash = "sha256-lM8637tcKc9iSPjXJPDZXFCGj7pShOXTC6X2iketg90=";
+    hash = "sha256-tl6unHz0E0v0ObrfTiE0vZwVSyVFmrLggNM5QsUGsvI=";
   };
 
   nativeBuildInputs = [
@@ -92,6 +92,7 @@ buildGo123Module rec {
     maintainers = with lib.maintainers; [
       aciceri
       squalus
+      tebriel
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;

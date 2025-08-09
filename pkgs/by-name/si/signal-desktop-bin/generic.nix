@@ -43,6 +43,7 @@
   at-spi2-core,
   libappindicator-gtk3,
   libgbm,
+  libwebp,
   # Runtime dependencies:
   systemd,
   libnotify,
@@ -50,6 +51,9 @@
   libpulseaudio,
   xdg-utils,
   wayland,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs,
 }:
 
 {
@@ -86,6 +90,15 @@ let
       runHook postInstall
     '';
   });
+
+  noto-emoji-sheet-32 = fetchurl {
+    url = "https://raw.githubusercontent.com/iamcal/emoji-data/refs/tags/v15.1.2/sheet_google_32.png";
+    hash = "sha256-S03NCTbvB5yeQl62WpLNjNGhjNErtgaOB6tAj/X8vPc=";
+  };
+  noto-emoji-sheet-64 = fetchurl {
+    url = "https://raw.githubusercontent.com/iamcal/emoji-data/refs/tags/v15.1.2/sheet_google_64.png";
+    hash = "sha256-kZYStR5xAuausSpOD6wJZRJZ1K6nPpweE3aYSgWntS4=";
+  };
 in
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -124,7 +137,8 @@ stdenv.mkDerivation rec {
       asar extract "$out/${libdir}/resources/app.asar" $out/asar-contents
       rm -r \
         "$out/${libdir}/resources/app.asar"{,.unpacked} \
-        $out/asar-contents/node_modules/emoji-datasource-apple
+        $out/asar-contents/images/emoji-sheet-32.webp \
+        $out/asar-contents/images/emoji-sheet-64.webp
     '';
   };
 
@@ -136,6 +150,7 @@ stdenv.mkDerivation rec {
     # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
     # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
     (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+    libwebp
   ];
 
   buildInputs = [
@@ -208,6 +223,10 @@ stdenv.mkDerivation rec {
     # Create required symlinks:
     ln -s libGLESv2.so "$out/lib/signal-desktop/libGLESv2.so.2"
 
+    # Compress the emoji sheets to webp, as signal expects webp images. The flags used are the same as those used upstream.
+    cwebp -progress -mt -preset icon -alpha_filter best -alpha_q 20 -pass 10 -q 75 ${noto-emoji-sheet-32} -o asar-contents/images/emoji-sheet-32.webp
+    cwebp -progress -mt -preset icon -alpha_filter best -alpha_q 20 -pass 10 -q 75 ${noto-emoji-sheet-64} -o asar-contents/images/emoji-sheet-64.webp
+
     # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
     # for the motivation, and the script for the technical details.
     emojiPrefix=$(
@@ -239,12 +258,15 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
     )
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace-fail "/${bindir}/signal-desktop" ${meta.mainProgram} \
       --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
+
+    mv $out/share/applications/signal{-desktop,}.desktop
 
     # Note: The following path contains bundled libraries:
     # $out/lib/signal-desktop/resources/app.asar.unpacked/node_modules/
@@ -270,17 +292,19 @@ stdenv.mkDerivation rec {
 
       # Various npm packages
       lib.licenses.free
+
+      lib.licenses.asl20 # noto-emoji
+      lib.licenses.mit # emoji-data
     ];
     maintainers = with lib.maintainers; [
       mic92
       equirosa
       urandom
       bkchr
-      teutat3s
       emily
       Gliczy
     ];
-    mainProgram = pname;
+    mainProgram = "signal-desktop";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -1,64 +1,70 @@
 {
-  stdenv,
-  autoPatchelfHook,
-  fetchurl,
   lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "confluent-cli";
-  version = "4.16.0";
+  version = "4.32.0";
 
   # To get the latest version:
   # curl -L https://cnfl.io/cli | sh -s -- -l | grep -v latest | sort -V | tail -n1
   src =
-    {
-      x86_64-linux = fetchurl {
-        url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${version}/confluent_${version}_linux_amd64.tar.gz";
-        hash = "sha256-OFmbIqyDnZxymutdObzPvyuHJnfW353e+ChjDLfhQvI=";
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      system = selectSystem {
+        x86_64-linux = "linux_amd64";
+        aarch64-linux = "linux_arm64";
+        x86_64-darwin = "darwin_amd64";
+        aarch64-darwin = "darwin_arm64";
       };
-      aarch64-linux = fetchurl {
-        url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${version}/confluent_${version}_linux_arm64.tar.gz";
-        hash = "sha256-EZ+3WYIkmP5Aw3yg4fKUs805W58OFrILjp+Z18G6jjQ=";
+    in
+    fetchurl {
+      url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${finalAttrs.version}/confluent_${finalAttrs.version}_${system}.tar.gz";
+      hash = selectSystem {
+        x86_64-linux = "sha256-T2rMFkcbohRicRsZHdNMJtHEJvDNJq5yJn25gJXaMfw=";
+        aarch64-linux = "sha256-KpkohZMPQqnggftBGugLmz4f8UX4MkrvV90flBRdy18=";
+        x86_64-darwin = "sha256-/MUEzLkycQO1jTMAPhGzhT15RpO/Mzexj0wKbr2bSXk=";
+        aarch64-darwin = "sha256-Qqyw9TgGlj9fAFJknsvyohUQ3SleGGv/gvkCPkmFAuY=";
       };
-      x86_64-darwin = fetchurl {
-        url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${version}/confluent_${version}_darwin_amd64.tar.gz";
-        hash = "sha256-ogqrGn0I34L+UIzA+9Q+3LlcVoDlYnPRUqkn9oasCG8=";
-      };
-      aarch64-darwin = fetchurl {
-        url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${version}/confluent_${version}_darwin_arm64.tar.gz";
-        hash = "sha256-CQNGs8tFSUH3okFufVPUQqHTrVB3kyrbbgT9mFGmkYc=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dontStrip = stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/doc/confluent-cli}
     cp confluent $out/bin/
     cp LICENSE $out/share/doc/confluent-cli/
     cp -r legal $out/share/doc/confluent-cli/
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Confluent CLI";
     homepage = "https://docs.confluent.io/confluent-cli/current/overview.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
       rguevara84
       autophagy
     ];
-
     # TODO: There's support for i686 systems but I do not have any such system
     # to build it locally on, it's also unfree so I cannot rely on ofborg to
     # build it. Get the list of supported system by looking at the list of
     # files in the S3 bucket:
     #
     #   https://s3-us-west-2.amazonaws.com/confluent.cloud?prefix=confluent-cli/archives/1.25.0/&delimiter=/%27
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

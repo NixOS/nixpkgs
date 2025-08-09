@@ -14,7 +14,7 @@
   libpwquality,
   parted,
   polkit-qt,
-  python,
+  python3,
   qtbase,
   qtquickcontrols,
   qtsvg,
@@ -73,7 +73,7 @@ mkDerivation rec {
     libpwquality
     parted
     polkit-qt
-    python
+    python3
     qtbase
     qtquickcontrols
     qtsvg
@@ -83,8 +83,8 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+    "-DPYTHON_LIBRARY=${python3}/lib/lib${python3.libPrefix}.so"
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
     "-DWITH_PYTHONQT:BOOL=ON"
   ];

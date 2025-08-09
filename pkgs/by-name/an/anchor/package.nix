@@ -6,18 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "anchor";
-  version = "0.31.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "coral-xyz";
     repo = "anchor";
-    rev = "v${version}";
-    hash = "sha256-rwf2PWHoUl8Rkmktb2u7veRrIcLT3syi7M2OZxdxjG4=";
+    tag = "v${version}";
+    hash = "sha256-pvD0v4y7DilqCrhT8iQnAj5kBxGQVqNvObJUBzFLqzA=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ack2/WFrycfYHYVnZt0Q94WJdQrvLU/VZYm1KeqOjIQ=";
+  cargoHash = "sha256-fjhLA+utQdgR75wg+/N4VwASW6+YBHglRPj14sPHmGA=";
 
   checkFlags = [
     # the following test cases try to access network, skip them

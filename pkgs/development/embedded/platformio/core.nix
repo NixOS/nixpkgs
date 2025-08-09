@@ -7,6 +7,8 @@
   git,
   spdx-license-list-data,
   replaceVars,
+  writableTmpDirAsHomeHook,
+  udevCheckHook,
 }:
 
 with python3Packages;
@@ -30,7 +32,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./interpreter.patch {
-      interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
+      interpreter = (python3Packages.python.withPackages (_: dependencies)).interpreter;
     })
     (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
@@ -43,6 +45,7 @@ buildPythonApplication rec {
       hash = "sha256-yq+/QHCkhAkFND11MbKFiiWT3oF1cHhgWj5JkYjwuY0=";
       revert = true;
     })
+    ./builder-prioritize-python-env-in-path.patch
   ];
 
   postPatch = ''
@@ -55,46 +58,51 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools
+    udevCheckHook
   ];
+
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs =
-    [
-      aiofiles
-      ajsonrpc
-      bottle
-      click
-      click-completion
-      colorama
-      git
-      lockfile
-      marshmallow
-      pyelftools
-      pyserial
-      requests
-      semantic-version
-      setuptools
-      spdx-license-list-data.json
-      starlette
-      tabulate
-      uvicorn
-      wsproto
-      zeroconf
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      chardet
-    ];
+  dependencies = [
+    aiofiles
+    ajsonrpc
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    intelhex
+    lockfile
+    marshmallow
+    pip
+    pyelftools
+    pyserial
+    pyyaml
+    requests
+    semantic-version
+    setuptools
+    spdx-license-list-data.json
+    starlette
+    tabulate
+    uvicorn
+    wheel
+    wsproto
+    zeroconf
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    chardet
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH=$PATH:$out/bin
   '';
 
   nativeCheckInputs = [
     jsondiff
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   # Install udev rules into a separate output so all of platformio-core is not a dependency if
@@ -114,6 +122,10 @@ buildPythonApplication rec {
       --fish <(_PIO_COMPLETE=fish_source $out/bin/pio)
   '';
 
+  enabledTestPaths = [
+    "tests"
+  ];
+
   disabledTestPaths = [
     "tests/commands/pkg/test_install.py"
     "tests/commands/pkg/test_list.py"
@@ -128,8 +140,66 @@ buildPythonApplication rec {
     "tests/commands/test_run.py"
     "tests/commands/test_test.py"
     "tests/misc/test_maintenance.py"
+
     # requires internet connection
     "tests/misc/ino2cpp/test_ino2cpp.py"
+
+    "tests/commands/pkg/test_exec.py::test_pkg_specified"
+    "tests/commands/pkg/test_exec.py::test_unrecognized_options"
+    "tests/commands/test_ci.py::test_ci_boards"
+    "tests/commands/test_ci.py::test_ci_build_dir"
+    "tests/commands/test_ci.py::test_ci_keep_build_dir"
+    "tests/commands/test_ci.py::test_ci_lib_and_board"
+    "tests/commands/test_ci.py::test_ci_project_conf"
+    "tests/commands/test_init.py::test_init_custom_framework"
+    "tests/commands/test_init.py::test_init_duplicated_boards"
+    "tests/commands/test_init.py::test_init_enable_auto_uploading"
+    "tests/commands/test_init.py::test_init_ide_atom"
+    "tests/commands/test_init.py::test_init_ide_clion"
+    "tests/commands/test_init.py::test_init_ide_eclipse"
+    "tests/commands/test_init.py::test_init_ide_vscode"
+    "tests/commands/test_init.py::test_init_incorrect_board"
+    "tests/commands/test_init.py::test_init_special_board"
+    "tests/commands/test_lib.py::test_global_install_archive"
+    "tests/commands/test_lib.py::test_global_install_registry"
+    "tests/commands/test_lib.py::test_global_install_repository"
+    "tests/commands/test_lib.py::test_global_lib_list"
+    "tests/commands/test_lib.py::test_global_lib_uninstall"
+    "tests/commands/test_lib.py::test_global_lib_update"
+    "tests/commands/test_lib.py::test_global_lib_update_check"
+    "tests/commands/test_lib.py::test_install_duplicates"
+    "tests/commands/test_lib.py::test_lib_show"
+    "tests/commands/test_lib.py::test_lib_stats"
+    "tests/commands/test_lib.py::test_saving_deps"
+    "tests/commands/test_lib.py::test_search"
+    "tests/commands/test_lib.py::test_update"
+    "tests/commands/test_lib_complex.py::test_global_install_archive"
+    "tests/commands/test_lib_complex.py::test_global_install_registry"
+    "tests/commands/test_lib_complex.py::test_global_install_repository"
+    "tests/commands/test_lib_complex.py::test_global_lib_list"
+    "tests/commands/test_lib_complex.py::test_global_lib_uninstall"
+    "tests/commands/test_lib_complex.py::test_global_lib_update"
+    "tests/commands/test_lib_complex.py::test_global_lib_update_check"
+    "tests/commands/test_lib_complex.py::test_install_duplicates"
+    "tests/commands/test_lib_complex.py::test_lib_show"
+    "tests/commands/test_lib_complex.py::test_lib_stats"
+    "tests/commands/test_lib_complex.py::test_search"
+    "tests/package/test_manager.py::test_download"
+    "tests/package/test_manager.py::test_install_force"
+    "tests/package/test_manager.py::test_install_from_registry"
+    "tests/package/test_manager.py::test_install_lib_depndencies"
+    "tests/package/test_manager.py::test_registry"
+    "tests/package/test_manager.py::test_uninstall"
+    "tests/package/test_manager.py::test_update_with_metadata"
+    "tests/package/test_manager.py::test_update_without_metadata"
+    "tests/test_builder.py::test_build_flags"
+    "tests/test_builder.py::test_build_unflags"
+    "tests/test_builder.py::test_debug_custom_build_flags"
+    "tests/test_builder.py::test_debug_default_build_flags"
+    "tests/test_misc.py::test_api_cache"
+    "tests/test_misc.py::test_ping_internet_ips"
+    "tests/test_misc.py::test_platformio_cli"
+    "tests/test_pkgmanifest.py::test_packages"
   ];
 
   disabledTests = [
@@ -138,69 +208,6 @@ buildPythonApplication rec {
     "test_ping_internet_ips"
     "test_metadata_dump"
   ];
-
-  pytestFlagsArray =
-    [
-      "tests"
-    ]
-    ++ (map (e: "--deselect tests/${e}") [
-      "commands/pkg/test_exec.py::test_pkg_specified"
-      "commands/pkg/test_exec.py::test_unrecognized_options"
-      "commands/test_ci.py::test_ci_boards"
-      "commands/test_ci.py::test_ci_build_dir"
-      "commands/test_ci.py::test_ci_keep_build_dir"
-      "commands/test_ci.py::test_ci_lib_and_board"
-      "commands/test_ci.py::test_ci_project_conf"
-      "commands/test_init.py::test_init_custom_framework"
-      "commands/test_init.py::test_init_duplicated_boards"
-      "commands/test_init.py::test_init_enable_auto_uploading"
-      "commands/test_init.py::test_init_ide_atom"
-      "commands/test_init.py::test_init_ide_clion"
-      "commands/test_init.py::test_init_ide_eclipse"
-      "commands/test_init.py::test_init_ide_vscode"
-      "commands/test_init.py::test_init_incorrect_board"
-      "commands/test_init.py::test_init_special_board"
-      "commands/test_lib.py::test_global_install_archive"
-      "commands/test_lib.py::test_global_install_registry"
-      "commands/test_lib.py::test_global_install_repository"
-      "commands/test_lib.py::test_global_lib_list"
-      "commands/test_lib.py::test_global_lib_uninstall"
-      "commands/test_lib.py::test_global_lib_update"
-      "commands/test_lib.py::test_global_lib_update_check"
-      "commands/test_lib.py::test_install_duplicates"
-      "commands/test_lib.py::test_lib_show"
-      "commands/test_lib.py::test_lib_stats"
-      "commands/test_lib.py::test_saving_deps"
-      "commands/test_lib.py::test_search"
-      "commands/test_lib.py::test_update"
-      "commands/test_lib_complex.py::test_global_install_archive"
-      "commands/test_lib_complex.py::test_global_install_registry"
-      "commands/test_lib_complex.py::test_global_install_repository"
-      "commands/test_lib_complex.py::test_global_lib_list"
-      "commands/test_lib_complex.py::test_global_lib_uninstall"
-      "commands/test_lib_complex.py::test_global_lib_update"
-      "commands/test_lib_complex.py::test_global_lib_update_check"
-      "commands/test_lib_complex.py::test_install_duplicates"
-      "commands/test_lib_complex.py::test_lib_show"
-      "commands/test_lib_complex.py::test_lib_stats"
-      "commands/test_lib_complex.py::test_search"
-      "package/test_manager.py::test_download"
-      "package/test_manager.py::test_install_force"
-      "package/test_manager.py::test_install_from_registry"
-      "package/test_manager.py::test_install_lib_depndencies"
-      "package/test_manager.py::test_registry"
-      "package/test_manager.py::test_uninstall"
-      "package/test_manager.py::test_update_with_metadata"
-      "package/test_manager.py::test_update_without_metadata"
-      "test_builder.py::test_build_flags"
-      "test_builder.py::test_build_unflags"
-      "test_builder.py::test_debug_custom_build_flags"
-      "test_builder.py::test_debug_default_build_flags"
-      "test_misc.py::test_api_cache"
-      "test_misc.py::test_ping_internet_ips"
-      "test_misc.py::test_platformio_cli"
-      "test_pkgmanifest.py::test_packages"
-    ]);
 
   passthru = {
     python = python3Packages.python;

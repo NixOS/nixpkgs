@@ -8,15 +8,15 @@
   # Defaults to `false` as we expect it to be project specific most of the time.
   pythonUseFixed ? false,
   # For updateScript
-  vscode-extensions-update-script,
+  vscode-extension-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2025.4.0";
-    hash = "sha256-/yQbmZTnkks1gvMItEApRzfk8Lczjq+JC5rnyJxr6fo=";
+    version = "2025.10.1";
+    hash = "sha256-3hd940mfxnvqoblIrx/S0A8KwHtYLFuonu52/HGGfak=";
   };
 
   buildInputs = [ icu ];
@@ -28,24 +28,23 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     jedi-language-server
   ];
 
-  postPatch =
-    ''
-      # remove bundled python deps and use libs from nixpkgs
-      rm -r python_files/lib
-      mkdir -p python_files/lib/python/
-      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
-      buildPythonPath "$propagatedBuildInputs"
-      for i in python_files/*.py; do
-        patchPythonScript "$i"
-      done
-    ''
-    + lib.optionalString pythonUseFixed ''
-      # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
-      substituteInPlace "./package.json" \
-        --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
-    '';
+  postPatch = ''
+    # remove bundled python deps and use libs from nixpkgs
+    rm -r python_files/lib
+    mkdir -p python_files/lib/python/
+    ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
+    buildPythonPath "$propagatedBuildInputs"
+    for i in python_files/*.py; do
+      patchPythonScript "$i"
+    done
+  ''
+  + lib.optionalString pythonUseFixed ''
+    # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
+    substituteInPlace "./package.json" \
+      --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
+  '';
 
-  passthru.updateScript = vscode-extensions-update-script { };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Visual Studio Code extension with rich support for the Python language";

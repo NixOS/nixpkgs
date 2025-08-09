@@ -37,24 +37,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  dependencies =
-    [
-      colorama
-      packaging
-      python-dateutil
-      pyyaml
-      requests
-      requests-cache
-      requests-toolbelt
-      stevedore
-      tqdm
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux [
-      # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
-      # These are required only on Linux. Darwin has its own set of requirements
-      psutil
-      distro
-    ];
+  dependencies = [
+    colorama
+    packaging
+    python-dateutil
+    pyyaml
+    requests
+    requests-cache
+    requests-toolbelt
+    stevedore
+    tqdm
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux [
+    # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
+    # These are required only on Linux. Darwin has its own set of requirements
+    psutil
+    distro
+  ];
 
   pythonImportsCheck = [ "e3" ];
 

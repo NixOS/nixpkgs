@@ -27,14 +27,14 @@
   gst_all_1,
   libgudev,
   umockdev,
-  substituteAll,
+  replaceVars,
   enableGeoLocation ? true,
   enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.20.0";
+  version = "1.20.3";
 
   outputs = [
     "out"
@@ -45,20 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-FHMa8fTr8qNEM5WptuMjMs/XOsvmFxi8pDaCrwJ3/ww=";
+    hash = "sha256-ntTGEsk8GlXkp3i9RtF+T7jqnNdL2GVbu05d68WVTYc=";
   };
 
   patches = [
     # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
     # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
-    (substituteAll {
-      src = ./fix-icon-validation.patch;
+    (replaceVars ./fix-icon-validation.patch {
       inherit (builtins) storeDir;
     })
 
     # Same for the sound validator, except the gdk-pixbuf part.
-    (substituteAll {
-      src = ./fix-sound-validation.patch;
+    (replaceVars ./fix-sound-validation.patch {
       inherit (builtins) storeDir;
     })
 
@@ -76,36 +74,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     docutils # for rst2man
+    glib
     meson
     ninja
     pkg-config
     wrapGAppsNoGuiHook
   ];
 
-  buildInputs =
-    [
-      flatpak
-      fuse3
-      bubblewrap
-      glib
-      gsettings-desktop-schemas
-      json-glib
-      pipewire
-      gst_all_1.gst-plugins-base
-      libgudev
-      umockdev
+  buildInputs = [
+    flatpak
+    fuse3
+    bubblewrap
+    glib
+    gsettings-desktop-schemas
+    json-glib
+    pipewire
+    gst_all_1.gst-plugins-base
+    libgudev
 
-      # For icon validator
-      gdk-pixbuf
-      librsvg
-      bash
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableSystemd [
-      systemdMinimal # libsystemd
-    ];
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+    bash
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableSystemd [
+    systemdMinimal # libsystemd
+  ];
 
   nativeCheckInputs = [
     dbus
@@ -126,20 +123,21 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
-  mesonFlags =
-    [
-      "--sysconfdir=/etc"
-      "-Dinstalled-tests=true"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
-      (lib.mesonEnable "systemd" enableSystemd)
-    ]
-    ++ lib.optionals (!enableGeoLocation) [
-      "-Dgeoclue=disabled"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dtests=disabled"
-    ];
+  checkInputs = [ umockdev ];
+
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "-Dinstalled-tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
+    (lib.mesonEnable "systemd" enableSystemd)
+  ]
+  ++ lib.optionals (!enableGeoLocation) [
+    "-Dgeoclue=disabled"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dtests=disabled"
+  ];
 
   strictDeps = true;
 
@@ -154,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/run-test.sh
   '';
 
-  preCheck = ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # For test_trash_file
     export HOME=$(mktemp -d)
 
@@ -167,6 +165,12 @@ stdenv.mkDerivation (finalAttrs: {
     # need to set this ourselves, because the tests will set LD_PRELOAD=libumockdev-preload.so,
     # which can't be found because it's not in default rpath
     export LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so
+  '';
+
+  # We can't disable the installedTests output when doCheck is disabled,
+  # because that produces an infinite recursion.
+  preFixup = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    mkdir $installedTests
   '';
 
   passthru = {

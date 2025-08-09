@@ -77,24 +77,61 @@ in
       }
     ];
 
-    systemd.tmpfiles.settings."10-glpi-agent" = {
-      ${cfg.stateDir} = {
-        d = {
-          mode = "0755";
-          user = "root";
-          group = "root";
-        };
-      };
-    };
-
     systemd.services.glpi-agent = {
       description = "GLPI Agent";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --conf-file ${configFile} --vardir ${cfg.stateDir} --daemon --no-fork";
+        ExecStart = lib.escapeShellArgs [
+          "${lib.getExe cfg.package}"
+          "--conf-file"
+          "${configFile}"
+          "--vardir"
+          "${cfg.stateDir}"
+          "--daemon"
+          "--no-fork"
+        ];
+
+        DynamicUser = true;
+        StateDirectory = "glpi-agent";
+        CapabilityBoundingSet = [ "CAP_SYS_ADMIN" ];
+        AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
+
+        LimitCORE = 0;
+        LimitNOFILE = 65535;
+        LockPersonality = true;
+        MemorySwapMax = 0;
+        MemoryZSwapMax = 0;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
         Restart = "on-failure";
+        RestartSec = "10s";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@resources"
+          "~@privileged"
+        ];
+        NoNewPrivileges = true;
+        UMask = "0077";
       };
     };
   };

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "httpx-socks";
     tag = "v${version}";
-    hash = "sha256-H+A6203XMM7MaIdwtjQScyOBRJNpTx9NsSMIoov8hg8=";
+    hash = "sha256-1NDsIKJ8lWpjaTnlv5DrwTsEJU4gYwEUuqKpn+2QVhg=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +40,8 @@ buildPythonPackage rec {
     httpx
     httpcore
     python-socks
-  ] ++ python-socks.optional-dependencies.asyncio;
+  ]
+  ++ python-socks.optional-dependencies.asyncio;
 
   optional-dependencies = {
     asyncio = [ async-timeout ];

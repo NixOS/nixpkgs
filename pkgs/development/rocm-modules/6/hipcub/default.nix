@@ -19,16 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -43,35 +42,33 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
-  buildInputs =
-    [
-      rocprim
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals buildBenchmarks [
-      gbenchmark
-    ];
+  buildInputs = [
+    rocprim
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ]
+  ++ lib.optionals buildBenchmarks [
+    gbenchmark
+  ];
 
-  cmakeFlags =
-    [
-      "-DHIP_ROOT_DIR=${clr}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_TEST=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_BENCHMARK=ON"
-    ];
+  cmakeFlags = [
+    "-DHIP_ROOT_DIR=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_TEST=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_BENCHMARK=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''
@@ -96,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Thin wrapper library on top of rocPRIM or CUB";
     homepage = "https://github.com/ROCm/hipCUB";
     license = with licenses; [ bsd3 ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

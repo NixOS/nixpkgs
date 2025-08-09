@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
-    repo = pname;
+    repo = "pebble";
     rev = "v${version}";
     hash = "sha256-YPU/bl7h6rOWg+5ut0Thn2UupeKpJ7u4KXc2svIeZEM=";
   };
@@ -35,6 +35,6 @@ buildGoModule rec {
     longDescription = "Miniature version of Boulder, Pebble is a small RFC 8555 ACME test server not suited for a production CA";
     license = [ lib.licenses.mpl20 ];
     mainProgram = "pebble";
-    maintainers = lib.teams.acme.members;
+    teams = [ lib.teams.acme ];
   };
 }

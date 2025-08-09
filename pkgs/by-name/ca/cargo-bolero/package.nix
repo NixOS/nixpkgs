@@ -10,15 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bolero";
-  version = "0.13.1";
+  version = "0.13.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-73TjQYkSng93tryaZpBtwq3MdVYZC8enEibx6yTdEKw=";
+    hash = "sha256-lfBpHaY2UCBMg45S4IW8fcpkGkKJoT4qqR2yq5KiXuE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0T7KyTQ5kJ4mv5lLxYeo7hxLjSkrmjfenrNV+7GL1hM=";
+  cargoHash = "sha256-2URFqLg2aQF7MOpwG6fEPBXyBsLENWpdiXgxW/DJxQE=";
 
   buildInputs = [
     libbfd

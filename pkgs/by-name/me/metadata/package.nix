@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ugirYg3l+zIfKAqp2smLgG99mX9tsy9rmGe6lFAwx5o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CqPRhfhTAEXTXRAJ9T5gQZx5jAQmJXYPbfQmyXkO6Sk=";
 
   nativeBuildInputs = [
@@ -54,7 +53,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";
-    maintainers = with lib.maintainers; [ clevor ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";

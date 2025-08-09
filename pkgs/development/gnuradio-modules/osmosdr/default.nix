@@ -41,46 +41,44 @@ mkDerivation rec {
     "dev"
   ];
 
-  buildInputs =
-    [
-      logLib
-      mpir
-      boost
-      fftwFloat
-      gmp
-      icu
-      airspy
-      hackrf
-      libbladeRF
-      rtl-sdr
-      soapysdr-with-plugins
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "gr-blocks") [
-      libsndfile
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
-      uhd
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
-      thrift
-      python.pkgs.thrift
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.numpy
-      python.pkgs.pybind11
-    ];
+  buildInputs = [
+    logLib
+    mpir
+    boost
+    fftwFloat
+    gmp
+    icu
+    airspy
+    hackrf
+    libbladeRF
+    rtl-sdr
+    soapysdr-with-plugins
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-blocks") [
+    libsndfile
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
+    uhd
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+    thrift
+    python.pkgs.thrift
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.numpy
+    python.pkgs.pybind11
+  ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then "-DENABLE_PYTHON=ON" else "-DENABLE_PYTHON=OFF")
   ];
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.mako
-      python
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.mako
+    python
+  ];
 
   meta = {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";

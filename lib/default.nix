@@ -279,6 +279,7 @@ let
         naturalSort
         compareLists
         take
+        takeEnd
         drop
         dropEnd
         sublist
@@ -308,6 +309,7 @@ let
         stringLength
         substring
         isString
+        replaceString
         replaceStrings
         intersperse
         concatStringsSep
@@ -344,9 +346,11 @@ let
         upperChars
         toLower
         toUpper
+        toCamelCase
         toSentenceCase
         addContextFrom
         splitString
+        splitStringBy
         removePrefix
         removeSuffix
         versionOlder
@@ -429,6 +433,8 @@ let
         pathHasContext
         canCleanSource
         pathIsGitRepo
+        revOrTag
+        repoRevToName
         ;
       inherit (self.modules)
         evalModules

@@ -18,7 +18,10 @@ let
     '';
 in
 {
-  meta.maintainers = [ maintainers.bachp ];
+  meta.maintainers = with maintainers; [
+    bachp
+    ryan4yin
+  ];
 
   options.services.minio = {
     enable = mkEnableOption "Minio Object Storage";
@@ -108,11 +111,10 @@ in
 
     systemd = lib.mkMerge [
       {
-        tmpfiles.rules =
-          [
-            "d '${cfg.configDir}' - minio minio - -"
-          ]
-          ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
+        tmpfiles.rules = [
+          "d '${cfg.configDir}' - minio minio - -"
+        ]
+        ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
 
         services.minio = {
           description = "Minio Object Storage";
@@ -132,6 +134,44 @@ in
                 (legacyCredentials cfg)
               else
                 null;
+
+            # hardening
+            DevicePolicy = "closed";
+            CapabilityBoundingSet = "";
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK"
+              "AF_UNIX"
+            ];
+            DeviceAllow = "";
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            PrivateUsers = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            MemoryDenyWriteExecute = true;
+            LockPersonality = true;
+            RemoveIPC = true;
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged"
+            ];
+            ProtectProc = "invisible";
+            ProtectHostname = true;
+            UMask = "0077";
+            # minio opens /proc/mounts on startup
+            ProcSubset = "all";
           };
           environment = {
             MINIO_REGION = "${cfg.region}";

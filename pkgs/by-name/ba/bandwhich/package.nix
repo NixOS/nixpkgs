@@ -5,7 +5,6 @@
   rustPlatform,
   installShellFiles,
 
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,15 +18,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gXPX5drVXsfkssPMdhqIpFsYNSbelE9mKwO+nGEy4Qs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bsyEEbwBTDcIOc+PRkZqcfqcDgQnchuVy8a8eSZZUHU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
-
-  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files

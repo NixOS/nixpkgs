@@ -4,6 +4,7 @@
   fetchPypi,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   distutils,
 }:
 
@@ -19,7 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-76jiZPK93rt/UCTkrOErYz2dWQSLxkdCfR4blojItY8=";
   };
 
-  build-system = [ setuptools ];
+  # https://github.com/eriwen/lcov-to-cobertura-xml/issues/63
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail 'License :: OSI Approved :: Apache Software License' ""
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
   dependencies = [ distutils ];
 
   pythonImportsCheck = [ "lcov_cobertura" ];

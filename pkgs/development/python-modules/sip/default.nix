@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-+gUVaX1MmNvgTZ6JjYFt4UJ+W5rl0OFSFpEJ/SH10pw=";
   };
 
+  patches = [
+    # Make wheel file generation deterministic https://github.com/NixOS/nixpkgs/issues/383885
+    ./sip-builder.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -32,7 +37,8 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There aren't tests
   doCheck = false;

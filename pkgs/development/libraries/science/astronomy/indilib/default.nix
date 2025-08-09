@@ -16,22 +16,24 @@
   gsl,
   fftw,
   gtest,
+  udevCheckHook,
   indi-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.2.1";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EaLmwPyoQfdTUURKb6bBhg9kz7wSEzRdH3QQkayJDjA=";
+    hash = "sha256-ceDuWnIeHTpXyQRXDEQxCDM1pdfz5rEDMyJIcCu6OaM=";
   };
 
   nativeBuildInputs = [
     cmake
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -47,19 +49,19 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-    ]
-    ++ lib.optional finalAttrs.finalPackage.doCheck [
-      "-DINDI_BUILD_UNITTESTS=ON"
-      "-DINDI_BUILD_INTEGTESTS=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck [
+    "-DINDI_BUILD_UNITTESTS=ON"
+    "-DINDI_BUILD_INTEGTESTS=ON"
+  ];
 
   checkInputs = [ gtest ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   # Socket address collisions between tests
   enableParallelChecking = false;
@@ -67,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
-      substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \
-                           --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
+      substituteInPlace $f --replace-quiet "/bin/sh" "${bash}/bin/sh" \
+                           --replace-quiet "/sbin/modprobe" "${kmod}/sbin/modprobe"
     done
   '';
 

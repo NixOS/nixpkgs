@@ -16,6 +16,7 @@
   description ? null,
   homepage ? null,
   maintainers ? [ ],
+  teams ? [ ],
   unpack ? false, # whether to use fetchzip rather than fetchurl
 }:
 applyPatches (
@@ -23,18 +24,17 @@ applyPatches (
     inherit patches;
     src = (if unpack then fetchzip else fetchurl) {
       inherit url hash sha256;
-      meta =
-        {
-          license = lib.licenses.${license};
-          longDescription = description;
-          inherit homepage maintainers;
-        }
-        // lib.optionalAttrs (description != null) {
-          longDescription = description;
-        }
-        // lib.optionalAttrs (homepage != null) {
-          inherit homepage;
-        };
+      meta = {
+        license = lib.licenses.${license};
+        longDescription = description;
+        inherit homepage maintainers teams;
+      }
+      // lib.optionalAttrs (description != null) {
+        longDescription = description;
+      }
+      // lib.optionalAttrs (homepage != null) {
+        inherit homepage;
+      };
     };
     prePatch = ''
       if [ ! -f ./appinfo/info.xml ]; then

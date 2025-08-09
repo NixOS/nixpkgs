@@ -69,7 +69,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fun way to learn how to play the piano";
+    description = "Fun way to learn how to play the piano";
     homepage = "https://synthesiagame.com/";
     downloadPage = "https://synthesiagame.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

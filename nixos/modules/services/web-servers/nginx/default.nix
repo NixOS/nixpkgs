@@ -207,6 +207,7 @@ let
             ${optionalString cfg.recommendedTlsSettings ''
               # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
+              ssl_ecdh_curve X25519:prime256v1:secp384r1;
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -214,10 +215,6 @@ let
               # We don't enable insecure ciphers by default, so this allows
               # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
-
-              # OCSP stapling
-              ssl_stapling on;
-              ssl_stapling_verify on;
             ''}
 
             ${optionalString cfg.recommendedBrotliSettings ''
@@ -242,7 +239,7 @@ let
               ''
             }
 
-            ${optionalString cfg.recommendedZstdSettings ''
+            ${optionalString cfg.experimentalZstdSettings ''
               zstd on;
               zstd_comp_level 9;
               zstd_min_length 256;
@@ -630,11 +627,11 @@ in
         '';
       };
 
-      recommendedZstdSettings = mkOption {
+      experimentalZstdSettings = mkOption {
         default = false;
         type = types.bool;
         description = ''
-          Enable recommended zstd settings.
+          Enable alpha quality zstd module with recommended settings.
           Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
 
           This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
@@ -1002,17 +999,14 @@ in
       };
 
       mapHashBucketSize = mkOption {
-        type = types.nullOr (
-          types.enum [
-            32
-            64
-            128
-          ]
-        );
+        type = types.nullOr (types.ints.positive);
         default = null;
         description = ''
           Sets the bucket size for the map variables hash tables. Default
           value depends on the processor’s cache line size.
+
+          Refer to [the nginx docs on hashes](https://nginx.org/en/docs/hash.html)
+          for more information.
         '';
       };
 
@@ -1308,6 +1302,12 @@ in
       [ "services" "nginx" "proxyCache" "enable" ]
       [ "services" "nginx" "proxyCachePath" "" "enable" ]
     )
+    (mkRemovedOptionModule [ "services" "nginx" "recommendedZstdSettings" ] ''
+      The zstd module for Nginx has known bugs and is not maintained well. It is thus not
+      generally recommend to use it. You may enable anyway by setting
+      `services.nginx.experimentalZstdSettings` which adds the same configuration as the
+      removed option.
+    '')
   ];
 
   config = mkIf cfg.enable {
@@ -1446,17 +1446,18 @@ in
         mkCertOwnershipAssertion {
           cert = config.security.acme.certs.${name};
           groups = config.users.groups;
-          services =
-            [ config.systemd.services.nginx ]
-            ++ lib.optional (
-              cfg.enableReload || vhostCertNames != [ ]
-            ) config.systemd.services.nginx-config-reload;
+          services = [
+            config.systemd.services.nginx
+          ]
+          ++ lib.optional (
+            cfg.enableReload || vhostCertNames != [ ]
+          ) config.systemd.services.nginx-config-reload;
         }
       ) vhostCertNames;
 
     services.nginx.additionalModules =
       optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
-      ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+      ++ lib.optional cfg.experimentalZstdSettings pkgs.nginxModules.zstd;
 
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       serverAliases = [ "127.0.0.1" ] ++ lib.optional config.networking.enableIPv6 "[::1]";
@@ -1481,10 +1482,11 @@ in
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
       wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
-      after =
-        [ "network.target" ]
-        ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
+      after = [
+        "network.target"
+      ]
+      ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+      ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
       # Nginx needs to be started in order to be able to request certificates
       # (it's hosting the acme challenge after all)
       # This fixes https://github.com/NixOS/nixpkgs/issues/81842
@@ -1522,24 +1524,22 @@ in
         # New file permissions
         UMask = "0027"; # 0640 / 0750
         # Capabilities
-        AmbientCapabilities =
-          [
-            "CAP_NET_BIND_SERVICE"
-            "CAP_SYS_RESOURCE"
-          ]
-          ++ optionals cfg.enableQuicBPF [
-            "CAP_SYS_ADMIN"
-            "CAP_NET_ADMIN"
-          ];
-        CapabilityBoundingSet =
-          [
-            "CAP_NET_BIND_SERVICE"
-            "CAP_SYS_RESOURCE"
-          ]
-          ++ optionals cfg.enableQuicBPF [
-            "CAP_SYS_ADMIN"
-            "CAP_NET_ADMIN"
-          ];
+        AmbientCapabilities = [
+          "CAP_NET_BIND_SERVICE"
+          "CAP_SYS_RESOURCE"
+        ]
+        ++ optionals cfg.enableQuicBPF [
+          "CAP_SYS_ADMIN"
+          "CAP_NET_ADMIN"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
+          "CAP_SYS_RESOURCE"
+        ]
+        ++ optionals cfg.enableQuicBPF [
+          "CAP_SYS_ADMIN"
+          "CAP_NET_ADMIN"
+        ];
         # Security
         NoNewPrivileges = true;
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
@@ -1573,7 +1573,8 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
-        ] ++ optional cfg.enableQuicBPF [ "bpf" ];
+        ]
+        ++ optional cfg.enableQuicBPF [ "bpf" ];
       };
     };
 

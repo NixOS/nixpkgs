@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttr: {
     hash = "sha256-pqqUvHK6mPrK1Mir2ILANxtih9OrAKDJPE0nRWc5JOY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-voUucoSLsKn0QhCpr52U8x9K4ykkx7iQ3SsHfjrXu+Q=";
 
   buildInputs = [
@@ -60,7 +59,8 @@ rustPlatform.buildRustPackage (finalAttr: {
     description = "Cross-platform Inko version manager";
     homepage = "https://github.com/inko-lang/ivm";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.feathecutie ] ++ lib.teams.ngi.members;
+    maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "ivm";
   };

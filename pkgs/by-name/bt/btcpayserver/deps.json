@@ -46,13 +46,13 @@
   },
   {
     "pname": "BTCPayServer.Hwi",
-    "version": "2.0.2",
-    "hash": "sha256-CUq68FosFJyUtjjpnONhqQEXjtC9mF7zmkRjZnGwA1I="
+    "version": "2.0.6",
+    "hash": "sha256-LEj2R9hFQVCBol91l1ICn13z8rxT9iVkKT4krFskzLM="
   },
   {
     "pname": "BTCPayServer.Lightning.All",
-    "version": "1.6.9",
-    "hash": "sha256-pCCxZ1CW+Xc2KvG5yZ79vLYtcwr/PWsrz9A1x02ryb0="
+    "version": "1.6.11",
+    "hash": "sha256-HId8axtrx8i205y1uytHp/04/DyKsXzJwSEMzpr7Mzk="
   },
   {
     "pname": "BTCPayServer.Lightning.Charge",
@@ -93,6 +93,11 @@
     "pname": "BTCPayServer.Lightning.LNDhub",
     "version": "1.5.3",
     "hash": "sha256-CbSjeix4JCVtgb8WCfsKgThpl/YbnhbJ3wcPoexpSew="
+  },
+  {
+    "pname": "BTCPayServer.Lightning.Phoenixd",
+    "version": "1.5.8",
+    "hash": "sha256-pISNuSZW/B0MZ5VkW8nHAENTOUoFI+YfvrubD/vh74w="
   },
   {
     "pname": "BTCPayServer.NETCore.Plugins",
@@ -701,53 +706,23 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "5.0.40",
-    "hash": "sha256-cEu9luoct9YiL80z16THezZcaHgSPf6UU4Rz5QmyH+c="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "6.0.8",
-    "hash": "sha256-pfJRCSVAdh87SmEKeAYg7TNoGpQDtf026N+V0bL/ILk="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "7.0.31",
-    "hash": "sha256-sybd3AOGVlN7U6rLuWSi1kVxtBeaXb8iy786gc0CIh4="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "7.0.45",
-    "hash": "sha256-hWgtvAJvONk6jg1WiytE6M+ExkQJUCwO6cyVA6JE+8w="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "7.0.46",
-    "hash": "sha256-c5KHQ/TYGBTMoKKKo7XYR8r7VTJlaU0ZW6KqWRMjh2Y="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "7.0.48",
-    "hash": "sha256-IbiCGHu1cug4kDzwS+vpTqX4jYifxWegFpIctjb/bOA="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "7.0.49",
-    "hash": "sha256-0MQSBeQahSX9s1PPFWengy5J8pWiKR48Vx7dsh3I2p4="
-  },
-  {
-    "pname": "NBitcoin",
     "version": "7.0.50",
     "hash": "sha256-l3H70u5OAbd2hevX/yeVBdQyee/dUn5mp4iGvTnTcjk="
   },
   {
-    "pname": "NBitcoin.Altcoins",
-    "version": "3.0.31",
-    "hash": "sha256-Mtaqj8Fl8jxeOBXz66fjZQKZ/yg6pARJKJTFW0V/wDA="
+    "pname": "NBitcoin",
+    "version": "8.0.13",
+    "hash": "sha256-x7vMEgk5JXfGGNWfoclCwAbnx1mtlgbxl0HC0B/iV2E="
   },
   {
     "pname": "NBitcoin.Altcoins",
     "version": "3.0.33",
     "hash": "sha256-0RYmRKcluGwfTEcOEmoREC/9CgECEi7piQZetMXHOxI="
+  },
+  {
+    "pname": "NBitcoin.Altcoins",
+    "version": "4.0.8",
+    "hash": "sha256-n1e0BUhXl3D/fn1DbCdbelYfys2fc7+ZABazhUWxzo4="
   },
   {
     "pname": "NBitpayClient",

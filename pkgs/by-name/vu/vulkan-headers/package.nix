@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
-  version = "1.4.309.0";
+  version = "1.4.313.0";
 
   # Adding `ninja` here to enable Ninja backend. Otherwise on gcc-14 or
   # later the build fails as:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-LfJ7um+rzc4HdkJerHWkuPWeEc7ZFSBafbP+svAjklk=";
+    hash = "sha256-cbt0QHifjRCak+3V9J5PjNXDIEBvnwVYFa7rcmNv1VU=";
   };
 
   passthru.updateScript = ./update.sh;

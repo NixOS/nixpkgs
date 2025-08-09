@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
       sed -i "s/OpenSSL::OpenSSL/OpenSSL::SSL/g" $cmakelists
-      ${lib.optionalString (lib.versionOlder cudaPackages.cudaVersion "11.8") ''
+      ${lib.optionalString (cudaPackages.cudaOlder "11.8") ''
         sed -i 's/-gencode=arch=compute_89,code=sm_89//g' $cmakelists
         sed -i 's/-gencode=arch=compute_90,code=sm_90//g' $cmakelists
       ''}
@@ -57,35 +57,33 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      llvmPackages.bintools
-      ninja
-      (python3Packages.python.withPackages (ps: with ps; [ six ]))
-      ragel
-      yasm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.bintools
+    ninja
+    (python3Packages.python.withPackages (ps: with ps; [ six ]))
+    ragel
+    yasm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-      cudaPackages.libcublas
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+    cudaPackages.libcublas
+  ];
 
   env = {
     PROGRAM_VERSION = finalAttrs.version;

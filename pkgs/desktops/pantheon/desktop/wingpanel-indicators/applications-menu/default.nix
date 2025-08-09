@@ -45,18 +45,17 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs =
-    [
-      granite
-      gtk3
-      json-glib
-      libgee
-      libhandy
-      switchboard-with-plugs
-      wingpanel
-      zeitgeist
-    ]
-    ++
+  buildInputs = [
+    granite
+    gtk3
+    json-glib
+    libgee
+    libhandy
+    switchboard-with-plugs
+    wingpanel
+    zeitgeist
+  ]
+  ++
     # applications-menu has a plugin to search switchboard plugins
     # see https://github.com/NixOS/nixpkgs/issues/100209
     # wingpanel's wrapper will need to pick up the fact that
@@ -79,6 +78,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

@@ -10,58 +10,61 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "17.10.1";
+  version = "18.1.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pLmDWZHxd9dNhmbcHJRBxPuY0IpcJoXz/fOJeP1lVlA=";
+    hash = "sha256-zazDJBo6HiBh995nsYQvYCgcxyNaulV2ZrG7Kbwxb+0=";
   };
 
-  vendorHash = "sha256-1NteDxcGjsC0kT/9u7BT065EN/rBhaNznegdPHZUKxo=";
+  vendorHash = "sha256-G9qZKWI//ECG88Tu8zb8nEDSwNRabVMsrp7aQzVsxCY=";
 
   # For patchShebangs
-  nativeBuildInputs = [ bash ];
+  buildInputs = [ bash ];
 
   patches = [
     ./fix-shell-path.patch
     ./remove-bash-test.patch
   ];
 
-  prePatch =
-    ''
-      # Remove some tests that can't work during a nix build
+  prePatch = ''
+    # Remove some tests that can't work during a nix build
 
-      # Needs the build directory to be a git repo
-      sed -i "s/func TestCacheArchiverAddingUntrackedFiles/func OFF_TestCacheArchiverAddingUntrackedFiles/" commands/helpers/file_archiver_test.go
-      sed -i "s/func TestCacheArchiverAddingUntrackedUnicodeFiles/func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles/" commands/helpers/file_archiver_test.go
-      rm shells/abstract_test.go
+    # Needs the build directory to be a git repo
+    substituteInPlace commands/helpers/file_archiver_test.go \
+      --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
+      --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
+    rm shells/abstract_test.go
 
-      # No writable developer environment
-      rm common/build_settings_test.go
-      rm common/build_test.go
-      rm executors/custom/custom_test.go
+    # No writable developer environment
+    rm common/build_settings_test.go
+    rm common/build_test.go
+    rm executors/custom/custom_test.go
 
-      # No Docker during build
-      rm executors/docker/docker_test.go
-      rm executors/docker/services_test.go
-      rm executors/docker/terminal_test.go
-      rm helpers/docker/auth/auth_test.go
+    # No Docker during build
+    rm executors/docker/docker_test.go
+    rm executors/docker/services_test.go
+    rm executors/docker/terminal_test.go
+    rm helpers/docker/auth/auth_test.go
 
-      # No Kubernetes during build
-      rm executors/kubernetes/feature_test.go
-      rm executors/kubernetes/kubernetes_test.go
-      rm executors/kubernetes/overwrites_test.go
-    ''
-    + lib.optionalString stdenv.buildPlatform.isDarwin ''
-      # Invalid bind arguments break Unix socket tests
-      sed -i "s/func TestRunnerWrapperCommand_createListener/func OFF_TestRunnerWrapperCommand_createListener/" commands/wrapper_test.go
+    # No Kubernetes during build
+    rm executors/kubernetes/feature_test.go
+    rm executors/kubernetes/kubernetes_test.go
+    rm executors/kubernetes/overwrites_test.go
+  ''
+  + lib.optionalString stdenv.buildPlatform.isDarwin ''
+    # Invalid bind arguments break Unix socket tests
+    substituteInPlace commands/wrapper_test.go \
+      --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
 
-      # No keychain access during build breaks X.509 certificate tests
-      sed -i "s/func TestCertificate/func OFF_TestCertificate/" helpers/certificate/x509_test.go
-      sed -i "s/func TestClientInvalidSSL/func OFF_TestClientInvalidSSL/" network/client_test.go
-    '';
+    # No keychain access during build breaks X.509 certificate tests
+    substituteInPlace helpers/certificate/x509_test.go \
+      --replace-fail "func TestCertificate" "func OFF_TestCertificate"
+    substituteInPlace network/client_test.go \
+      --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
+  '';
 
   excludedPackages = [
     # Nested dependency Go module, used with go.mod replace directive
@@ -79,7 +82,7 @@ buildGoModule (finalAttrs: {
     [
       "-X ${ldflagsPackageVariablePrefix}.NAME=gitlab-runner"
       "-X ${ldflagsPackageVariablePrefix}.VERSION=${finalAttrs.version}"
-      "-X ${ldflagsPackageVariablePrefix}.REVISION=${finalAttrs.src.tag}"
+      "-X ${ldflagsPackageVariablePrefix}.REVISION=v${finalAttrs.version}"
     ];
 
   preCheck = ''
@@ -109,6 +112,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.gitlab.com/runner";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
-    maintainers = with lib.maintainers; [ zimbatm ] ++ lib.teams.gitlab.members;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    teams = [ lib.teams.gitlab ];
   };
 })

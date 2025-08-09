@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
-  version = "1.6.3";
+  version = "1.6.7";
 
   src = fetchFromGitLab {
     owner = "etherlab.org";
     repo = "ethercat";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vTAAeWAiJDo/Bd/3id4Bc0OdkL6s57vl+jbwOGFzfnc=";
+    hash = "sha256-UNd8PLdudI5TMdKKNH6BQP2VQ0LSPvsA/sEYnIuZRRA=";
   };
 
   separateDebugInfo = true;

@@ -11,6 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "taoup";
+  # nixpkgs-update: no auto update
   version = "1.1.23";
 
   src = fetchFromGitHub {

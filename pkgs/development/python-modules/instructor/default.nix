@@ -10,9 +10,11 @@
   # dependencies
   aiohttp,
   docstring-parser,
+  jinja2,
   jiter,
   openai,
   pydantic,
+  requests,
   rich,
   tenacity,
   typer,
@@ -22,7 +24,6 @@
   diskcache,
   fastapi,
   google-generativeai,
-  jinja2,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.4";
+  version = "1.7.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
-    hash = "sha256-TrNGTWnZShOYeMGonSEib7NiEbrwWNtujeWo2gaewf4=";
+    hash = "sha256-3IwvbepDrylOIlL+IteyFChqYc/ZIu6IieIkbAPL+mw=";
   };
 
   build-system = [ hatchling ];
@@ -50,9 +51,11 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     docstring-parser
+    jinja2
     jiter
     openai
     pydantic
+    requests
     rich
     tenacity
     typer
@@ -63,7 +66,6 @@ buildPythonPackage rec {
     diskcache
     fastapi
     google-generativeai
-    jinja2
     pytest-asyncio
     pytestCheckHook
     python-dotenv
@@ -84,6 +86,10 @@ buildPythonPackage rec {
     # Checks magic values and this fails on Python 3.13
     "test_raw_base64_autodetect_jpeg"
     "test_raw_base64_autodetect_png"
+
+    # Performance benchmarks that sometimes fail when running many parallel builds
+    "test_combine_system_messages_benchmark"
+    "test_extract_system_messages_benchmark"
   ];
 
   disabledTestPaths = [

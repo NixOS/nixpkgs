@@ -1,8 +1,8 @@
 { callPackage, fetchurl }:
 
 callPackage ./generic.nix {
-  version = "3.6.2";
-  hash = "sha256-tSWhF8i0Tx9QSFmyDEHdd2xveZvpyd+HXR+8xYj2Syo=";
+  version = "3.6.3";
+  hash = "sha256-FJuezgVTxzLRz0Jzk2XnSnpO5sTc8q6QgzkCwlqQ+EU=";
   patches = [
     # Fixes the build with GCC 14.
     #

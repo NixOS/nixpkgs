@@ -26,12 +26,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.1.3";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
+    hash = "sha256-nIpktZyQsIJeVAqbj8udLZQsY2+BulAZnwaP3kTzTtg=";
   };
 
   patches = [
@@ -54,24 +54,22 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  buildInputs =
-    [
-      libmnl
-      libnftnl
-      libpcap
-      gmp
-      jansson
-    ]
-    ++ lib.optional withCli libedit
-    ++ lib.optional withXtables iptables;
+  buildInputs = [
+    libmnl
+    libnftnl
+    libpcap
+    gmp
+    jansson
+  ]
+  ++ lib.optional withCli libedit
+  ++ lib.optional withXtables iptables;
 
-  configureFlags =
-    [
-      "--with-json"
-      (lib.withFeatureAs withCli "cli" "editline")
-    ]
-    ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional withXtables "--with-xtables";
+  configureFlags = [
+    "--with-json"
+    (lib.withFeatureAs withCli "cli" "editline")
+  ]
+  ++ lib.optional (!withDebugSymbols) "--disable-debug"
+  ++ lib.optional withXtables "--with-xtables";
 
   enableParallelBuilding = true;
 

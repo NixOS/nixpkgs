@@ -22,12 +22,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.32.5";
+  version = "0.34.2";
   pname = "neon";
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
+    sha256 = "sha256-+Yzjx0MAvgXt3wXcy9ykmLFNQMKJ93MZXdGlWc/6WFY=";
   };
 
   patches = optionals stdenv.hostPlatform.isDarwin [ ./darwin-fix-configure.patch ];
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     libxml2
     openssl
     bash
-  ] ++ lib.optional compressionSupport zlib;
+  ]
+  ++ lib.optional compressionSupport zlib;
 
   strictDeps = true;
 
@@ -54,12 +55,12 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit compressionSupport sslSupport; };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP and WebDAV client library";
     mainProgram = "neon-config";
     homepage = "https://notroj.github.io/neon/";
     changelog = "https://github.com/notroj/${pname}/blob/${version}/NEWS";
-    platforms = platforms.unix;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
 }

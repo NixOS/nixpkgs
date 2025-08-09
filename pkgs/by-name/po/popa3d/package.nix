@@ -4,21 +4,17 @@
   fetchurl,
   openssl,
   libxcrypt,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "popa3d";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "http://www.openwall.com/popa3d/${pname}-${version}.tar.gz";
-    sha256 = "1g48cd74sqhl496wmljhq44iyfpghaz363a1ip8nyhpjz7d57f03";
+    url = "http://www.openwall.com/popa3d/popa3d-${finalAttrs.version}.tar.gz";
+    hash = "sha256-A7hT2vnyQm/RjUENM76C7zofCcFQ0spNIhRiTU5jiLw=";
   };
-
-  buildInputs = [
-    openssl
-    libxcrypt
-  ];
 
   patches = [
     ./fix-mail-spool-path.patch
@@ -27,7 +23,23 @@ stdenv.mkDerivation rec {
     ./enable-standalone-mode.patch
   ];
 
-  configurePhase = ''makeFlags="PREFIX=$out MANDIR=$out/share/man"'';
+  enableParallelBuilding = true;
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "MANDIR=$(out)/share/man"
+  ];
+
+  buildInputs = [
+    openssl
+    libxcrypt
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     homepage = "http://www.openwall.com/popa3d/";
@@ -35,4 +47,4 @@ stdenv.mkDerivation rec {
     mainProgram = "popa3d";
     platforms = lib.platforms.linux;
   };
-}
+})

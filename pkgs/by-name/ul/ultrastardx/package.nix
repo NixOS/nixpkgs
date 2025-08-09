@@ -6,7 +6,6 @@
   pkg-config,
   lua,
   fpc,
-  pcre,
   portaudio,
   freetype,
   libpng,
@@ -26,7 +25,6 @@
 
 let
   sharedLibs = [
-    pcre
     portaudio
     freetype
     SDL2
@@ -47,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2025.3.0";
+  version = "2025.8.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-tMYw+nkyEEK7AqG9AvMchCGzzKWlfut4poXc1WK6vkA=";
+    hash = "sha256-rliUJNhvbXbD+ELxwutCoQs6BO1DyJ8J/+mmYHPuvQE=";
   };
 
   nativeBuildInputs = [
@@ -63,12 +61,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fpc
     libpng
-  ] ++ sharedLibs;
-
-  postPatch = ''
-    substituteInPlace src/config.inc.in \
-      --subst-var-by libpcre_LIBNAME libpcre.so.1
-  '';
+  ]
+  ++ sharedLibs;
 
   preBuild =
     let
@@ -86,7 +80,10 @@ stdenv.mkDerivation rec {
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [
+      diogotcorreia
+      Profpatsch
+    ];
     platforms = platforms.linux;
   };
 }

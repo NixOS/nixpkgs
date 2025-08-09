@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -39,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.5";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-8ZJbuPht9vQV52HN7eMqHBaNkzRP4K6K9CSw68vSTys=";
+    hash = "sha256-Epc7o8JoDkvNMbSH4D0cGyNJtg88qsDDbE881UVBxX4=";
   };
 
   build-system = [
@@ -84,6 +83,12 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlags = [
+    # DeprecationWarning: Triggering of __jax_array__() during abstractification is deprecated.
+    # To avoid this error, either explicitly convert your object using jax.numpy.array(), or register your object as a pytree.
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
@@ -97,16 +102,10 @@ buildPythonPackage rec {
     "examples/*"
   ];
 
-  disabledTests =
-    [
-      # AssertionError: [Chex] Function 'add' is traced > 1 times!
-      "PadShardUnpadTest"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-      "test_ref_changed"
-      "test_structure_changed"
-    ];
+  disabledTests = [
+    # AssertionError: [Chex] Function 'add' is traced > 1 times!
+    "PadShardUnpadTest"
+  ];
 
   passthru = {
     updateScript = writeScript "update.sh" ''

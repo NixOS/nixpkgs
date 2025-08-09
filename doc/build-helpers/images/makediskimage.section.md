@@ -52,23 +52,23 @@ A `deterministic` flag is available for best efforts determinism.
 To produce a Nix-store only image:
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
   lib = pkgs.lib;
   make-disk-image = import <nixpkgs/nixos/lib/make-disk-image.nix>;
 in
-  make-disk-image {
-    inherit pkgs lib;
-    config = {};
-    additionalPaths = [ ];
-    format = "qcow2";
-    onlyNixStore = true;
-    partitionTableType = "none";
-    installBootLoader = false;
-    touchEFIVars = false;
-    diskSize = "auto";
-    additionalSpace = "0M"; # Defaults to 512M.
-    copyChannel = false;
-  }
+make-disk-image {
+  inherit pkgs lib;
+  config = { };
+  additionalPaths = [ ];
+  format = "qcow2";
+  onlyNixStore = true;
+  partitionTableType = "none";
+  installBootLoader = false;
+  touchEFIVars = false;
+  diskSize = "auto";
+  additionalSpace = "0M"; # Defaults to 512M.
+  copyChannel = false;
+}
 ```
 
 Some arguments can be left out, they are shown explicitly for the sake of the example.
@@ -78,29 +78,36 @@ Building this derivation will provide a QCOW2 disk image containing only the Nix
 To produce a NixOS installation image disk with UEFI and bootloader installed:
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
   lib = pkgs.lib;
   make-disk-image = import <nixpkgs/nixos/lib/make-disk-image.nix>;
   evalConfig = import <nixpkgs/nixos/lib/eval-config.nix>;
 in
-  make-disk-image {
-    inherit pkgs lib;
-    inherit (evalConfig {
+make-disk-image {
+  inherit pkgs lib;
+  inherit
+    (evalConfig {
       modules = [
         {
-          fileSystems."/" = { device = "/dev/vda"; fsType = "ext4"; autoFormat = true; };
+          fileSystems."/" = {
+            device = "/dev/vda";
+            fsType = "ext4";
+            autoFormat = true;
+          };
           boot.grub.device = "/dev/vda";
         }
       ];
-    }) config;
-    format = "qcow2";
-    onlyNixStore = false;
-    partitionTableType = "legacy+gpt";
-    installBootLoader = true;
-    touchEFIVars = true;
-    diskSize = "auto";
-    additionalSpace = "0M"; # Defaults to 512M.
-    copyChannel = false;
-    memSize = 2048; # Qemu VM memory size in megabytes. Defaults to 1024M.
-  }
+    })
+    config
+    ;
+  format = "qcow2";
+  onlyNixStore = false;
+  partitionTableType = "legacy+gpt";
+  installBootLoader = true;
+  touchEFIVars = true;
+  diskSize = "auto";
+  additionalSpace = "0M"; # Defaults to 512M.
+  copyChannel = false;
+  memSize = 2048; # Qemu VM memory size in MiB (1024*1024 bytes). Defaults to 1024M.
+}
 ```

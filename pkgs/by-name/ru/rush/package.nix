@@ -4,6 +4,7 @@
   stdenv,
   bash,
   perl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,5 +62,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/rush";
+    tests = { inherit (nixosTests) rush; };
   };
 }

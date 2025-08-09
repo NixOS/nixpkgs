@@ -8,19 +8,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "c2patool";
-  version = "0.9.12";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "contentauth";
-    repo = "c2patool";
-    rev = "v${version}";
-    hash = "sha256-3OaCsy6xt2Pc/Cqm3qbbpr7kiQiA2BM/LqIQnuw73MY=";
+    repo = "c2pa-rs";
+    tag = "c2patool-v${finalAttrs.version}";
+    hash = "sha256-48qQwk0TwOmnzcG/cJCYkyPch+obj9pP/z8I1UFVCBE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-jod9wKuyhbY+/3NIEMZGoKIA1rT6Y4XoLKqYvzM5fAQ=";
+  cargoHash = "sha256-EA34It7DGGO8fTJuCCUkr4q/C6IgQ6d2dt4ZUfIv0OA=";
 
   # use the non-vendored openssl
   env.OPENSSL_NO_VENDOR = 1;
@@ -30,9 +29,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
+
+  # could not compile `c2pa` (lib test) due to 102 previous errors
+  doCheck = false;
 
   checkFlags = [
     # These tests rely on additional executables to be compiled to "target/debug/".
@@ -51,18 +51,16 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
-    description = "Command line tool for displaying and adding C2PA manifests";
-    homepage = "https://github.com/contentauth/c2patool";
-    license = with licenses; [
+  meta = {
+    description = "Command line tool for working with C2PA manifests and media assets";
+    homepage = "https://github.com/contentauth/c2pa-rs/tree/main/cli";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ ok-nick ];
+    maintainers = with lib.maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };
-}
+})

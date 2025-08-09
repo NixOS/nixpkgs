@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "python-zaqarclient";
-  version = "2.8.0";
+  version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";
     tag = version;
-    hash = "sha256-vfu1GYd9eoVpmBtlnRTiqpiqlgxqPnwpFC9YC1UuvLM=";
+    hash = "sha256-oqfD9+9xNYAEjCy3DvpHOF9PeRGnwo7flpFQCSnpt7g=";
   };
 
   env.PBR_VERSION = version;
@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openstack/python-zaqarclient";
     description = "Client library for OpenStack Zaqar API";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

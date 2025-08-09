@@ -25,7 +25,8 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Xenstore protocol in pure OCaml";
     license = licenses.lgpl21Only;
-    maintainers = teams.xen.members ++ [ maintainers.sternenseemann ];
+    maintainers = [ maintainers.sternenseemann ];
+    teams = [ teams.xen ];
     homepage = "https://github.com/mirage/ocaml-xenstore";
   };
 }

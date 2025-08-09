@@ -31,6 +31,6 @@ buildKodiBinaryAddon rec {
     description = "Client for RTMP streams";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

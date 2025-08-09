@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "29.9.0";
+  version = "37.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-Wk2WxyyU8SUsBu99sj1LNNzQYspC3eLy1tPXSjk2UxQ=";
+    hash = "sha256-+l/tEdraTkNt70sjcGpS/e1uEyudEsJdlqgoHPhMNg0=";
   };
 
   build-system = [
@@ -53,7 +53,8 @@ buildPythonPackage rec {
     noiseprotocol
     protobuf
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     mock

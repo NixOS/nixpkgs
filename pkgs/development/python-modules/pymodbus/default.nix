@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.9.1";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
-    hash = "sha256-O64r8/3AGZYr449FANo3wQCUiIJkIjN5eQ+VoTrvUHo=";
+    hash = "sha256-bwTc2tzgGNcsDDeHkjq9ZeTuYLc7u76WbMvzOmzOTI4=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     redis
     sqlalchemy
     twisted
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     pushd test
@@ -59,16 +60,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymodbus" ];
 
-  disabledTests =
-    [
-      # Tests often hang
-      "test_connected"
-    ]
-    ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-      "test_split_serial_packet"
-      "test_serial_poll"
-      "test_simulator"
-    ];
+  disabledTests = [
+    # Tests often hang
+    "test_connected"
+  ]
+  ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
+  ];
+
+  disabledTestPaths = [
+    # Don't test the examples
+    "examples/"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
@@ -79,8 +84,8 @@ buildPythonPackage rec {
       lightweight project is needed.
     '';
     homepage = "https://github.com/pymodbus-dev/pymodbus";
-    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${src.tag}";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
     mainProgram = "pymodbus.simulator";
   };

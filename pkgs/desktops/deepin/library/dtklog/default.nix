@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsForQt5.qtbase
     spdlog
-  ] ++ lib.optional withSystemd systemd;
+  ]
+  ++ lib.optional withSystemd systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_SYSTEMD" withSystemd)
@@ -45,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtklog";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

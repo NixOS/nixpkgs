@@ -3,6 +3,7 @@
   fetchPypi,
   hypothesis,
   lib,
+  nix-update-script,
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-rs";
-  version = "0.29.1";
+  version = "0.32.0";
 
   pyproject = true;
 
@@ -20,13 +21,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jsonschema_rs";
-    hash = "sha256-qfiWqeRRdjA3TxdTZHBYNsIvCdW9W7sG7AYRMytnAv0=";
+    hash = "sha256-BQDPoBn6WNwaxS1gWSol021My7Oiz0DIspHujY9/7Mc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-kVi4EFig0ZGnOSVjzfJuGeR7BiEngP1Jhj6NvbhMVy4=";
+    inherit pname version src;
+    hash = "sha256-MbIBiV0xOKvDrQPnovTLgGgvdJIHPw19faJFmMqWIMw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -41,11 +41,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonschema_rs" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "High-performance JSON Schema validator for Python";
     homepage = "https://github.com/Stranger6667/jsonschema/tree/master/crates/jsonschema-py";
     changelog = "https://github.com/Stranger6667/jsonschema/blob/python-v${version}/crates/jsonschema-py/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

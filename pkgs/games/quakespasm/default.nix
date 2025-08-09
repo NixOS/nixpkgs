@@ -14,11 +14,6 @@
   opusfile,
   libogg,
   libxmp,
-  Cocoa,
-  CoreAudio,
-  CoreFoundation,
-  IOKit,
-  OpenGL,
   copyDesktopItems,
   makeDesktopItem,
   pkg-config,
@@ -51,49 +46,38 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gzip
-      libGL
-      libGLU
-      libvorbis
-      libmad
-      flac
-      libopus
-      opusfile
-      libogg
-      libxmp
-      (if useSDL2 then SDL2 else SDL)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreAudio
-      IOKit
-      OpenGL
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && useSDL2) [
-      CoreFoundation
-    ];
+  buildInputs = [
+    gzip
+    libGL
+    libGLU
+    libvorbis
+    libmad
+    flac
+    libopus
+    opusfile
+    libogg
+    libxmp
+    (if useSDL2 then SDL2 else SDL)
+  ];
 
-  buildFlags =
-    [
-      "DO_USERDIRS=1"
-      # Makefile defaults, set here to enforce consistency on Darwin build
-      "USE_CODEC_WAVE=1"
-      "USE_CODEC_MP3=1"
-      "USE_CODEC_VORBIS=1"
-      "USE_CODEC_FLAC=1"
-      "USE_CODEC_OPUS=1"
-      "USE_CODEC_MIKMOD=0"
-      "USE_CODEC_UMX=0"
-      "USE_CODEC_XMP=1"
-      "MP3LIB=mad"
-      "VORBISLIB=vorbis"
-    ]
-    ++ lib.optionals useSDL2 [
-      "SDL_CONFIG=sdl2-config"
-      "USE_SDL2=1"
-    ];
+  buildFlags = [
+    "DO_USERDIRS=1"
+    # Makefile defaults, set here to enforce consistency on Darwin build
+    "USE_CODEC_WAVE=1"
+    "USE_CODEC_MP3=1"
+    "USE_CODEC_VORBIS=1"
+    "USE_CODEC_FLAC=1"
+    "USE_CODEC_OPUS=1"
+    "USE_CODEC_MIKMOD=0"
+    "USE_CODEC_UMX=0"
+    "USE_CODEC_XMP=1"
+    "MP3LIB=mad"
+    "VORBISLIB=vorbis"
+  ]
+  ++ lib.optionals useSDL2 [
+    "SDL_CONFIG=sdl2-config"
+    "USE_SDL2=1"
+  ];
 
   makefile = if (stdenv.hostPlatform.isDarwin) then "Makefile.darwin" else "Makefile";
 

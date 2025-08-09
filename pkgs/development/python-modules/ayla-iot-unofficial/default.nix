@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ayla-iot-unofficial";
-  version = "1.4.8";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rewardone";
     repo = "ayla-iot-unofficial";
     tag = "v${version}";
-    hash = "sha256-XFLNt+TwkowNoDcJJpaX9kKi+Gcx4JnzEU1JikpbzZ0=";
+    hash = "sha256-/Js2XMhGe4zPAjpeH2ON4377TAPaWPvA8+HEliYKxlw=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/ayla_iot_unofficial.py" ];
+  enabledTestPaths = [ "tests/ayla_iot_unofficial.py" ];
 
   # tests interact with the actual API
   doCheck = false;

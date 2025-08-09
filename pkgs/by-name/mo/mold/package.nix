@@ -7,7 +7,7 @@
   cmake,
   mimalloc,
   ninja,
-  tbb,
+  tbb_2022,
   zlib,
   zstd,
 
@@ -20,17 +20,19 @@
   runCommandCC,
   testers,
   useMoldLinker,
+
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mold";
-  version = "2.37.1";
+  version = "2.40.3";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
-    rev = "v${version}";
-    hash = "sha256-ZGO3oT8NOOkAYTyoMUKxH3TFP4mw2z0BGdGSF2TbKaE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zE+qve1ooCN1UY0h9tI2jo7Sw+fVdhh4DPFIU7yYKSg=";
   };
 
   nativeBuildInputs = [
@@ -38,20 +40,23 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs =
-    [
-      tbb
-      zlib
-      zstd
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      mimalloc
-    ];
+  buildInputs = [
+    tbb_2022
+    zlib
+    zstd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    mimalloc
+  ];
 
   cmakeFlags = [
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
     "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -110,7 +115,7 @@ stdenv.mkDerivation rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster drop-in replacement for existing Unix linkers (unwrapped)";
     longDescription = ''
       mold is a faster drop-in replacement for existing Unix linkers. It is
@@ -119,13 +124,11 @@ stdenv.mkDerivation rec {
       rapid debug-edit-rebuild cycles.
     '';
     homepage = "https://github.com/rui314/mold";
-    changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    changelog = "https://github.com/rui314/mold/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mold";
-    maintainers = with maintainers; [
-      azahi
-      paveloom
-    ];
+    maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

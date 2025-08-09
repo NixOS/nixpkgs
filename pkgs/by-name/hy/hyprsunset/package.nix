@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   hyprland-protocols,
+  hyprlang,
   hyprutils,
   hyprwayland-scanner,
   wayland,
@@ -14,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprsunset";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EIJka3UtSEtmkDBjYiGeR/hO6s6R4x3K+rbUlc9KPBE=";
+    hash = "sha256-Ctk7zophp8obM/u9S2c8a6nOWV+VeIzq6ma+dI5BE3s=";
   };
 
   postPatch = ''
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprland-protocols
+    hyprlang
     hyprutils
     wayland
     wayland-protocols
@@ -53,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Application to enable a blue-light filter on Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprsunset";
   };
 })

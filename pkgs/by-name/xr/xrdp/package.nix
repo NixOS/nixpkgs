@@ -12,7 +12,7 @@
   openssl,
   systemd,
   pam,
-  fuse,
+  fuse3,
   libdrm,
   libjpeg,
   libopus,
@@ -29,13 +29,13 @@
 let
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.10.2";
+    version = "0.10.4";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-xwkGY9dD747kyTvoXrYAIoiFBzQe5ngskUYQhDawnbU=";
+      hash = "sha256-TuzUerfOn8+3YfueG00IBP9sMpvy2deyL16mWQ8cRHg=";
     };
 
     nativeBuildInputs = [
@@ -74,7 +74,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
-    version = "0.10.1";
+    version = "0.10.3";
 
     src = applyPatches {
       inherit version;
@@ -85,7 +85,7 @@ let
         repo = "xrdp";
         rev = "v${version}";
         fetchSubmodules = true;
-        hash = "sha256-lqifQJ/JX+0304arVctsEBEDFPhEPn2OWLyjAQW1who=";
+        hash = "sha256-6QSz0a0ed1UxfYYibehPgGUzU/xf1HmqEvVE4xU5hRg=";
       };
     };
 
@@ -100,7 +100,7 @@ let
     ];
 
     buildInputs = [
-      fuse
+      fuse3
       lame
       libjpeg
       libjpeg_turbo
@@ -151,8 +151,8 @@ let
 
       cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
 
-      substituteInPlace $out/etc/xrdp/sesman.ini --replace /etc/xrdp/pulse $out/etc/xrdp/pulse
-      substituteInPlace $out/etc/xrdp/sesman.ini --replace '#SessionSockdirGroup=root' 'SessionSockdirGroup=xrdp'
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace-fail /etc/xrdp/pulse $out/etc/xrdp/pulse
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace-fail '#SessionSockdirGroup=xrdp' 'SessionSockdirGroup=xrdp'
 
       # remove all session types except Xorg (they are not supported by this setup)
       perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini

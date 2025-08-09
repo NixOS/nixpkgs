@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "3.4.8";
+  version = "3.4.11";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "xviewer";
     rev = version;
-    hash = "sha256-Wn1a/tGNIJNGbgDKoMMMo/oCXrqCXDM1nTUgCZt0O/U=";
+    hash = "sha256-fW+hhHJ4i3u0vtbvaQWliIZSLI1WCFhR5CvVZL6Vy8U=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xviewer";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
+    maintainers = with maintainers; [ tu-maurice ];
+    teams = [ teams.cinnamon ];
   };
 }

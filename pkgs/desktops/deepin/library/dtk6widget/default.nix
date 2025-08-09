@@ -47,16 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      cups
-      libstartup_notification
-    ]
-    ++ (with qt6Packages; [
-      qtbase
-      qtmultimedia
-      qtsvg
-    ]);
+  buildInputs = [
+    cups
+    libstartup_notification
+  ]
+  ++ (with qt6Packages; [
+    qtbase
+    qtmultimedia
+    qtsvg
+  ]);
 
   propagatedBuildInputs = [ dtk6gui ];
 
@@ -90,6 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6widget";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

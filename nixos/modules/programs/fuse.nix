@@ -4,7 +4,7 @@ let
   cfg = config.programs.fuse;
 in
 {
-  meta.maintainers = with lib.maintainers; [ primeos ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   options.programs.fuse = {
     mountMax = lib.mkOption {

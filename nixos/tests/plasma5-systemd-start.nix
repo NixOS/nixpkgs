@@ -1,48 +1,46 @@
-import ./make-test-python.nix (
-  { pkgs, ... }:
+{ pkgs, ... }:
 
-  {
-    name = "plasma5-systemd-start";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ oxalica ];
-    };
+{
+  name = "plasma5-systemd-start";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ oxalica ];
+  };
 
-    nodes.machine =
-      { ... }:
+  nodes.machine =
+    { ... }:
 
-      {
-        imports = [ ./common/user-account.nix ];
-        services.xserver = {
-          enable = true;
-          desktopManager.plasma5.enable = true;
-          desktopManager.plasma5.runUsingSystemd = true;
-        };
-
-        services.displayManager = {
-          sddm.enable = true;
-          defaultSession = "plasma";
-          autoLogin = {
-            enable = true;
-            user = "alice";
-          };
-        };
+    {
+      imports = [ ./common/user-account.nix ];
+      services.xserver = {
+        enable = true;
+        desktopManager.plasma5.enable = true;
+        desktopManager.plasma5.runUsingSystemd = true;
       };
 
-    testScript =
-      { nodes, ... }:
-      ''
-        with subtest("Wait for login"):
-            start_all()
-            machine.wait_for_file("/tmp/xauth_*")
-            machine.succeed("xauth merge /tmp/xauth_*")
+      services.displayManager = {
+        sddm.enable = true;
+        defaultSession = "plasma";
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
+      };
+    };
 
-        with subtest("Check plasmashell started"):
-            machine.wait_until_succeeds("pgrep plasmashell")
-            machine.wait_for_window("^Desktop ")
+  testScript =
+    { nodes, ... }:
+    ''
+      with subtest("Wait for login"):
+          start_all()
+          machine.wait_for_file("/tmp/xauth_*")
+          machine.succeed("xauth merge /tmp/xauth_*")
 
-        status, result = machine.systemctl('--no-pager show plasma-plasmashell.service', user='alice')
-        assert status == 0, 'Service not found'
-        assert 'ActiveState=active' in result.split('\n'), 'Systemd service not active'
-      '';
-  }
-)
+      with subtest("Check plasmashell started"):
+          machine.wait_until_succeeds("pgrep plasmashell")
+          machine.wait_for_window("^Desktop ")
+
+      status, result = machine.systemctl('--no-pager show plasma-plasmashell.service', user='alice')
+      assert status == 0, 'Service not found'
+      assert 'ActiveState=active' in result.split('\n'), 'Systemd service not active'
+    '';
+}

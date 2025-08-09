@@ -4,7 +4,6 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  importlib-metadata,
   poetry-core,
   poetry-dynamic-versioning,
   pydantic,
@@ -12,23 +11,23 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  rich,
   rich-rst,
-  typing-extensions,
+  rich,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "3.12.0";
+  version = "3.22.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-VV2C9SvVOF2452lP20WJaSppXrenUhSf2QTh0t3WjgM=";
+    hash = "sha256-Jts60OLapLBM9tZCPd9OtRgqyrQveUVDHTIz302cCrI=";
   };
 
   build-system = [
@@ -39,18 +38,22 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     docstring-parser
-    importlib-metadata
     rich
     rich-rst
-    typing-extensions
   ];
+
+  optional-dependencies = {
+    trio = [ trio ];
+    yaml = [ pyyaml ];
+  };
 
   nativeCheckInputs = [
     pydantic
     pytest-mock
     pytestCheckHook
     pyyaml
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 

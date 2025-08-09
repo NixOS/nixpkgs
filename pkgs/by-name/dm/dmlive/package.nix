@@ -20,17 +20,16 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "dmlive";
-  version = "5.5.7-unstable-2025-01-25";
+  version = "5.6.0-unstable-2025-06-21";
 
   src = fetchFromGitHub {
     owner = "THMonster";
     repo = "dmlive";
-    rev = "79b4d9430fca3ebb86c57ee506989f620ea68a21"; # no tag
-    hash = "sha256-0DDKKd4IZj+3AyVMG4FXjCbvvMg5iDCiF1B6nB8n3lU=";
+    rev = "485eae06737530360c0e6f6415c62791767d595b"; # no tag
+    hash = "sha256-0JjPZPtAtbxdh0HDycWHEonZggBcoqv5SJUnhKzXNIk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-UwKQivYZyXYADbwf4VA1h2y7YzpxefUgDYQG+NaLMwE=";
+  cargoHash = "sha256-B1v9m4Nn5wXMbNBlh7+A8zBejJ0tHdqvSXVpRz+wC5g=";
 
   nativeBuildInputs = [
     pkg-config

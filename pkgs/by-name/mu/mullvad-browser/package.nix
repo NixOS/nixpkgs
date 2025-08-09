@@ -97,7 +97,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "14.0.9";
+  version = "14.5.5";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-5mVplSTqXVTL+QSJg0hthKUL/JiwX3A3DC869HRzQ7M=";
+      hash = "sha256-PwqxYylW602XAKBvEJk4Rl8q6nWBGH3pFvTOuAYtr/w=";
     };
   };
 
@@ -249,7 +249,7 @@ stdenv.mkDerivation rec {
     # FONTCONFIG_FILE is required to make fontconfig read the MB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
-    FONTCONFIG_FILE=$MB_IN_STORE/fontconfig/fonts.conf
+    FONTCONFIG_FILE=$MB_IN_STORE/fonts/fonts.conf
     substituteInPlace "$FONTCONFIG_FILE" \
       --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$MB_IN_STORE/fonts</dir>"
 

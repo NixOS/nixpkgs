@@ -7,19 +7,18 @@
 python3Packages.buildPythonApplication rec {
   pname = "mloader";
   version = "1.1.12";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-0o4FvhuFudNSEL6fwBVqxldaNePbbidY9utDqXiLRNc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "protobuf~=3.6" "protobuf"
-  '';
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonRelaxDeps = [ "protobuf" ];
+
+  dependencies = with python3Packages; [
     click
     protobuf
     requests

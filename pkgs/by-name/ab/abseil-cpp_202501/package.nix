@@ -10,24 +10,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abseil-cpp";
-  version = "20250127.1";
+  version = "20250512.1";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-QTywqQCkyGFpdbtDBvUwz9bGXxbJs/qoFKF6zYAZUmQ=";
+    hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
   };
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "ABSL_BUILD_TEST_HELPERS" true)
-      (lib.cmakeBool "ABSL_USE_EXTERNAL_GOOGLETEST" true)
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
-    ]
-    ++ lib.optionals (cxxStandard != null) [
-      (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ABSL_BUILD_TEST_HELPERS" true)
+    (lib.cmakeBool "ABSL_USE_EXTERNAL_GOOGLETEST" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
+  ]
+  ++ lib.optionals (cxxStandard != null) [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
+  ];
 
   strictDeps = true;
 

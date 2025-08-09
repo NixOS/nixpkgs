@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-cov-stub
-    pytest
+    pytestCheckHook
     git
   ];
 

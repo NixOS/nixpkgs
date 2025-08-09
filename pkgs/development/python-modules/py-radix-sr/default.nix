@@ -43,6 +43,6 @@ buildPythonPackage rec {
       isc
       bsdOriginal
     ];
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

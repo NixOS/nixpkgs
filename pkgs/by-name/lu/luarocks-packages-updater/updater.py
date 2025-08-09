@@ -143,6 +143,9 @@ class LuaEditor(pluginupdate.Editor):
 
         print(f"updated {outfilename}")
 
+        # Format the generated file with nix fmt
+        subprocess.run(["nix", "fmt", outfilename], check=True)
+
     @property
     def attr_path(self):
         return "luaPackages"

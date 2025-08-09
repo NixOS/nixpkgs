@@ -7,18 +7,22 @@ use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix fil
 
 ```nix
 {
-    packageOverrides = super: let self = super.pkgs; in
+  packageOverrides =
+    super:
+    let
+      self = super.pkgs;
+    in
     {
 
-        rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [
-                devtools
-                ggplot2
-                reshape2
-                yaml
-                optparse
-                ];
-        };
+      rEnv = super.rWrapper.override {
+        packages = with self.rPackages; [
+          devtools
+          ggplot2
+          reshape2
+          yaml
+          optparse
+        ];
+      };
     };
 }
 ```
@@ -33,7 +37,7 @@ environment available for other contributors, you can create a `default.nix`
 file like so:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 {
   myProject = stdenv.mkDerivation {
     name = "myProject";
@@ -60,16 +64,20 @@ environment, see `rstudioWrapper`, which functions similarly to
 
 ```nix
 {
-    packageOverrides = super: let self = super.pkgs; in
+  packageOverrides =
+    super:
+    let
+      self = super.pkgs;
+    in
     {
 
-        rstudioEnv = super.rstudioWrapper.override {
-            packages = with self.rPackages; [
-                dplyr
-                ggplot2
-                reshape2
-                ];
-        };
+      rstudioEnv = super.rstudioWrapper.override {
+        packages = with self.rPackages; [
+          dplyr
+          ggplot2
+          reshape2
+        ];
+      };
     };
 }
 ```
@@ -81,13 +89,17 @@ Alternatively, you can create a self-contained `shell.nix` without the need to
 modify any configuration files:
 
 ```nix
-{ pkgs ? import <nixpkgs> {}
+{
+  pkgs ? import <nixpkgs> { },
 }:
 
 pkgs.rstudioWrapper.override {
-  packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 ];
+  packages = with pkgs.rPackages; [
+    dplyr
+    ggplot2
+    reshape2
+  ];
 }
-
 ```
 
 Executing `nix-shell` will then drop you into an environment equivalent to the

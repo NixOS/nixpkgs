@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-i1CVhfieexeiKPwp0y29QyrKspzEFkp1+zwIaM9D/Qc=";
+    hash = "sha256-bI5yTpqU2N6hFwI9wi4b9N5onY5iN+8YDM3bSgdYxjQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-I5WRuEogMwa0dB6wxhWDxivqhCdUugvsPrwUvjjDnt8=";
+  cargoHash = "sha256-7AOdSk9XIXFCDyCus3XgOK3ZBVa4CvX+NFM0jHf7Wbs=";
 
   env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
+    VERGEN_GIT_COMMIT_DATE = "2025-04-22";
     VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
 
@@ -72,7 +72,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     defaultCargoTestFlags="$cargoTestFlags"
 
-    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
+    # Some tests with the `compio` runtime expect io_uring support but that
+    # is disabled in the Nix sandbox and the tests fail because they can't
+    # run in the sandbox. Ideally, the `compio` crate should fallback to a
+    # non-io_uring runtime but for some reason, that doesn't happen.
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files -- \
+      --skip operation::tests::copy_dir_to_same_location \
+      --skip operation::tests::copy_file_to_same_location \
+      --skip operation::tests::copy_file_with_diff_name_to_diff_dir \
+      --skip operation::tests::copy_file_with_extension_to_same_loc \
+      --skip operation::tests::copy_to_diff_dir_doesnt_dupe_files \
+      --skip operation::tests::copying_file_multiple_times_to_same_location"
     runHook cargoCheckHook
 
     cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
@@ -105,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "File Manager for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-files";
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

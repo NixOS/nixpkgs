@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nvidia_oc";
-  version = "0.1.19";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "Dreaming-Codes";
     repo = "nvidia_oc";
     tag = version;
-    hash = "sha256-OYQuCNHByt9y6XGIayCw8uvZHeITqRk8PV06+pT0dhA=";
+    hash = "sha256-I5L+VUcbMw4lLvEvtcjs/3BXLKovEg/34DZAL4a7LJU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-94uoOzbC1ocK1LWHArUYqfaBFzOUQNSLPKnMRXXjBQ0=";
+  cargoHash = "sha256-VRrMSDKB8VrfdKUbZ63XY1oq0xaxgcwn739dt0C/KKY=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath

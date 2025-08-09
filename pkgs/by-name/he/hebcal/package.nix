@@ -1,32 +1,35 @@
 {
   lib,
-  stdenv,
+  buildGoModule,
   fetchFromGitHub,
-  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.24";
+buildGoModule (finalAttrs: {
   pname = "hebcal";
+  version = "5.9.4";
 
   src = fetchFromGitHub {
     owner = "hebcal";
     repo = "hebcal";
-    rev = "v${version}";
-    sha256 = "sha256-iWp2S3s8z/y4dZ66Ogqu7Yf4gTUvSS1J5F7d0ifRbcY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6SyK5BKVMGcqEFy3tbPBPqmZYp9/DD8A3VUNpAsihEM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  vendorHash = null;
+
+  preBuild = ''
+    make dcity.go
+  '';
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hebcal.github.io";
     description = "Perpetual Jewish Calendar";
     longDescription = "Hebcal is a program which prints out the days in the Jewish calendar for a given Gregorian year. Hebcal is fairly flexible in terms of which events in the Jewish calendar it displays.";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.hhm ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.hhm ];
+    platforms = lib.platforms.all;
     mainProgram = "hebcal";
   };
-}
+})

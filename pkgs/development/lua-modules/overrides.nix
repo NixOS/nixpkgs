@@ -4,7 +4,7 @@
   cargo,
   cmake,
 
-  # plenary utilities
+  ast-grep,
   which,
   findutils,
   coreutils,
@@ -15,7 +15,6 @@
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
-  fixDarwinDylibNames,
   fzf,
   glib,
   glibc,
@@ -33,7 +32,6 @@
   libpsl,
   libpq,
   libuuid,
-  libuv,
   libxcrypt,
   libyaml,
   lua-language-server,
@@ -41,6 +39,7 @@
   mariadb,
   mpfr,
   neovim-unwrapped,
+  oniguruma,
   openldap,
   openssl,
   pcre,
@@ -52,6 +51,7 @@
   tree-sitter,
   unbound,
   unzip,
+  versionCheckHook,
   vimPlugins,
   yajl,
   zip,
@@ -59,6 +59,7 @@
   zziplib,
   writableTmpDirAsHomeHook,
   gitMinimal,
+  getopt,
 }:
 
 final: prev:
@@ -86,16 +87,6 @@ in
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  bit32 = prev.bit32.overrideAttrs (oa: {
-    # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
-    # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
-    # more
-    patches = [
-      ./bit32.patch
-    ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
-  });
-
   busted = prev.busted.overrideAttrs (oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
@@ -111,7 +102,7 @@ in
     '';
   });
 
-  cqueues = prev.cqueues.overrideAttrs (oa: rec {
+  cqueues = prev.cqueues.overrideAttrs (oa: {
     # Parse out a version number without the Lua version inserted
     version =
       let
@@ -121,8 +112,9 @@ in
         rev = lib.last (lib.splitString "-" (lib.last rel));
       in
       "${date}-${rev}";
+    __intentionallyOverridingVersion = true;
 
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       gnum4
@@ -143,13 +135,13 @@ in
     # version, which doesn't work well for us, so modify it
     postConfigure =
       let
-        inherit (prev.cqueues) pname;
+        inherit (final.cqueues) pname version;
       in
       ''
         # 'all' target auto-detects correct Lua version, which is fine for us as
         # we only have the right one available :)
         sed -Ei ''${rockspecFilename} \
-          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.4|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
@@ -159,13 +151,14 @@ in
   });
 
   fzf-lua = prev.fzf-lua.overrideAttrs {
-    # FIXME: Darwin flaky tests
-    # address already in use on second test run
+    # FIXME: https://github.com/NixOS/nixpkgs/issues/431458
+    # fzf-lua throws `address already in use` on darwin
     # Previewer transient failure
     doCheck = !stdenv.hostPlatform.isDarwin;
     checkInputs = [
       fd
       fzf
+      getopt
       ripgrep
     ];
     nativeCheckInputs = [
@@ -183,18 +176,14 @@ in
 
       # TODO: remove with new nvim-web-devicons release
       # Disabled devicons test because we have old version as dep and fzf-lua checks for a new icon
-      substituteInPlace tests/file/ui_spec.lua \
+      substituteInPlace tests/files_spec.lua \
         --replace-fail \
-          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
-          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
+          "T[\"files\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
+          "T[\"files\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
 
       # TODO: Figure out why 2 files extra
-      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "111" "113"
-
-      # TODO: Figure out why 2 files extra
-      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
-        --replace-fail "110" "112"
+      substituteInPlace tests/screenshots/tests-files_spec.lua---files---executable---1-+-args-{-\'fd\'-} \
+        --replace-fail "96" "98"
 
       make test
 
@@ -227,6 +216,19 @@ in
       runHook preCheck
       # feel free to disable/adjust the tests
       rm tests/base/test_apply.lua tests/base/test_vimscript_interpreter.lua
+
+      # Dependencies needed in special location
+      mkdir -p deps/{ripgrep,astgrep}
+      mkdir {temp_test_dir,temp_history_dir}
+      ln -s ${lib.getExe ripgrep} deps/ripgrep/rg
+      ln -s ${lib.getExe ast-grep} deps/astgrep/ast-grep
+      ln -s ${vimPlugins.mini-nvim} deps/mini.nvim
+
+      # Update dependency check to respect packaged version
+      substituteInPlace lua/grug-far/test/dependencies.lua \
+        --replace-fail "local RG_VERSION = '14.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
+        --replace-fail "local SG_VERSION = '0.35.0'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
+
       make test dir=base
       runHook postCheck
     '';
@@ -234,13 +236,6 @@ in
   });
 
   http = prev.http.overrideAttrs (oa: {
-    patches = [
-      (fetchpatch {
-        name = "invalid-state-progression.patch";
-        url = "https://github.com/daurnimator/lua-http/commit/cb7b59474a.diff";
-        sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
-      })
-    ];
     /*
       TODO: separate docs derivation? (pandoc is heavy)
       nativeBuildInputs = [ pandoc ];
@@ -381,6 +376,15 @@ in
   lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       gnulib
+    ];
+  });
+
+  lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs (oa: {
+    externalDeps = [
+      {
+        name = "ONIG";
+        dep = oniguruma;
+      }
     ];
   });
 
@@ -582,9 +586,13 @@ in
       installShellFiles
       lua
       unzip
+      versionCheckHook
     ];
     # cmake is just to compile packages with "cmake" buildType, not luarocks itself
     dontUseCmakeConfigure = true;
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip
@@ -715,6 +723,8 @@ in
     };
   });
 
+  lux-lua = final.callPackage ./lux-lua.nix { inherit lua; };
+
   lz-n = prev.lz-n.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
@@ -794,10 +804,12 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs (oa: {
+    # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
+        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   });
 
@@ -840,57 +852,6 @@ in
       rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
       make test
       runHook postCheck
-    '';
-  });
-
-  # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
-  # we shouldn't use luarocks machinery to build complex cmake components
-  libluv = stdenv.mkDerivation {
-
-    pname = "libluv";
-    inherit (prev.luv) version meta src;
-
-    cmakeFlags = [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_MODULE=OFF"
-      "-DWITH_SHARED_LIBUV=ON"
-      "-DLUA_BUILD_TYPE=System"
-      "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
-    ];
-
-    # to make sure we dont use bundled deps
-    postUnpack = ''
-      rm -rf deps/lua deps/libuv
-    '';
-
-    buildInputs = [
-      libuv
-      final.lua
-    ];
-
-    nativeBuildInputs = [
-      pkg-config
-      cmake
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
-  };
-
-  luv = prev.luv.overrideAttrs (oa: {
-
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ pkg-config ];
-    buildInputs = [ libuv ];
-
-    # Use system libuv instead of building local and statically linking
-    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
-      variables = {
-        WITH_SHARED_LIBUV = "ON";
-      };
-    };
-
-    # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
-    # tests is not run since they are not part of the tarball anymore
-    preCheck = ''
-      unset LUA_PATH
-      rm tests/test-{dns,thread}.lua
     '';
   });
 
@@ -1001,6 +962,21 @@ in
     })
   ) { };
 
+  rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs (oa: {
+
+    # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
+    doCheck = luaOlder "5.2";
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+    ];
+    checkPhase = ''
+      runHook preCheck
+      busted spec
+      runHook postCheck
+    '';
+  });
+
   rtp-nvim = prev.rtp-nvim.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
@@ -1026,6 +1002,18 @@ in
       runHook preCheck
       busted --lua=nlua
       runHook postCheck
+    '';
+  });
+
+  sofa = prev.sofa.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      installShellFiles
+    ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd sofa \
+        --bash <($out/bin/sofa --completion bash) \
+        --fish <($out/bin/sofa --completion fish) \
+        --zsh <($out/bin/sofa --completion zsh)
     '';
   });
 
@@ -1070,7 +1058,7 @@ in
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       src = oa.src;
-      hash = "sha256-sO2q4cmkJc6T4iyJUWpBfr2ISycS1cXAIO0ibMfzyIE=";
+      hash = "sha256-egmb4BTbORpTpVO50IcqbZU1Y0hioXLMkxxUAo05TIA=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo

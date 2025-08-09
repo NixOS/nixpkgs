@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "phase-cli";
-  version = "1.19.0";
+  version = "1.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phasehq";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-E5vSF8/DLUH2zfGwbQ3XqELTSP4XR3cqfcMM8hMaOf4=";
+    hash = "sha256-XicOP/V9j74kogu6KEUyk06D0kCq/oG5N635h6X1eng=";
   };
 
   build-system = with python3Packages; [
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/*.py"
   ];
 

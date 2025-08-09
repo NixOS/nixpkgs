@@ -13,14 +13,14 @@ The following is an example expression using `buildGoModule`:
 
 ```nix
 {
-  pet = buildGoModule rec {
+  pet = buildGoModule (finalAttrs: {
     pname = "pet";
     version = "0.3.4";
 
     src = fetchFromGitHub {
       owner = "knqyf263";
       repo = "pet";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
     };
 
@@ -32,7 +32,7 @@ The following is an example expression using `buildGoModule`:
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ kalbasit ];
     };
-  };
+  });
 }
 ```
 
@@ -147,9 +147,7 @@ A string list of [Go build tags (also called build constraints)](https://pkg.go.
 Tags can also be set conditionally:
 
 ```nix
-{
-  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
-}
+{ tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ]; }
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -187,6 +185,28 @@ Defaults to `true`.
 Whether the build result should be allowed to contain references to the Go tool chain. This might be needed for programs that are coupled with the compiler, but shouldn't be set without a good reason.
 
 Defaults to `false`
+
+### `goSum` {#var-go-goSum}
+
+Specifies the contents of the `go.sum` file and triggers rebuilds when it changes. This helps combat inconsistent dependency errors on `go.sum` changes.
+
+Defaults to `null`
+
+
+## Versioned toolchains and builders {#ssec-go-toolchain-versions}
+
+Beside `buildGoModule`, there are also versioned builders available that pin a specific Go version, like `buildGo124Module` for Go 1.24.
+Similar, versioned toolchains are available, like `go_1_24` for Go 1.24.
+Both builder and toolchain of a certain version will be removed as soon as the Go version reaches end of life.
+
+As toolchain updates in nixpkgs cause mass rebuilds and must go through the staging cycle, it can take a while until a new Go minor version is available to consumers of nixpkgs.
+If you want quicker access to the latest minor, use `go_latest` toolchain and `buildGoLatestModule` builder.
+To learn more about the Go maintenance and upgrade procedure in nixpkgs, check out the [Go toolchain/builder upgrade policy](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/go/README.md#go-toolchainbuilder-upgrade-policy).
+
+::: {.warning}
+The use of `go_latest` and `buildGoLatestModule` is restricted within nixpkgs.
+The [Go toolchain/builder upgrade policy](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/go/README.md#go-toolchainbuilder-upgrade-policy) must be followed.
+:::
 
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 
@@ -261,9 +281,7 @@ For example, only a selection of tests could be run with:
 ```nix
 {
   # -run and -skip accept regular expressions
-  checkFlags = [
-    "-run=^Test(Simple|Fast)$"
-  ];
+  checkFlags = [ "-run=^Test(Simple|Fast)$" ];
 }
 ```
 

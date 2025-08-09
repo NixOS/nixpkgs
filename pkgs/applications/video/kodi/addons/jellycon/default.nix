@@ -62,6 +62,6 @@ buildKodiAddon rec {
       easily switch between multiple user accounts at will.
     '';
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

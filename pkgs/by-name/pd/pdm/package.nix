@@ -19,9 +19,7 @@ let
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
-      # pdm requires hishel and subsequentially pytest-regressions -> matplotlib -> ghostscript -> jbig2dec which is AGPL only
-      matplotlib = super.matplotlib.override ({ enableGhostscript = false; });
-      # avoid many extra dependencies
+      # pdm requires ...... -> jbig2dec which is AGPL only
       moto = super.moto.overridePythonAttrs (old: rec {
         doCheck = false;
       });
@@ -30,7 +28,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.22.3";
+  version = "2.24.2";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -39,7 +37,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-+qUvVQJO/xfBZJuMBezu/LdKhKag1BCQ3To2qFXiOzY=";
+    hash = "sha256-z2p7guCQrKpDSYRHaGcHuwoTDsprrvJo9SH3sGBILSQ=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -73,6 +71,7 @@ python.pkgs.buildPythonApplication rec {
       tomlkit
       truststore
       unearth
+      id
       virtualenv
     ]
     ++ httpx.optional-dependencies.socks;
@@ -102,7 +101,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -124,18 +123,21 @@ python.pkgs.buildPythonApplication rec {
     "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
     "test_build_distributions"
     "test_init_project_respect"
+    "test_use_python_write_file_multiple_versions"
+    "test_repository_get_token_from_oidc"
+    "test_repository_get_token_misconfigured_github"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion { package = pdm; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpcloud
       natsukium
       misilelab

@@ -37,10 +37,3 @@ index 3afc5f6..19785e5 100644
    "app": {
      "withGlobalTauri": true,
      "security": {
-@@ -56,4 +47,4 @@
-       }
-     ]
-   }
--}
-\ No newline at end of file
-+}

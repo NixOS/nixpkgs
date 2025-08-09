@@ -3,6 +3,7 @@
   asgiref,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flask,
   hiro,
   limits,
@@ -32,6 +33,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-3GFbLQExd4c3Cyr7UDX/zOAfedOluXMwCbBhOgoKfn0=";
   };
+
+  patches = [
+    # permit use of rich < 15 -- remove when updating past 3.12
+    (fetchpatch {
+      url = "https://github.com/alisaifee/flask-limiter/commit/008a5c89f249e18e5375f16d79efc3ac518e9bcc.patch";
+      hash = "sha256-dvTPVnuPs7xCRfUBBA1bgeWGuevFUZ+Kgl9MBHdgfKU=";
+    })
+  ];
 
   postPatch = ''
     # flask-restful is unmaintained and breaks regularly, don't depend on it

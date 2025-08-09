@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "2.1.0";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
     tag = "v${version}";
-    sha256 = "sha256-vojRe64STkCKNn/es5+TyBAXvSBXkjjGLbykuKTEa5k=";
+    hash = "sha256-zMCjG8baQeXYLgiSr1jqHxvyeeVDiOZXOq/8MQiggCI=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
@@ -30,15 +30,15 @@ buildDotnetModule rec {
     mv $out/bin/{BTCPayServer,btcpayserver} || :
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
     changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kcalvinalvin
       erikarvstedt
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

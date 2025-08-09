@@ -24,6 +24,7 @@
   binutils,
   gnused,
   dfVersion,
+  dfVersions,
 }:
 
 let
@@ -40,77 +41,20 @@ let
     versionAtLeast
     ;
 
-  dfhack-releases = {
-    "0.44.10" = {
-      dfHackRelease = "0.44.10-r2";
-      hash = "sha256-0RikMwFv/eJk26Hptnam6J97flekapQhjWvw3+HTfaU=";
-      xmlRev = "321bd48b10c4c3f694cc801a7dee6be392c09b7b";
-    };
-    "0.44.11" = {
-      dfHackRelease = "0.44.11-beta2.1";
-      hash = "sha256-Yi/8BdoluickbcQQRbmuhcfrvrl02vf12MuHmh5m/Mk=";
-      xmlRev = "f27ebae6aa8fb12c46217adec5a812cd49a905c8";
-      prerelease = true;
-    };
-    "0.44.12" = {
-      dfHackRelease = "0.44.12-r1";
-      hash = "sha256-3j83wgRXbfcrwPRrJVHFGcLD+tXy1M3MR2dwIw2mA0g=";
-      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
-    };
-    "0.47.02" = {
-      dfHackRelease = "0.47.02-alpha0";
-      hash = "sha256-ScrFcfyiimuLgEaFjN5DKKRaFuKfdJjaTlGDit/0j6Y=";
-      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd509a";
-      prerelease = true;
-    };
-    "0.47.04" = {
-      dfHackRelease = "0.47.04-r5";
-      hash = "sha256-0s+/LKbqsS/mrxKPDeniqykE5+Gy3ZzCa8yEDzMyssY=";
-      xmlRev = "be0444cc165a1abff053d5893dc1f780f06526b7";
-    };
-    "0.47.05" = {
-      dfHackRelease = "0.47.05-r7";
-      hash = "sha256-vBKUTSjfCnalkBzfjaIKcxUuqsGGOTtoJC1RHJIDlNc=";
-      xmlRev = "f5019a5c6f19ef05a28bd974c3e8668b78e6e2a4";
-    };
-    "50.10" = {
-      dfHackRelease = "50.10-r1.1";
-      hash = "sha256-k2j8G4kJ/RYE8W0YDOxcsRb5qjjn4El+rigf0v3AqZU=";
-      xmlRev = "041493b221e0799c106abeac1f86df4535ab80d3";
-      needsPatches = true;
-    };
-    "50.11" = {
-      dfHackRelease = "50.11-r7";
-      hash = "sha256-3KsFc0i4XkzoeRvcl5GUlx/fJB1HyqfZm+xL6T4oT/A=";
-      xmlRev = "cca87907c1cbfcf4af957b0bea3a961a345b1581";
-      needsPatches = true;
-    };
-    "50.12" = {
-      dfHackRelease = "50.12-r3";
-      hash = "sha256-2mO8DpNmZRCV7IRY0arf3SMvlO4Pxs61Kxfh3q3k3HU=";
-      xmlRev = "980b1af13acc31660dce632f913c968f52e2b275";
-    };
-    "50.13" = {
-      dfHackRelease = "50.13-r3";
-      hash = "sha256-WbkJ8HmLT5GdZgDmcuFh+1uzhloKM9um0b9YO//uR7Y=";
-      xmlRev = "f0530a22149606596e97e3e17d941df3aafe29b9";
-    };
-  };
-
   release =
     if isAttrs dfVersion then
       dfVersion
-    else if hasAttr dfVersion dfhack-releases then
-      getAttr dfVersion dfhack-releases
+    else if hasAttr dfVersion dfVersions.game.versions then
+      (getAttr dfVersion dfVersions.game.versions).hack
     else
       throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
-  version = release.dfHackRelease;
+  inherit (release) version;
   isAtLeast50 = versionAtLeast version "50.0";
   needs50Patches = isAtLeast50 && (release.needsPatches or false);
 
   # revision of library/xml submodule
-  xmlRev = release.xmlRev;
+  inherit (release) xmlRev;
 
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -149,8 +93,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "DFHack";
     repo = "dfhack";
-    rev = release.dfHackRelease;
-    inherit (release) hash;
+    tag = release.git.revision;
+    hash = release.git.outputHash;
     fetchSubmodules = true;
   };
 
@@ -204,15 +148,16 @@ stdenv.mkDerivation {
   ];
 
   # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs =
-    [ zlib ]
-    ++ optional isAtLeast50 SDL2
-    ++ optional (!isAtLeast50) SDL
-    ++ optionals enableStoneSense [
-      allegro5
-      libGLU
-      libGL
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ optional isAtLeast50 SDL2
+  ++ optional (!isAtLeast50) SDL
+  ++ optionals enableStoneSense [
+    allegro5
+    libGLU
+    libGL
+  ];
 
   preConfigure = ''
     # Trick the build system into believing we have .git.
@@ -220,27 +165,27 @@ stdenv.mkDerivation {
     touch .git/index .git/modules/library/xml/index
   '';
 
-  cmakeFlags =
-    [
-      # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
-      "-GNinja"
-      "-DDFHACK_BUILD_ARCH=${arch}"
+  cmakeFlags = [
+    # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
+    "-GNinja"
+    "-DDFHACK_BUILD_ARCH=${arch}"
 
-      # Don't download anything.
-      "-DDOWNLOAD_RUBY=OFF"
-      "-DUSE_SYSTEM_SDL2=ON"
+    # Don't download anything.
+    "-DDOWNLOAD_RUBY=OFF"
+    "-DUSE_SYSTEM_SDL2=ON"
 
-      # Ruby support with dfhack is very spotty and was removed in version 50.
-      "-DBUILD_RUBY=OFF"
-    ]
-    ++ optionals enableStoneSense [
-      "-DBUILD_STONESENSE=ON"
-      "-DSTONESENSE_INTERNAL_SO=OFF"
-    ];
+    # Ruby support with dfhack is very spotty and was removed in version 50.
+    "-DBUILD_RUBY=OFF"
+  ]
+  ++ optionals enableStoneSense [
+    "-DBUILD_STONESENSE=ON"
+    "-DSTONESENSE_INTERNAL_SO=OFF"
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=deprecated-enum-enum-conversion"
-  ] ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
+  ]
+  ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
     # Wrap dfhack scripts.

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "3.6.0";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknx";
     tag = version;
-    hash = "sha256-NEtx4aK4D6ZiLD8X3U0VTcLv5LLyPLxql9JbXrwamno=";
+    hash = "sha256-iuub8ZO5XN5PWTDGlo/8U7A7+1NpSVGFtG+EmJR9VfM=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +31,8 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     freezegun
@@ -43,7 +44,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Test requires network access
+    "test_routing_indication_multicast"
     "test_scan_timeout"
+    "test_start_secure_routing_explicit_keyring"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
     # RuntimeError: Event loop is closed
@@ -65,7 +68,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/XKNX/xknx";
     changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
   };

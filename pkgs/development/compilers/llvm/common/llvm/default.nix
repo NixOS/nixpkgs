@@ -123,8 +123,14 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optional (lib.versionOlder release_version "14") ./llvm-config-link-static.patch
+      lib.optional (lib.versionOlder release_version "14")
+        # When cross-compiling we configure llvm-config-native with an approximation
+        # of the flags used for the normal LLVM build. To avoid the need for building
+        # a native libLLVM.so (which would fail) we force llvm-config to be linked
+        # statically against the necessary LLVM components always.
+        ./llvm-config-link-static.patch
       ++ lib.optionals (lib.versions.major release_version == "12") [
+        # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
         (getVersionFile "llvm/fix-llvm-issue-49955.patch")
 
         # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
@@ -135,6 +141,9 @@ stdenv.mkDerivation (
           stripLen = 1;
         })
       ]
+      # Support custom installation dirs
+      # Originally based off https://reviews.llvm.org/D99484
+      # Latest state: https://github.com/llvm/llvm-project/pull/125376
       ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         # Running the tests involves invoking binaries (like `opt`) that depend on
@@ -199,16 +208,16 @@ stdenv.mkDerivation (
               stripLen = 1;
             }
           )
-      ++
-        lib.optional (lib.versionOlder release_version "16")
-          # Fix musl build.
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
-              relative = "llvm";
-              hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
-            }
-          )
+      ++ lib.optionals (lib.versionOlder release_version "16") [
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+        # Fix for Python 3.13
+        (getVersionFile "llvm/no-pipes.patch")
+      ]
       ++ lib.optionals (lib.versionOlder release_version "14") [
         # Backport gcc-13 fixes with missing includes.
         (fetchpatch {
@@ -241,7 +250,8 @@ stdenv.mkDerivation (
           ]
       ++
         lib.optional (lib.versions.major release_version == "17")
-          # resolves https://github.com/llvm/llvm-project/issues/75168
+          # Fixes a crash with -fzero-call-used-regs=used-gpr
+          # See also https://github.com/llvm/llvm-project/issues/75168
           (
             fetchpatch {
               name = "fix-fzero-call-used-regs.patch";
@@ -278,38 +288,50 @@ stdenv.mkDerivation (
             })
           ]
       ++ lib.optionals enablePolly [
+        # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
       ]
       ++
         lib.optional (lib.versionAtLeast release_version "15")
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
+          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
+      ++
+        lib.optional (lib.versions.major release_version == "20" && stdenv.hostPlatform.isRiscV)
+          # Test failure on riscv64, fixed in llvm 21
+          # https://github.com/llvm/llvm-project/issues/150818
+          (
+            fetchpatch {
+              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
+              hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
+              stripLen = 1;
+            }
+          );
 
-    nativeBuildInputs =
-      [
-        cmake
-        # while this is not an autotools build, it still includes a config.guess
-        # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
-        updateAutotoolsGnuConfigScriptsHook
-        python
-      ]
-      ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-      ++ optionals enableManpages [
-        # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-        # splicing does *not* work with the latter. (TODO: fix)
-        python3Packages.sphinx
-      ]
-      ++ optionals (lib.versionOlder version "18" && enableManpages) [
-        python3Packages.recommonmark
-      ]
-      ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
-        python3Packages.myst-parser
-      ];
+    nativeBuildInputs = [
+      cmake
+      # while this is not an autotools build, it still includes a config.guess
+      # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
+      updateAutotoolsGnuConfigScriptsHook
+      python
+    ]
+    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
+    ++ optionals enableManpages [
+      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+      # splicing does *not* work with the latter. (TODO: fix)
+      python3Packages.sphinx
+    ]
+    ++ optionals (lib.versionOlder version "18" && enableManpages) [
+      python3Packages.recommonmark
+    ]
+    ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
+      python3Packages.myst-parser
+    ];
 
     buildInputs = [
       libxml2
       libffi
-    ] ++ optional enablePFM libpfm; # exegesis
+    ]
+    ++ optional enablePFM libpfm; # exegesis
 
     propagatedBuildInputs =
       (lib.optional (
@@ -505,6 +527,8 @@ stdenv.mkDerivation (
         optionalString stdenv.hostPlatform.isFreeBSD ''
           rm test/tools/llvm-libtool-darwin/L-and-l.test
           rm test/ExecutionEngine/Interpreter/intrinsics.ll
+          # Fails in sandbox
+          substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
         ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py
@@ -548,19 +572,11 @@ stdenv.mkDerivation (
         ));
 
     # Workaround for configure flags that need to have spaces
-    preConfigure =
-      if lib.versionAtLeast release_version "15" then
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
-          )
-        ''
-      else
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
-          )
-        '';
+    preConfigure = ''
+      cmakeFlagsArray+=(
+        -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
+      )
+    '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (
@@ -677,41 +693,40 @@ stdenv.mkDerivation (
           ]
       ++ devExtraCmakeFlags;
 
-    postInstall =
-      ''
-        mkdir -p $python/share
-        mv $out/share/opt-viewer $python/share/opt-viewer
-        moveToOutput "bin/llvm-config*" "$dev"
-        substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
-          --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
-      ''
-      + (
-        if lib.versionOlder release_version "15" then
-          ''
-            substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-              --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
-          ''
-        else
-          ''
-            substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-              --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
-          ''
-      )
-      + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
-        ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
-          if lib.versionOlder release_version "18" then "$shortVersion" else release_version
-        }.dylib
-      ''
-      + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          ''
-            ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
-          ''
-        else
-          ''
-            cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
-          ''
-      );
+    postInstall = ''
+      mkdir -p $python/share
+      mv $out/share/opt-viewer $python/share/opt-viewer
+      moveToOutput "bin/llvm-config*" "$dev"
+      substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
+        --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
+    ''
+    + (
+      if lib.versionOlder release_version "15" then
+        ''
+          substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+            --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
+        ''
+      else
+        ''
+          substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+            --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
+        ''
+    )
+    + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
+        if lib.versionOlder release_version "18" then "$shortVersion" else release_version
+      }.dylib
+    ''
+    + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
+      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+        ''
+          ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
+        ''
+      else
+        ''
+          cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
+        ''
+    );
 
     doCheck =
       !isDarwinBootstrap
@@ -790,7 +805,8 @@ stdenv.mkDerivation (
   // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
     nativeCheckInputs = [
       which
-    ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
   }
   // lib.optionalAttrs (lib.versionOlder release_version "15") {
     # hacky fix: created binaries need to be run before installation

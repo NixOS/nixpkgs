@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "25.3.1";
+  version = "25.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yHZpB8i4v+yI19Gl3xIyvUYGoMU9nLldOOhLRVppk6Y=";
+    hash = "sha256-oljMrwotFaoLSS/Epa1jhouyKeCYRRzZpY+/QBW7pRA=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,8 @@ buildPythonPackage rec {
     rich
     yamllint
     wcmatch
-  ] ++ lib.optional withPlugins molecule-plugins;
+  ]
+  ++ lib.optional withPlugins molecule-plugins;
 
   pythonImportsCheck = [ "molecule" ];
 

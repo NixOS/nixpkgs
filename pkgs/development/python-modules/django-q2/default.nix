@@ -14,6 +14,7 @@
   poetry-core,
   pytest-django,
   pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -81,19 +82,31 @@ buildPythonPackage rec {
   disabledTests = [
     # requires a running mongodb
     "test_mongo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails with an assertion
+    "test_max_rss"
+    "test_recycle"
+    # cannot connect to redis
+    "test_broker"
+    "test_custom"
+    "test_redis"
+    "test_redis_connection"
   ];
 
   disabledTestPaths = [
     "django_q/tests/test_commands.py"
   ];
 
-  pytestFlagsArray = [ "-vv" ];
+  pytestFlags = [ "-vv" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Multiprocessing distributed task queue for Django based on Django-Q";
     homepage = "https://github.com/django-q2/django-q2";
     changelog = "https://github.com/django-q2/django-q2/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -9,27 +9,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yqBKZOUDdvBcW8OzO832P75miNKUluR+fR1FSOcDoSM=";
+    hash = "sha256-6Fqv3g9e/9i5JMYHwbymm0n2mBEI0207TAyu/nF39Xk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W3SbJE0tt391k6MscgaijCStSyzfTN2MR66a6K+Ui4s=";
+  cargoHash = "sha256-N7A7GAdk9j84qtKHTMtloU469FRwiYtqUdSytFVidlA=";
 
   nativeBuildInputs = [
     pkg-config
     perl
+    git
   ];
-
-  # Replace hardcoded git binary
-  postPatch = ''
-    substituteInPlace crates/cli/build.rs --replace-fail 'Command::new("git")' 'Command::new("${lib.getExe git}")'
-  '';
 
   cargoBuildFlags = [ "-p spacetimedb-standalone -p spacetimedb-cli" ];
 

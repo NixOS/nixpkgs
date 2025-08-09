@@ -5,7 +5,7 @@
   cargo,
   copyDesktopItems,
   darwin,
-  electron_34,
+  electron_36,
   fetchFromGitHub,
   gnome-keyring,
   jq,
@@ -25,7 +25,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_34;
+  electron = electron_36;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -34,21 +34,27 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.2.0";
+  version = "2025.6.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-+RMeo+Kyum1WNm7citUe9Uk5yOtfhMPPlQRtnYL3Pj8=";
+    hash = "sha256-dYeq0YkQwmRve++RcMWnAuJyslaTZ4VIV4V/lMgSauQ=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
-    ./set-exe-path.patch # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
-    ./skip-afterpack-and-aftersign.patch # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
-    ./dont-use-platform-triple.patch # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
+    # The nixpkgs tooling trips over upstreams inconsistent lock files, so we fixed them by running npm install open@10.2.1 and cargo b
+    ./fix-lock-files.diff
+
+    # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
+    ./set-exe-path.patch
+    # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
+    ./skip-afterpack-and-aftersign.patch
+    # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
+    ./dont-use-platform-triple.patch
   ];
 
   postPatch = ''
@@ -76,7 +82,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-fYZJA6qV3mqxO2g+yxD0MWWQc9QYmdWJ7O7Vf88Qpbs=";
+  npmDepsHash = "sha256-yzOz1X75Wz/NwjlGHL439bEek082vJBL/9imnla3SyU=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -86,7 +92,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-OldVFMI+rcGAbpDg7pHu/Lqbw5I6/+oXULteQ9mXiFc=";
+    hash = "sha256-mt7zWKgH21khAIrfpBFzb+aS2V2mV56zMqCSLzDhGfQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -95,24 +101,23 @@ buildNpmPackage' rec {
   # make electron-builder not attempt to codesign the app on darwin
   env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
-  nativeBuildInputs =
-    [
-      cargo
-      jq
-      makeWrapper
-      napi-rs-cli
-      pkg-config
-      rustc
-      rustPlatform.cargoCheckHook
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    cargo
+    jq
+    makeWrapper
+    napi-rs-cli
+    pkg-config
+    rustc
+    rustPlatform.cargoCheckHook
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_14
@@ -151,13 +156,12 @@ buildNpmPackage' rec {
     (gnome-keyring.override { useWrappedDaemon = false; })
   ];
 
-  checkFlags =
-    [
-      "--skip=password::password::tests::test"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--skip=clipboard::tests::test_write_read"
-    ];
+  checkFlags = [
+    "--skip=password::password::tests::test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=clipboard::tests::test_write_read"
+  ];
 
   preCheck = ''
     pushd ${cargoRoot}
@@ -169,43 +173,42 @@ buildNpmPackage' rec {
     popd
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r apps/desktop/dist/mac*/Bitwarden.app $out/Applications
-      makeWrapper $out/Applications/Bitwarden.app/Contents/MacOS/Bitwarden $out/bin/bitwarden
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/opt/Bitwarden
-      cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r apps/desktop/dist/mac*/Bitwarden.app $out/Applications
+    makeWrapper $out/Applications/Bitwarden.app/Contents/MacOS/Bitwarden $out/bin/bitwarden
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/opt/Bitwarden
+    cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
 
-      makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
-        --add-flags $out/opt/Bitwarden/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --set-default ELECTRON_IS_DEV 0 \
-        --inherit-argv0
+    makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
+      --add-flags $out/opt/Bitwarden/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
 
-      # Extract the polkit policy file from the multiline string in the source code.
-      # This may break in the future but its better than copy-pasting it manually.
-      mkdir -p $out/share/polkit-1/actions/
-      pushd apps/desktop/src/key-management/biometrics
-      awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
-      popd
+    # Extract the polkit policy file from the multiline string in the source code.
+    # This may break in the future but its better than copy-pasting it manually.
+    mkdir -p $out/share/polkit-1/actions/
+    pushd apps/desktop/src/key-management/biometrics
+    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+    popd
 
-      pushd apps/desktop/resources/icons
-      for icon in *.png; do
-        dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
-        mkdir -p "$dir"
-        cp "$icon" "$dir"/${icon}.png
-      done
-      popd
-    ''
-    + ''
-      runHook postInstall
-    '';
+    pushd apps/desktop/resources/icons
+    for icon in *.png; do
+      dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
+      mkdir -p "$dir"
+      cp "$icon" "$dir"/${icon}.png
+    done
+    popd
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -222,7 +225,6 @@ buildNpmPackage' rec {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
-        "--commit"
         "--version=stable"
         "--version-regex=^desktop-v(.*)$"
       ];

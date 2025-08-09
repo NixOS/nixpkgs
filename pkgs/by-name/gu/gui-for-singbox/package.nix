@@ -1,10 +1,10 @@
 {
+  lib,
   stdenv,
   nodejs,
   pnpm_9,
   fetchFromGitHub,
   buildGoModule,
-  lib,
   wails,
   webkitgtk_4_0,
   pkg-config,
@@ -17,13 +17,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.9.4";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-v6bx1nIIL5SpPsiUNbU35w7vh+1Zgl+d0Y6sG5XfEB8=";
+    hash = "sha256-2wmg0qPXFRuVd5jU1RT9QuqEaG/h2R+VSNeniVZELLk=";
   };
 
   metaCommon = {
@@ -45,7 +45,8 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-5SVu8eCyN89k6BvNEqgs4hOrP5IjvjUZrzrVuDwtYCk=";
+      fetcherVersion = 1;
+      hash = "sha256-5tz1FItH9AvZhJjka8i5Kz22yf/tEmRPkDhz6iswZzc=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -81,7 +82,7 @@ buildGoModule {
       --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-Zt3We+Ai8oEqof2eQvcaIkocH85goeldmPf4mmDX17o=";
+  vendorHash = "sha256-Coq8GtaIS7ClmOTFw6PSgGDFW/CpGpKPvXgNw8qz3Hs=";
 
   nativeBuildInputs = [
     wails
@@ -114,12 +115,8 @@ buildGoModule {
       icon = "gui-for-singbox";
       genericName = "GUI.for.SingBox";
       desktopName = "GUI.for.SingBox";
-      categories = [
-        "Network"
-      ];
-      keywords = [
-        "Proxy"
-      ];
+      categories = [ "Network" ];
+      keywords = [ "Proxy" ];
     })
   ];
 

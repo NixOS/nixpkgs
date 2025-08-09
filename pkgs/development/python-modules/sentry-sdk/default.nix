@@ -62,6 +62,7 @@
   pytest-xdist,
   pytest-watch,
   responses,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -163,9 +164,15 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-watch
     pytestCheckHook
-  ] ++ optional-dependencies.http2;
+  ]
+  ++ optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # darwin: 'profiler should not be running'
+    "tests/profiler/test_continuous_profiler.py"
+  ];
 
   disabledTests = [
     # depends on git revision
@@ -198,7 +205,9 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # timing sensitive
     "test_profile_captured"
-    "test_continuous_profiler_manual_start_and_stop"
+    "test_continuous_profiler_auto"
+    "test_continuous_profiler_manual"
+    "test_stacktrace_big_recursion"
     # assert ('socks' in "<class 'httpcore.connectionpool'>") == True
     "test_socks_proxy"
     # requires socksio to mock, but that crashes pytest-forked

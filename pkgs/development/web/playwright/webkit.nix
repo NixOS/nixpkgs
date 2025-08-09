@@ -102,21 +102,24 @@ let
           hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
         })
       ];
-      postPatch = "";
+      postPatch = ''
+        # Fix multiple definition errors by using C++17 instead of C++11
+        substituteInPlace CMakeLists.txt \
+          --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
+      '';
       postInstall = "";
 
-      cmakeFlags =
-        [
-          "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
-          "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
-          "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DJPEGXL_STATIC=ON"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-          "-DJPEGXL_FORCE_NEON=ON"
-        ];
+      cmakeFlags = [
+        "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
+        "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+        "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isStatic [
+        "-DJPEGXL_STATIC=ON"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+        "-DJPEGXL_FORCE_NEON=ON"
+      ];
     }
   );
   webkit-linux = stdenv.mkDerivation {
@@ -126,8 +129,8 @@ let
       stripRoot = false;
       hash =
         {
-          x86_64-linux = "sha256-jw/wQ2Ql7KNpquz5CK+Mo6nPcCbMf8jeSQT64Vt/sLs=";
-          aarch64-linux = "sha256-vKAvl1kMxTE4CsDryseWF5lxf2iYOYkHHXAdPCnfnHk=";
+          x86_64-linux = "sha256-OSVHFGdcQrzmhLPdXF61tKmip/6/D+uaQgSBBQiOIZI=";
+          aarch64-linux = "sha256-b8XwVMCwSbujyqgkJKIPAVNX83Qmmsthprr2x9XSb10=";
         }
         .${system} or throwSystem;
     };
@@ -195,14 +198,20 @@ let
         --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
 
     '';
+
+    preFixup = ''
+      # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+      mkdir -p "$out/lib"
+      ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+    '';
   };
   webkit-darwin = fetchzip {
     url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-6GpzcA77TthcZEtAC7s3dVpnLk31atw7EPxKUZeC5i4=";
-        aarch64-darwin = "sha256-lDyeehVveciOsm4JZvz7CPphkl/ryRK1rz7DOcEDzYc=";
+        x86_64-darwin = "sha256-shjhozJS2VbBjpjJVlM9hwBzGWwgva1qhfEUhY8t9Bk=";
+        aarch64-darwin = "sha256-ZRl86L/OOTNPWfZDl6JQfuXL41kI/Wir99/JIbf7T7M=";
       }
       .${system} or throwSystem;
   };

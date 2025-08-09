@@ -7,17 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codesnap";
-  version = "0.10.7";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "mistricky";
     repo = "CodeSnap";
     tag = "v${version}";
-    hash = "sha256-gDV66eLHcg7OuVR0Wo5x3anqKjnS/BsCCVaR6VOnM+s=";
+    hash = "sha256-EtMEUtLSgYrb0izPPCh432uX2p/8Ykf2caAR+8ZdxhU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bQT+tpoSZ54yppyNJxbOEqQoIKqYZAnRo0j42Ti+EJo=";
+  cargoHash = "sha256-atvSygt1Xi+rPxcJb0zdRBnL6SpSkyCcGxs1z2hWXGA=";
 
   cargoBuildFlags = [
     "-p"

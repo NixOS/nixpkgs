@@ -59,18 +59,19 @@ let
     libGL
     vulkan-loader
     curlWithGnuTls
-  ] ++ xorgDeps;
+  ]
+  ++ xorgDeps;
 
   libPath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binPath = lib.makeBinPath deps;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "airtame-application";
-  version = "4.12.0";
+  version = "4.14.0";
 
   src = fetchurl {
     url = "https://downloads.airtame.com/app/latest/linux/Airtame-${finalAttrs.version}.deb";
-    hash = "sha256-HTqJ637iPtiReFLoGdgKkpxW0UGRPvLjgMMcVV+cRfY=";
+    hash = "sha256-zOLafN4QFDt2xnn+B8ytz+IvN8R6qje+Sge2Zb5mRZI=";
   };
 
   nativeBuildInputs = [

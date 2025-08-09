@@ -1,7 +1,7 @@
 {
+  lib,
   stdenv,
   stdenvNoCC,
-  lib,
   callPackage,
   fetchurl,
   nixosTests,
@@ -34,34 +34,41 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  sha256 =
+  hash =
     {
-      x86_64-linux = "0hb1rmrrd7zjihrl080h7jf4dprpr7mvm3ykv13mg0xmmv0d7pww";
-      x86_64-darwin = "0bf69y7xxn499r35zxliqx0jvhyd11b46p5a87w62g90q4kcald8";
-      aarch64-linux = "05zjk3l05lxh21anxxds6fn98fxlkrak37sz79jg50cxrpn5jvxg";
-      aarch64-darwin = "1sjvj4d0d3mcjczb1sjia6gl34vkr91z7jxbyqbf5c88j3zybvw5";
-      armv7l-linux = "1m7g179hlz2kri0pqsaigdyfnkkv4xwaxmxrbdpxh0sjb2imv8x2";
+      x86_64-linux = "sha256-EbgP2CjUBiC+2G7TkGyuxaqr35sTArls4lbDNTH1Pmc=";
+      x86_64-darwin = "sha256-OrDuzSaPxuedhS21Hx1PNTbp6eQpfFfUbO05gIu5Ou8=";
+      aarch64-linux = "sha256-V0aEGqBRf3qVKvPYNypQ9hYWovqQIC3kQq2goq/hVjA=";
+      aarch64-darwin = "sha256-29i/+mz0NCU0ZCO+tzlbSl1iKx5/H89bGQTvRR5/PuA=";
+      armv7l-linux = "sha256-VSsn4d9ztFgGXVZeCeTSHDD5n3aTBbHF/xx2JvTGOeQ=";
     }
     .${system} or throwSystem;
-in
-callPackage ./generic.nix rec {
+
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.99.2";
-  pname = "vscode" + lib.optionalString isInsiders "-insiders";
+  version = "1.102.3";
 
   # This is used for VS Code - Remote SSH test
-  rev = "4949701c880d4bdb949e3c0e6b400288da7f474b";
+  rev = "488a1f239235055e34e673291fb8d8c810886f81";
+in
+callPackage ./generic.nix {
+  pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
   shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-  inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
+  inherit
+    version
+    rev
+    commandLineArgs
+    useVSCodeRipgrep
+    sourceExecutableName
+    ;
 
   src = fetchurl {
     name = "VSCode_${version}_${plat}.${archive_fmt}";
     url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-    inherit sha256;
+    inherit hash;
   };
 
   # We don't test vscode on CI, instead we test vscodium
@@ -75,7 +82,7 @@ callPackage ./generic.nix rec {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "0rd5j7n0cc3srn8rcm3ia1knp6zwwjvbjw4067xv0nvb8ilalssw";
+      hash = "sha256-xVYG/EJRPRJBj3BSarTwpX9F1UM/OI+7ci6vQa64iWI=";
     };
     stdenv = stdenvNoCC;
   };
@@ -89,23 +96,21 @@ callPackage ./generic.nix rec {
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
-    description = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS
-    '';
+  hasVsceSign = true;
+
+  meta = {
+    description = "Code editor developed by Microsoft";
     mainProgram = "code";
     longDescription = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS. It includes support for debugging, embedded Git
-      control, syntax highlighting, intelligent code completion, snippets,
-      and code refactoring. It is also customizable, so users can change the
-      editor's theme, keyboard shortcuts, and preferences
+      Code editor developed by Microsoft. It includes support for debugging,
+      embedded Git control, syntax highlighting, intelligent code completion,
+      snippets, and code refactoring. It is also customizable, so users can
+      change the editor's theme, keyboard shortcuts, and preferences
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       eadwu
       synthetica
       bobby285271

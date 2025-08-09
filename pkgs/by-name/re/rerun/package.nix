@@ -28,20 +28,19 @@
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
-    "grpc"
     "map_view"
   ],
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.22.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
-    tag = version;
-    hash = "sha256-J9Iy/KiDajDavL95qLcQBfUWpZ6OiUtldk+ZAGpSNWA=";
+    tag = finalAttrs.version;
+    hash = "sha256-OMSLCS1j55MYsC3pv4qPQjqO9nRgGj+AUOlcyESFXek=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -50,8 +49,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cGg8yi/jYKyle8dudHSNLPMnOtcgqlBQmu83h4B26NI=";
+  cargoHash = "sha256-8XmOtB1U2SAOBchrpKMAv5I8mFvJniVVcmFPugtD4RI=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -108,7 +106,8 @@ rustPlatform.buildRustPackage rec {
     (lib.getDev openssl)
     libxkbcommon
     vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -153,7 +152,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate.  Built in Rust using egui";
     homepage = "https://github.com/rerun-io/rerun";
-    changelog = "https://github.com/rerun-io/rerun/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/rerun-io/rerun/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -164,4 +163,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "rerun";
   };
-}
+})

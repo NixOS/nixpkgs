@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "bmaptool";
   version = "3.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yoctoproject";

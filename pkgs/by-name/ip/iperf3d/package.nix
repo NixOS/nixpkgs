@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/iperf3d --prefix PATH : ${iperf3}/bin
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eijsPyoe3/+yR5kRmzk0dH62gTAFFURTVT8wN6Iy0HI=";
 
   meta = with lib; {
@@ -31,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "iperf3d";
     homepage = "https://github.com/wobcom/iperf3d";
     license = licenses.mit;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    maintainers = with maintainers; [ netali ];
+    teams = [ teams.wdz ];
   };
 }

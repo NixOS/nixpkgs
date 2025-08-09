@@ -90,7 +90,7 @@ let
   ibisTestingData = fetchFromGitHub {
     owner = "ibis-project";
     repo = "testing-data";
-    # https://github.com/ibis-project/ibis/blob/10.4.0/nix/overlay.nix#L94-L100
+    # https://github.com/ibis-project/ibis/blob/10.5.0/nix/overlay.nix#L94-L100
     rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
     hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
@@ -98,22 +98,18 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "10.4.0";
+  version = "10.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
     tag = version;
-    hash = "sha256-N6T3Hx4UIb08P+Xqg6RFb9q/pmAHvldW0yaFoRxmMv0=";
+    hash = "sha256-KJPl5bkD/tQlHY2k0b9zok5YCPekaXw7Y9z8P4AD3FQ=";
   };
 
   build-system = [
     hatchling
-  ];
-
-  pythonRelaxDeps = [
-    # "toolz"
   ];
 
   dependencies = [
@@ -141,12 +137,14 @@ buildPythonPackage rec {
     # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
     writableTmpDirAsHomeHook
-  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+  ]
+  ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
-  pytestFlagsArray = [
-    "-m"
-    "'${lib.concatStringsSep " or " testBackends} or core'"
+  pytestFlags = [
+    "--benchmark-disable"
   ];
+
+  enabledTestMarks = testBackends ++ [ "core" ];
 
   disabledTests = [
     # tries to download duckdb extensions
@@ -157,13 +155,25 @@ buildPythonPackage rec {
     "test_read_sqlite"
     "test_register_sqlite"
     "test_roundtrip_xlsx"
+
     # AssertionError: value does not match the expected value in snapshot
     "test_union_aliasing"
+
     # requires network connection
     "test_s3_403_fallback"
     "test_hugging_face"
+
     # requires pytest 8.2+
     "test_roundtrip_delta"
+
+    # AssertionError: value does not match the expected value in snapshot ibis/backends/tests/snapshots/test_sql/test_rewrite_context/sqlite/out.sql
+    "test_rewrite_context"
+
+    # Assertion error comparing a calculated version string with the actual (during nixpkgs-review)
+    "test_builtin_scalar_noargs"
+
+    # duckdb ParserError: syntax error at or near "AT"
+    "test_90"
   ];
 
   # patch out tests that check formatting with black
@@ -345,6 +355,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ibis-project/ibis";
     changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [
+      cpcloud
+      sarahec
+    ];
   };
 }

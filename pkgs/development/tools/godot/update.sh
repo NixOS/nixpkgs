@@ -1,18 +1,20 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. --pure -i bash -p bash nix nix-update git cacert common-updater-scripts --keep UPDATE_NIX_ATTR_PATH --keep UPDATE_NIX_OLD_VERSION
+#!nix-shell -I nixpkgs=./. --pure -i bash -p bash nix nix-update git cacert common-updater-scripts
 set -euo pipefail
 
 versionPrefix=$1
 file=$2
-attr=$UPDATE_NIX_ATTR_PATH
+attr=godotPackages_${versionPrefix/./_}
 
-prev_version=$UPDATE_NIX_OLD_VERSION
-nix-update "$attr" \
+prev_version=$(nix eval --raw -f. "$attr".godot)
+nix-update "$attr".godot \
     --version-regex "($versionPrefix\\b.*-stable)" \
     --override-filename "$2" \
     --src-only
-[[ $(nix eval --raw -f. "$attr".version) != "$prev_version" ]] || exit 0
+[[ $(nix eval --raw -f. "$attr".godot) != "$prev_version" ]] || exit 0
 
-"$(nix build --impure --expr "((import ./. {}).$attr.override { withMono = true; }).fetch-deps" --print-out-paths --no-link)"
+fetch_deps=$(nix build -f. "$attr".godot-mono.fetch-deps --print-out-paths --no-link)
+"$fetch_deps"
 
-update-source-version "$attr" --ignore-same-version --source-key=export-templates-bin --file="$file"
+update-source-version "$attr".godot.export-templates-bin --ignore-same-version --file="$file"
+update-source-version "$attr".godot-mono.export-templates-bin --ignore-same-version --file="$file"

@@ -23,6 +23,7 @@
   wayland,
   libglvnd,
   libkrb5,
+  openssl,
 
   # Populate passthru.tests
   tests,
@@ -51,6 +52,8 @@
   sourceExecutableName ? executableName,
   useVSCodeRipgrep ? false,
   ripgrep,
+  hasVsceSign ? false,
+  patchVSCodePath ? true,
 }:
 
 stdenv.mkDerivation (
@@ -93,6 +96,31 @@ stdenv.mkDerivation (
 
             # mono
             krb5
+
+            # Needed for headless browser-in-vscode based plugins such as
+            # anything based on Puppeteer https://pptr.dev .
+            # e.g. Roo Code
+            glib
+            nspr
+            nss
+            dbus
+            at-spi2-atk
+            cups
+            expat
+            libxkbcommon
+            xorg.libX11
+            xorg.libXcomposite
+            xorg.libXdamage
+            xorg.libxcb
+            xorg.libXext
+            xorg.libXfixes
+            xorg.libXrandr
+            cairo
+            pango
+            alsa-lib
+            libgbm
+            udev
+            libudev0-shim
           ])
           ++ additionalPkgs pkgs;
 
@@ -134,20 +162,20 @@ stdenv.mkDerivation (
       dontFixup
       ;
 
-    passthru =
-      {
-        inherit
-          executableName
-          longName
-          tests
-          updateScript
-          ;
-        fhs = fhs { };
-        fhsWithPackages = f: fhs { additionalPkgs = f; };
-      }
-      // lib.optionalAttrs (vscodeServer != null) {
-        inherit rev vscodeServer;
-      };
+    passthru = {
+      inherit
+        executableName
+        longName
+        tests
+        updateScript
+        vscodeVersion
+        ;
+      fhs = fhs { };
+      fhsWithPackages = f: fhs { additionalPkgs = f; };
+    }
+    // lib.optionalAttrs (vscodeServer != null) {
+      inherit rev vscodeServer;
+    };
 
     desktopItems = [
       (makeDesktopItem {
@@ -193,22 +221,21 @@ stdenv.mkDerivation (
       })
     ];
 
-    buildInputs =
-      [
-        libsecret
-        libXScrnSaver
-        libxshmfence
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        alsa-lib
-        at-spi2-atk
-        libkrb5
-        libgbm
-        nss
-        nspr
-        systemd
-        xorg.libxkbfile
-      ];
+    buildInputs = [
+      libsecret
+      libXScrnSaver
+      libxshmfence
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      alsa-lib
+      at-spi2-atk
+      libkrb5
+      libgbm
+      nss
+      nspr
+      systemd
+      xorg.libxkbfile
+    ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
       (lib.getLib systemd)
@@ -218,56 +245,65 @@ stdenv.mkDerivation (
       libsecret
     ];
 
-    nativeBuildInputs =
-      [ unzip ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        autoPatchelfHook
-        asar
-        copyDesktopItems
-        # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-        # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
-        (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
-      ];
+    nativeBuildInputs = [
+      unzip
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+      asar
+      copyDesktopItems
+      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+    ];
 
     dontBuild = true;
     dontConfigure = true;
     noDumpEnvVars = true;
 
-    installPhase =
-      ''
-        runHook preInstall
-      ''
-      + (
-        if stdenv.hostPlatform.isDarwin then
-          ''
-            mkdir -p "$out/Applications/${longName}.app" "$out/bin"
-            cp -r ./* "$out/Applications/${longName}.app"
-            ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
-          ''
-        else
-          ''
-            mkdir -p "$out/lib/${libraryName}" "$out/bin"
-            cp -r ./* "$out/lib/${libraryName}"
+    stripExclude = lib.optional hasVsceSign [
+      # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
+      "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
+    ];
 
-            ln -s "$out/lib/${libraryName}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
+    installPhase = ''
+      runHook preInstall
+    ''
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p "$out/Applications/${longName}.app" "$out/bin"
+          cp -r ./* "$out/Applications/${longName}.app"
+          ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
+        ''
+      else
+        ''
+          mkdir -p "$out/lib/${libraryName}" "$out/bin"
+          cp -r ./* "$out/lib/${libraryName}"
 
-            # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
-            mkdir -p "$out/share/pixmaps"
-            cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
+          ln -s "$out/lib/${libraryName}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
 
-            # Override the previously determined VSCODE_PATH with the one we know to be correct
-            sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
-            grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
+          # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
+          mkdir -p "$out/share/pixmaps"
+          cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
 
-            # Remove native encryption code, as it derives the key from the executable path which does not work for us.
-            # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
-            # in the first place.
-            rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
-          ''
-      )
-      + ''
-        runHook postInstall
-      '';
+        ''
+        + (lib.optionalString patchVSCodePath ''
+          # Override the previously determined VSCODE_PATH with the one we know to be correct
+          sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
+          grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
+        '')
+        + ''
+
+          # Remove native encryption code, as it derives the key from the executable path which does not work for us.
+          # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
+          # in the first place.
+          rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
+        ''
+    )
+    + ''
+      runHook postInstall
+    '';
 
     preFixup = ''
       gappsWrapperArgs+=(
@@ -324,13 +360,20 @@ stdenv.mkDerivation (
           ''
       );
 
-    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf \
-        --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
-        --add-needed ${libglvnd}/lib/libGL.so.1 \
-        --add-needed ${libglvnd}/lib/libEGL.so.1 \
-        $out/lib/${libraryName}/${executableName}
-    '';
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux (
+      ''
+        patchelf \
+          --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
+          --add-needed ${libglvnd}/lib/libGL.so.1 \
+          --add-needed ${libglvnd}/lib/libEGL.so.1 \
+          $out/lib/${libraryName}/${executableName}
+      ''
+      + (lib.optionalString hasVsceSign ''
+        patchelf \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so \
+          $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
+      '')
+    );
 
     inherit meta;
   }

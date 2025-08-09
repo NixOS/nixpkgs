@@ -6,40 +6,32 @@
   bzip2,
   openssl,
   zstd,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "25.3.0";
+  version = "25.7.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-/8Jo/M51ulrQFzXKkcFXTYfh9a3w6C5oW6A/bDFcRp0=";
+    hash = "sha256-pLo28qtNDQig85GQh6Swo3XUqsSM5XNBbZM5lj2mAbQ=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mWvCvzqTUzpxYYxf8KWjxfo4E7oS9oNVbeVxx8J3QwI=";
+  cargoHash = "sha256-9oRPs3r63JMV0zugdoZLpfe2uToBVIPVMZ78I1+v60o=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    zstd
+  ];
 
   env = {
     SYMBOLICATOR_GIT_VERSION = src.rev;

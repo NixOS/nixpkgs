@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -15,6 +16,9 @@
   liblapack,
   xorg,
   libusb1,
+  yaml-cpp,
+  libnabo,
+  libpointmatcher,
   eigen,
   g2o,
   ceres-solver,
@@ -23,6 +27,7 @@
   libdc1394,
   libGL,
   libGLU,
+  librealsense,
   vtkWithQt5,
   zed-open-capture,
   hidapi,
@@ -33,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.21.4.1";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
+    hash = "sha256-6kDjIfUgyaqrsVAWO6k0h1qIDN/idMOJJxLpqMQ6DFY=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
   ];
-
   buildInputs = [
     ## Required
     opencv
@@ -58,16 +62,19 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libSM
     xorg.libICE
     xorg.libXt
+
     ## Optional
     libusb1
     eigen
     g2o
     ceres-solver
-    # libpointmatcher - ABI mismatch
+    yaml-cpp
+    libnabo
+    libpointmatcher
     octomap
     freenect
     libdc1394
-    # librealsense - missing includedir
+    librealsense
     libsForQt5.qtbase
     libGL
     libGLU
@@ -76,8 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
   ];
 
-  # Disable warnings that are irrelevant to us as packagers
-  cmakeFlags = [ "-Wno-dev" ];
+  # Configure environment variables
+  NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions -I${vtkWithQt5}/include/vtk";
+
+  cmakeFlags = [
+    (lib.cmakeFeature "VTK_QT_VERSION" "5")
+    (lib.cmakeFeature "VTK_DIR" "${vtkWithQt5}/lib/cmake/vtk-${lib.versions.majorMinor vtkWithQt5.version}")
+    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${vtkWithQt5}/include/vtk:${pcl}/include/pcl-${lib.versions.majorMinor pcl.version}")
+  ];
 
   passthru = {
     updateScript = gitUpdater { };
@@ -90,7 +103,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marius851000 ];
     platforms = with lib.platforms; linux;
-    # pcl/io/io.h: No such file or directory
-    broken = true;
   };
 })

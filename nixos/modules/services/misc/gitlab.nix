@@ -39,7 +39,8 @@ let
         username = cfg.databaseUsername;
         encoding = "utf8";
         pool = cfg.databasePool;
-      } // cfg.extraDatabaseConfig;
+      }
+      // cfg.extraDatabaseConfig;
     in
     {
       production =
@@ -141,15 +142,14 @@ let
       omniauth.enabled = false;
       shared.path = "${cfg.statePath}/shared";
       gitaly.client_path = "${cfg.packages.gitaly}/bin";
-      backup =
-        {
-          gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
-          path = cfg.backup.path;
-          keep_time = cfg.backup.keepTime;
-        }
-        // (optionalAttrs (cfg.backup.uploadOptions != { }) {
-          upload = cfg.backup.uploadOptions;
-        });
+      backup = {
+        gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
+        path = cfg.backup.path;
+        keep_time = cfg.backup.keepTime;
+      }
+      // (optionalAttrs (cfg.backup.uploadOptions != { }) {
+        upload = cfg.backup.uploadOptions;
+      });
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";
@@ -209,17 +209,18 @@ let
     }
     // cfg.extraEnv;
 
-  runtimeDeps =
-    [ git ]
-    ++ (with pkgs; [
-      nodejs
-      gzip
-      gnutar
-      postgresqlPackage
-      coreutils
-      procps
-      findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
-    ]);
+  runtimeDeps = [
+    git
+  ]
+  ++ (with pkgs; [
+    nodejs
+    gzip
+    gnutar
+    postgresqlPackage
+    coreutils
+    procps
+    findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
+  ]);
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
@@ -907,6 +908,50 @@ in
         '';
       };
 
+      secrets.activeRecordPrimaryKeyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the secret used to encrypt some rails data
+          in the DB. This should not be the same as `services.gitlab.secrets.activeRecordDeterministicKeyFile`!
+
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      secrets.activeRecordDeterministicKeyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the secret used to encrypt some rails data in a deterministic way
+          in the DB. This should not be the same as `services.gitlab.secrets.activeRecordPrimaryKeyFile`!
+
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      secrets.activeRecordSaltFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the salt for active record encryption in the DB.
+
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
       extraShellConfig = mkOption {
         type = types.attrs;
         default = { };
@@ -1181,8 +1226,20 @@ in
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "14.9";
-        message = "PostgreSQL >= 14.9 is required to run GitLab 17. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = cfg.secrets.activeRecordPrimaryKeyFile != null;
+        message = "services.gitlab.secrets.activeRecordPrimaryKeyFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.activeRecordDeterministicKeyFile != null;
+        message = "services.gitlab.secrets.activeRecordDeterministicKeyFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.activeRecordSaltFile != null;
+        message = "services.gitlab.secrets.activeRecordSaltFile must be set!";
+      }
+      {
+        assertion = versionAtLeast postgresqlPackage.version "16";
+        message = "PostgreSQL >= 16 is required to run GitLab 18. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 
@@ -1239,8 +1296,8 @@ in
         pgsql = config.services.postgresql;
       in
       mkIf databaseActuallyCreateLocally {
-        after = [ "postgresql.service" ];
-        bindsTo = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
+        bindsTo = [ "postgresql.target" ];
         wantedBy = [ "gitlab.target" ];
         partOf = [ "gitlab.target" ];
         path = [
@@ -1296,6 +1353,7 @@ in
         ConditionPathExists = "!${cfg.registry.certFile}";
       };
       serviceConfig = {
+        Type = "oneshot";
         Slice = "system-gitlab.slice";
       };
     };
@@ -1374,13 +1432,14 @@ in
     systemd.services.gitlab-config = {
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          jq
-          openssl
-          replace-secret
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        jq
+        openssl
+        replace-secret
+      ]);
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
@@ -1479,11 +1538,17 @@ in
             db="$(<'${cfg.secrets.dbFile}')"
             otp="$(<'${cfg.secrets.otpFile}')"
             jws="$(<'${cfg.secrets.jwsFile}')"
-            export secret db otp jws
+            arprimary="$(<'${cfg.secrets.activeRecordPrimaryKeyFile}')"
+            ardeterministic="$(<'${cfg.secrets.activeRecordDeterministicKeyFile}')"
+            arsalt="$(<'${cfg.secrets.activeRecordSaltFile}')"
+            export secret db otp jws arprimary ardeterministic arsalt
             jq -n '{production: {secret_key_base: $ENV.secret,
                     otp_key_base: $ENV.otp,
                     db_key_base: $ENV.db,
-                    openid_connect_signing_key: $ENV.jws}}' \
+                    openid_connect_signing_key: $ENV.jws,
+                    active_record_encryption_primary_key: $ENV.arprimary,
+                    active_record_encryption_deterministic_key: $ENV.ardeterministic,
+                    active_record_encryption_key_derivation_salt: $ENV.arsalt}}' \
                > '${cfg.statePath}/config/secrets.yml'
           )
 
@@ -1498,12 +1563,12 @@ in
     systemd.services.gitlab-db-config = {
       after = [
         "gitlab-config.service"
-        "gitlab-postgresql.service"
-        "postgresql.service"
+        "gitlab-postgresql.target"
+        "postgresql.target"
       ];
       wants =
-        optional (cfg.databaseHost == "") "postgresql.service"
-        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+        optional (cfg.databaseHost == "") "postgresql.target"
+        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.target";
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
@@ -1533,7 +1598,7 @@ in
       after = [
         "network.target"
         "redis-gitlab.service"
-        "postgresql.service"
+        "postgresql.target"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
@@ -1541,7 +1606,7 @@ in
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
-      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.target";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment =
@@ -1551,23 +1616,24 @@ in
           SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
           SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
         });
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          postgresqlPackage
-          ruby
-          openssh
-          nodejs
-          gnupg
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        postgresqlPackage
+        ruby
+        openssh
+        nodejs
+        gnupg
 
-          "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
+        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
 
-          # Needed for GitLab project imports
-          gnutar
-          gzip
+        # Needed for GitLab project imports
+        gnutar
+        gzip
 
-          procps # Sidekiq MemoryKiller
-        ]);
+        procps # Sidekiq MemoryKiller
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1603,13 +1669,14 @@ in
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          openssh
-          gzip
-          bzip2
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        openssh
+        gzip
+        bzip2
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1708,17 +1775,18 @@ in
       after = [ "network.target" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          remarshal
-          exiftool
-          git
-          gnutar
-          gzip
-          openssh
-          cfg.packages.gitlab-workhorse
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        remarshal
+        exiftool
+        git
+        gnutar
+        gzip
+        openssh
+        cfg.packages.gitlab-workhorse
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1784,20 +1852,21 @@ in
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
-      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.target";
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          postgresqlPackage
-          openssh
-          nodejs
-          procps
-          gnupg
-          gzip
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        postgresqlPackage
+        openssh
+        nodejs
+        procps
+        gnupg
+        gzip
+      ]);
       serviceConfig = {
         Type = "notify";
         User = cfg.user;
@@ -1823,14 +1892,13 @@ in
       after = [ "gitlab.service" ];
       bindsTo = [ "gitlab.service" ];
       startAt = cfg.backup.startAt;
-      environment =
-        {
-          RAILS_ENV = "production";
-          CRON = "1";
-        }
-        // optionalAttrs (stringLength cfg.backup.skip > 0) {
-          SKIP = cfg.backup.skip;
-        };
+      environment = {
+        RAILS_ENV = "production";
+        CRON = "1";
+      }
+      // optionalAttrs (stringLength cfg.backup.skip > 0) {
+        SKIP = cfg.backup.skip;
+      };
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

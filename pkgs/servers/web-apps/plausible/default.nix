@@ -82,7 +82,7 @@ let
     pname = "mjml-native";
     version = "";
     src = "${mixFodDeps}/mjml/native/mjml_nif";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-zDWOik65PWAMpIDDcG+DibprPVW/k+Q83+fjFI5vWaY=";
     doCheck = false;
 
@@ -178,9 +178,9 @@ beamPackages.mixRelease rec {
     license = licenses.agpl3Plus;
     homepage = "https://plausible.io/";
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
-    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
+    description = "Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     mainProgram = "plausible";
-    maintainers = teams.cyberus.members;
+    teams = [ teams.cyberus ];
     platforms = platforms.unix;
   };
 }

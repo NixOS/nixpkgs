@@ -4,7 +4,9 @@
   lib ? pkgs.lib,
 }:
 let
-  allK3s = lib.filterAttrs (n: _: lib.strings.hasPrefix "k3s_" n) pkgs;
+  allK3s = lib.filterAttrs (
+    n: _: lib.strings.hasPrefix "k3s_" n && (builtins.tryEval pkgs.${n}).success
+  ) pkgs;
 in
 {
   airgap-images = lib.mapAttrs (

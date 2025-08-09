@@ -10,21 +10,21 @@
 assert zlib != null;
 
 let
-  patchVersion = "1.6.46";
+  patchVersion = "1.6.47";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
-    hash = "sha256-Kb7C39BG71HVLz5TIPkfr/yWvge0HZy51D2d9Veg0wM=";
+    hash = "sha256-Wwhvr+fhJ4SyhpPhmlvPaGd6jFKUcRVxKlbD0SOUT28=";
   };
   whenPatched = lib.optionalString apngSupport;
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.46";
+  version = "1.6.47";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-86qLcAOZirkqTpkGwY0ZhT6Zn507ypvRZo9U+oFwfLE=";
+    hash = "sha256-shPLOB+7EXUye9cIp3qrcIoFrd57RxvCZ70VrJmJNjE=";
   };
   postPatch =
     whenPatched "gunzip < ${patch_src} | patch -Np1"

@@ -336,7 +336,7 @@ in
           [
             gitMinimal
             openssh
-            util-linux
+            util-linuxMinimal
             iproute2
             ethtool
             thin-provisioning-tools

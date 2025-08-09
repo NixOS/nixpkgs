@@ -110,6 +110,12 @@ let
       expected = false;
     };
 
+    # Root path (empty path components list)
+    testHasStorePathPrefixRoot = {
+      expr = hasStorePathPrefix /.;
+      expected = false;
+    };
+
     testHasStorePathPrefixExample1 = {
       expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz");
       expected = true;

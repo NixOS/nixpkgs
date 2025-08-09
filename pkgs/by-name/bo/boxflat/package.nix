@@ -9,18 +9,19 @@
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "boxflat";
-  version = "1.29.2";
+  version = "1.34.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
     tag = "v${version}";
-    hash = "sha256-ouq21n9G+wP4wpfpnX2gVJrCAANIHNjbIUnCmftwajI=";
+    hash = "sha256-u1rhZfYCQC0qm79cMCCBvlHC4F9rwkL6X72rylPhJwE=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -41,6 +42,7 @@ python3Packages.buildPythonPackage rec {
     copyDesktopItems
     wrapGAppsHook4
     gobject-introspection
+    udevCheckHook
   ];
 
   postPatch = ''

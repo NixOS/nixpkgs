@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vcyzMw2tWil4MULEkf25S6kXzqMG6JXIx6GibxxspkY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KlWzcJtNBTLCDDH01vI1mn9H7LUqni5o/Q6PsNeI7HE=";
 
   cargoPatches = [
@@ -30,14 +27,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = with lib; {
     description = "Urban Dictionary CLI - written in Rust";

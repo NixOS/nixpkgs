@@ -131,13 +131,15 @@ buildDubPackage (
     postFixup = ''
       # Add support for `open file` dialog
       makeWrapper $out/share/${pname}/${pname} $out/bin/${pname} \
-          --prefix PATH : ${lib.makeBinPath [ zenity ]} \
-          --prefix LD_LIBRARY_PATH : ${
-            lib.makeLibraryPath [
-              libGL
-              luajit_2_1
-            ]
-          }
+        --prefix PATH : ${lib.makeBinPath [ zenity ]}
+
+      patchelf $out/share/${pname}/${pname} \
+        --add-rpath ${
+          lib.makeLibraryPath [
+            libGL
+            luajit_2_1
+          ]
+        }
     '';
 
     meta = {
@@ -145,6 +147,7 @@ buildDubPackage (
       license = lib.licenses.bsd2;
       mainProgram = pname;
       maintainers = with lib.maintainers; [ tomasajt ];
-    } // meta;
+    }
+    // meta;
   }
 )

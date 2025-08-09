@@ -15,9 +15,7 @@
   itstool,
   poppler,
   nautilus,
-  darwin,
   djvulibre,
-  libspectre,
   libarchive,
   libsecret,
   wrapGAppsHook4,
@@ -27,7 +25,8 @@
   gsettings-desktop-schemas,
   dbus,
   gi-docgen,
-  libgxps,
+  libsysprof-capture,
+  libspelling,
   withLibsecret ? true,
   supportNautilus ? (!stdenv.hostPlatform.isDarwin),
   libadwaita,
@@ -38,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "47.3";
+  version = "48.4";
 
   outputs = [
     "out"
@@ -48,19 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PlhTk+gef6D5r55U38hvYSa1w9hS6pDf3DumsHlSxKo=";
+    hash = "sha256-8RqhxUSsIRJZ4jC0DIBK5kB3M5pXve+j2761f5Fm4/0=";
   };
-
-  cargoRoot = "shell-rs";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
       src
       pname
       version
-      cargoRoot
       ;
-    hash = "sha256-66pOdZxgzbvXkvF07rNvWtcF/dJ2+RuS24IeI/VWykE=";
+    hash = "sha256-1HFecOTn84m9lT166HlmYjqP+KN/ZOTWW4ztigrpqNQ=";
   };
 
   nativeBuildInputs = [
@@ -78,38 +74,31 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      dbus # only needed to find the service directory
-      djvulibre
-      exempi
-      gdk-pixbuf
-      glib
-      gtk4
-      gsettings-desktop-schemas
-      libadwaita
-      libarchive
-      libgxps
-      librsvg
-      libspectre
-      pango
-      poppler
-    ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals supportNautilus [
-      nautilus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    dbus # only needed to find the service directory
+    djvulibre
+    exempi
+    gdk-pixbuf
+    glib
+    gtk4
+    gsettings-desktop-schemas
+    libadwaita
+    libarchive
+    librsvg
+    libsysprof-capture
+    libspelling
+    pango
+    poppler
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals supportNautilus [
+    nautilus
+  ];
 
   mesonFlags =
-    [
-      "-Dps=enabled"
-    ]
-    ++ lib.optionals (!withLibsecret) [
+    lib.optionals (!withLibsecret) [
       "-Dkeyring=disabled"
     ]
     ++ lib.optionals (!supportNautilus) [
@@ -121,15 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
   '';
 
-  preFixup =
-    ''
-      gappsWrapperArgs+=(
-        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      )
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
-    '';
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
+  '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -151,6 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "papers";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

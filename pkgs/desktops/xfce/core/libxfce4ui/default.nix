@@ -27,14 +27,13 @@ mkXfceDerivation {
 
   sha256 = "sha256-CY9KCCbKBAuoYAJtPHlQj04dUuCZAovnyJsBgjzzQkI=";
 
-  nativeBuildInputs =
-    [
-      perl
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala # vala bindings require GObject introspection
-    ];
+  nativeBuildInputs = [
+    perl
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala # vala bindings require GObject introspection
+  ];
 
   buildInputs = [
     libICE
@@ -62,6 +61,6 @@ mkXfceDerivation {
       lgpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

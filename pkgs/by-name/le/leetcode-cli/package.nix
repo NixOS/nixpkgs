@@ -8,7 +8,6 @@
   dbus,
   sqlite,
   stdenv,
-  darwin,
   testers,
   leetcode-cli,
 }:
@@ -22,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AYBBW9VtdvqqqiouhkS3diPcOdaQOs8Htkw9DTRX2t4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-o2RkhYsSQKwU+dsHQvlcxAVKUjOTqg424dqrM7JRoN8=";
 
   nativeBuildInputs = [
@@ -30,16 +28,11 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    dbus
+    sqlite
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetcode \

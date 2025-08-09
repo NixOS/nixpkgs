@@ -1,23 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  flit-core,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "stringly";
-  version = "1.0b2";
-  format = "setuptools";
+  version = "1.0b3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09fi9dgf27v4qi0mwwms7hpwim9qpyalckd66p7nlmfp6c8bzppq";
+  src = fetchFromGitHub {
+    owner = "evalf";
+    repo = "stringly";
+    tag = "v${version}";
+    hash = "sha256-OAATONkok9M2pVoChtwWMPPU/bhAxGf+BFawy9g3iZI=";
   };
+
+  build-system = [ flit-core ];
+
+  dependencies = [ typing-extensions ];
 
   pythonImportsCheck = [ "stringly" ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  doCheck = false; # no tests
 
   meta = with lib; {
     description = "Stringly: Human Readable Object Serialization";

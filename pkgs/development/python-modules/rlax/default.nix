@@ -36,12 +36,29 @@ buildPythonPackage rec {
     hash = "sha256-v2Lbzya+E9d7tlUVlQQa4fuPp2q3E309Qvyt70mcdb0=";
   };
 
+  # TODO: remove these patches at the next release (already on master)
   patches = [
     (fetchpatch {
       # Follow chex API change (https://github.com/google-deepmind/chex/pull/52)
       name = "replace-deprecated-chex-assertions";
       url = "https://github.com/google-deepmind/rlax/commit/30e7913a1102667137654d6e652a6c4b9e9ba1f4.patch";
       hash = "sha256-OPnuTKEtwZ28hzR1660v3DcktxTYjhR1xYvFbQvOhgs=";
+    })
+    (fetchpatch {
+      name = "remove-deprecation-warning";
+      url = "https://github.com/google-deepmind/rlax/commit/dea6eb479ffc32156aefe73015387a762c6b4562.patch";
+      hash = "sha256-htDyDRJW0eQx7AmrS3Fl7Lbh2VAmoYiDgHSePsQUaWs=";
+    })
+    (fetchpatch {
+      name = "fix-deprecation-warnings";
+      url = "https://github.com/google-deepmind/rlax/commit/605e0ef8ad8f9a06e88d4aabbb7d50e086d0cf3a.patch";
+      hash = "sha256-GZ/nGMXne6Lv6yDm/29NVTWxLBVSzaPYKAfQOLHY4UI=";
+    })
+    # https://github.com/google-deepmind/rlax/pull/135
+    (fetchpatch {
+      name = "fix-jax-0.6.0-compat";
+      url = "https://github.com/google-deepmind/rlax/commit/461b4cf9b4239d6b1b83aad6e5946f68d8402b93.patch";
+      hash = "sha256-uPMpm4IcoBWJwnyuIRjQEfo0F9HIW/lrwecxGW/Yw38=";
     })
   ];
 

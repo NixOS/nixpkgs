@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "aliae";
-  version = "0.26.4";
+  version = "0.26.5";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "aliae";
     tag = "v${version}";
-    hash = "sha256-Xyj/CEvYnVz8bX0vMsFAyRY7Hp6heHFjvq+VeCYWXow=";
+    hash = "sha256-F5OteK1D0MCNyiZG6iz3vawkx74WJKst2Yr6ca8TYZw=";
   };
 
-  vendorHash = "sha256-wNcn7ATUumuki8IQIrs7f8cf3uD7sMFlaS6BhgpEMVM=";
+  vendorHash = "sha256-TsJU1oAc1T+VdUYzrcyflTPYJhG6sPjFNZ7bZKk1KdM=";
 
   sourceRoot = "${src.name}/src";
 
@@ -34,16 +34,15 @@ buildGoModule rec {
     "osusergo"
   ];
 
-  postInstall =
-    ''
-      mv $out/bin/{src,aliae}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd aliae \
-        --bash <($out/bin/aliae completion bash) \
-        --fish <($out/bin/aliae completion fish) \
-        --zsh <($out/bin/aliae completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/{src,aliae}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd aliae \
+      --bash <($out/bin/aliae completion bash) \
+      --fish <($out/bin/aliae completion fish) \
+      --zsh <($out/bin/aliae completion zsh)
+  '';
 
   meta = {
     description = "Cross shell and platform alias management";

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "acsone";
-    repo = pname;
+    repo = "setuptools-odoo";
     tag = version;
     hash = "sha256-38YlkDH/PuJ1yvQ43OYmdnRd1SGJULv6fC/+fitLDJ8=";
   };

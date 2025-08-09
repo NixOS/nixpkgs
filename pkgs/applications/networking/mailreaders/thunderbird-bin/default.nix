@@ -3,6 +3,7 @@
 # To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
 #
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-bin-unwrapped
+#     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-esr-bin-unwrapped
 {
   lib,
   stdenv,
@@ -24,6 +25,7 @@
   systemLocale ? config.i18n.defaultLocale or "en_US",
   patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   generated,
+  versionSuffix ? "",
   applicationName ? "Thunderbird",
 }:
 
@@ -43,7 +45,8 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  } // config.thunderbird.policies or { };
+  }
+  // config.thunderbird.policies or { };
   policiesJson = writeText "thunderbird-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") { } sources;
@@ -63,8 +66,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha256;
+    inherit (source) url sha256;
   };
 
   nativeBuildInputs = [
@@ -103,7 +105,6 @@ stdenv.mkDerivation {
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit
       pname
-      lib
       writeScript
       xidel
       coreutils
@@ -112,12 +113,11 @@ stdenv.mkDerivation {
       curl
       gnupg
       runtimeShell
+      versionSuffix
       ;
     baseName = "thunderbird";
-    channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    versionSuffix = "esr";
   };
 
   passthru = {
@@ -127,13 +127,13 @@ stdenv.mkDerivation {
     gtk3 = gtk3;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
     mainProgram = "thunderbird";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [ ];

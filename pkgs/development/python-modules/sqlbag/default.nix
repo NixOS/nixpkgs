@@ -17,14 +17,14 @@
   postgresql,
   postgresqlTestHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sqlbag";
   version = "0.1.1617247075";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = pname;
+    repo = "sqlbag";
     # no tags on github, version patch number is unix time.
     rev = "eaaeec4158ffa139fba1ec30d7887f4d836f4120";
     hash = "sha256-lipgnkqrzjzqwbhtVcWDQypBNzq6Dct/qoM8y/FNiNs=";
@@ -58,6 +58,11 @@ buildPythonPackage rec {
   preCheck = ''
     export PGUSER="nixbld";
   '';
+
+  enabledTestPaths = [
+    "tests"
+  ];
+
   disabledTests = [
     # These all fail with "List argument must consist only of tuples or dictionaries":
     # Related issue: https://github.com/djrobstep/sqlbag/issues/14
@@ -70,10 +75,9 @@ buildPythonPackage rec {
     "test_transaction_separation"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
     "-svv"
-    "tests"
   ];
 
   pythonImportsCheck = [ "sqlbag" ];

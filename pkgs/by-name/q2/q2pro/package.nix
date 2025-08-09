@@ -30,52 +30,50 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "q2pro";
-  version = "0-unstable-2025-04-03";
+  version = "0-unstable-2025-07-21";
 
   src = fetchFromGitHub {
     owner = "skullernet";
     repo = "q2pro";
-    rev = "0e00beedaa892fd5f6e50d33231978846ab2d5de";
-    hash = "sha256-xw09M7EtXJ7i6myj/Em0Rtg5CmZtpbyRWmkPhCApu7I=";
+    rev = "3aa0d40ba58935154b0d2a02116021bfbb4f17e8";
+    hash = "sha256-aqpOoECNKozbCWnCFpyTCbUlTx8tdpqjMAES7x9yEM0=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "3749"; # git rev-list --count ${src.rev}
-  SOURCE_DATE_EPOCH = "1743706497"; # git show -s --format=%ct ${src.rev}
+  revCount = "3832"; # git rev-list --count ${src.rev}
+  SOURCE_DATE_EPOCH = "1753090158"; # git show -s --format=%ct ${src.rev}
 
-  nativeBuildInputs =
-    [
-      meson
-      pkg-config
-      ninja
-      makeBinaryWrapper
-      copyDesktopItems
-    ]
-    ++ lib.optional waylandSupport wayland-scanner
-    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    makeBinaryWrapper
+    copyDesktopItems
+  ]
+  ++ lib.optional waylandSupport wayland-scanner
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      zlib
-      libpng
-      libjpeg
-      curl
-      SDL2
-      libGL
-      libogg
-      libvorbis
-      libX11
-      ffmpeg
-      openalSoft
-    ]
-    ++ lib.optionals waylandSupport [
-      wayland
-      wayland-protocols
-      libdecor
-    ]
-    ++ lib.optional x11Support libXi;
+  buildInputs = [
+    zlib
+    libpng
+    libjpeg
+    curl
+    SDL2
+    libGL
+    libogg
+    libvorbis
+    libX11
+    ffmpeg
+    openalSoft
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+    wayland-protocols
+    libdecor
+  ]
+  ++ lib.optional x11Support libXi;
 
   mesonBuildType = "release";
 
@@ -90,9 +88,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.mesonEnable "windows-crash-dumps" false)
   ];
 
-  internalVersion = "r${revCount}~${builtins.substring 0 8 src.rev}";
+  internalVersion = "r${finalAttrs.revCount}~${builtins.substring 0 8 finalAttrs.src.rev}";
   postPatch = ''
-    echo '${internalVersion}' > VERSION
+    echo '${finalAttrs.internalVersion}' > VERSION
   '';
 
   postInstall =
@@ -105,13 +103,13 @@ stdenv.mkDerivation (finalAttrs: rec {
       makeWrapper $out/bin/q2pro-unwrapped $out/bin/q2pro \
         --prefix ${ldLibraryPathEnvName} : "${lib.makeLibraryPath finalAttrs.buildInputs}"
 
-      install -D ${src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
+      install -D ${finalAttrs.src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   preVersionCheck = ''
-    export version='${internalVersion}'
+    export version='${finalAttrs.internalVersion}'
   '';
   doInstallCheck = true;
 

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
     tag = "v${version}";
-    hash = "sha256-oGDRGg1FmDJPFyDy6n4CiWmQjG0VibW7tLXYGBNq25c=";
+    hash = "sha256-c9oHBQCdJpPAeI7xwePXx75Sp39I8QVjRZSxxSOm2PM=";
   };
 
   build-system = [ setuptools ];
@@ -68,10 +68,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # These tests fail when MPS devices are detected
-  disabledTests = lib.optional stdenv.isDarwin [
+  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
     "gpu"
   ];
 

@@ -8,11 +8,6 @@
 let
   cfg = config.services.geoclue2;
 
-  defaultWhitelist = [
-    "gnome-shell"
-    "io.elementary.desktop.agent-geoclue2"
-  ];
-
   appConfigModule = lib.types.submodule (
     { name, ... }:
     {
@@ -83,6 +78,16 @@ in
         description = ''
           Whether to enable GeoClue 2 daemon, a DBus service
           that provides location information for accessing.
+        '';
+      };
+      whitelistedAgents = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "gnome-shell"
+          "io.elementary.desktop.agent-geoclue2"
+        ];
+        description = ''
+          Desktop IDs (without the .desktop extension) of whitelisted agents.
         '';
       };
 
@@ -180,7 +185,7 @@ in
 
       geoProviderUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
+        default = "https://api.beacondb.net/v1/geolocate";
         example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
         description = ''
           The url to the wifi GeoLocation Service.
@@ -210,7 +215,7 @@ in
 
       submissionUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://location.services.mozilla.com/v1/submit?key=geoclue";
+        default = "https://api.beacondb.net/v2/geosubmit";
         description = ''
           The url to submit data to a GeoLocation Service.
         '';
@@ -321,7 +326,10 @@ in
       {
         agent = {
           whitelist = lib.concatStringsSep ";" (
-            lib.optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist
+            lib.lists.unique (
+              cfg.whitelistedAgents
+              ++ lib.optionals config.services.geoclue2.enableDemoAgent [ "geoclue-demo-agent" ]
+            )
           );
         };
         network-nmea = {
@@ -336,16 +344,15 @@ in
         modem-gps = {
           enable = cfg.enableModemGPS;
         };
-        wifi =
-          {
-            enable = cfg.enableWifi;
-          }
-          // lib.optionalAttrs cfg.enableWifi {
-            url = cfg.geoProviderUrl;
-            submit-data = lib.boolToString cfg.submitData;
-            submission-url = cfg.submissionUrl;
-            submission-nick = cfg.submissionNick;
-          };
+        wifi = {
+          enable = cfg.enableWifi;
+        }
+        // lib.optionalAttrs cfg.enableWifi {
+          url = cfg.geoProviderUrl;
+          submit-data = lib.boolToString cfg.submitData;
+          submission-url = cfg.submissionUrl;
+          submission-nick = cfg.submissionNick;
+        };
         static-source = {
           enable = cfg.enableStatic;
         };

@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "obs-livesplit-one";
-  version = "0.3.4";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "LiveSplit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3B3P1PlzIlpVqHJMKWpEnWXGgD/IaiWM1FVKn0BtRj0=";
+    sha256 = "sha256-4Ar4ChSl226BVFyAnqpWDLxsZF63bxl++sWD+6aENW8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JHocpqDeF24Qn9lUr+YCnZqgckLhGRpWQD7WGCxVmd8=";
+  cargoHash = "sha256-e0FDa72vzRb5AMVmtkvAkiQ5GUXsq0LekqF+wDYDsr8=";
 
   nativeBuildInputs = [
     cmake

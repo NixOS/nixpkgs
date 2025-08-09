@@ -13,22 +13,18 @@
   protobuf,
 
   # dependencies
-  attrs,
-  cachetools,
   deprecation,
-  nest-asyncio,
   overrides,
   packaging,
+  pyarrow,
   pydantic,
-  pylance,
-  requests,
-  retry,
   tqdm,
 
   # tests
   aiohttp,
   pandas,
   polars,
+  pylance,
   pytest-asyncio,
   pytestCheckHook,
   duckdb,
@@ -37,21 +33,21 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.19.0";
+  version = "0.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
-    hash = "sha256-AvISt9YpnHFrxRQYkkycXmsHSRs9QcBUe0DLXMYGrEI=";
+    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-0mBCBQTv9nsHiQDUrZfm5+ZUGp3A2k8+DH/T85Vq2KA=";
+    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -72,16 +68,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    attrs
-    cachetools
     deprecation
-    nest-asyncio
     overrides
     packaging
+    pyarrow
     pydantic
-    pylance
-    requests
-    retry
     tqdm
   ];
 
@@ -92,6 +83,7 @@ buildPythonPackage rec {
     duckdb
     pandas
     polars
+    pylance
     pytest-asyncio
     pytestCheckHook
   ];
@@ -100,7 +92,7 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # require tantivy which is not packaged in nixpkgs
@@ -112,15 +104,14 @@ buildPythonPackage rec {
     "test_polars"
   ];
 
-  disabledTestPaths =
-    [
-      # touch the network
-      "test_s3.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-      "test_remote_db.py"
-    ];
+  disabledTestPaths = [
+    # touch the network
+    "test_s3.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_remote_db.py"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

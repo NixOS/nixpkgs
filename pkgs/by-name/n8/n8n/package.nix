@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   python3,
   node-gyp,
   cctools,
@@ -17,31 +17,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.75.2";
+  version = "1.104.1";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-fIdwciI4QUNr2wNWiq7qT4c6aZeUnkaVhSkIgFO4Svw=";
+    hash = "sha256-/GrpcJU94NqeTAcXVGWG+NamS28cLxKDSr6M4sF6Els=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rtXTAHZUeitQFTa1Tw6l4el+xWD2hLT+2wu2LXW80cE=";
+    fetcherVersion = 1;
+    hash = "sha256-UhCwZPthRZSF5ZLFLc5SgG5EZeFySnCRLqGRbc+3F/U=";
   };
 
-  nativeBuildInputs =
-    [
-      pnpm_9.configHook
-      python3 # required to build sqlite3 bindings
-      node-gyp # required to build sqlite3 bindings
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    pnpm_10.configHook
+    python3 # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

@@ -5,12 +5,12 @@
   fetchFromGitHub,
   fetchYarnDeps,
   replaceVars,
-  runCommand,
   writeShellScriptBin,
 
   copyDesktopItems,
   cctools,
   clojure,
+  darwin,
   makeDesktopItem,
   makeWrapper,
   nodejs,
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.9-unstable-2025-03-11";
+  version = "0.10.12";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
-    rev = "ac0a0dae727c46b348d0f1410138d5e49d446692";
-    hash = "sha256-esCB51BeWnni/JFL4yMKcJj5lka2+hLpcvWGify0T2o=";
+    tag = finalAttrs.version;
+    hash = "sha256-SUzt4hYHE6XJOEMxFp2a0om2oVUk1MHQUteGFiM9Lkc=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src;
-    hash = "sha256-z4G675kxfpmG2AJlbK5bfeUUgX7jz1ys2FlMNHJqrQ4=";
+    hash = "sha256-sbC6WQLjEHIKTuejSQXplQOWZwUmBJdGXuAkilQGjYs=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/static";
-    hash = "sha256-xuZj2EKHxvkiDPKMLh3ZSvLT54k+buHqg9lRTFv8rNI=";
+    hash = "sha256-01t6lolMbBL5f6SFk4qTkTx6SQXWtHuVkBhDwW+HScc=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
@@ -151,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
+      darwin.autoSignDarwinBinariesHook
       xcbuild
     ];
 
@@ -209,8 +210,9 @@ stdenv.mkDerivation (finalAttrs: {
     npm rebuild --verbose
 
     # remove most references to electron.headers
-    # TODO: track down the remaining references
-    find node_modules -type f \( -name "*.target.mk" -o -name "config.gypi" -o -name "Makefile" \) -delete
+    shopt -s globstar
+    rm -r node_modules/**/{*.target.mk,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
 
     popd
 
@@ -231,37 +233,36 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnBuildScript = "release-electron";
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # remove references to nodejs
-      find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"
+    # remove references to nodejs
+    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"
 
-      mkdir -p $out/share/logseq
-      cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
+    mkdir -p $out/share/logseq
+    cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
 
-      makeWrapper ${lib.getExe electron} $out/bin/logseq \
-          --add-flags $out/share/logseq/resources/app \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-          --set-default LOCAL_GIT_DIRECTORY ${git} \
-          --inherit-argv0
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r static/out/*/Logseq.app $out/Applications
+    makeWrapper ${lib.getExe electron} $out/bin/logseq \
+        --add-flags $out/share/logseq/resources/app \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --set-default LOCAL_GIT_DIRECTORY ${git} \
+        --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r static/out/*/Logseq.app $out/Applications
 
-      wrapProgram $out/Applications/Logseq.app/Contents/MacOS/Logseq \
-        --set-default LOCAL_GIT_DIRECTORY ${git}
+    wrapProgram $out/Applications/Logseq.app/Contents/MacOS/Logseq \
+      --set-default LOCAL_GIT_DIRECTORY ${git}
 
-      makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
-    ''
-    + ''
-      runHook postInstall
-    '';
+    makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

@@ -49,7 +49,7 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  pytestFlagsArray = [ "-s" ];
+  pytestFlags = [ "-s" ];
 
   pythonImportsCheck = [ "bindep" ];
 
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/opendev/bindep";
     license = licenses.asl20;
     mainProgram = "bindep";
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

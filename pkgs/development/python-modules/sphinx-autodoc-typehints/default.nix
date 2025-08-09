@@ -11,7 +11,7 @@
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "3.1.0";
+  version = "3.2.0";
 in
 
 buildPythonPackage {
@@ -23,7 +23,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
-    hash = "sha256-prewtt8KOAeDzlspFQwtMDUnRvAno+KU03GDmV0/I+0=";
+    hash = "sha256-EHrJi8i0g3ICyIwHNtWdbaRAduZaDX19VDp4Yx9mKps=";
   };
 
   pythonRelaxDeps = [ "sphinx" ];

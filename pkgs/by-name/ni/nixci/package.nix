@@ -5,9 +5,6 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
-  Security,
-  SystemConfiguration,
-  IOKit,
   installShellFiles,
   nix,
 }:
@@ -23,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0VvZFclqwAcKN95eusQ3lgV0pp1NRUDcVXpVUC0P4QI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iRsmB+ak6pWFtAdXEmGSc9dGdIuSbgLp3UT3SdOUOGQ=";
 
   nativeBuildInputs = [
@@ -32,15 +28,9 @@ rustPlatform.buildRustPackage rec {
     nix
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   postInstall = ''
     installShellCompletion --cmd nixci \

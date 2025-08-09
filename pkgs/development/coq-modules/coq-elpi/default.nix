@@ -3,7 +3,6 @@
   mkCoqDerivation,
   which,
   coq,
-  rocqPackages,
   stdlib,
   version ? null,
   elpi-version ? null,
@@ -14,52 +13,22 @@ let
     if elpi-version != null then
       elpi-version
     else
-      (lib.switch coq.coq-version [
-        {
-          case = "8.11";
-          out = "1.11.4";
-        }
-        {
-          case = "8.12";
-          out = "1.12.0";
-        }
-        {
-          case = "8.13";
-          out = "1.13.7";
-        }
-        {
-          case = "8.14";
-          out = "1.13.7";
-        }
-        {
-          case = "8.15";
-          out = "1.15.0";
-        }
-        {
-          case = "8.16";
-          out = "1.17.0";
-        }
-        {
-          case = "8.17";
-          out = "1.17.0";
-        }
-        {
-          case = "8.18";
-          out = "1.18.1";
-        }
-        {
-          case = "8.19";
-          out = "1.18.1";
-        }
-        {
-          case = "8.20";
-          out = "1.19.2";
-        }
-        {
-          case = "9.0";
-          out = "2.0.7";
-        }
-      ] { });
+      (
+        let
+
+          case = case: out: { inherit case out; };
+        in
+        with lib.versions;
+        lib.switch coq.coq-version [
+          (case (range "8.20" "8.20") "2.0.7")
+          (case (range "8.18" "8.19") "1.18.1")
+          (case (range "8.16" "8.17") "1.17.0")
+          (case "8.15" "1.15.0")
+          (case (range "8.13" "8.14") "1.13.7")
+          (case "8.12" "1.12.0")
+          (case "8.11" "1.11.4")
+        ] { }
+      );
   elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [
     coq.ocamlPackages.findlib
@@ -69,54 +38,29 @@ let
     repo = "coq-elpi";
     owner = "LPCIC";
     inherit version;
-    defaultVersion = lib.switch coq.coq-version [
-      {
-        case = "9.0";
-        out = "2.5.0";
-      }
-      {
-        case = "8.20";
-        out = "2.2.0";
-      }
-      {
-        case = "8.19";
-        out = "2.0.1";
-      }
-      {
-        case = "8.18";
-        out = "2.0.0";
-      }
-      {
-        case = "8.17";
-        out = "1.18.0";
-      }
-      {
-        case = "8.16";
-        out = "1.15.6";
-      }
-      {
-        case = "8.15";
-        out = "1.14.0";
-      }
-      {
-        case = "8.14";
-        out = "1.11.2";
-      }
-      {
-        case = "8.13";
-        out = "1.11.1";
-      }
-      {
-        case = "8.12";
-        out = "1.8.3_8.12";
-      }
-      {
-        case = "8.11";
-        out = "1.6.3_8.11";
-      }
-    ] null;
+    defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
+      with lib.versions;
+      lib.switch coq.coq-version [
+        (case (range "8.20" "8.20") "2.6.0")
+        (case (range "8.20" "8.20") "2.5.2")
+        (case "8.19" "2.0.1")
+        (case "8.18" "2.0.0")
+        (case "8.17" "1.18.0")
+        (case "8.16" "1.15.6")
+        (case "8.15" "1.14.0")
+        (case "8.14" "1.11.2")
+        (case "8.13" "1.11.1")
+        (case "8.12" "1.8.3_8.12")
+        (case "8.11" "1.6.3_8.11")
+      ] null;
+    release."2.6.0".sha256 = "sha256-23BHq1NFUkI3ayXnGUwiGFySLyY3EuH4RyMgAhQqI4g=";
+    release."2.5.2".sha256 = "sha256-lLzjPrbVB3rrqox528YiheUb0u89R84Xmrgkn0oplOs=";
     release."2.5.0".sha256 = "sha256-Z5xjO83X/ZoTQlWnVupGXPH3HuJefr57Kv128I0dltg=";
     release."2.4.0".sha256 = "sha256-W2+vVGExLLux8e0nSZESSoMVvrLxhL6dmXkb+JuKiqc=";
+    release."2.3.0".sha256 = "sha256-XVOI+s8Qpa7f17+Xq0y7IGPLFeJqo+cDcd3zfMuO7UU=";
     release."2.2.0".sha256 = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
     release."2.0.1".sha256 = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
     release."2.0.0".sha256 = "sha256-A/cH324M21k3SZ7+YWXtaYEbu6dZQq3K0cb1RMKjbsM=";
@@ -194,35 +138,27 @@ let
   );
   patched-derivation4 = patched-derivation3.overrideAttrs (
     o:
-    # this is just a wrapper for rocPackages.rocq-elpi for Rocq >= 9.0
-    if coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version) then
+    lib.optionalAttrs (o.version != null && (o.version == "dev" || lib.versions.isGe "2.5.0" o.version))
       {
         configurePhase = ''
-          echo no configuration
+          make dune-files || true
         '';
         buildPhase = ''
-          echo building nothing
+          dune build -p rocq-elpi @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
         '';
         installPhase = ''
-          echo installing nothing
+          dune install --root . rocq-elpi --prefix=$out --libdir $OCAMLFIND_DESTDIR
+          mkdir $out/lib/coq/
+          mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
         '';
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.rocq-elpi ];
       }
-    else
-      lib.optionalAttrs (o.version != null && (o.version == "dev" || lib.versions.isGe "2.5.0" o.version))
-        {
-          configurePhase = ''
-            make dune-files || true
-          '';
-          buildPhase = ''
-            dune build -p rocq-elpi @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-          '';
-          installPhase = ''
-            dune install --root . rocq-elpi --prefix=$out --libdir $OCAMLFIND_DESTDIR
-            mkdir $out/lib/coq/
-            mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
-          '';
-        }
   );
 in
-patched-derivation4
+# this is just a wrapper for rocqPackages.stdlib for Rocq >= 9.0
+if coq.rocqPackages ? rocq-elpi then
+  coq.rocqPackages.rocq-elpi.override {
+    inherit version elpi-version;
+    inherit (coq.rocqPackages) rocq-core;
+  }
+else
+  patched-derivation4

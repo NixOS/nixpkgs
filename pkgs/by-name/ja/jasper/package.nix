@@ -6,7 +6,6 @@
   libGL,
   libheif,
   libjpeg,
-  darwin,
   pkg-config,
   stdenv,
   enableHEIFCodec ? true,
@@ -38,22 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-    ]
-    ++ lib.optionals enableHEIFCodec [
-      libheif
-    ]
-    ++ lib.optionals enableJPGCodec [
-      libjpeg
-    ]
-    ++ lib.optionals enableOpenGL [
-      libglut
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-    ];
+  buildInputs = [
+  ]
+  ++ lib.optionals enableHEIFCodec [
+    libheif
+  ]
+  ++ lib.optionals enableJPGCodec [
+    libjpeg
+  ]
+  ++ lib.optionals enableOpenGL [
+    libglut
+    libGL
+  ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...

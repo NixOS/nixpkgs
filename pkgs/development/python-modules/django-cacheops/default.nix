@@ -14,14 +14,14 @@
   jinja2,
   before-after,
   pythonOlder,
-  nettools,
+  net-tools,
   pkgs,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.1";
+  version = "7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_cacheops";
     inherit version;
-    hash = "sha256-7Aeau5aFVzIe4gjGJ0ggIxgg+YymN33alx8EmBvCq1I=";
+    hash = "sha256-y8EcwDISlaNkTie8smlA8Iy5wucdPuUGy8/wvdoanzM=";
   };
 
   pythonRelaxDeps = [ "funcy" ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     dill
     jinja2
     before-after
-    nettools
+    net-tools
     pkgs.valkey
     redisTestHook
   ];

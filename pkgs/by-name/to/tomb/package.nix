@@ -1,4 +1,5 @@
 {
+  acl,
   coreutils,
   cryptsetup,
   e2fsprogs,
@@ -16,19 +17,39 @@
   nix-update-script,
   pinentry,
   stdenvNoCC,
+  testers,
   util-linux,
   zsh,
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  runtimeDependencies = [
+    acl # setfacl
+    coreutils # shred
+    cryptsetup
+    e2fsprogs # resize2fs
+    file
+    gawk
+    getent
+    gettext
+    gnugrep
+    gnupg
+    libargon2
+    lsof
+    pinentry
+    util-linux
+  ];
+
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tomb";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "Tomb";
-    tag = "v${version}";
-    hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P8YS6PlfrAHY2EsSyCG8QAeDbN7ChHmjxtqIAtMLomk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -49,33 +70,21 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${
-        lib.makeBinPath [
-          coreutils
-          cryptsetup
-          e2fsprogs
-          file
-          gawk
-          getent
-          gettext
-          gnugrep
-          gnupg
-          libargon2
-          lsof
-          pinentry
-          util-linux
-        ]
-      }
+      --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}
   '';
 
   passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "tomb -v";
+    };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "File encryption on GNU/Linux";
-    homepage = "https://www.dyne.org/software/tomb/";
-    changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
+    homepage = "https://dyne.org/tomb/";
+    changelog = "https://github.com/dyne/Tomb/blob/v${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "tomb";
     maintainers = with lib.maintainers; [
@@ -84,4 +93,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

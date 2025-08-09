@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -27,18 +26,16 @@
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.6.1";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
     tag = "v${version}";
-    hash = "sha256-1CU5aRhiVPGXLVYZzOM8ELgRwa3hz7kQSwlTYsvFE7s=";
     fetchSubmodules = true;
+    hash = "sha256-GGYnyO8eILYNu7va2tMB0QJkBCRDMIfRQO4a9geV49Y=";
   };
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     cmake
@@ -61,18 +58,17 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      numpy
-      scipy
-      torch
-    ]
-    ++ lib.optionals (!(builtins.elem stdenv.hostPlatform.system tensorflow-bin.meta.badPlatforms)) [
-      tensorflow-bin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+    torch
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
+    tensorflow-bin
+    jax
+    jaxlib
+  ];
 
   passthru.tests = {
     pytest = nanobind.overridePythonAttrs { doCheck = true; };

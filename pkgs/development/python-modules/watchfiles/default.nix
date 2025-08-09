@@ -1,54 +1,43 @@
 {
   lib,
-  stdenv,
-  anyio,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
   rustPlatform,
-  rustc,
-  pythonOlder,
+  anyio,
+
+  # tests
   dirty-equals,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
-  typing-extensions,
-  CoreServices,
-  libiconv,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
+    repo = "watchfiles";
     tag = "v${version}";
-    hash = "sha256-0JBnUi/aRM9UFTkb8OkP9UkJV+BF2EieZptymRvAXc0=";
+    hash = "sha256-a6SHqYRNMGXNkVvwj9RpLj449dAQtWXO44v1ko5suaw=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname src version;
+    hash = "sha256-2RMWxeOjitbEqer9+ETpMX9WxHEiPzVmEv7LpSiaRVg=";
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    libiconv
-  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    cargo
-    rustc
+    rustPlatform.maturinBuildHook
   ];
 
-  build-system = [ rustPlatform.maturinBuildHook ];
-
-  dependencies = [ anyio ];
+  dependencies = [
+    anyio
+  ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -60,11 +49,9 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    versionCheckHook
   ];
-
-  postPatch = ''
-    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
-  '';
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf watchfiles
@@ -77,11 +64,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchfiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "File watching and code reload";
-    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "watchfiles";
   };
 }

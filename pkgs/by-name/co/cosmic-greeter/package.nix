@@ -17,17 +17,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-K6kCBtlmFfav8UP4zorzDJBzHt4CoSaFFAufrW1DPrw=";
+    hash = "sha256-o9ZoRHi+k+HCSGfRz1lQFAeJMCqcTQEHf5rf9wn3qqY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nmkM/Jm2P5ftZFfzX+O1Fe6eobRbgBkajZsbyI67Zfw=";
+  cargoHash = "sha256-hUHkyz/avFu9g1FMdC+4vz6xM75CauurrarhouuVZXc=";
+
+  env.VERGEN_GIT_COMMIT_DATE = "2025-04-25";
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   cargoBuildFlags = [ "--all" ];
 
@@ -94,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

@@ -6,20 +6,22 @@
   zstd,
   openssl,
   curl,
+  cyrus_sasl,
   cmake,
   ninja,
+  pkg-config,
   deterministic-host-uname,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.8.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-OCCsxgEO8UvCcC0XwzqpqmaT8dV0Klrspp+2o1FbH2Y=";
+    sha256 = "sha256-+ACn+1fjWEnUB32gUCoMpnq+6YBu+rufPT8LY920DBk=";
   };
 
   outputs = [
@@ -30,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    pkg-config
     # cross: build system uses uname to determine host system
     deterministic-host-uname
   ];
@@ -39,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     openssl
     curl
+    cyrus_sasl
   ];
 
   # examples and tests don't build on darwin statically
@@ -68,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "librdkafka - Apache Kafka C/C++ client library";
+    description = "Apache Kafka C/C++ client library";
     homepage = "https://github.com/confluentinc/librdkafka";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;

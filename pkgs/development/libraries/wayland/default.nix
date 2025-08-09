@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-hk+yqDmeLQ7DnVbp2bdTwJN3W+rcYCLOgfRBkpqB5e0=";
+    hash = "sha256-gokkh6Aa1nszTsqDtUMXp8hqA6ic+trP71IR8RpdBTY=";
   };
 
   patches = [
@@ -46,15 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i '/os-wrappers-test/d' tests/meson.build
     '';
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withDocumentation [
-      "doc"
-      "man"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
+    "man"
+  ];
   separateDebugInfo = true;
 
   mesonFlags = [
@@ -67,35 +66,33 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      pkg-config
-      ninja
-      wayland-scanner
-    ]
-    ++ lib.optionals withDocumentation [
-      (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
-      doxygen
-      libxslt
-      xmlto
-      python3
-      docbook_xml_dtd_45
-      docbook_xsl
-    ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    wayland-scanner
+  ]
+  ++ lib.optionals withDocumentation [
+    (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
+    doxygen
+    libxslt
+    xmlto
+    python3
+    docbook_xml_dtd_45
+    docbook_xsl
+  ];
 
-  buildInputs =
-    [
-      libffi
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      epoll-shim
-    ]
-    ++ lib.optionals withDocumentation [
-      docbook_xsl
-      docbook_xml_dtd_45
-      docbook_xml_dtd_42
-    ];
+  buildInputs = [
+    libffi
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    epoll-shim
+  ]
+  ++ lib.optionals withDocumentation [
+    docbook_xsl
+    docbook_xml_dtd_45
+    docbook_xml_dtd_42
+  ];
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
@@ -105,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
-    mainProgram = "wayland-scanner";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
       clients as well as a library implementation of the protocol.
@@ -118,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      primeos
       codyopel
       qyliss
     ];

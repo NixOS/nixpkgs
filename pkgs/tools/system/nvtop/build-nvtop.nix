@@ -65,21 +65,21 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "V3D_SUPPORT" v3d)
     (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
   ];
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals finalAttrs.doCheck [
-      gtest
-    ]
-    ++ lib.optional nvidia addDriverRunpath;
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
+    gtest
+  ]
+  ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12
-    ++ lib.optional nvidia cudatoolkit
-    ++ lib.optional needDrm libdrm;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12
+  ++ lib.optional nvidia cudatoolkit
+  ++ lib.optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString needDrm "-isystem ${lib.getDev libdrm}/include/libdrm";
@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     platforms = if apple then platforms.darwin else platforms.linux;
     maintainers = with maintainers; [
-      willibutz
       gbtb
       anthonyroussel
       moni

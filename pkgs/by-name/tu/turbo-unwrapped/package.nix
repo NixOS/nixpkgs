@@ -5,6 +5,7 @@
   extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
+  installShellFiles,
   llvmPackages,
   nix-update-script,
   openssl,
@@ -17,27 +18,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.5.0";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-crpEJdhO27cVXl4YnPmUwvJFAeezcxdS/vJPJ2m1VU8=";
+    hash = "sha256-QQTHgSaVDCnhbxhETo2bSGdtEcbL9lrWed+EpH3Fydk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7pcJ7NUTLe9rxLWnviJbWtTg1P145BzL1ZfWcuxPlSc=";
+  cargoHash = "sha256-PQOUWcUlxATzfgf9QbZT+vLs20/tR4Xmv0lPadzQoZQ=";
 
-  nativeBuildInputs =
-    [
-      capnproto
-      extra-cmake-modules
-      pkg-config
-      protobuf
-    ]
-    # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
+  nativeBuildInputs = [
+    capnproto
+    extra-cmake-modules
+    installShellFiles
+    pkg-config
+    protobuf
+  ]
+  # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
+  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs = [
     fontconfig
@@ -53,6 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turbo \
+      --bash <($out/bin/turbo completion bash) \
+      --fish <($out/bin/turbo completion fish) \
+      --zsh <($out/bin/turbo completion zsh)
+  '';
 
   env = {
     # nightly features are used

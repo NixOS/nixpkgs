@@ -1,16 +1,18 @@
 {
   lib,
+  aiohttp,
+  aioresponses,
   awesomeversion,
   buildPythonPackage,
   envoy-utils,
   fetchFromGitHub,
-  httpx,
   lxml,
   orjson,
   poetry-core,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
+  pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -20,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.25.5";
+  version = "2.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,7 +31,7 @@ buildPythonPackage rec {
     owner = "pyenphase";
     repo = "pyenphase";
     tag = "v${version}";
-    hash = "sha256-prYrs8JPw6KXqS981GvaXYIdo5+khf+vnxH60kKGvKE=";
+    hash = "sha256-4O5erOPltBIVWSDQ9qpmFlhKBPxvqiYNFOl+vN8MCNM=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -37,9 +39,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    aiohttp
     awesomeversion
     envoy-utils
-    httpx
     lxml
     orjson
     pyjwt
@@ -47,8 +49,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
+    pytest-timeout
     pytestCheckHook
     respx
     syrupy
@@ -64,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control enphase envoy";
     homepage = "https://github.com/pyenphase/pyenphase";
-    changelog = "https://github.com/pyenphase/pyenphase/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyenphase/pyenphase/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

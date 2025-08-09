@@ -57,36 +57,36 @@ stdenv.mkDerivation (
     gpuTargets' = lib.concatStringsSep ";" gpuTargets;
     compiler = "amdclang++";
     cFlags = "-O3 -DNDEBUG";
+    cxxFlags = "${cFlags} -Wno-c++11-narrowing";
     triton-llvm' = triton-llvm;
   in
   {
     pname = "aotriton";
-    version = "0.8.2b";
+    version = "0.9.2b";
 
     src = fetchFromGitHub {
       owner = "ROCm";
       repo = "aotriton";
       rev = "${finalAttrs.version}";
-      hash = "sha256-gSzGYWfyUNLyzqpu3BM8rjFFL7cRVZ+w9L5pnh9QGz4=";
+      hash = "sha256-1Cf0olD3zRg9JESD6s/WaGifm3kfD12VUvjTZHpmGAE=";
       fetchSubmodules = true;
     };
     env.CXX = compiler;
     env.ROCM_PATH = "${clr}";
     requiredSystemFeatures = [ "big-parallel" ];
 
-    outputs =
-      [
-        "out"
-      ]
-      ++ lib.optionals buildTests [
-        "test"
-      ]
-      ++ lib.optionals buildBenchmarks [
-        "benchmark"
-      ]
-      ++ lib.optionals buildSamples [
-        "sample"
-      ];
+    outputs = [
+      "out"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ]
+    ++ lib.optionals buildSamples [
+      "sample"
+    ];
 
     # Need an empty cuda.h for this to compile
     # Better than pulling in unfree cuda headers
@@ -106,31 +106,30 @@ stdenv.mkDerivation (
       ninja
     ];
 
-    buildInputs =
-      [
-        rocblas
-        rocsolver
-        hipblas-common
-        hipblas
-        openmp
-        libffi
-        ncurses
-        xz
-        nlohmann_json
-        rocmlir
+    buildInputs = [
+      rocblas
+      rocsolver
+      hipblas-common
+      hipblas
+      openmp
+      libffi
+      ncurses
+      xz
+      nlohmann_json
+      rocmlir
 
-        msgpack
-        libxml2
-        python3Packages.msgpack
-        zlib
-        zstd
-      ]
-      ++ lib.optionals buildTests [
-        gtest
-      ]
-      ++ lib.optionals (buildTests || buildBenchmarks) [
-        lapack-reference
-      ];
+      msgpack
+      libxml2
+      python3Packages.msgpack
+      zlib
+      zstd
+    ]
+    ++ lib.optionals buildTests [
+      gtest
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      lapack-reference
+    ];
 
     env.TRITON_OFFLINE_BUILD = 1;
     env.LLVM_SYSPATH = "${triton-llvm'}";
@@ -152,10 +151,13 @@ stdenv.mkDerivation (
       substituteInPlace third_party/triton/python/setup.py \
         --replace-fail "from distutils.command.clean import clean" "import setuptools;from distutils.command.clean import clean" \
         --replace-fail 'system == "Linux"' 'False'
+      # Fix 'ld: error: unable to insert .comment after .comment'
+      substituteInPlace v2python/ld_script.py \
+        --replace-fail 'INSERT AFTER .comment;' ""
 
       cmakeFlagsArray+=(
         '-DCMAKE_C_FLAGS_RELEASE=${cFlags}'
-        '-DCMAKE_CXX_FLAGS_RELEASE=${cFlags}'
+        '-DCMAKE_CXX_FLAGS_RELEASE=${cxxFlags}'
       )
       prependToVar cmakeFlags "-GNinja"
       mkdir -p /build/tmp-home
@@ -173,31 +175,30 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
-    cmakeFlags =
-      [
-        "-Wno-dev"
-        "-DAOTRITON_NOIMAGE_MODE=ON" # FIXME: Should be able to build with object code but generate_shim is failing
-        "-DCMAKE_BUILD_TYPE=Release"
-        "-DCMAKE_VERBOSE_MAKEFILE=ON"
-        "-DVIRTUALENV_PYTHON_EXENAME=${lib.getExe py}"
-        "-DCMAKE_CXX_COMPILER=${compiler}"
-        # Manually define CMAKE_INSTALL_<DIR>
-        # See: https://github.com/NixOS/nixpkgs/pull/197838
-        "-DCMAKE_INSTALL_BINDIR=bin"
-        "-DCMAKE_INSTALL_LIBDIR=lib"
-        "-DCMAKE_INSTALL_INCLUDEDIR=include"
-        "-DAMDGPU_TARGETS=${gpuTargets'}"
-        "-DGPU_TARGETS=${gpuTargets'}"
-      ]
-      ++ lib.optionals buildTests [
-        "-DBUILD_CLIENTS_TESTS=ON"
-      ]
-      ++ lib.optionals buildBenchmarks [
-        "-DBUILD_CLIENTS_BENCHMARKS=ON"
-      ]
-      ++ lib.optionals buildSamples [
-        "-DBUILD_CLIENTS_SAMPLES=ON"
-      ];
+    cmakeFlags = [
+      "-Wno-dev"
+      "-DAOTRITON_NOIMAGE_MODE=ON" # FIXME: Should be able to build with object code but generate_shim is failing
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DCMAKE_VERBOSE_MAKEFILE=ON"
+      "-DVIRTUALENV_PYTHON_EXENAME=${lib.getExe py}"
+      "-DCMAKE_CXX_COMPILER=${compiler}"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DAMDGPU_TARGETS=${gpuTargets'}"
+      "-DGPU_TARGETS=${gpuTargets'}"
+    ]
+    ++ lib.optionals buildTests [
+      "-DBUILD_CLIENTS_TESTS=ON"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ]
+    ++ lib.optionals buildSamples [
+      "-DBUILD_CLIENTS_SAMPLES=ON"
+    ];
 
     postInstall =
       lib.optionalString buildTests ''
@@ -219,7 +220,7 @@ stdenv.mkDerivation (
       description = "ROCm Ahead of Time (AOT) Triton Math Library ";
       homepage = "https://github.com/ROCm/aotriton";
       license = with licenses; [ mit ];
-      maintainers = teams.rocm.members;
+      teams = [ teams.rocm ];
       platforms = platforms.linux;
     };
   }

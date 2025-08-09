@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   nix-update-script,
   testers,
   pgcat,
@@ -20,12 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DHXUhAAOmPSt4aVp93I1y69of+MEboXJBZH50mzQTm8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6x/IPFncfOPxautW7gVUh5LG0hK4h6T4QL7B82Moi6o=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   checkFlags = [
     # requires network access

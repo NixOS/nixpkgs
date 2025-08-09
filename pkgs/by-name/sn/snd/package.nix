@@ -12,32 +12,31 @@
 
 stdenv.mkDerivation rec {
   pname = "snd";
-  version = "25.2";
+  version = "25.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    hash = "sha256-BPtovk1seGGz/hrIRP5SEjfBIi4trZoKMLJ1v8DE/Tk=";
+    hash = "sha256-IVGaHcsZGEPRk04UdjlYfDRYLHAEzeyhx2HWV3Ks2Bo=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftw
-      gsl
-      motif
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ (with xorg; [
-      libXext
-      libXft
-      libXpm
-      libXt
-    ]);
+  buildInputs = [
+    fftw
+    gsl
+    motif
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ (with xorg; [
+    libXext
+    libXft
+    libXpm
+    libXt
+  ]);
 
   configureFlags = [
     "--with-motif"

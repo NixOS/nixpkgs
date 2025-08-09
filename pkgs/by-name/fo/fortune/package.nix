@@ -21,22 +21,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      perl
-      rinutils
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      # "strfile" must be in PATH for cross-compiling builds.
-      fortune
-    ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    rinutils
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # "strfile" must be in PATH for cross-compiling builds.
+    fortune
+  ];
 
   buildInputs = [ recode ];
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
-  ] ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
+  ]
+  ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
 
   patches = [
     (builtins.toFile "not-a-game.patch" ''

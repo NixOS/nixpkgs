@@ -8,7 +8,6 @@
   gettext,
   python3,
   giflib,
-  darwin,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -27,28 +26,19 @@
   xorg,
 }:
 let
-  version = "2.15.1";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-vICkRfVxzQlqhSBCieVNSGeXb6FCOx0qOnInKMy6Lhg=";
+    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
   };
 
-  # subpath installation is broken with uvicorn >= 0.26
-  # https://github.com/NixOS/nixpkgs/issues/298719
-  # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
-
-      django-extensions = prev.django-extensions.overridePythonAttrs (_: {
-        # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
-        # probably because of django_5 but it is the latest version available and used like that in paperless-ngx
-        doCheck = false;
-      });
+      django = prev.django_5_1;
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -79,29 +69,27 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-yoTXlxXLcWD2DMxqjb02ZORJ+E0xE1DbZm1VL7vXM4g=";
+        fetcherVersion = 1;
+        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
-      nativeBuildInputs =
-        [
-          node-gyp
-          nodejs_20
-          pkg-config
-          pnpm.configHook
-          python3
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          xcbuild
-        ];
+      nativeBuildInputs = [
+        node-gyp
+        nodejs_20
+        pkg-config
+        pnpm.configHook
+        python3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
-      buildInputs =
-        [
-          pango
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          giflib
-          darwin.apple_sdk.frameworks.CoreText
-        ];
+      buildInputs = [
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        giflib
+      ];
 
       CYPRESS_INSTALL_BINARY = "0";
       NG_CLI_ANALYTICS = "false";
@@ -145,8 +133,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
-    if (( $NIX_BUILD_CORES > 4)); then
-      NIX_BUILD_CORES=4
+    if (( $NIX_BUILD_CORES > 3)); then
+      NIX_BUILD_CORES=3
     fi
     substituteInPlace pyproject.toml \
       --replace-fail '"--numprocesses=auto",' "" \
@@ -160,15 +148,8 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "celery"
     "django-allauth"
-    "django-extensions"
-    "drf-spectacular-sidecar"
-    "filelock"
-    "python-dotenv"
-    "rapidfuzz"
-    # TODO: https://github.com/NixOS/nixpkgs/pull/373099
-    "zxing-cpp"
+    "redis"
   ];
 
   dependencies =
@@ -179,8 +160,18 @@ python.pkgs.buildPythonApplication rec {
       channels-redis
       concurrent-log-handler
       dateparser
-      django_5
-      django-allauth
+      django
+      # django-allauth version 65.9.X not yet supported
+      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
+      (django-allauth.overrideAttrs (
+        new: prev: rec {
+          version = "65.7.0";
+          src = prev.src.override {
+            tag = version;
+            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+          };
+        }
+      ))
       django-auditlog
       django-celery-results
       django-compression-middleware
@@ -286,7 +277,7 @@ python.pkgs.buildPythonApplication rec {
   # manually managed in postPatch
   dontUsePytestXdist = false;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "src"
   ];
 
@@ -312,6 +303,9 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
     # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
     "test_convert"
+    # Favicon tests fail due to static file handling in the test environment
+    "test_favicon_view"
+    "test_favicon_view_missing_file"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -324,21 +318,21 @@ python.pkgs.buildPythonApplication rec {
       tesseract5
       ;
     nltkData = with nltk-data; [
-      punkt_tab
-      snowball_data
+      punkt-tab
+      snowball-data
       stopwords
     ];
     tests = { inherit (nixosTests) paperless; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       leona
       SuperSandro2000
       erikarvstedt

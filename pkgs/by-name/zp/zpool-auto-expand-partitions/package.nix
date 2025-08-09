@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-N1znZbJULEeNR4ABSrUtHHkmz08N+CZqX6Ni7jFzc4c=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xxTnNwqDlym4Bviek38PRUwmPKUSTnI9GOEYYyBxW+s=";
 
   preBuild = ''
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool that aims to expand all partitions in a specified zpool to fill the available space";
     homepage = "https://github.com/DeterminateSystems/zpool-auto-expand-partitions";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    teams = [ teams.determinatesystems ];
     mainProgram = "zpool_part_disks";
   };
 }

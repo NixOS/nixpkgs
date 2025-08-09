@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.30.0";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-i7MQqkVf+NZkmcf589BpLofwqc5KGxRNqdr1Go84M9A=";
+    hash = "sha256-YsyKCSSxg0THflzPVF9yRn1X2liVT5xNafeQej/pdyI=";
   };
 
   postPatch = ''
@@ -84,13 +84,13 @@ mkDerivation rec {
   # and no format arguments [-Werror=format-security]"
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
     mainProgram = "klayout";
-    license = with licenses; [ gpl2Plus ];
+    license = with lib.licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ ];
   };
 }

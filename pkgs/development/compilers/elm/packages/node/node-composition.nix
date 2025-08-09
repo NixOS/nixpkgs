@@ -5,7 +5,7 @@
     inherit system;
   },
   system ? builtins.currentSystem,
-  nodejs ? pkgs."nodejs_18",
+  nodejs ? pkgs."nodejs_20",
 }:
 
 let
@@ -18,7 +18,7 @@ let
       writeShellScript
       ;
     inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.cctools or pkgs.darwin.cctools else null;
+    libtool = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.cctools or pkgs.darwin.cctools else null;
   };
 in
 import ./node-packages.nix {

@@ -30,43 +30,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.8.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i0gVKk2nFQQGxvUI2zqPWL82SFJdNglAuZ5gNdNhg2M=";
+    hash = "sha256-zeyg/VdzcWbMXuCE1RELiyGg9mytfpNfIa911BwqqIA=";
   };
 
-  postPatch =
-    ''
-      patchShebangs genversion.sh
-      substituteInPlace cmake/XRootDConfig.cmake.in \
-        --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
-    ''
-    # Upstream started using an absolute path in an install's DESTINATION directive.
-    # This causes our build to fail in `fixupPhase` with:
-    #   Moving /nix/store/jbh4667k5zm74h9wv8y1j11x89cv6pnd-xrootd-5.8.0/include to /nix/store/6vnmipw8p1hc6cmkrsq9v1ay7j6iycq2-xrootd-5.8.0-dev/include
-    #   mv: cannot overwrite '/nix/store/6vnmipw8p1hc6cmkrsq9v1ay7j6iycq2-xrootd-5.8.0-dev/include/xrootd': Directory not empty
-    # Patch submitted upstream: https://github.com/xrootd/xrootd/pull/2478
-    + ''
-      substituteInPlace src/XrdPfc.cmake \
-        --replace-fail \
-        'DESTINATION ''${CMAKE_INSTALL_PREFIX}/include/xrootd/XrdPfc' \
-        'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}/xrootd/XrdPfc'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
-    '';
+  postPatch = ''
+    patchShebangs genversion.sh
+    substituteInPlace cmake/XRootDConfig.cmake.in \
+      --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
+  '';
 
   outputs = [
     "bin"
     "out"
     "dev"
     "man"
-  ] ++ lib.optional (externalEtc != null) "etc";
+  ]
+  ++ lib.optional (externalEtc != null) "etc";
 
   nativeBuildInputs = [
     cmake
@@ -75,53 +64,51 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      davix
-      curl
-      libkrb5
-      libuuid
-      libxcrypt
-      libxml2
-      openssl
-      readline
-      scitokens-cpp
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
-      fuse
-    ]
-    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-      isa-l # not available on Apple silicon
-      systemd # only available on specific non-static Linux platforms
-      voms # only available on Linux due to gsoap failing to build on Darwin
-    ];
+  buildInputs = [
+    davix
+    curl
+    libkrb5
+    libuuid
+    libxcrypt
+    libxml2
+    openssl
+    readline
+    scitokens-cpp
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
+    fuse
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    isa-l # not available on Apple silicon
+    systemd # only available on specific non-static Linux platforms
+    voms # only available on Linux due to gsoap failing to build on Darwin
+  ];
 
   # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=
-  postInstall =
-    ''
-      mkdir -p "$out/lib/tmpfiles.d"
-      install -m 644 -T ../packaging/rhel/xrootd.tmpfiles "$out/lib/tmpfiles.d/xrootd.conf"
-      mkdir -p "$out/etc/xrootd"
-      install -m 644 -t "$out/etc/xrootd" ../packaging/common/*.cfg
-      install -m 644 -t "$out/etc/xrootd" ../packaging/common/client.conf
-      mkdir -p "$out/etc/xrootd/client.plugins.d"
-      install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../packaging/common/client-plugin.conf.example
-      mkdir -p "$out/etc/logrotate.d"
-      install -m 644 -T ../packaging/common/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
-    ''
-    # Leaving those in bin/ leads to a cyclic reference between $dev and $bin
-    # This happens since https://github.com/xrootd/xrootd/commit/fe268eb622e2192d54a4230cea54c41660bd5788
-    # So far, this xrootd-config script does not seem necessary in $bin
-    + ''
-      moveToOutput "bin/xrootd-config" "$dev"
-      moveToOutput "bin/.xrootd-config-wrapped" "$dev"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p "$out/lib/systemd/system"
-      install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
-    '';
+  postInstall = ''
+    mkdir -p "$out/lib/tmpfiles.d"
+    install -m 644 -T ../packaging/rhel/xrootd.tmpfiles "$out/lib/tmpfiles.d/xrootd.conf"
+    mkdir -p "$out/etc/xrootd"
+    install -m 644 -t "$out/etc/xrootd" ../packaging/common/*.cfg
+    install -m 644 -t "$out/etc/xrootd" ../packaging/common/client.conf
+    mkdir -p "$out/etc/xrootd/client.plugins.d"
+    install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../packaging/common/client-plugin.conf.example
+    mkdir -p "$out/etc/logrotate.d"
+    install -m 644 -T ../packaging/common/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
+  ''
+  # Leaving those in bin/ leads to a cyclic reference between $dev and $bin
+  # This happens since https://github.com/xrootd/xrootd/commit/fe268eb622e2192d54a4230cea54c41660bd5788
+  # So far, this xrootd-config script does not seem necessary in $bin
+  + ''
+    moveToOutput "bin/xrootd-config" "$dev"
+    moveToOutput "bin/.xrootd-config-wrapped" "$dev"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p "$out/lib/systemd/system"
+    install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "XRootD_VERSION_STRING" finalAttrs.version)

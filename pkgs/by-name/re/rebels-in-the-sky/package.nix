@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -15,37 +14,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.0.29";
+  version = "1.0.30";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rWBaD4nxSmr1RZRbc51Sz9Xl2Te2yv4HNuFqWj8KayM=";
+    hash = "sha256-eC8n9g2kFErTRWWNo6jwAMGBX3+xGjtzq23+r3w0n0I=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZRxq6/mgXZ33o1AEHnSOt4HJAI1y+F+ysVNvvbb9M28=";
 
-  patches =
-    lib.optionals (!withRadio) [
-      ./disable-radio.patch
-    ]
-    ++ [
-      # https://github.com/ricott1/rebels-in-the-sky/pull/25
-      (fetchpatch {
-        url = "https://github.com/ricott1/rebels-in-the-sky/commit/31778fee783637fe8af09f71754f35c5d15b800a.patch";
-        hash = "sha256-PO/aY+fB72gQpxE5eaIP/s4xevfQ/Ac1TH5ZEKwpw1I=";
-      })
-    ];
+  cargoHash = "sha256-dGD0RpelENEWe9W/3CXUS2GhOXRaWhCoD8AI2n4mUfs=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  patches = lib.optionals (!withRadio) [
+    ./disable-radio.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   nativeCheckInputs = [

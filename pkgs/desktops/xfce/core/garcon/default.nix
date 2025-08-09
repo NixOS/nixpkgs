@@ -35,6 +35,6 @@ mkXfceDerivation {
       lgpl2Only
       fdl11Only
     ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

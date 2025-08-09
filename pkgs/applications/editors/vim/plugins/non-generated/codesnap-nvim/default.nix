@@ -9,12 +9,12 @@
   libuv,
 }:
 let
-  version = "1.6.1";
+  version = "1.6.3";
   src = fetchFromGitHub {
     owner = "mistricky";
     repo = "codesnap.nvim";
     tag = "v${version}";
-    hash = "sha256-OmSgrTYDtNb2plMyzjVvxGrfXB/lGKDpUQhpRqKfAMA=";
+    hash = "sha256-VHH1jQczzNFiH+5YflhU9vVCkEUoKciV/Z/n9DEZwiY=";
   };
   codesnap-lib = rustPlatform.buildRustPackage {
     pname = "codesnap-lib";
@@ -22,7 +22,6 @@ let
 
     sourceRoot = "${src.name}/generator";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-tg4BO4tPzHhJTowL7RiAuBo4i440FehpGmnz9stTxfI=";
 
     nativeBuildInputs = [

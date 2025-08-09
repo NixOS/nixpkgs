@@ -1,33 +1,45 @@
 {
   lib,
   stdenv,
-  nodejs,
-  pnpm_9,
+  pnpm_10,
+  nodejs_22,
   fetchFromGitHub,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.9";
+  version = "1.3.26";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WhPQ7JYfE8RBhDknBunKdW1VBxrklb3UGnMgk5LFVFA=";
+    hash = "sha256-NcwRidwb/ask65LE86os4RkhyoPQo5sLu0sJs/NboK4=";
   };
 
   nativeBuildInputs = [
-    nodejs
-    pnpm_9.configHook
+    nodejs_22
+    pnpm_10.configHook
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
 
-    hash = "sha256-KZFHcW/OVjTDXZltxPYGuO+NWjuD5o6HE/E9JQZmrG8=";
+    buildInputs = [ nodejs_22 ];
+
+    fetcherVersion = 2;
+    hash = "sha256-LUUpcC2eS8VvzguicIn9xsKql9w3533xxUJ+l7e7Anc=";
   };
+
+  env = {
+    NODE_ENV = "production";
+    MOONLIGHT_BRANCH = "stable";
+    MOONLIGHT_VERSION = "v${finalAttrs.version} (nixpkgs)";
+  };
+
+  patches = [
+    ./disable_updates.patch
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -55,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       All core code is original or used with permission from their respective authors where not copyleft.
     '';
     homepage = "https://moonlight-mod.github.io";
-    changelog = "https://github.com/moonlight-mod/moonlight/blob/main/CHANGELOG.md";
+    downloadPage = "https://moonlight-mod.github.io/using/install/#nix";
+    changelog = "https://raw.githubusercontent.com/moonlight-mod/moonlight/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
 
     license = licenses.lgpl3;
     maintainers = with maintainers; [

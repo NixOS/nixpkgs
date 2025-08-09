@@ -18,6 +18,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,25 +35,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r1sn9ck2MCc3IQDKwLrxkFUoBynfHMWN1ORU72mOsf8=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      gobject-introspection
-      python3
-      flex
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    python3
+    flex
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
   buildInputs = [
     bash-completion
     libxml2
     gst-devtools
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   propagatedBuildInputs = [

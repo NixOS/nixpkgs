@@ -5,8 +5,6 @@
   pkg-config,
   openssl,
   spade,
-  stdenv,
-  darwin,
   git,
 }:
 
@@ -21,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0H45kOIwFMdp+eIQJNutLUC/jEpWKsPfEZXDUOUa12g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fF+43tZzr6lxVovMCIaDwf9JKweqiMMR+BNojIqQREY=";
 
   preConfigure = ''
@@ -35,14 +32,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   nativeCheckInputs = [ git ];
 

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   cmake,
   just,
@@ -28,25 +27,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-UKg3TIpyaqtynk6wLFFPpv69F74hmqfMVPra2+iFbvE=";
+    hash = "sha256-rrPgCXl4uD4Gvstgj9Sdv6rB/0d8wa56CdBjAkTLQG8=";
   };
 
-  patches = [
-    # TODO: This is merged and will be included in the 7th Alpha release, remove it then.
-    (fetchpatch {
-      url = "https://github.com/pop-os/cosmic-settings/commit/2e2898b31fabcb3f3b561e6c4cea2aca9de9b284.patch";
-      hash = "sha256-ZGJlGmR6lZB697uQ+ZsjvisNbPKBlBdRK/Ti541ZdlE=";
-    })
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mf/Cw3/RLrCYgsk7JKCU2+oPn1VPbD+4JzkUmbd47m8=";
+  cargoHash = "sha256-7Aoy/okgFSwDU6jMYzTGtwPbK82yMgL5bnKBfBUD3vA=";
 
   nativeBuildInputs = [
     cmake
@@ -111,7 +102,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pop-os/cosmic-settings";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-settings";
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

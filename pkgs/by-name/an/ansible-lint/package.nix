@@ -1,37 +1,34 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   ansible,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "24.12.2";
-  format = "pyproject";
+  version = "25.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ansible_lint";
-    hash = "sha256-9jYwnE5/ck/BpUTfUpxMI1T1TPNe3hHXUDZq+xFYpGQ=";
+    hash = "sha256-mvz0GZl84f/FesqjpW83e86M7rnbEOarhP1WXQm+QIs=";
   };
 
   postPatch = ''
     # it is fine if lint tools are missing
     substituteInPlace conftest.py \
-      --replace "sys.exit(1)" ""
+      --replace-fail "sys.exit(1)" ""
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "ruamel.yaml"
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in
     ansible-core
     ansible-compat
@@ -48,20 +45,24 @@ python3.pkgs.buildPythonApplication rec {
     yamllint
   ];
 
+  pythonRelaxDeps = [ "ruamel.yaml" ];
+
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  nativeCheckInputs = with python3.pkgs; [
-    flaky
-    pytest-xdist
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      flaky
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
+      ansible
+    ];
 
   preCheck = ''
-    # ansible wants to write to $HOME and crashes if it can't
-    export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible ]}
-
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
     ln -rs src/ansiblelint/__main__.py src/ansiblelint/ansible-lint
@@ -88,12 +89,16 @@ python3.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Best practices checker for Ansible";
     mainProgram = "ansible-lint";
     homepage = "https://github.com/ansible/ansible-lint";
     changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sengaya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sengaya
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

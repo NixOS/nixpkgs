@@ -1,6 +1,5 @@
 {
   bzip2,
-  Cocoa,
   copyDesktopItems,
   curl,
   fetchFromGitHub,
@@ -35,7 +34,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     bzip2
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     luajit
     SDL2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 

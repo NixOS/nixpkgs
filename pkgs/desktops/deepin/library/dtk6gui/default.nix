@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/util/dsvgrenderer.cpp \
       --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
+    sed '1i#include <pwd.h>' \
+      -i 'src/kernel/dguiapplicationhelper.cpp'
   '';
 
   nativeBuildInputs = [
@@ -86,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6gui";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

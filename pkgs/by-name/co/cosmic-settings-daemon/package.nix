@@ -6,6 +6,7 @@
   pop-gtk-theme,
   adw-gtk3,
   pkg-config,
+  libpulseaudio,
   geoclue2-with-demo-agent,
   libinput,
   udev,
@@ -14,13 +15,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-DtwW6RxHnNh87Xu0NCULfUsHNzYU9tHtFKE9HO3rvME=";
+    hash = "sha256-vdhkE5CmgiGYg5TXxN7lLqxjv7apKEKvIscXFIzZfRc=";
   };
 
   postPatch = ''
@@ -30,12 +32,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lGzQBL9IXbPsaKeVHp34xkm5FnTxWvfw4wg3El4LZdA=";
+  cargoHash = "sha256-Dzv1SDeZFIa+LFQQ91lO7RBHldsjDnGf+R12Ln2WZwU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libinput
+    libpulseaudio
     udev
   ];
 
@@ -62,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Settings Daemon for the COSMIC Desktop Environment";
     mainProgram = "cosmic-settings-daemon";
     license = licenses.gpl3Only;
-    maintainers = teams.cosmic.members;
+    teams = [ teams.cosmic ];
     platforms = platforms.linux;
   };
 })

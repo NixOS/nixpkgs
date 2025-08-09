@@ -40,13 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
   version = "1.90.6";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withDocs [ "devdoc" ]
-    ++ lib.optionals withIntrospection [ "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocs [ "devdoc" ]
+  ++ lib.optionals withIntrospection [ "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -71,6 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://gitlab.freedesktop.org/upower/upower/-/commit/9ee76826bd41a5d3a377dfd6f5835f42ec50be9a.patch";
         hash = "sha256-E56iz/iHn+VM7Opo0a13A5nhnB9nf6C7Y1kyWzk4ZnU=";
       })
+      # Fix style issues in the udev rules file
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/upower/upower/-/commit/6f9d84694da56b317989b8c34250b60d833a4b29.patch";
+        hash = "sha256-xBUbf4qz9Llmw7CuKKMp/uPk7JqwjB4+p7z9kMOVRuE=";
+      })
     ];
 
   strictDeps = true;
@@ -79,65 +83,62 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      python3
-      docbook-xsl-nons
-      gettext
-      libxslt
-      makeWrapper
-      pkg-config
-      glib
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals withDocs [
-      gtk-doc
-    ]
-    ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+    docbook-xsl-nons
+    gettext
+    libxslt
+    makeWrapper
+    pkg-config
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withDocs [
+    gtk-doc
+  ]
+  ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      libgudev
-      libusb1
-      udev
-    ]
-    ++ lib.optionals withIntrospection [
-      # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
-      umockdev
+  buildInputs = [
+    libgudev
+    libusb1
+    udev
+  ]
+  ++ lib.optionals withIntrospection [
+    # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    umockdev
 
-      # For installed tests.
-      (python3.withPackages (pp: [
-        pp.dbus-python
-        pp.python-dbusmock
-        pp.pygobject3
-        pp.packaging
-      ]))
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ]
-    ++ lib.optionals useIMobileDevice [
-      libimobiledevice
-    ];
+    # For installed tests.
+    (python3.withPackages (pp: [
+      pp.dbus-python
+      pp.python-dbusmock
+      pp.pygobject3
+      pp.packaging
+    ]))
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ]
+  ++ lib.optionals useIMobileDevice [
+    libimobiledevice
+  ];
 
-  nativeCheckInputs =
-    [
-      libeatmydata
-    ]
-    ++ lib.optionals withIntrospection [
-      python3.pkgs.dbus-python
-      python3.pkgs.python-dbusmock
-      python3.pkgs.pygobject3
-      dbus
-      umockdev
-      python3.pkgs.packaging
-    ];
+  nativeCheckInputs = [
+    libeatmydata
+  ]
+  ++ lib.optionals withIntrospection [
+    python3.pkgs.dbus-python
+    python3.pkgs.python-dbusmock
+    python3.pkgs.pygobject3
+    dbus
+    umockdev
+    python3.pkgs.packaging
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -157,13 +158,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs src/linux/integration-test.py
     patchShebangs src/linux/unittest_inspector.py
 
     substituteInPlace src/linux/integration-test.py \
-      --replace "/usr/share/dbus-1" "$out/share/dbus-1"
+      --replace-fail "/usr/share/dbus-1" "$out/share/dbus-1"
   '';
 
   preCheck = ''
@@ -250,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "D-Bus service for power management";
     mainProgram = "upower";
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.26.0";
+  version = "2.30.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BKD8X4nPLyTtY0x06nCSRRK36XKucpnhvjJN8aZssUs=";
+    hash = "sha256-dwVgwEs1prEXOYuYlO1m5lJD5AKolW0Stj2HOZC+Y+o=";
   };
   patches = [ ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-tVTXlGO969qPR9/TbOJbDdOiwOI1PT11MvNYdLqgDlo=";
+    hash = "sha256-dap2t7nINWaTTahiPUFVkgAlkDuVt0w0mz13ycqwLcI=";
   };
 
   buildInputs = [
@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
+
+    patchShebangs scripts/utils/xlifftool.py
   '';
 
   cmakeFlags = [

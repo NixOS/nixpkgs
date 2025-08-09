@@ -5,6 +5,7 @@
 
   # build-system
   poetry-core,
+  setuptools,
 
   # dependencies
   jsonref,
@@ -28,18 +29,19 @@
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.25.0";
+  version = "2.44.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-Ri2oSfXScwFLwCHuWBRVut77O0ExK1vcVYg7XpRAugQ=";
+    hash = "sha256-vZTQE8UACMdMPPvNM2FVu+Sq9uJByt443N3ScNXsjGc=";
   };
 
   build-system = [
     poetry-core
+    setuptools
   ];
 
   dependencies = [
@@ -59,7 +61,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pillow"
-    "typer"
   ];
 
   pythonImportsCheck = [

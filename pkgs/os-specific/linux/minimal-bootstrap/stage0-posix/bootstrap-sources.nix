@@ -22,7 +22,7 @@ rec {
 
     Run the following command:
     ```
-    nix hash path $(nix build --print-out-paths -f '<nixpkgs>' make-minimal-bootstrap-sources)
+    nix --extra-experimental-features nix-command hash path $(nix build --print-out-paths -f '<nixpkgs>' make-minimal-bootstrap-sources)
     ```
 
     # Why do we need this `.nar` archive?

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-27mbIycenOk51PLQrAfU1cZcjiWddNtxoyC6Q9wxqFg=";
     fetchSubmodules = true;
   };
@@ -69,6 +69,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+
+    # can be removed again with next release, check is already in master
+    substituteInPlace module/scheduler/dpdk_governor/dpdk_governor.c \
+      --replace-fail "<rte_power.h>" " <rte_power_cpufreq.h>"
   '';
 
   enableParallelBuilding = true;

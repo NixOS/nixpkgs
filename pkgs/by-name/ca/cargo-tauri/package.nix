@@ -13,26 +13,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "2.4.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     tag = "tauri-cli-v${version}";
-    hash = "sha256-tUa3Hb2pDqjcQs8isu1PxI5nx4rUzB/rOep2hDsun1Q=";
+    hash = "sha256-0J55AvAvvqTVls4474GcgLPBtSC+rh8cXVKluMjAVBE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nwrKeCKrzwDOdRwkkuRMR91IbtPRxnSrJFyEW0W+1wA=";
+  cargoHash = "sha256-nkY1ydc2VewRwY+B5nR68mz8Ff3FK1KoHE4dLzNtPkY=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk4
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk4
+    webkitgtk_4_1
+  ];
 
   cargoBuildFlags = [ "--package tauri-cli" ];
   cargoTestFlags = cargoBuildFlags;

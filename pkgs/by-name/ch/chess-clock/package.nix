@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/chess-clock";
     license = lib.licenses.gpl3Plus;
     mainProgram = "chess-clock";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
   };
 }

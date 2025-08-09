@@ -236,7 +236,8 @@ let
             libtool
             pkg-config
             re2c
-          ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+          ]
+          ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -393,7 +394,7 @@ let
             homepage = "https://www.php.net/";
             license = licenses.php301;
             mainProgram = "php";
-            maintainers = teams.php.members;
+            teams = [ teams.php ];
             platforms = platforms.all;
             outputsToInstall = [
               "out"

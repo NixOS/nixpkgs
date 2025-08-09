@@ -15,18 +15,19 @@
   requests,
   setuptools,
   six,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.23.0";
+  version = "6.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${version}";
-    hash = "sha256-+nmCmO1vPnNgZJdZSWwapeFfckNXEcdc/129yaLygf8=";
+    hash = "sha256-401cw0V8FEEpiYISUdXrGBGmVkfIJd4+3fCrCwfS9cE=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -62,11 +64,17 @@ buildPythonPackage rec {
     "test_flush_interval"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Revisit this at the next version bump, issue open upstream
+    # See https://github.com/PostHog/posthog-python/issues/234
+    "posthog/test/ai/openai/test_openai.py"
+  ];
+
+  meta = {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
     changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -8,8 +8,6 @@
   openssl,
   sqlite,
   zstd,
-  stdenv,
-  darwin,
   cmake,
 
   nix-update-script,
@@ -43,7 +41,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoHash = "sha256-4Ma/17t+EmmjiYICBLhJifQez0dnwtjhlkmoQrAIG+s";
-  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     cmake
@@ -56,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 

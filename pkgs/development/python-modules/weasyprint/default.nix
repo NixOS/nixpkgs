@@ -1,39 +1,47 @@
 {
+  lib,
+  stdenv,
+  pkgs,
   buildPythonPackage,
-  cffi,
-  cssselect2,
-  fetchPypi,
-  flit-core,
+  fetchFromGitHub,
   fontconfig,
-  fonttools,
-  ghostscript,
   glib,
   harfbuzz,
-  lib,
   pango,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  cffi,
+  cssselect2,
+  fonttools,
   pillow,
   pydyf,
   pyphen,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
-  stdenv,
   tinycss2,
   tinyhtml5,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
+  replaceVars,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "65.0";
+  version = "65.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  __darwinAllowLocalNetworking = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "weasyprint";
-    hash = "sha256-PGed6Wp8hxrgDwjNHncgDzPipJ014gnHIRWTJ1eN+Yg=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "WeasyPrint";
+    tag = "v${version}";
+    hash = "sha256-iSeuRX1dnnrGZbcb1yTxOJPD5kgIWY6oz/0v02QJqSs=";
   };
 
   patches = [
@@ -58,13 +66,17 @@ buildPythonPackage rec {
     pyphen
     tinycss2
     tinyhtml5
-  ] ++ fonttools.optional-dependencies.woff;
+  ]
+  ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     pytest-cov-stub
     pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # needs the Ahem font (fails on macOS)
@@ -93,11 +105,6 @@ buildPythonPackage rec {
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
 
-  preCheck = ''
-    # Fontconfig wants to create a cache.
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
@@ -106,6 +113,6 @@ buildPythonPackage rec {
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

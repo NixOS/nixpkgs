@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pcre2,
   sqlite,
-  ncurses,
   readline,
   zlib,
   bzip2,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.12.4";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XS3/km2sJwRnWloLKu9X9z07+qBFRfUsaRpZVYjoclI=";
+    hash = "sha256-1TS954ysXqSuMEGdzc2b9HTJ+ic0qfyc35j8RFzjLWA=";
   };
 
   enableParallelBuilding = true;
@@ -42,34 +41,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      zlib
-      curl.dev
-      re2c
-    ]
-    ++ lib.optionals prqlSupport [
-      cargo
-      rustPlatform.cargoSetupHook
-      rustc
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    zlib
+    curl.dev
+    re2c
+  ]
+  ++ lib.optionals prqlSupport [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      ncurses
-      pcre2
-      readline
-      sqlite
-      curl
-      libarchive
-      libunistring
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gpm
-    ];
+  buildInputs = [
+    bzip2
+    pcre2
+    readline
+    sqlite
+    curl
+    libarchive
+    libunistring
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gpm
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = "${finalAttrs.src}/src/third-party/prqlc-c";
@@ -82,7 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
+  };
 
   meta = {
     homepage = "https://github.com/tstack/lnav";

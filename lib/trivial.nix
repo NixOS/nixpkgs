@@ -409,7 +409,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2411;
+    2505;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
@@ -439,7 +439,7 @@ in
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Warbler";
+  codeName = "Xantusia";
 
   /**
     Returns the current nixpkgs version suffix as string.

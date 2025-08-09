@@ -7,7 +7,6 @@
   xcodebuild,
   protobuf,
   boringssl,
-  darwin,
 }:
 let
   # boring-sys expects the static libraries in build/ instead of lib/
@@ -22,28 +21,26 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.67.4";
+  version = "0.76.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${version}";
-    hash = "sha256-s7vTzAOWKvGCkrWcxDcKptsmxvW5VxrF5X9Vfkjj1jA=";
+    hash = "sha256-411+ANwyqqUX11rxCzFvPhjMWviJ0CcQlkAiqNWs32w=";
   };
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wxBbq4WtqzHbdro+tm2hU6JVwTgC2X/Cx9po+ndgECg=";
+  cargoHash = "sha256-9W7u0fZgU0J03hT6D4BJPpIKn3dwf9yckJiwwNkyqUA=";
 
   cargoBuildFlags = [
     "-p"
@@ -54,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ niklaskorz ];
+    maintainers = with maintainers; [ pentane ];
   };
 }

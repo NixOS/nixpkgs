@@ -17,12 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dmadisetti";
-    repo = pname;
+    repo = "steam-tui";
     rev = version;
     sha256 = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/39MrHCdJGTBTZplQcwYk6zpaVFYHpRKHhZC1GTNysY=";
 
   nativeBuildInputs = [

@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoLibc,
   fetchurl,
   buildPackages,
   lib,
@@ -11,7 +11,7 @@
   nanoizeNewlib ? false,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "newlib";
   version = "4.5.0.20241231";
 
@@ -20,7 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-M/EmBeAFSWWZbCXBOCs+RjsK+ReZAB9buMBjDy7IyFI=";
   };
 
-  patches = lib.optionals nanoizeNewlib [
+  patches = [
+    (fetchpatch {
+      name = "0001-newlib-Fix-mips-libgloss-support.patch";
+      url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=8a8fb570d7c5310a03a34b3dd6f9f8bb35ee9f40";
+      hash = "sha256-hWS/X0jf/ZFXIR39NvNDVhkR8F81k9UWpsqDhZFxO5o=";
+    })
+  ]
+  ++ lib.optionals nanoizeNewlib [
     # https://bugs.gentoo.org/723756
     (fetchpatch {
       name = "newlib-3.3.0-no-nano-cxx.patch";
@@ -35,22 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # newlib expects CC to build for build platform, not host platform
-  preConfigure =
+  preConfigure = ''
+    export CC=cc
+  ''
+  +
+    # newlib tries to disable itself when building for Linux *except*
+    # when native-compiling.  Unfortunately the check for "is cross
+    # compiling" was written when newlib was part of GCC and newlib
+    # was built along with GCC (therefore newlib was built to execute
+    # on the targetPlatform, not the hostPlatform).  Unfortunately
+    # when newlib was extracted from GCC, this "is cross compiling"
+    # logic was not fixed.  So we must disable it.
     ''
-      export CC=cc
-    ''
-    +
-      # newlib tries to disable itself when building for Linux *except*
-      # when native-compiling.  Unfortunately the check for "is cross
-      # compiling" was written when newlib was part of GCC and newlib
-      # was built along with GCC (therefore newlib was built to execute
-      # on the targetPlatform, not the hostPlatform).  Unfortunately
-      # when newlib was extracted from GCC, this "is cross compiling"
-      # logic was not fixed.  So we must disable it.
-      ''
-        substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
-        substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
-      '';
+      substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
+      substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
+    '';
 
   configurePlatforms = [
     "build"
@@ -58,50 +64,49 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   # flags copied from https://community.arm.com/support-forums/f/compilers-and-libraries-forum/53310/gcc-arm-none-eabi-what-were-the-newlib-compilation-options
   # sort alphabetically
-  configureFlags =
-    [
-      "--with-newlib"
+  configureFlags = [
+    "--with-newlib"
 
-      # The newlib configury uses `host` to refer to the platform
-      # which is being used to compile newlib.  Ugh.  It does this
-      # because of its history: newlib used to be distributed with and
-      # built as part of gcc.
-      #
-      # To prevent nixpkgs from going insane, this package presents the
-      # "normal" view to the outside world: the binaries in $out will
-      # execute on `stdenv.hostPlatform`.  We then fool newlib's build
-      # process into doing the right thing.
-      "--host=${stdenv.targetPlatform.config}"
+    # The newlib configury uses `host` to refer to the platform
+    # which is being used to compile newlib.  Ugh.  It does this
+    # because of its history: newlib used to be distributed with and
+    # built as part of gcc.
+    #
+    # To prevent nixpkgs from going insane, this package presents the
+    # "normal" view to the outside world: the binaries in $out will
+    # execute on `stdenv.hostPlatform`.  We then fool newlib's build
+    # process into doing the right thing.
+    "--host=${stdenvNoLibc.targetPlatform.config}"
 
-    ]
-    ++ (
-      if !nanoizeNewlib then
-        [
-          "--disable-newlib-supplied-syscalls"
-          "--disable-nls"
-          "--enable-newlib-io-c99-formats"
-          "--enable-newlib-io-long-long"
-          "--enable-newlib-reent-check-verify"
-          "--enable-newlib-register-fini"
-          "--enable-newlib-retargetable-locking"
-        ]
-      else
-        [
-          "--disable-newlib-fseek-optimization"
-          "--disable-newlib-fvwrite-in-streamio"
-          "--disable-newlib-supplied-syscalls"
-          "--disable-newlib-unbuf-stream-opt"
-          "--disable-newlib-wide-orient"
-          "--disable-nls"
-          "--enable-lite-exit"
-          "--enable-newlib-global-atexit"
-          "--enable-newlib-nano-formatted-io"
-          "--enable-newlib-nano-malloc"
-          "--enable-newlib-reent-check-verify"
-          "--enable-newlib-reent-small"
-          "--enable-newlib-retargetable-locking"
-        ]
-    );
+  ]
+  ++ (
+    if !nanoizeNewlib then
+      [
+        "--disable-newlib-supplied-syscalls"
+        "--disable-nls"
+        "--enable-newlib-io-c99-formats"
+        "--enable-newlib-io-long-long"
+        "--enable-newlib-reent-check-verify"
+        "--enable-newlib-register-fini"
+        "--enable-newlib-retargetable-locking"
+      ]
+    else
+      [
+        "--disable-newlib-fseek-optimization"
+        "--disable-newlib-fvwrite-in-streamio"
+        "--disable-newlib-supplied-syscalls"
+        "--disable-newlib-unbuf-stream-opt"
+        "--disable-newlib-wide-orient"
+        "--disable-nls"
+        "--enable-lite-exit"
+        "--enable-newlib-global-atexit"
+        "--enable-newlib-nano-formatted-io"
+        "--enable-newlib-nano-malloc"
+        "--enable-newlib-reent-check-verify"
+        "--enable-newlib-reent-small"
+        "--enable-newlib-retargetable-locking"
+      ]
+  );
 
   enableParallelBuilding = true;
   dontDisableStatic = true;
@@ -129,8 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
     + ''[ "$(find $out -type f | wc -l)" -gt 0 ] || (echo '$out is empty' 1>&2 && exit 1)'';
 
   passthru = {
-    incdir = "/${stdenv.targetPlatform.config}/include";
-    libdir = "/${stdenv.targetPlatform.config}/lib";
+    incdir = "/${stdenvNoLibc.targetPlatform.config}/include";
+    libdir = "/${stdenvNoLibc.targetPlatform.config}/lib";
   };
 
   meta = with lib; {

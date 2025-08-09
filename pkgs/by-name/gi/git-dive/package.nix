@@ -6,8 +6,6 @@
   libgit2,
   oniguruma,
   zlib,
-  stdenv,
-  darwin,
   gitMinimal,
 }:
 
@@ -22,22 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sy2qNFn8JLE173HVWfFXBx21jcx4kpFMwi9a0m38lso=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qRF111ofiM8SNUjQfpDg75OPpJnP7fOqM8Ih3NQUdGY=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      oniguruma
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    oniguruma
+    zlib
+  ];
 
   nativeCheckInputs = [
     gitMinimal

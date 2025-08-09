@@ -5,7 +5,7 @@
 }:
 
 buildGoModule rec {
-  version = "1.8.0";
+  version = "1.9.0";
   pname = "drone-cli";
   revision = "v${version}";
 
@@ -13,10 +13,10 @@ buildGoModule rec {
     owner = "harness";
     repo = "drone-cli";
     rev = revision;
-    hash = "sha256-moxsGlm7Q9E0q9SZ2gZotn3tRbnbtwhDc9UNCCSb3pY=";
+    hash = "sha256-XE0myh+PAl8JhoUhEdjdCe52vQo3NuA8/v/x+v5zHK4=";
   };
 
-  vendorHash = "sha256-rKZq2vIXvw4bZ6FXPqOip9dLiV5rSb1fWDJe3oxOBjw=";
+  vendorHash = "sha256-22sefx/2iLvVzN+6wJ7kbDFAv10PQNmWbia+HFzmaW8=";
 
   # patch taken from https://patch-diff.githubusercontent.com/raw/harness/drone-cli/pull/179.patch
   # but with go.mod changes removed due to conflict

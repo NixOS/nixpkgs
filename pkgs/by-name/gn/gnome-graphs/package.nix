@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Graphs";
     license = licenses.gpl3Plus;
     mainProgram = "graphs";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = platforms.linux; # locale.bindtextdomain only available on linux
   };
 }

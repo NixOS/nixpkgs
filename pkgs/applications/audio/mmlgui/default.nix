@@ -9,8 +9,6 @@
   libX11,
   libXau,
   libXdmcp,
-  Carbon,
-  Cocoa,
   cppunit,
 }:
 
@@ -52,20 +50,15 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glfw
-      libvgm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-    ];
+  buildInputs = [
+    glfw
+    libvgm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXau
+    libXdmcp
+  ];
 
   checkInputs = [
     cppunit

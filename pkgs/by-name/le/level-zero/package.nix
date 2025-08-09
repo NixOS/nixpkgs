@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.20.2";
+  version = "1.22.4";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     tag = "v${version}";
-    hash = "sha256-IqnEjlKBB3nx2rOTBG+rrJ078z8+kkg52hFV2+5lJV0=";
+    hash = "sha256-9MZcxpRyr0YMLHKTgxqJnm72rAYLkTdrn7Egky8mM48=";
   };
 
   nativeBuildInputs = [
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime openvino;
   };
 
-  meta = with lib; {
+  meta = {
     description = "oneAPI Level Zero Specification Headers and Loader";
     homepage = "https://github.com/oneapi-src/level-zero";
     changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ziguana ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ziguana ];
   };
 }

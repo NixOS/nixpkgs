@@ -6,7 +6,6 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

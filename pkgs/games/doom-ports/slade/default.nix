@@ -8,7 +8,7 @@
   zip,
   wxGTK,
   gtk3,
-  sfml,
+  sfml_2,
   fluidsynth,
   curl,
   freeimage,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slade";
-  version = "3.2.6";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     rev = version;
-    hash = "sha256-pcWmv1fnH18X/S8ljfHxaL1PjApo5jyM8W+WYn+/7zI=";
+    hash = "sha256-+i506uzO2q/9k7en6CKs4ui9gjszrMOYwW+V9W5Lvns=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wxGTK
     gtk3
-    sfml
+    sfml_2
     fluidsynth
     curl
     freeimage
@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
-    license = licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

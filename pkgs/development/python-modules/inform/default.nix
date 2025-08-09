@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.33";
+  version = "1.35";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "inform";
     tag = "v${version}";
-    hash = "sha256-YX+YT3pocauIAsxsfIM+TchiXYMGYVwiE84NnXoZDqQ=";
+    hash = "sha256-FQc8R4MJ5RKJi70ADboy2Lw6IwLaI3hup60GcnPxV60=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -39,12 +39,13 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  disabledTests =
-    [ "test_prostrate" ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # doctest runs one more test than expected
-      "test_inform"
-    ];
+  disabledTests = [
+    "test_prostrate"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # doctest runs one more test than expected
+    "test_inform"
+  ];
 
   meta = with lib; {
     description = "Print and logging utilities";
@@ -54,7 +55,7 @@ buildPythonPackage rec {
       allow you to simply and cleanly print different types of messages.
     '';
     homepage = "https://inform.readthedocs.io";
-    changelog = "https://github.com/KenKundert/inform/blob/v${version}/doc/releases.rst";
+    changelog = "https://github.com/KenKundert/inform/blob/${src.tag}/doc/releases.rst";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jeremyschlatter ];
   };

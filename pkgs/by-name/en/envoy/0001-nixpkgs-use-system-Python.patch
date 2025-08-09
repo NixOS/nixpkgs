@@ -4,6 +4,7 @@ Date: Mon, 22 Apr 2024 11:52:59 +0200
 Subject: [PATCH] nixpkgs: use system Python
 
 Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
 ---
  bazel/python_dependencies.bzl |  9 ++++-----
  bazel/repositories_extra.bzl  | 17 +----------------

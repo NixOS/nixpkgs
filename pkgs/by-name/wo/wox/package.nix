@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   keybinder3,
   nodejs,
   pnpm_9,
@@ -22,31 +22,29 @@
 }:
 
 let
-  version = "2.0.0-beta.1";
+  version = "2.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-ghrvBOTR2v7i50OrwfwbwwFFF4uBQuEPxhXimdcFUJI=";
+    hash = "sha256-z/fVRs5mflBhkeTazK9zg5WTYqDpqiXWEcNepEHg2k8=";
   };
 
   metaCommon = {
     description = "Cross-platform launcher that simply works";
     homepage = "https://github.com/Wox-launcher/Wox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 
-  ui-flutter = flutter327.buildFlutterApplication {
+  ui-flutter = flutter332.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
     sourceRoot = "${src.name}/wox.ui.flutter/wox";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-    gitHashes.window_manager = "sha256-OGVrby09QsCvXnkLdEcCoZBO2z/LXY4xFBVdRHnvKEQ=";
 
     nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -76,6 +74,7 @@ let
         src
         sourceRoot
         ;
+      fetcherVersion = 1;
       hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
     };
 
@@ -155,7 +154,7 @@ buildGoModule {
       --replace-fail "Exec=%s" "Exec=wox"
   '';
 
-  vendorHash = "sha256-n3lTx1od4EvWdTSe3sIsUStp2qcuSWMqztJZoNLrzQg=";
+  vendorHash = "sha256-PW8upRPhv4UDnXvI+0b61c4jKkTrxzFuobF7x+qxY74=";
 
   proxyVendor = true;
 

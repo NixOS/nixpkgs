@@ -30,13 +30,14 @@ stdenv.mkDerivation rec {
       (lib.enableFeature true "simdoverride")
     ];
 
-  nativeBuildInputs =
-    [ autoreconfHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      autoSignDarwinBinariesHook
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    autoSignDarwinBinariesHook
+    fixDarwinDylibNames
+  ];
 
   meta = {
     homepage = "https://liquidsdr.org/";

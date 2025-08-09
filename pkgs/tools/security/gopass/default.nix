@@ -18,7 +18,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.15.15";
+  version = "1.15.16";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,10 +34,10 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = "gopass";
     rev = "v${version}";
-    hash = "sha256-GL0vnrNz9vcdybubYIjiK0tDH3L4lNWNo+rAAWv7d8o=";
+    hash = "sha256-oZeik172VBSxuO3DfD5t8cKPl3AYjlyEw5x4/7g9h6o=";
   };
 
-  vendorHash = "sha256-dDy7eQe/JtAsB+cPONiqUwcCsbisCLzY/5YQaH9w2Yg=";
+  vendorHash = "sha256-mfUt1H7eApxb05SXWS1Fa/kU6ppnZs3IXvO4Bt5aXLo=";
 
   subPackages = [ "." ];
 
@@ -57,17 +57,16 @@ buildGoModule rec {
     ++ lib.optional stdenv.hostPlatform.isLinux wl-clipboard
   );
 
-  postInstall =
-    ''
-      installManPage gopass.1
-      installShellCompletion --cmd gopass \
-        --zsh zsh.completion \
-        --bash bash.completion \
-        --fish fish.completion
-    ''
-    + lib.optionalString passAlias ''
-      ln -s $out/bin/gopass $out/bin/pass
-    '';
+  postInstall = ''
+    installManPage gopass.1
+    installShellCompletion --cmd gopass \
+      --zsh zsh.completion \
+      --bash bash.completion \
+      --fish fish.completion
+  ''
+  + lib.optionalString passAlias ''
+    ln -s $out/bin/gopass $out/bin/pass
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/gopass \

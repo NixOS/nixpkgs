@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "rancher";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-XpNs5D1hO+Vp+Qjoz//U7L9tAE6AwOrh08FE2G7Byv4=";
+    tag = "v${version}";
+    hash = "sha256-K0uMo/sRol2F02iV7b9NcmZcQGZ9iSEIdbZgT+Ea+/c=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-static"
   ];
 
-  vendorHash = "sha256-WVNdeICjhDyFzDtQjIdXnoHsiPEJp/NReCRXCuTYzcQ=";
+  vendorHash = "sha256-l+mrardcka7ETcriFZHTxU+LTXwwQoED9yIar0S2gHA=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher

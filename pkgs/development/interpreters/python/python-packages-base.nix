@@ -147,8 +147,5 @@ in
   python = toPythonModule python;
 
   # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
-  # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
-  pythonPackages = self // {
-    __attrsFailEvaluation = true;
-  };
+  pythonPackages = self;
 }

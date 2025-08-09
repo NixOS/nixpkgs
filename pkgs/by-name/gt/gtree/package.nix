@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gtree";
-  version = "1.11.3";
+  version = "1.11.8";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
     rev = "v${version}";
-    hash = "sha256-VGlSc0NMl1yMoqLyIwxJn1s24Uw2DAv4BO2hM/7ffXA=";
+    hash = "sha256-IBsfE0Y/LzXIaQdbXv1ZOslwj2U5fAhYIo67BixwDMY=";
   };
 
-  vendorHash = "sha256-F4obYTU8LNsrNZtgFSf1A1a2N5aG2U94cXr91uVJT4s=";
+  vendorHash = "sha256-jGFEKwe0eglsj3U2jdlfMKYsMvwSu/z0EX+heCKQP0c=";
 
   subPackages = [
     "cmd/gtree"

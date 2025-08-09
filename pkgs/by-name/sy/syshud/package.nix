@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2025-03-11";
+  version = "0-unstable-2025-07-26";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "6a90edad20437a1d933937a44a4e3553caeb248f";
-    hash = "sha256-Lmv75OaPOK+NxDe+7Xgf/NDvyms+zXn8tYThQJRxf9k=";
+    rev = "d954c124280b71f80930046a11e390a814c1b229";
+    hash = "sha256-FUPnIUl9x0eZmhls4CmPGg4kZb1MNmKU5BKecFDQdHM=";
   };
 
   postPatch = ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "simple heads up display written in gtkmm 4";
+    description = "Simple heads up display written in gtkmm 4";
     mainProgram = "syshud";
     homepage = "https://github.com/System64fumo/syshud";
     license = lib.licenses.wtfpl;

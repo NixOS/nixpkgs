@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.13";
+  version = "1.8.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -34,44 +34,43 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-pQtslK+kiu1bw3RFKReFr+HeCiv7R/X07n0faEquJQE=";
+    hash = "sha256-11P2L3/ePoKrqO2G65XJeDEB6lsC8h7oRyXzGRz18tg=";
   };
 
-  patches =
-    [
-      # Use nixpkgs version instead of versioneer
-      (replaceVars ./hardcode-version.patch {
-        inherit version;
-      })
+  patches = [
+    # Use nixpkgs version instead of versioneer
+    (replaceVars ./hardcode-version.patch {
+      inherit version;
+    })
 
-      # Fix importing debugpy in:
-      # - test_nodebug[module-launch(externalTerminal)]
-      # - test_nodebug[module-launch(integratedTerminal)]
-      #
-      # NOTE: The import failures seen in these tests without the patch
-      # will be seen if a user "installs" debugpy by adding it to PYTHONPATH.
-      # To avoid this issue, debugpy should be installed using python.withPackages:
-      # python.withPackages (ps: with ps; [ debugpy ])
-      ./fix-test-pythonpath.patch
+    # Fix importing debugpy in:
+    # - test_nodebug[module-launch(externalTerminal)]
+    # - test_nodebug[module-launch(integratedTerminal)]
+    #
+    # NOTE: The import failures seen in these tests without the patch
+    # will be seen if a user "installs" debugpy by adding it to PYTHONPATH.
+    # To avoid this issue, debugpy should be installed using python.withPackages:
+    # python.withPackages (ps: with ps; [ debugpy ])
+    ./fix-test-pythonpath.patch
 
-      # Attach pid tests are disabled by default on windows & macos,
-      # but are also flaky on linux:
-      # - https://github.com/NixOS/nixpkgs/issues/262000
-      # - https://github.com/NixOS/nixpkgs/issues/251045
-      ./skip-attach-pid-tests.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Hard code GDB path (used to attach to process)
-      (replaceVars ./hardcode-gdb.patch {
-        inherit gdb;
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Hard code LLDB path (used to attach to process)
-      (replaceVars ./hardcode-lldb.patch {
-        inherit lldb;
-      })
-    ];
+    # Attach pid tests are disabled by default on windows & macos,
+    # but are also flaky on linux:
+    # - https://github.com/NixOS/nixpkgs/issues/262000
+    # - https://github.com/NixOS/nixpkgs/issues/251045
+    ./skip-attach-pid-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Hard code GDB path (used to attach to process)
+    (replaceVars ./hardcode-gdb.patch {
+      inherit gdb;
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hard code LLDB path (used to attach to process)
+    (replaceVars ./hardcode-lldb.patch {
+      inherit lldb;
+    })
+  ];
 
   # Compile attach library for host platform
   # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
@@ -84,8 +83,9 @@ buildPythonPackage rec {
             "x86_64-linux" = "-shared -o attach_linux_amd64.so";
             "i686-linux" = "-shared -o attach_linux_x86.so";
             "aarch64-linux" = "-shared -o attach_linux_arm64.so";
-            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
-            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
+            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
           }
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
         }
@@ -115,15 +115,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck =
-    ''
-      export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
-      export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
-      export no_proxy='*';
-    '';
+  preCheck = ''
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
+  '';
 
   postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
@@ -154,6 +153,7 @@ buildPythonPackage rec {
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
   };
 }

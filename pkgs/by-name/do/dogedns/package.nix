@@ -7,7 +7,6 @@
   pkg-config,
   openssl,
   pandoc,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3wOka+MKSy2x3100eF0d9A5Jc0qFSNCiLsisHO1Uldc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9Qm93Hmxutmg3oCXSVrCUAYA2W4gXR/LPC5zZ34x5jQ=";
 
   patches = [
@@ -44,10 +42,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pandoc
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   postInstall = ''
     installShellCompletion completions/doge.{bash,fish,zsh}

@@ -1,0 +1,23 @@
+From f822ffa9f886b668fe0a6269f0ba8bf48043d190 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Sun, 22 Jun 2025 14:12:08 +0100
+Subject: [PATCH 4/4] Don't attempt to install a non-existent Makefile
+
+---
+ demos/ntv2overlay/CMakeLists.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/demos/ntv2overlay/CMakeLists.txt b/demos/ntv2overlay/CMakeLists.txt
+index 4520e795..ae94906f 100644
+--- a/demos/ntv2overlay/CMakeLists.txt
++++ b/demos/ntv2overlay/CMakeLists.txt
+@@ -48,6 +48,3 @@ endif()
+ if (AJA_INSTALL_CMAKE)
+ 	install(FILES CMakeLists.txt DESTINATION ${CMAKE_INSTALL_PREFIX}/libajantv2/demos/ntv2overlay)
+ endif()
+-if (AJA_INSTALL_MISC)
+-	install(FILES Makefile DESTINATION ${CMAKE_INSTALL_PREFIX}/libajantv2/demos/ntv2overlay)
+-endif()
+-- 
+2.49.0
+

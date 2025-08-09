@@ -24,6 +24,7 @@
   python3,
   nixosTests,
   wayland-scanner,
+  udevCheckHook,
 }:
 
 let
@@ -49,7 +50,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.27.1";
+  version = "1.28.1";
 
   outputs = [
     "bin"
@@ -62,46 +63,45 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-3U+2a/uSoSj1t34uz7xO2QQtJExygKOhBL7BUGP0Fbo=";
+    hash = "sha256-kte5BzGEz7taW/ccnxmkJjXn3FeikzuD6Hm10l+X7c0=";
   };
 
   patches = [
     ./udev-absolute-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-    ]
-    ++ lib.optionals documentationSupport [
-      doxygen
-      graphviz
-      sphinx-build
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    udevCheckHook
+  ]
+  ++ lib.optionals documentationSupport [
+    doxygen
+    graphviz
+    sphinx-build
+  ];
 
-  buildInputs =
-    [
-      libevdev
-      mtdev
-      libwacom
-      (python3.withPackages (
-        pp: with pp; [
-          pp.libevdev # already in scope
-          pyudev
-          pyyaml
-          setuptools
-        ]
-      ))
-    ]
-    ++ lib.optionals eventGUISupport [
-      # GUI event viewer
-      cairo
-      glib
-      gtk3
-      wayland-scanner
-    ];
+  buildInputs = [
+    libevdev
+    mtdev
+    libwacom
+    (python3.withPackages (
+      pp: with pp; [
+        pp.libevdev # already in scope
+        pyudev
+        pyyaml
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals eventGUISupport [
+    # GUI event viewer
+    cairo
+    glib
+    gtk3
+    wayland-scanner
+  ];
 
   propagatedBuildInputs = [
     udev
@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs \
@@ -147,7 +149,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    maintainers = with maintainers; [ codyopel ];
+    teams = [ teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

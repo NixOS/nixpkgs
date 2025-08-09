@@ -4,26 +4,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
-    repo = pname;
+    repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-adSBFH5nGVPo7OBMak6rN5HA5uMKZCqnIVXBnR7REgQ=";
+    hash = "sha256-FIPU2D0e0JGcoxFKe5gf5nKZ0T/a18WS9I+LXeig1is=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     requests
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "sharkiq" ];
@@ -31,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Shark IQ robots";
     homepage = "https://github.com/JeffResc/sharkiq";
+    changelog = "https://github.com/JeffResc/sharkiq/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

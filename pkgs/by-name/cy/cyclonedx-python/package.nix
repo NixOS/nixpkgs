@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cyclonedx-python";
-  version = "5.3.0";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
     tag = "v${version}";
-    hash = "sha256-H3r/ypD3aEkrCnclf+zh0BK4ZzDQBMNvWS7V7xKX43g=";
+    hash = "sha256-hC+C85hdlHVhVcMLS9+gEvG+DohyxiBrjCApYnf6O/4=";
   };
 
   build-system = with python3Packages; [ poetry-core ];
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
     changelog = "https://github.com/CycloneDX/cyclonedx-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.cyberus.members;
+    teams = [ lib.teams.cyberus ];
     mainProgram = "cyclonedx-py";
   };
 }

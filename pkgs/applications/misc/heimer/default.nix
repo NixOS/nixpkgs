@@ -27,13 +27,13 @@ mkDerivation rec {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple cross-platform mind map and note-taking tool written in Qt";
     mainProgram = "heimer";
     homepage = "https://github.com/juzzlin/Heimer";
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

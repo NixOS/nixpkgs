@@ -9,6 +9,7 @@
   libxml2,
   libxslt,
   ncurses,
+  nix-update-script,
   openssl,
   perl,
   runtimeShell,
@@ -23,11 +24,6 @@
   wxSupport ? true,
   # systemd support for epmd
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  # updateScript deps
-  writeScript,
-  common-updater-scripts,
-  coreutils,
-  git,
   wrapGAppsHook3,
   zlib,
 }:
@@ -104,6 +100,7 @@ let
     ;
   wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
 
+  major = builtins.head (builtins.splitVersion version);
 in
 stdenv.mkDerivation (
   {
@@ -129,52 +126,51 @@ stdenv.mkDerivation (
     ];
 
     env = {
-      # only build shell/IDE docs and man pages
-      DOC_TARGETS = "chunks man";
+      # only build man pages and shell/IDE docs
+      DOC_TARGETS = "man chunks";
     };
 
-    buildInputs =
-      [
-        ncurses
-        opensslPackage
-        zlib
-      ]
-      ++ optionals wxSupport wxPackages2
-      ++ optionals odbcSupport odbcPackages
-      ++ optionals javacSupport javacPackages
-      ++ optional systemdSupport systemd;
+    buildInputs = [
+      ncurses
+      opensslPackage
+      zlib
+    ]
+    ++ optionals wxSupport wxPackages2
+    ++ optionals odbcSupport odbcPackages
+    ++ optionals javacSupport javacPackages
+    ++ optional systemdSupport systemd;
 
     debugInfo = enableDebugInfo;
 
     # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
     enableParallelBuilding = parallelBuild;
 
-    postPatch =
-      ''
-        patchShebangs make
+    postPatch = ''
+      patchShebangs make
 
-        ${postPatch}
-      ''
-      + optionalString (lib.versionOlder "25" version) ''
-        substituteInPlace lib/os_mon/src/disksup.erl \
-          --replace-fail '"sh ' '"${runtimeShell} '
-      '';
+      ${postPatch}
+    ''
+    + optionalString (lib.versionOlder "25" version) ''
+      substituteInPlace lib/os_mon/src/disksup.erl \
+        --replace-fail '"sh ' '"${runtimeShell} '
+    '';
 
-    configureFlags =
-      [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
-      ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
-      ++ optional enableThreads "--enable-threads"
-      ++ optional enableSmpSupport "--enable-smp-support"
-      ++ optional enableKernelPoll "--enable-kernel-poll"
-      ++ optional enableHipe "--enable-hipe"
-      ++ optional javacSupport "--with-javac"
-      ++ optional odbcSupport "--with-odbc=${unixODBC}"
-      ++ optional wxSupport "--enable-wx"
-      ++ optional systemdSupport "--enable-systemd"
-      ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
-      # make[3]: *** [yecc.beam] Segmentation fault: 11
-      ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
-      ++ configureFlags;
+    configureFlags = [
+      "--with-ssl=${lib.getOutput "out" opensslPackage}"
+    ]
+    ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
+    ++ optional enableThreads "--enable-threads"
+    ++ optional enableSmpSupport "--enable-smp-support"
+    ++ optional enableKernelPoll "--enable-kernel-poll"
+    ++ optional enableHipe "--enable-hipe"
+    ++ optional javacSupport "--with-javac"
+    ++ optional odbcSupport "--with-odbc=${unixODBC}"
+    ++ optional wxSupport "--enable-wx"
+    ++ optional systemdSupport "--enable-systemd"
+    ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
+    # make[3]: *** [yecc.beam] Segmentation fault: 11
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
+    ++ configureFlags;
 
     # install-docs will generate and install manpages and html docs
     # (PDFs are generated only when fop is available).
@@ -201,30 +197,14 @@ stdenv.mkDerivation (
     '';
 
     passthru = {
-      updateScript =
-        let
-          major = builtins.head (builtins.splitVersion version);
-        in
-        writeScript "update.sh" ''
-          #!${stdenv.shell}
-          set -ox errexit
-          PATH=${
-            lib.makeBinPath [
-              common-updater-scripts
-              coreutils
-              git
-              gnused
-            ]
-          }
-          latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
-          if [ "$latest" != "${version}" ]; then
-            nixpkgs="$(git rev-parse --show-toplevel)"
-            nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
-            update-source-version ${baseName}_${major} "$latest" --version-key=version --print-changes --file="$nix_file"
-          else
-            echo "${baseName}R${major} is already up-to-date"
-          fi
-        '';
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "OTP-(${major}.*)"
+          "--override-filename"
+          "pkgs/development/interpreters/erlang/${major}.nix"
+        ];
+      };
     };
 
     meta =
@@ -245,7 +225,7 @@ stdenv.mkDerivation (
           '';
 
           platforms = platforms.unix;
-          maintainers = teams.beam.members;
+          teams = [ teams.beam ];
           license = licenses.asl20;
         }
         // meta

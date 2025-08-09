@@ -62,19 +62,17 @@ buildPythonPackage rec {
     "lib/openjpeg"
   ];
 
-  pytestFlagsArray = [ "openjpeg/tests" ];
+  enabledTestPaths = [ "openjpeg/tests" ];
 
   pythonImportsCheck = [ "openjpeg" ];
 
   meta = {
-    description = "A J2K and JP2 plugin for pylibjpeg";
+    description = "J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/v${version}";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    # x86-linux: test_encode.py::TestEncodeBuffer failures
-    # darwin: numerous test failures, seemingly due to issues setting up test data
-    broken =
-      (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+    # darwin: numerous test failures, test dependency pydicom is marked as unsupported
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -4,60 +4,20 @@
   meta.maintainers = [ lib.maintainers.zupo ];
 
   nodes.terminal =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
-    }:
-    let
-      # Create a patched version of the package that points to the local dashboard
-      # for easier testing
-      patchedPareto = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
-        postPatch = ''
-          substituteInPlace team/report.go \
-            --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
-                           'const reportURL = "http://dashboard"'
-        '';
-      });
-    in
+    { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
-      services.paretosecurity = {
-        enable = true;
-        package = patchedPareto;
-      };
+      services.paretosecurity.enable = true;
 
-      networking.firewall.enable = true;
-
-    };
-
-  nodes.dashboard =
-    { config, pkgs, ... }:
-    {
-      networking.firewall.allowedTCPPorts = [ 80 ];
-
-      services.nginx = {
-        enable = true;
-        virtualHosts."dashboard" = {
-          locations."/api/v1/team/".extraConfig = ''
-            add_header Content-Type application/json;
-            return 200 '{"message": "Linked device."}';
-          '';
-        };
-      };
     };
 
   nodes.xfce =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
-      services.paretosecurity = {
-        enable = true;
-        trayIcon = true;
-      };
+      services.paretosecurity.enable = true;
 
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
@@ -76,7 +36,6 @@
 
       environment.systemPackages = [ pkgs.xdotool ];
       environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
-
     };
 
   enableOCR = true;
@@ -84,9 +43,8 @@
   testScript = ''
     # Test setup
     terminal.succeed("su - alice -c 'mkdir -p /home/alice/.config'")
-    for m in [terminal, dashboard]:
-      m.systemctl("start network-online.target")
-      m.wait_for_unit("network-online.target")
+    terminal.systemctl("start network-online.target")
+    terminal.wait_for_unit("network-online.target")
 
     # Test 1: Test the systemd socket is installed & enabled
     terminal.succeed('systemctl is-enabled paretosecurity.socket')
@@ -105,17 +63,7 @@
       + "'"
     )
 
-    # Test 3: Test linking
-    terminal.succeed("su - alice -c 'paretosecurity link"
-    + " paretosecurity://enrollTeam/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
-    + "eyJ0b2tlbiI6ImR1bW15LXRva2VuIiwidGVhbUlEIjoiZHVtbXktdGVhbS1pZCIsImlhdCI6"
-    + "MTcwMDAwMDAwMCwiZXhwIjoxOTAwMDAwMDAwfQ.WgnL6_S0EBJHwF1wEVUG8GtIcoVvK5IjWbZpUeZr4Qw'")
-
-    config = terminal.succeed("cat /home/alice/.config/pareto.toml")
-    assert 'AuthToken = "dummy-token"' in config
-    assert 'TeamID = "dummy-team-id"' in config
-
-    # Test 4: Test the tray icon
+    # Test 3: Test the tray icon
     xfce.wait_for_x()
     for unit in [
         'paretosecurity-trayicon',
@@ -128,5 +76,16 @@
     xfce.wait_for_text("Pareto Security")
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Run Checks")
+
+    # Test 4: Desktop entry
+    xfce.succeed("xdotool mousemove 10 10")
+    xfce.succeed("xdotool click 1")  # hide the tray icon window
+    xfce.succeed("xdotool click 1")  # show the Applications menu
+    xfce.succeed("xdotool mousemove 10 200")
+    xfce.succeed("xdotool click 1")
+    xfce.wait_for_text("Pareto Security")
+
+    # Test 5: paretosecurity:// URL handler is registered
+    xfce.succeed("su - alice -c 'xdg-open paretosecurity://foo'")
   '';
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "havoc";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ii8";
     repo = "havoc";
     rev = finalAttrs.version;
-    hash = "sha256-YCZdAlIDptVLMUko40gfp2BCAbhGNsYyVTDB14VTNSE=";
+    hash = "sha256-Hn0HrAgxrkfN+iXAt+C4rOd3/Z+ZKFVk3GGNgVtro7A=";
   };
 
   depsBuildBuild = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     mainProgram = "havoc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ videl ];
     inherit (wayland.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # fatal error: 'sys/epoll.h' file not found
   };

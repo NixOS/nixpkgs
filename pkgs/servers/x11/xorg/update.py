@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure --keep NIX_PATH -i python3 -p nix git "python3.withPackages (ps: [ ps. packaging ps.beautifulsoup4 ps.requests ])"
+#!nix-shell --pure --keep NIX_PATH -i python3 -p nix git nixfmt-rfc-style "python3.withPackages (ps: [ ps. packaging ps.beautifulsoup4 ps.requests ])"
 
 # Usage: Run ./update.py from the directory containing tarballs.list. The script checks for the
 # latest versions of all packages, updates the expressions if any update is found, and commits
@@ -92,6 +92,10 @@ with open("./tarballs.list", "w") as f:
 print("Generating updated expr (slow)...")
 
 subprocess.run(["./generate-expr-from-tarballs.pl", "tarballs.list"], check=True)
+
+print("Formatting generated expr...")
+
+subprocess.run(["nixfmt", "default.nix"], check=True)
 
 print("Committing...")
 

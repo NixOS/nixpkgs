@@ -2,7 +2,7 @@
   lib,
   stdenv,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
   gobject-introspection,
@@ -15,52 +15,68 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.8.5";
+  version = "1.8.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "pympress";
-    hash = "sha256-Kb05EV0F8lTamTq7pC1UoOkYf04s58NjMksVE2xTC/Y=";
+  src = fetchFromGitHub {
+    owner = "cimbali";
+    repo = "pympress";
+    tag = "v${version}";
+    hash = "sha256-rIlYd5SMWYeqdMHyW3d1ggKnUMCJCDP5uw25d7zG2DU=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+    babel
+  ];
+
+  patches = [
+    # Workaround for a bug on Python >= 3.13+ and pygobject < 3.51.
+    # This can go away once nixpkgs is using pygobject >= 3.51.
+    # See <https://github.com/Cimbali/pympress/issues/330> for details.
+    ./issue-330-gprops-iter-actually-iterable.patch
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      watchdog
+      pycairo
+      pygobject3
+    ]
+    ++ lib.optional withVLC [
+      python-vlc
+    ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      gtk3
-      poppler_gi
-    ]
-    ++ lib.optionals withGstreamer [
-      libcanberra-gtk3
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-      gst_all_1.gst-libav
-      gst_all_1.gst-vaapi
-    ];
-
-  propagatedBuildInputs =
-    with python3Packages;
-    [
-      pycairo
-      pygobject3
-      setuptools
-      watchdog
-    ]
-    ++ lib.optional withVLC python-vlc;
+  buildInputs = [
+    gtk3
+    poppler_gi
+  ]
+  ++ lib.optionals withGstreamer [
+    libcanberra-gtk3
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-vaapi
+  ];
 
   doCheck = false; # there are no tests
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pympress" ];
+
+  meta = {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";
     mainProgram = "pympress";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://cimbali.github.io/pympress/";
-    maintainers = [ maintainers.tbenst ];
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

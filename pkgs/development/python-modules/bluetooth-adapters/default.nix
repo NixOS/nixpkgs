@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.21.4";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     tag = "v${version}";
-    hash = "sha256-JUh4v9YeqMeecJh/eTpmLMwNsxbc/oqZY2CrEJUO418=";
+    hash = "sha256-0WZ6M/e5HLG1jS635Ir9eSGUW/2+YdU0tfszt+gM/qo=";
   };
 
   outputs = [
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-adapters";
     changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

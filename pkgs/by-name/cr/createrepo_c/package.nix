@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rpm-software-management.github.io/createrepo_c/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

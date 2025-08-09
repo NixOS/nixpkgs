@@ -19,10 +19,10 @@
   wcmatch,
 
   # test
+  mercurial,
   gitMinimal,
   freezegun,
-  pre-commit,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-localserver,
   pytest-mock,
   pytestCheckHook,
@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.0.2";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-V5eFh2ne7ivtTH46QAxG0YPE0JN/W7Dt2fbf085hBVM=";
+    hash = "sha256-eDkjnV84btrT7U96svba7EhuJyTxF4a5ZtLekEGzbus=";
   };
 
   build-system = [
@@ -66,10 +66,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    mercurial
     gitMinimal
     freezegun
-    pre-commit
-    pytest-cov
+    pytest-cov-stub
     pytest-localserver
     pytest-mock
     pytestCheckHook
@@ -91,7 +91,7 @@ buildPythonPackage rec {
       by the correct increment and optionally commit and tag the changes.
     '';
     homepage = "https://github.com/callowayproject/bump-my-version";
-    changelog = "https://github.com/callowayproject/bump-my-version/tag/${version}";
+    changelog = "https://github.com/callowayproject/bump-my-version/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daspk04 ];
     mainProgram = "bump-my-version";

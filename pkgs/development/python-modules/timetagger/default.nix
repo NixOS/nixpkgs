@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "24.12.2";
+  version = "25.06.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "almarklein";
-    repo = pname;
+    repo = "timetagger";
     tag = "v${version}";
-    hash = "sha256-YzMVjIsi7MGIwt828xE3FYobrh9CUz5FqCIogXjmOcM=";
+    hash = "sha256-fuZj4DoqtgIcRd/u7l0GsWqmuLEgF3BW5gN5wY8FdK0=";
   };
 
   propagatedBuildInputs = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     description = "Library to interact with TimeTagger";
     mainProgram = "timetagger";
     homepage = "https://github.com/almarklein/timetagger";
-    changelog = "https://github.com/almarklein/timetagger/releases/tag/v${version}";
+    changelog = "https://github.com/almarklein/timetagger/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ matthiasbeyer ];
   };

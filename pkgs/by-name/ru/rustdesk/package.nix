@@ -29,7 +29,6 @@
   zlib,
   zstd,
   stdenv,
-  darwin,
   alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
@@ -119,48 +118,35 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Checks require an active X server
   doCheck = false;
 
-  buildInputs =
-    [
-      atk
-      bzip2
-      cairo
-      dbus
-      gdk-pixbuf
-      glib
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      gtk3
-      libgit2
-      libpulseaudio
-      libsodium
-      libXtst
-      libvpx
-      libyuv
-      libopus
-      libaom
-      libxkbcommon
-      pam
-      pango
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreAudio
-        CoreFoundation
-        CoreGraphics
-        Foundation
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      xdotool
-    ];
+  buildInputs = [
+    atk
+    bzip2
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    gtk3
+    libgit2
+    libpulseaudio
+    libsodium
+    libXtst
+    libvpx
+    libyuv
+    libopus
+    libaom
+    libxkbcommon
+    pam
+    pango
+    zlib
+    zstd
+  ]
+
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    xdotool
+  ];
 
   # Add static ui resources and libsciter to same folder as binary so that it
   # can find them.

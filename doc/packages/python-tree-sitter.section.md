@@ -7,16 +7,20 @@ Python bindings for Tree Sitter grammars are provided through the [py-tree-sitte
 For example, to experiment with the Rust grammar, you can create a shell environment with the following configuration:
 
 ```nix
-{ pkgs ? <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 pkgs.mkShell {
   name = "py-tree-sitter-dev-shell";
 
   buildInputs = with pkgs; [
-    (python3.withPackages (ps: with ps; [
-      tree-sitter
-      tree-sitter-grammars.tree-sitter-rust
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        tree-sitter
+        tree-sitter-grammars.tree-sitter-rust
+      ]
+    ))
   ];
 }
 ```

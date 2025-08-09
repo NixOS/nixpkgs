@@ -28,18 +28,17 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [ ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      flex
-      pkg-config
-      python3
-      python3.pkgs.setuptools
-    ]
-    ++ lib.optionals (!static) [
-      python3.pkgs.twisted
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    pkg-config
+    python3
+    python3.pkgs.setuptools
+  ]
+  ++ lib.optionals (!static) [
+    python3.pkgs.twisted
+  ];
 
   buildInputs = [
     boost
@@ -93,45 +92,43 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_JAVASCRIPT:BOOL=OFF"
-      "-DBUILD_NODEJS:BOOL=OFF"
+  cmakeFlags = [
+    "-DBUILD_JAVASCRIPT:BOOL=OFF"
+    "-DBUILD_NODEJS:BOOL=OFF"
 
-      # FIXME: Fails to link in static mode with undefined reference to
-      # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
-      "-DBUILD_TESTING:BOOL=${if static then "OFF" else "ON"}"
-    ]
-    ++ lib.optionals static [
-      "-DWITH_STATIC_LIB:BOOL=ON"
-      "-DOPENSSL_USE_STATIC_LIBS=ON"
-    ];
+    # FIXME: Fails to link in static mode with undefined reference to
+    # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
+    "-DBUILD_TESTING:BOOL=${if static then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals static [
+    "-DWITH_STATIC_LIB:BOOL=ON"
+    "-DOPENSSL_USE_STATIC_LIBS=ON"
+  ];
 
-  disabledTests =
-    [
-      "PythonTestSSLSocket"
-      "PythonThriftTNonblockingServer"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Tests that hang up in the Darwin sandbox
-      "SecurityTest"
-      "SecurityFromBufferTest"
-      "python_test"
+  disabledTests = [
+    "PythonTestSSLSocket"
+    "PythonThriftTNonblockingServer"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests that hang up in the Darwin sandbox
+    "SecurityTest"
+    "SecurityFromBufferTest"
+    "python_test"
 
-      # fails on hydra, passes locally
-      "concurrency_test"
+    # fails on hydra, passes locally
+    "concurrency_test"
 
-      # Tests that fail in the Darwin sandbox when trying to use network
-      "UnitTests"
-      "TInterruptTest"
-      "TServerIntegrationTest"
-      "processor"
-      "TNonblockingServerTest"
-      "TNonblockingSSLServerTest"
-      "StressTest"
-      "StressTestConcurrent"
-      "StressTestNonBlocking"
-    ];
+    # Tests that fail in the Darwin sandbox when trying to use network
+    "UnitTests"
+    "TInterruptTest"
+    "TServerIntegrationTest"
+    "processor"
+    "TNonblockingServerTest"
+    "TNonblockingSSLServerTest"
+    "StressTest"
+    "StressTestConcurrent"
+    "StressTestNonBlocking"
+  ];
 
   doCheck = !static;
 

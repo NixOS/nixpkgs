@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 }

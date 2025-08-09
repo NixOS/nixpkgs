@@ -120,7 +120,8 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         configFile
-      ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+      ]
+      ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
       serviceConfig =
         let
           paths = lib.flatten (
@@ -146,10 +147,13 @@ in
           NoNewPrivileges = true;
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           ReadWritePaths = lib.filter (x: !(isDefault x)) (lib.flatten [ paths ]);
+          # Upstream recommendation https://garagehq.deuxfleurs.fr/documentation/cookbook/systemd/
+          LimitNOFILE = 42000;
         };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
     };
   };
 }

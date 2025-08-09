@@ -21,14 +21,14 @@ let
 in
 buildPythonPackage rec {
   pname = "yaramod";
-  version = "4.3.0";
+  version = "4.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avast";
     repo = "yaramod";
     tag = "v${version}";
-    hash = "sha256-cgqVUBSDjT7xuCnSY76v8pAvA3W8tFu0fJZaFAF2caU=";
+    hash = "sha256-mI/NIgBs/amV7DRJEfclR5LcYOc8/2d1tmP+bWcULhw=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   pythonImportsCheck = [ "yaramod" ];
 

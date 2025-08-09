@@ -12,7 +12,7 @@
   setuptools,
 
   # nativeBuildInputs
-  SDL2_classic,
+  SDL2,
   pkg-config,
 
   # buildInputs
@@ -62,6 +62,14 @@ buildPythonPackage rec {
 
     # mixer queue test returns busy queue when it shouldn't
     ./skip-mixer-test.patch
+    # https://github.com/libsdl-org/sdl2-compat/issues/476
+    ./skip-rle-tests.patch
+    # https://github.com/libsdl-org/sdl2-compat/issues/489
+    ./adapt-to-sdl3-format-message.patch
+
+    # https://github.com/pygame/pygame/pull/4497
+    ./0001-Use-SDL_HasSurfaceRLE-when-available.patch
+    ./0002-Don-t-assume-that-touch-devices-support-get_num_fing.patch
   ];
 
   postPatch = ''
@@ -76,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    SDL2_classic
+    SDL2
     pkg-config
   ];
 
@@ -86,8 +94,8 @@ buildPythonPackage rec {
     libpng
     libX11
     portmidi
-    SDL2_classic
-    SDL2_image
+    SDL2
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
   ];
@@ -106,6 +114,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
 
     ${python.interpreter} -m pygame.tests -v \
       --exclude opengl,timing \

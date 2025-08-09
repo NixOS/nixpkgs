@@ -14,9 +14,7 @@
   docbook_xsl,
   libxslt,
   docbook_xml_dtd_412,
-  darwin,
   nix-update-script,
-  withApplePCSC ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,18 +33,16 @@ stdenv.mkDerivation rec {
     autoreconfHook
     libxslt # xsltproc
   ];
-  buildInputs =
-    [
-      zlib
-      readline
-      openssl
-      libassuan
-      libXt
-      libiconv
-      docbook_xml_dtd_412
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Carbon
-    ++ (if withApplePCSC then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ]);
+  buildInputs = [
+    zlib
+    readline
+    openssl
+    libassuan
+    libXt
+    libiconv
+    docbook_xml_dtd_412
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -61,20 +57,10 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    "--with-pcsc-provider=${
-      if withApplePCSC then
-        "${darwin.apple_sdk.frameworks.PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-      else
-        "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-    }"
-  ];
-
-  PCSC_CFLAGS = lib.concatStringsSep " " (
-    lib.optionals withApplePCSC [
-      "-I${darwin.apple_sdk.frameworks.PCSC}/Library/Frameworks/PCSC.framework/Headers"
-      "-I${lib.getDev pcsclite}/include/PCSC"
-    ]
-  );
+  ]
+  ++
+    lib.optional (!stdenv.hostPlatform.isDarwin)
+      "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   installFlags = [
     "sysconfdir=$(out)/etc"

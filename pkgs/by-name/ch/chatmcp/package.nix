@@ -1,6 +1,6 @@
 {
   lib,
-  flutter327,
+  flutter332,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "chatmcp";
-  version = "0.0.21-alpha";
+  version = "0.0.71";
 
   src = fetchFromGitHub {
     owner = "daodao97";
     repo = "chatmcp";
     tag = "v${version}";
-    hash = "sha256-T0HVvnMBH/Tnhks7NTCdE3QkHPbg4XaPnT1aJ+LSH6E=";
+    hash = "sha256-Cg9ZBBsNIbvLBJS9akRuC4kQjYINA+UAbJdn2sY5c6U=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -65,6 +65,6 @@ flutter327.buildFlutterApplication rec {
     mainProgram = "chatmcp";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

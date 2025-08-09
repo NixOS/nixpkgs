@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "certinfo-go";
-  version = "0.1.42";
+  version = "0.1.45";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "certinfo";
     tag = "v${version}";
-    hash = "sha256-XnHQTMohpuMnV2trSqZ9PlKWmuOyHGDj+6ljKfUD40A=";
+    hash = "sha256-dp8Fm+QthwL+c6725H9OFxQtZsbXoT9titaMcN8ZH9c=";
   };
 
-  vendorHash = "sha256-Bbj+8TAJJWhkOxib9cz/Znj5bHAXcgrDONRpGDK+los=";
+  vendorHash = "sha256-BuPvXVgYOzypX5oPLfVB1WFuOIZK4atFUqC0hdHa0UA=";
 
   ldflags = [
     "-s"

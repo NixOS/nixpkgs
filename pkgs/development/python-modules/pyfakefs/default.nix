@@ -11,7 +11,6 @@
   # tests
   pandas,
   pytestCheckHook,
-  undefined,
 }:
 
 buildPythonPackage rec {
@@ -33,21 +32,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    undefined
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "pyfakefs/tests"
   ];
 
-  disabledTests =
-    [
-      "test_expand_root"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      # this test fails on darwin due to case-insensitive file system
-      "test_rename_dir_to_existing_dir"
-    ]);
+  disabledTests = [
+    "test_expand_root"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    # this test fails on darwin due to case-insensitive file system
+    "test_rename_dir_to_existing_dir"
+  ]);
 
   meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";

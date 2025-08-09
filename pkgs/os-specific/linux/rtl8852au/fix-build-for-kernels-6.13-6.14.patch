@@ -1,0 +1,77 @@
+From c65ed43f42656aecf43e7ea80c58d204c3c67aca Mon Sep 17 00:00:00 2001
+From: Soham Nandy <soham.nandy2006@gmail.com>
+Date: Fri, 28 Mar 2025 17:24:55 +0530
+Subject: [PATCH 1/2] rtl8852au(fix): remove MODULE_IMPORT and net_device for
+ kernel versions over 6.13
+
+---
+ os_dep/linux/ioctl_cfg80211.c | 3 +++
+ os_dep/osdep_service_linux.c  | 4 ++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 2b79c97..277dffb 100755
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -6350,6 +6350,9 @@ static void rtw_get_chbwoff_from_cfg80211_chan_def(
+ 
+ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
++	, struct net_device *dev
++#endif
+ 	, struct cfg80211_chan_def *chandef
+ #else
+ 	, struct ieee80211_channel *chan
+diff --git a/os_dep/osdep_service_linux.c b/os_dep/osdep_service_linux.c
+index fe47c3b..8fdbcfc 100644
+--- a/os_dep/osdep_service_linux.c
++++ b/os_dep/osdep_service_linux.c
+@@ -390,7 +390,9 @@ static int openFile(struct file **fpp, const char *path, int flag, int mode)
+ 	struct file *fp;
+ 
+ #if defined(MODULE_IMPORT_NS)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
+ 	MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
++#endif
+ #endif
+ 
+ 	fp = filp_open(path, flag, mode);
+@@ -508,7 +510,9 @@ static int isFileReadable(const char *path, u32 *sz)
+ 	char buf;
+ 
+ #if defined(MODULE_IMPORT_NS)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0) && LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
+ 	MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
++#endif
+ #endif
+ 
+ 	fp = filp_open(path, O_RDONLY, 0);
+
+From 91d168fc5aa818b4e85aa5b2b43d7f25470e925c Mon Sep 17 00:00:00 2001
+From: Soham Nandy <soham.nandy2006@gmail.com>
+Date: Mon, 7 Apr 2025 10:25:03 +0530
+Subject: [PATCH 2/2] rtl8852au(fix): get_tx_power callback by adding link_id
+ parameter
+
+kernel versions >6.14 cfg80211_ops was updated to include an unsigned
+int link_id parameter.
+---
+ os_dep/linux/ioctl_cfg80211.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 277dffb..3d7620e 100755
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -4454,6 +4454,10 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
+ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+ 	struct wireless_dev *wdev,
++	
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,14,0))
++	unsigned int link_id,
++#endif
+ #endif
+ 	int *dbm)
+ {

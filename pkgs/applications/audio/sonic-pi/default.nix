@@ -11,13 +11,14 @@
   qtbase,
   qtsvg,
   qttools,
+  qtwayland,
   qwt,
   qscintilla,
   kissfftFloat,
   crossguid,
   reproc,
   platform-folders,
-  ruby,
+  ruby_3_2,
   erlang,
   elixir,
   beamPackages,
@@ -39,6 +40,11 @@
   SDL2,
   fmt,
 }:
+
+# Sonic Pi fails to build with Ruby 3.3.
+let
+  ruby = ruby_3_2;
+in
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
@@ -72,32 +78,32 @@ stdenv.mkDerivation rec {
     beamPackages.hex
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qttools
-      qwt
-      qscintilla
-      kissfftFloat
-      catch2_3
-      crossguid
-      reproc
-      platform-folders
-      ruby
-      alsa-lib
-      rtmidi
-      boost
-      aubio
-    ]
-    ++ lib.optionals withTauWidget [
-      qtwebengine
-    ]
-    ++ lib.optionals withImGui [
-      gl3w
-      SDL2
-      fmt
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+    qwt
+    qscintilla
+    kissfftFloat
+    catch2_3
+    crossguid
+    reproc
+    platform-folders
+    ruby
+    alsa-lib
+    rtmidi
+    boost
+    aubio
+  ]
+  ++ lib.optionals withTauWidget [
+    qtwebengine
+  ]
+  ++ lib.optionals withImGui [
+    gl3w
+    SDL2
+    fmt
+  ];
 
   nativeCheckInputs = [
     parallel

@@ -68,4 +68,8 @@
         maintainers = allMaintainers;
         inherit (cabal-install.meta) platforms;
       };
+    # `shellFor` adds a `buildCommand` (via `envFunc -> runCommandCC`), which
+    # overrides custom phases. To ensure this test's phases run, we remove
+    # that `buildCommand` from the derivation.
+    buildCommand = null;
   })

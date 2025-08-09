@@ -12,14 +12,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yle-dl";
-  version = "20240706";
+  version = "20250316";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
-    rev = version;
-    hash = "sha256-X5fkcJgTVGASoVvvshGWUFNzB1V4KMSKgwoxzP62mxc=";
+    rev = "releases/${version}";
+    hash = "sha256-8cJVaoZRKAR/mkRebpgMfwOWIdDySS8q6Dc2kanr4SE=";
   };
+
+  pyproject = true;
 
   propagatedBuildInputs = with python3Packages; [
     attrs
@@ -28,6 +30,9 @@ python3Packages.buildPythonApplication rec {
     future
     lxml
     requests
+  ];
+  buildInputs = with python3Packages; [
+    flit-core
   ];
   pythonPath = [
     rtmpdump
@@ -43,13 +48,13 @@ python3Packages.buildPythonApplication rec {
     command = "yle-dl -h";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${version}/ChangeLog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "yle-dl";
   };
 }

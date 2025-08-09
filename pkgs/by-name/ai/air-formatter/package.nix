@@ -7,20 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "air-formatter";
-  version = "0.5.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "air";
     tag = finalAttrs.version;
-    hash = "sha256-0eka87HKanB4Q8SfV04u01O92MJorJ9lBT8HqijADUs=";
+    hash = "sha256-FGucu5emmBtxVloun7Kh+MWKZDYdKw+75L7g3GqQ7Tw=";
   };
 
-  # Remove duplicate entries from cargo lock
-  cargoPatches = [ ./cargo-lock.patch ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-R+al7LWHDvVubfdQVVue1wmgl5do5m06JD5akj1NB9Q=";
+  cargoHash = "sha256-+cksQnHNXGyqbu+CoGhCEmQux7zfLIt5K5rWABfppDo=";
 
   useNextest = true;
 
@@ -36,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "An extremely fast R code formatter";
+    description = "Extremely fast R code formatter";
     homepage = "https://posit-dev.github.io/air";
     changelog = "https://github.com/posit-dev/air/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;

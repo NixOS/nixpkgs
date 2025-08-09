@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2025.3.28";
+  version = "2025.7.30";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     repo = "intents-package";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-p1AQYwlMas6GLzg4ZsypDaUsQs74drKqfXA8uJ2K+xw=";
+    hash = "sha256-eXEZNeEWeTFFwnMuDS9HqTGmqQ23NN5WTiklhcoOWbg=";
   };
 
   build-system = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "intents/tests"
   ];
 
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/home-assistant/intents";
     license = licenses.cc-by-40;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter329,
   gst_all_1,
   libunwind,
   orc,
@@ -15,21 +15,18 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.25.4";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-3ZTvGF5Ip6VTmyeuuZoJaGO1dDOee5GuRp6/YxSz27c=";
+    hash = "sha256-5N4HojdDysLgCPq614ZzJXx/dx3s4F++W35fjYdevRk=";
   };
 
-  gitHashes = {
-    receive_sharing_intent = "sha256-ppKPBL2ZOx2MeuLY6Q8aiVGsektK+Mqtwyxps0aNtwk=";
-    json2yaml = "sha256-Vb0Bt11OHGX5+lDf8KqYZEGoXleGi5iHXVS2k7CEmDw=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -44,13 +41,21 @@ flutter329.buildFlutterApplication rec {
     xorg.libXmu
   ];
 
+  postPatch = ''
+    patchShebangs patches/remove_proprietary_dependencies.sh
+    patches/remove_proprietary_dependencies.sh
+  '';
+
+  flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
+
   postInstall = ''
     install -Dm0644 flatpak/com.adilhanney.saber.desktop $out/share/applications/saber.desktop
     install -Dm0644 assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/com.adilhanney.saber.svg
+    install -Dm0644 flatpak/com.adilhanney.saber.metainfo.xml -t $out/share/metainfo
   '';
 
+  # Remove libpdfrx.so's reference to the /build/ directory
   preFixup = ''
-    # Remove libpdfrx.so's reference to the /build/ directory
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/saber/lib/lib*.so
   '';
 
@@ -67,6 +72,10 @@ flutter329.buildFlutterApplication rec {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       (_experimental-update-script-combinators.copyAttrOutputToFile "saber.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [ ./update-gitHashes.py ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
   };
 

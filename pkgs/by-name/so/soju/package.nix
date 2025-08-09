@@ -60,7 +60,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       azahi
       malte-v
-      jtbx
     ];
     mainProgram = "sojuctl";
   };

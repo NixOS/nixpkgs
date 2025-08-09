@@ -6,7 +6,6 @@
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  darwin,
   libsecret,
   nodejs,
   perl,
@@ -15,39 +14,33 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "filen-cli";
-  version = "0.0.32";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "FilenCloudDienste";
     repo = "filen-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sSwRgtjBfmvZ8jEzMoiqGNSaxE+bRvx1udGf9g8EwfM=";
+    hash = "sha256-iISW9EAk8haWUCh9I8qHhrBKLqHeBUC8sWA0MnXqQSA=";
   };
 
-  npmDepsHash = "sha256-RXA/kVvLrmrsxj6T6H2soTMYmC6VRWNjuQfefgVB/qY=";
+  npmDepsHash = "sha256-0DpiUjUFc0ThzP6/qrSEebKDq2fnr/CpcmtPFaIVHhU=";
 
   inherit nodejs;
 
   env.npm_config_build_from_source = "true";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config # for keytar
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      # for utf-8-validate
-      # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
-      perl
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config # for keytar
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    # for utf-8-validate
+    # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
+    perl
+  ];
 
   # for keytar
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
   postPatch = ''
     # The version string is substituted during publishing:

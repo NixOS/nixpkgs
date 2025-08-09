@@ -19,14 +19,13 @@ mkXfceDerivation {
 
   sha256 = "sha256-QlT5ev4NhjR/apbgYQsjrweJ2IqLySozLYLzCAnmkfM=";
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala # vala bindings require GObject introspection
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala # vala bindings require GObject introspection
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -40,6 +39,6 @@ mkXfceDerivation {
     description = "Extension library for Xfce";
     mainProgram = "xfce4-kiosk-query";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }
