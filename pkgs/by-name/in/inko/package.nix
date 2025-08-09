@@ -62,6 +62,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Language for building concurrent software with confidence";
     homepage = "https://inko-lang.org/";
