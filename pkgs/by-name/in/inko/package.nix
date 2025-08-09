@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  llvm_17,
+  llvm,
   libffi,
   libz,
   libxml2,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    llvm_17
+    llvm
     makeWrapper
   ];
 
