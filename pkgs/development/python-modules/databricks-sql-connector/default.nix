@@ -33,6 +33,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "pandas"
     "pyarrow"
     "thrift"
   ];
