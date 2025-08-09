@@ -45,6 +45,9 @@
   qttools, # for translations
   wrapQtAppsHook,
   libnotify,
+  md4c,
+  html-tidy,
+  hunspell,
   qt5compat,
   qtbase,
   qtdeclarative,
@@ -56,6 +59,7 @@
   qtwebengine,
   qtwebchannel,
   wrapGAppsHook3,
+  zxing-cpp,
   withWebengine ? true,
 
   # for pjsip
@@ -241,6 +245,8 @@ stdenv.mkDerivation rec {
     sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
     sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
     cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(3rdparty/zxing-cpp EXCLUDE_FROM_ALL)' 'find_package(ZXing)'
   '';
 
   preConfigure = ''
@@ -265,7 +271,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_6
+    html-tidy
+    hunspell
     libnotify
+    md4c
     networkmanager
     qtbase
     qt5compat
@@ -276,6 +285,7 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtsvg
     qtwebchannel
+    zxing-cpp
   ]
   ++ lib.optionals withWebengine [ qtwebengine ];
 
