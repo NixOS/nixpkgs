@@ -17,10 +17,10 @@
   gmp,
   gnutls,
   llhttp,
-  jack,
   jsoncpp,
   libarchive,
   libgit2,
+  libjack2,
   libnatpmp,
   libpulseaudio,
   libupnp,
@@ -42,22 +42,12 @@
   git,
   networkmanager, # for libnm
   python3,
-  qttools, # for translations
-  wrapQtAppsHook,
   libnotify,
   md4c,
   html-tidy,
   hunspell,
-  qt5compat,
-  qtbase,
-  qtdeclarative,
   qrencode,
-  qtmultimedia,
-  qtnetworkauth,
-  qtpositioning,
-  qtsvg,
-  qtwebengine,
-  qtwebchannel,
+  qt6Packages,
   wrapGAppsHook3,
   zxing-cpp,
   withWebengine ? true,
@@ -210,7 +200,7 @@ stdenv.mkDerivation rec {
       gmp
       gnutls
       llhttp
-      jack
+      libjack2
       jsoncpp
       libarchive
       libgit2
@@ -261,12 +251,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     pkg-config
     cmake
     git
     python3
-    qttools
+    qt6Packages.qttools # for translations
   ];
 
   buildInputs = [
@@ -276,18 +266,23 @@ stdenv.mkDerivation rec {
     libnotify
     md4c
     networkmanager
-    qtbase
-    qt5compat
     qrencode
-    qtnetworkauth
-    qtdeclarative
-    qtmultimedia
-    qtpositioning
-    qtsvg
-    qtwebchannel
     zxing-cpp
   ]
-  ++ lib.optionals withWebengine [ qtwebengine ];
+  ++ (
+    with qt6Packages;
+    [
+      qtbase
+      qt5compat
+      qtnetworkauth
+      qtdeclarative
+      qtmultimedia
+      qtpositioning
+      qtsvg
+      qtwebchannel
+    ]
+    ++ lib.optionals withWebengine [ qtwebengine ]
+  );
 
   cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
 
