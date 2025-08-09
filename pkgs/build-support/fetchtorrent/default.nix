@@ -31,7 +31,7 @@ in
   meta ? { },
 }:
 let
-  afterSuccess = writeShellScript "fetch-bittorrent-done.sh" ''
+  transmissionFinishScript = writeShellScript "fetch-bittorrent-done.sh" ''
     ${postUnpack}
     # Flatten the directory, so that only the torrent contents are in $out, not
     # the folder name
@@ -75,17 +75,26 @@ runCommand name
         mkdir -p $downloadedDirectory
         mkdir -p $HOME/.config/transmission
         cp ${jsonConfig} $HOME/.config/transmission/settings.json
+        port="$(shuf -n 1 -i 49152-65535)"
         function handleChild {
           # This detects failures and logs the contents of the transmission fetch
           find $out
           exit 0
         }
         trap handleChild CHLD
-        transmission-cli --port $(shuf -n 1 -i 49152-65535) --portmap --finish ${afterSuccess} --download-dir $downloadedDirectory --config-dir "$HOME"/.config/transmission "$url"
+        transmission-cli \
+            --port "$port" \
+            --portmap \
+            --finish ${transmissionFinishScript} \
+            --download-dir "$downloadedDirectory" \
+            --config-dir "$HOME"/.config/transmission \
+            "$url"
       ''
     else
       ''
         export HOME=$TMP
         rqbit --disable-dht-persistence --http-api-listen-addr "127.0.0.1:$(shuf -n 1 -i 49152-65535)" download -o $out --exit-on-finish "$url"
+        ${postUnpack}
+        ${postFetch}
       ''
   )
