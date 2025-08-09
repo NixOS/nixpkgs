@@ -365,6 +365,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
   ]
+  ++ optionals isPy313 [
+    # https://github.com/python/cpython/issues/137583
+    ./3.13/revert-gh134724.patch
+  ]
   ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
