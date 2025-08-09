@@ -3389,6 +3389,8 @@ self: super: with self; {
 
   dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
 
+  dbt-protos = callPackage ../development/python-modules/dbt-protos { };
+
   dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
 
   dbt-semantic-interfaces = callPackage ../development/python-modules/dbt-semantic-interfaces { };
