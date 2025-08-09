@@ -438,30 +438,29 @@ in
           restartIfChanged = false;
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
-          serviceConfig =
-            {
-              Type = "oneshot";
-              ExecStart =
-                lib.optionals doBackup [
-                  "${resticCmd} backup ${
-                    lib.concatStringsSep " " (
-                      backup.extraBackupArgs
-                      ++ lib.optionals fileBackup (excludeFlags ++ [ "--files-from=${filesFromTmpFile}" ])
-                      ++ lib.optionals commandBackup ([ "--stdin-from-command=true --" ] ++ backup.command)
-                    )
-                  }"
-                ]
-                ++ pruneCmd
-                ++ checkCmd;
-              User = backup.user;
-              RuntimeDirectory = "restic-backups-${name}";
-              CacheDirectory = "restic-backups-${name}";
-              CacheDirectoryMode = "0700";
-              PrivateTmp = true;
-            }
-            // lib.optionalAttrs (backup.environmentFile != null) {
-              EnvironmentFile = backup.environmentFile;
-            };
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart =
+              lib.optionals doBackup [
+                "${resticCmd} backup ${
+                  lib.concatStringsSep " " (
+                    backup.extraBackupArgs
+                    ++ lib.optionals fileBackup (excludeFlags ++ [ "--files-from=${filesFromTmpFile}" ])
+                    ++ lib.optionals commandBackup ([ "--stdin-from-command=true --" ] ++ backup.command)
+                  )
+                }"
+              ]
+              ++ pruneCmd
+              ++ checkCmd;
+            User = backup.user;
+            RuntimeDirectory = "restic-backups-${name}";
+            CacheDirectory = "restic-backups-${name}";
+            CacheDirectoryMode = "0700";
+            PrivateTmp = true;
+          }
+          // lib.optionalAttrs (backup.environmentFile != null) {
+            EnvironmentFile = backup.environmentFile;
+          };
         }
         // lib.optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
           preStart = ''
