@@ -32,7 +32,7 @@
   libuuid,
   libxkbcommon,
   libxml2,
-  llvmPackages_13,
+  llvmPackages,
   matio,
   mpfr,
   ncurses,
@@ -102,7 +102,7 @@ stdenv.mkDerivation {
     libuuid
     libxkbcommon
     libxml2
-    llvmPackages_13.libllvm.lib
+    llvmPackages.libllvm.lib
     matio
     mpfr
     ncurses
