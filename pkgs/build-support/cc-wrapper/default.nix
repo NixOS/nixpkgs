@@ -545,10 +545,6 @@ stdenvNoCC.mkDerivation {
     export named_fc=${targetPrefix}gfortran
   ''
 
-  + optionalString cc.langJava or false ''
-    wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
-  ''
-
   + optionalString cc.langGo or false ''
     wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
     wrap ${targetPrefix}go ${./go-wrapper.sh} $ccPath/${targetPrefix}go
@@ -559,7 +555,7 @@ stdenvNoCC.mkDerivation {
     bintools
   ]
   ++ extraTools
-  ++ optionals cc.langD or cc.langJava or false [ zlib ];
+  ++ optionals cc.langD or false [ zlib ];
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   setupHooks = [
@@ -796,7 +792,7 @@ stdenvNoCC.mkDerivation {
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
     ''
-    + optionalString (cc.langD or cc.langJava or false && !isArocc) ''
+    + optionalString (cc.langD or false && !isArocc) ''
       echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
