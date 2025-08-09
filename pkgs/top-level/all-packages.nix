@@ -12499,11 +12499,6 @@ with pkgs;
     lua = lua5_1;
   };
 
-  ipe = qt6Packages.callPackage ../applications/graphics/ipe {
-    ghostscript = ghostscriptX;
-    lua5 = lua5_3;
-  };
-
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   jabcode = callPackage ../development/libraries/jabcode { };
@@ -12525,8 +12520,6 @@ with pkgs;
 
   jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
-
-  jalv-qt = jalv.override { useQt = true; };
 
   js8call = qt5.callPackage ../applications/radio/js8call { };
 
@@ -15536,16 +15529,6 @@ with pkgs;
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
-  };
-
-  ghostscriptX = ghostscript.override {
-    cupsSupport = true;
-    x11Support = true;
-  };
-
-  ghostscript_headless = ghostscript.override {
-    cupsSupport = false;
-    x11Support = false;
   };
 
   gnuk = callPackage ../misc/gnuk {
