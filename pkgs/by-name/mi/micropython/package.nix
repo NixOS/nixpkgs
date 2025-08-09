@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.25.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     tag = "v${version}";
-    hash = "sha256-yH5omiYs07ZKECI+DAnpYq4T+r2O/RuGdtN+dhYxePc=";
+    hash = "sha256-T0yaTXRQFEdx6lap+S68I2RRA2kQnjbKGz+YB6okJkY=";
     fetchSubmodules = true;
 
     # remove unused libraries from rp2 port's SDK. we leave this and the other
