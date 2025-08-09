@@ -1,0 +1,26 @@
+diff --git a/api/config/meiliLogger.js b/api/config/meiliLogger.js
+index 195b387..d445e54 100644
+--- a/api/config/meiliLogger.js
++++ b/api/config/meiliLogger.js
+@@ -2,7 +2,7 @@ const path = require('path');
+ const winston = require('winston');
+ require('winston-daily-rotate-file');
+ 
+-const logDir = path.join(__dirname, '..', 'logs');
++const logDir = path.join('.', 'logs');
+ 
+ const { NODE_ENV } = process.env;
+ 
+diff --git a/api/config/winston.js b/api/config/winston.js
+index 8f51b99..2ebd041 100644
+--- a/api/config/winston.js
++++ b/api/config/winston.js
+@@ -3,7 +3,7 @@ const winston = require('winston');
+ require('winston-daily-rotate-file');
+ const { redactFormat, redactMessage, debugTraverse, jsonTruncateFormat } = require('./parsers');
+ 
+-const logDir = path.join(__dirname, '..', 'logs');
++const logDir = path.join('.', 'logs');
+ 
+ const { NODE_ENV, DEBUG_LOGGING = true, DEBUG_CONSOLE = false, CONSOLE_JSON = false } = process.env;
+ 

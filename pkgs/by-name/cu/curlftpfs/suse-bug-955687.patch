@@ -1,0 +1,11 @@
+--- a/ftpfs.c
++++ b/ftpfs.c
+@@ -614,6 +614,8 @@ static void free_ftpfs_file(struct ftpfs
+   sem_destroy(&fh->data_need);
+   sem_destroy(&fh->data_written);
+   sem_destroy(&fh->ready);
++  if (fh->buf.size) { buf_free(&fh->buf); }
++  if (fh->stream_buf.size) { buf_free(&fh->stream_buf); }
+   free(fh);
+ }
+ 

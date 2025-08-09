@@ -1,0 +1,15 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index bb8d370..7c5b7ac 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -35,6 +35,10 @@ anyhow = "1.0.89"
+ insta.opt-level = 3
+ similar.opt-level = 3
+ 
++# work around https://github.com/NixOS/nixpkgs/issues/427072
++[profile.release.package.hyper]
++opt-level = 0
++
+ [lints.clippy]
+ pedantic = { level = "warn", priority = -1 }
+ cargo = { level = "warn", priority = -1 }

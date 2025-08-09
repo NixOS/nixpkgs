@@ -1,0 +1,46 @@
+--- old/linux/CMakeLists.txt
++++ new/linux/CMakeLists.txt
+@@ -41,35 +41,6 @@
+ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
+ target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
+
+-# ----------------------------------------------------------------------
+-# Download and add objectbox-c prebuilt library.
+-
+-set(OBJECTBOX_VERSION 4.0.2)
+-
+-set(OBJECTBOX_ARCH ${CMAKE_SYSTEM_PROCESSOR})
+-if (${OBJECTBOX_ARCH} MATCHES "x86_64")
+-    set(OBJECTBOX_ARCH x64)
+-elseif (${OBJECTBOX_ARCH} MATCHES "^arm64" OR ${OBJECTBOX_ARCH} MATCHES "^armv8")
+-    set(OBJECTBOX_ARCH aarch64)
+-elseif (${OBJECTBOX_ARCH} MATCHES "^armv7")
+-    set(OBJECTBOX_ARCH armv7hf)
+-elseif (${OBJECTBOX_ARCH} MATCHES "^arm")
+-    set(OBJECTBOX_ARCH armv6hf)
+-endif ()
+-
+-include(FetchContent)
+-FetchContent_Declare(
+-    objectbox-download
+-    URL https://github.com/objectbox/objectbox-c/releases/download/v${OBJECTBOX_VERSION}/objectbox-linux-${OBJECTBOX_ARCH}.tar.gz
+-)
+-
+-FetchContent_GetProperties(objectbox-download)
+-if(NOT objectbox-download_POPULATED)
+-  FetchContent_Populate(objectbox-download)
+-endif()
+-
+-# ----------------------------------------------------------------------
+-
+ # List of absolute paths to libraries that should be bundled with the plugin.
+ # This list could contain prebuilt libraries, or libraries created by an
+ # external build triggered from this build file.
+@@ -77,6 +48,6 @@
+ # Note: do not link the ObjectBox C library; the Dart library looks for it in a lib subfolder
+ # where flutter build puts it when added below.
+ set(objectbox_flutter_libs_bundled_libraries
+-    "${objectbox-download_SOURCE_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}objectbox${CMAKE_SHARED_LIBRARY_SUFFIX}"
++    "@OBJECTBOX_SHARED_LIBRARY@"
+     PARENT_SCOPE
+ )

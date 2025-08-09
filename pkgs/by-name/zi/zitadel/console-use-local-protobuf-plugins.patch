@@ -1,0 +1,21 @@
+diff --git a/console/buf.gen.yaml b/console/buf.gen.yaml
+index 1737c2ded..d6affa8bc 100644
+--- a/console/buf.gen.yaml
++++ b/console/buf.gen.yaml
+@@ -3,12 +3,12 @@ version: v1
+ managed:
+   enabled: true
+ plugins:
+-  - plugin: buf.build/protocolbuffers/js
++  - plugin: js
+     out: src/app/proto/generated
+     opt: import_style=commonjs,binary
+-  - plugin: buf.build/grpc/web
++  - plugin: grpc-web
+     out: src/app/proto/generated
+     opt: import_style=typescript,mode=grpcweb
+-  - plugin: buf.build/grpc-ecosystem/openapiv2
++  - plugin: openapiv2
+     out: src/app/proto/generated
+     opt: allow_delete_body
+\ No newline at end of file

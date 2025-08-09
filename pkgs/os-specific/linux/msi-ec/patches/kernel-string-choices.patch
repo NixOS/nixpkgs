@@ -1,0 +1,37 @@
+--- a/msi-ec.c
++++ b/msi-ec.c
+@@ -38,7 +38,12 @@
+ #include <linux/slab.h>
+ #include <linux/version.h>
+ #include <linux/rtc.h>
+-#include <linux/string_choices.h>
++
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
++#include <linux/string_choices.h>
++#endif
++
+
+ static DEFINE_MUTEX(ec_set_by_mask_mutex);
+ static DEFINE_MUTEX(ec_unset_by_mask_mutex);
+@@ -1141,6 +1146,20 @@ static struct msi_ec_conf CONF52 __initdata = {
+ 	},
+ };
+
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,1,0)
++/* Define our own string choice helpers for older kernels */
++static inline const char *str_on_off(bool v)
++{
++    return v ? "on" : "off";
++}
++
++static inline const char *str_yes_no(bool v)
++{
++    return v ? "yes" : "no";
++}
++#endif
++
++
+ static struct msi_ec_conf *CONFIGURATIONS[] __initdata = {
+ 	&CONF0,
+ 	&CONF1,

@@ -1,0 +1,220 @@
+This patch introduces an intermediate Gradle build step to alter the behavior
+of flutter_tools' Gradle project, specifically moving the creation of `build`
+and `.gradle` directories from within the Nix Store to somewhere in `$HOME/.cache/flutter/nix-flutter-tools-gradle/$engineShortRev`.
+
+Without this patch, flutter_tools' Gradle project tries to generate `build` and `.gradle`
+directories within the Nix Store. Resulting in read-only errors when trying to build a
+Flutter Android app at runtime.
+
+This patch takes advantage of the fact settings.gradle takes priority over settings.gradle.kts to build the intermediate Gradle project
+when a Flutter app runs `includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")`
+
+`rootProject.buildFileName = "/dev/null"` so that the intermediate project doesn't use `build.gradle.kts` that's in the same directory.
+
+The intermediate project makes a `settings.gradle` file in `$HOME/.cache/flutter/nix-flutter-tools-gradle/<short engine rev>/` and `includeBuild`s it.
+This Gradle project will build the actual `packages/flutter_tools/gradle` project by setting
+`rootProject.projectDir = new File("$settingsDir")` and `apply from: new File("$settingsDir/settings.gradle.kts")`.
+
+To move `build` to `$HOME/.cache/flutter/nix-flutter-tools-gradle/<short engine rev>/`, we need to set `buildDirectory`.
+To move `.gradle` as well, the `--project-cache-dir` argument must be passed to the Gradle wrapper.
+Changing the `GradleUtils.getExecutable` function signature is a delibarate choice, to ensure that no new unpatched usages slip in.
+--- /dev/null
++++ b/packages/flutter_tools/gradle/settings.gradle
+@@ -0,0 +1,19 @@
++rootProject.buildFileName = "/dev/null"
++
++def engineShortRev = (new File("$settingsDir/../../../bin/internal/engine.version")).text.take(10)
++def dir = new File("$System.env.HOME/.cache/flutter/nix-flutter-tools-gradle/$engineShortRev")
++dir.mkdirs()
++def file = new File(dir, "settings.gradle")
++
++file.text = """
++rootProject.projectDir = new File("$settingsDir")
++apply from: new File("$settingsDir/settings.gradle.kts")
++
++gradle.allprojects { project ->
++  project.beforeEvaluate {
++    project.layout.buildDirectory = new File("$dir/build")
++  }
++}
++"""
++
++includeBuild(dir)
+--- a/packages/flutter_tools/gradle/build.gradle.kts
++++ b/packages/flutter_tools/gradle/build.gradle.kts
+@@ -4,6 +4,11 @@
+ 
+ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+ 
++// While flutter_tools runs Gradle with a --project-cache-dir, this startParameter
++// is not passed correctly to the Kotlin Gradle plugin for some reason, and so
++// must be set here as well.
++gradle.startParameter.projectCacheDir = layout.buildDirectory.dir("cache").get().asFile
++
+ plugins {
+     `java-gradle-plugin`
+     groovy
+--- a/packages/flutter_tools/lib/src/android/gradle.dart
++++ b/packages/flutter_tools/lib/src/android/gradle.dart
+@@ -456,9 +456,9 @@ class AndroidGradleBuilder implements AndroidBuilder {
+     // from the local.properties file.
+     updateLocalProperties(project: project, buildInfo: androidBuildInfo.buildInfo);
+ 
+-    final List<String> options = <String>[];
+-
+-    final String gradleExecutablePath = _gradleUtils.getExecutable(project);
++    final [String gradleExecutablePath, ...List<String> options] = _gradleUtils.getExecutable(
++      project,
++    );
+ 
+     // All automatically created files should exist.
+     if (configOnly) {
+@@ -781,7 +781,7 @@ class AndroidGradleBuilder implements AndroidBuilder {
+       'aar_init_script.gradle',
+     );
+     final List<String> command = <String>[
+-      _gradleUtils.getExecutable(project),
++      ..._gradleUtils.getExecutable(project),
+       '-I=$initScript',
+       '-Pflutter-root=$flutterRoot',
+       '-Poutput-dir=${outputDirectory.path}',
+@@ -896,6 +896,10 @@ class AndroidGradleBuilder implements AndroidBuilder {
+     final List<String> results = <String>[];
+ 
+     try {
++      final [String gradleExecutablePath, ...List<String> options] = _gradleUtils.getExecutable(
++        project,
++      );
++
+       exitCode = await _runGradleTask(
+         _kBuildVariantTaskName,
+         preRunTask: () {
+@@ -911,10 +915,10 @@ class AndroidGradleBuilder implements AndroidBuilder {
+             ),
+           );
+         },
+-        options: const <String>['-q'],
++        options: <String>[...options, '-q'],
+         project: project,
+         localGradleErrors: gradleErrors,
+-        gradleExecutablePath: _gradleUtils.getExecutable(project),
++        gradleExecutablePath: gradleExecutablePath,
+         outputParser: (String line) {
+           if (_kBuildVariantRegex.firstMatch(line) case final RegExpMatch match) {
+             results.add(match.namedGroup(_kBuildVariantRegexGroupName)!);
+@@ -948,6 +952,10 @@ class AndroidGradleBuilder implements AndroidBuilder {
+     late Stopwatch sw;
+     int exitCode = 1;
+     try {
++      final [String gradleExecutablePath, ...List<String> options] = _gradleUtils.getExecutable(
++        project,
++      );
++
+       exitCode = await _runGradleTask(
+         taskName,
+         preRunTask: () {
+@@ -963,10 +971,10 @@ class AndroidGradleBuilder implements AndroidBuilder {
+             ),
+           );
+         },
+-        options: <String>['-q', '-PoutputPath=$outputPath'],
++        options: <String>[...options, '-q', '-PoutputPath=$outputPath'],
+         project: project,
+         localGradleErrors: gradleErrors,
+-        gradleExecutablePath: _gradleUtils.getExecutable(project),
++        gradleExecutablePath: gradleExecutablePath,
+       );
+     } on Error catch (error) {
+       _logger.printError(error.toString());
+--- a/packages/flutter_tools/lib/src/android/gradle_errors.dart
++++ b/packages/flutter_tools/lib/src/android/gradle_errors.dart
+@@ -240,7 +240,12 @@ final GradleHandledError flavorUndefinedHandler = GradleHandledError(
+     required bool usesAndroidX,
+   }) async {
+     final RunResult tasksRunResult = await globals.processUtils.run(
+-      <String>[globals.gradleUtils!.getExecutable(project), 'app:tasks', '--all', '--console=auto'],
++      <String>[
++        ...globals.gradleUtils!.getExecutable(project),
++        'app:tasks',
++        '--all',
++        '--console=auto',
++      ],
+       throwOnError: true,
+       workingDirectory: project.android.hostAppGradleRoot.path,
+       environment: globals.java?.environment,
+--- a/packages/flutter_tools/lib/src/android/gradle_utils.dart
++++ b/packages/flutter_tools/lib/src/android/gradle_utils.dart
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ import 'package:meta/meta.dart';
++import 'package:path/path.dart';
+ import 'package:process/process.dart';
+ import 'package:unified_analytics/unified_analytics.dart';
+ 
+@@ -154,9 +155,29 @@ class GradleUtils {
+   final Logger _logger;
+   final OperatingSystemUtils _operatingSystemUtils;
+ 
++  List<String> get _requiredArguments {
++    final String cacheDir = join(
++      switch (globals.platform.environment['XDG_CACHE_HOME']) {
++        final String cacheHome => cacheHome,
++        _ => join(
++          globals.fsUtils.homeDirPath ?? throwToolExit('No cache directory has been specified.'),
++          '.cache',
++        ),
++      },
++      'flutter',
++      'nix-flutter-tools-gradle',
++      globals.flutterVersion.engineRevision.substring(0, 10),
++    );
++
++    return <String>[
++      '--project-cache-dir=${join(cacheDir, 'cache')}',
++      '-Pkotlin.project.persistent.dir=${join(cacheDir, 'kotlin')}',
++    ];
++  }
++
+   /// Gets the Gradle executable path and prepares the Gradle project.
+   /// This is the `gradlew` or `gradlew.bat` script in the `android/` directory.
+-  String getExecutable(FlutterProject project) {
++  List<String> getExecutable(FlutterProject project) {
+     final Directory androidDir = project.android.hostAppGradleRoot;
+     injectGradleWrapperIfNeeded(androidDir);
+ 
+@@ -167,7 +188,7 @@ class GradleUtils {
+       // If the Gradle executable doesn't have execute permission,
+       // then attempt to set it.
+       _operatingSystemUtils.makeExecutable(gradle);
+-      return gradle.absolute.path;
++      return <String>[gradle.absolute.path, ..._requiredArguments];
+     }
+     throwToolExit(
+       'Unable to locate gradlew script. Please check that ${gradle.path} '
+--- a/packages/flutter_tools/test/general.shard/android/android_gradle_builder_test.dart
++++ b/packages/flutter_tools/test/general.shard/android/android_gradle_builder_test.dart
+@@ -2740,8 +2740,8 @@ Gradle Crashed
+ 
+ class FakeGradleUtils extends Fake implements GradleUtils {
+   @override
+-  String getExecutable(FlutterProject project) {
+-    return 'gradlew';
++  List<String> getExecutable(FlutterProject project) {
++    return const <String>['gradlew'];
+   }
+ }
+ 
+--- a/packages/flutter_tools/test/general.shard/android/gradle_errors_test.dart
++++ b/packages/flutter_tools/test/general.shard/android/gradle_errors_test.dart
+@@ -1580,8 +1580,8 @@ Platform fakePlatform(String name) {
+ 
+ class FakeGradleUtils extends Fake implements GradleUtils {
+   @override
+-  String getExecutable(FlutterProject project) {
+-    return 'gradlew';
++  List<String> getExecutable(FlutterProject project) {
++    return const <String>['gradlew'];
+   }
+ }
+ 

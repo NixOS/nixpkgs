@@ -1,0 +1,36 @@
+diff --git a/impress/settings.py b/impress/settings.py
+index 9d825095..518aca7f 100755
+--- a/impress/settings.py
++++ b/impress/settings.py
+@@ -822,19 +822,24 @@ class Production(Base):
+     #
+     # In other cases, you should comment the following line to avoid security issues.
+     # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+-    SECURE_HSTS_SECONDS = 60
+-    SECURE_HSTS_PRELOAD = True
+-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+-    SECURE_SSL_REDIRECT = True
++    SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"),
++                                                environ_name="SECURE_PROXY_SSL_HEADER")
++    SECURE_HSTS_SECONDS = values.IntegerValue(
++        60, environ_name="SECURE_HSTS_SECONDS")
++    SECURE_HSTS_PRELOAD = values.BooleanValue(
++        True, environ_name="SECURE_HSTS_PRELOAD")
++    SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(
++        True, environ_name="SECURE_HSTS_INCLUDE_SUBDOMAINS")
++    SECURE_SSL_REDIRECT = values.BooleanValue(
++        True, environ_name="SECURE_SSL_REDIRECT")
+     SECURE_REDIRECT_EXEMPT = [
+         "^__lbheartbeat__",
+         "^__heartbeat__",
+     ]
+ 
+     # Modern browsers require to have the `secure` attribute on cookies with `Samesite=none`
+-    CSRF_COOKIE_SECURE = True
+-    SESSION_COOKIE_SECURE = True
++    CSRF_COOKIE_SECURE = values.BooleanValue(True, environ_name="CSRF_COOKIE_SECURE")
++    SESSION_COOKIE_SECURE = values.BooleanValue(True, environ_name="SESSION_COOKIE_SECURE")
+ 
+     # Privacy
+     SECURE_REFERRER_POLICY = "same-origin"

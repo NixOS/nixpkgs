@@ -1,0 +1,42 @@
+From e49f97eb4b0fd27b26437638db7984fbcfd3a14f Mon Sep 17 00:00:00 2001
+From: Morgan Jones <me@numin.it>
+Date: Sun, 4 May 2025 15:46:07 -0700
+Subject: [PATCH] net: disable tests in the Nix sandbox
+
+---
+ packages/net/_test.pony | 19 +------------------
+ 1 file changed, 1 insertion(+), 18 deletions(-)
+
+diff --git a/packages/net/_test.pony b/packages/net/_test.pony
+index 05462eb2..c0c6cdfa 100644
+--- a/packages/net/_test.pony
++++ b/packages/net/_test.pony
+@@ -15,25 +15,8 @@ actor \nodoc\ Main is TestList
+   new make() => None
+ 
+   fun tag tests(test: PonyTest) =>
+-    // Tests below function across all systems and are listed alphabetically
++    // (@numinit): only this test works in the Nix sandbox:
+     test(_TestTCPConnectionFailed)
+-    test(_TestTCPExpect)
+-    test(_TestTCPExpectOverBufferSize)
+-    test(_TestTCPMute)
+-    test(_TestTCPProxy)
+-    test(_TestTCPUnmute)
+-    test(_TestTCPWritev)
+-
+-    // Tests below exclude windows and are listed alphabetically
+-    ifdef not windows then
+-      test(_TestTCPConnectionToClosedServerFailed)
+-      test(_TestTCPThrottle)
+-    end
+-
+-    // Tests below exclude osx and are listed alphabetically
+-    ifdef not osx then
+-      test(_TestBroadcast)
+-    end
+ 
+ class \nodoc\ _TestPing is UDPNotify
+   let _h: TestHelper
+-- 
+2.47.0

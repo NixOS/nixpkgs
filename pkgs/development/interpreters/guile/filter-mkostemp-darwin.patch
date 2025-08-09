@@ -1,0 +1,28 @@
+Filter incompat. mkostemp(3) flags on macOS 10.12
+
+macOS Sierra introduces a mkostemp(3) function which is used when
+present. Contrary to the GNUlib version of mkostemp(3) that was used
+previously, this version fails with 'invalid argument' when flags other
+than from a specified set are passed. From mktemp(3):
+
+| The mkostemp() function is like mkstemp() but allows specifying
+| additional open(2) flags (defined in <fcntl.h>). The permitted flags
+| are O_APPEND, O_SHLOCK, O_EXLOCK and O_CLOEXEC.
+
+Signed-off-by: Clemens Lang <cal@macports.org>
+Upstream-Status: Submitted [https://debbugs.gnu.org/cgi/bugreport.cgi?bug=24862#23]
+--- a/libguile/filesys.c.orig	2017-01-09 00:53:27.000000000 +0100
++++ b/libguile/filesys.c	2017-01-09 00:54:48.000000000 +0100
+@@ -1486,6 +1486,12 @@
+       mode_bits = scm_i_mode_bits (mode);
+     }
+ 
++#ifdef __APPLE__
++  /* macOS starting with 10.12 defines mkostemp(2) which is used if defined,
++   * but only accepts some flags according to its manpage. It fails with
++   * invalid argument when other flags are passed. */
++  open_flags &= O_APPEND | O_SHLOCK | O_EXLOCK | O_CLOEXEC;
++#endif
+   SCM_SYSCALL (rv = mkostemp (c_tmpl, open_flags));
+   if (rv == -1)
+     SCM_SYSERROR;

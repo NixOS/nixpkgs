@@ -1,0 +1,13 @@
+diff --git a/tests/unit_tests/test_bash.py b/tests/unit_tests/test_bash.py
+index ba7b0d0..cade19e 100644
+--- a/tests/unit_tests/test_bash.py
++++ b/tests/unit_tests/test_bash.py
+@@ -58,7 +58,7 @@ def test_incorrect_command_return_err_output() -> None:
+     session = BashProcess(return_err_output=True)
+     output = session.run(["invalid_command"])
+     assert re.match(
+-        r"^/bin/sh:.*invalid_command.*(?:not found|Permission denied).*$", output
++        r".*/bin/sh:.*invalid_command.*(?:not found|Permission denied).*$", output
+     )
+ 
+ 

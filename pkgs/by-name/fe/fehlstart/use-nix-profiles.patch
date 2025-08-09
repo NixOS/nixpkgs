@@ -1,0 +1,21 @@
+diff --git a/fehlstart.c b/fehlstart.c
+index b33c8ff..ce467b5 100644
+--- a/fehlstart.c
++++ b/fehlstart.c
+@@ -802,6 +802,16 @@ static void* update_all(void* user_data)
+     add_launchers(APPLICATIONS_DIR_0);
+     add_launchers(APPLICATIONS_DIR_1);
+     add_launchers(USER_APPLICATIONS_DIR);
++    const char* nixprofiles = getenv("NIX_PROFILES");
++    if(nixprofiles != NULL) {
++      const char* pch = strtok(nixprofiles, " ");
++      while (pch != NULL)
++      {
++          char* nix_dir = g_strconcat(pch, "/share/applications", NULL);
++          add_launchers(nix_dir);
++          pch = strtok(NULL, " ");
++      }
++    }
+     return NULL;
+ }
+ 

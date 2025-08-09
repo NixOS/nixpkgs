@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/szebniok/tree-sitter-wgsl",
+  "rev": "40259f3c77ea856841a4e0c4c807705f3e4a2b65",
+  "date": "2023-01-09T17:32:53+01:00",
+  "path": "/nix/store/v97b952wz1x5np7cp5as603qzj2686yf-tree-sitter-wgsl",
+  "sha256": "0w15rhwafbjjmgbxj9fln9pca2w1wr7h5xwni9rniszlkxqf90my",
+  "hash": "sha256-voLkcJ/062hzipb3Ak/mgQvFbrLUJdnXq1IupzjMJXA=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

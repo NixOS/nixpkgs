@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 53e90a7..4afeb58 100755
+--- a/configure
++++ b/configure
+@@ -411,7 +411,7 @@ if test "$silent" = yes; then
+ else
+   exec 6>&1
+ fi
+-exec 5>./config.log
++exec 5>&2
+ 
+ echo "\
+ This file contains any messages produced by compilers while

@@ -1,0 +1,162 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "metadata": {
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:nim/preserves",
+      "name": "preserves",
+      "description": "data model and serialization format",
+      "version": "20241201",
+      "authors": [
+        {
+          "name": "Emery Hemingway"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Unlicense"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "nim:skipExt",
+          "value": "nim"
+        },
+        {
+          "name": "nim:bin:preserves-encode",
+          "value": "preserves/private/preserves_encode"
+        },
+        {
+          "name": "nim:bin:preserves-schema-nim",
+          "value": "preserves/preserves_schema_nim"
+        },
+        {
+          "name": "nim:bin:preserves-schemac",
+          "value": "preserves/preserves_schemac"
+        },
+        {
+          "name": "nim:srcDir",
+          "value": "src"
+        },
+        {
+          "name": "nim:backend",
+          "value": "c"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:nim/npeg",
+      "name": "npeg",
+      "version": "1.2.2",
+      "externalReferences": [
+        {
+          "url": "https://github.com/zevv/npeg/archive/ec0cc6e64ea4c62d2aa382b176a4838474238f8d.tar.gz",
+          "type": "source-distribution"
+        },
+        {
+          "url": "https://github.com/zevv/npeg.git",
+          "type": "vcs"
+        }
+      ],
+      "properties": [
+        {
+          "name": "nix:fod:method",
+          "value": "fetchzip"
+        },
+        {
+          "name": "nix:fod:path",
+          "value": "/nix/store/xpn694ibgipj8xak3j4bky6b3k0vp7hh-source"
+        },
+        {
+          "name": "nix:fod:rev",
+          "value": "ec0cc6e64ea4c62d2aa382b176a4838474238f8d"
+        },
+        {
+          "name": "nix:fod:sha256",
+          "value": "1fi9ls3xl20bmv1ikillxywl96i9al6zmmxrbffx448gbrxs86kg"
+        },
+        {
+          "name": "nix:fod:url",
+          "value": "https://github.com/zevv/npeg/archive/ec0cc6e64ea4c62d2aa382b176a4838474238f8d.tar.gz"
+        },
+        {
+          "name": "nix:fod:ref",
+          "value": "1.2.2"
+        },
+        {
+          "name": "nix:fod:srcDir",
+          "value": "src"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nim/bigints",
+      "name": "bigints",
+      "version": "20231006",
+      "externalReferences": [
+        {
+          "url": "https://github.com/ehmry/nim-bigints/archive/86ea14d31eea9275e1408ca34e6bfe9c99989a96.tar.gz",
+          "type": "source-distribution"
+        },
+        {
+          "url": "https://github.com/ehmry/nim-bigints.git",
+          "type": "vcs"
+        }
+      ],
+      "properties": [
+        {
+          "name": "nix:fod:method",
+          "value": "fetchzip"
+        },
+        {
+          "name": "nix:fod:path",
+          "value": "/nix/store/jvrm392g8adfsgf36prgwkbyd7vh5jsw-source"
+        },
+        {
+          "name": "nix:fod:rev",
+          "value": "86ea14d31eea9275e1408ca34e6bfe9c99989a96"
+        },
+        {
+          "name": "nix:fod:sha256",
+          "value": "15pcpmnk1bnw3k8769rjzcpg00nahyrypwbxs88jnwr4aczp99j4"
+        },
+        {
+          "name": "nix:fod:url",
+          "value": "https://github.com/ehmry/nim-bigints/archive/86ea14d31eea9275e1408ca34e6bfe9c99989a96.tar.gz"
+        },
+        {
+          "name": "nix:fod:ref",
+          "value": "20231006"
+        },
+        {
+          "name": "nix:fod:srcDir",
+          "value": "src"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:nim/preserves",
+      "dependsOn": [
+        "pkg:nim/npeg",
+        "pkg:nim/bigints"
+      ]
+    },
+    {
+      "ref": "pkg:nim/npeg",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nim/bigints",
+      "dependsOn": []
+    }
+  ]
+}

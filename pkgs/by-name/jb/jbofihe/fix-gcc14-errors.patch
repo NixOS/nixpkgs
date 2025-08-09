@@ -1,0 +1,37 @@
+diff --git a/add_trace_to_tabc.pl b/add_trace_to_tabc.pl
+index 04be787..3186075 100644
+--- a/add_trace_to_tabc.pl
++++ b/add_trace_to_tabc.pl
+@@ -15,11 +15,11 @@
+ # COPYRIGHT
+ 
+ print <<EOF;
+-extern elide_trace_reduce(int, int);
+-extern elide_trace_shift(int,int);
+-extern report_trace_shift(int);
+-extern report_trace_reduce(int, int);
+-extern report_trace_error(short *yyss, short *yyssp);
++extern void elide_trace_reduce(int, int);
++extern void elide_trace_shift(int,int);
++extern void report_trace_shift(int);
++extern void report_trace_reduce(int, int);
++extern void report_trace_error(short *yyss, short *yyssp);
+ EOF
+ 
+ while (<>) {
+diff --git a/dfasyn/n2d.h b/dfasyn/n2d.h
+index b2159ba..6c56abb 100644
+--- a/dfasyn/n2d.h
++++ b/dfasyn/n2d.h
+@@ -181,6 +181,10 @@ Expr * new_xor_expr(Expr *c1, Expr *c2);
+ Expr * new_cond_expr(Expr *c1, Expr *c2, Expr *c3);
+ Expr * new_sym_expr(char *sym_name);
+ 
++int yyparse(void);
++void yyerror(char *);
++int yylex(void);
++
+ void define_symbol(Evaluator *x, char *name, Expr *e);
+ void define_result(Evaluator *x, char *string, Expr *e, int early);
+ void define_symresult(Evaluator *x, char *string, Expr *e, int early);
+

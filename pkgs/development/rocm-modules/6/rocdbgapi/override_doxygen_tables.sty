@@ -1,0 +1,89 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% Packages used by this style file
+\RequirePackage{doxygen}
+\RequirePackage{tabularray}
+\UseTblrLibrary{varwidth}
+\RequirePackage{codehigh}
+\RequirePackage{environ}
+
+% Used by parameter lists
+\renewenvironment{DoxyParams}[2][]{%
+    \par%
+    \ifthenelse{\equal{#1}{}}%
+      {\begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,l]|X[-1,l]|}}}% name + description
+    {\ifthenelse{\equal{#1}{1}}%
+      {\begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,l]|X[-1,l]|X[-1,l]|}}}% in/out + name + desc
+      {\begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,l]|X[-1,l]|X[-1,l]|X[-1,l]|}}}% in/out + type + name + desc
+    }
+    \SetCell[c=2]{l} \hspace{-6pt}\bfseries\fontseries{bc}\selectfont\color{darkgray} #2 \\[1ex]%
+    \hline%
+}{%
+    \end{longtblr}%
+    \vspace{6pt}%
+}
+
+% Used for fields of simple structs
+\renewenvironment{DoxyFields}[1]{%
+    \par%
+    \begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,r]|X[-1,l]|X[-1,l]|}}%
+    \SetCell[c=3]{l} \hspace{-6pt}\bfseries\fontseries{bc}\selectfont\color{darkgray} #1 \\[1ex]%
+    \hline%
+}{%
+    \end{longtblr}%
+    \vspace{6pt}%
+}
+
+% Used for fields simple class style enums
+\renewenvironment{DoxyEnumFields}[2][]{%
+    \par%
+    \ifthenelse{\equal{#1}{2}}%
+      {\begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,r]|X[-1,l]|}}}%
+      {\begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,l]|X[-1,r]|X[-1,l]|}}}% with init value
+    \SetCell[c=2]{l} \hspace{-6pt}\bfseries\fontseries{bc}\selectfont\color{darkgray} #2 \\[1ex]%
+    \hline%
+}{%
+    \end{longtblr}%
+    \vspace{6pt}%
+}
+
+% Used by return value lists
+\renewenvironment{DoxyRetVals}[1]{%
+    \par%
+    \begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,r]|X[-1,l]|}}%
+    \SetCell[c=2]{l} \hspace{-6pt}\bfseries\fontseries{bc}\selectfont\color{darkgray} #1 \\[1ex]%
+    \hline%
+}{%
+    \end{longtblr}%
+    \vspace{6pt}%
+}
+
+% Used by exception lists
+\renewenvironment{DoxyExceptions}[1]{%
+    \par%
+    \begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|l[-1,r]|l[-1,l]|}}%
+    \SetCell[c=2]{l} \hspace{-6pt}\bfseries\fontseries{bc}\selectfont\color{darkgray} #1 \\[1ex]%
+    \hline%
+}{%
+    \end{longtblr}%
+    \vspace{6pt}%
+}
+
+% Used by template parameter lists
+\renewenvironment{DoxyTemplParams}[1]{%
+    \par%
+    \begin{longtblr}[l]{rowhead=1,measure=vbox,colspec={|X[-1,r]|X[-1,l]|}}%
+    \SetCell[c=2]{l} \hspace{-6pt}\bfseries\fontseries{bc}\selectfont\color{darkgray} #1 \\[1ex]%
+    \hline%
+}{%
+    \end{longtblr}%
+    \vspace{6pt}%
+}
+
+% NOTE: this is not a perfect workaround, and known to loose linebreaks, repeated spaces, etc
+\RenewEnviron{DoxyVerb}{%
+  \par%
+  \footnotesize%
+  \ExpandArgs{o}\fakeverb{\BODY}%
+  \normalsize%
+}

@@ -1,0 +1,28 @@
+diff --git a/viteconfig/main.ts b/viteconfig/main.ts
+index ba6e2b6..d748d0a 100644
+--- a/viteconfig/main.ts
++++ b/viteconfig/main.ts
+@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
+ 
+ let gitBranch: string = "";
+ try {
+-  gitBranch = execSync("git rev-parse --abbrev-ref HEAD").toString();
++  gitBranch = "???";
+ } catch (e) {
+   // User has likely downloaded from the YTM Desktop via the "Download ZIP".
+   // We don't plan to support this, but at least provide users with a bit of improved UX
+diff --git a/viteconfig/renderer.ts b/viteconfig/renderer.ts
+index b6531f6..321947a 100644
+--- a/viteconfig/renderer.ts
++++ b/viteconfig/renderer.ts
+@@ -6,8 +6,8 @@ import { execSync } from "node:child_process";
+ let gitBranch: string = "";
+ let gitCommitHash: string = "";
+ try {
+-  gitBranch = execSync("git rev-parse --abbrev-ref HEAD").toString();
+-  gitCommitHash = execSync("git rev-parse HEAD").toString();
++  gitBranch = "???";
++  gitCommitHash = execSync("cat .COMMIT").toString();
+ } catch (e) {
+   // User has likely downloaded from the YTM Desktop via the "Download ZIP".
+   // We don't plan to support this, but at least provide users with a bit of improved UX

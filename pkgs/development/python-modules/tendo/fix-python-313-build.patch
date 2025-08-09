@@ -1,0 +1,183 @@
+From 938d220ce48859cfbb117fb8df42c94c64b88043 Mon Sep 17 00:00:00 2001
+From: Leona Maroni <dev@leona.is>
+Date: Mon, 11 Nov 2024 12:03:54 +0000
+Subject: [PATCH] Enable support for python 3.13 and 3.13 (#96)
+
+adapter from 938d220ce48859cfbb117fb8df42c94c64b88043
+
+---
+ .gitignore                |  1 +
+ pyproject.toml            | 18 ++++++-----
+ setup.cfg                 |  3 ++
+ src/tendo/tee.py          |  4 +--
+ tox.ini                   | 67 +++++++++++++++++++--------------------
+ 5 files changed, 49 insertions(+), 44 deletions(-)
+
+index 215dce7..a1f51a7 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -29,3 +29,4 @@ test-distribute.sh
+ /.pytest_cache
+ venv/*
+ src/tendo/_version.py
++coverage.lcov
+diff --git a/pyproject.toml b/pyproject.toml
+index ef76df7..ad86d7d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -10,18 +10,20 @@ build-backend = "setuptools.build_meta"
+ [tool.black]
+ target-version = ["py38"]
+ 
++[tool.coverage.report]
++exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
++fail_under = 100
++skip_covered = true
++show_missing = true
++
+ [tool.coverage.run]
+-source_pkgs = ["tendo"]
+-branch = true
++source = ["src"]
++# Do not use branch until bug is fixes:
++# https://github.com/nedbat/coveragepy/issues/605
++branch = false
+ parallel = true
+ concurrency = ["multiprocessing", "thread"]
+ 
+-[tool.coverage.paths]
+-source = ["src", ".tox/*/site-packages"]
+-
+-[tool.coverage.report]
+-exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+-
+ [tool.isort]
+ profile = "black"
+ add_imports = "from __future__ import annotations"
+diff --git a/setup.cfg b/setup.cfg
+index 0a6d8c0..bf97071 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -23,6 +23,8 @@ classifier =
+     Programming Language :: Python :: 3.9
+     Programming Language :: Python :: 3.10
+     Programming Language :: Python :: 3.11
++    Programming Language :: Python :: 3.12
++    Programming Language :: Python :: 3.13
+     Topic :: Software Development :: Libraries :: Python Modules
+     Topic :: Internet :: WWW/HTTP
+ 
+@@ -52,6 +54,7 @@ test =
+     coverage[toml]>=6.5.0
+     coveralls~=3.3.1
+     pre-commit>=3.3.3
++    pip
+     pytest-cache~=1.0
+     pytest-cov~=3.0.0
+     pytest-html~=3.1.1
+diff --git a/src/tendo/tee.py b/src/tendo/tee.py
+index 04d21cf..5b08794 100755
+--- a/src/tendo/tee.py
++++ b/src/tendo/tee.py
+@@ -3,7 +3,7 @@
+ import codecs
+ import logging
+ import os
+-import pipes
++from shlex import quote
+ import subprocess
+ import sys
+ import time
+@@ -57,7 +57,7 @@ def system2(
+     # because collections.Iterable seems to be missing on Debian Python 2.5.5
+     # (but not on OS X 10.8 with Python 2.5.6)
+     if hasattr(cmd, "__iter__"):
+-        cmd = " ".join(pipes.quote(s) for s in cmd)
++        cmd = " ".join(quote(s) for s in cmd)
+ 
+     t = time.process_time()
+     output = []
+diff --git a/tox.ini b/tox.ini
+index 5faabef..7f81e8b 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -11,45 +11,44 @@ isolated_build = True
+ 
+ [testenv]
+ sitepackages=False
++commands_pre =
++  # safety measure to assure we do not accidentally run tests with broken dependencies
++  {envpython} -m pip check
++  # cleaning needed to prevent errors between runs
++  sh -c "rm -f {envdir}/.coverage.* 2>/dev/null || true"
++commands=
++  # We add coverage options but not making them mandatory as we do not want to force
++  # pytest users to run coverage when they just want to run a single test with `pytest -k test`
++  coverage run -m pytest {posargs:}
++  # needed for upload to codecov.io
++  {py,py39,py310,py311,py312,py313}: sh -c "coverage combine -q --data-file={envdir}/.coverage {envdir}/.coverage.* && coverage xml --data-file={envdir}/.coverage -o {envdir}/coverage.xml --ignore-errors --fail-under=0 && COVERAGE_FILE={envdir}/.coverage coverage lcov --fail-under=0 --ignore-errors -q && COVERAGE_FILE={envdir}/.coverage coverage report --fail-under=0 --ignore-errors"
++  # lcov needed for vscode integration due to https://github.com/ryanluker/vscode-coverage-gutters/issues/403
++editable = true
++extras = test
+ passenv =
+-    CURL_CA_BUNDLE  # https proxies, https://github.com/tox-dev/tox/issues/1437
+-    FORCE_COLOR
+-    HOME
+-    LANG
+-    LC_ALL
+-    LC_CTYPE
+-    NO_COLOR
+-    PYENV_VERSION
+-    PYTEST_*  # allows developer to define their own preferences
+-    PYTEST_REQPASS  # needed for CI
+-    PY_*
+-    PY_COLORS
+-    REQUESTS_CA_BUNDLE  # https proxies
+-    RTD_TOKEN
+-    RTOX*
+-    SSH_AUTH_SOCK
+-    SSL_CERT_FILE  # https proxies
++  CURL_CA_BUNDLE  # https proxies, https://github.com/tox-dev/tox/issues/1437
++  FORCE_COLOR
++  HOME
++  NO_COLOR
++  PYTEST_*  # allows developer to define their own preferences
++  PYTEST_REQPASS  # needed for CI
++  PYTHON*  # PYTHONPYCACHEPREFIX, PYTHONIOENCODING, PYTHONBREAKPOINT,...
++  PY_COLORS
++  RTD_TOKEN
++  REQUESTS_CA_BUNDLE  # https proxies
++  SETUPTOOLS_SCM_DEBUG
++  SSL_CERT_FILE  # https proxies
++  SSH_AUTH_SOCK # may be needed by git
++  LANG
++  LC_*
+ setenv =
+-    COVERAGE_FILE={env:COVERAGE_FILE:{toxworkdir}/.coverage.{envname}}
+-    COVERAGE_PROCESS_START={toxinidir}/pyproject.toml
+-commands=
+-    coverage run -m pytest --color=yes --html={envlogdir}/report.html --self-contained-html
+-    # --pyargs tendo
++  COVERAGE_FILE = {env:COVERAGE_FILE:{envdir}/.coverage.{envname}}
++  COVERAGE_PROCESS_START={toxinidir}/pyproject.toml
++  PIP_DISABLE_PIP_VERSION_CHECK = 1
+ allowlist_externals =
+     sh
+-deps =
+-    --editable .[test]
+ 
+-[testenv:coverage]
+-description = Combines and displays coverage results
+-commands =
+-  sh -c "coverage combine .tox/.coverage.*"
+-  # needed by codecov github actions:
+-  coverage xml
+-  # just for humans running it:
+-  coverage report --skip-covered --fail-under=43
+-deps =
+-  coverage[toml]>=6.5.0
++
+ 
+ [testenv:docs]
+ changedir=docs
+

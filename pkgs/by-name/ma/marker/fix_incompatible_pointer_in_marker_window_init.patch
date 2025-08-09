@@ -1,0 +1,25 @@
+From 92a679e02f08eef8e2f8c91371b7a3a1f95b4bbc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tomi=20L=C3=A4hteenm=C3=A4ki?= <lihis@lihis.net>
+Date: Fri, 25 Apr 2025 22:04:10 +0300
+Subject: [PATCH] Fix incompatible pointer in marker_window_init()
+
+The `g_action_group_activate_action()` takes `GActionGroup` as first parameter.
+
+This fixes compilation with `-Wincompatible-pointer-types`.
+---
+ src/marker-window.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/marker-window.c b/src/marker-window.c
+index 0ffd0ce3..98b2fdc5 100644
+--- a/src/marker-window.c
++++ b/src/marker-window.c
+@@ -866,7 +866,7 @@ marker_window_init (MarkerWindow *window)
+   if (marker_prefs_get_show_sidebar())
+   {
+     // show sidebar and set the "Sidebar" button as activated
+-    g_action_group_activate_action(G_ACTION_MAP (window), "sidebar", NULL);
++    g_action_group_activate_action(G_ACTION_GROUP (window), "sidebar", NULL);
+   }
+   g_signal_connect(window, "delete-event", G_CALLBACK(window_deleted_event_cb), window);
+ 
