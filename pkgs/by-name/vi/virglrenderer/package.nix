@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -17,16 +17,19 @@
   vulkanSupport ? stdenv.hostPlatform.isLinux,
   vulkan-headers,
   vulkan-loader,
-  gitUpdater,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
   version = "1.1.1";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/${version}/virglrenderer-${version}.tar.bz2";
-    hash = "sha256-D+SJqBL76z1nGBmcJ7Dzb41RvFxU2Ak6rVOwDRB94rM=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "virgl";
+    repo = "virglrenderer";
+    tag = finalAttrs.version;
+    hash = "sha256-ah6+AAf7B15rPMb4uO873wieT3+gf/5iGH+ZFoZKAAI=";
   };
 
   separateDebugInfo = true;
@@ -64,10 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://gitlab.freedesktop.org/virgl/virglrenderer.git";
-      rev-prefix = "virglrenderer-";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "virgl_test_server";
     platforms = lib.platforms.unix;
   };
-}
+})
