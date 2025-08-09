@@ -44,6 +44,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [ "httpx-sse" ];
+
   # tests require CO_API_KEY
   doCheck = false;
 
