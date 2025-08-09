@@ -47,6 +47,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
   };
 })
