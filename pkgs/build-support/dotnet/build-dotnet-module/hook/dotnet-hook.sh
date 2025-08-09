@@ -357,7 +357,7 @@ dotnetInstallPhase() {
     local -r projectFile="${1-}"
 
     for runtimeId in "${runtimeIds[@]}"; do
-      runtimeIdFlags=()
+      local runtimeIdFlags=()
       if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
         runtimeIdFlags+=("--runtime" "$runtimeId")
       fi
@@ -381,6 +381,11 @@ dotnetInstallPhase() {
     local -r projectFile="${1-}"
 
     for runtimeId in "${runtimeIds[@]}"; do
+      local runtimeIdFlags=()
+      if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+        runtimeIdFlags+=("--runtime" "$runtimeId")
+      fi
+
       dotnet pack ${1+"$projectFile"} \
              -maxcpucount:"$maxCpuFlag" \
              -p:ContinuousIntegrationBuild=true \
@@ -390,7 +395,7 @@ dotnetInstallPhase() {
              --configuration "$dotnetBuildType" \
              --no-restore \
              --no-build \
-             --runtime "$runtimeId" \
+             "${runtimeIdFlags[@]}" \
              "${flags[@]}" \
              "${packFlags[@]}"
     done
