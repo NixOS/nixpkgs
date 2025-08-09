@@ -9,6 +9,7 @@
   url,
   version,
   hash,
+  patches ? [ ],
   dovecot,
 }:
 stdenv.mkDerivation rec {
