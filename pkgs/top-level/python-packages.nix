@@ -14936,6 +14936,8 @@ self: super: with self; {
     meson = pkgs.meson.override { python3 = self.python; };
   };
 
+  pythonkuma = callPackage ../development/python-modules/pythonkuma { };
+
   pythonnet = callPackage ../development/python-modules/pythonnet { };
 
   pythonocc-core = toPythonModule (

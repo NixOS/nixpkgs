@@ -6293,7 +6293,8 @@
       ];
     "uptime_kuma" =
       ps: with ps; [
-      ]; # missing inputs: pythonkuma
+        pythonkuma
+      ];
     "uptimerobot" =
       ps: with ps; [
         pyuptimerobot
@@ -7738,6 +7739,7 @@
     "update"
     "upnp"
     "uptime"
+    "uptime_kuma"
     "uptimerobot"
     "usb"
     "usgs_earthquakes_feed"
