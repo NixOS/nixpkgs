@@ -6,7 +6,7 @@
   cryptography,
   ifaddr,
   freezegun,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ];
 

@@ -138,6 +138,18 @@ let
         ];
       });
 
+      hassil = super.hassil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.3";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) repo owner;
+          tag = "v${version}";
+          hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+        };
+
+        disabledTestPaths = [ ];
+      });
+
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = fetchFromGitHub {

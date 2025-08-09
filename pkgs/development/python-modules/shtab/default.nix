@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "shtab";
     tag = "v${version}";
-    hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
+    hash = "sha256-ngTAST+6lBek0PHvULmlJZAHVU49YN5+XAu5KEk6cIM=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     description = "Module for shell tab completion of Python CLI applications";
     mainProgram = "shtab";
     homepage = "https://docs.iterative.ai/shtab/";
-    changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
+    changelog = "https://github.com/iterative/shtab/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

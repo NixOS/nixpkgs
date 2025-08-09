@@ -7,12 +7,12 @@
 }:
 buildPythonPackage rec {
   pname = "uuid6";
-  version = "2024.7.10";
+  version = "2025.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LSnX9j9ZPKruoODQ3QrYEpycZjsp4ZvfiC6GS+3xj7A=";
+    hash = "sha256-zQr5T6QoZ1pE4yxTGexaNIUiW6IXnu/PTD8gWuMKgb0=";
   };
 
   # https://github.com/oittaa/uuid6-python/blob/e647035428d984452b9906b75bb007198533dfb1/setup.py#L12-L19

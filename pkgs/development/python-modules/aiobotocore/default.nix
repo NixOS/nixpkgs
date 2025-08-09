@@ -17,20 +17,21 @@
   werkzeug,
   awscli,
   boto3,
+  httpx,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.22.0";
+  version = "2.23.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-Zzwj0osXqWSCWsuxlpiqpptzjLhFwlqfXqiWMP7CgXg=";
+    hash = "sha256-3aqA+zjXgYGqDRF0x2eS458A0N7Dmc0tfOcnukjf0DM=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     awscli = [ awscli ];
     boto3 = [ boto3 ];
+    httpx = [ httpx ];
   };
 
   nativeCheckInputs = [
@@ -69,11 +71,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobotocore" ];
 
+  disabledTests = [
+    # TypeError: sequence item 1: expected str instance, MagicMock found
+    "test_signers_generate_db_auth_token"
+  ];
+
   disabledTestPaths = [
     # Test requires network access
     "tests/test_version.py"
-    # Test not compatible with latest moto
-    "tests/python3.8/test_eventstreams.py"
     "tests/test_basic_s3.py"
     "tests/test_batch.py"
     "tests/test_dynamodb.py"
@@ -84,6 +89,11 @@ buildPythonPackage rec {
     "tests/test_sns.py"
     "tests/test_sqs.py"
     "tests/test_waiter.py"
+  ];
+
+  disabledTestMarks = [
+    # Exclude localonly tests (incompatible with moto mocks)
+    "localonly"
   ];
 
   __darwinAllowLocalNetworking = true;

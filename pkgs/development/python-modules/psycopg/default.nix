@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -69,6 +68,9 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "Cython >= 3.0.0, < 3.1.0" "Cython"
     '';
 
     nativeBuildInputs = [
@@ -116,9 +118,7 @@ in
 
 buildPythonPackage rec {
   inherit pname version src;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -143,15 +143,15 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    furo
     setuptools
-    shapely
   ]
   # building the docs fails with the following error when cross compiling
   #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    furo
     sphinx-autodoc-typehints
     sphinxHook
+    shapely
   ];
 
   propagatedBuildInputs = [
@@ -209,9 +209,6 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
-    # https://github.com/psycopg/psycopg/pull/915
-    "tests/test_notify.py"
-    "tests/test_notify_async.py"
   ];
 
   pytestFlags = [

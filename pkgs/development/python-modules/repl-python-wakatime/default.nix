@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "repl-python-wakatime";
-  version = "0.0.11";
+  version = "0.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HoCdeo03Lf3g5Xg0GgAyWOu2PtGqy33vg5bQrfkEPkE=";
+    hash = "sha256-U5kg4GbfhyHno1DNbF1uOfHOjgCstYdyDgvwEXqnCZg=";
   };
 
   build-system = [

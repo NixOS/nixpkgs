@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-bio";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
     tag = version;
-    hash = "sha256-yZa9Kl7+Rk4FLQkZIxa9UIsIGAo6YI4UAiJYbhhPIaI=";
+    hash = "sha256-M0P5DUAMlRTkaIPbxSvO99N3y5eTrkg4NMlkIpGr4/g=";
   };
 
   build-system = [

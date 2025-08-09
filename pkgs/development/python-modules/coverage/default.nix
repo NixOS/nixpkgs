@@ -15,21 +15,15 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.8.2";
+  version = "7.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = "coveragepy";
     tag = version;
-    hash = "sha256-PCMGxyG5zIc8iigi9BsuhyuyQindZnewqTgxErT/jHw=";
+    hash = "sha256-OXi5FCLcfhseNDerwHdsVHF31Jy+ZSz2RU05vqPxQis=";
   };
-
-  postPatch = ''
-    # don't write to Nix store
-    substituteInPlace tests/conftest.py \
-      --replace-fail 'if WORKER == "none":' "if False:"
-  '';
 
   build-system = [ setuptools ];
 

@@ -4,6 +4,7 @@
   gettext,
   python3,
   fetchFromGitHub,
+  fetchPypi,
   plugins ? [ ],
   nixosTests,
 }:
@@ -13,6 +14,15 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = prev.django_5_1;
+
+      django-csp = prev.django-csp.overridePythonAttrs rec {
+        version = "3.8";
+        src = fetchPypi {
+          inherit version;
+          pname = "django_csp";
+          hash = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
+        };
+      };
 
       django-extensions = prev.django-extensions.overridePythonAttrs {
         # Compat issues with Django 5.1

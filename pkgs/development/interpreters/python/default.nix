@@ -105,37 +105,7 @@
           inherit passthruFun;
           pythonAttr = "python3Minimal";
           # strip down that python version as much as possible
-          openssl = null;
-          readline = null;
-          ncurses = null;
-          gdbm = null;
-          sqlite = null;
-          tzdata = null;
-          libuuid = null;
-          bzip2 = null;
-          libxcrypt = null;
-          xz = null;
-          zlib = null;
-          libffi = null;
-          stripConfig = true;
-          stripIdlelib = true;
-          stripTests = true;
-          stripTkinter = true;
-          rebuildBytecode = false;
-          stripBytecode = true;
-          includeSiteCustomize = false;
-          enableOptimizations = false;
-          enableLTO = false;
-          mimetypesSupport = false;
-          withExpat = false;
-          withMpdecimal = false;
-          /*
-            The actual 'allowedReferences' attribute is set inside the cpython derivation.
-            This is necessary in order to survive overrides of dependencies.
-          */
-          allowedReferenceNames = [
-            "bashNonInteractive"
-          ];
+          withMinimalDeps = true;
         }
         // sources.python313
       )).overrideAttrs

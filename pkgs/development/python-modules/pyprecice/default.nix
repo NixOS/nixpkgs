@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "3.1.2";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
     tag = "v${version}";
-    hash = "sha256-/atuMJVgvY4kgvrB+LuQZmJuSK4O8TJdguC7NCiRS2Y=";
+    hash = "sha256-8AM2wbPX54UaMO4MzLOV0TljLTAPOqR9gUbtT2McNjs=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python language bindings for preCICE";
     homepage = "https://github.com/precice/python-bindings";
-    changelog = "https://github.com/precice/python-bindings/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/precice/python-bindings/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };

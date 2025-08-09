@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.14.1";
+  version = "0.14.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_subtests";
     inherit version;
-    hash = "sha256-NQwArcNsOv9namYTXIGu2eIYLhX2w+yHITZpGLu/dYA=";
+    hash = "sha256-cVSoZl/VKO5wp20AIWpE0TncPJyDUhoPd597CtT4AN4=";
   };
 
   nativeBuildInputs = [

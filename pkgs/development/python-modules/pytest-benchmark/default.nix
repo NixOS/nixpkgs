@@ -12,7 +12,6 @@
   pygal,
   pytest,
   pytestCheckHook,
-  pytest-xdist,
   pythonAtLeast,
   pythonOlder,
   setuptools,
@@ -56,7 +55,6 @@ buildPythonPackage rec {
     mercurial
     nbmake
     pytestCheckHook
-    pytest-xdist
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 

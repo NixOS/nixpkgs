@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "4.0.4";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "devpi_common";
+    pname = "devpi-common";
     inherit version;
-    hash = "sha256-I1oKmkXJblTGC6a6L3fYVs+Q8aacG+6UmIfp7cA6Qcw=";
+    hash = "sha256-WNf3YeP+f9/kScSmqeI1DU3fvrZssPbSCAJRQpQwMNM=";
   };
 
   build-system = [
