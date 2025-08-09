@@ -1,9 +1,0 @@
-#   SPDX-FileCopyrightText: no
-#   SPDX-License-Identifier: CC0-1.0
-#
-.kdev4/
-build/
-*.kdev4
-*.qmlc
-.vscode/
-**/__pycache__/

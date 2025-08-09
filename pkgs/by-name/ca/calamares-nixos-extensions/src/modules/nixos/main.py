@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#
-#   SPDX-FileCopyrightText: 2022 Victor Fuentes <vmfuentes64@gmail.com>
-#   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
-#   SPDX-License-Identifier: GPL-3.0-or-later
-#
-#   Calamares is Free Software: see the License-Identifier above.
-#
-
 import configparser
 import libcalamares
 import os
