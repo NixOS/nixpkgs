@@ -4580,10 +4580,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  clipbuzz = callPackage ../tools/misc/clipbuzz {
-    zig = buildPackages.zig_0_12;
-  };
-
   # A minimal xar is needed to break an infinite recursion between macfuse-stubs and xar.
   # It is also needed to reduce the amount of unnecessary stuff in the Darwin bootstrap.
   xarMinimal = callPackage ../by-name/xa/xar/package.nix { e2fsprogs = null; };
