@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agenix-cli";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = "agenix-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-eJp6t8h8uOP0YupYn8x6VAAmUbVrXypxNMGx4SK/6d8=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "agenix";
   };
-}
+})
