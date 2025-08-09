@@ -506,7 +506,6 @@ in
   fanout = runTest ./fanout.nix;
   fcitx5 = runTest ./fcitx5;
   fedimintd = runTest ./fedimintd.nix;
-  fenics = runTest ./fenics.nix;
   ferm = runTest ./ferm.nix;
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
@@ -772,18 +771,8 @@ in
   k3s = handleTest ./k3s { };
   kafka = handleTest ./kafka { };
   kanboard = runTest ./web-apps/kanboard.nix;
-  kanidm =
-    kanidmVersion:
-    runTest {
-      imports = [ ./kanidm.nix ];
-      _module.args = { inherit kanidmVersion; };
-    };
-  kanidm-provisioning =
-    kanidmVersion:
-    runTest {
-      imports = [ ./kanidm-provisioning.nix ];
-      _module.args = { inherit kanidmVersion; };
-    };
+  kanidm = runTest ./kanidm.nix;
+  kanidm-provisioning = runTest ./kanidm-provisioning.nix;
   karma = runTest ./karma.nix;
   kavita = runTest ./kavita.nix;
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
@@ -1457,6 +1446,7 @@ in
   systemd-nspawn-configfile = runTest ./systemd-nspawn-configfile.nix;
   systemd-oomd = runTest ./systemd-oomd.nix;
   systemd-portabled = runTest ./systemd-portabled.nix;
+  systemd-pstore = runTest ./systemd-pstore.nix;
   systemd-repart = handleTest ./systemd-repart.nix { };
   systemd-resolved = runTest ./systemd-resolved.nix;
   systemd-ssh-proxy = runTest ./systemd-ssh-proxy.nix;

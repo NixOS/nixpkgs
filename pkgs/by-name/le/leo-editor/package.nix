@@ -1,31 +1,32 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   python3,
   fetchFromGitHub,
   makeWrapper,
-  wrapQtAppsHook,
   makeDesktopItem,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "leo-editor";
   version = "6.8.6.1";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
-    rev = version;
-    sha256 = "sha256-3ojiIjsGJpPgVSUi0QhIddqwsDxfRWxhxAQ5YmzwZiQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3ojiIjsGJpPgVSUi0QhIddqwsDxfRWxhxAQ5YmzwZiQ=";
   };
 
   dontBuild = true;
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     makeWrapper
     python3
   ];
+
   propagatedBuildInputs = with python3.pkgs; [
     pyqt6
     docutils
@@ -36,7 +37,7 @@ mkDerivation rec {
     exec = "leo %U";
     icon = "leoapp32";
     type = "Application";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     desktopName = "Leo";
     genericName = "Text Editor";
     categories = [
@@ -82,6 +83,8 @@ mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/icons/hicolor/32x32/apps"
     cp leo/Icons/leoapp32.png "$out/share/icons/hicolor/32x32/apps"
 
@@ -96,17 +99,19 @@ mkDerivation rec {
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
 
     wrapQtApp $out/bin/leo
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://leo-editor.github.io/leo-editor/";
     description = "Powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       leonardoce
       kashw2
     ];
     mainProgram = "leo";
   };
-}
+})

@@ -5,19 +5,20 @@
   fetchFromGitHub,
   lib,
   poetry-core,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "letpot";
-  version = "0.4.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpelgrom";
     repo = "python-letpot";
     tag = "v${version}";
-    hash = "sha256-ScguCgShoZ+qSfw558kqodpcpyPGy9HU6c2qAVOQb+c=";
+    hash = "sha256-CUTZvzLC7YGiKXOJSj6gdPOznHQIQ+Bu2YW7LyLB0Sg=";
   };
 
   build-system = [ poetry-core ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "letpot" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

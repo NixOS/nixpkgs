@@ -31,6 +31,8 @@ buildPythonPackage rec {
     csrmesh
   ];
 
+  pythonRelaxDeps = [ "bleak" ];
+
   # Project has no tests
   doCheck = false;
 
