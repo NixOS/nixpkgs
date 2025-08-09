@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  harbor-cli,
   installShellFiles,
 }:
 
@@ -46,7 +45,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = harbor-cli;
+    package = finalAttrs.finalPackage;
     command = "HOME=\"$(mktemp -d)\" harbor version";
   };
 
