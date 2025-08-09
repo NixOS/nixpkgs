@@ -15938,6 +15938,10 @@ self: super: with self; {
 
   ruamel-yaml-string = callPackage ../development/python-modules/ruamel-yaml-string { };
 
+  # There's a breaking change between 0.17.21 and 0.17.22
+  # Yes, really.
+  ruamel-yaml_0_17_21 = callPackage ../development/python-modules/ruamel-yaml/version_0_17_21.nix { };
+
   rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };

@@ -1,0 +1,89 @@
+From c870efed8a11b744429ae26b3c9f2dd3976e4906 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Mon, 30 Jun 2025 13:36:05 -0400
+Subject: [PATCH] Automagic plugin detection with sys.path
+
+---
+ main.py | 48 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
+
+diff --git a/main.py b/main.py
+index 06f1a17..38e8e59 100644
+--- a/main.py
++++ b/main.py
+@@ -5,6 +5,7 @@
+ import os
+ import warnings
+ import glob
++import importlib.util
+ from importlib import import_module
+ 
+ 
+@@ -38,7 +39,7 @@
+ if False:  # MYPY
+     from typing import List, Set, Dict, Tuple, Union, Any, Callable, Optional, Text, Type  # NOQA
+     from ruamel.yaml.compat import StreamType, StreamTextType, VersionType  # NOQA
+-    from types import TracebackType
++    from types import TracebackType, ModuleType
+     from pathlib import Path
+ 
+ try:
+@@ -81,10 +82,11 @@ def __init__(
+         self._output = output
+         self._context_manager: Any = None
+ 
+-        self.plug_ins: List[Any] = []
+-        for pu in ([] if plug_ins is None else plug_ins) + self.official_plug_ins():
+-            file_name = pu.replace(os.sep, '.')
+-            self.plug_ins.append(import_module(file_name))
++        self.plug_ins: List[Any] = self.find_plug_ins()
++        if plug_ins is not None:
++            for pu in plug_ins:
++                file_name = pu.replace(os.sep, '.')
++                self.plug_ins.append(import_module(file_name))
+         self.Resolver: Any = ruamel.yaml.resolver.VersionedResolver
+         self.allow_unicode = True
+         self.Reader: Any = None
+@@ -758,20 +760,28 @@ def seq(self, *args: Any) -> Any:
+             return list(*args)
+ 
+     # helpers
+-    def official_plug_ins(self) -> Any:
+-        """search for list of subdirs that are plug-ins, if __file__ is not available, e.g.
+-        single file installers that are not properly emulating a file-system (issue 324)
+-        no plug-ins will be found. If any are packaged, you know which file that are
+-        and you can explicitly provide it during instantiation:
+-            yaml = ruamel.yaml.YAML(plug_ins=['ruamel/yaml/jinja2/__plug_in__'])
+-        """
+-        try:
+-            bd = os.path.dirname(__file__)
+-        except NameError:
+-            return []
+-        gpbd = os.path.dirname(os.path.dirname(bd))
+-        res = [x.replace(gpbd, "")[1:-3] for x in glob.glob(bd + '/*/__plug_in__.py')]
+-        return res
++    def find_plug_ins(self) -> list[ModuleType]:
++        """search for list of subdirs that are plug-ins, using sys.path"""
++        plugins: list[ModuleType] = []
++        for base in sys.path:
++            yaml_dir = os.path.join(base, "ruamel", "yaml")
++            if not os.path.isdir(yaml_dir):
++                continue
++            for name in os.listdir(yaml_dir):
++                plugin_path = os.path.join(yaml_dir, name, "__plug_in__.py")
++                if not os.path.isfile(plugin_path):
++                    continue
++                spec = importlib.util.spec_from_file_location(
++                    name = f"ruamel.yaml.{name}.__plug_in__",
++                    location = plugin_path,
++                    submodule_search_locations = [ os.path.dirname(plugin_path) ]
++                )
++                if spec and spec.loader:
++                    mod = importlib.util.module_from_spec(spec)
++                    spec.loader.exec_module(mod)
++                    plugins.append(mod)
++    
++        return plugins
+ 
+     def register_class(self, cls: Any) -> Any:
+         """
