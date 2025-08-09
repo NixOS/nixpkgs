@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.199";
+  version = "2.223";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-1d5OzhAFo0s5xshJCdfWufo5Xb0UtHzUPdR6fwuaGYQ=";
+    hash = "sha256-NPiy1KQxi6iRR3tEjdPnx8w++sCLIsZ2FQXSUQL0WrA=";
   };
 
   nativeBuildInputs = [
