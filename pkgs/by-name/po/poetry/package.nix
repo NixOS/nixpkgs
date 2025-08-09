@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchPypi,
 }:
 
 let
@@ -23,6 +24,16 @@ let
           repo = "poetry-core";
           tag = version;
           hash = "sha256-CgaWlqjvBTN7GuerzmO5IiEdXxYH6pmTDj9IsNJlCBE=";
+        };
+      });
+
+      findpython = super.findpython.overridePythonAttrs (old: rec {
+        version = "0.6.3";
+
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-WGPqVVVtiq3Gk0gaFKxPNiSVJxnvwcVZGrsLSp6WXJQ=";
         };
       });
     }
