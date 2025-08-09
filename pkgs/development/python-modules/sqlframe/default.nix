@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.38.0";
+  version = "3.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-zzYhKAteYKvm6p6LkuGEDHJcOz9Miaqv2zztLlfTY1A=";
+    hash = "sha256-ekDt9vsHdHhUNaQghG3EaM82FRZYdw+gaxENcurSayk=";
   };
 
   build-system = [
