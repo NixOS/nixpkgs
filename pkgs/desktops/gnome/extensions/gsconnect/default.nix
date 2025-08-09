@@ -21,7 +21,7 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-gsconnect";
   version = "62";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HFm04XC61AjkJSt4YBc4dO9v563w+LsYDSaZckPYE14=";
   };
 
@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
 
     # slightly janky fix for gsettings_schemadir being removed
     substituteInPlace data/config.js.in \
-      --subst-var-by GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
+      --subst-var-by GSETTINGS_SCHEMA_DIR \
+        ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
   '';
 
   postFixup = ''
@@ -124,4 +125,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})
