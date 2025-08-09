@@ -238,20 +238,7 @@ let
         lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
       );
 
-      lldb = callPackage ./lldb (
-        {
-        }
-        // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
-          src = callPackage (
-            { runCommand }:
-            runCommand "lldb-src-${metadata.version}" { } ''
-              mkdir -p "$out"
-              cp -r ${monorepoSrc}/cmake "$out"
-              cp -r ${monorepoSrc}/lldb "$out"
-            ''
-          ) { };
-        }
-      );
+      lldb = callPackage ./lldb { };
 
       lldb-manpages = lowPrio (
         tools.lldb.override {
