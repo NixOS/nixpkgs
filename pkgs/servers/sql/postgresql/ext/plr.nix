@@ -2,6 +2,7 @@
   buildEnv,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   pkg-config,
   postgresql,
   postgresqlBuildExtension,
@@ -12,14 +13,12 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "plr";
-  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
-    lib.strings.removePrefix "REL" finalAttrs.src.rev
-  )}";
+  version = "8.4.7";
 
   src = fetchFromGitHub {
     owner = "postgres-plr";
     repo = "plr";
-    tag = "REL8_4_7";
+    tag = "REL${lib.replaceString "." "_" finalAttrs.version}";
     hash = "sha256-PdvFEmtKfLT/xfaf6obomPR5hKC9F+wqpfi1heBphRk=";
   };
 
@@ -29,6 +28,9 @@ postgresqlBuildExtension (finalAttrs: {
   makeFlags = [ "USE_PGXS=1" ];
 
   passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^REL(\\d+)_(\\d+)_(\\d+)$" ];
+    };
     withPackages =
       f:
       let
