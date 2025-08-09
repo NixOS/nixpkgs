@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-MqH3CPp+dAX5DXtnHio95KGQ+Ok2TXrX6rn/AMx5OsY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core==" "poetry-core>="
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -42,6 +47,12 @@ buildPythonPackage rec {
     mashumaro
     pyjwt
     yarl
+  ];
+
+  pythonRelaxDeps = [
+    "ciso8601"
+    "frozenlist"
+    "mashumaro"
   ];
 
   __darwinAllowLocalNetworking = true;
