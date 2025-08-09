@@ -4174,7 +4174,8 @@
         openai
         pymicro-vad
         pyspeex-noise
-      ]; # missing inputs: python-open-router
+        python-open-router
+      ];
     "openai_conversation" =
       ps: with ps; [
         ha-ffmpeg
@@ -7434,6 +7435,7 @@
     "onewire"
     "onvif"
     "open_meteo"
+    "open_router"
     "openai_conversation"
     "openalpr_cloud"
     "openerz"
