@@ -1,6 +1,6 @@
 {
   lib,
-  ocaml-ng,
+  ocamlPackages,
   fetchFromGitHub,
   llvmPackages,
   rustc,
@@ -10,9 +10,6 @@
   nixosTests,
 }:
 
-let
-  ocamlPackages = ocaml-ng.ocamlPackages_5_2;
-in
 ocamlPackages.buildDunePackage rec {
   pname = "owi";
   version = "0.2-unstable-2025-07-23";
