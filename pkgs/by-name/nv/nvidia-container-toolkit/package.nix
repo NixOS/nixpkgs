@@ -41,9 +41,6 @@ buildGoModule (finalAttrs: {
       --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
-    substituteInPlace tools/container/toolkit/toolkit.go \
-      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
-
     substituteInPlace cmd/nvidia-cdi-hook/update-ldcache/update-ldcache.go \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
   '';
