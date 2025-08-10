@@ -4,10 +4,9 @@
         "chromium": {
             "deps": {
                 "gn": {
-                    "hash": "sha256-EqbwCLkseND1v3UqM+49N7GuoXJ3PlJjWOes4OijQ3U=",
+                    "hash": "sha256-U0f/Q134UJrSke+/o9Hs4+mQa/vSM2hdkRXhLfhnqME=",
                     "rev": "ed1abc107815210dc66ec439542bee2f6cbabc00",
-                    "url": "https://gn.googlesource.com/gn",
-                    "version": "2025-01-13"
+                    "version": "0-unstable-2025-01-13"
                 }
             },
             "version": "134.0.6998.205"
@@ -1313,10 +1312,9 @@
         "chromium": {
             "deps": {
                 "gn": {
-                    "hash": "sha256-vDKMt23RMDI+KX6CmjfeOhRv2haf/mDOuHpWKnlODcg=",
+                    "hash": "sha256-MnGl+D9ahQibUHCtyOUf1snvmeupUn4D2yrDj55JTe4=",
                     "rev": "6e8e0d6d4a151ab2ed9b4a35366e630c55888444",
-                    "url": "https://gn.googlesource.com/gn",
-                    "version": "2025-03-24"
+                    "version": "0-unstable-2025-03-24"
                 }
             },
             "version": "136.0.7103.177"
@@ -2638,10 +2636,9 @@
         "chromium": {
             "deps": {
                 "gn": {
-                    "hash": "sha256-UB9a7Fr1W0yYld6WbXyRR8dFqWsj/zx4KumDZ5JQKSM=",
+                    "hash": "sha256-BplU8qNKObVrKMLKTyqivPF1L6bbJulFC+Zop9UpmZY=",
                     "rev": "ebc8f16ca7b0d36a3e532ee90896f9eb48e5423b",
-                    "url": "https://gn.googlesource.com/gn",
-                    "version": "2025-05-21"
+                    "version": "0-unstable-2025-05-21"
                 }
             },
             "version": "138.0.7204.185"
