@@ -63,6 +63,7 @@
         };
       };
       programs.mtr.enable = true;
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
 
     # The router is configured with static IPv4 addresses towards the server
@@ -139,6 +140,7 @@
           "192.0.2.42" = "2001:db8::2";
         };
       };
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
 
     router_nixos = {
@@ -204,6 +206,7 @@
           "192.0.2.42" = "2001:db8::2";
         };
       };
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
 
     # The client is configured with static IPv6 addresses. It has also a static
@@ -235,6 +238,7 @@
         };
       };
       programs.mtr.enable = true;
+      environment.systemPackages = [ pkgs.tcpdump ];
     };
   };
 
