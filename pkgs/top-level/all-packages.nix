@@ -1314,11 +1314,6 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS
 
-  _86Box-with-roms = _86Box.override {
-    unfreeEnableRoms = true;
-    unfreeEnableDiscord = true;
-  };
-
   box64 = callPackage ../applications/emulators/box64 {
     hello-x86_64 = if stdenv.hostPlatform.isx86_64 then hello else pkgsCross.gnu64.hello;
   };
@@ -1375,36 +1370,6 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  ppsspp-sdl =
-    let
-      argset = {
-        enableQt = false;
-        enableVulkan = true;
-        forceWayland = false;
-      };
-    in
-    ppsspp.override argset;
-
-  ppsspp-sdl-wayland =
-    let
-      argset = {
-        enableQt = false;
-        enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
-        forceWayland = true;
-      };
-    in
-    ppsspp.override argset;
-
-  ppsspp-qt =
-    let
-      argset = {
-        enableQt = true;
-        enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
-        forceWayland = false;
-      };
-    in
-    ppsspp.override argset;
-
   py65 = with python3.pkgs; toPythonApplication py65;
 
   rmg-wayland = callPackage ../by-name/rm/rmg/package.nix {
@@ -1456,11 +1421,6 @@ with pkgs;
   };
 
   ### APPLICATIONS/FILE-MANAGERS
-
-  vifm-full = vifm.override {
-    mediaSupport = true;
-    inherit lib udisks2 python3;
-  };
 
   xfe = callPackage ../by-name/xf/xfe/package.nix {
     fox = fox_1_6;
@@ -8231,14 +8191,7 @@ with pkgs;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  harfbuzzFull = harfbuzz.override {
-    withGraphite2 = true;
-    withIcu = true;
-  };
-
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
-
-  highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hivex = callPackage ../development/libraries/hivex { };
 
@@ -8319,15 +8272,6 @@ with pkgs;
     else
       callPackage ../development/libraries/irrlicht/mac.nix {
       };
-
-  iso-flags-png-320x240 = iso-flags.overrideAttrs (oldAttrs: {
-    buildFlags = [ "png-country-320x240-fancy" ];
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png
-      runHook postInstall
-    '';
-  });
 
   isoimagewriter = libsForQt5.callPackage ../tools/misc/isoimagewriter { };
 
@@ -8464,10 +8408,6 @@ with pkgs;
 
   dwarfdump = libdwarf.bin;
 
-  libfm-extra = libfm.override {
-    extraOnly = true;
-  };
-
   libgda5 = callPackage ../development/libraries/libgda/5.x.nix { };
 
   libgda6 = callPackage ../development/libraries/libgda/6.x.nix { };
@@ -8476,10 +8416,6 @@ with pkgs;
   libgnome-games-support_2_0 =
     callPackage ../development/libraries/libgnome-games-support/2.0.nix
       { };
-
-  libextractor = callPackage ../development/libraries/libextractor {
-    libmpeg2 = mpeg2dec;
-  };
 
   libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
