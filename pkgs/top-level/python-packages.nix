@@ -554,6 +554,8 @@ self: super: with self; {
 
   airly = callPackage ../development/python-modules/airly { };
 
+  airos = callPackage ../development/python-modules/airos { };
+
   airportsdata = callPackage ../development/python-modules/airportsdata { };
 
   airthings-ble = callPackage ../development/python-modules/airthings-ble { };
@@ -13032,6 +13034,8 @@ self: super: with self; {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
+  pyitachip2ir = callPackage ../development/python-modules/pyitachip2ir { };
+
   pyituran = callPackage ../development/python-modules/pyituran { };
 
   pyixapi = callPackage ../development/python-modules/pyixapi { };
@@ -13507,6 +13511,8 @@ self: super: with self; {
 
   pypass = callPackage ../development/python-modules/pypass { };
 
+  pypasser = callPackage ../development/python-modules/pypasser { };
+
   pypblib = callPackage ../development/python-modules/pypblib { };
 
   pypca = callPackage ../development/python-modules/pypca { };
@@ -13548,6 +13554,8 @@ self: super: with self; {
   pypiserver = callPackage ../development/python-modules/pypiserver { };
 
   pypitoken = callPackage ../development/python-modules/pypitoken { };
+
+  pypjlink2 = callPackage ../development/python-modules/pypjlink2 { };
 
   pyplaato = callPackage ../development/python-modules/pyplaato { };
 
@@ -15149,6 +15157,8 @@ self: super: with self; {
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
   pywlroots = callPackage ../development/python-modules/pywlroots { wlroots = pkgs.wlroots_0_17; };
+
+  pywmspro = callPackage ../development/python-modules/pywmspro { };
 
   pyworld = callPackage ../development/python-modules/pyworld { };
 
@@ -17668,6 +17678,8 @@ self: super: with self; {
 
   takethetime = callPackage ../development/python-modules/takethetime { };
 
+  tami4edgeapi = callPackage ../development/python-modules/tami4edgeapi { };
+
   tank-utility = callPackage ../development/python-modules/tank-utility { };
 
   tappy = callPackage ../development/python-modules/tappy { };
@@ -17980,6 +17992,8 @@ self: super: with self; {
   thespian = callPackage ../development/python-modules/thespian { };
 
   thinc = callPackage ../development/python-modules/thinc { };
+
+  thingspeak = callPackage ../development/python-modules/thingspeak { };
 
   thinqconnect = callPackage ../development/python-modules/thinqconnect { };
 
@@ -19443,6 +19457,8 @@ self: super: with self; {
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
 
   voluptuous-stubs = callPackage ../development/python-modules/voluptuous-stubs { };
+
+  volvocarsapi = callPackage ../development/python-modules/volvocarsapi { };
 
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 

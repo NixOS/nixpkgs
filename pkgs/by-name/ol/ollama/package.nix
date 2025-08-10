@@ -18,6 +18,7 @@
   cudaPackages,
   cudaArches ? cudaPackages.flags.realArches or [ ],
   autoAddDriverRunpath,
+  apple-sdk_15,
 
   # passthru
   nixosTests,
@@ -152,7 +153,9 @@ goBuild (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals enableRocm (rocmLibs ++ [ libdrm ]) ++ lib.optionals enableCuda cudaLibs;
+    lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
+    ++ lib.optionals enableCuda cudaLibs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   # replace inaccurate version number with actual release version
   postPatch = ''
@@ -251,7 +254,6 @@ goBuild (finalAttrs: {
     changelog = "https://github.com/ollama/ollama/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     platforms = if (rocmRequested || cudaRequested) then platforms.linux else platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # TODO: Remove after upstream issue is fixed, see issue #431464 and comments.
     mainProgram = "ollama";
     maintainers = with maintainers; [
       abysssol

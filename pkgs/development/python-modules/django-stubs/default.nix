@@ -1,17 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  django,
   django-stubs-ext,
+  django,
   fetchFromGitHub,
+  hatchling,
+  redis,
   mypy,
   pytest-mypy-plugins,
+  oracledb,
   pytestCheckHook,
   pythonOlder,
-  hatchling,
   tomli,
   types-pytz,
   types-pyyaml,
+  types-redis,
   typing-extensions,
 }:
 
@@ -40,6 +43,11 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];
+    oracle = [ oracledb ];
+    redis = [
+      redis
+      types-redis
+    ];
   };
 
   nativeCheckInputs = [
@@ -54,7 +62,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "tests/typecheck"
+    # Skip type checking
+    "tests/typecheck/"
   ];
 
   pythonImportsCheck = [ "django-stubs" ];

@@ -335,13 +335,13 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-2BoazJ97yPtp627a5HpAVg9iD2OMIeXSmv5kkdxuTes=",
+    "hash": "sha256-Fi1Ip/Uy89s8XeX5yT55LKjMw/Bk/B/Vwvc0qXTaYbw=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.69.0",
+    "rev": "v3.70.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-AQ+/+NCBBj4ptBGHJmibH6QZo4560dRRbs55SqY9buE="
+    "vendorHash": "sha256-IW7v9w3/X+v+AF8eRE4n1KI7MnLWlxkXzTvAJtsQ4Ik="
   },
   "deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
@@ -633,11 +633,11 @@
     "vendorHash": "sha256-SsEWNIBkgcdTlSrB4hIvRmhMv2eJ2qQaPUmiN09A+NM="
   },
   "huaweicloud": {
-    "hash": "sha256-BzWYtn6KVVMq+wjqj3CMPKSzo9DzePIIdnRjJ53nJBI=",
+    "hash": "sha256-LLQFgUy3Hv3HlcL4gnZPdIEcR95fqroKIH4cLyb21Sk=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.77.1",
+    "rev": "v1.77.3",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -831,13 +831,13 @@
     "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
   },
   "migadu": {
-    "hash": "sha256-3q9vhHt4VDqcIYHEZjJY0whvGPQWMDHkGsAQEES8EkE=",
+    "hash": "sha256-k7W/oaZeBY5/Wi1vRCD641DKc0KQbBa834WDmtBp5wY=",
     "homepage": "https://registry.terraform.io/providers/metio/migadu",
     "owner": "metio",
     "repo": "terraform-provider-migadu",
-    "rev": "2025.7.17",
+    "rev": "2025.8.7",
     "spdx": "0BSD",
-    "vendorHash": "sha256-oipY2hwgRrntCxxHPyH06e8p+0fKfAQwhh2iBI4RGHQ="
+    "vendorHash": "sha256-CokSZ4CgWBCb/MnGK410Lt9rwBq3luceoFAPLLrwT5U="
   },
   "minio": {
     "hash": "sha256-TLWbbWYTjnvxT1LaV3FsL31xHHov8LpDYhA/nchMyMo=",
@@ -1210,13 +1210,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "signalfx": {
-    "hash": "sha256-EoehHn7j3nnXzpHEjX4FQSO1na9xSmVpnTiPnTqUrpE=",
+    "hash": "sha256-hNMZbrihV+xlfamXRaGszQRqO8Tn2829rd4+pH83lrU=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.17.0",
+    "rev": "v9.19.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-404/DlCtz0yAaM8zJ3ngJ2/DwoUJImjIqKYwdigHl4U="
+    "vendorHash": "sha256-wpm7J8kfkm4vDZhZ0koQsgpW5JwWY7DngSYXfaWh3FQ="
   },
   "skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",

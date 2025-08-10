@@ -256,21 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0019-meson-Don-t-link-ssh-dropins.patch
 
     ./0020-install-unit_file_exists_full-follow-symlinks.patch
-
-    # add nspawn build option flag
-    # required to disable nspawn for systemdLibs to avoid dependency on getent
-    # https://github.com/systemd/systemd/pull/36876, remove for systemd 258
-    (fetchpatch {
-      # required for the actual patch to apply
-      url = "https://github.com/systemd/systemd/commit/b1fb2d971c810e0bdf9ff0ae567a1c6c230e4e5d.patch";
-      hash = "sha256-JBheazg1OFkx8vUl2l8+34BoEPVURBQJHxqntOBYB60=";
-      includes = [ "src/nspawn/meson.build" ];
-    })
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/d95818f5221d9b9b19648cffa0cb2407f023b27e.patch";
-      hash = "sha256-FTpWGec5ivlkyEEDMCPaLE+BH91e7JI0kH8pS88bBDY=";
-      excludes = [ "test/fuzz/meson.build" ];
-    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
@@ -600,7 +585,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" true)
-    (lib.mesonEnable "nspawn" withNspawn)
+    # (lib.mesonEnable "nspawn" withNspawn) # nspawn build can be turned off on systemd 258, on 257.x it will just not be installed in systemdLibs but the build is unconditional
 
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
@@ -697,6 +682,9 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optionals withNspawn [
         {
+          # we only need to patch getent when nspawn will actually be built/installed
+          # as of systemd 257.x, nspawn will not be installed on systemdLibs, so we don't need to patch it
+          # patching getent unconditionally here introduces infinite recursion on musl
           search = "/usr/bin/getent";
           replacement = "${getent}/bin/getent";
           where = [ "src/nspawn/nspawn-setuid.c" ];
