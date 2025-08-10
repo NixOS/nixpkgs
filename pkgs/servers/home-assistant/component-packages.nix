@@ -3693,7 +3693,8 @@
       ];
     "moehlenhoff_alpha2" =
       ps: with ps; [
-      ]; # missing inputs: moehlenhoff-alpha2
+        moehlenhoff-alpha2
+      ];
     "mold_indicator" =
       ps: with ps; [
       ];
@@ -4153,8 +4154,9 @@
       ];
     "onkyo" =
       ps: with ps; [
+        aioonkyo
         ifaddr
-      ]; # missing inputs: aioonkyo
+      ];
     "onvif" =
       ps: with ps; [
         ha-ffmpeg
@@ -4174,7 +4176,8 @@
         openai
         pymicro-vad
         pyspeex-noise
-      ]; # missing inputs: python-open-router
+        python-open-router
+      ];
     "openai_conversation" =
       ps: with ps; [
         ha-ffmpeg
@@ -6290,7 +6293,8 @@
       ];
     "uptime_kuma" =
       ps: with ps; [
-      ]; # missing inputs: pythonkuma
+        pythonkuma
+      ];
     "uptimerobot" =
       ps: with ps; [
         pyuptimerobot
@@ -7358,6 +7362,7 @@
     "modbus"
     "modem_callerid"
     "modern_forms"
+    "moehlenhoff_alpha2"
     "mold_indicator"
     "monarch_money"
     "monoprice"
@@ -7432,8 +7437,10 @@
     "ondilo_ico"
     "onedrive"
     "onewire"
+    "onkyo"
     "onvif"
     "open_meteo"
+    "open_router"
     "openai_conversation"
     "openalpr_cloud"
     "openerz"
@@ -7732,6 +7739,7 @@
     "update"
     "upnp"
     "uptime"
+    "uptime_kuma"
     "uptimerobot"
     "usb"
     "usgs_earthquakes_feed"

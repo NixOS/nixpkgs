@@ -396,7 +396,7 @@ in
         auth       requisite                   pam_nologin.so
         auth       requisite                   pam_faillock.so      preauth
         auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
-        auth       required                    pam_env.so
+        auth       required                    pam_env.so conffile=/etc/pam/environment readenv=0
         ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so

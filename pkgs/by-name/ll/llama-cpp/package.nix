@@ -72,19 +72,21 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "5985";
+  version = "6123";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-OoV/p4Es/X/xQW7PpDLq5YLVYjieIE5+1itvtJECH54=";
+    hash = "sha256-4kqbKGPPOkOkHXA4IeLuj/0P5jpqtGlGuVKeUD4UhZY=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
+  patches = lib.optionals vulkanSupport [ ./disable_bfloat16.patch ];
 
   postPatch = ''
     # Workaround for local-ai package which overrides this package to an older llama-cpp
@@ -139,11 +141,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
-  ++ optionals rocmSupport ([
+  ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
     # TODO: this should become `clr.gpuTargets` in the future.
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
-  ])
+  ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
@@ -186,6 +188,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
+    broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })
