@@ -2,7 +2,7 @@
   "clang/gnu-install-dirs.patch" = [
     {
       before = "14";
-      path = ../12;
+      path = ../13;
     }
     {
       after = "19";
@@ -21,7 +21,7 @@
     }
     {
       before = "16";
-      path = ../12;
+      path = ../13;
     }
   ];
   "clang/aarch64-tblgen.patch" = [
@@ -44,7 +44,7 @@
     }
     {
       before = "14";
-      path = ../12;
+      path = ../13;
     }
   ];
   "llvm/gnu-install-dirs.patch" = [
@@ -126,7 +126,7 @@
     }
     {
       before = "15";
-      path = ../12;
+      path = ../13;
     }
   ];
   "compiler-rt/armv6-scudo-libatomic.patch" = [
@@ -147,17 +147,15 @@
   "compiler-rt/armv7l.patch" = [
     {
       before = "15";
-      after = "13";
       path = ../13;
     }
   ];
   "compiler-rt/gnu-install-dirs.patch" = [
     {
       before = "14";
-      path = ../12;
+      path = ../13;
     }
     {
-      after = "13";
       before = "15";
       path = ../14;
     }
@@ -173,13 +171,11 @@
   ];
   "compiler-rt/darwin-targetconditionals.patch" = [
     {
-      after = "13";
       path = ../13;
     }
   ];
   "compiler-rt/codesign.patch" = [
     {
-      after = "13";
       path = ../13;
     }
   ];
@@ -190,7 +186,7 @@
     }
     {
       before = "16";
-      path = ../12;
+      path = ../13;
     }
   ];
   "lldb/procfs.patch" = [
@@ -200,19 +196,19 @@
     }
     {
       before = "15";
-      path = ../12;
+      path = ../13;
     }
   ];
   "lldb/resource-dir.patch" = [
     {
       before = "16";
-      path = ../12;
+      path = ../13;
     }
   ];
   "llvm/no-pipes.patch" = [
     {
       before = "16";
-      path = ../12;
+      path = ../13;
     }
   ];
   "openmp/fix-find-tool.patch" = [
