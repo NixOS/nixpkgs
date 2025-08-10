@@ -193,7 +193,10 @@ buildDotnetModule rec {
     downloadPage = "https://github.com/renode/renode";
     homepage = "https://renode.io";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ otavio ];
+    maintainers = with lib.maintainers; [
+      otavio
+      znaniye
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
