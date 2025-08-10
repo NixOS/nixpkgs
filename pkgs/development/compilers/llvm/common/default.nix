@@ -257,6 +257,13 @@ let
         }
       );
 
+      lldb-manpages = lowPrio (
+        tools.lldb.override {
+          enableManpages = true;
+          python3 = pkgs.python3; # don't use python-boot
+        }
+      );
+
       # Below, is the LLVM bootstrapping logic. It handles building a
       # fully LLVM toolchain from scratch. No GCC toolchain should be
       # pulled in. As a consequence, it is very quick to build different
@@ -349,9 +356,7 @@ let
           "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
           "-nostdlib++"
         ]
-        ++ lib.optional (
-          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-        ) "-fno-exceptions";
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
       };
 
       clangNoLibcWithBasicRt = wrapCCWith rec {
@@ -364,9 +369,7 @@ let
           "-rtlib=compiler-rt"
           "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
         ]
-        ++ lib.optional (
-          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-        ) "-fno-exceptions";
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
       };
 
       clangNoLibcNoRt = wrapCCWith rec {
@@ -376,9 +379,7 @@ let
         extraPackages = [ ];
         # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
         extraBuildCommands = mkExtraBuildCommands0 cc;
-        nixSupport.cc-cflags = lib.optional (
-          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-        ) "-fno-exceptions";
+        nixSupport.cc-cflags = lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
       };
 
       # This is an "oddly ordered" bootstrap just for Darwin. Probably
@@ -392,23 +393,14 @@ let
           extraBuildCommands = mkExtraBuildCommands0 cc;
         }
         # FIXME: This should be inside the `wrapCCWith` call.
-        // lib.optionalAttrs (
-          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-        ) { nixSupport.cc-cflags = [ "-fno-exceptions" ]; };
+        // lib.optionalAttrs stdenv.targetPlatform.isWasm {
+          nixSupport.cc-cflags = [ "-fno-exceptions" ];
+        };
 
       # Aliases
       clangNoCompilerRt = tools.clangNoLibcNoRt;
       clangNoLibc = tools.clangNoLibcWithBasicRt;
       clangNoLibcxx = tools.clangWithLibcAndBasicRt;
-    }
-    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "15") {
-      # TODO: pre-15: lldb/docs/index.rst:155:toctree contains reference to nonexisting document 'design/structureddataplugins'
-      lldb-manpages = lowPrio (
-        tools.lldb.override {
-          enableManpages = true;
-          python3 = pkgs.python3; # don't use python-boot
-        }
-      );
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "16") {
       mlir = callPackage ./mlir { };

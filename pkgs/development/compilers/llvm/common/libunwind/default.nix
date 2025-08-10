@@ -32,30 +32,22 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/libunwind "$out"
-            mkdir -p "$out/libcxx"
-            cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
-            cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
-            mkdir -p "$out/llvm"
-            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "15") ''
-            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-            cp -r ${monorepoSrc}/runtimes "$out"
-          ''
-        )
+        runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/libunwind "$out"
+          mkdir -p "$out/libcxx"
+          cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+          cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
+          mkdir -p "$out/llvm"
+          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+          cp -r ${monorepoSrc}/runtimes "$out"
+        ''
       else
         src;
 
-    sourceRoot =
-      if lib.versionAtLeast release_version "15" then
-        "${finalAttrs.src.name}/runtimes"
-      else
-        "${finalAttrs.src.name}/libunwind";
+    sourceRoot = "${finalAttrs.src.name}/runtimes";
 
     outputs = [
       "out"
@@ -64,34 +56,24 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [
       cmake
-    ]
-    ++ lib.optionals (lib.versionAtLeast release_version "15") [
       ninja
       python3
     ];
 
     cmakeFlags = [
       (lib.cmakeBool "LIBUNWIND_ENABLE_SHARED" enableShared)
+      (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind")
     ]
-    ++ lib.optional (lib.versionAtLeast release_version "15") (
-      lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind"
-    )
     ++ devExtraCmakeFlags;
 
-    prePatch =
-      lib.optionalString
-        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-        ''
-          cd ../libunwind
-          chmod -R u+w .
-        '';
+    prePatch = lib.optionalString (hasPatches || lib.versionOlder release_version "18") ''
+      cd ../libunwind
+      chmod -R u+w .
+    '';
 
-    postPatch =
-      lib.optionalString
-        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-        ''
-          cd ../runtimes
-        '';
+    postPatch = lib.optionalString (hasPatches || lib.versionOlder release_version "18") ''
+      cd ../runtimes
+    '';
 
     postInstall =
       lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)

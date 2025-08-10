@@ -50,9 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   patchFlags = null;
 
   patches =
-    lib.optional (lib.versionAtLeast release_version "15" && lib.versionOlder release_version "19") (
-      getVersionFile "openmp/fix-find-tool.patch"
-    )
+    lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")
     ++ lib.optional (lib.versionOlder release_version "18") (
       getVersionFile "openmp/gnu-install-dirs.patch"
     )
@@ -64,11 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3.pythonOnBuildForHost
     perl
-  ]
-  ++ lib.optionals (lib.versionAtLeast release_version "15") [
     ninja
-  ]
-  ++ [
     pkg-config
     lit
   ];

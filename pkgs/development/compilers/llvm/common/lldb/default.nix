@@ -78,20 +78,7 @@ stdenv.mkDerivation (
           }).overrideAttrs
             (_: _: { name = "resource-dir.patch"; });
       in
-      lib.optionals (lib.versionOlder release_version "15") [
-        # Fixes for SWIG 4
-        (fetchpatch2 {
-          url = "https://github.com/llvm/llvm-project/commit/81fc5f7909a4ef5a8d4b5da2a10f77f7cb01ba63.patch?full_index=1";
-          stripLen = 1;
-          hash = "sha256-Znw+C0uEw7lGETQLKPBZV/Ymo2UigZS+Hv/j1mUo7p0=";
-        })
-        (fetchpatch2 {
-          url = "https://github.com/llvm/llvm-project/commit/f0a25fe0b746f56295d5c02116ba28d2f965c175.patch?full_index=1";
-          stripLen = 1;
-          hash = "sha256-QzVeZzmc99xIMiO7n//b+RNAvmxghISKQD93U2zOgFI=";
-        })
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "16") [
+      lib.optionals (lib.versionOlder release_version "16") [
         # Fixes for SWIG 4
         (fetchpatch2 {
           url = "https://github.com/llvm/llvm-project/commit/ba35c27ec9aa9807f5b4be2a0c33ca9b045accc7.patch?full_index=1";
@@ -181,21 +168,17 @@ stdenv.mkDerivation (
     ++ lib.optionals (lib.versionAtLeast release_version "17") [
       (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
     ]
-    ++ lib.optionals enableManpages (
-      [
-        (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
-        (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
-        (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
-        # docs reference `automodapi` but it's not added to the extensions list when
-        # only building the manpages:
-        # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
-        #
-        # so, we just ignore the resulting errors
-        (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
-      ]
-    )
+    ++ lib.optionals enableManpages [
+      (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
+      (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
+      (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
+      # docs reference `automodapi` but it's not added to the extensions list when
+      # only building the manpages:
+      # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
+      #
+      # so, we just ignore the resulting errors
+      (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
+    ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
       (lib.cmakeFeature "-DLLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
@@ -203,7 +186,7 @@ stdenv.mkDerivation (
     ++ devExtraCmakeFlags;
 
     doCheck = false;
-    doInstallCheck = lib.versionOlder release_version "15";
+    doInstallCheck = false;
 
     # TODO: cleanup with mass-rebuild
     installCheckPhase = ''
@@ -248,11 +231,10 @@ stdenv.mkDerivation (
   // lib.optionalAttrs enableManpages {
     pname = "lldb-manpages";
 
-    buildPhase = lib.optionalString (lib.versionOlder release_version "15") ''
-      make docs-lldb-man
-    '';
+    # TODO: Remove on `staging`.
+    buildPhase = "";
 
-    ninjaFlags = lib.optionals (lib.versionAtLeast release_version "15") [ "docs-lldb-man" ];
+    ninjaFlags = [ "docs-lldb-man" ];
 
     propagatedBuildInputs = [ ];
 
