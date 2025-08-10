@@ -61,7 +61,8 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_37.version}
+        -c.electronVersion=${electron_37.version} \
+        -c.mac.identity=null
 
     runHook postBuild
   '';
