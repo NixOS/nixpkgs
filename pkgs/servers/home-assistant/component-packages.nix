@@ -4465,7 +4465,8 @@
       ];
     "pjlink" =
       ps: with ps; [
-      ]; # missing inputs: pypjlink2
+        pypjlink2
+      ];
     "plaato" =
       ps: with ps; [
         aiohasupervisor
@@ -7484,6 +7485,7 @@
     "pi_hole"
     "picnic"
     "ping"
+    "pjlink"
     "plaato"
     "plant"
     "playstation_network"
