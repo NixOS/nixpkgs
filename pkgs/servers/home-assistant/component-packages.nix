@@ -114,7 +114,8 @@
       ];
     "airos" =
       ps: with ps; [
-      ]; # missing inputs: airos
+        airos
+      ];
     "airq" =
       ps: with ps; [
         aioairq
@@ -2835,7 +2836,8 @@
       ];
     "itach" =
       ps: with ps; [
-      ]; # missing inputs: pyitachip2ir
+        pyitachip2ir
+      ];
     "itunes" =
       ps: with ps; [
       ];
@@ -4464,7 +4466,8 @@
       ];
     "pjlink" =
       ps: with ps; [
-      ]; # missing inputs: pypjlink2
+        pypjlink2
+      ];
     "plaato" =
       ps: with ps; [
         aiohasupervisor
@@ -5817,7 +5820,8 @@
       ];
     "tami4" =
       ps: with ps; [
-      ]; # missing inputs: Tami4EdgeAPI
+        tami4edgeapi
+      ];
     "tank_utility" =
       ps: with ps; [
         tank-utility
@@ -5979,7 +5983,8 @@
       ];
     "thingspeak" =
       ps: with ps; [
-      ]; # missing inputs: thingspeak
+        thingspeak
+      ];
     "thinkingcleaner" =
       ps: with ps; [
       ]; # missing inputs: pythinkingcleaner
@@ -6430,7 +6435,8 @@
       ];
     "volvo" =
       ps: with ps; [
-      ]; # missing inputs: volvocarsapi
+        volvocarsapi
+      ];
     "volvooncall" =
       ps: with ps; [
         volvooncall
@@ -6574,7 +6580,8 @@
       ];
     "wmspro" =
       ps: with ps; [
-      ]; # missing inputs: pywmspro
+        pywmspro
+      ];
     "wolflink" =
       ps: with ps; [
         wolf-comm
@@ -6867,6 +6874,7 @@
     "airgradient"
     "airly"
     "airnow"
+    "airos"
     "airq"
     "airthings"
     "airthings_ble"
@@ -7479,6 +7487,7 @@
     "pi_hole"
     "picnic"
     "ping"
+    "pjlink"
     "plaato"
     "plant"
     "playstation_network"
@@ -7671,6 +7680,7 @@
     "tag"
     "tailscale"
     "tailwind"
+    "tami4"
     "tankerkoenig"
     "tasmota"
     "tautulli"
@@ -7765,6 +7775,7 @@
     "voicerss"
     "voip"
     "volumio"
+    "volvo"
     "volvooncall"
     "vulcan"
     "vultr"
@@ -7794,6 +7805,7 @@
     "withings"
     "wiz"
     "wled"
+    "wmspro"
     "wolflink"
     "workday"
     "worldclock"

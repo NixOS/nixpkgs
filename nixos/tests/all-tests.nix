@@ -1059,6 +1059,7 @@ in
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
+  nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
