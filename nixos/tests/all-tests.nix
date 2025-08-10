@@ -273,6 +273,7 @@ in
   bitbox-bridge = runTest ./bitbox-bridge.nix;
   bitcoind = runTest ./bitcoind.nix;
   bittorrent = runTest ./bittorrent.nix;
+  blint = runTest ./blint.nix;
   blockbook-frontend = runTest ./blockbook-frontend.nix;
   blocky = runTest ./blocky.nix;
   bookstack = runTest ./bookstack.nix;
@@ -499,6 +500,7 @@ in
   etcd-cluster = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./etcd/etcd-cluster.nix;
   etebase-server = runTest ./etebase-server.nix;
   etesync-dav = runTest ./etesync-dav.nix;
+  dep-scan = runTest ./dep-scan.nix;
   evcc = runTest ./evcc.nix;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;

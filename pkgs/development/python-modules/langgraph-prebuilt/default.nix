@@ -31,14 +31,14 @@
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
 buildPythonPackage rec {
   pname = "langgraph-prebuilt";
-  version = "0.6.1";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "prebuilt==${version}";
-    hash = "sha256-8mubZSV1CDgYzykKaaWqn04yJldAgdGmgZDm54towWc=";
+    hash = "sha256-bASxPjOElhJhOAc0XiSqZ+i+dKETYi1KTFgamlJHA9Y=";
   };
 
   sourceRoot = "${src.name}/libs/prebuilt";

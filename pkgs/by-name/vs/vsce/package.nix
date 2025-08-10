@@ -6,7 +6,6 @@
   libsecret,
   python3,
   testers,
-  vsce,
   nix-update-script,
 }:
 
@@ -39,7 +38,7 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = vsce;
+      package = finalAttrs.finalPackage;
     };
     updateScript = nix-update-script {
       extraArgs = [

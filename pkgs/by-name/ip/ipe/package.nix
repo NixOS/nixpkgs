@@ -7,53 +7,53 @@
   copyDesktopItems,
   cairo,
   freetype,
-  ghostscript,
+  ghostscriptX,
   gsl,
   libjpeg,
   libpng,
   libspiro,
   lua5,
-  qtbase,
-  qtsvg,
+  qt6Packages,
   texliveSmall,
   qhull,
-  wrapQtAppsHook,
   zlib,
   withTeXLive ? true,
   withQVoronoi ? false,
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipe";
   version = "7.2.30";
 
   src = fetchFromGitHub {
     owner = "otfried";
     repo = "ipe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     cairo
     freetype
-    ghostscript
+    ghostscriptX
     gsl
     libjpeg
     libpng
     libspiro
     lua5
+  ]
+  ++ (with qt6Packages; [
     qtbase
     qtsvg
     zlib
-  ]
+  ])
   ++ (lib.optionals withTeXLive [
     texliveSmall
   ])
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "ipe";
       desktopName = "Ipe";
       genericName = "Drawing editor";
       comment = "A drawing editor for creating figures in PDF format";
@@ -100,19 +100,19 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/128x128/apps
-    ln -s $out/share/ipe/${version}/icons/icon_128x128.png $out/share/icons/hicolor/128x128/apps/ipe.png
+    ln -s $out/share/ipe/${finalAttrs.version}/icons/icon_128x128.png $out/share/icons/hicolor/128x128/apps/ipe.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
-    maintainers = with maintainers; [ ttuegel ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = lib.platforms.linux;
   };
-}
+})

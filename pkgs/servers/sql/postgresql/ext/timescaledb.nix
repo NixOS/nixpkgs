@@ -101,6 +101,13 @@ postgresqlBuildExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
     license = with lib.licenses; if enableUnfree then tsl else asl20;
-    broken = lib.versionOlder postgresql.version "15";
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # PostgreSQL 18 support issue upstream: https://github.com/timescale/timescaledb/issues/8233
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "2.21.1") "Is postgresql18Packages.timescaledb still broken?" (
+          lib.versionAtLeast postgresql.version "18"
+        );
   };
 })
