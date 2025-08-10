@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     addDriverRunpath $out/lib/libze_loader.so
   '';
 
+  setupHook = ./setup-hook.sh;
+
   passthru = {
     tests = {
       inherit intel-compute-runtime openvino;
