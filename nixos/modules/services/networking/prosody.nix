@@ -567,7 +567,7 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = {${optionalString cfg.modules.mam ''" muc_mam",''}${optionalString muc.allowners_muc ''" muc_allowners",''} }
+            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''} }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
