@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
@@ -13,11 +12,8 @@ buildPythonPackage rec {
   version = "1.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    pname = "python_hosts";
-    inherit version;
+    inherit pname version;
     hash = "sha256-XiU6aO6EhFVgj1g7TYMdbgg7IvjkU2DFoiwYikrB13A=";
   };
 
