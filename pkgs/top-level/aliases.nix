@@ -725,6 +725,7 @@ mapAliases {
 
   ### D ###
 
+  dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   dap = throw "'dap' has been removed because it doesn't compile and has been unmaintained since 2014"; # Added 2025-05-10
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
   darling = throw "'darling' has been removed due to vendoring Python2"; # Added 2025-05-10
