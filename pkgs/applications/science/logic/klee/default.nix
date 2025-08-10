@@ -60,13 +60,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation rec {
   pname = "klee";
-  version = "3.1";
+  version = "3.1-unstable-2025-07-11";
 
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
-    rev = "v${version}";
-    hash = "sha256-5js1N8qVF0lCkahSU3ojT7+p/a9IaUpPWhIyFHEzqto=";
+    rev = "1c9fbc1013a6000b39615cc9a5aba83e43a4bf75";
+    hash = "sha256-D93T0mBBrIhQTS42ScUHPrMoqCI55Y6Yp7snLmlriQM=";
   };
 
   nativeBuildInputs = [ cmake ];
