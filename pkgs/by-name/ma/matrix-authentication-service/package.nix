@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace crates/config/src/sections/http.rs \
-      --replace-fail ./frontend/dist/    "$out/share/$pname/assets/"
+      --replace-fail ./share/assets/    "$out/share/$pname/assets/"
     substituteInPlace crates/config/src/sections/templates.rs \
       --replace-fail ./share/templates/    "$out/share/$pname/templates/" \
       --replace-fail ./share/translations/    "$out/share/$pname/translations/" \
@@ -77,9 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (cd "$npmRoot" && npm run build)
   '';
 
-  # Adopted from https://github.com/element-hq/matrix-authentication-service/blob/main/Dockerfile
+  # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
   postInstall = ''
     install -Dm444 -t "$out/share/$pname"        "policies/policy.wasm"
+    install -Dm444 -t "$out/share/$pname"        "$npmRoot/dist/manifest.json"
     install -Dm444 -t "$out/share/$pname/assets" "$npmRoot/dist/"*
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
