@@ -53,6 +53,7 @@ jobs:
         with:
           mergedSha: ${{ inputs.mergedSha }}
           merged-as-untrusted: true
+          pinnedFrom: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
         with:
@@ -67,29 +68,29 @@ jobs:
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
-        run: nix-build untrusted/ci -A shell
+        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A shell
 
       - name: Build NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
           contains(fromJSON(inputs.baseBranch).type, 'primary')
-        run: nix-build untrusted/ci -A manual-nixos --argstr system ${{ matrix.system }} --out-link nixos-manual
+        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A manual-nixos --argstr system ${{ matrix.system }} --out-link nixos-manual
 
       - name: Build Nixpkgs manual
         if: contains(matrix.builds, 'manual-nixpkgs') && !cancelled()
-        run: nix-build untrusted/ci -A manual-nixpkgs -A manual-nixpkgs-tests
+        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs -A manual-nixpkgs-tests
 
       - name: Build Nixpkgs manual tests
         if: contains(matrix.builds, 'manual-nixpkgs-tests') && !cancelled()
-        run: nix-build untrusted/ci -A manual-nixpkgs-tests
+        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs-tests
 
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()
-        run: nix-build untrusted/ci -A lib-tests
+        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A lib-tests
 
       - name: Build tarball
         if: contains(matrix.builds, 'tarball') && !cancelled()
-        run: nix-build untrusted/ci -A tarball
+        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A tarball
 
       - name: Upload NixOS manual
         if: |
