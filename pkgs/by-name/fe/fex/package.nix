@@ -5,12 +5,13 @@
   cmake,
   ninja,
   pkg-config,
-  qt5,
   python3,
   nix-update-script,
   xxHash,
   fmt,
   nasm,
+  withQt ? true,
+  qt6,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -53,7 +54,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    qt5.wrapQtAppsHook
     llvmPackages.bintools
 
     (python3.withPackages (
@@ -62,7 +62,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         libclang
       ]
     ))
-  ];
+  ]
+  ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   nativeCheckInputs = [ nasm ];
 
@@ -70,12 +71,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     xxHash
     fmt
   ]
-  ++ (with qt5; [
-    qtbase
-    qtdeclarative
-    qtquickcontrols
-    qtquickcontrols2
-  ]);
+  ++ lib.optionals withQt [
+    qt6.qtbase
+    qt6.qtdeclarative
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
@@ -83,6 +82,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ASSERTIONS" false)
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
   ];
 
   strictDeps = true;
@@ -102,7 +102,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
   dontWrapQtApps = true;
-  preFixup = ''
+  preFixup = lib.optionalString withQt ''
     wrapQtApp $out/bin/FEXConfig
   '';
 
