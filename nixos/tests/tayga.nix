@@ -31,11 +31,10 @@
   };
 
   nodes = {
-    # The server is configured with static IPv4 addresses. RFC 6052 Section 3.1
-    # disallows the mapping of non-global IPv4 addresses like RFC 1918 into the
-    # Well-Known Prefix 64:ff9b::/96. TAYGA also does not allow the mapping of
-    # documentation space (RFC 5737). To circumvent this, 100.64.0.2/24 from
-    # RFC 6589 (Carrier Grade NAT) is used here.
+    # The server is configured with static IPv4 addresses. We have to disable the
+    # well-known prefix restrictions (as required by RFC 6052 Section 3.1) because
+    # we're using private space (TAYGA also considers documentation space non-global,
+    # unfortunately).
     # To reach the IPv4 address pool of the NAT64 gateway, there is a static
     # route configured. In normal cases, where the router would also source NAT
     # the pool addresses to one IPv4 addresses, this would not be needed.
@@ -145,6 +144,7 @@
           "icmp"
           "self"
         ];
+        wkpfStrict = false;
       };
       environment.systemPackages = [ pkgs.tcpdump ];
     };
@@ -217,6 +217,7 @@
           "icmp"
           "self"
         ];
+        wkpfStrict = false;
       };
       environment.systemPackages = [ pkgs.tcpdump ];
     };

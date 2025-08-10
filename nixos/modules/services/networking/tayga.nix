@@ -27,6 +27,8 @@ let
     ${optionalString ((builtins.length cfg.log) > 0) ''
       log ${concatStringsSep " " cfg.log}
     ''}
+
+    wkpf-strict ${if cfg.wkpfStrict then "yes" else "no"}
   '';
 
   addrOpts =
@@ -144,6 +146,12 @@ in
         example = literalExpression ''
           [ "drop" "reject" "icmp" "self" ]
         '';
+      };
+
+      wkpfStrict = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable restrictions on the use of the well-known prefix (64:ff9b::/96) - prevents translation of non-global IPv4 ranges when using the well-known prefix. Must be enabled for RFC 6052 compatibility.";
       };
     };
   };
