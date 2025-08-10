@@ -6430,7 +6430,8 @@
       ];
     "volvo" =
       ps: with ps; [
-      ]; # missing inputs: volvocarsapi
+        volvocarsapi
+      ];
     "volvooncall" =
       ps: with ps; [
         volvooncall
@@ -7765,6 +7766,7 @@
     "voicerss"
     "voip"
     "volumio"
+    "volvo"
     "volvooncall"
     "vulcan"
     "vultr"
