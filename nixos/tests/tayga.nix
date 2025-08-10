@@ -87,6 +87,7 @@
       ];
 
       networking = {
+        hostName = "router-systemd";
         useDHCP = false;
         useNetworkd = true;
         firewall.enable = false;
@@ -152,6 +153,7 @@
       ];
 
       networking = {
+        hostName = "router-nixos";
         useDHCP = false;
         firewall.enable = false;
         interfaces.eth1 = lib.mkForce {
