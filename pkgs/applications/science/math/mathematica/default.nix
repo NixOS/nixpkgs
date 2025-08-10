@@ -76,7 +76,6 @@ callPackage ./generic.nix {
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
-      herberteuler
       rafaelrc
     ];
     platforms = [ "x86_64-linux" ];
