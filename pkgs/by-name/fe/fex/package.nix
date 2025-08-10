@@ -7,8 +7,10 @@
   pkg-config,
   python3,
   nix-update-script,
+  vulkan-headers,
   xxHash,
   fmt,
+  catch2,
   nasm,
   withQt ? true,
   qt6,
@@ -22,7 +24,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-
     hash = "sha256-F6rMEPmw2UxWw+XWsUXrrUjvrDcIA1W+spkcq3tdUMI=";
 
     leaveDotGit = true;
@@ -32,14 +33,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
       # Only fetch required submodules
       git submodule update --init --depth 1 \
-        External/Vulkan-Headers \
         External/drm-headers \
         External/jemalloc \
         External/jemalloc_glibc \
         External/robin-map \
         External/vixl \
-        Source/Common/cpp-optparse \
-        External/Catch2
+        Source/Common/cpp-optparse
 
       find . -name .git -print0 | xargs -0 rm -rf
 
@@ -55,7 +54,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     llvmPackages.bintools
-
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
         setuptools
@@ -65,9 +63,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withQt qt6.wrapQtAppsHook;
 
-  nativeCheckInputs = [ nasm ];
-
   buildInputs = [
+    vulkan-headers
     xxHash
     fmt
   ]
@@ -79,8 +76,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "USE_LINKER" "lld")
-    (lib.cmakeBool "ENABLE_LTO" true)
-    (lib.cmakeBool "ENABLE_ASSERTIONS" false)
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
@@ -90,6 +85,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
   doCheck = true;
+
+  nativeCheckInputs = [ nasm ];
+  checkInputs = [ catch2 ];
 
   # List not exhaustive, e.g. because they depend on an x86 compiler or some
   # other difficult-to-build test binaries.
