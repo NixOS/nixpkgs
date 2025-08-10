@@ -266,16 +266,9 @@ stdenv.mkDerivation (
   // (
     if (lib.versionOlder release_version "16" || lib.versionAtLeast release_version "17") then
       {
-        postPatch =
-          (lib.optionalString (lib.versionOlder release_version "15") ''
-            # fix CMake error when static and LIBCXXABI_USE_LLVM_UNWINDER=ON. aren't
-            # building unwind so don't need to depend on it
-            substituteInPlace libcxx/src/CMakeLists.txt \
-              --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
-          '')
-          + ''
-            cd runtimes
-          '';
+        postPatch = ''
+          cd runtimes
+        '';
       }
     else
       {
