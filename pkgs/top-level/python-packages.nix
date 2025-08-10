@@ -8641,8 +8641,7 @@ self: super: with self; {
   llmx = callPackage ../development/python-modules/llmx { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
-    # llvmlite always requires a specific version of llvm.
-    llvm = pkgs.llvm_16;
+    inherit (pkgs) cmake ninja;
   };
 
   lm-eval = callPackage ../development/python-modules/lm-eval { };
