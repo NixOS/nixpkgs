@@ -30,7 +30,6 @@
   libxml2,
   withMultiArc ? true,
   libarchive,
-  pcre,
   withNetRocks ? true,
   openssl,
   libssh,
