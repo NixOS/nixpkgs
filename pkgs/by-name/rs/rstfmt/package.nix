@@ -39,5 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/dzhu/rstfmt/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "rstfmt";
   };
 }
