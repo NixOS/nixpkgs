@@ -20,22 +20,10 @@ sed -Ei \
 
 readonly ATTRSET="llvmPackages_$VERSION_MAJOR"
 
-if [ "$VERSION_MAJOR" -ge "14" ]; then
-  readonly SOURCES=(
-    "llvm.monorepoSrc"
-  )
-else
-  readonly SOURCES=(
-    "llvm.src"
-  )
-fi
-
-for SOURCE in "${SOURCES[@]}"; do
-  echo "Updating the hash of $SOURCE:"
-  declare ATTR="$ATTRSET.$SOURCE"
-  declare OLD_HASH="$(nix --extra-experimental-features nix-command eval -f . $ATTR.outputHash)"
-  declare NEW_HASH="\"$(nix-prefetch-url -A $ATTR)\""
-  find "$DIR" -type f -exec sed -i "s/$OLD_HASH/$NEW_HASH/" {} +
-done
+echo "Updating the hash of llvm.monorepoSrc:"
+declare ATTR="$ATTRSET.llvm.monorepoSrc"
+declare OLD_HASH="$(nix --extra-experimental-features nix-command eval -f . $ATTR.outputHash)"
+declare NEW_HASH="\"$(nix-prefetch-url -A $ATTR)\""
+find "$DIR" -type f -exec sed -i "s/$OLD_HASH/$NEW_HASH/" {} +
 
 echo OK
