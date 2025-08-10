@@ -32,8 +32,8 @@
 
 let
   vscodeExt = {
-    name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
-    version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
+    name = "lldb-dap";
+    version = "0.2.0";
   };
 in
 
@@ -70,14 +70,7 @@ stdenv.mkDerivation (
 
     sourceRoot = "${finalAttrs.src.name}/lldb";
 
-    patches =
-      lib.optional (lib.versionOlder release_version "18") (fetchpatch {
-        name = "libcxx-19-char_traits.patch";
-        url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
-        stripLen = 1;
-        hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
-      })
-      ++ [ ./gnu-install-dirs.patch ];
+    patches = [ ./gnu-install-dirs.patch ];
 
     nativeBuildInputs = [
       cmake
@@ -90,11 +83,6 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals enableManpages [
       python3.pkgs.sphinx
-    ]
-    ++ lib.optionals (lib.versionOlder release_version "18" && enableManpages) [
-      python3.pkgs.recommonmark
-    ]
-    ++ lib.optionals (lib.versionAtLeast release_version "18" && enableManpages) [
       python3.pkgs.myst-parser
     ]
     # TODO: Clean up on `staging`.
@@ -174,9 +162,7 @@ stdenv.mkDerivation (
       # vscode:
       install -D ../tools/${vscodeExt.name}/package.json $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/package.json
       mkdir -p $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
-      ln -s $out/bin/*${
-        if lib.versionAtLeast release_version "18" then vscodeExt.name else "-vscode"
-      } $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
+      ln -s $out/bin/*${vscodeExt.name} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
     '';
 
     passthru.vscodeExtName = vscodeExt.name;

@@ -7,24 +7,11 @@
   ];
   "clang/purity.patch" = [
     {
-      after = "18";
       path = ../18;
-    }
-  ];
-  "clang/aarch64-tblgen.patch" = [
-    {
-      before = "18";
-      path = ../17;
-    }
-  ];
-  "lld/add-table-base.patch" = [
-    {
-      path = ../17;
     }
   ];
   "lld/gnu-install-dirs.patch" = [
     {
-      after = "18";
       path = ../18;
     }
   ];
@@ -44,7 +31,6 @@
       path = ../20;
     }
     {
-      after = "18";
       before = "20";
       path = ../18;
     }
@@ -56,37 +42,27 @@
     }
     {
       before = "20";
-      after = "18";
       path = ../18;
-    }
-    {
-      before = "18";
-      path = ../17;
     }
   ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
-      path = ../17;
+      path = ../18;
     }
   ];
   "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
     {
-      after = "18";
       path = ../18;
-    }
-    {
-      before = "18";
-      path = ../17;
     }
   ];
   "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
-      path = ../17;
+      path = ../18;
     }
   ];
   "compiler-rt/X86-support-extension.patch" = [
     {
-      path = ../17;
+      path = ../18;
     }
   ];
   "compiler-rt/armv6-scudo-libatomic.patch" = [
@@ -96,33 +72,23 @@
     }
     {
       before = "19";
-      path = ../17;
-    }
-  ];
-  "compiler-rt/gnu-install-dirs.patch" = [
-    {
-      path = ../17;
-    }
-  ];
-  "compiler-rt/darwin-targetconditionals.patch" = [
-    {
-      path = ../17;
+      path = ../18;
     }
   ];
   "compiler-rt/normalize-var.patch" = [
     {
-      path = ../17;
+      path = ../18;
     }
   ];
   "openmp/fix-find-tool.patch" = [
     {
       before = "19";
-      path = ../17;
+      path = ../18;
     }
   ];
   "openmp/run-lit-directly.patch" = [
     {
-      path = ../17;
+      path = ../18;
     }
   ];
   "libclc/use-default-paths.patch" = [
@@ -139,7 +105,7 @@
   "libclc/gnu-install-dirs.patch" = [
     {
       before = "21";
-      path = ../17;
+      path = ../18;
     }
     {
       after = "21";
