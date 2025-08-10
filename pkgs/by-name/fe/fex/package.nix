@@ -9,6 +9,7 @@
   nix-update-script,
   xxHash,
   fmt,
+  catch2,
   nasm,
   withQt ? true,
   qt6,
@@ -22,7 +23,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-
     hash = "sha256-yWUZF/Chgi9bd5gF9qU1jiiIvHOHBUw7tLWxyNUZy9g=";
 
     leaveDotGit = true;
@@ -38,8 +38,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         External/jemalloc_glibc \
         External/robin-map \
         External/vixl \
-        Source/Common/cpp-optparse \
-        External/Catch2
+        Source/Common/cpp-optparse
 
       find . -name .git -print0 | xargs -0 rm -rf
 
@@ -55,7 +54,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     llvmPackages.bintools
-
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
         setuptools
@@ -64,8 +62,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ))
   ]
   ++ lib.optional withQt qt6.wrapQtAppsHook;
-
-  nativeCheckInputs = [ nasm ];
 
   buildInputs = [
     xxHash
@@ -78,8 +74,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
-    (lib.cmakeBool "ENABLE_LTO" true)
-    (lib.cmakeBool "ENABLE_ASSERTIONS" false)
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
@@ -89,6 +83,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
   doCheck = true;
+
+  nativeCheckInputs = [ nasm ];
+  checkInputs = [ catch2 ];
 
   # List not exhaustive, e.g. because they depend on an x86 compiler or some
   # other difficult-to-build test binaries.
