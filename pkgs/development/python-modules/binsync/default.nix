@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "binsync";
-  version = "5.3.0";
+  version = "5.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "binsync";
     tag = "v${version}";
-    hash = "sha256-f0pPuNTrZ5+iuJgtxLXJF89C9hKXwplhBA/olyhfsQ4=";
+    hash = "sha256-C9yIb//h1pAJnlWT4+VgeVzeSjd0sfn8o4yfePNF/YM=";
   };
 
   build-system = [ setuptools ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Reversing plugin for cross-decompiler collaboration, built on git";
     homepage = "https://github.com/binsync/binsync";
-    changelog = "https://github.com/binsync/binsync/releases/tag/v${version}";
+    changelog = "https://github.com/binsync/binsync/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
   };

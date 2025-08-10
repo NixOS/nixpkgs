@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "4.2.2";
+  version = "4.3.0";
   pyproject = true;
 
   # pypi version does not include tests
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "uber";
     repo = "h3-py";
     tag = "v${version}";
-    hash = "sha256-HvJT5SuE7UHhGMlaQG3YSHfGkgsdDAVVGsGRsAeNHGQ=";
+    hash = "sha256-D2imgxGzJpOEQ3xddM42SKWPZEIwuXQ31mm8ZIQhqkE=";
   };
 
   dontConfigure = true;

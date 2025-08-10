@@ -3,7 +3,9 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
+  iniconfig,
   numpy,
+  psutil,
   pytest-console-scripts,
   pytestCheckHook,
   pythonOlder,
@@ -28,8 +30,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  optional-dependencies = {
+    cpu = [
+      psutil
+      # mkl
+    ];
+  };
+
   nativeCheckInputs = [
     beautifulsoup4
+    iniconfig
     numpy
     pytest-console-scripts
     pytestCheckHook
@@ -51,6 +61,8 @@ buildPythonPackage rec {
     "test_import_time"
     # TypeError: expected str, bytes or os.PathLike object, not list
     "test_cli"
+    # Fails to find iniconfig in environment
+    "test_auto_report"
   ];
 
   meta = with lib; {

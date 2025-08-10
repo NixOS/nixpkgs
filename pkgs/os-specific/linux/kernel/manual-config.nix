@@ -22,8 +22,8 @@
   kmod,
   ubootTools,
   fetchpatch,
-  rustc,
-  rust-bindgen,
+  rustc-unwrapped,
+  rust-bindgen-unwrapped,
   rustPlatform,
 }:
 
@@ -169,8 +169,8 @@ lib.makeOverridable (
         ]
         ++ optional (lib.versionAtLeast version "5.13") zstd
         ++ optionals withRust [
-          rustc
-          rust-bindgen
+          rustc-unwrapped
+          rust-bindgen-unwrapped
         ];
 
       in
@@ -229,8 +229,8 @@ lib.makeOverridable (
           zlib
         ]
         ++ optionals withRust [
-          rustc
-          rust-bindgen
+          rustc-unwrapped
+          rust-bindgen-unwrapped
         ];
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
@@ -531,20 +531,14 @@ lib.makeOverridable (
         // extraMeta;
       };
 
-    # Absolute paths for compilers avoid any PATH-clobbering issues.
-    commonMakeFlags = [
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
-      # The wrapper for ld.lld breaks linking the kernel. We use the
-      # unwrapped linker as workaround. See:
-      #
-      # https://github.com/NixOS/nixpkgs/issues/321667
-      "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
-    ]
-    ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
-    ++ extraMakeFlags;
+    commonMakeFlags = import ./common-flags.nix {
+      inherit
+        lib
+        stdenv
+        buildPackages
+        extraMakeFlags
+        ;
+    };
   in
 
   stdenv.mkDerivation (

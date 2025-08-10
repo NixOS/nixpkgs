@@ -94,12 +94,14 @@ let
     getLib
     getName
     getVersion
+    hasPrefix
     mapAttrsToList
     optional
     optionalAttrs
     optionals
     optionalString
     removePrefix
+    removeSuffix
     replaceStrings
     toList
     versionAtLeast
@@ -363,6 +365,22 @@ let
     else
       targetPlatform.darwinPlatform
   );
+
+  # Header files that use `__FILE__` (e.g., for error reporting) lead
+  # to unwanted references to development packages and outputs in built
+  # binaries, like C++ programs depending on GCC and Boost at runtime.
+  #
+  # We use `-fmacro-prefix-map` to avoid the store references in these
+  # situations while keeping them in compiler diagnostics and debugging
+  # and profiling output.
+  #
+  # Unfortunately, doing this with GCC runs into issues with compiler
+  # argument length limits due to <https://gcc.gnu.org/PR111527>, so we
+  # disable it there in favour of our existing patch.
+  #
+  # TODO: Drop `mangle-NIX_STORE-in-__FILE__.patch` from GCC and make
+  # this unconditional once the upstream bug is fixed.
+  useMacroPrefixMap = !isGNU;
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -454,6 +472,14 @@ stdenvNoCC.mkDerivation {
       export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
       substituteAll "$wrapper" "$out/bin/$dst"
       chmod +x "$out/bin/$dst"
+    }
+
+    include() {
+      printf -- '%s %s\n' "$1" "$2"
+      ${lib.optionalString useMacroPrefixMap ''
+        local scrubbed="$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-''${2#"$NIX_STORE"/*-}"
+        printf -- '-fmacro-prefix-map=%s=%s\n' "$2" "$scrubbed"
+      ''}
     }
   ''
 
@@ -673,13 +699,13 @@ stdenvNoCC.mkDerivation {
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
       + optionalString (!(cc.langD or false)) ''
-        echo "-${
+        include "-${
           if isArocc then "I" else "idirafter"
-        } ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        }" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
       ''
       + optionalString (isGNU && (!(cc.langD or false))) ''
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
-          echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
+          include '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
         done
       ''
       + ''
@@ -695,7 +721,7 @@ stdenvNoCC.mkDerivation {
       # like option that forces the libc headers before all -idirafter,
       # hence -isystem here.
       + optionalString includeFortifyHeaders' ''
-        echo "-isystem ${fortify-headers}/include" >> $out/nix-support/libc-cflags
+        include -isystem "${fortify-headers}/include" >> $out/nix-support/libc-cflags
       ''
     )
 
@@ -718,19 +744,19 @@ stdenvNoCC.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
-        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
       for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
     + optionalString (libcxx.isLLVM or false) ''
-      echo "-isystem ${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      include -isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     ''
     # GCC NG friendly libc++
     + optionalString (libcxx != null && libcxx.isGNU or false) ''
-      echo "-isystem ${getDev libcxx}/include" >> $out/nix-support/libcxx-cxxflags
+      include -isystem "${getDev libcxx}/include" >> $out/nix-support/libcxx-cxxflags
     ''
 
     ##
@@ -901,12 +927,24 @@ stdenvNoCC.mkDerivation {
     ## General Clang support
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
     ##
-    + optionalString isClang ''
-      # Escape twice: once for this script, once for the one it gets substituted into.
-      export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
-      export defaultTarget=${targetPlatform.config}
-      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
-    ''
+    + optionalString isClang (
+      let
+        hasUnsupportedGnuSuffix = hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name;
+        clangCompatibleConfig =
+          if hasUnsupportedGnuSuffix then
+            removeSuffix (removePrefix "gnu" targetPlatform.parsed.abi.name) targetPlatform.config
+          else
+            targetPlatform.config;
+        explicitAbiValue = if hasUnsupportedGnuSuffix then targetPlatform.parsed.abi.abi else "";
+      in
+      ''
+        # Escape twice: once for this script, once for the one it gets substituted into.
+        export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
+        export defaultTarget=${clangCompatibleConfig}
+        export explicitAbiValue=${explicitAbiValue}
+        substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+      ''
+    )
 
     ##
     ## Extra custom steps
@@ -937,6 +975,7 @@ stdenvNoCC.mkDerivation {
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    inherit useMacroPrefixMap;
   }
   // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.

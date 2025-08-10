@@ -47,14 +47,14 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.2.69";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-mQYnaWch0lVzz1hV6WboYxBGe3ruw+mK2AwMx13DQJM=";
+    hash = "sha256-rf8dWeZYnL0Ce4TDEyediYN+jc+StsGZrpp9OohSz8g=";
   };
 
   build-system = [
@@ -118,7 +118,7 @@ buildPythonPackage rec {
     description = "Design circuit boards with code";
     homepage = "https://aiopg.readthedocs.io/";
     downloadPage = "https://github.com/atopile/atopile";
-    changelog = "https://github.com/atopile/atopile/releases/tag/${src.rev}";
+    changelog = "https://github.com/atopile/atopile/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";

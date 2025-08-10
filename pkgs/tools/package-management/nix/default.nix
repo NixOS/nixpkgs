@@ -29,11 +29,7 @@ let
           stateDir
           confDir
           ;
-        aws-sdk-cpp =
-          if lib.versionAtLeast args.version "2.12pre" then
-            nixDependencies.aws-sdk-cpp
-          else
-            nixDependencies.aws-sdk-cpp-old;
+        inherit (nixDependencies) aws-sdk-cpp;
       };
 
   # Called for Nix == 2.28. Transitional until we always use

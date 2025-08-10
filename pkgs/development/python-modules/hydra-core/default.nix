@@ -20,7 +20,7 @@
   packaging,
 
   # tests
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonAtLeast,
 }:
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pytestFlags = [
     "-Wignore::UserWarning"

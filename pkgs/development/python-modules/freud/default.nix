@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "freud";
-  version = "3.1.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "freud";
     tag = "v${version}";
-    hash = "sha256-jlscEHQ1q4oqxE06NhVWCOlPRcjDcJVrvy4h6iYrkz0=";
+    hash = "sha256-3THoGPjfaDy2s96+Oaf1f2SDzxTaqRDQlNa3gZ/ytUU=";
     fetchSubmodules = true;
   };
 
@@ -93,7 +93,7 @@ buildPythonPackage rec {
   meta = {
     description = "Powerful, efficient particle trajectory analysis in scientific Python";
     homepage = "https://github.com/glotzerlab/freud";
-    changelog = "https://github.com/glotzerlab/freud/blob/${src.rev}/ChangeLog.md";
+    changelog = "https://github.com/glotzerlab/freud/blob/${src.tag}/ChangeLog.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

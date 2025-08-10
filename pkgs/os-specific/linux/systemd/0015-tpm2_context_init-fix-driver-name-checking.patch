@@ -27,7 +27,7 @@ filename_is_valid with path_is_valid.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/shared/tpm2-util.c b/src/shared/tpm2-util.c
-index 36a0f906da..e0f42abca2 100644
+index 5b6b3ea93c..8ab04241b6 100644
 --- a/src/shared/tpm2-util.c
 +++ b/src/shared/tpm2-util.c
 @@ -721,7 +721,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {

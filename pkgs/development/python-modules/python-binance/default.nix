@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-binance";
-  version = "1.0.27";
+  version = "1.0.29";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "sammchardy";
     repo = "python-binance";
     tag = "v${version}";
-    hash = "sha256-nsJuHxPXhMBRY4BUDDLj5sHK/GuJA0pBU3RGUDxVm50=";
+    hash = "sha256-Hqd6228k2j1BPzBBCRpdEp0rAGxZt00XPnzpCPlwIfg=";
   };
 
   build-system = [ setuptools ];

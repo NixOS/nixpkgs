@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "coincurve";
-  version = "20.0.0";
+  version = "21.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "ofek";
     repo = "coincurve";
     tag = "v${version}";
-    hash = "sha256-NKx/iLuzFEu1UBuwa14x55Ab3laVAKEtX6dtoWi0dOg=";
+    hash = "sha256-+8/CsV2BTKZ5O2LIh5/kOKMfFrkt2Jsjuj37oiOgO6Y=";
   };
 
   build-system = [

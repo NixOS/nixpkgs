@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "re2";
-  version = "2024-07-02";
+  version = "2025-08-05";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = finalAttrs.version;
-    hash = "sha256-IeANwJlJl45yf8iu/AZNDoiyIvTCZIeK1b74sdCfAIc=";
+    hash = "sha256-Q4/xab6Jqhai/WIMND5YWOrPmNyDDf3HysKDqum3RgQ=";
   };
 
   outputs = [

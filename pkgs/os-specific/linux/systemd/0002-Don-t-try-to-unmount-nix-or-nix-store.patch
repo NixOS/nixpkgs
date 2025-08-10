@@ -27,10 +27,10 @@ index d6a256c4a7..f74d5198f1 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 4bc01c75e0..ede9ac7b87 100644
+index 84da5eed63..d6e2f36d52 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
-@@ -170,8 +170,10 @@ int mount_points_list_get(const char *mountinfo, MountPoint **head) {
+@@ -175,8 +175,10 @@ int mount_points_list_get(const char *mountinfo, MountPoint **head) {
  static bool nonunmountable_path(const char *path) {
          assert(path);
  

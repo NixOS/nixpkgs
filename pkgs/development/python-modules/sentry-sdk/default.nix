@@ -67,14 +67,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.25.0";
+  version = "2.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = version;
-    hash = "sha256-HQxZczpfTURbkLaWjOqnYB86UuFHD71kE7HPPjlkUqc=";
+    hash = "sha256-RQnjvX3bDiB9csn/DsQ769EiVm7HY+B7x9V5jpvsOOA=";
   };
 
   postPatch = ''
@@ -214,6 +214,7 @@ buildPythonPackage rec {
     "test_http_timeout"
     # KeyError: 'sentry.release'
     "test_logs_attributes"
+    "test_logger_with_all_attributes"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];
@@ -221,7 +222,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Official Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    changelog = "https://github.com/getsentry/sentry-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/sentry-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

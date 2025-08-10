@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "tika-client";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "stumpylog";
     repo = "tika-client";
     tag = version;
-    hash = "sha256-lg6syUbEbPb70iBa4lw5fVN8cvfWY3bkG2jNGxxNLDo=";
+    hash = "sha256-XYyMp+02lWzE+3Txr+shVGVwalLEJHvoy988tA7SWgY=";
   };
 
   build-system = [ hatchling ];

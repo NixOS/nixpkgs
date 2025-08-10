@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.10.6";
+  version = "2.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-Wxugk2ocuur710WZLG7xph2R/n02Y9BvH7Lf4BuEMYs=";
+    hash = "sha256-Y71AJdWcRBDbq63p+lcQplqutz2UTQ3f+pTyhcolpuw=";
   };
 
   postPatch = ''
@@ -115,7 +115,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast, Pythonic way to build MCP servers and clients";
-    changelog = "https://github.com/jlowin/fastmcp/releases/tag/v${version}";
+    changelog = "https://github.com/jlowin/fastmcp/releases/tag/${src.tag}";
     homepage = "https://github.com/jlowin/fastmcp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];

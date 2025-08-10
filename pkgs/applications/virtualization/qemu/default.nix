@@ -146,11 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.0.2";
+  version = "10.0.3";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-73hvI5jLUYRgD2mu9NXWke/URXajz/QSbTjUxv7Id1k=";
+    hash = "sha256-XIkSZ7FTSndEZduLGg38sMXm1+y29xNFYlrfTgiJlFs=";
   };
 
   depsBuildBuild = [
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    python3Packages.python
+    (python3Packages.python.withPackages (ps: with ps; [ distlib ]))
   ]
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
   ++ lib.optionals enableDocs [
@@ -293,9 +293,9 @@ stdenv.mkDerivation (finalAttrs: {
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
-      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
+      --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
-      --replace "'VERSION'" "'QEMU_VERSION'"
+      --replace-fail "'VERSION'" "'QEMU_VERSION'"
     substituteInPlace python/qemu/machine/machine.py \
       --replace-fail /var/tmp "$TMPDIR"
   '';

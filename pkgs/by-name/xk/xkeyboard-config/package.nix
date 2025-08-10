@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pkg-config,
   meson,
   ninja,
@@ -19,6 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-${finalAttrs.version}.tar.xz";
     hash = "sha256-Fp4HWpLZV6V3h8GZ6E41nfKTG3GWwcW0o9V27mI1qHw=";
   };
+
+  patches = [
+    # Patch that reverts a commit in 2.45 that broke the us-mac keyboard layout.
+    # Remove when 2.46 is released.
+    # https://github.com/NixOS/nixpkgs/issues/426375
+    (fetchpatch2 {
+      url = "https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/commit/11dbaeb23d06c0d21efe538c90b44ffc8fc3a071.patch";
+      hash = "sha256-qZkO1GQvbtTFeXqCuA7bjgQX5jq9c+LiKa/ziP1w2sI=";
+    })
+  ];
 
   strictDeps = true;
 

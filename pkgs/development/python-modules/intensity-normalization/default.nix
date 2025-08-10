@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "intensity-normalization";
-  version = "2.2.4";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "intensity_normalization";
     inherit version;
-    hash = "sha256-s/trDIRoqLFj3NO+iv3E+AEB4grBAHDlEL6+TCdsgmg=";
+    hash = "sha256-d5f+Ug/ta9RQjk3JwHmVJQr8g93glzf7IcmLxLeA1tQ=";
   };
 
   postPatch = ''

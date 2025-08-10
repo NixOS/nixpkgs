@@ -136,7 +136,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/openai/openai-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.malo ];
     mainProgram = "openai";

@@ -1,8 +1,10 @@
 {
   lib,
   argcomplete,
+  attrs,
   buildPythonPackage,
   colorlog,
+  dependency-groups,
   fetchFromGitHub,
   hatchling,
   jinja2,
@@ -17,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2024.10.09";
+  version = "2025.05.01";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,19 +28,16 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = "nox";
     tag = version;
-    hash = "sha256-GdNz34A8IKwPG/270sY5t3SoggGCZMWfDq/Wyhk0ez8=";
+    hash = "sha256-qH8oh7tmiJkXOobyDZMRZ62w2sRHJF8sh4PX+6s7M70=";
   };
-
-  patches = [
-    # Backport of https://github.com/wntrblm/nox/pull/903, which can be removed on next release
-    ./fix-broken-mock-on-cpython-3.12.8.patch
-  ];
 
   build-system = [ hatchling ];
 
   dependencies = [
     argcomplete
+    attrs
     colorlog
+    dependency-groups
     packaging
     virtualenv
   ]
@@ -67,6 +66,9 @@ buildPythonPackage rec {
     "test__create_venv_options"
     # Assertion errors
     "test_uv"
+    # calls to naked python
+    "test_noxfile_script_mode"
+    "test_noxfile_script_mode_url_req"
   ];
 
   disabledTestPaths = [
@@ -77,7 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Flexible test automation for Python";
     homepage = "https://nox.thea.codes/";
-    changelog = "https://github.com/wntrblm/nox/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/wntrblm/nox/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       doronbehar

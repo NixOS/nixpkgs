@@ -46,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "lm-eval";
-  version = "0.4.8";
+  version = "0.4.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${version}";
-    hash = "sha256-F8oy6XTovqiU7FQyuubRsiblSdvfZg9RPIyzRw2GH18=";
+    hash = "sha256-N5NRRabjWxPchwOIkjqYTCKInCmVSY6T5cAmdxNbCkU=";
   };
 
   build-system = [

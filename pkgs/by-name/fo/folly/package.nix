@@ -8,7 +8,6 @@
   cmake,
   ninja,
   pkg-config,
-  sanitiseHeaderPathsHook,
 
   double-conversion,
   fast-float,
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    sanitiseHeaderPathsHook
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.

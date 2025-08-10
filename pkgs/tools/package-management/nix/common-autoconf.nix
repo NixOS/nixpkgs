@@ -21,6 +21,7 @@
 }@args:
 assert (hash == null) -> (src != null);
 let
+  atLeast24 = lib.versionAtLeast version "2.4";
   atLeast224 = lib.versionAtLeast version "2.24pre";
   atLeast225 = lib.versionAtLeast version "2.25pre";
 in
@@ -75,7 +76,8 @@ in
   withAWS ?
     lib.meta.availableOn stdenv.hostPlatform aws-c-common
     && !enableStatic
-    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && atLeast24,
   aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
