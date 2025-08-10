@@ -44,11 +44,15 @@ jobs:
           sudo mkswap /swap
           sudo swapon /swap
 
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          ref: ${{ inputs.mergedSha }}
-          path: untrusted
+          sparse-checkout: .github/actions
+      - name: Check out the PR at the test merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          mergedSha: ${{ inputs.mergedSha }}
+          merged-as-untrusted: true
+          pinnedFrom: untrusted
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
@@ -57,7 +61,7 @@ jobs:
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build untrusted/ci -A eval.singleSystem \
+          nix-build untrusted/ci --arg nixpkgs ./pinned  -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
             --out-link merged
@@ -135,7 +139,7 @@ jobs:
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build untrusted/ci -A eval.diff \
+          nix-build untrusted/ci --arg nixpkgs ./pinned -A eval.diff \
             --arg beforeDir ./target \
             --arg afterDir "$(readlink ./merged)" \
             --argstr evalSystem "$MATRIX_SYSTEM" \
@@ -156,6 +160,16 @@ jobs:
       statuses: write
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: .github/actions
+      - name: Check out the PR at the target commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          targetSha: ${{ inputs.targetSha }}
+          target-as-trusted: true
+          pinnedFrom: trusted
+
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@de96f4613b77ec03b5cf633e7c350c32bd3c5660 # v4.1.8
         with:
@@ -163,18 +177,12 @@ jobs:
           path: diff
           merge-multiple: true
 
-      - name: Check out the PR at the target commit
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          ref: ${{ inputs.targetSha }}
-          path: trusted
-
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Combine all output paths and eval stats
         run: |
-          nix-build trusted/ci -A eval.combine \
+          nix-build trusted/ci --arg nixpkgs ./pinned -A eval.combine \
             --arg diffDir ./diff \
             --out-link combined
 
@@ -187,7 +195,7 @@ jobs:
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
-          nix-build trusted/ci -A eval.compare \
+          nix-build trusted/ci --arg nixpkgs ./pinned -A eval.compare \
             --arg combinedDir "$(realpath ./combined)" \
             --arg touchedFilesJson ./touched-files.json \
             --argstr githubAuthorId "$AUTHOR_ID" \
