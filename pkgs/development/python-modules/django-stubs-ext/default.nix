@@ -52,6 +52,8 @@ buildPythonPackage rec {
     "tests/typecheck"
   ];
 
+  # Tests are not shipped with PyPI
+
   pythonImportsCheck = [ "django_stubs_ext" ];
 
   meta = with lib; {
