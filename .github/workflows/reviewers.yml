@@ -37,8 +37,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Build the requestReviews derivation
         run: nix-build trusted/ci -A requestReviews
