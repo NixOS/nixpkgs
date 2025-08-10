@@ -3,32 +3,38 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ory";
-  version = "0.3.4";
+  version = "v1.1.0";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-q7+Fpttgx62GbKxCCiEDlX//e/pNO24e7KhhBeGRDH0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Su2FIuCb2vpPW/OCOTzqQOZPpY9gGRbwylSepLh2hk=";
   };
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  subPackages = [ "." ];
-
   env.CGO_ENABLED = 1;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/ory/cli/buildinfo.Version=${finalAttrs.version}"
+  ];
 
   tags = [
     "sqlite"
   ];
 
-  vendorHash = "sha256-B0y1JVjJmC5eitn7yIcDpl+9+xaBDJBMdvm+7N/ZxTk=";
+  vendorHash = "sha256-VXaMc4VnHPljVugJyuGn8EQvNUBkEhbvepg2p7vw2EY=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/ory
@@ -38,14 +44,21 @@ buildGoModule rec {
       --zsh <($out/bin/ory completion zsh)
   '';
 
-  meta = with lib; {
+  doCheck = false;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     mainProgram = "ory";
     description = "Ory CLI";
     homepage = "https://www.ory.sh/cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       luleyleo
       nicolas-goudry
     ];
   };
-}
+})
