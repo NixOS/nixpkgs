@@ -129,18 +129,6 @@ stdenv.mkDerivation (
         # a native libLLVM.so (which would fail) we force llvm-config to be linked
         # statically against the necessary LLVM components always.
         ./llvm-config-link-static.patch
-      ++ lib.optionals (lib.versions.major release_version == "12") [
-        # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
-        (getVersionFile "llvm/fix-llvm-issue-49955.patch")
-
-        # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
-        (fetchpatch {
-          name = "uops-CMOV16rm-noreg.diff";
-          url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
-          sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
-          stripLen = 1;
-        })
-      ]
       # Support custom installation dirs
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
@@ -339,6 +327,11 @@ stdenv.mkDerivation (
       ) ncurses)
       ++ [ zlib ];
 
+    nativeCheckInputs = [
+      which
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
+
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
         ''
@@ -470,14 +463,8 @@ stdenv.mkDerivation (
           substituteInPlace unittests/IR/CMakeLists.txt \
             --replace-fail "PassBuilderCallbacksTest.cpp" ""
           rm unittests/IR/PassBuilderCallbacksTest.cpp
+          rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
         ''
-      + lib.optionalString (lib.versionAtLeast release_version "13") ''
-        rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
-      ''
-      + lib.optionalString (lib.versionOlder release_version "13") ''
-        # TODO: Fix failing tests:
-        rm test/DebugInfo/X86/vla-multi.ll
-      ''
       +
         # Fails in the presence of anti-virus software or other intrusion-detection software that
         # modifies the atime when run. See #284056.
@@ -540,44 +527,7 @@ stdenv.mkDerivation (
         ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py
-      ''
-      +
-        # Tweak tests to ignore namespace part of type to support
-        # gcc-12: https://gcc.gnu.org/PR103598.
-        # The change below mangles strings like:
-        #    CHECK-NEXT: Starting llvm::Function pass manager run.
-        # to:
-        #    CHECK-NEXT: Starting {{.*}}Function pass manager run.
-        (lib.optionalString (lib.versionOlder release_version "13") (
-          ''
-            for f in \
-              test/Other/new-pass-manager.ll \
-              test/Other/new-pm-O0-defaults.ll \
-              test/Other/new-pm-defaults.ll \
-              test/Other/new-pm-lto-defaults.ll \
-              test/Other/new-pm-thinlto-defaults.ll \
-              test/Other/pass-pipeline-parsing.ll \
-              test/Transforms/Inline/cgscc-incremental-invalidate.ll \
-              test/Transforms/Inline/clear-analyses.ll \
-              test/Transforms/LoopUnroll/unroll-loop-invalidation.ll \
-              test/Transforms/SCCP/ipsccp-preserve-analysis.ll \
-              test/Transforms/SCCP/preserve-analysis.ll \
-              test/Transforms/SROA/dead-inst.ll \
-              test/tools/gold/X86/new-pm.ll \
-              ; do
-              echo "PATCH: $f"
-              substituteInPlace $f \
-                --replace-quiet 'Starting llvm::' 'Starting {{.*}}' \
-                --replace-quiet 'Finished llvm::' 'Finished {{.*}}'
-            done
-          ''
-          +
-            # gcc-13 fix
-            ''
-              sed -i '/#include <string>/i#include <cstdint>' \
-                include/llvm/DebugInfo/Symbolize/DIPrinter.h
-            ''
-        ));
+      '';
 
     # Workaround for configure flags that need to have spaces
     preConfigure = ''
@@ -810,12 +760,6 @@ stdenv.mkDerivation (
         }
     )
   )
-  // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
-    nativeCheckInputs = [
-      which
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
-  }
   // lib.optionalAttrs (lib.versionOlder release_version "15") {
     # hacky fix: created binaries need to be run before installation
     preBuild = ''

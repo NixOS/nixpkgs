@@ -113,16 +113,8 @@ let
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" (lib.concatStringsSep ";" runtimes))
   ]
-  ++
-    lib.optionals
-      (
-        stdenv.hostPlatform.isWasm
-        || (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin)
-      )
-      [
-        (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
-      ]
   ++ lib.optionals stdenv.hostPlatform.isWasm [
+    (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
     (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
     (lib.cmakeBool "UNIX" true) # Required otherwise libc++ fails to detect the correct linker
   ]
