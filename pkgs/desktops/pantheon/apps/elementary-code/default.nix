@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   meson,
   ninja,
@@ -26,23 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    hash = "sha256-muW7K9cFITZaoNi3id+iplmokN5sSE8x1CVQ62+myUU=";
+    hash = "sha256-pL/xyD9jwuPixbVdjPa3vdZWHxI+T2ARI4BvcTV61jc=";
   };
-
-  patches = [
-    # Fix build with GCC 14
-    # https://github.com/elementary/code/pull/1606
-    (fetchpatch {
-      url = "https://github.com/elementary/code/commit/9b8347adcbb94f3186815413d927eecc51be2ccf.patch";
-      hash = "sha256-VhpvWgOGniOEjxBOjvX30DZIRGalxfPlb9j1VaOAJTA=";
-    })
-  ];
 
   strictDeps = true;
 
