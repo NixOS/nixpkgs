@@ -176,5 +176,6 @@ in
     };
   };
 
+  meta.doc = ./mitmdump/manual.md;
   meta.maintainers = lib.maintainers.ibizaman;
 }
