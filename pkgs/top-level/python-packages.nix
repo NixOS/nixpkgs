@@ -7023,8 +7023,6 @@ self: super: with self; {
 
   inline-snapshot = callPackage ../development/python-modules/inline-snapshot { };
 
-  inlinestyler = callPackage ../development/python-modules/inlinestyler { };
-
   inotify = callPackage ../development/python-modules/inotify { };
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
