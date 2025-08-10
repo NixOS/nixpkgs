@@ -1,6 +1,10 @@
 {
   lib,
   stdenv,
+
+  writeShellScriptBin,
+  xdg-utils,
+
   fetchFromGitea,
 
   cmake,
@@ -23,6 +27,13 @@
   calamares-nixos,
 }:
 
+let
+  # drop privileges so we can launch browsers, etc;
+  # force going through the portal so we get the right environment
+  xdg-open-nixos = writeShellScriptBin "xdg-open" ''
+    sudo --user $(id -nu $PKEXEC_UID) env NIXOS_XDG_OPEN_USE_PORTAL=1 ${xdg-utils}/bin/xdg-open "$@"
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calamares";
   version = "3.4.0";
@@ -97,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
         ckbcomp
         os-prober
         util-linux
+        xdg-open-nixos
       ]
     }"
   ];
