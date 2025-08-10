@@ -171,13 +171,16 @@ in
       };
     };
 
+    environment.etc."tayga.conf".source = configFile;
+
     systemd.services.tayga = {
       description = "Stateless NAT64 implementation";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      reloadTriggers = [ configFile ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/tayga -d --nodetach --config ${configFile}";
+        ExecStart = "${cfg.package}/bin/tayga -d --nodetach --config /etc/tayga.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         Restart = "always";
 
