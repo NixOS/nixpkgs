@@ -57,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.10.23";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-dwlST3Cf4SLSYvuaPBbpkwHG0c57NZ+9tIWXcXsI1wQ=";
+    hash = "sha256-JczlQulHlViV9pg0uPXd9Boagp74VBdZ1UMDXh2c3DA=";
   };
 
   build-system = [
