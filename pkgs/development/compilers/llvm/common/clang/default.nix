@@ -28,18 +28,12 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "14") ''
-            cp -r ${monorepoSrc}/cmake "$out"
-          ''
-          + ''
-            cp -r ${monorepoSrc}/clang "$out"
-            cp -r ${monorepoSrc}/clang-tools-extra "$out"
-          ''
-        )
+        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } (''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/clang "$out"
+          cp -r ${monorepoSrc}/clang-tools-extra "$out"
+        '')
       else
         src;
 
@@ -58,24 +52,12 @@ stdenv.mkDerivation (
       # libraries. eg: `clang -munsupported hello.c -lc`
       ./clang-unsupported-option.patch
     ]
-    ++
-      lib.optional (lib.versions.major release_version == "13")
-        # Revert of https://reviews.llvm.org/D100879
-        # The malloc alignment assumption is incorrect for jemalloc and causes
-        # mis-compilation in firefox.
-        # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
-        (getVersionFile "clang/revert-malloc-alignment-assumption.patch")
-    ++ lib.optional (lib.versionOlder release_version "17") (
-      if lib.versionAtLeast release_version "14" then
-        fetchpatch {
-          name = "ignore-nostd-link.patch";
-          url = "https://github.com/llvm/llvm-project/commit/5b77e752dcd073846b89559d6c0e1a7699e58615.patch";
-          relative = "clang";
-          hash = "sha256-qzSAmoGY+7POkDhcGgQRPaNQ3+7PIcIc9cZuiE/eLkc=";
-        }
-      else
-        ./ignore-nostd-link-13.diff
-    )
+    ++ lib.optional (lib.versionOlder release_version "17") (fetchpatch {
+      name = "ignore-nostd-link.patch";
+      url = "https://github.com/llvm/llvm-project/commit/5b77e752dcd073846b89559d6c0e1a7699e58615.patch";
+      relative = "clang";
+      hash = "sha256-qzSAmoGY+7POkDhcGgQRPaNQ3+7PIcIc9cZuiE/eLkc=";
+    })
     # Pass the correct path to libllvm
     ++ [
       (replaceVars

@@ -135,18 +135,12 @@ stdenv.mkDerivation (
         runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (
           ''
             mkdir -p "$out/llvm"
-          ''
-          + (lib.optionalString (lib.versionAtLeast release_version "14") ''
             cp -r ${monorepoSrc}/cmake "$out"
-          '')
-          + ''
             cp -r ${monorepoSrc}/libcxx "$out"
             cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
             cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-          ''
-          + (lib.optionalString (lib.versionAtLeast release_version "14") ''
             cp -r ${monorepoSrc}/third-party "$out"
-          '')
+          ''
           + (lib.optionalString (lib.versionAtLeast release_version "20") ''
             cp -r ${monorepoSrc}/libc "$out"
           '')
@@ -273,15 +267,12 @@ stdenv.mkDerivation (
     if (lib.versionOlder release_version "16" || lib.versionAtLeast release_version "17") then
       {
         postPatch =
-          (lib.optionalString
-            (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "15")
-            ''
-              # fix CMake error when static and LIBCXXABI_USE_LLVM_UNWINDER=ON. aren't
-              # building unwind so don't need to depend on it
-              substituteInPlace libcxx/src/CMakeLists.txt \
-                --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
-            ''
-          )
+          (lib.optionalString (lib.versionOlder release_version "15") ''
+            # fix CMake error when static and LIBCXXABI_USE_LLVM_UNWINDER=ON. aren't
+            # building unwind so don't need to depend on it
+            substituteInPlace libcxx/src/CMakeLists.txt \
+              --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
+          '')
           + ''
             cd runtimes
           '';

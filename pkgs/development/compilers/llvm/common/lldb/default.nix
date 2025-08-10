@@ -49,11 +49,7 @@ stdenv.mkDerivation (
         runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
           ''
             mkdir -p "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "14") ''
             cp -r ${monorepoSrc}/cmake "$out"
-          ''
-          + ''
             cp -r ${monorepoSrc}/lldb "$out"
           ''
           + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
@@ -126,10 +122,7 @@ stdenv.mkDerivation (
           hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
         })
       ]
-      ++ lib.optional (lib.versionOlder release_version "14") (
-        getVersionFile "lldb/gnu-install-dirs.patch"
-      )
-      ++ lib.optional (lib.versionAtLeast release_version "14") ./gnu-install-dirs.patch;
+      ++ [ ./gnu-install-dirs.patch ];
 
     nativeBuildInputs = [
       cmake
@@ -149,7 +142,8 @@ stdenv.mkDerivation (
     ++ lib.optionals (lib.versionAtLeast release_version "18" && enableManpages) [
       python3.pkgs.myst-parser
     ]
-    ++ lib.optionals (lib.versionAtLeast release_version "14") [
+    # TODO: Clean up on `staging`.
+    ++ [
       ninja
     ];
 
@@ -217,8 +211,6 @@ stdenv.mkDerivation (
           echo "ERROR: python files not installed where expected!";
           return 1;
       fi
-    '' # Something lua is built on older versions but this file doesn't exist.
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
       if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
           echo "ERROR: lua files not installed where expected!";
           return 1;
@@ -250,7 +242,6 @@ stdenv.mkDerivation (
         larger LLVM Project, such as the Clang expression parser and LLVM
         disassembler.
       '';
-      broken = lib.versionOlder release_version "14";
       mainProgram = "lldb";
     };
   }

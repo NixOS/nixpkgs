@@ -31,7 +31,7 @@
     # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
     # broken for the armv7l builder
     && !stdenv.hostPlatform.isAarch,
-  enablePolly ? lib.versionAtLeast release_version "14",
+  enablePolly ? true,
   enableTerminfo ? true,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
@@ -92,8 +92,6 @@ stdenv.mkDerivation (
           ''
             mkdir -p "$out"
             cp -r ${monorepoSrc}/llvm "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "14") ''
             cp -r ${monorepoSrc}/cmake "$out"
             cp -r ${monorepoSrc}/third-party "$out"
           ''
@@ -123,16 +121,10 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optional (lib.versionOlder release_version "14")
-        # When cross-compiling we configure llvm-config-native with an approximation
-        # of the flags used for the normal LLVM build. To avoid the need for building
-        # a native libLLVM.so (which would fail) we force llvm-config to be linked
-        # statically against the necessary LLVM components always.
-        ./llvm-config-link-static.patch
       # Support custom installation dirs
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
-      ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
+      [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         # Running the tests involves invoking binaries (like `opt`) that depend on
         # the LLVM dylibs and reference them by absolute install path (i.e. their
@@ -176,16 +168,6 @@ stdenv.mkDerivation (
         (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
       ]
       ++
-        lib.optional (lib.versions.major release_version == "13")
-          # Fix random compiler crashes: https://bugs.llvm.org/show_bug.cgi?id=50611
-          (
-            fetchpatch {
-              url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4764a4f8c920912a2bfd8b0eea57273acfe0d8a8/trunk/no-strict-aliasing-DwarfCompileUnit.patch";
-              sha256 = "18l6mrvm2vmwm77ckcnbjvh6ybvn72rhrb799d4qzwac4x2ifl7g";
-              stripLen = 1;
-            }
-          )
-      ++
         lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
           #   https://github.com/llvm/llvm-project/pull/101761
@@ -206,36 +188,15 @@ stdenv.mkDerivation (
         # Fix for Python 3.13
         (getVersionFile "llvm/no-pipes.patch")
       ]
-      ++ lib.optionals (lib.versionOlder release_version "14") [
-        # Backport gcc-13 fixes with missing includes.
+      ++ lib.optionals (lib.versionOlder (lib.versions.major release_version) "17") [
+        # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
+        # See also: https://github.com/numba/numba/issues/9109
         (fetchpatch {
-          name = "signals-gcc-13.patch";
-          url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
-          hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
-          stripLen = 1;
-        })
-        (fetchpatch {
-          name = "base64-gcc-13.patch";
-          url = "https://github.com/llvm/llvm-project/commit/5e9be93566f39ee6cecd579401e453eccfbe81e5.patch";
-          hash = "sha256-PAwrVrvffPd7tphpwCkYiz+67szPRzRB2TXBvKfzQ7U=";
-          stripLen = 1;
+          url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
+          relative = "llvm";
+          hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
         })
       ]
-      ++
-        lib.optionals
-          (
-            (lib.versionAtLeast (lib.versions.major release_version) "14")
-            && (lib.versionOlder (lib.versions.major release_version) "17")
-          )
-          [
-            # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
-            # See also: https://github.com/numba/numba/issues/9109
-            (fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
-              relative = "llvm";
-              hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
-            })
-          ]
       ++
         lib.optional (lib.versions.major release_version == "17")
           # Fixes a crash with -fzero-call-used-regs=used-gpr
@@ -321,11 +282,10 @@ stdenv.mkDerivation (
     ]
     ++ optional enablePFM libpfm; # exegesis
 
-    propagatedBuildInputs =
-      (lib.optional (
-        lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform
-      ) ncurses)
-      ++ [ zlib ];
+    propagatedBuildInputs = [
+      ncurses
+      zlib
+    ];
 
     nativeCheckInputs = [
       which

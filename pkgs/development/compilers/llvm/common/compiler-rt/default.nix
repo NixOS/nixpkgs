@@ -58,8 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
         ''
           mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
           cp -r ${monorepoSrc}/cmake "$out"
         ''
         + lib.optionalString (lib.versionAtLeast release_version "21") ''
@@ -84,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix build on armv6l
       ./armv6-no-ldrexd-strexd.patch
     ]
-    ++ lib.optional (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "18") (
+    ++ lib.optional (lib.versionOlder release_version "18") (
       getVersionFile "compiler-rt/gnu-install-dirs.patch"
     )
     ++ lib.optional (lib.versionOlder release_version "18") (fetchpatch {
@@ -169,12 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SANITIZER_CXX_ABI_LIBNAME" "libcxxabi")
     (lib.cmakeBool "COMPILER_RT_USE_BUILTINS_LIBRARY" true)
   ]
-  ++
-    lib.optionals
-      ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13"))
-      [
-        (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
-      ]
   ++ lib.optionals (useLLVM && haveLibc) [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
     (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
@@ -265,13 +257,6 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       )
     )
-    + lib.optionalString (lib.versionOlder release_version "14") ''
-      # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
-      # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
-      substituteInPlace ../libcxx/utils/merge_archives.py \
-        --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
-        --replace-fail "distutils.spawn." ""
-    ''
     +
       lib.optionalString (lib.versionAtLeast release_version "19")
         # codesign in sigtool doesn't support the various options used by the build
