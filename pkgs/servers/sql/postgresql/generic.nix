@@ -99,14 +99,7 @@ let
       gettext,
 
       # NUMA
-      numaSupport ?
-        lib.versionAtLeast version "18"
-        && lib.meta.availableOn stdenv.hostPlatform numactl
-        # NUMA can fail in 18beta2 on some hardware with:
-        # ERROR:  invalid NUMA node id outside of allowed range [0, 0]: 1
-        # https://github.com/NixOS/nixpkgs/pull/411958#issuecomment-3031680123
-        # https://www.postgresql.org/message-id/flat/E1u1tr8-003BbN-2E%40gemulon.postgresql.org
-        && version != "18beta2",
+      numaSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform numactl,
       numactl,
 
       # PAM
@@ -432,6 +425,17 @@ let
         substituteInPlace "src/Makefile.global.in" --subst-var out
         substituteInPlace "src/common/config_info.c" --subst-var dev
         cat ${./pg_config.env.mk} >> src/common/Makefile
+
+        # This test always fails on hardware with >1 NUMA node: the sysfs
+        # dirs providing information about the topology are hidden in the sandbox,
+        # so postgres assumes there's only a single node `0`. However,
+        # the test checks on which NUMA nodes the allocated pages are which is >1
+        # on such hardware. This in turn triggers a safeguard in the view
+        # which breaks the test.
+        # Manual tests confirm that the testcase behaves properly outside of the
+        # Nix sandbox.
+        substituteInPlace src/test/regress/parallel_schedule \
+          --replace-fail numa ""
       ''
       # This check was introduced upstream to prevent calls to "exit" inside libpq.
       # However, this doesn't work reliably with static linking, see this and following:
