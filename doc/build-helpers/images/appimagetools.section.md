@@ -37,9 +37,7 @@ let
     hash = "sha256-he1uGC1M/nFcKpMM9JKY4oeexJcnzV0ZRxhTjtJz6xw=";
   };
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
-}
+appimageTools.wrapType2 { inherit pname version src; }
 ```
 
 :::
@@ -104,9 +102,7 @@ let
     hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

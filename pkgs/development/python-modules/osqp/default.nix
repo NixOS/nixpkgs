@@ -57,19 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osqp" ];
 
-  disabledTests =
-    [
-      # Need an unfree license package - mkl
-      "test_issue14"
-    ]
-    # disable tests failing after scipy 1.12 update
-    # https://github.com/osqp/osqp-python/issues/121
-    # re-enable once unit tests fixed
-    ++ [
-      "feasibility_tests"
-      "polish_tests"
-      "update_matrices_tests"
-    ];
+  disabledTests = [
+    # Need an unfree license package - mkl
+    "test_issue14"
+  ]
+  # disable tests failing after scipy 1.12 update
+  # https://github.com/osqp/osqp-python/issues/121
+  # re-enable once unit tests fixed
+  ++ [
+    "feasibility_tests"
+    "polish_tests"
+    "update_matrices_tests"
+  ];
 
   meta = with lib; {
     description = "Operator Splitting QP Solver";

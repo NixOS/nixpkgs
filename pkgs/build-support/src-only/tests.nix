@@ -1,28 +1,89 @@
 {
+  lib,
   runCommand,
   srcOnly,
+  hello,
   emptyDirectory,
-  glibc,
+  zlib,
+  stdenv,
+  testers,
 }:
 
 let
   emptySrc = srcOnly emptyDirectory;
-  glibcSrc = srcOnly glibc;
+  zlibSrc = srcOnly zlib;
+
+  # It can be invoked in a number of ways. Let's make sure they're equivalent.
+  zlibSrcDrvAttrs = srcOnly zlib.drvAttrs;
+  # zlibSrcFreeform = # ???;
+  helloSrc = srcOnly hello;
+  helloSrcDrvAttrs = srcOnly hello.drvAttrs;
+
+  # The srcOnly <drv> invocation leaks a lot of attrs into the srcOnly derivation,
+  # so for comparing with the freeform invocation, we need to make a selection.
+  # Otherwise, we'll be comparing against whatever attribute the fancy hello drv
+  # has.
+  helloDrvSimple = stdenv.mkDerivation {
+    inherit (hello)
+      name
+      pname
+      version
+      src
+      patches
+      ;
+  };
+  helloDrvSimpleSrc = srcOnly helloDrvSimple;
+  helloDrvSimpleSrcFreeform = srcOnly (
+    {
+      inherit (helloDrvSimple)
+        name
+        pname
+        version
+        src
+        patches
+        stdenv
+        ;
+    }
+    # __impureHostDeps get duplicated in helloDrvSimpleSrc (on darwin)
+    # This is harmless, but fails the test for what is arguably an
+    # unrelated non-problem, so we just work around it here.
+    # The inclusion of __impureHostDeps really shouldn't be required,
+    # and should be removed from this test.
+    // lib.optionalAttrs (helloDrvSimple ? __impureHostDeps) {
+      inherit (helloDrvSimple) __impureHostDeps;
+    }
+  );
+
 in
 
-runCommand "srcOnly-tests" { } ''
-  # Test that emptySrc is empty
-  if [ -n "$(ls -A ${emptySrc})" ]; then
-    echo "emptySrc is not empty"
-    exit 1
-  fi
+runCommand "srcOnly-tests"
+  {
+    moreTests = [
+      (testers.testEqualDerivation "zlibSrcDrvAttrs == zlibSrc" zlibSrcDrvAttrs zlibSrc)
+      # (testers.testEqualDerivation
+      #   "zlibSrcFreeform == zlibSrc"
+      #   zlibSrcFreeform
+      #   zlibSrc)
+      (testers.testEqualDerivation "helloSrcDrvAttrs == helloSrc" helloSrcDrvAttrs helloSrc)
+      (testers.testEqualDerivation "helloDrvSimpleSrcFreeform == helloDrvSimpleSrc"
+        helloDrvSimpleSrcFreeform
+        helloDrvSimpleSrc
+      )
+    ];
+  }
+  ''
+    # Test that emptySrc is empty
+    if [ -n "$(ls -A ${emptySrc})" ]; then
+      echo "emptySrc is not empty"
+      exit 1
+    fi
 
-  # Test that glibcSrc is not empty
-  if [ -z "$(ls -A ${glibcSrc})" ]; then
-    echo "glibcSrc is empty"
-    exit 1
-  fi
+    # Test that zlibSrc is not empty
+    if [ -z "$(ls -A ${zlibSrc})" ]; then
+      echo "zlibSrc is empty"
+      exit 1
+    fi
 
-  # Make $out exist to avoid build failure
-  mkdir -p $out
-''
+    # Make $out exist to avoid build failure
+    mkdir -p $out
+  ''

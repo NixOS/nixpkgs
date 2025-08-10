@@ -69,16 +69,17 @@ buildPythonPackage rec {
     pytz
     shapely
     snuggs
-  ] ++ optional-dependencies.s3;
+  ]
+  ++ optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # Tests with gdal marker do not test the functionality of Fiona,
     # but they are used to check GDAL driver capabilities.
-    "-m 'not gdal'"
+    "gdal"
   ];
 
   disabledTests = [

@@ -101,7 +101,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   preCheck = ''
     export HOME=$TMPDIR

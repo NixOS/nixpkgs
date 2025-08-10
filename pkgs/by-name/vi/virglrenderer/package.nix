@@ -31,21 +31,20 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  buildInputs =
-    [
-      libepoxy
-    ]
-    ++ lib.optionals vaapiSupport [ libva ]
-    ++ lib.optionals vulkanSupport [
-      vulkan-headers
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      libX11
-      libdrm
-      libgbm
-    ];
+  buildInputs = [
+    libepoxy
+  ]
+  ++ lib.optionals vaapiSupport [ libva ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libX11
+    libdrm
+    libgbm
+  ];
 
   nativeBuildInputs = [
     meson
@@ -56,14 +55,13 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "video" vaapiSupport)
-      (lib.mesonBool "venus" vulkanSupport)
-    ]
-    ++ lib.optionals nativeContextSupport [
-      (lib.mesonOption "drm-renderers" "amdgpu-experimental,msm")
-    ];
+  mesonFlags = [
+    (lib.mesonBool "video" vaapiSupport)
+    (lib.mesonBool "venus" vulkanSupport)
+  ]
+  ++ lib.optionals nativeContextSupport [
+    (lib.mesonOption "drm-renderers" "amdgpu-experimental,msm")
+  ];
 
   passthru = {
     updateScript = gitUpdater {

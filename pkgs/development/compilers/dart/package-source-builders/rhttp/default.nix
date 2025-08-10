@@ -27,7 +27,6 @@ let
       runHook postUnpack
     '';
 
-    useFetchCargoVendor = true;
     cargoHash =
       {
         _0_9_1 = "sha256-ZVl1nesepZnmOWeJPOgE6IDCokQm5FedbA5MBvr5S8c=";

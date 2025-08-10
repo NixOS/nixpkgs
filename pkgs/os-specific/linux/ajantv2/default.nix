@@ -9,6 +9,11 @@ stdenv.mkDerivation {
   inherit (libajantv2) src;
   sourceRoot = "${libajantv2.src.name}/driver/linux";
 
+  patches = [
+    ./fix-linux-6.15.patch
+  ];
+  patchFlags = "-p3";
+
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -35,5 +40,7 @@ stdenv.mkDerivation {
       "aarch64-linux"
     ];
     description = "AJA video driver";
+    # FTB for hardened 5.10/5.15 kernels
+    broken = kernel.kernelOlder "6" && kernel.isHardened;
   };
 }

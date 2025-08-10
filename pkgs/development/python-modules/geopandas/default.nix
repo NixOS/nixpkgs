@@ -83,9 +83,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ] ++ optional-dependencies.all;
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ]
+  ++ optional-dependencies.all;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -96,7 +95,7 @@ buildPythonPackage rec {
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [ "geopandas" ];
+  enabledTestPaths = [ "geopandas" ];
 
   pythonImportsCheck = [ "geopandas" ];
 

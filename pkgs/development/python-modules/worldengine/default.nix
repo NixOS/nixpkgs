@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src-data = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "worldengine-data";
-    rev = "029051e";
+    rev = "029051e707f4702cb2af1a23b8222cca7dc88930";
     sha256 = "06xbf8gj3ljgr11v1n8jbs2q8pdf9wz53xdgkhpm8hdnjahgdxdm";
   };
 

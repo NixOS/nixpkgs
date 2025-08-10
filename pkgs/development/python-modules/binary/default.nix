@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "binary";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "binary";
     tag = "v${version}";
-    hash = "sha256-PbQlD/VR5KKoQ3+C6pnNoA/BJB5CEnXh6Q8CVZH/6cs=";
+    hash = "sha256-dU+E6MxAmH8AEGTW2/lZmtgRTinKCv9gDiVeb4n78U4=";
   };
 
   build-system = [

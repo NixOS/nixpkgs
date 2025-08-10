@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "polyswarm-api";
-  version = "3.13.1";
+  version = "3.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "polyswarm";
     repo = "polyswarm-api";
     tag = version;
-    hash = "sha256-+oKhKn+wUnvKlNymY/vtXn0cHBMyawBNhOQRu0tYC/M=";
+    hash = "sha256-yDnE32/6dzFCops5xQAvvg45R0coR0H/LdWIM0f+wME=";
   };
 
   build-system = [ setuptools ];

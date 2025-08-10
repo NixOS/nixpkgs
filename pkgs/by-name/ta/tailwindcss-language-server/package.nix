@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  version = "0.14.24";
+  version = "0.14.26";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FlPrDoCGV7w3RBAZPP8gT/RGze9LDYQeAIVVPQA4Na4=";
+    hash = "sha256-XXRWxN+1fOuVULh+ZE+XRRBaoRzhCpw7n8SkBIorG9A=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    fetcherVersion = 1;
     hash = "sha256-SUEq20gZCiTDkFuNgMc5McHBPgW++8P9Q1MJb7a7pY8=";
   };
 

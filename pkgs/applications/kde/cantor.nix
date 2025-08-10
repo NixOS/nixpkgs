@@ -64,46 +64,46 @@ mkDerivation {
     qttools
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qtwebengine
-      qtxmlpatterns
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtwebengine
+    qtxmlpatterns
 
-      poppler
+    poppler
 
-      karchive
-      kcompletion
-      kconfig
-      kcoreaddons
-      kcrash
-      kdoctools
-      ki18n
-      kiconthemes
-      kio
-      knewstuff
-      kparts
-      kpty
-      ktexteditor
-      ktextwidgets
-      kxmlgui
-      syntax-highlighting
+    karchive
+    kcompletion
+    kconfig
+    kcoreaddons
+    kcrash
+    kdoctools
+    ki18n
+    kiconthemes
+    kio
+    knewstuff
+    kparts
+    kpty
+    ktexteditor
+    ktextwidgets
+    kxmlgui
+    syntax-highlighting
 
-      libspectre
-    ]
-    # backends
-    ++ lib.optional withAnalitza analitza
-    ++ lib.optional wtihJulia julia
-    ++ lib.optional withQalculate libqalculate
-    ++ lib.optional withLua luajit
-    ++ lib.optional withPython python3
-    ++ lib.optional withR R
-    ++ lib.optional withSage sage-with-env;
+    libspectre
+  ]
+  # backends
+  ++ lib.optional withAnalitza analitza
+  ++ lib.optional wtihJulia julia
+  ++ lib.optional withQalculate libqalculate
+  ++ lib.optional withLua luajit
+  ++ lib.optional withPython python3
+  ++ lib.optional withR R
+  ++ lib.optional withSage sage-with-env;
 
   qtWrapperArgs = [
     "--prefix PATH : ${placeholder "out"}/bin"
-  ] ++ lib.optional withSage "--prefix PATH : ${sage-with-env}/bin";
+  ]
+  ++ lib.optional withSage "--prefix PATH : ${sage-with-env}/bin";
 
   # Causes failures on Hydra and ofborg from some reason
   enableParallelBuilding = false;

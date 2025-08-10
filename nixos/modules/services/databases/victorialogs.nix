@@ -23,7 +23,8 @@ let
     "${cfg.package}/bin/victoria-logs"
     "-storageDataPath=/var/lib/${cfg.stateDir}"
     "-httpListenAddr=${cfg.listenAddress}"
-  ] ++ cfg.extraOptions;
+  ]
+  ++ cfg.extraOptions;
 in
 {
   options.services.victorialogs = {

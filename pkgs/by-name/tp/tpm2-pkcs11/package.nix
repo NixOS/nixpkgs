@@ -82,18 +82,17 @@ chosenStdenv.mkDerivation (finalAttrs: {
     ./bootstrap
   '';
 
-  configureFlags =
-    [
-      (lib.enableFeature finalAttrs.doCheck "unit")
-      (lib.enableFeature finalAttrs.doCheck "integration")
+  configureFlags = [
+    (lib.enableFeature finalAttrs.doCheck "unit")
+    (lib.enableFeature finalAttrs.doCheck "integration")
 
-      # Strangely, it uses --with-fapi=yes|no instead of a normal configure flag.
-      "--with-fapi=${if fapiSupport then "yes" else "no"}"
-    ]
-    ++ lib.optionals enableFuzzing [
-      "--enable-fuzzing"
-      "--disable-hardening"
-    ];
+    # Strangely, it uses --with-fapi=yes|no instead of a normal configure flag.
+    "--with-fapi=${if fapiSupport then "yes" else "no"}"
+  ]
+  ++ lib.optionals enableFuzzing [
+    "--enable-fuzzing"
+    "--disable-hardening"
+  ];
 
   strictDeps = true;
 

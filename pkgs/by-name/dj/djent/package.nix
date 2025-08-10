@@ -18,13 +18,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpfr ];
 
-  preBuild =
-    ''
-      sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      sed -i s/-m64//g Makefile
-    '';
+  preBuild = ''
+    sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    sed -i s/-m64//g Makefile
+  '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

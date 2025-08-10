@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  ]
+  ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
   propagatedBuildInputs =
     lib.optionals pythonSupport [
@@ -46,17 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
       proxsuite
     ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-      (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin) (
-      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
-    )
-    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
-      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
-    );
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isDarwin) (
+    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
+  )
+  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
+    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
+  );
 
   doCheck = true;
   pythonImportsCheck = [ "mim_solvers" ];

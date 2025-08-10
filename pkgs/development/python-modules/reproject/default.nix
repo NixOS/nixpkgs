@@ -51,21 +51,28 @@ buildPythonPackage rec {
     numpy
     scipy
     zarr
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "build/lib*"
+  pytestFlags = [
     # Avoid failure due to user warning: Distutils was imported before Setuptools
-    "-p no:warnings"
-    # Uses network
-    "--ignore build/lib*/reproject/interpolation/"
+    "-pno:warnings"
     # prevent "'filterwarnings' not found in `markers` configuration option" error
-    "-o 'markers=filterwarnings'"
+    "-omarkers=filterwarnings"
+  ];
+
+  enabledTestPaths = [
+    "build/lib*"
+  ];
+
+  disabledTestPaths = [
+    # Uses network
+    "build/lib*/reproject/interpolation/"
   ];
 
   pythonImportsCheck = [ "reproject" ];

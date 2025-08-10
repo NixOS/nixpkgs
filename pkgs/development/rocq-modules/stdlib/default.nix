@@ -8,7 +8,7 @@ mkRocqDerivation {
 
   pname = "stdlib";
   repo = "stdlib";
-  owner = "coq";
+  owner = "rocq-prover";
   opam-name = "rocq-stdlib";
 
   inherit version;
@@ -18,7 +18,7 @@ mkRocqDerivation {
     in
     with lib.versions;
     lib.switch rocq-core.version [
-      (case (isEq "9.0") "9.0.0")
+      (case (range "9.0" "9.1") "9.0.0")
     ] null;
   releaseRev = v: "V${v}";
 
@@ -27,7 +27,7 @@ mkRocqDerivation {
   mlPlugin = true;
 
   meta = {
-    description = "The Rocq Proof Assistant -- Standard Library";
+    description = "Rocq Proof Assistant -- Standard Library";
     license = lib.licenses.lgpl21Only;
   };
 

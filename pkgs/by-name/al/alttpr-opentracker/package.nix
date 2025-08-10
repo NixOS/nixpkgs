@@ -48,18 +48,17 @@ buildDotnetModule rec {
     openssl
   ];
 
-  runtimeDeps =
-    [
-      gtk3
-      openssl
-      xinput
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libX11
-      libXi
-    ]);
+  runtimeDeps = [
+    gtk3
+    openssl
+    xinput
+  ]
+  ++ (with xorg; [
+    libICE
+    libSM
+    libX11
+    libXi
+  ]);
 
   autoPatchelfIgnoreMissingDeps = [
     "libc.musl-x86_64.so.1"

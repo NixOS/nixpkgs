@@ -46,35 +46,33 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      gn
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      cctools.libtool
-      zlib
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    gn
+    ninja
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools.libtool
+    zlib
+    fixDarwinDylibNames
+  ];
 
-  buildInputs =
-    [
-      expat
-      fontconfig
-      freetype
-      harfbuzzFull
-      icu
-      libGL
-      libjpeg
-      libwebp
-      libX11
-    ]
-    ++ lib.optionals enableVulkan [
-      vulkan-headers
-      vulkan-memory-allocator
-    ];
+  buildInputs = [
+    expat
+    fontconfig
+    freetype
+    harfbuzzFull
+    icu
+    libGL
+    libjpeg
+    libwebp
+    libX11
+  ]
+  ++ lib.optionals enableVulkan [
+    vulkan-headers
+    vulkan-memory-allocator
+  ];
 
   gnFlags =
     let

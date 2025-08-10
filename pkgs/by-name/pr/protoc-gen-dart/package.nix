@@ -6,13 +6,13 @@
 
 buildDartApplication rec {
   pname = "protoc-gen-dart";
-  version = "22.4.0";
+  version = "22.5.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "protobuf.dart";
     tag = "protoc_plugin-v${version}";
-    hash = "sha256-X5WBju6DHsimhvOIVhX+zJCm5BTlEky/7iR2CS5Ybm4=";
+    hash = "sha256-8pSCYlbZLqHnpetM4luyfGo1qnWgKx93JPjRVWCOX0w=";
   };
 
   sourceRoot = "${src.name}/protoc_plugin";

@@ -12,20 +12,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "3.0.35";
+  version = "3.0.37";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-in+IURIUpHx5U0FeO0nCYF2/rsroHszUzXb/TThoFEI=";
+    hash = "sha256-EMNWt84mEKy96NAygRVhwTKFNYoEZEKggI37MllQTW0=";
     fetchSubmodules = true;
   };
   patches = [
     ./no_remote_version_check.patch
   ];
   proxyVendor = true;
-  vendorHash = "sha256-HDiSkj6GYDzQoLZWLQHH64GmYr9k9SSTaGNHJBNaeGU=";
+
+  vendorHash = "sha256-JIs0HQrUk/oTf7eVd558qe9BgfKFcbprj1zn3ZebApA=";
 
   subPackages = [ "." ];
 

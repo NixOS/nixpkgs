@@ -49,17 +49,16 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      attrs
-      jsonschema-specifications
-      referencing
-      rpds-py
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-      pkgutil-resolve-name
-    ];
+  dependencies = [
+    attrs
+    jsonschema-specifications
+    referencing
+    rpds-py
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+    pkgutil-resolve-name
+  ];
 
   optional-dependencies = {
     format = [

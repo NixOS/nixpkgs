@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j9MlvE2upocwC5xxroms3am6tqJX30sSw7PFNw8Ofog=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1x3F2TqNlqwfPUvLwU8ac4aEeEwpIy5gEyxRBC0Q5YM=";
 
   nativeBuildInputs = [
@@ -32,26 +31,26 @@ rustPlatform.buildRustPackage rec {
     asciidoctor
   ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          libiconv
-        ]
-      else
-        [
-          openssl
-        ]
-    );
+  buildInputs = [
+    sqlite
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        libiconv
+      ]
+    else
+      [
+        openssl
+      ]
+  );
 
-  buildFeatures =
-    [
-      "shell_completion"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "systemd"
-    ];
+  buildFeatures = [
+    "shell_completion"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "systemd"
+  ];
 
   postInstall = ''
     installShellCompletion \

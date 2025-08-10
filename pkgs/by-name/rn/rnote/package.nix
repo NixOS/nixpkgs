@@ -64,19 +64,18 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs =
-    [
-      appstream
-      glib
-      gst_all_1.gstreamer
-      gtk4
-      libadwaita
-      libxml2
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    appstream
+    glib
+    gst_all_1.gstreamer
+    gtk4
+    libadwaita
+    libxml2
+    poppler
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   postPatch = ''
     chmod +x build-aux/*.py

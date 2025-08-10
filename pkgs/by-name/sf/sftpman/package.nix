@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sftpman";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spantaleev";
@@ -16,9 +16,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-YxqN4+u0nYUWehbyRhjddIo2sythH3E0fiPSyrUlWhM=";
   };
 
+  build-system = with python3Packages; [ setuptools ];
+
   checkPhase = ''
     $out/bin/sftpman help
   '';
+
+  pythonImportsCheck = [ "sftpman" ];
 
   meta = with lib; {
     homepage = "https://github.com/spantaleev/sftpman";

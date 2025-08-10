@@ -37,17 +37,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      iso8601
-      os-service-types
-      pbr
-      requests
-      stevedore
-      typing-extensions
-    ]
-    # TODO: remove this workaround and fix breakages
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  dependencies = [
+    iso8601
+    os-service-types
+    pbr
+    requests
+    stevedore
+    typing-extensions
+  ]
+  # TODO: remove this workaround and fix breakages
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   optional-dependencies = {
     betamax = [
@@ -69,7 +68,8 @@ buildPythonPackage rec {
     stestr
     testresources
     testtools
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
   # https://bugs.launchpad.net/keystoneauth/+bug/2020112

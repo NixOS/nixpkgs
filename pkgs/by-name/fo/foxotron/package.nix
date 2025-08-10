@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-OnZWoiQ5ASKQV73/W6nl17B2ANwqCy/PlybHbNwrOyQ=";
   };
@@ -57,19 +57,20 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXext
-      alsa-lib
-      fontconfig
-      libGLU
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libXi
+    libXext
+    alsa-lib
+    fontconfig
+    libGLU
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12

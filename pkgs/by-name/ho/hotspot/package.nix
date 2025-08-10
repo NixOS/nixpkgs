@@ -46,31 +46,30 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ (lib.strings.cmakeBool "QT6_BUILD" true) ];
 
-  buildInputs =
-    [
-      (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
-      kddockwidgets
-      libelf
-      qt6.qtbase
-      qt6.qtsvg
-      rustc-demangle
-      zstd
-    ]
-    ++ (with kdePackages; [
-      kconfig
-      kconfigwidgets
-      kgraphviewer
-      ki18n
-      kio
-      kitemmodels
-      kitemviews
-      konsole
-      kparts
-      kwindowsystem
-      qcustomplot
-      syntax-highlighting
-      threadweaver
-    ]);
+  buildInputs = [
+    (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
+    kddockwidgets
+    libelf
+    qt6.qtbase
+    qt6.qtsvg
+    rustc-demangle
+    zstd
+  ]
+  ++ (with kdePackages; [
+    kconfig
+    kconfigwidgets
+    kgraphviewer
+    ki18n
+    kio
+    kitemmodels
+    kitemviews
+    konsole
+    kparts
+    kwindowsystem
+    qcustomplot
+    syntax-highlighting
+    threadweaver
+  ]);
 
   qtWrapperArgs = [
     "--suffix PATH : ${

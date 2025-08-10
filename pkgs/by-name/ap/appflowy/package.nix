@@ -17,11 +17,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-5OYlKorjv80QaTruGyp8x4m2vp3Q4Ol6Hf1wN+8m6bs=";
+        hash = "sha256-GhQaT6vby0VD8dPr88JcDLcBX+r0apdOyip3tk30was=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-pZIEOGJxEo0Z5Z8iTC0YTRTJOS8J4AvJGWq10Sl2zCQ=";
+        hash = "sha256-/hj+8okWufI2ow54xCD+XMZiEsPh0jjG8VN/phx+zgs=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -30,7 +30,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -41,7 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     gtk3

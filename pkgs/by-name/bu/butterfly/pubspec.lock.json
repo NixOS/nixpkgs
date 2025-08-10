@@ -197,7 +197,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "2.3.1"
+      "version": "2.3.2"
     },
     "camera": {
       "dependency": "direct main",
@@ -986,8 +986,8 @@
       "dependency": "direct main",
       "description": {
         "path": "packages/lw_file_system",
-        "ref": "08f472ba88112647b4a7b94dff57d74ed897e062",
-        "resolved-ref": "08f472ba88112647b4a7b94dff57d74ed897e062",
+        "ref": "ad67d9835e5fc673c9e7d1bcaad10c89423d4b61",
+        "resolved-ref": "ad67d9835e5fc673c9e7d1bcaad10c89423d4b61",
         "url": "https://github.com/LinwoodDev/dart_pkgs.git"
       },
       "source": "git",

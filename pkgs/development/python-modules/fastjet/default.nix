@@ -20,11 +20,9 @@ let
       withPython = true;
     }).overrideAttrs
       (prev: {
-        postInstall =
-          (prev.postInstall or "")
-          + ''
-            mv "$out/${python.sitePackages}/"{fastjet.py,_fastjet_swig.py}
-          '';
+        postInstall = (prev.postInstall or "") + ''
+          mv "$out/${python.sitePackages}/"{fastjet.py,_fastjet_swig.py}
+        '';
       });
   fastjet-contrib = pkgs.fastjet-contrib.override {
     inherit fastjet;

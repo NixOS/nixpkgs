@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   # Disabling tests failing on darwin due to a missing pgrep binary on procps
   disabledTests = [ "test_is_process_running" ];

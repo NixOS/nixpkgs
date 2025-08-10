@@ -284,34 +284,33 @@ let
             data.webroot
           ];
 
-      commonOpts =
-        [
-          "--accept-tos" # Checking the option is covered by the assertions
-          "--path"
-          "."
-          "--email"
-          data.email
-        ]
-        ++ protocolOpts
-        ++ lib.optionals (acmeServer != null) [
-          "--server"
-          acmeServer
-        ]
-        ++ lib.optionals (data.csr != null) [
-          "--csr"
-          data.csr
-        ]
-        ++ lib.optionals (data.csr == null) [
-          "--key-type"
-          data.keyType
-          "-d"
-          data.domain
-        ]
-        ++ lib.concatMap (name: [
-          "-d"
-          name
-        ]) extraDomains
-        ++ data.extraLegoFlags;
+      commonOpts = [
+        "--accept-tos" # Checking the option is covered by the assertions
+        "--path"
+        "."
+        "--email"
+        data.email
+      ]
+      ++ protocolOpts
+      ++ lib.optionals (acmeServer != null) [
+        "--server"
+        acmeServer
+      ]
+      ++ lib.optionals (data.csr != null) [
+        "--csr"
+        data.csr
+      ]
+      ++ lib.optionals (data.csr == null) [
+        "--key-type"
+        data.keyType
+        "-d"
+        data.domain
+      ]
+      ++ lib.concatMap (name: [
+        "-d"
+        name
+      ]) extraDomains
+      ++ data.extraLegoFlags;
 
       # Although --must-staple is common to both modes, it is not declared as a
       # mode-agnostic argument in lego and thus must come after the mode.
@@ -420,7 +419,8 @@ let
           "network-online.target"
           "acme-setup.service"
           "nss-lookup.target"
-        ] ++ selfsignedDeps;
+        ]
+        ++ selfsignedDeps;
         wants = [ "network-online.target" ] ++ selfsignedDeps;
         requires = [ "acme-setup.service" ];
 

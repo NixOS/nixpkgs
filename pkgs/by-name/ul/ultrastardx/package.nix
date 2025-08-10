@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2025.6.0";
+  version = "2025.8.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-0M5z40DLZsw/MPjhxsXGwkJnd1dnV59UjR15UXQCChM=";
+    hash = "sha256-rliUJNhvbXbD+ELxwutCoQs6BO1DyJ8J/+mmYHPuvQE=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fpc
     libpng
-  ] ++ sharedLibs;
+  ]
+  ++ sharedLibs;
 
   preBuild =
     let

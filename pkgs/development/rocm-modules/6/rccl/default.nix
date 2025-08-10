@@ -36,13 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   patches = [
     ./fix-mainline-support-and-ub.diff
@@ -66,45 +65,43 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook # ASAN doesn't add rpath without this
   ];
 
-  buildInputs =
-    [
-      rocm-smi
-      gtest
-      rocprofiler
-      rocprofiler-register
-      mscclpp
-    ]
-    ++ lib.optionals buildTests [
-      chrpath
-    ];
+  buildInputs = [
+    rocm-smi
+    gtest
+    rocprofiler
+    rocprofiler-register
+    mscclpp
+  ]
+  ++ lib.optionals buildTests [
+    chrpath
+  ];
 
-  cmakeFlags =
-    [
-      "-DHIP_CLANG_NUM_PARALLEL_JOBS=4"
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DROCM_PATH=${clr}"
-      "-DHIP_COMPILER=${clr}/bin/amdclang++"
-      "-DCMAKE_CXX_COMPILER=${clr}/bin/amdclang++"
-      "-DROCM_PATCH_VERSION=${rocm-core.ROCM_LIBPATCH_VERSION}"
-      "-DROCM_VERSION=${rocm-core.ROCM_LIBPATCH_VERSION}"
-      "-DBUILD_BFD=OFF" # Can't get it to detect bfd.h
-      "-DENABLE_MSCCL_KERNEL=ON"
-      "-DENABLE_MSCCLPP=ON"
-      "-DMSCCLPP_ROOT=${mscclpp}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      # AMD can't make up their minds and keep changing which one is used in different projects.
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-      "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_TESTS=ON"
-    ];
+  cmakeFlags = [
+    "-DHIP_CLANG_NUM_PARALLEL_JOBS=4"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DROCM_PATH=${clr}"
+    "-DHIP_COMPILER=${clr}/bin/amdclang++"
+    "-DCMAKE_CXX_COMPILER=${clr}/bin/amdclang++"
+    "-DROCM_PATCH_VERSION=${rocm-core.ROCM_LIBPATCH_VERSION}"
+    "-DROCM_VERSION=${rocm-core.ROCM_LIBPATCH_VERSION}"
+    "-DBUILD_BFD=OFF" # Can't get it to detect bfd.h
+    "-DENABLE_MSCCL_KERNEL=ON"
+    "-DENABLE_MSCCLPP=ON"
+    "-DMSCCLPP_ROOT=${mscclpp}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    # AMD can't make up their minds and keep changing which one is used in different projects.
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_TESTS=ON"
+  ];
 
   # -O2 and -fno-strict-aliasing due to UB issues in RCCL :c
   # Reported upstream

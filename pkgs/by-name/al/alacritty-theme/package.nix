@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (self: {
   pname = "alacritty-theme";
-  version = "0-unstable-2025-05-15";
+  version = "0-unstable-2025-07-16";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "59a96ef4c734f97a1aadaa619b31cc1ca90a0fbc";
-    hash = "sha256-7Qu00+odZblXqN9e3uVZWfIWySFT0IiwIyK5wEbtReE=";
+    rev = "6c91a0e913396daafdb7ca43e84014d4e176623c";
+    hash = "sha256-Rq5AB9BktTaCQ1UzUITgu6g5a74C0sHpiiHAjeC1RiA=";
     sparseCheckout = [ "themes" ];
   };
 

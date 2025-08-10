@@ -63,14 +63,13 @@ in
       cfg.package
     ];
 
-    environment.etc."htoprc".text =
-      ''
-        # Global htop configuration
-        # To change set: programs.htop.settings.KEY = VALUE;
-      ''
-      + builtins.concatStringsSep "\n" (
-        lib.mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings
-      );
+    environment.etc."htoprc".text = ''
+      # Global htop configuration
+      # To change set: programs.htop.settings.KEY = VALUE;
+    ''
+    + builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings
+    );
   };
 
 }

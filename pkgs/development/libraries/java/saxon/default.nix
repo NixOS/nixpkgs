@@ -44,28 +44,27 @@ let
 
         sourceRoot = ".";
 
-        installPhase =
-          ''
-            runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-            install -Dm444 -t $out/share/java/ *.jar
-            mv doc $out/share
+          install -Dm444 -t $out/share/java/ *.jar
+          mv doc $out/share
 
-            mkdir -p $out/bin
-            makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
-              --add-flags "-jar $out/share/java/${jar'}.jar"
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
-            mv lib $out/share/java
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
-            makeWrapper ${lib.getExe jre} $out/bin/transform \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+          mkdir -p $out/bin
+          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+            --add-flags "-jar $out/share/java/${jar'}.jar"
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+          mv lib $out/share/java
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+          makeWrapper ${lib.getExe jre} $out/bin/transform \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
 
-            makeWrapper ${lib.getExe jre} $out/bin/query \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
-          ''
-          + "runHook postInstall";
+          makeWrapper ${lib.getExe jre} $out/bin/query \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+        ''
+        + "runHook postInstall";
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;
@@ -174,11 +173,11 @@ in
 
   saxon_11-he = common rec {
     pname = "saxon-he";
-    version = "11.6";
+    version = "11.7";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      sha256 = "/AVX5mtZSO6Is19t3+FlEvtIBsnwB3MIWAPCht8Aqnw=";
+      sha256 = "MGzhUW9ZLVvTSqEdpAZWAiwTYxCZxbn26zESDmIe4Vo=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
@@ -186,11 +185,11 @@ in
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.7";
+    version = "12.8";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-+J4ghaw1fZtsuKIxcHrrxff20LTsOmJhRLqWVvdZLN4=";
+      hash = "sha256-K6hRrseSW4giCBgsSMk2IwIF1VjjNWNrvkZia9gANZg=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

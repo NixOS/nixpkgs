@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "test_recursion"
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ubjson" ];
 

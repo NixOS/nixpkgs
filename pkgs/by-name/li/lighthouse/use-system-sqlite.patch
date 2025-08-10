@@ -1,13 +1,13 @@
 diff --git a/Cargo.toml b/Cargo.toml
-index b942d1719..da6f245c5 100644
+index 6a7b2f610..4cd9a9bc0 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -148,7 +148,7 @@ regex = "1"
- reqwest = { version = "0.11", default-features = false, features = ["blocking", "json", "stream", "rustls-tls", "native-tls-vendored"] }
- ring = "0.16"
+@@ -215,7 +215,7 @@ reqwest = { version = "0.11", default-features = false, features = [
+ ] }
+ ring = "0.17"
  rpds = "0.11"
 -rusqlite = { version = "0.28", features = ["bundled"] }
 +rusqlite = { version = "0.28" }
- serde = { version = "1", features = ["derive"] }
- serde_json = "1"
- serde_repr = "0.1"
+ rust_eth_kzg = "0.5.4"
+ safe_arith = { path = "consensus/safe_arith" }
+ sensitive_url = { path = "common/sensitive_url" }

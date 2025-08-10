@@ -6,23 +6,30 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "norminette";
-  version = "3.3.58";
-  format = "setuptools";
+  version = "3.3.59";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "42School";
     repo = "norminette";
     tag = version;
-    hash = "sha256-6hBBbfW2PQFb8rcDihvtWK0df7WcvOk0il1E82GOxaU=";
+    hash = "sha256-XPaMQCziL9/h+AHx6I6MIRAlzscWvOTkxUP9dMI4y0o=";
   };
+
+  build-system = with python3Packages; [
+    poetry-core
+  ];
+
+  pythonRemoveDeps = [
+    # Can be removed once https://github.com/42school/norminette/issues/565 is addressed
+    "argparse"
+  ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export PYTHONPATH=norminette:$PYTHONPATH
-  '';
+  pythonImportsCheck = [ "norminette" ];
 
   meta = with lib; {
     description = "Open source norminette to apply 42's norme to C files";

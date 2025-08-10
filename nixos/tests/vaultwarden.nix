@@ -69,7 +69,7 @@ let
               driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_new-password').send_keys(
                   '${userPassword}'
               )
-              driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_confirm-new-password').send_keys(
+              driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_new-password-confirm').send_keys(
                   '${userPassword}'
               )
               if driver.find_element(By.XPATH, '//input[@formcontrolname="checkForBreaches"]').is_selected():
@@ -101,81 +101,80 @@ let
           ];
         };
 
-        nodes =
-          {
-            server =
-              { pkgs, ... }:
-              lib.mkMerge [
-                {
-                  mysql = {
-                    services.mysql = {
-                      enable = true;
-                      initialScript = pkgs.writeText "mysql-init.sql" ''
-                        CREATE DATABASE bitwarden;
-                        CREATE USER 'bitwardenuser'@'localhost' IDENTIFIED BY '${dbPassword}';
-                        GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
-                        FLUSH PRIVILEGES;
-                      '';
-                      package = pkgs.mariadb;
-                    };
-
-                    services.vaultwarden.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
-
-                    systemd.services.vaultwarden.after = [ "mysql.service" ];
-                  };
-
-                  postgresql = {
-                    services.postgresql = {
-                      enable = true;
-                      ensureDatabases = [ "vaultwarden" ];
-                      ensureUsers = [
-                        {
-                          name = "vaultwarden";
-                          ensureDBOwnership = true;
-                        }
-                      ];
-                    };
-
-                    services.vaultwarden.config.databaseUrl = "postgresql:///vaultwarden?host=/run/postgresql";
-
-                    systemd.services.vaultwarden.after = [ "postgresql.target" ];
-                  };
-
-                  sqlite = {
-                    services.vaultwarden.backupDir = "/srv/backups/vaultwarden";
-
-                    environment.systemPackages = [ pkgs.sqlite ];
-                  };
-                }
-                .${backend}
-
-                {
-                  services.vaultwarden = {
-                    enable = true;
-                    dbBackend = backend;
-                    config = {
-                      rocketAddress = "::";
-                      rocketPort = 8080;
-                    };
-                  };
-
-                  networking.firewall.allowedTCPPorts = [ 8080 ];
-
-                  environment.systemPackages = [
-                    pkgs.firefox-unwrapped
-                    pkgs.geckodriver
-                    testRunner
-                  ];
-                }
-              ];
-          }
-          // lib.optionalAttrs withClient {
-            client =
-              { pkgs, ... }:
+        nodes = {
+          server =
+            { pkgs, ... }:
+            lib.mkMerge [
               {
-                environment.systemPackages = [ pkgs.bitwarden-cli ];
-              };
-          };
+                mysql = {
+                  services.mysql = {
+                    enable = true;
+                    initialScript = pkgs.writeText "mysql-init.sql" ''
+                      CREATE DATABASE bitwarden;
+                      CREATE USER 'bitwardenuser'@'localhost' IDENTIFIED BY '${dbPassword}';
+                      GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
+                      FLUSH PRIVILEGES;
+                    '';
+                    package = pkgs.mariadb;
+                  };
+
+                  services.vaultwarden.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+
+                  systemd.services.vaultwarden.after = [ "mysql.service" ];
+                };
+
+                postgresql = {
+                  services.postgresql = {
+                    enable = true;
+                    ensureDatabases = [ "vaultwarden" ];
+                    ensureUsers = [
+                      {
+                        name = "vaultwarden";
+                        ensureDBOwnership = true;
+                      }
+                    ];
+                  };
+
+                  services.vaultwarden.config.databaseUrl = "postgresql:///vaultwarden?host=/run/postgresql";
+
+                  systemd.services.vaultwarden.after = [ "postgresql.target" ];
+                };
+
+                sqlite = {
+                  services.vaultwarden.backupDir = "/srv/backups/vaultwarden";
+
+                  environment.systemPackages = [ pkgs.sqlite ];
+                };
+              }
+              .${backend}
+
+              {
+                services.vaultwarden = {
+                  enable = true;
+                  dbBackend = backend;
+                  config = {
+                    rocketAddress = "::";
+                    rocketPort = 8080;
+                  };
+                };
+
+                networking.firewall.allowedTCPPorts = [ 8080 ];
+
+                environment.systemPackages = [
+                  pkgs.firefox-unwrapped
+                  pkgs.geckodriver
+                  testRunner
+                ];
+              }
+            ];
+        }
+        // lib.optionalAttrs withClient {
+          client =
+            { pkgs, ... }:
+            {
+              environment.systemPackages = [ pkgs.bitwarden-cli ];
+            };
+        };
 
         testScript =
           if testScript != null then

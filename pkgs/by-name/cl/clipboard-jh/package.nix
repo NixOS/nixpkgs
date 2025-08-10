@@ -35,15 +35,16 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libffi
-      wayland-protocols
-      wayland
-      xorg.libX11
-      alsa-lib
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libffi
+    wayland-protocols
+    wayland
+    xorg.libX11
+    alsa-lib
+  ];
 
   cmakeBuildType = "MinSizeRel";
 

@@ -48,21 +48,20 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      gtk3
-      glib
-      gjs
-      libxml2
-      python3
-      python3.pkgs.pygobject3
-      gsettings-desktop-schemas
-      gdk-pixbuf
-      adwaita-icon-theme
-    ]
-    ++ lib.optionals enableWebkit2gtk [
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    gtk3
+    glib
+    gjs
+    libxml2
+    python3
+    python3.pkgs.pygobject3
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    adwaita-icon-theme
+  ]
+  ++ lib.optionals enableWebkit2gtk [
+    webkitgtk_4_1
+  ];
 
   mesonFlags = [
     (lib.mesonEnable "webkit2gtk" enableWebkit2gtk)

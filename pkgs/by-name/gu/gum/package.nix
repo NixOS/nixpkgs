@@ -23,17 +23,16 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X=main.Version=${version}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
-      "-linkmode=external"
-      "-extldflags"
-      "-static"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    "-linkmode=external"
+    "-extldflags"
+    "-static"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/gum man > gum.1

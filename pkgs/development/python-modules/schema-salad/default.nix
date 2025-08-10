@@ -43,21 +43,20 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies =
-    [
-      cachecontrol
-      mistune
-      mypy
-      mypy-extensions
-      rdflib
-      requests
-      ruamel-yaml
-      types-dataclasses
-      types-requests
-      types-setuptools
-    ]
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  dependencies = [
+    cachecontrol
+    mistune
+    mypy
+    mypy-extensions
+    rdflib
+    requests
+    ruamel-yaml
+    types-dataclasses
+    types-requests
+    types-setuptools
+  ]
+  ++ cachecontrol.optional-dependencies.filecache
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 

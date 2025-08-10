@@ -85,5 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     teams = [ lib.teams.freedesktop ];
     license = lib.licenses.hpnd;
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })

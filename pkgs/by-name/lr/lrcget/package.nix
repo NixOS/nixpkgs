@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Nu1N96OrLG/D2/1vbU229jLVNZuKIiCSwDJA25hlqFM=";
 
   # FIXME: This is a workaround, because we have a git dependency node_modules/lrc-kit contains install scripts
@@ -52,20 +51,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-N48+C3NNPYg/rOpnRNmkZfZU/ZHp8imrG/tiDaMGsCE=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri.hook
-      nodejs
-      npmHooks.npmConfigHook
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    cargo-tauri.hook
+    nodejs
+    npmHooks.npmConfigHook
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     alsa-lib

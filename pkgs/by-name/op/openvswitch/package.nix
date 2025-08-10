@@ -63,21 +63,20 @@ stdenv.mkDerivation rec {
 
   sphinxRoot = "./Documentation";
 
-  buildInputs =
-    [
-      libcap_ng
-      openssl
-      perl
-      procps
-      python3
-      util-linux
-      which
-    ]
-    ++ (lib.optionals withDPDK [
-      dpdk
-      numactl
-      libpcap
-    ]);
+  buildInputs = [
+    libcap_ng
+    openssl
+    perl
+    procps
+    python3
+    util-linux
+    which
+  ]
+  ++ (lib.optionals withDPDK [
+    dpdk
+    numactl
+    libpcap
+  ]);
 
   preConfigure = "./boot.sh";
 
@@ -85,7 +84,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/var"
     "--sbindir=$(out)/bin"
-  ] ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
+  ]
+  ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -116,14 +116,15 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  nativeCheckInputs =
-    [ iproute2 ]
-    ++ (with python3.pkgs; [
-      netaddr
-      pyparsing
-      pytest
-      setuptools
-    ]);
+  nativeCheckInputs = [
+    iproute2
+  ]
+  ++ (with python3.pkgs; [
+    netaddr
+    pyparsing
+    pytest
+    setuptools
+  ]);
 
   passthru = {
     tests = {

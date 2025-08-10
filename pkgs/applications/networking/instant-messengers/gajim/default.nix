@@ -35,6 +35,8 @@
   gupnp-igd,
   enableAppIndicator ? true,
   libappindicator-gtk3,
+  enableSoundNotifications ? true,
+  gsound,
   extraPythonPackages ? ps: [ ],
 }:
 
@@ -49,25 +51,25 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "pyproject";
 
-  buildInputs =
-    [
-      gtk4
-      adwaita-icon-theme
-      gtksourceview5
-      glib-networking
-    ]
-    ++ lib.optionals enableJingle [
-      farstream
-      gstreamer
-      gst-plugins-base
-      gst-libav
-      gst-plugins-good
-      libnice
-    ]
-    ++ lib.optional enableSecrets libsecret
-    ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd
-    ++ lib.optional enableAppIndicator libappindicator-gtk3;
+  buildInputs = [
+    gtk4
+    adwaita-icon-theme
+    gtksourceview5
+    glib-networking
+  ]
+  ++ lib.optionals enableJingle [
+    farstream
+    gstreamer
+    gst-plugins-base
+    gst-libav
+    gst-plugins-good
+    libnice
+  ]
+  ++ lib.optional enableSecrets libsecret
+  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableUPnP gupnp-igd
+  ++ lib.optional enableAppIndicator libappindicator-gtk3
+  ++ lib.optional enableSoundNotifications gsound;
 
   nativeBuildInputs = [
     gettext

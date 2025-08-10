@@ -88,11 +88,11 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [
-          nettools
+          net-tools
           nmap
           traceroute
         ];
-        defaultText = literalExpression "[ nettools nmap traceroute ]";
+        defaultText = literalExpression "[ net-tools nmap traceroute ]";
         description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
@@ -331,33 +331,32 @@ in
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;
-      preStart =
-        ''
-          # pre 19.09 compatibility
-          if test -e "${runtimeDir}/db-created"; then
-            mv "${runtimeDir}/db-created" "${stateDir}/"
-          fi
-        ''
-        + optionalString pgsqlLocal ''
-          if ! test -e "${stateDir}/db-created"; then
-            cat ${cfg.package}/share/zabbix/database/postgresql/schema.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
-            cat ${cfg.package}/share/zabbix/database/postgresql/images.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
-            cat ${cfg.package}/share/zabbix/database/postgresql/data.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
-            touch "${stateDir}/db-created"
-          fi
-        ''
-        + optionalString mysqlLocal ''
-          if ! test -e "${stateDir}/db-created"; then
-            cat ${cfg.package}/share/zabbix/database/mysql/schema.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
-            cat ${cfg.package}/share/zabbix/database/mysql/images.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
-            cat ${cfg.package}/share/zabbix/database/mysql/data.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
-            touch "${stateDir}/db-created"
-          fi
-        ''
-        + optionalString (cfg.database.passwordFile != null) ''
-          # create a copy of the supplied password file in a format zabbix can consume
-          install -m 0600 <(echo "DBPassword = $(cat ${cfg.database.passwordFile})") ${passwordFile}
-        '';
+      preStart = ''
+        # pre 19.09 compatibility
+        if test -e "${runtimeDir}/db-created"; then
+          mv "${runtimeDir}/db-created" "${stateDir}/"
+        fi
+      ''
+      + optionalString pgsqlLocal ''
+        if ! test -e "${stateDir}/db-created"; then
+          cat ${cfg.package}/share/zabbix/database/postgresql/schema.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
+          cat ${cfg.package}/share/zabbix/database/postgresql/images.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
+          cat ${cfg.package}/share/zabbix/database/postgresql/data.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
+          touch "${stateDir}/db-created"
+        fi
+      ''
+      + optionalString mysqlLocal ''
+        if ! test -e "${stateDir}/db-created"; then
+          cat ${cfg.package}/share/zabbix/database/mysql/schema.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
+          cat ${cfg.package}/share/zabbix/database/mysql/images.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
+          cat ${cfg.package}/share/zabbix/database/mysql/data.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
+          touch "${stateDir}/db-created"
+        fi
+      ''
+      + optionalString (cfg.database.passwordFile != null) ''
+        # create a copy of the supplied password file in a format zabbix can consume
+        install -m 0600 <(echo "DBPassword = $(cat ${cfg.database.passwordFile})") ${passwordFile}
+      '';
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/sbin/zabbix_server zabbix_server -f --config ${configFile}";

@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
     "--enable-libipq"
     "--enable-nfsynproxy"
     "--enable-shared"
-  ] ++ lib.optional (!nftablesCompat) "--disable-nftables";
+  ]
+  ++ lib.optional (!nftablesCompat) "--disable-nftables";
 
   enableParallelBuilding = true;
 

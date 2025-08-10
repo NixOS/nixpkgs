@@ -12,26 +12,27 @@
   stdenv,
   open-policy-agent,
   cctools,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.17.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iBDvvKy5alaieIm+Jv9WnqHVGjItDSvJAk+ClTRj3v0=";
+    hash = "sha256-BLEbEDZRh7fgcnkH/YUHPPdKM1FtZdjvsL1rJ57BP3w=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-rHlzLawpCD9onhca9NzgUXmA2vDmW48cQrV05qs+tn8=";
+  cargoHash = "sha256-1jLiCCZUj/rBHd1huqZdmgKayoSZoOt3tptyZlOcWJA=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-0rJAU4PZAshTu6KD4EzIltUT8PO4dnWCY5oM3kyxBBk=";
+    hash = "sha256-+n9P2P88G3neHJqmJi/VWpaQ/UkUzBtihfeKy5lju4U=";
   };
 
   npmRoot = "frontend";
@@ -43,7 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
   buildInputs = [
     sqlite
@@ -82,6 +84,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid unstable pre‐releases
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";

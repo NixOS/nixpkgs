@@ -10,7 +10,7 @@
   git,
   jdk8,
   makeWrapper,
-  nettools,
+  net-tools,
   python3,
 }:
 
@@ -324,7 +324,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     jdk
-    nettools
+    net-tools
     python3
     git
   ];

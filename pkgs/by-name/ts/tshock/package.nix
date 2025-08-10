@@ -36,7 +36,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/Pryaxis/TShock";
-    description = "Modded server software for Terraria, providing a plugin system and inbuilt tools such as anti-cheat, server-side characters, groups, permissions, and item bans.";
+    description = "Modded server software for Terraria, providing a plugin system and inbuilt tools such as anti-cheat, server-side characters, groups, permissions, and item bans";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.proggerx ];
     mainProgram = "TShock.Server";

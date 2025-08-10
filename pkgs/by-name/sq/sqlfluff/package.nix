@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     tag = version;
-    hash = "sha256-gtpYQvhDOxNO97YXaSHqSgUklmPJIe2ynjexTZPBUmA=";
+    hash = "sha256-Cf4nrINpe5Kr2JYwcTYx1oO+E6ydlBs0W7F4Mh7ITAs=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
-    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sqlfluff";

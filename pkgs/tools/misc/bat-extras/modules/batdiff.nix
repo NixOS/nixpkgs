@@ -13,6 +13,7 @@ buildBatExtrasPkg {
     less
     coreutils
     gitMinimal
-  ] ++ lib.optional withDelta delta;
+  ]
+  ++ lib.optional withDelta delta;
   meta.description = "Diff a file against the current git index, or display the diff between two files";
 }

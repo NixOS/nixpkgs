@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "25.5.0";
+  version = "25.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ansible_lint";
-    hash = "sha256-QYJSDyM+70JIvEz0tgdOJc2vW+Ic+b6USqvIXfVAfpw=";
+    hash = "sha256-mvz0GZl84f/FesqjpW83e86M7rnbEOarhP1WXQm+QIs=";
   };
 
   postPatch = ''
@@ -98,6 +98,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       sengaya
       HarisDotParis
+      robsliwi
     ];
   };
 }

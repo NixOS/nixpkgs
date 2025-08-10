@@ -111,14 +111,13 @@ let
     # already vendored
     vendorHash = null;
 
-    preBuild =
-      ''
-        cp -r ../locale/en pkg/locale/src/
-        cp -r ${server-webconsole}/* webconsole/dist/
-      ''
-      + lib.optionalString withLocales ''
-        cp -r ${corteza-locale}/src/* pkg/locale/src/
-      '';
+    preBuild = ''
+      cp -r ../locale/en pkg/locale/src/
+      cp -r ${server-webconsole}/* webconsole/dist/
+    ''
+    + lib.optionalString withLocales ''
+      cp -r ${corteza-locale}/src/* pkg/locale/src/
+    '';
 
     subPackages = [ "cmd/corteza" ];
 

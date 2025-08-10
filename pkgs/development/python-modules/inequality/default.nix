@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "inequality";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "inequality";
     tag = "v${version}";
-    hash = "sha256-JVim2u+VF35dvD+y14WbA2+G4wktAGpin/GMe0uGhjc=";
+    hash = "sha256-GMl/hHwaHPozdLhV9/CPYIMY5lFYeo0X0SPDg4RT1zo=";
   };
 
   build-system = [ setuptools-scm ];

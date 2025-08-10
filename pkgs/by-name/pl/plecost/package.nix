@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "plecost";
   version = "1.1.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iniqua";
@@ -27,7 +27,9 @@ python3Packages.buildPythonApplication {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     aiohttp
     async-timeout
     termcolor
@@ -36,6 +38,8 @@ python3Packages.buildPythonApplication {
 
   # Project has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "plecost_lib" ];
 
   meta = with lib; {
     description = "Vulnerability fingerprinting and vulnerability finder for Wordpress blog engine";

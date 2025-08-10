@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "vpnc";
-  version = "unstable-2025-06-16";
+  version = "0-unstable-2025-06-16";
 
   src = fetchFromGitHub {
     owner = "streambinder";
@@ -29,35 +29,37 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
     perl
-  ] ++ lib.optional (!opensslSupport) pkg-config;
+  ]
+  ++ lib.optional (!opensslSupport) pkg-config;
 
   buildInputs = [
     libgcrypt
     perl
-  ] ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
+  ]
+  ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
 
   makeFlags = [
     "PREFIX=$(out)"
     "ETCDIR=$(out)/etc/vpnc"
     "SCRIPT_PATH=${vpnc-scripts}/bin/vpnc-script"
-  ] ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
+  ]
+  ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/vpnc-disconnect \
-        --replace-fail /bin/sh ${lib.getExe' bash "sh"}
-      patchShebangs src/makeman.pl
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      # manpage generation invokes the build vpnc, which must be emulating when cross compiling
-      substituteInPlace src/makeman.pl --replace-fail \
-        '$vpnc --long-help' \
-        '${stdenv.hostPlatform.emulator buildPackages} $vpnc --long-help'
-    '';
+  postPatch = ''
+    substituteInPlace src/vpnc-disconnect \
+      --replace-fail /bin/sh ${lib.getExe' bash "sh"}
+    patchShebangs src/makeman.pl
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # manpage generation invokes the build vpnc, which must be emulating when cross compiling
+    substituteInPlace src/makeman.pl --replace-fail \
+      '$vpnc --long-help' \
+      '${stdenv.hostPlatform.emulator buildPackages} $vpnc --long-help'
+  '';
 
   enableParallelBuilding = true;
   # Missing install depends:

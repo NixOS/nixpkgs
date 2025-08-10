@@ -54,15 +54,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      llvmMerged
-      ncurses
-      libffi
-      libxml2
-    ]
-    ++ lib.optionals enableCUDA [ cuda ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
+  buildInputs = [
+    llvmMerged
+    ncurses
+    libffi
+    libxml2
+  ]
+  ++ lib.optionals enableCUDA [ cuda ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
     let

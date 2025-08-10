@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "22.7.3";
+  version = "22.8.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     tag = "intel-gmmlib-${version}";
-    hash = "sha256-3KGDKdhy4jtBVdZYY6fhEEBQYmfYzXoTR7yPAuFqBvI=";
+    hash = "sha256-TFa8EfrL14w8ameIinRhmeNnfOJ18hoXWEpTgxTeBBE=";
   };
 
   nativeBuildInputs = [ cmake ];

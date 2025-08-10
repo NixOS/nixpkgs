@@ -6,7 +6,7 @@
   dnsutils,
   coreutils,
   openssl,
-  nettools,
+  net-tools,
   util-linux,
   procps,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils # for printf
     dnsutils # for dig
-    nettools # for hostname
+    net-tools # for hostname
     openssl # for openssl
     procps # for ps
     util-linux # for hexdump
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://testssl.sh/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     mainProgram = "testssl.sh";
   };
 }

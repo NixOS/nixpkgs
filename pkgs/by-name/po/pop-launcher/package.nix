@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Htre2gzAlNfxBkBvMMtjYbUcuwNw+tB4DI18iBA+g34=";
 
   cargoBuildFlags = [

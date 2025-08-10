@@ -4,24 +4,10 @@
   fetchFromGitHub,
   makeWrapper,
   buildGoModule,
-  formats,
-  configTemplate ? null,
-  configTemplatePath ? null,
-  libnvidia-container,
   autoAddDriverRunpath,
 }:
 
-assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
-assert
-  configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
-
 let
-  configToml =
-    if configTemplatePath != null then
-      configTemplatePath
-    else
-      (formats.toml { }).generate "config.toml" configTemplate;
-
   # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
@@ -97,28 +83,15 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall =
-    ''
-      mkdir -p $tools/bin
-      mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
-
-      for bin in nvidia-container-runtime-hook nvidia-container-runtime; do
-        wrapProgram $tools/bin/$bin \
-          --prefix PATH : ${libnvidia-container}/bin:$out/bin
-      done
-    ''
-    + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
-      mkdir -p $out/etc/nvidia-container-runtime
-
-      cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
-
-      substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
-        --subst-var-by glibcbin ${lib.getBin glibc}
-    '';
+  postInstall = ''
+    mkdir -p $tools/bin
+    mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
+  '';
 
   meta = {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
     description = "NVIDIA Container Toolkit";
+    mainProgram = "nvidia-ctk";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

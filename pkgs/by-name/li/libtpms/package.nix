@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libtpms";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "libtpms";
     rev = "v${version}";
-    sha256 = "sha256-YKs/XYJ8UItOtSinl28/G9XFVzobFd4ZDKtClQDLXFk=";
+    sha256 = "sha256-uj06cAhepTOFxSeiBY/UVP/rtBQHLvrODe4ljU6ALOE=";
   };
 
   hardeningDisable = [ "strictflexarrays3" ];

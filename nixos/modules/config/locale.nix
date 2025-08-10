@@ -90,14 +90,13 @@ in
       NIXOS_STATIC_TIMEZONE = "1";
     };
 
-    environment.etc =
-      {
-        zoneinfo.source = tzdir;
-      }
-      // lib.optionalAttrs (config.time.timeZone != null) {
-        localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
-        localtime.mode = "direct-symlink";
-      };
+    environment.etc = {
+      zoneinfo.source = tzdir;
+    }
+    // lib.optionalAttrs (config.time.timeZone != null) {
+      localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
+      localtime.mode = "direct-symlink";
+    };
   };
 
 }

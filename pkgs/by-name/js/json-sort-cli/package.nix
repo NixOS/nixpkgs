@@ -30,7 +30,7 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "CLI interface to json-stable-stringify.";
+    description = "CLI interface to json-stable-stringify";
     homepage = "https://github.com/tillig/json-sort-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hasnep ];

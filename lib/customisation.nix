@@ -446,16 +446,15 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs =
-        {
-          inherit (drv) name system meta;
-          inherit outputs;
-        }
-        // optionalAttrs (drv._hydraAggregate or false) {
-          _hydraAggregate = true;
-          constituents = map hydraJob (flatten drv.constituents);
-        }
-        // (listToAttrs outputsList);
+      commonAttrs = {
+        inherit (drv) name system meta;
+        inherit outputs;
+      }
+      // optionalAttrs (drv._hydraAggregate or false) {
+        _hydraAggregate = true;
+        constituents = map hydraJob (flatten drv.constituents);
+      }
+      // (listToAttrs outputsList);
 
       makeOutput =
         outputName:

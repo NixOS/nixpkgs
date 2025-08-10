@@ -34,7 +34,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "monotonic_alignment_search" ];
 

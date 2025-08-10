@@ -23,12 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
   };
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      which
-      unixtools.xxd
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    which
+    unixtools.xxd
+  ];
 
   buildInputs = [
     ffmpeg

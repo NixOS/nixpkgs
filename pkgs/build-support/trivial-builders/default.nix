@@ -344,27 +344,26 @@ rec {
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
-      text =
-        ''
-          #!${runtimeShell}
-          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-        ''
-        + lib.optionalString (runtimeEnv != null) (
-          lib.concatStrings (
-            lib.mapAttrsToList (name: value: ''
-              ${lib.toShellVar name value}
-              export ${name}
-            '') runtimeEnv
-          )
+      text = ''
+        #!${runtimeShell}
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      ''
+      + lib.optionalString (runtimeEnv != null) (
+        lib.concatStrings (
+          lib.mapAttrsToList (name: value: ''
+            ${lib.toShellVar name value}
+            export ${name}
+          '') runtimeEnv
         )
-        + lib.optionalString (runtimeInputs != [ ]) ''
+      )
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
-          export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
-        ''
-        + ''
+        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+      ''
+      + ''
 
-          ${text}
-        '';
+        ${text}
+      '';
 
       checkPhase =
         let
@@ -671,8 +670,8 @@ rec {
           throw "linkFarm entries must be either attrs or a list!";
 
       linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-        ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
+        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
@@ -740,6 +739,7 @@ rec {
       name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook",
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
       propagatedBuildInputs ? [ ],
+      propagatedNativeBuildInputs ? [ ],
       # these will be buildInputs
       depsTargetTargetPropagated ? [ ],
       meta ? { },
@@ -758,6 +758,7 @@ rec {
           inherit meta;
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
+          inherit propagatedNativeBuildInputs;
           strictDeps = true;
           # TODO 2023-01, no backport: simplify to inherit passthru;
           passthru =

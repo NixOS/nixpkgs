@@ -22,7 +22,8 @@ let
           inherit codePath;
           preferLocalBuild = true;
           allowSubstitutes = false;
-        } // env;
+        }
+        // env;
       }
       ''
         [ -n "$postConfigure" ] && eval "$postConfigure"

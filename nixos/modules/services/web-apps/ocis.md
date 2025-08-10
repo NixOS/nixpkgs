@@ -104,7 +104,7 @@ values, and
 [`services.ocis.environmentFile`][mod-envFile] for
 sensitive values.
 
-Configuration in (`services.ocis.environment`)[mod-env] overrides those from
+Configuration in [`services.ocis.environment`][mod-env] overrides those from
 [`services.ocis.environmentFile`][mod-envFile] and will have highest
 precedence
 

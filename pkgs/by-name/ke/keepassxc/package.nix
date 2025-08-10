@@ -109,16 +109,16 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
     libsForQt5.qttools
     pkg-config
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
-  preFixup =
-    ''
-      qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
-    '';
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
+  '';
 
   postInstall = lib.concatLines [
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -135,35 +135,34 @@ stdenv.mkDerivation (finalAttrs: {
     '')
   ];
 
-  buildInputs =
-    [
-      botan3
-      curl
-      libXi
-      libXtst
-      libargon2
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      minizip
-      pcsclite
-      qrencode
-      readline
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libsForQt5.qtmacextras
+  buildInputs = [
+    botan3
+    curl
+    libXi
+    libXtst
+    libargon2
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    minizip
+    pcsclite
+    qrencode
+    readline
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libsForQt5.qtmacextras
 
-      apple-sdk_15
-      # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-      # https://developer.apple.com/documentation/screencapturekit
-      (darwinMinVersionHook "12.3")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libusb1
-    ]
-    ++ lib.optionals withKeePassX11 [
-      libsForQt5.qtx11extras
-    ];
+    apple-sdk_15
+    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
+    # https://developer.apple.com/documentation/screencapturekit
+    (darwinMinVersionHook "12.3")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libusb1
+  ]
+  ++ lib.optionals withKeePassX11 [
+    libsForQt5.qtx11extras
+  ];
 
   passthru = {
     tests = {

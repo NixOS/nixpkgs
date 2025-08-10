@@ -9,10 +9,6 @@ on:
   pull_request_target:
     types: [closed, labeled]
 
-concurrency:
-  group: backport-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
-
 permissions:
   contents: read
   issues: write
@@ -27,6 +23,7 @@ jobs:
     name: Backport Pull Request
     if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 3
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs

@@ -19,14 +19,13 @@
     cc = zig.cc-unwrapped;
     bintools = zig.bintools;
     extraPackages = [ ];
-    nixSupport.cc-cflags =
-      [
-        "-target"
-        "${stdenv.targetPlatform.system}-${stdenv.targetPlatform.parsed.abi.name}"
-      ]
-      ++ lib.optional (
-        stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-      ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
+    nixSupport.cc-cflags = [
+      "-target"
+      "${stdenv.targetPlatform.system}-${stdenv.targetPlatform.parsed.abi.name}"
+    ]
+    ++ lib.optional (
+      stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
+    ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
   };
 
   stdenv = overrideCC stdenv zig.cc;

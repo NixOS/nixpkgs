@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "symfc";
-  version = "1.3.3";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "symfc";
     repo = "symfc";
     tag = "v${version}";
-    hash = "sha256-ec/HFs3txVtu46llTmcfDF8j0+mTkozdu7+RsZXaAGE=";
+    hash = "sha256-SGFKbOVi5cVw+8trXrSnO0v2obpJBZrj+7yXk7hK+1s=";
   };
 
   build-system = [

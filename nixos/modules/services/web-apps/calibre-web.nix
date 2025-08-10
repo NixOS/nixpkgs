@@ -160,29 +160,28 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          {
-            Type = "simple";
-            User = cfg.user;
-            Group = cfg.group;
+        serviceConfig = {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
 
-            ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
-              ''
-                __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
+          ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
+            ''
+              __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
-                ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-              ''
-              + optionalString (cfg.options.calibreLibrary != null) ''
-                test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
-              ''
-            );
+              ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
+            ''
+            + optionalString (cfg.options.calibreLibrary != null) ''
+              test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
+            ''
+          );
 
-            ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
-            Restart = "on-failure";
-          }
-          // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
-            StateDirectory = cfg.dataDir;
-          };
+          ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
+          Restart = "on-failure";
+        }
+        // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
+        };
       };
 
     networking.firewall = mkIf cfg.openFirewall {

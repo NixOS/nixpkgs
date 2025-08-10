@@ -48,7 +48,8 @@ buildPythonPackage rec {
     packaging
     tzdata
     vine
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   optional-dependencies = {
     msgpack = [ msgpack ];
@@ -81,7 +82,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "kombu" ];
 

@@ -53,7 +53,7 @@ They fall in one of these categories:
 
   These tend to entail support from the derivation or the `passthru` attribute in question.
   Common examples of this type are `passthru.optional-dependencies`, `passthru.withPlugins`, and `passthru.withPackages`.
-  All of those allow associating the package with a set of components built for that specific package, such as when building Python runtime environments using (`python.withPackages`)[#python.withpackages-function].
+  All of those allow associating the package with a set of components built for that specific package, such as when building Python runtime environments using [`python.withPackages`](#python.withpackages-function).
 
 Attributes that apply only to particular [build helpers](#part-builders) or [language ecosystems](#chap-language-support) are documented there.
 

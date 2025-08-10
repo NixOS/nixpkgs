@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyside6-fluent-widgets";
-  version = "1.8.2";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyside6_fluent_widgets";
     inherit version;
-    hash = "sha256-FspFnfu4f3PS2ARTOqaH7NCKMpg9r4YTj5LYsHyduBI=";
+    hash = "sha256-A9lKRFGpfrWKGAKJS9ETIbSTBF/Ba6KUBBc4Pht2eBE=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zhiyiYo/PyQt-Fluent-Widgets";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

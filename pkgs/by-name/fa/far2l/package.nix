@@ -27,7 +27,7 @@
   # Plugins
   withColorer ? true,
   spdlog,
-  xercesc,
+  libxml2,
   withMultiArc ? true,
   libarchive,
   pcre,
@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.6.3";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-iWZQpLe+shdepCVOHZDp7QEQoqelbHGRJh09KWb6aD0=";
+    sha256 = "sha256-a/k36O19z/lHnETOGIbTJ7BNAI5zOQxVUSp+nIM08i4=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUCD libuchardet
     ++ lib.optionals withColorer [
       spdlog
-      xercesc
+      libxml2
     ]
     ++ lib.optionals withMultiArc [
       libarchive
@@ -95,20 +95,19 @@ stdenv.mkDerivation rec {
     patchShebangs far2l/bootstrap/view.sh
   '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "TTYX" withTTYX)
-      (lib.cmakeBool "USEWX" withGUI)
-      (lib.cmakeBool "USEUCD" withUCD)
-      (lib.cmakeBool "COLORER" withColorer)
-      (lib.cmakeBool "MULTIARC" withMultiArc)
-      (lib.cmakeBool "NETROCKS" withNetRocks)
-      (lib.cmakeBool "PYTHON" withPython)
-    ]
-    ++ lib.optionals withPython [
-      (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
-      (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "TTYX" withTTYX)
+    (lib.cmakeBool "USEWX" withGUI)
+    (lib.cmakeBool "USEUCD" withUCD)
+    (lib.cmakeBool "COLORER" withColorer)
+    (lib.cmakeBool "MULTIARC" withMultiArc)
+    (lib.cmakeBool "NETROCKS" withNetRocks)
+    (lib.cmakeBool "PYTHON" withPython)
+  ]
+  ++ lib.optionals withPython [
+    (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
+    (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
+  ];
 
   runtimeDeps = [
     unzip
@@ -122,7 +121,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/far2l \
-      --argv0 $out/bin/far2l \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';

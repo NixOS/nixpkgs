@@ -32,7 +32,7 @@ mkCoqDerivation {
   ];
 
   meta = {
-    description = "Interpret itree in the IO monad of simple-io.";
+    description = "Interpret itree in the IO monad of simple-io";
     license = lib.licenses.mit;
   };
 }

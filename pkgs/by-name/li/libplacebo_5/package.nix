@@ -47,16 +47,15 @@ stdenv.mkDerivation rec {
     libdovi
   ];
 
-  mesonFlags =
-    [
-      (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-      (lib.mesonBool "demos" false) # Don't build and install the demo programs
-      (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-      (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
-    ];
+  mesonFlags = [
+    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+    (lib.mesonBool "demos" false) # Don't build and install the demo programs
+    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+  ];
 
   postPatch = ''
     substituteInPlace meson.build \

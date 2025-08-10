@@ -33,7 +33,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A typed wrapper around argparse using pydantic models";
+    description = "Typed wrapper around argparse using pydantic models";
     homepage = "https://pypi.org/project/pydantic-argparse-extensible";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];

@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     "-DUSE_NVML=OFF"
     # force install unit files
     "-DSYSTEMD_FOUND=ON"
-  ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
+  ]
+  ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
   nativeBuildInputs = [
     cmake

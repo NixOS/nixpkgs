@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pymysensors";
-  version = "0.25.2";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theolind";
     repo = "pymysensors";
     tag = version;
-    hash = "sha256-ndvn3mQ4fchL4NiUQLpYn7HMKeuEBT09HQvnJy14jPI=";
+    hash = "sha256-iND3MEKEruqCdsqJJExm+SA4Z2e87I45fsI4wbnIPRc=";
   };
 
   build-system = [ setuptools ];

@@ -58,7 +58,8 @@ let
           passthru = {
             updateScript = extensionUpdateScript { inherit pname; };
             tests.azWithExtension = testAzWithExts [ self ];
-          } // args.passthru or { };
+          }
+          // args.passthru or { };
           meta = {
             inherit description;
             inherit (azure-cli.meta) platforms maintainers;
@@ -66,7 +67,8 @@ let
             changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
             license = lib.licenses.mit;
             sourceProvenance = [ lib.sourceTypes.fromSource ];
-          } // args.meta or { };
+          }
+          // args.meta or { };
         }
         // (removeAttrs args [
           "url"
@@ -294,19 +296,18 @@ py.pkgs.toPythonApplication (
 
     # wrap the executable so that the python packages are available
     # it's just a shebang script which calls `python -m azure.cli "$@"`
-    postFixup =
-      ''
-        wrapProgram $out/bin/az \
-      ''
-      + lib.optionalString withImmutableConfig ''
-        --set AZURE_IMMUTABLE_DIR $out/etc/azure \
-      ''
-      + lib.optionalString (withExtensions != [ ]) ''
-        --set AZURE_EXTENSION_DIR ${extensionDir} \
-      ''
-      + ''
-        --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
-      '';
+    postFixup = ''
+      wrapProgram $out/bin/az \
+    ''
+    + lib.optionalString withImmutableConfig ''
+      --set AZURE_IMMUTABLE_DIR $out/etc/azure \
+    ''
+    + lib.optionalString (withExtensions != [ ]) ''
+      --set AZURE_EXTENSION_DIR ${extensionDir} \
+    ''
+    + ''
+      --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
+    '';
 
     doInstallCheck = true;
     installCheckPhase = ''

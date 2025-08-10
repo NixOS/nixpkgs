@@ -41,30 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      boost
-      bzip2
-      cli11
-      expat
-      fmt_11
-      libosmium
-      libpq
-      nlohmann_json
-      opencv
-      potrace
-      proj
-      protozero
-      (python3.withPackages (
-        p: with p; [
-          psycopg2
-          pyosmium
-        ]
-      ))
-      zlib
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  buildInputs = [
+    boost
+    bzip2
+    cli11
+    expat
+    fmt_11
+    libosmium
+    libpq
+    nlohmann_json
+    opencv
+    potrace
+    proj
+    protozero
+    (python3.withPackages (
+      p: with p; [
+        psycopg2
+        pyosmium
+      ]
+    ))
+    zlib
+  ]
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     (lib.cmakeBool "EXTERNAL_LIBOSMIUM" true)

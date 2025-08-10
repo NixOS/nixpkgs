@@ -60,16 +60,15 @@ let
       url = "mirror://cpan/authors/id/P/PS/PSCUST/Asm-Preproc-1.03.tar.gz";
       hash = "sha256-pVTpIqGxZpBxZlAbXuGDapuOxsp3uM/AM5dKUxlej1M=";
     };
-    propagatedBuildInputs =
-      [
-        IteratorSimpleLookahead
-      ]
-      ++ (with perlPackages; [
-        IteratorSimple
-        TextTemplate
-        DataDump
-        FileSlurp
-      ]);
+    propagatedBuildInputs = [
+      IteratorSimpleLookahead
+    ]
+    ++ (with perlPackages; [
+      IteratorSimple
+      TextTemplate
+      DataDump
+      FileSlurp
+    ]);
     meta = {
       description = "Preprocessor to be called from an assembler";
       license = with lib.licenses; [
@@ -86,14 +85,15 @@ let
       url = "mirror://cpan/authors/id/P/PS/PSCUST/CPU-Z80-Assembler-2.25.tar.gz";
       hash = "sha256-cJ8Fl2KZw9/bnBDUzFuwwdw9x23OUvcftk78kw7abdU=";
     };
-    buildInputs =
-      [ AsmPreproc ]
-      ++ (with perlPackages; [
-        CaptureTiny
-        RegexpTrie
-        PathTiny
-        ClassAccessor
-      ]);
+    buildInputs = [
+      AsmPreproc
+    ]
+    ++ (with perlPackages; [
+      CaptureTiny
+      RegexpTrie
+      PathTiny
+      ClassAccessor
+    ]);
     meta = {
       description = "Functions to assemble a set of Z80 assembly instructions";
       license = with lib.licenses; [
@@ -156,29 +156,28 @@ stdenv.mkDerivation (finalAttrs: {
     "git_count=0"
   ];
 
-  nativeBuildInputs =
-    [
-      which
-      unzip
-      m4
-      perl
-      pkg-config
+  nativeBuildInputs = [
+    which
+    unzip
+    m4
+    perl
+    pkg-config
 
-      # Local perl packages
-      AsmPreproc
-      CPUZ80Assembler
-      ObjectTinyRW
-    ]
-    ++ (with perlPackages; [
-      CaptureTiny
-      DataHexDump
-      ModernPerl
-      PathTiny
-      RegexpCommon
-      TestHexDifferences
-      TextDiff
-      RegexpTrie
-    ]);
+    # Local perl packages
+    AsmPreproc
+    CPUZ80Assembler
+    ObjectTinyRW
+  ]
+  ++ (with perlPackages; [
+    CaptureTiny
+    DataHexDump
+    ModernPerl
+    PathTiny
+    RegexpCommon
+    TestHexDifferences
+    TextDiff
+    RegexpTrie
+  ]);
 
   buildInputs = [
     libxml2

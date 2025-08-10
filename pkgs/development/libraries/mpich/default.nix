@@ -53,18 +53,17 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  configureFlags =
-    [
-      "--enable-shared"
-      "--with-pm=${withPmStr}"
-    ]
-    ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
-      "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
-      "FCFLAGS=-fallow-argument-mismatch"
-    ]
-    ++ lib.optionals pmixSupport [
-      "--with-pmix"
-    ];
+  configureFlags = [
+    "--enable-shared"
+    "--with-pm=${withPmStr}"
+  ]
+  ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
+    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
+    "FCFLAGS=-fallow-argument-mismatch"
+  ]
+  ++ lib.optionals pmixSupport [
+    "--with-pmix"
+  ];
 
   enableParallelBuilding = true;
 
@@ -74,14 +73,13 @@ stdenv.mkDerivation rec {
     autoconf
     automake
   ];
-  buildInputs =
-    [
-      perl
-      openssh
-      hwloc
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
-    ++ lib.optional pmixSupport pmix;
+  buildInputs = [
+    perl
+    openssh
+    hwloc
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
+  ++ lib.optional pmixSupport pmix;
 
   # test_double_serializer.test fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

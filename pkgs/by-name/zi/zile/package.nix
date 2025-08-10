@@ -27,15 +27,14 @@ stdenv.mkDerivation rec {
     libgee
     ncurses
   ];
-  nativeBuildInputs =
-    [
-      perl
-      pkg-config
-      vala
-    ]
-    # `help2man' wants to run Zile, which won't work when the
-    # newly-produced binary can't be run at build-time.
-    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    vala
+  ]
+  # `help2man' wants to run Zile, which won't work when the
+  # newly-produced binary can't be run at build-time.
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.

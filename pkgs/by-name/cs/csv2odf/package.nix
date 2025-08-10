@@ -7,11 +7,16 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "csv2odf";
   version = "2.09";
-  format = "setuptools";
+  format = "pyproject";
+
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "09l0yfay89grjdzap2h11f0hcyn49np5zizg2yyp2aqgjs8ki57p";
   };
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   meta = with lib; {
     homepage = "https://sourceforge.net/p/csv2odf/wiki/Main_Page/";

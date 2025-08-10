@@ -75,7 +75,8 @@ in
       after = [ "network.target" ];
       environment = {
         HOME = "/run/guacamole-server";
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} -f -b ${cfg.host} -l ${toString cfg.port}";
         RuntimeDirectory = "guacamole-server";

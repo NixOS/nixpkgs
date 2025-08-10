@@ -7,35 +7,34 @@
 let
   cfg = config.services.gotenberg;
 
-  args =
-    [
-      "--api-port=${toString cfg.port}"
-      "--api-timeout=${cfg.timeout}"
-      "--api-root-path=${cfg.rootPath}"
-      "--log-level=${cfg.logLevel}"
-      "--chromium-max-queue-size=${toString cfg.chromium.maxQueueSize}"
-      "--libreoffice-restart-after=${toString cfg.libreoffice.restartAfter}"
-      "--libreoffice-max-queue-size=${toString cfg.libreoffice.maxQueueSize}"
-      "--pdfengines-merge-engines=${lib.concatStringsSep "," cfg.pdfEngines.merge}"
-      "--pdfengines-convert-engines=${lib.concatStringsSep "," cfg.pdfEngines.convert}"
-      "--pdfengines-read-metadata-engines=${lib.concatStringsSep "," cfg.pdfEngines.readMetadata}"
-      "--pdfengines-write-metadata-engines=${lib.concatStringsSep "," cfg.pdfEngines.writeMetadata}"
-      "--api-download-from-allow-list=${cfg.downloadFrom.allowList}"
-      "--api-download-from-max-retry=${toString cfg.downloadFrom.maxRetries}"
-    ]
-    ++ optional cfg.enableBasicAuth "--api-enable-basic-auth"
-    ++ optional cfg.chromium.autoStart "--chromium-auto-start"
-    ++ optional cfg.chromium.disableJavascript "--chromium-disable-javascript"
-    ++ optional cfg.chromium.disableRoutes "--chromium-disable-routes"
-    ++ optional cfg.libreoffice.autoStart "--libreoffice-auto-start"
-    ++ optional cfg.libreoffice.disableRoutes "--libreoffice-disable-routes"
-    ++ optional cfg.pdfEngines.disableRoutes "--pdfengines-disable-routes"
-    ++ optional (
-      cfg.downloadFrom.denyList != null
-    ) "--api-download-from-deny-list=${cfg.downloadFrom.denyList}"
-    ++ optional cfg.downloadFrom.disable "--api-disable-download-from"
-    ++ optional (cfg.bodyLimit != null) "--api-body-limit=${cfg.bodyLimit}"
-    ++ lib.optionals (cfg.extraArgs != [ ]) cfg.extraArgs;
+  args = [
+    "--api-port=${toString cfg.port}"
+    "--api-timeout=${cfg.timeout}"
+    "--api-root-path=${cfg.rootPath}"
+    "--log-level=${cfg.logLevel}"
+    "--chromium-max-queue-size=${toString cfg.chromium.maxQueueSize}"
+    "--libreoffice-restart-after=${toString cfg.libreoffice.restartAfter}"
+    "--libreoffice-max-queue-size=${toString cfg.libreoffice.maxQueueSize}"
+    "--pdfengines-merge-engines=${lib.concatStringsSep "," cfg.pdfEngines.merge}"
+    "--pdfengines-convert-engines=${lib.concatStringsSep "," cfg.pdfEngines.convert}"
+    "--pdfengines-read-metadata-engines=${lib.concatStringsSep "," cfg.pdfEngines.readMetadata}"
+    "--pdfengines-write-metadata-engines=${lib.concatStringsSep "," cfg.pdfEngines.writeMetadata}"
+    "--api-download-from-allow-list=${cfg.downloadFrom.allowList}"
+    "--api-download-from-max-retry=${toString cfg.downloadFrom.maxRetries}"
+  ]
+  ++ optional cfg.enableBasicAuth "--api-enable-basic-auth"
+  ++ optional cfg.chromium.autoStart "--chromium-auto-start"
+  ++ optional cfg.chromium.disableJavascript "--chromium-disable-javascript"
+  ++ optional cfg.chromium.disableRoutes "--chromium-disable-routes"
+  ++ optional cfg.libreoffice.autoStart "--libreoffice-auto-start"
+  ++ optional cfg.libreoffice.disableRoutes "--libreoffice-disable-routes"
+  ++ optional cfg.pdfEngines.disableRoutes "--pdfengines-disable-routes"
+  ++ optional (
+    cfg.downloadFrom.denyList != null
+  ) "--api-download-from-deny-list=${cfg.downloadFrom.denyList}"
+  ++ optional cfg.downloadFrom.disable "--api-disable-download-from"
+  ++ optional (cfg.bodyLimit != null) "--api-body-limit=${cfg.bodyLimit}"
+  ++ lib.optionals (cfg.extraArgs != [ ]) cfg.extraArgs;
 
   inherit (lib)
     mkEnableOption
@@ -345,7 +344,8 @@ in
         SystemCallArchitectures = "native";
 
         UMask = 77;
-      } // optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
+      }
+      // optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
     };
   };
 

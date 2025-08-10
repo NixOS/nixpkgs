@@ -47,7 +47,8 @@ buildPythonPackage rec {
     setuptools # for pkg_resources
     toml
     websocket-client
-  ] ++ lib.optionals withTui optional-dependencies.tui;
+  ]
+  ++ lib.optionals withTui optional-dependencies.tui;
 
   optional-dependencies = {
     tui = [
@@ -68,7 +69,8 @@ buildPythonPackage rec {
     responses
     psutil
     uvicorn
-  ] ++ optional-dependencies.tui;
+  ]
+  ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server

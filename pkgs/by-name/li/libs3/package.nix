@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "libs3";
-  version = "unstable-2019-04-10";
+  version = "0-unstable-2019-04-10";
 
   src = fetchFromGitHub {
     owner = "bji";

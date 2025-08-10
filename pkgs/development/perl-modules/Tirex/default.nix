@@ -46,7 +46,8 @@ buildPerlPackage rec {
     LWP
     mapnik
     boost
-  ] ++ mapnik.buildInputs;
+  ]
+  ++ mapnik.buildInputs;
 
   installPhase = ''
     install -m 755 -d $out/usr/libexec

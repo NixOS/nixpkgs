@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "open-fprintd";
-  version = "0.6";
+  version = "0.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uunicorn";
     repo = "open-fprintd";
     rev = version;
-    hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
+    hash = "sha256-4TraOKvBc7ddqcY73aCuKgfwx4fNoaPHVG8so8Dc5Bw=";
   };
 
   nativeBuildInputs = [

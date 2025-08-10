@@ -7,20 +7,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.0.1";
+  version = "2.1.2";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HpnLh0JfGZsHcvDQSiKfW62QcCe/QDsVP/nGBo9x494=";
+    hash = "sha256-lcd0yY8o5eGa1bP5WsA9K/K7gtjRVorS/Rm0bno0AOY=";
   };
 
-  cargoHash = "sha256-i8KZygESxgty8RR3C+JMuE1aAsBxoLuGsL4jqjdGr0E=";
+  cargoHash = "sha256-ZRTgzVz8ia763cMBx9U1NIy9W6gDUVhwNr6wDqU1Ulo=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  checkFlags = [
+    # Those time-based tests behave poorly in low-resource environments (CI...)
+    "--skip=daemon::filter::tests"
+    "--skip=treedb::raw::tests::write_then_read_1000"
+    "--skip=simple"
   ];
 
   postInstall = ''
@@ -41,6 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
     maintainers = with lib.maintainers; [ ppom ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

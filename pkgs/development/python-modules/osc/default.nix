@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/openSUSE/osc";
-    description = "opensuse-commander with svn like handling";
+    description = "Opensuse-commander with svn like handling";
     mainProgram = "osc";
     maintainers = with maintainers; [
       peti

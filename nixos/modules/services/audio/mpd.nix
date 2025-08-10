@@ -258,19 +258,18 @@ in
     systemd.services.mpd = {
       wantedBy = lib.optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      preStart =
-        ''
-          set -euo pipefail
-          install -m 600 ${mpdConf} /run/mpd/mpd.conf
-        ''
-        + lib.optionalString (cfg.credentials != [ ]) (
-          lib.concatStringsSep "\n" (
-            lib.imap0 (
-              i: c:
-              ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf''
-            ) cfg.credentials
-          )
-        );
+      preStart = ''
+        set -euo pipefail
+        install -m 600 ${mpdConf} /run/mpd/mpd.conf
+      ''
+      + lib.optionalString (cfg.credentials != [ ]) (
+        lib.concatStringsSep "\n" (
+          lib.imap0 (
+            i: c:
+            ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf''
+          ) cfg.credentials
+        )
+      );
 
       serviceConfig = {
         User = "${cfg.user}";

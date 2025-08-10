@@ -62,12 +62,12 @@ buildPythonPackage rec {
     "lib/openjpeg"
   ];
 
-  pytestFlagsArray = [ "openjpeg/tests" ];
+  enabledTestPaths = [ "openjpeg/tests" ];
 
   pythonImportsCheck = [ "openjpeg" ];
 
   meta = {
-    description = "A J2K and JP2 plugin for pylibjpeg";
+    description = "J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/v${version}";
     license = [ lib.licenses.mit ];

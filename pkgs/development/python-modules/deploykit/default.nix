@@ -35,7 +35,7 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_ssh" ];
 
   # don't swallow stdout/stderr
-  pytestFlagsArray = [ "-s" ];
+  pytestFlags = [ "-s" ];
 
   pythonImportsCheck = [ "deploykit" ];
 

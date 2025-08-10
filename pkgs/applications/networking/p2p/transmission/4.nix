@@ -91,19 +91,18 @@ stdenv.mkDerivation (finalAttrs: {
     "apparmor"
   ];
 
-  cmakeFlags =
-    [
-      (cmakeBool "ENABLE_CLI" enableCli)
-      (cmakeBool "ENABLE_DAEMON" enableDaemon)
-      (cmakeBool "ENABLE_GTK" enableGTK3)
-      (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
-      (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
-      (cmakeBool "INSTALL_LIB" installLib)
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  cmakeFlags = [
+    (cmakeBool "ENABLE_CLI" enableCli)
+    (cmakeBool "ENABLE_DAEMON" enableDaemon)
+    (cmakeBool "ENABLE_GTK" enableGTK3)
+    (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
+    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
+    (cmakeBool "INSTALL_LIB" installLib)
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   postPatch = ''
     # Clean third-party libraries to ensure system ones are used.
@@ -126,54 +125,52 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '#if defined(HAVE_GETTEXT) && !defined(__APPLE__)' '#if defined(HAVE_GETTEXT)'
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      python3
-    ]
-    ++ optionals enableGTK3 [ wrapGAppsHook3 ]
-    ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
-    ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    python3
+  ]
+  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
+  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
+  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
 
-  buildInputs =
+  buildInputs = [
+    curl
+    dht
+    fmt
+    libb64
+    libdeflate
+    libevent
+    libnatpmp
+    libpsl
+    libutp
+    miniupnpc
+    openssl
+    pcre
+    utf8cpp
+    zlib
+  ]
+  ++ optionals enableQt5 (
+    with qt5;
     [
-      curl
-      dht
-      fmt
-      libb64
-      libdeflate
-      libevent
-      libnatpmp
-      libpsl
-      libutp
-      miniupnpc
-      openssl
-      pcre
-      utf8cpp
-      zlib
+      qttools
+      qtbase
     ]
-    ++ optionals enableQt5 (
-      with qt5;
-      [
-        qttools
-        qtbase
-      ]
-    )
-    ++ optionals enableQt6 (
-      with qt6Packages;
-      [
-        qttools
-        qtbase
-        qtsvg
-      ]
-    )
-    ++ optionals enableGTK3 [
-      gtkmm3
-      xorg.libpthreadstubs
+  )
+  ++ optionals enableQt6 (
+    with qt6Packages;
+    [
+      qttools
+      qtbase
+      qtsvg
     ]
-    ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
+  )
+  ++ optionals enableGTK3 [
+    gtkmm3
+    xorg.libpthreadstubs
+  ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall = ''
     mkdir $apparmor

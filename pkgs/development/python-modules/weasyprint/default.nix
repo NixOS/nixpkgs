@@ -35,6 +35,8 @@ buildPythonPackage rec {
   version = "65.1";
   pyproject = true;
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
@@ -64,7 +66,8 @@ buildPythonPackage rec {
     pyphen
     tinycss2
     tinyhtml5
-  ] ++ fonttools.optional-dependencies.woff;
+  ]
+  ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
     pkgs.ghostscript
@@ -111,10 +114,5 @@ buildPythonPackage rec {
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.apm ];
-    badPlatforms = [
-      # Fatal Python error: Segmentation fault
-      # "...weasyprint/pdf/fonts.py", line 221 in _harfbuzz_subset
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

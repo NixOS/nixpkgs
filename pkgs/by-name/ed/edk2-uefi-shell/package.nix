@@ -12,16 +12,15 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
   pname = "edk2-uefi-shell";
   inherit (edk2) version;
 
-  nativeBuildInputs =
-    [
-      util-linux
-      nasm
-      python3
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.bintools
-      llvmPackages.llvm
-    ];
+  nativeBuildInputs = [
+    util-linux
+    nasm
+    python3
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.bintools
+    llvmPackages.llvm
+  ];
   strictDeps = true;
 
   env.NIX_CFLAGS_COMPILE = toString (

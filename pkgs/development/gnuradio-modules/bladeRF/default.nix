@@ -26,33 +26,31 @@ mkDerivation {
     hash = "sha256-josovHEp2VxgZqItkTAISdY1LARMIvQKD604fh4iZWc=";
   };
 
-  buildInputs =
-    [
-      boost
-      doxygen
-      gmp
-      gnuradio
-      libbladeRF
-      mpir
-      osmosdr
-      spdlog
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.numpy
-      python.pkgs.pybind11
-    ];
+  buildInputs = [
+    boost
+    doxygen
+    gmp
+    gnuradio
+    libbladeRF
+    mpir
+    osmosdr
+    spdlog
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.numpy
+    python.pkgs.pybind11
+  ];
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_PYTHON" (gnuradio.hasFeature "python-support"))
   ];
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.mako
-      python.pkgs.pygccxml
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.mako
+    python.pkgs.pygccxml
+  ];
 
   meta = {
     description = "GNU Radio source and sink blocks for bladeRF devices";

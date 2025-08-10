@@ -53,8 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     poppler
     samba
-    gtest
   ];
+
+  mesonFlags = [ (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck) ];
+
+  checkInputs = [ gtest ];
+
+  doCheck = false; # gtest requires C/C++17 but the project is written in C/C++11
 
   meta = {
     description = "Fast and powerful twin-panel file manager for the Linux desktop";

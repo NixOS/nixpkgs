@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
 
   configurePhase = ''
+    runHook preConfigure
+
     python build.py release
+
+    runHook postConfigure
   '';
 
   postPatch = ''

@@ -83,71 +83,68 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      copyDesktopItems
-    ]
-    ++ lib.optionals enableVCVRack [
-      jq
-      zstd
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    copyDesktopItems
+  ]
+  ++ lib.optionals enableVCVRack [
+    jq
+    zstd
+  ];
 
-  buildInputs =
-    [
-      alsa-lib
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libXdmcp
-      libGLU
-      libjack2
-      freetype
-      webkitgtk_4_0
-      glib
-      gtk3-x11
-      curl
-      libsysprof-capture
-      pcre2
-      util-linux
-      libselinux
-      libsepol
-      libthai
-      libxkbcommon
-      libdatrie
-      libepoxy
-      libsoup_2_4
-      lerc
-      sqlite
-    ]
-    ++ lib.optionals enableVCVRack [
-      vcv-rack
-      jansson
-      glew
-      glfw
-      libarchive
-      speexdsp
-      libpulseaudio
-      libsamplerate
-      rtmidi
-      zstd
-    ];
+  buildInputs = [
+    alsa-lib
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libXdmcp
+    libGLU
+    libjack2
+    freetype
+    webkitgtk_4_0
+    glib
+    gtk3-x11
+    curl
+    libsysprof-capture
+    pcre2
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libxkbcommon
+    libdatrie
+    libepoxy
+    libsoup_2_4
+    lerc
+    sqlite
+  ]
+  ++ lib.optionals enableVCVRack [
+    vcv-rack
+    jansson
+    glew
+    glfw
+    libarchive
+    speexdsp
+    libpulseaudio
+    libsamplerate
+    rtmidi
+    zstd
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_JUCE_PLUGIN" true)
-      (lib.cmakeBool "USE_JUCE_PROGRAMS" true)
-    ]
-    ++ lib.optionals enableVCVRack [
-      (lib.cmakeBool "BUILD_RACK_PLUGIN" true)
-      (lib.cmakeFeature "RACK_SDK_DIR" "${vcvRackSdk}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_JUCE_PLUGIN" true)
+    (lib.cmakeBool "USE_JUCE_PROGRAMS" true)
+  ]
+  ++ lib.optionals enableVCVRack [
+    (lib.cmakeBool "BUILD_RACK_PLUGIN" true)
+    (lib.cmakeFeature "RACK_SDK_DIR" "${vcvRackSdk}")
+  ];
 
   cmakeBuildType = "Release";
 

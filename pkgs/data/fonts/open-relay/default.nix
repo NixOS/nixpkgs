@@ -38,7 +38,8 @@ let
           linus
           toastal
         ];
-      } // meta;
+      }
+      // meta;
     });
 in
 lib.mapAttrs mkOpenRelayTypeface {
@@ -46,7 +47,7 @@ lib.mapAttrs mkOpenRelayTypeface {
     directory = "Constructium";
     meta = {
       homepage = "https://www.kreativekorp.com/software/fonts/constructium/";
-      description = "fork of SIL Gentium designed specifically to support constructed scripts as encoded in the Under-ConScript Unicode Registry";
+      description = "Fork of SIL Gentium designed specifically to support constructed scripts as encoded in the Under-ConScript Unicode Registry";
       longDescription = ''
         Constructium is a fork of SIL Gentium designed specifically to support
         constructed scripts as encoded in the Under-ConScript Unicode Registry.
@@ -75,7 +76,7 @@ lib.mapAttrs mkOpenRelayTypeface {
     directory = "FairfaxHD";
     meta = {
       homepage = "https://www.kreativekorp.com/software/fonts/fairfaxhd/";
-      description = "halfwidth scalable monospace font supporting many Unicode blocks & script as well as constructed scripts";
+      description = "Halfwidth scalable monospace font supporting many Unicode blocks & script as well as constructed scripts";
       longDescription = ''
         Fairfax HD is a halfwidth scalable monospace font for terminals, text
         editors, IDEs, etc. It supports many scripts and a large number of

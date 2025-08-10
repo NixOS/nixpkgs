@@ -71,29 +71,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      rustPlatform.cargoSetupHook
-      rustc
-      cargo
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      cairo
-      python3
-      json-glib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    cairo
+    python3
+    json-glib
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     gstreamer

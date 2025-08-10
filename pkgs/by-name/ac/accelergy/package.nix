@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "accelergy";
   version = "unstable-2022-05-03";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Accelergy-Project";
@@ -16,11 +16,14 @@ python3Packages.buildPythonApplication {
     hash = "sha256-SRtt1EocHy5fKszpoumC+mOK/qhreoA2/Ff1wcu5WKo=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pyyaml
     yamlordereddictloader
     pyfiglet
-    setuptools
   ];
 
   meta = {

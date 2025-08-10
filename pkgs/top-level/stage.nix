@@ -191,15 +191,19 @@ let
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
 
-  variants = import ./variants.nix {
-    inherit
-      lib
-      nixpkgsFun
-      stdenv
-      overlays
-      makeMuslParsedPlatform
-      ;
-  };
+  variants =
+    self: super:
+    lib.optionalAttrs config.allowVariants (
+      import ./variants.nix {
+        inherit
+          lib
+          nixpkgsFun
+          stdenv
+          overlays
+          makeMuslParsedPlatform
+          ;
+      } self super
+    );
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -236,13 +240,34 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
+      let
+        isSupported = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
+      in
+      if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (self': super': {
-              pkgsi686Linux = super';
-            })
-          ] ++ overlays;
+            (
+              self': super':
+              {
+                pkgsi686Linux = super';
+              }
+              // lib.optionalAttrs (!isSupported) {
+                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+                # when used on a non x86_64-linux platform in CI.
+                # TODO: Remove this, once pkgsi686Linux can become a variant.
+                stdenv = super'.stdenv // {
+                  mkDerivation =
+                    args:
+                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                      meta = prevAttrs.meta or { } // {
+                        broken = true;
+                      };
+                    });
+                };
+              }
+            )
+          ]
+          ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
             config = lib.systems.parse.tripleFromSystem (
               stdenv.hostPlatform.parsed
@@ -254,27 +279,6 @@ let
         }
       else
         throw "i686 Linux package set can only be used with the x86 family.";
-
-    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin =
-      if stdenv.hostPlatform.isDarwin then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsx86_64Darwin = super';
-            })
-          ] ++ overlays;
-          localSystem = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.x86_64;
-              }
-            );
-          };
-        }
-      else
-        throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
     # If already linux: the same package set unaltered
     # Otherwise, return a natively built linux package set for the current cpu architecture string.
@@ -310,7 +314,8 @@ let
         (self': super': {
           pkgsStatic = super';
         })
-      ] ++ overlays;
+      ]
+      ++ overlays;
       crossSystem = {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (

@@ -22,27 +22,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ (with libsForQt5; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
+  buildInputs = [
 
-      libusb1
-      hidapi
-      mbedtls_2
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qttools
-      qtwayland
-    ]);
+    libusb1
+    hidapi
+    mbedtls_2
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qttools
+    qtwayland
+  ]);
 
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh

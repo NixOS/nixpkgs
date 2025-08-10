@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cubeb";
-  version = "0-unstable-2025-06-16";
+  version = "0-unstable-2025-08-05";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cubeb";
-    rev = "566c73da47668ca85817108b749a13ac9c3f5a9d";
-    hash = "sha256-qYDsRhVBHLOVpWwtRNUtnZRZZq9Rot1pOn+4let6v6I=";
+    rev = "d78a19ba4a892abfdfd7eeeb19fa7ffe3d80938c";
+    hash = "sha256-sjv5XKZu9uX2y2HN+BFttOsb6bECEpl0oRneYxNOZgU=";
   };
 
   outputs = [
@@ -45,14 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs =
-    [ speexdsp ]
-    # In the default configuration these inputs are lazy-loaded. If your package builds a vendored cubeb please make
-    # sure to include these in the runtime LD path.
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional jackSupport jack2
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional sndioSupport sndio;
+  buildInputs = [
+    speexdsp
+  ]
+  # In the default configuration these inputs are lazy-loaded. If your package builds a vendored cubeb please make
+  # sure to include these in the runtime LD path.
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional jackSupport jack2
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional sndioSupport sndio;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)

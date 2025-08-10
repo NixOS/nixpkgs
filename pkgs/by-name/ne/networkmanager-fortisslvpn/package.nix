@@ -47,20 +47,19 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs =
-    [
-      openfortivpn
-      networkmanager
-      ppp
-      glib
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    openfortivpn
+    networkmanager
+    ppp
+    glib
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"

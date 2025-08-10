@@ -182,16 +182,15 @@ in
 
         services.postfix = {
           enable = true;
-          hostname = "${mailerDomain}";
-          # open relay for subnet
-          networksStyle = "subnet";
           enableSubmission = true;
-          tlsTrustedAuthorities = "${mailerCerts.ca.cert}";
 
           # blackhole transport
           transport = "example.com discard:silently";
 
-          config = {
+          settings.main = {
+            myhostname = "${mailerDomain}";
+            # open relay for subnet
+            mynetworks_style = "subnet";
             debug_peer_level = "10";
             smtpd_relay_restrictions = [
               "permit_mynetworks"

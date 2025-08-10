@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "similarity";
-  version = "0.2.4";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "mizchi";
     repo = "similarity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z2ZaKBpq7N8KIX8nOzPhm8evfoUxBzaAK0+4cU9qBDE=";
+    hash = "sha256-eZQ0FTmysFYwqg3sjasZW3S0lps2XbFWUbWuZzkFWkA=";
   };
 
-  cargoHash = "sha256-oYqdCHGY6OZSbYXhjIt20ZL2JkZP7UEOhn0fhuZQnZo=";
+  cargoHash = "sha256-7qLC1RvjBXd9JFrJdDTIngZhMvyQV1ko3MXRr/2y7hA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.pname}-ts";

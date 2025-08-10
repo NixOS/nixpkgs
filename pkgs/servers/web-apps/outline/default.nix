@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.85.0";
+  version = "0.85.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-xzZQ0+eJOznZWpApbh9SUGuA5XiLnbhQS0qBLrLfk9Y=";
+    hash = "sha256-lErNsYzxqZYVl1MAQdMk062nBORjQGd3C+UbGbZMzvA=";
   };
 
   nativeBuildInputs = [

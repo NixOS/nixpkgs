@@ -428,17 +428,16 @@ in
       {
         pretalx-web = lib.recursiveUpdate commonUnitConfig {
           description = "pretalx web service";
-          after =
-            [
-              "network.target"
-              "redis-pretalx.service"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-              "postgresql.target"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-              "mysql.service"
-            ];
+          after = [
+            "network.target"
+            "redis-pretalx.service"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+            "postgresql.target"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+            "mysql.service"
+          ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''
             versionFile="${cfg.settings.filesystem.data}/.version"
@@ -478,17 +477,16 @@ in
         pretalx-worker = lib.mkIf cfg.celery.enable (
           lib.recursiveUpdate commonUnitConfig {
             description = "pretalx asynchronous job runner";
-            after =
-              [
-                "network.target"
-                "redis-pretalx.service"
-              ]
-              ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-                "postgresql.target"
-              ]
-              ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-                "mysql.service"
-              ];
+            after = [
+              "network.target"
+              "redis-pretalx.service"
+            ]
+            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+              "postgresql.target"
+            ]
+            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+              "mysql.service"
+            ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
           }

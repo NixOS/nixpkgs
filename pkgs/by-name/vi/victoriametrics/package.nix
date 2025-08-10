@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.120.0";
+  version = "1.123.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tU3rRdYpP0uO0SeIuYarHwJu80m/iRVbYtlbON1WeSQ=";
+    hash = "sha256-GUVRMlF94BaZSVfz4Z+IBSpf6WuA5o1WQQmeZAqKZ1g=";
   };
 
   vendorHash = null;
@@ -80,7 +80,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://victoriametrics.com/";
-    description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
+    description = "Fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp

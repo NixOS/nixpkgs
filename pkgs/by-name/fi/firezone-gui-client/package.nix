@@ -40,6 +40,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version;
       src = "${src}/rust/gui-client";
+      fetcherVersion = 1;
       hash = "sha256-ttbTYBuUv0vyiYzrFATF4x/zngsRXjuLPfL3qW2HEe4=";
     };
     pnpmRoot = "rust/gui-client";
@@ -74,7 +75,6 @@ rustPlatform.buildRustPackage rec {
   pname = "firezone-gui-client";
   inherit version src;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";

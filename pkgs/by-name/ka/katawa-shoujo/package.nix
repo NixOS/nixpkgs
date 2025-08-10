@@ -70,24 +70,23 @@ stdenv.mkDerivation rec {
       undmg
     ];
 
-  buildInputs =
-    [
-      freetype
-      SDL_compat
-      zlib
-    ]
-    ++ lib.optionals devendorImageLibs [
-      libjpeg
-      libpng12
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXext
-      libXi
-      libXmu
-      libGL
-      libGLU
-    ];
+  buildInputs = [
+    freetype
+    SDL_compat
+    zlib
+  ]
+  ++ lib.optionals devendorImageLibs [
+    libjpeg
+    libpng12
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXext
+    libXi
+    libXmu
+    libGL
+    libGLU
+  ];
 
   desktopItems = [
     (makeDesktopItem rec {

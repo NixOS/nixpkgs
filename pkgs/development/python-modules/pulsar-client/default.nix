@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pulsar-client";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
     tag = "v${version}";
-    hash = "sha256-M8Y72VgtPdM80AO9jRyyyOFW6wQ7dbKH33alLWcTLV8=";
+    hash = "sha256-0EeQiYEYdER6qPQUYsk/OwYKiPWG0oymG5eiB01Oysk=";
   };
 
   build-system = [
@@ -72,7 +72,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   unittestFlagsArray = [
     "-s"

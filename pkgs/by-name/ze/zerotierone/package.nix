@@ -74,15 +74,14 @@ stdenv.mkDerivation {
     rustc
   ];
 
-  buildInputs =
-    [
-      lzo
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    lzo
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   enableParallelBuilding = true;
 

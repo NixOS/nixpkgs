@@ -7,18 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.238.3";
+  version = "0.277.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
-    rev = "v${version}";
-    hash = "sha256-WlHta/wXTULehopXeIUdNAQb12Lf0SJnm1HIVHTDshA=";
+    tag = "v${version}";
+    hash = "sha256-wFOhxYEMN2mEzmCjCJhDcDM3b6CmW1kKheEjpVqUhLA=";
   };
-
-  postPatch = ''
-    substituteInPlace src/services/inference/check_cache.ml --replace 'Core_kernel' 'Core'
-  '';
 
   makeFlags = [ "FLOW_RELEASE=1" ];
 
@@ -39,12 +35,12 @@ stdenv.mkDerivation rec {
   buildInputs = (
     with ocamlPackages;
     [
-      core_kernel
+      camlp-streams
       dtoa
       fileutils
       lwt_log
       lwt_ppx
-      ocaml_lwt
+      lwt
       ppx_deriving
       ppx_gen_rec
       ppx_let

@@ -46,6 +46,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/version-fox/vfox/releases/tag/v${finalAttrs.version}";
     mainProgram = "vfox";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

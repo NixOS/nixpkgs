@@ -26,7 +26,7 @@
 let
   pname = "rxvt-unicode";
   version = "9.31";
-  description = "A clone of the well-known terminal emulator rxvt";
+  description = "Clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
     name = pname;
@@ -65,22 +65,21 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libX11
-      libXt
-      libXft
-      ncurses # required to build the terminfo file
-      fontconfig
-      freetype
-      libXrender
-      libptytty
-    ]
-    ++ lib.optionals perlSupport [
-      perl
-      libXext
-    ]
-    ++ lib.optional gdkPixbufSupport gdk-pixbuf;
+  buildInputs = [
+    libX11
+    libXt
+    libXft
+    ncurses # required to build the terminfo file
+    fontconfig
+    freetype
+    libXrender
+    libptytty
+  ]
+  ++ lib.optionals perlSupport [
+    perl
+    libXext
+  ]
+  ++ lib.optional gdkPixbufSupport gdk-pixbuf;
 
   outputs = [
     "out"
@@ -113,6 +112,12 @@ stdenv.mkDerivation {
     )
     ++ [
       ./patches/256-color-resources.patch
+      (fetchPatchFromAUR {
+        name = "7-bit-queries.patch";
+        package = "rxvt-unicode-truecolor-wide-glyphs";
+        rev = "61ed186890a2bf37585e4704a095be61e6504ac6";
+        sha256 = "1xpv6g3bhxq5gp40k3rp8yjp4xrw7dr2g9sfkdmj0gi3rr0myx46";
+      })
     ]
     ++ lib.optional (perlSupport && lib.versionAtLeast perl.version "5.38") (fetchpatch {
       name = "perl538-locale-c.patch";
@@ -127,7 +132,8 @@ stdenv.mkDerivation {
     "--enable-256-color"
     (lib.enableFeature perlSupport "perl")
     (lib.enableFeature unicode3Support "unicode3")
-  ] ++ lib.optional emojiSupport "--enable-wide-glyphs";
+  ]
+  ++ lib.optional emojiSupport "--enable-wide-glyphs";
 
   LDFLAGS = [
     "-lfontconfig"
@@ -136,18 +142,17 @@ stdenv.mkDerivation {
   ];
   CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
 
-  preConfigure =
-    ''
-      # without this the terminfo won't be compiled by tic, see man tic
-      mkdir -p $terminfo/share/terminfo
-      export TERMINFO=$terminfo/share/terminfo
-    ''
-    + lib.optionalString perlSupport ''
-      # make urxvt find its perl file lib/perl5/site_perl
-      # is added to PERL5LIB automatically
-      mkdir -p $out/$(dirname ${perl.libPrefix})
-      ln -s $out/lib/urxvt $out/${perl.libPrefix}
-    '';
+  preConfigure = ''
+    # without this the terminfo won't be compiled by tic, see man tic
+    mkdir -p $terminfo/share/terminfo
+    export TERMINFO=$terminfo/share/terminfo
+  ''
+  + lib.optionalString perlSupport ''
+    # make urxvt find its perl file lib/perl5/site_perl
+    # is added to PERL5LIB automatically
+    mkdir -p $out/$(dirname ${perl.libPrefix})
+    ln -s $out/lib/urxvt $out/${perl.libPrefix}
+  '';
 
   postInstall = ''
     mkdir -p $out/nix-support

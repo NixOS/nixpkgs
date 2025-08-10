@@ -142,6 +142,7 @@ stdenv.mkDerivation (
 
     meta = {
       platforms = dub.meta.platforms;
-    } // args.meta or { };
+    }
+    // args.meta or { };
   }
 )

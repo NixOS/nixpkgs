@@ -167,7 +167,8 @@ in
       # server references the dejavu fonts
       systemPackages = [
         pkgs.dejavu_fonts
-      ] ++ lib.optional cfg.withCLI cfg.package;
+      ]
+      ++ lib.optional cfg.withCLI cfg.package;
 
       variables =
         { }

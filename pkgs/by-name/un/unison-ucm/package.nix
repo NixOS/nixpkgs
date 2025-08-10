@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gmp
     ncurses6

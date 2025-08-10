@@ -58,14 +58,13 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.system == "i686-linux"
   ) "-D_FILE_OFFSET_BITS=64";
 
-  postInstall =
-    ''
-      mkdir -p $out/sbin
-      ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
-    '';
+  postInstall = ''
+    mkdir -p $out/sbin
+    ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
+  '';
 
   # doCheck = true;
   checkPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

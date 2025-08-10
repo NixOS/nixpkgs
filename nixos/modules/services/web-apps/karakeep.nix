@@ -20,7 +20,8 @@ let
 
   environmentFiles = [
     "/var/lib/karakeep/settings.env"
-  ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+  ]
+  ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
 in
 {
   options = {

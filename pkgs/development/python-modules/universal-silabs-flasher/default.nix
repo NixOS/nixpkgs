@@ -46,18 +46,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      bellows
-      click
-      coloredlogs
-      crc
-      pyserial-asyncio-fast
-      typing-extensions
-      zigpy
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  dependencies = [
+    bellows
+    click
+    coloredlogs
+    crc
+    pyserial-asyncio-fast
+    typing-extensions
+    zigpy
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook

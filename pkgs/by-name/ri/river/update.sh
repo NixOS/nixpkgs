@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash common-updater-scripts gnused nixfmt-rfc-style zon2nix
+#!nix-shell -i bash -p bash common-updater-scripts gnused zon2nix
 
 latest_tag=$(list-git-tags --url=https://codeberg.org/river/river | sed 's/^v//' | sort --version-sort | tail --lines=1)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python -p nix nixfmt-rfc-style 'python3.withPackages (pp: [ pp.requests ])'
+#!nix-shell -i python -p nix 'python3.withPackages (pp: [ pp.requests ])'
 
 import json
 import os

@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "itm-tools";
-  version = "unstable-2019-11-15";
+  version = "0-unstable-2019-11-15";
 
   src = fetchFromGitHub {
     owner = "japaric";

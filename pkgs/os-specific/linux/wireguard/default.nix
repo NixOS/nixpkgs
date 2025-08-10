@@ -27,17 +27,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     bc
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   preBuild = "cd src";
   buildFlags = [ "module" ];
-  makeFlags =
-    [
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ];
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   INSTALL_MOD_PATH = placeholder "out";
   installFlags = [ "DEPMOD=true" ];

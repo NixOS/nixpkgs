@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kafkactl";
-  version = "5.9.0";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = "kafkactl";
     tag = "v${version}";
-    hash = "sha256-yoNZD6WiaGtZlJRQJeu6rIDCN2ozVXYTr71PAVpgWIE=";
+    hash = "sha256-kemN4XJcXH3V7/RT9S2FLiUgS7tisK6wmHyUQnyBfhU=";
   };
 
-  vendorHash = "sha256-eGTT3ETww+tR8nuhALy3fbQu3fmRLSLPIEGHHa6TVsE=";
+  vendorHash = "sha256-rxQxNf3FBAGudgrE2wxHw4mVHxTEpQpQ+DX/nEVpoJY=";
 
   doCheck = false;
 

@@ -11,8 +11,8 @@
   },
   {
     "pname": "Avalonia",
-    "version": "11.3.1",
-    "hash": "sha256-732wl4/JmvYFS26NLvPD7T/V3J3JZUDy6Xwj5p1TNyE="
+    "version": "11.3.2",
+    "hash": "sha256-eDptsmrO7QxIvHm5kCs9ZE/N1tAuIBvaJMKiAcsu9yk="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -31,38 +31,38 @@
   },
   {
     "pname": "Avalonia.Controls.ColorPicker",
-    "version": "11.3.1",
-    "hash": "sha256-95sAkALievpuwLtCl7+6PgwNyxx9DAi/vVvQUFT7Qqs="
+    "version": "11.3.2",
+    "hash": "sha256-Lr943SkpYMZz3+TPA7vc/mtbQH0r/eLewZFNGNf3i2M="
   },
   {
     "pname": "Avalonia.Controls.DataGrid",
-    "version": "11.3.1",
-    "hash": "sha256-UcfsSNYCd9zO75hyLevVe59/esHgNmcjJOproy3nhNM="
+    "version": "11.3.2",
+    "hash": "sha256-PFz2fgrBzXQWPLj9X1wdDKDH2iy/54E4NBa+yO7DTfQ="
   },
   {
     "pname": "Avalonia.Desktop",
-    "version": "11.3.1",
-    "hash": "sha256-H6SLCi3by9bFF1YR12PnNZSmtC44UQPKr+5+8LvqC90="
+    "version": "11.3.2",
+    "hash": "sha256-A3LV30ekjXWdo/pRldL4S68AAA6BTuLU8ZGCinkNrvk="
   },
   {
     "pname": "Avalonia.Diagnostics",
-    "version": "11.3.1",
-    "hash": "sha256-zDX3BfqUFUQ+p1ZWdHuhnV0n5B9RfiEtB8m0Px5AhsI="
+    "version": "11.3.2",
+    "hash": "sha256-fMXY9p16o/wpUXFjRngf96gVwSlX/WCY0fn3nE/TmIY="
   },
   {
     "pname": "Avalonia.FreeDesktop",
-    "version": "11.3.1",
-    "hash": "sha256-Iph1SQazNNr9liox0LR7ITidAEEWhp8Mg9Zn4MZVkRQ="
+    "version": "11.3.2",
+    "hash": "sha256-Mxvpd5JKmIpjQCZmuiSb6IkKfwQhA3o712Ubdx0gP28="
   },
   {
     "pname": "Avalonia.Native",
-    "version": "11.3.1",
-    "hash": "sha256-jNzqmHm58bbPGs/ogp6gFvinbN81Psg+sg+Z5UsbcDs="
+    "version": "11.3.2",
+    "hash": "sha256-HLVKaAVIRnm77lk7LJfrbiEmGWVIim7XMMoZAyGVUFA="
   },
   {
     "pname": "Avalonia.ReactiveUI",
-    "version": "11.3.1",
-    "hash": "sha256-m7AFSxwvfz9LAueu0AFC+C7jHrB+lysBmpBh7bhpmUs="
+    "version": "11.3.2",
+    "hash": "sha256-lYKhqoKqEZB4tttXehK5KoBMkwVeTxAThh87dns4C/c="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
@@ -76,28 +76,28 @@
   },
   {
     "pname": "Avalonia.Remote.Protocol",
-    "version": "11.3.1",
-    "hash": "sha256-evkhJOxKjsR+jNLrXRcrhqjFdlrxYMMMRBJ6FK08vMM="
+    "version": "11.3.2",
+    "hash": "sha256-NIkrj4pMvxVvznexzEXmNI8KXWLSXmVbHHWpwz9h3M8="
   },
   {
     "pname": "Avalonia.Skia",
-    "version": "11.3.1",
-    "hash": "sha256-zN09CcuSqtLcQrTCQOoPJrhLd4LioZqt/Qi4sDp/cJI="
+    "version": "11.3.2",
+    "hash": "sha256-cBJo/tTewA2/LSygJ5aAyPPr11KpLPwS1I6kQxDMy24="
   },
   {
     "pname": "Avalonia.Themes.Simple",
-    "version": "11.3.1",
-    "hash": "sha256-U9btigJeFcuOu7T3ryyJJesffnZo1JBb9pWkF0PFu9s="
+    "version": "11.3.2",
+    "hash": "sha256-c8QtpXv+B1CTkW9ovxOZwjRZAkD4KZzIvhIhI5WJXdo="
   },
   {
     "pname": "Avalonia.Win32",
-    "version": "11.3.1",
-    "hash": "sha256-w3+8luJByeIchiVQ0wsq0olDabX/DndigyBEuK8Ty04="
+    "version": "11.3.2",
+    "hash": "sha256-FNs+O2knXcmUpfDjd/9JcNmpzEi8g3UQ3pQHItnN2U8="
   },
   {
     "pname": "Avalonia.X11",
-    "version": "11.3.1",
-    "hash": "sha256-0iUFrDM+10T3OiOeGSEiqQ6EzEucQL3shZUNqOiqkyQ="
+    "version": "11.3.2",
+    "hash": "sha256-OCH5bwJ7Zje0/L7qtDcFa+yje/uwm2pYNE169J866/I="
   },
   {
     "pname": "CliWrap",
@@ -116,8 +116,8 @@
   },
   {
     "pname": "DynamicData",
-    "version": "9.3.2",
-    "hash": "sha256-00fzA28aU48l52TsrDSJ9ucljYOunmH7s2qPyR3YjRA="
+    "version": "9.4.1",
+    "hash": "sha256-CX4NQj2LTk/8f4xDE5rUVBsqcY74H/1qUHFTrVX+9/0="
   },
   {
     "pname": "Fody",
@@ -176,8 +176,8 @@
   },
   {
     "pname": "NLog",
-    "version": "5.3.4",
-    "hash": "sha256-Cwr1Wu9VbOcRz3GdVKkt7lIpNwC1E4Hdb0g+qEkEr3k="
+    "version": "5.5.0",
+    "hash": "sha256-WkuKGo3iEqJruQuRZXMksqIbAQjZbFIANcm0zZr/fYE="
   },
   {
     "pname": "QRCoder",
@@ -186,8 +186,8 @@
   },
   {
     "pname": "ReactiveUI",
-    "version": "20.3.1",
-    "hash": "sha256-1eCZ5M+zkVmlPYuK1gBDCdyCGlYbXIfX+h6Vz0hu8e4="
+    "version": "20.4.1",
+    "hash": "sha256-YXd4A5akZ/dMOo9IalKPoNMGlBGxk60o3u6pGB4BCXY="
   },
   {
     "pname": "ReactiveUI.Fody",
@@ -196,13 +196,13 @@
   },
   {
     "pname": "Semi.Avalonia",
-    "version": "11.2.1.8",
-    "hash": "sha256-1P3hr634woqLtNrWOiJWzizwh0AMWt9Y7J1SXHIkv5M="
+    "version": "11.2.1.9",
+    "hash": "sha256-4NsQyk70xjD+V0X/0wuWhQshkadbBVs1iyRNEPmExkk="
   },
   {
     "pname": "Semi.Avalonia.DataGrid",
-    "version": "11.2.1.8",
-    "hash": "sha256-OKb+vlKSf9e0vL5mGNzSEr62k1Zy/mS4kXWGHZHcBq0="
+    "version": "11.2.1.9",
+    "hash": "sha256-6V1agOI1KcTXQN1+uab7tSZH1ZdJEQrVfxZ5ha1cvGI="
   },
   {
     "pname": "SkiaSharp",
@@ -250,9 +250,14 @@
     "hash": "sha256-1MlkqywOtLr5TbQ+zAqzw0l92LK9+9h2+sJgmfV32RU="
   },
   {
+    "pname": "Splat",
+    "version": "15.4.1",
+    "hash": "sha256-qmp9aNmSSGQjrt9womxfC786nxeafH66okaBk0LXnhw="
+  },
+  {
     "pname": "Splat.NLog",
-    "version": "15.3.1",
-    "hash": "sha256-u/8nSYE618HHNfJjyiQfuluWx83FDYW2RlorPjxRuxs="
+    "version": "15.4.1",
+    "hash": "sha256-CPgRSGmCtG9hFTFjd9r0Hwr0tO9MHpyttZ4NdKrWYyY="
   },
   {
     "pname": "sqlite-net-pcl",
@@ -316,8 +321,8 @@
   },
   {
     "pname": "TaskScheduler",
-    "version": "2.12.1",
-    "hash": "sha256-eM4vgA+/ukoXCX3y4Ad5WPeIPiwLLDfhh4P0ukWf4lQ="
+    "version": "2.12.2",
+    "hash": "sha256-05yC1ufzZrRQU8PxG1EvDsAh0aD8+f4Cg0eLLt0Ljdk="
   },
   {
     "pname": "Tmds.DBus.Protocol",

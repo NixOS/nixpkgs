@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -i s,data/,$out/share/teetertorture/, src/teetertorture.c
+
+    runHook postConfigure
   '';
 
   patchPhase = ''

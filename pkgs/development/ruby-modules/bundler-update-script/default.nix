@@ -7,7 +7,7 @@
   coreutils,
   git,
   nix,
-  nixfmt-rfc-style,
+  nixfmt,
 }:
 
 attrPath:
@@ -22,7 +22,7 @@ let
         coreutils
         git
         nix
-        nixfmt-rfc-style
+        nixfmt
       ]
     }
     set -o errexit

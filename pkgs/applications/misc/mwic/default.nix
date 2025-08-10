@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://jwilk.net/software/mwic";
-    description = "spell-checker that groups possible misspellings and shows them in their contexts";
+    description = "Spell-checker that groups possible misspellings and shows them in their contexts";
     mainProgram = "mwic";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];

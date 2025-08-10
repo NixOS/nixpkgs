@@ -24,21 +24,13 @@
 let
   versionMap = {
     # Necessary for Nyxt
-    "2.4.6" = {
-      sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
-    };
+    "2.4.6".sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
     # Necessary for stumpwm
-    "2.4.10" = {
-      sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
-    };
+    "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.2" = {
-      sha256 = "sha256-XcJ+un3aQz31P9dEHeixFHSoLNrBaJwfbOVfoGXWX6w=";
-    };
-    "2.5.4" = {
-      sha256 = "sha256-XxS07ZKUKp44dZT6wAC5bbdGfpzlYTBn/8CSPfPsIHI=";
-    };
+    "2.5.4".sha256 = "sha256-XxS07ZKUKp44dZT6wAC5bbdGfpzlYTBn/8CSPfPsIHI=";
+    "2.5.5".sha256 = "sha256-ZQJnCvs2G6m+RKL6/pr5tZ57JK5QmnkaZrVIHylVlQs=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -91,22 +83,21 @@ stdenv.mkDerivation (self: {
     inherit (versionMap.${version}) sha256;
   };
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    texinfo
+  ]
+  ++ lib.optionals self.doCheck (
     [
-      texinfo
+      which
+      writableTmpDirAsHomeHook
     ]
-    ++ lib.optionals self.doCheck (
-      [
-        which
-        writableTmpDirAsHomeHook
-      ]
-      ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
-        strace
-      ]
-      ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
-        ps
-      ]
-    );
+    ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
+      strace
+    ]
+    ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
+      ps
+    ]
+  );
   buildInputs = lib.optionals self.coreCompression (
     # Declare at the point of actual use in case the caller wants to override
     # buildInputs to sidestep this.
@@ -223,16 +214,15 @@ stdenv.mkDerivation (self: {
       "compact-instance-header"
     ];
 
-  buildArgs =
-    [
-      "--prefix=$out"
-      "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
-    ]
-    ++ builtins.map (x: "--with-${x}") self.enableFeatures
-    ++ builtins.map (x: "--without-${x}") self.disableFeatures
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
-      "--arch=arm64"
-    ];
+  buildArgs = [
+    "--prefix=$out"
+    "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
+  ]
+  ++ builtins.map (x: "--with-${x}") self.enableFeatures
+  ++ builtins.map (x: "--without-${x}") self.disableFeatures
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    "--arch=arm64"
+  ];
 
   # Fails to find `O_LARGEFILE` otherwise.
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
@@ -262,25 +252,24 @@ stdenv.mkDerivation (self: {
     runHook postCheck
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      sh install.sh
+    sh install.sh
 
-    ''
-    + lib.optionalString (!self.purgeNixReferences) ''
-      cp -r src $out/lib/sbcl
-      cp -r contrib $out/lib/sbcl
-      cat >$out/lib/sbcl/sbclrc <<EOF
-       (setf (logical-pathname-translations "SYS")
-         '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
-           ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
-      EOF
-    ''
-    + ''
-      runHook postInstall
-    '';
+  ''
+  + lib.optionalString (!self.purgeNixReferences) ''
+    cp -r src $out/lib/sbcl
+    cp -r contrib $out/lib/sbcl
+    cat >$out/lib/sbcl/sbclrc <<EOF
+     (setf (logical-pathname-translations "SYS")
+       '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
+         ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
+    EOF
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   setupHook = lib.optional self.purgeNixReferences (
     writeText "setupHook.sh" ''

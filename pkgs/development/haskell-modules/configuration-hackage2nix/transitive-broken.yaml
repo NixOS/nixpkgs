@@ -136,11 +136,13 @@ dont-distribute-packages:
  - atlassian-connect-core
  - atmos-dimensional-tf
  - atom-msp430
+ - atomic-css
  - atomic-primops-foreign
  - atp
  - attenuation-profunctors
  - AttoJson
  - attoparsec-enumerator
+ - attoparsec-isotropic
  - attoparsec-iteratee
  - attoparsec-text-enumerator
  - atuin
@@ -267,7 +269,6 @@ dont-distribute-packages:
  - birch-beer
  - bird
  - BirdPP
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -276,7 +277,6 @@ dont-distribute-packages:
  - bitcoin-api-extra
  - bitcoin-block
  - bitcoin-tx
- - bitcoin-types
  - bitcoind-regtest
  - Bitly
  - bitly-cli
@@ -339,9 +339,7 @@ dont-distribute-packages:
  - bytestring-read
  - bytetrie
  - ca
- - cabal-bounds
  - cabal-cache
- - cabal-cargs
  - cabal-query
  - cabal-test
  - cabal2arch
@@ -470,6 +468,7 @@ dont-distribute-packages:
  - clod
  - cloud-haskell
  - cloud-seeder
+ - cloudevents-haskell
  - cloudyfs
  - clr-bindings
  - clr-inline
@@ -682,6 +681,7 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
+ - dde
  - debug
  - decimal-arithmetic
  - dedukti
@@ -700,7 +700,6 @@ dont-distribute-packages:
  - delimiter-separated
  - delta
  - delta-h
- - delta-store
  - dep-t-advice
  - dep-t-dynamic
  - dep-t-value
@@ -1027,6 +1026,7 @@ dont-distribute-packages:
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
+ - fs-sim
  - ftdi
  - ftp-client-conduit
  - FTPLine
@@ -1065,8 +1065,6 @@ dont-distribute-packages:
  - gelatin-gl
  - gelatin-sdl2
  - gelatin-shaders
- - gemini-router
- - gemini-textboard
  - Genbank
  - gencheck
  - Gene-CluEDO
@@ -1085,6 +1083,7 @@ dont-distribute-packages:
  - geodetic
  - geolite-csv
  - getemx
+ - ghc-debugger
  - ghc-dump-util
  - ghc-experimental
  - ghc-imported-from
@@ -1377,7 +1376,6 @@ dont-distribute-packages:
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
- - haskore-realtime
  - haskore-supercollider
  - haskore-synthesizer
  - hasktorch-ffi-thc
@@ -1612,7 +1610,6 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
- - hs-pkpass
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
@@ -1636,6 +1633,7 @@ dont-distribute-packages:
  - hsdev
  - hsec-core
  - Hsed
+ - hsendxmpp
  - hsfacter
  - HSGEP
  - HSHHelpers
@@ -1752,7 +1750,6 @@ dont-distribute-packages:
  - igrf
  - ihaskell-inline-r
  - ihaskell-rlangqq
- - ihaskell-symtegration
  - ihttp
  - imap
  - imbib
@@ -2211,12 +2208,11 @@ dont-distribute-packages:
  - Michelangelo
  - micro-gateway
  - microformats2-types
+ - MicroHs
  - MicrosoftTranslator
  - midimory
  - mig-server
  - mighttpd
- - migrant-hdbc
- - migrant-sqlite-simple
  - minecraft-data
  - minesweeper
  - minilight
@@ -2471,7 +2467,6 @@ dont-distribute-packages:
  - ollama-holes-plugin
  - olwrapper
  - om-kubernetes
- - one-time-password
  - online-csv
  - OnRmt
  - oops-examples
@@ -2761,6 +2756,7 @@ dont-distribute-packages:
  - queryparser-presto
  - queryparser-vertica
  - queuelike
+ - quick-process
  - quickcheck-poly
  - quickcheck-regex
  - quickcheck-relaxng
@@ -2815,12 +2811,10 @@ dont-distribute-packages:
  - rasa-ext-vim
  - rascal
  - raw-feldspar
- - rawlock
  - razom-text-util
  - rbr
  - rc
  - rdioh
- - rds-data
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -2890,7 +2884,6 @@ dont-distribute-packages:
  - reserve
  - resin
  - resource-pool-catchio
- - resource-registry
  - resource-simple
  - rest-client
  - rest-core
@@ -3156,7 +3149,6 @@ dont-distribute-packages:
  - sibe
  - sigma-ij
  - signals
- - signature
  - signify-hs
  - silvi
  - simgi
@@ -3550,6 +3542,7 @@ dont-distribute-packages:
  - TypeClass
  - typed-encoding-encoding
  - typed-gui
+ - typed-protocols-doc
  - typed-streams
  - typedflow
  - TypeIlluminator
@@ -3647,7 +3640,6 @@ dont-distribute-packages:
  - venzone
  - verdict-json
  - verifiable-expressions
- - verismith
  - versioning-servant
  - vertexenum
  - vflow-types
@@ -3732,7 +3724,6 @@ dont-distribute-packages:
  - windowslive
  - winery
  - winio
- - wire-streams
  - Wired
  - wl-pprint-ansiterm
  - wl-pprint-terminfo
@@ -3751,7 +3742,6 @@ dont-distribute-packages:
  - WringTwistree
  - write-buffer-stm
  - writer-cps-full
- - wsjtx-udp
  - wstunnel
  - wtk-gtk
  - wu-wei
@@ -3829,7 +3819,6 @@ dont-distribute-packages:
  - yesod-continuations
  - yesod-examples
  - yesod-fay
- - yesod-fb
  - yesod-mangopay
  - yesod-paypal-rest
  - yesod-platform

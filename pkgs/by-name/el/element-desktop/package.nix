@@ -7,7 +7,7 @@
   yarn,
   nodejs,
   jq,
-  electron_36,
+  electron_37,
   element-web,
   sqlcipher,
   callPackage,
@@ -22,7 +22,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_36;
+  electron = electron_37;
   keytar = callPackage ./keytar {
     inherit electron;
   };
@@ -57,7 +57,8 @@ stdenv.mkDerivation (
       jq
       yarn
       typescript
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
 

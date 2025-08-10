@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  python,
   pythonOlder,
   installShellFiles,
   docutils,
@@ -25,11 +26,13 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.18.6";
+  version = "2.18.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -37,7 +40,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ansible_core";
     inherit version;
-    hash = "sha256-JbsgzhUWobcweDGyY872hAQ7NyBxFGa9nUFk5f1XZVc=";
+    hash = "sha256-GhKb+fzV3KKxfoPOdxR+4vvDxRpJWJcBUol8xbbQquc=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -87,7 +90,9 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ]
+  ++ extraPackages python.pkgs;
 
   pythonRelaxDeps = [ "resolvelib" ];
 

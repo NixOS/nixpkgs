@@ -85,6 +85,7 @@ let
           # ValueError: An instance of Chroma already exists for ephemeral with different settings
           "chromadb/test/test_chroma.py"
           "chromadb/test/test_client.py"
+          "chromadb/test/ef/test_multimodal_ef.py"
         ];
       });
     };
@@ -92,20 +93,23 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.4";
+  version = "0.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-N74XBQahUIj0rKJI0emtNvGlG9uYkeHqweppp8fUSLU=";
+    hash = "sha256-c8Wp/bP5KHDN/i2bMyiOQgnHDw8tPbg4IZIQ5Ut4SIo=";
   };
 
   build-system = with python.pkgs; [
     pdm-backend
   ];
 
+  pythonRelaxDeps = [
+    "posthog"
+  ];
   dependencies =
     with python.pkgs;
     [
@@ -157,27 +161,23 @@ python.pkgs.buildPythonApplication rec {
     installShellCompletion vectorcode.{bash,zsh}
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/vectorcode \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set PATH ${
-        lib.makeBinPath [
-          python
-        ]
-      };
-  '';
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
+  ];
 
   pythonImportsCheck = [ "vectorcode" ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python.pkgs; [
-      mcp
-      pygls
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python.pkgs; [
+    mcp
+    pygls
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "version";
 
   disabledTests = [

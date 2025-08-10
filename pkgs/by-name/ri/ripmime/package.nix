@@ -17,13 +17,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/share/man/man1"
   '';
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = " -Wno-error ";
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_LDFLAGS = "-liconv";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = " -Wno-error ";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
   meta = with lib; {
     description = "Attachment extractor for MIME messages";

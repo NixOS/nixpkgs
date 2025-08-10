@@ -24,19 +24,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OW/LOZUCGOIl7jeWnzt4SXTo3gplJx/wbC21S1TdZx0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-aDgpEfX0QRkQD6c4ant6uSN18WLHVnZISRr7lyu9IzA=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      curl
-    ];
-  nativeBuildInputs =
-    [ pkg-config ]
-    # curl-sys wants to run curl-config on darwin
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    curl
+  ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  # curl-sys wants to run curl-config on darwin
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

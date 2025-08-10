@@ -7,24 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "juno";
-  version = "0.0.1";
+  version = "0.0.3";
 
   srcs = [
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno.tar.xz";
-      sha256 = "1cghsn9qagcf1nlga5cal0aqch6hkjm5wk6ja791zxhdqy3crx1i";
+      sha256 = "sha256-G/H5FZ6VSLHwtMtttRafvPFE2sd30FHbep/0i4dGfl8=";
     })
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-mirage.tar.xz";
-      sha256 = "0zh6bc85svmwh8qrhpn8mim0pj322x2x2i9sxnp7p1938p5z5m2b";
+      sha256 = "sha256-VU8uNH6T9FyOWgIfsGCCihnX3uHfOy6dXsANWKRPQ1c=";
     })
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-ocean.tar.xz";
-      sha256 = "0m2wgmcn12dfq5badzlpzjc8792ba9hi32c79vfvqawdn1q3hrdx";
+      sha256 = "sha256-OeMXR0nE9aUmwAGfOAfbNP2Rgvv1u/2vj3LKb88mD1s=";
     })
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-palenight.tar.xz";
-      sha256 = "1hn2l0m76x61ixjd253hi7czm65asdjdhqvvlv7idbccc40pvrak";
+      sha256 = "sha256-DP3fKXYxUHpsw0msfPAZB3UtEa6CCOfqsabAmsmWq44=";
     })
   ];
 

@@ -90,7 +90,7 @@ buildPythonPackage rec {
     h5py
     hypothesis
   ];
-  pytestFlagsArray = [
+  pytestFlags = [
     # See https://github.com/scipp/scipp/issues/3721
     "--hypothesis-profile=ci"
   ];

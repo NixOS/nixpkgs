@@ -98,9 +98,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: 'jinja2.Markup' is deprecated and...
-    "-W ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

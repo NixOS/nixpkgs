@@ -97,20 +97,19 @@ stdenv.mkDerivation rec {
   ];
 
   doInstallCheck = true;
-  configureFlags =
-    [
-      "--with-all"
-      "--with-ssl"
-      "--without-powerman" # Until we have it ...
-      "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
-      "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
-      "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
-      "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
-      "--with-udev-dir=$(out)/etc/udev"
-    ]
-    ++ (lib.lists.optionals withApcModbus [
-      "--with-modbus+usb"
-    ]);
+  configureFlags = [
+    "--with-all"
+    "--with-ssl"
+    "--without-powerman" # Until we have it ...
+    "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
+    "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
+    "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
+    "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
+    "--with-udev-dir=$(out)/etc/udev"
+  ]
+  ++ (lib.lists.optionals withApcModbus [
+    "--with-modbus+usb"
+  ]);
 
   enableParallelBuilding = true;
 

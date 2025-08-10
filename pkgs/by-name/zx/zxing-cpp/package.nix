@@ -5,7 +5,7 @@
   gitUpdater,
   python3,
   stdenv,
-  zint,
+  libzint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    zint
+    libzint
   ];
 
   cmakeFlags = [

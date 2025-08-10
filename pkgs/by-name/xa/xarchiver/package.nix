@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gtk3

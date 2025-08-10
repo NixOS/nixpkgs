@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "3.0.0";
+  version = "3.1.2";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-cli";
     tag = version;
-    hash = "sha256-RAnvx5519iXZnJm8jtY635e0DEL7jnIgZtTCindqMTY=";
+    hash = "sha256-ryNHl/c8Pg2mGQHE9Dbd0bLU80NyCyxfhd2YQGEBN40=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   passthru.updateScript = nix-update-script { };
 

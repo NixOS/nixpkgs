@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pytestFlagsArray = [ "test" ];
+  enabledTestPaths = [ "test" ];
 
   meta = {
     description = "Python data serialization library";

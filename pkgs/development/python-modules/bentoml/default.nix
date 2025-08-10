@@ -112,11 +112,12 @@ let
       tracing-otlp
       tracing
       ;
-    triton =
-      [ tritonclient ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux (
-        tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
-      );
+    triton = [
+      tritonclient
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
+      tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
+    );
   };
 
   src = fetchFromGitHub {
@@ -191,7 +192,8 @@ buildPythonPackage {
     uv
     uvicorn
     watchfiles
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   inherit optional-dependencies;
 
@@ -224,7 +226,8 @@ buildPythonPackage {
     pytest-xdist
     pytestCheckHook
     scikit-learn
-  ] ++ optional-dependencies.grpc;
+  ]
+  ++ optional-dependencies.grpc;
 
   meta = with lib; {
     description = "Build Production-Grade AI Applications";

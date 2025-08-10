@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zhiyiYo/PyQt-Frameless-Window";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

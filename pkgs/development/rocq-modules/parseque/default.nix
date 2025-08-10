@@ -1,7 +1,6 @@
 {
   lib,
   mkRocqDerivation,
-  which,
   stdlib,
   rocq-core,
   version ? null,

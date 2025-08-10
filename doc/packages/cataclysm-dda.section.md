@@ -29,9 +29,7 @@ The default configuration directory is `~/.cataclysm-dda`. If you prefer
 `$XDG_CONFIG_HOME/cataclysm-dda`, override the derivation:
 
 ```nix
-cataclysm-dda.override {
-  useXdgDir = true;
-}
+cataclysm-dda.override { useXdgDir = true; }
 ```
 
 ## Important note for overriding packages {#important-note-for-overriding-packages}
@@ -62,10 +60,10 @@ let
 
   # or by using a helper function `attachPkgs`.
   goodExample2 = attachPkgs pkgs myCDDA;
-in
 
-# badExample                     # parallel building disabled
-# goodExample1.withMods (_: [])  # parallel building enabled
+  # badExample                     # parallel building disabled
+  # goodExample1.withMods (_: [])  # parallel building enabled
+in
 goodExample2.withMods (_: [ ]) # parallel building enabled
 ```
 
@@ -75,11 +73,7 @@ To install Cataclysm DDA with mods of your choice, you can use `withMods`
 attribute:
 
 ```nix
-cataclysm-dda.withMods (
-  mods: with mods; [
-    tileset.UndeadPeople
-  ]
-)
+cataclysm-dda.withMods (mods: with mods; [ tileset.UndeadPeople ])
 ```
 
 All mods, soundpacks, and tilesets available in nixpkgs are found in

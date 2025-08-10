@@ -52,18 +52,17 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs =
-    [
-      opencv4
-      gtest
-      blas.provider
-    ]
-    ++ lib.optional stdenv.cc.isGNU gomp
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optionals cudaSupport [
-      # needed for OpenCV cmake module
-      cudaPackages.cudatoolkit
-    ];
+  buildInputs = [
+    opencv4
+    gtest
+    blas.provider
+  ]
+  ++ lib.optional stdenv.cc.isGNU gomp
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+  ++ lib.optionals cudaSupport [
+    # needed for OpenCV cmake module
+    cudaPackages.cudatoolkit
+  ];
 
   cmakeFlags = [
     "-DUSE_MKL_IF_AVAILABLE=OFF"

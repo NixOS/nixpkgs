@@ -101,42 +101,41 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
   ];
 
-  buildInputs =
-    [
-      binutils
-      boost186 # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
-      cereal
-      cgal
-      curl
-      dbus
-      eigen
-      expat
-      glew
-      glib
-      glib-networking
-      gmp
-      gtk3
-      hicolor-icon-theme
-      ilmbase
-      libpng
-      mpfr
-      nanosvg-fltk
-      nlopt
-      opencascade-override'
-      openvdb_tbb_2021_8
-      qhull
-      tbb_2021
-      wxGTK-override'
-      xorg.libX11
-      libbgcode
-      heatshrink
-      catch2_3
-      webkitgtk_4_1
-      z3
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    binutils
+    boost186 # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
+    cereal
+    cgal
+    curl
+    dbus
+    eigen
+    expat
+    glew
+    glib
+    glib-networking
+    gmp
+    gtk3
+    hicolor-icon-theme
+    ilmbase
+    libpng
+    mpfr
+    nanosvg-fltk
+    nlopt
+    opencascade-override'
+    openvdb_tbb_2021_8
+    qhull
+    tbb_2021
+    wxGTK-override'
+    xorg.libX11
+    libbgcode
+    heatshrink
+    catch2_3
+    webkitgtk_4_1
+    z3
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   strictDeps = true;
 

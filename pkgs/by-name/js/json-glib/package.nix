@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "installedTests"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -47,26 +48,25 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      docutils # for rst2man, rst2html5
-      meson
-      ninja
-      pkg-config
-      gettext
-      glib
-      libxslt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gi-docgen
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
+    meson
+    ninja
+    pkg-config
+    gettext
+    glib
+    libxslt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   propagatedBuildInputs = [
     glib

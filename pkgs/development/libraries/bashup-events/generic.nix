@@ -63,7 +63,8 @@ resholve.mkDerivation {
       interpreter = "none";
       scripts = [ "bin/bashup.events" ];
       inherit keep;
-    } // lib.optionalAttrs (lib.isAttrs fake) { inherit fake; };
+    }
+    // lib.optionalAttrs (lib.isAttrs fake) { inherit fake; };
   };
 
   inherit doInstallCheck;

@@ -60,44 +60,44 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.perl
     pkg-config
     xxd
-  ] ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook3;
+  ]
+  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook3;
 
-  buildInputs =
-    [
-      check
-      curl
-      gperf
-      libXcursor
-      libXrandr
-      libidn
-      libjpeg
-      libjxl
-      libpng
-      libwebp
-      libxml2
-      openssl
+  buildInputs = [
+    check
+    curl
+    gperf
+    libXcursor
+    libXrandr
+    libidn
+    libjpeg
+    libjxl
+    libpng
+    libwebp
+    libxml2
+    openssl
 
-      libcss
-      libdom
-      libhubbub
-      libnsbmp
-      libnsfb
-      libnsgif
-      libnslog
-      libnspsl
-      libnsutils
-      libparserutils
-      libsvgtiny
-      libutf8proc
-      libwapcaplet
-      nsgenbind
-    ]
-    ++ lib.optionals (uilib == "framebuffer") [
-      expat
-      SDL
-    ]
-    ++ lib.optional (uilib == "gtk2") gtk2
-    ++ lib.optional (uilib == "gtk3") gtk3;
+    libcss
+    libdom
+    libhubbub
+    libnsbmp
+    libnsfb
+    libnsgif
+    libnslog
+    libnspsl
+    libnsutils
+    libparserutils
+    libsvgtiny
+    libutf8proc
+    libwapcaplet
+    nsgenbind
+  ]
+  ++ lib.optionals (uilib == "framebuffer") [
+    expat
+    SDL
+  ]
+  ++ lib.optional (uilib == "gtk2") gtk2
+  ++ lib.optional (uilib == "gtk3") gtk3;
 
   # Since at least 2018 AD, GCC and other compilers run in `-fno-common` mode as
   # default, in order to comply with C standards and also get rid of some bad

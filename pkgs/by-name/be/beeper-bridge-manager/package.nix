@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-yTNUxwnulQ+WbHdQbeNDghH4RPXurQMIgKDyXfrMxG8=";
 
   meta = {
-    description = "Tool for running self-hosted bridges with the Beeper Matrix server.";
+    description = "Tool for running self-hosted bridges with the Beeper Matrix server";
     homepage = "https://github.com/beeper/bridge-manager";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.heywoodlh ];

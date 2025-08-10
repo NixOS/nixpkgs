@@ -28,12 +28,13 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [ qtbase ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-      qtsvg
-    ];
+  buildInputs = [
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+    qtsvg
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     nitrokey

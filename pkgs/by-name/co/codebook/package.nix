@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codebook";
-  version = "0.3.3";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "blopker";
     repo = "codebook";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9tXzruyISC+JdzV4aPBB31OCKgZVAO0eU3SsgAZy/+I=";
+    hash = "sha256-zSxMvWRpH1AtvHo/odQZftxgAMdOd8p2ZiMUcsOWhes=";
   };
 
   buildAndTestSubdir = "crates/codebook-lsp";
-  cargoHash = "sha256-Bba5v0J5HRaylQRHV41LQ2My0zYybme/AHZ+HDekoHc=";
+  cargoHash = "sha256-FS8ZEjFFoNCJGkfL8C5hBgwj9o9XT239/9Qh/Xea2wk=";
 
   # Integration tests require internet access for dictionaries
   doCheck = false;

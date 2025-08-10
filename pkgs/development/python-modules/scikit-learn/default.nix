@@ -23,6 +23,8 @@
 }:
 
 buildPythonPackage rec {
+  __structuredAttrs = true;
+
   pname = "scikit-learn";
   version = "1.6.1";
   pyproject = true;
@@ -45,7 +47,8 @@ buildPythonPackage rec {
     numpy.blas
     pillow
     glibcLocales
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     gfortran
@@ -75,30 +78,33 @@ buildPythonPackage rec {
   # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  disabledTests =
-    [
-      # Skip test_feature_importance_regression - does web fetch
-      "test_feature_importance_regression"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # doesn't seem to produce correct results?
-      # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
-      "test_sparse_input"
-    ];
+  disabledTests = [
+    # Skip test_feature_importance_regression - does web fetch
+    "test_feature_importance_regression"
 
-  pytestFlagsArray = [
-    # verbose build outputs needed to debug hard-to-reproduce hydra failures
-    "-v"
-    "--pyargs"
-    "sklearn"
+    # Fail due to new deprecation warnings in scipy
+    # FIXME: reenable when fixed upstream
+    "test_logistic_regression_path_convergence_fail"
+    "test_linalg_warning_with_newton_solver"
+    "test_newton_cholesky_fallback_to_lbfgs"
 
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
     # (https://github.com/joblib/joblib/issues/563). See also:
     # https://github.com/scikit-learn/scikit-learn/issues/17582
-    # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
-    "-k"
-    "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
+    "NuSVC and memmap"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # doesn't seem to produce correct results?
+    # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
+    "test_sparse_input"
+  ];
+
+  pytestFlags = [
+    # verbose build outputs needed to debug hard-to-reproduce hydra failures
+    "-v"
+    "--pyargs"
+    "sklearn"
   ];
 
   preCheck = ''

@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     spglib
     metis
     (python3.withPackages (ps: [ ps.pyyaml ]))
-  ] ++ lib.optional enableMpi scalapack;
+  ]
+  ++ lib.optional enableMpi scalapack;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "israel-rail-api";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sh0oki";
     repo = "israel-rail-api";
     tag = "v${version}";
-    hash = "sha256-OiWK3gi7dQ7SF4fvusKtSFzdhrsvePlscX0EYQ/hlYk=";
+    hash = "sha256-viIETVCW3YSwJOsFxkYoi0Ko9vXQEP9d+fjQAlb142c=";
   };
 
   build-system = [ setuptools ];

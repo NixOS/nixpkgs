@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   libtasn1,
@@ -35,6 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N79vuI0FhawLyQtwVF6ABIvCmEaYefq/YkyrafUfUHE=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "retry-nwwrite.patch";
+      url = "https://github.com/stefanberger/swtpm/commit/4da66c66f92438443e66b67555673c9cb898b0ae.patch";
+      hash = "sha256-TTS+ViN4g6EfNLrhvGPobcSQEbr/mEl9ZLZTWdxbifs=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     unixtools.netstat
@@ -50,27 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =
-    [
-      libtpms
-      openssl
-      libtasn1
-      glib
-      json-glib
-      gnutls
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fuse
-      libseccomp
-    ];
+  buildInputs = [
+    libtpms
+    openssl
+    libtasn1
+    glib
+    json-glib
+    gnutls
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fuse
+    libseccomp
+  ];
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--with-cuse"
-    ];
+  configureFlags = [
+    "--localstatedir=/var"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--with-cuse"
+  ];
 
   postPatch = ''
     patchShebangs tests/*

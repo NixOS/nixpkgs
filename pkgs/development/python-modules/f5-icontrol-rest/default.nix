@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # needs to be updated to newer pytest version and requires physical device
   doCheck = false;
 
-  pytestFlags = [ "icontrol/test" ];
+  enabledTestPaths = [ "icontrol/test" ];
 
   pythonImportsCheck = [ "icontrol" ];
 

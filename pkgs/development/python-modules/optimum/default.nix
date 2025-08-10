@@ -50,7 +50,8 @@ buildPythonPackage rec {
     packaging
     torch
     transformers
-  ] ++ transformers.optional-dependencies.sentencepiece;
+  ]
+  ++ transformers.optional-dependencies.sentencepiece;
 
   optional-dependencies = {
     onnxruntime = [

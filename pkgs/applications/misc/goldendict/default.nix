@@ -60,33 +60,32 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qtwebkit
-      qttools
-      libvorbis
-      hunspell
-      xz
-      lzo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtx11extras
-      libXtst
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional withCC opencc
-    ++ lib.optional withEpwing libeb
-    ++ lib.optional withExtraTiff libtiff
-    ++ lib.optionals withFFmpeg [
-      libao
-      ffmpeg
-    ]
-    ++ lib.optional withZim zstd;
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtwebkit
+    qttools
+    libvorbis
+    hunspell
+    xz
+    lzo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtx11extras
+    libXtst
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    bzip2
+    libiconv
+  ]
+  ++ lib.optional withCC opencc
+  ++ lib.optional withEpwing libeb
+  ++ lib.optional withExtraTiff libtiff
+  ++ lib.optionals withFFmpeg [
+    libao
+    ffmpeg
+  ]
+  ++ lib.optional withZim zstd;
 
   qmakeFlags = [
     "goldendict.pro"

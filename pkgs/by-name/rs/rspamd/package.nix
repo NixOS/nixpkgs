@@ -51,30 +51,29 @@ stdenv.mkDerivation rec {
     ragel
   ];
 
-  buildInputs =
-    [
-      doctest
-      fmt_11
-      glib
-      openssl
-      pcre
-      sqlite
-      ragel
-      fasttext
-      icu
-      jemalloc
-      libsodium
-      xxHash
-      zstd
-      libarchive
-      vectorscan
-    ]
-    ++ lib.optionals withBlas [
-      blas
-      lapack
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  buildInputs = [
+    doctest
+    fmt_11
+    glib
+    openssl
+    pcre
+    sqlite
+    ragel
+    fasttext
+    icu
+    jemalloc
+    libsodium
+    xxHash
+    zstd
+    libarchive
+    vectorscan
+  ]
+  ++ lib.optionals withBlas [
+    blas
+    lapack
+  ]
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
@@ -92,7 +91,8 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_XXHASH=ON"
     "-DSYSTEM_ZSTD=ON"
     "-DENABLE_HYPERSCAN=ON"
-  ] ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+  ]
+  ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 
   passthru.tests.rspamd = nixosTests.rspamd;
 

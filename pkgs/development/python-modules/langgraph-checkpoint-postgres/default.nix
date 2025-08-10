@@ -5,7 +5,7 @@
   stdenvNoCC,
 
   # build system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langgraph-checkpoint,
@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.21";
+  version = "2.0.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-hl1EBOtUkSfHGxsM+LOZPLSvkW7hdHS08klpvA7/Bd0=";
+    hash = "sha256-QAzT8T3bf3R3gwI/iWDYYDz0SxgLZsP61oMk72dYz4s=";
   };
 
   postgresqlTestSetupPost = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/checkpoint-postgres";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langgraph-checkpoint
@@ -58,7 +58,10 @@ buildPythonPackage rec {
     "psycopg-pool"
   ];
 
-  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
+  # Temporarily disabled until the following is solved:
+  # https://github.com/NixOS/nixpkgs/pull/425384
+  doCheck = false;
+  # doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     pytest-asyncio

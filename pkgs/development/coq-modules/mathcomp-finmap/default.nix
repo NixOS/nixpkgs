@@ -29,7 +29,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (range "8.20" "9.0") (range "2.3" "2.4") "2.2.0")
+        (case (range "8.20" "9.1") (range "2.3" "2.4") "2.2.0")
         (case (range "8.16" "9.0") (range "2.0" "2.3") "2.1.0")
         (case (range "8.16" "8.18") (range "2.0" "2.1") "2.0.0")
         (case (range "8.13" "8.20") (range "1.12" "1.19") "1.5.2")

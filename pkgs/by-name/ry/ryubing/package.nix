@@ -52,35 +52,34 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  runtimeDeps =
-    [
-      libX11
-      libgdiplus
-      SDL2_mixer
-      openal
-      libsoundio
-      sndio
-      vulkan-loader
-      ffmpeg
+  runtimeDeps = [
+    libX11
+    libgdiplus
+    SDL2_mixer
+    openal
+    libsoundio
+    sndio
+    vulkan-loader
+    ffmpeg
 
-      # Avalonia UI
-      glew
-      libICE
-      libSM
-      libXcursor
-      libXext
-      libXi
-      libXrandr
+    # Avalonia UI
+    glew
+    libICE
+    libSM
+    libXcursor
+    libXext
+    libXi
+    libXrandr
 
-      # Headless executable
-      libGL
-      SDL2
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
-      udev
-      pulseaudio
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
+    # Headless executable
+    libGL
+    SDL2
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+    udev
+    pulseaudio
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";

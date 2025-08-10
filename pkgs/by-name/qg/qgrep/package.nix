@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "qgrep";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-TeXOzfb1Nu6hz9l6dXGZY+xboscPapKm0Z264hv1Aww=";
   };

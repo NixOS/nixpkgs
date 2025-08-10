@@ -49,19 +49,19 @@ buildPythonPackage rec {
     pandas
     plotly
     scikit-learn
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  disabledTests =
-    [
-      # Test requires extra nltk data dependency
-      "test_text_mining"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-      "test_hill_slopes"
-      "test_two_key_plot"
-    ];
+  disabledTests = [
+    # Test requires extra nltk data dependency
+    "test_text_mining"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    "test_hill_slopes"
+    "test_two_key_plot"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

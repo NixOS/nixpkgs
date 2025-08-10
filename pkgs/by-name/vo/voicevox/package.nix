@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
-    hash = "sha256-2MXJOLt14zpoahYjd3l3q5UxT2yK/g/jksHO4Q7W6HA=";
+    hash = "sha256-ploFrzxIseyUD7LINnFmshrg3QJV8KUkdbvDoJ/VkRk=";
   };
 
   patches = [
@@ -64,21 +64,21 @@ stdenv.mkDerivation (finalAttrs: {
       moreutils
     ];
 
+    fetcherVersion = 1;
     hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
   };
 
-  nativeBuildInputs =
-    [
-      dart-sass
-      jq
-      makeWrapper
-      moreutils
-      nodejs
-      pnpm.configHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    dart-sass
+    jq
+    makeWrapper
+    moreutils
+    nodejs
+    pnpm.configHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

@@ -18,18 +18,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    [
-      "-DSIMDJSON_DEVELOPER_MODE=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "-DBUILD_SHARED_LIBS=OFF"
-    ]
-    ++ lib.optionals (with stdenv.hostPlatform; isPower && isBigEndian) [
-      # Assume required CPU features are available, since otherwise we
-      # just get a failed build.
-      "-DCMAKE_CXX_FLAGS=-mpower8-vector"
-    ];
+  cmakeFlags = [
+    "-DSIMDJSON_DEVELOPER_MODE=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-DBUILD_SHARED_LIBS=OFF"
+  ]
+  ++ lib.optionals (with stdenv.hostPlatform; isPower && isBigEndian) [
+    # Assume required CPU features are available, since otherwise we
+    # just get a failed build.
+    "-DCMAKE_CXX_FLAGS=-mpower8-vector"
+  ];
 
   meta = with lib; {
     homepage = "https://simdjson.org/";

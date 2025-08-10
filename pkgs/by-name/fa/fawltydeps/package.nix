@@ -27,14 +27,13 @@ python3Packages.buildPythonApplication rec {
     pydantic
   ];
 
-  nativeCheckInputs =
-    [
-      writableTmpDirAsHomeHook
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-      hypothesis
-    ]);
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    hypothesis
+  ]);
 
   disabledTestPaths = [
     # Disable tests that require network

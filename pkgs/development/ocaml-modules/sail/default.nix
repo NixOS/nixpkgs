@@ -16,7 +16,7 @@
   lem,
   linksem,
   yojson,
-  version ? "0.19",
+  version ? "0.19.1",
 }:
 
 buildDunePackage {
@@ -25,21 +25,20 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
-    hash = "sha256-VFjmmsCl2fUnONGUZQnFAYl/VIesy5YQsfIMMDBdI+A=";
+    hash = "sha256-Xplpi2NnwBgTPJCq7Szv8XPeINtuYcM+KxlZSh1IKjI=";
   };
 
   minimalOCamlVersion = "4.08";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      ott
-      menhir
-      lem
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.sigtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    ott
+    menhir
+    lem
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.sigtool
+  ];
 
   propagatedBuildInputs = [
     base64

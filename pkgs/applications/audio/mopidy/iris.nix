@@ -1,32 +1,36 @@
 {
   lib,
-  python3Packages,
+  pythonPackages,
   fetchPypi,
   mopidy,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "Mopidy-Iris";
+pythonPackages.buildPythonApplication rec {
+  pname = "mopidy-iris";
   version = "3.69.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "Mopidy-Iris";
     hash = "sha256-PEAXnapiyxozijR053I7zQYRYLeDOV719L0QbO2r4r4=";
   };
 
-  propagatedBuildInputs =
-    [
-      mopidy
-    ]
-    ++ (with python3Packages; [
-      configobj
-      requests
-      tornado
-    ]);
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
+    mopidy
+    pythonPackages.configobj
+    pythonPackages.requests
+    pythonPackages.tornado
+  ];
 
   # no tests implemented
   doCheck = false;
+
+  pythonImportsCheck = [ "mopidy_iris" ];
 
   meta = with lib; {
     homepage = "https://github.com/jaedb/Iris";

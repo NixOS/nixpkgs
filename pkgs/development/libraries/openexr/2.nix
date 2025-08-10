@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_CTEST_ARGUMENTS=--timeout;3600"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [

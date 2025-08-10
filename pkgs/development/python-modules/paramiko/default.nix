@@ -57,7 +57,8 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-relaxed
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "paramiko" ];
 

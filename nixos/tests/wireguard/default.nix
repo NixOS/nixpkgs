@@ -1,46 +1,49 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+  runTest,
+  lib,
+  pkgs,
   # Test current default (LTS) and latest kernel
   kernelVersionsToTest ? [
-    (pkgs.lib.versions.majorMinor pkgs.linuxPackages.kernel.version)
+    (lib.versions.majorMinor pkgs.linuxPackages.kernel.version)
     "latest"
   ],
 }:
 
-with pkgs.lib;
-
 let
   tests =
     let
-      callTest = p: args: import p ({ inherit system pkgs; } // args);
+      callTest =
+        p: args:
+        runTest {
+          imports = [ p ];
+          _module = { inherit args; };
+        };
     in
     {
       basic = callTest ./basic.nix;
       amneziawg = callTest ./amneziawg.nix;
       namespaces = callTest ./namespaces.nix;
       networkd = callTest ./networkd.nix;
-      wg-quick = callTest ./wg-quick.nix;
+      wg-quick = args: callTest ./wg-quick.nix ({ nftables = false; } // args);
       wg-quick-nftables = args: callTest ./wg-quick.nix ({ nftables = true; } // args);
-      amneziawg-quick = callTest ./amneziawg-quick.nix;
+      amneziawg-quick = args: callTest ./amneziawg-quick.nix ({ nftables = false; } // args);
       generated = callTest ./generated.nix;
-      dynamic-refresh = callTest ./dynamic-refresh.nix;
+      dynamic-refresh = args: callTest ./dynamic-refresh.nix ({ useNetworkd = false; } // args);
       dynamic-refresh-networkd = args: callTest ./dynamic-refresh.nix ({ useNetworkd = true; } // args);
     };
 in
 
-listToAttrs (
-  flip concatMap kernelVersionsToTest (
+lib.listToAttrs (
+  lib.flip lib.concatMap kernelVersionsToTest (
     version:
     let
-      v' = replaceStrings [ "." ] [ "_" ] version;
+      v' = lib.replaceString "." "_" version;
     in
-    flip mapAttrsToList tests (
+    lib.flip lib.mapAttrsToList tests (
       name: test:
-      nameValuePair "wireguard-${name}-linux-${v'}" (test {
+      lib.nameValuePair "wireguard-${name}-linux-${v'}" (test {
         kernelPackages =
-          if v' == "latest" then pkgs.linuxPackages_latest else pkgs.linuxKernel.packages."linux_${v'}";
+          pkgs: if v' == "latest" then pkgs.linuxPackages_latest else pkgs.linuxKernel.packages."linux_${v'}";
       })
     )
   )

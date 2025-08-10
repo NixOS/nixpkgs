@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     pam
     libp11.passthru.openssl
     libp11
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
   meta = with lib; {
     homepage = "https://github.com/OpenSC/pam_p11";

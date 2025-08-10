@@ -152,6 +152,7 @@ stdenv.mkDerivation rec {
       # have any Darwin systems to test things on at the moment.
       #
       # [1]: <https://logs.ofborg.org/?key=nixos/nixpkgs.355710&attempt_id=747dd630-5068-4ba9-9c50-6f150634ef1a>
-    ] ++ lib.platforms.darwin;
+    ]
+    ++ lib.platforms.darwin;
   };
 }

@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yt6801";
-  version = "1.0.29-20240812";
+  version = "1.0.30-20250430";
 
   src =
     let
@@ -23,14 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
     fetchzip {
       stripRoot = false;
       url = "https://www.motor-comm.com/Public/Uploads/uploadfile/files/${uploadDate}/yt6801-linux-driver-${versionName}.zip";
-      sha256 = "sha256-oz6CeOUN6QWKXxe3WUZljhGDTFArsknjzBuQ4IchGeU=";
+      sha256 = "sha256-6HeU3bbTaKOCy3X+nMpC9/bBc+0c4Ip5TdG+LGUGTKk=";
     };
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kmod ];
 
-  patches = lib.optionals (lib.versionAtLeast kernel.version "6.15") [
-    ./kernel_6.15_fix.patch
-  ];
+  patches =
+    lib.optionals (lib.versionAtLeast kernel.version "6.15") [
+      ./kernel_6.15_fix.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast kernel.version "6.16") [
+      ./kernel_6_16_fix.patch
+    ];
 
   postPatch = ''
     substituteInPlace src/Makefile \

@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
   version = "2.1.6";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "inkcut";
@@ -21,12 +21,14 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace inkcut/device/transports/printer/plugin.py \
-      --replace ", 'lpr', " ", '${cups}/bin/lpr', "
+      --replace-fail ", 'lpr', " ", '${cups}/bin/lpr', "
   '';
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     enamlx
     twisted
     lxml
@@ -36,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     pycups
     qtconsole
     pyqt5
-    setuptools
   ];
 
   # QtApplication.instance() does not work during tests?

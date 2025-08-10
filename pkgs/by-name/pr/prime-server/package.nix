@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kevinkreiser";
     repo = "prime_server";
-    rev = version;
+    tag = version;
     sha256 = "0izmmvi3pvidhlrgfpg4ccblrw6fil3ddxg5cfxsz4qbh399x83w";
     fetchSubmodules = true;
   };
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kevinkreiser/prime_server";
     license = licenses.bsd2;
     maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

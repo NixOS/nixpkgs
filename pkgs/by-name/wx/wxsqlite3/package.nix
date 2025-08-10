@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wxsqlite3";
-  version = "4.10.8";
+  version = "4.10.12";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
-    hash = "sha256-Gd3RuSQgN9D9nAsQqlFjDPTC1OldoVc3E6TXr0VwTCI=";
+    hash = "sha256-3t8SQJdB7ivuCnsr5TxmgslQNkvz+O/mE3NB+R/kXHM=";
   };
 
   nativeBuildInputs = [

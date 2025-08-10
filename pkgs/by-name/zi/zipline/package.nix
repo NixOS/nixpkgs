@@ -32,17 +32,23 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zm2xNhWghg/Pa9LhLzV+AG/tfiSjAiSnGs8OMnC0Tpw=";
+    hash = "sha256-16D44QQHrXn6y+3IRsWh6iHSr+o4l3zHDW7SOFMsHnc=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse --short HEAD > $out/.git_head
+      rm -rf $out/.git
+    '';
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-kIneqtLPZ29PzluKUGO4XbQYHbNddu0kTfoP4C22k7U=";
   };
 
@@ -87,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
+        --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
         ${
@@ -116,8 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
-    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     homepage = "https://zipline.diced.sh/";
+    downloadPage = "https://github.com/diced/zipline";
+    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";

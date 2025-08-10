@@ -36,23 +36,22 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace cmake/tools/version_files.py \
-        --replace-fail "args.git_version" '"${finalAttrs.version}"' \
-        --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
-        --replace-fail "args.git_date" '"1970-01-01"'
-      substituteInPlace cmake/templates/lcevc_dec.pc.in \
-        --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
+  postPatch = ''
+    substituteInPlace cmake/tools/version_files.py \
+      --replace-fail "args.git_version" '"${finalAttrs.version}"' \
+      --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
+      --replace-fail "args.git_date" '"1970-01-01"'
+    substituteInPlace cmake/templates/lcevc_dec.pc.in \
+      --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
 
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
-      substituteInPlace cmake/modules/Compiler/GNU.cmake \
-        --replace-fail "-mavx" ""
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
+    substituteInPlace cmake/modules/Compiler/GNU.cmake \
+      --replace-fail "-mavx" ""
 
-       substituteInPlace src/core/decoder/src/common/simd.c \
-        --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
-    '';
+     substituteInPlace src/core/decoder/src/common/simd.c \
+      --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
+  '';
 
   env = {
     includedir = "${placeholder "dev"}/include";

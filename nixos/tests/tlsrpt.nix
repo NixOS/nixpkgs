@@ -35,7 +35,7 @@
 
     # Enabling postfix should put sendmail as the sendmail setting
     machine.succeed("grep -q sendmail_script=sendmail /etc/tlsrpt/reportd.cfg")
-    machine.succeed("systemctl show --property SupplementaryGroups postfix.service | grep tlsrpt")
+    machine.succeed("getent group tlsrpt | grep -q postfix")
 
     machine.log(machine.succeed("systemd-analyze security tlsrpt-collectd.service tlsrpt-reportd.service | grep -v ✓"))
   '';

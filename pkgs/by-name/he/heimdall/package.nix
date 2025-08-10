@@ -37,11 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional enableGUI qt6.wrapQtAppsHook;
+  ]
+  ++ lib.optional enableGUI qt6.wrapQtAppsHook;
 
   buildInputs = [
     (libusb1.override { withStatic = stdenv.hostPlatform.isWindows; })
-  ] ++ lib.optional enableGUI qt6.qtbase;
+  ]
+  ++ lib.optional enableGUI qt6.qtbase;
 
   preInstall = ''
     mkdir -p $udev/lib/udev/rules.d

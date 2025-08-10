@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";
-    description = "The Samarium Programming Language";
+    description = "Samarium Programming Language";
     license = licenses.mit;
     homepage = "https://samarium-lang.github.io/Samarium";
     maintainers = with maintainers; [ sigmanificient ];

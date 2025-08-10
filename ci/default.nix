@@ -49,7 +49,7 @@ let
 
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt-rfc-style underneath,
+        # This uses nixfmt underneath,
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
@@ -75,6 +75,23 @@ let
           includes = [ "*" ];
           priority = 1;
         };
+
+        # TODO: Upstream this into treefmt-nix eventually:
+        #   https://github.com/numtide/treefmt-nix/issues/387
+        settings.formatter.markdown-code-runner = {
+          command = pkgs.lib.getExe pkgs.markdown-code-runner;
+          options =
+            let
+              config = pkgs.writers.writeTOML "markdown-code-runner-config" {
+                presets.nixfmt = {
+                  language = "nix";
+                  command = [ (pkgs.lib.getExe pkgs.nixfmt) ];
+                };
+              };
+            in
+            [ "--config=${config}" ];
+          includes = [ "*.md" ];
+        };
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
@@ -89,7 +106,7 @@ let
     };
 
 in
-{
+rec {
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
@@ -110,7 +127,20 @@ in
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
+    # TODO: Raise nixVersions.minimum to 2.24 and flip back to it.
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
+  tarball = import ../pkgs/top-level/make-tarball.nix {
+    # Mirrored from top-level release.nix:
+    nixpkgs = {
+      outPath = pkgs.lib.cleanSource ../.;
+      revCount = 1234;
+      shortRev = "abcdef";
+      revision = "0000000000000000000000000000000000000000";
+    };
+    officialRelease = false;
+    inherit pkgs lib-tests;
+    nix = pkgs.nixVersions.latest;
+  };
 }

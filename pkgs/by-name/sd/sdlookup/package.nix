@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "sdlookup";
-  version = "unstable-2022-03-10";
+  version = "0-unstable-2022-03-10";
 
   src = fetchFromGitHub {
     owner = "j3ssie";

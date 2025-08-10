@@ -49,54 +49,51 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.6";
+  version = "0.20.7";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-PYf8Ms0hmG4EWDjb+er6YvY/UFiQbIF6dtCL87O4rOs=";
+    hash = "sha256-g+SU6qDnafLiNOzZ75HUPgifuC8A+rb+KoqJoMHBJ04=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ec4rIYZsIvYIezDm956aYSM75e/GEoNilVjm40691Ys=";
+  cargoHash = "sha256-rwWSKJMI/4fY60m+vGqTqrTijJN6d0PfQH417Ku9+0E=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      rustPlatform.bindgenHook
-      installShellFiles
-      # Tries to access $HOME when installing shell files, and on Darwin
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rustPlatform.bindgenHook
+    installShellFiles
+    # Tries to access $HOME when installing shell files, and on Darwin
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      fontconfig
-    ]
-    ++ lib.optionals withSixel [ libsixel ]
-    ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
-    ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
-    ++ lib.optionals (withAudioBackend == "rodiojack") [
-      alsa-lib
-      libjack2
-    ]
-    ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
-    ++ lib.optionals (withAudioBackend == "gstreamer") [
-      gst_all_1.gstreamer
-      gst_all_1.gst-devtools
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ];
+  buildInputs = [
+    openssl
+    dbus
+    fontconfig
+  ]
+  ++ lib.optionals withSixel [ libsixel ]
+  ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
+  ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
+  ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
+  ++ lib.optionals (withAudioBackend == "rodiojack") [
+    alsa-lib
+    libjack2
+  ]
+  ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
+  ++ lib.optionals (withAudioBackend == "gstreamer") [
+    gst_all_1.gstreamer
+    gst_all_1.gst-devtools
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 
   buildNoDefaultFeatures = true;
 

@@ -21,7 +21,7 @@ buildHomeAssistantComponent rec {
 
   meta = {
     changelog = "https://github.com/jmcollin78/versatile_thermostat/releases/tag/${version}";
-    description = "A full-featured thermostat";
+    description = "Full-featured thermostat";
     homepage = "https://github.com/jmcollin78/versatile_thermostat";
     maintainers = with lib.maintainers; [ pwoelfel ];
     license = lib.licenses.mit;

@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "test_array_prefixitems_invalid"
   ];
 
-  pytestFlagsArray = [ "-vvv" ];
+  pytestFlags = [ "-vvv" ];
 
   pythonImportsCheck = [ "openapi_schema_validator" ];
 

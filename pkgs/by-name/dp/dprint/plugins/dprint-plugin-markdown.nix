@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "Markdown code formatter.";
+  description = "Markdown code formatter";
   hash = "sha256-2lpgVMExOjMVRTvX6hGRWuufwh2AIkiXaOzkN8LhZgw=";
   initConfig = {
     configExcludes = [ ];

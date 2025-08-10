@@ -89,28 +89,27 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  postPatch =
-    ''
-      substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
-        --replace-fail "/usr/bin/touch" "touch"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      # Fix build on gcc-13 due to missing includes
-      sed -e '1i #include <cstdint>' -i \
-        Libraries/libutil/Headers/libutil/Permissions.h \
-        Libraries/pbxbuild/Headers/pbxbuild/Tool/AuxiliaryFile.h \
-        Libraries/pbxbuild/Headers/pbxbuild/Tool/Invocation.h
+  postPatch = ''
+    substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
+      --replace-fail "/usr/bin/touch" "touch"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # Fix build on gcc-13 due to missing includes
+    sed -e '1i #include <cstdint>' -i \
+      Libraries/libutil/Headers/libutil/Permissions.h \
+      Libraries/pbxbuild/Headers/pbxbuild/Tool/AuxiliaryFile.h \
+      Libraries/pbxbuild/Headers/pbxbuild/Tool/Invocation.h
 
-      # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-      sed 1i'#include <sys/sysmacros.h>' \
-        -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Apple Open Sourced LZFSE, but not libcompression, and it isn't
-      # part of an impure framework we can add
-      substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
-        --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
-    '';
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+    sed 1i'#include <sys/sysmacros.h>' \
+      -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+    # part of an impure framework we can add
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
+  '';
 
   strictDeps = true;
 

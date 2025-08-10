@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoreconfHook269,
+  autoreconfHook,
   autoconf-archive,
   pkg-config,
   gtk3,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook269
+    autoreconfHook
     autoconf-archive
     pkg-config
     wrapGAppsHook3

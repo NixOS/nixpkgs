@@ -63,63 +63,60 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      makeWrapper
-      pkg-config
-      file
-      python3
-    ]
-    ++ (with perlPackages; [
-      perl
-      ExtUtilsMakeMaker
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+    file
+    python3
+  ]
+  ++ (with perlPackages; [
+    perl
+    ExtUtilsMakeMaker
+  ])
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
-  buildInputs =
-    [
-      openssl
-      pcre
-      perlPackages.perl
-    ]
-    ++ lib.optional withBrotli brotli
-    ++ lib.optional withCap libcap
-    ++ lib.optional withCjose cjose
-    ++ lib.optional withCurl curl
-    ++ lib.optional withGeoIP geoip
-    ++ lib.optional withHiredis hiredis
-    ++ lib.optional withHwloc hwloc
-    ++ lib.optional withImageMagick imagemagick
-    ++ lib.optional withJansson jansson
-    ++ lib.optional withKyotoCabinet kyotocabinet
-    ++ lib.optional withCurses ncurses
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional withUnwind libunwind
-    ++ lib.optional withMaxmindDB libmaxminddb;
+  buildInputs = [
+    openssl
+    pcre
+    perlPackages.perl
+  ]
+  ++ lib.optional withBrotli brotli
+  ++ lib.optional withCap libcap
+  ++ lib.optional withCjose cjose
+  ++ lib.optional withCurl curl
+  ++ lib.optional withGeoIP geoip
+  ++ lib.optional withHiredis hiredis
+  ++ lib.optional withHwloc hwloc
+  ++ lib.optional withImageMagick imagemagick
+  ++ lib.optional withJansson jansson
+  ++ lib.optional withKyotoCabinet kyotocabinet
+  ++ lib.optional withCurses ncurses
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional withUnwind libunwind
+  ++ lib.optional withMaxmindDB libmaxminddb;
 
   outputs = [
     "out"
     "man"
   ];
 
-  postPatch =
-    ''
-      patchShebangs \
-        iocore/aio/test_AIO.sample \
-        src/traffic_via/test_traffic_via \
-        src/traffic_logstats/tests \
-        tools/check-unused-dependencies
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace configure.ac \
-        --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # 'xcrun leaks' probably requires non-free XCode
-      substituteInPlace iocore/net/test_certlookup.cc \
-        --replace-fail 'xcrun leaks' 'true'
-    '';
+  postPatch = ''
+    patchShebangs \
+      iocore/aio/test_AIO.sample \
+      src/traffic_via/test_traffic_via \
+      src/traffic_logstats/tests \
+      tools/check-unused-dependencies
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace configure.ac \
+      --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # 'xcrun leaks' probably requires non-free XCode
+    substituteInPlace iocore/net/test_certlookup.cc \
+      --replace-fail 'xcrun leaks' 'true'
+  '';
 
   configureFlags = [
     "--enable-layout=NixOS"

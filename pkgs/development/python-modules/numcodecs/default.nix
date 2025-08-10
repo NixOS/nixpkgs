@@ -61,7 +61,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     importlib-metadata
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = "pushd $out";

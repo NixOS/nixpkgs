@@ -52,19 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace doc/info/Makefile.am --replace "/usr/bin/env perl" "${perl}/bin/perl"
   '';
 
-  postInstall =
-    ''
-      # Make sure that maxima can find its runtime dependencies.
-      for prog in "$out/bin/"*; do
-        wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
-      done
-      # Move documentation into the right place.
-      mkdir -p $out/share/doc
-      ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
-    ''
-    + (lib.optionalString (lisp-compiler.pname == "ecl") ''
-      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
-    '');
+  postInstall = ''
+    # Make sure that maxima can find its runtime dependencies.
+    for prog in "$out/bin/"*; do
+      wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
+    done
+    # Move documentation into the right place.
+    mkdir -p $out/share/doc
+    ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
+  ''
+  + (lib.optionalString (lisp-compiler.pname == "ecl") ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
+  '');
 
   patches = [
     # fix path to info dir (see https://trac.sagemath.org/ticket/11348)

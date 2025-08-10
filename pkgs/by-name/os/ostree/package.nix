@@ -80,67 +80,64 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      libtool
-      pkg-config
-      glib
-      gtk-doc
-      which
-      makeWrapper
-      bison
-      libxslt
-      docbook-xsl-nons
-      docbook_xml_dtd_42
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    glib
+    gtk-doc
+    which
+    makeWrapper
+    bison
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
-  buildInputs =
-    [
-      curl
-      glib
-      e2fsprogs
-      libsoup_3 # for trivial-httpd for tests
-      gpgme
-      fuse3
-      libselinux
-      libsodium
-      libcap
-      libarchive
-      bzip2
-      xz
-      util-linuxMinimal # for libmount
+  buildInputs = [
+    curl
+    glib
+    e2fsprogs
+    libsoup_3 # for trivial-httpd for tests
+    gpgme
+    fuse3
+    libselinux
+    libsodium
+    libcap
+    libarchive
+    bzip2
+    xz
+    util-linuxMinimal # for libmount
 
-      # for installed tests
-      testPython
-    ]
-    ++ lib.optionals withComposefs [
-      (lib.getDev composefs)
-    ]
-    ++ lib.optionals withGjs [
-      gjs
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+    # for installed tests
+    testPython
+  ]
+  ++ lib.optionals withComposefs [
+    (lib.getDev composefs)
+  ]
+  ++ lib.optionals withGjs [
+    gjs
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--with-curl"
-      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-      "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
-      "--enable-installed-tests"
-      "--with-ed25519-libsodium"
-    ]
-    ++ lib.optionals withComposefs [
-      "--with-composefs"
-    ];
+  configureFlags = [
+    "--with-curl"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
+    "--enable-installed-tests"
+    "--with-ed25519-libsodium"
+  ]
+  ++ lib.optionals withComposefs [
+    "--with-composefs"
+  ];
 
   makeFlags = [
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"

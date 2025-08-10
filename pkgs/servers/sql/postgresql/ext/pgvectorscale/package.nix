@@ -7,13 +7,7 @@
   postgresqlTestExtension,
 }:
 
-let
-  buildPgrxExtension' = buildPgrxExtension.override {
-    # Upstream only works with a fixed minor version of cargo-pgrx for each release.
-    cargo-pgrx = cargo-pgrx_0_12_6;
-  };
-in
-buildPgrxExtension' (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   pname = "pgvectorscale";
   version = "0.7.0";
 
@@ -26,7 +20,6 @@ buildPgrxExtension' (finalAttrs: {
 
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CeRyDn9VhxfjWFJ1/Z/XvOUQOSnDoHHZAqgfYTeKU0o=";
   cargoPatches = [
     ./add-Cargo.lock.patch
@@ -38,6 +31,7 @@ buildPgrxExtension' (finalAttrs: {
   ];
 
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
@@ -71,6 +65,11 @@ buildPgrxExtension' (finalAttrs: {
   };
 
   meta = {
+    # PostgreSQL 18 support issue upstream: https://github.com/timescale/pgvectorscale/issues/249
+    # Check after next package update.
+    broken =
+      lib.warnIf (finalAttrs.version != "0.7.0") "Is postgresql18Packages.pgvectorscale still broken?"
+        (lib.versionAtLeast postgresql.version "18");
     homepage = "https://github.com/timescale/pgvectorscale";
     teams = [ lib.teams.flyingcircus ];
     description = "Complement to pgvector for high performance, cost efficient vector search on large workloads";

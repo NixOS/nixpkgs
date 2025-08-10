@@ -23,6 +23,7 @@ let
     # Binary GHCs
     "ghc865Binary"
     "ghc8107Binary"
+    "ghc902Binary"
     "ghc924Binary"
     "ghc963Binary"
     "ghc984Binary"
@@ -91,6 +92,10 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
 
+      ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+
       ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
         llvmPackages = pkgs.llvmPackages_12;
       };
@@ -137,10 +142,14 @@ in
       ghc90 = compiler.ghc902;
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
         bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
+          # GHC >= 9.0 removed the armv7l bindist
+          if stdenv.buildPlatform.isAarch32 then
+            bb.packages.ghc8107Binary
+          # No suitable bindists for powerpc64le
+          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+            bb.packages.ghc902
           else
-            bb.packages.ghc8107Binary;
+            bb.packages.ghc902Binary;
         inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
         python3 = buildPackages.python311; # so that we don't have two of them
         # Need to use apple's patched xattr until
@@ -155,17 +164,12 @@ in
         bootPkgs =
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          # Use 8.10 as a workaround where possible to keep bootstrap path short.
 
-          # On ARM text won't build with GHC 8.10.*
-          if stdenv.buildPlatform.isAarch then
-            # TODO(@sternenseemann): package bindist
-            bb.packages.ghc902
           # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc902
           else
-            bb.packages.ghc8107Binary;
+            bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -179,17 +183,12 @@ in
         bootPkgs =
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          # Use 8.10 as a workaround where possible to keep bootstrap path short.
 
-          # On ARM text won't build with GHC 8.10.*
-          if stdenv.buildPlatform.isAarch then
-            # TODO(@sternenseemann): package bindist
-            bb.packages.ghc902
           # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc902
           else
-            bb.packages.ghc8107Binary;
+            bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -416,7 +415,7 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
         llvmPackages = pkgs.llvmPackages_15;
       };
-      ghc910 = compiler.ghc9101;
+      ghc910 = compiler.ghc9102;
       ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -519,6 +518,12 @@ in
         buildHaskellPackages = bh.packages.ghc8107Binary;
         ghc = bh.compiler.ghc8107Binary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+      ghc902Binary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc902Binary;
+        ghc = bh.compiler.ghc902Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
       ghc924Binary = callPackage ../development/haskell-modules {
@@ -625,7 +630,7 @@ in
         ghc = bh.compiler.ghc9102;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
       };
-      ghc910 = packages.ghc9101;
+      ghc910 = packages.ghc9102;
       ghc9121 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9121;
         ghc = bh.compiler.ghc9121;

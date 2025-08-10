@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0rc-unstable-2025-06-18";
+  version = "1.0-unstable-2025-07-13";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "71edf793fcd2726c4212f7915194c60107dc2809";
-    hash = "sha256-B/qWdt+fWSov54zA+7S25bEVxqQuspo5oT3MyMk4Ato=";
+    rev = "13a9825c9a84fdbf42d0d4b922f9c2e0920ed19e";
+    hash = "sha256-16QcMsYARA5tXeEtCyV2jsWSRwrcBJBYSxG5YtYMPa4=";
   };
 
   nativeBuildInputs = [
@@ -44,21 +44,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      SDL2
-      enet
-      libarchive
-      libslirp
-      libGL
-      qtbase
-      qtmultimedia
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      qtwayland
-    ];
+  buildInputs = [
+    SDL2
+    enet
+    libarchive
+    libslirp
+    libGL
+    qtbase
+    qtmultimedia
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    qtwayland
+  ];
 
   cmakeFlags = [ (lib.cmakeBool "USE_QT6" true) ];
 

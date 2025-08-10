@@ -239,7 +239,8 @@ let
       wheel
       build
       which
-    ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
+    ]
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
 
     buildInputs = [
       curl
@@ -256,7 +257,8 @@ let
       six
       snappy-cpp
       zlib
-    ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
+    ]
+    ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
     # We don't want to be quite so picky regarding bazel version
     postPatch = ''
@@ -339,22 +341,21 @@ let
 
     # Make sure Bazel knows about our configuration flags during fetching so that the
     # relevant dependencies can be downloaded.
-    bazelFlags =
-      [
-        "-c opt"
-        # See https://bazel.build/external/advanced#overriding-repositories for
-        # information on --override_repository flag.
-        "--override_repository=xla=${xla}"
-      ]
-      ++ lib.optionals effectiveStdenv.cc.isClang [
-        # bazel depends on the compiler frontend automatically selecting these flags based on file
-        # extension but our clang doesn't.
-        # https://github.com/NixOS/nixpkgs/issues/150655
-        "--cxxopt=-x"
-        "--cxxopt=c++"
-        "--host_cxxopt=-x"
-        "--host_cxxopt=c++"
-      ];
+    bazelFlags = [
+      "-c opt"
+      # See https://bazel.build/external/advanced#overriding-repositories for
+      # information on --override_repository flag.
+      "--override_repository=xla=${xla}"
+    ]
+    ++ lib.optionals effectiveStdenv.cc.isClang [
+      # bazel depends on the compiler frontend automatically selecting these flags based on file
+      # extension but our clang doesn't.
+      # https://github.com/NixOS/nixpkgs/issues/150655
+      "--cxxopt=-x"
+      "--cxxopt=c++"
+      "--host_cxxopt=-x"
+      "--host_cxxopt=c++"
+    ];
 
     # We intentionally overfetch so we can share the fetch derivation across all the different configurations
     fetchAttrs = {

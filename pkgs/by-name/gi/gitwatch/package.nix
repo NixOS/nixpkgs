@@ -23,7 +23,7 @@ runCommand "gitwatch"
     nativeBuildInputs = [ makeWrapper ];
 
     meta = {
-      description = "Watch a filesystem and automatically stage changes to a git.";
+      description = "Watch a filesystem and automatically stage changes to a git";
       mainProgram = "gitwatch";
       longDescription = ''
         A bash script to watch a file or folder and commit changes to a git repo.

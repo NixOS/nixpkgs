@@ -28,18 +28,17 @@ buildPythonPackage rec {
     hash = "sha256-6SjVpKFtiiLLU7tZ3hBQr0KT/YEQyywJj0e21/dJRzk=";
   };
 
-  propagatedBuildInputs =
-    [
-      opencv-python
-      torch
-      pillow
-      pywavelets
-      numpy
-    ]
-    ++ lib.optionals withOnnx [
-      onnx
-      onnxruntime
-    ];
+  propagatedBuildInputs = [
+    opencv-python
+    torch
+    pillow
+    pywavelets
+    numpy
+  ]
+  ++ lib.optionals withOnnx [
+    onnx
+    onnxruntime
+  ];
 
   postPatch = ''
     substituteInPlace imwatermark/rivaGan.py --replace \

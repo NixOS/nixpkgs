@@ -107,20 +107,19 @@ in
     systemd.services =
       let
         useUrlPath = (cfg.database.urlPath != null);
-        serviceConfig =
-          {
-            DynamicUser = true;
-            # using the same user to simplify db connection
-            User = cfg.database.user;
-            ExecStart = "${pkgs.windmill}/bin/windmill";
+        serviceConfig = {
+          DynamicUser = true;
+          # using the same user to simplify db connection
+          User = cfg.database.user;
+          ExecStart = "${pkgs.windmill}/bin/windmill";
 
-            Restart = "always";
-          }
-          // lib.optionalAttrs useUrlPath {
-            LoadCredential = [
-              "DATABASE_URL_FILE:${cfg.database.urlPath}"
-            ];
-          };
+          Restart = "always";
+        }
+        // lib.optionalAttrs useUrlPath {
+          LoadCredential = [
+            "DATABASE_URL_FILE:${cfg.database.urlPath}"
+          ];
+        };
         db_url_envs =
           lib.optionalAttrs useUrlPath {
             DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
@@ -176,7 +175,8 @@ in
             WM_BASE_URL = cfg.baseUrl;
             RUST_LOG = cfg.logLevel;
             MODE = "server";
-          } // db_url_envs;
+          }
+          // db_url_envs;
         };
 
         windmill-worker = {
@@ -194,7 +194,8 @@ in
             MODE = "worker";
             WORKER_GROUP = "default";
             KEEP_JOB_DIR = "false";
-          } // db_url_envs;
+          }
+          // db_url_envs;
         };
 
         windmill-worker-native = {
@@ -211,7 +212,8 @@ in
             RUST_LOG = cfg.logLevel;
             MODE = "worker";
             WORKER_GROUP = "native";
-          } // db_url_envs;
+          }
+          // db_url_envs;
         };
       };
   };

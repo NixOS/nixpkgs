@@ -57,7 +57,8 @@ qtModule {
     "bin/qthelpconverter"
     "bin/lprodump"
     "bin/qdistancefieldgenerator"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && qtdeclarative != null

@@ -37,8 +37,7 @@ The `package.nix` may look like this:
 # The return value must be a derivation
 stdenv.mkDerivation {
   # ...
-  buildInputs =
-    lib.optional enableBar libbar;
+  buildInputs = lib.optional enableBar libbar;
 }
 ```
 
@@ -70,9 +69,7 @@ and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-p
 
 ```nix
 {
-  libfoo = callPackage ../by-name/so/some-package/package.nix {
-    libbar = libbar_2;
-  };
+  libfoo = callPackage ../by-name/so/some-package/package.nix { libbar = libbar_2; };
 }
 ```
 
@@ -99,18 +96,16 @@ Definitions like the following however, _can_ be transitioned:
 
 ```nix
 # all-packages.nix
-fooWithBaz = foo.override {
-  bar = baz;
-};
-# turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
 {
-  foo,
-  baz,
-}:
-
-foo.override {
-  bar = baz;
+  fooWithBaz = foo.override { bar = baz; };
 }
+```
+
+```nix
+# turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
+{ foo, baz }:
+
+foo.override { bar = baz; }
 ```
 
 ## Limitations
@@ -182,10 +177,7 @@ because it establishes a clear connection between related attributes.
 This is not required, but the above solution also allows refactoring the definitions into a separate file:
 
 ```nix
-{
-  inherit (import ../tools/foo pkgs)
-    foo_1 foo_2;
-}
+{ inherit (import ../tools/foo pkgs) foo_1 foo_2; }
 ```
 
 ```nix
@@ -200,19 +192,19 @@ Alternatively using [`callPackages`](https://nixos.org/manual/nixpkgs/unstable/#
 if `callPackage` isn't used underneath and you want the same `.override` arguments for all attributes:
 
 ```nix
-{
-  inherit (callPackages ../tools/foo { })
-    foo_1 foo_2;
-}
+{ inherit (callPackages ../tools/foo { }) foo_1 foo_2; }
 ```
 
 ```nix
 # pkgs/tools/foo/default.nix
+{ stdenv }:
 {
-  stdenv
-}: {
-  foo_1 = stdenv.mkDerivation { /* ... */ };
-  foo_2 = stdenv.mkDerivation { /* ... */ };
+  foo_1 = stdenv.mkDerivation {
+    # ...
+  };
+  foo_2 = stdenv.mkDerivation {
+    # ...
+  };
 }
 ```
 

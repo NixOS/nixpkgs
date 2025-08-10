@@ -58,7 +58,8 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     requests
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     bqstorage = [
@@ -75,19 +76,18 @@ buildPythonPackage rec {
     ipython = [ ipython ];
   };
 
-  nativeCheckInputs =
-    [
-      freezegun
-      google-cloud-datacatalog
-      google-cloud-storage
-      google-cloud-testutils
-      mock
-      psutil
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.pandas
-    ++ optional-dependencies.ipython;
+  nativeCheckInputs = [
+    freezegun
+    google-cloud-datacatalog
+    google-cloud-storage
+    google-cloud-testutils
+    mock
+    psutil
+    pytest-xdist
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.pandas
+  ++ optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''

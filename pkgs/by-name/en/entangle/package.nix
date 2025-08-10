@@ -77,38 +77,37 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      dbus
-      libepoxy
-      elfutils
-      gexiv2
-      glib
-      lerc
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      gtk3
-      lcms2
-      libdatrie
-      libgphoto2
-      libgudev
-      libpeas
-      libraw
-      libselinux
-      libsepol
-      libthai
-      libunwind
-      libxkbcommon
-      orc
-      udev
-      util-linux
-      zstd
-    ]
-    ++ (with xorg; [
-      libXdmcp
-      libXtst
-    ]);
+  buildInputs = [
+    at-spi2-core
+    dbus
+    libepoxy
+    elfutils
+    gexiv2
+    glib
+    lerc
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    gtk3
+    lcms2
+    libdatrie
+    libgphoto2
+    libgudev
+    libpeas
+    libraw
+    libselinux
+    libsepol
+    libthai
+    libunwind
+    libxkbcommon
+    orc
+    udev
+    util-linux
+    zstd
+  ]
+  ++ (with xorg; [
+    libXdmcp
+    libXtst
+  ]);
 
   # Disable building of doc/reference since it requires network connection to render XML to HTML
   # Patch build script shebangs

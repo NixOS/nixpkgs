@@ -28,32 +28,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  propagatedBuildInputs =
-    [
-      assimp
-      jrl-cmakemodules
-      octomap
-      qhull
-      zlib
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.boost
-      python3Packages.eigenpy
-    ];
+  propagatedBuildInputs = [
+    assimp
+    jrl-cmakemodules
+    octomap
+    qhull
+    zlib
+  ]
+  ++ lib.optionals (!pythonSupport) [
+    boost
+    eigen
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.boost
+    python3Packages.eigenpy
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)

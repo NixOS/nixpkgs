@@ -17,6 +17,12 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   meta = {
+    # PostgreSQL 18 support issue upstream: https://github.com/citusdata/pg_cron/issues/396
+    # Note: already fixed on `main` branch.
+    # Check after next package update.
+    broken = lib.warnIf (
+      finalAttrs.version != "1.6.5"
+    ) "Is postgresql18Packages.pg_cron still broken?" (lib.versionAtLeast postgresql.version "18");
     description = "Run Cron jobs through PostgreSQL";
     homepage = "https://github.com/citusdata/pg_cron";
     changelog = "https://github.com/citusdata/pg_cron/releases/tag/v${finalAttrs.version}";

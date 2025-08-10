@@ -35,7 +35,7 @@ let
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      (case (range "8.20" "9.0") "2.4.0")
+      (case (range "8.20" "9.1") "2.4.0")
       (case (range "8.19" "9.0") "2.3.0")
       (case (range "8.17" "8.20") "2.2.0")
       (case (range "8.17" "8.18") "2.1.0")
@@ -131,21 +131,20 @@ let
 
           buildFlags = lib.optional withDoc "doc";
 
-          preBuild =
-            ''
-              if [[ -f etc/utils/ssrcoqdep ]]
-              then patchShebangs etc/utils/ssrcoqdep
-              fi
-              if [[ -f etc/buildlibgraph ]]
-              then patchShebangs etc/buildlibgraph
-              fi
-            ''
-            + ''
-              # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
-              test -d mathcomp && cd mathcomp
-              cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
-            ''
-            + lib.optionalString (package == "all") pkgallMake;
+          preBuild = ''
+            if [[ -f etc/utils/ssrcoqdep ]]
+            then patchShebangs etc/utils/ssrcoqdep
+            fi
+            if [[ -f etc/buildlibgraph ]]
+            then patchShebangs etc/buildlibgraph
+            fi
+          ''
+          + ''
+            # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
+            test -d mathcomp && cd mathcomp
+            cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
+          ''
+          + lib.optionalString (package == "all") pkgallMake;
 
           meta = {
             homepage = "https://math-comp.github.io/";

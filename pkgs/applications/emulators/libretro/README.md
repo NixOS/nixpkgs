@@ -22,16 +22,18 @@ this:
 { pkgs, ... }:
 
 let
-  retroarchWithCores = (pkgs.retroarch.withCores (cores: with cores; [
-    bsnes
-    mgba
-    quicknes
-  ]));
+  retroarchWithCores = (
+    pkgs.retroarch.withCores (
+      cores: with cores; [
+        bsnes
+        mgba
+        quicknes
+      ]
+    )
+  );
 in
 {
-  environment.systemPackages = [
-    retroarchWithCores
-  ];
+  environment.systemPackages = [ retroarchWithCores ];
 }
 ```
 

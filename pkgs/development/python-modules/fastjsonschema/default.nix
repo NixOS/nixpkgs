@@ -27,20 +27,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests =
-    [
-      "benchmark"
-      # these tests require network access
-      "remote ref"
-      "definitions"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_compile_to_code_custom_format" # cannot import temporary module created during test
-    ];
+  disabledTests = [
+    "benchmark"
+    # these tests require network access
+    "remote ref"
+    "definitions"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_compile_to_code_custom_format" # cannot import temporary module created during test
+  ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # fastjsonschema.exceptions.JsonSchemaDefinitionException: Unknown format uuid/duration
-    "--deselect=tests/json_schema/test_draft2019.py::test"
+    "tests/json_schema/test_draft2019.py::test"
   ];
 
   pythonImportsCheck = [ "fastjsonschema" ];

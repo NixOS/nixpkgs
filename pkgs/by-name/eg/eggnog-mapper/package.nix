@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
-  version = "2.1.12";
+  version = "2.1.13";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = "eggnog-mapper";
     tag = version;
-    hash = "sha256-+luxXQmtGufYrA/9Ak3yKzbotOj2HM3vhIoOxE+Ty1U=";
+    hash = "sha256-Gu4D8DBvgCPlO+2MjeNZy6+lNqsIlksegWmmYvEZmUU=";
   };
 
   postPatch = ''
@@ -33,15 +33,14 @@ python3Packages.buildPythonApplication rec {
     zlib
   ];
 
-  propagatedBuildInputs =
-    [
-      wget
-    ]
-    ++ (with python3Packages; [
-      biopython
-      psutil
-      xlsxwriter
-    ]);
+  propagatedBuildInputs = [
+    wget
+  ]
+  ++ (with python3Packages; [
+    biopython
+    psutil
+    xlsxwriter
+  ]);
 
   # Tests rely on some of the databases being available, which is not bundled
   # with this package as (1) in total, they represent >100GB of data, and (2)
