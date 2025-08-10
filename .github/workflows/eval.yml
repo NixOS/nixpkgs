@@ -52,8 +52,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
         env:
@@ -173,8 +171,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Combine all output paths and eval stats
         run: |
@@ -251,8 +247,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Ensure flake outputs on all systems still evaluate
         run: nix flake check --all-systems --no-build ./untrusted

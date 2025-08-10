@@ -31,8 +31,6 @@ jobs:
           merged-as-untrusted: true
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Check that files are formatted
         run: |
@@ -64,8 +62,6 @@ jobs:
           merged-as-untrusted: true
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Parse all nix files
         run: |
@@ -88,8 +84,6 @@ jobs:
           target-as-trusted: true
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
-        with:
-          extra_nix_config: sandbox = true
 
       - name: Running nixpkgs-vet
         env:
