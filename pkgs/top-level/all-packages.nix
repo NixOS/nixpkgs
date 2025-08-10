@@ -9382,7 +9382,6 @@ with pkgs;
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
   termbench-pro = callPackage ../by-name/te/termbench-pro/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
     fmt = fmt_11;
   };
 
