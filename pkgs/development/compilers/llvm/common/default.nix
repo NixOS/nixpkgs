@@ -273,178 +273,113 @@ let
 
       bintools = wrapBintoolsWith { bintools = tools.bintools-unwrapped; };
 
-      clangUseLLVM = wrapCCWith (
-        rec {
-          cc = tools.clang-unwrapped;
-          libcxx = targetLlvmLibraries.libcxx;
-          bintools = bintools';
-          extraPackages = [
-            targetLlvmLibraries.compiler-rt
-          ]
-          ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
-            targetLlvmLibraries.libunwind
-          ];
-          extraBuildCommands =
-            lib.optionalString (lib.versions.major metadata.release_version == "13") (
-              ''
-                echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-                echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-              ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
-                echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-                echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
-                echo "-lunwind" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString stdenv.targetPlatform.isWasm ''
-                echo "-fno-exceptions" >> $out/nix-support/cc-cflags
-              ''
+      clangUseLLVM = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = targetLlvmLibraries.libcxx;
+        bintools = bintools';
+        extraPackages = [
+          targetLlvmLibraries.compiler-rt
+        ]
+        ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
+          targetLlvmLibraries.libunwind
+        ];
+        extraBuildCommands = mkExtraBuildCommands cc;
+        nixSupport.cc-cflags = [
+          "-rtlib=compiler-rt"
+          "-Wno-unused-command-line-argument"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional (
+          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+        ) "--unwindlib=libunwind"
+        ++ lib.optional (
+          !stdenv.targetPlatform.isWasm
+          && !stdenv.targetPlatform.isFreeBSD
+          && stdenv.targetPlatform.useLLVM or false
+        ) "-lunwind"
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+        nixSupport.cc-ldflags = lib.optionals (
+          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+        ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+      };
+
+      clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = targetLlvmLibraries.libcxx;
+        bintools = bintools';
+        extraPackages = [
+          targetLlvmLibraries.compiler-rt-no-libc
+        ]
+        ++
+          lib.optionals
+            (
+              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
             )
-            + mkExtraBuildCommands cc;
-        }
-        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags = [
-            "-rtlib=compiler-rt"
-            "-Wno-unused-command-line-argument"
-            "-B${targetLlvmLibraries.compiler-rt}/lib"
-          ]
-          ++ lib.optional (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-          ) "--unwindlib=libunwind"
-          ++ lib.optional (
-            !stdenv.targetPlatform.isWasm
-            && !stdenv.targetPlatform.isFreeBSD
-            && stdenv.targetPlatform.useLLVM or false
-          ) "-lunwind"
-          ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-          nixSupport.cc-ldflags = lib.optionals (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
-        }
-      );
+            [
+              targetLlvmLibraries.libunwind
+            ];
+        extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
+        nixSupport.cc-cflags = [
+          "-rtlib=compiler-rt"
+          "-Wno-unused-command-line-argument"
+          "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+        ]
+        ++ lib.optional (
+          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+        ) "--unwindlib=libunwind"
+        ++ lib.optional (
+          !stdenv.targetPlatform.isWasm
+          && !stdenv.targetPlatform.isFreeBSD
+          && stdenv.targetPlatform.useLLVM or false
+        ) "-lunwind"
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+        nixSupport.cc-ldflags = lib.optionals (
+          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+        ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+      };
 
-      clangWithLibcAndBasicRtAndLibcxx = wrapCCWith (
-        rec {
-          cc = tools.clang-unwrapped;
-          libcxx = targetLlvmLibraries.libcxx;
-          bintools = bintools';
-          extraPackages = [
-            targetLlvmLibraries.compiler-rt-no-libc
-          ]
-          ++
-            lib.optionals
-              (
-                !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-              )
-              [
-                targetLlvmLibraries.libunwind
-              ];
-          extraBuildCommands =
-            lib.optionalString (lib.versions.major metadata.release_version == "13") (
-              ''
-                echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-                echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
-              ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isDarwin) ''
-                echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-                echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
-                echo "-lunwind" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString stdenv.targetPlatform.isWasm ''
-                echo "-fno-exceptions" >> $out/nix-support/cc-cflags
-              ''
-            )
-            + mkExtraBuildCommandsBasicRt cc;
-        }
-        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags = [
-            "-rtlib=compiler-rt"
-            "-Wno-unused-command-line-argument"
-            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-          ]
-          ++ lib.optional (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-          ) "--unwindlib=libunwind"
-          ++ lib.optional (
-            !stdenv.targetPlatform.isWasm
-            && !stdenv.targetPlatform.isFreeBSD
-            && stdenv.targetPlatform.useLLVM or false
-          ) "-lunwind"
-          ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-          nixSupport.cc-ldflags = lib.optionals (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
-        }
-      );
+      clangWithLibcAndBasicRt = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = null;
+        bintools = bintools';
+        extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
+        extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
+        nixSupport.cc-cflags = [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          "-nostdlib++"
+        ]
+        ++ lib.optional (
+          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+        ) "-fno-exceptions";
+      };
 
-      clangWithLibcAndBasicRt = wrapCCWith (
-        rec {
-          cc = tools.clang-unwrapped;
-          libcxx = null;
-          bintools = bintools';
-          extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
-          extraBuildCommands =
-            lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
-              echo "-nostdlib++" >> $out/nix-support/cc-cflags
-            ''
-            + mkExtraBuildCommandsBasicRt cc;
-        }
-        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags = [
-            "-rtlib=compiler-rt"
-            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-            "-nostdlib++"
-          ]
-          ++ lib.optional (
-            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-          ) "-fno-exceptions";
-        }
-      );
+      clangNoLibcWithBasicRt = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = null;
+        bintools = bintoolsNoLibc';
+        extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
+        extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
+        nixSupport.cc-cflags = [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+        ]
+        ++ lib.optional (
+          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+        ) "-fno-exceptions";
+      };
 
-      clangNoLibcWithBasicRt = wrapCCWith (
-        rec {
-          cc = tools.clang-unwrapped;
-          libcxx = null;
-          bintools = bintoolsNoLibc';
-          extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
-          extraBuildCommands =
-            lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
-            ''
-            + mkExtraBuildCommandsBasicRt cc;
-        }
-        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags = [
-            "-rtlib=compiler-rt"
-            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-          ]
-          ++ lib.optional (
-            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-          ) "-fno-exceptions";
-        }
-      );
-
-      clangNoLibcNoRt = wrapCCWith (
-        rec {
-          cc = tools.clang-unwrapped;
-          libcxx = null;
-          bintools = bintoolsNoLibc';
-          extraPackages = [ ];
-          # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
-          extraBuildCommands = mkExtraBuildCommands0 cc;
-        }
-        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags = lib.optional (
-            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-          ) "-fno-exceptions";
-        }
-      );
+      clangNoLibcNoRt = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = null;
+        bintools = bintoolsNoLibc';
+        extraPackages = [ ];
+        # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
+        extraBuildCommands = mkExtraBuildCommands0 cc;
+        nixSupport.cc-cflags = lib.optional (
+          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+        ) "-fno-exceptions";
+      };
 
       # This is an "oddly ordered" bootstrap just for Darwin. Probably
       # don't want it otherwise.
@@ -498,14 +433,7 @@ let
   libraries = lib.makeExtensible (
     libraries:
     let
-      callPackage = newScope (
-        libraries
-        // buildLlvmTools
-        // args
-        // metadata
-        # Previously monorepoSrc was erroneously not being passed through.
-        // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
-      );
+      callPackage = newScope (libraries // buildLlvmTools // args // metadata);
     in
     (
       {
@@ -561,19 +489,13 @@ let
 
         libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-        libcxx = callPackage ./libcxx (
-          {
-            stdenv =
-              if stdenv.hostPlatform.isDarwin then
-                overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
-              else
-                overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-          }
-          // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
-            # TODO: remove this, causes LLVM 13 packages rebuild.
-            inherit (metadata) monorepoSrc; # Preserve bug during #307211 refactor.
-          }
-        );
+        libcxx = callPackage ./libcxx {
+          stdenv =
+            if stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
+            else
+              overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+        };
 
         libunwind = callPackage ./libunwind {
           stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;

@@ -30,17 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
-    ''
-      mkdir -p "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    ''
-    + ''
-      cp -r ${monorepoSrc}/libclc "$out"
-    ''
-  );
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/libclc "$out"
+  '');
 
   sourceRoot = "${finalAttrs.src.name}/libclc";
 

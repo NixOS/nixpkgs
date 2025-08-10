@@ -38,21 +38,15 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/llvm "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          cp -r ${monorepoSrc}/clang-tools-extra "$out"
-          cp -r ${monorepoSrc}/mlir "$out"
-        ''
-      )
+      runCommand "${pname}-src-${version}" { } (''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/third-party "$out"
+        cp -r ${monorepoSrc}/llvm "$out"
+        cp -r ${monorepoSrc}/clang "$out"
+        cp -r ${monorepoSrc}/clang-tools-extra "$out"
+        cp -r ${monorepoSrc}/mlir "$out"
+      '')
     else
       src;
 
