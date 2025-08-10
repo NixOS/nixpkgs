@@ -24,23 +24,9 @@ if [ "$VERSION_MAJOR" -ge "14" ]; then
   readonly SOURCES=(
     "llvm.monorepoSrc"
   )
-elif [ "$VERSION_MAJOR" -eq "13" ]; then
-  readonly SOURCES=(
-    "llvm.src"
-  )
 else
   readonly SOURCES=(
-    "clang-unwrapped.src"
-    "compiler-rt.src"
-    "clang-unwrapped.clang-tools-extra_src"
-    "libcxx.src"
-    "libcxxabi.src"
-    "libunwind.src"
-    "lld.src"
-    "lldb.src"
     "llvm.src"
-    "llvm.polly_src"
-    "openmp.src"
   )
 fi
 

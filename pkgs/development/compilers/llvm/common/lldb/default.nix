@@ -72,7 +72,7 @@ stdenv.mkDerivation (
       "dev"
     ];
 
-    sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${finalAttrs.src.name}/lldb";
+    sourceRoot = "${finalAttrs.src.name}/lldb";
 
     patches =
       let

@@ -698,8 +698,6 @@ mapAliases {
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
 
   # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
-  clang9Stdenv = throw "clang9Stdenv has been removed from nixpkgs"; # Added 2024-04-08
-  clang12Stdenv = lowPrio llvmPackages_12.stdenv; # preserve, reason: see above
   clang13Stdenv = lowPrio llvmPackages_13.stdenv; # preserve, reason: see above
   clang14Stdenv = lowPrio llvmPackages_14.stdenv; # preserve, reason: see above
   clang15Stdenv = lowPrio llvmPackages_15.stdenv; # preserve, reason: see above
@@ -708,10 +706,6 @@ mapAliases {
   clang18Stdenv = lowPrio llvmPackages_18.stdenv; # preserve, reason: see above
   clang19Stdenv = lowPrio llvmPackages_19.stdenv; # preserve, reason: see above
 
-  clang-tools_9 = throw "clang-tools_9 has been removed from nixpkgs"; # Added 2024-04-08
-  clang_9 = throw "clang_9 has been removed from nixpkgs"; # Added 2024-04-08
-
-  clang-tools_12 = llvmPackages_12.clang-tools; # Added 2024-04-22
   clang-tools_13 = llvmPackages_13.clang-tools; # Added 2024-04-22
   clang-tools_14 = llvmPackages_14.clang-tools; # Added 2024-04-22
   clang-tools_15 = llvmPackages_15.clang-tools; # Added 2024-04-22
@@ -1485,10 +1479,21 @@ mapAliases {
 
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git; # Added 2024-08-02
 
-  lld_9 = throw "lld_9 has been removed from nixpkgs"; # Added 2024-04-08
-  lldb_9 = throw "lldb_9 has been removed from nixpkgs"; # Added 2024-04-08
   llvmPackages_9 = throw "llvmPackages_9 has been removed from nixpkgs"; # Added 2024-04-08
   llvm_9 = throw "llvm_9 has been removed from nixpkgs"; # Added 2024-04-08
+  lld_9 = throw "lld_9 has been removed from nixpkgs"; # Added 2024-04-08
+  lldb_9 = throw "lldb_9 has been removed from nixpkgs"; # Added 2024-04-08
+  clang_9 = throw "clang_9 has been removed from nixpkgs"; # Added 2024-04-08
+  clang9Stdenv = throw "clang9Stdenv has been removed from nixpkgs"; # Added 2024-04-08
+  clang-tools_9 = throw "clang-tools_9 has been removed from nixpkgs"; # Added 2024-04-08
+
+  llvmPackages_12 = throw "llvmPackages_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
+  llvm_12 = throw "llvm_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
+  lld_12 = throw "lld_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
+  lldb_12 = throw "lldb_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
+  clang_12 = throw "clang_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
+  clang12Stdenv = throw "clang12Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
+  clang-tools_12 = throw "clang-tools_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
 
   lobster-two = throw "'lobster-two' has been renamed to/replaced by 'google-fonts'"; # Converted to throw 2024-10-17
   loc = throw "'loc' has been removed due to lack of upstream maintenance. Consider 'tokei' as an alternative."; # Added 2025-01-25

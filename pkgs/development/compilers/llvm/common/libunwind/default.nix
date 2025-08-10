@@ -80,9 +80,6 @@ stdenv.mkDerivation (
     ++ lib.optional (lib.versionAtLeast release_version "15") (
       lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind"
     )
-    ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
-      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
-    ]
     ++ devExtraCmakeFlags;
 
     prePatch =

@@ -84,27 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix build on armv6l
       ./armv6-no-ldrexd-strexd.patch
     ]
-    ++ lib.optional (lib.versions.major release_version == "12") (fetchpatch {
-      # fixes the parallel build on aarch64 darwin
-      name = "fix-symlink-race-aarch64-darwin.patch";
-      url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
-      relative = "compiler-rt";
-      hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
+    ++ lib.optional (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "18") (
+      getVersionFile "compiler-rt/gnu-install-dirs.patch"
+    )
+    ++ lib.optional (lib.versionOlder release_version "18") (fetchpatch {
+      name = "cfi_startproc-after-label.patch";
+      url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
+      stripLen = 1;
+      hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
     })
-    ++ lib.optional (
-      lib.versions.major release_version == "12"
-      || (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "18")
-    ) (getVersionFile "compiler-rt/gnu-install-dirs.patch")
     ++
-      lib.optional (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
-        (fetchpatch {
-          name = "cfi_startproc-after-label.patch";
-          url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
-          stripLen = 1;
-          hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
-        })
-    ++
-      lib.optional (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+      lib.optional (lib.versionOlder release_version "18")
         # Prevent a compilation error on darwin
         (getVersionFile "compiler-rt/darwin-targetconditionals.patch")
     # TODO: make unconditional and remove in <15 section below. Causes rebuilds.
@@ -123,13 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
       ./armv6-mcr-dmb.patch
       ./armv6-sync-ops-no-thumb.patch
     ]
-    ++
-      lib.optionals (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
-        [
-          # Fix build on armv6l
-          ./armv6-scudo-no-yield.patch
-        ]
-    ++ lib.optionals (lib.versionAtLeast release_version "13") [
+    ++ lib.optionals (lib.versionOlder release_version "18") [
+      # Fix build on armv6l
+      ./armv6-scudo-no-yield.patch
+    ]
+    ++ [
       (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
     ]
     ++ lib.optional (lib.versions.major release_version == "19") (fetchpatch {
@@ -277,16 +265,13 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       )
     )
-    +
-      lib.optionalString
-        (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14")
-        ''
-          # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
-          # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
-          substituteInPlace ../libcxx/utils/merge_archives.py \
-            --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
-            --replace-fail "distutils.spawn." ""
-        ''
+    + lib.optionalString (lib.versionOlder release_version "14") ''
+      # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
+      # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
+      substituteInPlace ../libcxx/utils/merge_archives.py \
+        --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
+        --replace-fail "distutils.spawn." ""
+    ''
     +
       lib.optionalString (lib.versionAtLeast release_version "19")
         # codesign in sigtool doesn't support the various options used by the build
