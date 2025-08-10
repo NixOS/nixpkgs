@@ -12,12 +12,7 @@
     }
     {
       before = "17";
-      after = "15";
       path = ../15;
-    }
-    {
-      before = "16";
-      path = ../14;
     }
   ];
   "clang/aarch64-tblgen.patch" = [
@@ -72,13 +67,12 @@
     }
     {
       before = "18";
-      path = ../14;
+      path = ../15;
     }
   ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
       before = "17";
-      after = "15";
       path = ../15;
     }
     {
@@ -99,25 +93,18 @@
   ];
   "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
-      after = "15";
       path = ../15;
     }
   ];
   "libunwind/gnu-install-dirs.patch" = [
     {
       before = "17";
-      after = "15";
       path = ../15;
     }
   ];
   "compiler-rt/X86-support-extension.patch" = [
     {
-      after = "15";
       path = ../15;
-    }
-    {
-      before = "15";
-      path = ../14;
     }
   ];
   "compiler-rt/armv6-scudo-libatomic.patch" = [
@@ -126,28 +113,12 @@
       path = ../19;
     }
     {
-      after = "15";
       before = "19";
       path = ../15;
-    }
-    {
-      before = "15";
-      path = ../14;
-    }
-  ];
-  "compiler-rt/armv7l.patch" = [
-    {
-      before = "15";
-      path = ../14;
     }
   ];
   "compiler-rt/gnu-install-dirs.patch" = [
     {
-      before = "15";
-      path = ../14;
-    }
-    {
-      after = "15";
       before = "17";
       path = ../15;
     }
@@ -158,12 +129,7 @@
   ];
   "compiler-rt/darwin-targetconditionals.patch" = [
     {
-      path = ../14;
-    }
-  ];
-  "compiler-rt/codesign.patch" = [
-    {
-      path = ../14;
+      path = ../15;
     }
   ];
   "compiler-rt/normalize-var.patch" = [
@@ -173,29 +139,24 @@
     }
     {
       before = "16";
-      path = ../14;
+      path = ../15;
     }
   ];
   "lldb/procfs.patch" = [
     {
-      after = "15";
       path = ../15;
-    }
-    {
-      before = "15";
-      path = ../14;
     }
   ];
   "lldb/resource-dir.patch" = [
     {
       before = "16";
-      path = ../14;
+      path = ../15;
     }
   ];
   "llvm/no-pipes.patch" = [
     {
       before = "16";
-      path = ../14;
+      path = ../15;
     }
   ];
   "openmp/fix-find-tool.patch" = [
@@ -212,7 +173,7 @@
     }
     {
       before = "16";
-      path = ../14;
+      path = ../15;
     }
   ];
   "libclc/use-default-paths.patch" = [

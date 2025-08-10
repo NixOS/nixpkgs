@@ -125,7 +125,7 @@ stdenv.mkDerivation (
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
       [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      ++ [
         # Running the tests involves invoking binaries (like `opt`) that depend on
         # the LLVM dylibs and reference them by absolute install path (i.e. their
         # nix store path).
@@ -240,10 +240,10 @@ stdenv.mkDerivation (
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
       ]
-      ++
-        lib.optional (lib.versionAtLeast release_version "15")
-          # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
+      ++ [
+        # Just like the `llvm-lit-cfg` patch, but for `polly`.
+        (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
+      ]
       ++
         lib.optional (lib.versions.major release_version == "20")
           # Test failure on riscv64, fixed in llvm 21
@@ -262,8 +262,8 @@ stdenv.mkDerivation (
       # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
       updateAutotoolsGnuConfigScriptsHook
       python
+      ninja
     ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ optionals enableManpages [
       # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
       # splicing does *not* work with the latter. (TODO: fix)
@@ -290,7 +290,7 @@ stdenv.mkDerivation (
     nativeCheckInputs = [
       which
     ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
+    ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -301,119 +301,113 @@ stdenv.mkDerivation (
         +
           # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
           # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
-          (optionalString (lib.versionAtLeast release_version "15") (
-            ''
-              rm test/MC/ELF/cfi-version.ll
+          ''
+            rm test/MC/ELF/cfi-version.ll
 
-            ''
-            +
-              # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
-              # and thus fails under the sandbox:
-              (
-                if lib.versionAtLeast release_version "16" then
-                  ''
-                    substituteInPlace unittests/TargetParser/Host.cpp \
-                      --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
-                  ''
-                else
-                  ''
-                    substituteInPlace unittests/Support/Host.cpp \
-                      --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
-                  ''
-              )
-            +
-              # This test tries to call the intrinsics `@llvm.roundeven.f32` and
-              # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
-              # and `roundeven` on macOS and FreeBSD.
-              #
-              # However these functions are glibc specific so the test fails:
-              #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
-              #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
-              #
-              # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
-              # pass there?
-              optionalString (lib.versionAtLeast release_version "16") ''
-                substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-                  --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-                  --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+          ''
+        +
+          # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
+          # and thus fails under the sandbox:
+          (
+            if lib.versionAtLeast release_version "16" then
               ''
-            +
-              # fails when run in sandbox
-              optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
-                substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                  --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+                substituteInPlace unittests/TargetParser/Host.cpp \
+                  --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
               ''
-          ))
+            else
+              ''
+                substituteInPlace unittests/Support/Host.cpp \
+                  --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
+              ''
+          )
+        +
+          # This test tries to call the intrinsics `@llvm.roundeven.f32` and
+          # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
+          # and `roundeven` on macOS and FreeBSD.
+          #
+          # However these functions are glibc specific so the test fails:
+          #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
+          #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
+          #
+          # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
+          # pass there?
+          optionalString (lib.versionAtLeast release_version "16") ''
+            substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
+              --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+              --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+          ''
+        +
+          # fails when run in sandbox
+          optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
+            substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+              --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+          ''
       )
       +
         # dup of above patch with different conditions
-        optionalString
-          (
-            stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "15"
-          )
-          (
-            optionalString (lib.versionOlder release_version "16") ''
-              substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-                --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-                --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+          optionalString (lib.versionOlder release_version "16") ''
+            substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
+              --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+              --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
 
-            ''
-            +
-              # fails when run in sandbox
-              (
-                (optionalString (lib.versionAtLeast release_version "18") ''
-                  substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                    --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-                '')
-                +
-                  # This test fails on darwin x86_64 because `sw_vers` reports a different
-                  # macOS version than what LLVM finds by reading
-                  # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
-                  # the sandbox on macOS).
-                  #
-                  # The `sw_vers` provided by nixpkgs reports the macOS version associated
-                  # with the `CoreFoundation` framework with which it was built. Because
-                  # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
-                  # `sw_vers` reports is not guaranteed to match the macOS version of the host
-                  # that's building this derivation.
-                  #
-                  # Astute readers will note that we only _patch_ this test on aarch64-darwin
-                  # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
-                  # So why does this test pass on aarch64?
-                  #
-                  # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
-                  # CoreFoundation framework instead of the nixpkgs provided one.
-                  #
-                  # Not entirely sure what the right fix is here. I'm assuming aarch64
-                  # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
-                  # (still digging into how this ends up happening, will follow up) but that
-                  # aside I think the more pertinent question is: should we be patching LLVM's
-                  # macOS version detection logic to use `sw_vers` instead of reading host
-                  # paths? This *is* a way in which details about builder machines can creep
-                  # into the artifacts that are produced, affecting reproducibility, but it's
-                  # not clear to me when/where/for what this even gets used in LLVM.
-                  #
-                  # TODO(@rrbutani): fix/follow-up
-                  (
-                    if lib.versionAtLeast release_version "16" then
-                      ''
-                        substituteInPlace unittests/TargetParser/Host.cpp \
-                          --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-                      ''
-                    else
-                      ''
-                        substituteInPlace unittests/Support/Host.cpp \
-                          --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-                      ''
-                  )
-                +
-                  # This test fails with a `dysmutil` crash; have not yet dug into what's
-                  # going on here (TODO(@rrbutani)).
-                  lib.optionalString (lib.versionOlder release_version "19") ''
-                    rm test/tools/dsymutil/ARM/obfuscated.test
-                  ''
-              )
-          )
+          ''
+          +
+            # fails when run in sandbox
+            (
+              (optionalString (lib.versionAtLeast release_version "18") ''
+                substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+                  --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+              '')
+              +
+                # This test fails on darwin x86_64 because `sw_vers` reports a different
+                # macOS version than what LLVM finds by reading
+                # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
+                # the sandbox on macOS).
+                #
+                # The `sw_vers` provided by nixpkgs reports the macOS version associated
+                # with the `CoreFoundation` framework with which it was built. Because
+                # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
+                # `sw_vers` reports is not guaranteed to match the macOS version of the host
+                # that's building this derivation.
+                #
+                # Astute readers will note that we only _patch_ this test on aarch64-darwin
+                # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
+                # So why does this test pass on aarch64?
+                #
+                # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
+                # CoreFoundation framework instead of the nixpkgs provided one.
+                #
+                # Not entirely sure what the right fix is here. I'm assuming aarch64
+                # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
+                # (still digging into how this ends up happening, will follow up) but that
+                # aside I think the more pertinent question is: should we be patching LLVM's
+                # macOS version detection logic to use `sw_vers` instead of reading host
+                # paths? This *is* a way in which details about builder machines can creep
+                # into the artifacts that are produced, affecting reproducibility, but it's
+                # not clear to me when/where/for what this even gets used in LLVM.
+                #
+                # TODO(@rrbutani): fix/follow-up
+                (
+                  if lib.versionAtLeast release_version "16" then
+                    ''
+                      substituteInPlace unittests/TargetParser/Host.cpp \
+                        --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+                    ''
+                  else
+                    ''
+                      substituteInPlace unittests/Support/Host.cpp \
+                        --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+                    ''
+                )
+              +
+                # This test fails with a `dysmutil` crash; have not yet dug into what's
+                # going on here (TODO(@rrbutani)).
+                lib.optionalString (lib.versionOlder release_version "19") ''
+                  rm test/tools/dsymutil/ARM/obfuscated.test
+                ''
+            )
+        )
       +
         # FileSystem permissions tests fail with various special bits
         ''
@@ -438,11 +432,9 @@ stdenv.mkDerivation (
         )
       +
         # timing-based tests are trouble
-        lib.optionalString
-          (lib.versionAtLeast release_version "15" && lib.versionOlder release_version "17")
-          ''
-            rm utils/lit/tests/googletest-timeout.py
-          ''
+        lib.optionalString (lib.versionOlder release_version "17") ''
+          rm utils/lit/tests/googletest-timeout.py
+        ''
       +
         # valgrind unhappy with musl or glibc, but fails w/musl only
         optionalString stdenv.hostPlatform.isMusl ''
@@ -496,6 +488,40 @@ stdenv.mkDerivation (
       )
     '';
 
+    # Defensive check: some paths (that we make symlinks to) depend on the release
+    # version, for example:
+    #  - https://github.com/llvm/llvm-project/blob/406bde9a15136254f2b10d9ef3a42033b3cb1b16/clang/lib/Headers/CMakeLists.txt#L185
+    #
+    # So we want to sure that the version in the source matches the release
+    # version we were given.
+    #
+    # We do this check here, in the LLVM build, because it happens early.
+    postConfigure =
+      let
+        v = lib.versions;
+        major = v.major release_version;
+        minor = v.minor release_version;
+        patch = v.patch release_version;
+      in
+      ''
+        # $1: part, $2: expected
+        check_version() {
+          part="''${1^^}"
+          part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
+
+          if [[ "$part" != "$2" ]]; then
+            echo >&2 \
+              "mismatch in the $1 version! we have version ${release_version}" \
+              "and expected the $1 version to be '$2'; the source has '$part' instead"
+            exit 3
+          fi
+        }
+
+        check_version major ${major}
+        check_version minor ${minor}
+        check_version patch ${patch}
+      '';
+
     # E.g. Mesa uses the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (
       enableSharedLibraries && !stdenv.hostPlatform.isDarwin
@@ -512,22 +538,12 @@ stdenv.mkDerivation (
         #
         # Some flags don't need to be repassed because LLVM already does so (like
         # CMAKE_BUILD_TYPE), others are irrelevant to the result.
-        flagsForLlvmConfig =
-          (
-            if lib.versionOlder release_version "15" then
-              [
-                (lib.cmakeFeature "LLVM_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/llvm/")
-              ]
-            else
-              [
-                (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
-              ]
-          )
-          ++ [
-            (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
-            (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
-            (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-          ];
+        flagsForLlvmConfig = [
+          (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
+          (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
+          (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
+          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+        ];
       in
       flagsForLlvmConfig
       ++ [
@@ -617,19 +633,9 @@ stdenv.mkDerivation (
       moveToOutput "bin/llvm-config*" "$dev"
       substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
         --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
+      substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+        --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
     ''
-    + (
-      if lib.versionOlder release_version "15" then
-        ''
-          substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-            --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
-        ''
-      else
-        ''
-          substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-            --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
-        ''
-    )
     + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
         if lib.versionOlder release_version "18" then "$shortVersion" else release_version
@@ -649,7 +655,6 @@ stdenv.mkDerivation (
     doCheck =
       !isDarwinBootstrap
       && !stdenv.hostPlatform.isAarch32
-      && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
       && (
         !stdenv.hostPlatform.isx86_32 # TODO: why
       )
@@ -682,92 +687,23 @@ stdenv.mkDerivation (
       '';
     };
   }
-  // lib.optionalAttrs enableManpages (
-    {
-      pname = "llvm-manpages";
+  // lib.optionalAttrs enableManpages {
+    pname = "llvm-manpages";
 
-      propagatedBuildInputs = [ ];
+    propagatedBuildInputs = [ ];
 
-      postPatch = null;
-      postInstall = null;
+    ninjaFlags = [ "docs-llvm-man" ];
+    installTargets = [ "install-docs-llvm-man" ];
 
-      outputs = [ "out" ];
+    doCheck = false;
 
-      doCheck = false;
+    postPatch = null;
+    postInstall = null;
 
-      meta = llvm_meta // {
-        description = "man pages for LLVM ${version}";
-      };
-    }
-    // (
-      if lib.versionOlder release_version "15" then
-        {
-          buildPhase = ''
-            make docs-llvm-man
-          '';
+    outputs = [ "out" ];
 
-          installPhase = ''
-            make -C docs install
-          '';
-        }
-      else
-        {
-          ninjaFlags = [ "docs-llvm-man" ];
-          installTargets = [ "install-docs-llvm-man" ];
-
-          postPatch = null;
-          postInstall = null;
-        }
-    )
-  )
-  // lib.optionalAttrs (lib.versionOlder release_version "15") {
-    # hacky fix: created binaries need to be run before installation
-    preBuild = ''
-      mkdir -p $out/
-      ln -sv $PWD/lib $out
-    '';
-
-    postBuild = ''
-      rm -fR $out
-    '';
-
-    preCheck = ''
-      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
-    '';
-  }
-  // lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    # Defensive check: some paths (that we make symlinks to) depend on the release
-    # version, for example:
-    #  - https://github.com/llvm/llvm-project/blob/406bde9a15136254f2b10d9ef3a42033b3cb1b16/clang/lib/Headers/CMakeLists.txt#L185
-    #
-    # So we want to sure that the version in the source matches the release
-    # version we were given.
-    #
-    # We do this check here, in the LLVM build, because it happens early.
-    postConfigure =
-      let
-        v = lib.versions;
-        major = v.major release_version;
-        minor = v.minor release_version;
-        patch = v.patch release_version;
-      in
-      ''
-        # $1: part, $2: expected
-        check_version() {
-          part="''${1^^}"
-          part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
-
-          if [[ "$part" != "$2" ]]; then
-            echo >&2 \
-              "mismatch in the $1 version! we have version ${release_version}" \
-              "and expected the $1 version to be '$2'; the source has '$part' instead"
-            exit 3
-          fi
-        }
-
-        check_version major ${major}
-        check_version minor ${minor}
-        check_version patch ${patch}
-      '';
+    meta = llvm_meta // {
+      description = "man pages for LLVM ${version}";
+    };
   }
 )

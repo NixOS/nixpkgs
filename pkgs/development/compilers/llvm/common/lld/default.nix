@@ -38,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (getVersionFile "lld/gnu-install-dirs.patch")
   ]
-  ++ lib.optional (lib.versions.major release_version == "14") (
-    getVersionFile "lld/fix-root-src-dir.patch"
-  )
   ++ lib.optional (lib.versionAtLeast release_version "16" && lib.versionOlder release_version "18") (
     getVersionFile "lld/add-table-base.patch"
   )
@@ -54,20 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional (lib.versionAtLeast release_version "15") ninja;
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
   buildInputs = [
     libllvm
     libxml2
   ];
 
-  cmakeFlags =
-    lib.optionals (lib.versionAtLeast release_version "15") [
-      (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
-    ]
-    ++ [
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+  ]
+  ++ devExtraCmakeFlags;
 
   # TODO: Remove on `staging`.
   postPatch = "";
