@@ -11232,6 +11232,7 @@ with pkgs;
     shadowSupport = false;
     systemdSupport = false;
     translateManpages = false;
+    withLastlog = false;
   };
 
   v4l-utils = callPackage ../os-specific/linux/v4l-utils { };

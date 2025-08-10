@@ -1311,7 +1311,7 @@ let
                 name = "lastlog";
                 enable = cfg.updateWtmp;
                 control = "required";
-                modulePath = "${package}/lib/security/pam_lastlog.so";
+                modulePath = "${pkgs.util-linux.lastlog}/lib/security/pam_lastlog2.so";
                 settings = {
                   silent = true;
                 };
@@ -2310,6 +2310,12 @@ in
     };
 
     environment.etc = lib.mapAttrs' makePAMService enabledServices;
+
+    systemd = lib.optionalAttrs config.security.pam.services.login.updateWtmp {
+      tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
+      services.lastlog2-import.enable = true;
+      packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
+    };
 
     security.pam.services = {
       other.text = ''

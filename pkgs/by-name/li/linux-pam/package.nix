@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests)
       pam-oath-login
       pam-u2f
+      pam-lastlog
       shadow
       sssd-ldap
       ;
