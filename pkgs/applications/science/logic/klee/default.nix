@@ -21,7 +21,7 @@
   includeDebugInfo ? true,
 
   # Enable KLEE asserts. Defaults to true, since LLVM is built with them.
-  asserts ? true,
+  asserts ? false,
 
   # Build the KLEE runtime in debug mode. Defaults to true, as this improves
   # stack traces of the software under test.
