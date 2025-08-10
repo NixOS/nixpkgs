@@ -47,7 +47,10 @@ appimageTools.wrapType2 {
     description = "All-in-one 3D slicer for resin and FDM printers";
     homepage = "https://lychee.mango3d.io/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ tarinaky ];
+    maintainers = with lib.maintainers; [ 
+      tarinaky
+      ZachDavies
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "lychee";
   };
