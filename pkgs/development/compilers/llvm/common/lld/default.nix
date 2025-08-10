@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (getVersionFile "lld/gnu-install-dirs.patch")
   ]
-  ++ lib.optional (lib.versionOlder release_version "18") (getVersionFile "lld/add-table-base.patch")
   ++ lib.optional (lib.versions.major release_version == "18") (
     # https://github.com/llvm/llvm-project/pull/97122
     fetchpatch {

@@ -51,9 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")
-    ++ lib.optional (lib.versionOlder release_version "18") (
-      getVersionFile "openmp/gnu-install-dirs.patch"
-    )
     ++ [
       (getVersionFile "openmp/run-lit-directly.patch")
     ];

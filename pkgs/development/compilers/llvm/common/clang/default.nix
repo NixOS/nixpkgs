@@ -70,20 +70,17 @@ stdenv.mkDerivation (
       ];
       stripLen = 1;
       hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-    })
-    ++
-      lib.optional (stdenv.isAarch64 && lib.versions.major release_version == "17")
-        # Fixes llvm17 tblgen builds on aarch64.
-        # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
-        (getVersionFile "clang/aarch64-tblgen.patch");
+    });
 
     nativeBuildInputs = [
       cmake
       python3
       ninja
     ]
-    ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
-    ++ lib.optional enableManpages python3.pkgs.sphinx
+    ++ lib.optionals enableManpages [
+      python3.pkgs.myst-parser
+      python3.pkgs.sphinx
+    ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
     buildInputs = [
@@ -150,10 +147,6 @@ stdenv.mkDerivation (
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
     ''
-    + (lib.optionalString (lib.versions.major release_version == "17") ''
-      mkdir -p $lib/lib/clang
-      mv $lib/lib/17 $lib/lib/clang/17
-    '')
     + (lib.optionalString
       ((lib.versionAtLeast release_version "19") && !(lib.versionAtLeast release_version "21"))
       ''
@@ -206,8 +199,7 @@ stdenv.mkDerivation (
         ++ lib.optional (!targetPlatform.isLinux || !targetPlatform.isx86_64) "shadowstack"
         ++ lib.optional (!targetPlatform.isAarch64 || !targetPlatform.isLinux) "pacret"
         ++ lib.optional (
-          (targetPlatform.isAarch64 && (lib.versionOlder release_version "18.1"))
-          || !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
+          !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
           || !(
             targetPlatform.isx86
             || targetPlatform.isPower64

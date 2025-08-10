@@ -83,7 +83,7 @@ stdenv.mkDerivation (
     pname = "llvm";
     inherit version;
 
-    # Used when creating a version-suffixed symlink of libLLVM.dylib
+    # TODO: Remove on `staging`.
     shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
     src =
@@ -178,18 +178,6 @@ stdenv.mkDerivation (
               stripLen = 1;
             }
           )
-      ++
-        lib.optional (lib.versions.major release_version == "17")
-          # Fixes a crash with -fzero-call-used-regs=used-gpr
-          # See also https://github.com/llvm/llvm-project/issues/75168
-          (
-            fetchpatch {
-              name = "fix-fzero-call-used-regs.patch";
-              url = "https://github.com/llvm/llvm-project/commit/f800c1f3b207e7bcdc8b4c7192928d9a078242a0.patch";
-              stripLen = 1;
-              hash = "sha256-e8YKrMy2rGcSJGC6er2V66cOnAnI+u1/yImkvsRsmg8=";
-            }
-          )
       ++ lib.optionals (lib.versions.major release_version == "18") [
         # Reorgs one test so the next patch applies
         (fetchpatch {
@@ -247,11 +235,6 @@ stdenv.mkDerivation (
       # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
       # splicing does *not* work with the latter. (TODO: fix)
       python3Packages.sphinx
-    ]
-    ++ optionals (lib.versionOlder version "18" && enableManpages) [
-      python3Packages.recommonmark
-    ]
-    ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
       python3Packages.myst-parser
     ];
 
@@ -309,7 +292,7 @@ stdenv.mkDerivation (
           ''
         +
           # fails when run in sandbox
-          optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
+          optionalString (!stdenv.hostPlatform.isx86) ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
@@ -319,10 +302,10 @@ stdenv.mkDerivation (
         optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
           # fails when run in sandbox
           (
-            (optionalString (lib.versionAtLeast release_version "18") ''
+            ''
               substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
                 --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-            '')
+            ''
             +
               # This test fails on darwin x86_64 because `sw_vers` reports a different
               # macOS version than what LLVM finds by reading
@@ -583,9 +566,7 @@ stdenv.mkDerivation (
         --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
     ''
     + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
-      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
-        if lib.versionOlder release_version "18" then "$shortVersion" else release_version
-      }.dylib
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
     ''
     + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
       if stdenv.buildPlatform.canExecute stdenv.hostPlatform then

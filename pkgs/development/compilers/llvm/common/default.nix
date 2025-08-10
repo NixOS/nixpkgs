@@ -171,12 +171,7 @@ let
           # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
           # So take the only patch known to be necessary.
           (metadata.getVersionFile "clang/gnu-install-dirs.patch")
-        ]
-        ++
-          lib.optional (stdenv.isAarch64 && lib.versions.major metadata.release_version == "17")
-            # Fixes llvm17 tblgen builds on aarch64.
-            # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
-            (metadata.getVersionFile "clang/aarch64-tblgen.patch");
+        ];
       };
 
       libclang = callPackage ./clang {

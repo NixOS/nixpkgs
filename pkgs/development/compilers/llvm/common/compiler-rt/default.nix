@@ -76,27 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     (getVersionFile "compiler-rt/normalize-var.patch")
     # Fix build on armv6l
     ./armv6-no-ldrexd-strexd.patch
-  ]
-  ++ lib.optional (lib.versionOlder release_version "18") (
-    getVersionFile "compiler-rt/gnu-install-dirs.patch"
-  )
-  ++ lib.optional (lib.versionOlder release_version "18") (fetchpatch {
-    name = "cfi_startproc-after-label.patch";
-    url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
-    stripLen = 1;
-    hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
-  })
-  ++
-    lib.optional (lib.versionOlder release_version "18")
-      # Prevent a compilation error on darwin
-      (getVersionFile "compiler-rt/darwin-targetconditionals.patch")
-  ++ [
     # See: https://github.com/NixOS/nixpkgs/pull/186575
     ./darwin-plistbuddy-workaround.patch
-  ]
-  ++ lib.optionals (lib.versionOlder release_version "18") [
-    # Fix build on armv6l
-    ./armv6-scudo-no-yield.patch
   ]
   ++ [
     (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
@@ -233,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           substituteInPlace lib/builtins/clear_cache.c \
             --replace-fail "#include <assert.h>" ""
-          substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast release_version "18") "/x86"}.c \
+          substituteInPlace lib/builtins/cpu_model/x86.c \
             --replace-fail "#include <assert.h>" ""
         ''
       )
