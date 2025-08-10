@@ -11,9 +11,11 @@ let
   maintainer = mkOptionType {
     name = "maintainer";
     check = email: lib.elem email (lib.attrValues lib.maintainers);
-    merge =
-      loc: defs:
-      lib.listToAttrs (lib.singleton (lib.nameValuePair (lib.last defs).file (lib.last defs).value));
+    merge = loc: defs: {
+      # lib.last: Perhaps this could be merged instead, if "at most once per module"
+      # is a problem (see option description).
+      ${(lib.last defs).file} = (lib.last defs).value;
+    };
   };
 
   listOfMaintainers = types.listOf maintainer // {
