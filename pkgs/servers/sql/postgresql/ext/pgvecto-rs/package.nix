@@ -1,7 +1,7 @@
 {
   buildPgrxExtension,
   cargo-pgrx_0_12_0_alpha_1,
-  clang_16,
+  clang,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -10,20 +10,9 @@
   postgresql,
   postgresqlTestExtension,
   replaceVars,
-  rustPlatform,
 }:
 
-let
-  # Upstream only works with clang 16, so we're pinning it here to
-  # avoid future incompatibility.
-  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 2
-  clang = clang_16;
-  rustPlatform' = rustPlatform // {
-    bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
-  };
-
-in
-(buildPgrxExtension.override { rustPlatform = rustPlatform'; }) (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
   cargo-pgrx = cargo-pgrx_0_12_0_alpha_1;
 
