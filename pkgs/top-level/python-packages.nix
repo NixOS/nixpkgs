@@ -15152,6 +15152,8 @@ self: super: with self; {
 
   pywlroots = callPackage ../development/python-modules/pywlroots { wlroots = pkgs.wlroots_0_17; };
 
+  pywmspro = callPackage ../development/python-modules/pywmspro { };
+
   pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyws66i = callPackage ../development/python-modules/pyws66i { };
