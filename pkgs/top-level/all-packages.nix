@@ -11099,7 +11099,6 @@ with pkgs;
     withHomed = false;
     withHwdb = false;
     withImportd = false;
-    withIptables = false;
     withLibBPF = false;
     withLibidn2 = false;
     withLocaled = false;
@@ -12543,6 +12542,10 @@ with pkgs;
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
+
+  kbdCompressed = callPackage ../by-name/kb/kbd/package.nix {
+    compress = true;
+  };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 

@@ -63,8 +63,8 @@
   libseccomp,
   withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools,
   kexec-tools,
-  bashInteractive,
   bash,
+  bashNonInteractive,
   libmicrohttpd,
   libfido2,
   p11-kit,
@@ -114,7 +114,6 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? !stdenv.hostPlatform.isMusl,
-  withIptables ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -401,7 +400,6 @@ stdenv.mkDerivation (finalAttrs: {
     (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
-    bashInteractive # for patch shebangs
   ]
 
   ++ lib.optionals withGcrypt [
@@ -427,7 +425,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
   ++ lib.optional withLibseccomp libseccomp
-  ++ lib.optional withIptables iptables
   ++ lib.optional withPam pam
   ++ lib.optional withPCRE2 pcre2
   ++ lib.optional withSelinux libselinux
@@ -466,10 +463,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version-tag" version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
-    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
+
+    # /bin/sh is also the upstream default. Explicitly set this so that we're
+    # independent of upstream changes to the default.
+    (lib.mesonOption "debug-shell" "/bin/sh")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
@@ -516,6 +516,10 @@ stdenv.mkDerivation (finalAttrs: {
     # SSH
     (lib.mesonOption "sshconfdir" "")
     (lib.mesonOption "sshdconfdir" "no")
+
+    # RPM
+    # This stops building/installing RPM specific tools.
+    (lib.mesonOption "rpmmacrosdir" "no")
 
     # Features
 
@@ -566,7 +570,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libcurl" wantCurl)
     (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
-    (lib.mesonEnable "libiptc" withIptables)
+    (lib.mesonEnable "libiptc" false)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
@@ -904,6 +908,11 @@ stdenv.mkDerivation (finalAttrs: {
           builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
         )
       );
+
+  disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
 
   passthru = {
     # The `interfaceVersion` attribute below points out the incompatibilities
