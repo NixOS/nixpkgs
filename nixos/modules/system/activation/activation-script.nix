@@ -317,7 +317,7 @@ in
       source ${config.system.build.earlyMountScript}
     '';
 
-    systemd.user = lib.mkIf config.system.activatable {
+    systemd.user = {
       services.nixos-activation = {
         description = "Run user-specific NixOS activation";
         script = config.system.userActivationScripts.script;

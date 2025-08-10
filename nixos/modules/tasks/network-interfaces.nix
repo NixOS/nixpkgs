@@ -1767,19 +1767,17 @@ in
       text = cfg.hostName + "\n";
     };
 
-    environment.corePackages = lib.mkOptionDefault (
-      [
-        pkgs.host
-        pkgs.hostname-debian
-        pkgs.iproute2
-        pkgs.iputils
-      ]
-      ++ optionals config.networking.wireless.enable [
-        pkgs.wirelesstools # FIXME: obsolete?
-        pkgs.iw
-      ]
-      ++ bridgeStp
-    );
+    environment.systemPackages = [
+      pkgs.host
+      pkgs.hostname-debian
+      pkgs.iproute2
+      pkgs.iputils
+    ]
+    ++ optionals config.networking.wireless.enable [
+      pkgs.wirelesstools # FIXME: obsolete?
+      pkgs.iw
+    ]
+    ++ bridgeStp;
 
     # Wake-on-LAN configuration is shared by the scripted and networkd backends.
     systemd.network.links = pipe interfaces [
