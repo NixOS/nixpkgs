@@ -111,6 +111,7 @@ llvmPackages.stdenv.mkDerivation rec {
       "-DENABLE_POSIX_RUNTIME=${onOff true}"
       "-DENABLE_UNIT_TESTS=${onOff true}"
       "-DENABLE_SYSTEM_TESTS=${onOff true}"
+      "-DLIT_ARGS=--verbose"
       "-DGTEST_SRC_DIR=${gtest.src}"
       "-DGTEST_INCLUDE_DIR=${gtest.src}/googletest/include"
       "-Wno-dev"
@@ -118,6 +119,8 @@ llvmPackages.stdenv.mkDerivation rec {
 
   # Silence various warnings during the compilation of fortified bitcode.
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-macro-redefined" ];
+
+  env.FILECHECK_OPTS = "--dump-input-filter=all";
 
   prePatch = ''
     patchShebangs --build .
