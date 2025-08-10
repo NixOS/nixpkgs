@@ -105,8 +105,9 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
 
+      # Required to bootstrap 9.4.8.
       ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
+        inherit llvmPackages;
       };
 
       ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix { };
