@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     rev = "v${version}";
     hash = "sha256-7stFa2fLczGyoM/O2S/uKCfjSDyABUw/b3tXp7Olqq8=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-RSW0N0icKAZbh8KQNkI9TgcKwa6hTKjhaJWCGADtfq8=";
 
   postInstall = "install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications";

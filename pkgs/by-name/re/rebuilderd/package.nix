@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-O+1ARimSN26geZanLV5E94vnZk0HsE4pyjNS3dADg8Y=";
 
   nativeBuildInputs = [

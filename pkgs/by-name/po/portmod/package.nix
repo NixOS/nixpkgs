@@ -26,7 +26,6 @@ let
     inherit src version;
     pname = "portmod-rust";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
 
     nativeBuildInputs = [

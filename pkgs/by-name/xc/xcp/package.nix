@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
   # no such file or directory errors
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9cNu0cgoo0/41daJwy/uWIXa2wFhYkcPhJfA/69DVx0=";
 
   meta = with lib; {

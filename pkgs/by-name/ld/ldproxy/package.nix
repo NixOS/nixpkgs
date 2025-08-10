@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YH2CPb3uBlPncd+KkP25xhCVvDB7HDxJuSqWOJ1LT3k=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/WBhgPyd5hR3DBYvV8pd7uZb6FeD3yiDe3wOKtyFRG8=";
 
   # However we are only interested in building the specific crate located at `/ldproxy`

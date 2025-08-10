@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1IILk52HyeGMZC+oD2tIUApEgV8RAojmAlVP/uQIng0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HKJ9ndh23ho3PtWUpGPaGOaECQC2dEfKp0D1N2PY9Ew=";
 
   passthru.updateScript = nix-update-script { };

@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage rec {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KPgi0wZh1+PTKUmvCkLGPf+DZW5Tt4dQVK/cdxjm/1A=";
 
   postInstall = ''

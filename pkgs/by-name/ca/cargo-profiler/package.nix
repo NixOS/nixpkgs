@@ -25,7 +25,6 @@ buildRustPackage rec {
     repo = pname;
   };
 
-  useFetchCargoVendor = true;
   inherit cargoHash;
 
   meta = with lib; {

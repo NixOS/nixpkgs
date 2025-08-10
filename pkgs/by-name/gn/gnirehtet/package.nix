@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/relay-rust";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xfRTGGlL1/Bq04aGWJSGgkoTGKYiiUAdkHu4zJS3x/U=";
 
   nativeBuildInputs = [ makeWrapper ];

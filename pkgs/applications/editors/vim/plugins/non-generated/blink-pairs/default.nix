@@ -21,7 +21,6 @@ let
     pname = "blink-pairs";
     inherit version src;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-vkybRuym1yibaw943Gs9luYLdYEp4tgvA8e4maATiTY=";
 
     nativeBuildInputs = [

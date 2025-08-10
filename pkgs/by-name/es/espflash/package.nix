@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WEPSXgHR7wA2zWbc8ogVxDRtXcmR20R14Qwo2VqPLrQ=";
   checkFlags = [
     "--skip cli::monitor::external_processors"

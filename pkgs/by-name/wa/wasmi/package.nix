@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-IDoZ6A5c/ayCusdb9flR3S/CBxJIWHQlEYP8ILRWXFw=";
   passthru.updateScript = nix-update-script { };
 

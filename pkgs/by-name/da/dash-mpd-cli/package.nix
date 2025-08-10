@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./use-shaka-by-default.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qy8X9DoBD5MIUQ6akalqtyasst0ZKJJLZTEz+6Hp6EI=";
 
   nativeBuildInputs = [

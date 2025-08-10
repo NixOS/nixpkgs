@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zS4g/uMh1eOoPo/RZfanL6afCEU5cnyzHrIqkvuQVrg=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };

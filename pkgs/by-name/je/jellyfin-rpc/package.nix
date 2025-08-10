@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zKqP6Wt38ckqCPDS1oncmx92lZJm2oeb3bfpwVc6fUc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-k9dGz+1HGcQoDMyqmJ1hEYklfYHibo1PI5jHEe0mr+w=";
 
   # TODO: Re-enable when upstream bumps the version number internally

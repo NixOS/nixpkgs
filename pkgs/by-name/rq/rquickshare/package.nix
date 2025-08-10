@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage rec {
     hash = app-type-either "sha256-V46V/VPwCKEe3sAp8zK0UUU5YigqgYh1GIOorqIAiNE=" "sha256-8QRigYNtxirXidFFnTzA6rP0+L64M/iakPqe2lZKegs=";
   };
 
-  useFetchCargoVendor = true;
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
   cargoPatches = [

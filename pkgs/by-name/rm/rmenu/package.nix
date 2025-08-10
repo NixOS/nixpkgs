@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9sKcvVN14gfR30FvF8/esdJoIbSgHUl/aHRBWA8DRWg=";
 
   postInstall = ''

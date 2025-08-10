@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AO4bB+aqAzGxFyPhuwaEQDAbL+fCIWY2rv3QFdBAq7s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fWKrHo5WdeEhnPxATbZ9Cjv+aiSxOh0pRDeeHHDk8u4=";
 
   # some necessary files are absent in the crate version

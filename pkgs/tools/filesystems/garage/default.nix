@@ -37,7 +37,6 @@ let
         rm .cargo/config.toml || true
       '';
 
-      useFetchCargoVendor = true;
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [

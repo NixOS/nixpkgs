@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  useFetchCargoVendor = true;
   cargoHash = cargoHashes.${version};
 
   # Default features include mini dashboard which downloads something from the internet.

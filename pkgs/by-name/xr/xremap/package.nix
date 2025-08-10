@@ -33,8 +33,6 @@ let
       buildNoDefaultFeatures = true;
       buildFeatures = features;
 
-      useFetchCargoVendor = true;
-
       meta = {
         description =
           "Key remapper for X11 and Wayland"

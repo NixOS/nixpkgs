@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-NbrJGGnpZkF7ZX3MqrMsZ03tWkN/nqWahh00O3IJGOw=";
-  useFetchCargoVendor = true;
 
   # TODO: can we unvendor AWS LC somehow?
   buildFeatures = [

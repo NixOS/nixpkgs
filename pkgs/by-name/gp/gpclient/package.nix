@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   inherit (gpauth) meta;
 
   buildAndTestSubdir = "apps/gpclient";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
 
   nativeBuildInputs = [

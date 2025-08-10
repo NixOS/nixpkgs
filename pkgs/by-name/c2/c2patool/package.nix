@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-W9I7I4sukKBg4seRyn9iXoNhkRoSKcjbpjgZjvQKCGw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-C5PkwMfP/MyO8QlQk0DwkU2Z/u/FdJIvwpE3gseUG/Q=";
 
   # use the non-vendored openssl
