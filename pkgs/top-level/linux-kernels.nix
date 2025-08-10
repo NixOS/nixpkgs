@@ -294,14 +294,10 @@ in
 
         linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
 
-        linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
-
-        linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
-        linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
-        linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
-        linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
+        linux_6_15_hardened = hardenedKernelFor kernels.linux_6_15 { };
 
+        linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
       }
       // lib.optionalAttrs config.allowAliases {
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
@@ -310,6 +306,11 @@ in
         linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
         linux_6_13 = throw "linux 6.13 was removed because it has reached its end of life upstream";
         linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
+
+        linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+        linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+        linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+        linux_6_6_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
 
         linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_5_4_hardened = throw "linux_5_4_hardened was removed because it was broken";
@@ -776,11 +777,8 @@ in
 
       linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
-      linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
-      linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
-      linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
-      linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
+      linux_6_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_15_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -794,6 +792,12 @@ in
       __recurseIntoDerivationForReleaseJobs = true;
     }
     // lib.optionalAttrs config.allowAliases {
+
+      linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+      linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+      linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+      linux_6_6_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+
       linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
       linux_5_4_hardened = throw "linux_5_4_hardened was removed because it was broken";
       linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";

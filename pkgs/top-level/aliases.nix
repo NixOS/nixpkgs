@@ -1413,6 +1413,22 @@ mapAliases {
   '';
   linux_latest_hardened = linuxPackages_latest_hardened;
 
+  # Added 2025-08-10
+  linuxPackages_hardened = linuxKernel.packages.linux_hardened;
+  linux_hardened = linuxPackages_hardened.kernel;
+  linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
+  linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
+  linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
+  linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
+  linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
+  linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
+  linuxPackages_6_1_hardened = linuxKernel.packages.linux_6_1_hardened;
+  linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
+  linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
+  linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
+  linuxPackages_6_12_hardened = linuxKernel.packages.linux_6_12_hardened;
+  linux_6_12_hardened = linuxKernel.kernels.linux_6_12_hardened;
+
   # Added 2023-11-18, modified 2024-01-09
   linuxPackages_testing_bcachefs = throw "'linuxPackages_testing_bcachefs' has been removed, please use 'linuxPackages_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support";
   linux_testing_bcachefs = throw "'linux_testing_bcachefs' has been removed, please use 'linux_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support";
