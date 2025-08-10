@@ -1361,7 +1361,8 @@
       ]; # missing inputs: pyebox
     "ebusd" =
       ps: with ps; [
-      ]; # missing inputs: ebusdpy
+        ebusdpy
+      ];
     "ecoal_boiler" =
       ps: with ps; [
         ecoaliface
