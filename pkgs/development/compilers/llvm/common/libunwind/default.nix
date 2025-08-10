@@ -60,15 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ devExtraCmakeFlags;
 
-  prePatch = lib.optionalString (lib.versionOlder release_version "18") ''
-    cd ../libunwind
-    chmod -R u+w .
-  '';
-
-  postPatch = lib.optionalString (lib.versionOlder release_version "18") ''
-    cd ../runtimes
-  '';
-
   postInstall =
     lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
       ''

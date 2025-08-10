@@ -33,30 +33,21 @@ let
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
-  cxxabiCMakeFlags =
-    lib.optionals (lib.versionAtLeast release_version "18") [
-      (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
-    ]
-    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) (
-      if lib.versionAtLeast release_version "18" then
-        [
-          (lib.cmakeFeature "LIBCXXABI_ADDITIONAL_LIBRARIES" "unwind")
-          (lib.cmakeBool "LIBCXXABI_USE_COMPILER_RT" true)
-        ]
-      else
-        [
-          (lib.cmakeBool "LIBCXXABI_USE_COMPILER_RT" true)
-          (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" true)
-        ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
-      (lib.cmakeBool "LIBCXXABI_ENABLE_THREADS" false)
-      (lib.cmakeBool "LIBCXXABI_ENABLE_EXCEPTIONS" false)
-    ]
-    ++ lib.optionals (!enableShared || stdenv.hostPlatform.isWindows) [
-      # Required on Windows due to https://github.com/llvm/llvm-project/issues/55245
-      (lib.cmakeBool "LIBCXXABI_ENABLE_SHARED" false)
-    ];
+  cxxabiCMakeFlags = [
+    (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
+  ]
+  ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
+    (lib.cmakeFeature "LIBCXXABI_ADDITIONAL_LIBRARIES" "unwind")
+    (lib.cmakeBool "LIBCXXABI_USE_COMPILER_RT" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWasm [
+    (lib.cmakeBool "LIBCXXABI_ENABLE_THREADS" false)
+    (lib.cmakeBool "LIBCXXABI_ENABLE_EXCEPTIONS" false)
+  ]
+  ++ lib.optionals (!enableShared || stdenv.hostPlatform.isWindows) [
+    # Required on Windows due to https://github.com/llvm/llvm-project/issues/55245
+    (lib.cmakeBool "LIBCXXABI_ENABLE_SHARED" false)
+  ];
 
   cxxCMakeFlags = [
     (lib.cmakeFeature "LIBCXX_CXX_ABI" cxxabiName)
@@ -77,17 +68,11 @@ let
     (lib.cmakeFeature "LIBCXX_HAS_MUSL_LIBC" "1")
   ]
   ++
-    lib.optionals
-      (
-        lib.versionAtLeast release_version "18"
-        && !useLLVM
-        && stdenv.hostPlatform.libc == "glibc"
-        && !stdenv.hostPlatform.isStatic
-      )
+    lib.optionals (!useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic)
       [
         (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
       ]
-  ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
     # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
     (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
