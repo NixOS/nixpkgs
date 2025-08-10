@@ -41,6 +41,8 @@ self: super: with self; {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  abtem = callPackage ../development/python-modules/abtem { };
+
   accelerate = callPackage ../development/python-modules/accelerate { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
@@ -1082,6 +1084,8 @@ self: super: with self; {
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };
+
+  atomap = callPackage ../development/python-modules/atomap { };
 
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
@@ -3607,6 +3611,10 @@ self: super: with self; {
 
   diffimg = callPackage ../development/python-modules/diffimg { };
 
+  diffpy-structure = callPackage ../development/python-modules/diffpy-structure { };
+
+  diffsims = callPackage ../development/python-modules/diffsims { };
+
   diffsync = callPackage ../development/python-modules/diffsync { };
 
   diffusers = callPackage ../development/python-modules/diffusers { };
@@ -4621,6 +4629,8 @@ self: super: with self; {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emdfile = callPackage ../development/python-modules/emdfile { };
+
   emoji = callPackage ../development/python-modules/emoji { };
 
   emojis = callPackage ../development/python-modules/emojis { };
@@ -4845,6 +4855,8 @@ self: super: with self; {
   explorerscript = callPackage ../development/python-modules/explorerscript { };
 
   exrex = callPackage ../development/python-modules/exrex { };
+
+  exspy = callPackage ../development/python-modules/exspy { };
 
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
@@ -6795,6 +6807,8 @@ self: super: with self; {
   hyperpyyaml = callPackage ../development/python-modules/hyperpyyaml { };
 
   hyperscan = callPackage ../development/python-modules/hyperscan { };
+
+  hyperspy = callPackage ../development/python-modules/hyperspy { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
@@ -8927,6 +8941,8 @@ self: super: with self; {
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
+  matplotlib-scalebar = callPackage ../development/python-modules/matplotlib-scalebar { };
+
   matplotlib-sixel = callPackage ../development/python-modules/matplotlib-sixel { };
 
   matplotlib-venn = callPackage ../development/python-modules/matplotlib-venn { };
@@ -10193,6 +10209,8 @@ self: super: with self; {
 
   ncclient = callPackage ../development/python-modules/ncclient { };
 
+  ncempy = callPackage ../development/python-modules/ncempy { };
+
   nclib = callPackage ../development/python-modules/nclib { };
 
   ndcurves = toPythonModule (
@@ -11030,6 +11048,8 @@ self: super: with self; {
 
   orgparse = callPackage ../development/python-modules/orgparse { };
 
+  orix = callPackage ../development/python-modules/orix { };
+
   orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
@@ -11287,6 +11307,8 @@ self: super: with self; {
   partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
 
   particle = callPackage ../development/python-modules/particle { };
+
+  particlespy = callPackage ../development/python-modules/particlespy { };
 
   parts = callPackage ../development/python-modules/parts { };
 
@@ -12330,6 +12352,8 @@ self: super: with self; {
 
   py3status = callPackage ../development/python-modules/py3status { };
 
+  py4dstem = callPackage ../development/python-modules/py4dstem { };
+
   py4j = callPackage ../development/python-modules/py4j { };
 
   py65 = callPackage ../development/python-modules/py65 { };
@@ -12524,6 +12548,8 @@ self: super: with self; {
   pychm = callPackage ../development/python-modules/pychm { };
 
   pychromecast = callPackage ../development/python-modules/pychromecast { };
+
+  pycifrw = callPackage ../development/python-modules/pycifrw { };
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
@@ -12810,6 +12836,8 @@ self: super: with self; {
   pyfcm = callPackage ../development/python-modules/pyfcm { };
 
   pyfdt = callPackage ../development/python-modules/pyfdt { };
+
+  pyfftw = callPackage ../development/python-modules/pyfftw { };
 
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
@@ -13189,6 +13217,8 @@ self: super: with self; {
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
 
   pyloggermanager = callPackage ../development/python-modules/pyloggermanager { };
+
+  pylops = callPackage ../development/python-modules/pylops { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
 
@@ -15176,6 +15206,8 @@ self: super: with self; {
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
+  pyxem = callPackage ../development/python-modules/pyxem { };
+
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
   pyxiaomigateway = callPackage ../development/python-modules/pyxiaomigateway { };
@@ -15878,6 +15910,8 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rosettasciio = callPackage ../development/python-modules/rosettasciio { };
+
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
@@ -16139,6 +16173,8 @@ self: super: with self; {
   scikit-learn-extra = callPackage ../development/python-modules/scikit-learn-extra { };
 
   scikit-misc = callPackage ../development/python-modules/scikit-misc { };
+
+  scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikit-posthocs = callPackage ../development/python-modules/scikit-posthocs { };
 
