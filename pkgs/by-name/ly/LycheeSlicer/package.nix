@@ -18,7 +18,7 @@ let
     name = "Lychee Slicer";
     genericName = "Resin Slicer";
     comment = "All-in-one 3D slicer for Resin and Filament";
-    desktopName = "Lychee";
+    desktopName = "LycheeSlicer";
     noDisplay = false;
     exec = "lychee";
     terminal = false;
@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
-  extraLibraries = [
+  extraPkgs = _: [
     xorg.libxshmfence
   ];
 
@@ -52,6 +52,6 @@ appimageTools.wrapType2 {
       ZachDavies
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "lychee";
+    mainProgram = "LycheeSlicer";
   };
 }
