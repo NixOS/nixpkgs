@@ -2439,11 +2439,15 @@ with haskellLib;
     })
   ] super.hookup;
 
-  # Raise version bounds: https://github.com/kosmikus/records-sop/pull/15
-  records-sop = appendPatch (fetchpatch {
-    url = "https://github.com/kosmikus/records-sop/commit/fb149f453a816ff14d0cb20b3ea56b80ff49d9f1.patch";
-    sha256 = "sha256-iHiF4EWL/GjJFnr/6aR+yMZKLMLAZK+gsgSxG8YaeDI=";
-  }) super.records-sop;
+  basic-sop = appendPatch (fetchpatch {
+    # https://github.com/well-typed/basic-sop/pull/13
+    name = "increase-upper-bounds.patch";
+    url = "https://github.com/well-typed/basic-sop/commit/f1873487dd3e3955a82d6d9f37a6b164be36851f.patch";
+    sha256 = "sha256-uBH+LmiSO91diVe4uX75/DdWT2wuyqEL+XUlSHnJk5k=";
+  }) super.basic-sop;
+
+  # Unmaintained
+  records-sop = doJailbreak super.records-sop;
 
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial =
@@ -2903,11 +2907,45 @@ with haskellLib;
     + (drv.postPatch or "");
   }) (doJailbreak (addExtraLibrary pkgs.pkg-config (addExtraLibrary pkgs.poppler super.pdftotext)));
 
-  proto3-wire = appendPatch (fetchpatch {
-    # https://github.com/awakesecurity/proto3-wire/pull/109
-    url = "https://github.com/awakesecurity/proto3-wire/commit/b32f3db6f8d36ea0708fb2f371f62d439ea45b42.patch";
-    hash = "sha256-EGFyk3XawU0+zk299WGwFKB2uW9eJrCDM6NgfIKWgRY=";
-  }) super.proto3-wire;
+  # QuickCheck <2.15
+  # https://github.com/google/proto-lens/issues/403
+  proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
+
+  proto3-wire = appendPatches [
+    (fetchpatch {
+      # https://github.com/awakesecurity/proto3-wire/pull/109
+      name = "bump-outdated-bounds.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/b32f3db6f8d36ea0708fb2f371f62d439ea45b42.patch";
+      hash = "sha256-EGFyk3XawU0+zk299WGwFKB2uW9eJrCDM6NgfIKWgRY=";
+    })
+    (fetchpatch {
+      # https://github.com/awakesecurity/proto3-wire/pull/110
+      name = "support-GHC-9.10.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/6fdf0eb93b2028ade0e3e011ce8429c94546839e.patch";
+      hash = "sha256-jK0ztjuhM7qRH5T7xo75aX7wqmZFymOgWDx6UrlcqWQ=";
+      includes = [
+        "*.cabal"
+        "*.hs"
+      ];
+    })
+    (fetchpatch {
+      # https://github.com/awakesecurity/proto3-wire/pull/108
+      name = "add-reverse-encoders-for-packed-repeated-fields.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/d4376fb6f1c1ac03ee8ec5c5793700ca6508ea70.patch";
+      hash = "sha256-vtEYg/jLoTn1YRVhQJi6kyta+U4XiWeS7i1ZSN7BYf8=";
+      includes = [
+        "**.cabal"
+        "*.hs"
+      ];
+    })
+    (fetchpatch {
+      # https://github.com/awakesecurity/proto3-wire/pull/111
+      name = "support-LTS-24.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/35fd88c4daf6643135db6da9ab6ed6d6f33eb3de.patch";
+      hash = "sha256-GzXlweRshVLA29xVHhJSRIU40y+KtAplIqfvp0I8cY0=";
+    })
+
+  ] super.proto3-wire;
 
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
