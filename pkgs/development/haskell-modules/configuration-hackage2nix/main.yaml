@@ -371,6 +371,7 @@ package-maintainers:
     - pdftotext
     - warp-systemd
     - amazonka
+    - libssh2
   ncfavier:
     - Agda
     - irc-client

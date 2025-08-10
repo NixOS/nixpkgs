@@ -3179,6 +3179,19 @@ with haskellLib;
   # and therefore aren't uploaded to hackage
   # Needs to be fixed upstream
   haskore = dontCheck (doJailbreak super.haskore);
+
+  # 2025-07-10: Hackage release is outdated, https://github.com/portnov/libssh2-hs/issues/77
+  libssh2 = overrideSrc {
+    version = "0.2.0.9-unstable-2025-04-03";
+    src =
+      pkgs.fetchFromGitHub {
+        owner = "portnov";
+        repo = "libssh2-hs";
+        rev = "d35fa047cd872a73cd4db83aa3185463ac88a1d7";
+        sha256 = "sha256-m3VVx9mgI3OqtWHC8qY63/Wns808q5iITD5regdMILo=";
+      }
+      + "/libssh2";
+  } super.libssh2;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
