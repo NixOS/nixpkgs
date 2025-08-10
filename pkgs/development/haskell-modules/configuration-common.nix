@@ -3569,5 +3569,8 @@ with haskellLib;
     amazonka = warnAfterVersion "2.0" (
       setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka)
     );
+    amazonka-test = warnAfterVersion "2.0" (
+      setAmazonkaSourceRoot "lib/amazonka-test" (doJailbreak super.amazonka-test)
+    );
   }
 )
