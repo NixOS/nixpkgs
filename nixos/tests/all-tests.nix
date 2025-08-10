@@ -1139,6 +1139,7 @@ in
   paperless = runTest ./paperless.nix;
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
+  pcscd = runTest ./pcscd.nix;
   pdns-recursor = runTest ./pdns-recursor.nix;
   pds = runTest ./pds.nix;
   peerflix = runTest ./peerflix.nix;
