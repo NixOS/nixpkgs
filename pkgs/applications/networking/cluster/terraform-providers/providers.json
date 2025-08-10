@@ -1138,11 +1138,11 @@
     "vendorHash": "sha256-75GQmp/ybD+VugrrB8qTbP3OPHy3eyBGe5u7CM7CRcc="
   },
   "routeros": {
-    "hash": "sha256-1qdq09QFijxQDUaoPJwJB4F5aZ0AHXJSGndcdR9iqOs=",
+    "hash": "sha256-q0ZRAip6mgHkdBcns8G7VlDnMNB+ux6ITKwcSL4WrcY=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.86.1",
+    "rev": "v1.86.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-et1xqcaCKTRz9bJjTlRnxhXBoc6PaeSwJgBI4pAzcdg="
   },
