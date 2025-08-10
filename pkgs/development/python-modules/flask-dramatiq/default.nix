@@ -68,7 +68,6 @@ buildPythonPackage {
 
   disabledTestPaths = [
     "tests/func/"
-    "tests/unit"
   ];
 
   pythonImportsCheck = [ "flask_dramatiq" ];
