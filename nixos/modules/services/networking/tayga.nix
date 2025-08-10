@@ -23,6 +23,10 @@ let
     data-dir ${cfg.dataDir}
 
     ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
+
+    ${optionalString ((builtins.length cfg.log) > 0) ''
+      log ${concatStringsSep " " cfg.log}
+    ''}
   '';
 
   addrOpts =
@@ -130,6 +134,15 @@ in
             "192.168.5.43" = "2001:db8:1:4444::2";
             "192.168.255.2" = "2001:db8:1:569::143";
           }
+        '';
+      };
+
+      log = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Packet errors to log (drop, reject, icmp, self)";
+        example = literalExpression ''
+          [ "drop" "reject" "icmp" "self" ]
         '';
       };
     };

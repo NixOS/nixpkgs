@@ -139,6 +139,12 @@
         mappings = {
           "192.0.2.42" = "2001:db8::2";
         };
+        log = [
+          "drop"
+          "reject"
+          "icmp"
+          "self"
+        ];
       };
       environment.systemPackages = [ pkgs.tcpdump ];
     };
@@ -205,6 +211,12 @@
         mappings = {
           "192.0.2.42" = "2001:db8::2";
         };
+        log = [
+          "drop"
+          "reject"
+          "icmp"
+          "self"
+        ];
       };
       environment.systemPackages = [ pkgs.tcpdump ];
     };
