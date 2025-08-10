@@ -14111,6 +14111,8 @@ self: super: with self; {
 
   pyswitchbot = callPackage ../development/python-modules/pyswitchbot { };
 
+  pyswitchmate = callPackage ../development/python-modules/pyswitchmate { };
+
   pysychonaut = callPackage ../development/python-modules/pysychonaut { };
 
   pysyncobj = callPackage ../development/python-modules/pysyncobj { };
