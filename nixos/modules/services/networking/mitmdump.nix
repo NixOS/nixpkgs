@@ -170,6 +170,10 @@ in
         wantedBy = [ "multi-user.target" ];
       }
     ) cfg.instances;
+
+    services.mitmdump.addons = {
+      logger = ./mitmdump/addons/logger.py;
+    };
   };
 
   meta.maintainers = lib.maintainers.ibizaman;
