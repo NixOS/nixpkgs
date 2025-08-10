@@ -5820,7 +5820,8 @@
       ];
     "tami4" =
       ps: with ps; [
-      ]; # missing inputs: Tami4EdgeAPI
+        tami4edgeapi
+      ];
     "tank_utility" =
       ps: with ps; [
         tank-utility
@@ -7679,6 +7680,7 @@
     "tag"
     "tailscale"
     "tailwind"
+    "tami4"
     "tankerkoenig"
     "tasmota"
     "tautulli"

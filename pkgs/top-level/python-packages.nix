@@ -13521,6 +13521,8 @@ self: super: with self; {
 
   pypass = callPackage ../development/python-modules/pypass { };
 
+  pypasser = callPackage ../development/python-modules/pypasser { };
+
   pypblib = callPackage ../development/python-modules/pypblib { };
 
   pypca = callPackage ../development/python-modules/pypca { };
@@ -17675,6 +17677,8 @@ self: super: with self; {
   tailscale = callPackage ../development/python-modules/tailscale { };
 
   takethetime = callPackage ../development/python-modules/takethetime { };
+
+  tami4edgeapi = callPackage ../development/python-modules/tami4edgeapi { };
 
   tank-utility = callPackage ../development/python-modules/tank-utility { };
 
