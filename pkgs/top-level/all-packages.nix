@@ -2620,10 +2620,6 @@ with pkgs;
 
   compass = callPackage ../development/tools/compass { };
 
-  cone = callPackage ../development/compilers/cone {
-    llvmPackages = llvmPackages_13;
-  };
-
   coreutils = callPackage ../tools/misc/coreutils { };
 
   # The coreutils above are built with dependencies from
