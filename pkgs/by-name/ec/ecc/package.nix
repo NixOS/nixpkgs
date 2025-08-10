@@ -65,7 +65,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iYceYwRqnYA6KxCQxOieR8JZ6TQlIL+OSzAjyr4Cu/g=";
 
   nativeBuildInputs = [

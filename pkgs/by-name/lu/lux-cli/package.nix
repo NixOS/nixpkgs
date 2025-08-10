@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = luaPackages.lux-lua.src;
 
   buildAndTestSubdir = "lux-cli";
-  useFetchCargoVendor = true;
+
   cargoHash = luaPackages.lux-lua.cargoHash;
 
   nativeInstallCheckInputs = [

@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=platform::linux::net::tests::test_default_ip"
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-E5OJVf9CkLn5mFtk4Yacs2OIvAuIw0idSs7QuTNvfgU=";
 
   meta = {

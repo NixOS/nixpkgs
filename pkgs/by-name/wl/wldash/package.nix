@@ -54,7 +54,6 @@ rustPlatform.buildRustPackage {
     ./0002-Update-fontconfig.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gvIsm6D6ZvRm0APw+xpayY+yt2IedMpWoa/hmvIpmV8=";
 
   dontPatchELF = true;

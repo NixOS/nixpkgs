@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4SH7ux15Sm7NJDY79x9O7oahvbjS4kZzzY/9UsLDq0U=";
 
   passthru.updateScript = nix-update-script { };

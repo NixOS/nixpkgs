@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'rust-version = "1.85.0"' ""
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lq+0R5g4MwVm8ESjKpz+aymjpqcaAE856XnBtYXYs8A=";
 
   env.RUSTC_BOOTSTRAP = 1;

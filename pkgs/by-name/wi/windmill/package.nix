@@ -64,7 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-6htM6p09mPUQmS+QVBDO7Y/tuwweHgA+W/E3XTNunB8=";
-  useFetchCargoVendor = true;
 
   buildFeatures = [
     "embedding"

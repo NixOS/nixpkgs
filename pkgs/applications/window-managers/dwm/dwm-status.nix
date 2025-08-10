@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-G31p8iVRUODD4hUssXaOqEOUTW+C+GZMy/L/tgumDtA=";
 
   postInstall = lib.optionalString (bins != [ ]) ''

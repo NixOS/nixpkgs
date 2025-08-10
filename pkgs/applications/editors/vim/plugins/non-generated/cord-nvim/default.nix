@@ -25,7 +25,6 @@ let
         --replace-fail "2.0.0-beta.30" "${version}"
     '';
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-hKt9d2u/tlD7bgo49O8oHDLljRvad9dEpGdFt+LH6Ec=";
 
     # cord depends on nightly features

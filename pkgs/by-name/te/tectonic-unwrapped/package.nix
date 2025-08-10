@@ -58,7 +58,6 @@ buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OMa89riyopKMQf9E9Fr7Qs4hFfEfjnDFzaSWFtkYUXE=";
 
   nativeBuildInputs = [ pkg-config ];

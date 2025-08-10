@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fb6RDcOLtkrUqw+BX2oa43d84BGF8IA2HxhdGgB94iU=";
 
   meta = {

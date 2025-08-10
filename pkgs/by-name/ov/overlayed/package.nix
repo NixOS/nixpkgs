@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/apps/desktop/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6wN4nZQWrY0J5E+auj17B3iJ/84hzBXYA/bJsX/N5pk=";
 
   webui = callPackage ./webui.nix {

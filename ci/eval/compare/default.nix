@@ -122,7 +122,8 @@ let
 in
 runCommand "compare"
   {
-    nativeBuildInputs = [
+    # Don't depend on -dev outputs to reduce closure size for CI.
+    nativeBuildInputs = map lib.getBin [
       jq
       (python3.withPackages (
         ps: with ps; [

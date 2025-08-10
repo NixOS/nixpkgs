@@ -12,6 +12,7 @@
   gtk4,
   libadwaita,
   json-glib,
+  gexiv2,
   glib,
   glib-networking,
   gnome,
@@ -24,25 +25,25 @@
   libsecret,
   libwebp,
   libspelling,
+  webkitgtk_6_0,
   webp-pixbuf-loader,
   icu,
   gst_all_1,
+  clapper-enhancers,
   clapper-unwrapped,
-  # clapper support is still experimental and has bugs.
-  # See https://github.com/GeopJr/Tuba/pull/931
-  clapperSupport ? false,
+  clapperSupport ? true,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-SQrk6zsn3zZQTIruqVfjzs5cNyT2pAvM8XNI8SmyFM0=";
+    hash = "sha256-q+AwtmvLf0AFrCK2YlRFrrXakULHLh749TV/iwapIlw=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gexiv2
     glib
     glib-networking
     gtksourceview5
@@ -69,6 +71,7 @@ stdenv.mkDerivation rec {
     libsecret
     libwebp
     libspelling
+    webkitgtk_6_0
     icu
   ]
   ++ (with gst_all_1; [
@@ -83,14 +86,16 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "clapper" clapperSupport)
+    (lib.mesonEnable "clapper" clapperSupport)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set-default CLAPPER_ENHANCERS_PATH "${clapper-enhancers}/${clapper-enhancers.passthru.pluginPath}"
+    )
+  '';
 
   # Pull in WebP support for avatars from Misskey instances.
   # In postInstall to run before gappsWrapperArgsHook.
@@ -104,6 +109,10 @@ stdenv.mkDerivation rec {
       }
     }"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Browse the Fediverse";

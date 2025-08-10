@@ -19,8 +19,6 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    useFetchCargoVendor = true;
-
     cargoHash =
       rec {
         _0_9_0-dev_6 = "sha256-1yJIbBxScmkCwy/e+/z2cYA8qQBfT0yoIBmOSPVd4h4=";

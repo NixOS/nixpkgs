@@ -24,7 +24,6 @@ let
         inherit version pname hash;
       };
 
-      useFetchCargoVendor = true;
       inherit cargoHash;
 
       nativeBuildInputs = [

@@ -43,7 +43,7 @@ let
       })
     ];
     sourceRoot = "${src.name}/libflux";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-kbI1uUDE8JyFFtwV5k0EeeNGCZFQLXLobW/MilHX2Sg=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;

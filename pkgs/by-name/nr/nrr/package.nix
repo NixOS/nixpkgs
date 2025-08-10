@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qh4YEfdfO6WofdrFHVDvkNocloK2LuWelfZPilxiKPk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-f8ugfkTtS23TLh0Ss4SpxGy1Y9AeqinE+psDmHVHibg=";
 
   env = lib.optionalAttrs enableLTO {

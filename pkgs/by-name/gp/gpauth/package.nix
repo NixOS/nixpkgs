@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildAndTestSubdir = "apps/gpauth";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
 
   nativeBuildInputs = [

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-8Iqg2coFsPQY3ws5MEC1LhTu+Z1lXeI3ccjgoBS454o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-a5YI6bOo/rsi9hZO1BcVMjJtdrYq2aHqxtlO3F+P+8s=";
 
   buildInputs = [ libunwind ];

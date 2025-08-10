@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QeR7KXwRGfAU31ueI6v26pKnoQdj2C7bXlcMP4qKvZg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UkyRl2eY520JPxtcOl7hvkY3MCH2bi2jL9zCJEdkQmU=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin

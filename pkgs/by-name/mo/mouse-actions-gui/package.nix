@@ -58,7 +58,6 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-G5PQWPcPOVhq11BQIplbB3mLAGFCVm+vQ4eM4/5MFwI=";
 
   postInstall = ''

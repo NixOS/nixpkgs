@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage {
     (python3.withPackages (pp: with pp; [ psutil ]))
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-caf1d7SdAEc5RUDQCQkxlYw073gIUwlnvlVaX8gJGmc=";
 
   preFixup = ''

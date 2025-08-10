@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-unwrapped";
   sourceRoot = "${src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = vendor-hash;
 
   env = {

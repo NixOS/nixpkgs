@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
   cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
-  useFetchCargoVendor = true;
 
   env = {
     ATTIC_DISTRIBUTOR = "nixpkgs";
