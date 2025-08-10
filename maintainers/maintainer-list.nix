@@ -26922,6 +26922,12 @@
     name = "Stefan Zabka";
     githubId = 13276717;
   };
+  vrose = {
+    email = "vrose04@gmail.com";
+    github = "vinnybod";
+    name = "Vince Rose";
+    githubId = 9831420;
+  };
   vrthra = {
     email = "rahul@gopinath.org";
     github = "vrthra";
