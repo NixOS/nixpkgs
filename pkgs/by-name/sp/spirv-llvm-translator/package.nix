@@ -60,9 +60,27 @@ let
     };
   };
 
-  branch =
-    versions."${if isROCm then "17" else llvmMajor}"
-      or (throw "Incompatible LLVM version ${llvmMajor}");
+  majorVersion = if isROCm then "21" else llvmMajor;
+  branch = versions."${majorVersion}" or (throw "Incompatible LLVM version ${llvmMajor}");
+
+  # For the LLVM 21 build some commits to spirv-headers
+  # are required, that didn't make it into the final release of 1.4.321
+  # For example: 9e3836d Add SPV_INTEL_function_variants
+  # Once spirv-headers are released again and updated on nixpkgs,
+  # this will switch over to the nixpkgs version once it exists,
+  # at which point this can be removed.
+  # In the meanwhile, we pull from the repo directly.
+  spirv-headers-src =
+    if majorVersion != "21" || lib.versionAtLeast spirv-headers.version "1.4.322" then
+      spirv-headers.src
+    else
+      fetchFromGitHub {
+        owner = "KhronosGroup";
+        repo = "SPIRV-Headers";
+        # Latest commit on main branch as of 2025-08-10
+        rev = "a7361efd139bf65de0e86d43b01b01e0b34d387f";
+        hash = "sha256-Z03gXioXxtUviAmOXmPLHB/QaW3DQUGyaSXiAQj5UE4=";
+      };
 in
 stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
@@ -104,7 +122,7 @@ stdenv.mkDerivation {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers-src}"
   ]
   ++ lib.optional (llvmMajor == "19") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
 
