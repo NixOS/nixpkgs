@@ -114,7 +114,8 @@
       ];
     "airos" =
       ps: with ps; [
-      ]; # missing inputs: airos
+        airos
+      ];
     "airq" =
       ps: with ps; [
         aioairq
@@ -6867,6 +6868,7 @@
     "airgradient"
     "airly"
     "airnow"
+    "airos"
     "airq"
     "airthings"
     "airthings_ble"
