@@ -13762,6 +13762,8 @@ self: super: with self; {
     }
   );
 
+  pyrecswitch = callPackage ../development/python-modules/pyrecswitch { };
+
   pyrect = callPackage ../development/python-modules/pyrect { };
 
   pyregion = callPackage ../development/python-modules/pyregion { };
