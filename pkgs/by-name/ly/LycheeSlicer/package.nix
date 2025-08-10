@@ -4,6 +4,8 @@
   makeDesktopItem,
   lib,
   xorg,
+  wayland,
+  wayland-protocols,
 }:
 let
   pname = "LycheeSlicer";
@@ -41,13 +43,15 @@ appimageTools.wrapType2 {
 
   extraPkgs = _: [
     xorg.libxshmfence
+    wayland
+    wayland-protocols
   ];
 
   meta = {
     description = "All-in-one 3D slicer for resin and FDM printers";
     homepage = "https://lychee.mango3d.io/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ 
+    maintainers = with lib.maintainers; [
       tarinaky
       ZachDavies
     ];
