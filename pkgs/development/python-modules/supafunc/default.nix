@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "supafunc";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pbM8i67La1KX0l2imiUD4uxn7mmG89RME35lG4pZoX0=";
+    hash = "sha256-ReTVAIVBZ8JhUVxD96NjMg4KkoEYGC/okyre/d7dtUU=";
   };
 
   dependencies = [
