@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "terraform-mcp-server";
@@ -22,6 +23,12 @@ buildGoModule (finalAttrs: {
   ];
 
   subPackages = [ "cmd/terraform-mcp-server" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Terraform Model Context Protocol (MCP) Server";
