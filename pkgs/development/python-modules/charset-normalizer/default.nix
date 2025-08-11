@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.4.2";
+  version = "3.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Ousret";
     repo = "charset_normalizer";
     tag = version;
-    hash = "sha256-PkFmNEMdp9duDCqMTKooOLAOCqHf3IjrGlr8jKYT2WE=";
+    hash = "sha256-ZEHxBErjjvofqe3rkkgiEuEJcoluwo+2nZrLfrsHn5Q=";
   };
 
   build-system = [
