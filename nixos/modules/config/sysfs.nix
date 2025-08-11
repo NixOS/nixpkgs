@@ -191,27 +191,26 @@ in
 
   config = lib.mkIf (cfg != { }) {
     systemd = {
-      paths =
-        {
-          "nixos-sysfs@" = {
-            description = "/%I attribute watcher";
-            pathConfig.PathExistsGlob = "/%I";
-            unitConfig.DefaultDependencies = false;
-          };
-        }
-        // listToAttrs (
-          mapAttrsToListRecursive (
-            p: v:
-            if v == null then
-              [ ]
-            else
-              nameValuePair "nixos-sysfs@${escapeSystemdPath (mkPath p)}" {
-                overrideStrategy = "asDropin";
-                wantedBy = [ "sysinit.target" ];
-                before = [ "sysinit.target" ];
-              }
-          ) cfg
-        );
+      paths = {
+        "nixos-sysfs@" = {
+          description = "/%I attribute watcher";
+          pathConfig.PathExistsGlob = "/%I";
+          unitConfig.DefaultDependencies = false;
+        };
+      }
+      // listToAttrs (
+        mapAttrsToListRecursive (
+          p: v:
+          if v == null then
+            [ ]
+          else
+            nameValuePair "nixos-sysfs@${escapeSystemdPath (mkPath p)}" {
+              overrideStrategy = "asDropin";
+              wantedBy = [ "sysinit.target" ];
+              before = [ "sysinit.target" ];
+            }
+        ) cfg
+      );
 
       services."nixos-sysfs@" = {
         description = "/%I attribute setter";
