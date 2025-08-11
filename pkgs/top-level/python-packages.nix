@@ -16293,6 +16293,8 @@ self: super: with self; {
 
   secure = callPackage ../development/python-modules/secure { };
 
+  securestring = callPackage ../development/python-modules/securestring { };
+
   securesystemslib = callPackage ../development/python-modules/securesystemslib { };
 
   securetar = callPackage ../development/python-modules/securetar { };
