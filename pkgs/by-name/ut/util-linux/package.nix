@@ -17,7 +17,7 @@
   cryptsetup,
   ncursesSupport ? true,
   ncurses,
-  pamSupport ? true,
+  pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
   pam,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
@@ -28,8 +28,8 @@
   installShellFiles,
   writeSupport ? stdenv.hostPlatform.isLinux,
   shadowSupport ? stdenv.hostPlatform.isLinux,
-  # Doesn't build on Darwin, also doesn't really make sense on Darwin
-  withLastlog ? !stdenv.hostPlatform.isDarwin,
+  # Doesn't build on Darwin, only makes sense on systems which have pam
+  withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam,
   gitUpdater,
   nixosTests,
 }:
