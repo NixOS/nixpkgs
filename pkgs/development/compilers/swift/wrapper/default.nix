@@ -4,6 +4,7 @@
   swift,
   useSwiftDriver ? true,
   swift-driver,
+  clang,
 }:
 
 stdenv.mkDerivation (
@@ -28,6 +29,20 @@ stdenv.mkDerivation (
       swiftStaticLibSubdir
       ;
     swiftDriver = lib.optionalString useSwiftDriver "${swift-driver}/bin/swift-driver";
+    cc_wrapper = clang.override (prev: {
+      extraBuildCommands =
+        prev.extraBuildCommands
+        # We need to use the resource directory corresponding to Swift’s
+        # version of Clang instead of passing along the one from the
+        # `cc-wrapper` flags.
+        + ''
+          rm -r $out/resource-root
+          substituteInPlace $out/nix-support/cc-cflags \
+            --replace-fail \
+              "-resource-dir=$out/resource-root" \
+              "-resource-dir=${lib.getLib swift}/lib/swift/clang"
+        '';
+    });
 
     env.darwinMinVersion = lib.optionalString stdenv.targetPlatform.isDarwin (
       stdenv.targetPlatform.darwinMinVersion

@@ -111,6 +111,18 @@ let
     "swift-remote-mirror-headers"
   ];
 
+  clangForWrappers = clang.override (prev: {
+    extraBuildCommands =
+      prev.extraBuildCommands
+      # We need to use the resource directory corresponding to Swift’s
+      # version of Clang instead of passing along the one from the
+      # `cc-wrapper` flags.
+      + ''
+        substituteInPlace $out/nix-support/cc-cflags \
+          --replace-fail " -resource-dir=$out/resource-root" ""
+      '';
+  });
+
   # Build a tool used during the build to create a custom clang wrapper, with
   # which we wrap the clang produced by the swift build.
   #
@@ -130,7 +142,7 @@ let
     unwrappedClang="$targetFile-unwrapped"
 
     mv "$targetFile" "$unwrappedClang"
-    sed < '${clang}/bin/clang' > "$targetFile" \
+    sed < '${clangForWrappers}/bin/clang' > "$targetFile" \
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
       -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
@@ -146,13 +158,12 @@ let
   # executable uses $0 to detect what tool is called.
   wrapperParams = {
     inherit bintools;
-    default_cc_wrapper = clang; # Instead of `@out@` in the original.
     coreutils_bin = lib.getBin coreutils;
     gnugrep_bin = gnugrep;
     suffixSalt = lib.replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
     use_response_file_by_default = 1;
     swiftDriver = "";
-    # NOTE: @prog@ needs to be filled elsewhere.
+    # NOTE: @cc_wrapper@ and @prog@ need to be filled elsewhere.
   };
   swiftWrapper = runCommand "swift-wrapper.sh" wrapperParams ''
     # Make empty to avoid adding the SDK’s modules in the bootstrap wrapper. Otherwise, the SDK conflicts with the
@@ -168,6 +179,7 @@ let
     mv "$targetFile" "$unwrappedSwift"
     sed < '${swiftWrapper}' > "$targetFile" \
       -e "s|@prog@|'$unwrappedSwift'|g" \
+      -e 's|@cc_wrapper@|${clangForWrappers}|g' \
       -e 's|exec "$prog"|exec -a "$0" "$prog"|g'
     chmod a+x "$targetFile"
   '';
@@ -308,9 +320,12 @@ stdenv.mkDerivation {
 
      patch -p1 -d swift -i ${./patches/swift-cmake-3.25-compat.patch}
      patch -p1 -d swift -i ${./patches/swift-wrap.patch}
-     patch -p1 -d swift -i ${./patches/swift-nix-resource-root.patch}
      patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
-     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
+     patch -p1 -d swift -i ${
+       replaceVars ./patches/swift-linux-fix-linking.patch {
+         inherit clang;
+       }
+     }
      patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
      patch -p1 -d swift -i ${
        replaceVars ./patches/swift-darwin-plistbuddy-workaround.patch {
@@ -506,6 +521,10 @@ stdenv.mkDerivation {
       }
     "
     buildProject llvm llvm-project/llvm
+
+    # Ensure that the built Clang can find the runtime libraries by
+    # copying the symlinks from the main wrapper.
+    cp -P ${clang}/resource-root/{lib,share} $SWIFT_BUILD_ROOT/llvm/lib/clang/15.0.0/
 
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -714,14 +733,8 @@ stdenv.mkDerivation {
     ln -s $lib/lib/swift $out/lib/swift
 
     # Swift has a separate resource root from Clang, but locates the Clang
-    # resource root via subdir or symlink. Provide a default here, but we also
-    # patch Swift to prefer NIX_CC if set.
-    #
-    # NOTE: We don't symlink directly here, because that'd add a run-time dep
-    # on the full Clang compiler to every Swift executable. The copy here is
-    # just copying the 3 symlinks inside to smaller closures.
-    mkdir $lib/lib/swift/clang
-    cp -P ${clang}/resource-root/* $lib/lib/swift/clang/
+    # resource root via subdir or symlink.
+    mv $SWIFT_BUILD_ROOT/llvm/lib/clang/15.0.0 $lib/lib/swift/clang
   '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
