@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "Weggli is a fast and robust semantic search tool for C and C++ codebases";
+    description = "Fast and robust semantic search tool for C and C++ codebases";
     homepage = "https://github.com/weggli-rs/weggli";
     changelog = "https://github.com/weggli-rs/weggli/releases/tag/v${version}";
     mainProgram = "weggli";

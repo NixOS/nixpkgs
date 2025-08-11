@@ -24,7 +24,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/phel-lang/phel-lang/releases/tag/v${finalAttrs.version}";
-    description = "Phel is a functional programming language that compiles to PHP. A Lisp dialect inspired by Clojure and Janet";
+    description = "Functional programming language that compiles to PHP. A Lisp dialect inspired by Clojure and Janet";
     homepage = "https://github.com/phel-lang/phel-lang";
     license = lib.licenses.mit;
     mainProgram = "phel";

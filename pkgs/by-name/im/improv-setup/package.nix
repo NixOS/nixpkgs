@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "improv-setup";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "git.clerie.de";
     owner = "clerie";
     repo = "improv-setup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3vF8StD2qk3S87Rw7hphmIW2udlFK9e4YQfHF12yFwI=";
+    hash = "sha256-N/HMvyZfWuxzNg0IDvyNVJiNBh7gb+v38mjVYmt2vw4=";
   };
 
-  cargoHash = "sha256-H2X1hpynOIZOHBx8nZz09Yr4zk/7Ikn6TNhx3cCmOuA=";
+  cargoHash = "sha256-vv7i+RsOjYaVWLmyBcvYNdiKsPOP4GyKyWAYB718Liw=";
 
   passthru.updateScript = nix-update-script { };
 
