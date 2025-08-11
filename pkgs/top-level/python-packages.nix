@@ -17322,6 +17322,8 @@ self: super: with self; {
 
   starline = callPackage ../development/python-modules/starline { };
 
+  starlingbank = callPackage ../development/python-modules/starlingbank { };
+
   starlink-grpc-core = callPackage ../development/python-modules/starlink-grpc-core { };
 
   stashy = callPackage ../development/python-modules/stashy { };
