@@ -7,7 +7,6 @@
   build,
   ruff,
   dill,
-  fastapi,
   granian,
   hatchling,
   httpx,
@@ -43,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.14";
+  version = "0.8.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-yuVBQYP0YlvAIWF/+oSfCLbfj1GLtnYajU3WoolyTjY=";
+    hash = "sha256-Tas67x9UEFSR7yyENvixzCWbbKgP+OBMw6prnxWgCQo=";
   };
 
   # 'rich' is also somehow checked when building the wheel,
@@ -59,9 +58,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # needed
+    "click"
+    "starlette"
     "rich"
-    # preventative
-    "fastapi"
   ];
 
   build-system = [ hatchling ];
@@ -70,7 +69,6 @@ buildPythonPackage rec {
     alembic
     build # used in custom_components/custom_components.py
     dill # used in state.py
-    fastapi
     granian
     granian.optional-dependencies.reload
     httpx
