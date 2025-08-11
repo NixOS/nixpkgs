@@ -371,10 +371,11 @@ in
 
     systemd.services.redmine = {
       after = [
-        "network.target"
+        "network-online.target"
       ]
       ++ lib.optional mysqlLocal "mysql.service"
       ++ lib.optional pgsqlLocal "postgresql.target";
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
