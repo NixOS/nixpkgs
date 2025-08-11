@@ -730,10 +730,13 @@ in
       services."sshd@" = {
         description = "SSH per-connection Daemon";
         after = [
-          "network.target"
+          "network-online.target"
           "sshd-keygen.service"
         ];
-        wants = [ "sshd-keygen.service" ];
+        wants = [
+          "network-online.target"
+          "sshd-keygen.service"
+        ];
         stopIfChanged = false;
         path = [ cfg.package ];
         environment.LD_LIBRARY_PATH = nssModulesPath;
@@ -755,10 +758,13 @@ in
         description = "SSH Daemon";
         wantedBy = [ "multi-user.target" ];
         after = [
-          "network.target"
+          "network-online.target"
           "sshd-keygen.service"
         ];
-        wants = [ "sshd-keygen.service" ];
+        wants = [
+          "network-online.target"
+          "sshd-keygen.service"
+        ];
         stopIfChanged = false;
         path = [ cfg.package ];
         environment.LD_LIBRARY_PATH = nssModulesPath;
