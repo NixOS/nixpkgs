@@ -4186,12 +4186,6 @@
     github = "carlthome";
     githubId = 1595907;
   };
-  carpinchomug = {
-    email = "aki.suda@protonmail.com";
-    github = "carpinchomug";
-    githubId = 101536256;
-    name = "Akiyoshi Suda";
-  };
   cartr = {
     email = "carter.sande@duodecima.technology";
     github = "cartr";
