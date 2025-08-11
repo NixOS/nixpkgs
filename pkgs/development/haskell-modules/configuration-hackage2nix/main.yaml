@@ -513,6 +513,7 @@ package-maintainers:
     - regex-rure
     - jacinda
     - citeproc
+    - mighttpd2
     # owothia
     - irc-client
     - chatter
