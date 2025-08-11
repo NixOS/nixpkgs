@@ -354,6 +354,19 @@ stdenv.mkDerivation {
            stripLen = 1;
            hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
          })
+
+         # Fix the build with modern libc++.
+         (fetchpatch {
+           name = "add-cstdio.patch";
+           url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
+           stripLen = 1;
+           hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
+         })
+         (fetchpatch {
+           url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+           stripLen = 1;
+           hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+         })
        ]
      }; do
        patch -p1 -d llvm-project/lldb -i $lldbPatch
@@ -419,6 +432,14 @@ stdenv.mkDerivation {
      patchShebangs .
 
      ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+       patch -p1 -d swift-corelibs-libdispatch -i ${
+         # Fix the build with modern Clang.
+         fetchpatch {
+           url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/30bb8019ba79cdae0eb1dc0c967c17996dd5cc0a.patch";
+           hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
+         }
+       }
+
        # NOTE: This interferes with ABI stability on Darwin, which uses the system
        # libraries in the hardcoded path /usr/lib/swift.
        fixCmakeFiles .
