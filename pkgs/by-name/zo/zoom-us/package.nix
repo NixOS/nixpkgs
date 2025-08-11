@@ -62,7 +62,7 @@ let
   versions.x86_64-darwin = "6.5.7.60598";
 
   # This is the fallback version so that evaluation can produce a meaningful result.
-  versions.x86_64-linux = "6.5.7.3298";
+  versions.x86_64-linux = "6.5.8.3527";
 
   srcs = {
     aarch64-darwin = fetchurl {
@@ -76,7 +76,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-6gzgJmB+/cwcEToQpniVVZyQZcqzblQG/num0X+xUIE=";
+      hash = "sha256-qTehkDMyc28XHtta7taNYn8gPCYS/Qdr2VMUIDDC/68=";
     };
   };
 

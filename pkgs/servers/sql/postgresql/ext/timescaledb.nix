@@ -13,13 +13,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.21.1";
+  version = "2.21.2";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
     tag = finalAttrs.version;
-    hash = "sha256-oZaEUz6g/8oVdVyPCkAE0quzYBxO911MZcgd8rFFA3c=";
+    hash = "sha256-pNF75Wh8WMXqxjU19KBiH/jYzT/4uBYuUMH1vRilU94=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -106,7 +106,7 @@ postgresqlBuildExtension (finalAttrs: {
       ||
         # PostgreSQL 18 support issue upstream: https://github.com/timescale/timescaledb/issues/8233
         # Check after next package update.
-        lib.warnIf (finalAttrs.version != "2.21.1") "Is postgresql18Packages.timescaledb still broken?" (
+        lib.warnIf (finalAttrs.version != "2.21.2") "Is postgresql18Packages.timescaledb still broken?" (
           lib.versionAtLeast postgresql.version "18"
         );
   };
