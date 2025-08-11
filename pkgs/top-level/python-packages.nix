@@ -13772,6 +13772,8 @@ self: super: with self; {
     inherit (pkgs) mesa;
   };
 
+  pyrepetierng = callPackage ../development/python-modules/pyrepetierng { };
+
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
   pyrfc3339 = callPackage ../development/python-modules/pyrfc3339 { };
