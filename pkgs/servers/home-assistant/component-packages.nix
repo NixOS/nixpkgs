@@ -6689,7 +6689,8 @@
       ];
     "xs1" =
       ps: with ps; [
-      ]; # missing inputs: xs1-api-client
+        xs1-api-client
+      ];
     "yale" =
       ps: with ps; [
         aiohasupervisor

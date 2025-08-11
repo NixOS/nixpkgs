@@ -19970,6 +19970,8 @@ self: super: with self; {
 
   xrootd = callPackage ../development/python-modules/xrootd { inherit (pkgs) xrootd; };
 
+  xs1-api-client = callPackage ../development/python-modules/xs1-api-client { };
+
   xsdata = callPackage ../development/python-modules/xsdata { };
 
   xstatic = callPackage ../development/python-modules/xstatic { };
