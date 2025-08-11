@@ -8,12 +8,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "catgirl";
   version = "2.2a";
 
   src = fetchurl {
-    url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
+    url = "https://git.causal.agency/catgirl/snapshot/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-xtdgqu4TTgUlht73qRA1Q/coH95lMfvLQQhkcHlCl8I=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     mainProgram = "catgirl";
     maintainers = with maintainers; [ xfnw ];
   };
-}
+})
