@@ -23,6 +23,7 @@ buildPythonApplication rec {
     paramiko
     pynput
     libevdev
+    tkinter
   ];
 
   # no tests
