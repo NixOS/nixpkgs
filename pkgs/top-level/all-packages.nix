@@ -5314,7 +5314,7 @@ with pkgs;
 
   ghdl-llvm = callPackage ../by-name/gh/ghdl/package.nix {
     backend = "llvm";
-    inherit (llvmPackages_15) llvm;
+    inherit (llvmPackages) llvm;
   };
 
   gcc-arm-embedded = gcc-arm-embedded-14;
