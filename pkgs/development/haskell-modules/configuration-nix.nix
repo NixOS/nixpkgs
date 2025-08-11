@@ -354,6 +354,10 @@ builtins.intersectAttrs super {
     (overrideCabal (old: {
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
+
+      passthru = old.passthru or { } // {
+        tests.lix = pkgs.lixPackageSets.stable.nix-serve-ng;
+      };
     }))
   ];
 
