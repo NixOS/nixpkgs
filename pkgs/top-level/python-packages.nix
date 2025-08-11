@@ -8136,6 +8136,8 @@ self: super: with self; {
 
   liblarch = callPackage ../development/python-modules/liblarch { };
 
+  liblp = callPackage ../development/python-modules/liblp { };
+
   liblzfse = callPackage ../development/python-modules/liblzfse { inherit (pkgs) lzfse; };
 
   libmambapy = callPackage ../development/python-modules/libmambapy { };
