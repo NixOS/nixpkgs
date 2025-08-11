@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.111.1";
+  version = "0.111.2";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-WmsLn/pHI3KJSmX5U20eNUEs0Q1upuwkkzcHIYPNYjY=";
+    hash = "sha256-64DdjyzeeYI9u8hYP7CwZvLhCcCzztti2DshvtYcxNQ=";
   };
 
   build-system = [ setuptools ];
