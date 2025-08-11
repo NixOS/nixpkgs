@@ -72,6 +72,12 @@ maven.buildMavenPackage rec {
     ];
   };
 
+  mvnParameters = lib.escapeShellArgs [
+    "-pl"
+    ":forge-gui-desktop,:forge-gui-mobile-dev,:adventure-editor" # forge-gui-mobile-dev is required for forge-adventure
+    "--also-make"
+  ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/share/forge
@@ -89,7 +95,7 @@ maven.buildMavenPackage rec {
     cp ${desktopItem}/share/applications/* $out/share/applications/
 
     mkdir -p $out/share/icons/hicolor/128x128/apps
-    convert AppIcon.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/forge-mtg.png
+    magick AppIcon.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/forge-mtg.png
 
     runHook postInstall
   '';
