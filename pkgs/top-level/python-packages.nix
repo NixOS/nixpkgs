@@ -17552,6 +17552,8 @@ self: super: with self; {
 
   tensorly = callPackage ../development/python-modules/tensorly { };
 
+  tensorpotential = callPackage ../development/python-modules/tensorpotential { };
+
   tensorrt = callPackage ../development/python-modules/tensorrt {
     cudaPackages = pkgs.cudaPackages_11;
   };
