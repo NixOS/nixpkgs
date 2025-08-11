@@ -17,7 +17,9 @@
   libyaml,
   libffi,
   llvmPackages_15,
-  llvmPackages_18,
+  llvmPackages_19,
+  llvmPackages_20,
+  llvmPackages_21,
   makeWrapper,
   openssl,
   pcre2,
@@ -308,7 +310,7 @@ rec {
     version = "1.14.1";
     sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
     doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
@@ -316,7 +318,7 @@ rec {
     version = "1.15.1";
     sha256 = "sha256-L/Q8yZdDq/wn4kJ+zpLfi4pxznAtgjxTCbLnEiCC2K0=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
     doCheck = false;
   };
 
@@ -324,7 +326,7 @@ rec {
     version = "1.16.3";
     sha256 = "sha256-U9H1tHUMyDNicZnXzEccDki5bGXdV0B2Wu2PyCksPVI=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_20;
     doCheck = false;
   };
 
@@ -332,7 +334,7 @@ rec {
     version = "1.17.1";
     sha256 = "sha256-+wHhozPhpIsfQy1Lw+V48zvuWCfXzT4IC9KA1AU/DLw=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_21;
     doCheck = false;
   };
 
