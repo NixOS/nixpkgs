@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcat-unwrapped";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Skardyy";
     repo = "mcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+uq2mqUpdpO5lStf4dj6nYpOff3LOL45fXB338mnlZ8=";
+    hash = "sha256-U2uMc+KjYE8ny4+yO8TleEj2MXardV0ueCNhJCtj2Js=";
   };
 
-  cargoHash = "sha256-m1TJ255jwQOEGqz22t5CmrW0zRyGqgQls84yGK5taWU=";
+  cargoHash = "sha256-bqoaO3gRO6mx8+oDS8blh2DusokmwoPJALD7bt4e47Y=";
 
   passthru = {
     updateScript = nix-update-script { };
