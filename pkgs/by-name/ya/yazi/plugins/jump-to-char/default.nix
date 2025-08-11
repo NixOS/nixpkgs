@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Switch the preview pane between hidden and shown";
+    description = "Vim-like f<char>, jump to the next file whose name starts with <char>.";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
