@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     xorgproto
-    libxcb
   ];
 
   configureFlags =
