@@ -9,15 +9,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openstack-rs";
-  version = "0.12.4";
+  version = "0.13.0";
   src = fetchFromGitHub {
     owner = "gtema";
     repo = "openstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UEnvKqnAY7QHeeEayTk5aBBxHcOrAr7LisvaOiRhRMQ=";
+    hash = "sha256-ywj0K9MdckVuKxjt1za+IyK4SoeyTXoXbDRXLqEkic0=";
   };
 
-  cargoHash = "sha256-YytlhN1UtNnB5ZgCEVyBfiPTnhABjCaA87ejkHJsIOk=";
+  cargoHash = "sha256-e2wt5BS+RQOpo3T5HOutvKGv4lHiIoTk9tEqMs4f5Dw=";
 
   nativeBuildInputs = [
     installShellFiles
