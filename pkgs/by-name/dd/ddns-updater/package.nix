@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  makeWrapper,
   nixosTests,
   nix-update-script,
 }:
@@ -24,6 +25,13 @@ buildGoModule rec {
   ];
 
   subPackages = [ "cmd/ddns-updater" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/ddns-updater \
+      --set GODEBUG "netdns=go"
+  '';
 
   passthru = {
     tests = {
