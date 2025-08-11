@@ -596,7 +596,8 @@
       ];
     "blockchain" =
       ps: with ps; [
-      ]; # missing inputs: python-blockchain-api
+        python-blockchain-api
+      ];
     "blue_current" =
       ps: with ps; [
         bluecurrent-api

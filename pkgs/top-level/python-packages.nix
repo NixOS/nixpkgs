@@ -14487,6 +14487,8 @@ self: super: with self; {
 
   python-bitcoinlib = callPackage ../development/python-modules/python-bitcoinlib { };
 
+  python-blockchain-api = callPackage ../development/python-modules/python-blockchain-api { };
+
   python-box = callPackage ../development/python-modules/python-box { };
 
   python-bring-api = callPackage ../development/python-modules/python-bring-api { };
