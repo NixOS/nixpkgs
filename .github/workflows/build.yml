@@ -26,22 +26,21 @@ jobs:
       matrix:
         include:
           - runner: ubuntu-24.04
-            system: x86_64-linux
+            name: x86_64-linux
+            systems: x86_64-linux
             builds: [shell, manual-nixos, lib-tests, tarball]
             desc: shell, docs, lib, tarball
           - runner: ubuntu-24.04-arm
-            system: aarch64-linux
+            name: aarch64-linux
+            systems: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
             desc: shell, docs
-          - runner: macos-13
-            system: x86_64-darwin
-            builds: [shell]
-            desc: shell
           - runner: macos-14
-            system: aarch64-darwin
+            name: darwin
+            systems: aarch64-darwin x86_64-darwin
             builds: [shell]
             desc: shell
-    name: '${{ matrix.system }}: ${{ matrix.desc }}'
+    name: '${{ matrix.name }}: ${{ matrix.desc }}'
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     steps:
@@ -66,31 +65,33 @@ jobs:
           name: nixpkgs-ci
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
+      - run: nix-env --install -f pinned -A nix-build-uncached
+
       - name: Build shell
         if: contains(matrix.builds, 'shell')
-        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A shell
+        run: echo "${{ matrix.systems }}" | xargs -n1 nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A shell --argstr system
 
       - name: Build NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
           contains(fromJSON(inputs.baseBranch).type, 'primary')
-        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A manual-nixos --argstr system ${{ matrix.system }} --out-link nixos-manual
+        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A manual-nixos --out-link nixos-manual
 
       - name: Build Nixpkgs manual
         if: contains(matrix.builds, 'manual-nixpkgs') && !cancelled()
-        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs -A manual-nixpkgs-tests
+        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs -A manual-nixpkgs-tests
 
       - name: Build Nixpkgs manual tests
         if: contains(matrix.builds, 'manual-nixpkgs-tests') && !cancelled()
-        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs-tests
+        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs-tests
 
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()
-        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A lib-tests
+        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A lib-tests
 
       - name: Build tarball
         if: contains(matrix.builds, 'tarball') && !cancelled()
-        run: nix-build untrusted/ci --arg nixpkgs ./pinned -A tarball
+        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A tarball
 
       - name: Upload NixOS manual
         if: |
@@ -98,6 +99,5 @@ jobs:
           contains(fromJSON(inputs.baseBranch).type, 'primary')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: nixos-manual-${{ matrix.system }}
+          name: nixos-manual-${{ matrix.name }}
           path: nixos-manual
-          if-no-files-found: error
