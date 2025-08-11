@@ -43,7 +43,10 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/hashicorp/terraform-mcp-server";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ connerohnesorge ];
+    maintainers = with lib.maintainers; [
+      connerohnesorge
+      pilz
+    ];
     mainProgram = "terraform-mcp-server";
   };
 })
