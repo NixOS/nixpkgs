@@ -4250,7 +4250,8 @@
       ];
     "opple" =
       ps: with ps; [
-      ]; # missing inputs: pyoppleio-legacy
+        pyoppleio-legacy
+      ];
     "oralb" =
       ps: with ps; [
         aioesphomeapi
