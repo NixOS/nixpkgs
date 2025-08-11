@@ -1,5 +1,5 @@
 { netbird }:
 
 netbird.override {
-  componentName = "ui";
+  componentName = "relay";
 }
