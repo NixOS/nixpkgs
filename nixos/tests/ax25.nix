@@ -25,11 +25,16 @@ let
       description = "mocked tnc";
     };
 
-    services.ax25.axlisten = {
-      enable = true;
+    services.ax25 = {
+      axlisten = {
+        enable = true;
+      };
+      mheard = {
+        enable = true;
+      };
     };
 
-    # All mocks radios will connect back to socat-broker on node 1 in order to get
+    # Each mock radio will connect back to socat-broker on node 1 in order to get
     # all messages that are "broadcasted over the ether"
     systemd.services.ax25-mock-hardware = {
       description = "mock AX.25 TNC and Radio";
@@ -80,6 +85,14 @@ in
         m.wait_for_unit("axlisten.service")
         m.fail("journalctl -o cat -u axlisten.service | grep -i \"no AX.25 port data configured\"")
 
+      def whose_heard(m):
+        peers = [ machine.name for machine in machines ]
+        peers.remove(m.name)
+        for peer in peers:
+          peerId = peer[-1]
+          packets = m.succeed(f"mheard | grep -i NOCALL-{peerId}" + " | awk '{ print $3 }'")
+          assert int(packets) == len(peers) * 5
+
       # start the first node since the socat-broker needs to be running
       node1.start()
       node1.wait_for_unit("ax25-mock-ether.service")
@@ -123,5 +136,9 @@ in
       node3.succeed("echo hello | ax25_call ${port} NOCALL-3 NOCALL-2")
       node2.sleep(1)
       node2.succeed("journalctl -o cat -u axlisten.service | grep -A1 \"NOCALL-3 to NOCALL-2 ctl I00\" | grep hello")
+
+      whose_heard(node1)
+      whose_heard(node2)
+      whose_heard(node3)
     '';
 }
