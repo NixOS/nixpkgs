@@ -102,7 +102,9 @@ stdenv.mkDerivation {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
   ]
-  ++ lib.optional (llvmMajor == "19") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
+  ++ lib.optional (
+    lib.toInt llvmMajor >= 19
+  ) "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
