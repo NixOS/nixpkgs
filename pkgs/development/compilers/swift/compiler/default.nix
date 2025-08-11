@@ -658,7 +658,7 @@ stdenv.mkDerivation {
     mv llvm/bin/clang-15{-unwrapped,}
     mv swift/bin/swift-frontend{-unwrapped,}
 
-    mkdir $out $lib
+    mkdir $lib
 
     # Install clang binaries only. We hide these with the wrapper, so they are
     # for private use by Swift only.
