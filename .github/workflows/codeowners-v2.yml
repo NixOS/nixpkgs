@@ -71,7 +71,7 @@ jobs:
       - name: Build codeowners validator
         run: nix-build trusted/ci -A codeownersValidator
 
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+      - uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
         if: github.event_name == 'pull_request_target' && vars.OWNER_RO_APP_ID
         id: app-token
         with:
@@ -120,7 +120,7 @@ jobs:
       - name: Build review request package
         run: nix-build trusted/ci -A requestReviews
 
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+      - uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
         if: github.event_name == 'pull_request_target' && vars.OWNER_APP_ID
         id: app-token
         with:
