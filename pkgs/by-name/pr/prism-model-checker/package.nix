@@ -22,13 +22,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "prism-model-checker";
-  version = "4.8.1";
+  version = "4.9";
 
   src = fetchFromGitHub {
     owner = "prismmodelchecker";
     repo = "prism";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-igFRIjPfx0BFpQjaW/vgMEnH2HLC06aL3IMHh+ELB6U=";
+    hash = "sha256-eoyMGrXta49j2h/bStPuzrF6OZd/l2aQBngPbTZEvAo=";
   };
 
   nativeBuildInputs = [
