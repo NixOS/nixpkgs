@@ -2,7 +2,8 @@
   ctags,
   fetchurl,
   lib,
-  libressl,
+  libretls,
+  openssl,
   ncurses,
   pkg-config,
   stdenv,
@@ -19,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   # catgirl's configure script uses pkg-config --variable exec_prefix openssl
   # to discover the install location of the openssl(1) utility. exec_prefix
-  # is the "out" output of libressl in our case (where the libraries are
+  # is the "out" output of openssl in our case (where the libraries are
   # installed), so we need to fix this up.
   postConfigure = ''
-    substituteInPlace config.mk --replace \
+    substituteInPlace config.mk --replace-fail \
       "$($PKG_CONFIG --variable exec_prefix openssl)" \
-      "${lib.getBin libressl}"
+      "${lib.getBin openssl}"
   '';
 
   nativeBuildInputs = [
@@ -32,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    libressl
+    libretls
+    openssl
     ncurses
   ];
   strictDeps = true;
