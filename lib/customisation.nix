@@ -285,18 +285,9 @@ rec {
         arg:
         let
           loc = builtins.unsafeGetAttrPos arg fargs;
-          # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
-          # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
-          loc' =
-            if loc != null then
-              loc.file + ":" + toString loc.line
-            else if !isFunction fn then
-              toString (lib.filesystem.resolveDefaultNix fn)
-            else
-              "<unknown location>";
         in
         "Function called without required argument \"${arg}\" at "
-        + "${loc'}${prettySuggestions (getSuggestions arg)}";
+        + "${loc.file}:${loc.line}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
       error = errorForArg (head (attrNames missingArgs));
