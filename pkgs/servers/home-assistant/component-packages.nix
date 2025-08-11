@@ -3514,7 +3514,8 @@
       ];
     "melissa" =
       ps: with ps; [
-      ]; # missing inputs: py-melissa-climate
+        py-melissa-climate
+      ];
     "melnor" =
       ps: with ps; [
         aioesphomeapi
@@ -7358,6 +7359,7 @@
     "media_player"
     "media_source"
     "melcloud"
+    "melissa"
     "melnor"
     "meraki"
     "met"
