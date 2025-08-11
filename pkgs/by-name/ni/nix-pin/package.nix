@@ -65,7 +65,7 @@ let
       };
     meta = with lib; {
       homepage = "https://github.com/timbertson/nix-pin";
-      description = "nixpkgs development utility";
+      description = "Nixpkgs development utility";
       license = licenses.mit;
       maintainers = [ maintainers.timbertson ];
       platforms = platforms.all;

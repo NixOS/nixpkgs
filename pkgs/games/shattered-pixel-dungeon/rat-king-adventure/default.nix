@@ -19,6 +19,6 @@ callPackage ../generic.nix rec {
   meta = {
     homepage = "https://github.com/TrashboxBobylev/Rat-King-Adventure";
     downloadPage = "https://github.com/TrashboxBobylev/Rat-King-Adventure/releases";
-    description = "An expansive fork of RKPD2, itself a fork of the Shattered Pixel Dungeon roguelike";
+    description = "Expansive fork of RKPD2, itself a fork of the Shattered Pixel Dungeon roguelike";
   };
 }
