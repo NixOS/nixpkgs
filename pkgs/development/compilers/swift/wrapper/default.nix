@@ -41,6 +41,11 @@ stdenv.mkDerivation (
             --replace-fail \
               "-resource-dir=$out/resource-root" \
               "-resource-dir=${lib.getLib swift}/lib/swift/clang"
+        ''
+        # We need the libc++ headers corresponding to the LLVM version of
+        # Swift’s Clang.
+        + lib.optionalString (clang.libcxx != null) ''
+          include -isystem "${lib.getDev swift}/include/c++/v1" > $out/nix-support/libcxx-cxxflags
         '';
     });
 

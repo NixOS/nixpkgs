@@ -146,7 +146,10 @@ let
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
       -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
-      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|"
+      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|" \
+    ${lib.optionalString (clang.libcxx != null) ''
+      -e 's|$NIX_CXXSTDLIB_COMPILE_${clang.suffixSalt}|-isystem '$SWIFT_BUILD_ROOT'/libcxx/include/c++/v1|g'
+    ''}
     chmod a+x "$targetFile"
   '';
 
@@ -180,7 +183,10 @@ let
     sed < '${swiftWrapper}' > "$targetFile" \
       -e "s|@prog@|'$unwrappedSwift'|g" \
       -e 's|@cc_wrapper@|${clangForWrappers}|g' \
-      -e 's|exec "$prog"|exec -a "$0" "$prog"|g'
+      -e 's|exec "$prog"|exec -a "$0" "$prog"|g' \
+    ${lib.optionalString (clang.libcxx != null) ''
+      -e 's|$NIX_CXXSTDLIB_COMPILE_${clang.suffixSalt}|-isystem '$SWIFT_BUILD_ROOT'/libcxx/include/c++/v1|g'
+    ''}
     chmod a+x "$targetFile"
   '';
 
@@ -326,7 +332,6 @@ stdenv.mkDerivation {
          inherit clang;
        }
      }
-     patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
      patch -p1 -d swift -i ${
        replaceVars ./patches/swift-darwin-plistbuddy-workaround.patch {
          inherit swiftArch;
@@ -504,6 +509,19 @@ stdenv.mkDerivation {
 
     cmakeFlags="-GNinja"
     buildProject swift-cmark
+
+    ${lib.optionalString (clang.libcxx != null) ''
+      # Install the libc++ headers corresponding to the LLVM version of
+      # Swift’s Clang.
+      cmakeFlags="
+        -GNinja
+        -DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi
+        -DLIBCXXABI_INSTALL_INCLUDE_DIR=$dev/include/c++/v1
+      "
+      ninjaFlags="install-cxx-headers install-cxxabi-headers"
+      buildProject libcxx llvm-project/runtimes
+      unset ninjaFlags
+    ''}
 
     # Some notes:
     # - The Swift build just needs Clang.
