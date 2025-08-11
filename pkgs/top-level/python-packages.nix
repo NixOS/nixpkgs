@@ -14094,6 +14094,8 @@ self: super: with self; {
 
   pystemmer = callPackage ../development/python-modules/pystemmer { };
 
+  pystiebeleltron = callPackage ../development/python-modules/pystiebeleltron { };
+
   pystray = callPackage ../development/python-modules/pystray { };
 
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
