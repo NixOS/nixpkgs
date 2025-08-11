@@ -1395,6 +1395,7 @@ in
   syncthing-folders = runTest ./syncthing-folders.nix;
   syncthing-relay = runTest ./syncthing-relay.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  sysfs = runTest ./sysfs.nix;
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };

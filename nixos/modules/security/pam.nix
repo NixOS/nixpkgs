@@ -2311,11 +2311,28 @@ in
 
     environment.etc = lib.mapAttrs' makePAMService enabledServices;
 
-    systemd = lib.optionalAttrs config.security.pam.services.login.updateWtmp {
-      tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
-      services.lastlog2-import.enable = true;
-      packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
-    };
+    systemd =
+      lib.optionalAttrs
+        (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
+        {
+          tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
+          services.lastlog2-import = {
+            enable = true;
+            wantedBy = [ "default.target" ];
+            after = [
+              "local-fs.target"
+              "systemd-tmpfiles-setup.service"
+            ];
+            # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
+            # uses unpatched /usr/bin/mv, needs to be fixed on staging
+            # in the meantime, use a service drop-in here
+            serviceConfig.ExecStartPost = [
+              ""
+              "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
+            ];
+          };
+          packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
+        };
 
     security.pam.services = {
       other.text = ''

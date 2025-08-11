@@ -4575,6 +4575,8 @@ self: super: with self; {
 
   elasticsearchdsl = self.elasticsearch-dsl;
 
+  electrickiwi-api = callPackage ../development/python-modules/electrickiwi-api { };
+
   electrum-aionostr = callPackage ../development/python-modules/electrum-aionostr { };
 
   electrum-ecc = callPackage ../development/python-modules/electrum-ecc { };
@@ -12250,6 +12252,8 @@ self: super: with self; {
 
   py-madvr2 = callPackage ../development/python-modules/py-madvr2 { };
 
+  py-melissa-climate = callPackage ../development/python-modules/py-melissa-climate { };
+
   py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
 
   py-multibase = callPackage ../development/python-modules/py-multibase { };
@@ -13286,6 +13290,8 @@ self: super: with self; {
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
+  pymochad = callPackage ../development/python-modules/pymochad { };
+
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
@@ -13459,6 +13465,8 @@ self: super: with self; {
   pyopnsense = callPackage ../development/python-modules/pyopnsense { };
 
   pyoppleio = callPackage ../development/python-modules/pyoppleio { };
+
+  pyoppleio-legacy = callPackage ../development/python-modules/pyoppleio-legacy { };
 
   pyorc = callPackage ../development/python-modules/pyorc { };
 
@@ -13761,6 +13769,8 @@ self: super: with self; {
   pyrender = callPackage ../development/python-modules/pyrender {
     inherit (pkgs) mesa;
   };
+
+  pyrepetierng = callPackage ../development/python-modules/pyrepetierng { };
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
@@ -14075,6 +14085,8 @@ self: super: with self; {
   pystemd = callPackage ../development/python-modules/pystemd { inherit (pkgs) systemd; };
 
   pystemmer = callPackage ../development/python-modules/pystemmer { };
+
+  pystiebeleltron = callPackage ../development/python-modules/pystiebeleltron { };
 
   pystray = callPackage ../development/python-modules/pystray { };
 
@@ -14474,6 +14486,8 @@ self: super: with self; {
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-bitcoinlib = callPackage ../development/python-modules/python-bitcoinlib { };
+
+  python-blockchain-api = callPackage ../development/python-modules/python-blockchain-api { };
 
   python-box = callPackage ../development/python-modules/python-box { };
 
@@ -17322,6 +17336,8 @@ self: super: with self; {
 
   starline = callPackage ../development/python-modules/starline { };
 
+  starlingbank = callPackage ../development/python-modules/starlingbank { };
+
   starlink-grpc-core = callPackage ../development/python-modules/starlink-grpc-core { };
 
   stashy = callPackage ../development/python-modules/stashy { };
@@ -19957,6 +19973,8 @@ self: super: with self; {
   xpybutil = callPackage ../development/python-modules/xpybutil { };
 
   xrootd = callPackage ../development/python-modules/xrootd { inherit (pkgs) xrootd; };
+
+  xs1-api-client = callPackage ../development/python-modules/xs1-api-client { };
 
   xsdata = callPackage ../development/python-modules/xsdata { };
 

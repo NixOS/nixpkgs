@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A tool to generate Go data types from JSON Schema definitions.";
+    description = "Tool to generate Go data types from JSON Schema definitions";
     homepage = "https://github.com/omissis/go-jsonschema";
     changelog = "https://github.com/omissis/go-jsonschema/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

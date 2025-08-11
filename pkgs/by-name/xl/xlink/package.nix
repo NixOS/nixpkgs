@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "XLink library for communication with Myriad VPUs";
+    description = "Library for communication with Myriad VPUs";
     homepage = "https://github.com/luxonis/XLink";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
