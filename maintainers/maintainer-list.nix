@@ -25752,6 +25752,19 @@
     githubId = 1391883;
     name = "Tom Hall";
   };
+  threadexio = {
+    email = "pzarganitis@gmail.com";
+    matrix = "@threadexio:matrix.org";
+    github = "threadexio";
+    githubId = 59455514;
+    name = "Panagiotis Zarganitis";
+
+    keys = [
+      {
+        fingerprint = "D475 1508 457E 4172 6D4A  4F24 7FAD 5F3A 3702 647C";
+      }
+    ];
+  };
   three = {
     email = "eric@ericroberts.dev";
     github = "three";
