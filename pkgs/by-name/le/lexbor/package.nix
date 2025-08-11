@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Lexbor is development of an open source HTML Renderer library";
+    description = "Open source HTML Renderer library";
     homepage = "https://github.com/lexbor/lexbor";
     changelog = "https://github.com/lexbor/lexbor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

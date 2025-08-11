@@ -21974,6 +21974,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  workspaces-nvim = buildVimPlugin {
+    pname = "workspaces.nvim";
+    version = "2024-10-08";
+    src = fetchFromGitHub {
+      owner = "natecraddock";
+      repo = "workspaces.nvim";
+      rev = "55a1eb6f5b72e07ee8333898254e113e927180ca";
+      sha256 = "143xzg60yiw1aam7sc5rva9bzzmshfzpm2sacimwr8188qsz8xvb";
+    };
+    meta.homepage = "https://github.com/natecraddock/workspaces.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   wrapping-nvim = buildVimPlugin {
     pname = "wrapping.nvim";
     version = "2025-01-16";

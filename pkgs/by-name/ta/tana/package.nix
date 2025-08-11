@@ -101,7 +101,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Tana is an intelligent all-in-one workspace";
+    description = "Intelligent all-in-one workspace";
     longDescription = ''
       At its core, Tana is an outline editor which can be extended to
       cover multiple use-cases and different workflows.

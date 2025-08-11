@@ -1059,6 +1059,7 @@ in
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
+  nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
@@ -1393,6 +1394,7 @@ in
   syncthing-folders = runTest ./syncthing-folders.nix;
   syncthing-relay = runTest ./syncthing-relay.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  sysfs = runTest ./sysfs.nix;
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };

@@ -145,10 +145,7 @@ stdenv.mkDerivation (
         };
 
         meta = meta // {
-          description = ''
-            Wrapped variant of ${pname} which launches in a FHS compatible environment.
-            Should allow for easy usage of extensions without nix-specific modifications.
-          '';
+          description = "Wrapped variant of ${pname} which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications";
         };
       };
   in
@@ -277,27 +274,28 @@ stdenv.mkDerivation (
           ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
         ''
       else
-        ''
-          mkdir -p "$out/lib/${libraryName}" "$out/bin"
-          cp -r ./* "$out/lib/${libraryName}"
+        (
+          ''
+            mkdir -p "$out/lib/${libraryName}" "$out/bin"
+            cp -r ./* "$out/lib/${libraryName}"
 
-          ln -s "$out/lib/${libraryName}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
-
+            ln -s "$out/lib/${libraryName}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
+          ''
           # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
-          mkdir -p "$out/share/pixmaps"
-          cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
-
-        ''
+          + ''
+            mkdir -p "$out/share/pixmaps"
+            cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
+          ''
+        )
+        # Override the previously determined VSCODE_PATH with the one we know to be correct
         + (lib.optionalString patchVSCodePath ''
-          # Override the previously determined VSCODE_PATH with the one we know to be correct
           sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
           grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
         '')
+        # Remove native encryption code, as it derives the key from the executable path which does not work for us.
+        # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
+        # in the first place.
         + ''
-
-          # Remove native encryption code, as it derives the key from the executable path which does not work for us.
-          # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
-          # in the first place.
           rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
         ''
     )
@@ -312,9 +310,11 @@ stdenv.mkDerivation (
             lib.optionalString stdenv.hostPlatform.isLinux
               "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
           }
-        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+    ''
+    # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+    + ''
         --prefix PATH : ${glib.bin}/bin
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
@@ -322,22 +322,25 @@ stdenv.mkDerivation (
     # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
     # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
     postPatch =
-      lib.optionalString stdenv.hostPlatform.isLinux ''
-        # this is a fix for "save as root" functionality
-        packed="resources/app/node_modules.asar"
-        unpacked="resources/app/node_modules"
-        asar extract "$packed" "$unpacked"
-        substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
-          --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
-          --replace "/bin/bash" "${bash}/bin/bash"
-        rm -rf "$packed"
-
+      # this is a fix for "save as root" functionality
+      lib.optionalString stdenv.hostPlatform.isLinux (
+        ''
+          packed="resources/app/node_modules.asar"
+          unpacked="resources/app/node_modules"
+          asar extract "$packed" "$unpacked"
+          substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
+            --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
+            --replace-fail "/bin/bash" "${bash}/bin/bash"
+          rm -rf "$packed"
+        ''
         # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,
         # fails to load with: electron/js2c/renderer_init: Error: Cannot find module 'jschardet'
         # and the window immediately closes which renders VSCode unusable
         # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
-        ln -rs "$unpacked" "$packed"
-      ''
+        + ''
+          ln -rs "$unpacked" "$packed"
+        ''
+      )
       + (
         let
           vscodeRipgrep =

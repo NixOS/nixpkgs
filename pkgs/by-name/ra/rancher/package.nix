@@ -15,6 +15,8 @@ buildGoModule rec {
     hash = "sha256-K0uMo/sRol2F02iV7b9NcmZcQGZ9iSEIdbZgT+Ea+/c=";
   };
 
+  env.CGO_ENABLED = 0;
+
   ldflags = [
     "-w"
     "-s"
@@ -35,7 +37,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Rancher Command Line Interface (CLI) is a unified tool for interacting with your Rancher Server";
+    description = "CLI tool for interacting with your Rancher Server";
     mainProgram = "rancher";
     homepage = "https://github.com/rancher/cli";
     license = licenses.asl20;

@@ -31,6 +31,7 @@
   ./config/stub-ld.nix
   ./config/swap.nix
   ./config/sysctl.nix
+  ./config/sysfs.nix
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/terminfo.nix
@@ -591,6 +592,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/livebook.nix
   ./services/development/lorri.nix
+  ./services/development/nixseparatedebuginfod2.nix
   ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/vsmartcard-vpcd.nix

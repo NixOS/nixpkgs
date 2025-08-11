@@ -114,7 +114,8 @@
       ];
     "airos" =
       ps: with ps; [
-      ]; # missing inputs: airos
+        airos
+      ];
     "airq" =
       ps: with ps; [
         aioairq
@@ -595,7 +596,8 @@
       ];
     "blockchain" =
       ps: with ps; [
-      ]; # missing inputs: python-blockchain-api
+        python-blockchain-api
+      ];
     "blue_current" =
       ps: with ps; [
         bluecurrent-api
@@ -1360,7 +1362,8 @@
       ]; # missing inputs: pyebox
     "ebusd" =
       ps: with ps; [
-      ]; # missing inputs: ebusdpy
+        ebusdpy
+      ];
     "ecoal_boiler" =
       ps: with ps; [
         ecoaliface
@@ -1422,7 +1425,8 @@
       ];
     "electric_kiwi" =
       ps: with ps; [
-      ]; # missing inputs: electrickiwi-api
+        electrickiwi-api
+      ];
     "elevenlabs" =
       ps: with ps; [
         elevenlabs
@@ -2835,7 +2839,8 @@
       ];
     "itach" =
       ps: with ps; [
-      ]; # missing inputs: pyitachip2ir
+        pyitachip2ir
+      ];
     "itunes" =
       ps: with ps; [
       ];
@@ -3509,7 +3514,8 @@
       ];
     "melissa" =
       ps: with ps; [
-      ]; # missing inputs: py-melissa-climate
+        py-melissa-climate
+      ];
     "melnor" =
       ps: with ps; [
         aioesphomeapi
@@ -3676,7 +3682,8 @@
       ];
     "mochad" =
       ps: with ps; [
-      ]; # missing inputs: pymochad
+        pymochad
+      ];
     "modbus" =
       ps: with ps; [
         pymodbus
@@ -4247,7 +4254,8 @@
       ];
     "opple" =
       ps: with ps; [
-      ]; # missing inputs: pyoppleio-legacy
+        pyoppleio-legacy
+      ];
     "oralb" =
       ps: with ps; [
         aioesphomeapi
@@ -4464,7 +4472,8 @@
       ];
     "pjlink" =
       ps: with ps; [
-      ]; # missing inputs: pypjlink2
+        pypjlink2
+      ];
     "plaato" =
       ps: with ps; [
         aiohasupervisor
@@ -4878,7 +4887,8 @@
       ];
     "recswitch" =
       ps: with ps; [
-      ]; # missing inputs: pyrecswitch
+        pyrecswitch
+      ];
     "reddit" =
       ps: with ps; [
         praw
@@ -4928,7 +4938,8 @@
       ];
     "repetier" =
       ps: with ps; [
-      ]; # missing inputs: pyrepetierng
+        pyrepetierng
+      ];
     "rest" =
       ps: with ps; [
         jsonpath
@@ -5617,7 +5628,8 @@
       ];
     "starlingbank" =
       ps: with ps; [
-      ]; # missing inputs: starlingbank
+        starlingbank
+      ];
     "starlink" =
       ps: with ps; [
         starlink-grpc-core
@@ -5648,7 +5660,8 @@
       ];
     "stiebel_eltron" =
       ps: with ps; [
-      ]; # missing inputs: pystiebeleltron
+        pystiebeleltron
+      ];
     "stookwijzer" =
       ps: with ps; [
         stookwijzer
@@ -5755,7 +5768,8 @@
       ];
     "switchmate" =
       ps: with ps; [
-      ]; # missing inputs: PySwitchmate
+        pyswitchmate
+      ];
     "symfonisk" =
       ps: with ps; [
       ];
@@ -5817,7 +5831,8 @@
       ];
     "tami4" =
       ps: with ps; [
-      ]; # missing inputs: Tami4EdgeAPI
+        tami4edgeapi
+      ];
     "tank_utility" =
       ps: with ps; [
         tank-utility
@@ -5979,7 +5994,8 @@
       ];
     "thingspeak" =
       ps: with ps; [
-      ]; # missing inputs: thingspeak
+        thingspeak
+      ];
     "thinkingcleaner" =
       ps: with ps; [
       ]; # missing inputs: pythinkingcleaner
@@ -6430,7 +6446,8 @@
       ];
     "volvo" =
       ps: with ps; [
-      ]; # missing inputs: volvocarsapi
+        volvocarsapi
+      ];
     "volvooncall" =
       ps: with ps; [
         volvooncall
@@ -6574,7 +6591,8 @@
       ];
     "wmspro" =
       ps: with ps; [
-      ]; # missing inputs: pywmspro
+        pywmspro
+      ];
     "wolflink" =
       ps: with ps; [
         wolf-comm
@@ -6673,7 +6691,8 @@
       ];
     "xs1" =
       ps: with ps; [
-      ]; # missing inputs: xs1-api-client
+        xs1-api-client
+      ];
     "yale" =
       ps: with ps; [
         aiohasupervisor
@@ -6867,6 +6886,7 @@
     "airgradient"
     "airly"
     "airnow"
+    "airos"
     "airq"
     "airthings"
     "airthings_ble"
@@ -7046,6 +7066,7 @@
     "eheimdigital"
     "eight_sleep"
     "electrasmart"
+    "electric_kiwi"
     "elevenlabs"
     "elgato"
     "elkm1"
@@ -7338,6 +7359,7 @@
     "media_player"
     "media_source"
     "melcloud"
+    "melissa"
     "melnor"
     "meraki"
     "met"
@@ -7359,6 +7381,7 @@
     "mjpeg"
     "moat"
     "mobile_app"
+    "mochad"
     "modbus"
     "modem_callerid"
     "modern_forms"
@@ -7479,6 +7502,7 @@
     "pi_hole"
     "picnic"
     "ping"
+    "pjlink"
     "plaato"
     "plant"
     "playstation_network"
@@ -7644,6 +7668,7 @@
     "statsd"
     "steam_online"
     "steamist"
+    "stiebel_eltron"
     "stookwijzer"
     "stream"
     "streamlabswater"
@@ -7671,6 +7696,7 @@
     "tag"
     "tailscale"
     "tailwind"
+    "tami4"
     "tankerkoenig"
     "tasmota"
     "tautulli"
@@ -7765,6 +7791,7 @@
     "voicerss"
     "voip"
     "volumio"
+    "volvo"
     "volvooncall"
     "vulcan"
     "vultr"
@@ -7794,6 +7821,7 @@
     "withings"
     "wiz"
     "wled"
+    "wmspro"
     "wolflink"
     "workday"
     "worldclock"

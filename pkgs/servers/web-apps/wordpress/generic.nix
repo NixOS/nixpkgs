@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wordpress.org";
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
+    description = "Open source software you can use to create a beautiful website, blog, or app";
     license = [ licenses.gpl2Plus ];
     maintainers = [ maintainers.basvandijk ];
     platforms = platforms.all;
