@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
   buildGoModule,
   bun,
   fetchFromGitHub,
+  makeBinaryWrapper,
   models-dev,
   nix-update-script,
   testers,
@@ -109,6 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bun
+    makeBinaryWrapper
     models-dev
   ];
 
@@ -150,6 +153,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm755 opencode $out/bin/opencode
 
     runHook postInstall
+  '';
+
+  # Execution of commands using bash-tool fail on linux with
+  # Error [ERR_DLOPEN_FAILED]: libstdc++.so.6: cannot open shared object file: No such
+  # file or directory
+  # Thus, we add libstdc++.so.6 manually to LD_LIBRARY_PATH
+  postFixup = ''
+    wrapProgram $out/bin/opencode \
+      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
   '';
 
   passthru = {
