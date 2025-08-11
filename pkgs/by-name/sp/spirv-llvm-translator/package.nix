@@ -14,9 +14,7 @@
 
 let
   llvmMajor = lib.versions.major llvm.version;
-  isROCm = lib.hasPrefix "rocm" llvm.pname;
 
-  # ROCm, if actively updated will always be at the latest version
   versions = {
     "21" = rec {
       version = "21.1.0";
@@ -60,9 +58,7 @@ let
     };
   };
 
-  branch =
-    versions."${if isROCm then "17" else llvmMajor}"
-      or (throw "Incompatible LLVM version ${llvmMajor}");
+  branch = versions."${llvmMajor}" or (throw "Incompatible LLVM version ${llvmMajor}");
 in
 stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
@@ -86,20 +82,20 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ]
-  ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
+    llvm.dev
+  ];
 
   buildInputs = [
     spirv-headers
     spirv-tools
-  ]
-  ++ lib.optionals (!isROCm) [ llvm ];
+    llvm
+  ];
 
   nativeCheckInputs = [ lit ];
 
   cmakeFlags = [
     "-DLLVM_INCLUDE_TESTS=ON"
-    "-DLLVM_DIR=${(if isROCm then llvm else llvm.dev)}"
+    "-DLLVM_DIR=${llvm.dev}"
     "-DBUILD_SHARED_LIBS=YES"
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
