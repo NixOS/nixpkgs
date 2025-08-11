@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
   buildGoModule,
   bun,
   fetchFromGitHub,
+  makeWrapper,
   models-dev,
   nix-update-script,
   testers,
@@ -109,6 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bun
+    makeWrapper
     models-dev
   ];
 
@@ -150,6 +153,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm755 opencode $out/bin/opencode
 
     runHook postInstall
+  '';
+
+  # Add runtime dependencies for libstdc++.so.6
+  postFixup = ''
+    mv $out/bin/opencode $out/bin/.opencode-unwrapped
+    makeWrapper $out/bin/.opencode-unwrapped $out/bin/opencode \
+      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
   '';
 
   passthru = {
