@@ -926,6 +926,36 @@ rec {
 
   darwinArch = cpu: if cpu.name == "aarch64" then "arm64" else cpu.name;
 
+  IEEE_format =
+    cpu:
+    builtins.getAttr cpu.name {
+      "aarch64" = "binary64";
+      "armv5tel" = "binary64";
+      "armv6l" = "binary64";
+      "armv7a" = "binary64";
+      "armv7l" = "binary64";
+      "arm" = "binary64";
+      "arm64" = "binary128";
+      "avr" = "binary32";
+      "i686" = "x87_extended";
+      "loongarch64" = "binary64"; # not well documented; usually binary64
+      "m68k" = "binary64"; # classic m68k is big-endian
+      "microblaze" = "binary64";
+      "microblazeel" = "binary64";
+      "wasm32" = "binary64";
+      "mips" = "binary64";
+      "mips64" = "binary64";
+      "mips64el" = "binary64";
+      "mipsel" = "binary64";
+      "powerpc64" = "binary64"; # on modern Linux (POWER9+)
+      "powerpc64le" = "binary64"; # recent distros switched to IEEE quad
+      "riscv32" = "binary64";
+      "riscv64" = "binary64"; # if quad ext enabled; otherwise double
+      "s390" = "binary64";
+      "s390x" = "binary64";
+      "x86_64" = "x87_extended";
+    };
+
   doubleFromSystem =
     {
       cpu,
