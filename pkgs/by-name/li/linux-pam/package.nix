@@ -114,5 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
   };
 })
