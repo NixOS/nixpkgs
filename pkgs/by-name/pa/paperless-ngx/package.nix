@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   node-gyp,
   nodejs_20,
   nixosTests,
@@ -143,6 +144,13 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   inherit version src;
+
+  # Manual partial backport of https://github.com/paperless-ngx/paperless-ngx/commit/9889c59d3daa8f4ac8ec2400c00ddc36a7ca63c9
+  # Fixes build with latest concurrent-log-handler.
+  # FIXME: remove in next update
+  patches = [
+    ./concurrent-log-handler.patch
+  ];
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky

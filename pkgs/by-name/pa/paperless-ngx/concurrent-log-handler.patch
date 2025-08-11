@@ -1,0 +1,21 @@
+diff --git a/src/paperless/settings.py b/src/paperless/settings.py
+index 3b69b2fc2..8549b9396 100644
+--- a/src/paperless/settings.py
++++ b/src/paperless/settings.py
+@@ -11,7 +11,6 @@ from typing import Final
+ from urllib.parse import urlparse
+ 
+ from celery.schedules import crontab
+-from concurrent_log_handler.queue import setup_logging_queues
+ from django.utils.translation import gettext_lazy as _
+ from dotenv import load_dotenv
+ 
+@@ -803,8 +802,6 @@ USE_TZ = True
+ # Logging                                                                     #
+ ###############################################################################
+ 
+-setup_logging_queues()
+-
+ LOGGING_DIR.mkdir(parents=True, exist_ok=True)
+ 
+ LOGROTATE_MAX_SIZE = os.getenv("PAPERLESS_LOGROTATE_MAX_SIZE", 1024 * 1024)
