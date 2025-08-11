@@ -18,8 +18,6 @@ let
     cuda_cudart
     cuda_nvcc
     cudaAtLeast
-    cudaOlder
-    cudatoolkit
     nccl
     ;
 in
@@ -44,15 +42,11 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     which
-  ]
-  ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-  ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+    cuda_nvcc
+  ];
 
   buildInputs = [
     nccl
-  ]
-  ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-  ++ lib.optionals (cudaAtLeast "11.4") [
     cuda_nvcc # crt/host_config.h
     cuda_cudart
   ]
@@ -63,9 +57,8 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "NCCL_HOME=${nccl}"
+    "CUDA_HOME=${cuda_nvcc}"
   ]
-  ++ lib.optionals (cudaOlder "11.4") [ "CUDA_HOME=${cudatoolkit}" ]
-  ++ lib.optionals (cudaAtLeast "11.4") [ "CUDA_HOME=${cuda_nvcc}" ]
   ++ lib.optionals mpiSupport [ "MPI=1" ];
 
   enableParallelBuilding = true;

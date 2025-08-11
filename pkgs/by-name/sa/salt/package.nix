@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3.pkgs;
     [
+      cryptography
       distro
       jinja2
       jmespath

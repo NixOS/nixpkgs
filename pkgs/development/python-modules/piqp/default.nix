@@ -78,7 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Proximal Interior Point Quadratic Programming solver";
+    description = "Proximal Interior Point Quadratic Programming solver";
     homepage = "https://github.com/PREDICT-EPFL/piqp";
     license = licenses.bsd2;
     maintainers = with maintainers; [ renesat ];

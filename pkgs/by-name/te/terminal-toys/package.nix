@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-hjWPWNwZxJkuoFuEUuf7SOSJ4CEtqwCOV5ZM7CGtvfY=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Screensavers for your terminal";

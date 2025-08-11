@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "2.4.1";
+  version = "2.5.0";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "catppuccin";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-lQsJnzOnyDIUu1mbydiyfRwh0zCRGU35p0Kn2a3H/48=";
+    hash = "sha256-wumJ8kpr+C2pdw8jYf+IqYTdSB6Iy37yZqPKycYmOSs=";
   };
 
   build-system = [ hatchling ];

@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -34,11 +35,11 @@ let
       DhcpDdns = cfg.dhcp-ddns.settings;
     }
   );
-
-  package = pkgs.kea;
 in
 {
   options.services.kea = with lib.types; {
+    package = lib.mkPackageOption pkgs "kea" { };
+
     ctrl-agent = lib.mkOption {
       description = ''
         Kea Control Agent configuration
@@ -60,7 +61,7 @@ in
             type = nullOr path;
             default = null;
             description = ''
-              Kea Control Agent configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
+              Kea Control Agent configuration as a path, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html>.
 
               Takes preference over [settings](#opt-services.kea.ctrl-agent.settings).
               Most users should prefer using [settings](#opt-services.kea.ctrl-agent.settings) instead.
@@ -71,7 +72,7 @@ in
             type = format.type;
             default = null;
             description = ''
-              Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
+              Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html>.
             '';
           };
         };
@@ -99,7 +100,7 @@ in
             type = nullOr path;
             default = null;
             description = ''
-              Kea DHCP4 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
+              Kea DHCP4 configuration as a path, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp4-srv.html>.
 
               Takes preference over [settings](#opt-services.kea.dhcp4.settings).
               Most users should prefer using [settings](#opt-services.kea.dhcp4.settings) instead.
@@ -136,7 +137,7 @@ in
               ];
             };
             description = ''
-              Kea DHCP4 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
+              Kea DHCP4 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp4-srv.html>.
             '';
           };
         };
@@ -164,7 +165,7 @@ in
             type = nullOr path;
             default = null;
             description = ''
-              Kea DHCP6 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
+              Kea DHCP6 configuration as a path, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp6-srv.html>.
 
               Takes preference over [settings](#opt-services.kea.dhcp6.settings).
               Most users should prefer using [settings](#opt-services.kea.dhcp6.settings) instead.
@@ -202,7 +203,7 @@ in
               ];
             };
             description = ''
-              Kea DHCP6 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
+              Kea DHCP6 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp6-srv.html>.
             '';
           };
         };
@@ -230,7 +231,7 @@ in
             type = nullOr path;
             default = null;
             description = ''
-              Kea DHCP-DDNS configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
+              Kea DHCP-DDNS configuration as a path, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/ddns.html>.
 
               Takes preference over [settings](#opt-services.kea.dhcp-ddns.settings).
               Most users should prefer using [settings](#opt-services.kea.dhcp-ddns.settings) instead.
@@ -255,7 +256,7 @@ in
               };
             };
             description = ''
-              Kea DHCP-DDNS configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
+              Kea DHCP-DDNS configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/ddns.html>.
             '';
           };
         };
@@ -266,9 +267,10 @@ in
   config =
     let
       commonEnvironment = {
-        KEA_CONTROL_SOCKET_DIR = "/run/kea";
-        KEA_LOCKFILE_DIR = "/run/kea";
-        KEA_PIDFILE_DIR = "/run/kea";
+        # Allow hook scripts only when they originate from the system configuration
+        KEA_HOOK_SCRIPTS_PATH = lib.mkDefault "/nix/store";
+        # Allow hooks to originate from the configured package
+        KEA_HOOKS_PATH = lib.mkDefault "${cfg.package}/lib/kea/hooks";
       };
 
       commonServiceConfig = {
@@ -291,7 +293,7 @@ in
     lib.mkIf (cfg.ctrl-agent.enable || cfg.dhcp4.enable || cfg.dhcp6.enable || cfg.dhcp-ddns.enable) (
       lib.mkMerge [
         {
-          environment.systemPackages = [ package ];
+          environment.systemPackages = [ cfg.package ];
 
           users.users.kea = {
             isSystemUser = true;
@@ -314,7 +316,7 @@ in
             description = "Kea Control Agent";
             documentation = [
               "man:kea-ctrl-agent(8)"
-              "https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"
+              "https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html"
             ];
 
             wants = [
@@ -337,7 +339,14 @@ in
             ];
 
             serviceConfig = {
-              ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.ctrl-agent.extraArgs}";
+              ExecStart = utils.escapeSystemdExecArgs (
+                [
+                  (lib.getExe' cfg.package "kea-ctrl-agent")
+                  "-c"
+                  "/etc/kea/ctrl-agent.conf"
+                ]
+                ++ cfg.ctrl-agent.extraArgs
+              );
               KillMode = "process";
               Restart = "on-failure";
             }
@@ -359,7 +368,7 @@ in
             description = "Kea DHCP4 Server";
             documentation = [
               "man:kea-dhcp4(8)"
-              "https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html"
+              "https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp4-srv.html"
             ];
 
             after = [
@@ -380,7 +389,14 @@ in
             ];
 
             serviceConfig = {
-              ExecStart = "${package}/bin/kea-dhcp4 -c /etc/kea/dhcp4-server.conf ${lib.escapeShellArgs cfg.dhcp4.extraArgs}";
+              ExecStart = utils.escapeSystemdExecArgs (
+                [
+                  (lib.getExe' cfg.package "kea-dhcp4")
+                  "-c"
+                  "etc/kea/dhcp4-server.conf"
+                ]
+                ++ cfg.dhcp4.extraArgs
+              );
               # Kea does not request capabilities by itself
               AmbientCapabilities = [
                 "CAP_NET_BIND_SERVICE"
@@ -409,7 +425,7 @@ in
             description = "Kea DHCP6 Server";
             documentation = [
               "man:kea-dhcp6(8)"
-              "https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html"
+              "https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp6-srv.html"
             ];
 
             after = [
@@ -430,7 +446,14 @@ in
             ];
 
             serviceConfig = {
-              ExecStart = "${package}/bin/kea-dhcp6 -c /etc/kea/dhcp6-server.conf ${lib.escapeShellArgs cfg.dhcp6.extraArgs}";
+              ExecStart = utils.escapeSystemdExecArgs (
+                [
+                  (lib.getExe' cfg.package "kea-dhcp6")
+                  "-c"
+                  "/etc/kea/dhcp6-server.conf"
+                ]
+                ++ cfg.dhcp6.extraArgs
+              );
               # Kea does not request capabilities by itself
               AmbientCapabilities = [
                 "CAP_NET_BIND_SERVICE"
@@ -457,7 +480,7 @@ in
             description = "Kea DHCP-DDNS Server";
             documentation = [
               "man:kea-dhcp-ddns(8)"
-              "https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html"
+              "https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/ddns.html"
             ];
 
             wants = [ "network-online.target" ];
@@ -476,7 +499,14 @@ in
             ];
 
             serviceConfig = {
-              ExecStart = "${package}/bin/kea-dhcp-ddns -c /etc/kea/dhcp-ddns.conf ${lib.escapeShellArgs cfg.dhcp-ddns.extraArgs}";
+              ExecStart = utils.escapeSystemdExecArgs (
+                [
+                  (lib.getExe' cfg.package "kea-dhcp-ddns")
+                  "-c"
+                  "/etc/kea/dhcp-ddns.conf"
+                ]
+                ++ cfg.dhcp-ddns.extraArgs
+              );
               AmbientCapabilities = [
                 "CAP_NET_BIND_SERVICE"
               ];

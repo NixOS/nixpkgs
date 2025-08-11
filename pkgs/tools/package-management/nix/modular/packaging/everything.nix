@@ -223,7 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     mainProgram = "nix";
-    description = "The Nix package manager";
+    description = "Nix package manager";
     longDescription = nix-cli.meta.longDescription;
     homepage = nix-cli.meta.homepage;
     license = nix-cli.meta.license;

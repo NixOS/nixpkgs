@@ -177,7 +177,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://www.pulumi.com";
-    description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
+    description = "Cloud development platform that makes creating cloud programs easy and productive";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.asl20;
     mainProgram = "pulumi";

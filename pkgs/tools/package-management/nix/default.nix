@@ -231,7 +231,7 @@ lib.makeExtensible (
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_29;
+      latest = self.nix_2_30;
 
       # The minimum Nix version supported by Nixpkgs
       # Note that some functionality *might* have been backported into this Nix version,

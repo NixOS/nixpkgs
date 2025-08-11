@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Agent is the configuration application of the Ultimate Hacking Keyboard";
+    description = "Configuration application of the Ultimate Hacking Keyboard";
     homepage = "https://github.com/UltimateHackingKeyboard/agent";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [

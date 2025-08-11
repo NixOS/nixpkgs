@@ -772,10 +772,13 @@ in
 
     configureRedis = lib.mkOption {
       type = lib.types.bool;
-      default = config.services.nextcloud.notify_push.enable;
-      defaultText = lib.literalExpression "config.services.nextcloud.notify_push.enable";
+      default = true;
       description = ''
         Whether to configure Nextcloud to use the recommended Redis settings for small instances.
+
+        ::: {.note}
+        The Nextcloud system check recommends to configure either Redis or Memcache for file lock caching.
+        :::
 
         ::: {.note}
         The `notify_push` app requires Redis to be configured. If this option is turned off, this must be configured manually.
@@ -1058,24 +1061,22 @@ in
         ++ (lib.optional (lib.versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
         ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"));
 
-      services.nextcloud.package =
-        with pkgs;
-        lib.mkDefault (
-          if pkgs ? nextcloud then
-            throw ''
-              The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
-              nextcloud defined in an overlay, please set `services.nextcloud.package` to
-              `pkgs.nextcloud`.
-            ''
-          else if versionOlder stateVersion "24.05" then
-            nextcloud27
-          else if versionOlder stateVersion "24.11" then
-            nextcloud29
-          else if versionOlder stateVersion "25.05" then
-            nextcloud30
-          else
-            nextcloud31
-        );
+      services.nextcloud.package = lib.mkDefault (
+        if pkgs ? nextcloud then
+          throw ''
+            The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
+            nextcloud defined in an overlay, please set `services.nextcloud.package` to
+            `pkgs.nextcloud`.
+          ''
+        else if lib.versionOlder stateVersion "24.05" then
+          pkgs.nextcloud27
+        else if lib.versionOlder stateVersion "24.11" then
+          pkgs.nextcloud29
+        else if lib.versionOlder stateVersion "25.05" then
+          pkgs.nextcloud30
+        else
+          pkgs.nextcloud31
+      );
 
       services.nextcloud.phpOptions = mkMerge [
         (lib.mapAttrs (lib.const lib.mkOptionDefault) defaultPHPSettings)

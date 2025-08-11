@@ -32,7 +32,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "PgSCV is a PostgreSQL ecosystem metrics collector";
+    description = "PostgreSQL ecosystem metrics collector";
     homepage = "https://github.com/CHERTS/pgscv/";
     changelog = "https://github.com/CHERTS/pgscv/releases/${version}";
     license = lib.licenses.bsd3;

@@ -190,7 +190,6 @@ in
     users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
-    services.xserver.tty = null;
     services.xserver.display = null;
     services.xserver.verbose = null;
 
@@ -260,12 +259,10 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
-      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
     ];
     systemd.services.display-manager.onFailure = [
@@ -399,7 +396,7 @@ in
         auth       requisite                   pam_nologin.so
         auth       requisite                   pam_faillock.so      preauth
         auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
-        auth       required                    pam_env.so
+        auth       required                    pam_env.so conffile=/etc/pam/environment readenv=0
         ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so

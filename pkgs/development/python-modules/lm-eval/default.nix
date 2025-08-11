@@ -149,7 +149,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${src.tag}";
-    description = "A framework for few-shot evaluation of language models";
+    description = "Framework for few-shot evaluation of language models";
     homepage = "https://github.com/EleutherAI/lm-evaluation-harness";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.booxter ];

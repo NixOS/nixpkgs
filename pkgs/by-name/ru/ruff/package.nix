@@ -81,6 +81,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
     };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 

@@ -169,10 +169,11 @@ buildPythonPackage rec {
     "test_timer"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
     # We have not packaged moyopy yet.
     "tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
-
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Crash when running the pmg command
     # Critical error: required built-in appearance SystemAppearance not found
     "tests/cli/test_pmg_plot.py"

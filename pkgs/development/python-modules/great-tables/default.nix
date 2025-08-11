@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "great-tables";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "great-tables";
     tag = "v${version}";
-    hash = "sha256-2XTGLlhzn1gaj1oKPoSdmMrc6E97DsCWZL6Zpa0o8U0=";
+    hash = "sha256-AuhcIQGBroWa2+Rg6qLTtB4ulq+vvCoouPcTZcZhnbQ=";
   };
 
   build-system = [

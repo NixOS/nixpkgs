@@ -25,6 +25,7 @@ jobs:
   minimize:
     name: Minimize as resolved
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 2
     steps:
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:

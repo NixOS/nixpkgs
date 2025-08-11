@@ -272,7 +272,9 @@ let
           jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
         */
       ]
-      ++ collect isDerivation jobs.stdenvBootstrapTools
+      # FIXME: these are just temporarily omitted until fixed
+      # see https://hydra.nixos.org/build/303330677#tabs-constituents
+      #++ collect isDerivation jobs.stdenvBootstrapTools
       ++ optionals supportDarwin.x86_64 [
         jobs.stdenv.x86_64-darwin
         jobs.cargo.x86_64-darwin
@@ -393,8 +395,6 @@ let
                 haskell-language-server
                 ;
             });
-        idrisPackages = packagePlatforms pkgs.idrisPackages;
-        agdaPackages = packagePlatforms pkgs.agdaPackages;
 
         pkgsLLVM.stdenv = [
           "x86_64-linux"
@@ -417,18 +417,8 @@ let
           "aarch64-linux"
         ];
 
-        tests = packagePlatforms pkgs.tests;
-
-        # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
-
-        #emacsPackages = packagePlatforms pkgs.emacsPackages;
-        #rPackages = packagePlatforms pkgs.rPackages;
+        # Fails CI in its current state
         ocamlPackages = { };
-        perlPackages = { };
-
-        darwin = packagePlatforms pkgs.darwin // {
-          xcode = { };
-        };
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in

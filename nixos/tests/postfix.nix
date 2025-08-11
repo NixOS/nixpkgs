@@ -13,11 +13,13 @@ import ./make-test-python.nix {
         enable = true;
         enableSubmission = true;
         enableSubmissions = true;
-        tlsTrustedAuthorities = "${certs.ca.cert}";
-        config.smtpd_tls_chain_files = [
-          certs.${domain}.key
-          certs.${domain}.cert
-        ];
+        settings.main = {
+          smtp_tls_CAfile = "${certs.ca.cert}";
+          smtpd_tls_chain_files = [
+            certs.${domain}.key
+            certs.${domain}.cert
+          ];
+        };
         submissionsOptions = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit";

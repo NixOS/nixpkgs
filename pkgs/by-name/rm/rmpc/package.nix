@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     '';
     maintainers = with lib.maintainers; [
       donovanglover
-      bloxx12
+      faukah
     ];
     mainProgram = "rmpc";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

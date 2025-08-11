@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     "pydantic"
     "textual"
     "typer"
+    "fastmcp"
   ];
 
   build-system = with python3Packages; [ hatchling ];

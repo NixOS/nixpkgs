@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "falconpy" ];
 
   meta = {
-    description = "The CrowdStrike Falcon SDK for Python";
+    description = "CrowdStrike Falcon SDK for Python";
     homepage = "https://github.com/CrowdStrike/falconpy";
     changelog = "https://github.com/CrowdStrike/falconpy/releases/tag/${src.tag}";
     license = lib.licenses.unlicense;

@@ -154,8 +154,7 @@ self: super:
   libxcb = super.libxcb.overrideAttrs (attrs: {
     # $dev/include/xcb/xcb.h includes pthread.h
     propagatedBuildInputs =
-      attrs.propagatedBuildInputs or [ ]
-      ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+      attrs.propagatedBuildInputs or [ ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
     configureFlags = [
       "--enable-xkb"
       "--enable-xinput"
@@ -829,7 +828,6 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ mesa ];
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = [

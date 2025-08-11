@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "crc32c";
-    rev = version;
+    tag = version;
     sha256 = "0c383p7vkfq9rblww6mqxz8sygycyl27rr0j3bzb8l8ga71710ii";
     fetchSubmodules = true;
   };

@@ -728,7 +728,8 @@ let
         # Optional features:
         use_gio = true;
         use_cups = cupsSupport;
-
+      }
+      // lib.optionalAttrs (!chromiumVersionAtLeast "139") {
         # Feature overrides:
         # Native Client support was deprecated in 2020 and support will end in June 2021:
         enable_nacl = false;

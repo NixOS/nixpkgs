@@ -32,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace command-not-found.sh \
       --subst-var out
     install -Dm555 command-not-found.sh -t $out/etc/profile.d
+    substituteInPlace command-not-found.nu \
+      --subst-var out
+    install -Dm555 command-not-found.nu -t $out/etc/profile.d
   '';
 
   meta = with lib; {

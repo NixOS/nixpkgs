@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koto-ls";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "koto-lang";
     repo = "koto-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a2YGjAZvLyPRfFdZdd0z7sbijS1RCPa5wY2DkJZwbmk=";
+    hash = "sha256-k3XzVfuObA+PyE45arZvp1aER/6uDOyMzs937K8VECQ=";
   };
 
-  cargoHash = "sha256-GFgIW+x+kncf1OTWZZZjD9yoLEwW01pWAUnJQCpPFhQ=";
+  cargoHash = "sha256-4mHl9Pds2B4Htkpm425LBHADaR2E2VwvhYC1FwDu304=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -277,7 +277,7 @@ let
       repo = "tree-sitter-scss";
     };
     "tree-sitter-erlang" = {
-      orga = "abstractmachineslab";
+      orga = "WhatsApp";
       repo = "tree-sitter-erlang";
     };
     "tree-sitter-elixir" = {

@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
     tag = "v${version}";
-    hash = "sha256-n2h+sgqNZhFgUa4MFp501W4YPtlWN94GhP9Rlu5plBA=";
+    hash = "sha256-Al0cT4WaOX7gxOkD5ciRntbGLCCDFSjj83E4n8nXp6I=";
   };
 
-  cargoHash = "sha256-ffqTzu8/ra6SwvqDne/g9EgISGlEBSleEGn6gQ/DWAY=";
+  cargoHash = "sha256-FaKUQk/Q2hE0lZ11QSKA2P2BLlBNih47zzuwpMsblhw=";
 
   # Tests require network access
   doCheck = false;

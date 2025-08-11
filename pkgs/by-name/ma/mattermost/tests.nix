@@ -89,6 +89,7 @@ mattermost.overrideAttrs (
       "TestS3TestConnection"
       "TestS3FileBackendTestSuite"
       "TestS3FileBackendTestSuiteWithEncryption"
+      "TestWriteFileVideoMimeTypes"
 
       # Mail tests (needs a SMTP server)
       "TestSendMailUsingConfig"

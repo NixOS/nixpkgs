@@ -94,6 +94,12 @@ buildPythonPackage rec {
     "test_openai_get_num_tokens"
   ];
 
+  disabledTestPaths = [
+    # TODO recheck on next update. Langchain has been working on Pydantic errors.
+    # ValidationError from pydantic
+    "tests/unit_tests/chat_models/test_responses_stream.py"
+  ];
+
   pythonImportsCheck = [ "langchain_openai" ];
 
   passthru.updateScript = gitUpdater {

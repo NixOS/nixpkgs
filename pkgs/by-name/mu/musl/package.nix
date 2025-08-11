@@ -1,11 +1,17 @@
 {
   stdenv,
+  stdenvNoLibc,
   lib,
   fetchurl,
   linuxHeaders ? null,
   useBSDCompatHeaders ? true,
 }:
 let
+  stdenv' = if stdenv.hostPlatform != stdenv.buildPlatform then stdenvNoLibc else stdenv;
+in
+let
+  stdenv = stdenv';
+
   cdefs_h = fetchurl {
     name = "sys-cdefs.h";
     url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";

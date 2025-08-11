@@ -40,6 +40,7 @@ buildPythonPackage rec {
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=incompatible-pointer-types"
     ]);
+    OPENSSL_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "${openssl.dev}";
   }
   // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
     CPP = "${stdenv.cc.targetPrefix}cpp";

@@ -17,6 +17,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
+  # otherwise fails to unpack with:
+  # ERROR: Dangerous link path was ignored : Ghostty.app/Contents/Resources/terminfo/67/ghostty : ../78/xterm-ghostty
+  unpackPhase = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    runHook preUnpack
+    7zz -snld x $src
+    runHook postUnpack
+  '';
+
   nativeBuildInputs = [
     _7zz
     makeBinaryWrapper

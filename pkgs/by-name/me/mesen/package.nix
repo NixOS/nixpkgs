@@ -26,6 +26,8 @@ buildDotnetModule rec {
     ./dont-use-nightly-avalonia.patch
     # upstream has a weird library loading mechanism, which we override with a more sane alternative
     ./dont-zip-libraries.patch
+    # without this the generated .desktop file uses an absolute (and incorrect) path for the binary
+    ./desktop-make-non-absolute-exec.patch
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

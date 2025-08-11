@@ -106,12 +106,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "301";
-  format = "setuptools";
+  version = "303";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-piTdP812LgcxvvgvUOKUrkxVXCbclyQW8dp84beT7H4=";
+    hash = "sha256-kalURmsdYl0HOnzAkJ6aGRvYcjnb8BeWimokmpqE+Ds=";
   };
 
   outputs = [
@@ -134,6 +134,8 @@ python.pkgs.buildPythonApplication rec {
     help2man
     installShellFiles
   ];
+
+  build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
@@ -302,6 +304,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/comparators/test_uimage.py"
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
+    # OSError: AF_UNIX path too long
+    "tests/comparators/test_sockets.py"
   ];
 
   passthru = {

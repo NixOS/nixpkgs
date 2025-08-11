@@ -294,7 +294,18 @@ stdenv.mkDerivation (
       ++
         lib.optional (lib.versionAtLeast release_version "15")
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
+          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
+      ++
+        lib.optional (lib.versions.major release_version == "20" && stdenv.hostPlatform.isRiscV)
+          # Test failure on riscv64, fixed in llvm 21
+          # https://github.com/llvm/llvm-project/issues/150818
+          (
+            fetchpatch {
+              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
+              hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
+              stripLen = 1;
+            }
+          );
 
     nativeBuildInputs = [
       cmake

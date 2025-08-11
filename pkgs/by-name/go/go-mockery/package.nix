@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-mockery";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x7WniZ4wpnuzUHM2ZC2P7Ns67bIp4V4F9f4xQEJONEk=";
+    hash = "sha256-/OMUL/C/uUKT5GvEd3ylpS72XfGTnD+J7EuOR1LovB0=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-cNMknwlU7ENwN67CtyU1YgYIXCJbh4b7Z3oUK7kkEkk=";
+  vendorHash = "sha256-PAJymNrl83knDXP9ukUbfEdtabE4+k16Ygzwvfu5ZR8=";
 
   ldflags = [
     "-s"

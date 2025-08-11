@@ -57,6 +57,7 @@
   pytestCheckHook,
   sqlite,
   starlette,
+  writableTmpDirAsHomeHook,
 
   # passthru
   nixosTests,
@@ -165,6 +166,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sqlite
     starlette
+    writableTmpDirAsHomeHook
   ];
 
   # Disable on aarch64-linux due to broken onnxruntime
@@ -238,6 +240,10 @@ buildPythonPackage rec {
 
     # Cannot find protobuf file while loading test
     "chromadb/test/distributed/test_log_failover.py"
+
+    # ValueError: An instance of Chroma already exists for ephemeral with different settings
+    "chromadb/test/test_chroma.py"
+    "chromadb/test/ef/test_multimodal_ef.py"
   ];
 
   __darwinAllowLocalNetworking = true;

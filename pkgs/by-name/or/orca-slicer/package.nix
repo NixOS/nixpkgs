@@ -35,7 +35,7 @@
   pcre,
   systemd,
   tbb_2021,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   libnoise,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb
     pcre
     tbb_2021
-    webkitgtk_4_0
+    webkitgtk_4_1
     wxGTK'
     xorg.libX11
     opencv.cxxdev

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "miniature early Macintosh emulator (fork from erichelgeson)";
+    description = "Miniature early Macintosh emulator (fork from erichelgeson)";
     homepage = "https://github.com/erichelgeson/minivmac";
     license = licenses.gpl2;
     maintainers = [ maintainers.flokli ];

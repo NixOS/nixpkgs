@@ -65,6 +65,11 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
+    # PostgreSQL 18 support issue upstream: https://github.com/timescale/pgvectorscale/issues/249
+    # Check after next package update.
+    broken =
+      lib.warnIf (finalAttrs.version != "0.7.0") "Is postgresql18Packages.pgvectorscale still broken?"
+        (lib.versionAtLeast postgresql.version "18");
     homepage = "https://github.com/timescale/pgvectorscale";
     teams = [ lib.teams.flyingcircus ];
     description = "Complement to pgvector for high performance, cost efficient vector search on large workloads";

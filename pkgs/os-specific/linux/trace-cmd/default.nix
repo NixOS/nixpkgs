@@ -16,11 +16,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
-    hash = "sha256-35BEzuevGiRQFqvWOQK1m20juhSd5101a8bBsNtM8Eo=";
+    hash = "sha256-B3bwHV+f6IuoNESz5B4ij5KsIcCcpUPmoSnJeJj0J0Y=";
   };
 
   # Don't build and install html documentation

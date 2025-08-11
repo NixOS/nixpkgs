@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ipycanvas";
-  version = "0.13.3";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ToZ8UJsB9cTPwAn32SHjLloSoCmshW54wE/xW2VpLEo=";
+    hash = "sha256-kh8UgiWLWSm1mTF7XBKZMdgOFr41+jgwCjLnqkz+n4k=";
   };
 
   # We relax dependencies here instead of pulling in a patch because upstream

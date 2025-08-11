@@ -27,6 +27,7 @@ defaults:
 jobs:
   request:
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 20
     steps:
       - name: Check out the PR at the base commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

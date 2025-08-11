@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "redux";
-  version = "1.3.5";
+  version = "1.4.1";
 
   src =
     if releasePath != null then
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
             lib.replaceStrings [ "." ] [ "_" ] version
           }_Demo_Linux_x86_64.tar.gz"
         ];
-        sha256 = "sha256-eznsdLzgdJ7MyWe5WAEg1MHId5VlfyanoZ6+I9nI/0I=";
+        sha256 = "sha256-q9hxDI8tgjIFaZyrguXn57C4vh0oeSQBY8koq8cPDlg=";
       };
 
   nativeBuildInputs = [

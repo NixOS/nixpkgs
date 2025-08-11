@@ -1066,6 +1066,8 @@ let
 
         logs = callPackage ../development/ocaml-modules/logs { };
 
+        logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
+
         lru = callPackage ../development/ocaml-modules/lru { };
 
         lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
@@ -1513,7 +1515,15 @@ let
 
         ocsipersist-pgsql = callPackage ../development/ocaml-modules/ocsipersist/pgsql.nix { };
 
+        ocsipersist-pgsql-config =
+          callPackage ../development/ocaml-modules/ocsipersist/pgsql-config.nix
+            { };
+
         ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
+
+        ocsipersist-sqlite-config =
+          callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix
+            { };
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 

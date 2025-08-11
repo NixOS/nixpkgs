@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/91e64286/Feishu-linux_x64-7.42.17.deb";
-      sha256 = "sha256-Rsq+xQAyi7I1WcnkXzhPEgbUyfXU9XPVKIuv6Z9H5VA=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/fc10b1c0/Feishu-linux_x64-7.46.11.deb";
+      sha256 = "sha256-xcTSyRoRGlXn++KRmXtqNBI6diY00v0UUZe3RxCewFk=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/49127814/Feishu-linux_arm64-7.42.17.deb";
-      sha256 = "sha256-UykQk8R8EDsHmRGy9BfDXhEZFlYT16bAkRuLXFZJDHw=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/ccc36dfd/Feishu-linux_arm64-7.46.11.deb";
+      sha256 = "sha256-pOA1WAhkIFn4H9sZye6ges2U5DvDDmLAOllD5qAklmg=";
     };
   };
 
@@ -133,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.42.17";
+  version = "7.46.11";
   pname = "feishu";
 
   src =

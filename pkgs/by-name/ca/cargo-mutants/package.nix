@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-mutants";
-  version = "25.2.0";
+  version = "25.2.2";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "cargo-mutants";
     rev = "v${version}";
-    hash = "sha256-//OUOf4RUM69tHBB17p4OSs/cCvv0HnDjyRUzUZc8KE=";
+    hash = "sha256-VDXI/pR7lmIMrsHx9E+oWp0PPUcl83Hc98z6Sh18Hsc=";
   };
 
-  cargoHash = "sha256-QZrpH0nJ6a9AQAKNp/tkT1hpkUMWa2kh8kek2rY8wO4=";
+  cargoHash = "sha256-fTGIFD6V7L3erzi2RexR9XJNIV/UTu8vwFnrNpeFE4A=";
 
   # too many tests require internet access
   doCheck = false;

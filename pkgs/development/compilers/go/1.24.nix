@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .

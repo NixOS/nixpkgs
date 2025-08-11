@@ -187,6 +187,27 @@ To add a package to Nixpkgs:
 
 (using "→" instead of "->" is also accepted)
 
+Using the `(pkg-name):` prefix is important beyond just being a convention: it queues automatic builds by CI.
+More sophisticated prefixes are also possible:
+
+| Message                                                                  | Automatic Builds                                           |
+|--------------------------------------------------------------------------|------------------------------------------------------------|
+| `vim: 1.0.0 -> 2.0.0`                                                    | `vim`                                                      |
+| `vagrant: fix dependencies for version 2.0.2`                            | `vagrant`                                                  |
+| `python3{9,10}Packages.requests: 1.0.0 -> 2.0.0`                         | `python39Packages.requests`, `python310Packages.requests`  |
+| `python312.pkgs.numpy,python313.pkgs.scipy: fix build`                   | `python312.pkgs.numpy` , `python313.pkgs.scipy`            |
+
+When opening a PR with multiple commits, CI creates a single build job for all detected packages.
+If `passthru.tests` attributes are available, these will be built as well.
+
+If the title of the _PR_ begins with `WIP:` or contains `[WIP]` anywhere, its packages are not built automatically.
+Other than that, PR titles have meaning only for humans.
+It is recommended to keep the PR title in sync with the commit title, to make it easier to find.
+For PRs with multiple commits, the PR title should be a general summary of these commits.
+
+[!NOTE]
+Marking a PR as a draft does not prevent automatic builds.
+
 ## Category Hierarchy
 [categories]: #category-hierarchy
 

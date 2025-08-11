@@ -13,6 +13,7 @@ let
     elem
     filterAttrsRecursive
     hasPrefix
+    literalExpression
     makeLibraryPath
     mkDefault
     mkEnableOption
@@ -29,6 +30,32 @@ let
   format = pkgs.formats.yaml { };
 
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) cfg.settings;
+
+  configFileUnchecked = format.generate "frigate.yaml" filteredConfig;
+  configFileChecked =
+    pkgs.runCommand "frigate-config"
+      {
+        preferLocalBuilds = true;
+      }
+      ''
+        function error() {
+          cat << 'HEREDOC'
+
+        Note that not all configurations can be reliably checked in the
+        build sandbox.
+
+        This check can be disabled using `services.frigate.checkConfig`.
+        HEREDOC
+
+          exit 1
+        }
+
+        cp ${configFileUnchecked} $out
+        export CONFIG_FILE=$out
+        export PYTHONPATH=${cfg.package.pythonPath}
+        ${cfg.package.python.interpreter} -m frigate --validate-config || error
+      '';
+  configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
 
   cameraFormat =
     with types;
@@ -163,6 +190,17 @@ in
 
         - https://docs.frigate.video/configuration/hardware_acceleration
         - https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets
+      '';
+    };
+
+    checkConfig = mkOption {
+      type = bool;
+      default = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
+      defaultText = literalExpression ''
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform
+      '';
+      description = ''
+        Whether to check the configuration at build time.
       '';
     };
 
@@ -636,7 +674,7 @@ in
             rm --recursive --force /var/cache/frigate/!(model_cache)
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
-            cp --no-preserve=mode "${format.generate "frigate.yml" filteredConfig}" /run/frigate/frigate.yml
+            cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
         ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";

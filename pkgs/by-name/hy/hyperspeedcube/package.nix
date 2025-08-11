@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Hyperspeedcube is a 3D and 4D Rubik's cube simulator";
+    description = "3D and 4D Rubik's cube simulator";
     longDescription = ''
       Hyperspeedcube is a modern, beginner-friendly 3D and 4D Rubik's cube
       simulator with customizable mouse and keyboard controls and advanced

@@ -224,6 +224,7 @@ let
       graph
       model
       pipeline-audio
+      pipeline-data
       pipeline-image
       pipeline-llm
       pipeline-text
@@ -289,26 +290,8 @@ buildPythonPackage {
   ++ optional-dependencies.api
   ++ optional-dependencies.similarity;
 
-  enabledTestPaths = [
-    "test/python/test*.py"
-  ];
-
-  # The deselected paths depend on the huggingface hub and should be run as a passthru test
-  # disabledTestPaths won't work as the problem is with the classes containing the tests
-  # (in other words, it fails on __init__)
-  disabledTestPaths = [
-    "test/python/testagent.py"
-    "test/python/testcloud.py"
-    "test/python/testconsole.py"
-    "test/python/testembeddings.py"
-    "test/python/testgraph.py"
-    "test/python/testapi/testapiembeddings.py"
-    "test/python/testapi/testapipipelines.py"
-    "test/python/testapi/testapiworkflow.py"
-    "test/python/testdatabase/testclient.py"
-    "test/python/testdatabase/testduckdb.py"
-    "test/python/testdatabase/testencoder.py"
-    "test/python/testworkflow.py"
+  pytestFlagsArray = [
+    "test/python/*"
   ];
 
   disabledTests = [
@@ -316,6 +299,12 @@ buildPythonPackage {
     "testInvalidTar"
     "testInvalidZip"
     # Downloads from Huggingface
+    "TestAgent"
+    "TestCloud"
+    "TestConsole"
+    "TestEmbeddings"
+    "TestGraph"
+    "TestWorkflow"
     "testPipeline"
     "testVectors"
     # Not finding sqlite-vec despite being supplied

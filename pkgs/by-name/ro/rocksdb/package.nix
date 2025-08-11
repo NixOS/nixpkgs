@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.2.1";
+  version = "10.4.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v8kZShgz0O3nHZwWjTvhcM56qAs/le1XgMVYyvVd4tg=";
+    hash = "sha256-mKh6zsmxsiUix4LX+npiytmKvLbo6WNA9y4Ns/EY+bE=";
   };
 
   patches = lib.optional (
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enableJemalloc jemalloc
     ++ lib.optional enableLiburing liburing
-    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   outputs = [
     "out"

@@ -12,10 +12,10 @@
 
 let
   opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-so+KiAo8C7olbJaCH1rIVxs/tq/g9l5pKPaU8D+Zm28=";
-    "aarch64-linux" = "sha256-JNf8g0z6oH2OXJLAmCSP0W4WX+GGyald5DAFOYCBNP0=";
-    "x86_64-darwin" = "sha256-jwmH4gEcyRNgeMvYz2SyWRagFkYN1O3ULEQIPPgqhwg=";
-    "x86_64-linux" = "sha256-ZMz7vfndYrpjUvhX8L9qv/lXcWKqXZwvfahGAE5EKYo=";
+    "aarch64-darwin" = "sha256-LNp9sLhNUUC4ujLYPvfPx423GlXuIS0Z2H512H5oY8s=";
+    "aarch64-linux" = "sha256-xeKZwNV4ScF9p1vAcVR+vk4BiEpUH+AOGb7DQ2vLl1I=";
+    "x86_64-darwin" = "sha256-4NaHXeWf57dGVV+KP3mBSIUkbIApT19BuADT0E4X+rg=";
+    "x86_64-linux" = "sha256-7Hc3FJcg2dA8AvGQlS082fO1ehGBMPXWPF8N+sAHh2I=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -26,20 +26,21 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.3.58";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zm3ydijaduPcIw5Np1+5CzNMoaASQwOT2R72/pdyUwM=";
+    hash = "sha256-LEFmfsqhCuGcRK7CEPZb6EZfjOHAyYpUHptXu04fjpQ=";
   };
 
   tui = buildGoModule {
     pname = "opencode-tui";
-    inherit (finalAttrs) version;
-    src = "${finalAttrs.src}/packages/tui";
+    inherit (finalAttrs) version src;
 
-    vendorHash = "sha256-8OIPFa+bl1If55YZtacyOZOqMLslbMyO9Hx0HOzmrA0=";
+    modRoot = "packages/tui";
+
+    vendorHash = "sha256-jGaTgKyAvBMt8Js5JrPFUayhVt3QhgyclFoNatoHac4=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -113,7 +114,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   patches = [
     # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `api.json` from the file bundled with `bun build`.
+    # `_api.json` from the file bundled with `bun build`.
     ./local-models-dev.patch
   ];
 
@@ -125,19 +126,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/api.json";
+  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
 
   buildPhase = ''
     runHook preBuild
 
     bun build \
+      --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
       --define OPENCODE_VERSION="'${finalAttrs.version}'" \
       --compile \
-      --minify \
       --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
       --outfile=opencode \
       ./packages/opencode/src/index.ts \
-      ${finalAttrs.tui}/bin/tui
 
     runHook postBuild
   '';

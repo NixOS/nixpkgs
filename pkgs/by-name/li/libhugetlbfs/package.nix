@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/libhugetlbfs/libhugetlbfs";
     changelog = "https://github.com/libhugetlbfs/libhugetlbfs/blob/${version}/NEWS";
-    description = "library and utilities for Linux hugepages";
+    description = "Library and utilities for Linux hugepages";
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;

@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.26";
+  version = "0.3.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-xxkayOtC2GtgtF3tPkTGKOS9VQ/y2gRPopvKq48/Kq0=";
+    hash = "sha256-bqzJ0017Td65rhDCr2wfx+SCaJzPZTFzQpzy3RlaRj4=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -128,6 +128,9 @@ buildPythonPackage rec {
     "test_serializable_mapping"
     "test_person"
     "test_aliases_hidden"
+    # AssertionError: (failed string match due to terminal control chars in output)
+    # https://github.com/langchain-ai/langchain/issues/32150
+    "test_filecallback"
   ];
 
   disabledTestPaths = [
@@ -150,6 +153,8 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater {
     rev-prefix = "langchain==";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Building applications with LLMs through composability";

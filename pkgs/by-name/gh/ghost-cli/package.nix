@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghost-cli";
-  version = "1.27.1";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "TryGhost";
     repo = "Ghost-CLI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ka+fqfUw6SSixrSHV2rbFsAqEM2f/yTQNcGONJKTRMc=";
+    hash = "sha256-gpOaoR/UB8ermQCXlYgoVA3h+OdUGvP6ofjlFlMHA58=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-SaekfV1QZw6PIJm8GtyjZmCSNIc0aXolz1mEyTwVERM=";
+    hash = "sha256-4GJ6I0Iynu+/lmiKat3p/MIivVjcyxxhpXKPSOheBls=";
   };
 
   nativeBuildInputs = [

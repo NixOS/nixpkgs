@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "nvrh";
-  version = "0.1.19";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "mikew";
     repo = "nvrh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oLCHuU2KZypMnW+KOuc3RhSP/mO4hQUN3Pi1W8uhoJA=";
+    hash = "sha256-hKlL/kjfDtWZHfDuVbVNVnhBEeJcX5zWFtDaNW/KExI=";
   };
 
   postPatch = ''

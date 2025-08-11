@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.034";
+  version = "5.038";
 
   # Verilator gets the version from this environment variable
   # if it can't do git describe while building.
@@ -29,14 +29,18 @@ stdenv.mkDerivation rec {
     owner = "verilator";
     repo = "verilator";
     rev = "v${version}";
-    hash = "sha256-1o9Qf6avdiRgIYUgBS/S0W2GLSi/HdO9Xgs78oW6VJE=";
+    hash = "sha256-uPGVE7y3zm+5ZydGjd1+/kIjW+a5u6d+YzjUSE4KnCY=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [
     perl
-    python3
     systemc
+    (python3.withPackages (
+      pp: with pp; [
+        distro
+      ]
+    ))
     # ccache
   ];
   nativeBuildInputs = [

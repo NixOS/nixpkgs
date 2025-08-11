@@ -100,7 +100,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      appsforartists
       toast
     ];
     mainProgram = "hhd";

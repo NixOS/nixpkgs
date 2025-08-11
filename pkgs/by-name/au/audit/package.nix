@@ -17,6 +17,7 @@
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
   nix-update-script,
   testers,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       musl = pkgsCross.musl64.audit;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      audit = nixosTests.audit;
     };
   };
 

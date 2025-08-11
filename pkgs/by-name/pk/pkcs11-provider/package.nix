@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "pkcs11-provider";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-Q9dmzYDBco+LLVWdORFTjRyk0RX8qhmZ1m+Kgfeyr04=";
   };

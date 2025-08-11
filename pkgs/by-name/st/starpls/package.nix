@@ -1,57 +1,47 @@
 {
+  rustPlatform,
   lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
   testers,
-  starpls,
+  fetchFromGitHub,
+  protobuf,
 }:
-
-let
-  manifest = lib.importJSON ./manifest.json;
-in
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starpls";
-  version = manifest.version;
+  version = "0.1.21";
 
-  src =
-    let
-      system = stdenv.hostPlatform.system;
-    in
-    fetchurl (manifest.assets.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchFromGitHub {
+    owner = "withered-magic";
+    repo = "starpls";
+    # https://github.com/withered-magic/starpls/commit/96ef5d0548748745756c421960e0ebb5cfbef963
+    rev = "96ef5d0548748745756c421960e0ebb5cfbef963";
+    hash = "sha256-PymdSITGeSxKwcLnsJPKc73E8VDS8SSRBRRNQSKvnbU=";
+  };
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+  cargoHash = "sha256-yovv8ox7TtSOxGW+YKYr/ED4cq7P7T7vSqoXBFhFGb4=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [
-    autoPatchelfHook
+  nativeBuildInputs = [
+    protobuf
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isElf [
-    (lib.getLib stdenv.cc.cc)
-  ];
-
-  installPhase = ''
-    install -D $src $out/bin/starpls
-  '';
+  # The tests assume Bazel build and environment variables set like
+  # RUNFILES_DIR which don't have an equivalent in Cargo.
+  doCheck = false;
 
   passthru = {
     tests.version = testers.testVersion {
-      package = starpls;
+      package = finalAttrs.finalPackage;
       command = "starpls version";
       version = "v${finalAttrs.version}";
     };
-    updateScript = ./update.py;
   };
 
   meta = {
     description = "Language server for Starlark";
     homepage = "https://github.com/withered-magic/starpls";
     license = lib.licenses.asl20;
-    platforms = builtins.attrNames manifest.assets;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ aaronjheng ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "starpls";
   };
 })

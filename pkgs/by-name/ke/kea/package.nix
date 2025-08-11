@@ -4,87 +4,108 @@
   fetchurl,
 
   # build time
-  autoreconfHook,
+  bison,
+  flex,
+  meson,
+  ninja,
   pkg-config,
   python3Packages,
 
   # runtime
-  withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
-  withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
-  boost186,
-  libmysqlclient,
+  boost,
   log4cplus,
   openssl,
-  libpq,
   python3,
+  withKrb5 ? true,
+  krb5,
+  withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
+  libmysqlclient,
+  withPostgresql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
+  libpq,
 
   # tests
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
-  version = "2.6.3"; # only even minor versions are stable
+  version = "3.0.0"; # only even minor versions are stable
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-ACQaWVX/09IVosCYxFJ/nX9LIDGIsnb5o2JQ3T2d1hI=";
+    url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
+    hash = "sha256-v5Y9HhCVHYxXDGBCr8zyfHCdReA4E70mOde7HPxP7nY=";
   };
 
   patches = [
-    ./dont-create-var.patch
+    ./dont-create-system-paths.patch
   ];
 
   postPatch = ''
-    substituteInPlace ./src/bin/keactrl/Makefile.am --replace-fail '@sysconfdir@' "$out/etc"
-    # darwin special-casing just causes trouble
-    substituteInPlace ./m4macros/ax_crypto.m4 --replace-fail 'apple-darwin' 'nope'
+    patchShebangs \
+      scripts/grabber.py \
+      doc/sphinx/*.sh.in
   '';
 
   outputs = [
     "out"
     "doc"
-    "man"
+    "python"
   ];
 
-  configureFlags = [
-    "--enable-perfdhcp"
-    "--enable-shell"
-    "--localstatedir=/var"
-    "--with-openssl=${lib.getDev openssl}"
-  ]
-  ++ lib.optional withPostgres "--with-pgsql=${libpq.pg_config}/bin/pg_config"
-  ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
+  mesonFlags = [
+    (lib.mesonOption "crypto" "openssl")
+    (lib.mesonEnable "krb5" withKrb5)
+    (lib.mesonEnable "mysql" withMysql)
+    (lib.mesonEnable "netconf" false) # missing libyang-cpp, sysinfo, libsysrepo-cpp
+    (lib.mesonEnable "postgresql" withPostgresql)
+    (lib.mesonOption "localstatedir" "/var")
+    (lib.mesonOption "runstatedir" "/run")
+  ];
 
   postConfigure = ''
     # Mangle embedded paths to dev-only inputs.
-    sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
+    for file in config.report meson-info/intro*.json; do
+      sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i "$file"
+    done
   '';
 
   nativeBuildInputs = [
-    autoreconfHook
+    bison
+    flex
+    meson
+    ninja
     pkg-config
+    python3
   ]
   ++ (with python3Packages; [
-    sphinxHook
+    sphinx
     sphinx-rtd-theme
   ]);
 
-  sphinxBuilders = [
-    "html"
-    "man"
-  ];
-  sphinxRoot = "doc/sphinx";
-
   buildInputs = [
-    boost186 # does not build with 1.87 yet, see https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2523
-    libmysqlclient
+    boost
     log4cplus
     openssl
     python3
+  ]
+  ++ lib.optionals withMysql [
+    libmysqlclient
+  ]
+  ++ lib.optionals withPostgresql [
+    libpq
+  ]
+  ++ lib.optionals withKrb5 [
+    krb5
   ];
 
-  enableParallelBuilding = true;
+  postBuild = ''
+    ninja doc
+  '';
+
+  postFixup = ''
+    mkdir -p $python/lib
+    mv $out/lib/python* $python/lib/
+  '';
 
   passthru.tests = {
     kea = nixosTests.kea;
@@ -98,9 +119,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    # error: implicit instantiation of undefined template 'std::char_traits<unsigned char>'
-    broken = stdenv.hostPlatform.isDarwin;
-    changelog = "https://downloads.isc.org/isc/kea/${version}/Kea-${version}-ReleaseNotes.txt";
+    changelog = "https://gitlab.isc.org/isc-projects/kea/-/wikis/Release-Notes/release-notes-${finalAttrs.version}";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
     longDescription = ''
@@ -117,4 +136,4 @@ stdenv.mkDerivation rec {
       hexa
     ];
   };
-}
+})

@@ -85,6 +85,7 @@ let
           # ValueError: An instance of Chroma already exists for ephemeral with different settings
           "chromadb/test/test_chroma.py"
           "chromadb/test/test_client.py"
+          "chromadb/test/ef/test_multimodal_ef.py"
         ];
       });
     };
@@ -160,15 +161,12 @@ python.pkgs.buildPythonApplication rec {
     installShellCompletion vectorcode.{bash,zsh}
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/vectorcode \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set PATH ${
-        lib.makeBinPath [
-          python
-        ]
-      };
-  '';
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
+  ];
 
   pythonImportsCheck = [ "vectorcode" ];
 

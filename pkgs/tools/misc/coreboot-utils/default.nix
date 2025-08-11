@@ -83,7 +83,7 @@ let
     };
     cbmem = generic {
       pname = "cbmem";
-      meta.description = "coreboot console log reader";
+      meta.description = "Coreboot console log reader";
     };
     ifdtool = generic {
       pname = "ifdtool";

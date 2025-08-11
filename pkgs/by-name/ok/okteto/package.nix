@@ -4,21 +4,20 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  okteto,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
-    rev = finalAttrs.version;
-    hash = "sha256-gGtQrhetIWV7ZvnmPYcGzz718uGyAdRiraiKODrJS4w=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZMvZP7p/Ew3TvPLV5U1v0TG0FCWU8VTAcSMtOJLrWVQ=";
   };
 
-  vendorHash = "sha256-P+N8PYh6+qj1sEp1s9yswA3HOVlI87+XOj6j9hijSuw=";
+  vendorHash = "sha256-Pun9LgQAv/wlX0CwU4AJuEkMeZgPTL+ExmUevURvjYE=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -74,7 +73,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = okteto;
+    package = finalAttrs.finalPackage;
     command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 

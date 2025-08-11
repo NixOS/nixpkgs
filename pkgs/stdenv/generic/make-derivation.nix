@@ -202,17 +202,15 @@ let
     # to be built eventually, we would still like to get the error early and without
     # having to wait while nix builds a derivation that might not be used.
     # See also https://github.com/NixOS/nix/issues/4629
-    optionalAttrs (attrs ? disallowedReferences) {
-      disallowedReferences = map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-    }
-    // optionalAttrs (attrs ? disallowedRequisites) {
-      disallowedRequisites = map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-    }
-    // optionalAttrs (attrs ? allowedReferences) {
-      allowedReferences = mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-    }
-    // optionalAttrs (attrs ? allowedRequisites) {
-      allowedRequisites = mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+    {
+      ${if (attrs ? disallowedReferences) then "disallowedReferences" else null} =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+      ${if (attrs ? disallowedRequisites) then "disallowedRequisites" else null} =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+      ${if (attrs ? allowedReferences) then "allowedReferences" else null} =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+      ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
   makeDerivationArgument =
@@ -478,8 +476,8 @@ let
 
         derivationArg =
           removeAttrs attrs removedOrReplacedAttrNames
-          // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
-            name =
+          // {
+            ${if (attrs ? name || (attrs ? pname && attrs ? version)) then "name" else null} =
               let
                 # Indicate the host platform of the derivation if cross compiling.
                 # Fixed-output derivations like source tarballs shouldn't get a host
@@ -507,8 +505,7 @@ let
                   ) "The `version` attribute cannot be null.";
                   "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
               );
-          })
-          // {
+
             builder = attrs.realBuilder or stdenv.shell;
             args =
               attrs.args or [
@@ -556,28 +553,33 @@ let
             inherit doCheck doInstallCheck;
 
             inherit outputs;
-          }
-          // optionalAttrs (__contentAddressed) {
-            inherit __contentAddressed;
-            # Provide default values for outputHashMode and outputHashAlgo because
-            # most people won't care about these anyways
-            outputHashAlgo = attrs.outputHashAlgo or "sha256";
-            outputHashMode = attrs.outputHashMode or "recursive";
-          }
-          // optionalAttrs (enableParallelBuilding) {
-            inherit enableParallelBuilding;
-            enableParallelChecking = attrs.enableParallelChecking or true;
-            enableParallelInstalling = attrs.enableParallelInstalling or true;
-          }
-          // optionalAttrs (hardeningDisable != [ ] || hardeningEnable != [ ] || stdenv.hostPlatform.isMusl) {
-            NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
-          }
-          //
+
+            # When the derivations is content addressed provide default values
+            # for outputHashMode and outputHashAlgo because most people won't
+            # care about these anyways
+            ${if __contentAddressed then "__contentAddressed" else null} = __contentAddressed;
+            ${if __contentAddressed then "outputHashAlgo" else null} = attrs.outputHashAlgo or "sha256";
+            ${if __contentAddressed then "outputHashMode" else null} = attrs.outputHashMode or "recursive";
+
+            ${if enableParallelBuilding then "enableParallelBuilding" else null} = enableParallelBuilding;
+            ${if enableParallelBuilding then "enableParallelChecking" else null} =
+              attrs.enableParallelChecking or true;
+            ${if enableParallelBuilding then "enableParallelInstalling" else null} =
+              attrs.enableParallelInstalling or true;
+
+            ${
+              if (hardeningDisable != [ ] || hardeningEnable != [ ] || stdenv.hostPlatform.isMusl) then
+                "NIX_HARDENING_ENABLE"
+              else
+                null
+            } =
+              builtins.concatStringsSep " " enabledHardeningOptions;
+
             # TODO: remove platform condition
             # Enabling this check could be a breaking change as it requires to edit nix.conf
             # NixOS module already sets gccarch, unsure of nix installers and other distributions
-            optionalAttrs
-              (
+            ${
+              if
                 stdenv.buildPlatform ? gcc.arch
                 && !(
                   stdenv.buildPlatform.isAarch64
@@ -589,12 +591,15 @@ let
                       stdenv.buildPlatform.gcc.arch == "armv8-a"
                   )
                 )
-              )
-              {
-                requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
-                  "gccarch-${stdenv.buildPlatform.gcc.arch}"
-                ];
-              }
+              then
+                "requiredSystemFeatures"
+              else
+                null
+            } =
+              attrs.requiredSystemFeatures or [ ] ++ [
+                "gccarch-${stdenv.buildPlatform.gcc.arch}"
+              ];
+          }
           // optionalAttrs (stdenv.buildPlatform.isDarwin) (
             let
               allDependencies = concatLists (concatLists dependencies);

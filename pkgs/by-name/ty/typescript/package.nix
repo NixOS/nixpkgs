@@ -14,7 +14,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "typescript";
-  version = "5.8.3";
+  version = "5.9.2";
 
   # Prefer npmjs over the GitHub repository for source code.
   # The TypeScript project typically publishes stable, versioned code to npmjs,
@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
   #   - https://github.com/microsoft/TypeScript/pull/60150#issuecomment-2648791588, 5.8.3 includes this 5.9 breaking change
   src = fetchurl {
     url = "https://registry.npmjs.org/typescript/-/typescript-${finalAttrs.version}.tgz";
-    hash = "sha256-cuddvrksLm65o0y1nXT6tcLubzKgMkqJQF9hZdWgg3Q=";
+    hash = "sha256-Z6O8gugiuPRfZTqA/DqXMNIyFNNsg7qF3X9avr7oIGI=";
   };
 
   # The upstream GitHub repository's package-lock.json differs from the package.json in the npmjs tarball.
@@ -40,7 +40,7 @@ buildNpmPackage (finalAttrs: {
     mkdir -p node_modules
   '';
 
-  npmDepsHash = "sha256-f/7Dxwoz0qv7T3Ez4jeRvmu7PxhzObwczjO7JcEcCr4=";
+  npmDepsHash = "sha256-dyN94wmEA/jtiJCsEs/MoDSd6AFsaq2r25a/FeuqQ5k=";
   forceEmptyCache = true;
 
   dontNpmBuild = true;

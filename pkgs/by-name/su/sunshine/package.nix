@@ -54,21 +54,21 @@
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
   version = "2025.628.4510";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xNWFo6a4YrJ+tBFTSReoAEi1oZ4DSguBEusizWeWKYY=";
     fetchSubmodules = true;
   };
 
   # build webui
   ui = buildNpmPackage {
-    inherit src version;
+    inherit (finalAttrs) src version;
     pname = "sunshine-ui";
     npmDepsHash = "sha256-kUixeLf8prsWQolg1v+vJ5rvwKZOsU+88+0hVOgTZ0A=";
 
@@ -78,10 +78,38 @@ stdenv'.mkDerivation rec {
     '';
 
     installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
+      runHook preInstall
+
+      mkdir -p "$out"
+      cp -a . "$out"/
+
+      runHook postInstall
     '';
   };
+
+  postPatch = # remove upstream dependency on systemd and udev
+  ''
+    substituteInPlace cmake/packaging/linux.cmake \
+      --replace-fail 'find_package(Systemd)' "" \
+      --replace-fail 'find_package(Udev)' ""
+  ''
+  # don't look for npm since we build webui separately
+  + ''
+    substituteInPlace cmake/targets/common.cmake \
+      --replace-fail 'find_program(NPM npm REQUIRED)' ""
+
+    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
+      --subst-var-by PROJECT_NAME 'Sunshine' \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
+      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
+      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+
+    substituteInPlace packaging/linux/sunshine.service.in \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -91,7 +119,6 @@ stdenv'.mkDerivation rec {
     wayland-scanner
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
-    udevCheckHook
   ]
   ++ lib.optionals cudaSupport [
     autoAddDriverRunpath
@@ -172,53 +199,26 @@ stdenv'.mkDerivation rec {
 
   env = {
     # needed to trigger CMake version configuration
-    BUILD_VERSION = "${version}";
+    BUILD_VERSION = "${finalAttrs.version}";
     BRANCH = "master";
     COMMIT = "";
   };
 
-  postPatch = ''
-    # remove upstream dependency on systemd and udev
-    substituteInPlace cmake/packaging/linux.cmake \
-      --replace-fail 'find_package(Systemd)' "" \
-      --replace-fail 'find_package(Udev)' ""
-
-    # don't look for npm since we build webui separately
-    substituteInPlace cmake/targets/common.cmake \
-      --replace-fail 'find_program(NPM npm REQUIRED)' ""
-
-    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
-      --subst-var-by PROJECT_NAME 'Sunshine' \
-      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
-      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
-      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
-
-    substituteInPlace packaging/linux/sunshine.service.in \
-      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
-      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
-  '';
-
+  # copy webui where it can be picked up by build
   preBuild = ''
-    # copy webui where it can be picked up by build
-    cp -r ${ui}/build ../
+    cp -r ${finalAttrs.ui}/build ../
   '';
 
   buildFlags = [
     "sunshine"
   ];
 
-  # allow Sunshine to find libvulkan
-  postFixup = lib.optionalString cudaSupport ''
-    wrapProgram $out/bin/sunshine \
-      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
-  '';
-
   # redefine installPhase to avoid attempt to build webui
   installPhase = ''
     runHook preInstall
+
     cmake --install .
+
     runHook postInstall
   '';
 
@@ -226,19 +226,27 @@ stdenv'.mkDerivation rec {
     install -Dm644 ../packaging/linux/dev.lizardbyte.app.Sunshine.desktop $out/share/applications/dev.lizardbyte.app.Sunshine.desktop
   '';
 
+  # allow Sunshine to find libvulkan
+  postFixup = lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/sunshine \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   passthru = {
     tests.sunshine = nixosTests.sunshine;
     updateScript = ./updater.sh;
   };
 
-  meta = with lib; {
-    description = "Sunshine is a Game stream host for Moonlight";
+  meta = {
+    description = "Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "sunshine";
-    maintainers = with maintainers; [ devusb ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.linux;
   };
-}
+})

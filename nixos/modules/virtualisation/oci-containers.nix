@@ -98,20 +98,16 @@ let
           type = with types; listOf str;
           default = [ ];
           description = "Commandline arguments to pass to the image's entrypoint.";
-          example = literalExpression ''
-            ["--port=9000"]
-          '';
+          example = [ "--port=9000" ];
         };
 
         labels = mkOption {
           type = with types; attrsOf str;
           default = { };
           description = "Labels to attach to the container at runtime.";
-          example = literalExpression ''
-            {
-              "traefik.https.routers.example.rule" = "Host(`example.container`)";
-            }
-          '';
+          example = {
+            "traefik.https.routers.example.rule" = "Host(`example.container`)";
+          };
         };
 
         entrypoint = mkOption {
@@ -125,24 +121,20 @@ let
           type = with types; attrsOf str;
           default = { };
           description = "Environment variables to set for this container.";
-          example = literalExpression ''
-            {
-              DATABASE_HOST = "db.example.com";
-              DATABASE_PORT = "3306";
-            }
-          '';
+          example = {
+            DATABASE_HOST = "db.example.com";
+            DATABASE_PORT = "3306";
+          };
         };
 
         environmentFiles = mkOption {
           type = with types; listOf path;
           default = [ ];
           description = "Environment files for this container.";
-          example = literalExpression ''
-            [
-              /path/to/.env
-              /path/to/.env.secret
-            ]
-          '';
+          example = [
+            /path/to/.env
+            /path/to/.env.secret
+          ];
         };
 
         log-driver = mkOption {
@@ -223,12 +215,10 @@ let
             field; please refer to the
             [docker engine documentation](https://docs.docker.com/engine/storage/volumes/) for details.
           '';
-          example = literalExpression ''
-            [
-              "volume_name:/path/inside/container"
-              "/path/on/host:/path/inside/container"
-            ]
-          '';
+          example = [
+            "volume_name:/path/inside/container"
+            "/path/on/host:/path/inside/container"
+          ];
         };
 
         workdir = mkOption {
@@ -249,10 +239,8 @@ let
           example = literalExpression ''
             virtualisation.oci-containers.containers = {
               node1 = {};
-              node2 = {
-                dependsOn = [ "node1" ];
-              }
-            }
+              node2.dependsOn = [ "node1" ];
+            };
           '';
         };
 
@@ -277,9 +265,7 @@ let
           type = with types; listOf str;
           default = [ ];
           description = "Extra options for {command}`${defaultBackend} run`.";
-          example = literalExpression ''
-            ["--network=host"]
-          '';
+          example = [ "--network=host" ];
         };
 
         autoStart = mkOption {
@@ -352,12 +338,10 @@ let
             When set to false, capability is dropped from the container.
             When null, default runtime settings apply.
           '';
-          example = literalExpression ''
-            {
-              SYS_ADMIN = true;
-              SYS_WRITE = false;
-            {
-          '';
+          example = {
+            SYS_ADMIN = true;
+            SYS_WRITE = false;
+          };
         };
 
         devices = mkOption {
@@ -366,11 +350,9 @@ let
           description = ''
             List of devices to attach to this container.
           '';
-          example = literalExpression ''
-            [
-              "/dev/dri:/dev/dri"
-            ]
-          '';
+          example = [
+            "/dev/dri:/dev/dri"
+          ];
         };
 
         privileged = mkOption {

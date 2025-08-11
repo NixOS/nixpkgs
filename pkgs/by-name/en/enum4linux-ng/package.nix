@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "enum4linux-ng";
-  version = "1.3.4";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = "enum4linux-ng";
     tag = "v${version}";
-    hash = "sha256-MN3AUubro9CHkdPe/X1xcE11ye/D/A+Kf6zUOJTN4l0=";
+    hash = "sha256-jwwBYpzMjaVVojMB1udkinNQDiOXPKWbOwIsWHlhWw4=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
       enumerating information from Windows and Samba systems.
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
-    changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/v${version}";
+    changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/${src.tag}";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "enum4linux-ng";

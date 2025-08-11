@@ -80,6 +80,7 @@ buildFHSEnv {
       gcc
       glib
       gnutar
+      gtk3
       libxml2
       libxslt
       procps

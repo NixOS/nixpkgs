@@ -16,7 +16,6 @@
   python3,
   runCommand,
   rustPlatform,
-  unstableGitUpdater,
   vulkan-loader,
   wayland,
   wezterm,
@@ -29,14 +28,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-06-24";
+  version = "0-unstable-2025-07-10";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "2deb317ec069b8f94ec1282253faaa71a8d997fc";
+    rev = "85c587f9f3d8be49dfa252da116fc9ca290df113";
     fetchSubmodules = true;
-    hash = "sha256-danJcaG4ZyMbqR+4xaVOVM7a+4Sehq5cum40iRt/HQ8=";
+    hash = "sha256-hyyKC5BXeIbgP+bXxtvIz1LZUDoUJ6+em/PrX/TEg4k=";
   };
 
   postPatch = ''
@@ -59,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-uYx5OykWHN4B73rXWMYg3Sl7B+o7uFJMyAFiLMlLCsA=";
+  cargoHash = "sha256-chMbDMT8UWaiGovlzYn1UD8VFqb9UYHMDDx/A62wQsY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -152,10 +151,7 @@ rustPlatform.buildRustPackage rec {
       #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
 
-    # upstream tags are composed with timestamp+commit, e.g.:
-    # 20240203-110809-5046fc22
-    # doesn't make much sense if we are following unstable
-    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {

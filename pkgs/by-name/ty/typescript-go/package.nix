@@ -7,17 +7,17 @@
 
 buildGoModule {
   pname = "typescript-go";
-  version = "0-unstable-2025-07-25";
+  version = "0-unstable-2025-08-01";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typescript-go";
-    rev = "c05da65ec4298d5930c59b559e9d5e00dfab8af3";
-    hash = "sha256-6zFBooMgdUHsKP5qOd7GOCBj3+NS0ckzWFIeO+0V2Fw=";
+    rev = "644bde28939733580cbef96adaa7253f9faa54ac";
+    hash = "sha256-5oU3tTZ8jvc85jzgh14ICLlz0VgQ7v2ofeMADRMW5O4=";
     fetchSubmodules = false;
   };
 
-  vendorHash = "sha256-ORetO5VTo94KJfC/q7TDSWoQjZUKYjrMcSMecVpu8Pw=";
+  vendorHash = "sha256-nOro2EARm/4LZ0BfX10nuhCAlPi6T91EpXGP0F9Rm04=";
 
   ldflags = [
     "-s"

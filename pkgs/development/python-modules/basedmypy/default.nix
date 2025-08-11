@@ -47,6 +47,11 @@ buildPythonPackage rec {
     substituteInPlace \
       pyproject.toml \
       --replace-warn 'types-setuptools==' 'types-setuptools>='
+  ''
+  # __closed__ returns None at runtime (not a bool)
+  + ''
+    substituteInPlace test-data/unit/lib-stub/typing_extensions.pyi \
+      --replace-fail "__closed__: bool" "__closed__: None"
   '';
 
   build-system = [
@@ -119,7 +124,13 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isi686 [
     # https://github.com/python/mypy/issues/15221
     "mypyc/test/test_run.py"
-  ];
+  ]
+  ++
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && pythonOlder "3.13")
+      [
+        # mypy/test/testsolve.py::SolveSuite::test_simple_constraints_with_dynamic_type: [Any | A] != [Any]
+        "mypy/test/testsolve.py"
+      ];
 
   passthru.updateScript = nix-update-script { };
 

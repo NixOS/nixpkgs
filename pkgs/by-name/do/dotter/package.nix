@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Dotfile manager and templater written in rust 🦀";
+    description = "Dotfile manager and templater written in Rust";
     homepage = "https://github.com/SuperCuber/dotter";
     license = licenses.unlicense;
     maintainers = with maintainers; [ linsui ];

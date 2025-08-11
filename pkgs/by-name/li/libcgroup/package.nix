@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libcgroup";
     repo = "libcgroup";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-kWW9ID/eYZH0O/Ge8pf3Cso4yu644R5EiQFYfZMcizs=";
   };
