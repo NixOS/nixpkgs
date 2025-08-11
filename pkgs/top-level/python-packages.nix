@@ -3445,6 +3445,8 @@ self: super: with self; {
 
   decli = callPackage ../development/python-modules/decli { };
 
+  declinate = callPackage ../development/python-modules/declinate { };
+
   decopatch = callPackage ../development/python-modules/decopatch { };
 
   decora-wifi = callPackage ../development/python-modules/decora-wifi { };
@@ -4494,6 +4496,8 @@ self: super: with self; {
 
   ebooklib = callPackage ../development/python-modules/ebooklib { };
 
+  ebusdpy = callPackage ../development/python-modules/ebusdpy { };
+
   ec2-metadata = callPackage ../development/python-modules/ec2-metadata { };
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
@@ -4526,8 +4530,6 @@ self: super: with self; {
   editables = callPackage ../development/python-modules/editables { };
 
   editdistance = callPackage ../development/python-modules/editdistance { };
-
-  editdistance-s = callPackage ../development/python-modules/editdistance-s { };
 
   editdistpy = callPackage ../development/python-modules/editdistpy { };
 
@@ -7012,8 +7014,6 @@ self: super: with self; {
   inkex = callPackage ../development/python-modules/inkex { };
 
   inline-snapshot = callPackage ../development/python-modules/inline-snapshot { };
-
-  inlinestyler = callPackage ../development/python-modules/inlinestyler { };
 
   inotify = callPackage ../development/python-modules/inotify { };
 
@@ -13752,6 +13752,8 @@ self: super: with self; {
     }
   );
 
+  pyrecswitch = callPackage ../development/python-modules/pyrecswitch { };
+
   pyrect = callPackage ../development/python-modules/pyrect { };
 
   pyregion = callPackage ../development/python-modules/pyregion { };
@@ -14096,6 +14098,8 @@ self: super: with self; {
   pyswitchbee = callPackage ../development/python-modules/pyswitchbee { };
 
   pyswitchbot = callPackage ../development/python-modules/pyswitchbot { };
+
+  pyswitchmate = callPackage ../development/python-modules/pyswitchmate { };
 
   pysychonaut = callPackage ../development/python-modules/pysychonaut { };
 
@@ -15875,6 +15879,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rosbags = callPackage ../development/python-modules/rosbags { };
 
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 

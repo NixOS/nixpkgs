@@ -88,7 +88,6 @@ in
 
       corePackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = corePackages;
         defaultText = lib.literalMD ''
           these packages, with their `meta.priority` numerically increased
           (thus lowering their installation priority):
@@ -179,6 +178,10 @@ in
   };
 
   config = {
+
+    # Set this here so that it has the right priority and allows ergonomic
+    # merging.
+    environment.corePackages = corePackages;
 
     environment.systemPackages = config.environment.corePackages ++ config.environment.defaultPackages;
 
