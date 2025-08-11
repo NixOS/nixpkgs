@@ -1164,8 +1164,16 @@ broken-packages:
   - data-concurrent-queue # failure in job https://hydra.nixos.org/build/233252841 at 2023-09-02
   - data-construction # failure in job https://hydra.nixos.org/build/233251464 at 2023-09-02
   - data-constructors # failure in job https://hydra.nixos.org/build/233241097 at 2023-09-02
+  - data-default-instances-base # failure in job https://hydra.nixos.org/build/304235552 at 2025-08-11
+  - data-default-instances-bytestring # failure in job https://hydra.nixos.org/build/304235538 at 2025-08-11
+  - data-default-instances-case-insensitive # failure in job https://hydra.nixos.org/build/304235539 at 2025-08-11
+  - data-default-instances-containers # failure in job https://hydra.nixos.org/build/304235541 at 2025-08-11
+  - data-default-instances-dlist # failure in job https://hydra.nixos.org/build/304235550 at 2025-08-11
   - data-default-instances-new-base # failure in job https://hydra.nixos.org/build/233256824 at 2023-09-02
+  - data-default-instances-old-locale # failure in job https://hydra.nixos.org/build/304235551 at 2025-08-11
   - data-default-instances-text # failure in job https://hydra.nixos.org/build/233209026 at 2023-09-02
+  - data-default-instances-unordered-containers # failure in job https://hydra.nixos.org/build/304235558 at 2025-08-11
+  - data-default-instances-vector # failure in job https://hydra.nixos.org/build/304235557 at 2025-08-11
   - data-dispersal # failure in job https://hydra.nixos.org/build/233242611 at 2023-09-02
   - data-diverse-lens # failure in job https://hydra.nixos.org/build/233221672 at 2023-09-02
   - data-easy # failure in job https://hydra.nixos.org/build/233250802 at 2023-09-02
