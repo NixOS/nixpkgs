@@ -111,7 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bun
-    makeWrapper
+    makeBinaryWrapper
     models-dev
   ];
 
