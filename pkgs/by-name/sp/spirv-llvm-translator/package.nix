@@ -14,9 +14,7 @@
 
 let
   llvmMajor = lib.versions.major llvm.version;
-  isROCm = lib.hasPrefix "rocm" llvm.pname;
 
-  # ROCm, if actively updated will always be at the latest version
   versions = {
     "21" = rec {
       version = "21.1.0";
@@ -60,8 +58,7 @@ let
     };
   };
 
-  majorVersion = if isROCm then "21" else llvmMajor;
-  branch = versions."${majorVersion}" or (throw "Incompatible LLVM version ${llvmMajor}");
+  branch = versions."${llvmMajor}" or (throw "Incompatible LLVM version ${llvmMajor}");
 
   # For the LLVM 21 build some commits to spirv-headers
   # are required, that didn't make it into the final release of 1.4.321
@@ -71,7 +68,7 @@ let
   # at which point this can be removed.
   # In the meanwhile, we pull from the repo directly.
   spirv-headers-src =
-    if majorVersion != "21" || lib.versionAtLeast spirv-headers.version "1.4.322" then
+    if llvmMajor != "21" || lib.versionAtLeast spirv-headers.version "1.4.322" then
       spirv-headers.src
     else
       fetchFromGitHub {
@@ -104,20 +101,20 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ]
-  ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
+    llvm.dev
+  ];
 
   buildInputs = [
     spirv-headers
     spirv-tools
-  ]
-  ++ lib.optionals (!isROCm) [ llvm ];
+    llvm
+  ];
 
   nativeCheckInputs = [ lit ];
 
   cmakeFlags = [
     "-DLLVM_INCLUDE_TESTS=ON"
-    "-DLLVM_DIR=${(if isROCm then llvm else llvm.dev)}"
+    "-DLLVM_DIR=${llvm.dev}"
     "-DBUILD_SHARED_LIBS=YES"
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
