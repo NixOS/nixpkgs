@@ -5653,7 +5653,8 @@
       ];
     "stiebel_eltron" =
       ps: with ps; [
-      ]; # missing inputs: pystiebeleltron
+        pystiebeleltron
+      ];
     "stookwijzer" =
       ps: with ps; [
         stookwijzer
@@ -7656,6 +7657,7 @@
     "statsd"
     "steam_online"
     "steamist"
+    "stiebel_eltron"
     "stookwijzer"
     "stream"
     "streamlabswater"
