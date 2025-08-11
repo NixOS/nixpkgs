@@ -481,7 +481,6 @@ in
       settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
       contents = {
-        "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 
@@ -507,6 +506,8 @@ in
 
         "/bin".source = "${initrdBinEnv}/bin";
         "/sbin".source = "${initrdBinEnv}/sbin";
+        "/usr/bin".source = "${initrdBinEnv}/bin";
+        "/usr/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
