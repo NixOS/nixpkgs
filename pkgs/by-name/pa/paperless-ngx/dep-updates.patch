@@ -1,0 +1,108 @@
+diff --git a/src/paperless/settings.py b/src/paperless/settings.py
+index 3b69b2fc2..8549b9396 100644
+--- a/src/paperless/settings.py
++++ b/src/paperless/settings.py
+@@ -11,7 +11,6 @@ from typing import Final
+ from urllib.parse import urlparse
+ 
+ from celery.schedules import crontab
+-from concurrent_log_handler.queue import setup_logging_queues
+ from django.utils.translation import gettext_lazy as _
+ from dotenv import load_dotenv
+ 
+@@ -803,8 +802,6 @@ USE_TZ = True
+ # Logging                                                                     #
+ ###############################################################################
+ 
+-setup_logging_queues()
+-
+ LOGGING_DIR.mkdir(parents=True, exist_ok=True)
+ 
+ LOGROTATE_MAX_SIZE = os.getenv("PAPERLESS_LOGROTATE_MAX_SIZE", 1024 * 1024)
+diff --git a/src/paperless_mail/mail.py b/src/paperless_mail/mail.py
+index b62e37166..415a69163 100644
+--- a/src/paperless_mail/mail.py
++++ b/src/paperless_mail/mail.py
+@@ -29,7 +29,7 @@ from imap_tools import MailBoxUnencrypted
+ from imap_tools import MailMessage
+ from imap_tools import MailMessageFlags
+ from imap_tools import errors
+-from imap_tools.mailbox import MailBoxTls
++from imap_tools.mailbox import MailBoxStartTls
+ from imap_tools.query import LogicOperator
+ 
+ from documents.data_models import ConsumableDocument
+@@ -419,7 +419,7 @@ def get_mailbox(server, port, security) -> MailBox:
+     if security == MailAccount.ImapSecurity.NONE:
+         mailbox = MailBoxUnencrypted(server, port)
+     elif security == MailAccount.ImapSecurity.STARTTLS:
+-        mailbox = MailBoxTls(server, port, ssl_context=ssl_context)
++        mailbox = MailBoxStartTls(server, port, ssl_context=ssl_context)
+     elif security == MailAccount.ImapSecurity.SSL:
+         mailbox = MailBox(server, port, ssl_context=ssl_context)
+     else:
+diff --git a/src/documents/serialisers.py b/src/documents/serialisers.py
+index 5a1a6c6859a..95689b5124d 100644
+--- a/src/documents/serialisers.py
++++ b/src/documents/serialisers.py
+@@ -2038,6 +2038,24 @@ def validate(self, attrs):
+ 
+         return attrs
+ 
++    @staticmethod
++    def normalize_workflow_trigger_sources(trigger):
++        """
++        Convert sources to strings to handle django-multiselectfield v1.0 changes
++        """
++        if trigger and "sources" in trigger:
++            trigger["sources"] = [
++                str(s.value if hasattr(s, "value") else s) for s in trigger["sources"]
++            ]
++
++    def create(self, validated_data):
++        WorkflowTriggerSerializer.normalize_workflow_trigger_sources(validated_data)
++        return super().create(validated_data)
++
++    def update(self, instance, validated_data):
++        WorkflowTriggerSerializer.normalize_workflow_trigger_sources(validated_data)
++        return super().update(instance, validated_data)
++
+ 
+ class WorkflowActionEmailSerializer(serializers.ModelSerializer):
+     id = serializers.IntegerField(allow_null=True, required=False)
+@@ -2202,6 +2220,8 @@ def update_triggers_and_actions(self, instance: Workflow, triggers, actions):
+         if triggers is not None and triggers is not serializers.empty:
+             for trigger in triggers:
+                 filter_has_tags = trigger.pop("filter_has_tags", None)
++                # Convert sources to strings to handle django-multiselectfield v1.0 changes
++                WorkflowTriggerSerializer.normalize_workflow_trigger_sources(trigger)
+                 trigger_instance, _ = WorkflowTrigger.objects.update_or_create(
+                     id=trigger.get("id"),
+                     defaults=trigger,
+diff --git a/src/documents/tests/test_management_exporter.py b/src/documents/tests/test_management_exporter.py
+index 68d20476593..7415467de79 100644
+--- a/src/documents/tests/test_management_exporter.py
++++ b/src/documents/tests/test_management_exporter.py
+@@ -123,7 +123,7 @@ def setUp(self) -> None:
+ 
+         self.trigger = WorkflowTrigger.objects.create(
+             type=WorkflowTrigger.WorkflowTriggerType.CONSUMPTION,
+-            sources=[1],
++            sources=[str(WorkflowTrigger.DocumentSourceChoices.CONSUME_FOLDER.value)],
+             filter_filename="*",
+         )
+         self.action = WorkflowAction.objects.create(assign_title="new title")
+diff --git a/src/documents/tests/test_migration_workflows.py b/src/documents/tests/test_migration_workflows.py
+index 9895188188a..60e429d68c2 100644
+--- a/src/documents/tests/test_migration_workflows.py
++++ b/src/documents/tests/test_migration_workflows.py
+@@ -104,7 +104,7 @@ def setUpBeforeMigration(self, apps):
+ 
+         trigger = WorkflowTrigger.objects.create(
+             type=0,
+-            sources=[DocumentSource.ConsumeFolder],
++            sources=[str(DocumentSource.ConsumeFolder)],
+             filter_path="*/path/*",
+             filter_filename="*file*",
+         )
+

@@ -251,7 +251,7 @@ dotnetFromEnv'
 
   local wrapperFlags=()
   if (( ${#runtimeDeps[@]} > 0 )); then
-    local libraryPath=("${dotnetRuntimeDeps[@]/%//lib}")
+    local libraryPath=("${runtimeDeps[@]/%//lib}")
     local OLDIFS="$IFS" IFS=':'
     wrapperFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPath[*]}")
     IFS="$OLDIFS"

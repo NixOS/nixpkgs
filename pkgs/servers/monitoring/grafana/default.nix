@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   removeReferencesTo,
   tzdata,
   wire,
@@ -55,6 +56,15 @@ buildGoModule rec {
     rev = "v${version}";
     hash = "sha256-yraCuPLe68ryCgFzOZPL1H/JYynEvxijjgxMmQvcPZE=";
   };
+
+  # Fix build
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/grafana/grafana/commit/21f305c6a0e242463f5219cc6944fb880ea809f0.patch";
+      hash = "sha256-sXooRlnKY5ax0+1CPhy4zxDQtDGspbSdOoHHciqLTD8=";
+    })
+  ];
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {

@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "48.4";
+  version = "48.5";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8RqhxUSsIRJZ4jC0DIBK5kB3M5pXve+j2761f5Fm4/0=";
+    hash = "sha256-DMjXLHHT2KqxvhCuGUGkzZLNHip+gwq3aA4sgt+xnAs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -125,8 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/papers";
-    changelog = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/GNOME/papers";
+    changelog = "https://gitlab.gnome.org/GNOME/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME's document viewer";
 
     longDescription = ''
