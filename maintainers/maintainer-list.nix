@@ -18908,6 +18908,12 @@
     githubId = 20295134;
     name = "Oliver Ni";
   };
+  olk = {
+    name = "Oleksandr Knyshuk";
+    email = "olk@disr.it";
+    github = "k1gen";
+    githubId = 62500387;
+  };
   ollieB = {
     github = "oliverbunting";
     githubId = 1237862;
