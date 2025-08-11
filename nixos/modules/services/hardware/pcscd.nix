@@ -112,7 +112,7 @@ in
       environment = {
         PCSCLITE_HP_DROPDIR = pluginEnv;
 
-        PCSCLITE_FILTER_IGNORE_READER_NAMES = lib.mkIf (cfg.ignoreReaderNames) (
+        PCSCLITE_FILTER_IGNORE_READER_NAMES = lib.mkIf (cfg.ignoreReaderNames != [ ]) (
           lib.concatStringsSep ":" cfg.ignoreReaderNames
         );
 
