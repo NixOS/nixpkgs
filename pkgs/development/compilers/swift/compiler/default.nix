@@ -756,6 +756,10 @@ stdenv.mkDerivation {
       swiftStaticLibSubdir
       ;
 
+    tests = {
+      cxx-interop-test = callPackage ../cxx-interop-test { };
+    };
+
     # Internal attr for the wrapper.
     _wrapperParams = wrapperParams;
   };

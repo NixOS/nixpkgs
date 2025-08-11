@@ -79,6 +79,7 @@ stdenv.mkDerivation (
         swiftArch
         swiftModuleSubdir
         swiftLibSubdir
+        tests
         ;
     };
   }
