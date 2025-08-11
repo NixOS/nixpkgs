@@ -361,7 +361,7 @@ stdenv.mkDerivation {
 
      patch -p1 -d llvm-project/clang -i ${./patches/clang-toolchain-dir.patch}
      patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
-     patch -p1 -d llvm-project/clang -i ${../../llvm/12/clang/purity.patch}
+     patch -p1 -d llvm-project/clang -i ${./patches/clang-purity.patch}
      patch -p2 -d llvm-project/clang -i ${
        fetchpatch {
          name = "clang-cmake-fix-interpreter.patch";
