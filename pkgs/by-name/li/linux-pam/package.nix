@@ -20,6 +20,8 @@
   findXMLCatalogs,
   docbook_xsl_ns,
   nix-update-script,
+  withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  withAudit ? lib.meta.availableOn stdenv.hostPlatform audit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,8 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     db4
     libxcrypt
   ]
-  ++ lib.optionals stdenv.buildPlatform.isLinux [
+  ++ lib.optionals withAudit [
     audit
+  ]
+  ++ lib.optionals withLogind [
     systemdLibs
   ];
 
@@ -75,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonAutoFeatures = "auto";
   mesonFlags = [
-    (lib.mesonEnable "logind" stdenv.buildPlatform.isLinux)
-    (lib.mesonEnable "audit" stdenv.buildPlatform.isLinux)
+    (lib.mesonEnable "logind" withLogind)
+    (lib.mesonEnable "audit" withAudit)
     (lib.mesonEnable "pam_lastlog" (!stdenv.hostPlatform.isMusl)) # TODO: switch to pam_lastlog2, pam_lastlog is deprecated and broken on musl
     (lib.mesonEnable "pam_unix" true)
     # (lib.mesonBool "pam-debug" true) # warning: slower execution due to debug makes VM tests fail!
