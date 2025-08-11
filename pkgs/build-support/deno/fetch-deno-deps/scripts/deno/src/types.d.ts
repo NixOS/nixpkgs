@@ -1,5 +1,7 @@
+type TsTypesJson = Array<string>;
 type LockfileTransformerConfig = {
   inPath: PathString;
+  inPathTsTypes: PathString;
   outPathJsr: PathString;
   outPathNpm: PathString;
   outPathHttps: PathString;

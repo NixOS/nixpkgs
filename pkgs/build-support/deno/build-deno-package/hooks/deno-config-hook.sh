@@ -50,6 +50,26 @@ denoConfigHook() {
     exit 1
   fi
 
+  local -r cacheTsTypes="$denoDeps/ts-types.json"
+  local -r srcTsTypes="$tsTypesJsonPath"
+
+  echo "Validating consistency between $srcTsTypes and $cacheTsTypes"
+  if ! diff "$srcTsTypes" "$cacheTsTypes"; then
+    echo
+    echo "ERROR: denoDepsHash is out of date"
+    echo
+    echo "The @ts-types in src are not the same as the in $denoDeps."
+    echo
+    echo "To fix the issue:"
+    echo '1. Use `lib.fakeHash` as the denoDepsHash value'
+    echo "2. Build the derivation and wait for it to fail with a hash mismatch"
+    echo "3. Copy the 'got: sha256-' value back into the denoDepsHash field"
+    echo
+
+    exit 1
+  fi
+
+
   # NOTE: we need to use vendor in the build too, since we used it for the deps
   useVendor() {
     jq '.vendor = true' deno.json >temp.json &&

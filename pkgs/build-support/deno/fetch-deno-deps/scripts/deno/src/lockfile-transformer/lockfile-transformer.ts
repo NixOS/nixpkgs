@@ -4,6 +4,7 @@ type Config = LockfileTransformerConfig;
 function getConfig(): Config {
   const flagsParsed = {
     "in-path": "",
+    "in-path-ts-types": "",
     "out-path-jsr": "",
     "out-path-npm": "",
     "out-path-https": "",
@@ -22,17 +23,59 @@ function getConfig(): Config {
     }
   });
 
-  return {
-    lockfile: JSON.parse(
-      new TextDecoder("utf-8").decode(
-        Deno.readFileSync(flagsParsed["in-path"]),
-      ),
+  const tsTypesJson: TsTypesJson = JSON.parse(
+    new TextDecoder().decode(
+      Deno.readFileSync(flagsParsed["in-path-ts-types"]),
     ),
+  );
+
+  const lockfile = JSON.parse(
+    new TextDecoder("utf-8").decode(
+      Deno.readFileSync(flagsParsed["in-path"]),
+    ),
+  );
+  const tsTypes = transformTsTypes(tsTypesJson);
+
+  lockfile.jsr = { ...tsTypes.jsr, ...lockfile.jsr };
+  lockfile.remote = { ...tsTypes.remote, ...lockfile.remote };
+  lockfile.npm = { ...tsTypes.npm, ...lockfile.npm };
+
+  return {
+    lockfile,
     outPathJsr: flagsParsed["out-path-jsr"],
     outPathNpm: flagsParsed["out-path-npm"],
     outPathHttps: flagsParsed["out-path-https"],
+    inPathTsTypes: flagsParsed["in-path-ts-types"],
     inPath: flagsParsed["in-path"],
   };
+}
+
+function transformTsTypes(
+  tsTypes: TsTypesJson,
+): Pick<DenoLock, "jsr" | "npm" | "remote"> {
+  const result: Pick<DenoLock, "jsr" | "npm" | "remote"> = {
+    jsr: {},
+    npm: {},
+    remote: {},
+  };
+  for (const packageSpecifier of tsTypes) {
+    if (packageSpecifier.match(/^https?:/)) {
+      result.remote[packageSpecifier] = "";
+    } else if (packageSpecifier.match(/^jsr:/)) {
+      result.jsr[packageSpecifier] = { integrity: "", dependencies: [] };
+    } else if (packageSpecifier.match(/^npm:/)) {
+      result.npm[packageSpecifier] = {
+        integrity: "",
+        optionalDependencies: [],
+        dependencies: [],
+      };
+    } else {
+      throw new Error(
+        `Invalid package specifier received from ts-types-preprocessor: ${packageSpecifier}`,
+      );
+    }
+  }
+  return result;
 }
 
 function parsePackageSpecifier(fullString: string): PackageSpecifier {
@@ -46,7 +89,7 @@ function parsePackageSpecifier(fullString: string): PackageSpecifier {
   const split = nameVersionSuffix.split("_");
   const nameVersionMatch = split[0].match(/^(.+)@(.+)$/);
   if (!nameVersionMatch) {
-    throw new Error(`Invalid name@version format in: ${split[0]}`);
+    throw new Error(`Invalid name@version format (version is required) in: "${split[0]}" in string "${fullString}"`);
   }
   const name = nameVersionMatch[1];
   const version = nameVersionMatch[2];

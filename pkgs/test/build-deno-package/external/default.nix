@@ -3,7 +3,7 @@
   readma-cli-linux = buildDenoPackage rec {
     pname = "readma-cli";
     version = "2.11.0";
-    denoDepsHash = "sha256-yeLwWUwItusIf4eId/WELYe03fIa8yK72BouGTeRvQU=";
+    denoDepsHash = "sha256-8aDLhxOWvZ+G0IiN140KordhR3Y1hW1/AuJvZEbG8nc=";
     src = fetchFromGitHub {
       owner = "elcoosp";
       repo = "readma";
@@ -23,7 +23,7 @@
   fresh-init-cli-linux = buildDenoPackage {
     pname = "fresh-init-cli";
     version = "";
-    denoDepsHash = "sha256-tHXBYYbUCVFNdwx2gldFBh9ZtibI/2kAP3XFOLDQkyw=";
+    denoDepsHash = "sha256-X/qR84QbLFBwAYW52xZARa1UnuayE5pOklRrN+ufraQ=";
     src = fetchFromGitHub {
       owner = "denoland";
       repo = "fresh";
@@ -37,7 +37,7 @@
   invidious-companion-cli-linux = buildDenoPackage {
     pname = "invidious-companion-cli";
     version = "";
-    denoDepsHash = "sha256-BEC3Ztu0xwAXnTfD5tjqWc5nkcGm6GW2OmECqOvo8Is=";
+    denoDepsHash = "sha256-ckPHZvMYcx51uROi1yftS6d13/Rp0CCrpbG8DmdM7UI=";
     src = fetchFromGitHub {
       owner = "iv-org";
       repo = "invidious-companion";

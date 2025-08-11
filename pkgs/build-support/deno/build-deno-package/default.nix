@@ -10,12 +10,6 @@
   lib,
   callPackage,
 }:
-let
-  vendorJsonName = "vendor.json";
-  npmJsonName = "npm.json";
-  denoDir = ".deno";
-  vendorDir = "vendor";
-in
 {
   name ? "${args.pname}-${args.version}",
   src ? null,
@@ -25,15 +19,7 @@ in
   hostPlatform ? stdenvNoCC.hostPlatform.system,
   # TODO: impure env vars passthru for npm tokens and deno auth tokens
   # TODO: source overrides like in buildNpmPackage
-  denoDeps ? fetchDenoDeps {
-    inherit
-      vendorJsonName
-      npmJsonName
-      ;
-    denoLock = src + "/deno.lock";
-    name = "${name}-deno-deps";
-    hash = denoDepsHash;
-  },
+  denoDeps ? null,
   # The package used for every deno command in the build
   denoPackage ? deno,
   # The package used as the runtime that is bundled with the the src to create the binary.
@@ -108,11 +94,34 @@ let
     "arm64-linux" = "aarch64-unknown-linux-gnu";
     "aarch64-linux" = "aarch64-unknown-linux-gnu";
   };
+
   hostPlatform_ =
     if builtins.hasAttr hostPlatform systemLookupTable then
       systemLookupTable."${hostPlatform}"
     else
       (lib.systems.elaborate hostPlatform).config;
+
+  tsTypesJson = (callPackage ../ts-types-preprocessor/default.nix { }).ts-types-json { inherit src; };
+
+  denoDeps' =
+    if denoDeps != null then
+      denoDeps
+    else
+      fetchDenoDeps {
+        inherit
+          vendorJsonName
+          npmJsonName
+          tsTypesJson
+          ;
+        denoLock = src + "/deno.lock";
+        name = "${name}-deno-deps";
+        hash = denoDepsHash;
+      };
+
+  vendorJsonName = "vendor.json";
+  npmJsonName = "npm.json";
+  denoDir = ".deno";
+  vendorDir = "vendor";
 in
 stdenvNoCC.mkDerivation (
   args'
@@ -135,7 +144,8 @@ stdenvNoCC.mkDerivation (
       npmJsonName
       ;
 
-    denoDeps = denoDeps.fetched;
+    tsTypesJsonPath = "${tsTypesJson}";
+    denoDeps = denoDeps'.fetched;
 
     nativeBuildInputs = nativeBuildInputs ++ [
       # Prefer passed hooks
@@ -155,7 +165,8 @@ stdenvNoCC.mkDerivation (
     dontFixup = if binaryEntrypointPath != null then false else dontFixup;
 
     passthru = {
-      inherit denoDeps;
+      denoDeps = denoDeps';
+      tsTypesJson = tsTypesJson;
     };
 
     meta = (args.meta or { }) // {

@@ -10,6 +10,7 @@ let
   transformDenoLock =
     {
       denoLock,
+      tsTypesJson,
     }:
     stdenvNoCC.mkDerivation {
       name = "transformed-deno-lock";
@@ -19,6 +20,7 @@ let
         mkdir -p $out
         lockfile-transformer \
           --in-path ${denoLock} \
+          --in-path-ts-types ${tsTypesJson} \
           --out-path-jsr $out/jsr.json \
           --out-path-npm $out/npm.json \
           --out-path-https $out/https.json;
@@ -36,6 +38,7 @@ let
       denoLock,
       hash,
       name,
+      tsTypesJson,
     }:
     stdenvNoCC.mkDerivation {
       inherit name;
@@ -50,6 +53,7 @@ let
           --out-path-vendored ${vendorJsonName} \
           --out-path-npm ${npmJsonName};
         cp ${denoLock} $out/deno.lock
+        cp ${tsTypesJson} $out/ts-types.json
       '';
       nativeBuildInputs = [
         fetch-deno-deps-scripts
@@ -71,9 +75,10 @@ in
       hash ? lib.fakeHash,
       vendorJsonName,
       npmJsonName,
+      tsTypesJson,
     }:
     let
-      transformedDenoLock = transformDenoLock { inherit denoLock; };
+      transformedDenoLock = transformDenoLock { inherit denoLock tsTypesJson; };
 
       fetched = singleFodFetcher {
         inherit
@@ -83,6 +88,7 @@ in
           vendorJsonName
           npmJsonName
           name
+          tsTypesJson
           ;
       };
     in

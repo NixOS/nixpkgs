@@ -929,6 +929,11 @@ If a package uses one of those features, this build helper can't be used.
 [`--allow-scripts`](https://docs.deno.com/runtime/reference/CLI/add/#options-allow-scripts)
 - [private HTTPS repositories](https://docs.deno.com/runtime/fundamentals/modules/#private-repositories)
 - [`.npmrc`](https://docs.npmjs.com/CLI/v8/configuring-npm/npmrc)
+- [`@ts-types`](https://docs.deno.com/runtime/reference/ts_config_migration/#providing-types-when-importing) &
+[triple slash directive with types](https://docs.deno.com/runtime/reference/ts_config_migration/#triple-slash-directive) &
+[`deno.json`'s `compilerOption.types`](https://docs.deno.com/runtime/reference/ts_config_migration/#supplying-%22types%22-in-deno.json),
+only if they import a package with `jsr:` or `npm:` but don't specify an explicit version (this would break reproducibility).
+In those cases you can still pass `denoCompileFlags = ["--no-check"]` to disable type checking.
 
 :::
 

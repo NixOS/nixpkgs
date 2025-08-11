@@ -587,3 +587,66 @@ It enables the user to associate a `@scope` with a custom URL, and associate tha
 Then we need to extract the `(@scope, domain)` pairs.
 Then we need to adapt the construction of NPM URLs for the relevant scopes.
 And then provide all `curl` calls to the respective domain with the respective auth headers.
+
+### `@ts-types`, triple slash directive and `deno.json`'s `compilerOption.types`
+
+[`@ts-types`](https://docs.deno.com/runtime/reference/ts_config_migration/#providing-types-when-importing)
+formerly called `@deno-types`, is an annotation that can be made above import
+statements in js code.
+
+The
+[triple slash directive](https://docs.deno.com/runtime/reference/ts_config_migration/#triple-slash-directive)
+can be placed in `.d.ts` files and can also import types.
+
+
+[`deno.json`'s `compilerOption.types`](https://docs.deno.com/runtime/reference/ts_config_migration/#supplying-%22types%22-in-deno.json)
+is a list of `packageSpecifier`s that can be placed
+files to import types as well.
+
+These imported files can be any `packageSpecifier`, so absolute or relative
+paths, as well as `https://`, `jsr:` and `npm:` specifiers.
+
+(although I did no testing with `jsr:` packages, since there were no extra types on jsr as packages)
+
+Deno will download these files lazily, only when type checking was triggered
+with e.g. `deno check` or `deno compile`.
+
+If developers don't do that locally, the files won't be added to the lock-file,
+but type checking during build will still fail, as Deno will try to download the
+missing types file.
+
+`https://` specifiers don't get added to the lock-file, even if they are
+downloaded while developing.
+
+This leaves us with the problem that sometimes such a specifier is not part of the
+lock-file, but the fetcher already needs to know about them.
+
+We could pass the entire source files along with the lock file to the fetcher,
+but this creates problems with the updating of the hash.
+
+There is a check in the `buildDenoPackage` that tells the user that the lock
+file has changed and they need to update the `denoDepsHash`, which will then
+result in a refetch.
+
+Doing the same thing for the whole source code would mean refetching on every
+code change while developing.
+
+Instead, what we need is another derivation, before the fetching step, that
+takes the source files as input and returns a JSON containing all the
+_hidden_ `packageSpecifiers` in the source code.
+This JSON is passed to the `lockfile-transformer` and the
+`packageSpecifiers` in it are merged with the specifiers from the lock-file.
+The JSON is also passed to the fetcher and the fetcher copies it to `$out`.
+The JSON in the fetcher derivation can then be checked every time when
+building and, if it changes, the user needs to update the `denoDepsHash`.
+
+**NOT IMPLEMENTED**: These all these `packageSpecifier`s can be written without a version.
+This does not matter for `https:` case, since those are fetched as is,
+but for the `jsr:` and `npm:` case, we need to construct a URL from the package specifier
+and to do that we need a version.
+NPM and JSR offer discovery mechanisms to discover the latest version from their API,
+but we can't do that, since the latest version is mutable.
+We would have to do this in the fetcher-step and depending on the latest version of a types file,
+the whole hash of the fetcher derivation could change, which would break reproducibility
+and cause unnecessary rebuilds.
+So this build helper requires there to be a version for the `jsr:` and `npm:` cases.

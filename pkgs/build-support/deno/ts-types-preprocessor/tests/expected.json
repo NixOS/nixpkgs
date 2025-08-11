@@ -1,0 +1,7 @@
+[
+  "http://asdf.com/asdf",
+  "https://asdf.com/asdf",
+  "jsr:@asdf/asdf",
+  "npm:@asdf/asdf",
+  "npm:@other/asdf"
+]
