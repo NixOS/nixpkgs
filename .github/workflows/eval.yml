@@ -45,13 +45,13 @@ jobs:
           sudo swapon /swap
 
       - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ inputs.mergedSha }}
           path: untrusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -123,7 +123,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         if: steps.targetRunId.outputs.targetRunId
         with:
           run-id: ${{ steps.targetRunId.outputs.targetRunId }}
@@ -159,20 +159,20 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@de96f4613b77ec03b5cf633e7c350c32bd3c5660 # v4.1.8
         with:
           pattern: diff-*
           path: diff
           merge-multiple: true
 
       - name: Check out the PR at the target commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ inputs.targetSha }}
           path: trusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -241,7 +241,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
       - name: Check if the PR can be merged and checkout the merge commit
@@ -250,7 +250,7 @@ jobs:
           merged-as-untrusted: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
         with:
           extra_nix_config: sandbox = true
 
