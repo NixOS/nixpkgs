@@ -18,24 +18,15 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.135.0";
+  version = "1.135.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-ygLWjI6HzBMTPDhEmf1rT18UhoRekzpG8DkeZXo2dts=";
+    hash = "sha256-4HAA9Xq4C3DHxz0BgqBitfM4wZwPSEu+IO/OPfHzLVw=";
   };
-
-  patches = [
-    # Skip broken HTML preview test case with libxml >= 2.14
-    # https://github.com/element-hq/synapse/pull/18413
-    (fetchpatch {
-      url = "https://github.com/element-hq/synapse/commit/8aad32965888476b4660bf8228d2d2aa9ccc848b.patch";
-      hash = "sha256-EUEbF442nOAybMI8EL6Ee0ib3JqSlQQ04f5Az3quKko=";
-    })
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
