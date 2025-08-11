@@ -54,7 +54,7 @@ jobs:
           mergedSha: ${{ inputs.mergedSha }}
           merged-as-untrusted: true
 
-      - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+      - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
         with:
           extra_nix_config: sandbox = true
 
