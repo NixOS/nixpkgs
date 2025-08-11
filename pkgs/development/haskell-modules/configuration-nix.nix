@@ -1755,6 +1755,22 @@ builtins.intersectAttrs super {
     '';
   }) super.wai-app-file-cgi;
 
+  # All flags are off by default
+  mighttpd2 = lib.pipe super.mighttpd2 [
+    # Library shouldn't increase closure size of resulting daemon and utility executables
+    enableSeparateBinOutput
+    # Enable all possible features
+    (enableCabalFlag "dhall")
+    (addBuildDepends [ self.dhall ])
+    (enableCabalFlag "tls")
+    (addBuildDepends [
+      self.warp-tls
+      self.tls
+    ])
+    # Can't build quic with Stackage LTS at the moment (random >= 1.3, tls >= 2.1.10)
+    (disableCabalFlag "quic")
+  ];
+
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
   mpi-hs =
