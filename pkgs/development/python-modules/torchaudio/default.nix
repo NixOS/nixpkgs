@@ -77,7 +77,7 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -86,7 +86,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-T1V+/Oho6Dblh3ah5PljpxKcndy2e1dAlVxC3ay4AM0=";
+    hash = "sha256-SPa6ZWA2AWawfL4Z4mb1nddGaAsGEl/0dwweBpex2Wo=";
   };
 
   patches = [
@@ -157,7 +157,7 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/audio/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     platforms =
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
