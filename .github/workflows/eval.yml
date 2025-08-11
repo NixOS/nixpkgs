@@ -123,7 +123,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         if: steps.targetRunId.outputs.targetRunId
         with:
           run-id: ${{ steps.targetRunId.outputs.targetRunId }}
@@ -159,7 +159,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@de96f4613b77ec03b5cf633e7c350c32bd3c5660 # v4.1.8
         with:
           pattern: diff-*
           path: diff
