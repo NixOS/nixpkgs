@@ -14066,6 +14066,8 @@ self: super: with self; {
 
   pysocks = callPackage ../development/python-modules/pysocks { };
 
+  pysodium = callPackage ../development/python-modules/pysodium { };
+
   pysol-cards = callPackage ../development/python-modules/pysol-cards { };
 
   pysolarmanv5 = callPackage ../development/python-modules/pysolarmanv5 { };
