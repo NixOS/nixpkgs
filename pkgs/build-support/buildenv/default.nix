@@ -15,9 +15,8 @@ let
   };
 in
 
-# TODO(@ShamrockLee): Remove lib.makeOverridable
-# after deprecating the locally-added custom overrider `<env pkg>.override`
-# in favour of the unified `<pkg>.overrideAttrs`.
+# We currently still rely on this custom overrider `<env-pkg>.override`,
+# as fixing the structured attribute support would change the `<pkg>.overrideAttrs` interface.
 lib.makeOverridable (
   lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
@@ -89,9 +88,11 @@ lib.makeOverridable (
                 [ drv ]
             )
             # Add any extra outputs specified by the caller of `buildEnv`.
-            ++ lib.filter (p: p != null) (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+            ++ lib.filter (p: p != null) (
+              builtins.map (outName: drv.${outName} or null) finalAttrs.extraOutputsToInstall
+            );
           priority = drv.meta.priority or lib.meta.defaultPriority;
-        }) paths;
+        }) finalAttrs.paths;
 
         pathsForClosure = lib.pipe chosenOutputs [
           (map (p: p.paths))
@@ -99,14 +100,17 @@ lib.makeOverridable (
           (lib.remove null)
         ];
       in
-      rec {
+      {
         inherit
+          extraOutputsToInstall
           manifest
           ignoreCollisions
           checkCollisionContents
           ignoreSingleFileOutputs
+          includeClosures
           passthru
           meta
+          paths
           pathsToLink
           extraPrefix
           postBuild
@@ -114,14 +118,14 @@ lib.makeOverridable (
           buildInputs
           ;
         pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
+        extraPathsFrom = lib.optional finalAttrs.includeClosures (writeClosure pathsForClosure);
         preferLocalBuild = true;
         allowSubstitutes = false;
         passAsFile = [
           "buildCommand"
         ]
         # XXX: The size is somewhat arbitrary
-        ++ lib.optional (lib.stringLength pkgs >= 128 * 1024) "pkgs";
+        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs";
 
         buildCommand = ''
           ${buildPackages.perl}/bin/perl -w ${builder}
