@@ -6598,7 +6598,6 @@ broken-packages:
   - vty-ui # failure in job https://hydra.nixos.org/build/233200900 at 2023-09-02
   - wacom-daemon # failure in job https://hydra.nixos.org/build/233213077 at 2023-09-02
   - waddle # failure in job https://hydra.nixos.org/build/233239973 at 2023-09-02
-  - wai-app-file-cgi # failure in job https://hydra.nixos.org/build/252733772 at 2024-03-16
   - wai-control # failure in job https://hydra.nixos.org/build/295098171 at 2025-04-22
   - wai-git-http # failure in job https://hydra.nixos.org/build/233191513 at 2023-09-02
   - wai-graceful # failure in job https://hydra.nixos.org/build/233243180 at 2023-09-02
