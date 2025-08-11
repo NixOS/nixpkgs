@@ -66,7 +66,7 @@ in
         };
         enablePam = true;
         unixSettings = {
-          pam_allowed_login_groups = [ "shell" ];
+          kanidm.pam_allowed_login_groups = [ "shell" ];
         };
       };
 
