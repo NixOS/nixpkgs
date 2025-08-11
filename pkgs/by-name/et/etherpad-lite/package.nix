@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D5YukbPnf2qN9NimALHfhCJAgNPsTZxoVV4KuPmnSdc=";
+    hash = "sha256-BUgWx6SVpQ6qIJnb6EoiogRXuKo9uDRrl7bPuXTGQy8=";
   };
 
   patches = [
