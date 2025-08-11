@@ -2316,7 +2316,21 @@ in
         (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
         {
           tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
-          services.lastlog2-import.enable = true;
+          services.lastlog2-import = {
+            enable = true;
+            wantedBy = [ "default.target" ];
+            after = [
+              "local-fs.target"
+              "systemd-tmpfiles-setup.service"
+            ];
+            # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
+            # uses unpatched /usr/bin/mv, needs to be fixed on staging
+            # in the meantime, use a service drop-in here
+            serviceConfig.ExecStartPost = [
+              ""
+              "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
+            ];
+          };
           packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
         };
 
