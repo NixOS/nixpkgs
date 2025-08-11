@@ -95,9 +95,12 @@ lib.makeOverridable (
                 [ drv ]
             )
             # Add any extra outputs specified by the caller of `buildEnv`.
-            ++ lib.filter (p: p != null) (map (outName: drv.${outName} or null) extraOutputsToInstall);
+            ++ lib.filter (p: p != null) (
+              map (outName: drv.${outName} or null) finalAttrs.extraOutputsToInstall
+            );
           priority = drv.meta.priority or lib.meta.defaultPriority;
-        }) paths;
+          # Silently use the original `paths` if `passthru.paths` is missing.
+        }) finalAttrs.passthru.paths or paths;
 
         pathsForClosure = lib.pipe chosenOutputs [
           (map (p: p.paths))
@@ -105,13 +108,14 @@ lib.makeOverridable (
           (lib.remove null)
         ];
       in
-      rec {
+      {
         inherit
+          extraOutputsToInstall
           manifest
           ignoreCollisions
           checkCollisionContents
           ignoreSingleFileOutputs
-          passthru
+          includeClosures
           meta
           pathsToLink
           extraPrefix
@@ -121,19 +125,27 @@ lib.makeOverridable (
           ;
         pathsToLinkJSON = builtins.toJSON pathsToLink;
         pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optionalString includeClosures (writeClosure pathsForClosure);
+        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (writeClosure pathsForClosure);
         preferLocalBuild = true;
         allowSubstitutes = false;
         passAsFile = [
           "buildCommand"
         ]
         # XXX: The size is somewhat arbitrary
-        ++ lib.optional (lib.stringLength pkgs >= 128 * 1024) "pkgs";
+        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs";
 
         buildCommand = ''
           ${buildPackages.perl}/bin/perl -w ${builder}
           eval "$postBuild"
         '';
+
+        passthru = {
+          # Attributes to override from passthru
+          inherit
+            paths
+            ;
+        }
+        // passthru;
       };
 
     # Function argument set pattern doesn't have an ellipsis
