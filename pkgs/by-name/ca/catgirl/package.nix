@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.causal.agency/catgirl/about/";
-    license = licenses.gpl3Plus;
     description = "TLS-only terminal IRC client";
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "catgirl";
-    maintainers = with maintainers; [ xfnw ];
+    maintainers = with lib.maintainers; [ xfnw ];
   };
 })
