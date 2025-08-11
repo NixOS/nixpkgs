@@ -1746,6 +1746,15 @@ builtins.intersectAttrs super {
 
   jsaddle-warp = addTestToolDepends [ pkgs.nodejs ] super.jsaddle-warp;
 
+  # Hackage tarball doesn't have the executable bits from git repo
+  wai-app-file-cgi = overrideCabal (drv: {
+    preCheck = ''
+      ${drv.preCheck or ""}
+      chmod +x test/cgi-bin/*
+      patchShebangs test/cgi-bin
+    '';
+  }) super.wai-app-file-cgi;
+
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
   mpi-hs =
