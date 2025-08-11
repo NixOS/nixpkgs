@@ -2078,6 +2078,7 @@ mapAliases {
   qcachegrind = throw "'qcachegrind' has been removed, as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
   qflipper = qFlipper; # Added 2022-02-11
   qnial = throw "'qnial' has been removed due to failing to build and being unmaintained"; # Added 2025-06-26
+  qrscan = throw "qrscan has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-19
   qscintilla = libsForQt5.qscintilla; # Added 2023-09-20
   qscintilla-qt6 = qt6Packages.qscintilla; # Added 2023-09-20
   qt-video-wlr = throw "'qt-video-wlr' has been removed, as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
