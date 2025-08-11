@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  cppcheck,
   doxygen,
   graphviz,
   pkg-config,
@@ -10,7 +11,7 @@
   nix-update-script,
 }:
 let
-  version = "4.2.0";
+  version = "5.0.0";
   versionPrefix = "gz-cmake${lib.versions.major version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -21,41 +22,45 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gazebosim";
     repo = "gz-cmake";
     tag = "${versionPrefix}_${finalAttrs.version}";
-    hash = "sha256-+bMOcGWfcwPhxR9CBp4iH02CZC4oplCjsTDpPDsDnSs=";
+    hash = "sha256-XF7oglj9Xr6F8a+6uowrY5a040yl4FZlFfW/Y0BJwOs=";
   };
 
   postPatch = ''
     patchShebangs examples/test_c_child_requires_c_no_deps.bash
-    substituteInPlace examples/CMakeLists.txt --replace-fail \
-      "$""{CMAKE_INSTALL_LIBDIR}" "${if stdenv.hostPlatform.isDarwin then "lib" else "lib64"}"
+    substituteInPlace examples/CMakeLists.txt \
+    --replace-fail "$""{CMAKE_INSTALL_LIBDIR}" "${
+      if stdenv.hostPlatform.isDarwin then "lib" else "lib64"
+    }"
   '';
 
   nativeBuildInputs = [
     cmake
+    cppcheck
     doxygen
     graphviz
     pkg-config
+    python3
   ];
+
+  doBuildExamples = false;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_EXAMPLES" finalAttrs.doBuildExamples)
   ];
-
-  nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 
-  # Extract the version by matching the tag's prefix.
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=${versionPrefix}_([\\d\\.]+)" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CMake modules to build Gazebo projects";
     homepage = "https://github.com/gazebosim/gz-cmake";
     changelog = "https://github.com/gazebosim/gz-cmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ guelakais ];
+    badPlatforms = lib.platforms.darwin; # hard replicable building error
   };
 })
