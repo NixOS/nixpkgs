@@ -6,16 +6,38 @@
 }:
 let
   cfg = config.services.paretosecurity;
+
+  # Define user-specific paretosecurity options
+  userOptions = {
+    options.paretosecurity = {
+      inviteId = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          A unique ID that links the agent to Pareto Cloud.
+          Get it from the Join Team page on `https://cloud.paretosecurity.com/team/join/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
+          In Step 2, under Linux tab, enter your email then copy it from the generated command.
+        '';
+        example = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+      };
+    };
+  };
 in
 {
 
-  options.services.paretosecurity = {
-    enable = lib.mkEnableOption "[ParetoSecurity](https://paretosecurity.com) [agent](https://github.com/ParetoSecurity/agent) and its root helper";
-    package = lib.mkPackageOption pkgs "paretosecurity" { };
-    trayIcon = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Set to false to disable the tray icon and run as a CLI tool only.";
+  options = {
+    services.paretosecurity = {
+      enable = lib.mkEnableOption "[ParetoSecurity](https://paretosecurity.com) [agent](https://github.com/ParetoSecurity/agent) and its root helper";
+      package = lib.mkPackageOption pkgs "paretosecurity" { };
+      trayIcon = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Set to false to disable the tray icon and run as a CLI tool only.";
+      };
+    };
+
+    users.users = lib.mkOption {
+      type = with lib.types; attrsOf (submodule userOptions);
     };
   };
 
@@ -38,9 +60,69 @@ in
     # if one is installed.
     # The `paretosecurity-user` timer service that is configured lower has
     # the same need.
-    systemd.services.paretosecurity.serviceConfig.Environment = [
-      "PATH=${config.system.path}/bin:${config.system.path}/sbin"
-    ];
+    systemd.services = {
+      paretosecurity.serviceConfig.Environment = [
+        "PATH=${config.system.path}/bin:${config.system.path}/sbin"
+      ];
+    }
+    // (
+
+      # Each user can set their inviteID, which creates a systemd service
+      # that runs `paretosecurity link ...` to link their device to Pareto Cloud.
+      let
+        usersWithInvites = lib.filterAttrs (
+          name: user: user.paretosecurity.inviteId != null
+        ) config.users.users;
+      in
+      lib.mapAttrs' (
+        username: user:
+        lib.nameValuePair "paretosecurity-link-${username}" {
+          description = "Link Pareto Desktop to Pareto Cloud for user ${username}";
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = username;
+            StateDirectory = "paretosecurity/${username}";
+
+            ExecStart = pkgs.writeShellScript "paretosecurity-link-${username}" ''
+              set -euo pipefail
+
+              INVITE_ID="${user.paretosecurity.inviteId}"
+              STATE_FILE="/var/lib/paretosecurity/${username}/linked-$INVITE_ID"
+              CONFIG_FILE="$HOME/.config/pareto.toml"
+
+              # Check if already linked with this specific invite
+              if [ -f "$STATE_FILE" ]; then
+                echo "Device already linked with invite $INVITE_ID for user ${username}"
+                exit 0
+              fi
+
+              # Ensure config directory exists
+              mkdir -p "$(dirname "$CONFIG_FILE")"
+
+              # Perform linking
+              echo "Linking device to Pareto Cloud for user ${username}..."
+              ${cfg.package}/bin/paretosecurity link \
+                "paretosecurity://linkDevice/?invite_id=$INVITE_ID"
+
+              # Verify linking succeeded
+              if [ -f "$CONFIG_FILE" ] && grep -q "TeamID" "$CONFIG_FILE"; then
+                echo "Successfully linked to Pareto Cloud for user ${username}"
+                touch "$STATE_FILE"
+              else
+                echo "Failed to link to Pareto Cloud for user ${username}"
+                exit 1
+              fi
+            '';
+          };
+
+          wantedBy = [ "multi-user.target" ];
+        }
+      ) usersWithInvites
+    );
 
     # Enable the tray icon and timer services if the trayIcon option is enabled
     systemd.user = lib.mkIf cfg.trayIcon {

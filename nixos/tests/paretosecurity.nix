@@ -9,7 +9,7 @@
       imports = [ ./common/user-account.nix ];
 
       services.paretosecurity.enable = true;
-
+      users.users.alice.paretosecurity.inviteId = "test-invite-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
     };
 
   nodes.xfce =
@@ -63,6 +63,12 @@
       + "'"
     )
 
+    # Test 3: Test linking to Pareto Cloud
+    # The linking service will fail because there is no Internet,
+    # but we can check that it tried
+    terminal.succeed('systemctl list-units --type=service | grep paretosecurity-link-alice')
+    terminal.succeed('journalctl -u paretosecurity-link-alice.service | grep "Linking device to Pareto Cloud for user alice"')
+
     # Test 3: Test the tray icon
     xfce.wait_for_x()
     for unit in [
@@ -87,5 +93,6 @@
 
     # Test 5: paretosecurity:// URL handler is registered
     xfce.succeed("su - alice -c 'xdg-open paretosecurity://foo'")
+
   '';
 }
