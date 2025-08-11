@@ -4,6 +4,7 @@
   fetchurl,
   electron,
   dpkg,
+  libva,
   makeWrapper,
   commandLineArgs ? "",
 }:
@@ -30,6 +31,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
     dpkg
+  ];
+
+  buildInputs = [
+    libva
   ];
 
   installPhase = ''
