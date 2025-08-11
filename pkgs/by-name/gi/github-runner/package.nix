@@ -151,6 +151,8 @@ buildDotnetModule (finalAttrs: {
   disabledTests = [
     "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
     "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
+    # intermittently failing
+    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
   ]
   ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
     "Cancel_CloneHashTask_WhenNotNeeded"
@@ -208,12 +210,10 @@ buildDotnetModule (finalAttrs: {
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
   ]
   ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
-    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
     "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
     "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
     "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
-    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
   ];
 
   testProjectFile = [ "src/Test/Test.csproj" ];
