@@ -1,12 +1,15 @@
 let
-  requiredVersion = import ./lib/minver.nix;
+  missingFeatures = import ./lib/minfeatures.nix;
 in
 
-if !builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1 then
+if builtins.length missingFeatures > 0 then
 
   abort ''
 
-    This version of Nixpkgs requires Nix >= ${requiredVersion}, please upgrade:
+    This version of Nixpkgs requires an implementation of Nix with the following features:
+    - ${builtins.concatStringsSep "\n- " missingFeatures}
+
+    Please upgrade:
 
     - If you are running NixOS, `nixos-rebuild' can be used to upgrade your system.
 
