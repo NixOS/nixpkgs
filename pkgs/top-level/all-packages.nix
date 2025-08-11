@@ -10047,6 +10047,9 @@ with pkgs;
   etcd_3_5 = callPackage ../servers/etcd/3_5 {
     buildGoModule = buildGo123Module;
   };
+  etcd_3_6 = callPackage ../servers/etcd/3_6 {
+    buildGoModule = buildGo123Module;
+  };
 
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];
