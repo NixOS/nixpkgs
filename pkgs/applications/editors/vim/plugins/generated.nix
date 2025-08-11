@@ -15769,6 +15769,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vague-nvim = buildVimPlugin {
+    pname = "vague.nvim";
+    version = "2025-08-03";
+    src = fetchFromGitHub {
+      owner = "vague2k";
+      repo = "vague.nvim";
+      rev = "676e5b4d74f32ff91c1583eba9c326d2b749672f";
+      sha256 = "1rj02zb12v3rz8z9f80s4pc5jyblql1lyjnq16195z5skfjb95xc";
+    };
+    meta.homepage = "https://github.com/vague2k/vague.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   venn-nvim = buildVimPlugin {
     pname = "venn.nvim";
     version = "2024-05-03";
