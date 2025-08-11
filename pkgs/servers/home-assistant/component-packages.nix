@@ -537,7 +537,8 @@
       ];
     "baidu" =
       ps: with ps; [
-      ]; # missing inputs: baidu-aip
+        baidu-aip
+      ];
     "balay" =
       ps: with ps; [
       ];
