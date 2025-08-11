@@ -4,10 +4,12 @@
   click,
   configobj,
   fetchPypi,
+  postgresql,
+  postgresqlTestHook,
   psycopg,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
   sqlparse,
 }:
 
@@ -16,14 +18,15 @@ buildPythonPackage rec {
   version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2mx/zHvve7ATLcIEb3TsZROx/m8MgOVSjWMNFLfEhJ0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     click
@@ -34,11 +37,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     configobj
     pytestCheckHook
+    postgresqlTestHook
+    postgresql
   ];
 
+  pytestFlagsArray = [ "-vvv" ];
+
+  env = {
+    PGDATABASE = "_test_db";
+    PGUSER = "postgres";
+  };
+
   disabledTests = [
-    # Test requires a Postgresql server
-    "test_slash_dp_pattern_schema"
+    "test_slash_d_view_verbose"
+    "test_slash_ddp"
+    "test_slash_ddp_pattern"
   ];
 
   meta = with lib; {
