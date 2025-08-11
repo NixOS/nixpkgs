@@ -5,102 +5,152 @@
   writableTmpDirAsHomeHook,
 
   # javascript
-  fetchYarnDeps,
+  fetchPnpmDeps,
   nodejs,
-  webpack-cli,
-  yarnBuildHook,
-  yarnConfigHook,
+  pnpm,
+  pnpmConfigHook,
 
   # python
+  a2wsgi,
+  aiosqlite,
   alembic,
   argcomplete,
+  asgiref,
+  attrs,
   buildPythonPackage,
+  cadwyn,
   colorlog,
-  configupdater,
-  connexion,
   cron-descriptor,
   croniter,
   cryptography,
+  deprecated,
   dill,
-  flask-caching,
-  flask-login,
-  flask-session,
+  fastapi,
+  flit-core,
   fsspec,
   gitdb,
   gitpython,
-  gunicorn,
+  greenback,
   hatchling,
+  httpx,
+  importlib-metadata,
+  itsdangerous,
+  jinja2,
+  jsonschema,
   lazy-object-proxy,
+  libcst,
   linkify-it-py,
   lockfile,
-  marshmallow-oneofschema,
-  mdit-py-plugins,
   methodtools,
+  msgspec,
+  natsort,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
   packaging,
-  pandas,
   pathspec,
   pendulum,
   pluggy,
   psutil,
-  pytest-asyncio,
-  pytestCheckHook,
+  pydantic,
+  pygments,
+  pygtrie,
+  pyjwt,
   python,
   python-daemon,
-  python-nvd3,
+  python-dateutil,
   python-slugify,
+  pyyaml,
+  requests,
+  retryhttp,
+  rich,
   rich-argparse,
+  rich-click,
   setproctitle,
   smmap,
   sqlalchemy,
   sqlalchemy-jsonfield,
+  sqlalchemy-utils,
+  starlette,
+  structlog,
+  svcs,
   tabulate,
   tenacity,
   termcolor,
   tomli,
   trove-classifiers,
+  types-requests,
+  typing-extensions,
   universal-pathlib,
+  uuid6,
 
   # Extra airflow providers to enable
   enabledProviders ? [ ],
 }:
 let
-  version = "2.10.5";
+  version = "3.1.0";
 
-  airflow-src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-APmZ/ylAcZuW5du2JJdMeAQ9g0VNAsXB+ZBPr0OEprg=";
+    hash = "sha256-bg7PYW2xjDVWgBr8IduF+duIm5QnM23E23zY+fcKkns=";
   };
 
-  airflow-frontend = stdenv.mkDerivation rec {
-    name = "airflow-frontend";
-
-    src = "${airflow-src}/airflow/www";
-
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-hKgtMH4c8sPRDLPLVn+H8rmwc2Q6ei6U4er6fGuFn4I=";
-    };
+  airflowUi = stdenv.mkDerivation rec {
+    pname = "airflow-ui-assets";
+    inherit src version;
+    sourceRoot = "${src.name}/airflow-core/src/airflow/ui";
 
     nativeBuildInputs = [
       nodejs
-      webpack-cli
-      yarnBuildHook
-      yarnConfigHook
+      pnpm
+      pnpmConfigHook
     ];
 
-    # The webpack license plugin tries to create /3rd-party-licenses when given the
-    # original relative path
-    postPatch = ''
-      sed -i 's!../../../../3rd-party-licenses/LICENSES-ui.txt!/3rd-party-licenses/LICENSES-ui.txt!' webpack.config.js
+    pnpmDeps = fetchPnpmDeps {
+      pname = "airflow-ui";
+      inherit sourceRoot src version;
+      fetcherVersion = 1;
+      hash = "sha256-bGWt9KKvseuwDe7I+GbAUGUz3yGjDA2semKX5EmoNPM=";
+    };
+
+    buildPhase = ''
+      pnpm install
+      pnpm build
     '';
 
     installPhase = ''
-      mkdir -p $out/static/
-      cp -r static/dist $out/static
+      mkdir -p $out/share/airflow/ui
+      cp -r dist $out/share/airflow/ui/
+    '';
+  };
+
+  airflowSimpleAuthUi = stdenv.mkDerivation rec {
+    pname = "airflow-simple-ui-assets";
+    inherit src version;
+    sourceRoot = "${src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm
+      pnpmConfigHook
+    ];
+
+    pnpmDeps = fetchPnpmDeps {
+      pname = "simple-auth-manager-ui";
+      inherit sourceRoot src version;
+      fetcherVersion = 1;
+      hash = "sha256-XXA6Ynxvt/KnVT8EsV4z5Nxd5QejZO8iDDEcS04B57A=";
+    };
+
+    buildPhase = ''
+      pnpm install
+      pnpm build
+    '';
+
+    installPhase = ''
+      mkdir -p $out/share/airflow/simple-ui
+      cp -r dist $out/share/airflow/simple-ui/
     '';
   };
 
@@ -108,92 +158,178 @@ let
     "common_compat"
     "common_io"
     "common_sql"
-    "fab"
-    "ftp"
-    "http"
-    "imap"
     "smtp"
-    "sqlite"
+    "standard"
   ];
 
-  # Import generated file with metadata for provider dependencies and imports.
-  # Enable additional providers using enabledProviders above.
   providers = import ./providers.nix;
-  getProviderPath = provider: lib.replaceStrings [ "_" ] [ "/" ] provider;
-  getProviderDeps = provider: map (dep: python.pkgs.${dep}) providers.${provider}.deps;
-  getProviderImports = provider: providers.${provider}.imports;
-  providerImports = lib.concatMap getProviderImports enabledProviders;
 
   buildProvider =
     provider:
-    let
-      providerPath = getProviderPath provider;
-    in
-    python.pkgs.buildPythonPackage {
+    buildPythonPackage {
       pname = "apache-airflow-providers-${provider}";
-      version = "unstable"; # will be extracted in the build phase
-      pyproject = false; # providers packages don't have pyproject.toml nor setup.py
+      version = providers.${provider}.version;
+      pyproject = true;
 
-      src = airflow-src;
+      inherit src;
+      sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
 
-      propagatedBuildInputs = getProviderDeps provider;
-      dependencies = [ packaging ];
+      buildInputs = [ flit-core ];
 
-      buildPhase = ''
-        # extract version from the provider's __init__.py file
-        if [ -f "airflow/providers/${providerPath}/__init__.py" ]; then
-          version=$(grep -oP "(?<=__version__ = ')[^']+" "airflow/providers/${providerPath}/__init__.py" || echo "0.0.0")
-          echo "Provider ${provider} version: $version"
-        else
-          echo "Error: __init__.py not found for provider ${provider} at path airflow/providers/${providerPath}"
-          exit 1
-        fi
-      '';
+      dependencies = map (dep: python.pkgs.${dep}) providers.${provider}.deps;
 
-      installPhase = ''
-                      # create directory structure
-                      mkdir -p $out/${python.sitePackages}/airflow/providers
+      pythonRemoveDeps = [
+        "apache-airflow"
+      ];
 
-                      # copy the provider directory
-                      if [ -d "airflow/providers/${providerPath}" ]; then
-                        mkdir -p $out/${python.sitePackages}/airflow/providers/$(dirname "${providerPath}")
-                        cp -r airflow/providers/${providerPath} $out/${python.sitePackages}/airflow/providers/$(dirname "${providerPath}")
-
-                        # create parent __init__.py files
-                        touch $out/${python.sitePackages}/airflow/__init__.py
-                        touch $out/${python.sitePackages}/airflow/providers/__init__.py
-
-                        # create any needed intermediate __init__.py files for nested providers
-                        providerDir=$(dirname "${providerPath}")
-                        while [ "$providerDir" != "." ] && [ -n "$providerDir" ]; do
-                          mkdir -p $out/${python.sitePackages}/airflow/providers/$providerDir
-                          touch $out/${python.sitePackages}/airflow/providers/$providerDir/__init__.py
-                          providerDir=$(dirname "$providerDir")
-                        done
-
-                        # create egg-info for package discovery
-                        mkdir -p $out/${python.sitePackages}/apache_airflow_providers_${provider}.egg-info
-                        cat > $out/${python.sitePackages}/apache_airflow_providers_${provider}.egg-info/PKG-INFO <<EOF
-        Metadata-Version: 2.1
-        Name: apache-airflow-providers-${lib.replaceStrings [ "_" ] [ "-" ] provider}
-        Version: ${version}
-        Summary: Apache Airflow Provider for ${provider}
-        EOF
-                      else
-                        echo "Provider directory not found: airflow/providers/${providerPath}"
-                        exit 1
-                      fi
-      '';
+      pythonRelaxDeps = [
+        "flit-core"
+      ];
     };
 
-  providerPackages = map buildProvider (requiredProviders ++ enabledProviders);
+  airflowCore = buildPythonPackage {
+    pname = "apache-airflow-core";
+    inherit src version;
+    pyproject = true;
+
+    sourceRoot = "${src.name}/airflow-core";
+
+    postPatch = ''
+      # remove cyclic dependency
+      sed -i -E 's/"apache-airflow-task-sdk[^"]+",//' pyproject.toml
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "hatchling==1.27.0" "hatchling" \
+        --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
+
+      # Copy built UI assets
+      cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
+      cp -r ${airflowSimpleAuthUi}/share/airflow/simple-ui/dist src/airflow/api_fastapi/auth/managers/simple/ui/
+    '';
+
+    build-system = [
+      gitdb
+      gitpython
+      hatchling
+      packaging
+      smmap
+      tomli
+      trove-classifiers
+    ];
+
+    dependencies = [
+      a2wsgi
+      aiosqlite
+      alembic
+      argcomplete
+      asgiref
+      attrs
+      cadwyn
+      colorlog
+      cron-descriptor
+      croniter
+      cryptography
+      deprecated
+      dill
+      fastapi
+      httpx
+      importlib-metadata
+      itsdangerous
+      jinja2
+      jsonschema
+      lazy-object-proxy
+      libcst
+      linkify-it-py
+      lockfile
+      methodtools
+      msgspec
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      packaging
+      pathspec
+      pendulum
+      pluggy
+      psutil
+      pydantic
+      pygments
+      pygtrie
+      pyjwt
+      python-daemon
+      python-dateutil
+      python-slugify
+      pyyaml
+      requests
+      rich
+      rich-argparse
+      rich-click
+      setproctitle
+      sqlalchemy
+      sqlalchemy-jsonfield
+      sqlalchemy-utils
+      starlette
+      structlog
+      svcs
+      tabulate
+      taskSdk
+      tenacity
+      termcolor
+      typing-extensions
+      universal-pathlib
+      uuid6
+    ]
+    ++ (map buildProvider requiredProviders);
+  };
+
+  taskSdk = buildPythonPackage {
+    pname = "task-sdk";
+    inherit src version;
+    pyproject = true;
+
+    sourceRoot = "${src.name}/task-sdk";
+
+    postPatch = ''
+      # resolve cyclic dependency
+      sed -i -E 's/"apache-airflow-core[^"]+",//' pyproject.toml
+    '';
+
+    build-system = [
+      hatchling
+    ];
+
+    dependencies = [
+      asgiref
+      attrs
+      colorlog
+      fsspec
+      greenback
+      httpx
+      jinja2
+      methodtools
+      msgspec
+      pendulum
+      psutil
+      pydantic
+      pygtrie
+      python-dateutil
+      requests
+      retryhttp
+      structlog
+      tenacity
+      types-requests
+    ];
+  };
 
 in
 buildPythonPackage rec {
   pname = "apache-airflow";
-  inherit version;
-  src = airflow-src;
+  inherit src version;
   pyproject = true;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.27.0" "hatchling" \
+      --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
+  '';
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
@@ -210,92 +346,31 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    alembic
-    argcomplete
-    colorlog
-    configupdater
-    connexion
-    cron-descriptor
-    croniter
-    cryptography
-    dill
-    flask-caching
-    flask-login
-    flask-session
-    fsspec
-    gunicorn
-    lazy-object-proxy
-    linkify-it-py
-    lockfile
-    mdit-py-plugins
-    methodtools
-    opentelemetry-api
-    opentelemetry-exporter-otlp
-    pandas
-    pendulum
-    psutil
-    python-daemon
-    python-nvd3
-    python-slugify
-    rich-argparse
-    setproctitle
-    sqlalchemy
-    sqlalchemy-jsonfield
-    tabulate
-    tenacity
-    termcolor
-    universal-pathlib
+    airflowCore # subpackage from airflow src
+    natsort
+    taskSdk # subpackage from airflow src
   ]
-  ++ providerPackages;
-
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytestCheckHook
-    marshmallow-oneofschema
-  ];
-
-  checkPhase = ''
-    export PYTEST_ADDOPTS="--asyncio_default_fixture_loop_scope=cache"
-  '';
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.27.0" "hatchling" \
-      --replace-fail "\"/airflow/providers/\"," ""
-  '';
-
-  pythonRelaxDeps = [
-    "apache-airflow-providers-fab" # fab provider package has wrong version
-    "colorlog"
-    "pathspec"
-  ];
-
-  # allow for gunicorn processes to have access to Python packages
-  makeWrapperArgs = [
-    "--prefix PYTHONPATH : $PYTHONPATH"
-  ];
+  ++ (map buildProvider enabledProviders);
 
   postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
+    # Create a symlink to the airflow-core package
+    mkdir -p $out/bin
+    ln -s ${airflowCore}/bin/airflow $out/bin/airflow
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/airflow version
+    $out/bin/airflow db reset -y
+
+    runHook postInstallCheck
   '';
 
   pythonImportsCheck = [
     "airflow"
   ]
-  ++ providerImports;
-
-  preCheck = ''
-    export AIRFLOW__CORE__UNIT_TEST_MODE=True
-    export PATH=$PATH:$out/bin
-  '';
-
-  enabledTestPaths = [
-    "tests/core/test_core.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    "bash_operator_kill" # psutil.AccessDenied
-  ];
+  ++ lib.concatMap (provider: providers.${provider}.imports) (requiredProviders ++ enabledProviders);
 
   passthru.updateScript = ./update.sh;
 
@@ -311,12 +386,13 @@ buildPythonPackage rec {
   # triggering the 'example_bash_operator' DAG and see if it reports success.
 
   meta = {
-    description = "Programmatically author, schedule and monitor data pipelines";
+    description = "Platform to programmatically author, schedule and monitor workflows";
     homepage = "https://airflow.apache.org/";
     changelog = "https://airflow.apache.org/docs/apache-airflow/${version}/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       taranarmo
     ];
+    mainProgram = "airflow";
   };
 }
