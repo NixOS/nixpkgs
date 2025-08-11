@@ -18047,6 +18047,8 @@ self: super: with self; {
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
 
+  tiered-debug = callPackage ../development/python-modules/tiered-debug { };
+
   tifffile = callPackage ../development/python-modules/tifffile { };
 
   tika = callPackage ../development/python-modules/tika { };
