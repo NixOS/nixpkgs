@@ -9,7 +9,7 @@
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "1.85.1b2";
+  version = "1.85.1";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
