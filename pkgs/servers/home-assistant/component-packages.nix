@@ -4933,7 +4933,8 @@
       ];
     "repetier" =
       ps: with ps; [
-      ]; # missing inputs: pyrepetierng
+        pyrepetierng
+      ];
     "rest" =
       ps: with ps; [
         jsonpath
