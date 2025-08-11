@@ -16,7 +16,6 @@
   libxml2,
   libyaml,
   libffi,
-  llvmPackages_15,
   llvmPackages_19,
   llvmPackages_20,
   llvmPackages_21,
@@ -170,11 +169,7 @@ let
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
         export MACOSX_DEPLOYMENT_TARGET=10.11
-
-        # Available since 1.13.0 https://github.com/crystal-lang/crystal/pull/14574
-        if [[ -f src/SOURCE_DATE_EPOCH ]]; then
-          export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
-        fi
+        export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
       '';
 
       strictDeps = true;
@@ -296,14 +291,6 @@ rec {
       x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
       aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
     };
-  };
-
-  # When removing this version, also remove checks for src/SOURCE_DATE_EPOCH existence
-  crystal_1_11 = generic {
-    version = "1.11.2";
-    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_15;
   };
 
   crystal_1_14 = generic {
