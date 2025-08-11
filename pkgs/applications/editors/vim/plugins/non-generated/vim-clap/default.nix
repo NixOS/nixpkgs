@@ -48,6 +48,8 @@ let
       })
     ];
 
+    cargoBuildFlags = [ "-p maple" ];
+
     buildInputs = [
       libgit2
       zlib
