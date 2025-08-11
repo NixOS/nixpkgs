@@ -41,7 +41,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   meta = {
-    description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
+    description = "Backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
     homepage = "https://github.com/fsharp/FsAutoComplete";
     changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";

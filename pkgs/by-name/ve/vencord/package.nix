@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Vencord web extension";
+    description = "Cutest Discord client mod";
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [

@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Httperf HTTP load generator";
+    description = "HTTP load generator";
     homepage = "https://github.com/httperf/httperf";
     maintainers = [ ];
     license = licenses.gpl2Plus;
