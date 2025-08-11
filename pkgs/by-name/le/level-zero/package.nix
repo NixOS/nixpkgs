@@ -3,7 +3,6 @@
   addDriverRunpath,
   cmake,
   fetchFromGitHub,
-  intel-compute-runtime,
   openvino,
   stdenv,
   nix-update-script,
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      inherit intel-compute-runtime openvino;
+      inherit openvino;
     };
     updateScript = nix-update-script { };
   };
