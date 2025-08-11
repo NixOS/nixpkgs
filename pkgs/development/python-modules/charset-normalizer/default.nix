@@ -3,9 +3,9 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  isPyPy,
   mypy,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -13,25 +13,23 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.4.2";
+  version = "3.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";
     tag = version;
-    hash = "sha256-PkFmNEMdp9duDCqMTKooOLAOCqHf3IjrGlr8jKYT2WE=";
+    hash = "sha256-ZEHxBErjjvofqe3rkkgiEuEJcoluwo+2nZrLfrsHn5Q=";
   };
 
   build-system = [
-    mypy
     setuptools
     setuptools-scm
-  ];
+  ]
+  ++ lib.optional (!isPyPy) mypy;
 
-  env.CHARSET_NORMALIZER_USE_MYPYC = "1";
+  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString (!isPyPy) "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
