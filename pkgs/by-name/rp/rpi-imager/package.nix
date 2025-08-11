@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.4";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ih7FeAKTKSvuwsrMgKQ0VEUYHHT6L99shxfAIjAzErk=";
+    hash = "sha256-HJLl0FOseZgW3DMi8M3SqIN/UHBDkIc09vKcenhSnO8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
