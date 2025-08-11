@@ -157,8 +157,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # Add runtime dependencies for libstdc++.so.6
   postFixup = ''
-    mv $out/bin/opencode $out/bin/.opencode-unwrapped
-    makeWrapper $out/bin/.opencode-unwrapped $out/bin/opencode \
+    wrapProgram $out/bin/opencode \
       --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
   '';
 
