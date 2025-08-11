@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  stdenv,
+  stdenvNoCC,
   nodejs,
   pnpm_10,
   nixosTests,
@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
     mv $out/bin/cmd $out/bin/pocket-id
   '';
 
-  frontend = stdenv.mkDerivation {
+  frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
 
