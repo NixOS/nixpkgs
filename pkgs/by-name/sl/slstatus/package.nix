@@ -1,25 +1,26 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchzip,
   pkg-config,
   writeText,
   libX11,
   libXau,
   libXdmcp,
-  conf ? null,
-  patches ? [ ],
+  config,
+  conf ? config.slstatus.conf or null,
+  patches ? config.slstatus.patches or [ ],
+  extraLibs ? config.slstatus.extraLibs or [ ],
   # update script dependencies
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slstatus";
   version = "1.1";
 
-  src = fetchgit {
-    url = "https://git.suckless.org/slstatus";
-    rev = version;
+  src = fetchzip {
+    url = "https://dl.suckless.org/tools/slstatus-${finalAttrs.version}.tar.gz";
     hash = "sha256-MRDovZpQsvnLEvsbJNBzprkzQQ4nIs1T9BLT+tSGta8=";
   };
 
@@ -40,21 +41,22 @@ stdenv.mkDerivation rec {
     libX11
     libXau
     libXdmcp
-  ];
+  ]
+  ++ extraLibs;
 
   installFlags = [ "PREFIX=$(out)" ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/slstatus/";
     description = "Status monitor for window managers that use WM_NAME like dwm";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       oxzi
       qusic
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "slstatus";
   };
-}
+})

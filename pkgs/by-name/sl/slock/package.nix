@@ -1,16 +1,17 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   writeText,
   xorgproto,
   libX11,
   libXext,
   libXrandr,
   libxcrypt,
-  # default header can be obtained from
-  # https://git.suckless.org/slock/tree/config.def.h
-  conf ? null,
+  config,
+  conf ? config.slock.conf or null,
+  patches ? config.slock.patches or [ ],
+  extraLibs ? config.slock.extraLibs or [ ],
   # update script dependencies
   gitUpdater,
 }:
@@ -19,9 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "slock";
   version = "1.5";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://dl.suckless.org/tools/slock-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ruHj+/aid/tiWjg4BzuXm2SD57rKTOgvVt4f8ZLbDk0=";
+    hash = "sha256-nAAbyH4jixmwes9esrWRnHFw3mythKfqWu2+DRdlmx0=";
   };
 
   buildInputs = [
@@ -30,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     libxcrypt
-  ];
+  ]
+  ++ extraLibs;
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -40,23 +42,25 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${writeText "config.def.h" conf} config.def.h
   '';
 
+  inherit patches;
+
   makeFlags = [ "CC:=$(CC)" ];
 
   passthru.updateScript = gitUpdater {
     url = "git://git.suckless.org/slock";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
     mainProgram = "slock";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       qusic
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

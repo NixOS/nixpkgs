@@ -4249,10 +4249,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
 
-  slstatus = callPackage ../applications/misc/slstatus {
-    conf = config.slstatus.conf or null;
-  };
-
   smpq = callPackage ../by-name/sm/smpq/package.nix {
     stormlib = stormlib.overrideAttrs (old: {
       version = "9.22";
@@ -15892,10 +15888,6 @@ with pkgs;
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
-
-  slock = callPackage ../misc/screensavers/slock {
-    conf = config.slock.conf or null;
-  };
 
   snscrape = with python3Packages; toPythonApplication snscrape;
 
