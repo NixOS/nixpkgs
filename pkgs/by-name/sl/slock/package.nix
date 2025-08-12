@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   writeText,
   xorgproto,
   libX11,
@@ -20,9 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "slock";
   version = "1.5";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://dl.suckless.org/tools/slock-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ruHj+/aid/tiWjg4BzuXm2SD57rKTOgvVt4f8ZLbDk0=";
+    hash = "sha256-nAAbyH4jixmwes9esrWRnHFw3mythKfqWu2+DRdlmx0=";
   };
 
   buildInputs = [
@@ -50,17 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     url = "git://git.suckless.org/slock";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
     mainProgram = "slock";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       qusic
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
