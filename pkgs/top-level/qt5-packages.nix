@@ -118,9 +118,6 @@ makeScopeWithSplicing' {
 
         accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
-
-        applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
-
         applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
 
         appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
