@@ -66,6 +66,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
-    broken = lib.versionOlder django.version "5.2";
   };
 }

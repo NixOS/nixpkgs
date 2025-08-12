@@ -1,0 +1,30 @@
+From 5aa2288c983f672ad95a3385f2b104b040b6951f Mon Sep 17 00:00:00 2001
+From: soyouzpanda <soyouzpanda@soyouzpanda.fr>
+Date: Thu, 22 May 2025 21:10:34 +0200
+Subject: [PATCH] =?UTF-8?q?=F0=9F=94=A7(backend)=20allow=20`DATA=5FDIR`=20?=
+ =?UTF-8?q?to=20be=20configurable?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+`DATA_DIR` was always set to `/data`
+---
+ drive/settings.py | 2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/drive/settings.py b/drive/settings.py
+index 82f4d31..85660ad 100755
+--- a/drive/settings.py
++++ b/drive/settings.py
+@@ -23,7 +23,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
+ 
+ # Build paths inside the project like this: BASE_DIR / 'subdir'.
+ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+-DATA_DIR = os.path.join("/", "data")
++DATA_DIR = os.getenv("DATA_DIR", os.path.join("/", "data"))
+ 
+ 
+ def get_release():
+-- 
+2.47.2
+
