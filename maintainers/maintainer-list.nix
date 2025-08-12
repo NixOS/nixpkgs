@@ -15712,6 +15712,12 @@
     githubId = 155603;
     name = "Maren van Otterdijk";
   };
+  matrixman = {
+    name = "Matt Rixman";
+    email = "nixpkgs@matt.rixman.org";
+    github = "MatrixManAtYrService";
+    githubId = 5834582;
+  };
   matrss = {
     name = "Matthias Riße";
     email = "matthias.risze@t-online.de";
