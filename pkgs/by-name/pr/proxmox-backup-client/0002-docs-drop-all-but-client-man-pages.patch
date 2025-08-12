@@ -1,7 +1,7 @@
-From 846d0b9c8f62340cb0703c59d16414b05a15382a Mon Sep 17 00:00:00 2001
+From 732dc6b91299bda441f52c6d7decddfbfd6e5517 Mon Sep 17 00:00:00 2001
 From: Thomas Lamprecht <thomas@lamprecht.org>
 Date: Tue, 29 Nov 2022 17:20:28 +0100
-Subject: [PATCH 4/5] docs: drop all but client man pages
+Subject: [PATCH proxmox-backup 2/2] docs: drop all but client man pages
 
 Signed-off-by: Thomas Lamprecht <thomas@lamprecht.org>
 Signed-off-by: Christoph Heiss <christoph@c8h4.io>
@@ -11,7 +11,7 @@ Signed-off-by: Christoph Heiss <christoph@c8h4.io>
  2 files changed, 43 deletions(-)
 
 diff --git a/docs/Makefile b/docs/Makefile
-index fa00729e..53a420b5 100644
+index 5cf5fc17..85ff3b91 100644
 --- a/docs/Makefile
 +++ b/docs/Makefile
 @@ -1,27 +1,8 @@
@@ -43,7 +43,7 @@ index fa00729e..53a420b5 100644
  
  MAN1_PAGES := 				\
 diff --git a/docs/conf.py b/docs/conf.py
-index a7fa1079..345a0170 100644
+index 64c4f9d4..345a0170 100644
 --- a/docs/conf.py
 +++ b/docs/conf.py
 @@ -93,31 +93,7 @@ rst_epilog += f"\n..  |pbs-copyright| replace:: Copyright (C) {copyright}"
@@ -59,7 +59,7 @@ index a7fa1079..345a0170 100644
      ('pxar/man1', 'pxar', 'Proxmox File Archive CLI Tool', [author], 1),
 -    ('pmt/man1', 'pmt', 'Control Linux Tape Devices', [author], 1),
 -    ('pmtx/man1', 'pmtx', 'Control SCSI media changer devices (tape autoloaders)', [author], 1),
--    ('pbs2to3/man1', 'pbs2to3', 'Proxmox Backup Server upgrade checker script for 2.4+ to current 3.x major upgrades', [author], 1),
+-    ('pbs3to4/man1', 'pbs3to4', 'Proxmox Backup Server upgrade checker script for 3.4+ to current 4.x major upgrades', [author], 1),
 -    # configs
 -    ('config/acl/man5', 'acl.cfg', 'Access Control Configuration', [author], 5),
 -    ('config/datastore/man5', 'datastore.cfg', 'Datastore Configuration', [author], 5),
@@ -79,5 +79,5 @@ index a7fa1079..345a0170 100644
  
  
 -- 
-2.49.0
+2.50.1
 
