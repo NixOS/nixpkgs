@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  distributed ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +19,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-1kfKBN4uRbU5LjbC0cLgMqoGnOSEAdC0S7EzXlfaDPo=";
+
+  buildFeatures = lib.optionals distributed [
+    "dist-client"
+    "dist-server"
+  ];
 
   nativeBuildInputs = [
     pkg-config
