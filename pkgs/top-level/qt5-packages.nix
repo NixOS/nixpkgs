@@ -118,7 +118,6 @@ makeScopeWithSplicing' {
 
         accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
-        alkimia = callPackage ../development/libraries/alkimia { };
 
         applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
 
