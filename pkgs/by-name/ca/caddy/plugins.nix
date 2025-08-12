@@ -29,6 +29,7 @@ in
 {
   plugins,
   hash ? fakeHash,
+  doInstallCheck ? true,
 }:
 
 let
@@ -83,42 +84,69 @@ caddy.overrideAttrs (
 
     # xcaddy built output always uses pseudo-version number
     # we enforce user provided plugins are present and have matching tags here
-    doInstallCheck = true;
+    inherit doInstallCheck;
     installCheckPhase = ''
       runHook preInstallCheck
 
+      declare -A modules errors
       ${toShellVar "notfound" pluginsSorted}
 
-      while read kind module version; do
-        [[ "$kind" = "dep" ]] || continue
-        module="''${module}@''${version}"
-        for i in "''${!notfound[@]}"; do
-          if [[ ''${notfound[i]} = ''${module} ]]; then
-            unset 'notfound[i]'
-          fi
-        done
+      # put build info that we care about into `modules` list
+      while read -r kind module version _; do
+        case "$kind" in
+          'dep'|'=>')
+            modules[$module]=$version
+            ;;
+          *)
+            # we only care about 'dep' and '=>' directives for now
+            ;;
+        esac
       done < <($out/bin/caddy build-info)
 
-      if (( ''${#notfound[@]} )); then
-        for plugin in "''${notfound[@]}"; do
-          base=''${plugin%@*}
-          specified=''${plugin#*@}
-          found=0
+      # compare build-time (Nix side) against runtime (Caddy side)
+      for spec in "''${notfound[@]}"; do
+        if [[ $spec == *=* ]]; then
+            # orig=repl_mod@repl_ver
+            orig=''${spec%%=*}
+            repl=''${spec#*=}
+            repl_mod=''${repl%@*}
+            repl_ver=''${repl#*@}
 
-          while read kind module expected; do
-            [[ "$kind" = "dep" && "$module" = "$base" ]] || continue
-            echo "Plugin \"$base\" have incorrect tag:"
-            echo "  specified: \"$base@$specified\""
-            echo "  got: \"$base@$expected\""
-            found=1
-          done < <($out/bin/caddy build-info)
+            if [[ -z ''${modules[$orig]} ]]; then
+                errors[$spec]="plugin \"$spec\" with replacement not found in build info:\n  reason: \"$orig\" missing"
+            elif [[ -z ''${modules[$repl_mod]} ]]; then
+                errors[$spec]="plugin \"$spec\" with replacement not found in build info:\n  reason: \"$repl_mod\" missing"
+            elif [[ "''${modules[$repl_mod]}" != "$repl_ver" ]]; then
+                errors[$spec]="plugin \"$spec\" have incorrect tag:\n  specified: \"$spec\"\n  got: \"$orig=$repl_mod@''${modules[$repl_mod]}\""
+            fi
+        else
+          # mod@ver
+          mod=''${spec%@*}
+          ver=''${spec#*@}
 
-          if (( found == 0 )); then
-            echo "Plugin \"$base\" not found in build:"
-            echo "  specified: \"$base@$specified\""
-            echo "  plugin does not exist in the xcaddy build output, open an issue in nixpkgs or upstream"
+          if [[ -z ''${modules[$mod]} ]]; then
+              errors[$spec]="plugin \"$spec\" not found in build info"
+          elif [[ "''${modules[$mod]}" != "$ver" ]]; then
+              errors[$spec]="plugin \"$spec\" have incorrect tag:\n  specified: \"$spec\"\n  got: \"$mod@''${modules[$mod]}\""
           fi
+        fi
+      done
+
+      # print errors if any
+      if [[ ''${#errors[@]} -gt 0 ]]; then
+        for spec in "''${!errors[@]}"; do
+          printf "Error: ''${errors[$spec]}\n" >&2
         done
+
+        echo "Tips:"
+        echo "If:"
+        echo "  - you are using module replacement (e.g. \`plugin1=plugin2@version\`)"
+        echo "  - the provided Caddy plugin is under a repository's subdirectory, and \`go.{mod,sum}\` files are not in that subdirectory"
+        echo "  - you have custom build logic or other advanced use cases"
+        echo "Please consider:"
+        echo "  - set \`doInstallCheck = false\`"
+        echo "  - write your own \`installCheckPhase\` and override the default script"
+        echo "If you are sure this error is caused by packaging, or by caddy/xcaddy, raise an issue with upstream or nixpkgs"
 
         exit 1
       fi
