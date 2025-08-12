@@ -8089,6 +8089,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libear = callPackage ../development/python-modules/libear { };
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (
@@ -8223,6 +8225,8 @@ self: super: with self; {
       inherit (self) python;
     }
   );
+
+  libscanbuild = callPackage ../development/python-modules/libscanbuild { };
 
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
@@ -10400,8 +10404,6 @@ self: super: with self; {
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
 
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
-
-  nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
@@ -14954,11 +14956,6 @@ self: super: with self; {
   pythonegardia = callPackage ../development/python-modules/pythonegardia { };
 
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
-
-  pythonix = callPackage ../development/python-modules/pythonix {
-    nix = pkgs.nixVersions.nix_2_3;
-    meson = pkgs.meson.override { python3 = self.python; };
-  };
 
   pythonkuma = callPackage ../development/python-modules/pythonkuma { };
 

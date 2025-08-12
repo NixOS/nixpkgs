@@ -28147,6 +28147,12 @@
     githubId = 908716;
     name = "Zach Coyle";
   };
+  ZachDavies = {
+    name = "Zach Davies";
+    email = "zdmalta@proton.me";
+    github = "ZachDavies";
+    githubId = 131615861;
+  };
   Zaczero = {
     name = "Kamil Monicz";
     email = "kamil@monicz.dev";
