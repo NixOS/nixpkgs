@@ -14047,6 +14047,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  symbol-usage-nvim = buildVimPlugin {
+    pname = "symbol-usage.nvim";
+    version = "2025-05-03";
+    src = fetchFromGitHub {
+      owner = "Wansmer";
+      repo = "symbol-usage.nvim";
+      rev = "e07c07dfe7504295a369281e95a24e1afa14b243";
+      sha256 = "0539ahy72wh8rdkn2pybsdk58ki0jdn9dk2ap7q65986crjglr6d";
+    };
+    meta.homepage = "https://github.com/Wansmer/symbol-usage.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   symbols-outline-nvim = buildVimPlugin {
     pname = "symbols-outline.nvim";
     version = "2024-01-03";
