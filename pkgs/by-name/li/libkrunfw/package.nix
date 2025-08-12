@@ -8,11 +8,20 @@
   bc,
   cpio,
   perl,
+  pkgsCross,
   elfutils,
   python3,
   sevVariant ? false,
+  efiVariant ? stdenv.hostPlatform.isDarwin,
+  llvmPackages_20,
+  llvm,
+  linuxHeaders,
+  elf-header-real,
 }:
 
+let
+  elfutils' = if stdenv.hostPlatform.isLinux then elfutils else pkgsCross.aarch64-multiplatform.elfutils;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw";
   version = "4.9.0";
@@ -28,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.20.tar.xz";
     hash = "sha256-Iw6JsHsKuC508H7MG+4xBdyoHQ70qX+QCSnEBySbasc=";
   };
+
+  patches = [
+    ./enable-native-build-darwin.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -45,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    elfutils
+    elfutils'
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages_20.lld
+    llvm
   ];
 
   makeFlags = [
@@ -53,7 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals sevVariant [
     "SEV=1"
+    ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "CC=${lib.getExe llvmPackages_20.clang}"
+    "ARCH=arm64"
+    "LLVM=1"
   ];
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeFlagsArray+=(HOSTCFLAGS="-D_UUID_T -D__GETHOSTUUID_H -I${elf-header-real}/include -I${linuxHeaders.passthru.darwin-byteswap-h}/include")
+    makeFlagsArray+=(CLANG_FLAGS="-fintegrated-as --target=${elfutils'.stdenv.system}")
+  '';
+
+  hardeningDisable = lib.optional stdenv.hostPlatform.isAarch64 "zerocallusedregs";
 
   # Fixes https://github.com/containers/libkrunfw/issues/55
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.targetPlatform.isAarch64 "-march=armv8-a+crypto";
@@ -72,6 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       RossComputerGuy
       nrabulinski
     ];
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ] ++ lib.optionals efiVariant [ "aarch64-darwin" ];
   };
 })

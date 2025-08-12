@@ -129,6 +129,10 @@ let
         echo "${version}-default" > $out/include/config/kernel.release
       '';
 
+      passthru = {
+        darwin-byteswap-h = darwin-byteswap-h;
+      };
+
       meta = {
         description = "Header files and scripts for Linux kernel";
         license = lib.licenses.gpl2Only;
