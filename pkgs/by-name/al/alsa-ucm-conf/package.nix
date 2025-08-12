@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   stdenvNoCC,
+  alsa-utils-nhlt ? null,
   coreutils,
   kmod ? null,
   alsa-lib,
@@ -25,8 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   executablePkgs = {
-    # circular dependency
-    # alsa-utils = [ "nhlt-dmic-info" ];
+    alsa-utils-nhlt = [ "nhlt-dmic-info" ];
 
     coreutils = [
       "mkdir"
