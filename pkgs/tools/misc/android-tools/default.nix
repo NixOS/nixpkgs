@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/android-tools/-/raw/dd0234790b42b48567b64a3024fc2ec6c7ab6c21/android-tools-35.0.2-fix-protobuf-30.0-compilation.patch";
+      url = "https://raw.githubusercontent.com/nmeum/android-tools/0c4d79943e23785589ce1881cbb5a9bc76d64d9b/patches/extras/0003-extras-libjsonpb-Fix-incompatibility-with-protobuf-v.patch";
       stripLen = 1;
       extraPrefix = "vendor/extras/";
-      hash = "sha256-WSfU+0XIrxxlCjAIR49l9JvX9C6xCXirhLFHMMvNmJk=";
+      hash = "sha256-PO6ZKP54ri2ujVa/uFXgMy/zMQjjIo4e/EPW2Cu6a1Q=";
     })
   ];
 
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     zstd
     pcre2
     fmt
-    udev
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
   propagatedBuildInputs = [ pythonEnv ];
 
   preConfigure = ''
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
     (lib.cmakeBool "protobuf_MODULE_COMPATIBLE" true)
-    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" true)
+    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" stdenv.hostPlatform.isLinux)
     (lib.cmakeBool "ANDROID_TOOLS_USE_BUNDLED_LIBUSB" true)
   ];
 
