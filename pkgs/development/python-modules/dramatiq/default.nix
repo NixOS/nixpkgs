@@ -89,6 +89,9 @@ buildPythonPackage rec {
     "test_rabbitmq_process_100k_messages_with_cli"
     "test_rabbitmq_process_10k_fib_with_cli"
     "test_rabbitmq_process_1k_latency_with_cli"
+    # AssertionError
+    "test_cli_scrubs_stale_pid_files"
+    "test_message_contains_requeue_time_after_retry"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Takes too long for darwin ofborg

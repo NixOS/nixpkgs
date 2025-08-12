@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ defelo ];
     broken =
       stdenv.hostPlatform.isAarch64
-      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened)
+      || kernel.kernelAtLeast "6.16";
   };
 })

@@ -113,20 +113,7 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix {
-      pkgs = import nixpkgs (
-        recursiveUpdate
-          (recursiveUpdate {
-            inherit system;
-            config.allowUnsupportedSystem = true;
-          } nixpkgsArgs)
-          {
-            config.permittedInsecurePackages = nixpkgsArgs.config.permittedInsecurePackages or [ ] ++ [
-              "nix-2.3.18"
-            ];
-          }
-      );
-    };
+    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =
