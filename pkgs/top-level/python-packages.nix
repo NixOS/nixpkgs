@@ -9090,6 +9090,8 @@ self: super: with self; {
 
   mercurial = toPythonModule (pkgs.mercurial.override { python3Packages = self; });
 
+  merge-args = callPackage ../development/python-modules/merge-args { };
+
   merge3 = callPackage ../development/python-modules/merge3 { };
 
   mergecal = callPackage ../development/python-modules/mergecal { };
