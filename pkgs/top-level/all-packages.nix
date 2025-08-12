@@ -14687,8 +14687,6 @@ with pkgs;
 
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
-  plasma-theme-switcher = libsForQt5.callPackage ../applications/misc/plasma-theme-switcher { };
-
   inherit
     (callPackages ../applications/misc/redshift {
       inherit (python3Packages)
