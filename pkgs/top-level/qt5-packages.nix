@@ -291,10 +291,6 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced {
-          useQt5 = true;
-        };
-
         soqt = callPackage ../development/libraries/soqt { };
 
         telepathy = callPackage ../development/libraries/telepathy/qt { };
