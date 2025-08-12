@@ -160,7 +160,7 @@ jobs:
     # Do NOT change the name of this job, otherwise the rule will not catch it anymore.
     # This would prevent all PRs from merging.
     name: no PR failures
-    if: ${{ failure() }}
+    if: ${{ cancelled() || failure() }}
     runs-on: ubuntu-24.04-arm
     steps:
       - run: exit 1
