@@ -11446,10 +11446,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  sierra-breeze-enhanced =
-    libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced
-      { useQt5 = true; };
-
   scheherazade-new = scheherazade.override {
     version = "4.300";
   };
