@@ -75,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "(x,y) Data Points from SVG files";
+    description = "Extract numerical data points from SVG files";
     homepage = "https://github.com/echemdb/svgdigitizer";
     changelog = "https://github.com/echemdb/svgdigitizer/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;

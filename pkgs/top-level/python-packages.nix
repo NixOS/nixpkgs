@@ -3453,6 +3453,8 @@ self: super: with self; {
 
   decli = callPackage ../development/python-modules/decli { };
 
+  declinate = callPackage ../development/python-modules/declinate { };
+
   decopatch = callPackage ../development/python-modules/decopatch { };
 
   decora-wifi = callPackage ../development/python-modules/decora-wifi { };
@@ -4500,6 +4502,8 @@ self: super: with self; {
 
   ebooklib = callPackage ../development/python-modules/ebooklib { };
 
+  ebusdpy = callPackage ../development/python-modules/ebusdpy { };
+
   ec2-metadata = callPackage ../development/python-modules/ec2-metadata { };
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
@@ -4532,8 +4536,6 @@ self: super: with self; {
   editables = callPackage ../development/python-modules/editables { };
 
   editdistance = callPackage ../development/python-modules/editdistance { };
-
-  editdistance-s = callPackage ../development/python-modules/editdistance-s { };
 
   editdistpy = callPackage ../development/python-modules/editdistpy { };
 
@@ -4578,6 +4580,8 @@ self: super: with self; {
   elasticsearch8 = callPackage ../development/python-modules/elasticsearch8 { };
 
   elasticsearchdsl = self.elasticsearch-dsl;
+
+  electrickiwi-api = callPackage ../development/python-modules/electrickiwi-api { };
 
   electrum-aionostr = callPackage ../development/python-modules/electrum-aionostr { };
 
@@ -7022,8 +7026,6 @@ self: super: with self; {
   inkex = callPackage ../development/python-modules/inkex { };
 
   inline-snapshot = callPackage ../development/python-modules/inline-snapshot { };
-
-  inlinestyler = callPackage ../development/python-modules/inlinestyler { };
 
   inotify = callPackage ../development/python-modules/inotify { };
 
@@ -12260,6 +12262,8 @@ self: super: with self; {
 
   py-madvr2 = callPackage ../development/python-modules/py-madvr2 { };
 
+  py-melissa-climate = callPackage ../development/python-modules/py-melissa-climate { };
+
   py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
 
   py-multibase = callPackage ../development/python-modules/py-multibase { };
@@ -13296,6 +13300,8 @@ self: super: with self; {
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
+  pymochad = callPackage ../development/python-modules/pymochad { };
+
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
@@ -13469,6 +13475,8 @@ self: super: with self; {
   pyopnsense = callPackage ../development/python-modules/pyopnsense { };
 
   pyoppleio = callPackage ../development/python-modules/pyoppleio { };
+
+  pyoppleio-legacy = callPackage ../development/python-modules/pyoppleio-legacy { };
 
   pyorc = callPackage ../development/python-modules/pyorc { };
 
@@ -13762,6 +13770,8 @@ self: super: with self; {
     }
   );
 
+  pyrecswitch = callPackage ../development/python-modules/pyrecswitch { };
+
   pyrect = callPackage ../development/python-modules/pyrect { };
 
   pyregion = callPackage ../development/python-modules/pyregion { };
@@ -13769,6 +13779,8 @@ self: super: with self; {
   pyrender = callPackage ../development/python-modules/pyrender {
     inherit (pkgs) mesa;
   };
+
+  pyrepetierng = callPackage ../development/python-modules/pyrepetierng { };
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
@@ -14084,6 +14096,8 @@ self: super: with self; {
 
   pystemmer = callPackage ../development/python-modules/pystemmer { };
 
+  pystiebeleltron = callPackage ../development/python-modules/pystiebeleltron { };
+
   pystray = callPackage ../development/python-modules/pystray { };
 
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
@@ -14106,6 +14120,8 @@ self: super: with self; {
   pyswitchbee = callPackage ../development/python-modules/pyswitchbee { };
 
   pyswitchbot = callPackage ../development/python-modules/pyswitchbot { };
+
+  pyswitchmate = callPackage ../development/python-modules/pyswitchmate { };
 
   pysychonaut = callPackage ../development/python-modules/pysychonaut { };
 
@@ -14474,6 +14490,8 @@ self: super: with self; {
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-bitcoinlib = callPackage ../development/python-modules/python-bitcoinlib { };
+
+  python-blockchain-api = callPackage ../development/python-modules/python-blockchain-api { };
 
   python-box = callPackage ../development/python-modules/python-box { };
 
@@ -15875,6 +15893,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rosbags = callPackage ../development/python-modules/rosbags { };
 
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
@@ -17315,6 +17335,8 @@ self: super: with self; {
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 
   starline = callPackage ../development/python-modules/starline { };
+
+  starlingbank = callPackage ../development/python-modules/starlingbank { };
 
   starlink-grpc-core = callPackage ../development/python-modules/starlink-grpc-core { };
 
@@ -19951,6 +19973,8 @@ self: super: with self; {
   xpybutil = callPackage ../development/python-modules/xpybutil { };
 
   xrootd = callPackage ../development/python-modules/xrootd { inherit (pkgs) xrootd; };
+
+  xs1-api-client = callPackage ../development/python-modules/xs1-api-client { };
 
   xsdata = callPackage ../development/python-modules/xsdata { };
 

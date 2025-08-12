@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   symlinkJoin,
   nixosTests,
@@ -8,11 +8,11 @@
 }:
 
 let
-  version = "3.5.21";
-  etcdSrcHash = "sha256-0L/lA9/9SNKMz74R6UPF1I7gj03/e91EpNr4LxKoisw=";
-  etcdServerVendorHash = "sha256-JMxkcDibRcXhU+T7BQMAz95O7xDKefu1YPZK0GU7osk=";
-  etcdUtlVendorHash = "sha256-901QcnEQ8PWnkliqwL4CrbCD+0ja8vJlDke0P4ya8cA=";
-  etcdCtlVendorHash = "sha256-BJ924wRPQTqbqtNtXL3l/OSdQv1UmU1y6Zqu//EWTHI=";
+  version = "3.5.22";
+  etcdSrcHash = "sha256-tS1IFMxfb8Vk9HJTAK+BGPZiVE3ls4Q2DQSerALOQCc=";
+  etcdServerVendorHash = "sha256-ul3R0c6RoCqLvlD2dfso1KwfHjsHfzQiUVJZJmz28ks=";
+  etcdUtlVendorHash = "sha256-S2pje2fTDaZwf6jnyE2YXWcs/fgqF51nxCVfEwg0Gsw=";
+  etcdCtlVendorHash = "sha256-lZ6o0oWUsc3WiCa87ynm7UAG6VxTf81a301QMSPOvW0=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -29,11 +29,13 @@ let
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [
+      dtomvan
+    ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 
-  etcdserver = buildGo123Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -42,6 +44,8 @@ let
       src
       version
       ;
+
+    __darwinAllowLocalNetworking = true;
 
     vendorHash = etcdServerVendorHash;
 
@@ -58,7 +62,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo123Module rec {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -73,7 +77,7 @@ let
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGo123Module rec {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit
@@ -94,7 +98,10 @@ symlinkJoin {
   inherit meta version;
 
   passthru = {
-    inherit etcdserver etcdutl etcdctl;
+    deps = {
+      inherit etcdserver etcdutl etcdctl;
+    };
+
     tests = {
       inherit (nixosTests) etcd etcd-cluster;
       k3s = k3s.passthru.tests.etcd;

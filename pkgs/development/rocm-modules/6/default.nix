@@ -142,6 +142,8 @@ let
 
       hipfft = self.callPackage ./hipfft { };
 
+      hiprt = self.callPackage ./hiprt { };
+
       tensile = pyPackages.callPackage ./tensile {
         inherit (self)
           rocmUpdateScript
@@ -323,6 +325,7 @@ let
             rocprim
             rocalution
             hipfft
+            hiprt
             rocm-core
             hipcub
             hipblas
@@ -355,6 +358,7 @@ let
             hipblaslt
             rocfft
             hipfft
+            hiprt
             rccl
             rocsparse
             hipsparse
