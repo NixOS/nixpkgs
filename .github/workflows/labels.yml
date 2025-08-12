@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: |
             ci/github-script
@@ -49,7 +49,7 @@ jobs:
         run: npm install @actions/artifact bottleneck
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+      - uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
         if: vars.NIXPKGS_CI_APP_ID
         id: app-token
         with:
