@@ -2706,6 +2706,10 @@ with haskellLib;
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
 
+  # Allow doctest >= 0.24
+  # https://github.com/haskell/statistics/issues/222
+  statistics = doJailbreak super.statistics;
+
   # calls ghc in tests
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
