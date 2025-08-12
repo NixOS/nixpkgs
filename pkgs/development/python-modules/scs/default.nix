@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.2.7.post2";
+  version = "3.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
     tag = version;
-    hash = "sha256-A626gK30J4e/TrJMXYc+jMgYw7fNcnWfnTeXlyYQNMM=";
+    hash = "sha256-Dv0LDY6JFFq/dpcDsnU+ErnHJ8RDpaNhrRjEwY31Szk=";
     fetchSubmodules = true;
   };
 
