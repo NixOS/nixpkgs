@@ -10827,6 +10827,10 @@ with pkgs;
 
   libkrun-sev = libkrun.override { sevVariant = true; };
 
+  krunkit = callPackage ../by-name/kr/krunkit/package.nix {
+    inherit (darwin) sigtool;
+  };
+
   linthesia = callPackage ../games/linthesia/default.nix { };
 
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
