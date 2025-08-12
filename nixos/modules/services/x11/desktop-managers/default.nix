@@ -26,7 +26,6 @@ in
     ./xterm.nix
     ./phosh.nix
     ./xfce.nix
-    ./plasma5.nix
     ../../desktop-managers/plasma6.nix
     ./lumina.nix
     ./lxqt.nix
