@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-K0lQuk2PBwnVlkRpYNo4Z7to/Lx2fY6RIlkgmMjvEtc=";
 
+  nativeBuildInputs = [ protobuf ];
+
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
     rm .cargo/config.toml
   '';
-
-  env.PROTOC = lib.getExe' protobuf "protoc";
 
   meta = {
     changelog = "https://github.com/imLinguin/comet/releases/tag/v${finalAttrs.version}";
