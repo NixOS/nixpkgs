@@ -32,36 +32,34 @@ stdenv.mkDerivation rec {
     hash = "sha256-DJs4G1qD1rOrSwuGXXJW2rJ9V1mBtjvi+Fnty5TaWcc=";
   };
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.lists.optionals withDocumentation [
-      "doc"
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.lists.optionals withDocumentation [
+    "doc"
+    "devdoc"
+  ];
 
-  nativeBuildInputs =
-    [
-      ninja
-      meson
-      pkg-config
-    ]
-    ++ lib.lists.optionals withDocumentation [
-      perl
-      doxygen
-      libxslt
-      graphviz
-    ]
-    ++ lib.lists.optionals withManual [
-      docbook5
-      docbook-xsl-ns
-    ]
-    ++ lib.lists.optional withPDF [
-      fop
-      dblatex
-    ];
+  nativeBuildInputs = [
+    ninja
+    meson
+    pkg-config
+  ]
+  ++ lib.lists.optionals withDocumentation [
+    perl
+    doxygen
+    libxslt
+    graphviz
+  ]
+  ++ lib.lists.optionals withManual [
+    docbook5
+    docbook-xsl-ns
+  ]
+  ++ lib.lists.optional withPDF [
+    fop
+    dblatex
+  ];
 
   buildInputs = [ glibmm ];
 
