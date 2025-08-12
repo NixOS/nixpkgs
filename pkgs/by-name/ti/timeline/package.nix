@@ -10,12 +10,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
-    sha256 = "sha256-xUWIIpnOohcpD/1esjHQTUxndo4j91hyyAXTmV3Eo0k=";
+    sha256 = "sha256-XJ5Gu3nFLtSaEedzxBZERtPydIFMWWGi5frXWmgKxVA=";
   };
 
   nativeBuildInputs = [
