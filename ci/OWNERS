@@ -460,9 +460,8 @@ nixos/tests/incus/                      @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 
-# ExpidusOS, Flutter
+# Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy
-/pkgs/desktops/expidus              @RossComputerGuy
 
 # GNU Tar & Zip
 /pkgs/tools/archivers/gnutar        @RossComputerGuy

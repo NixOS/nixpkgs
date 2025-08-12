@@ -669,6 +669,7 @@ mapAliases {
 
   ethabi = throw "ethabi has been removed due to lack of maintainence upstream and no updates in Nixpkgs"; # Added 2024-07-16
   eww-wayland = lib.warnOnInstantiate "eww now can build for X11 and wayland simultaneously, so `eww-wayland` is deprecated, use the normal `eww` package instead." eww;
+  expidus = throw "'expidus' has been removed from nixpkgs due to it not being maintained"; # Added 2025-08-12
 
   ### F ###
 
