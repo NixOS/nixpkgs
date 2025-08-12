@@ -13,7 +13,6 @@
   js_of_ocaml-compiler,
   lwtSupport ? true,
   lwt,
-  result,
 }:
 let
   pname = "logs";
@@ -60,7 +59,6 @@ buildTopkgPackage rec {
   };
 
   buildInputs = [ topkg ] ++ optional_buildInputs;
-  propagatedBuildInputs = [ result ];
 
   strictDeps = true;
 
