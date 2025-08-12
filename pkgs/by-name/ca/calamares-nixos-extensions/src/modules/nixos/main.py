@@ -201,15 +201,6 @@ cfgbudgie = """  # Enable the X11 windowing system.
 
 """
 
-cfgdeepin = """  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the Deepin Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.deepin.enable = true;
-
-"""
-
 cfgkeymap = """  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "@@kblayout@@";
@@ -589,8 +580,6 @@ def run():
         cfg += cfglumina
     elif gs.value("packagechooser_packagechooser") == "budgie":
         cfg += cfgbudgie
-    elif gs.value("packagechooser_packagechooser") == "deepin":
-        cfg += cfgdeepin
 
     if (
         gs.value("keyboardLayout") is not None
