@@ -560,7 +560,7 @@ in
         "${pkgs.glibc}/lib/libnss_files.so.2"
 
         # Resolving sysroot symlinks without code exec
-        "${pkgs.chroot-realpath}/bin/chroot-realpath"
+        "${config.system.nixos-init.package}/bin/chroot-realpath"
         # Find the etc paths
         "${config.system.nixos-init.package}/bin/find-etc"
       ]
@@ -618,7 +618,7 @@ in
         script = # bash
           ''
             set -uo pipefail
-            export PATH="/bin:${cfg.package.util-linux}/bin:${pkgs.chroot-realpath}/bin"
+            export PATH="/bin:${cfg.package.util-linux}/bin:${config.system.nixos-init.package}/bin"
 
             # Figure out what closure to boot
             closure=
