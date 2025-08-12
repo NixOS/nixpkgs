@@ -5,14 +5,14 @@
   protobuf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comet-gog";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "comet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-asg2xp9A5abmsF+CgOa+ScK2sQwSNFQXD5Qnm76Iyhg=";
     fetchSubmodules = true;
   };
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   env.PROTOC = lib.getExe' protobuf "protoc";
 
   meta = {
-    changelog = "https://github.com/imLinguin/comet/releases/tag/v${version}";
+    changelog = "https://github.com/imLinguin/comet/releases/tag/v${finalAttrs.version}";
     description = "Open Source implementation of GOG Galaxy's Communication Service";
     homepage = "https://github.com/imLinguin/comet";
     license = lib.licenses.gpl3Plus;
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
       aidalgol
     ];
   };
-}
+})
