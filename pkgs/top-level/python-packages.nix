@@ -2114,9 +2114,9 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
-  britive = callPackage ../development/python-modules/britive { };
-
   bring-api = callPackage ../development/python-modules/bring-api { };
+
+  britive = callPackage ../development/python-modules/britive { };
 
   broadbean = callPackage ../development/python-modules/broadbean { };
 
@@ -9104,9 +9104,9 @@ self: super: with self; {
 
   mercurial = toPythonModule (pkgs.mercurial.override { python3Packages = self; });
 
-  merge3 = callPackage ../development/python-modules/merge3 { };
-
   merge-args = callPackage ../development/python-modules/merge-args { };
+
+  merge3 = callPackage ../development/python-modules/merge3 { };
 
   mergecal = callPackage ../development/python-modules/mergecal { };
 
