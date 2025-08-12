@@ -18,6 +18,8 @@
   withSound ? false,
   withNet ? false,
   sevVariant ? false,
+  efiVariant ? stdenv.hostPlatform.isDarwin,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Make sure libkrunfw can be found by dlopen()
   # FIXME: This wasn't needed previously. What changed?
-  env.RUSTFLAGS = toString (
+  env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString (
     map (flag: "-C link-arg=" + flag) [
       "-Wl,--push-state,--no-as-needed"
       (if sevVariant then "-lkrunfw-sev" else "-lkrunfw")
       "-Wl,--pop-state"
     ]
-  );
+  ));
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -57,17 +59,24 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustc
   ]
-  ++ lib.optional (sevVariant || withGpu) pkg-config;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optional (sevVariant || efiVariant || withGpu) pkg-config;
 
   buildInputs = [
-    (libkrunfw.override { inherit sevVariant; })
+    (libkrunfw.override { inherit sevVariant efiVariant; })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glibc
     glibc.static
   ]
-  ++ lib.optionals withGpu [
+  ++ lib.optionals (withGpu || efiVariant) [
     libepoxy
-    libdrm
     virglrenderer
+  ]
+  ++ lib.optionals withGpu [
+    libdrm
   ]
   ++ lib.optional withSound pipewire
   ++ lib.optional sevVariant openssl;
@@ -79,11 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withGpu "GPU=1"
   ++ lib.optional withSound "SND=1"
   ++ lib.optional withNet "NET=1"
-  ++ lib.optional sevVariant "SEV=1";
+  ++ lib.optional sevVariant "SEV=1"
+  ++ lib.optional efiVariant "EFI=1";
 
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig
-    mv $out/lib64/pkgconfig $dev/lib/
+    mv $out/lib*/pkgconfig $dev/lib/
     mv $out/include $dev/
   '';
 
