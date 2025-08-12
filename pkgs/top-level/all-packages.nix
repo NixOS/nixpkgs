@@ -2098,8 +2098,6 @@ with pkgs;
 
   futhark = haskell.lib.compose.justStaticExecutables haskellPackages.futhark;
 
-  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
-
   g2o = libsForQt5.callPackage ../development/libraries/g2o { };
 
   inherit (go-containerregistry) crane gcrane;
