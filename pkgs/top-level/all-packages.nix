@@ -11202,8 +11202,6 @@ with pkgs;
   font-awesome_6 = (callPackage ../data/fonts/font-awesome { }).v6;
   font-awesome = font-awesome_6;
 
-  graphite-kde-theme = libsForQt5.callPackage ../data/themes/graphite-kde-theme { };
-
   palenight-theme = callPackage ../data/themes/gtk-theme-framework { theme = "palenight"; };
 
   amarena-theme = callPackage ../data/themes/gtk-theme-framework { theme = "amarena"; };
