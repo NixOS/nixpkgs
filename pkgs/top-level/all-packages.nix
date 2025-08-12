@@ -11155,8 +11155,6 @@ with pkgs;
 
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
-  breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
-
   colloid-kde = libsForQt5.callPackage ../data/themes/colloid-kde { };
 
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
