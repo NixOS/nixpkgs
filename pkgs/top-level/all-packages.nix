@@ -4633,7 +4633,6 @@ with pkgs;
   clang-manpages = llvmPackages.clang-manpages;
 
   clang = llvmPackages.clang;
-  clang_15 = llvmPackages_15.clang;
   clang_16 = llvmPackages_16.clang;
   clang_17 = llvmPackages_17.clang;
 
@@ -5362,17 +5361,14 @@ with pkgs;
   };
 
   lld = llvmPackages.lld;
-  lld_15 = llvmPackages_15.lld;
   lld_16 = llvmPackages_16.lld;
   lld_17 = llvmPackages_17.lld;
 
   lldb = llvmPackages.lldb;
-  lldb_15 = llvmPackages_15.lldb;
   lldb_16 = llvmPackages_16.lldb;
   lldb_17 = llvmPackages_17.lldb;
 
   llvm = llvmPackages.llvm;
-  llvm_15 = llvmPackages_15.llvm;
   llvm_16 = llvmPackages_16.llvm;
   llvm_17 = llvmPackages_17.llvm;
 
@@ -5390,7 +5386,6 @@ with pkgs;
     (rec {
       llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
 
-      llvmPackages_15 = llvmPackagesSet."15";
       llvmPackages_16 = llvmPackagesSet."16";
       llvmPackages_17 = llvmPackagesSet."17";
 
@@ -5425,7 +5420,6 @@ with pkgs;
 
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
-    llvmPackages_15
     llvmPackages_16
     llvmPackages_17
     llvmPackages_18

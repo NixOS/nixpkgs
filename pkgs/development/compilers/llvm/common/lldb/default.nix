@@ -78,23 +78,7 @@ stdenv.mkDerivation (
           }).overrideAttrs
             (_: _: { name = "resource-dir.patch"; });
       in
-      lib.optionals (lib.versionOlder release_version "16") [
-        # Fixes for SWIG 4
-        (fetchpatch2 {
-          url = "https://github.com/llvm/llvm-project/commit/ba35c27ec9aa9807f5b4be2a0c33ca9b045accc7.patch?full_index=1";
-          stripLen = 1;
-          hash = "sha256-LXl+WbpmWZww5xMDrle3BM2Tw56v8k9LO1f1Z1/wDTs=";
-        })
-        (fetchpatch2 {
-          url = "https://github.com/llvm/llvm-project/commit/9ec115978ea2bdfc60800cd3c21264341cdc8b0a.patch?full_index=1";
-          stripLen = 1;
-          hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
-        })
-
-        # FIXME: do we need this after 15?
-        (getVersionFile "lldb/procfs.patch")
-      ]
-      ++ lib.optional (lib.versionOlder release_version "18") (fetchpatch {
+      lib.optional (lib.versionOlder release_version "18") (fetchpatch {
         name = "libcxx-19-char_traits.patch";
         url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
         stripLen = 1;
@@ -140,8 +124,6 @@ stdenv.mkDerivation (
       libedit
       libxml2
       libllvm
-    ]
-    ++ lib.optionals (lib.versionAtLeast release_version "16") [
       # Starting with LLVM 16, the resource dir patch is no longer enough to get
       # libclang into the rpath of the lldb executables. By putting it into
       # buildInputs cc-wrapper will set up rpath correctly for us.

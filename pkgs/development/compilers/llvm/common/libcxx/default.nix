@@ -64,8 +64,7 @@ let
     # https://github.com/llvm/llvm-project/issues/55245
     (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" stdenv.hostPlatform.isWindows)
   ]
-  ++ lib.optionals (cxxabi == null && lib.versionAtLeast release_version "16") [
-    # Note: llvm < 16 doesn't support this flag (or it's broken); handled in postInstall instead.
+  ++ lib.optionals (cxxabi == null) [
     # Include libc++abi symbols within libc++.a for static linking libc++;
     # dynamic linking includes them through libc++.so being a linker script
     # which includes both shared objects.
@@ -96,11 +95,9 @@ let
   ++ lib.optionals useLLVM [
     (lib.cmakeBool "LIBCXX_USE_COMPILER_RT" true)
   ]
-  ++
-    lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16")
-      [
-        (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "unwind")
-      ]
+  ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD) [
+    (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "unwind")
+  ]
   ++ lib.optionals stdenv.hostPlatform.isWasm [
     (lib.cmakeBool "LIBCXX_ENABLE_THREADS" false)
     (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
@@ -163,37 +160,8 @@ stdenv.mkDerivation (
       patchShebangs utils/cat_files.py
     '';
 
-    patches = lib.optionals (lib.versionOlder release_version "16") (
-      lib.optional (lib.versions.major release_version == "15")
-        # See:
-        #   - https://reviews.llvm.org/D133566
-        #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
-        # !!! Drop in LLVM 16+
-        (
-          fetchpatch {
-            url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
-            hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
-          }
-        )
-      ++ [
-        (substitute {
-          src = ../libcxxabi/wasm.patch;
-          substitutions = [
-            "--replace-fail"
-            "/cmake/"
-            "/llvm/cmake/"
-          ];
-        })
-      ]
-      ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
-        src = ./libcxx-0001-musl-hacks.patch;
-        substitutions = [
-          "--replace-fail"
-          "/include/"
-          "/libcxx/include/"
-        ];
-      })
-    );
+    # TODO: Remove on `staging`.
+    patches = [ ];
 
     nativeBuildInputs = [
       cmake
@@ -219,13 +187,13 @@ stdenv.mkDerivation (
         lndir ${lib.getLib cxxabi}/lib $out/lib
         libcxxabi=$out/lib/lib${cxxabi.libName}.a
       ''
-      # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for LLVM < 16 or
+      # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for
       # external cxxabi libraries so merge libc++abi.a into libc++.a ourselves.
 
       # GNU binutils emits objects in LIFO order in MRI scripts so after the merge
       # the objects are in reversed order so a second MRI script is required so the
       # objects in the archive are listed in proper order (libc++.a, libc++abi.a)
-      + lib.optionalString (cxxabi != null || lib.versionOlder release_version "16") ''
+      + lib.optionalString (cxxabi != null) ''
         libcxxabi=''${libcxxabi-$out/lib/libc++abi.a}
         if [[ -f $out/lib/libc++.a && -e $libcxxabi ]]; then
           $AR -M <<MRI
@@ -264,7 +232,7 @@ stdenv.mkDerivation (
     };
   }
   // (
-    if (lib.versionOlder release_version "16" || lib.versionAtLeast release_version "17") then
+    if lib.versionAtLeast release_version "17" then
       {
         postPatch = ''
           cd runtimes

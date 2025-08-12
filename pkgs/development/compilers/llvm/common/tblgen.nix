@@ -55,8 +55,6 @@ let
     "clang-tblgen"
     "llvm-tblgen"
     "clang-tidy-confusable-chars-gen"
-  ]
-  ++ lib.optionals (lib.versionAtLeast release_version "16") [
     "mlir-tblgen"
   ]
   ++ lib.optionals (lib.versionOlder release_version "20") [
@@ -95,16 +93,12 @@ let
     cmakeFlags = [
       # Projects with tablegen-like tools.
       "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" (
-          [
-            "llvm"
-            "clang"
-            "clang-tools-extra"
-          ]
-          ++ lib.optionals (lib.versionAtLeast release_version "16") [
-            "mlir"
-          ]
-        )
+        lib.concatStringsSep ";" [
+          "llvm"
+          "clang"
+          "clang-tools-extra"
+          "mlir"
+        ]
       }"
     ]
     ++ devExtraCmakeFlags;

@@ -19,6 +19,7 @@ with pkgs;
             (filter (n: n != "llvmPackages_12"))
             (filter (n: n != "llvmPackages_13"))
             (filter (n: n != "llvmPackages_14"))
+            (filter (n: n != "llvmPackages_15"))
           ];
           tests = lib.genAttrs pkgSets (
             name:
