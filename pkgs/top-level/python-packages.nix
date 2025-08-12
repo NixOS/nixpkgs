@@ -2114,6 +2114,8 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+  britive = callPackage ../development/python-modules/britive { };
+
   bring-api = callPackage ../development/python-modules/bring-api { };
 
   broadbean = callPackage ../development/python-modules/broadbean { };
