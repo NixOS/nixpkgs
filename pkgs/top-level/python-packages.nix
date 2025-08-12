@@ -17414,6 +17414,8 @@ self: super: with self; {
 
   storage3 = callPackage ../development/python-modules/storage3 { };
 
+  stormpy = callPackage ../development/python-modules/stormpy { };
+
   stp = toPythonModule (pkgs.stp.override { python3 = self.python; });
 
   stransi = callPackage ../development/python-modules/stransi { };
