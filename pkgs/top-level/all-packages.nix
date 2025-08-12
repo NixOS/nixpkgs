@@ -15900,9 +15900,7 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  slock = callPackage ../misc/screensavers/slock {
-    conf = config.slock.conf or null;
-  };
+  slock = callPackage ../misc/screensavers/slock { };
 
   snscrape = with python3Packages; toPythonApplication snscrape;
 

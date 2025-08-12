@@ -8,9 +8,10 @@
   libXext,
   libXrandr,
   libxcrypt,
-  # default header can be obtained from
-  # https://git.suckless.org/slock/tree/config.def.h
-  conf ? null,
+  config,
+  conf ? config.slock.conf or null,
+  patches ? config.slock.patches or [ ],
+  extraLibs ? config.slock.extraLibs or [ ],
   # update script dependencies
   gitUpdater,
 }:
@@ -30,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     libxcrypt
-  ];
+  ]
+  ++ extraLibs;
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = lib.optionalString (conf != null) ''
     cp ${writeText "config.def.h" conf} config.def.h
   '';
+
+  inherit patches;
 
   makeFlags = [ "CC:=$(CC)" ];
 
