@@ -14673,6 +14673,12 @@
     githubId = 542154;
     name = "Lorenz Leutgeb";
   };
+  lortane = {
+    email = "lortane@pm.me";
+    github = "lortane";
+    githubId = 61233304;
+    name = "Lorenzo Ortiz";
+  };
   loskutov = {
     email = "ignat.loskutov@gmail.com";
     github = "loskutov";
