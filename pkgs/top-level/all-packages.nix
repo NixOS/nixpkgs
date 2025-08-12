@@ -14751,8 +14751,6 @@ with pkgs;
     appls = [ prio ];
   };
 
-  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
-
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });
 
   expidus = recurseIntoAttrs (
