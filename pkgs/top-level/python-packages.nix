@@ -13508,6 +13508,8 @@ self: super: with self; {
 
   pyoppleio-legacy = callPackage ../development/python-modules/pyoppleio-legacy { };
 
+  pyoprf = callPackage ../development/python-modules/pyoprf { };
+
   pyorc = callPackage ../development/python-modules/pyorc { };
 
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
