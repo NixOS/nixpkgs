@@ -4256,8 +4256,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
 
-  slstatus = callPackage ../applications/misc/slstatus { };
-
   smpq = callPackage ../by-name/sm/smpq/package.nix {
     stormlib = stormlib.overrideAttrs (old: {
       version = "9.22";
