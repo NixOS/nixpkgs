@@ -14,6 +14,10 @@
   file,
   binutils,
   makeDesktopItem,
+
+  # Forces libTAS to run in X11.
+  # Enabled by default because libTAS does not support Wayland.
+  withForceX11 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
           ffmpeg.lib
         ]
       } \
+      ${lib.optionalString withForceX11 "--set QT_QPA_PLATFORM xcb"} \
       --set-default LIBTAS_SO_PATH $out/lib/libtas.so
   '';
 
