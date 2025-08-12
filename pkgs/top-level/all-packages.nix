@@ -13505,8 +13505,6 @@ with pkgs;
     wlroots = wlroots_0_19;
   };
 
-  trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
-
   tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
     tuxclocker-plugins = tuxclocker-plugins-with-unfree;
   };
