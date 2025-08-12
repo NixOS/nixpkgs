@@ -17,13 +17,7 @@ let
     else
       nixpkgs;
 
-  pkgs = import nixpkgs' {
-    inherit system;
-    config = {
-      permittedInsecurePackages = [ "nix-2.3.18" ];
-    };
-    overlays = [ ];
-  };
+  pkgs = import nixpkgs' { inherit system; };
 
   fmt =
     let
@@ -128,8 +122,7 @@ rec {
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    # TODO: Raise nixVersions.minimum to 2.24 and flip back to it.
-    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
+    nix_2_24 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
   tarball = import ../pkgs/top-level/make-tarball.nix {
