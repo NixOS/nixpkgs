@@ -11257,8 +11257,6 @@ with pkgs;
     ;
   liberation_ttf = liberation_ttf_v2;
 
-  lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
-
   # ltunifi and solaar both provide udev rules but solaar's rules are more
   # up-to-date so we simply use that instead of having to maintain our own rules
   logitech-udev-rules = solaar.udev;
