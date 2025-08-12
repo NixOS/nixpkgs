@@ -15689,7 +15689,7 @@ with pkgs;
     hasktags = haskellPackages.hasktags;
   };
 
-  tellico = libsForQt5.callPackage ../applications/misc/tellico { };
+  tellico = kdePackages.callPackage ../applications/misc/tellico { };
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
 
