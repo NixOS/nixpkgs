@@ -60,16 +60,6 @@ makeScopeWithSplicing' {
         in
         (lib.makeOverridable mkGear attrs);
 
-      plasmaMobileGear =
-        let
-          mkPlamoGear = import ../applications/plasma-mobile;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkPlamoGear attrs);
-
       noExtraAttrs =
         set:
         lib.attrsets.removeAttrs set [
@@ -82,7 +72,6 @@ makeScopeWithSplicing' {
     in
     (noExtraAttrs (
       kdeFrameworks
-      // plasmaMobileGear
       // plasma5
       // plasma5.thirdParty
       // kdeGear
@@ -91,7 +80,6 @@ makeScopeWithSplicing' {
 
         inherit
           kdeFrameworks
-          plasmaMobileGear
           plasma5
           kdeGear
           qt5
