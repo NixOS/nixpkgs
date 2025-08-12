@@ -4277,8 +4277,6 @@ with pkgs;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
-  soundkonverter = libsForQt5.soundkonverter;
-
   steck = callPackage ../servers/pinnwand/steck.nix { };
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
