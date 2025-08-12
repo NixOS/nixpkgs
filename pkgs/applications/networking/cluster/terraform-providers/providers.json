@@ -198,13 +198,13 @@
     "vendorHash": "sha256-ok73U0WWFGXp5TJ7sp7U9umq7DlChCw7fSyFmbifwKE="
   },
   "bitwarden": {
-    "hash": "sha256-eqWyKPzSINSZcO8Ho0WHTeVDOxbUynOzupXu6vzTtuU=",
+    "hash": "sha256-yq45SlP8x/jMSuhgrIIAM+hWa4tcp2d871uoLy+iIZM=",
     "homepage": "https://registry.terraform.io/providers/maxlaverse/bitwarden",
     "owner": "maxlaverse",
     "repo": "terraform-provider-bitwarden",
-    "rev": "v0.14.0",
+    "rev": "v0.15.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TmlnrCsIM9k2ApPFcSpFUoggIIDrT9S/BeD3kKI2Klc="
+    "vendorHash": "sha256-oQ7rOrWS2cJtAOwO+tQ9aB27DyHMhf5FYpDvJVsLe/k="
   },
   "brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
@@ -534,13 +534,13 @@
     "vendorHash": "sha256-n6UUSCQt3mJESEfqVHX4sfr1XqOXu+u7Qejjps6RmBs="
   },
   "google-beta": {
-    "hash": "sha256-HWtH/F4Bf86jzb27jSSpE7h77CH9FpGTF5tpGSxuX+g=",
+    "hash": "sha256-8woiWjYYaojpKykxd9eMT4qXfpHVkXFA9eN3qzhEu+8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v6.46.0",
+    "rev": "v6.47.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QQI1BfUgDRYwlqOC2+e/EMcDsEbZV8cAUnscnW8xVLk="
+    "vendorHash": "sha256-BzmaCp0QL2BbYn+NwlvPGV2CoDjKXr75HaPFVdrS5e4="
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -876,11 +876,11 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-ymxR4LOgsMg8evg4nBjzJZ5rKi/ql4TLlYb9i9gzKK4=",
+    "hash": "sha256-4l7q9umrbic4lOKMtTWwBDRHMJUlVyrl5un7KAYYiAM=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.65.0",
+    "rev": "v3.66.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-+ogtadT0zekeaynXQCwDBrD+bBnKUsyzLGPQyLsCSR8="
   },
@@ -1138,11 +1138,11 @@
     "vendorHash": "sha256-75GQmp/ybD+VugrrB8qTbP3OPHy3eyBGe5u7CM7CRcc="
   },
   "routeros": {
-    "hash": "sha256-1qdq09QFijxQDUaoPJwJB4F5aZ0AHXJSGndcdR9iqOs=",
+    "hash": "sha256-q0ZRAip6mgHkdBcns8G7VlDnMNB+ux6ITKwcSL4WrcY=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.86.1",
+    "rev": "v1.86.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-et1xqcaCKTRz9bJjTlRnxhXBoc6PaeSwJgBI4pAzcdg="
   },

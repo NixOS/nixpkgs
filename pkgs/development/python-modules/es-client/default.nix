@@ -3,6 +3,7 @@
   buildPythonPackage,
   certifi,
   click,
+  cryptography,
   dotmap,
   ecs-logging,
   elastic-transport,
@@ -15,7 +16,7 @@
   pythonOlder,
   pyyaml,
   requests,
-  six,
+  tiered-debug,
   voluptuous,
 }:
 
@@ -40,12 +41,13 @@ buildPythonPackage rec {
   dependencies = [
     certifi
     click
+    cryptography
     dotmap
     ecs-logging
     elastic-transport
     elasticsearch8
     pyyaml
-    six
+    tiered-debug
     voluptuous
   ];
 

@@ -5526,6 +5526,8 @@ self: super: with self; {
 
   fugashi = callPackage ../development/python-modules/fugashi { };
 
+  fullmoon = callPackage ../development/python-modules/fullmoon { };
+
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
@@ -18046,6 +18048,8 @@ self: super: with self; {
   tidyexc = callPackage ../development/python-modules/tidyexc { };
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
+
+  tiered-debug = callPackage ../development/python-modules/tiered-debug { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
 

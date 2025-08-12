@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "open-timeline-io";
+  pname = "opentimelineio";
   version = "0.17.0";
 
   src = fetchFromGitHub {
