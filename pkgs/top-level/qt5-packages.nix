@@ -39,16 +39,6 @@ makeScopeWithSplicing' {
         in
         (lib.makeOverridable mkFrameworks attrs);
 
-      kdeGear =
-        let
-          mkGear = import ../applications/kde;
-          attrs = {
-            inherit config libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkGear attrs);
-
       noExtraAttrs =
         set:
         lib.attrsets.removeAttrs set [
@@ -61,18 +51,13 @@ makeScopeWithSplicing' {
     in
     (noExtraAttrs (
       kdeFrameworks
-      // kdeGear
       // qt5
       // {
 
         inherit
           kdeFrameworks
-          kdeGear
           qt5
           ;
-
-        # Alias for backwards compatibility. Added 2021-05-07.
-        kdeApplications = kdeGear;
 
         ### LIBRARIES
 
