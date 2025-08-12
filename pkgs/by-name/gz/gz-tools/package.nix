@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Disable automatic shebang patching since we'll do it manually
   dontPatchShebangs = true;
 
-  # Manually fix the shebang after installation
   postFixup = ''
     if [ -f "$out/bin/gz" ]; then
       # Check if it's a text file (script)
