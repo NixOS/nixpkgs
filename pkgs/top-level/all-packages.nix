@@ -14689,8 +14689,6 @@ with pkgs;
 
   plasma-theme-switcher = libsForQt5.callPackage ../applications/misc/plasma-theme-switcher { };
 
-  plasma-pass = libsForQt5.callPackage ../tools/security/plasma-pass { };
-
   inherit
     (callPackages ../applications/misc/redshift {
       inherit (python3Packages)
