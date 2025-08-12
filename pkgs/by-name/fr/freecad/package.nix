@@ -31,6 +31,8 @@
   zlib,
   qt6,
   nix-update-script,
+  gmsh,
+  which,
 }:
 let
   pythonDeps = with python3Packages; [
@@ -119,6 +121,11 @@ freecad-utils.makeCustomizable (
       })
     ];
 
+    postPatch = ''
+      substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
+        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+    '';
+
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
       "-DBUILD_DRAWING=ON"
@@ -145,12 +152,19 @@ freecad-utils.makeCustomizable (
 
     dontWrapGApps = true;
 
-    qtWrapperArgs = [
-      "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-      "--prefix PATH : ${libredwg}/bin"
-      "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-      "\${gappsWrapperArgs[@]}"
-    ];
+    qtWrapperArgs =
+      let
+        binPath = lib.makeBinPath [
+          libredwg
+          which # for locating tools
+        ];
+      in
+      [
+        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+        "--prefix PATH : ${binPath}"
+        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "\${gappsWrapperArgs[@]}"
+      ];
 
     postFixup = ''
       mv $out/share/doc $out
