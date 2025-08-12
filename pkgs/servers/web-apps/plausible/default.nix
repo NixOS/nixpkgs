@@ -10,7 +10,7 @@
   npm-lockfile-fix,
   nix-update-script,
   brotli,
-  tailwindcss_3,
+  tailwindcss_4,
   esbuild,
   ...
 }:
@@ -160,7 +160,7 @@ beamPackages.mixRelease rec {
     cp -r ${tracker} tracker
 
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
+    config :tailwind, path: "${lib.getExe tailwindcss_4}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';
