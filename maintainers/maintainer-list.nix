@@ -15146,6 +15146,12 @@
     github = "m1dugh";
     githubId = 42266017;
   };
+  matrixman = {
+    name = "Matt Rixman";
+    email = "nixpkgs@matt.rixman.org";
+    github = "MatrixManAtYrService";
+    githubId = 5834582;
+  };
   ma27 = {
     email = "maximilian@mbosch.me";
     matrix = "@ma27:nicht-so.sexy";

@@ -9104,6 +9104,8 @@ self: super: with self; {
 
   merge3 = callPackage ../development/python-modules/merge3 { };
 
+  merge-args = callPackage ../development/python-modules/merge-args { };
+
   mergecal = callPackage ../development/python-modules/mergecal { };
 
   mergedb = callPackage ../development/python-modules/mergedb { };
