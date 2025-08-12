@@ -24,8 +24,8 @@ let
     sha256Hash = "sha256-qA7iu4nK+29aHKsUmyQWuwV0SFnv5cYQvFq5CAMKyKw=";
   };
   latestVersion = {
-    version = "2025.1.3.3"; # "Android Studio Narwhal Feature Drop | 2025.1.3 Canary 3"
-    sha256Hash = "sha256-0BdbAJMQi9qgss1IJTMxjQpOjynLFuiY0Vlw5VYCY+c=";
+    version = "2025.1.3.4"; # "Android Studio Narwhal 3 Feature Drop | 2025.1.3 Canary 4"
+    sha256Hash = "sha256-SAdmuuentJZGtjcFAgAedPa9MLAS9vNtWoOI1pPvDhA=";
   };
 in
 {
