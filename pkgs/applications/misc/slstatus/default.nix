@@ -7,8 +7,10 @@
   libX11,
   libXau,
   libXdmcp,
-  conf ? null,
-  patches ? [ ],
+  config,
+  conf ? config.slstatus.conf or null,
+  patches ? config.slstatus.patches or [ ],
+  extraLibs ? config.slstatus.extraLibs or [ ],
   # update script dependencies
   gitUpdater,
 }:
@@ -40,7 +42,8 @@ stdenv.mkDerivation rec {
     libX11
     libXau
     libXdmcp
-  ];
+  ]
+  ++ extraLibs;
 
   installFlags = [ "PREFIX=$(out)" ];
 
