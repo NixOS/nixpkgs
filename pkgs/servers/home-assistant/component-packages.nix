@@ -1607,7 +1607,8 @@
       ];
     "etherscan" =
       ps: with ps; [
-      ]; # missing inputs: python-etherscan-api
+        python-etherscan-api
+      ];
     "eufy" =
       ps: with ps; [
         lakeside
