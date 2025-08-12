@@ -3932,7 +3932,8 @@
       ];
     "netio" =
       ps: with ps; [
-      ]; # missing inputs: pynetio
+        pynetio
+      ];
     "network" =
       ps: with ps; [
         ifaddr
