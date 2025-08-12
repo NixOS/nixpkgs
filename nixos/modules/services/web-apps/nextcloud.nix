@@ -1143,7 +1143,7 @@ in
           "${cfg.home}/store-apps"
         ]
         ++ [
-          "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
+          "f+ ${datadir}/config/override.config.php 0440 nextcloud nextcloud - <?php require_once('${overrideConfig}');"
         ];
 
       services.nextcloud.finalPackage = webroot;
