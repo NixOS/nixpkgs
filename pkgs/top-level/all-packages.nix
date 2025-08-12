@@ -7524,8 +7524,6 @@ with pkgs;
     };
   });
 
-  qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
-
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
