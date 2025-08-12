@@ -2023,7 +2023,6 @@ mapAliases {
   tkimg = tclPackages.tkimg; # Added 2024-10-02
   todiff = throw "'todiff' was removed due to lack of known users"; # Added 2025-01-25
   toil = throw "toil was removed as it was broken and requires obsolete versions of libraries"; # Added 2024-09-22
-  tokodon = plasma5Packages.tokodon;
   tokyo-night-gtk = tokyonight-gtk-theme; # Added 2024-01-28
   tomcat_connectors = apacheHttpdPackages.mod_jk; # Added 2024-06-07
   ton = throw "'ton' has been removed as there were insufficient maintainer resources to keep up with updates"; # Added 2025-04-27
