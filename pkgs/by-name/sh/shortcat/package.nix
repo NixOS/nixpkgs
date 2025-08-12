@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://shortcat.app/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
-    maintainers = [ ];
+    maintainers = [t-monaghan];
     license = licenses.unfreeRedistributable;
   };
 }
