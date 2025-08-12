@@ -2121,7 +2121,7 @@ The following rules are desired to be respected:
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
-* The file is formatted with `nixfmt-rfc-style`.
+* The file is formatted with `nixfmt`.
 * Commit names of Python libraries must reflect that they are Python
   libraries (e.g. `python313Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
 * The current default version of python should be included
