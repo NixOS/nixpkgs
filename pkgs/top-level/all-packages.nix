@@ -15683,8 +15683,6 @@ with pkgs;
 
   py-wacz = with python3Packages; toPythonApplication wacz;
 
-  wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   winePackagesFor =
