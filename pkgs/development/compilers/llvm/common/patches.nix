@@ -12,7 +12,7 @@
     }
     {
       before = "17";
-      path = ../15;
+      path = ../16;
     }
   ];
   "clang/aarch64-tblgen.patch" = [
@@ -24,7 +24,6 @@
   ];
   "lld/add-table-base.patch" = [
     {
-      after = "16";
       path = ../16;
     }
   ];
@@ -67,13 +66,13 @@
     }
     {
       before = "18";
-      path = ../15;
+      path = ../16;
     }
   ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
       before = "17";
-      path = ../15;
+      path = ../16;
     }
     {
       after = "17";
@@ -86,25 +85,24 @@
       path = ../18;
     }
     {
-      after = "16";
       before = "18";
       path = ../16;
     }
   ];
   "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
-      path = ../15;
+      path = ../16;
     }
   ];
   "libunwind/gnu-install-dirs.patch" = [
     {
       before = "17";
-      path = ../15;
+      path = ../16;
     }
   ];
   "compiler-rt/X86-support-extension.patch" = [
     {
-      path = ../15;
+      path = ../16;
     }
   ];
   "compiler-rt/armv6-scudo-libatomic.patch" = [
@@ -114,49 +112,26 @@
     }
     {
       before = "19";
-      path = ../15;
+      path = ../16;
     }
   ];
   "compiler-rt/gnu-install-dirs.patch" = [
     {
       before = "17";
-      path = ../15;
+      path = ../16;
     }
     {
-      after = "16";
       path = ../17;
     }
   ];
   "compiler-rt/darwin-targetconditionals.patch" = [
     {
-      path = ../15;
+      path = ../16;
     }
   ];
   "compiler-rt/normalize-var.patch" = [
     {
-      after = "16";
       path = ../16;
-    }
-    {
-      before = "16";
-      path = ../15;
-    }
-  ];
-  "lldb/procfs.patch" = [
-    {
-      path = ../15;
-    }
-  ];
-  "lldb/resource-dir.patch" = [
-    {
-      before = "16";
-      path = ../15;
-    }
-  ];
-  "llvm/no-pipes.patch" = [
-    {
-      before = "16";
-      path = ../15;
     }
   ];
   "openmp/fix-find-tool.patch" = [
@@ -168,12 +143,7 @@
   ];
   "openmp/run-lit-directly.patch" = [
     {
-      after = "16";
       path = ../16;
-    }
-    {
-      before = "16";
-      path = ../15;
     }
   ];
   "libclc/use-default-paths.patch" = [
@@ -189,7 +159,6 @@
   ];
   "libclc/gnu-install-dirs.patch" = [
     {
-      after = "16";
       before = "21";
       path = ../16;
     }

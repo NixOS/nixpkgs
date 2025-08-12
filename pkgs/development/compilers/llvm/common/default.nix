@@ -115,11 +115,7 @@ let
     tools:
     let
       callPackage = newScope (tools // args // metadata);
-      clangVersion =
-        if (lib.versionOlder metadata.release_version "16") then
-          metadata.release_version
-        else
-          lib.versions.major metadata.release_version;
+      clangVersion = lib.versions.major metadata.release_version;
       mkExtraBuildCommands0 =
         cc:
         ''
@@ -401,20 +397,16 @@ let
       clangNoCompilerRt = tools.clangNoLibcNoRt;
       clangNoLibc = tools.clangNoLibcWithBasicRt;
       clangNoLibcxx = tools.clangWithLibcAndBasicRt;
-    }
-    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "16") {
+
       mlir = callPackage ./mlir { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt {
       };
     }
-    //
-      lib.optionalAttrs
-        (lib.versionAtLeast metadata.release_version "16" && lib.versionOlder metadata.release_version "22")
-        {
-          libclc = callPackage ./libclc { };
-        }
+    // lib.optionalAttrs (lib.versionOlder metadata.release_version "22") {
+      libclc = callPackage ./libclc { };
+    }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
       flang = callPackage ./flang {
         mlir = tools.mlir;

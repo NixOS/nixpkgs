@@ -60,26 +60,10 @@ stdenv.mkDerivation (
     })
     # Pass the correct path to libllvm
     ++ [
-      (replaceVars
-        (
-          if (lib.versionOlder release_version "16") then
-            ./clang-11-15-LLVMgold-path.patch
-          else
-            ./clang-at-least-16-LLVMgold-path.patch
-        )
-        {
-          libllvmLibdir = "${libllvm.lib}/lib";
-        }
-      )
+      (replaceVars ./clang-at-least-16-LLVMgold-path.patch {
+        libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ]
-    # Backport version logic from Clang 16. This is needed by the following patch.
-    ++ lib.optional (lib.versions.major release_version == "15") (fetchpatch {
-      name = "clang-darwin-Use-consistent-version-define-stringifying-logic.patch";
-      url = "https://github.com/llvm/llvm-project/commit/60a33ded751c86fff9ac1c4bdd2b341fbe4b0649.patch?full_index=1";
-      includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
-      stripLen = 1;
-      hash = "sha256-YVTSg5eZLz3po2AUczPNXCK26JA3CuTh6Iqp7hAAKIs=";
-    })
     # Backport `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` support from Clang 17.
     # This is needed by newer SDKs (14+).
     ++ lib.optional (lib.versionOlder (lib.versions.major release_version) "17") (fetchpatch {
@@ -246,7 +230,6 @@ stdenv.mkDerivation (
           )
         ) "stackclashprotection"
         ++ lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
-        ++ lib.optional (lib.versionOlder release_version "16") "strictflexarrays3"
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or [ ]);
     };
 
