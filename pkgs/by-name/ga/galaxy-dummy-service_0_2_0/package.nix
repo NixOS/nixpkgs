@@ -1,14 +1,17 @@
 {
   lib,
   stdenv,
-  comet-gog,
+  comet-gog_0_2_0,
   meson,
   ninja,
   pkgsCross,
 }:
+let
+  comet = comet-gog_0_2_0;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "galaxy-dummy-service";
-  inherit (comet-gog) version src;
+  inherit (comet) version src;
   sourceRoot = "${finalAttrs.src.name}/dummy-service";
 
   nativeBuildInputs = [
@@ -31,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    inherit (comet-gog.meta) changelog homepage license;
+    inherit (comet.meta) changelog homepage license;
   }
   // {
     description = "Dummy Windows service for Galaxy64.dll";

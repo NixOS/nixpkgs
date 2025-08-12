@@ -1,6 +1,5 @@
 {
   lib,
-  gitUpdater,
   fetchFromGitHub,
   python3Packages,
 }:
@@ -40,6 +39,4 @@ python3Packages.buildPythonApplication {
     maintainers = with maintainers; [ aidalgol ];
     mainProgram = "legendary";
   };
-
-  passthru.updateScript = gitUpdater { };
 }

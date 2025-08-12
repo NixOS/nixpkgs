@@ -11,17 +11,23 @@
   # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
   electron_36,
   vulkan-helper,
-  gogdl,
-  legendary-heroic,
-  nile,
-  comet-gog,
-  galaxy-dummy-service,
-  heroic-epic-integration,
+  gogdl_1_1_2,
+  legendary-heroic_0_20_37,
+  nile_1_1_2,
+  comet-gog_0_2_0,
+  galaxy-dummy-service_0_2_0,
+  heroic-epic-integration_0_3,
   umu-launcher,
 }:
 
 let
   electron = electron_36;
+  gogdl = gogdl_1_1_2;
+  legendary = legendary-heroic_0_20_37;
+  nile = nile_1_1_2;
+  comet = comet-gog_0_2_0;
+  galaxy-dummy-service = galaxy-dummy-service_0_2_0;
+  epic-integration = heroic-epic-integration_0_3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
@@ -86,15 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary-heroic}" \
+      "${lib.getExe legendary}" \
       "${lib.getExe nile}" \
-      "${lib.getExe comet-gog}" \
+      "${lib.getExe comet}" \
       "${lib.getExe vulkan-helper}" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
     # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
     cp \
       "${galaxy-dummy-service}/GalaxyCommunication.exe" \
-      "${heroic-epic-integration}/EpicGamesLauncher.exe" \
+      "${epic-integration}/EpicGamesLauncher.exe" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \

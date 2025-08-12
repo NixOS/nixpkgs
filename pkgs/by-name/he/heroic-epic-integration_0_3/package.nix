@@ -1,20 +1,19 @@
 {
   lib,
   stdenv,
-  gitUpdater,
   fetchFromGitHub,
   cmake,
   pkgsCross,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-epic-integration";
-  version = "0.4";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "Etaash-mathamsetty";
     repo = "heroic-epic-integration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pRgs1w4bzm5Ao0zXfaNxBAR8+h7w4I+C+bm4nT7kIgU=";
+    hash = "sha256-Zn0MsaQd8Ro6eu8IQkMcLNGLVTUukwajkn8PRLfB+Yw=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +43,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aidalgol ];
   };
-
-  passthru.updateScript = gitUpdater { };
 })
