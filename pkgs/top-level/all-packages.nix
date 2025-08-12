@@ -7149,7 +7149,13 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
-  flow = callPackage ../development/tools/analysis/flow { };
+  flow = callPackage ../development/tools/analysis/flow {
+    ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
+      self: super: {
+        ppxlib = super.ppxlib.override { version = "0.33.0"; };
+      }
+    );
+  };
 
   fswatch = callPackage ../development/tools/misc/fswatch { };
 

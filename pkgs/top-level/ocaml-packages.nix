@@ -534,15 +534,17 @@ let
 
         elpi = callPackage ../development/ocaml-modules/elpi (
           let
-            ppxlib_0_15 =
-              if lib.versionAtLeast ppxlib.version "0.15" then
-                ppxlib.override { version = "0.15.0"; }
-              else
-                ppxlib;
+            ppx_deriving_ =
+              cap:
+              ppx_deriving.override {
+                ppxlib = ppxlib.override {
+                  version = if lib.versionAtLeast ppxlib.version cap then cap else ppxlib.version;
+                };
+              };
           in
           {
-            ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-            inherit ppxlib_0_15;
+            ppx_deriving_0_15 = ppx_deriving_ "0.15";
+            ppx_deriving = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -1689,7 +1691,9 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
-        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml { };
+        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
+          mdx = mdx.override { inherit logs; };
+        };
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
