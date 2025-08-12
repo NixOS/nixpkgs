@@ -6,7 +6,7 @@
   dpkg,
   libva,
   makeWrapper,
-  commandLineArgs ? "",
+  commandLineArgs ? "--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3",
 }:
 let
   sources = import ./sources.nix;
@@ -31,10 +31,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
     dpkg
-  ];
-
-  buildInputs = [
-    libva
   ];
 
   installPhase = ''
