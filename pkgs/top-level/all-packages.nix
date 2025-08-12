@@ -14821,8 +14821,6 @@ with pkgs;
 
   blas-ilp64 = blas.override { isILP64 = true; };
 
-  cantor = libsForQt5.cantor;
-
   labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
 
   lapack-ilp64 = lapack.override { isILP64 = true; };
