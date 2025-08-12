@@ -1189,9 +1189,7 @@ in
   pinnwand = runTest ./pinnwand.nix;
   plantuml-server = runTest ./plantuml-server.nix;
   plasma-bigscreen = runTest ./plasma-bigscreen.nix;
-  plasma5 = runTest ./plasma5.nix;
   plasma6 = runTest ./plasma6.nix;
-  plasma5-systemd-start = runTest ./plasma5-systemd-start.nix;
   plausible = runTest ./plausible.nix;
   playwright-python = runTest ./playwright-python.nix;
   please = runTest ./please.nix;

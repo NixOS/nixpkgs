@@ -265,6 +265,12 @@ in
       LightDM. Please use the services.displayManager.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "plasma5"
+    ] "the Plasma 5 desktop environment has been removed from nixpkgs, as it has reached EOL upstream.")
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
       services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
       as the underlying package isn't being maintained. Working alternatives are
