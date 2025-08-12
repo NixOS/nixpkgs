@@ -165,7 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_CFLAGS_COMPILE = [
     "-I${finalAttrs.toolchain}/include"
   ]
-  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
+  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE"
+  ++ lib.optionals (lib.versionAtLeast flutterVersion "3.35") [
+    "-Wno-macro-redefined"
+    "-Wno-error=macro-redefined"
+  ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
@@ -254,6 +258,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     popd
+  ''
+  # error: 'close_range' is missing exception specification 'noexcept(true)'
+  + lib.optionalString (lib.versionAtLeast flutterVersion "3.35") ''
+    substituteInPlace src/flutter/third_party/dart/runtime/bin/process_linux.cc \
+      --replace-fail "(unsigned int first, unsigned int last, int flags)" "(unsigned int first, unsigned int last, int flags) noexcept(true)"
+  ''
+  + ''
     popd
   '';
 
