@@ -15,7 +15,6 @@
   # Whether to support XDG portals at all
   xdgDesktopPortalSupport ? (
     plasma6XdgDesktopPortalSupport
-    || plasma5XdgDesktopPortalSupport
     || lxqtXdgDesktopPortalSupport
     || gnomeXdgDesktopPortalSupport
     || hyprlandXdgDesktopPortalSupport
@@ -25,9 +24,6 @@
 
   # This is Plasma 6 (KDE) XDG portal support
   plasma6XdgDesktopPortalSupport ? false,
-
-  # This is Plasma 5 (KDE) XDG portal support
-  plasma5XdgDesktopPortalSupport ? false,
 
   # This is LXQT XDG portal support
   lxqtXdgDesktopPortalSupport ? false,
@@ -222,7 +218,6 @@ let
     ]
     ++ lib.optional xdgDesktopPortalSupport pkgs.xdg-desktop-portal
     ++ lib.optional plasma6XdgDesktopPortalSupport pkgs.kdePackages.xdg-desktop-portal-kde
-    ++ lib.optional plasma5XdgDesktopPortalSupport pkgs.plasma5Packages.xdg-desktop-portal-kde
     ++ lib.optional lxqtXdgDesktopPortalSupport pkgs.lxqt.xdg-desktop-portal-lxqt
     ++ lib.optionals gnomeXdgDesktopPortalSupport [
       pkgs.xdg-desktop-portal-gnome
