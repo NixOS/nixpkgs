@@ -13,14 +13,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kcc";
-  version = "8.0.4";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ciromattia";
     repo = "kcc";
     tag = "v${version}";
-    hash = "sha256-8rnuSGlfwH5AVp8GQn3RTtiTYFdTNp7Wqq+ATibpkNA=";
+    hash = "sha256-J4nuVY5eOmHziteLvoBf/+CAY0X/7wBbRtPoIgdd5MA=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     packaging # undeclared dependency
+    pymupdf
     pyside6
     pillow
     psutil
