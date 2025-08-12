@@ -41,10 +41,7 @@ let
   # TODO: Make this account for GCC having libstdcxx, which will help
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
-  isDarwinStatic =
-    stdenv.hostPlatform.isDarwin
-    && stdenv.hostPlatform.isStatic
-    && lib.versionAtLeast release_version "16";
+  isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 in
@@ -97,10 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/pull/186575
     ./darwin-plistbuddy-workaround.patch
   ]
-  ++
-    lib.optional (lib.versions.major release_version == "15")
-      # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
-      ./armv7l-15.patch
   ++ lib.optionals (lib.versionOlder release_version "18") [
     # Fix build on armv6l
     ./armv6-scudo-no-yield.patch
@@ -191,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) (
-    lib.optionals (lib.versionAtLeast release_version "16") [
+    [
       (lib.cmakeFeature "CMAKE_LIPO" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo")
     ]
     ++ lib.optionals (!haveLibcxx) [
@@ -255,16 +248,12 @@ stdenv.mkDerivation (finalAttrs: {
             --replace-fail 'find_program(CODESIGN codesign)' ""
         '';
 
-  preConfigure =
-    lib.optionalString (lib.versionOlder release_version "16" && !haveLibc) ''
-      cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cmakeFlagsArray+=(
-        "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
-        "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
-      )
-    '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
+    )
+  '';
 
   # Hack around weird upstream RPATH bug
   postInstall =
