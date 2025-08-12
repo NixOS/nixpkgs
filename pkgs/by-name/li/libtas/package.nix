@@ -10,6 +10,7 @@
   ffmpeg,
   lua5_4,
   qt5,
+  xorg,
   file,
   binutils,
   makeDesktopItem,
@@ -64,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
           file
           binutils
           ffmpeg
+        ]
+      } \
+      --suffix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libXi
         ]
       } \
       --set-default LIBTAS_SO_PATH $out/lib/libtas.so
