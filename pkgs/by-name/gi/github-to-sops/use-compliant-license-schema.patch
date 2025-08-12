@@ -1,0 +1,22 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 5f4c177..573b655 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,14 +4,9 @@ version = "2.0.0"
+ description = "Standalone (no-dependencies beyond Python) script fetches SSH keys of GitHub repository contributors and generates SOPS-compatible SSH key files."
+ readme = "README.md"
+ requires-python = ">=3.8"
+-authors = [{name = "Taras Glek"}]
+-license = {text = "MIT"}
+-classifiers = [
+-    "License :: OSI Approved :: MIT License"
+-]
+-dependencies = [
+-
+-]
++authors = [{ name = "Taras Glek" }]
++license = "MIT"
++dependencies = []
+ 
+ [build-system]
+ requires = ["setuptools", "wheel"]
