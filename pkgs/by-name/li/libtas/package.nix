@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           xorg.libXi
+          ffmpeg.lib
         ]
       } \
       --set-default LIBTAS_SO_PATH $out/lib/libtas.so
