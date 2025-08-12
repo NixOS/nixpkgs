@@ -39,17 +39,6 @@ makeScopeWithSplicing' {
         in
         (lib.makeOverridable mkFrameworks attrs);
 
-      plasma5 =
-        let
-          mkPlasma5 = import ../desktops/plasma-5;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) config lib fetchurl;
-            inherit (pkgs) gsettings-desktop-schemas;
-          };
-        in
-        (lib.makeOverridable mkPlasma5 attrs);
-
       kdeGear =
         let
           mkGear = import ../applications/kde;
@@ -72,15 +61,12 @@ makeScopeWithSplicing' {
     in
     (noExtraAttrs (
       kdeFrameworks
-      // plasma5
-      // plasma5.thirdParty
       // kdeGear
       // qt5
       // {
 
         inherit
           kdeFrameworks
-          plasma5
           kdeGear
           qt5
           ;
