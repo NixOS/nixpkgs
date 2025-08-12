@@ -74,7 +74,7 @@ self: super: {
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
   # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_2_0_7;
+  os-string = doDistribute self.os-string_2_0_8;
 
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
