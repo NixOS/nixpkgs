@@ -12,6 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   urllib3,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-text-v${version}";
+    tag = "microsoft-kiota-http-v${version}";
     hash = "sha256-59vuJc7Wb/6PsPA4taAFA2UK8bdz+raZ+NB4S8LahtM=";
   };
 
@@ -49,10 +50,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_http" ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-http-v";
+  };
+
   meta = with lib; {
     description = "HTTP request adapter implementation for Kiota clients for Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/http/httpx";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-http-${src.tag}";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
