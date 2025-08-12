@@ -418,7 +418,7 @@ in
       };
 
       passwordFile = mkOption {
-        type = types.nullOr types.path;
+        type = types.nullOr config.contracts.secret.consumer;
         default = null;
         example = "/path/to/password/file";
         description = ''
@@ -432,11 +432,11 @@ in
       };
 
       jwtSecretKeyFile = mkOption {
-        type = types.path;
+        type = config.contracts.secret.consumer;
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
       sessionStoreKeyFile = mkOption {
-        type = types.path;
+        type = config.contracts.secret.consumer;
         description = "Path to file containing a secret for session store.";
       };
 
@@ -479,6 +479,26 @@ in
       scrapers_path = mkIf (!cfg.mutableScrapers) cfg.scrapers;
     };
 
+    # I would prefer to have these in the "default" attr of the `services.stash.passwordFile` option
+    # but I couldn't make it work.
+    services.stash.passwordFile.input = mkIf (cfg.passwordFile != null) {
+      owner = cfg.user;
+      group = cfg.group;
+      mode = "0400";
+    };
+    # Just as an example, this is forbidden thanks to the readOnly property in consumer.output;
+    # services.stash.jwtSecretKeyFile.output.path = "/ash";
+    services.stash.jwtSecretKeyFile.input = {
+      owner = cfg.user;
+      group = cfg.group;
+      mode = "0400";
+    };
+    services.stash.sessionStoreKeyFile.input = {
+      owner = cfg.user;
+      group = cfg.group;
+      mode = "0400";
+    };
+
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.port ];
 
     users.users.${cfg.user} = {
@@ -514,9 +534,9 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
-                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
-                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
+                  password=$(< ${cfg.passwordFile.output.path}) \
+                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile.output.path}) \
+                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile.output.path}) \
                   ${lib.getExe pkgs.yq-go} '
                     .jwt_secret_key = strenv(jwtSecretKeyFile) |
                     .session_store_key = strenv(sessionStoreKeyFile) |

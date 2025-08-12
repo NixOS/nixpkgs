@@ -48,6 +48,10 @@
   ./config/xdg/sounds.nix
   ./config/xdg/terminal-exec.nix
   ./config/zram.nix
+  ./contracts/default.nix
+  ./contracts/fileBackup.nix
+  ./contracts/secret.nix
+  ./contracts/streamingBackup.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
@@ -1891,6 +1895,7 @@
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
   ./testing/service-runner.nix
+  ./testing/hardcodedSecret.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/appvm.nix
   ./virtualisation/build-vm.nix

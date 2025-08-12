@@ -9,16 +9,20 @@ import ./make-test-python.nix (
     name = "stash";
     meta.maintainers = pkgs.stash.meta.maintainers;
 
-    nodes.machine = {
+    nodes.machine = { config, ... }: {
+      imports = [
+        ../modules/testing/hardcodedSecret.nix
+      ];
+
       services.stash = {
         inherit dataDir;
         enable = true;
 
         username = "test";
-        passwordFile = pkgs.writeText "stash-password" "MyPassword";
+        passwordFile.provider = config.testing.hardcodedSecret."stash-password".secret;
 
-        jwtSecretKeyFile = pkgs.writeText "jwt_secret_key" "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        sessionStoreKeyFile = pkgs.writeText "session_store_key" "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+        jwtSecretKeyFile.provider = config.testing.hardcodedSecret."jwt_secret_key".secret;
+        sessionStoreKeyFile.provider = config.testing.hardcodedSecret."session_store_key".secret;
 
         plugins =
           let
@@ -62,6 +66,18 @@ import ./make-test-python.nix (
 
           stash = [ { path = "/srv"; } ];
         };
+      };
+      testing.hardcodedSecret."stash-password" = {
+        secret.consumer = config.services.stash.passwordFile;
+        content = "MyPassword";
+      };
+      testing.hardcodedSecret."jwt_secret_key" = {
+        secret.consumer = config.services.stash.jwtSecretKeyFile;
+        content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+      };
+      testing.hardcodedSecret."session_store_key" = {
+        secret.consumer = config.services.stash.sessionStoreKeyFile;
+        content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
       };
     };
 

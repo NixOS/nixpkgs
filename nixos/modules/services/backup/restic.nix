@@ -16,7 +16,7 @@ in
     '';
     type = lib.types.attrsOf (
       lib.types.submodule (
-        { name, ... }:
+        mod@{ name, ... }:
         {
           options = {
             passwordFile = lib.mkOption {
@@ -302,7 +302,77 @@ in
               '';
               example = 0.1;
             };
+
+            fileBackup = lib.mkOption {
+              type = lib.types.nullOr config.contracts.fileBackup.provider;
+              default = null;
+            };
+            streamingBackup = lib.mkOption {
+              type = lib.types.nullOr config.contracts.streamingBackup.provider;
+              default = null;
+            };
           };
+
+          config = lib.mkMerge [
+            (lib.mkIf (mod.config.fileBackup.input != null) (let
+              inherit (mod.config) fileBackup;
+            in {
+              user = fileBackup.input.user;
+              paths = fileBackup.input.sourceDirectories;
+              backupPrepareCommand = lib.concatStringsSep "\n" fileBackup.input.hooks.beforeBackup;
+              backupCleanupCommand = lib.concatStringsSep "\n" fileBackup.input.hooks.afterBackup;
+              exclude = fileBackup.input.excludePatterns;
+            }))
+            {
+              fileBackup.output = {
+                backupService = "restic-backups-${name}.service";
+                restoreScript = lib.getExe (pkgs.writeShellApplication {
+                  name = "restic-${name}";
+                  text = ''
+                    if [ "$1" = "snapshots" ]; then
+                      restic-${name} snapshots
+                    elif [ "$1" = "restore" ]; then
+                      shift
+                      restic-${name} restore "$1" --target /
+                    fi
+                  '';
+                });
+              };
+            }
+
+            (lib.mkIf (mod.config.streamingBackup.input != null) (let
+              inherit (mod.config.streamingBackup) input;
+            in {
+              extraBackupArgs =
+                (let
+                  dumpCmd = lib.getExe (pkgs.writeShellApplication {
+                    name = "dump.sh";
+                    text = input.backupCmd;
+                  });
+                in
+                  [
+                    "--stdin-filename ${input.backupName} --stdin-from-command -- ${dumpCmd}"
+                  ]);
+            }))
+            (let
+              inherit (mod.config.streamingBackup) input;
+            in {
+              streamingBackup.output = {
+                backupService = "restic-backups-${name}.service";
+                restoreScript = lib.getExe (pkgs.writeShellApplication {
+                  name = "restic-${name}";
+                  text = ''
+                    if [ "$1" = "snapshots" ]; then
+                      restic-${name} snapshots
+                    elif [ "$1" = "restore" ]; then
+                      shift
+                      restic-${name} dump "$1" ${input.backupName} | ${input.restoreCmd}
+                    fi
+                  '';
+                });
+              };
+            })
+          ];
         }
       )
     );
@@ -351,7 +421,7 @@ in
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
         filesFromTmpFile = "/run/restic-backups-${name}/includes";
-        doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
+        doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]) || (backup.extraBackupArgs != []);
         pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
           (resticCmd + " unlock")
           (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
@@ -399,8 +469,10 @@ in
             ExecStart =
               (lib.optionals doBackup [
                 "${resticCmd} backup ${
+                  lib.optionalString ((backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null) "--files-from=${filesFromTmpFile}"
+                } ${
                   lib.concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)
-                } --files-from=${filesFromTmpFile}"
+                }"
               ])
               ++ pruneCmd
               ++ checkCmd;
@@ -435,7 +507,7 @@ in
             ${lib.optionalString (backup.backupCleanupCommand != null) ''
               ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
             ''}
-            ${lib.optionalString doBackup ''
+            ${lib.optionalString ((backup.paths != null && backup.paths != [ ]) || backup.dynamicFilesFrom != null) ''
               rm ${filesFromTmpFile}
             ''}
           '';
@@ -451,25 +523,28 @@ in
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
-    environment.systemPackages = lib.mapAttrsToList (
+    environment.systemPackages = (lib.mapAttrsToList (
       name: backup:
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
         resticCmd = "${lib.getExe backup.package}${extraOptions}";
       in
-      pkgs.writeShellScriptBin "restic-${name}" ''
-        set -a  # automatically export variables
-        ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
-        # set same environment variables as the systemd service
-        ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-          (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrs (_: v: "${v}"))
-          (lib.toShellVars)
-        ]}
-        PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+        # [
+          (pkgs.writeShellScriptBin "restic-${name}" ''
+            set -a  # automatically export variables
+            ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+            # set same environment variables as the systemd service
+            ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+              (lib.filterAttrs (n: v: v != null && n != "PATH"))
+              (lib.mapAttrs (_: v: "${v}"))
+              (lib.toShellVars)
+            ]}
+            PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-        exec ${resticCmd} "$@"
-      ''
-    ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
+            exec ${resticCmd} "$@"
+          '')
+          # backup.streamingBackup.output.restoreScript
+        # ]
+    ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups));
   };
 }
