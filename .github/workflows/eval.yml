@@ -57,7 +57,7 @@ jobs:
   eval:
     runs-on: ubuntu-24.04-arm
     needs: versions
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && !failure() }}
     strategy:
       fail-fast: false
       matrix:
@@ -197,7 +197,7 @@ jobs:
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: needs.eval.outputs.targetRunId
+    if: needs.eval.outputs.targetRunId && !cancelled() && !failure()
     permissions:
       statuses: write
     timeout-minutes: 5
