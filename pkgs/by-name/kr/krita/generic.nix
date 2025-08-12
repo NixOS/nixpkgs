@@ -27,7 +27,7 @@
   fribidi,
   libaom,
   libheif,
-  libkdcraw,
+  #libkdcraw,
   lcms2,
   gsl,
   openexr,
@@ -109,7 +109,7 @@ mkDerivation rec {
     lager
     libaom
     libheif
-    libkdcraw
+    #libkdcraw
     giflib
     libjxl
     mlt
