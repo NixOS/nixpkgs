@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
-  gitUpdater,
   lib,
+  nix-update-script,
   rustPlatform,
 }:
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9wXnxsgZZprUez3PggBWbTU/Vx7JFkNC7fuOiqWG87Y=";
   };
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   cargoHash = "sha256-OfnCKFWUxpFu6NU4MNMCimXAbhspBf1n6Qz5ff7MHI4=";
 
