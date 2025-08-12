@@ -5,7 +5,6 @@
   unzip,
   ...
 }:
-
 stdenv.mkDerivation rec {
   pname = "shortcat";
   version = "0.11.4";
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://shortcat.app/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ t-monaghan ];
     license = licenses.unfreeRedistributable;
   };
 }
