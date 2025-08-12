@@ -27,19 +27,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "edestcroix";
     repo = "Recordbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o2cKVRpuAwE+/TI5mwtSvkCFaXN349GP9dDlgdh3Luk=";
+    hash = "sha256-9rrVlD+ODl+U9bPzbXGLQBLkbnfAm4SmJHRcVife33A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0/tKL5UW1QuhsddivU/r8n3T3xyRaGLRVpKuXcc4fmU=";
+    hash = "sha256-W60X69/fEq/X6AK1sbT6rb+SsF/oPzfUvrar0fihr88=";
   };
 
   strictDeps = true;
