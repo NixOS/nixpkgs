@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "lnch";
-  version = "unstable-2021-08-15";
+  version = "0-unstable-2021-08-15";
 
   src = fetchFromGitHub {
     owner = "oem";

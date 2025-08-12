@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.29.1";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = version;
-    hash = "sha256-i3rGPKptsFD/IE4vGpWC0HTKoqAtjQ6gkVhZbfYn2bo=";
+    hash = "sha256-tJErux/90zXaV0ViGJOQKMf1yYCxMhH1nMrQlXlHw/Y=";
   };
 
   postPatch = ''
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
-    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
   };

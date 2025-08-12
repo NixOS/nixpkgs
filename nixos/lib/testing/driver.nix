@@ -91,7 +91,7 @@ let
 
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
-            < ${lib.escapeShellArg "driver-symbols"}
+            cat ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 

@@ -94,10 +94,15 @@ buildPythonPackage rec {
     "test_simulate_raw_bem"
   ];
 
-  pytestFlagsArray = [
-    "-m 'not (slowtest or ultraslowtest or pgtest)'"
+  pytestFlag = [
     # removes 700k lines form pytest log, remove this when scipy is at v1.17.0
     "--disable-warnings"
+  ];
+
+  disabledTestMarks = [
+    "slowtest"
+    "ultraslowtest"
+    "pgtest"
   ];
 
   pythonImportsCheck = [ "mne" ];

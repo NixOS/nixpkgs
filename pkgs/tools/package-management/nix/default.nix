@@ -151,32 +151,6 @@ lib.makeExtensible (
   self:
   (
     {
-      nix_2_3 =
-        (commonAutoconf {
-          version = "2.3.18";
-          hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
-          patches = [
-            patch-monitorfdhup
-          ];
-          self_attribute_name = "nix_2_3";
-          knownVulnerabilities = [
-            "CVE-2024-38531"
-            "CVE-2024-47174"
-            "CVE-2025-46415"
-            "CVE-2025-46416"
-            "CVE-2025-52991"
-            "CVE-2025-52992"
-            "CVE-2025-52993"
-          ];
-          maintainers = with lib.maintainers; [ flokli ];
-          teams = [ ];
-        }).overrideAttrs
-          {
-            # https://github.com/NixOS/nix/issues/10222
-            # spurious test/add.sh failures
-            enableParallelChecking = false;
-          };
-
       nix_2_24 = commonAutoconf {
         version = "2.24.15";
         hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
@@ -204,14 +178,14 @@ lib.makeExtensible (
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
       nixComponents_2_30 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.30.1";
+        version = "2.30.2";
         inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
           tag = version;
-          hash = "sha256-4+xPVJBeYLlIn+fOS5F0iq/DclpCXnmh4Y7VzAIr/a8=";
+          hash = "sha256-U46fAs+j2PfWWqP1zNi1odhnV4030SQ0RoEC8Eah1OQ=";
         };
       };
 
@@ -231,24 +205,7 @@ lib.makeExtensible (
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_29;
-
-      # The minimum Nix version supported by Nixpkgs
-      # Note that some functionality *might* have been backported into this Nix version,
-      # making this package an inaccurate representation of what features are available
-      # in the actual lowest minver.nix *patch* version.
-      minimum =
-        let
-          minver = import ../../../../lib/minver.nix;
-          major = lib.versions.major minver;
-          minor = lib.versions.minor minver;
-          attribute = "nix_${major}_${minor}";
-          nix = self.${attribute};
-        in
-        if !self ? ${attribute} then
-          throw "The minimum supported Nix version is ${minver} (declared in lib/minver.nix), but pkgs.nixVersions.${attribute} does not exist."
-        else
-          nix;
+      latest = self.nix_2_30;
 
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_28;
@@ -269,6 +226,7 @@ lib.makeExtensible (
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
 
+        minimum = throw "nixVersions.minimum has been removed. Use a specific version instead.";
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
       }
     )

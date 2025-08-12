@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "apio udev rules list";
+    description = "Apio udev rules list";
     homepage = "https://github.com/FPGAwars/apio";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;

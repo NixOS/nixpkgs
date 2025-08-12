@@ -12,6 +12,11 @@
 
 let
   pnpm' = pnpm;
+
+  supportedFetcherVersions = [
+    1 # First version. Here to preserve backwards compatibility
+    2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
+  ];
 in
 {
   fetchDeps = lib.makeOverridable (
@@ -48,6 +53,10 @@ in
 
     assert (lib.throwIf (fetcherVersion == null)
       "pnpm.fetchDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
+    ) true;
+
+    assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
+      "pnpm.fetchDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (builtins.map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
     stdenvNoCC.mkDerivation (

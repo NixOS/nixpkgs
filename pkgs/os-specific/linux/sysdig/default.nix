@@ -187,7 +187,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
+    description = "Tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = with lib.licenses; [
       asl20
       gpl2Only

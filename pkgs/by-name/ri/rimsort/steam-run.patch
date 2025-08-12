@@ -1,0 +1,26 @@
+diff --git a/app/utils/generic.py b/app/utils/generic.py
+--- a/app/utils/generic.py
++++ b/app/utils/generic.py
+@@ -255,7 +255,7 @@
+                 popen_args.extend(args)
+                 p = subprocess.Popen(popen_args)
+             else:
+-                popen_args = [executable_path]
++                popen_args = ["@steam-run@/bin/steam-run", executable_path]
+                 popen_args.extend(args)
+ 
+                 if sys.platform == "win32":
+diff --git a/app/utils/steam/steamcmd/wrapper.py b/app/utils/steam/steamcmd/wrapper.py
+--- a/app/utils/steam/steamcmd/wrapper.py
++++ b/app/utils/steam/steamcmd/wrapper.py
+@@ -316,8 +316,8 @@
+                 script_output.write("\n".join(script))
+             runner.message(f"Compiled & using script: {script_path}")
+             runner.execute(
+-                self.steamcmd,
+-                [f'+runscript "{script_path}"'],
++                "@steam-run@/bin/steam-run",
++                [self.steamcmd,  f'+runscript "{script_path}"'],
+                 len(publishedfileids),
+             )
+         else:

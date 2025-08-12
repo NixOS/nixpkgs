@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
+    description = "Performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
     homepage = "https://github.com/tconbeer/textual-fastdatatable";
     changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/${src.tag}";
     license = lib.licenses.mit;

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/sphinx-doc/alabaster/blob/${src.rev}/docs/changelog.rst";
     homepage = "https://github.com/sphinx-doc/alabaster";
-    description = "A light, configurable Sphinx theme";
+    description = "Light, configurable Sphinx theme";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.sphinx ];
   };

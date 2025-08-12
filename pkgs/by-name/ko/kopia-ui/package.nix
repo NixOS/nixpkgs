@@ -10,12 +10,12 @@
   kopia,
 }:
 let
-  version = "0.21.0";
+  version = "0.21.1";
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-M4qI8CzIIeoUqCvi8wc7s2CItPFN+1scHdwACy9vw/4=";
+    hash = "sha256-0i8bKah3a7MrgzATysgFCsmDZxK9qH+4hmBMW+GR9/4=";
   };
 in
 buildNpmPackage {

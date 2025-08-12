@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     tag = "v${version}";
-    hash = "sha256-cgcoxDTfXeP2w1k8Miw8zY1Bln0XpTdtUY13SSvrHXw=";
+    hash = "sha256-wILjBhdlNU8U2lyJm4CmPy4DzOjJ7cBIkawKwW5KVgg=";
   };
 
   build-system = [ setuptools ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
-    changelog = "https://github.com/nats-io/nats.py/releases/tag/v${version}";
+    changelog = "https://github.com/nats-io/nats.py/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

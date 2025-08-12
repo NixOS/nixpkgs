@@ -9,6 +9,9 @@ inputs:
   merged-as-untrusted:
     description: "Whether to checkout the merge commit in the ./untrusted folder."
     type: boolean
+  pinnedFrom:
+    description: "Whether to checkout the pinned nixpkgs for CI and from where (trusted, untrusted)."
+    type: string
   targetSha:
     description: "The target commit SHA, previously collected."
     type: string
@@ -83,13 +86,36 @@ runs:
       # Would be great to do the checkouts in git worktrees of the existing spare checkout instead,
       # but Nix is broken with them:
       # https://github.com/NixOS/nix/issues/6073
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         ref: ${{ inputs.mergedSha || steps.commits.outputs.mergedSha }}
         path: untrusted
 
     - if: inputs.target-as-trusted && (inputs.targetSha || steps.commits.outputs.targetSha)
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         ref: ${{ inputs.targetSha || steps.commits.outputs.targetSha }}
         path: trusted
+
+    - if: inputs.pinnedFrom
+      id: pinned
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        PINNED_FROM: ${{ inputs.pinnedFrom }}
+      with:
+        script: |
+          const path = require('node:path')
+          const pinned = require(path.resolve(path.join(process.env.PINNED_FROM, 'ci', 'pinned.json')))
+          core.setOutput('pinnedSha', pinned.pins.nixpkgs.revision)
+
+    - if: steps.pinned.outputs.pinnedSha
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        ref: ${{ steps.pinned.outputs.pinnedSha }}
+        path: pinned
+        sparse-checkout: |
+          lib
+          maintainers
+          nixos/lib
+          pkgs
+

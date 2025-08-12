@@ -461,10 +461,5 @@ stdenv.mkDerivation (finalAttrs: {
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
-    # Builds, but can't actually compile anything
-    # https://github.com/NixOS/nixpkgs/issues/311930
-    # https://github.com/rust-lang/rust/issues/55120
-    # https://github.com/rust-lang/rust/issues/82521
-    broken = stdenv.hostPlatform.useLLVM;
   };
 })

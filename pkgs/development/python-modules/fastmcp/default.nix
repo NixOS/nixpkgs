@@ -10,31 +10,35 @@
 
   # dependencies
   authlib,
+  cyclopts,
   exceptiongroup,
   httpx,
   mcp,
   openapi-pydantic,
+  pydantic,
+  pyperclip,
   python-dotenv,
   rich,
-  typer,
 
   # tests
   dirty-equals,
+  email-validator,
   fastapi,
+  pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.8.0";
+  version = "2.10.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-FleJkqdUIhGsV+DVYv/Nf5IORntH/aFq9abKn2r/6Is=";
+    hash = "sha256-Wxugk2ocuur710WZLG7xph2R/n02Y9BvH7Lf4BuEMYs=";
   };
 
   postPatch = ''
@@ -49,28 +53,51 @@ buildPythonPackage rec {
 
   dependencies = [
     authlib
+    cyclopts
     exceptiongroup
     httpx
     mcp
     openapi-pydantic
+    pyperclip
     python-dotenv
     rich
-    typer
   ];
 
   pythonImportsCheck = [ "fastmcp" ];
 
   nativeCheckInputs = [
     dirty-equals
+    email-validator
     fastapi
+    pydantic
+    pytest-asyncio
     pytest-httpx
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ pydantic.optional-dependencies.email;
 
   disabledTests = [
     # AssertionError: assert 'INFO' == 'DEBUG'
     "test_temporary_settings"
+
+    # RuntimeError: Client failed to connect: Connection close
+    "test_keep_alive_maintains_session_across_multiple_calls"
+    "test_keep_alive_false_starts_new_session_across_multiple_calls"
+    "test_keep_alive_starts_new_session_if_manually_closed"
+    "test_keep_alive_maintains_session_if_reentered"
+    "test_close_session_and_try_to_use_client_raises_error"
+
+    # RuntimeError: Client failed to connect: Timed out while waiting for response
+    "test_timeout"
+    "test_timeout_tool_call_overrides_client_timeout_even_if_lower"
+
+    # assert 0 == 2
+    "test_multi_client"
+
+    # fastmcp.exceptions.ToolError: Unknown tool
+    "test_multi_client_with_logging"
+    "test_multi_client_with_elicitation"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -87,7 +114,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The fast, Pythonic way to build MCP servers and clients";
+    description = "Fast, Pythonic way to build MCP servers and clients";
     changelog = "https://github.com/jlowin/fastmcp/releases/tag/v${version}";
     homepage = "https://github.com/jlowin/fastmcp";
     license = lib.licenses.asl20;

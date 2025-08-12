@@ -21,8 +21,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoPatches = [
     (fetchpatch {
       name = "git2-version.patch";

@@ -42,13 +42,13 @@ assert lib.asserts.assertOneOf "buildMaximumColorFonts" buildMaximumColorFonts [
 
 stdenvNoCC.mkDerivation rec {
   pname = "openmoji";
-  version = "15.1.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
     repo = pname;
     rev = version;
-    hash = "sha256-k37MsBbRUZ4vIEPAgVMiCK8gz377DWwAfjjjOassNMY=";
+    hash = "sha256-4dYtLaABu88z25Ud/cuOECajxSJWR01qcTIZNWN7Fhw=";
   };
 
   patches = [

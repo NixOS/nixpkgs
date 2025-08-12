@@ -44,6 +44,7 @@ let
         };
         passthru = {
           inherit provider;
+          inherit (provider) version;
         }
         // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
           binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);

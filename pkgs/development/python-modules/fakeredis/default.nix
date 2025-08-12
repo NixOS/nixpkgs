@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fakeredis" ];
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   preCheck = ''
     redisTestPort=6390

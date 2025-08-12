@@ -4,14 +4,6 @@
 
   cudaPackages,
 
-  cudaPackages_11_0,
-  cudaPackages_11_1,
-  cudaPackages_11_2,
-  cudaPackages_11_3,
-  cudaPackages_11_4,
-  cudaPackages_11_5,
-  cudaPackages_11_6,
-  cudaPackages_11_7,
   cudaPackages_11_8,
   cudaPackages_11,
 

@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel_base";
   # Picked this version over 6.3 because much easier to get to build
   # and it matches the version torch 2.6 wants
-  version = "6.4.0-unstable-20241220";
+  version = "6.4.0-unstable-2024-12-20";
 
   outputs = [
     "out"

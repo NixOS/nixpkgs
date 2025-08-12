@@ -28,6 +28,18 @@ python3Packages.buildPythonApplication rec {
     pytest-asyncio
   ];
 
+  disabledTests = [
+    # AssertionError: expected call not found.
+    # Expected: mock(PromptReference(type='ref/prompt', name='name'), CompletionArgument(name='name', value='value'))
+    #   Actual: mock(PromptReference(type='ref/prompt', name='name'), CompletionArgument(name='name', value='value'), None)
+    "test_call_tool[server-AsyncMock]"
+    "test_call_tool[proxy-AsyncMock]"
+    "test_complete[server-AsyncMock]"
+    "test_complete[proxy-AsyncMock]"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "MCP server which proxies other MCP servers from stdio to SSE or from SSE to stdio";
     homepage = "https://github.com/sparfenyuk/mcp-proxy";

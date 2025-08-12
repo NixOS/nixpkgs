@@ -341,7 +341,7 @@ stdenv.mkDerivation (finalAttrs: {
     {
       # Very broken on Darwin
       broken = stdenv.hostPlatform.isDarwin;
-      description = "The Flutter engine";
+      description = "Flutter engine";
       homepage = "https://flutter.dev";
       maintainers = with maintainers; [ RossComputerGuy ];
       license = licenses.bsd3;

@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.build2.org/";
-    description = "build2 build system";
+    description = "Build2 build system";
     license = licenses.mit;
     longDescription = ''
       build2 is an open source (MIT), cross-platform build toolchain

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch2,
   gettext,
   meson,
   mesonEmulatorHook,
@@ -110,6 +111,14 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   doCheck = true;
+
+  patches = [
+    (fetchpatch2 {
+      name = "make-dbus-dep-optional.patch";
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/31b5a793cd40cdce032e0f7d7c3ef7841c6e3691.patch?full_index=1";
+      hash = "sha256-YoWJEa2bFIjZdPW9pJ3iHTxi0dvveYDjKaDokcIvnj8=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs \

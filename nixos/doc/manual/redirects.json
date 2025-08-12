@@ -1206,6 +1206,15 @@
   "module-services-mautrix-signal-migrate-configuration": [
     "index.html#module-services-mautrix-signal-migrate-configuration"
   ],
+  "module-services-mautrix-whatsapp": [
+    "index.html#module-services-mautrix-whatsapp"
+  ],
+  "module-services-mautrix-whatsapp-configuration": [
+    "index.html#module-services-mautrix-whatsapp-configuration"
+  ],
+  "module-services-mautrix-whatsapp-migrate-configuration": [
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
+  ],
   "module-services-maubot": [
     "index.html#module-services-maubot"
   ],

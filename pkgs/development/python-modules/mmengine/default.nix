@@ -107,16 +107,16 @@ buildPythonPackage rec {
       export MKL_NUM_THREADS=1
     '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # Require unpackaged aim
-    "--deselect tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
+    "tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
     # Cannot find SSL certificate
     # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
-    "--deselect tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
+    "tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
 
     # AttributeError: type object 'MagicMock' has no attribute ...
-    "--deselect tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
+    "tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
   ];
 
   disabledTests = [

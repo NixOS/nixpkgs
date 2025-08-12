@@ -34,7 +34,7 @@ let
     preBuild = "cd coq-menhirlib/src";
     meta = {
       homepage = "https://gitlab.inria.fr/fpottier/menhir/-/tree/master/coq-menhirlib";
-      description = "A support library for verified Coq parsers produced by Menhir";
+      description = "Support library for verified Coq parsers produced by Menhir";
       license = lib.licenses.lgpl3Plus;
       maintainers = with lib.maintainers; [ damhiya ];
     };

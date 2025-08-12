@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "dclxvi";
-  version = "unstable-2013-01-27";
+  version = "0-unstable-2013-01-27";
 
   src = fetchFromGitHub {
     owner = "agl";

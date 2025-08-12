@@ -109,6 +109,8 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{cxxtest-4.4,nvtt,premake-core,spidermonkey,spirv-reflect}
 
@@ -138,6 +140,8 @@ stdenv.mkDerivation rec {
 
     # Move to the build directory.
     pushd build/workspaces/gcc
+
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;

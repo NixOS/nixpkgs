@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WtdzrtTqeDN0N50KLry95ijYfCP8xIY+ZSRtVbWLw/g=";
+    hash = "sha256-C2Tv/R8bIKAG0E1vcZyS2fs2Pr26+luinPsjCqbboR0=";
   };
 
   bazelapi = fetchurl {

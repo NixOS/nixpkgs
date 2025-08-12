@@ -129,27 +129,35 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs = [
-    libxkbcommon
-    (libepoxy.override { inherit x11Support; })
-    isocodes
-  ]
-  ++ lib.optionals trackerSupport [
-    tinysparql
-  ];
+  buildInputs =
+    lib.optionals (x11Support || waylandSupport) [
+      # TODO: Reorder me on `staging`.
+      libxkbcommon
+    ]
+    ++ [
+      (libepoxy.override { inherit x11Support; })
+    ]
+    ++ lib.optionals (x11Support || waylandSupport) [
+      isocodes
+    ]
+    ++ lib.optionals trackerSupport [
+      tinysparql
+    ];
   #TODO: colord?
 
-  propagatedBuildInputs =
+  propagatedBuildInputs = [
+    at-spi2-atk
+    atk
+    cairo
+    expat
+    fribidi
+    gdk-pixbuf
+    glib
+    gsettings-desktop-schemas
+  ]
+  ++ lib.optionals x11Support (
     with xorg;
     [
-      at-spi2-atk
-      atk
-      cairo
-      expat
-      fribidi
-      gdk-pixbuf
-      glib
-      gsettings-desktop-schemas
       libICE
       libSM
       libXcomposite
@@ -159,19 +167,23 @@ stdenv.mkDerivation (finalAttrs: {
       libXi
       libXrandr
       libXrender
-      pango
     ]
-    ++ lib.optionals waylandSupport [
-      libGL
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals xineramaSupport [
-      libXinerama
-    ]
-    ++ lib.optionals cupsSupport [
-      cups
-    ];
+  )
+  ++ [
+    # TODO: Reorder me on `staging`.
+    pango
+  ]
+  ++ lib.optionals waylandSupport [
+    libGL
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals xineramaSupport [
+    xorg.libXinerama
+  ]
+  ++ lib.optionals cupsSupport [
+    cups
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withIntrospection}"

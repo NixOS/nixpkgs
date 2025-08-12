@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     make PREFIX=$out USE_WIDE=1 RELEASE=1 build/Makefile
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

@@ -62,10 +62,10 @@ buildPythonPackage rec {
   ++ optional-dependencies.networkx
   ++ optional-dependencies.html;
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires network access
-    "--deselect=rdflib/__init__.py::rdflib"
-    "--deselect=test/jsonld/test_onedotone.py::test_suite"
+    "rdflib/__init__.py::rdflib"
+    "test/jsonld/test_onedotone.py::test_suite"
   ];
 
   disabledTests = [

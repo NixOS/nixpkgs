@@ -23,6 +23,8 @@
 }:
 
 buildPythonPackage rec {
+  __structuredAttrs = true;
+
   pname = "scikit-learn";
   version = "1.6.1";
   pyproject = true;
@@ -85,6 +87,12 @@ buildPythonPackage rec {
     "test_logistic_regression_path_convergence_fail"
     "test_linalg_warning_with_newton_solver"
     "test_newton_cholesky_fallback_to_lbfgs"
+
+    # NuSVC memmap tests causes segmentation faults in certain environments
+    # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
+    # (https://github.com/joblib/joblib/issues/563). See also:
+    # https://github.com/scikit-learn/scikit-learn/issues/17582
+    "NuSVC and memmap"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # doesn't seem to produce correct results?
@@ -92,19 +100,11 @@ buildPythonPackage rec {
     "test_sparse_input"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # verbose build outputs needed to debug hard-to-reproduce hydra failures
     "-v"
     "--pyargs"
     "sklearn"
-
-    # NuSVC memmap tests causes segmentation faults in certain environments
-    # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
-    # (https://github.com/joblib/joblib/issues/563). See also:
-    # https://github.com/scikit-learn/scikit-learn/issues/17582
-    # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
-    "-k"
-    "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
   ];
 
   preCheck = ''

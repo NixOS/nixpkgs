@@ -13,6 +13,9 @@
   addBinToPathHook,
   gitMinimal,
   versionCheckHook,
+
+  # Optional features
+  enableBuildstreamPlugins ? true,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,7 +56,10 @@ python3Packages.buildPythonApplication rec {
     ruamel-yaml-clib
     tomlkit
     ujson
-  ]);
+  ])
+  ++ lib.optionals enableBuildstreamPlugins [
+    python3Packages.buildstream-plugins
+  ];
 
   buildInputs = [
     fuse3

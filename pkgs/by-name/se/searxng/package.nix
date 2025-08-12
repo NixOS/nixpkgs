@@ -13,19 +13,28 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-16";
-    format = "setuptools";
+    version = "0-unstable-2025-08-03";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "62fac1c6a9db94682f8ef686f0424a482663b288";
-      hash = "sha256-3Ma16EdQdqnXyz+ipH5qq9TF0+DwpNU2kq2RTgK5b/A=";
+      rev = "2e62eb5d68d875c49e32229103a4fd75fe26c104";
+      hash = "sha256-UKGPkaG2agXZhEi2h8g2gXHHEDmDSzL/f9B+l5WZVvE=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRemoveDeps = [
+      "typer-slim" # we use typer instead
+    ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "httpx-socks"
+      "lxml"
+      "pygments"
+    ];
 
     preBuild =
       let
@@ -45,6 +54,8 @@ python.pkgs.toPythonModule (
         GIT_BRANCH="master"
         EOF
       '';
+
+    build-system = with python.pkgs; [ setuptools ];
 
     dependencies =
       with python.pkgs;
@@ -70,6 +81,7 @@ python.pkgs.toPythonModule (
         typer
         uvloop
         valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;

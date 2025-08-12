@@ -93,7 +93,7 @@ buildPythonPackage rec {
     numba
   ];
   # Select some lightweight tests
-  pytestFlagsArray = [ "-m 'not long'" ];
+  disabledTestMarks = [ "long" ];
   disabledTests = [
     # ModuleNotFoundError: No module named 'pymoo.cython.non_dominated_sorting'
     "test_fast_non_dominated_sorting"

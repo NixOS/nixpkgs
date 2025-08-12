@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   meta = with lib; {
     description = "Chinese Characters to Pinyin - 汉字转拼音";

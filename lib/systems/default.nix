@@ -120,6 +120,8 @@ let
         libc =
           if final.isDarwin then
             "libSystem"
+          else if final.isMsvc then
+            "ucrt"
           else if final.isMinGW then
             "msvcrt"
           else if final.isWasi then

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-xai";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-xai==${version}";
-    hash = "sha256-uH9D1mbpVfoxhF8e4uUycrj3hwV4r+hc/CBpeCVZ2eE=";
+    hash = "sha256-nae7KwCKjkvenOO8vErxFQStHolc+N8EUuK6U8r48Kc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/xai";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   disabledTests =
     lib.optionals (stdenvNoCC.hostPlatform.isLinux && stdenvNoCC.hostPlatform.isAarch64)

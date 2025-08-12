@@ -276,7 +276,12 @@ stdenv.mkDerivation (finalAttrs: {
           license = lib.licenses.gpl3Only;
         };
       }).goModules;
-    inherit withIpmi withNetworkViewer withNdsudo;
+    inherit
+      withIpmi
+      withNdsudo
+      withNetworkViewer
+      withSystemdJournal
+      ;
     tests.netdata = nixosTests.netdata;
   };
 

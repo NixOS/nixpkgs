@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isIbusEngine = true;
-    description = "libkkc (Japanese Kana Kanji input method) engine for ibus";
+    description = "Libkkc (Japanese Kana Kanji input method) engine for ibus";
     homepage = "https://github.com/ueno/ibus-kkc";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

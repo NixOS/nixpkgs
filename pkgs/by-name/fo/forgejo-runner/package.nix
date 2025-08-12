@@ -13,21 +13,45 @@ let
   disabledTests = [
     "Test_runCreateRunnerFile"
     "Test_ping"
+
+    # The following tests were introduced in 9.x with the inclusion of act
+    # the pkgs/by-name/ac/act/package.nix just sets doCheck = false;
+
+    # Requires running docker install
+    "TestDocker"
+    "TestJobExecutor"
+    "TestRunner"
+    "Test_validateCmd"
+
+    # Docker network request for image
+    "TestImageExistsLocally"
+
+    # Reaches out to different websites
+    "TestFindGitRemoteURL"
+    "TestGitFindRef"
+    "TestGitCloneExecutor"
+    "TestCloneIfRequired"
+    "TestActionCache"
+    "TestRunContext_GetGitHubContext"
+
+    # These tests rely on outbound IP address
+    "TestHandler"
+    "TestHandler_gcCache"
   ];
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "7.0.0";
+  version = "9.0.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-vt0uPGJdydy4cM1AEBeXQu4aNRggqaITS3eAmimVPRU=";
+    hash = "sha256-UjYi7+UAKvdz5FuElYGLfTYQD/E0vS1TJkUyPfUq7YA=";
   };
 
-  vendorHash = "sha256-hE03QkXSPyl7IVEnXi/wWwQZOVcdyyGdEmGiOwLK6Zg=";
+  vendorHash = "sha256-7R42Aa04wCba90xLTX2p6oNX58OpfDDKegqwDw3Ycbk=";
 
   # See upstream Makefile
   # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
@@ -39,7 +63,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X runner.forgejo.org/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v9/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
@@ -49,7 +73,7 @@ buildGoModule rec {
   postInstall = ''
     # fix up go-specific executable naming derived from package name, upstream
     # also calls it `forgejo-runner`
-    mv $out/bin/runner.forgejo.org $out/bin/forgejo-runner
+    mv $out/bin/runner $out/bin/forgejo-runner
     # provide old binary name for compatibility
     ln -s $out/bin/forgejo-runner $out/bin/act_runner
   '';
@@ -69,7 +93,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [
       adamcstephens

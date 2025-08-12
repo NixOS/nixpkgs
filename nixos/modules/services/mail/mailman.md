@@ -14,12 +14,14 @@ For a basic configuration with Postfix as the MTA, the following settings are su
 {
   services.postfix = {
     enable = true;
-    relayDomains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
-    sslCert = config.security.acme.certs."lists.example.org".directory + "/full.pem";
-    sslKey = config.security.acme.certs."lists.example.org".directory + "/key.pem";
-    config = {
+    settings.main = {
       transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
       local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+      relay_domains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
+      smtpd_tls_chain_files = [
+        (config.security.acme.certs."lists.example.org".directory + "/full.pem")
+        (config.security.acme.certs."lists.example.org".directory + "/key.pem")
+      ];
     };
   };
   services.mailman = {

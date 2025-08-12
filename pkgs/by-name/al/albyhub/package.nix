@@ -23,16 +23,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "albyhub";
-  version = "1.18.2";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bwM9BMLTiQmQMC6dZHgePdNp3YqoYoAyYuvCMPNtGQE=";
+    hash = "sha256-j918jzhQs3dnPQaG4UMmoit8UvC8/3Z5+IiAZqO3OSA=";
   };
 
-  vendorHash = "sha256-TWzieBzDIYvrUg9MFDjBIiMI+yB2oD9thTLnhum6Bx0=";
+  vendorHash = "sha256-iMxxJQZLQOLl7v1SimtXSYH7wXFOdZcSJAaUAKDqvBY=";
   proxyVendor = true; # needed for secp256k1-zkp CGO bindings
 
   nativeBuildInputs = [

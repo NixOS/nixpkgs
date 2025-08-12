@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://mdocml.bsd.lv/";
-    description = "converter from Texinfo into mdoc";
+    description = "Converter from Texinfo into mdoc";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ ramkromberg ];

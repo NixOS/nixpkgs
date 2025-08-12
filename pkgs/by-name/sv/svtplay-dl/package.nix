@@ -59,8 +59,11 @@ buildPythonApplication {
     requests-mock
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--doctest-modules"
+  ];
+
+  enabledTestPaths = [
     "lib"
   ];
 

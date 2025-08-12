@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ [ dpkg ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_project_all_platforms_invalid"

@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
     fetchSubmodules = true;
   };
@@ -30,7 +30,7 @@ let
     installFlags = [ "PREFIX=$(out)" ];
 
     meta = with lib; {
-      description = "svg-flatten SVG downconverter";
+      description = "SVG-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
       license = with licenses; [ agpl3Plus ];
       maintainers = with maintainers; [ wulfsta ];
@@ -81,7 +81,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH: ${
+    "--prefix PATH : ${
       lib.makeBinPath [
         resvg
         svg-flatten

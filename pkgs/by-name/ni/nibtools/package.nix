@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "disk transfer utility for imaging and converting commodore 64 disk images";
+    description = "Disk transfer utility for imaging and converting commodore 64 disk images";
     homepage = "https://github.com/OpenCBM/nibtools/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ matthewcroughan ];

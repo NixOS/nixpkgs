@@ -5,7 +5,6 @@
   fetchpatch,
   replaceVars,
   cmake,
-  uthash,
   pkg-config,
   python3,
   freetype,
@@ -98,7 +97,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     readline
-    uthash
     woff2
     zeromq
     py

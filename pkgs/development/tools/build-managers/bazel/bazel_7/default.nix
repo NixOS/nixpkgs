@@ -635,9 +635,13 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish \
       --name bazel.fish \
       ./bazel_src/output/bazel-complete.fish
+
+    runHook postInstall
   '';
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     export TEST_TMPDIR=$(pwd)
 
     hello_test () {
@@ -683,7 +687,7 @@ stdenv.mkDerivation rec {
       exit 1
     fi
 
-    runHook postInstall
+    runHook postInstallCheck
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.

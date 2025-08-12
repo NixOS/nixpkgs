@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-n4iEDt9AstDZPZXN47p13brNLbNWS3BTB+A4UuoEjzE=";
     fetchSubmodules = true;
   };

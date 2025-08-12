@@ -17,21 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
     tag = "r${version}";
-    hash = "sha256-W6TCtd6LJwjM/kPBqEiPM2xcWn8OzEjCx4llUR/6K78=";
+    hash = "sha256-5mOw69qqKabvbMCJbLoaIV8WwcRr6m4zc/lM0ssvtEw=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/nickg/nvc/commit/4a94efdb8f314732d59368ade364d2e03b424e14.patch?full_index=1";
-      hash = "sha256-faL+/CtqgLitHAol7JYW0dxOXZrm3dwVwiZ8FGPEhgg=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

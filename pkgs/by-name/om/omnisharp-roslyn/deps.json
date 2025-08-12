@@ -397,57 +397,57 @@
   },
   {
     "pname": "NuGet.Common",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-EHVxth3dUo40xHucL2JKIO1c1nPPP+WMLSbOliqNLjc=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.common/6.14.0-preview.1.45/nuget.common.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-9iueLk2eBzA1Qph0zz2eM9hSfKtwdlApcEXkcImYHow=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.common/6.14.0-rc.116/nuget.common.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.Configuration",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-WKv+hQMEN+SuQ+cA/ok5a+Kmyq/VVZjOjRWiHlYSLSU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.configuration/6.14.0-preview.1.45/nuget.configuration.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-aZcINPKC6x773h/JW007YDPkj/jXZIBs/Y2gVp2jHKI=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.configuration/6.14.0-rc.116/nuget.configuration.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.DependencyResolver.Core",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-SomOQxwF9o2DDmZgnyQ0eVJw33xmHlfKYMEDX2iip6g=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.dependencyresolver.core/6.14.0-preview.1.45/nuget.dependencyresolver.core.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-xn3ftpNI3xMblSwqQcgYzhZ1fDj/urbnnCLZrTLuNNk=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.dependencyresolver.core/6.14.0-rc.116/nuget.dependencyresolver.core.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.Frameworks",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-6c8H9NmR1opC65hLJRbWtCzCUf7TuFPSw3hmd3fxoTo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.frameworks/6.14.0-preview.1.45/nuget.frameworks.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-d9pZxwUrPcl/pizjC6j+Tns30muXUk2OVOAvkQ40TWk=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.frameworks/6.14.0-rc.116/nuget.frameworks.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.LibraryModel",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-uWf4ouqvVhoucBTRlGKeUqGrMEZcKEC7L3gYKibSY84=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.librarymodel/6.14.0-preview.1.45/nuget.librarymodel.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-8MzoYPA6p9pd0NkVW3oImhy1t3szqjk/dqHbRb2UM9I=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.librarymodel/6.14.0-rc.116/nuget.librarymodel.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.Packaging",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-U0yN7FyjZvyxsD3QZokxg7FSWnKgcJtY+21vNyCW5XU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.packaging/6.14.0-preview.1.45/nuget.packaging.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-0ck3KroeV+MSYBESHrqtZ7I4h10Wx5qfEYgikVk9lLE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.packaging/6.14.0-rc.116/nuget.packaging.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.ProjectModel",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-39jyhqfv9hkQzT9zlEEXDToWi5VDpceJBgf34dyVv0I=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.projectmodel/6.14.0-preview.1.45/nuget.projectmodel.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-w8xv1eWnCgTEMd7UoZkoxcQ2fiOhPTf6AgkcY6XFiXs=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.projectmodel/6.14.0-rc.116/nuget.projectmodel.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.Protocol",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-wIsXtR+Mgg5+J5eep98vGNeLXWvAW2L1rEEbhTEICLc=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.protocol/6.14.0-preview.1.45/nuget.protocol.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-vJH2Lp7eBq44+w6iDkgUItcy81qYG52E7NE5q10TJqc=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.protocol/6.14.0-rc.116/nuget.protocol.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "NuGet.Versioning",
-    "version": "6.14.0-preview.1.45",
-    "hash": "sha256-RpaibO5v0jfu1U2U+WbDHweVR+LLlhadqP9Qw0IWIRo=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.versioning/6.14.0-preview.1.45/nuget.versioning.6.14.0-preview.1.45.nupkg"
+    "version": "6.14.0-rc.116",
+    "hash": "sha256-qSpNg8NdQDTxS+xXkz5j/LJNqhF8jUn/bAQyJWFP9vA=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.versioning/6.14.0-rc.116/nuget.versioning.6.14.0-rc.116.nupkg"
   },
   {
     "pname": "OmniSharp.Extensions.JsonRpc",

@@ -114,6 +114,11 @@ with haskellLib;
     self.syb
     self.HUnit
   ] super.ghc-exactprint_1_12_0_0;
+  timezone-series = doJailbreak super.timezone-series; # time <1.14
+  timezone-olson = doJailbreak super.timezone-olson; # time <1.14
+  cabal-plan = doJailbreak super.cabal-plan; # base <4.21
+  dbus = doJailbreak super.dbus; # template-haskell <2.23
+  xmobar = doJailbreak super.xmobar; # base <4.21
 
   #
   # Test suite issues

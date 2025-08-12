@@ -9,6 +9,7 @@
   glib,
   gnome,
   gtk3,
+  gtk-doc,
   gnupg,
   gpgme,
   dbus-glib,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     pkg-config
     dbus-glib # dbus-binding-tool
     gtk3 # AM_GLIB_GNU_GETTEXT
+    gtk-doc
     intltool
     autoreconfHook
   ];

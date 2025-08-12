@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--workspace" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YgDWaxrEfG1xxZOqa7tk2NaPVfMIqoMNZdjejkY6Jow=";
 
   # Purposefully don't install systemd unit file, that's for NixOS

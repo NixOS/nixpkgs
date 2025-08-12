@@ -19,6 +19,7 @@
   nixosTests,
   writeShellScript,
   versionCheckHook,
+  makeSetupHook,
 }:
 
 let
@@ -111,8 +112,21 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    tests.tor = nixosTests.tor;
+    tests = {
+      inherit (nixosTests) tor;
+      proxyHook = callPackage ./proxy-hook-tests.nix {
+        tor = finalAttrs.finalPackage;
+      };
+    };
     updateScript = callPackage ./update.nix { };
+    proxyHook = makeSetupHook {
+      name = "tor-proxy-hook";
+      substitutions = {
+        grep = lib.getExe gnugrep;
+        tee = lib.getExe' coreutils "tee";
+        tor = lib.getExe finalAttrs.finalPackage;
+      };
+    } ./proxy-hook.sh;
   };
 
   meta = {

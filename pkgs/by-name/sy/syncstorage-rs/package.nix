@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-q6WKaUHr1/Cxpj/A2ox3e63EqQpNMDk3Bdkdrb6qq7A=";
 
   # almost all tests need a DB to test against

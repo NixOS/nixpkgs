@@ -19,7 +19,7 @@ buildGoModule rec {
   excludedPackages = "integrationtest";
 
   meta = with lib; {
-    description = "dump ACME data from traefik to certificates";
+    description = "Dump ACME data from traefik to certificates";
     homepage = "https://github.com/ldez/traefik-certs-dumper";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];

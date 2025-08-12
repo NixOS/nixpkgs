@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "splunklib" ];
 
   meta = {
-    description = "The Splunk Enterprise Software Development Kit (SDK) for Python";
+    description = "Splunk Enterprise Software Development Kit (SDK) for Python";
     homepage = "https://github.com/splunk/splunk-sdk-python";
     changelog = "https://github.com/splunk/splunk-sdk-python/releases/tag/${version}";
     license = lib.licenses.asl20;

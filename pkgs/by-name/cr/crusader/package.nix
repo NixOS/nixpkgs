@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-f0TWiRX203/gNsa9UEr/1Bv+kUxLAK/Zlw+S693xZlE=";
 
   # autoPatchelfHook required on linux for crusader-gui

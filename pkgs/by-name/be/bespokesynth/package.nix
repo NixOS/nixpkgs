@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = "bespokesynth";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ad8wdLos3jM0gRMpcfRKeaiUxJsPGqWd/7XeDz87ToQ=";
     fetchSubmodules = true;
   };

@@ -477,12 +477,17 @@ let
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "16") {
       mlir = callPackage ./mlir { };
-      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt {
       };
     }
+    //
+      lib.optionalAttrs
+        (lib.versionAtLeast metadata.release_version "16" && lib.versionOlder metadata.release_version "20")
+        {
+          libclc = callPackage ./libclc { };
+        }
   );
 
   libraries = lib.makeExtensible (

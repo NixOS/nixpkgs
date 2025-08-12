@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "1.12.2";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xrnh8M5m0bv1T5kgGwimC6OW00RtnrGNS8ObJqLhpe4=";
+    hash = "sha256-pbYMcflbzS1D1On7PcOHkSDB9gRyu1zhn3qGCx1E9gc=";
   };
 
   nativeBuildInputs = [ flit-core ];

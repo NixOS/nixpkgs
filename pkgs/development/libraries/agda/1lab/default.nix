@@ -37,7 +37,7 @@ mkDerivation rec {
   everythingFile = "_build/all-pages.agda";
 
   meta = with lib; {
-    description = "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
+    description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = src.meta.homepage;
     license = licenses.agpl3Only;
     platforms = platforms.unix;

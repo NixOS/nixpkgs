@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shlib" ];
 
   meta = with lib; {
-    description = "shell library";
+    description = "Shell library";
     homepage = "https://github.com/KenKundert/shlib";
     changelog = "https://github.com/KenKundert/shlib/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;

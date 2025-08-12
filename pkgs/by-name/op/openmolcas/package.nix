@@ -48,15 +48,10 @@ let
   nevpt2Src = stdenv.mkDerivation {
     pname = "nevpt2-src";
     version = "unstable";
-    phases = [
-      "unpackPhase"
-      "patchPhase"
-      "installPhase"
-    ];
     src = fetchFromGitHub {
       owner = "qcscine";
       repo = "nevpt2";
-      rev = "e1484fd"; # Must match tag in cmake/custom/nevpt2.cmake
+      rev = "e1484fd4901ae93ab0188bde417cf5dc440a8a3b"; # Must match tag in cmake/custom/nevpt2.cmake
       hash = "sha256-Vl+FhwhJBbD/7U2CwsYE9BClSQYLJ8DKXV9EXxQUmz0=";
     };
     patches = [ ./nevpt2.patch ];

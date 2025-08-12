@@ -280,6 +280,7 @@ in
           "network.hosts"
           "ssh.authorized_keys.root"
         ];
+        RestrictSUIDSGID = false;
       };
     };
 

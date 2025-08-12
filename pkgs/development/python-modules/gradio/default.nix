@@ -75,20 +75,20 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.38.0";
+  version = "5.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-NbVRbwqHUSwyG+v+cDKCrVtzjj6ThxGRfO+xjqXOy5I=";
+    hash = "sha256-zKAH/tbF1S+LIi1i+BuKBUWDSI0+Ii5FhsZ3sQaFtto=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-E6dBajJoKzaJF67KRrSB/LNAyLDmT78mCmTar5G6P6g=";
+    hash = "sha256-sIEsolHffX3cpAJU79w+ndRY4vvmWLxp2efTryv+j38=";
   };
 
   pythonRelaxDeps = [
@@ -329,10 +329,13 @@ buildPythonPackage rec {
     "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
+    "flaky"
+  ];
+
+  pytestFlags = [
     "-x" # abort on first failure
-    "-m 'not flaky'"
-    #"-W" "ignore" # uncomment for debugging help
+    #"-Wignore" # uncomment for debugging help
   ];
 
   # check the binary works outside the build env

@@ -43,7 +43,7 @@ python3'.pkgs.buildPythonApplication rec {
     description = "Simple pythonic programming language for Smart Contracts on Cardano";
     homepage = "https://opshin.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    maintainers = with maintainers; [ aciceri ];
     mainProgram = "opshin";
   };
 }

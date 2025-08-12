@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
     rev = "rshim-${version}";
-    hash = "sha256-J/gCACqpUY+KraVOLWpd+UVyZ1f2o77EfpAgUVtZL9w=";
+    hash = "sha256-w2+1tUDWYmgDC0ycWGdtVfdbkZCmtvwXm47qK5PCCfg=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "user-space rshim driver for the BlueField SoC";
+    description = "User-space rshim driver for the BlueField SoC";
     longDescription = ''
       The rshim driver provides a way to access the rshim resources on the
       BlueField target from external host machine. The current version

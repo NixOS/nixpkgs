@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "unstable-2023-11-06";
+  version = "0-unstable-2023-11-06";
   disabled = !python3.isPy3k;
 
   # required for third_party directory creation

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
-  version = "1.6.0";
+  version = "1.6.1";
 
   deps = stdenv.mkDerivation {
     name = "metals-deps-${finalAttrs.version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-+6u/nnaoCBEQCwhvPs1WQzMnppz7KEWWd1TlzbKYpAU=";
+    outputHash = "sha256-OsA+AWNYBmQ9wfUq1O4WKTf4ANCvBErKLUXH6NRfMss=";
   };
 
   nativeBuildInputs = [

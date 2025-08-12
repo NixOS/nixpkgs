@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "fx";
-  version = "37.0.1";
+  version = "39.0.1";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "fx";
     tag = finalAttrs.version;
-    hash = "sha256-n2Jaw8ffRnMQ89OsV5HhRGkjD3n8p49N2jYyx3SUrjU=";
+    hash = "sha256-KVnPESE0Fp1liOZtpDgNpAggROnGHYdefAAECkbgZDE=";
   };
 
-  vendorHash = "sha256-yVAoswClpf5+1nwLyrLKLYFt9Noh2HRemif1e1nWm7M=";
+  vendorHash = "sha256-7x0nbgMzEJznDH6Wf5iaTYXLh/2IGUSeSVvb0UKKTOQ=";
 
   ldflags = [ "-s" ];
 

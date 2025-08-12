@@ -52,7 +52,7 @@ let
       "-what-even-am-i";
 
   meta = {
-    description = "A free fast-paced first-person shooter";
+    description = "Free fast-paced first-person shooter";
     longDescription = ''
       Xonotic is a free, fast-paced first-person shooter that works on
       Windows, macOS and Linux. The project is geared towards providing

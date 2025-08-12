@@ -35,6 +35,8 @@
   gupnp-igd,
   enableAppIndicator ? true,
   libappindicator-gtk3,
+  enableSoundNotifications ? true,
+  gsound,
   extraPythonPackages ? ps: [ ],
 }:
 
@@ -66,7 +68,8 @@ python3.pkgs.buildPythonApplication rec {
   ++ lib.optional enableSecrets libsecret
   ++ lib.optional enableSpelling gspell
   ++ lib.optional enableUPnP gupnp-igd
-  ++ lib.optional enableAppIndicator libappindicator-gtk3;
+  ++ lib.optional enableAppIndicator libappindicator-gtk3
+  ++ lib.optional enableSoundNotifications gsound;
 
   nativeBuildInputs = [
     gettext

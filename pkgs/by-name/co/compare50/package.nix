@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "compare50";
-  version = "1.2.7";
+  version = "1.2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "compare50";
     tag = "v${version}";
-    hash = "sha256-T7ts/9Uux2gVhh5EGv8PRh9cbCQDbLBYD06sWqNSvLU=";
+    hash = "sha256-qRESVE9242Leo6js+YrRrLff7C3IjWFKSN2/GsC/8VA=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ python3Packages.buildPythonApplication rec {
     description = "Tool for detecting similarity in code supporting over 300 languages";
     homepage = "https://cs50.readthedocs.io/projects/compare50/en/latest/";
     downloadPage = "https://github.com/cs50/compare50";
-    changelog = "https://github.com/cs50/compare50/releases/tag/v${version}";
+    changelog = "https://github.com/cs50/compare50/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];

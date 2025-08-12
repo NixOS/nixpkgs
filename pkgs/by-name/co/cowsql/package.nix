@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cowsql/cowsql/releases/tag/${finalAttrs.version}";
     description = "Embeddable, replicated and fault tolerant SQL engine";
     homepage = "https://github.com/cowsql/cowsql";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lxc ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    teams = with lib.teams; [ lxc ];
+    platforms = lib.platforms.unix;
   };
 })

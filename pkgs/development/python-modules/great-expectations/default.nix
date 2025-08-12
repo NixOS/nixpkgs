@@ -120,6 +120,12 @@ buildPythonPackage rec {
     "tests/render"
   ];
 
+  disabledTestMarks = [
+    "postgresql"
+    "snowflake"
+    "spark"
+  ];
+
   disabledTests = [
     # tries to access network:
     "test_checkpoint_run_with_data_docs_and_slack_actions_emit_page_links"
@@ -127,7 +133,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "great_expectations" ];
-  pytestFlagsArray = [ "-m 'not spark and not postgresql and not snowflake'" ];
 
   meta = {
     broken = true; # 408 tests fail

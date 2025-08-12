@@ -321,6 +321,7 @@ let
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
       NET_SCHED = yes;
+      NET_SCH_BPF = whenAtLeast "6.16" yes;
       L2TP_V3 = yes;
       L2TP_IP = module;
       L2TP_ETH = module;
@@ -653,6 +654,8 @@ let
       # default to dual role mode
       USB_DWC2_DUAL_ROLE = yes;
       USB_DWC3_DUAL_ROLE = yes;
+
+      USB_XHCI_SIDEBAND = whenAtLeast "6.16" yes; # needed for audio offload
     };
 
     usb-serial = {

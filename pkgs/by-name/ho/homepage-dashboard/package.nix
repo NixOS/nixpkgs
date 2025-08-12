@@ -15,14 +15,14 @@ let
   dashboardIcons = fetchFromGitHub {
     owner = "homarr-labs";
     repo = "dashboard-icons";
-    rev = "51a2ae7b101c520bcfb5b44e5ddc99e658bc1e21"; # Until 2025-01-06
-    hash = "sha256-rKXeMAhHV0Ax7mVFyn6hIZXm5RFkbGakjugU0DG0jLM=";
+    rev = "f222c55843b888a82e9f2fe2697365841cbe6025"; # Until 2025-07-11
+    hash = "sha256-VOWQh8ZadsqNInoXcRKYuXfWn5MK0qJpuYEWgM7Pny8=";
   };
 
   installLocalIcons = ''
     mkdir -p $out/share/homepage/public/icons
-    cp ${dashboardIcons}/png/* $out/share/homepage/public/icons
-    cp ${dashboardIcons}/svg/* $out/share/homepage/public/icons
+    cp -r --no-preserve=mode ${dashboardIcons}/png/. $out/share/homepage/public/icons
+    cp -r --no-preserve=mode ${dashboardIcons}/svg/. $out/share/homepage/public/icons
     cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
   '';
 in

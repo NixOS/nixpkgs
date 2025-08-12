@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bikeshed";
-  version = "5.3.3";
+  version = "5.3.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hHLodlbHuDRXCR8GlTwSvaryOENPCiHgFj3S1hpApA8=";
+    hash = "sha256-QcypdeFIzEt2cx8PWWWhnMMhnc2oEWZUOm8kge4KJQY=";
   };
 
   build-system = [ python3Packages.setuptools ];

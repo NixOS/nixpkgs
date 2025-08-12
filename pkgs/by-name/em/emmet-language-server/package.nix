@@ -9,19 +9,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "olrtg";
     repo = "emmet-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ptIdZPGLjKsdFJKjt5LZ8JQNNBU5KR62Yw78qzfRxg=";
+    hash = "sha256-Lojy7y7RnPZPV9x0Mb4Rjm18RHwx6ejEpCo8wmXIOMw=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-hh5PEtmSHPs6QBgwWHS0laGU21e82JckIP3mB/P9/vE=";
+    hash = "sha256-sMOC5MQmJKwXZoUZnOmBy2I83SNMdrPc6WQKmeVGiCc=";
   };
 
   nativeBuildInputs = [

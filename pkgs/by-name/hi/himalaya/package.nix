@@ -45,8 +45,6 @@ rustPlatform.buildRustPackage {
     rev = "v${version}";
   };
 
-  useFetchCargoVendor = true;
-
   buildNoDefaultFeatures = noDefaultFeatures;
   buildFeatures = features;
 

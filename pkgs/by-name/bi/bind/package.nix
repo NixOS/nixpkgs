@@ -23,6 +23,8 @@
   cmocka,
   tzdata,
   gitUpdater,
+  fstrm,
+  protobufc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    protobufc
     removeReferencesTo
   ];
   buildInputs = [
@@ -61,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libuv
     nghttp2
     jemalloc
+    fstrm
+    protobufc
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libcap
   ++ lib.optional enableGSSAPI libkrb5
@@ -71,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--localstatedir=/var"
     "--without-lmdb"
+    "--enable-dnstap"
     "--with-libidn2"
   ]
   ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
@@ -102,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   doCheck = false;
   # TODO: investigate failures; see this and linked discussions:

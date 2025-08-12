@@ -10,6 +10,8 @@
   minizip,
   opencl-headers,
   ocl-icd,
+  perl,
+  python3,
   xxHash,
   zlib,
   libiconv,
@@ -17,12 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat";
-  version = "6.2.6";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
+    sha256 = "sha256-hCtx0NNLAgAFiCR6rp/smg/BMnfyzTpqSSWw8Jszv3U=";
   };
+
+  patches = [
+    ./0001-python-shebangs.patch
+  ];
 
   postPatch = ''
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
@@ -44,6 +50,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     minizip
     opencl-headers
+    perl
+    (python3.withPackages (
+      ps: with ps; [
+        # leveldb # Required for bitwarden2hashcat.py, broken since python 3.12 https://github.com/NixOS/nixpkgs/pull/342756
+        protobuf
+        pyasn1
+        pycryptodome
+        python-snappy
+        simplejson
+      ]
+    ))
     xxHash
     zlib
   ]
@@ -61,6 +78,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
     "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "IS_AARCH64=1"
   ];
 
   enableParallelBuilding = true;

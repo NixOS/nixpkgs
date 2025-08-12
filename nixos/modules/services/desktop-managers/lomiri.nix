@@ -7,9 +7,6 @@
 
 let
   cfg = config.services.desktopManager.lomiri;
-  nixos-gsettings-overrides = pkgs.lomiri.lomiri-gsettings-overrides.override {
-    inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages;
-  };
 in
 {
   options.services.desktopManager.lomiri = {
@@ -24,18 +21,6 @@ in
       '';
       type = lib.types.bool;
       default = config.services.xserver.displayManager.lightdm.greeters.lomiri.enable || cfg.enable;
-    };
-
-    extraGSettingsOverrides = lib.mkOption {
-      description = "Additional GSettings overrides.";
-      type = lib.types.lines;
-      default = "";
-    };
-
-    extraGSettingsOverridePackages = lib.mkOption {
-      description = "List of packages for which GSettings are overridden.";
-      type = lib.types.listOf lib.types.path;
-      default = [ ];
     };
   };
 
@@ -58,16 +43,26 @@ in
           "/share/wallpapers"
         ];
 
-        # Override GSettings defaults
-        sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
-
-        systemPackages = [
-          nixos-gsettings-overrides # GSettings default overrides
-        ]
-        ++ (with pkgs.lomiri; [
+        systemPackages = with pkgs.lomiri; [
           lomiri-wallpapers # default + additional wallpaper
           suru-icon-theme # basic indicator icons
-        ]);
+        ];
+      };
+
+      # Override GSettings defaults
+      programs.dconf = {
+        enable = true;
+        profiles.user.databases = [
+          {
+            settings = {
+              "com/lomiri/shell/launcher" = {
+                logo-picture-uri = "file://${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
+                home-button-background-color = "#5277C3";
+              };
+            };
+            lockAll = true;
+          }
+        ];
       };
 
       fonts.packages = with pkgs; [
@@ -156,7 +151,6 @@ in
       # Copy-pasted basic stuff
       hardware.graphics.enable = lib.mkDefault true;
       fonts.enableDefaultPackages = lib.mkDefault true;
-      programs.dconf.enable = lib.mkDefault true;
 
       services.accounts-daemon.enable = true;
 

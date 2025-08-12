@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "protocol";
-  version = "unstable-2019-03-28";
+  version = "0-unstable-2019-03-28";
   pyproject = true;
 
   src = fetchFromGitHub {

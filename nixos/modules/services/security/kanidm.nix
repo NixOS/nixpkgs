@@ -548,7 +548,7 @@ in
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*$";
+                    originStrType = types.strMatching ".*://?.*$";
                   in
                   types.either originStrType (types.nonEmptyListOf originStrType);
                 example = "https://someservice.example.com/auth/login";
@@ -671,6 +671,8 @@ in
   };
 
   config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
+    warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+
     assertions =
       let
         entityList =
@@ -888,7 +890,14 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretPaths);
+            BindReadOnlyPaths = mergePaths (
+              defaultServiceConfig.BindReadOnlyPaths
+              ++ secretPaths
+              ++ (lib.optionals (cfg.provision.enable && !cfg.provision.acceptInvalidCerts) [
+                "-/etc/ssl"
+                "-/etc/static/ssl"
+              ])
+            );
           }
         )
         {

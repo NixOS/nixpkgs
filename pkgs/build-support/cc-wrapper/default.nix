@@ -810,9 +810,13 @@ stdenvNoCC.mkDerivation {
     # Do not prevent omission of framepointers on x86 32bit due to the small
     # number of general purpose registers. Keeping EBP available provides
     # non-trivial performance benefits.
+    # Also skip s390/s390x as it fails to build glibc and causes
+    # performance regressions:
+    #   https://bugs.launchpad.net/ubuntu-z-systems/+bug/2064538
+    #   https://github.com/NixOS/nixpkgs/issues/428260
     + (
       let
-        enable_fp = !targetPlatform.isx86_32;
+        enable_fp = !targetPlatform.isx86_32 && !targetPlatform.isS390;
         enable_leaf_fp =
           enable_fp
           && (

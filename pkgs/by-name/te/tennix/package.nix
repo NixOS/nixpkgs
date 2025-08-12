@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     ./configure --prefix $out
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

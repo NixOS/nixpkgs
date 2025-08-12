@@ -22,7 +22,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests --doctest-modules jsonstreams" ];
+
+  pytestFlags = [ "--doctest-modules" ];
+
+  enabledTestPaths = [
+    "tests"
+    "jsonstreams"
+  ];
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

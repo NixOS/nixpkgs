@@ -39,7 +39,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-I/9JXjt6aF/80Mh3iRgUYXv4l+m3XIpmKsIBviOuWCo=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with

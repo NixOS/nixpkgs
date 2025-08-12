@@ -220,8 +220,11 @@ let
       cp ${llm-echo.src}/llm_echo.py llm_echo.py
     '';
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "-svv"
+    ];
+
+    enabledTestPaths = [
       "tests/"
     ];
 

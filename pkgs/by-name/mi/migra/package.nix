@@ -44,9 +44,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_singleschema"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
     "-svv"
+  ];
+
+  enabledTestPaths = [
     "tests"
   ];
 

@@ -29,7 +29,6 @@ let
     {
       inherit coq lib;
       coqPackages = self // {
-        __attrsFailEvaluation = true;
         recurseForDerivations = false;
       };
 
@@ -246,6 +245,7 @@ let
           };
         })
       );
+      wasmcert = callPackage ../development/coq-modules/wasmcert { };
       waterproof = callPackage ../development/coq-modules/waterproof { };
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma { };
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;

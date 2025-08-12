@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "toxvpn";
-  version = "unstable-2024-08-21";
+  version = "0-unstable-2024-08-21";
 
   src = fetchFromGitHub {
     owner = "cleverca22";

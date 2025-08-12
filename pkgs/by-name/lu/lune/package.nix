@@ -12,12 +12,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Kk3ZIF+kQzsg/ApUm12bbWlIthj5cpVefAqEGhgxb3w=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zGXxck/cH8nIS1B/bPTJf1LLCl1viOGSDL0TRQSNaRk=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found

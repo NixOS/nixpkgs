@@ -104,7 +104,7 @@ buildPythonPackage rec {
   ++ optional-dependencies.dilation
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
-  pytestFlagsArray = [ "src/wormhole/test" ];
+  enabledTestPaths = [ "src/wormhole/test" ];
 
   __darwinAllowLocalNetworking = true;
 

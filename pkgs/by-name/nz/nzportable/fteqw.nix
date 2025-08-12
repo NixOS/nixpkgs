@@ -41,7 +41,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";
-  version = "0-unstable-2024-09-11-20-07-31";
+  version = "0-unstable-2024-09-11";
 
   src = fetchFromGitHub {
     owner = "nzp-team";

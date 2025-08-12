@@ -21,13 +21,13 @@ assert backend == "mcode" || backend == "llvm" || backend == "gcc";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "ghdl";
     repo = "ghdl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v3wl+tn92Bks0VnW80Q1KwHwUtUxlbeMSI3WWvgDky4=";
+    hash = "sha256-vPeODNTptxIjN6qLoIHaKOFf3P3iAK2GloVreHPaAz8=";
   };
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";

@@ -81,7 +81,7 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
   meta = {
-    description = "portable archive file manager";
+    description = "Portable archive file manager";
     mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
     license = lib.licenses.gpl3;

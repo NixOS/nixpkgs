@@ -16,6 +16,7 @@
 
   # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
   aacgain,
+  chromaprint,
   essentia-extractor,
   ffmpeg,
   flac,

@@ -733,14 +733,14 @@ in
       after = [
         "redis-discourse.service"
         "postgresql.target"
-        "discourse-postgresql.target"
+        "discourse-postgresql.service"
       ];
       bindsTo = [
         "redis-discourse.service"
       ]
       ++ lib.optionals (cfg.database.host == null) [
         "postgresql.target"
-        "discourse-postgresql.target"
+        "discourse-postgresql.service"
       ];
       path = cfg.package.runtimeDeps ++ [
         postgresqlPackage
@@ -1076,24 +1076,28 @@ in
 
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
-      sslCert = lib.optionalString (cfg.sslCertificate != null) cfg.sslCertificate;
-      sslKey = lib.optionalString (cfg.sslCertificateKey != null) cfg.sslCertificateKey;
 
-      origin = cfg.hostname;
-      relayDomains = [ cfg.hostname ];
-      config = {
+      settings.main = {
         smtpd_recipient_restrictions = "check_policy_service unix:private/discourse-policy";
         append_dot_mydomain = lib.mkDefault false;
         compatibility_level = "2";
         smtputf8_enable = false;
         smtpd_banner = lib.mkDefault "ESMTP server";
+        smtpd_tls_chain_files =
+          lib.optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null)
+            [
+              cfg.sslCertificateKey
+              cfg.sslCertificate
+            ];
         myhostname = lib.mkDefault cfg.hostname;
         mydestination = lib.mkDefault "localhost";
+        myorigin = cfg.hostname;
+        relay_domains = [ cfg.hostname ];
       };
       transport = ''
         ${cfg.hostname} discourse-mail-receiver:
       '';
-      masterConfig = {
+      settings.master = {
         "discourse-mail-receiver" = {
           type = "unix";
           privileged = true;

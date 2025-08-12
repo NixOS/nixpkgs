@@ -97,7 +97,7 @@ let
         meta =
           with lib;
           {
-            description = "A Trusted Execution Environment for ARM";
+            description = "Trusted Execution Environment for ARM";
             homepage = "https://github.com/OP-TEE/optee_os";
             changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
             license = licenses.bsd2;

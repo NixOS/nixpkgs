@@ -192,6 +192,7 @@ mapAliases ({
   django-allauth-2fa = throw "django-allauth-2fa was removed because it was unused and django-allauth now contains 2fa logic itself."; # added 2025-02-15
   django-sampledatahelper = throw "django-sampledatahelper was removed because it is no longer compatible to latest Django version"; # added 2022-07-18
   django_2 = throw "Django 2 has reached it's projected EOL in 2022/04 and has therefore been removed."; # added 2022-03-05
+  django_3 = throw "Django 3 has reached it#s EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
   django_appconf = django-appconf; # added 2022-03-03
   django_classytags = django-classy-tags; # added 2023-07-25
   django_colorful = django-colorful; # added 2023-07-25
@@ -229,6 +230,7 @@ mapAliases ({
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   dugong = throw "dugong is unmaintained since 2022 and has therefore been removed"; # added 2024-12-12
+  editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   EasyProcess = easyprocess; # added 2023-02-19
   email_validator = email-validator; # added 2022-06-22
@@ -240,6 +242,7 @@ mapAliases ({
   ev3dev2 = python-ev3dev2; # added 2023-06-19
   evernote = throw "evernote is intended for use with Python 2.X";
   eyeD3 = eyed3; # added 2024-01-03
+  f3d_egl = lib.warnOnInstantiate "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # added 2025-07-18
   Fabric = fabric; # addedd 2023-02-19
   face_recognition = face-recognition; # added 2022-10-15
   face_recognition_models = face-recognition-models; # added 2022-10-15
@@ -251,6 +254,7 @@ mapAliases ({
   fastpair = throw "fastpair is unmaintained upstream and has therefore been removed"; # added 2024-05-01
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   inherit (super.pkgs) fetchPypi; # added 2023-05-25
+  fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = filebrowser-safe; # added 2024-01-03
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
@@ -339,11 +343,13 @@ mapAliases ({
   imgaug = throw "imgaug has been removed as it is no longer maintained"; # added 2023-07-10
   imgtool = throw "imgtool has been promoted to a top-level attribute name: `mcuboot-imgtool`"; # added 2024-10-09
   intreehook = throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
+  ionhash = throw "ionhash has been removed due to being unmaintained upstream"; # added 2025-07-30
   iotawattpy = ha-iotawattpy; # added 2025-07-06
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years"; # added 2024-05-21
   ipython_genutils = ipython-genutils; # added 2023-10-12
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
+  inlinestyler = throw "inlinestyler has been removed because it is no longer maintained"; # added 2025-08-09
   itanium_demangler = itanium-demangler; # added 2022-10-17
   jaeger-client = throw "jaeger-client was removed because it is deprecated upstream. OpenTelemetry is recommended instead."; # Added 2024-12-09
   jaraco_classes = jaraco-classes; # added 2023-07-14
@@ -419,6 +425,7 @@ mapAliases ({
   mapbox = throw "mapbox has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   marshmallow-enum = throw "marshmallow-enum has been removed because it was archived in 2022 and had no maintainer"; # added 2024-05-10
   markerlib = throw "markerlib has been removed because it's abandoned since 2013"; # added 2023-05-19
+  mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   matrix-api-async = throw "matrix-api-async has been removed as it is an old wrapper and no longer in use"; # added 2025-01-01
   memory_profiler = memory-profiler; # added 2023-10-09
   mir_eval = mir-eval; # added 2024-01-07
@@ -448,6 +455,7 @@ mapAliases ({
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   niko-home-control = throw "niko-home-control was removed because Home Assistant switched to nhc"; # added 2025-01-09
   ninja-python = ninja; # add 2022-08-03
+  nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
   nose = throw "nose has been removed since it has been deprecated and unmaintained for almost a decade and does not work on Python 3.12; please switch to pytest or another test runner/framework"; # added 2024-07-28
   nose3 = throw "nose3 has been removed since it is unmaintained and does not work with Python 3.12"; # added 2024-07-28
   nosejs = throw "nosejs has been removed since it has not been maintained for 15 years and there are no dependent packages"; # added 2024-05-21
@@ -581,7 +589,9 @@ mapAliases ({
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   python-picnic-api = throw "python-picnic-api was removed because Home Assistant switched to python-picnic-api2"; # added 2025-03-05
   python-unshare = throw "python-unshare was removed as unmaintained since 2016"; # added 2025-05-25
+  pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pytrends = throw "pytrends has been removed, as it no longer works and is abandoned upstream"; # added 2025-02-02
+  pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyqt5_sip = pyqt5-sip; # added 2024-01-07
   pyqt5_with_qtmultimedia = pyqt5-multimedia; # added 2024-01-07
@@ -611,7 +621,7 @@ mapAliases ({
   Pyro5 = pyro5; # added 2023-02-19
   PyRSS2Gen = pyrss2gen; # added 2023-02-19
   pyruckus = throw "pyruckus has been removed, it was deprecrated in favor of aioruckus."; # added 2023-09-07
-  py_scrypt = py-scrypt; # added 2024-01-07
+  py-scrypt = scrypt; # added 2025-08-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysimplegui = throw "pysimplegui update to v5 broke the package, it now needs a license key to decrypt the source code"; # added 2024-09-16
   pysmart-smartx = pysmart; # added 2021-10-22
@@ -731,6 +741,7 @@ mapAliases ({
   setuptoolsCheckHook = throw "The setuptoolsCheckHook has been removed, since the test command has been removed in setuptools 72.0."; # added 2024-08-06
   setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
+  shippai = throw "shippai has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   shouldbe = throw "shouldbe was removed, because it was disabled on all python version since 3.8 and last updated in 2019."; # added 2024-05-12
   sip_4 = sip4; # added 2024-01-07
   slackclient = slack-sdk; # added 2024-06-27

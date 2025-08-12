@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "volk";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
     fetchSubmodules = true;
   };

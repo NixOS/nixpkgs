@@ -154,8 +154,7 @@ self: super:
   libxcb = super.libxcb.overrideAttrs (attrs: {
     # $dev/include/xcb/xcb.h includes pthread.h
     propagatedBuildInputs =
-      attrs.propagatedBuildInputs or [ ]
-      ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+      attrs.propagatedBuildInputs or [ ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
     configureFlags = [
       "--enable-xkb"
       "--enable-xinput"
@@ -829,7 +828,6 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ mesa ];
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = [
@@ -1154,19 +1152,13 @@ self: super:
   );
 
   # xvfb is used by a bunch of things to run tests
-  # and doesn't support hardware accelerated rendering
-  # so remove it from the rebuild heavy path for mesa
+  # so try to reduce its reverse closure
   xvfb = super.xorgserver.overrideAttrs (old: {
     configureFlags = [
       "--enable-xvfb"
       "--disable-xorg"
       "--disable-xquartz"
       "--disable-xwayland"
-      "--disable-glamor"
-      "--disable-glx"
-      "--disable-dri"
-      "--disable-dri2"
-      "--disable-dri3"
       "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
       "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
       "--with-xkb-output=$out/share/X11/xkb/compiled"
@@ -1176,10 +1168,15 @@ self: super:
     ];
 
     buildInputs = old.buildInputs ++ [
+      dri-pkgconfig-stub
+      libdrm
+      libGL
+      mesa-gl-headers
       xorg.pixman
       xorg.libXfont2
       xorg.xtrans
       xorg.libxcvt
+      xorg.libxshmfence
     ];
   });
 
@@ -1246,9 +1243,9 @@ self: super:
             xorg.xorgproto
           ];
         postFixup = ''
-          substituteInPlace $out/bin/startx \
-            --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc \
-            --replace $out/etc/X11/xinit/xinitrc /etc/X11/xinit/xinitrc
+          sed -i $out/bin/startx \
+            -e '/^sysserverrc=/ s:=.*:=/etc/X11/xinit/xserverrc:' \
+            -e '/^sysclientrc=/ s:=.*:=/etc/X11/xinit/xinitrc:'
         '';
         meta = attrs.meta // {
           mainProgram = "xinit";

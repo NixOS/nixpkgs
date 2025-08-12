@@ -76,7 +76,7 @@ buildPythonPackage rec {
   # Optionally disable pytest-xdist to make it easier to debug the test suite.
   # Test suite takes ~5 minutes without pytest-xdist. Note that some tests will
   # fail when running without pytest-xdist ("worker_id not found").
-  # pytestFlagsArray = [ "-o" "addopts=" ];
+  # pytestFlags = [ "-oaddopts=" ];
 
   disabledTestPaths = [
     # Tests that require scanpy, creating a circular dependency chain

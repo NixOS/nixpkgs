@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage rec {
     ./time-crate.patch
   ];
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-5KbqX8HU7s5ZLoCVUmZhvrliAl3wXV4/nMEI5tq2piU=";
 
   doCheck = true;

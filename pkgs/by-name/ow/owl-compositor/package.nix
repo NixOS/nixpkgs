@@ -17,7 +17,7 @@ in
 
 stdenv.mkDerivation {
   pname = "owl-compositor";
-  version = "unstable-2021-11-10";
+  version = "0-unstable-2021-11-10";
 
   src = fetchFromGitHub {
     owner = "owl-compositor";

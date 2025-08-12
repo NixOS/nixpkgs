@@ -35,7 +35,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
     hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
 
   SKIA_SOURCE_DIR =
@@ -124,7 +123,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
 
   meta = {
-    description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
+    description = "Simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://neovide.dev/";
     changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";

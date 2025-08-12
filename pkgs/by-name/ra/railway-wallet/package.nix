@@ -5,11 +5,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "railway-wallet";
-  version = "5.22.3";
+  version = "5.22.4";
 
   src = fetchurl {
     url = "https://github.com/Railway-Wallet/Railway-Wallet/releases/download/v${version}/Railway-v${version}-linux-x86_64.AppImage";
-    hash = "sha256-Y0t4YzzJwIfRYHV3GIETeRfxoRJptQ83RoacP3kdYtc=";
+    hash = "sha256-ikVDbUQOAx1626qtmzObu5Uzppz/PZPTPB4/LWoWZmI=";
   };
 
   meta = {

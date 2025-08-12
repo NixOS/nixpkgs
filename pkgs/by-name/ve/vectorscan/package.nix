@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vectorscan";
-  version = "5.4.11";
+  version = "5.4.12";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${version}";
-    hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
+    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
   };
 
   postPatch = ''
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
   cmakeFlags = [
+    "-DBUILD_BENCHMARKS=OFF"
     (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON")
   ]
   ++ (

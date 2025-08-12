@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jmesmon";
     repo = "illum";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "S4lUBeRnZlRUpIxFdN/bh979xvdS7roF6/6Dk0ZUrnM=";
     fetchSubmodules = true;
   };
@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     bash ./configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''

@@ -184,6 +184,10 @@ let
         (boolOpt "enabled" cfg.ntcp2.enable)
         (boolOpt "published" cfg.ntcp2.published)
         (intOpt "port" cfg.ntcp2.port)
+        (sec "ssu2")
+        (boolOpt "enabled" cfg.ssu2.enable)
+        (boolOpt "published" cfg.ssu2.published)
+        (intOpt "port" cfg.ssu2.port)
         (sec "addressbook")
         (strOpt "defaulturl" cfg.addressbook.defaulturl)
       ]
@@ -538,6 +542,18 @@ in
         description = ''
           Port to listen for incoming NTCP2 connections (0=auto).
         '';
+      };
+
+      ssu2 = {
+        enable = mkEnableTrueOption "SSU2";
+        published = mkEnableOption "SSU2 publication";
+        port = mkOption {
+          type = types.port;
+          default = 0;
+          description = ''
+            Port to listen for incoming SSU2 connections (0=auto).
+          '';
+        };
       };
 
       limits.transittunnels = mkOption {

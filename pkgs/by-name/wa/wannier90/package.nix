@@ -45,7 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cp config/make.inc.gfort make.inc
+
+    runHook postConfigure
   '';
 
   buildFlags = [

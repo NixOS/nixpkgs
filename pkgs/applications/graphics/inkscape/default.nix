@@ -97,6 +97,16 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix path to ps2pdf binary
       inherit ghostscript;
     })
+    (fetchpatch {
+      name = "fix-build-poppler-25.06.0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/97bd8f29a61e691ceea98ca2444b974cf4256ae0.patch";
+      hash = "sha256-bYRd/KUh/7qFb7x0EuUgQYA9P8abcTf5XS67gzaAiXA=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.07.0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/ce52c5f96106ae5747171663a46831f21aa52d95.patch";
+      hash = "sha256-3Yj+neSRSSQPeeZkHJ0P6v3Sis/lg9xiygktI6Z+zDY=";
+    })
   ];
 
   postPatch = ''

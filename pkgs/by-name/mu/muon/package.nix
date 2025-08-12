@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "muon-src";
     owner = "~lattis";
     repo = "muon";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-xTdyqK8t741raMhjjJBMbWnAorLMMdZ02TeMXK7O+Yw=";
   };
 

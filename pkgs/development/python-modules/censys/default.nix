@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.17";
+  version = "2.2.18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     tag = "v${version}";
-    hash = "sha256-1V7IeaV7Ro1q5UyD2DDetunaRO2L4UbF1VODg5ktqKs=";
+    hash = "sha256-fHqDXqhjqfj8VBb7Od7wuUXAEHQBXwm5LAUPLM0oN2Q=";
   };
 
   build-system = [ poetry-core ];

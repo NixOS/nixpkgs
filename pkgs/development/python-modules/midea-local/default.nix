@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "midea-local";
-  version = "6.3.0";
+  version = "6.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
     tag = "v${version}";
-    hash = "sha256-J044JyRrpig2RmX39tvxBbjFExFouK3++0mvaPN+8To=";
+    hash = "sha256-jeQ5PXkKxVz041VJ58lJVpqIoj1Y054VADFtnutddg4=";
   };
 
   build-system = [ setuptools ];

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "zoraxy";
-  version = "3.2.4";
+  version = "3.2.5r2";
 
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vcsN75o5olK/yQln77OJeq/PmUX1c/RYLBHyP8mRs8Q=";
+    hash = "sha256-O7Rzx62O0h3kK6+lMag+5totijJoobOKi8DNWT9sDjg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

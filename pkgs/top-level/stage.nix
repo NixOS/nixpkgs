@@ -280,28 +280,6 @@ let
       else
         throw "i686 Linux package set can only be used with the x86 family.";
 
-    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin =
-      if stdenv.hostPlatform.isDarwin then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsx86_64Darwin = super';
-            })
-          ]
-          ++ overlays;
-          localSystem = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.x86_64;
-              }
-            );
-          };
-        }
-      else
-        throw "x86_64 Darwin package set can only be used on Darwin systems.";
-
     # If already linux: the same package set unaltered
     # Otherwise, return a natively built linux package set for the current cpu architecture string.
     # (ABI and other details will be set to the default for the cpu/os pair)

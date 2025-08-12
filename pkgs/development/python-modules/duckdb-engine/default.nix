@@ -62,14 +62,13 @@ buildPythonPackage rec {
     snapshottest
   ];
 
-  pytestFlagsArray = [
-    "-m"
-    "'not remote_data'"
-  ];
-
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
     # requires snapshottest
     "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  disabledTestMarks = [
+    "remote_data"
   ];
 
   disabledTests = [

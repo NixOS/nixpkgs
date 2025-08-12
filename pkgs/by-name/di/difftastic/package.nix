@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-XMvysYO6Kji9cbfGayB6wPVuNp0j2uXLHfZ9H+dBLt0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1u3oUbqhwHXD90ld70pjK2XPJe5hpUbJtU78QpIjAE8=";
 
   env = lib.optionalAttrs stdenv.hostPlatform.isStatic { RUSTFLAGS = "-C relocation-model=static"; };

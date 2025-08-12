@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AYBBW9VtdvqqqiouhkS3diPcOdaQOs8Htkw9DTRX2t4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-o2RkhYsSQKwU+dsHQvlcxAVKUjOTqg424dqrM7JRoN8=";
 
   nativeBuildInputs = [
@@ -49,8 +48,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "May the code be with you 👻";
-    longDescription = "Use leetcode.com in command line";
+    description = "Leetcode CLI utility";
     homepage = "https://github.com/clearloop/leetcode-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ congee ];

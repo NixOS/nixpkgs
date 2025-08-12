@@ -57,6 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
       hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
     })
+    # This patch can be removed with the next openmpi update (>5.0.6)
+    # See https://github.com/open-mpi/ompi/issues/12924 and https://github.com/open-mpi/ompi/pull/12934
+    # Fix the size_t/int parameter compile error in coll/cuda
+    (fetchpatch {
+      name = "fix-size-t-int-parameter";
+      url = "https://github.com/open-mpi/ompi/commit/399f69d68735839d379913a5433ea81dbdbd98bf.patch";
+      hash = "sha256-TbB73a419v5JGkiyBAwe/t+6g+pzaR15yAZhdbJIXG4=";
+    })
   ];
 
   postPatch = ''
@@ -101,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
     numactl
     pmix
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
     ucx
     ucc
   ]
@@ -135,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+    (lib.withFeatureAs cudaSupport "cuda-libdir" "${cudaPackages.cuda_cudart.stubs}/lib")
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
@@ -153,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
         p = [
           "mpi"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
           "shmem"
           "osh"
         ];
@@ -201,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
         part1 = [
           "mpi"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
@@ -237,14 +248,14 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
-      # from some reason.
-      moveToOutput "bin/pcc" "''${!outputDev}"
 
       # Handle informative binaries about the compilation
-      for i in {prte,ompi,oshmem}_info; do
-        moveToOutput "bin/$i" "''${!outputDev}"
-      done
+      ${lib.pipe wrapperDataFileNames.part1 [
+        (map (name: ''
+          moveToOutput "bin/o${name}_info" "''${!outputDev}"
+        ''))
+        (lib.concatStringsSep "\n")
+      ]}
     '';
 
   postFixup = ''

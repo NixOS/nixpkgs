@@ -52,19 +52,26 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.18.0";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-pRpogmVes8ZX19GZff+HmGdykvMnBJ7hGsoYsUGVOSY=";
+    hash = "sha256-ING+C2MACKFto+1FON5OGFgzLf8SM99ViTdADzNzQLw=";
   };
 
-  build-system = [ setuptools ];
+  # TODO: remove at the next release
+  # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+  # Caused by: https://github.com/huggingface/transformers/commit/1ecd52e50a31e7c344c32564e0484d7e9a0f2256
+  # Fixed in: https://github.com/huggingface/smolagents/pull/1625
+  postPatch = ''
+    substituteInPlace tests/test_types.py \
+      --replace-fail "require_soundfile" "require_torchcodec"
+  '';
 
-  pythonRelaxDeps = [ "pillow" ];
+  build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
@@ -134,8 +141,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smolagents" ];
 
+  disabledTestPaths = [
+    # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+    "tests/test_types.py"
+  ];
+
   disabledTests = [
     # Missing dependencies
+    "test_cleanup"
     "test_ddgs_with_kwargs"
     "test_e2b_executor_instantiation"
     "test_flatten_messages_as_text_for_all_models"

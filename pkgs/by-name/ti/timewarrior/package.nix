@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6WZ5k9cxWe+eS9me700ITq0rKEiIuDhTtmuzhOnUM4k=";
     fetchSubmodules = true;
   };

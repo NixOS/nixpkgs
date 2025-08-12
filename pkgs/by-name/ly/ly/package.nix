@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "AnErrupTion";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+rRvrlzV5MDwb/7pr/oZjxxDmE1kbnchyUi70xwp0Cw=";
+    hash = "sha256-xD1FLW8LT+6szfjZbP++qJThf4xxbmw4jRHB8TdrG70=";
   };
 
   nativeBuildInputs = [

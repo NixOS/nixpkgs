@@ -90,6 +90,28 @@ self: super: {
     else
       throw "Musl libc only supports 64-bit Linux systems.";
 
+  # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+  pkgsx86_64Darwin =
+    if stdenv.hostPlatform.isDarwin then
+      nixpkgsFun {
+        overlays = [
+          (self': super': {
+            pkgsx86_64Darwin = super';
+          })
+        ]
+        ++ overlays;
+        localSystem = {
+          config = lib.systems.parse.tripleFromSystem (
+            stdenv.hostPlatform.parsed
+            // {
+              cpu = lib.systems.parse.cpuTypes.x86_64;
+            }
+          );
+        };
+      }
+    else
+      throw "x86_64 Darwin package set can only be used on Darwin systems.";
+
   # Full package set with rocm on cuda off
   # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
   pkgsRocm = nixpkgsFun ({

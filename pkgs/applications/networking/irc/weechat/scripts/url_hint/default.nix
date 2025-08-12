@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     inherit (weechat.meta) platforms;
-    description = "url_hint.py is a URL opening script";
+    description = "WeeChat URL opening script";
     license = licenses.mit;
     maintainers = with maintainers; [ eraserhd ];
   };

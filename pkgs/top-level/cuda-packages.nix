@@ -70,7 +70,6 @@ let
     else
       pkgs.extend (
         final: _: {
-          __attrsFailEvaluation = true;
           recurseForDerivations = false;
           # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
           # minor-versioned and unversioned package sets.
@@ -174,7 +173,11 @@ let
       (
         final: _:
         {
-          cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false"; # Prevent missing attribute errors
+          # Prevent missing attribute errors
+          # NOTE(@connorbaker): CUDA 12.3 does not have a cuda_compat package; indeed, none of the release supports
+          # Jetson devices. To avoid errors in the case that cuda_compat is not defined, we have a dummy package which
+          # is always defined, but does nothing, will not build successfully, and has no platforms.
+          cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false";
         }
         // lib.packagesFromDirectoryRecursive {
           inherit (final) callPackage;

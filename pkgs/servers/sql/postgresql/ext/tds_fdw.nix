@@ -20,6 +20,11 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   meta = {
+    # PostgreSQL 18 support issue upstream: https://github.com/tds-fdw/tds_fdw/issues/384
+    # Check after next package update.
+    broken = lib.warnIf (
+      finalAttrs.version != "2.0.4"
+    ) "Is postgresql18Packages.tds_fdw still broken?" (lib.versionAtLeast postgresql.version "18");
     description = "PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";
     homepage = "https://github.com/tds-fdw/tds_fdw";
     changelog = "https://github.com/tds-fdw/tds_fdw/releases/tag/v${finalAttrs.version}";

@@ -16,6 +16,7 @@
 let
   pnpm = pnpm_9;
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "test-app";
   inherit (cargo-tauri) version src;
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
 
     fetcherVersion = 1;
-    hash = "sha256-I++iYwqSxACmXFvfPYAnY/0WSWSY6ElJYnylJDC03D8=";
+    hash = "sha256-7F2vk6WUeXunTuXX9J0rVhl2I0ENYagRdqTy+WAXBB8=";
   };
 
   nativeBuildInputs = [

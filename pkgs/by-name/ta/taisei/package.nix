@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "taisei-project";
     repo = "taisei";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rThLz8o6IYhIBUc0b1sAQi2aF28btajcM1ScTv+qn6c=";
     fetchSubmodules = true;
   };
