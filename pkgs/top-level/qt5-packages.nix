@@ -150,8 +150,6 @@ makeScopeWithSplicing' {
 
         kdb = callPackage ../development/libraries/kdb { };
 
-        kde2-decoration = callPackage ../data/themes/kde2 { };
-
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
         kdiagram = callPackage ../development/libraries/kdiagram { };
