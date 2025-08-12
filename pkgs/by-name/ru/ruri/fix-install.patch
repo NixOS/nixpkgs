@@ -1,0 +1,61 @@
+From b6939000d33fd5c727b93c5d1c535d5aa1e8b758 Mon Sep 17 00:00:00 2001
+From: dabao1955 <dabao1955@163.com>
+Date: Sun, 17 Aug 2025 11:35:47 +0800
+Subject: [PATCH] chore(cmake): Drop BUILD_LIB option
+
+It looks like nolonger uses it
+---
+ CMakeLists.txt | 32 ++++++++++++--------------------
+ 1 file changed, 12 insertions(+), 20 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 41a4da8..3d491c2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -144,7 +144,6 @@ option(ENABLE_STATIC "Enable static linking" OFF)
+ option(DISABLE_LIBCAP "Disable cap library linking" OFF)
+ option(DISABLE_LIBSECCOMP "Disable seccomp library linking" OFF)
+ option(DISABLE_RURIENV "Disable env in ruri" OFF)
+-option(BUILD_LIB "Build with lib" OFF)
+ option(STRIP_DEBUGINFO "Strip debuginfo from ruri binary" ON)
+ 
+ # For Debug build
+@@ -197,26 +196,19 @@ add_definitions(-D_FILE_OFFSET_BITS=64)
+ 
+ file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/src/easteregg/*.c)
+ 
+-if (BUILD_LIB)
+-    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+-    add_library(ruri SHARED ${SOURCES})
+-    install (TARGETS ruri DESTINATION /usr/lib/)
+-else ()
+ # add the executable
+-    set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
+-    add_executable(ruri ${SOURCES})
+-    if(STRIP_DEBUGINFO)
+-        add_custom_command(
+-            TARGET ruri
+-            POST_BUILD
+-            COMMAND strip ruri
+-            VERBATIM
+-        )
+-    endif()
+-    install (TARGETS ruri DESTINATION /usr/bin/)
+-endif()
++set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
++add_executable(ruri ${SOURCES})
++if(STRIP_DEBUGINFO)
++    add_custom_command(
++        TARGET ruri
++        POST_BUILD
++        COMMAND strip ruri
++        VERBATIM
++    )
++endif()
++install (TARGETS ruri DESTINATION /usr/bin/)
+ 
+ add_custom_target(
+     tidy
