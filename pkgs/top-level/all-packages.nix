@@ -13606,10 +13606,6 @@ with pkgs;
 
   virt-manager = callPackage ../applications/virtualization/virt-manager { };
 
-  virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
-    qtermwidget = lxqt.qtermwidget_1_4;
-  };
-
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
 
