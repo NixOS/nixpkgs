@@ -13,6 +13,9 @@ let
   builder = replaceVars ./builder.pl {
     inherit (builtins) storeDir;
   };
+
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 in
 
 # We currently still rely on this custom overrider `<env-pkg>.override`,
@@ -20,6 +23,10 @@ in
 lib.makeOverridable (
   lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
+
+    excludeDrvArgNames = [
+      "derivationArgs"
+    ];
 
     extendDrvArgs =
       finalAttrs:
@@ -59,19 +66,28 @@ lib.makeOverridable (
         # Shell commands to run after building the symlink tree.
         postBuild ? "",
 
-        # Additional inputs
-        nativeBuildInputs ? [ ], # Handy e.g. if using makeWrapper in `postBuild`.
-        buildInputs ? [ ],
+        # Additional stdenv.mkDerivation arguments
+        # such as nativeBuildInputs/buildInputs for postBuild dependencies.
+        derivationArgs ? { },
 
-        passthru ? { },
-        meta ? { },
-
-        # Placeholder arguments
+        # Placeholder name arguments.
         name ? null,
         pname ? null,
         version ? null,
-      }:
+
+        # `stdenv.mkDerivation` args before introducing derivationArgs.
+        nativeBuildInputs ? null,
+        buildInputs ? null,
+        passthru ? null,
+        meta ? null,
+      }@args:
       let
+        compatArgs = getOptionalAttrs [
+          "nativeBuildInputs"
+          "buildInputs"
+          "passthru"
+          "meta"
+        ] args;
 
         chosenOutputs = map (drv: {
           paths =
@@ -100,7 +116,9 @@ lib.makeOverridable (
           (lib.remove null)
         ];
       in
-      {
+      derivationArgs
+      // compatArgs
+      // {
         inherit
           extraOutputsToInstall
           manifest
@@ -108,24 +126,22 @@ lib.makeOverridable (
           checkCollisionContents
           ignoreSingleFileOutputs
           includeClosures
-          passthru
-          meta
           paths
           pathsToLink
           extraPrefix
           postBuild
-          nativeBuildInputs
-          buildInputs
           ;
         pkgs = builtins.toJSON chosenOutputs;
         extraPathsFrom = lib.optional finalAttrs.includeClosures (writeClosure pathsForClosure);
-        preferLocalBuild = true;
-        allowSubstitutes = false;
+
+        preferLocalBuild = derivationArgs.preferLocalBuild or true;
+        allowSubstitutes = derivationArgs.allowSubstitutes or false;
         passAsFile = [
           "buildCommand"
         ]
         # XXX: The size is somewhat arbitrary
-        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs";
+        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs"
+        ++ derivationArgs.passAsFile or [ ];
 
         buildCommand = ''
           ${buildPackages.perl}/bin/perl -w ${builder}
