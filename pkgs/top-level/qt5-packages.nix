@@ -70,16 +70,6 @@ makeScopeWithSplicing' {
         in
         (lib.makeOverridable mkPlamoGear attrs);
 
-      mauiPackages =
-        let
-          mkMaui = import ../applications/maui;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkMaui attrs);
-
       noExtraAttrs =
         set:
         lib.attrsets.removeAttrs set [
@@ -96,7 +86,6 @@ makeScopeWithSplicing' {
       // plasma5
       // plasma5.thirdParty
       // kdeGear
-      // mauiPackages
       // qt5
       // {
 
@@ -105,7 +94,6 @@ makeScopeWithSplicing' {
           plasmaMobileGear
           plasma5
           kdeGear
-          mauiPackages
           qt5
           ;
 
