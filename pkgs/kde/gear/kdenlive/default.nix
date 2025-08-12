@@ -12,7 +12,7 @@
   qtnetworkauth,
   qqc2-desktop-style,
   libv4l,
-  open-timeline-io,
+  opentimelineio,
   frei0r,
 }:
 mkKdeDerivation {
@@ -44,7 +44,7 @@ mkKdeDerivation {
     ffmpeg-full
     libv4l
     mlt
-    open-timeline-io
+    opentimelineio
   ];
 
   qtWrapperArgs = [

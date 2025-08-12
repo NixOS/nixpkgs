@@ -17,10 +17,10 @@
   gmp,
   gnutls,
   llhttp,
-  jack,
   jsoncpp,
   libarchive,
   libgit2,
+  libjack2,
   libnatpmp,
   libpulseaudio,
   libupnp,
@@ -42,20 +42,14 @@
   git,
   networkmanager, # for libnm
   python3,
-  qttools, # for translations
-  wrapQtAppsHook,
   libnotify,
-  qt5compat,
-  qtbase,
-  qtdeclarative,
+  md4c,
+  html-tidy,
+  hunspell,
   qrencode,
-  qtmultimedia,
-  qtnetworkauth,
-  qtpositioning,
-  qtsvg,
-  qtwebengine,
-  qtwebchannel,
+  qt6Packages,
   wrapGAppsHook3,
+  zxing-cpp,
   withWebengine ? true,
 
   # for pjsip
@@ -206,7 +200,7 @@ stdenv.mkDerivation rec {
       gmp
       gnutls
       llhttp
-      jack
+      libjack2
       jsoncpp
       libarchive
       libgit2
@@ -241,6 +235,8 @@ stdenv.mkDerivation rec {
     sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
     sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
     cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(3rdparty/zxing-cpp EXCLUDE_FROM_ALL)' 'find_package(ZXing)'
   '';
 
   preConfigure = ''
@@ -255,29 +251,38 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     pkg-config
     cmake
     git
     python3
-    qttools
+    qt6Packages.qttools # for translations
   ];
 
   buildInputs = [
     ffmpeg_6
+    html-tidy
+    hunspell
     libnotify
+    md4c
     networkmanager
-    qtbase
-    qt5compat
     qrencode
-    qtnetworkauth
-    qtdeclarative
-    qtmultimedia
-    qtpositioning
-    qtsvg
-    qtwebchannel
+    zxing-cpp
   ]
-  ++ lib.optionals withWebengine [ qtwebengine ];
+  ++ (
+    with qt6Packages;
+    [
+      qtbase
+      qt5compat
+      qtnetworkauth
+      qtdeclarative
+      qtmultimedia
+      qtpositioning
+      qtsvg
+      qtwebchannel
+    ]
+    ++ lib.optionals withWebengine [ qtwebengine ]
+  );
 
   cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
 

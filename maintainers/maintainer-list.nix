@@ -5914,7 +5914,7 @@
   };
   dblsaiko = {
     email = "me@dblsaiko.net";
-    github = "2xsaiko";
+    github = "dblsaiko";
     githubId = 3987560;
     name = "Katalin Rebhan";
   };
@@ -16744,6 +16744,12 @@
     github = "MithicSpirit";
     githubId = 24192522;
     name = "MithicSpirit";
+  };
+  miyu = {
+    email = "miyu@allthingslinux.org";
+    github = "fndov";
+    githubId = 168955383;
+    name = "Tommy B";
   };
   mjm = {
     email = "matt@mattmoriarity.com";
