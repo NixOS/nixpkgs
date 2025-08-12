@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchzip,
   pkg-config,
   writeText,
   libX11,
@@ -15,13 +15,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slstatus";
   version = "1.1";
 
-  src = fetchgit {
-    url = "https://git.suckless.org/slstatus";
-    rev = version;
+  src = fetchzip {
+    url = "https://dl.suckless.org/tools/slstatus-${finalAttrs.version}.tar.gz";
     hash = "sha256-MRDovZpQsvnLEvsbJNBzprkzQQ4nIs1T9BLT+tSGta8=";
   };
 
@@ -49,15 +48,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/slstatus/";
     description = "Status monitor for window managers that use WM_NAME like dwm";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       oxzi
       qusic
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "slstatus";
   };
-}
+})
