@@ -9,6 +9,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_serialization_json" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-serialization-json-v";
+  };
 
   meta = with lib; {
     description = "JSON serialization implementation for Kiota clients in Python";
