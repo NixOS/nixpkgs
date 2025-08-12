@@ -46,6 +46,7 @@ stdenv.mkDerivation {
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
     makeWrapper ${lib.getExe electron} $out/bin/bilibili \
       --argv0 "bilibili" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libva ]} \
       --add-flags "$out/opt/app.asar" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
