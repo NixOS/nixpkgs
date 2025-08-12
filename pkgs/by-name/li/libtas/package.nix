@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
   pkg-config,
   SDL2,
@@ -24,6 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-/hyKJ8HGLN7hT+9If/lcp0C7GnhJMRpc7EKDgA1kQcI=";
   };
+  patches = [
+    # Fixes `undefined symbol: SDL_Log` errors
+    (fetchurl {
+      url = "https://github.com/clementgallet/libTAS/commit/779ff0fb0f3accfc62949680d85ecf96b28d18ef.patch";
+      hash = "sha256-xAaTWIXt8FkMu6GE5mBWtLypROFZ1aEqmBTtG+6rTWk=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
