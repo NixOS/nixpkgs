@@ -19,16 +19,16 @@ let
     }:
     buildGoModule rec {
       pname = stname;
-      version = "1.30.0";
+      version = "2.0.0";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         tag = "v${version}";
-        hash = "sha256-GKyzJ2kzs2h/tfb3StSleGBofiKk6FwVcSkCjsJRvRY=";
+        hash = "sha256-2gcD3p1os2zr5mMU+NLHrXUI6sIKGf7bhFFYwr4HlMk=";
       };
 
-      vendorHash = "sha256-Soky/3wEmP1QRy8xfL68sTHi3CSl4nbCINmG0DY2Qys=";
+      vendorHash = "sha256-lNdha5qg9vzkjlzXQq7ULW68nMwFRfL1DH1TrLoPw6c=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
