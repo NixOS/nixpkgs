@@ -127,6 +127,10 @@ in
       "services"
       "dd-agent"
     ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
+    (mkRemovedOptionModule [
+      "services"
+      "deepin"
+    ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "dnscrypt-wrapper" ] ''
       The dnscrypt-wrapper module was removed since the project has been effectively unmaintained since 2018;
@@ -271,6 +275,12 @@ in
       "desktopManager"
       "plasma5"
     ] "the Plasma 5 desktop environment has been removed from nixpkgs, as it has reached EOL upstream.")
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "deepin"
+    ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
       services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
       as the underlying package isn't being maintained. Working alternatives are

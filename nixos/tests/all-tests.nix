@@ -423,7 +423,6 @@ in
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;
-  deepin = runTest ./deepin.nix;
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
   dependency-track = runTest ./dependency-track.nix;

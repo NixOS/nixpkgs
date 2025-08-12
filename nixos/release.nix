@@ -623,15 +623,6 @@ rec {
       }
     );
 
-    deepin = makeClosure (
-      { ... }:
-      {
-        services.xserver.enable = true;
-        services.xserver.displayManager.lightdm.enable = true;
-        services.xserver.desktopManager.deepin.enable = true;
-      }
-    );
-
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure (
       { pkgs, ... }:
