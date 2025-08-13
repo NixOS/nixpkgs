@@ -7,6 +7,7 @@
   gfortran,
   fixDarwinDylibNames,
   nix-update-script,
+  python3Packages,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.scs-python = python3Packages.scs;
   };
 
   meta = {
