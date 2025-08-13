@@ -12519,6 +12519,8 @@ self: super: with self; {
 
   pycategories = callPackage ../development/python-modules/pycategories { };
 
+  pycayennelpp = callPackage ../development/python-modules/pycayennelpp { };
+
   pycddl = callPackage ../development/python-modules/pycddl { };
 
   pycdio = callPackage ../development/python-modules/pycdio { };
