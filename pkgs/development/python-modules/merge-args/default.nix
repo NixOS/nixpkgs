@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Merge signatures of two functions with Advanced Python Hackery";
     homepage = "https://github.com/Kwpolska/merge_args";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ matrixman ];
   };
 }
