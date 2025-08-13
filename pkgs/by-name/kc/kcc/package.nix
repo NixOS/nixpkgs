@@ -25,7 +25,10 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  buildInputs = [ qt6.qtbase ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
