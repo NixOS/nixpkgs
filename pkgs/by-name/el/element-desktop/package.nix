@@ -77,6 +77,11 @@ stdenv.mkDerivation (
       runHook postConfigure
     '';
 
+    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
+    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TMPDIR="$(mktemp -d)"
+    '';
+
     buildPhase = ''
       runHook preBuild
 
