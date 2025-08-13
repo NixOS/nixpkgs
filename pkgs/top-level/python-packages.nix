@@ -19380,6 +19380,8 @@ self: super: with self; {
     pinentry = pkgs.pinentry-curses;
   };
 
+  trianglesolver = callPackage ../development/python-modules/trianglesolver { };
+
   trie = callPackage ../development/python-modules/trie { };
 
   triggercmd = callPackage ../development/python-modules/triggercmd { };
