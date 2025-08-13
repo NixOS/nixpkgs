@@ -54,10 +54,14 @@ let
 
   flutterTools =
     args.flutterTools or (callPackage ./flutter-tools.nix {
-      inherit dart version;
+      inherit
+        dart
+        engineVersion
+        patches
+        pubspecLock
+        version
+        ;
       flutterSrc = src;
-      inherit patches;
-      inherit pubspecLock;
       systemPlatform = stdenv.hostPlatform.system;
     });
 
