@@ -6,6 +6,7 @@
   lib,
   fetchgit,
   fetchurl,
+  symlinkJoin,
 }:
 
 let
@@ -75,6 +76,53 @@ rec {
 
   # see https://github.com/LibreOffice/dictionaries
   # for the sources and to find the names of the README files
+
+  all = symlinkJoin {
+    name = "hyphen-all";
+    paths = [
+      af_ZA
+      be_BY
+      bg_BG
+      ca_ES
+      cs_CZ
+      da_DK
+      de_DE
+      de_AT
+      de_CH
+      el_GR
+      en_GB
+      en_US
+      eo
+      es_ES
+      et_EE
+      fr_FR
+      hr_HR
+      hu_HU
+      id_ID
+      it_IT
+      lt_LT
+      lv_LV
+      mn_MN
+      nl_NL
+      nb_NO
+      nn_NO
+      pl_PL
+      pt_BR
+      pt_PT
+      ro_RO
+      ru_RU
+      sk_SK
+      sl_SI
+      sq_AL
+      sr_SR
+      sr_SR_LATN
+      sv_SE
+      te_IN
+      th_TH
+      uk_UA
+      zu_ZA
+    ];
+  };
 
   # AFRIKAANS
 
@@ -528,4 +576,3 @@ rec {
   };
 
 }
-
