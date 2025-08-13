@@ -369,6 +369,16 @@
       "agpl"
     ]
   },
+  "tables": {
+    "hash": "sha256-E68fyimEMBe0DJ2cOAIBs0+Psb8UVFFfLBZc/ESRzY8=",
+    "url": "https://github.com/nextcloud-releases/tables/releases/download/v0.9.5/tables-v0.9.5.tar.gz",
+    "version": "0.9.5",
+    "description": "Manage data the way you need it.\n\nWith this app you are able to create your own tables with individual columns. You can start with a template or from scratch and add your wanted columns.\nYou can choose from the following column types:\n- Text line or rich text\n- Link to urls or other nextcloud resources\n- Numbers\n- Progress bar\n- Stars rating\n- Yes/No tick\n- Date and/or time\n- (Multi) selection\n\nShare your tables and views with users and groups within your cloud.\n\nHave a good time and manage whatever you want.",
+    "homepage": "https://github.com/nextcloud/tables",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "tasks": {
     "hash": "sha256-Upa3dl+b97UV3KXLlcxeS6OzFBTIW+e3U/T9QJT6Pmw=",
     "url": "https://github.com/nextcloud/tasks/releases/download/v0.16.1/tasks.tar.gz",
