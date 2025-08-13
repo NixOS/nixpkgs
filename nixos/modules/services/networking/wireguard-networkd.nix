@@ -105,7 +105,7 @@ let
       # See: https://github.com/systemd/systemd/issues/9911
       # This hack does the job but takes down the whole interface to do it.
       script = ''
-        ip link delete ${name}
+        ip link delete ${name} || :
         networkctl reload
       '';
     };

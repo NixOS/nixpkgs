@@ -34,6 +34,7 @@ python.pkgs.toPythonModule (
       "httpx-socks"
       "lxml"
       "pygments"
+      "valkey"
     ];
 
     preBuild =

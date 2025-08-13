@@ -5914,7 +5914,7 @@
   };
   dblsaiko = {
     email = "me@dblsaiko.net";
-    github = "2xsaiko";
+    github = "dblsaiko";
     githubId = 3987560;
     name = "Katalin Rebhan";
   };
@@ -6885,6 +6885,11 @@
     matrix = "@dstengele:pango.place";
     github = "dstengele";
     githubId = 1706418;
+  };
+  dstremur = {
+    name = "Diego Strebel";
+    github = "dstremur";
+    githubId = 76773187;
   };
   dsuetin = {
     name = "Danil Suetin";
@@ -16744,6 +16749,12 @@
     github = "MithicSpirit";
     githubId = 24192522;
     name = "MithicSpirit";
+  };
+  miyu = {
+    email = "miyu@allthingslinux.org";
+    github = "fndov";
+    githubId = 168955383;
+    name = "Tommy B";
   };
   mjm = {
     email = "matt@mattmoriarity.com";
@@ -26917,6 +26928,12 @@
     name = "Stefan Zabka";
     githubId = 13276717;
   };
+  vrose = {
+    email = "vrose04@gmail.com";
+    github = "vinnybod";
+    name = "Vince Rose";
+    githubId = 9831420;
+  };
   vrthra = {
     email = "rahul@gopinath.org";
     github = "vrthra";
@@ -28140,6 +28157,12 @@
     github = "zachcoyle";
     githubId = 908716;
     name = "Zach Coyle";
+  };
+  ZachDavies = {
+    name = "Zach Davies";
+    email = "zdmalta@proton.me";
+    github = "ZachDavies";
+    githubId = 131615861;
   };
   Zaczero = {
     name = "Kamil Monicz";

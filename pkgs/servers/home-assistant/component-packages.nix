@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.8.0";
+  version = "2025.8.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -3932,7 +3932,8 @@
       ];
     "netio" =
       ps: with ps; [
-      ]; # missing inputs: pynetio
+        pynetio
+      ];
     "network" =
       ps: with ps; [
         ifaddr

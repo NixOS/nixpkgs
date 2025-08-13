@@ -2771,6 +2771,10 @@ self: super: with self; {
 
   colcon-output = callPackage ../development/python-modules/colcon-output { };
 
+  colcon-package-information =
+    callPackage ../development/python-modules/colcon-package-information
+      { };
+
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
 
   colcon-ros-domain-id-coordinator =
@@ -5536,6 +5540,8 @@ self: super: with self; {
 
   fugashi = callPackage ../development/python-modules/fugashi { };
 
+  fullmoon = callPackage ../development/python-modules/fullmoon { };
+
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
@@ -8097,6 +8103,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libear = callPackage ../development/python-modules/libear { };
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (
@@ -8231,6 +8239,8 @@ self: super: with self; {
       inherit (self) python;
     }
   );
+
+  libscanbuild = callPackage ../development/python-modules/libscanbuild { };
 
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
@@ -9354,6 +9364,8 @@ self: super: with self; {
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
 
+  mkdocs-simple-blog = callPackage ../development/python-modules/mkdocs-simple-blog { };
+
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
@@ -10408,8 +10420,6 @@ self: super: with self; {
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
 
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
-
-  nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
@@ -13380,6 +13390,8 @@ self: super: with self; {
 
   pynetgear = callPackage ../development/python-modules/pynetgear { };
 
+  pynetio = callPackage ../development/python-modules/pynetio { };
+
   pynfsclient = callPackage ../development/python-modules/pynfsclient { };
 
   pyngo = callPackage ../development/python-modules/pyngo { };
@@ -13591,7 +13603,11 @@ self: super: with self; {
 
   pyppmd = callPackage ../development/python-modules/pyppmd { };
 
-  pyprecice = callPackage ../development/python-modules/pyprecice { };
+  pyprecice = callPackage ../development/python-modules/pyprecice {
+    precice = pkgs.precice.override {
+      python3Packages = self;
+    };
+  };
 
   pypresence = callPackage ../development/python-modules/pypresence { };
 
@@ -14956,11 +14972,6 @@ self: super: with self; {
   pythonegardia = callPackage ../development/python-modules/pythonegardia { };
 
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
-
-  pythonix = callPackage ../development/python-modules/pythonix {
-    nix = pkgs.nixVersions.nix_2_3;
-    meson = pkgs.meson.override { python3 = self.python; };
-  };
 
   pythonkuma = callPackage ../development/python-modules/pythonkuma { };
 
@@ -18046,6 +18057,8 @@ self: super: with self; {
   tidyexc = callPackage ../development/python-modules/tidyexc { };
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
+
+  tiered-debug = callPackage ../development/python-modules/tiered-debug { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
 
