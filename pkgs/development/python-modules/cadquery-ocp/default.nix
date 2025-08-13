@@ -191,6 +191,7 @@ let
     propagatedBuildInputs = [
       (mkPythonMetaPackage {
         inherit (finalAttrs) pname version meta;
+        dependencies = [ vtk ];
       })
     ];
 
