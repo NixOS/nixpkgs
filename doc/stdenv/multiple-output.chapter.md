@@ -60,7 +60,7 @@ The support code currently recognizes some particular kinds of outputs and eithe
 
 #### `$outputDev` {#outputdev}
 
-is for development-only files. These include C(++) headers (`include/`), pkg-config (`lib/pkgconfig/`), cmake (`lib/cmake/`) and aclocal files (`share/aclocal/`). They go to `dev` or `out` by default.
+is for development-only files. These include C(++) headers (`include/`, unless [`$outputInclude`](#outputinclude) is set), pkg-config (`lib/pkgconfig/`), cmake (`lib/cmake/`) and aclocal files (`share/aclocal/`). They go to `dev` or `out` by default.
 
 #### `$outputBin` {#outputbin}
 
@@ -69,6 +69,10 @@ is meant for user-facing binaries, typically residing in `bin/`. They go to `bin
 #### `$outputLib` {#outputlib}
 
 is meant for libraries, typically residing in `lib/` and `libexec/`. They go to `lib` or `out` by default.
+
+#### `$outputInclude` {#outputinclude}
+
+is for development-only files that go in `include/`. Defaults to [`$outputDev`](#outputdev).
 
 #### `$outputDoc` {#outputdoc}
 

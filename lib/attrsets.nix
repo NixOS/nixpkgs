@@ -28,6 +28,7 @@ let
     groupBy
     take
     foldl
+    optionals
     ;
 in
 
@@ -1790,7 +1791,7 @@ rec {
   getFirstOutput =
     candidates: pkg:
     let
-      outputs = builtins.filter (name: hasAttr name pkg) candidates;
+      outputs = optionals (isAttrs pkg) (builtins.filter (name: hasAttr name pkg) candidates);
       output = builtins.head outputs;
     in
     if pkg.outputSpecified or false || outputs == [ ] then pkg else pkg.${output};
