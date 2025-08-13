@@ -151,7 +151,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     mainProgram = "warp-cli";
     maintainers = with maintainers; [
-      devpikachu
       marcusramberg
     ];
     platforms = [
