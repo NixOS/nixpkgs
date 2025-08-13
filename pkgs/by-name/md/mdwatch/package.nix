@@ -5,6 +5,7 @@
   nix-update-script,
   versionCheckHook,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdwatch";
   version = "0.1.12";
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Simple CLI tool to live-preview Markdown files in your browser";
     homepage = "https://github.com/santoshxshrestha/mdwatch";
+    changelog = "https://github.com/santoshxshrestha/mdwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "mdwatch";
