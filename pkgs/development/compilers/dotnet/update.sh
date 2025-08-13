@@ -220,6 +220,12 @@ netcore_target_packages () {
         esac
     fi
 
+    if versionAtLeast "$version" 10; then
+        pkgs+=(
+            "Microsoft.NETCore.App.Runtime.NativeAOT.$rid"
+        )
+    fi
+
     generate_package_list "$version" '      ' "${pkgs[@]}"
 }
 
