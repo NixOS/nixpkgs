@@ -23,13 +23,25 @@ module.exports = async function ({ github, context, core, dry }) {
         pull_number
 
     async function extract({ sha, commit }) {
+      const noCherryPick = Array.from(
+        commit.message.matchAll(/^Not-cherry-picked-because: (.*)$/g)
+      ).at(0)
+
+      if (noCherryPick)
+        return {
+          sha,
+          commit,
+          severity: 'important',
+          message: `${sha} is not a cherry-pick, because: ${noCherryPick[1]}. Please review this commit manually.`,
+        }
+
       // Using the last line with "cherry" + hash, because a chained backport
       // can result in multiple of those lines. Only the last one counts.
-      const match = Array.from(
+      const cherry = Array.from(
         commit.message.matchAll(/cherry.*([0-9a-f]{40})/g),
       ).at(-1)
 
-      if (!match)
+      if (!cherry)
         return {
           sha,
           commit,
@@ -37,7 +49,7 @@ module.exports = async function ({ github, context, core, dry }) {
           message: `Couldn't locate original commit hash in message of ${sha}.`,
         }
 
-      const original_sha = match[1]
+      const original_sha = cherry[1]
 
       let branches
       try {
@@ -222,7 +234,7 @@ module.exports = async function ({ github, context, core, dry }) {
       // Whether this is intended or just an implementation detail is unclear.
       core.summary.addRaw('<blockquote>')
       core.summary.addRaw(
-        `\n\n[!${severity == 'warning' ? 'WARNING' : 'CAUTION'}]`,
+        `\n\n[!${({ important: 'IMPORTANT', warning: 'WARNING', error: 'CAUTION' })[severity]}]`,
         true,
       )
       core.summary.addRaw(`${message}`, true)
