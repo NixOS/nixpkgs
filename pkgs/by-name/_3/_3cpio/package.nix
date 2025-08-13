@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1kdJSwe9v7ojdukj04/G/RDeEk0NVCXmiNoVaelqt4Y=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-axPghG1T5NZYzGRZBwtdBJ5tQh+h8/vep/EmL5ADCjE=";
 
   # Tests attempt to access arbitrary filepaths
