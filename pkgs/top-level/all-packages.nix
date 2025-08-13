@@ -10324,11 +10324,6 @@ with pkgs;
 
   mongodb = hiPrio mongodb-7_0;
 
-  mongodb-6_0 = callPackage ../servers/nosql/mongodb/6.0.nix {
-    sasl = cyrus_sasl;
-    boost = boost178.override { enableShared = false; };
-  };
-
   mongodb-7_0 = callPackage ../servers/nosql/mongodb/7.0.nix {
     sasl = cyrus_sasl;
     boost = boost179.override { enableShared = false; };
