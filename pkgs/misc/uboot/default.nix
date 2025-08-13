@@ -203,6 +203,7 @@ in
       "tools/mkenvimage"
       "tools/mkimage"
       "tools/env/fw_printenv"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
