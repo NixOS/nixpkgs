@@ -4620,9 +4620,7 @@ with pkgs;
   };
   bashInteractiveFHS = bashFHS;
 
-  carapace = callPackage ../shells/carapace {
-    buildGoModule = buildGo123Module;
-  };
+  carapace = callPackage ../shells/carapace { };
 
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
