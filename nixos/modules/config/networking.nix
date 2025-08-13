@@ -206,30 +206,29 @@ in
         extraHosts
       ];
 
-    environment.etc =
-      {
-        # /etc/services: TCP/UDP port assignments.
-        services.source = pkgs.iana-etc + "/etc/services";
+    environment.etc = {
+      # /etc/services: TCP/UDP port assignments.
+      services.source = pkgs.iana-etc + "/etc/services";
 
-        # /etc/protocols: IP protocol numbers.
-        protocols.source = pkgs.iana-etc + "/etc/protocols";
+      # /etc/protocols: IP protocol numbers.
+      protocols.source = pkgs.iana-etc + "/etc/protocols";
 
-        # /etc/hosts: Hostname-to-IP mappings.
-        hosts.source = pkgs.concatText "hosts" cfg.hostFiles;
+      # /etc/hosts: Hostname-to-IP mappings.
+      hosts.source = pkgs.concatText "hosts" cfg.hostFiles;
 
-        # /etc/netgroup: Network-wide groups.
-        netgroup.text = lib.mkDefault "";
+      # /etc/netgroup: Network-wide groups.
+      netgroup.text = lib.mkDefault "";
 
-        # /etc/host.conf: resolver configuration file
-        "host.conf".text = ''
-          multi on
-        '';
+      # /etc/host.conf: resolver configuration file
+      "host.conf".text = ''
+        multi on
+      '';
 
-      }
-      // lib.optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
-        # /etc/rpc: RPC program numbers.
-        rpc.source = pkgs.stdenv.cc.libc.out + "/etc/rpc";
-      };
+    }
+    // lib.optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
+      # /etc/rpc: RPC program numbers.
+      rpc.source = pkgs.stdenv.cc.libc.out + "/etc/rpc";
+    };
 
     networking.proxy.envVars =
       lib.optionalAttrs (cfg.proxy.default != null) {

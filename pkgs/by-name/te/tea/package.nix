@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "tea";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "tea";
     rev = "v${version}";
-    sha256 = "sha256-JXF3oKbJ1G5UBfZYfEJcFw8H+J9KRn1aqSxUAyiRCIg=";
+    sha256 = "sha256-Dhb3y13sxkyE+2BjNj7YcsjiIPgznIVyuzWs0F8LNfU=";
   };
 
-  vendorHash = "sha256-1j8X4euJPbNeqEtYFKuRl9zARxUW0aWk07+AoNO24Qc=";
+  vendorHash = "sha256-mKCsBPBWs3+61em53cEB0shTLXgUg4TivJRogy1tYXw=";
 
   meta = with lib; {
     description = "Gitea official CLI client";

@@ -87,7 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
           which
         ]
       } \
-      --set JAVA_HOME ${openjdk.home}
+      --set JAVA_HOME ${openjdk.home} \
+      --set NXF_OPTS "-Duser.name=\''${USER}"
   '';
 
   passthru.tests.default = nixosTests.nextflow;

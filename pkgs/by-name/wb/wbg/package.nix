@@ -38,16 +38,15 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      pixman
-      tllist
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional enablePNG libpng
-    ++ lib.optional enableJPEG libjpeg
-    ++ lib.optional enableWebp libwebp;
+  buildInputs = [
+    pixman
+    tllist
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional enablePNG libpng
+  ++ lib.optional enableJPEG libjpeg
+  ++ lib.optional enableWebp libwebp;
 
   mesonBuildType = "release";
 

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "litemapy";
-  version = "0.10.0b0";
+  version = "0.11.0b0";
   pyproject = true;
   build-system = [ setuptools ];
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "SmylerMC";
     repo = "litemapy";
     rev = "v${version}";
-    hash = "sha256-mGRnrFfrg0VD9pXs0WOuiP6QnYyu0Jbv/bqCWtkOie0=";
+    hash = "sha256-jqJYiggAs/JA+CJ35HzpsIQA/5p8PRFkbmPlwJvTI28=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/SmylerMC/litemapy";
     changelog = "https://github.com/SmylerMC/litemapy/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gdd ];
+    maintainers = with maintainers; [
+      gdd
+      kuflierl
+    ];
   };
 }

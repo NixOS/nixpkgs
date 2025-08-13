@@ -19,8 +19,6 @@ buildGoModule rec {
 
   excludedPackages = [ "website" ];
 
-  doCheck = false;
-
   meta = with lib; {
     description = "Collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = "https://staticcheck.io";

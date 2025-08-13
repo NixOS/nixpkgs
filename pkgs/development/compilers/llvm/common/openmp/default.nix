@@ -73,45 +73,42 @@ stdenv.mkDerivation (
             }
           );
 
-    nativeBuildInputs =
-      [
-        cmake
-        python3.pythonOnBuildForHost
-        perl
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
-        ninja
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "14") [
-        pkg-config
-        lit
-      ];
+    nativeBuildInputs = [
+      cmake
+      python3.pythonOnBuildForHost
+      perl
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      ninja
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "14") [
+      pkg-config
+      lit
+    ];
 
-    buildInputs =
-      [
-        (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
-      ]
-      ++ lib.optionals (ompdSupport && ompdGdbSupport) [
-        python3
-      ];
+    buildInputs = [
+      (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    ]
+    ++ lib.optionals (ompdSupport && ompdGdbSupport) [
+      python3
+    ];
 
-    cmakeFlags =
-      [
-        (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (
-          !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries
-        ))
-        (lib.cmakeBool "LIBOMP_OMPD_SUPPORT" ompdSupport)
-        (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
-      ]
-      ++ lib.optionals (lib.versions.major release_version == "13") [
-        (lib.cmakeBool "LIBOMPTARGET_BUILD_AMDGCN_BCLIB" false) # Building the AMDGCN device RTL fails
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "14") [
-        (lib.cmakeFeature "CLANG_TOOL" "${clang-unwrapped}/bin/clang")
-        (lib.cmakeFeature "OPT_TOOL" "${llvm}/bin/opt")
-        (lib.cmakeFeature "LINK_TOOL" "${llvm}/bin/llvm-link")
-      ]
-      ++ devExtraCmakeFlags;
+    cmakeFlags = [
+      (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (
+        !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries
+      ))
+      (lib.cmakeBool "LIBOMP_OMPD_SUPPORT" ompdSupport)
+      (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
+    ]
+    ++ lib.optionals (lib.versions.major release_version == "13") [
+      (lib.cmakeBool "LIBOMPTARGET_BUILD_AMDGCN_BCLIB" false) # Building the AMDGCN device RTL fails
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "14") [
+      (lib.cmakeFeature "CLANG_TOOL" "${clang-unwrapped}/bin/clang")
+      (lib.cmakeFeature "OPT_TOOL" "${llvm}/bin/opt")
+      (lib.cmakeFeature "LINK_TOOL" "${llvm}/bin/llvm-link")
+    ]
+    ++ devExtraCmakeFlags;
 
     meta = llvm_meta // {
       homepage = "https://openmp.llvm.org/";

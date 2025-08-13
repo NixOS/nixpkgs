@@ -9,7 +9,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "adbtuifm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TK93O9XwMrsrQT3EG0969HYMtYkK0a4PzG9FSTqHxAY=";
   };
   vendorHash = "sha256-voVoowjM90OGWXF4REEevO8XEzT7azRYiDay4bnGBks=";

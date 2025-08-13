@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonpath" ];
 
-  pytestFlagsArray = [ "test/test*.py" ];
+  enabledTestPaths = [ "test/test*.py" ];
 
   meta = with lib; {
     description = "XPath for JSON";

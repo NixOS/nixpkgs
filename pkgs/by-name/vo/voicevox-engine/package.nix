@@ -2,60 +2,55 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  replaceVars,
   voicevox-core,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.23.0";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
-    hash = "sha256-kuWpLnDKRYcfV9FxYLeR6FmQFO2K12KxJx/Y/4MwhbM=";
+    hash = "sha256-WoHTv4VjLFJPIi47WETMQM8JmgBctAWlue8yKmi1+6A=";
   };
 
   patches = [
-    # the upstream package only uses poetry for dependency management, not for package definition
-    # this patch makes the package installable via poetry-core
-    (replaceVars ./make-installable.patch {
-      inherit version;
-    })
+    # this patch makes the package installable via hatchling
+    ./make-installable.patch
   ];
 
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
-  dependencies =
-    [
-      passthru.pyopenjtalk
-    ]
-    ++ (with python3Packages; [
-      numpy
-      fastapi
-      jinja2
-      python-multipart
-      uvicorn
-      soundfile
-      pyyaml
-      pyworld
-      semver
-      platformdirs
-      soxr
-      pydantic
-      starlette
-    ]);
+  dependencies = [
+    passthru.pyopenjtalk
+  ]
+  ++ (with python3Packages; [
+    fastapi
+    jinja2
+    kanalizer
+    numpy
+    platformdirs
+    pydantic
+    python-multipart
+    pyworld
+    pyyaml
+    semver
+    setuptools
+    soundfile
+    soxr
+    starlette
+    uvicorn
+  ]);
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
     "fastapi-slim"
   ];
-
-  pythonRelaxDeps = true;
 
   preConfigure = ''
     # copy demo metadata to temporary directory
@@ -103,7 +98,7 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
-      hash = "sha256-6pxx+ebNzXd3qbrFa4gfMDM2e5XANo3ZPzSAegKoJBE=";
+      hash = "sha256-4D9b5MjJQq+oCqSv8t7CILgFcotbNBH3m2F/up12pPE=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };

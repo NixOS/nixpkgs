@@ -62,7 +62,8 @@ buildPythonPackage rec {
     cloudpickle
     numpy
     gym-notices
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "gym" ];
 
@@ -78,45 +79,44 @@ buildPythonPackage rec {
     export SDL_VIDEODRIVER=dummy
   '';
 
-  disabledTests =
-    [
-      # TypeError: Converting from sequence to b2Vec2, expected int/float arguments index 0
-      "test_box_actions_out_of_bound"
-      "test_env_determinism_rollout"
-      "test_envs_pass_env_checker"
-      "test_frame_stack"
-      "test_make_autoreset_true"
-      "test_passive_checker_wrapper_warnings"
-      "test_pickle_env"
-      "test_render_modes"
+  disabledTests = [
+    # TypeError: Converting from sequence to b2Vec2, expected int/float arguments index 0
+    "test_box_actions_out_of_bound"
+    "test_env_determinism_rollout"
+    "test_envs_pass_env_checker"
+    "test_frame_stack"
+    "test_make_autoreset_true"
+    "test_passive_checker_wrapper_warnings"
+    "test_pickle_env"
+    "test_render_modes"
 
-      # TypeError: in method 'b2RevoluteJoint___SetMotorSpeed', argument 2 of type 'float32'
-      "test_box_actions_out_of_bound"
+    # TypeError: in method 'b2RevoluteJoint___SetMotorSpeed', argument 2 of type 'float32'
+    "test_box_actions_out_of_bound"
 
-      # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
-      "test_dict_init"
+    # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_dict_init"
 
-      # ValueError: setting an array element with a sequence.
-      # The requested array has an inhomogeneous shape after 1 dimensions.
-      # The detected shape was (2,) + inhomogeneous part
-      "test_sample_contains"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # gym/envs/classic_control/cartpole.py", line 227 in render
-      "test_autoclose"
-      "test_call_async_vector_env"
-      "test_call_sync_vector_env"
-      "test_human_rendering"
-      "test_make_render_mode"
-      "test_order_enforcing"
-      "test_record_simple"
-      "test_record_video_reset"
-      "test_record_video_step_trigger"
-      "test_record_video_using_default_trigger"
-      "test_record_video_within_vecto"
-      "test_text_envs"
-    ];
+    # ValueError: setting an array element with a sequence.
+    # The requested array has an inhomogeneous shape after 1 dimensions.
+    # The detected shape was (2,) + inhomogeneous part
+    "test_sample_contains"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # gym/envs/classic_control/cartpole.py", line 227 in render
+    "test_autoclose"
+    "test_call_async_vector_env"
+    "test_call_sync_vector_env"
+    "test_human_rendering"
+    "test_make_render_mode"
+    "test_order_enforcing"
+    "test_record_simple"
+    "test_record_video_reset"
+    "test_record_video_step_trigger"
+    "test_record_video_using_default_trigger"
+    "test_record_video_within_vecto"
+    "test_text_envs"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted

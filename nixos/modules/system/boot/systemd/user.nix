@@ -44,7 +44,8 @@ let
     "systemd-exit.service"
     "timers.target"
     "xdg-desktop-autostart.target"
-  ] ++ config.systemd.additionalUpstreamUserUnits;
+  ]
+  ++ config.systemd.additionalUpstreamUserUnits;
 
   writeTmpfiles =
     {

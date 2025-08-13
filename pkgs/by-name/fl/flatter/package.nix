@@ -29,22 +29,21 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs =
-    [
-      blas
-      gmp
-      mpfr
-      fplll
-      eigen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    blas
+    gmp
+    mpfr
+    fplll
+    eigen
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "(F)ast (lat)tice (r)eduction of integer lattice bases";
+    description = "Fast lattice reduction of integer lattice bases";
     homepage = "https://github.com/keeganryan/flatter";
     license = licenses.lgpl3Only;
     mainProgram = "flatter";

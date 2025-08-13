@@ -71,21 +71,20 @@ buildPythonPackage rec {
     rm -r python/llguidance
   '';
 
-  disabledTests =
-    [
-      # Require internet access (https://huggingface.co)
-      "test_grammar"
-      "test_incomplete_tokenizer"
-      "test_par_errors"
-      "test_par_grammar"
-      "test_tokenize_partial_basic"
-      "test_tokenize_partial_docs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # torch._inductor.exc.CppCompileError: C++ compile error
-      # OpenMP support not found.
-      "test_mask_data_torch"
-    ];
+  disabledTests = [
+    # Require internet access (https://huggingface.co)
+    "test_grammar"
+    "test_incomplete_tokenizer"
+    "test_par_errors"
+    "test_par_grammar"
+    "test_tokenize_partial_basic"
+    "test_tokenize_partial_docs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # torch._inductor.exc.CppCompileError: C++ compile error
+    # OpenMP support not found.
+    "test_mask_data_torch"
+  ];
 
   disabledTestPaths = [
     # Require internet access (https://huggingface.co)

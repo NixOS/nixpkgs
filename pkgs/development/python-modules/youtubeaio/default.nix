@@ -9,13 +9,14 @@
   yarl,
   aresponses,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "youtubeaio";
-  version = "1.1.5";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-youtube";
     tag = "v${version}";
-    hash = "sha256-utkf5t6yrf0f9QBIaDH6MxKduNZOsjfEWfQnuVyUoRM=";
+    hash = "sha256-lpmqQXizfFJXgGcKWhFqS4XMML12CFlB40k2ixdszCM=";
   };
 
-  postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pydantic
     yarl
@@ -44,12 +41,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
   meta = {
-    changelog = "https://github.com/joostlek/python-youtube/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-youtube/releases/tag/${src.tag}";
     description = "Asynchronous Python client for the YouTube V3 API";
     homepage = "https://github.com/joostlek/python-youtube";
     license = lib.licenses.mit;

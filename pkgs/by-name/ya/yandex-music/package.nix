@@ -29,13 +29,13 @@ assert lib.assertMsg (trayStyle >= 1 && trayStyle <= 3) "Tray style must be with
 assert lib.assertMsg (vibeAnimationMaxFps >= 0) "Vibe animation max FPS must be greater then 0";
 stdenvNoCC.mkDerivation rec {
   pname = "yandex-music";
-  version = "5.54.0";
+  version = "5.61.1";
 
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
     rev = "v${version}";
-    hash = "sha256-/ZZIL3DZY/L28fCq4CD9vVuvX7xJK2hsyDY6gymdUWo=";
+    hash = "sha256-/PpIlje7wXHTEI/ymbPsX3k7uYNKMrcjHrmfnr6QNo4=";
   };
 
   nativeBuildInputs = [

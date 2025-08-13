@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  future,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -13,9 +11,7 @@
 buildPythonPackage rec {
   pname = "aurorapy";
   version = "0.2.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "energievalsabbia";
@@ -24,12 +20,15 @@ buildPythonPackage rec {
     hash = "sha256-rGwfGq3zdoG9NCGqVN29Q4bWApk5B6CRdsW9ctWgOec=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    sed -i "/from past.builtins import map/d" aurorapy/client.py
+  '';
 
-  propagatedBuildInputs = [
-    future
-    pyserial
-  ];
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "future" ];
+
+  dependencies = [ pyserial ];
 
   nativeCheckInputs = [
     pytestCheckHook

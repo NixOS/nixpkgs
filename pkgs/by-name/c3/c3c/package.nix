@@ -19,13 +19,13 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   pname = "c3c${optionalString debug "-debug"}";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/S2rcZZe441b1sbiJDH1rnxT/mEP1694d5L8MIV6QQc=";
+    hash = "sha256-LIwav9ZvNRn4tGh+MGEhimSIKROU3H+R1pc3oyGDb18=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -51,7 +51,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
+  ]
+  ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
 
   nativeCheckInputs = [ python3 ];
 

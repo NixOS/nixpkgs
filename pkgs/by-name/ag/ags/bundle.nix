@@ -40,27 +40,26 @@ stdenvNoCC.mkDerivation (
         astal.io
       ];
 
-    preFixup =
-      ''
-        gappsWrapperArgs+=(
-          --prefix PATH : ${
-            lib.makeBinPath (
-              dependencies
-              ++ [
-                dart-sass
-                fzf
-                gtk3
-              ]
-            )
-          }
-        )
-      ''
-      + lib.optionalString enableGtk4 ''
-        gappsWrapperArgs+=(
-          --set LD_PRELOAD "${gtk4-layer-shell}/lib/libgtk4-layer-shell.so"
-        )
-      ''
-      + (attrs.preFixup or "");
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix PATH : ${
+          lib.makeBinPath (
+            dependencies
+            ++ [
+              dart-sass
+              fzf
+              gtk3
+            ]
+          )
+        }
+      )
+    ''
+    + lib.optionalString enableGtk4 ''
+      gappsWrapperArgs+=(
+        --set LD_PRELOAD "${gtk4-layer-shell}/lib/libgtk4-layer-shell.so"
+      )
+    ''
+    + (attrs.preFixup or "");
 
     installPhase =
       let

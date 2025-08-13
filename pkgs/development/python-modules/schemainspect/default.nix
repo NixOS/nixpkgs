@@ -92,11 +92,15 @@ buildPythonPackage {
     "test_weird_names"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
     "-svv"
+  ];
+
+  enabledTestPaths = [
     "tests"
   ];
+
   pythonImportsCheck = [ "schemainspect" ];
 
   postUnpack = ''

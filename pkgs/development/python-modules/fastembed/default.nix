@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
     tag = "v${version}";
-    hash = "sha256-CnUg6ZJ3VmKXbeWWsD0j4KTdUhqrgOP5PBnHtghugHQ=";
+    hash = "sha256-zftNBATvb9iCjEOWIg0Q8/1+VwQ1km/iob3TgOAfJbg=";
   };
 
   build-system = [ poetry-core ];

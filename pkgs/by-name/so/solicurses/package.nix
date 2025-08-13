@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "solicurses";
-  version = "unstable-2020-02-13";
+  version = "0-unstable-2020-02-13";
 
   src = fetchFromGitHub {
     owner = "KaylaPP";

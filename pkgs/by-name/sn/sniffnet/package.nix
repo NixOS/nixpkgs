@@ -26,29 +26,27 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MWYCXLIv0euEHkfqZCxbfs1wFHkGIFk06wn7F8CIXx0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-M7vIiGdH5+rdlqi603bfcXZavUAx2tU7+4sXb+QG+2g=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libpcap
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      expat
-      fontconfig
-      vulkan-loader
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  buildInputs = [
+    libpcap
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    expat
+    fontconfig
+    vulkan-loader
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
   # requires internet access
   checkFlags = [

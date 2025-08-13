@@ -17,6 +17,7 @@
   lark,
   pandas,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pytest-mock,
   pytest-socket,
@@ -31,22 +32,17 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.23";
+  version = "0.3.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-o/DDHV2niEDp0kFJ+XuUXH7TSL/cBXwrI4lYLyD2SHc=";
+    hash = "sha256-HpAdCHxmfGJcqXArvtlYagNuEBGBjrbICIwh9nI0qMQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
-
-  preConfigure = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=langchain_openai" ""
-  '';
 
   build-system = [ pdm-backend ];
 
@@ -68,6 +64,7 @@ buildPythonPackage rec {
     lark
     pandas
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     pytest-mock
     pytest-socket
@@ -77,7 +74,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   disabledTests = [
     # These tests require network access
@@ -95,6 +92,12 @@ buildPythonPackage rec {
     "test_get_token_ids"
     "test_init_o1"
     "test_openai_get_num_tokens"
+  ];
+
+  disabledTestPaths = [
+    # TODO recheck on next update. Langchain has been working on Pydantic errors.
+    # ValidationError from pydantic
+    "tests/unit_tests/chat_models/test_responses_stream.py"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

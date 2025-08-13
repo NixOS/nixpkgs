@@ -10,6 +10,7 @@
 buildPythonPackage {
   pname = "pyscreeze";
   version = "0.1.26";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "asweigart";

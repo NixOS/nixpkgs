@@ -25,19 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -54,47 +53,45 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      rocblas
-      rocsparse
-      rocprim
-      rocrand
-      openmp
-      openmpi
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ];
+  buildInputs = [
+    rocblas
+    rocsparse
+    rocprim
+    rocrand
+    openmp
+    openmpi
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ];
 
   CXXFLAGS = "-I${openmp.dev}/include";
-  cmakeFlags =
-    [
-      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
-      "-DROCM_PATH=${clr}"
-      "-DHIP_ROOT_DIR=${clr}"
-      "-DSUPPORT_HIP=ON"
-      "-DSUPPORT_OMP=ON"
-      "-DSUPPORT_MPI=ON"
-      "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
-      "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_CLIENTS_TESTS=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_CLIENTS_BENCHMARKS=ON"
-    ];
+  cmakeFlags = [
+    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
+    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
+    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
+    "-DROCM_PATH=${clr}"
+    "-DHIP_ROOT_DIR=${clr}"
+    "-DSUPPORT_HIP=ON"
+    "-DSUPPORT_OMP=ON"
+    "-DSUPPORT_MPI=ON"
+    "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_CLIENTS_TESTS=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_CLIENTS_BENCHMARKS=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''

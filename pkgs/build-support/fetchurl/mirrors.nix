@@ -69,12 +69,6 @@
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need
     "https://download.gnome.org/"
-
-    "https://fr2.rpmfind.net/linux/gnome.org/"
-    "https://ftp.acc.umu.se/pub/GNOME/"
-    "https://ftp.belnet.be/mirror/ftp.gnome.org/"
-    "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
-    "ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/"
   ];
 
   # GNU (https://www.gnu.org/prep/ftp.html)

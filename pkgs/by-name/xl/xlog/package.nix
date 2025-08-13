@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     mainProgram = "xlog";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

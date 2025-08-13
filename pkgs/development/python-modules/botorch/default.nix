@@ -47,31 +47,30 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      "test_all_cases_covered"
+  disabledTests = [
+    "test_all_cases_covered"
 
-      # Skip tests that take too much time
-      "TestQMultiObjectivePredictiveEntropySearch"
-      "TestQPredictiveEntropySearch"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
-      "test_optimize_acqf_mixed_binary_only"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
-      # stuck tests on hydra
-      "test_moo_predictive_entropy_search"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # RuntimeError: required keyword attribute 'value' has the wrong type
-      "test_posterior_in_trace_mode"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # Numerical error slightly above threshold
-      # AssertionError: Tensor-likes are not close!
-      "test_model_list_gpytorch_model"
-    ];
+    # Skip tests that take too much time
+    "TestQMultiObjectivePredictiveEntropySearch"
+    "TestQPredictiveEntropySearch"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
+    "test_optimize_acqf_mixed_binary_only"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
+    # stuck tests on hydra
+    "test_moo_predictive_entropy_search"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # RuntimeError: required keyword attribute 'value' has the wrong type
+    "test_posterior_in_trace_mode"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Numerical error slightly above threshold
+    # AssertionError: Tensor-likes are not close!
+    "test_model_list_gpytorch_model"
+  ];
 
   pythonImportsCheck = [ "botorch" ];
 

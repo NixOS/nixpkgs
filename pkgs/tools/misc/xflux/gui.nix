@@ -18,6 +18,7 @@
 buildPythonApplication rec {
   pname = "xflux-gui";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "xflux-gui";

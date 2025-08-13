@@ -52,33 +52,32 @@ stdenv.mkDerivation rec {
       --replace '${"$"}{prefix}/${"$"}{PTL_INSTALL_' '${"$"}{PTL_INSTALL_'
   '';
 
-  cmakeFlags =
-    [
-      "-DGEANT4_INSTALL_DATA=OFF"
-      "-DGEANT4_USE_GDML=ON"
-      "-DGEANT4_USE_G3TOG4=ON"
-      "-DGEANT4_USE_QT=${if enableQt then "ON" else "OFF"}"
-      "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
-      "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
-      "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
-      "-DGEANT4_USE_PYTHON=${if enablePython then "ON" else "OFF"}"
-      "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
-      "-DGEANT4_USE_SYSTEM_CLHEP=ON"
-      "-DGEANT4_USE_SYSTEM_EXPAT=ON"
-      "-DGEANT4_USE_SYSTEM_ZLIB=ON"
-      "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-    ]
-    ++ lib.optionals (enableOpenGLX11 && stdenv.hostPlatform.isDarwin) [
-      "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
-      "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
-    ]
-    ++ lib.optionals (enableMultiThreading && enablePython) [
-      "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
-    ]
-    ++ lib.optionals enableInventor [
-      "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
-      "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
-    ];
+  cmakeFlags = [
+    "-DGEANT4_INSTALL_DATA=OFF"
+    "-DGEANT4_USE_GDML=ON"
+    "-DGEANT4_USE_G3TOG4=ON"
+    "-DGEANT4_USE_QT=${if enableQt then "ON" else "OFF"}"
+    "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
+    "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
+    "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
+    "-DGEANT4_USE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
+    "-DGEANT4_USE_SYSTEM_CLHEP=ON"
+    "-DGEANT4_USE_SYSTEM_EXPAT=ON"
+    "-DGEANT4_USE_SYSTEM_ZLIB=ON"
+    "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
+  ]
+  ++ lib.optionals (enableOpenGLX11 && stdenv.hostPlatform.isDarwin) [
+    "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
+  ]
+  ++ lib.optionals (enableMultiThreading && enablePython) [
+    "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
+  ]
+  ++ lib.optionals enableInventor [
+    "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
+    "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -102,28 +101,26 @@ stdenv.mkDerivation rec {
       python3
     ];
 
-  propagatedBuildInputs =
-    [
-      clhep
-      expat
-      xercesc
-      zlib
-    ]
-    ++ lib.optionals enableOpenGLX11 [
-      libGL
-      libX11
-    ]
-    ++ lib.optionals enableXM [ motif ]
-    ++ lib.optionals enableQt [ qt5.qtbase ];
+  propagatedBuildInputs = [
+    clhep
+    expat
+    xercesc
+    zlib
+  ]
+  ++ lib.optionals enableOpenGLX11 [
+    libGL
+    libX11
+  ]
+  ++ lib.optionals enableXM [ motif ]
+  ++ lib.optionals enableQt [ qt5.qtbase ];
 
-  postFixup =
-    ''
-      substituteInPlace "$out"/bin/geant4.sh \
-        --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
-    ''
-    + lib.optionalString enableQt ''
-      wrapQtAppsHook
-    '';
+  postFixup = ''
+    substituteInPlace "$out"/bin/geant4.sh \
+      --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
+  ''
+  + lib.optionalString enableQt ''
+    wrapQtAppsHook
+  '';
 
   setupHook = ./geant4-hook.sh;
 

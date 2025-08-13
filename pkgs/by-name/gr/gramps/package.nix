@@ -23,7 +23,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "6.0.1";
+  version = "6.0.3";
   pname = "gramps";
   pyproject = true;
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-EKiC7zFIAXwKXun8jixanVmBI5XyQlxBcN5rxbqdq9k=";
+    hash = "sha256-dmokrAN6ZC7guMYHifNifL9rXqZPW+Z5LudQhIUxMs8=";
   };
 
   patches = [
@@ -60,34 +60,32 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  nativeCheckInputs =
-    [
-      glibcLocales
-      python3Packages.unittestCheckHook
-      python3Packages.jsonschema
-      python3Packages.mock
-      python3Packages.lxml
-    ]
-    # TODO: use JHBuild to build the Gramps' bundle
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeCheckInputs = [
+    glibcLocales
+    python3Packages.unittestCheckHook
+    python3Packages.jsonschema
+    python3Packages.mock
+    python3Packages.lxml
+  ]
+  # TODO: use JHBuild to build the Gramps' bundle
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      gtk3
-      pango
-      gexiv2
-    ]
-    # Map support
-    ++ lib.optionals enableOSM [
-      osm-gps-map
-      glib-networking
-    ]
-    # Graphviz support
-    ++ lib.optional enableGraphviz graphviz
-    # Ghostscript support
-    ++ lib.optional enableGhostscript ghostscript;
+  buildInputs = [
+    gtk3
+    pango
+    gexiv2
+  ]
+  # Map support
+  ++ lib.optionals enableOSM [
+    osm-gps-map
+    glib-networking
+  ]
+  # Graphviz support
+  ++ lib.optional enableGraphviz graphviz
+  # Ghostscript support
+  ++ lib.optional enableGhostscript ghostscript;
 
   preCheck = ''
     export HOME=$(mktemp -d)

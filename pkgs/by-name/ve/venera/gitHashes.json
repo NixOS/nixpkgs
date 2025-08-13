@@ -1,0 +1,18 @@
+{
+  "desktop_webview_window": "sha256-c2f1CjfZJ8M9SJz65WQVG+0uuKaFMjQFFAGSNH9osjg=",
+  "flutter_7zip": "sha256-KHDq4XG3l+dq1NPW84wOK5kKbXJ8qCK8voGeTnX/Krw=",
+  "flutter_inappwebview": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_inappwebview_android": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_inappwebview_ios": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_inappwebview_macos": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_inappwebview_platform_interface": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_inappwebview_web": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_inappwebview_windows": "sha256-9ocNFgXXqP28VmuJVXc81MUSPjIkzngOyEInMSxgwCU=",
+  "flutter_qjs": "sha256-Mp9swQ4JEIyIEBQGlR7i+37Jp2sFGwL0uGrSTwE/n88=",
+  "flutter_saf": "sha256-zmRZ82aJPYX/N/lOUcOoT8UAHEDoUk0FTFSqB4gKR+U=",
+  "lodepng_flutter": "sha256-fOOhjoo3dzNNZI04Ie7GHLTfVlD5X+5IONpg8+RlmsE=",
+  "photo_view": "sha256-zRc/WCbVybWkF52KDZZXgvKA8bbXASI7Yj2RFzLhXUk=",
+  "rhttp": "sha256-6AH7A+CJg60Vk0ph3cJwj29GkmJEezI/VuZvRqqmOYs=",
+  "scrollable_positioned_list": "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=",
+  "webdav_client": "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE="
+}

@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.504.2";
+  version = "2.516.1";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-5SNHwB3TkRbDZPt+ureNFWvOj2rdKEhP9XH+DQ+uq/Y=";
+    hash = "sha256-wwiifoH0zjqmeH6WyvdxU09/IG/vu4OWnXexX8fycAo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       version="$(jq -r .version <<<$core_json)"
       sha256="$(jq -r .sha256 <<<$core_json)"
-      hash="$(nix hash to-sri --type sha256 "$sha256")"
+      hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256")"
 
       if [ ! "$oldVersion" = "$version" ]; then
         update-source-version jenkins "$version" "$hash"

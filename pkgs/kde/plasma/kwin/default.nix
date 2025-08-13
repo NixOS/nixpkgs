@@ -22,10 +22,6 @@ mkKdeDerivation {
   pname = "kwin";
 
   patches = [
-    # Follow symlinks when searching for aurorae configs
-    # FIXME(later): upstream?
-    ./0001-follow-symlinks.patch
-    # The rest are NixOS-specific hacks
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch

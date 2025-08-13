@@ -31,6 +31,10 @@ let
     ''}
     ${cfg.qemu.verbatimConfig}
   '';
+  networkConfigFile = pkgs.writeText "network.conf" ''
+    firewall_backend = "${cfg.firewallBackend}"
+  '';
+
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
 
@@ -385,6 +389,18 @@ in
         Whether to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
       '';
     };
+
+    firewallBackend = mkOption {
+      type = types.enum [
+        "iptables"
+        "nftables"
+      ];
+      default = if config.networking.nftables.enable then "nftables" else "iptables";
+      defaultText = lib.literalExpression "if config.networking.nftables.enable then \"nftables\" else \"iptables\"";
+      description = ''
+        The backend used to setup virtual network firewall rules.
+      '';
+    };
   };
 
   ###### implementation
@@ -462,6 +478,9 @@ in
         # Copy generated qemu config to libvirt directory
         cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
 
+        # Copy generated network config to libvirt directory
+        cp -f ${networkConfigFile} /var/lib/${dirName}/network.conf
+
         # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
         for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
@@ -526,13 +545,12 @@ in
         ++ cfg.extraOptions
       );
 
-      path =
-        [
-          cfg.qemu.package
-          pkgs.netcat
-        ] # libvirtd requires qemu-img to manage disk images
-        ++ optional vswitch.enable vswitch.package
-        ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
+      path = [
+        cfg.qemu.package
+        pkgs.netcat
+      ] # libvirtd requires qemu-img to manage disk images
+      ++ optional vswitch.enable vswitch.package
+      ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
       serviceConfig = {
         Type = "notify";

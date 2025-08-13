@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     fetchLFS = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-scCF4xpc1COdlg57/eNTPdgY7/cJkdcc2s1YNraXzXk=";
 
   offlineCache = fetchYarnDeps {
@@ -74,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Local-first, encrypted, note taking application organized in tree-like structures";
-    homepage = " https://codeberg.org/solver-orgz/treedome";
+    homepage = "https://codeberg.org/solver-orgz/treedome";
     license = lib.licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";

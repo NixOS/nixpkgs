@@ -15,40 +15,39 @@ let
   enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
   redisServer = config.services.redis.servers.paperless;
 
-  env =
-    {
-      PAPERLESS_DATA_DIR = cfg.dataDir;
-      PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
-      PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
-      PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
-      GRANIAN_HOST = cfg.address;
-      GRANIAN_PORT = toString cfg.port;
-      GRANIAN_WORKERS_KILL_TIMEOUT = "60";
-    }
-    // lib.optionalAttrs (config.time.timeZone != null) {
-      PAPERLESS_TIME_ZONE = config.time.timeZone;
-    }
-    // lib.optionalAttrs enableRedis {
-      PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
-    }
-    // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
-      PAPERLESS_NLTK_DIR = pkgs.symlinkJoin {
-        name = "paperless_ngx_nltk_data";
-        paths = cfg.package.nltkData;
-      };
-    }
-    // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
-      OMP_NUM_THREADS = "1";
-    }
-    // (lib.mapAttrs (
-      _: s:
-      if (lib.isAttrs s || lib.isList s) then
-        builtins.toJSON s
-      else if lib.isBool s then
-        lib.boolToString s
-      else
-        toString s
-    ) cfg.settings);
+  env = {
+    PAPERLESS_DATA_DIR = cfg.dataDir;
+    PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
+    PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+    PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
+    GRANIAN_HOST = cfg.address;
+    GRANIAN_PORT = toString cfg.port;
+    GRANIAN_WORKERS_KILL_TIMEOUT = "60";
+  }
+  // lib.optionalAttrs (config.time.timeZone != null) {
+    PAPERLESS_TIME_ZONE = config.time.timeZone;
+  }
+  // lib.optionalAttrs enableRedis {
+    PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
+  }
+  // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
+    PAPERLESS_NLTK_DIR = pkgs.symlinkJoin {
+      name = "paperless_ngx_nltk_data";
+      paths = cfg.package.nltkData;
+    };
+  }
+  // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
+    OMP_NUM_THREADS = "1";
+  }
+  // (lib.mapAttrs (
+    _: s:
+    if (lib.isAttrs s || lib.isList s) then
+      builtins.toJSON s
+    else if lib.isBool s then
+      lib.boolToString s
+    else
+      toString s
+  ) cfg.settings);
 
   manage = pkgs.writeShellScriptBin "paperless-manage" ''
     set -o allexport # Export the following env vars
@@ -491,18 +490,19 @@ in
               fi
             fi
           '';
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after =
             lib.optional enableRedis "redis-paperless.service"
-            ++ lib.optional cfg.database.createLocally "postgresql.service";
+            ++ lib.optional cfg.database.createLocally "postgresql.target";
         };
 
         systemd.services.paperless-task-queue = {
           description = "Paperless Celery Workers";
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
@@ -520,10 +520,11 @@ in
           # Bind to `paperless-scheduler` so that the consumer never runs
           # during migrations
           bindsTo = [ "paperless-scheduler.service" ];
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
@@ -541,10 +542,11 @@ in
           # Bind to `paperless-scheduler` so that the web server never runs
           # during migrations
           bindsTo = [ "paperless-scheduler.service" ];
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target";
           # Setup PAPERLESS_SECRET_KEY.
           # If this environment variable is left unset, paperless-ngx defaults
           # to a well-known value, which is insecure.

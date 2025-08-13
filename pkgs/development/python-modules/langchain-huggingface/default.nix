@@ -76,7 +76,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
@@ -86,7 +86,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
-    description = "An integration package connecting Huggingface related classes and LangChain";
+    description = "Integration package connecting Huggingface related classes and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/huggingface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

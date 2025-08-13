@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "opentimestamps-client";
   version = "0.7.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opentimestamps";
@@ -16,7 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ny2svB8WcoUky8UfeilANo1DlS+f3o9RtV4YNmUwjJk=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     appdirs
     gitpython
     opentimestamps

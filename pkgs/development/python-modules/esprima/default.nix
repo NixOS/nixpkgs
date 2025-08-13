@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/__main__.py::TestEsprima" ];
+  enabledTestPaths = [ "test/__main__.py::TestEsprima" ];
 
   pythonImportsCheck = [ "esprima" ];
 

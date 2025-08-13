@@ -199,7 +199,7 @@ in
       postStart = ''
         if test -e "${cfg.dbpath}/.first_startup"; then
           ${lib.optionalString (cfg.initialScript != null) ''
-            initialRootPassword=$(<${cfg.initialRootPasswordFile})
+            ${lib.optionalString (cfg.enableAuth) "initialRootPassword=$(<${cfg.initialRootPasswordFile})"}
             ${mongoshExe} ${lib.optionalString (cfg.enableAuth) "-u root -p $initialRootPassword"} admin "${cfg.initialScript}"
           ''}
           rm -f "${cfg.dbpath}/.first_startup"

@@ -366,7 +366,7 @@ in
     systemd.services.mobilizon-postgresql = mkIf isLocalPostgres {
       description = "Mobilizon PostgreSQL setup";
 
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [
         "mobilizon.service"
         "mobilizon-setup-secrets.service"

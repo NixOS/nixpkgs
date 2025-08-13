@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
   # remove if updating to rust 1.85
   env.RUSTC_BOOTSTRAP = 1;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XuuLuIeD/S60by/hg1fR+ML3PtIyX9JNrEvgGzI3UiM=";
 
   hardeningDisable = [ "zerocallusedregs" ];
@@ -52,15 +51,14 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  cargoBuildFlags =
-    [
-      "--no-default-features"
-      "--features=recommended"
-    ]
-    # Remove RiscV64 specialisation when this is fixed:
-    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-    # * https://github.com/rust-vmm/seccompiler/pull/72
-    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ]
+  # Remove RiscV64 specialisation when this is fixed:
+  # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
+  # * https://github.com/rust-vmm/seccompiler/pull/72
+  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests

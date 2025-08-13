@@ -84,7 +84,8 @@ mkDerivation {
     kcrash
     chmlib
     qtx11extras
-  ] ++ lib.optional withSpeech qtspeech;
+  ]
+  ++ lib.optional withSpeech qtspeech;
 
   # InitialPreference values are too high and end up making okular
   # default for anything considered text/plain. Resetting to 1, which

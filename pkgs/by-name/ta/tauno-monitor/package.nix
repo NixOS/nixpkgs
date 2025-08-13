@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "tauno-monitor";
-  version = "0.1.28";
+  version = "0.2.14";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "taunoe";
     repo = "tauno-monitor";
     tag = "v${version}";
-    hash = "sha256-DxWB69bkDAe35ci/e18Dji0EpZvbz7Y5y+32ZchV/m8=";
+    hash = "sha256-1jXQZc2+Yufjo75KwHbAFPsGxdpxkdUP8LXyY2fj3Kw=";
   };
 
   nativeBuildInputs = [

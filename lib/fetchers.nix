@@ -193,8 +193,8 @@ rec {
     }:
     fetcher:
     let
-      inherit (lib.attrsets) genAttrs intersectAttrs removeAttrs;
-      inherit (lib.trivial) const functionArgs setFunctionArgs;
+      inherit (lib.attrsets) intersectAttrs removeAttrs;
+      inherit (lib.trivial) functionArgs setFunctionArgs;
 
       inherit (commonH hashTypes) hashSet;
       fArgs = functionArgs fetcher;

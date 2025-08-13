@@ -23,6 +23,7 @@ in
 mkDerivation rec {
   pname = "lgpio";
   version = "0.2.2";
+  format = if pyProject == "" then null else "setuptools";
 
   src = fetchFromGitHub {
     owner = "joan2937";

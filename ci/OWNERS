@@ -15,9 +15,9 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/ci                                     @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/actions                        @NixOS/nixpkgs-ci
+/.github/workflows                      @NixOS/nixpkgs-ci
+/ci                                     @NixOS/nixpkgs-ci
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
@@ -234,8 +234,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
+/pkgs/build-support/build-mozilla-mach @mweinelt
+/pkgs/applications/networking/browsers/firefox/update.nix
+/pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
+/pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
 /pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
-/pkgs/applications/networking/browsers/firefox @mweinelt
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 
@@ -297,6 +300,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/zigbee2mqtt.nix @mweinelt
 /pkgs/servers/home-assistant @mweinelt
 /pkgs/by-name/es/esphome @mweinelt
+
+# Linux kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice

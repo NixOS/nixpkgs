@@ -8,7 +8,7 @@
 }:
 let
   pname = "swagger-typescript-api";
-  version = "13.2.2";
+  version = "13.2.7";
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "acacode";
     repo = "swagger-typescript-api";
     rev = version;
-    hash = "sha256-dpziQNXLwo2W+zZdFujaNufVoGg8M11G79LVWTi9G/M=";
+    hash = "sha256-sK1zqpxQLnO5/6Spw/fgFcwotwb7vHX/aQUCW601HBQ=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-pD/yx1DyccEWczvDQM+gseravu8eIqumOBuG65htYr8=";
+    hash = "sha256-KyE+Wmbx8hN9ewOyNk5imlrae7kqZgOYoyCg+K/dC+k=";
   };
 
   buildPhase = ''
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swagger-typescript-api";
     description = "Generate TypeScript API client and definitions for fetch or axios from an OpenAPI specification";
     homepage = "https://github.com/acacode/swagger-typescript-api";
+    changelog = "https://github.com/acacode/swagger-typescript-api/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ angelodlfrtr ];

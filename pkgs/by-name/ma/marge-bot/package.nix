@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "marge-bot";
-  version = "0.15.3";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "marge-org";
     repo = "marge-bot";
     rev = version;
-    hash = "sha256-i/hnfoBxgP1mo4RV4F10+QOOkPP/fkcwqaLKBlOuP0I=";
+    hash = "sha256-I1yQwTqHFynEbjF0BpGBHek6qgtTzZztDAqdl+2j2U0=";
   };
 
   nativeBuildInputs = [

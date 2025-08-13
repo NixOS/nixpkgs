@@ -2,51 +2,39 @@
   fetchFromGitHub,
   glib,
   gtk4,
-  iproute2,
   kdePackages,
   lib,
-  libappindicator,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
-  libayatana-appindicator,
-  libsoup_3,
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_1,
+  wrapGAppsHook4,
   graphene,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snx-rs";
-  version = "4.4.3";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
     tag = "v${version}";
-    hash = "sha256-dGK+52sOyJs4P3SfTdjPPSbBgSyVGFHcNw45Jed6aVo=";
+    hash = "sha256-24zklkFczsp7fhvka3T3Nz3bL61Owyrs8eHt7F9CQM8=";
   };
 
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
-    iproute2
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
     gtk4
     kdePackages.kstatusnotifieritem
-    libappindicator
-    libappindicator-gtk2
-    libappindicator-gtk3
-    libayatana-appindicator
-    libsoup_3
     openssl
-    webkitgtk_4_1
     graphene
   ];
 
@@ -59,8 +47,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9yZ8TSWy+S1sNS4cnJvEi7Ttt8zqF4PkxR5/FzVg4Ds=";
+  cargoHash = "sha256-uDQzUl1q6mlDzs5D3b1/Q53Sz//BFeJZrE88HfMrXIk=";
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";

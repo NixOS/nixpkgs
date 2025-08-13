@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-AY0i7qXA7JXfIEY0htmL+/yn71xAuh7WowXOs2fD6n8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Mt/UFVFLZRrY8Mka4VFi6J2XjBjFsnJPi9tnBVZ6a5E=";
   nativeBuildInputs = [
     git
@@ -38,6 +37,8 @@ rustPlatform.buildRustPackage {
 
   # too many tests fail for now
   doCheck = false;
+
+  cargoBuildFlags = [ "-p ockam" ];
 
   meta = with lib; {
     description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";

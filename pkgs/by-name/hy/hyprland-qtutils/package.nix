@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -12,7 +12,7 @@
 let
   inherit (lib.strings) makeBinPath;
 in
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
   version = "0.1.4";
 

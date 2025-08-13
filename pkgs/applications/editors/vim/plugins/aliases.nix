@@ -39,6 +39,7 @@ mapAliases (
     airline = vim-airline;
     alternative = a-vim; # backwards compat, added 2014-10-21
     bats = bats-vim;
+    blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
     BufOnly = BufOnly-vim;
     calendar = calendar-vim;
     coffee-script = vim-coffee-script;
@@ -47,6 +48,7 @@ mapAliases (
     solarized = vim-colors-solarized;
     spacevim = throw "this distribution was unmaintained for the last 6 years, please use top-level 'spacevim'"; # added 2024-11-27
     SpaceVim = throw "this distribution didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # added 2024-11-27
+    sparkup = throw "the upstream repository got deleted"; # added 2025-08-06
     colors-solarized = vim-colors-solarized;
     caw = caw-vim;
     chad = chadtree;

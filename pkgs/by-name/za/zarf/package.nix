@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.55.6";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
     tag = "v${version}";
-    hash = "sha256-UoTbw5QW9HpGDWHOC0Wv/4FaTKWEztHRp/XAOatqqjs=";
+    hash = "sha256-KcBF3Iw3hiQ25UHaCCvsU5HOYWVE2b5RpeyprZ8omAA=";
   };
 
-  vendorHash = "sha256-AJd/QVL+ZoLORqeYrC/WkRtggYd3nhg8AEZ9Gb1j2tQ=";
+  vendorHash = "sha256-SgXOBLw2vtVsgLIcoYQTz1npQwzj99X/GnnqqSsmb10=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];

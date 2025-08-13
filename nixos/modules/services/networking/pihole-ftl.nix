@@ -56,6 +56,12 @@ in
       example = "3";
     };
 
+    openFirewallDNS = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open ports in the firewall for pihole-FTL's DNS server.";
+    };
+
     openFirewallDHCP = mkOption {
       type = types.bool;
       default = false;
@@ -255,7 +261,7 @@ in
           log.webserver = "${cfg.logDirectory}/webserver.log";
         };
 
-        webserver.tls = "${cfg.stateDirectory}/tls.pem";
+        webserver.tls.cert = "${cfg.stateDirectory}/tls.pem";
       }
 
       (lib.optionalAttrs cfg.useDnsmasqConfig {
@@ -434,9 +440,13 @@ in
     };
 
     networking.firewall = lib.mkMerge [
-      (mkIf cfg.openFirewallDHCP {
+      (mkIf cfg.openFirewallDNS {
         allowedUDPPorts = [ 53 ];
         allowedTCPPorts = [ 53 ];
+      })
+
+      (mkIf cfg.openFirewallDHCP {
+        allowedUDPPorts = [ 67 ];
       })
 
       (mkIf cfg.openFirewallWebserver {

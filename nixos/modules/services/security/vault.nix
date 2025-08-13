@@ -224,11 +224,10 @@ in
       description = "Vault server daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after =
-        [
-          "network.target"
-        ]
-        ++ lib.optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
       restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 

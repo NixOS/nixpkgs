@@ -26,7 +26,7 @@
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     repo = "nanobind";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ex5svqDp9XJtiNCxu0249ORL6LbG679U6PvKQaWANmE=";
+    hash = "sha256-GGYnyO8eILYNu7va2tMB0QJkBCRDMIfRQO4a9geV49Y=";
   };
 
   build-system = [
@@ -58,18 +58,17 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      numpy
-      scipy
-      torch
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
-      tensorflow-bin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+    torch
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
+    tensorflow-bin
+    jax
+    jaxlib
+  ];
 
   passthru.tests = {
     pytest = nanobind.overridePythonAttrs { doCheck = true; };

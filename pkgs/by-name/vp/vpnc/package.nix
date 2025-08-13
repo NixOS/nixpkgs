@@ -16,48 +16,50 @@
 
 stdenv.mkDerivation {
   pname = "vpnc";
-  version = "unstable-2024-12-20";
+  version = "0-unstable-2025-06-16";
 
   src = fetchFromGitHub {
     owner = "streambinder";
     repo = "vpnc";
-    rev = "d58afaaafb6a43cb21bb08282b54480d7b2cc6ab";
-    sha256 = "sha256-79DaK1s+YmROKbcWIXte+GZh0qq9LAQlSmczooR86H8=";
+    rev = "6a70db13f6e9201101e1c4890393566be6000e6a";
+    sha256 = "sha256-8XgEoQn7hz/eU7w+jqxYUBuOpAQlc+2qTj1mcDMHK30=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     makeWrapper
     perl
-  ] ++ lib.optional (!opensslSupport) pkg-config;
+  ]
+  ++ lib.optional (!opensslSupport) pkg-config;
 
   buildInputs = [
     libgcrypt
     perl
-  ] ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
+  ]
+  ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
 
   makeFlags = [
     "PREFIX=$(out)"
     "ETCDIR=$(out)/etc/vpnc"
     "SCRIPT_PATH=${vpnc-scripts}/bin/vpnc-script"
-  ] ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
+  ]
+  ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/vpnc-disconnect \
-        --replace-fail /bin/sh ${lib.getExe' bash "sh"}
-      patchShebangs src/makeman.pl
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      # manpage generation invokes the build vpnc, which must be emulating when cross compiling
-      substituteInPlace src/makeman.pl --replace-fail \
-        '$vpnc --long-help' \
-        '${stdenv.hostPlatform.emulator buildPackages} $vpnc --long-help'
-    '';
+  postPatch = ''
+    substituteInPlace src/vpnc-disconnect \
+      --replace-fail /bin/sh ${lib.getExe' bash "sh"}
+    patchShebangs src/makeman.pl
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # manpage generation invokes the build vpnc, which must be emulating when cross compiling
+    substituteInPlace src/makeman.pl --replace-fail \
+      '$vpnc --long-help' \
+      '${stdenv.hostPlatform.emulator buildPackages} $vpnc --long-help'
+  '';
 
   enableParallelBuilding = true;
   # Missing install depends:

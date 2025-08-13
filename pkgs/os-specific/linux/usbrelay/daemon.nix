@@ -3,6 +3,7 @@
   usbrelay,
   python3,
   installShellFiles,
+  udevCheckHook,
 }:
 let
   python = python3.withPackages (
@@ -26,11 +27,16 @@ stdenv.mkDerivation {
       --replace '/usr/sbin/usbrelayd' "$out/bin/usbrelayd"
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    udevCheckHook
+  ];
 
   buildInputs = [ python ];
 
   dontBuild = true;
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall;

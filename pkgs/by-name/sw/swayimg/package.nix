@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/SKzdUjCcpwKRCFiFDFuRhLq0S1Z2kK+mpTOeG/JXc0=";
+    hash = "sha256-0MiIJVX1GKyvoGw1+DGVE1gJq/6sJiA79L16YF4USiQ=";
   };
 
   strictDeps = true;

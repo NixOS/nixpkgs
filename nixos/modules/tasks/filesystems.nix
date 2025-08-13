@@ -33,6 +33,12 @@ let
   # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
   escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
 
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
+
   addCheckDesc =
     desc: elemType: check:
     types.addCheck elemType check // { description = "${elemType.description} (with check: ${desc})"; };
@@ -217,38 +223,37 @@ let
 
   makeFstabEntries =
     let
-      fsToSkipCheck =
-        [
-          "none"
-          "auto"
-          "overlay"
-          "iso9660"
-          "bindfs"
-          "udf"
-          "btrfs"
-          "zfs"
-          "tmpfs"
-          "bcachefs"
-          "nfs"
-          "nfs4"
-          "nilfs2"
-          "vboxsf"
-          "squashfs"
-          "glusterfs"
-          "apfs"
-          "9p"
-          "cifs"
-          "prl_fs"
-          "vmhgfs"
-        ]
-        ++ lib.optionals (!config.boot.initrd.checkJournalingFS) [
-          "ext3"
-          "ext4"
-          "reiserfs"
-          "xfs"
-          "jfs"
-          "f2fs"
-        ];
+      fsToSkipCheck = [
+        "none"
+        "auto"
+        "overlay"
+        "iso9660"
+        "bindfs"
+        "udf"
+        "btrfs"
+        "zfs"
+        "tmpfs"
+        "bcachefs"
+        "nfs"
+        "nfs4"
+        "nilfs2"
+        "vboxsf"
+        "squashfs"
+        "glusterfs"
+        "apfs"
+        "9p"
+        "cifs"
+        "prl_fs"
+        "vmhgfs"
+      ]
+      ++ lib.optionals (!config.boot.initrd.checkJournalingFS) [
+        "ext3"
+        "ext4"
+        "reiserfs"
+        "xfs"
+        "jfs"
+        "f2fs"
+      ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck =
         fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
@@ -344,9 +349,7 @@ in
           zfs = lib.mkForce false;
         }
       '';
-      type = types.coercedTo (types.listOf types.str) (
-        enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled)
-      ) (types.attrsOf types.bool);
+      type = attrNamesToTrue;
       description = ''
         Names of supported filesystem types, or an attribute set of file system types
         and their state. The set form may be used together with `lib.mkForce` to
@@ -458,13 +461,7 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
-    environment.systemPackages =
-      with pkgs;
-      [
-        fuse3
-        fuse
-      ]
-      ++ config.system.fsPackages;
+    environment.systemPackages = config.system.fsPackages;
 
     environment.etc.fstab.text =
       let
@@ -506,124 +503,84 @@ in
       ];
     };
 
-    systemd.services = {
-      # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
-      # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
-      "mount-pstore" = {
-        serviceConfig = {
-          Type = "oneshot";
-          # skip on kernels without the pstore module
-          ExecCondition = "${pkgs.kmod}/bin/modprobe -b pstore";
-          ExecStart = pkgs.writeShellScript "mount-pstore.sh" ''
-            set -eu
-            # if the pstore module is builtin it will have mounted the persistent store automatically. it may also be already mounted for other reasons.
-            ${pkgs.util-linux}/bin/mountpoint -q /sys/fs/pstore || ${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore
-            # wait up to 1.5 seconds for the backend to be registered and the files to appear. a systemd path unit cannot detect this happening; and succeeding after a restart would not start dependent units.
-            TRIES=15
-            while [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
-              if (( $TRIES )); then
-                sleep 0.1
-                TRIES=$((TRIES-1))
-              else
-                echo "Persistent Storage backend was not registered in time." >&2
-                break
-              fi
-            done
-          '';
-          RemainAfterExit = true;
-        };
-        unitConfig = {
-          ConditionVirtualization = "!container";
-          DefaultDependencies = false; # needed to prevent a cycle
-        };
-        before = [
-          "systemd-pstore.service"
-          "shutdown.target"
-        ];
-        conflicts = [ "shutdown.target" ];
-        wantedBy = [ "systemd-pstore.service" ];
-      };
-    };
-
     systemd.tmpfiles.rules = [
       "d /run/keys 0750 root ${toString config.ids.gids.keys}"
       "z /run/keys 0750 root ${toString config.ids.gids.keys}"
     ];
 
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
-    boot.specialFileSystems =
-      {
-        "/proc" = {
-          fsType = "proc";
-          options = [
-            "nosuid"
-            "noexec"
-            "nodev"
-          ];
-        };
-        "/run" = {
-          fsType = "tmpfs";
-          options = [
-            "nosuid"
-            "nodev"
-            "strictatime"
-            "mode=755"
-            "size=${config.boot.runSize}"
-          ];
-        };
-        "/dev" = {
-          fsType = "devtmpfs";
-          options = [
-            "nosuid"
-            "strictatime"
-            "mode=755"
-            "size=${config.boot.devSize}"
-          ];
-        };
-        "/dev/shm" = {
-          fsType = "tmpfs";
-          options = [
-            "nosuid"
-            "nodev"
-            "strictatime"
-            "mode=1777"
-            "size=${config.boot.devShmSize}"
-          ];
-        };
-        "/dev/pts" = {
-          fsType = "devpts";
-          options = [
-            "nosuid"
-            "noexec"
-            "mode=620"
-            "ptmxmode=0666"
-            "gid=${toString config.ids.gids.tty}"
-          ];
-        };
-
-        # To hold secrets that shouldn't be written to disk
-        "/run/keys" = {
-          fsType = "ramfs";
-          options = [
-            "nosuid"
-            "nodev"
-            "mode=750"
-          ];
-        };
-      }
-      // optionalAttrs (!config.boot.isContainer) {
-        # systemd-nspawn populates /sys by itself, and remounting it causes all
-        # kinds of weird issues (most noticeably, waiting for host disk device
-        # nodes).
-        "/sys" = {
-          fsType = "sysfs";
-          options = [
-            "nosuid"
-            "noexec"
-            "nodev"
-          ];
-        };
+    boot.specialFileSystems = {
+      "/proc" = {
+        fsType = "proc";
+        options = [
+          "nosuid"
+          "noexec"
+          "nodev"
+        ];
       };
+      "/run" = {
+        fsType = "tmpfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "strictatime"
+          "mode=755"
+          "size=${config.boot.runSize}"
+        ];
+      };
+      "/dev" = {
+        fsType = "devtmpfs";
+        options = [
+          "nosuid"
+          "strictatime"
+          "mode=755"
+          "size=${config.boot.devSize}"
+        ];
+      };
+      "/dev/shm" = {
+        fsType = "tmpfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "strictatime"
+          "mode=1777"
+          "size=${config.boot.devShmSize}"
+        ];
+      };
+      "/dev/pts" = {
+        fsType = "devpts";
+        options = [
+          "nosuid"
+          "noexec"
+          "mode=620"
+          "ptmxmode=0666"
+          "gid=${toString config.ids.gids.tty}"
+        ];
+      };
+
+      # To hold secrets that shouldn't be written to disk
+      "/run/keys" = {
+        fsType = "ramfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "mode=750"
+        ];
+      };
+    }
+    // optionalAttrs (!config.boot.isContainer) {
+      # systemd-nspawn populates /sys by itself, and remounting it causes all
+      # kinds of weird issues (most noticeably, waiting for host disk device
+      # nodes).
+      "/sys" = {
+        fsType = "sysfs";
+        options = [
+          "nosuid"
+          "noexec"
+          "nodev"
+        ];
+      };
+    };
 
   };
 

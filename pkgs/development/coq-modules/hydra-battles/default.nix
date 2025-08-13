@@ -19,16 +19,13 @@
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.13" "8.16";
-        out = "0.9";
-      }
-      {
-        case = range "8.11" "8.12";
-        out = "0.4";
-      }
+      (case (range "8.13" "8.16") "0.9")
+      (case (range "8.11" "8.12") "0.4")
     ] null;
 
   useDune = true;
@@ -58,6 +55,7 @@
     {
       propagatedBuildInputs = [
         equations
-      ] ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
+      ]
+      ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
     }
   )

@@ -266,13 +266,13 @@ stdenv.mkDerivation rec {
         "pcb_calculator"
         "pl_editor"
         "bitmap2component"
+        "kicad-cli"
       ];
       utils = [
         "dxf2idf"
         "idf2vrml"
         "idfcyl"
         "idfrect"
-        "kicad-cli"
       ];
     in
     (concatStringsSep "\n" (flatten [

@@ -30,6 +30,24 @@ let
         __structuredAttrs = enable;
       });
     });
+  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
+    { lib, ... }:
+    {
+      name = "runNixOSTest-test";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          system.nixos = dummyVersioning;
+          environment.systemPackages = [
+            pkgs.proof-of-overlay-hello
+            pkgs.figlet
+          ];
+        };
+      testScript = ''
+        machine.succeed("hello | figlet >/dev/console")
+      '';
+    }
+  );
 
 in
 lib.recurseIntoAttrs {
@@ -66,24 +84,27 @@ lib.recurseIntoAttrs {
     };
   };
 
-  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
-    { lib, ... }:
-    {
-      name = "runNixOSTest-test";
-      nodes.machine =
-        { pkgs, ... }:
-        {
-          system.nixos = dummyVersioning;
-          environment.systemPackages = [
-            pkgs.proof-of-overlay-hello
-            pkgs.figlet
-          ];
-        };
-      testScript = ''
-        machine.succeed("hello | figlet >/dev/console")
-      '';
-    }
-  );
+  inherit runNixOSTest-example;
+
+  runNixOSTest-extendNixOS =
+    let
+      t = runNixOSTest-example.extendNixOS {
+        module =
+          { hi, lib, ... }:
+          {
+            config = {
+              assertions = [ { assertion = hi; } ];
+            };
+            options = {
+              itsProofYay = lib.mkOption { };
+            };
+          };
+        specialArgs.hi = true;
+      };
+    in
+    assert lib.isDerivation t;
+    assert t.nodes.machine ? itsProofYay;
+    t;
 
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.

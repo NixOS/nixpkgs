@@ -1,11 +1,11 @@
 {
   lib,
   bundlerApp,
-  ruby,
+  ruby_3_4,
   bundlerUpdateScript,
 }:
 
-bundlerApp {
+(bundlerApp.override { ruby = ruby_3_4; }) {
   pname = "colorls";
 
   gemdir = ./.;
@@ -13,16 +13,16 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "colorls";
 
-  meta = with lib; {
+  meta = {
     description = "Prettified LS";
     homepage = "https://github.com/athityakumar/colorls";
-    license = with licenses; mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lukebfox
       nicknovitski
       cbley
     ];
-    platforms = ruby.meta.platforms;
+    platforms = ruby_3_4.meta.platforms;
     mainProgram = "colorls";
   };
 }

@@ -15,7 +15,7 @@ let
   version = "26.1.9";
 
   itch-setup = fetchzip {
-    url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
+    url = "https://broth.itch.zone/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
     stripRoot = false;
     hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchzip {
-    url = "https://broth.itch.ovh/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
+    url = "https://broth.itch.zone/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
     stripRoot = false;
     hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
   };

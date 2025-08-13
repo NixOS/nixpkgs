@@ -190,6 +190,10 @@ in
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]
       "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver"
     )
+    (mkRemovedOptionModule [
+      "services"
+      "mx-puppet-discord"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
@@ -235,6 +239,9 @@ in
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
+    '')
+    (mkRemovedOptionModule [ "services" "sourcehut" ] ''
+      The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
@@ -341,7 +348,9 @@ in
       The signald project is unmaintained and has long been incompatible with the
       official Signal servers.
     '')
-
+    (mkRemovedOptionModule [ "services" "private-gpt" ] ''
+      The private-gpt package and the corresponding module have been removed due to being broken and unmaintained.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

@@ -23,12 +23,13 @@ let
     "${cfg.package}/bin/victoria-logs"
     "-storageDataPath=/var/lib/${cfg.stateDir}"
     "-httpListenAddr=${cfg.listenAddress}"
-  ] ++ cfg.extraOptions;
+  ]
+  ++ cfg.extraOptions;
 in
 {
   options.services.victorialogs = {
     enable = mkEnableOption "VictoriaLogs is an open source user-friendly database for logs from VictoriaMetrics";
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = mkPackageOption pkgs "victorialogs" { };
     listenAddress = mkOption {
       default = ":9428";
       type = types.str;

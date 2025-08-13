@@ -28,6 +28,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "onedrivegui";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bpozdena";

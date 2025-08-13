@@ -28,14 +28,13 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      bidict
-      packaging
-      typing-extensions
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus-fast ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
+  dependencies = [
+    bidict
+    packaging
+    typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus-fast ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   # no tests available, do the imports check instead
   doCheck = false;

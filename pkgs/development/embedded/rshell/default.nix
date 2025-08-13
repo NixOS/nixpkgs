@@ -9,6 +9,7 @@
 buildPythonApplication rec {
   pname = "rshell";
   version = "0.0.36";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

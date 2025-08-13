@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "log4j-detect";
-  version = "unstable-2021-12-14";
+  version = "0-unstable-2021-12-14";
   format = "other";
 
   src = fetchFromGitHub {

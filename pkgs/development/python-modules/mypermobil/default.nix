@@ -36,15 +36,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # requires networking
-      "test_region"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError: MyPermobilAPIException not raised
-      "test_request_item_404"
-    ];
+  disabledTests = [
+    # requires networking
+    "test_region"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError: MyPermobilAPIException not raised
+    "test_request_item_404"
+  ];
 
   meta = {
     changelog = "https://github.com/Permobil-Software/mypermobil/releases/tag/v${version}";

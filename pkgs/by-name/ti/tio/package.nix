@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     inih
     lua
     glib
+    bash-completion
   ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    bash-completion
   ];
 
   meta = with lib; {

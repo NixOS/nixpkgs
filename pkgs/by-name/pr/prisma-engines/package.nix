@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Ty8BqWjZluU6a5xhSAVb2VoTVY91UUj6zoVXMKeLO4o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HjDoWa/JE6izUd+hmWVI1Yy3cTBlMcvD9ANsvqAoHBI=";
 
   # Use system openssl.
@@ -72,7 +71,6 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
     mainProgram = "prisma";
     maintainers = with maintainers; [
-      pimeys
       tomhoule
       aqrln
     ];

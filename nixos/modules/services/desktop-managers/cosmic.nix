@@ -13,6 +13,7 @@
 
 let
   cfg = config.services.desktopManager.cosmic;
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cosmic.excludePackages;
   excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
   # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
   corePkgs =
@@ -162,6 +163,7 @@ in
     services.avahi.enable = lib.mkDefault true;
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
+    services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
     services.power-profiles-daemon.enable = lib.mkDefault (
       !config.hardware.system76.power-daemon.enable
     );

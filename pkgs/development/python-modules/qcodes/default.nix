@@ -155,11 +155,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    # Follow upstream with settings
-    "-m 'not serial'"
     "--hypothesis-profile ci"
+    # Follow upstream with settings
     "--durations=20"
   ];
 
@@ -168,6 +167,10 @@ buildPythonPackage rec {
     "tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
     "tests/dataset/test_dataset_basic.py"
+  ];
+
+  disabledTestMarks = [
+    "serial"
   ];
 
   disabledTests = [

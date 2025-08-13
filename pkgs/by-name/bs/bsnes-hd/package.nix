@@ -45,37 +45,36 @@ stdenv.mkDerivation {
     ./patches/0001-macos-copy-app-to-prefix.patch
   ];
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libao
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXv
-      udev
-      gtk3
-      gtksourceview3
-      alsa-lib
-      openal
-      libpulseaudio
-    ];
+  buildInputs = [
+    SDL2
+    libao
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXv
+    udev
+    gtk3
+    gtksourceview3
+    alsa-lib
+    openal
+    libpulseaudio
+  ];
 
-  makeFlags =
-    [
-      "-C bsnes"
-      "prefix=$(out)"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "hiro=gtk3" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "hiro=cocoa" ];
+  makeFlags = [
+    "-C bsnes"
+    "prefix=$(out)"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "hiro=gtk3" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "hiro=cocoa" ];
 
   enableParallelBuilding = true;
 

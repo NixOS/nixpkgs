@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.19.5";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    hash = "sha256-pj9aaEpXEmBBjJOqdvD2bYip5gg3pUob7gmV8rbhnuo=";
+    hash = "sha256-QkBSHkXP67khJa/Ju7yx97ibOU3BcBt6tOHnS0rYvZM=";
   };
 
-  vendorHash = "sha256-tOGB9psxlgC+h/uJd93tkpDYzi/xIZ25rDMQ4LnX9Pg=";
+  vendorHash = "sha256-O7T7DO3RCQVBBDvFSLAgoD8tJRMJpb4/3ch7OYk4bIk=";
 
   proxyVendor = true;
 
@@ -42,20 +42,19 @@ buildGoModule rec {
     "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
-  postInstall =
-    ''
-      echo "complete -C $out/bin/vault vault" > vault.bash
-      installShellCompletion vault.bash
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/vault \
-        --prefix PATH ${
-          lib.makeBinPath [
-            gawk
-            glibc
-          ]
-        }
-    '';
+  postInstall = ''
+    echo "complete -C $out/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${
+        lib.makeBinPath [
+          gawk
+          glibc
+        ]
+      }
+  '';
 
   passthru.tests = {
     inherit (nixosTests)

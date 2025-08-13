@@ -24,8 +24,8 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "bf8d898efaa10dce3f7972ff765b58c353b4b4ab";
-    hash = "sha256-1tJV7F+iwMPRV6FgnbTw+5m7vMhgaeXftYkr9GPR4xw=";
+    rev = "5c30e1de6d664d609ff3828a8877fba3e06ca336";
+    hash = "sha256-S9p/g8DZhZ1cZdyFI6eaOxxGAbz+dloFEWdamAHo120=";
   };
 
 in
@@ -46,15 +46,14 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      (lib.enableFeature enableNls "nls")
-      (lib.enableFeature enableTiny "tiny")
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "gl_cv_func_strcasecmp_works=yes"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (lib.enableFeature enableNls "nls")
+    (lib.enableFeature enableTiny "tiny")
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "gl_cv_func_strcasecmp_works=yes"
+  ];
 
   postInstall =
     if enableTiny then

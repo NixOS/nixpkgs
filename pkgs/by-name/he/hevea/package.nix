@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hevea";
-  version = "2.36";
+  version = "2.37";
 
   src = fetchurl {
     url = "https://hevea.inria.fr/distri/hevea-${version}.tar.gz";
-    sha256 = "sha256-XWdZ13AqKVx2oSwbKhoWdUqw7B/+1z/J0LE4tB5yBkg=";
+    sha256 = "sha256-tuk/B/WBedZbTrfoxKXV9otKJfEEwCmmL8kVTpPhr1k=";
   };
 
   strictDeps = true;

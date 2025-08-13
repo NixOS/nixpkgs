@@ -19,14 +19,10 @@ For example, when upgrading from 1.4 -> 1.5
 1. `cp -r pkgs/by-name/ka/kanidm/patches/1_4 pkgs/by-name/ka/kanidm/patches/1_5`
 1. Update `1_5.nix` hashes/paths, and as needed for upstream changes, `generic.nix`
 1. Update `all-packages.nix` to add `kanidm_1_5` and `kanidmWithSecretProvisioning_1_5`, leave default
+1. Update the previous release, e.g. `1_4.nix` and set `eolDate = "YYYY-MM-DD"` where the date is 30 days from release of 1.5.
 1. Create commit, `kanidm_1_5: init at 1.5.0` - this is the only commit that will be backported
 
-### Mark previous version deprecated
-
-1. Update `pkgs/by-name/ka/kanidm/1_4.nix` by adding `deprecated = true;`
-1. Create commit `kanidm_1_4: update default to 1.5.0, deprecate 1.4.0`
-
-### Update default and mark deprecation
+### Update default
 
 1. `sed -i 's/1_4/1_5/' pkgs/by-name/ka/kanidm/package.nix`
 1. Update `all-packages.nix` and set `kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;`
@@ -41,9 +37,10 @@ For example, when upgrading from 1.4 -> 1.5
 Kanidm versions are supported for 30 days after the release of new versions. Following the example above, 1.5.x superseding 1.4.x in 30 days, do the following near the end of the 30 day window
 
 1. Update `pkgs/by-name/ka/kanidm/1_4.nix` by adding `unsupported = true;`
-1. Update `pkgs/top-level/release.nix` and add `kanidm_1_4-1.4.6` to `permittedInsecurePackages`
+1. Update `pkgs/top-level/release.nix` and add `kanidm_1_4-1.4.6` and `kanidmWithSecretProvisioning_1_4-1.4.6` to `permittedInsecurePackages`
 1. Create commit `kanidm_1_4: mark EOL`, this commit alone should be backported
 
 1. Remove the third oldest release from `all-packages.nix`, e.g. 1.3.x continuing the example. Remove `kanidm_1_3` and `kanidmWithSecretProvisioning_1_3`
-1. Update `pkgs/top-level/release.nix` and remove `kanidm_1_3-1.3.3` from `permittedInsecurePackages`
+1. Update `pkgs/top-level/release.nix` and remove `kanidm_1_3*` from `permittedInsecurePackages`
+1. Update `pkgs/top-level/aliases.nix` and add `kanidm_1_4` and `kanidmWithSecretProvisioning_1_4-1.4.6`
 1. Remove `pkgs/by-name/ka/kanidm/1_3.nix`

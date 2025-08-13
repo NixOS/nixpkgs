@@ -27,6 +27,7 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version src;
+      fetcherVersion = 1;
       hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
     };
 
@@ -93,6 +94,12 @@ buildGoModule rec {
       bundle
 
     runHook postBuild
+  '';
+
+  postInstall = ''
+    install -Dm444 $src/install/daed.service -t $out/lib/systemd/system
+    substituteInPlace $out/lib/systemd/system/daed.service \
+      --replace-fail /usr/bin $out/bin
   '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [

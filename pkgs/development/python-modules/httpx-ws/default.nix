@@ -7,6 +7,7 @@
   httpcore,
   httpx,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   starlette,
   trio,
@@ -33,8 +34,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'source = "regex_commit"' "" \
       --replace-fail 'commit_extra_args = ["-e"]' "" \
-      --replace-fail '"hatch-regex-commit"' "" \
-      --replace-fail 'addopts = "--cov=httpx_ws/ --cov-report=term-missing"' ""
+      --replace-fail '"hatch-regex-commit"' ""
   '';
 
   build-system = [ hatchling ];
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     starlette
     trio
     uvicorn

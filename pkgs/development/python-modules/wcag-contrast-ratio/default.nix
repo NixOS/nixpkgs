@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "wcag_contrast_ratio" ];
 

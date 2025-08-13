@@ -44,6 +44,8 @@ buildPythonPackage rec {
     # Tests require networking
     "examples"
     "test/integration"
+    # requires yet to be packaged aws-cryptographic-material-providers
+    "test/mpl"
   ];
 
   disabledTests = [

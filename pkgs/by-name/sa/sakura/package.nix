@@ -68,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      astsmtl
       codyopel
     ];
     platforms = lib.platforms.linux;

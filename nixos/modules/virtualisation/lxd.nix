@@ -277,6 +277,7 @@ in
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    ]
+    ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }

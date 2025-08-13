@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-validators";
     repo = "validators";
     tag = version;
-    hash = "sha256-1QKo6nidaHeKCbti/xALbgylHYbtBUJlWrjhNtdx8kU=";
+    hash = "sha256-b3kjKbqmfny6YnU0rlrralTgvYT06sUpckI4EDKDleA=";
   };
 
   build-system = [ setuptools ];

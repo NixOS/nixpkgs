@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.12.0";
+  version = "4.13.2";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-YgNM+fzss1+Q6Fv9mhedhCorWFnerx5oC3iISEhs6z8=";
+    hash = "sha256-bQ7kKUdInf6ZYO0X6kwW0HbuciiXhGyAdvnPcT0MllM=";
   };
 
   nativeBuildInputs = [
@@ -67,10 +67,6 @@ stdenv.mkDerivation rec {
     pantheon.granite7
     sqlite
     webkitgtk_6_0
-  ];
-
-  mesonFlags = [
-    "-Dprofile=default"
   ];
 
   meta = with lib; {

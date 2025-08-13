@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "unsloth-zoo";
-  version = "2025.5.11";
+  version = "2025.6.4";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit version;
-    hash = "sha256-QRKcFkNlr7pICEy3il+za6hDYjvsSxHIBM6VaB1c5mk=";
+    hash = "sha256-3KLsFYhnTPqaeydFJDHr+qNkTVi2NL3ADjzkd0NBOQQ=";
   };
 
   # pyproject.toml requires an obsolete version of protobuf,
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "protobuf"
     "transformers"
+    "torch"
   ];
 
   patches = [

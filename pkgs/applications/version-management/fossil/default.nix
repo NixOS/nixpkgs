@@ -34,24 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
   ];
 
-  buildInputs =
-    [
-      zlib
-      openssl
-      readline
-      which
-      ed
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-    ++ lib.optional (!withInternalSqlite) sqlite;
+  buildInputs = [
+    zlib
+    openssl
+    readline
+    which
+    ed
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional (!withInternalSqlite) sqlite;
 
   enableParallelBuilding = true;
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   configureFlags =
-    lib.optional (!withInternalSqlite) "--disable-internal-sqlite"
-    ++ lib.optional withJson "--json";
+    lib.optional (!withInternalSqlite) "--disable-internal-sqlite" ++ lib.optional withJson "--json";
 
   preBuild = ''
     export USER=nonexistent-but-specified-user

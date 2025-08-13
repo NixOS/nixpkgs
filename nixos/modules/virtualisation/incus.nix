@@ -316,7 +316,8 @@ in
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
+    ]
+    ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
 
     environment.systemPackages = [
       cfg.clientPackage
@@ -358,23 +359,22 @@ in
           include "/var/lib/incus/security/apparmor/profiles"
         '';
       };
-      includes."abstractions/base" =
-        ''
-          # Allow incusd's various AA profiles to load dynamic libraries from Nix store
-          # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
-          mr /nix/store/*/lib/*.so*,
-          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
-          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
-          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+      includes."abstractions/base" = ''
+        # Allow incusd's various AA profiles to load dynamic libraries from Nix store
+        # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+        mr /nix/store/*/lib/*.so*,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
 
-          # Support use of VM instance
-          mrix ${pkgs.qemu_kvm}/bin/*,
-          k ${OVMF2MB.fd}/FV/*.fd,
-          k ${pkgs.OVMFFull.fd}/FV/*.fd,
-        ''
-        + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
-          k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
-        '';
+        # Support use of VM instance
+        mrix ${pkgs.qemu_kvm}/bin/*,
+        k ${OVMF2MB.fd}/FV/*.fd,
+        k ${pkgs.OVMFFull.fd}/FV/*.fd,
+      ''
+      + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+        k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
+      '';
     };
 
     systemd.services.incus = {
@@ -387,12 +387,14 @@ in
         "network-online.target"
         "lxcfs.service"
         "incus.socket"
-      ] ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
       requires = [
         "lxcfs.service"
         "incus.socket"
-      ] ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
       wants = [ "network-online.target" ];
 

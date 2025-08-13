@@ -134,12 +134,12 @@ def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
         new_hash = run_command(f"nix-prefetch-url --unpack --type sha256 {prefetch_url} 2>/dev/null")
 
         if not new_hash.startswith("sha256-"):
-            new_hash = run_command(f"nix hash to-sri --type sha256 {new_hash} 2>/dev/null")
+            new_hash = run_command(f"nix --extra-experimental-features nix-command hash to-sri --type sha256 {new_hash} 2>/dev/null")
 
             if not new_hash.startswith("sha256-"):
                 print("Warning: Failed to get SRI hash directly, trying alternative method...")
                 raw_hash = run_command(f"nix-prefetch-url --type sha256 {prefetch_url} 2>/dev/null")
-                new_hash = run_command(f"nix hash to-sri --type sha256 {raw_hash} 2>/dev/null")
+                new_hash = run_command(f"nix --extra-experimental-features nix-command hash to-sri --type sha256 {raw_hash} 2>/dev/null")
     except Exception as e:
         raise RuntimeError(f"Error calculating hash: {e}")
 

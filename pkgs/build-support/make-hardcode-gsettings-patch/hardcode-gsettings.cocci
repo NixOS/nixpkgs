@@ -162,4 +162,4 @@ expression SCHEMA_ID;
 identifier schema_exists_fn.fn;
 @@
 -fn(SCHEMA_ID)
-+true
++TRUE

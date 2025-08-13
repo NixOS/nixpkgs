@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.29.0";
+  version = "2.30.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-AJ22q6yWc1hPkqssXMxQqD6QUeJ6hbx52xWHhKsmuP0=";
+    repo = "nix-eval-jobs";
+    tag = "v${version}";
+    hash = "sha256-urOFgqXzs+cgd1CKFuN245vOeVx7rIldlS9Q5WcemCw=";
   };
 
   buildInputs = [
@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   # Since this package is intimately tied to a specific Nix release, we

@@ -8,8 +8,8 @@ This patch hinders libnvidia-container from using the loader cache, which doesn'
  src/ldcache.c     | 46 +++++++++++++++++-----------------------------
  src/ldcache.h     |  2 +-
  src/nvc_info.c    |  8 ++------
- src/nvc_ldcache.c |  2 +-
- 4 files changed, 21 insertions(+), 37 deletions(-)
+ src/nvc_ldcache.c |  4 ++--
+ 4 files changed, 22 insertions(+), 38 deletions(-)
 
 diff --git a/src/ldcache.c b/src/ldcache.c
 index 38bab0553208f66b2866ccea6cdb0faca4357f19..1c4acd52b622be4ca6accdc80da5a6fcf9ae67dd 100644
@@ -86,7 +86,7 @@ index 33d78dd7e21f65eb696535c115bbd2839a6c67ca..2b087dbca1a6a2946cd495e676a61e95
  
  #endif /* HEADER_LDCACHE_H */
 diff --git a/src/nvc_info.c b/src/nvc_info.c
-index b7b8adfa7c79c326a1acb481a06a05d1463e810f..cf4b1905fd2127c28ee16649501be122d3be5261 100644
+index bcc887b2345bd42a098f9b85d9c66fae2775f736..5eaef61ada5e955ab11c6a4eb8429c50468e3370 100644
 --- a/src/nvc_info.c
 +++ b/src/nvc_info.c
 @@ -217,15 +217,13 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
@@ -122,15 +122,17 @@ index b7b8adfa7c79c326a1acb481a06a05d1463e810f..cf4b1905fd2127c28ee16649501be122
  }
  
 diff --git a/src/nvc_ldcache.c b/src/nvc_ldcache.c
-index db3b2f69692270e9058b2e26f18eb31677909d05..ae5def43b4cb3973af3aad55361265173ca938a7 100644
+index 0535090dafbae5a00acb707bbbb5a35dbcea4a7a..5de429f4c2ea62775403a5fc1ed0f23a6c88655c 100644
 --- a/src/nvc_ldcache.c
 +++ b/src/nvc_ldcache.c
-@@ -367,7 +367,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
-         if (validate_args(ctx, cnt != NULL) < 0)
-                 return (-1);
- 
--        argv = (char * []){cnt->cfg.ldconfig, "-f", "/etc/ld.so.conf", "-C", "/etc/ld.so.cache", cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
-+        argv = (char * []){cnt->cfg.ldconfig, "-f", "/tmp/ld.so.conf.nvidia-host", "-C", "/tmp/ld.so.cache.nvidia-host", cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
-         if (*argv[0] == '@') {
+@@ -482,8 +482,8 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+          * See https://github.com/NVIDIA/libnvidia-container/issues/316 for an
+          * in-depth investigation.
+          */
+-        char *argv_default[] = {cnt->cfg.ldconfig, "-f", "/etc/ld.so.conf", "-C", "/etc/ld.so.cache", cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
+-        char *argv_with_compat_dir[] = {cnt->cfg.ldconfig, "-f", "/etc/ld.so.conf", "-C", "/etc/ld.so.cache", cnt->cuda_compat_dir, cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
++        char *argv_default[] = {cnt->cfg.ldconfig, "-f", "/tmp/ld.so.conf.nvidia-host", "-C", "/tmp/ld.so.cache.nvidia-host", cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
++        char *argv_with_compat_dir[] = {cnt->cfg.ldconfig, "-f", "/tmp/ld.so.conf.nvidia-host", "-C", "/tmp/ld.so.cache.nvidia-host", cnt->cuda_compat_dir, cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
+         if ((cnt->flags & OPT_CUDA_COMPAT_MODE_LDCONFIG) && (cnt->cuda_compat_dir != NULL)) {
                  /*
-                  * We treat this path specially to be relative to the host filesystem.
+                  * We include the cuda_compat_dir directory on the ldconfig

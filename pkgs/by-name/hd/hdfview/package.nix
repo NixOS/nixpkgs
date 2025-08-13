@@ -67,27 +67,26 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/bin $out/lib
-      cp -a build/dist/HDFView/bin/HDFView $out/bin/
-      cp -a build/dist/HDFView/lib/app $out/lib/
-      cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
-      ln -s ${jdk}/lib/openjdk $out/lib/runtime
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/bin $out/lib
+    cp -a build/dist/HDFView/bin/HDFView $out/bin/
+    cp -a build/dist/HDFView/lib/app $out/lib/
+    cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
+    ln -s ${jdk}/lib/openjdk $out/lib/runtime
 
-      mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
-      cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -a build/dist/HDFView.app $out/Applications/
-    ''
-    + ''
-      runHook postInstall
-    '';
+    mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
+    cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -a build/dist/HDFView.app $out/Applications/
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   preFixup = ''
     # Remove build timestamp from javadoc files

@@ -1,27 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   google-auth,
   google-auth-httplib2,
   google-api-core,
   httplib2,
   uritemplate,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.166.0";
+  version = "2.169.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_api_python_client";
-    inherit version;
-    hash = "sha256-uM+EO9nXNsE0rvds8dx6R8koOi7yQme5cge53UOzDvc=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-api-python-client";
+    tag = "v${version}";
+    hash = "sha256-XJwZ/gWL2pO9P+HuN6BtVbacNjwbZV2jW6FVLgNsj/0=";
   };
 
   build-system = [ setuptools ];
@@ -34,12 +32,9 @@ buildPythonPackage rec {
     uritemplate
   ];
 
-  # No tests included in archive
-  doCheck = false;
-
   pythonImportsCheck = [ "googleapiclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Python client library for Google's discovery based APIs";
     longDescription = ''
       These client libraries are officially supported by Google. However, the
@@ -49,7 +44,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/google/google-api-python-client";
     changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

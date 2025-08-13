@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-r/+u76Qxat6U0Hb3Xh31K/F0dNSPzteFzoE69NNCerI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nTCqqTFt87snzOXkjablaX9ZMGu/s88ZnUVr5uYrzPs=";
 
   # override debug=true set in Cargo.toml upstream

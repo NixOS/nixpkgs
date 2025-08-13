@@ -21,6 +21,9 @@
   # runtime deps
   gpgme,
   gnum4,
+
+  withNotmuch ? true,
+  notmuch,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Dp0WI1Cl+m7oxZ/4zEi0TtOwqRX681jZht9bNMFnmsU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DJtk8xLppXdl9sSt6GcaXwZ5MEIY/s/z/bdcdr8YdLw=";
 
   # Needed to get openssl-sys to use pkg-config
@@ -66,7 +68,9 @@ rustPlatform.buildRustPackage rec {
     installManPage meli/docs/*.{1,5,7}
 
     wrapProgram $out/bin/meli \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gpgme ]} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath ([ gpgme ] ++ lib.optional withNotmuch notmuch)
+      } \
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 

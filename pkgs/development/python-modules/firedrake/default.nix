@@ -57,21 +57,21 @@ let
 in
 buildPythonPackage rec {
   pname = "firedrake";
-  version = "2025.4.1";
+  version = "2025.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
     tag = version;
-    hash = "sha256-p/yquIKWynGY7UESDNBCf1cM8zpy8beuuRxSrSMvj7c=";
+    hash = "sha256-bAGmXoHPAdMYJMMQYVq98LYro1Vd+o9pfvXC3BsQUf0=";
   };
 
   postPatch =
     # relax build-dependency petsc4py
     ''
       substituteInPlace pyproject.toml --replace-fail \
-        "petsc4py==3.23.3" "petsc4py"
+        "petsc4py==3.23.4" "petsc4py"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace firedrake/petsc.py --replace-fail \
@@ -105,34 +105,33 @@ buildPythonPackage rec {
     firedrakePackages.mpi
   ];
 
-  dependencies =
-    [
-      decorator
-      cachetools
-      firedrakePackages.mpi4py
-      fenics-ufl
-      firedrake-fiat
-      firedrakePackages.h5py
-      libsupermesh
-      loopy
-      petsc4py
-      numpy
-      packaging
-      pkgconfig
-      progress
-      pyadjoint-ad
-      pycparser
-      pytools
-      requests
-      rtree
-      scipy
-      sympy
-      # required by script spydump
-      matplotlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      islpy
-    ];
+  dependencies = [
+    decorator
+    cachetools
+    firedrakePackages.mpi4py
+    fenics-ufl
+    firedrake-fiat
+    firedrakePackages.h5py
+    libsupermesh
+    loopy
+    petsc4py
+    numpy
+    packaging
+    pkgconfig
+    progress
+    pyadjoint-ad
+    pycparser
+    pytools
+    requests
+    rtree
+    scipy
+    sympy
+    # required by script spydump
+    matplotlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    islpy
+  ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libsupermesh}/${python.sitePackages}/libsupermesh/lib \

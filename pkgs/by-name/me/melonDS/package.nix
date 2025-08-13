@@ -9,6 +9,7 @@
   libarchive,
   libpcap,
   libslirp,
+  pipewire,
   pkg-config,
   qt6,
   stdenv,
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0rc-unstable-2025-05-27";
+  version = "1.0-unstable-2025-08-10";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "7117178c2dd56df32b6534ba6a54ad1f8547e693";
-    hash = "sha256-6bwagPFIv87WtmQ3cl8cDZ/1A8Ab6itLHAr33CJy/Eo=";
+    rev = "f9e46fdc29f8e55aca6bc121c424890faee2e51d";
+    hash = "sha256-g5TVvnCoWQej9v2aii5klx7gRzUrokiwy0By0G3LkiI=";
   };
 
   nativeBuildInputs = [
@@ -43,21 +44,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      SDL2
-      enet
-      libarchive
-      libslirp
-      libGL
-      qtbase
-      qtmultimedia
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      qtwayland
-    ];
+  buildInputs = [
+    SDL2
+    enet
+    libarchive
+    libslirp
+    libGL
+    qtbase
+    qtmultimedia
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    qtwayland
+  ];
 
   cmakeFlags = [ (lib.cmakeBool "USE_QT6" true) ];
 
@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
+          pipewire
           wayland
         ]
       }"

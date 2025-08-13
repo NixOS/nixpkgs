@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://repo.or.cz/alpine.git";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cJyUBatQBjD6RG+jesJ0JRhWghPRBACc/HQl+2aCTd0=";
   };
 

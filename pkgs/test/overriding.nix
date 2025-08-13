@@ -5,7 +5,7 @@
 }:
 
 let
-  tests = tests-stdenv // test-extendMkDerivation // tests-go // tests-python;
+  tests = tests-stdenv // test-extendMkDerivation // tests-fetchhg // tests-go // tests-python;
 
   tests-stdenv =
     let
@@ -127,6 +127,51 @@ let
       };
       extendMkDerivation-helloLocal-specialArg = {
         expr = hiLocal.greeting == "Hi!";
+        expected = true;
+      };
+    };
+
+  tests-fetchhg =
+    let
+      ruamel_0_18_14-hash = "sha256-HDkPPp1xI3uoGYlS9mwPp1ZjG2gKvx6vog0Blj6tBuI=";
+      ruamel_0_18_14-src = pkgs.fetchhg {
+        url = "http://hg.code.sf.net/p/ruamel-yaml/code";
+        rev = "0.18.14";
+        hash = ruamel_0_18_14-hash;
+      };
+      ruamel_0_17_21-hash = "sha256-6PV0NyPQfd+4RBqoj5vJaOHShx+TJVHD2IamRinU0VU=";
+      ruamel_0_17_21-src = pkgs.fetchhg {
+        url = "http://hg.code.sf.net/p/ruamel-yaml/code";
+        rev = "0.17.21";
+        hash = ruamel_0_17_21-hash;
+      };
+      ruamel_0_17_21-src-by-overriding = ruamel_0_18_14-src.overrideAttrs {
+        rev = "0.17.21";
+        hash = ruamel_0_17_21-hash;
+      };
+    in
+    {
+      hash-outputHash-equivalence = {
+        expr = ruamel_0_17_21-src.outputHash == ruamel_0_17_21-hash;
+        expected = true;
+      };
+
+      hash-overridability-outputHash = {
+        expr = ruamel_0_17_21-src-by-overriding.outputHash == ruamel_0_17_21-hash;
+        expected = true;
+      };
+
+      hash-overridability-drvPath = {
+        expr =
+          lib.isString ruamel_0_17_21-src-by-overriding.drvPath
+          && ruamel_0_17_21-src-by-overriding.drvPath == ruamel_0_17_21-src.drvPath;
+        expected = true;
+      };
+
+      hash-overridability-outPath = {
+        expr =
+          lib.isString ruamel_0_17_21-src-by-overriding.outPath
+          && ruamel_0_17_21-src-by-overriding.outPath == ruamel_0_17_21-src.outPath;
         expected = true;
       };
     };
@@ -267,12 +312,11 @@ in
 stdenvNoCC.mkDerivation {
   name = "test-overriding";
   passthru = { inherit tests; };
-  buildCommand =
-    ''
-      touch $out
-    ''
-    + lib.concatMapAttrsStringSep "\n" (
-      name: t:
-      "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
-    ) tests;
+  buildCommand = ''
+    touch $out
+  ''
+  + lib.concatMapAttrsStringSep "\n" (
+    name: t:
+    "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
+  ) tests;
 }

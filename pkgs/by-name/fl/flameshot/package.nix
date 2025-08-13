@@ -38,31 +38,29 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
-      (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
-      (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
+    (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
+    (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      libsForQt5.qttools
-      libsForQt5.qtsvg
-      libsForQt5.wrapQtAppsHook
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns
-    ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.qttools
+    libsForQt5.qtsvg
+    libsForQt5.wrapQtAppsHook
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ];
 
   buildInputs = [
     libsForQt5.qtbase

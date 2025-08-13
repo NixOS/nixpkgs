@@ -16,13 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.7.2";
+  version = "1.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-On67RM3u1/XhdwgtAHve1GAJwKGCnk8IOCjNZcyDfyg=";
+    hash = "sha256-xH3JPlXXkLKKT8Gay6qHG/JXTT1UcUCQaSC65Vxhfl0=";
   };
 
   patches = [
@@ -86,26 +87,24 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs =
-    [
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals python3.isPyPy [
-      # Several tests hardcode python3.
-      (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
-    ];
+  nativeCheckInputs = [
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals python3.isPyPy [
+    # Several tests hardcode python3.
+    (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
+  ];
 
-  checkInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
-      # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
-      llvmPackages.openmp
-      # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
-      libblocksruntime
-    ];
+  checkInputs = [
+    zlib
+  ]
+  ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+    libblocksruntime
+  ];
 
   checkPhase = lib.concatStringsSep "\n" (
     [

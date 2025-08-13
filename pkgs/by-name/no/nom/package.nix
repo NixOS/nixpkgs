@@ -2,26 +2,34 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "nom";
-  version = "2.8.2";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
     tag = "v${version}";
-    hash = "sha256-SkmY3eFEAC4EJtFpe6FwRmECIZJa/Oyb1yov75ySSH0=";
+    hash = "sha256-dGQDxjvB5OX4ot22zt2zFu3T3h/clSRlfxhCpkPRePU=";
   };
 
   vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
 
-  meta = with lib; {
+  ldflags = [
+    "-X 'main.version=${version}'"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/guyfedwards/nom";
+    changelog = "https://github.com/guyfedwards/nom/releases/tag/v${version}";
     description = "RSS reader for the terminal";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       nadir-ishiguro
       matthiasbeyer
     ];

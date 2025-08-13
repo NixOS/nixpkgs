@@ -1,7 +1,7 @@
 {
+  lib,
   stdenv,
   stdenvNoCC,
-  lib,
   callPackage,
   fetchurl,
   nixosTests,
@@ -34,34 +34,41 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  sha256 =
+  hash =
     {
-      x86_64-linux = "1zc64d1n84kzwmwh8m3j897di5955qlm7glnpjvl8g7q70b4rdax";
-      x86_64-darwin = "04ycsad1khxjmiph9fk9449w942m8gmq65amwkf8jxqzn0rybh76";
-      aarch64-linux = "0lhqmp59vccs35fksgvdgvw82b0mr9b2wlyafxlwb8pk2q0l0xga";
-      aarch64-darwin = "1axzsk6xqlzs3j9irjxp5f4fbdxyi4fffhdk89h45q3zkw8m9m4i";
-      armv7l-linux = "1rv3a8xj7iv1d8mfikpj58n398ww5cndbyvgy5328nj7dh6azrsw";
+      x86_64-linux = "sha256-Fji3/9T8X2VQH6gUhReSuniuX2BX+4S7uPJWEZn56vc=";
+      x86_64-darwin = "sha256-LgYdgiZbMdpe/KjAYuAVYEFFc1gcFSo5+/6lf15zUvk=";
+      aarch64-linux = "sha256-WxJEjTvXK1N1FjEFv0nUX7oLgPrcKlPHYSiLkTcdhj4=";
+      aarch64-darwin = "sha256-2H44MkP7Vv+j78DxGWROHCPdMQv2WzTrG1I7LANMYqg=";
+      armv7l-linux = "sha256-Pw9krAFjrllNOsXipaZy7X7wnB7C8V45WU7HuKa59JQ=";
     }
     .${system} or throwSystem;
-in
-callPackage ./generic.nix rec {
+
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.101.0";
-  pname = "vscode" + lib.optionalString isInsiders "-insiders";
+  version = "1.103.0";
 
   # This is used for VS Code - Remote SSH test
-  rev = "dfaf44141ea9deb3b4096f7cd6d24e00c147a4b1";
+  rev = "e3550cfac4b63ca4eafca7b601f0d2885817fd1f";
+in
+callPackage ./generic.nix {
+  pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
   shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-  inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
+  inherit
+    version
+    rev
+    commandLineArgs
+    useVSCodeRipgrep
+    sourceExecutableName
+    ;
 
   src = fetchurl {
     name = "VSCode_${version}_${plat}.${archive_fmt}";
     url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-    inherit sha256;
+    inherit hash;
   };
 
   # We don't test vscode on CI, instead we test vscodium
@@ -75,7 +82,7 @@ callPackage ./generic.nix rec {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "0rjd4f54k58k97gxvnivwj52aha5s8prws1izvmg43vphhfvk014";
+      hash = "sha256-GEN8WMPaYhwQsgml3tXWJP7F4RXH5vy6Ht0RUGauxnw=";
     };
     stdenv = stdenvNoCC;
   };
@@ -91,23 +98,19 @@ callPackage ./generic.nix rec {
 
   hasVsceSign = true;
 
-  meta = with lib; {
-    description = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS
-    '';
+  meta = {
+    description = "Code editor developed by Microsoft";
     mainProgram = "code";
     longDescription = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS. It includes support for debugging, embedded Git
-      control, syntax highlighting, intelligent code completion, snippets,
-      and code refactoring. It is also customizable, so users can change the
-      editor's theme, keyboard shortcuts, and preferences
+      Code editor developed by Microsoft. It includes support for debugging,
+      embedded Git control, syntax highlighting, intelligent code completion,
+      snippets, and code refactoring. It is also customizable, so users can
+      change the editor's theme, keyboard shortcuts, and preferences
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       eadwu
       synthetica
       bobby285271

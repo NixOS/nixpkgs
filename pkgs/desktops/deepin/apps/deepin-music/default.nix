@@ -37,26 +37,25 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      dtk6widget
-      dtk6declarative
-      qt6integration
-      qt6platform-plugins
-      qt6mpris
-      qt6Packages.qtbase
-      qt6Packages.qt5compat
-      qt6Packages.qtmultimedia
-      ffmpeg_6
-      libvlc
-      taglib_1
-      SDL2
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    dtk6widget
+    dtk6declarative
+    qt6integration
+    qt6platform-plugins
+    qt6mpris
+    qt6Packages.qtbase
+    qt6Packages.qt5compat
+    qt6Packages.qtmultimedia
+    ffmpeg_6
+    libvlc
+    taglib_1
+    SDL2
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 

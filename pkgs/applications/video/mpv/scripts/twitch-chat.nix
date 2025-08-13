@@ -27,7 +27,7 @@ buildLua {
   };
 
   meta = {
-    description = "Show Twitch chat messages as subtitles when watching Twitch VOD with mpv.";
+    description = "Show Twitch chat messages as subtitles when watching Twitch VOD with mpv";
     homepage = "https://github.com/CrendKing/mpv-twitch-chat";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.naho ];

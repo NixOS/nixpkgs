@@ -49,6 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # GTest needs C++17
+    # std::multimap in C++17 is not happy with this not being const
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/merge_requests/134 merged & in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'CMAKE_CXX_STANDARD 14' 'CMAKE_CXX_STANDARD 17'
+    substituteInPlace src/indicator/nmofono/wwan/wwan-link.h \
+      --replace-fail 'bool operator()(int lhs, int rhs)' 'bool operator()(int lhs, int rhs) const'
+
     # Override original prefixes
     substituteInPlace data/CMakeLists.txt \
       --replace-fail 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir)' 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir DEFINE_VARIABLES datadir=''${CMAKE_INSTALL_FULL_SYSCONFDIR})' \

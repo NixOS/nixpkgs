@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.06.0-146";
+  version = "2025.08.0-130";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,41 +30,42 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
-        hash = "sha256-V9ADtOskxEbGZryXD/6aiUDeTvqPzoY372f/Vo5195s=";
+        url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
+        hash = "sha256-FMnDXhIj6j/ToLtjUiJObu/SRUb9eTnffC9DBbb2azE=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-FiCTF5Bmfp4id9HXuB4luSGT9A7OoquaRW/QIh0A3ZY=";
+        url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-zNt+40BLHR48g0ZhY8KDpPVdzcOCW7Isl3JA4nlBisc=";
       }
     else
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-FnNoLV9uqgUeumYpHtRJuHrFA6mL65KI4jru7Ebq0/o=";
+        url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
+        hash = "sha256-vjEOQw3+AoAHA+zR3w56h1kKuNMsA+WLK6xKEVvMqSU=";
       };
 
-  buildInputs =
-    [ makeShellWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      libglvnd
-      libxkbcommon
-      libgbm
-      musl
-      nss
-      stdenv.cc.cc
-      openssl
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libxkbfile
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      blas
-      patchelf
-    ];
+  buildInputs = [
+    makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    libglvnd
+    libxkbcommon
+    libgbm
+    musl
+    nss
+    stdenv.cc.cc
+    openssl
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libxkbfile
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    blas
+    patchelf
+  ];
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -141,6 +142,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ] ++ platforms.darwin;
+    ]
+    ++ platforms.darwin;
   };
 }

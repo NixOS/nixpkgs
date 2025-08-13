@@ -6,7 +6,6 @@
   nixosTests,
   python3Packages,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "calibre-web";
   version = "0.6.24";
@@ -133,6 +132,8 @@ python3Packages.buildPythonApplication rec {
     "lxml"
     "pypdf"
     "regex"
+    "tornado"
+    "unidecode"
   ];
 
   nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);

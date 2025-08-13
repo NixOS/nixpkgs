@@ -58,16 +58,15 @@ let
         pkg-config
         orc
       ];
-      runtime =
-        [
-          volk
-          boost
-          spdlog
-          mpir
-        ]
-        # when gr-qtgui is disabled, icu needs to be included, otherwise
-        # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
+      runtime = [
+        volk
+        boost
+        spdlog
+        mpir
+      ]
+      # when gr-qtgui is disabled, icu needs to be included, otherwise
+      # building with boost 1.7x fails
+      ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
         mako
         six

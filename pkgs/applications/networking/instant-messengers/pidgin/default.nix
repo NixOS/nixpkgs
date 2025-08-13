@@ -99,46 +99,44 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin gtk2-x11;
 
-    propagatedBuildInputs =
-      [
-        pkg-config
-        gettext
-      ]
-      ++ (with perlPackages; [
-        perl
-        XMLParser
-      ])
-      ++ lib.optional stdenv.hostPlatform.isLinux gtk2
-      ++ lib.optional stdenv.hostPlatform.isDarwin gtk2-x11;
+    propagatedBuildInputs = [
+      pkg-config
+      gettext
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ])
+    ++ lib.optional stdenv.hostPlatform.isLinux gtk2
+    ++ lib.optional stdenv.hostPlatform.isDarwin gtk2-x11;
 
     patches = [
       ./add-search-path.patch
       ./pidgin-makefile.patch
     ];
 
-    configureFlags =
-      [
-        "--with-nspr-includes=${nspr.dev}/include/nspr"
-        "--with-nspr-libs=${nspr.out}/lib"
-        "--with-nss-includes=${nss.dev}/include/nss"
-        "--with-nss-libs=${nss.out}/lib"
-        "--with-ncurses-headers=${ncurses.dev}/include"
-        "--with-system-ssl-certs=${cacert}/etc/ssl/certs"
-        "--disable-meanwhile"
-        "--disable-nm"
-        "--disable-tcl"
-        "--disable-gevolution"
-      ]
-      ++ lib.optionals withCyrus_sasl [ "--enable-cyrus-sasl=yes" ]
-      ++ lib.optionals withGnutls [
-        "--enable-gnutls=yes"
-        "--enable-nss=no"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "--disable-gtkspell"
-        "--disable-vv"
-      ]
-      ++ lib.optionals stdenv.cc.isClang [ "CFLAGS=-Wno-error=int-conversion" ];
+    configureFlags = [
+      "--with-nspr-includes=${nspr.dev}/include/nspr"
+      "--with-nspr-libs=${nspr.out}/lib"
+      "--with-nss-includes=${nss.dev}/include/nss"
+      "--with-nss-libs=${nss.out}/lib"
+      "--with-ncurses-headers=${ncurses.dev}/include"
+      "--with-system-ssl-certs=${cacert}/etc/ssl/certs"
+      "--disable-meanwhile"
+      "--disable-nm"
+      "--disable-tcl"
+      "--disable-gevolution"
+    ]
+    ++ lib.optionals withCyrus_sasl [ "--enable-cyrus-sasl=yes" ]
+    ++ lib.optionals withGnutls [
+      "--enable-gnutls=yes"
+      "--enable-nss=no"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--disable-gtkspell"
+      "--disable-vv"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [ "CFLAGS=-Wno-error=int-conversion" ];
 
     enableParallelBuilding = true;
 

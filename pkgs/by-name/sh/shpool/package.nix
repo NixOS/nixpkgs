@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JDMgYd9mKsLdqc8rpDg3ymgFj/ntpBBF5fSDb2cLOJs=";
 
   buildInputs = [

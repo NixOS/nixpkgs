@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-    ]
-    ++ lib.optionals withGeolocation [ libmaxminddb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
+  buildInputs = [
+    ncurses
+    openssl
+  ]
+  ++ lib.optionals withGeolocation [ libmaxminddb ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   configureFlags = [
     "--enable-utf8"
     "--with-openssl"
-  ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
+  ]
+  ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [

@@ -38,7 +38,7 @@ buildFHSEnv {
       tbb
       xwayland
       qt5.qtwayland
-      nettools # needed by licensing tools
+      net-tools # needed by licensing tools
       bintools # needed for ld and other tools, so ctypes can find/load sos from python
       ocl-icd # needed for opencl
       numactl # needed by hfs ocl backend

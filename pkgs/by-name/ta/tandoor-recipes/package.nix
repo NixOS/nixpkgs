@@ -80,6 +80,7 @@ python.pkgs.buildPythonPackage {
     pyjwt
     python3-openid
     python3-saml
+    standard-imghdr
   ];
 
   configurePhase = ''

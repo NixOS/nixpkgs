@@ -94,31 +94,30 @@ buildPythonApplication rec {
     "twisted"
   ];
 
-  propagatedBuildInputs =
-    [
-      # core
-      twisted
-      jinja2
-      msgpack
-      zope-interface
-      sqlalchemy
-      alembic
-      python-dateutil
-      txaio
-      autobahn
-      pyjwt
-      pyyaml
-      setuptools
-      croniter
-      importlib-resources
-      packaging
-      unidiff
-      treq
-      brotli
-      zstandard
-    ]
-    # tls
-    ++ twisted.optional-dependencies.tls;
+  propagatedBuildInputs = [
+    # core
+    twisted
+    jinja2
+    msgpack
+    zope-interface
+    sqlalchemy
+    alembic
+    python-dateutil
+    txaio
+    autobahn
+    pyjwt
+    pyyaml
+    setuptools
+    croniter
+    importlib-resources
+    packaging
+    unidiff
+    treq
+    brotli
+    zstandard
+  ]
+  # tls
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     treq
@@ -156,16 +155,15 @@ buildPythonApplication rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  passthru =
-    {
-      inherit withPlugins python;
-      updateScript = ./update.sh;
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      tests = {
-        inherit (nixosTests) buildbot;
-      };
+  passthru = {
+    inherit withPlugins python;
+    updateScript = ./update.sh;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    tests = {
+      inherit (nixosTests) buildbot;
     };
+  };
 
   meta = with lib; {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";

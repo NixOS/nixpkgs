@@ -38,7 +38,7 @@
 .br
 .Op Fl -build-host Va host
 .Op Fl -target-host Va host
-.Op Fl -use-remote-sudo
+.Op Fl -sudo
 .Op Fl -no-ssh-tty
 .br
 .Op Fl -verbose | v
@@ -404,7 +404,7 @@ or
 is also set. This is useful when the target-host connection to cache.nixos.org
 is faster than the connection between hosts.
 .
-.It Fl -use-remote-sudo
+.It Fl -sudo
 When set, nixos-rebuild prefixes activation commands that run on the
 .Fl -target-host
 system with

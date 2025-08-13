@@ -8,6 +8,7 @@
   swt,
   makeWrapper,
   strip-nondeterminism,
+  udevCheckHook,
 }:
 let
   swt-jdk17 = swt.override { jdk = jdk17; };
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk17
     makeWrapper
     strip-nondeterminism
+    udevCheckHook
   ];
 
   buildPhase = ''
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   #checkPhase = ''
   #  ant -f build/build.xml check
   #'';
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

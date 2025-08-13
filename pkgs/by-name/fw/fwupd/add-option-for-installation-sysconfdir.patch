@@ -207,8 +207,3 @@ index 2dfc4d2f0..e5ac73edd 100644
    )
  endif
  
-@@ -146,4 +146,3 @@ summary({
-   'capsule splash': get_option('plugin_uefi_capsule_splash'),
- }, section:'uefi capsule options')
- endif
--

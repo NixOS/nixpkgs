@@ -19,15 +19,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   configureFlags = [ "--disable-debug" ];
-  makeFlags =
-    [
-      "CC=${stdenv.cc.targetPrefix}cc"
-      "AR=${stdenv.cc.targetPrefix}ar"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "shared=-dynamiclib"
-      "shared+=-Wl,-install_name,$(out)/lib/$(lib_so)"
-    ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "shared=-dynamiclib"
+    "shared+=-Wl,-install_name,$(out)/lib/$(lib_so)"
+  ];
 
   preInstall = ''
     mkdir -p $out/{lib,include}

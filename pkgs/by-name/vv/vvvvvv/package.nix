@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUNDLE_DEPENDENCIES=OFF"
-  ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
+  ]
+  ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
 
   desktopItems = [
     (makeDesktopItem {
@@ -85,14 +86,13 @@ stdenv.mkDerivation rec {
     description =
       "A retro-styled platform game"
       + lib.optionalString makeAndPlay " (redistributable, without original levels)";
-    longDescription =
-      ''
-        VVVVVV is a platform game all about exploring one simple mechanical
-        idea - what if you reversed gravity instead of jumping?
-      ''
-      + lib.optionalString makeAndPlay ''
-        (Redistributable version, doesn't include the original levels.)
-      '';
+    longDescription = ''
+      VVVVVV is a platform game all about exploring one simple mechanical
+      idea - what if you reversed gravity instead of jumping?
+    ''
+    + lib.optionalString makeAndPlay ''
+      (Redistributable version, doesn't include the original levels.)
+    '';
     homepage = "https://thelettervsixtim.es";
     changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
     license = licenses.unfree;

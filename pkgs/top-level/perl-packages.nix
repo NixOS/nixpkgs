@@ -16,6 +16,7 @@
   fetchurl,
   fetchpatch,
   fetchpatch2,
+  fetchDebianPatch,
   fetchFromGitHub,
   fetchFromGitLab,
   perl,
@@ -35,11 +36,7 @@ with self;
 {
 
   inherit perl;
-  perlPackages = self // {
-    perlPackages = self.perlPackages // {
-      __attrsFailEvaluation = true;
-    };
-  };
+  perlPackages = self;
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule;
@@ -900,7 +897,7 @@ with self;
       Mouse
     ];
     meta = {
-      description = "(DEPRECATED) use Moo instead!";
+      description = "(DEPRECATED) use Moo instead";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -1277,7 +1274,8 @@ with self;
       PDFAPI2
       StringInterpolateNamed
       TextLayout
-    ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ Wx ];
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
     # Delete tests that fail when version env var is set, see
@@ -1397,11 +1395,11 @@ with self;
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.5.1";
+    version = "1.5.2";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.1.tar.gz";
-      hash = "sha256-Fqo0j8Sedfj/ZQMfBiLUGSkyMhsFvWUYq5lkYYVy1pg=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.2.tar.gz";
+      hash = "sha256-horqXNSz6uDPrKiXK546ag+PmYiEjVNazstJVbAovNE=";
     };
     buildInputs = [
       CaptureTiny
@@ -6836,7 +6834,7 @@ with self;
       hash = "sha256-Z/ymiwUm5zTi2VvGsyutAcMZ5Yer9j5M80Itpmu+o6A=";
     };
     meta = {
-      description = "modern bcrypt implementation";
+      description = "Modern bcrypt implementation";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -7904,10 +7902,10 @@ with self;
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.080";
+    version = "0.087";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.080.tar.gz";
-      hash = "sha256-tFe3khlKbJwT8G/goLXqFYllwygvOFypPh8AorM+fok=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.087.tar.gz";
+      hash = "sha256-gHDsKVFg1I83bY/xssvwvxUtqfIDOTk4LwDxP3SM030=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -8855,7 +8853,7 @@ with self;
     };
     propagatedBuildInputs = [ DateSimple ];
     meta = {
-      description = "work with a range of dates";
+      description = "Work with a range of dates";
       license = with lib.licenses; [ gpl2Plus ];
     };
   };
@@ -10959,7 +10957,7 @@ with self;
     '';
     doCheck = false;
     meta = {
-      description = "Distribution builder; installer not included!";
+      description = "Distribution builder; installer not included";
       homepage = "https://dzil.org";
       license = with lib.licenses; [
         artistic1
@@ -12454,7 +12452,7 @@ with self;
     };
     buildInputs = [ TestFatal ];
     meta = {
-      description = "Configure-time utilities for using C headers,";
+      description = "Configure-time utilities for using C headers";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -13820,6 +13818,11 @@ with self;
       url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.118.tar.gz";
       hash = "sha256-O7KiC6Nd+VjcCk8jBvwF2QPYuMTePIvu/OF3OdKByVg=";
     };
+    # Fix dynamic loading not available when cross compiling
+    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/install_share/d' Makefile.PL
+      sed -i '/File::ShareDir::Install/d' Makefile.PL
+    '';
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ FileShareDirInstall ];
     meta = {
@@ -13829,8 +13832,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      # Can't load module IO, dynamic loading not available in this perl.
-      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 
@@ -14149,10 +14150,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.65";
+    version = "1.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-C3pJZaLJrW+nwDawloHHtEWyB1j6qYNnsmZZz2L+Axg=";
+      hash = "sha256-GOkdcI+Ah6JvvL+zsKYe0UcdKks855jecwTzBIGkZ+k=";
     };
     buildInputs = [
       DateManip
@@ -16949,12 +16950,12 @@ with self;
     };
   };
 
-  ImagePNGLibpng = buildPerlPackage {
+  ImagePNGLibpng = buildPerlPackage rec {
     pname = "Image-PNG-Libpng";
-    version = "0.57";
+    version = "0.59";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
-      hash = "sha256-+vu/6/9CP3u4XvJ6MEH7YpG1AzbHpYIiSlysQzHDx9k=";
+      url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-${version}.tar.gz";
+      hash = "sha256-4fn19YqM6YhwUp9WgIQfsz4wQnLzn6rtXC95Kc5vWNc=";
     };
     buildInputs = [ pkgs.libpng ];
     meta = {
@@ -17245,7 +17246,7 @@ with self;
       hash = "sha256-VOIdJQwCKRJ+MLd6NGHhAHeFTsJE8m+2cPG0Re1MTVs=";
     };
     meta = {
-      description = "IO::All of it to Graham and Damian!";
+      description = "Combines all of the best Perl IO modules into a single nifty object oriented interface";
       homepage = "https://github.com/ingydotnet/io-all-pm";
       license = with lib.licenses; [
         artistic1
@@ -17519,26 +17520,6 @@ with self;
     };
   };
 
-  IOPty = buildPerlModule {
-    pname = "IO-Pty";
-    version = "1.16";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.16.tar.gz";
-      hash = "sha256-jxoJwHBzitxpXfkD8uf3QwjdjZkbkUwLw5Cg5gISlN0=";
-    };
-    buildPhase = "make";
-    checkPhase = "make test";
-    installPhase = "make install";
-    meta = {
-      homepage = "https://github.com/toddr/IO-Tty";
-      description = "Pseudo TTY object class";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
-
   IOPrompt = buildPerlModule {
     pname = "IO-Prompt";
     version = "0.997004";
@@ -17745,16 +17726,20 @@ with self;
     };
   };
 
-  IOTty = buildPerlPackage {
+  IOTty = buildPerlPackage rec {
     pname = "IO-Tty";
-    version = "1.17";
+    version = "1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.17.tar.gz";
-      hash = "sha256-pfGoMCC8W13WwbVw9Ix1RuCo9/rBCgaHQLA5Ja2eFOg=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-${version}.tar.gz";
+      hash = "sha256-sVMJ/IViOJMonLmyuI36ntHmkVa3XymThVOkW+bXMK8=";
     };
-    patches = [ ../development/perl-modules/IO-Tty-fix-makefile.patch ];
+    # Fix dynamic loading not available when cross compiling
+    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/use IO::File/d' Makefile.PL
+    '';
     doCheck = !stdenv.hostPlatform.isDarwin; # openpty fails in the sandbox
     meta = {
+      homepage = "https://github.com/toddr/IO-Tty";
       description = "Low-level allocate a pseudo-Tty, import constants";
       license = with lib.licenses; [
         artistic1
@@ -17844,6 +17829,33 @@ with self;
         artistic1
         gpl1Plus
         bsd3
+      ];
+    };
+  };
+
+  IPCShareable = buildPerlPackage {
+    pname = "IPC-Shareable";
+    version = "1.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/ST/STEVEB/IPC-Shareable-1.13.tar.gz";
+      hash = "sha256-RW5mX3Kj+3ulqOcOMhz8nIJZ3vsxEbUZQK0IyrnADms=";
+    };
+    # remove t/04-key.t pulling in Mock::Sub, it'd get skipped anyways.
+    postPatch = ''
+      rm t/04-key.t
+    '';
+    propagatedBuildInputs = [
+      JSON
+      StringCRC32
+    ];
+    checkInputs = [
+      TestSharedFork
+    ];
+    meta = {
+      description = "Use shared memory backed variables across processes";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
       ];
     };
   };
@@ -18356,21 +18368,21 @@ with self;
     ];
     nativeBuildInputs = [
       pkgs.makeWrapper
-    ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     makeMakerFlags = [
       "TEXMF=\${tex}"
       "NOMKTEXLSR"
     ];
     # shebangs need to be patched before executables are copied to $out
-    preBuild =
-      ''
-        patchShebangs bin/
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        for file in bin/*; do
-          shortenPerlShebang "$file"
-        done
-      '';
+    preBuild = ''
+      patchShebangs bin/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for file in bin/*; do
+        shortenPerlShebang "$file"
+      done
+    '';
     postInstall = ''
       for file in latexmlc latexmlmath latexmlpost ; do
         # add runtime dependencies that cause silent failures when missing
@@ -26702,14 +26714,13 @@ with self;
     # Most tests are skipped as no server is available in the sandbox.
     # `t/35_log.t` seems to suffer from a race condition; remove it.  See
     # https://github.com/NixOS/nixpkgs/pull/104889#issuecomment-737144513
-    preCheck =
-      ''
-        rm t/35_log.t
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        rm t/30_connect.t
-        rm t/45_class.t
-      '';
+    preCheck = ''
+      rm t/35_log.t
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      rm t/30_connect.t
+      rm t/45_class.t
+    '';
     meta = {
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
@@ -26846,7 +26857,7 @@ with self;
     outputs = [ "out" ];
 
     meta = {
-      description = "maintainer helper tool to help maintainers update their pacscripts.";
+      description = "Tool to help maintainers update their pacscripts";
       homepage = "https://github.com/pacstall/pacup";
       license = lib.licenses.gpl3Only;
     };
@@ -27514,19 +27525,18 @@ with self;
       (lib.getDev mesa_glu)
     ];
 
-    buildInputs =
-      [
-        DevelChecklib
-        TestDeep
-        TestException
-        TestWarn
-      ]
-      ++ (with pkgs; [
-        gsl
-        libglut
-        xorg.libXmu
-        xorg.libXi
-      ]);
+    buildInputs = [
+      DevelChecklib
+      TestDeep
+      TestException
+      TestWarn
+    ]
+    ++ (with pkgs; [
+      gsl
+      libglut
+      xorg.libXmu
+      xorg.libXi
+    ]);
 
     propagatedBuildInputs = [
       AstroFITSHeader
@@ -30837,7 +30847,7 @@ with self;
     ];
     meta = {
       homepage = "https://github.com/asb-capfan/Spreadsheet-XLSX";
-      description = "Perl extension for reading MS Excel 2007 files;";
+      description = "Perl extension for reading MS Excel 2007 files";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -31464,7 +31474,7 @@ with self;
       hash = "sha256-nkF6j42epiO+6i0TpHwNWmlvyGAsBQm4Js1F+Xt253g=";
     };
     meta = {
-      description = "sprintf-like string formatting capabilities with arbitrary format definitions";
+      description = "Sprintf-like string formatting capabilities with arbitrary format definitions";
       license = with lib.licenses; [ gpl2Only ];
     };
   };
@@ -32047,7 +32057,7 @@ with self;
       YAMLLibYAML
     ];
     meta = {
-      description = "See What I Mean?!";
+      description = "See What I Mean";
       homepage = "https://github.com/ingydotnet/swim-pm";
       license = with lib.licenses; [
         artistic1
@@ -32337,12 +32347,12 @@ with self;
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "11.0.0";
+    version = "11.2.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       tag = "v${version}";
-      hash = "sha256-k1fpVLWbFgZOUvCPLN6EpYgSfpwig5mHiWMRo8iRvZc=";
+      hash = "sha256-e/Zb9ox/ehfybpxiCAsEl97T1vjBNpRYJK/kmehPHsY=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
@@ -32571,15 +32581,14 @@ with self;
     buildPhase = ''
       perl Makefile.PL --tclsh "${pkgs.tk.tcl}/bin/tclsh" INSTALL_BASE=$out --no-test-for-tk
     '';
-    postInstall =
-      ''
-        mkdir -p $out/lib/perl5/site_perl
-        mv $out/lib/perl5/Tcl $out/lib/perl5/site_perl/
-        mv $out/lib/perl5/auto $out/lib/perl5/site_perl/
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        mv $out/lib/perl5/darwin-thread-multi-2level $out/lib/perl5/site_perl/
-      '';
+    postInstall = ''
+      mkdir -p $out/lib/perl5/site_perl
+      mv $out/lib/perl5/Tcl $out/lib/perl5/site_perl/
+      mv $out/lib/perl5/auto $out/lib/perl5/site_perl/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mv $out/lib/perl5/darwin-thread-multi-2level $out/lib/perl5/site_perl/
+    '';
     meta = {
       description = "Interface to Tcl/Tk with Perl/Tk compatible syntax";
       license = with lib.licenses; [
@@ -35991,7 +36000,7 @@ with self;
     };
     propagatedBuildInputs = [ PerlMinimumVersion ];
     meta = {
-      description = "Does your code require newer perl than you think?";
+      description = "Does your code require newer perl than you think";
       homepage = "https://github.com/rjbs/Test-MinimumVersion";
       license = with lib.licenses; [
         artistic1
@@ -36367,13 +36376,24 @@ with self;
     };
   };
 
-  TextUnaccent = buildPerlPackage {
+  TextUnaccent = buildPerlPackage rec {
     pname = "Text-Unaccent";
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDACHARY/Text-Unaccent-1.08.tar.gz";
       hash = "sha256-J45u/Jsk82mclh77NuvmAqNAi1QVcgF97hMdFScocys=";
     };
+    patches = [
+      # Fix build with gcc 14
+      # Convenience link to patch: https://salsa.debian.org/perl-team/modules/packages/libtext-unaccent-perl/-/blob/debian/1.08-2/debian/patches/bug848156.patch
+      (fetchDebianPatch {
+        inherit version;
+        pname = "libtext-unaccent-perl";
+        debianRevision = "2";
+        patch = "bug848156.patch";
+        hash = "sha256-RonSt/nPFYgAxbNU0jyfe1YpipxAJrLcIxwaUPxddoE=";
+      })
+    ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
     env.NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
     meta = {
@@ -36727,7 +36747,7 @@ with self;
       hash = "sha256-KeniEzlRBGx48gXxs+jfYskOEU8OCPoGuBd2ag+AixI=";
     };
     meta = {
-      description = "Variable ties made much easier: much, much, much easier.";
+      description = "Variable ties made much easier: much, much, much easier";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -37749,20 +37769,51 @@ with self;
     };
   };
 
-  WWWCurl = buildPerlPackage {
+  WWWCurl = buildPerlPackage rec {
     pname = "WWW-Curl";
     version = "4.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SZ/SZBALINT/WWW-Curl-4.17.tar.gz";
       hash = "sha256-Uv+rEQ4yNI13XyQclz61b5awju28EQ130lfNsKJKt7o=";
     };
-    patches = [
-      (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/makefile.patch?h=perl-www-curl&id=7e004bb8c5dc49c903a5d5fa5ff28c30a58e2595";
-        hash = "sha256-8JZbe4IMfRZyLa118AAH/wsXrazOFy79OoH3Nuy57A4=";
-        name = "perl-www-curl-makefile.patch";
-      })
-    ];
+    # Convenience link: https://salsa.debian.org/perl-team/modules/packages/libwww-curl-perl/-/tree/master/debian/patches
+    patches =
+      let
+        pname = "libwww-curl-perl";
+        debianRevision = "12";
+      in
+      [
+        # needed for curl 7.50.2 compat
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "Skip-preprocessor-symbol-only-CURL_STRICTER.patch";
+          hash = "sha256-9NcGBjVTbXWr4axl9cKsaAKt+spxDf97M76KDX7vl0I=";
+        })
+        # needed for curl 7.70.0 compat
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "WWW-Curl-4.17-RT130591.patch";
+          hash = "sha256-RoAjUSt8WwcxEgjDgitr8u+0BKcHUzIJts3ohKKmzg4=";
+        })
+        # Ignore undefined DEPRECAT macros from curl 7.87.0
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "workaround_DEPRECAT.patch";
+          hash = "sha256-oZBk2RUr2wVtrFhFN20TI2eWSCtcJbG+fPKhc1Br7JY=";
+        })
+        # Fix typo in "therefore" in man page
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "typo_therefore.patch";
+          hash = "sha256-UQTyv9YgIZC3S5Ih3qazPmQR4RLY7IEAmuMJUAyjewA=";
+        })
+        # needed for curl 8.13.0 compat
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "curl_8.13.0.patch";
+          hash = "sha256-VTp0CtVakGti23DvRJwnuP3//eS4BzV5/n+A2zg/a+k=";
+        })
+      ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
     buildInputs = [ pkgs.curl ];
     doCheck = false; # performs network access
@@ -38378,18 +38429,17 @@ with self;
       hash = "sha256-opvz8Aq5ye4EIYFU4K/I95m/I2dOuZwantTeH0BZpI0=";
     };
     SKIP_SAX_INSTALL = 1;
-    buildInputs =
+    buildInputs = [
+      AlienBuild
+      AlienLibxml2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with pkgs;
       [
-        AlienBuild
-        AlienLibxml2
+        libiconv
+        zlib
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin (
-        with pkgs;
-        [
-          libiconv
-          zlib
-        ]
-      );
+    );
     patches = [
       # https://github.com/shlomif/perl-XML-LibXML/pull/87
       ../development/perl-modules/XML-LibXML-fix-tests-libxml-2.13.0.patch
@@ -38633,8 +38683,9 @@ with self;
       XMLNamespaceSupport
       XMLSAXBase
     ];
-    postInstall = ''
-      perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+        --replace-fail "\$(PERL)" "${lib.getExe buildPackages.perl}"
     '';
     meta = {
       description = "Simple API for XML";
@@ -39332,6 +39383,7 @@ with self;
   DistZillaPluginNoTabsTests = self.DistZillaPluginTestNoTabs;
   EmailMIMEModifier = self.EmailMIME;
   ExtUtilsCommand = self.ExtUtilsMakeMaker;
+  IOPty = self.IOTty;
   IOSocketInet6 = self.IOSocketINET6;
   IOstringy = self.IOStringy;
   libintl_perl = self.libintl-perl;

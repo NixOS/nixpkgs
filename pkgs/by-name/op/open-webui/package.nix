@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.14";
+  version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-tq6npchWuEzgMOoCUvwHGbDjpJPOO1eSCS/88IzhWvQ=";
+    hash = "sha256-SX2uLmDZu1TW45A6F5mSXVtSqv5rbNKuVw8sWj8tEb4=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,19 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.27.3";
+    pyodideVersion = "0.28.0";
     pyodide = fetchurl {
-      hash = "sha256-SeK3RKqqxxLLf9DN5xXuPw6ZPblE6OX9VRXMzdrmTV4=";
+      hash = "sha256-4YwDuhcWPYm40VKfOEqPeUSIRQl1DDAdXEUcMuzzU7o=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-bt0Q6/ajrMA2yfdWyF+/NeImomRMspLiX3wu+EJ8mTU=";
+    npmDepsHash = "sha256-mMnDYMy1/7gW6XVaWVct9BuxDP78XX5u46lGBWjUvOQ=";
+
+    # See https://github.com/open-webui/open-webui/issues/15880
+    npmFlags = [
+      "--force"
+      "--legacy-peer-deps"
+    ];
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -108,8 +114,9 @@ python3Packages.buildPythonApplication rec {
       boto3
       chromadb
       colbert-ai
+      cryptography
+      ddgs
       docx2txt
-      duckduckgo-search
       einops
       elasticsearch
       extract-msg
@@ -127,6 +134,7 @@ python3Packages.buildPythonApplication rec {
       google-genai
       google-generativeai
       googleapis-common-protos
+      httpx
       iso-639
       langchain
       langchain-community
@@ -153,6 +161,7 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
+      oracledb
       pandas
       passlib
       peewee
@@ -161,8 +170,11 @@ python3Packages.buildPythonApplication rec {
       pillow
       pinecone-client
       playwright
+      posthog
       psutil
       psycopg2-binary
+      pyarrow
+      pycrdt
       pydub
       pyjwt
       pymdown-extensions

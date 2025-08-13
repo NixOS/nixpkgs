@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libmaddy-markdown";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "progsource";
     repo = "maddy";
     tag = finalAttrs.version;
-    hash = "sha256-FlERT2A5bxvLElBcqHCFTORFRK04rJjvRYguqZ+foVo=";
+    hash = "sha256-WMueY199ngw9BtHSY8zypfPZjWaQsSLUx8FDfQbBt5g=";
   };
 
   dontBuild = true;

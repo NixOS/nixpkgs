@@ -18,7 +18,8 @@ let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
         inherit hash;
-      } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
+      }
+      // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
     in
     if extension == "zip" then fetchzip args else fetchurl args;
 
@@ -45,16 +46,15 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      versionCheckHook
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      xar
-      cpio
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    xar
+    cpio
+  ];
 
   unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
@@ -86,16 +86,16 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "1Password command-line tool";
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       joelburget
       khaneliman
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     inherit mainProgram platforms;
   };
 }

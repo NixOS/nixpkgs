@@ -224,7 +224,8 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;
@@ -263,13 +264,12 @@ in
         inherit StateDirectory;
         StateDirectoryMode = "0700";
         SystemCallArchitectures = "native";
-        SystemCallFilter =
-          [
-            "@system-service"
-          ]
-          ++ lib.optionals (!useSendmail) [
-            "~@privileged"
-          ];
+        SystemCallFilter = [
+          "@system-service"
+        ]
+        ++ lib.optionals (!useSendmail) [
+          "~@privileged"
+        ];
         Restart = "always";
         UMask = "0077";
       };

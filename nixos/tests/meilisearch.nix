@@ -35,27 +35,26 @@ in
     machine.wait_for_unit("meilisearch")
     machine.wait_for_open_port(7700)
 
+    def wait_task(cmd):
+        response = json.loads(machine.succeed(cmd))
+        task_uid = response["taskUid"]
+        machine.wait_until_succeeds(
+            f"curl ${apiUrl}/tasks/{task_uid} | jq -e '.status | IN(\"succeeded\", \"failed\", \"canceled\")'"
+        )
+        machine.succeed(f"curl ${apiUrl}/tasks/{task_uid} | jq -e '.status == \"succeeded\"'")
+        return response
+
     with subtest("check version"):
         version = json.loads(machine.succeed("curl ${apiUrl}/version"))
         assert version["pkgVersion"] == "${pkgs.meilisearch.version}"
 
     with subtest("create index"):
-        machine.succeed(
-            "curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes --data @${indexJSON}"
-        )
+        wait_task("curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes --data @${indexJSON}")
         indexes = json.loads(machine.succeed("curl ${apiUrl}/indexes"))
         assert indexes["total"] == 1, "index wasn't created"
 
     with subtest("add documents"):
-        response = json.loads(
-            machine.succeed(
-                "curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes/${uid}/documents --data-binary @${moviesJSON}"
-            )
-        )
-        task_uid = response["taskUid"]
-        machine.wait_until_succeeds(
-            f"curl ${apiUrl}/tasks/{task_uid} | jq -e '.status == \"succeeded\"'"
-        )
+        wait_task("curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes/${uid}/documents --data-binary @${moviesJSON}")
 
     with subtest("search"):
         response = json.loads(

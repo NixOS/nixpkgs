@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "gfal2-python";
   version = "1.13.0";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";
@@ -37,7 +38,8 @@ buildPythonPackage rec {
     inherit gfal2;
     tests = {
       inherit gfal2-util;
-    } // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
+    }
+    // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
   };
   meta = with lib; {
     description = "Python binding for gfal2";

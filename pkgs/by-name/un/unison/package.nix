@@ -23,15 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      ocamlPackages.ocaml
-      ocamlPackages.findlib
-    ]
-    ++ lib.optionals enableX11 [
-      copyDesktopItems
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    ocamlPackages.ocaml
+    ocamlPackages.findlib
+  ]
+  ++ lib.optionals enableX11 [
+    copyDesktopItems
+    wrapGAppsHook3
+  ];
   buildInputs = lib.optionals enableX11 [
     gsettings-desktop-schemas
     ocamlPackages.lablgtk3
@@ -39,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-  ] ++ lib.optionals (!ocamlPackages.ocaml.nativeCompilers) [ "NATIVE=false" ];
+  ]
+  ++ lib.optionals (!ocamlPackages.ocaml.nativeCompilers) [ "NATIVE=false" ];
 
   postInstall = lib.optionalString enableX11 ''
     install -D $src/icons/U.svg $out/share/icons/hicolor/scalable/apps/unison.svg

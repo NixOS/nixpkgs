@@ -27,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     imagemagick
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     motif

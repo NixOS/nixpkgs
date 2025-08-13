@@ -29,14 +29,13 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      click
-      incremental
-      jinja2
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [
+    click
+    incremental
+    jinja2
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH

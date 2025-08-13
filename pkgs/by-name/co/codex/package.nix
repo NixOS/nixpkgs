@@ -1,80 +1,107 @@
 {
   lib,
   stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  nodejs_22, # Node ≥22 is required by codex-cli
-  pnpm_10,
-  makeBinaryWrapper,
+  gitMinimal,
   installShellFiles,
+  nix-update-script,
+  pkg-config,
+  python3,
+  openssl,
   versionCheckHook,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.1.2504301751"; # from codex-cli/package.json
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
-    rev = "463a230991393c7b39f2543a9766e6133ef65393";
-    hash = "sha256-CSd5e6BsGEigENjPu6R6s+QhZRLQ2CTmI5XBI9mPkmA=";
+    tag = "rust-v${finalAttrs.version}";
+    hash = "sha256-9hwDAkrMW0llcYJdkrUCSdh3guRcUCmx8MDkHLyY6v0=";
   };
 
-  pnpmWorkspaces = [ "@openai/codex" ];
+  sourceRoot = "${finalAttrs.src.name}/codex-rs";
+
+  cargoHash = "sha256-ykG3howLyA4kA7cjP8Gx+usRcgQoVHW0ECQzTUigG8A=";
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_10.configHook
-    makeBinaryWrapper
     installShellFiles
+    pkg-config
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      pnpmWorkspaces
-      ;
-    hash = "sha256-pPwHjtqqaG+Zqmq6x5o+WCT1H9XuXAqFNKMzevp7wTc=";
+  buildInputs = [
+    openssl
+    # Required because of codex-rs/login/src/login_with_chatgpt.py
+    python3
+  ];
+
+  nativeCheckInputs = [ gitMinimal ];
+
+  __darwinAllowLocalNetworking = true;
+  env = {
+    # Disables sandbox tests which want to access /usr/bin/touch
+    CODEX_SANDBOX = "seatbelt";
+    # Skips tests that require networking
+    CODEX_SANDBOX_NETWORK_DISABLED = 1;
   };
+  checkFlags = [
+    # Wants to access /bin/zsh
+    "--skip=shell::tests::test_run_with_profile_escaping_and_execution"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=includes_base_instructions_override_in_request"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=includes_user_instructions_message_in_request"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=originator_config_override_is_used"
+    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
+    "--skip=azure_overrides_assign_properties_used_for_responses_url"
+    # Fails with 'stream ended unexpectedly: InternalAgentDied'
+    "--skip=prefixes_context_and_instructions_once_and_consistently_across_requests"
+    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
+    "--skip=env_var_overrides_loaded_auth"
+    # Version 0.0.0 hardcoded
+    "--skip=test_conversation_create_and_send_message_ok"
+    # Version 0.0.0 hardcoded
+    "--skip=test_send_message_session_not_found"
+    # Version 0.0.0 hardcoded
+    "--skip=test_send_message_success"
+    # Assertion fails
+    "--skip=diff_render::tests::ui_snapshot_add_details"
+    "--skip=diff_render::tests::ui_snapshot_update_details_with_rename"
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-    pnpm --filter @openai/codex run build
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    dest=$out/lib/node_modules/@openai/codex
-    mkdir -p "$dest"
-    cp -r codex-cli/dist codex-cli/bin codex-cli/package.json "$dest"
-    cp LICENSE README.md "$dest"
-
-    mkdir -p $out/bin
-    makeBinaryWrapper ${nodejs_22}/bin/node $out/bin/codex --add-flags "$dest/bin/codex.js"
-
-    # Install shell completions
-    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      $out/bin/codex completion bash > codex.bash
-      $out/bin/codex completion zsh > codex.zsh
-      $out/bin/codex completion fish > codex.fish
-      installShellCompletion codex.{bash,zsh,fish}
-    ''}
-
-    runHook postInstall
+  postInstall = lib.optionalString installShellCompletions ''
+    installShellCompletion --cmd codex \
+      --bash <($out/bin/codex completion bash) \
+      --fish <($out/bin/codex completion fish) \
+      --zsh <($out/bin/codex completion zsh)
   '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^rust-v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
+
   meta = {
     description = "Lightweight coding agent that runs in your terminal";
     homepage = "https://github.com/openai/codex";
+    changelog = "https://raw.githubusercontent.com/openai/codex/refs/tags/rust-v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.malo ];
     mainProgram = "codex";
+    maintainers = with lib.maintainers; [
+      malo
+      delafthi
+    ];
+    platforms = lib.platforms.unix;
   };
 })

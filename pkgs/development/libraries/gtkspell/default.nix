@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix build with gettext 0.25
+    ./gettext-0.25.patch
     # Build with enchant 2
     # https://github.com/archlinux/svntogit-packages/tree/packages/gtkspell/trunk
     (fetchpatch {

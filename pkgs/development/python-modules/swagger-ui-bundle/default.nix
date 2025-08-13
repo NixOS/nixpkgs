@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "bundled swagger-ui pip package";
+    description = "Bundled swagger-ui pip package";
     homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = licenses.asl20;
   };

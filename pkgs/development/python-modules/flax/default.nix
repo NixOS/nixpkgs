@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.6";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-HhepJp7y2YN05XcZhB/L08g+yOfTJPRzd2m4ALQJGvw=";
+    hash = "sha256-Epc7o8JoDkvNMbSH4D0cGyNJtg88qsDDbE881UVBxX4=";
   };
 
   build-system = [
@@ -83,11 +83,10 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [
-    "-W"
+  pytestFlags = [
     # DeprecationWarning: Triggering of __jax_array__() during abstractification is deprecated.
     # To avoid this error, either explicitly convert your object using jax.numpy.array(), or register your object as a pytree.
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

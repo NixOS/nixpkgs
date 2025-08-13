@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wbsoft";

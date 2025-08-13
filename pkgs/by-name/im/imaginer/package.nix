@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/ImaginerApp/Imaginer";
-    description = "Imaginer with AI";
+    description = "AI image generator for GNOME";
     mainProgram = "imaginer";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ _0xMRTT ];

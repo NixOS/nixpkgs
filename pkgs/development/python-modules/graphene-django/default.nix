@@ -61,18 +61,17 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  disabledTests =
-    [
-      # https://github.com/graphql-python/graphene-django/issues/1510
-      "test_should_filepath_convert_string"
-      "test_should_choice_convert_enum"
-      "test_should_multiplechoicefield_convert_to_list_of_enum"
-      "test_perform_mutate_success_with_enum_choice_field"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # this test touches files in the "/" directory and fails in darwin sandbox
-      "test_should_filepath_convert_string"
-    ];
+  disabledTests = [
+    # https://github.com/graphql-python/graphene-django/issues/1510
+    "test_should_filepath_convert_string"
+    "test_should_choice_convert_enum"
+    "test_should_multiplechoicefield_convert_to_list_of_enum"
+    "test_perform_mutate_success_with_enum_choice_field"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # this test touches files in the "/" directory and fails in darwin sandbox
+    "test_should_filepath_convert_string"
+  ];
 
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";

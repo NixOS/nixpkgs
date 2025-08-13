@@ -13,6 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
   version = "1.0-beta4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
@@ -34,7 +35,11 @@ python3Packages.buildPythonApplication rec {
     keybinder3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     dbus-python
     pillow
     pygobject3

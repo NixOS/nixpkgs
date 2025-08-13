@@ -1,26 +1,26 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index fa23446..6a7705c 100644
+index 42a636b..209893f 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -40,7 +40,20 @@ use_parentheses = true
- datas = "datas" # PyInstaller's argument
+@@ -23,6 +23,21 @@ dependencies = [
+   "uvicorn>=0.34.0",
+ ]
  
- [tool.poetry]
--package-mode = false
-+name = "voicevox-engine"
-+version = "@version@"
-+authors = []
-+description = ""
-+packages = [ { include = "voicevox_engine" } ]
-+include = [
-+  { path = "resources/**/*", format = ["sdist", "wheel"] },
-+  { path = "run.py", format = ["sdist", "wheel"] },
-+  { path = "engine_manifest.json", format = ["sdist", "wheel"] },
-+  { path = "presets.yaml", format = ["sdist", "wheel"] }
++[project.scripts]
++voicevox-engine = "run:main"
++
++[build-system]
++requires = ["hatchling"]
++build-backend = "hatchling.build"
++
++[tool.hatch.build]
++only-include = [
++  "voicevox_engine",
++  "resources",
++  "run.py",
++  "engine_manifest.json",
 +]
 +
-+[tool.poetry.scripts]
-+voicevox-engine = "run:main"
+ [tool.uv]
+ default-groups = []
  
- [tool.poetry.dependencies]
- python = "~3.11"

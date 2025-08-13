@@ -31,7 +31,8 @@ python3Packages.buildPythonApplication rec {
     elfutils # for `-ldebuginfod`
     libunwind
     lz4
-  ] ++ (with python3Packages; [ cython ]);
+  ]
+  ++ (with python3Packages; [ cython ]);
 
   dependencies = with python3Packages; [
     pkgconfig
@@ -44,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       ipython
-      pytest-cov # fix Unknown pytest.mark.no_cover
+      pytest-cov-stub # fix Unknown pytest.mark.no_cover
       pytest-textual-snapshot
       pytestCheckHook
     ]
@@ -52,12 +53,20 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
+
+    # The following snapshot tests started failing since updating textual to 3.5.0
+    "TestTUILooks"
+    "test_merge_threads"
+    "test_tui_basic"
+    "test_tui_gradient"
+    "test_tui_pause"
+    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [

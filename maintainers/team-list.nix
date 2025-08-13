@@ -186,6 +186,19 @@ with lib.maintainers;
     shortName = "Categorization";
   };
 
+  ci = {
+    members = [
+      MattSturgeon
+      mic92
+      philiptaron
+      wolfgangwalther
+      zowoq
+    ];
+    githubTeams = [ "nixpkgs-ci" ];
+    scope = "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions.";
+    shortName = "CI";
+  };
+
   cinnamon = {
     members = [
       bobby285271
@@ -296,6 +309,7 @@ with lib.maintainers;
       raphaelr
       jamiemagee
       anpin
+      meenzen
     ];
     scope = "Maintainers of the .NET build tools and packages";
     shortName = "dotnet";
@@ -437,8 +451,9 @@ with lib.maintainers;
   fslabs = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      greaka
       lpostula
+      mockersf
+      NthTensor
     ];
     scope = "Group registration for packages maintained by Foresight Spatial Labs.";
     shortName = "Foresight Spatial Labs employees";
@@ -465,7 +480,7 @@ with lib.maintainers;
       willcohen
     ];
     githubTeams = [ "geospatial" ];
-    scope = "Maintain geospatial packages.";
+    scope = "Maintain geospatial, remote sensing and OpenStreetMap software.";
     shortName = "Geospatial";
     enableFeatureFreezePing = true;
   };
@@ -580,10 +595,7 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [
-      akhilmhdh
-      mahyarmirrashed
-    ];
+    members = [ akhilmhdh ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };
@@ -617,6 +629,7 @@ with lib.maintainers;
       leona
       theCapypara
       thiagokokada
+      jamesward
     ];
     shortName = "Jetbrains";
     scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
@@ -679,7 +692,6 @@ with lib.maintainers;
       kazenyuk
       minijackson
       peterhoeg
-      sephalon
     ];
     scope = "Maintain Kodi and related packages.";
     shortName = "Kodi";
@@ -742,6 +754,20 @@ with lib.maintainers;
     members = [ OPNA2608 ];
     scope = "Maintain Lomiri desktop environment and related packages.";
     shortName = "Lomiri";
+    enableFeatureFreezePing = true;
+  };
+
+  loongarch64 = {
+    members = [
+      aleksana
+      Cryolitia
+      darkyzhou
+      dramforever
+      wegank
+    ];
+    githubTeams = [ "loongarch64" ];
+    scope = "Maintain LoongArch64 related packages and code";
+    shortName = "LoongArch64";
     enableFeatureFreezePing = true;
   };
 
@@ -915,6 +941,7 @@ with lib.maintainers;
       eljamm
       ethancedwards8
       fricklerhandwerk
+      OPNA2608
       prince213
       wegank
     ];
@@ -1119,7 +1146,6 @@ with lib.maintainers;
   sage = {
     members = [
       timokau
-      omasanori
       raskin
       collares
     ];
@@ -1205,6 +1231,7 @@ with lib.maintainers;
       arianvp
       elvishjerricco
       aanderse
+      grimmauld
     ];
     githubTeams = [ "systemd" ];
     scope = "Maintain systemd for NixOS.";
@@ -1225,10 +1252,20 @@ with lib.maintainers;
     shortName = "coqui-ai TTS";
   };
 
+  windows = {
+    members = [
+      RossSmyth
+      eveeifyeve
+      ericson2314
+      puffnfresh
+    ];
+    scope = "Maintains the windows package set";
+    shortName = "Windows";
+  };
+
   wdz = {
     members = [
       n0emis
-      vidister
       johannwagner
       yuka
     ];

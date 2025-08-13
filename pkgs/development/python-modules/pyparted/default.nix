@@ -22,18 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-AiUCCrEbDD0OxrvXs1YN3/1IE7SuVasC2YCirIG58iU=";
   };
 
-  postPatch =
-    ''
-      sed -i -e 's|mke2fs|${pkgs.e2fsprogs}/bin/mke2fs|' tests/baseclass.py
-      sed -i -e '
-        s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
-      ' tests/test__ped_ped.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isi686 ''
-      # remove some integers in this test case which overflow on 32bit systems
-      sed -i -r -e '/class *UnitGetSizeTestCase/,/^$/{/[0-9]{11}/d}' \
-        tests/test__ped_ped.py
-    '';
+  postPatch = ''
+    sed -i -e 's|mke2fs|${pkgs.e2fsprogs}/bin/mke2fs|' tests/baseclass.py
+    sed -i -e '
+      s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
+    ' tests/test__ped_ped.py
+  ''
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    # remove some integers in this test case which overflow on 32bit systems
+    sed -i -r -e '/class *UnitGetSizeTestCase/,/^$/{/[0-9]{11}/d}' \
+      tests/test__ped_ped.py
+  '';
 
   preConfigure = ''
     PATH="${pkgs.parted}/sbin:$PATH"

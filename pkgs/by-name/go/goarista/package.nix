@@ -22,7 +22,8 @@ buildGoModule {
     let
       skippedTests = [
         "TestDeepSizeof"
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDialTCPTimeoutWithTOS" ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDialTCPTimeoutWithTOS" ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 

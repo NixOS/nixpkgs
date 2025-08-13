@@ -56,30 +56,29 @@ mkDerivation {
     || (lib.versionAtLeast ghcVersion "9.12" && lib.versionOlder ghcVersion "9.15");
   isLibrary = false;
   isExecutable = true;
-  executableHaskellDepends =
-    [
-      base
-      bytestring
-      Cabal
-      containers
-      directory
-      extra
-      filepath
-      mtl
-      parsec
-      shake
-      text
-      transformers
-      unordered-containers
-    ]
-    ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
-      cryptohash-sha256
-      base16-bytestring
-    ]
-    ++ lib.optionals (lib.versionAtLeast ghcVersion "9.9") [
-      ghc-platform
-      ghc-toolchain
-    ];
+  executableHaskellDepends = [
+    base
+    bytestring
+    Cabal
+    containers
+    directory
+    extra
+    filepath
+    mtl
+    parsec
+    shake
+    text
+    transformers
+    unordered-containers
+  ]
+  ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
+    cryptohash-sha256
+    base16-bytestring
+  ]
+  ++ lib.optionals (lib.versionAtLeast ghcVersion "9.9") [
+    ghc-platform
+    ghc-toolchain
+  ];
   passthru = {
     # Expose »private« dependencies if any
     inherit ghc-platform ghc-toolchain;

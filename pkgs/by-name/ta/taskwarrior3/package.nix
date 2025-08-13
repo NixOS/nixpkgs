@@ -54,14 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     "bash_completion.test.py"
   ];
   # Contains Bash and Python scripts used while testing.
-  preConfigure =
-    ''
-      patchShebangs test
-    ''
-    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
-      substituteInPlace test/CMakeLists.txt \
-        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
-    '';
+  preConfigure = ''
+    patchShebangs test
+  ''
+  + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+    substituteInPlace test/CMakeLists.txt \
+      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [

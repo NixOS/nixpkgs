@@ -39,7 +39,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "flannel CNI plugin";
+    description = "Network fabric for containers designed to work in conjunction with flannel";
     mainProgram = "flannel";
     homepage = "https://github.com/flannel-io/cni-plugin/";
     license = licenses.asl20;

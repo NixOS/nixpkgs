@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "babelfont";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   # PyPI source tarballs omit tests, fetch from Github instead
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "simoncozens";
     repo = "babelfont";
     tag = "v${version}";
-    hash = "sha256-XNoyM3kjKRc0NWA94ufzC2DBzAsufJNJbzFDUbLu8Lc=";
+    hash = "sha256-wCJNJZqjMm0M00F9/kd/g97+DRdRPTn03Nk3rnh7me4=";
   };
 
   build-system = [

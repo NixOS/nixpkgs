@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # reduces closure size significantly (fixes https://github.com/NixOS/nixpkgs/issues/391351)
     for file in $out/etc/opensnitchd/*.o; do
-      llvm-strip $file
+      llvm-strip --strip-debug $file
     done
   '';
 

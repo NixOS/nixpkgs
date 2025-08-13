@@ -19,21 +19,20 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sshock";
     repo = "AFFLIBv3";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-CBDkeUzHnRBkLUYl0JuQcVnQWap0l7dAca1deZVoNDM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [
-      zlib
-      curl
-      expat
-      openssl
-      python3
-    ]
-    ++ lib.optionals (with stdenv; isLinux || isDarwin) [ fuse ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [
+    zlib
+    curl
+    expat
+    openssl
+    python3
+  ]
+  ++ lib.optionals (with stdenv; isLinux || isDarwin) [ fuse ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = {
     homepage = "http://afflib.sourceforge.net/";

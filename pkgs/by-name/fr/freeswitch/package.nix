@@ -154,7 +154,8 @@ stdenv.mkDerivation rec {
     libtiff
     libuuid
     libxcrypt
-  ] ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
+  ]
+  ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
 
   enableParallelBuilding = true;
 

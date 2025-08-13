@@ -61,25 +61,44 @@ else
 fi
 
 
-# Make /nix/store a read-only bind mount to enforce immutability of
-# the Nix store.  Note that we can't use "chown root:nixbld" here
+# Give /nix/store the defined mount options.
+# Typically, this should be:
+# - 'ro' to enforce immutability of the Nix store
+# - 'nosuid' to enforce no suid binaries make it into the store and get executed by accident.
+#   suid-binaries should only exist in /run/wrappers.
+#   If an attacker can make the nix builder produce suid binaries in the store, those should be useless.
+#   Another example is tampering with the store from an outside system.
+# - 'nodev' to enforce no device files in the store
+# Note that we can't use "chown root:nixbld" here
 # because users/groups might not exist yet.
+
 # Silence chown/chmod to fail gracefully on a readonly filesystem
 # like squashfs.
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
-if [ -n "@readOnlyNixStore@" ]; then
-    # #375257: Ensure that we pick the "top" (i.e. last) mount so we don't get a false positive for a lower mount.
-    if ! [[ "$(findmnt --direction backward --first-only --noheadings --output OPTIONS /nix/store)" =~ (^|,)ro(,|$) ]]; then
-        if [ -z "$container" ]; then
-            mount --bind /nix/store /nix/store
-        else
-            mount --rbind /nix/store /nix/store
-        fi
-        mount -o remount,ro,bind /nix/store
-    fi
-fi
 
+missing_opts=() # stores the missing mount options that still need to be applied to the nix store
+current_opts="$(findmnt --direction backward --first-only --noheadings --output OPTIONS /nix/store)"
+for mount_opt in @nixStoreMountOpts@ ; do
+    # #375257: Ensure that we pick the "top" (i.e. last) mount so we don't get a false positive for a lower mount.
+    # matches '$opt', foo,$opt', '$opt,foo', 'foo,$opt,bar'
+    # crucially, it does not match 'foo$opt', otherwise e.g. 'errors=remount-ro' would yield false positives for 'ro'
+    if ! [[ "$current_opts" =~ (^|,)"$mount_opt"(,|$) ]]; then
+        missing_opts+=("$mount_opt")
+    fi
+done
+
+# only change the mount options if any need changing
+if [[ ${#missing_opts[@]} != 0 ]]; then
+    if [ -z "$container" ]; then
+        mount --bind /nix/store /nix/store
+    else
+        mount --rbind /nix/store /nix/store
+    fi
+
+    # apply the missing mount options
+    mount -o remount,"$(IFS=, ; echo "${missing_opts[*]}")",bind /nix/store
+fi
 
 if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
     # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.

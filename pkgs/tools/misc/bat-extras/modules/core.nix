@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     bash
     fish
     zsh
-  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
   checkPhase = ''
     runHook preCheck
     # test list repeats suites. Unique them

@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton10-4";
+  version = "GE-Proton10-11";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-Si/CQ2PINfhmsC+uW3iFBUoSczZdkqwCZ8FAFuipu68=";
+    hash = "sha256-gTf8k0fx0KGCHVTQLkZli/CvZMkVVNpgBDpI/eiuynE=";
   };
 
   dontUnpack = true;

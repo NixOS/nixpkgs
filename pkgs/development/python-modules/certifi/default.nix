@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2025.01.31";
+  version = "2025.06.15";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "certifi";
     repo = "python-certifi";
     rev = version;
-    hash = "sha256-LHoFI9+vrrrRzyhWNchQYp4AAiFcQwZHdeNzMjTJ8jk=";
+    hash = "sha256-ah2a+Qspll3jZ8M7CRL7zhTIt2kuRIiWeI6vTgwb3vs=";
   };
 
   patches = [

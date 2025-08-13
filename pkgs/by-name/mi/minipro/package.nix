@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "CFLAGS=-O2"
   ];
 
+  doInstallCheck = true;
+
   meta = with lib; {
     homepage = "https://gitlab.com/DavidGriffith/minipro";
     description = "Open source program for controlling the MiniPRO TL866xx series of chip programmers";

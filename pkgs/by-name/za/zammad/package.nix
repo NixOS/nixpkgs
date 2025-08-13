@@ -81,6 +81,7 @@ stdenvNoCC.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
+    fetcherVersion = 1;
     hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
   };
 
@@ -127,7 +128,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [

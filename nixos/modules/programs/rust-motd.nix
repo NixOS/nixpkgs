@@ -150,13 +150,10 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = cfg.refreshInterval;
     };
-    security.pam.services.sshd.text = lib.mkIf cfg.enableMotdInSSHD (
-      lib.mkDefault (
-        lib.mkAfter ''
-          session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
-        ''
-      )
-    );
+
+    security.pam.services.sshd.showMotd = lib.mkIf cfg.enableMotdInSSHD true;
+    users.motdFile = lib.mkIf cfg.enableMotdInSSHD "/var/lib/rust-motd/motd";
+
     services.openssh.extraConfig =
       lib.mkIf (cfg.settings ? last_login && cfg.settings.last_login != { })
         ''

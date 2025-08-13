@@ -213,23 +213,22 @@ in
         "Plasma 5 has been deprecated and will be removed in NixOS 25.11. Please migrate your configuration to Plasma 6."
       ];
 
-      security.wrappers =
-        {
-          kwin_wayland = {
-            owner = "root";
-            group = "root";
-            capabilities = "cap_sys_nice+ep";
-            source = "${getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
-          };
-        }
-        // optionalAttrs (!cfg.runUsingSystemd) {
-          start_kdeinit = {
-            setuid = true;
-            owner = "root";
-            group = "root";
-            source = "${getBin pkgs.plasma5Packages.kinit}/libexec/kf5/start_kdeinit";
-          };
+      security.wrappers = {
+        kwin_wayland = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_sys_nice+ep";
+          source = "${getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
         };
+      }
+      // optionalAttrs (!cfg.runUsingSystemd) {
+        start_kdeinit = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin pkgs.plasma5Packages.kinit}/libexec/kf5/start_kdeinit";
+        };
+      };
 
       qt.enable = true;
 

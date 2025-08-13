@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     find $out/share/plymouth/themes/ -name \*.plymouth -exec sed -i "s@\/usr\/@$out\/@" {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plymouth boot themes from adi1090x";
     longDescription = ''
       A variety of plymouth boot screens by adi1090x.  Using the default value
@@ -60,8 +60,8 @@ stdenv.mkDerivation {
       ./shas.nix for available themes.
     '';
     homepage = "https://github.com/adi1090x/plymouth-themes";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ slwst ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ slwst ];
   };
 }

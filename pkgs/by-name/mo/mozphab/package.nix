@@ -38,19 +38,18 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs =
-    [
-      git
-      mercurial
-      patch
-    ]
-    ++ (with python3.pkgs; [
-      callee
-      immutabledict
-      hg-evolve
-      mock
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+    mercurial
+    patch
+  ]
+  ++ (with python3.pkgs; [
+    callee
+    immutabledict
+    hg-evolve
+    mock
+    pytestCheckHook
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)

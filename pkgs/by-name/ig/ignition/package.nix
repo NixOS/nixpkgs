@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ignition";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "flattool";
     repo = "ignition";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-T0bVMJnJPpKdS5T6rPxVAEvIXFNSj5BtypaexSJhl2I=";
+    hash = "sha256-BqlzxrsbukfkwRIUTN5eaJPRC/dWSWUieDKIqnePZl4=";
   };
 
   patches = [

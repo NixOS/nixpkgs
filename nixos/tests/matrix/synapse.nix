@@ -182,18 +182,15 @@ in
 
         services.postfix = {
           enable = true;
-          hostname = "${mailerDomain}";
-          # open relay for subnet
-          networksStyle = "subnet";
           enableSubmission = true;
-          tlsTrustedAuthorities = "${mailerCerts.ca.cert}";
-          sslCert = "${mailerCerts.${mailerDomain}.cert}";
-          sslKey = "${mailerCerts.${mailerDomain}.key}";
 
           # blackhole transport
           transport = "example.com discard:silently";
 
-          config = {
+          settings.main = {
+            myhostname = "${mailerDomain}";
+            # open relay for subnet
+            mynetworks_style = "subnet";
             debug_peer_level = "10";
             smtpd_relay_restrictions = [
               "permit_mynetworks"
@@ -202,9 +199,11 @@ in
 
             # disable obsolete protocols, something old versions of twisted are still using
             smtpd_tls_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
-            smtp_tls_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
             smtpd_tls_mandatory_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
-            smtp_tls_mandatory_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
+            smtpd_tls_chain_files = [
+              "${mailerCerts.${mailerDomain}.key}"
+              "${mailerCerts.${mailerDomain}.cert}"
+            ];
           };
         };
       };
@@ -233,7 +232,7 @@ in
     serverpostgres.wait_until_succeeds(
         "journalctl -u matrix-synapse.service | grep -q 'Connected to redis'"
     )
-    serverpostgres.require_unit_state("postgresql.service")
+    serverpostgres.require_unit_state("postgresql.target")
     serverpostgres.succeed("REQUESTS_CA_BUNDLE=${ca_pem} register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} https://localhost:8448/")
     serverpostgres.succeed("obtain-token-and-register-email")
     serversqlite.wait_for_unit("matrix-synapse.service")

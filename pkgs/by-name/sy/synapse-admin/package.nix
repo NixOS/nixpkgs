@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "synapse-admin";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
     repo = "synapse-admin";
     tag = finalAttrs.version;
-    hash = "sha256-GE1DoB/NYyuB2NcTqX9qLhLpG4dXT6xleYAOsfkHaNE=";
+    hash = "sha256-rK1Tc1K3wx6/1J8TEw5Lb9g09gbt/1HoZdDrEFzxTQQ=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-    outputHash = "sha256-8SBtzwuM/uokjMVgRPnzatoLuSCmo58870WH3+H6zy8=";
+    outputHash = "sha256-IiViodAB1KAYsRRr8+zw3vrCbUYp7Mdtazi0Y6SEFNU=";
     outputHashMode = "recursive";
   };
 

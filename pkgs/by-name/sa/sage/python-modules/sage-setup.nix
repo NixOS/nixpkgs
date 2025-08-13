@@ -9,6 +9,7 @@
 
 buildPythonPackage rec {
   version = src.version;
+  format = "setuptools";
   pname = "sage-setup";
   src = sage-src;
 

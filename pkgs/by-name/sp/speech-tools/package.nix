@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs =
-    [
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

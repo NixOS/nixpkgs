@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   which,
   zip,
@@ -14,54 +15,60 @@
   lua53Packages,
   perlPackages,
   gtk3,
+  nix-update-script,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.62.1";
+  version = "0.63.2";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = "rehex";
-    rev = version;
-    hash = "sha256-RlYpg3aon1d25n8K/bbHGVLn5/iOOUSlvjT8U0fp9hA=";
+    tag = version;
+    hash = "sha256-de92lBnn0tp7Awm6PLJw12GfYohXY9m59XPmw7npvOg=";
   };
 
   nativeBuildInputs = [
     pkg-config
     which
+    wrapGAppsHook3
     zip
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns ];
 
-  buildInputs =
-    [
-      botan3
-      capstone
-      jansson
-      libunistring
-      wxGTK32
-    ]
-    ++ (with lua53Packages; [
-      lua
-      busted
-    ])
-    ++ (with perlPackages; [
-      perl
-      TemplateToolkit
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
+  buildInputs = [
+    botan3
+    capstone
+    jansson
+    libunistring
+    wxGTK32
+  ]
+  ++ (with lua53Packages; [
+    lua
+    busted
+  ])
+  ++ (with perlPackages; [
+    perl
+    TemplateToolkit
+  ])
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"
     "BOTAN_PKG=botan-3"
     "CXXSTD=-std=c++20"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-f Makefile.osx" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-f Makefile.osx" ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-liconv";
   };
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Reverse Engineers' Hex Editor";

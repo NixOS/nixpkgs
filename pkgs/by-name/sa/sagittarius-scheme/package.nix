@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     boehmgc
     openssl
     zlib
-  ] ++ lib.optional odbcSupport libiodbc;
+  ]
+  ++ lib.optional odbcSupport libiodbc;
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [

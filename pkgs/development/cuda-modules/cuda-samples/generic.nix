@@ -5,7 +5,6 @@
   cudatoolkit,
   cudaMajorMinorVersion,
   fetchFromGitHub,
-  fetchpatch,
   freeimage,
   glfw3,
   hash,
@@ -29,15 +28,14 @@ backendStdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  nativeBuildInputs =
-    [
-      autoAddDriverRunpath
-      pkg-config
-    ]
-    # CMake has to run as a native, build-time dependency for libNVVM samples.
-    # However, it's not the primary build tool -- that's still make.
-    # As such, we disable CMake's build system.
-    ++ lists.optionals (strings.versionAtLeast finalAttrs.version "12.2") [ cmake ];
+  nativeBuildInputs = [
+    autoAddDriverRunpath
+    pkg-config
+  ]
+  # CMake has to run as a native, build-time dependency for libNVVM samples.
+  # However, it's not the primary build tool -- that's still make.
+  # As such, we disable CMake's build system.
+  ++ lists.optionals (strings.versionAtLeast finalAttrs.version "12.2") [ cmake ];
 
   dontUseCmakeConfigure = true;
 
@@ -45,14 +43,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     cudatoolkit
     freeimage
     glfw3
-  ];
-
-  # See https://github.com/NVIDIA/cuda-samples/issues/75.
-  patches = lib.optionals (finalAttrs.version == "11.3") [
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
-      hash = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
-    })
   ];
 
   enableParallelBuilding = true;

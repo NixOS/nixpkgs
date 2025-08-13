@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
+  phonon,
   taglib,
 }:
 mkKdeDerivation {
@@ -8,7 +9,9 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtsvg
+    phonon
     taglib
   ];
+
   meta.mainProgram = "juk";
 }

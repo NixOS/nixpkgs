@@ -20,11 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs =
-    [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      xxd
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    xxd
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
     apple-sdk_15

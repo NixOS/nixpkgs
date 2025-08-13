@@ -27,6 +27,7 @@ stdenv.mkDerivation (
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
     makeFlags = kernelModuleMakeFlags ++ [
+      "IGNORE_PREEMPT_RT_PRESENCE=1"
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"

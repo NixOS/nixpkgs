@@ -33,57 +33,49 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.7.2";
+  version = "9.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-1nWpFGRBS49uzKl7m/4YWFI+3lvm2zKByYpR9llxsgY=";
+    hash = "sha256-InypyVCk08tsByKaIBRFWldwRz1AkNCgFD3DL4OG84w=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
-
-  patches = [
-    # Patches from https://sourceforge.net/p/saga-gis/code/merge-requests/38/.
-    # These are needed to fix building on Darwin (technically the first is not
-    # required, but the second doesn't apply without it).
-    ./darwin-patch-1.patch
-    ./darwin-patch-2.patch
-  ];
 
   nativeBuildInputs = [
     cmake
     wrapGAppsHook3
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      curl
-      libsForQt5.dxflib
-      fftw
-      libsvm
-      hdf5
-      gdal
-      wxGTK32
-      pdal
-      proj
-      libharu
-      opencv
-      vigra
-      libpq
-      libiodbc
-      xz
-      qhull
-      giflib
-    ]
-    # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
-    # for why the have additional buildInputs on darwin
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      unixODBC
-      poppler
-      netcdf
-      sqlite
-    ];
+  buildInputs = [
+    curl
+    libsForQt5.dxflib
+    fftw
+    libsvm
+    hdf5
+    gdal
+    wxGTK32
+    pdal
+    proj
+    libharu
+    opencv
+    vigra
+    libpq
+    libiodbc
+    xz
+    qhull
+    giflib
+  ]
+  # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
+  # for why the have additional buildInputs on darwin
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    unixODBC
+    poppler
+    netcdf
+    sqlite
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))

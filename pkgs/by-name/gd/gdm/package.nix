@@ -31,6 +31,7 @@
   dbus,
   nixos-icons,
   runCommand,
+  udevCheckHook,
 }:
 
 let
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
+    "-Dinitial-vt=1"
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -144,6 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
   '';
 
+  doInstallCheck = true;
+
   preInstall = ''
     install -D ${override} "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
   '';
@@ -181,9 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript { packageName = "gdm"; };
 
-    # Used in GDM NixOS module
-    # Don't remove.
-    initialVT = "7";
     dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
     dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
 

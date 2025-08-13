@@ -4,21 +4,24 @@
   fetchFromGitHub,
   lib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "micronucleus";
-  version = "2.04";
+  version = "2.6";
 
-  sourceRoot = "${src.name}/commandline";
+  sourceRoot = "${finalAttrs.src.name}/commandline";
 
   src = fetchFromGitHub {
     owner = "micronucleus";
     repo = "micronucleus";
-    rev = version;
-    sha256 = "14msy9amlbflw5mqrbs57b7bby3nsgx43srr7215zyhfdgsla0in";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-IngVHeYgPUwSsboTZ5h55iLUxtdBSdugiLk5HbyHIvI=";
   };
 
   buildInputs = [ libusb-compat-0_1 ];
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "STATIC="
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -27,11 +30,14 @@ stdenv.mkDerivation rec {
     cp 49-micronucleus.rules $out/lib/udev
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Upload tool for micronucleus";
     mainProgram = "micronucleus";
     homepage = "https://github.com/micronucleus/micronucleus";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.cab404 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      cab404
+      kuflierl
+    ];
   };
-}
+})

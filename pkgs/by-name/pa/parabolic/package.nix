@@ -34,13 +34,13 @@ assert lib.assertOneOf "uiPlatform" uiPlatform [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parabolic";
-  version = "2025.5.5";
+  version = "2025.6.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
     tag = finalAttrs.version;
-    hash = "sha256-OcWpOC4QZUAGSsK6YXAO+24pY1d8a1AK3BzQKBu/obc=";
+    hash = "sha256-Osfj/GaD4t85ZYnlFDqgHhLJLA8VvgqtHEJN8bn0SxI=";
   };
 
   # Patches desktop file/dbus service bypassing wrapped executable
@@ -54,41 +54,39 @@ stdenv.mkDerivation (finalAttrs: {
                      "@CMAKE_INSTALL_FULL_BINDIR@/@PROJECT_NAME@"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      gettext
-      ninja
-      pkg-config
-      itstool
-      yelp-tools
-      desktop-file-utils
-    ]
-    ++ lib.optionals (uiPlatform == "gnome") [
-      wrapGAppsHook4
-      blueprint-compiler
-      glib
-      shared-mime-info
-    ]
-    ++ lib.optional (uiPlatform == "qt") qt6.wrapQtAppsHook;
+  nativeBuildInputs = [
+    cmake
+    gettext
+    ninja
+    pkg-config
+    itstool
+    yelp-tools
+    desktop-file-utils
+  ]
+  ++ lib.optionals (uiPlatform == "gnome") [
+    wrapGAppsHook4
+    blueprint-compiler
+    glib
+    shared-mime-info
+  ]
+  ++ lib.optional (uiPlatform == "qt") qt6.wrapQtAppsHook;
 
-  buildInputs =
-    [
-      libnick
-      boost
-    ]
-    ++ lib.optionals (uiPlatform == "qt") [
-      qt6.qtbase
-      qt6.qtsvg
-      qlementine
-      qlementine-icons
-    ]
-    ++ lib.optionals (uiPlatform == "gnome") [
-      glib
-      gtk4
-      libadwaita
-      libxmlxx5
-    ];
+  buildInputs = [
+    libnick
+    boost
+  ]
+  ++ lib.optionals (uiPlatform == "qt") [
+    qt6.qtbase
+    qt6.qtsvg
+    qlementine
+    qlementine-icons
+  ]
+  ++ lib.optionals (uiPlatform == "gnome") [
+    glib
+    gtk4
+    libadwaita
+    libxmlxx5
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "UI_PLATFORM" uiPlatform)

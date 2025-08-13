@@ -42,12 +42,17 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
+  # Temporarily disabled until the following is solved:
+  # https://github.com/NixOS/nixpkgs/pull/425384
+  doCheck = false;
+
   nativeCheckInputs = [
     asyncpg
     django
     peewee
     pg8000
     psycopg
+    psycopg.pool
     psycopg2
     psycopg-pool
     (postgresql.withPackages (p: with p; [ pgvector ]))
@@ -63,6 +68,7 @@ buildPythonPackage rec {
     PGDATABASE = "pgvector_python_test";
     postgresqlEnableTCP = 1;
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
+    USER = "test_user";
   };
 
   disabledTestPaths = [

@@ -55,7 +55,8 @@ buildPythonPackage rec {
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   optional-dependencies = {
     all = [
@@ -82,9 +83,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--asyncio-mode=auto"
-    "-m 'not online'"
+  ];
+
+  disabledTestMarks = [
+    "online"
   ];
 
   disabledTests = [

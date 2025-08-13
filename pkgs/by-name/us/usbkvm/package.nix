@@ -12,6 +12,7 @@
   pkg-config,
   python3,
   udev,
+  udevCheckHook,
   wrapGAppsHook3,
 }:
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation {
     makeWrapper
     wrapGAppsHook3
     udev
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -98,6 +100,8 @@ stdenv.mkDerivation {
       wrapProgram $out/bin/usbkvm \
         --prefix GST_PLUGIN_PATH : "${GST_PLUGIN_PATH}"
     '';
+
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/carrotIndustries/usbkvm";

@@ -25,6 +25,7 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -108,7 +109,7 @@ let
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
-    windows.mingw_w64_pthreads = nativePlatforms;
+    windows.pthreads = nativePlatforms;
   };
 
   wasiCommon = {

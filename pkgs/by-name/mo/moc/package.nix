@@ -79,7 +79,8 @@ stdenv.mkDerivation {
     })
 
     ./use-ax-check-compile-flag.patch
-  ] ++ lib.optional pulseSupport ./pulseaudio.patch;
+  ]
+  ++ lib.optional pulseSupport ./pulseaudio.patch;
 
   postPatch = ''
     rm m4/*
@@ -91,40 +92,39 @@ stdenv.mkDerivation {
     autoconf-archive
   ];
 
-  buildInputs =
-    [
-      ncurses
-      db
-      popt
-      libtool
-    ]
-    # Sound sub-systems
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional jackSupport libjack2
-    # Audio formats
-    ++ lib.optional (aacSupport || mp3Support) libid3tag
-    ++ lib.optional aacSupport faad2
-    ++ lib.optional flacSupport flac
-    ++ lib.optional midiSupport timidity
-    ++ lib.optional modplugSupport libmodplug
-    ++ lib.optional mp3Support libmad
-    ++ lib.optionals musepackSupport [
-      libmpc
-      libmpcdec
-      taglib
-    ]
-    ++ lib.optional vorbisSupport libvorbis
-    ++ lib.optional speexSupport speex
-    ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optional sndfileSupport libsndfile
-    ++ lib.optional wavpackSupport wavpack
-    # Misc
-    ++ lib.optional curlSupport curl
-    ++ lib.optional samplerateSupport libsamplerate
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    ncurses
+    db
+    popt
+    libtool
+  ]
+  # Sound sub-systems
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional jackSupport libjack2
+  # Audio formats
+  ++ lib.optional (aacSupport || mp3Support) libid3tag
+  ++ lib.optional aacSupport faad2
+  ++ lib.optional flacSupport flac
+  ++ lib.optional midiSupport timidity
+  ++ lib.optional modplugSupport libmodplug
+  ++ lib.optional mp3Support libmad
+  ++ lib.optionals musepackSupport [
+    libmpc
+    libmpcdec
+    taglib
+  ]
+  ++ lib.optional vorbisSupport libvorbis
+  ++ lib.optional speexSupport speex
+  ++ lib.optional ffmpegSupport ffmpeg
+  ++ lib.optional sndfileSupport libsndfile
+  ++ lib.optional wavpackSupport wavpack
+  # Misc
+  ++ lib.optional curlSupport curl
+  ++ lib.optional samplerateSupport libsamplerate
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   configureFlags = [
     # Sound sub-systems

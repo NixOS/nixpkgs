@@ -28,8 +28,6 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-rWG5iPXiG7kCf0yLAqcQi8AM3qv/WTUiY4cVrjpUc/Y=";
 
   preBuild = ''

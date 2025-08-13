@@ -18,6 +18,6 @@ for i in \
     "aarch64-linux arm64"; do
     set -- $i
     prefetch=$(nix-prefetch-url "https://github.com/mihomo-party-org/mihomo-party/releases/download/v$latestVersion/mihomo-party-linux-$latestVersion-$2.deb")
-    hash=$(nix hash convert --hash-algo sha256 --to sri $prefetch)
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
     update-source-version mihomo-party $latestVersion $hash --system=$1 --ignore-same-version
 done

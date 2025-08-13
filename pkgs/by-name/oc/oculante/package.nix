@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3kDrsD24/TNcA7NkwwCHN4ez1bC5MP7g28H3jaO/M7E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lksAPT1nuwN5bh3x7+EN4B8ksGtvemt4tbm6/3gqdgE=";
 
   nativeBuildInputs = [
@@ -42,21 +41,20 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-      gtk3
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = [
+    openssl
+    fontconfig
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXi
+    libXrandr
+    gtk3
+    libxkbcommon
+    wayland
+  ];
 
   checkFlags = [
     "--skip=bench"

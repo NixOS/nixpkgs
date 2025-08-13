@@ -14,30 +14,24 @@
 
 stdenv.mkDerivation rec {
   pname = "pahole";
-  version = "1.29";
+  version = "1.30";
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${version}.tar.gz";
-    hash = "sha256-ke7WIIz0ZURw3Pgmt7WNL9WPbcv5B998Rflw/8/JQ8U=";
+    hash = "sha256-JF4KnI05uOlPuunJuetX/fX3ZRT6TDXdjCNG9/ufkgI=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      elfutils
-      zlib
-      libbpf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      argp-standalone
-      musl-obstack
-    ];
-
-  patches = [
-    # https://github.com/acmel/dwarves/pull/51 / https://lkml.kernel.org/r/20240626032253.3406460-1-asmadeus@codewreck.org
-    ./threading-reproducibility.patch
+  buildInputs = [
+    elfutils
+    zlib
+    libbpf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    argp-standalone
+    musl-obstack
   ];
 
   # Put libraries in "lib" subdirectory, not top level of $out

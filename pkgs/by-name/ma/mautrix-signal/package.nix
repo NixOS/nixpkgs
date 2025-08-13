@@ -19,13 +19,13 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     tag = "v${version}";
-    hash = "sha256-BummgGQ+LNe4JYJHF4a2JfKEzgo7wVEMnAIbi1D0hS0=";
+    hash = "sha256-koO1eeMZ8wmty6z2zyJlA7zoM6gYmFlxdF8GB2hOxb8=";
   };
 
   buildInputs =
@@ -41,18 +41,17 @@ buildGoModule rec {
 
   CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
 
-  vendorHash = "sha256-aJrcX2aK4Ge7yELEssoVdsrR+/2qoqTr3usRFGooLGU=";
+  vendorHash = "sha256-NmIWxc+6Leaqm1W+g2XdbMv4iU7Z7k8/g88U0iw/+98=";
 
   doCheck = true;
-  preCheck =
-    ''
-      # Needed by the tests to be able to find libstdc++
-      export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
-    ''
-    + (lib.optionalString (!withGoolm) ''
-      # When using libolm, the tests need explicit linking to libstdc++
-      export CGO_LDFLAGS="${cppStdLib}"
-    '');
+  preCheck = ''
+    # Needed by the tests to be able to find libstdc++
+    export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+  ''
+  + (lib.optionalString (!withGoolm) ''
+    # When using libolm, the tests need explicit linking to libstdc++
+    export CGO_LDFLAGS="${cppStdLib}"
+  '');
 
   postCheck = ''
     unset LD_LIBRARY_PATH

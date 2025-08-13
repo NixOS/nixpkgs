@@ -14,26 +14,26 @@
   rustPlatform,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.7.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
-    tag = "v0.7.1";
-    hash = "sha256-x5Bs/Zq0gfJAC3VFKG1hCg95IZ0qpgf8kBfFccP5HgU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tx4sgh8G5R3odpBBVl0qLFWnTcmk1YYfGYkAJtHL9wE=";
   };
 
   buildAndTestSubdir = "lux-cli";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lGQToe1nM6tjcoxYy94wiGMevm3/B7MD6NOIX61GpMA=";
+
+  cargoHash = "sha256-dLhfDDoz2jFShk3ksxmQ8FEKc9JE/NPF4zSUV5kvgj8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
@@ -70,6 +70,11 @@ rustPlatform.buildRustPackage rec {
     cargo xtask dist-completions
   '';
 
+  postInstall = ''
+    installManPage target/dist/lx.1
+    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
+  '';
+
   meta = {
     description = "Luxurious package manager for Lua";
     longDescription = ''
@@ -78,7 +83,7 @@ rustPlatform.buildRustPackage rec {
       with first-class support for Nix and Neovim.
     '';
     homepage = "https://nvim-neorocks.github.io/";
-    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/nvim-neorocks/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
@@ -86,4 +91,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "lx";
   };
-}
+})

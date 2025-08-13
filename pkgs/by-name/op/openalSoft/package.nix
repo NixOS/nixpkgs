@@ -14,17 +14,18 @@
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
   libpulseaudio,
   nix-update-script,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openal-soft";
-  version = "1.24.2";
+  version = "1.24.3";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = version;
-    sha256 = "sha256-ECrIkxMACPsWehtJWwTmoYj6hGcsdxwVuTiQywG36Y8=";
+    tag = finalAttrs.version;
+    hash = "sha256-VQa3FD9NyvDv/+VbU+5lmV0LteiioJHpRkr1lnCn1g4=";
   };
 
   strictDeps = true;
@@ -41,32 +42,32 @@ stdenv.mkDerivation rec {
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseSupport libpulseaudio;
 
-  cmakeFlags =
-    [
-      # Automatically links dependencies without having to rely on dlopen, thus
-      # removes the need for NIX_LDFLAGS.
-      "-DALSOFT_DLOPEN=OFF"
+  cmakeFlags = [
+    # Automatically links dependencies without having to rely on dlopen, thus
+    # removes the need for NIX_LDFLAGS.
+    (lib.cmakeBool "ALSOFT_DLOPEN" false)
+    # allow oal-soft to find its own data files (e.g. HRTF profiles)
+    (lib.cmakeBool "ALSOFT_SEARCH_INSTALL_DATADIR" true)
+  ];
 
-      # allow oal-soft to find its own data files (e.g. HRTF profiles)
-      "-DALSOFT_SEARCH_INSTALL_DATADIR=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # https://github.com/NixOS/nixpkgs/issues/183774
-      "-DALSOFT_BACKEND_OSS=OFF"
-    ];
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)$"
-    ];
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenAL alternative";
     homepage = "https://openal-soft.org/";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ ftrvxmtrx ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/kcat/openal-soft/blob/master/ChangeLog";
+    license = lib.licenses.lgpl2;
+    pkgConfigModules = [ "openal" ];
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    platforms = lib.platforms.unix;
   };
-}
+})

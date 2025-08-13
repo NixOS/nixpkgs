@@ -35,13 +35,15 @@ buildPythonPackage rec {
     validation = [
       openapi-spec-validator
       prance
-    ] ++ prance.optional-dependencies.osv;
+    ]
+    ++ prance.optional-dependencies.osv;
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apispec" ];
 

@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--skip-download"
   ];
 

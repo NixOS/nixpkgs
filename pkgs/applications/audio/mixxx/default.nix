@@ -65,6 +65,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-dKk3n3KDindnLbON52SW5h4cz96WVi0OPjwA27HqQCI=";
   };
 
+  # Should be removed when bumping to 2.6.x
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

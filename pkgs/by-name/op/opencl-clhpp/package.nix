@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-CLHPP";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     sha256 = "sha256-3RVZJIt03pRmjrPa9q6h6uqFCuTnxvEqjUGUmdwybbY=";
   };

@@ -22,7 +22,7 @@
   eigen,
   gtest,
   pybind11,
-  tbb_2022_0,
+  tbb_2022,
 
   # tests
   pytestCheckHook,
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     gtest
     pybind11
     units-llnl.passthru.top-level
-    tbb_2022_0
+    tbb_2022
   ];
 
   nativeCheckInputs = [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     h5py
     hypothesis
   ];
-  pytestFlagsArray = [
+  pytestFlags = [
     # See https://github.com/scipp/scipp/issues/3721
     "--hypothesis-profile=ci"
   ];

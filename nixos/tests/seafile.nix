@@ -14,7 +14,6 @@ in
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       kampfschlaefer
-      schmittlauch
     ];
   };
 

@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-6jn9jOCh96d9y2l1OZ5hgxg7sYXPUFzJiiT95OR7lD0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-n+ZVsdR+X7tMqZFYsjsWSUr6OkD90s44EFORqRldCNE=";
 
   CARGO_CRATE_NAME = "mhost";

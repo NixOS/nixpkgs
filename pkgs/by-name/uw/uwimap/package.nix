@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
     (if stdenv.hostPlatform.isDarwin then "osx" else "lnp") # Linux with PAM modules;
-  ] ++ lib.optional stdenv.hostPlatform.isx86_64 "EXTRACFLAGS=-fPIC"; # -fPIC is required to compile php with imap on x86_64 systems
+  ]
+  ++ lib.optional stdenv.hostPlatform.isx86_64 "EXTRACFLAGS=-fPIC"; # -fPIC is required to compile php with imap on x86_64 systems
 
   hardeningDisable = [ "format" ];
 
@@ -41,24 +42,23 @@ stdenv.mkDerivation rec {
     ./gcc-14-fix.diff
   ];
 
-  postPatch =
-    ''
-      sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
-      sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
-      sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${lib.getLib openssl}/lib,'
-    ''
-    # utime takes a struct utimbuf rather than an array of time_t[2]
-    # convert time_t tp[2] to a struct utimbuf where
-    # tp[0] -> tp.actime and tp[1] -> tp.modtime, where actime and modtime are
-    # type time_t.
-    + ''
-      sed -i \
-        -e 's/time_t tp\[2]/struct utimbuf tp/' \
-        -e 's/\<tp\[0]/tp.actime/g' \
-        -e 's/\<tp\[1]/tp.modtime/g' \
-        -e 's/\(utime *([-a-z>]*\),tp)/\1,\&tp)/' \
-        src/osdep/unix/{mbx.c,mh.c,mmdf.c,mtx.c,mx.c,tenex.c,unix.c}
-    '';
+  postPatch = ''
+    sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
+    sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
+    sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${lib.getLib openssl}/lib,'
+  ''
+  # utime takes a struct utimbuf rather than an array of time_t[2]
+  # convert time_t tp[2] to a struct utimbuf where
+  # tp[0] -> tp.actime and tp[1] -> tp.modtime, where actime and modtime are
+  # type time_t.
+  + ''
+    sed -i \
+      -e 's/time_t tp\[2]/struct utimbuf tp/' \
+      -e 's/\<tp\[0]/tp.actime/g' \
+      -e 's/\<tp\[1]/tp.modtime/g' \
+      -e 's/\(utime *([-a-z>]*\),tp)/\1,\&tp)/' \
+      src/osdep/unix/{mbx.c,mh.c,mmdf.c,mtx.c,mx.c,tenex.c,unix.c}
+  '';
 
   preConfigure = ''
     makeFlagsArray+=("ARRC=${stdenv.cc.targetPrefix}ar rc")

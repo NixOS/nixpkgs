@@ -18,7 +18,8 @@ let
   environment = {
     PYTHONPATH = pkg.pythonPath;
     STATIC_ROOT = cfg.dataDir + "/static";
-  } // lib.filterAttrs (_: v: !builtins.isNull v) cfg.settings;
+  }
+  // lib.filterAttrs (_: v: !builtins.isNull v) cfg.settings;
 
   environmentFile = pkgs.writeText "healthchecks-environment" (
     lib.generators.toKeyValue { } environment
@@ -211,7 +212,8 @@ in
           Group = cfg.group;
           EnvironmentFile = [
             environmentFile
-          ] ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
+          ]
+          ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };
@@ -235,12 +237,11 @@ in
           wantedBy = [ "healthchecks.target" ];
           after = [ "healthchecks-migration.service" ];
 
-          preStart =
-            ''
-              ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
-              ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
-            ''
-            + lib.optionalString (cfg.settings.DEBUG != "True") "${pkg}/opt/healthchecks/manage.py compress";
+          preStart = ''
+            ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
+            ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
+          ''
+          + lib.optionalString (cfg.settings.DEBUG != "True") "${pkg}/opt/healthchecks/manage.py compress";
 
           serviceConfig = commonConfig // {
             Restart = "always";

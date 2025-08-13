@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
-  ] ++ lib.optional enableManpages buildPackages.pandoc;
+  ]
+  ++ lib.optional enableManpages buildPackages.pandoc;
 
   buildInputs = [ libogg ];
 
@@ -51,16 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./package.patch ];
   doCheck = true;
 
-  outputs =
-    [
-      "bin"
-      "dev"
-      "doc"
-      "out"
-    ]
-    ++ lib.optionals enableManpages [
-      "man"
-    ];
+  outputs = [
+    "bin"
+    "dev"
+    "doc"
+    "out"
+  ]
+  ++ lib.optionals enableManpages [
+    "man"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

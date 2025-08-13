@@ -30,12 +30,12 @@ stdenv.mkDerivation {
     libXext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arnoldrobbins/9menu";
     description = "Simple X11 menu program for running commands";
     mainProgram = "9menu";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
     platforms = libX11.meta.platforms;
   };
 }

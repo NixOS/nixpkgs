@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "multiprocess";
-  version = "0.70.17";
+  version = "0.70.18";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = "multiprocess";
     tag = version;
-    hash = "sha256-TKD0iQv5Go4PrKWtVOF6FJG1tkvs3APxPlhDVEs7YXE=";
+    hash = "sha256-VDlbo+rXyOxY73JJz5SWEuq3lZLKWYKk9DKbHzpQesU=";
   };
 
   propagatedBuildInputs = [ dill ];

@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     xz
     boost
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # Python is reported as missing during the build, however
   # including Python does not change the output.

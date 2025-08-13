@@ -15,15 +15,15 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zim-tools";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "zim-tools";
-    tag = version;
-    hash = "sha256-gcCo3u1pLm1CnTF3CATOri5+zat839zUbmQnMOVjanI=";
+    tag = finalAttrs.version;
+    hash = "sha256-8+/3+FOq35FSYzpQdpqs5MTMtUO5SYbKLPECFi+IIKw=";
   };
 
   patches = [
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

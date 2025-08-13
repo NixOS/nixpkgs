@@ -36,17 +36,18 @@ in
         rev = "v${version}";
         sha256 = sourceSha256;
       };
-  nativeBuildInputs =
-    [ removeReferencesTo ]
-    ++ lib.flatten (
-      lib.mapAttrsToList (
-        feat: info:
-        (lib.optionals (hasFeature feat) (
-          (lib.optionals (builtins.hasAttr "native" info) info.native)
-          ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
-        ))
-      ) featuresInfo
-    );
+  nativeBuildInputs = [
+    removeReferencesTo
+  ]
+  ++ lib.flatten (
+    lib.mapAttrsToList (
+      feat: info:
+      (lib.optionals (hasFeature feat) (
+        (lib.optionals (builtins.hasAttr "native" info) info.native)
+        ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
+      ))
+    ) featuresInfo
+  );
   buildInputs = lib.flatten (
     lib.mapAttrsToList (
       feat: info:
@@ -70,23 +71,21 @@ in
         "-DENABLE_${info.cmakeEnableFlag}=OFF"
     )
   ) featuresInfo;
-  disallowedReferences =
-    [
-      # TODO: Should this be conditional?
-      stdenv.cc
-      stdenv.cc.cc
-    ]
-    # If python-support is disabled, we probably don't want it referenced
-    ++ lib.optionals (!hasFeature "python-support") [ python ];
+  disallowedReferences = [
+    # TODO: Should this be conditional?
+    stdenv.cc
+    stdenv.cc.cc
+  ]
+  # If python-support is disabled, we probably don't want it referenced
+  ++ lib.optionals (!hasFeature "python-support") [ python ];
   # Gcc references from examples
-  stripDebugList =
-    [
-      "lib"
-      "bin"
-    ]
-    ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
-    ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
-    ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ];
+  stripDebugList = [
+    "lib"
+    "bin"
+  ]
+  ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
+  ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
+  ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ];
   postInstall =
     ""
     # Gcc references
@@ -101,24 +100,23 @@ in
   # module. It's not that bad since it's a development package for most
   # purposes. If closure size needs to be reduced, features should be disabled
   # via an override.
-  passthru =
-    {
-      inherit
-        hasFeature
-        versionAttr
-        features
-        featuresInfo
-        python
-        ;
-      gnuradioOlder = lib.versionOlder versionAttr.major;
-      gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
-    }
-    // lib.optionalAttrs (hasFeature "gr-qtgui") {
-      inherit qt;
-    }
-    // lib.optionalAttrs (hasFeature "gnuradio-companion") {
-      inherit gtk;
-    };
+  passthru = {
+    inherit
+      hasFeature
+      versionAttr
+      features
+      featuresInfo
+      python
+      ;
+    gnuradioOlder = lib.versionOlder versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
+  }
+  // lib.optionalAttrs (hasFeature "gr-qtgui") {
+    inherit qt;
+  }
+  // lib.optionalAttrs (hasFeature "gnuradio-companion") {
+    inherit gtk;
+  };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
   dontWrapQtApps = true;

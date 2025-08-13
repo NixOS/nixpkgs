@@ -5,27 +5,27 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
-  typing-extensions,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
-  version = "9.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "9.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U7xu6tsJdNIfEguyG7Xmgn321lDhc0dGD9g+LWiINZk=";
+    pname = "azure_mgmt_search";
+    inherit version;
+    hash = "sha256-oNoOwzLR9D0PastjuM/YAIWwdeka/PgS+MdprZ/crYQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   # Module has no tests
   doCheck = false;

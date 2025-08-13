@@ -5,17 +5,19 @@
   nix-update-script,
   pkg-config,
   libusb1,
+  iproute2,
+  net-tools,
 }:
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.177";
+  version = "1.0.182";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-PfFDM/thq+OP3PeiX7qfBZYG//el0U3CkpJWzFbzVqs=";
+    sha256 = "sha256-GUCZiuW6IDVxVsFZN7QMRt5EFovxjUopC4jQD+/lZv8=";
   };
 
   proxyVendor = true;
@@ -24,6 +26,14 @@ buildGoModule rec {
   excludedPackages = [
     "restapi"
   ];
+
+  postPatch = ''
+    substituteInPlace ncm/linux_commands.go \
+      --replace-fail "ip " "${lib.getExe' iproute2 "ip"} "
+
+    substituteInPlace ios/tunnel/tunnel.go \
+      --replace-fail "ifconfig" "${lib.getExe' net-tools "ifconfig"}"
+  '';
 
   nativeBuildInputs = [
     pkg-config

@@ -72,18 +72,16 @@ stdenv.mkDerivation (
       fi
     '';
 
-    failureHook =
-      (lib.optionalString (failureHook != null) failureHook)
-      + ''
-        if test -n "$succeedOnFailure"; then
-            if test -n "$keepBuildDirectory"; then
-                KEEPBUILDDIR="$out/`basename $TMPDIR`"
-                echo "Copying build directory to $KEEPBUILDDIR"
-                mkdir -p $KEEPBUILDDIR
-                cp -R "$TMPDIR/"* $KEEPBUILDDIR
-            fi
-        fi
-      '';
+    failureHook = (lib.optionalString (failureHook != null) failureHook) + ''
+      if test -n "$succeedOnFailure"; then
+          if test -n "$keepBuildDirectory"; then
+              KEEPBUILDDIR="$out/`basename $TMPDIR`"
+              echo "Copying build directory to $KEEPBUILDDIR"
+              mkdir -p $KEEPBUILDDIR
+              cp -R "$TMPDIR/"* $KEEPBUILDDIR
+          fi
+      fi
+    '';
   }
 
   // removeAttrs args [ "lib" ] # Propagating lib causes the evaluation to fail, because lib is a function that can't be converted to a string

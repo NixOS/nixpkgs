@@ -3,18 +3,18 @@
   buildNpmPackage,
   fetchFromGitHub,
   runCommand,
-  hred,
   jq,
+  binlore,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "hred";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "danburzo";
     repo = "hred";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+0+WQRI8rdIMbPN0eBUdsWUMWDCxZhTRLiFo1WRd2xc=";
   };
 
@@ -23,12 +23,14 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
+    simple = runCommand "hred-test" { } ''
       set -e -o pipefail
-      echo '<i id="foo">bar</i>' | ${hred}/bin/hred 'i#foo { @id => id, @.textContent => text }' -c | ${jq}/bin/jq -c > $out
+      echo '<i id="foo">bar</i>' | ${finalAttrs.finalPackage}/bin/hred 'i#foo { @id => id, @.textContent => text }' -c | ${jq}/bin/jq -c > $out
       [ "$(cat $out)" = '{"id":"foo","text":"bar"}' ]
     '';
   };
+
+  passthru.binlore.out = binlore.synthesize finalAttrs.finalPackage "execer cannot bin/hred";
 
   meta = {
     description = "Command-line tool to extract data from HTML";
@@ -37,4 +39,4 @@ buildNpmPackage rec {
     homepage = "https://github.com/danburzo/hred";
     maintainers = with lib.maintainers; [ tejing ];
   };
-}
+})

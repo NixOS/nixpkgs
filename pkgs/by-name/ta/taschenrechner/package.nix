@@ -6,18 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taschenrechner";
-  version = "1.5.0";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.fem-net.de";
     owner = "mabl";
     repo = "taschenrechner";
     rev = version;
-    hash = "sha256-ZZVghL0R3p5sE8V9Z0MsmTiCacuE2RXohQQEYJYgp/o=";
+    hash = "sha256-ZkyZpCOSo30XEjfh6bLiTLQs/efSFtwdlpIu9bO5Sdc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/tgfHU4/B7tes2jU8L/MbWIG1sTLg9exWhmuSA6Davk=";
+  cargoHash = "sha256-29gqkJe/8ghAgAeioQ2r+AYgOI6lzMnDut4WF0Q59Xg=";
 
   meta = with lib; {
     description = "Cli-calculator written in Rust";

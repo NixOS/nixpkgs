@@ -17,31 +17,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.97.1";
+  version = "1.105.3";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-3tQx3yfs4LrNMSzHz4jnUduWu9uagvU8G/aGU22Fxq8=";
+    hash = "sha256-IsAazA4DCkcOE5lNbxNMYgWAZycwjLYneSFBLAhltac=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-yO5wOGCZmpiBRuw7wwi1YqllzYPIwLv2SEvWwNufNYM=";
+    fetcherVersion = 1;
+    hash = "sha256-maKD03Gr1gGUQwvTk35kv89a9TvzsIeKqI9NjjTO1TQ=";
   };
 
-  nativeBuildInputs =
-    [
-      pnpm_10.configHook
-      python3 # required to build sqlite3 bindings
-      node-gyp # required to build sqlite3 bindings
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    pnpm_10.configHook
+    python3 # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

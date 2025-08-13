@@ -3,7 +3,7 @@
 {
   name = "tinywl";
   meta = {
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   nodes.machine =

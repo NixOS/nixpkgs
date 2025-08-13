@@ -11,6 +11,7 @@
     inherit hash;
   },
   patches ? [ ],
+  knownVulnerabilities ? [ ],
   maintainers ? [
     lib.maintainers.lovesegfault
     lib.maintainers.artturin
@@ -20,7 +21,6 @@
 }@args:
 assert (hash == null) -> (src != null);
 let
-  atLeast224 = lib.versionAtLeast version "2.24pre";
   atLeast225 = lib.versionAtLeast version "2.25pre";
 in
 {
@@ -71,7 +71,11 @@ in
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
@@ -95,95 +99,78 @@ let
 
     inherit src patches;
 
-    outputs =
-      [
-        "out"
-        "dev"
-      ]
-      ++ lib.optionals enableDocumentation [
-        "man"
-        "doc"
-      ];
+    outputs = [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals enableDocumentation [
+      "man"
+      "doc"
+    ];
 
     hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
     hardeningDisable = [
       "shadowstack"
-    ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+    ]
+    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-    nativeInstallCheckInputs = lib.optional atLeast224 [
+    nativeInstallCheckInputs = [
       git
       man
     ];
 
-    nativeBuildInputs =
-      [
-        pkg-config
-        autoconf-archive
-        autoreconfHook
-        bison
-        flex
-        jq
-      ]
-      ++ lib.optionals enableDocumentation (
-        if atLeast224 then
-          [
-            (lib.getBin lowdown-unsandboxed)
-            mdbook
-            mdbook-linkcheck
-          ]
-        else
-          [
-            libxslt
-            libxml2
-            docbook_xsl_ns
-            docbook5
-          ]
-      )
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        util-linuxMinimal
-      ];
+    nativeBuildInputs = [
+      pkg-config
+      autoconf-archive
+      autoreconfHook
+      bison
+      flex
+      jq
+    ]
+    ++ lib.optionals enableDocumentation [
+      (lib.getBin lowdown-unsandboxed)
+      mdbook
+      mdbook-linkcheck
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linuxMinimal
+    ];
 
-    buildInputs =
-      [
-        boost
-        brotli
-        bzip2
-        curl
-        editline
-        libsodium
-        openssl
-        sqlite
-        xz
-        gtest
-        libarchive
-        lowdown
-      ]
-      ++ lib.optionals atLeast224 [
-        libgit2
-        toml11
-        rapidcheck
-      ]
-      ++ lib.optionals (atLeast225 && enableDocumentation) [
-        python3
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
-        libcpuid
-      ]
-      ++ lib.optionals withLibseccomp [
-        libseccomp
-      ]
-      ++ lib.optionals withAWS [
-        aws-sdk-cpp
-      ];
+    buildInputs = [
+      boost
+      brotli
+      bzip2
+      curl
+      editline
+      libsodium
+      openssl
+      sqlite
+      xz
+      gtest
+      libarchive
+      lowdown
+      libgit2
+      toml11
+      rapidcheck
+    ]
+    ++ lib.optionals (atLeast225 && enableDocumentation) [
+      python3
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
+      libcpuid
+    ]
+    ++ lib.optionals withLibseccomp [
+      libseccomp
+    ]
+    ++ lib.optionals withAWS [
+      aws-sdk-cpp
+    ];
 
-    propagatedBuildInputs =
-      [
-        boehmgc
-      ]
-      ++ lib.optionals atLeast224 [
-        nlohmann_json
-      ];
+    propagatedBuildInputs = [
+      boehmgc
+      nlohmann_json
+    ];
 
     postPatch = ''
       patchShebangs --build tests
@@ -200,74 +187,63 @@ let
           chmod u+w $out/lib/*.so.*
           patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
         ''}
-      ''
-      +
-        # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which
-        # removes config.nix entirely and is not present in 2.3.x, we need to
-        # patch around an issue where the Nix configure step pulls in the build
-        # system's bash and other utilities when cross-compiling.
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast224) ''
-          mkdir tmp/
-          substitute corepkgs/config.nix.in tmp/config.nix.in \
-            --subst-var-by bash ${bash}/bin/bash \
-            --subst-var-by coreutils ${coreutils}/bin \
-            --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
-            --subst-var-by gzip ${gzip}/bin/gzip \
-            --subst-var-by xz ${xz}/bin/xz \
-            --subst-var-by tar ${gnutar}/bin/tar \
-            --subst-var-by tr ${coreutils}/bin/tr
-          mv tmp/config.nix.in corepkgs/config.nix.in
-        '';
+      '';
 
-    configureFlags =
-      [
-        "--with-store-dir=${storeDir}"
-        "--localstatedir=${stateDir}"
-        "--sysconfdir=${confDir}"
-        "--enable-gc"
-      ]
-      ++ lib.optionals (!enableDocumentation) [
-        "--disable-doc-gen"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
-      ]
-      ++ lib.optionals (atLeast224 && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
-        "--enable-embedded-sandbox-shell"
-      ]
-      ++
-        lib.optionals
-          (
-            stdenv.hostPlatform != stdenv.buildPlatform
-            && stdenv.hostPlatform ? nix
-            && stdenv.hostPlatform.nix ? system
-          )
-          [
-            "--with-system=${stdenv.hostPlatform.nix.system}"
-          ]
-      ++ lib.optionals (!withLibseccomp) [
-        # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-        "--disable-seccomp-sandboxing"
-      ]
-      ++ lib.optionals (atLeast224 && stdenv.cc.isGNU && !enableStatic) [
-        "--enable-lto"
-      ];
+    configureFlags = [
+      "--with-store-dir=${storeDir}"
+      "--localstatedir=${stateDir}"
+      "--sysconfdir=${confDir}"
+      "--enable-gc"
+    ]
+    ++ lib.optionals (!enableDocumentation) [
+      "--disable-doc-gen"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+      "--enable-embedded-sandbox-shell"
+    ]
+    ++
+      lib.optionals
+        (
+          stdenv.hostPlatform != stdenv.buildPlatform
+          && stdenv.hostPlatform ? nix
+          && stdenv.hostPlatform.nix ? system
+        )
+        [
+          "--with-system=${stdenv.hostPlatform.nix.system}"
+        ]
+    ++ lib.optionals (!withLibseccomp) [
+      # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
+      "--disable-seccomp-sandboxing"
+    ]
+    ++ lib.optionals (stdenv.cc.isGNU && !enableStatic) [
+      "--enable-lto"
+    ];
 
-    makeFlags =
-      [
-        # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
-        # of make jobserver. until gcc adds support for this we have to instruct make to use this
-        # old style or LTO builds will run their linking on only one thread, which takes forever.
-        "--jobserver-style=pipe"
-        "profiledir=$(out)/etc/profile.d"
+    env.CXXFLAGS = toString (
+      lib.optionals (lib.versionAtLeast lowdown.version "1.4.0") [
+        # Autotools based build system wasn't updated with the backport of
+        # https://github.com/NixOS/nix/pull/12115, so set the define explicitly.
+        "-DHAVE_LOWDOWN_1_4"
       ]
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
+    );
+
+    makeFlags = [
+      # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
+      # of make jobserver. until gcc adds support for this we have to instruct make to use this
+      # old style or LTO builds will run their linking on only one thread, which takes forever.
+      "--jobserver-style=pipe"
+      "profiledir=$(out)/etc/profile.d"
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 
     doInstallCheck = true;
-    installCheckTarget = if atLeast224 then "installcheck" else null;
+    installCheckTarget = "installcheck";
 
     # socket path becomes too long otherwise
     preInstallCheck =
@@ -280,10 +256,10 @@ let
         export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
       ''
       # See https://github.com/NixOS/nix/issues/5687
-      + lib.optionalString (atLeast224 && stdenv.hostPlatform.isDarwin) ''
+      + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
         echo "exit 99" > tests/gc-non-blocking.sh
       '' # TODO: investigate why this broken
-      + lib.optionalString (atLeast224 && stdenv.hostPlatform.system == "aarch64-linux") ''
+      + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
         echo "exit 0" > tests/functional/flakes/show.sh
       ''
       + ''
@@ -291,7 +267,7 @@ let
         export MANPATH=$man/share/man:$MANPATH
       '';
 
-    separateDebugInfo = stdenv.hostPlatform.isLinux && (atLeast224 -> !enableStatic);
+    separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
 
     enableParallelBuilding = true;
 
@@ -335,7 +311,7 @@ let
       '';
       homepage = "https://nixos.org/";
       license = licenses.lgpl21Plus;
-      inherit maintainers teams;
+      inherit knownVulnerabilities maintainers teams;
       platforms = platforms.unix;
       outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       mainProgram = "nix";

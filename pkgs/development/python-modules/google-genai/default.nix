@@ -1,14 +1,18 @@
 {
+  aiohttp,
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
   google-auth,
   httpx,
   lib,
+  packaging,
+  pkginfo,
   pydantic,
   pytestCheckHook,
   requests,
   setuptools,
+  tenacity,
   twine,
   typing-extensions,
   websockets,
@@ -16,17 +20,19 @@
 
 buildPythonPackage rec {
   pname = "google-genai";
-  version = "1.19.0";
+  version = "1.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-genai";
     tag = "v${version}";
-    hash = "sha256-p9W34v1ToLwketM+wOfrouLLl9pFBljL5doykuZRINo=";
+    hash = "sha256-EOwIXZ373hsEfGxCE6DRjPRuqPQQoFHTzIDGK1K9X6Q=";
   };
 
   build-system = [
+    packaging
+    pkginfo
     setuptools
     twine
   ];
@@ -39,9 +45,14 @@ buildPythonPackage rec {
     httpx
     pydantic
     requests
+    tenacity
     typing-extensions
     websockets
   ];
+
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+  };
 
   pythonImportsCheck = [ "google.genai" ];
 

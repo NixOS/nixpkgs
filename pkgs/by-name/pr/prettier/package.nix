@@ -9,20 +9,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.5.3";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-jde5kU6wNJeNKtW2WlKaK9DkKOluiUy7KaonZVdwUxE=";
+    hash = "sha256-uMLRFBZP7/42R6nReONcb9/kVGCn3yGHLcLFajMZLmQ=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Yd1rHcPxKjGe8P1OuGrFjKgBnGTD+bSJP1iA0yHM6uM=";
+    hash = "sha256-dpxzbtWyXsHS6tH6DJ9OqSsUSc+YqYeAPJYb95Qy5wQ=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn install --immutable
     yarn build --clean
 
-    mkdir "$out"
-    cp --recursive dist/* "$out"
+    cp --recursive dist/prettier "$out"
 
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
       --add-flags "$out/bin/prettier.cjs"
@@ -46,10 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = ./update.sh;
 

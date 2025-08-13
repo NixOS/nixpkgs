@@ -7,6 +7,7 @@
   ninja,
   patches ? [ ],
   python3,
+  updateAutotoolsGnuConfigScriptsHook,
   release_version,
   runCommand,
   src ? null,
@@ -76,6 +77,10 @@ let
       cmake
       ninja
       python3
+
+      # while this is not an autotools build, it still includes a config.guess
+      # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
+      updateAutotoolsGnuConfigScriptsHook
     ];
 
     cmakeFlags = [
@@ -92,25 +97,25 @@ let
           ]
         )
       }"
-    ] ++ devExtraCmakeFlags;
+    ]
+    ++ devExtraCmakeFlags;
 
     # List of tablegen targets.
-    ninjaFlags =
-      [
-        "clang-tblgen"
-        "llvm-tblgen"
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
-        "clang-tidy-confusable-chars-gen"
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "16") [
-        "mlir-tblgen"
-      ]
-      ++
-        lib.optionals ((lib.versionAtLeast release_version "15") && (lib.versionOlder release_version "20"))
-          [
-            "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
-          ];
+    ninjaFlags = [
+      "clang-tblgen"
+      "llvm-tblgen"
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      "clang-tidy-confusable-chars-gen"
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "16") [
+      "mlir-tblgen"
+    ]
+    ++
+      lib.optionals ((lib.versionAtLeast release_version "15") && (lib.versionOlder release_version "20"))
+        [
+          "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
+        ];
 
     installPhase = ''
       mkdir -p $out

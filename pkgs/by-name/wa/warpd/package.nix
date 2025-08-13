@@ -47,10 +47,11 @@ stdenv.mkDerivation rec {
       libXext
     ];
 
-  makeFlags =
-    [ "PREFIX=$(out)" ]
-    ++ lib.optional (!withWayland) "DISABLE_WAYLAND=y"
-    ++ lib.optional (!withX) "DISABLE_X=y";
+  makeFlags = [
+    "PREFIX=$(out)"
+  ]
+  ++ lib.optional (!withWayland) "DISABLE_WAYLAND=y"
+  ++ lib.optional (!withX) "DISABLE_X=y";
 
   postPatch = ''
     substituteInPlace mk/linux.mk \
