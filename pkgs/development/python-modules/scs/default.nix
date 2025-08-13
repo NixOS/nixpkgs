@@ -65,6 +65,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
+    changelog = "https://github.com/bodono/scs-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drewrisinger ];
   };
