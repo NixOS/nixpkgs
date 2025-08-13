@@ -38,13 +38,13 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
-    timeout-minutes: 10
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          fetch-depth: 0
-          filter: tree:0
           path: trusted
+          sparse-checkout: |
+            ci/github-script
 
       - name: Install dependencies
         run: npm install bottleneck
