@@ -9547,8 +9547,8 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_24;
-  buildGoModule = buildGo124Module;
+  go = go_1_25;
+  buildGoModule = buildGo125Module;
 
   go_latest = go_1_25;
   buildGoLatestModule = buildGo125Module;
