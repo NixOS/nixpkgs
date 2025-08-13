@@ -1655,6 +1655,8 @@ self: super: with self; {
 
   bagit = callPackage ../development/python-modules/bagit { };
 
+  baidu-aip = callPackage ../development/python-modules/baidu-aip { };
+
   baize = callPackage ../development/python-modules/baize { };
 
   bambi = callPackage ../development/python-modules/bambi { };
