@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 3cab120d..abc526b1 100644
+index 1780f874..3ac02be6 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -128,7 +128,7 @@ target_link_libraries(
+@@ -140,7 +140,7 @@ target_link_libraries(
            lodepng
            qhullstatic_r
            tinyobjloader
@@ -12,7 +12,7 @@ index 3cab120d..abc526b1 100644
  
  set_target_properties(
 diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
-index 78522705..7c64e22a 100644
+index 5cdc33cb..3d4a4863 100644
 --- a/cmake/MujocoDependencies.cmake
 +++ b/cmake/MujocoDependencies.cmake
 @@ -93,28 +93,36 @@ set(BUILD_SHARED_LIBS
@@ -23,6 +23,14 @@ index 78522705..7c64e22a 100644
 -    GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
    )
 +endif()
++
++if(NOT TARGET lodepng)
++  if(NOT MUJOCO_USE_SYSTEM_lodepng)
++    fetchcontent_declare(
++      lodepng
++      GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
++      GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
++    )
  
 -  FetchContent_GetProperties(lodepng)
 -  if(NOT lodepng_POPULATED)
@@ -34,14 +42,6 @@ index 78522705..7c64e22a 100644
 -    target_compile_options(lodepng PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
 -    target_link_options(lodepng PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
 -    target_include_directories(lodepng PUBLIC ${lodepng_SOURCE_DIR})
-+if(NOT TARGET lodepng)
-+  if(NOT MUJOCO_USE_SYSTEM_lodepng)
-+    fetchcontent_declare(
-+      lodepng
-+      GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
-+      GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
-+    )
-+
 +    FetchContent_GetProperties(lodepng)
 +    if(NOT lodepng_POPULATED)
 +      FetchContent_Populate(lodepng)
@@ -66,7 +66,7 @@ index 78522705..7c64e22a 100644
    )
  
    FetchContent_GetProperties(marchingcubecpp)
-@@ -124,119 +132,157 @@ if(NOT TARGET marchingcubecpp)
+@@ -124,71 +132,86 @@ if(NOT TARGET marchingcubecpp)
    endif()
  endif()
  
@@ -170,53 +170,18 @@ index 78522705..7c64e22a 100644
    EXCLUDE_FROM_ALL
  )
  
-+if(MUJOCO_USE_SYSTEM_tinyobjloader)
-+  # As of tinyobjloader v2.0.0rc10, the tinyobjloader target is named tinyobjloader in the build,
-+  # but tinyobjloader::tinyobjloader when it is installed. To deal with this, if tinyobjloader is
-+  # found in the system, we create an ALIAS
-+  # The following is equivalent to add_library(tinyobjloader ALIAS tinyobjloader::tinyobjloader),
-+  # but compatible with CMake 3.16 . Once the minimum CMake is bumped to CMake 3.18, we can use
-+  # the simpler version
-+  add_library(tinyobjloader INTERFACE IMPORTED)
-+  set_target_properties(tinyobjloader PROPERTIES INTERFACE_LINK_LIBRARIES tinyobjloader::tinyobjloader)
-+endif()
++option(MUJOCO_USE_SYSTEM_trianglemeshdistance "Use installed trianglemeshdistance version." OFF)
++mark_as_advanced(MUJOCO_USE_SYSTEM_trianglemeshdistance)
 +
-+option(MUJOCO_USE_SYSTEM_sdflib "Use installed sdflib version." OFF)
-+mark_as_advanced(MUJOCO_USE_SYSTEM_sdflib)
-+
- option(SDFLIB_USE_ASSIMP OFF)
- option(SDFLIB_USE_OPENMP OFF)
- option(SDFLIB_USE_ENOKI OFF)
- findorfetch(
-   USE_SYSTEM_PACKAGE
--  OFF
-+  ${MUJOCO_USE_SYSTEM_sdflib}
-   PACKAGE_NAME
--  sdflib
-+  SdfLib
-   LIBRARY_NAME
-   sdflib
--  GIT_REPO
--  https://github.com/UPC-ViRVIG/SdfLib.git
--  GIT_TAG
--  ${MUJOCO_DEP_VERSION_sdflib}
-   TARGETS
--  SdfLib
-+  SdfLib::SdfLib
-   EXCLUDE_FROM_ALL
- )
--target_compile_options(SdfLib PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
--target_link_options(SdfLib PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
-+
-+if(NOT MUJOCO_USE_SYSTEM_sdflib)
-+  target_compile_options(SdfLib PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
-+  target_link_options(SdfLib PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
-+endif()
-+
-+option(MUJOCO_USE_SYSTEM_ccd "Use installed ccd version." OFF)
-+mark_as_advanced(MUJOCO_USE_SYSTEM_ccd)
+ if(NOT TARGET trianglemeshdistance)
+   FetchContent_Declare(
+     trianglemeshdistance
+-    GIT_REPOSITORY https://github.com/InteractiveComputerGraphics/TriangleMeshDistance.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_TriangleMeshDistance}
+   )
  
- set(ENABLE_DOUBLE_PRECISION ON)
+   FetchContent_GetProperties(trianglemeshdistance)
+@@ -202,34 +225,42 @@ set(ENABLE_DOUBLE_PRECISION ON)
  set(CCD_HIDE_ALL_SYMBOLS ON)
  findorfetch(
    USE_SYSTEM_PACKAGE
@@ -275,7 +240,7 @@ index 78522705..7c64e22a 100644
    set(ABSL_PROPAGATE_CXX_STD ON)
  
    # This specific version of Abseil does not have the following variable. We need to work with BUILD_TESTING
-@@ -249,15 +295,11 @@ if(MUJOCO_BUILD_TESTS)
+@@ -242,15 +273,11 @@ if(MUJOCO_BUILD_TESTS)
    set(ABSL_BUILD_TESTING OFF)
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -292,7 +257,7 @@ index 78522705..7c64e22a 100644
      TARGETS
      absl::core_headers
      EXCLUDE_FROM_ALL
-@@ -276,22 +318,20 @@ if(MUJOCO_BUILD_TESTS)
+@@ -269,22 +296,20 @@ if(MUJOCO_BUILD_TESTS)
  
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -321,7 +286,7 @@ index 78522705..7c64e22a 100644
    set(BENCHMARK_EXTRA_FETCH_ARGS "")
    if(WIN32 AND NOT MSVC)
      set(BENCHMARK_EXTRA_FETCH_ARGS
-@@ -310,15 +350,11 @@ if(MUJOCO_BUILD_TESTS)
+@@ -303,15 +328,11 @@ if(MUJOCO_BUILD_TESTS)
  
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -338,7 +303,7 @@ index 78522705..7c64e22a 100644
      TARGETS
      benchmark::benchmark
      benchmark::benchmark_main
-@@ -328,15 +364,18 @@ if(MUJOCO_BUILD_TESTS)
+@@ -321,15 +342,18 @@ if(MUJOCO_BUILD_TESTS)
  endif()
  
  if(MUJOCO_TEST_PYTHON_UTIL)
@@ -362,7 +327,7 @@ index 78522705..7c64e22a 100644
      )
  
      FetchContent_GetProperties(Eigen3)
-@@ -348,6 +387,19 @@ if(MUJOCO_TEST_PYTHON_UTIL)
+@@ -341,6 +365,19 @@ if(MUJOCO_TEST_PYTHON_UTIL)
        set_target_properties(
          Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${eigen3_SOURCE_DIR}"
        )
@@ -382,19 +347,6 @@ index 78522705..7c64e22a 100644
      endif()
    endif()
  endif()
-diff --git a/plugin/sdf/CMakeLists.txt b/plugin/sdf/CMakeLists.txt
-index 8b834971..25021fa1 100644
---- a/plugin/sdf/CMakeLists.txt
-+++ b/plugin/sdf/CMakeLists.txt
-@@ -37,7 +37,7 @@ set(MUJOCO_SDF_SRCS
- add_library(sdf_plugin SHARED)
- target_sources(sdf_plugin PRIVATE ${MUJOCO_SDF_SRCS})
- target_include_directories(sdf_plugin PRIVATE ${MUJOCO_SDF_INCLUDE})
--target_link_libraries(sdf_plugin PRIVATE mujoco SdfLib)
-+target_link_libraries(sdf_plugin PRIVATE mujoco SdfLib::SdfLib)
- target_compile_options(
-   sdf_plugin
-   PRIVATE ${AVX_COMPILE_OPTIONS}
 diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
 index 666a3725..d89bb499 100644
 --- a/python/mujoco/util/CMakeLists.txt
