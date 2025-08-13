@@ -2242,6 +2242,8 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  cadquery-ocp = callPackage ../development/python-modules/cadquery-ocp { };
+
   caffe = toPythonModule (
     pkgs.caffe.override {
       pythonSupport = true;
