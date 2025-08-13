@@ -1,19 +1,24 @@
 {
-  curl,
-  fetchurl,
   lib,
-  genericUpdater,
-  go,
-  perl,
   stdenv,
-  writeShellScript,
-  zstd,
-  pkg-config,
+  buildGoModule,
+  fetchurl,
+
+  # buildInputs
+  libogg,
   opusfile,
   sox,
-  libogg,
+
+  # nativeBuildInputs
   makeWrapper,
-  buildGoModule,
+  perl,
+  pkg-config,
+  zstd,
+
+  # updateScript
+  curl,
+  genericUpdater,
+  writeShellScript,
 }:
 
 buildGoModule (finalAttrs: {
@@ -27,16 +32,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
   buildInputs = [
-    opusfile
     libogg
+    opusfile
     sox
   ];
 
   nativeBuildInputs = [
-    zstd
-    pkg-config
-    perl
     makeWrapper
+    perl
+    pkg-config
+    zstd
   ];
 
   subPackages = [
