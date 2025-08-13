@@ -30,6 +30,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     perl
+    perl.pkgs.Appcpanminus
     makeBinaryWrapper
   ];
 
@@ -74,8 +75,7 @@ buildNpmPackage rec {
     runHook preBuild
 
     # Check if every perl dependency was installed
-    # explicitly call cpanm with perl because the shebang is broken on darwin
-    perl ${perl.pkgs.Appcpanminus}/bin/cpanm --installdeps ./tools --notest
+    cpanm --installdeps ./tools --notest
 
     perl ./tools/install.pl install-full
     rm -r node_modules public/js/vendor/*.map public/css/vendor/*.map
