@@ -12,9 +12,14 @@
   libX11,
   libXcursor,
   libXxf86vm,
-  netbird-ui,
   versionCheckHook,
+  netbird-management,
+  netbird-relay,
+  netbird-signal,
+  netbird-ui,
+  netbird-upload,
   componentName ? "client",
+  needsUpdateScript ? componentName == "client",
 }:
 let
   /*
@@ -59,7 +64,6 @@ let
       license = lib.licenses.agpl3Only;
     };
   };
-  isUI = componentName == "ui";
   component = availableComponents.${componentName};
 in
 buildGoModule (finalAttrs: {
@@ -75,9 +79,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-uVVm+iDGP2eZ5GVXWJrWZQ7LpHdZccRIiHPIFs6oAPo=";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional isUI pkg-config;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (componentName == "ui") pkg-config;
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && isUI) [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && componentName == "ui") [
     gtk3
     libayatana-appindicator
     libX11
@@ -122,7 +126,7 @@ buildGoModule (finalAttrs: {
             --zsh <($out/bin/${component.binaryName} completion zsh)
         ''
     # assemble & adjust netbird.desktop files for the GUI
-    + lib.optionalString (stdenv.hostPlatform.isLinux && isUI) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && componentName == "ui") ''
       install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/pixmaps/netbird.png"
       install -Dm644 "$src/client/ui/build/netbird.desktop" "$out/share/applications/netbird.desktop"
 
@@ -130,18 +134,26 @@ buildGoModule (finalAttrs: {
         --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/${component.binaryName}"
     '';
 
-  nativeInstallCheckInputs = [
+  nativeInstallCheckInputs = lib.lists.optionals (component ? versionCheckProgramArg) [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${component.binaryName}";
   versionCheckProgramArg = component.versionCheckProgramArg or "version";
-  doInstallCheck = component ? versionCheckProgramArg;
 
   passthru = {
-    tests = {
+    tests = lib.attrsets.optionalAttrs (componentName == "client") {
       nixos = nixosTests.netbird;
-      withUI = netbird-ui;
+      inherit
+        # make sure child packages are built by `ofborg`
+        netbird-management
+        netbird-relay
+        netbird-signal
+        netbird-ui
+        netbird-upload
+        ;
     };
+  }
+  // lib.attrsets.optionalAttrs needsUpdateScript {
     updateScript = nix-update-script { };
   };
 
