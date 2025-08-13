@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt
+#!nix-shell -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt-rfc-style
 
 set -euo pipefail
 

@@ -7,7 +7,7 @@
 
 * When adding a new extension, place its definition in a `default.nix` file in a directory with the extension's ID (e.g. `publisher.extension-name/default.nix`) and refer to it in `./default.nix`, e.g. `publisher.extension-name = callPackage ./publisher.extension-name { };`.
 
-* Currently `nixfmt` formatter is being used to format the VSCode extensions.
+* Currently `nixfmt-rfc-style` formatter is being used to format the VSCode extensions.
 
 * Respect `alphabetical order` whenever adding extensions. On disorder, please, kindly open a PR re-establishing the order.
 
