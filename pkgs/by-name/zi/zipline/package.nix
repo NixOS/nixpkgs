@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-16D44QQHrXn6y+3IRsWh6iHSr+o4l3zHDW7SOFMsHnc=";
+    hash = "sha256-WyL/ItY/hvmBDRBB063QAIATPT51bPChkFKH7i32sz0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-kIneqtLPZ29PzluKUGO4XbQYHbNddu0kTfoP4C22k7U=";
+    hash = "sha256-LDLcde+p0wjy1BddiNxJwFLS/7O9jGpMNapojZIipeA=";
   };
 
   buildInputs = [
