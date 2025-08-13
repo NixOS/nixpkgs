@@ -13,6 +13,7 @@
   camlp-streams,
   lwt,
   re,
+  result,
   csexp,
   gitUpdater,
 }:
@@ -37,6 +38,7 @@ buildDunePackage rec {
     ocaml-version
     camlp-streams
     re
+    result
     findlib
   ];
   checkInputs = [
