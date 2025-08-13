@@ -16,10 +16,10 @@ buildGoModule rec {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-djzeqSaDTAK8WR3y7hpDk6NpuGlGLMxLvgSTH1IvlWw=";
+    hash = "sha256-bH/ifvyeZ57GRBzqa9efMKBs5/6U5O10gwpOsDt1Mdc=";
   };
 
-  vendorHash = "sha256-sjF0NEea51CKPWuZZHsDVZDtQaYz/94qM5iYwPb3jNo=";
+  vendorHash = "sha256-8gqUlnfyQ41IRa65jBs8SO9bLIE+Rh0iypZt5Ll3wtg=";
 
   ldflags = [
     "-s"
