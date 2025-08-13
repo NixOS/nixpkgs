@@ -347,21 +347,19 @@ stdenv.mkDerivation (finalAttrs: {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta =
-    with lib;
-    {
-      # Very broken on Darwin
-      broken = stdenv.hostPlatform.isDarwin;
-      description = "Flutter engine";
-      homepage = "https://flutter.dev";
-      maintainers = with maintainers; [ RossComputerGuy ];
-      license = licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    }
-    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta = {
+    # Very broken on Darwin
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Flutter engine";
+    homepage = "https://flutter.dev";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = lib.licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  }
+  // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })
