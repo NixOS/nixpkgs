@@ -2,24 +2,25 @@
   lib,
   buildDunePackage,
   lwd,
-  lwt,
   nottui,
+  notty,
 }:
 
 buildDunePackage {
-  pname = "nottui-lwt";
+  pname = "nottui-unix";
 
   inherit (lwd) version src;
 
   propagatedBuildInputs = [
-    lwt
+    lwd
     nottui
+    notty
   ];
 
   meta = with lib; {
-    description = "Run Nottui UIs in Lwt";
+    description = "UI toolkit for the UNIX terminal built on top of Notty and Lwd";
     license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    maintainers = [ maintainers.vbgl ];
     homepage = "https://github.com/let-def/lwd";
   };
 }
