@@ -9,6 +9,7 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_serialization_text" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-serialization-text-v";
+  };
 
   meta = with lib; {
     description = "Text serialization implementation for Kiota generated clients in Python";

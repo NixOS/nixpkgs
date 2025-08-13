@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxcrypt
   ]
-  ++ lib.optional (pam != null && stdenv.hostPlatform.isLinux) pam
+  ++ lib.optional (pam != null && (lib.meta.availableOn stdenv.hostPlatform pam)) pam
   ++ lib.optional withLibbsd libbsd
   ++ lib.optional withTcb tcb;
 

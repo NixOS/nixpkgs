@@ -29,8 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=61,<72" "setuptools" \
-      --replace-fail "numpy<2" "numpy"
+      --replace-fail "setuptools>=61,<72" "setuptools"
   '';
 
   build-system = [
@@ -38,10 +37,6 @@ buildPythonPackage rec {
     pip
     pkgconfig
     setuptools
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
   ];
 
   dependencies = [
