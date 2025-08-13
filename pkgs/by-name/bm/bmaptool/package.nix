@@ -25,12 +25,12 @@ python3Packages.buildPythonApplication rec {
   # tests fail only on hydra.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "BMAP Tools";
     homepage = "https://github.com/yoctoproject/bmaptool";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.linux;
     mainProgram = "bmaptool";
   };
 }
