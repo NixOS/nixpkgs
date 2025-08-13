@@ -6,15 +6,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bmaptool";
-  version = "3.8.0";
-  format = "setuptools";
+  version = "3.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yoctoproject";
     repo = "bmaptool";
     rev = "v${version}";
-    hash = "sha256-YPY3sNuZ/TASNBPH94iqG6AuBRq5KjioKiuxAcu94+I=";
+    hash = "sha256-9KSBv420HJvK5fUg7paFJqA2MCw36BfaeAG4NME/co8=";
   };
+
+  build-system = [
+    python3Packages.hatchling
+  ];
 
   propagatedBuildInputs = with python3Packages; [ six ];
 
