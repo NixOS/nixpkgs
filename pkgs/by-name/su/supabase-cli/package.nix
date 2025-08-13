@@ -27,12 +27,13 @@ buildGoModule rec {
     "-X=github.com/supabase/cli/internal/utils.Version=${version}"
   ];
 
+  subPackages = [ "." ];
+
   doCheck = false; # tests are trying to connect to localhost
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    rm $out/bin/{docs,listdep}
     mv $out/bin/{cli,supabase}
 
     installShellCompletion --cmd supabase \
