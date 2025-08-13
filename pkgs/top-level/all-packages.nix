@@ -1654,9 +1654,7 @@ with pkgs;
 
   inherit (cue) writeCueValidator;
 
-  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod {
-    buildGoModule = buildGo123Module;
-  };
+  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
 
   dazel = python3Packages.callPackage ../development/tools/dazel { };
 
