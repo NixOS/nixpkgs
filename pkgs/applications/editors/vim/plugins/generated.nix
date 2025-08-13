@@ -15025,6 +15025,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  themery-nvim = buildVimPlugin {
+    pname = "themery.nvim";
+    version = "2025-01-01";
+    src = fetchFromGitHub {
+      owner = "zaldih";
+      repo = "themery.nvim";
+      rev = "bfa58f4b279d21cb515b28023e1b68ec908584b2";
+      sha256 = "0wrd3965wss9qzz4qfy5ryfj71napm5ckx98lwxrxszah6pmz3fl";
+    };
+    meta.homepage = "https://github.com/zaldih/themery.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   thesaurus_query-vim = buildVimPlugin {
     pname = "thesaurus_query.vim";
     version = "2022-12-11";
