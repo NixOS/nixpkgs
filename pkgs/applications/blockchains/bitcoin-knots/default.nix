@@ -32,12 +32,13 @@
   ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
   version = "28.1.knots20250305";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/28.x/${version}/bitcoin-${version}.tar.gz";
+    url = "https://bitcoinknots.org/files/28.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
+    # hash retrieved from signed SHA256SUMS
     hash = "sha256-DKO3+43Tn/BTKQVrLrCkeMtzm8SfbaJD8rPlb6lDA8A=";
   };
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
 
   preUnpack =
     let
-      majorVersion = lib.versions.major version;
+      majorVersion = lib.versions.major finalAttrs.version;
 
       publicKeys = fetchFromGitHub {
         owner = "bitcoinknots";
@@ -80,12 +81,12 @@ stdenv.mkDerivation rec {
       };
 
       checksums = fetchurl {
-        url = "https://bitcoinknots.org/files/${majorVersion}.x/${version}/SHA256SUMS";
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
         hash = "sha256-xWJKaZBLm9H6AuMBSC21FLy/5TRUI0AQVIUF/2PvDhs=";
       };
 
       signatures = fetchurl {
-        url = "https://bitcoinknots.org/files/${majorVersion}.x/${version}/SHA256SUMS.asc";
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
         hash = "sha256-SywdBEzZqsf2aDeOs7J9n513RTCm+TJA/QYP5+h7Ifo=";
       };
 
@@ -106,11 +107,11 @@ stdenv.mkDerivation rec {
       gpg --no-autostart --batch --import ${publicKeys}/builder-keys/*
       ln -s ${checksums} ./SHA256SUMS
       ln -s ${signatures} ./SHA256SUMS.asc
-      ln -s $src ./bitcoin-${version}.tar.gz
+      ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
       gpg --no-autostart --batch --verify --status-fd 1 SHA256SUMS.asc SHA256SUMS > verify.log
       ${verifyBuilderKeys}
-      grep bitcoin-${version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
-      echo "Verifying the checksum of bitcoin-${version}.tar.gz..."
+      grep bitcoin-${finalAttrs.version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
+      echo "Verifying the checksum of bitcoin-${finalAttrs.version}.tar.gz..."
       sha256sum -c SHA256SUMS.filtered
       popd
     '';
@@ -119,7 +120,7 @@ stdenv.mkDerivation rec {
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
   ]
-  ++ lib.optionals (!doCheck) [
+  ++ lib.optionals (!finalAttrs.doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
   ]
@@ -147,7 +148,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
-    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${version}/doc/release-notes.md";
+    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${finalAttrs.version}/doc/release-notes.md";
     maintainers = with lib.maintainers; [
       prusnak
       mmahut
@@ -155,4 +156,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})
