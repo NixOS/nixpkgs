@@ -33,6 +33,8 @@ let
       dtomvan
     ];
     platforms = platforms.darwin ++ platforms.linux;
+    # Tests fail with >buildGo123Module.
+    broken = true;
   };
 
   etcdserver = buildGoModule {
