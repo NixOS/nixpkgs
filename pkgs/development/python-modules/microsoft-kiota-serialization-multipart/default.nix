@@ -9,6 +9,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-text-v${version}";
+    tag = "microsoft-kiota-serialization-multipart-v${version}";
     hash = "sha256-h0sZhBIGZyhzYtCvLHRAn73HspgyOAKU3p4xSn+uXFU=";
   };
 
@@ -39,6 +40,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_serialization_multipart" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-serialization-multipart-v";
+  };
 
   meta = with lib; {
     description = "Multipart serialization implementation for Kiota clients in Python";

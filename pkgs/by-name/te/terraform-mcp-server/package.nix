@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "terraform-mcp-server";
@@ -23,6 +24,12 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/terraform-mcp-server" ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
   meta = {
     description = "Terraform Model Context Protocol (MCP) Server";
     longDescription = ''
@@ -36,7 +43,10 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/hashicorp/terraform-mcp-server";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ connerohnesorge ];
+    maintainers = with lib.maintainers; [
+      connerohnesorge
+      pilz
+    ];
     mainProgram = "terraform-mcp-server";
   };
 })

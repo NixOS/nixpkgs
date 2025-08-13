@@ -208,6 +208,7 @@ buildDotnetModule (finalAttrs: {
     # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
+    "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode24RuntimeVersionInAlpineContainerAsync"
   ]
   ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
     "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"

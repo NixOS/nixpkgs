@@ -9,6 +9,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-text-v${version}";
+    tag = "microsoft-kiota-serialization-form-v${version}";
     hash = "sha256-h0sZhBIGZyhzYtCvLHRAn73HspgyOAKU3p4xSn+uXFU=";
   };
 
@@ -41,6 +42,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_serialization_form" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-serialization-form-v";
+  };
 
   meta = with lib; {
     description = "Form serialization implementation for Kiota clients in Python";

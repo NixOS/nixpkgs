@@ -6886,6 +6886,11 @@
     github = "dstengele";
     githubId = 1706418;
   };
+  dstremur = {
+    name = "Diego Strebel";
+    github = "dstremur";
+    githubId = 76773187;
+  };
   dsuetin = {
     name = "Danil Suetin";
     email = "suetin085+nixpkgs@protonmail.com";
@@ -26922,6 +26927,12 @@
     github = "vringar";
     name = "Stefan Zabka";
     githubId = 13276717;
+  };
+  vrose = {
+    email = "vrose04@gmail.com";
+    github = "vinnybod";
+    name = "Vince Rose";
+    githubId = 9831420;
   };
   vrthra = {
     email = "rahul@gopinath.org";
