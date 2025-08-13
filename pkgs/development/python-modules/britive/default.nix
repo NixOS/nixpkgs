@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/britive/python-sdk";
     changelog = "https://github.com/britive/python-sdk/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ matrixman ];
   };
 }
