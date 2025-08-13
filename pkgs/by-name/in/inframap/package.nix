@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "inframap";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = "inframap";
     rev = "v${version}";
-    hash = "sha256-jV9mMJNSsRWdbvHr7OvF1cF2KVqxUEjlM9AaVMxNqBI=";
+    hash = "sha256-IdXP/gw81rQsaHz+uwEB9ThtHlbPYLXcYTYdwJynpVU=";
   };
 
   ldflags = [
