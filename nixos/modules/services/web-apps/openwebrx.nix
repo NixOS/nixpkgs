@@ -18,13 +18,22 @@ in
     systemd.services.openwebrx = {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
-        csdr
-        digiham
-        codec2
-        js8call
-        m17-cxx-demod
         alsa-utils
+        codec2
+        csdr
+        dablin
+        digiham
+        dumphfdl
+        dumpvdl2
+        dump1090
+        hamlib_4
+        imagemagick
+        js8call
+        lame
+        multimon-ng
+        m17-cxx-demod
         netcat
+        rtl_433
       ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/openwebrx";
