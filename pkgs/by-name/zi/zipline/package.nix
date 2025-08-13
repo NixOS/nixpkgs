@@ -85,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    pnpm prune --prod
+    find node_modules -xtype l -delete
+
     mkdir -p $out/{bin,share/zipline}
 
     cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
