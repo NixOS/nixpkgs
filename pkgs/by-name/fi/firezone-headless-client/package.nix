@@ -6,15 +6,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "firezone-headless-client";
-  version = "1.5.1";
+  version = "1.5.2";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "headless-client-${version}";
-    hash = "sha256-cN3+FO3hgqrElRh+ThZ0/rIdtVTVXUuNpQxV+7WISRo=";
+    hash = "sha256-qApafuIakVlwBiKN0YaYm4KwZAmSqrtXftPEg+VwsJE=";
   };
 
-  cargoHash = "sha256-bt/xscIqTlIoFmFP8XfH+7zoyG1DQzt+1CtsJlThstM=";
+  cargoHash = "sha256-Fp3c3ot2ET3gWrqKs+TI4XXjIDFxcEFBBl7irZrsgmE=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "headless-client";
   RUSTFLAGS = "--cfg system_certs";
