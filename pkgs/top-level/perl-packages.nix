@@ -1188,6 +1188,10 @@ with self;
         --replace-fail http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
     '';
     propagatedBuildInputs = [ IOSocketSSL ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      shortenPerlShebang $out/bin/cpanm
+    '';
     meta = {
       description = "Get, unpack, build and install modules from CPAN";
       homepage = "https://github.com/miyagawa/cpanminus";
