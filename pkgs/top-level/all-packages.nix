@@ -15358,9 +15358,7 @@ with pkgs;
 
   gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix { };
 
-  gowitness = callPackage ../tools/security/gowitness {
-    buildGoModule = buildGo123Module;
-  };
+  gowitness = callPackage ../tools/security/gowitness { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
