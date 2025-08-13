@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "djoser";
-  version = "2.3.1";
+  version = "2.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunscrapers";
     repo = "djoser";
     tag = version;
-    hash = "sha256-xPhf7FiJSq5bHfAU5RKbobgnsRh/6cLcXP6vfrLdzJA=";
+    hash = "sha256-RFOKEjAh5k/Bx7cj6ty2vQsW61lsXfJIJDOZeqL6iCE=";
   };
 
   build-system = [ poetry-core ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "djoser" ];
 
   meta = {
-    changelog = "https://github.com/sunscrapers/djoser/releases/tag/${version}";
+    changelog = "https://github.com/sunscrapers/djoser/releases/tag/${src.tag}";
     description = "REST implementation of Django authentication system";
     homepage = "https://github.com/sunscrapers/djoser";
     maintainers = with lib.maintainers; [ MostafaKhaled ];

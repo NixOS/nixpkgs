@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -18,10 +17,9 @@
   tqdm,
   typing-extensions,
 
-  # `httpx_aiohttp` not currently in `nixpkgs`
   # optional-dependencies (aiohttp)
-  # aiohttp,
-  # httpx_aiohttp,
+  aiohttp,
+  httpx-aiohttp,
 
   # optional-dependencies (datalib)
   numpy,
@@ -45,20 +43,22 @@
   respx,
 
   # optional-dependencies toggle
+  withAiohttp ? true,
+  withDatalib ? false,
   withRealtime ? true,
   withVoiceHelpers ? true,
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.99.1";
+  version = "1.99.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-TFzLfCT71BSbKg7LSqpFAsutKYAeQ6ALy7AE4ldeHr8=";
+    hash = "sha256-gE74uUQTj2kL9kwsRdu4IW69BGRmEOCRjDRiZCN8TEA=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -78,15 +78,16 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
   ]
+  ++ lib.optionals withAiohttp optional-dependencies.aiohttp
+  ++ lib.optionals withDatalib optional-dependencies.datalib
   ++ lib.optionals withRealtime optional-dependencies.realtime
   ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
-    # `httpx_aiohttp` not currently in `nixpkgs`
-    # aiohttp = [
-    #   aiohttp
-    #   httpx_aiohttp
-    # ];
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
     datalib = [
       numpy
       pandas
@@ -114,23 +115,12 @@ buildPythonPackage rec {
     respx
   ];
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-  ];
-
-  disabledTests = [
-    # Tests make network requests
-    "test_copy_build_request"
-    "test_basic_attribute_access_works"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
-    "test_multi_byte_character_multiple_chunks"
-  ];
-
   disabledTestPaths = [
     # Test makes network requests
     "tests/api_resources"
+    # E   TypeError: Unexpected type for 'content', <class 'inline_snapshot._external.external'>
+    # This seems to be due to `inline-snapshot` being disabled when `pytest-xdist` is used.
+    "tests/lib/chat/test_completions_streaming.py"
   ];
 
   meta = {
