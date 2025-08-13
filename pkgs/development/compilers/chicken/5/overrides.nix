@@ -114,6 +114,14 @@ in
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
+  glut =
+    old:
+    (addToCscOptions [
+      "-I${(lib.getDev pkgs.libglut)}/include"
+      "-I${(lib.getDev pkgs.libGL)}/include"
+      "-I${(lib.getDev pkgs.libGLU)}/include"
+    ] old)
+    // (addToBuildInputs pkgs.libglut old);
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
@@ -294,6 +302,8 @@ in
   chicken-doc-admin = broken;
   coops-utils = broken;
   crypt = broken;
+  gemini = broken;
+  gemini-client = broken;
   hypergiant = broken;
   iup = broken;
   kiwi = broken;
@@ -306,6 +316,7 @@ in
   svn-client = broken;
   system = broken;
   tokyocabinet = broken;
+  vandusen = broken;
 
   # mark broken darwin
 
