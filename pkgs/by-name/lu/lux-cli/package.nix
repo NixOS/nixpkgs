@@ -70,6 +70,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo xtask dist-completions
   '';
 
+  postInstall = ''
+    installManPage target/dist/lx.1
+    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
+  '';
+
   meta = {
     description = "Luxurious package manager for Lua";
     longDescription = ''

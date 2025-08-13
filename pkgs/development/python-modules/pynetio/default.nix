@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pynetio";
-  version = "0.1.8";
+  version = "0.1.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SSe6OHubWszOTnwytL/3GhzD4lGIz9kxS75kuJv7vKA=";
+    hash = "sha256-Z6pLZPcQrPy3z/wCwCO2S4FvkJYKDZ6dy/IlwImPeb8=";
   };
 
   build-system = [ setuptools ];

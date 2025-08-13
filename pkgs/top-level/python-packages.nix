@@ -1095,6 +1095,8 @@ self: super: with self; {
 
   atopile = callPackage ../development/python-modules/atopile { };
 
+  atopile-easyeda2kicad = callPackage ../development/python-modules/atopile-easyeda2kicad { };
+
   atproto = callPackage ../development/python-modules/atproto { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };
@@ -4484,8 +4486,6 @@ self: super: with self; {
 
   easydict = callPackage ../development/python-modules/easydict { };
 
-  easyeda2ato = callPackage ../development/python-modules/easyeda2ato { };
-
   easyenergy = callPackage ../development/python-modules/easyenergy { };
 
   easygui = callPackage ../development/python-modules/easygui { };
@@ -4964,6 +4964,8 @@ self: super: with self; {
   fastapi = callPackage ../development/python-modules/fastapi { };
 
   fastapi-cli = callPackage ../development/python-modules/fastapi-cli { };
+
+  fastapi-github-oidc = callPackage ../development/python-modules/fastapi-github-oidc { };
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
@@ -7734,6 +7736,10 @@ self: super: with self; {
   khanaa = callPackage ../development/python-modules/khanaa { };
 
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
+
+  kicad-python = callPackage ../development/python-modules/kicad-python { };
+
+  kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
 
   kinparse = callPackage ../development/python-modules/kinparse { };
 
@@ -12047,6 +12053,8 @@ self: super: with self; {
   protobuf6 = callPackage ../development/python-modules/protobuf/6.nix {
     inherit (pkgs.__splicedPackages) protobuf;
   };
+
+  protoletariat = callPackage ../development/python-modules/protoletariat { };
 
   proton-client = callPackage ../development/python-modules/proton-client { };
 
