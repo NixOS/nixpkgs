@@ -11,6 +11,10 @@ on:
       systems:
         required: true
         type: string
+      testVersions:
+        required: false
+        default: false
+        type: boolean
     secrets:
       OWNER_APP_PRIVATE_KEY:
         required: false
@@ -22,13 +26,49 @@ defaults:
     shell: bash
 
 jobs:
+  versions:
+    if: inputs.testVersions
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      versions: ${{ steps.versions.outputs.versions }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: trusted
+          sparse-checkout: |
+            ci/supportedVersions.nix
+
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ inputs.mergedSha }}
+          path: untrusted
+          sparse-checkout: |
+            ci/pinned.json
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+
+      - name: Load supported versions
+        id: versions
+        run: |
+          echo "versions=$(trusted/ci/supportedVersions.nix --arg pinnedJson untrusted/ci/pinned.json)" >> "$GITHUB_OUTPUT"
+
   eval:
     runs-on: ubuntu-24.04-arm
+    needs: versions
+    if: ${{ !cancelled() && !failure() }}
     strategy:
       fail-fast: false
       matrix:
         system: ${{ fromJSON(inputs.systems) }}
-    name: ${{ matrix.system }}
+        version:
+          - "" # Default Eval triggering rebuild labels and such.
+          - ${{ fromJSON(needs.versions.outputs.versions || '[]') }} # Only for ci/pinned.json updates.
+    # Failures for versioned Evals will be collected in a separate job below
+    # to not interrupt main Eval's compare step.
+    continue-on-error: ${{ matrix.version != '' }}
+    name: ${{ matrix.system }}${{ matrix.version && format(' @ {0}', matrix.version) || '' }}
     outputs:
       targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     timeout-minutes: 15
@@ -60,17 +100,19 @@ jobs:
       - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
+          MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
         run: |
           nix-build untrusted/ci --arg nixpkgs ./pinned  -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
+            --argstr nixPath "$MATRIX_VERSION" \
             --out-link merged
           # If it uses too much memory, slightly decrease chunkSize
 
       - name: Upload the output paths and eval stats
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: merged-${{ matrix.system }}
+          name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}merged-${{ matrix.system }}
           path: merged/*
 
       - name: Log current API rate limits
@@ -125,7 +167,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         if: steps.targetRunId.outputs.targetRunId
         with:
           run-id: ${{ steps.targetRunId.outputs.targetRunId }}
@@ -149,13 +191,13 @@ jobs:
         if: steps.targetRunId.outputs.targetRunId
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: diff-${{ matrix.system }}
+          name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
 
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: needs.eval.outputs.targetRunId
+    if: needs.eval.outputs.targetRunId && !cancelled() && !failure()
     permissions:
       statuses: write
     timeout-minutes: 5
@@ -171,7 +213,7 @@ jobs:
           pinnedFrom: trusted
 
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@de96f4613b77ec03b5cf633e7c350c32bd3c5660 # v4.1.8
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           pattern: diff-*
           path: diff
@@ -239,6 +281,91 @@ jobs:
               description,
               target_url
             })
+
+  # Creates a matrix of Eval performance for various versions and systems.
+  report:
+    runs-on: ubuntu-24.04-arm
+    needs: [versions, eval]
+    steps:
+      - name: Download output paths and eval stats for all versions
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          pattern: "*-diff-*"
+          path: versions
+
+      - name: Add version comparison table to job summary
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          SYSTEMS: ${{ inputs.systems }}
+          VERSIONS: ${{ needs.versions.outputs.versions }}
+        with:
+          script: |
+            const { readFileSync } = require('node:fs')
+            const path = require('node:path')
+
+            const systems = JSON.parse(process.env.SYSTEMS)
+            const versions = JSON.parse(process.env.VERSIONS)
+
+            core.summary.addHeading('Lix/Nix version comparison')
+            core.summary.addTable(
+              [].concat(
+                [
+                  [{ data: 'Version', header: true }].concat(
+                    systems.map((system) => ({ data: system, header: true })),
+                  ),
+                ],
+                versions.map((version) =>
+                  [{ data: version }].concat(
+                    systems.map((system) => {
+                      try {
+                        const artifact = path.join('versions', `${version}-diff-${system}`)
+                        const time = Math.round(
+                          parseFloat(
+                            readFileSync(
+                              path.join(artifact, 'after', system, 'total-time'),
+                              'utf-8',
+                            ),
+                          ),
+                        )
+                        const diff = JSON.parse(
+                          readFileSync(path.join(artifact, system, 'diff.json'), 'utf-8'),
+                        )
+                        const attrs = [].concat(
+                          diff.added,
+                          diff.removed,
+                          diff.changed,
+                          diff.rebuilds
+                        ).filter(attr =>
+                          // Exceptions related to dev shells, which changed at some time between 2.18 and 2.24.
+                          !attr.startsWith('tests.devShellTools.nixos.') &&
+                          !attr.startsWith('tests.devShellTools.unstructuredDerivationInputEnv.')
+                        )
+                        if (attrs.length > 0) {
+                          core.setFailed(
+                            `${version} on ${system} has changed outpaths!\nNote: Please make sure to update ci/pinned.json separately from changes to other packages.`,
+                          )
+                          return { data: ':x:' }
+                        }
+                        return { data: time }
+                      } catch {
+                        core.warning(`${version} on ${system} did not produce artifact.`)
+                        return { data: ':warning:' }
+                      }
+                    }),
+                  ),
+                ),
+              ),
+            )
+            core.summary.addRaw(
+              '\n*Evaluation time in seconds without downloading dependencies.*',
+              true,
+            )
+            core.summary.addRaw('\n*:warning: Job did not report a result.*', true)
+            core.summary.addRaw(
+              '\n*:x: Job produced different outpaths than the target branch.*',
+              true,
+            )
+            core.summary.write()
 
   misc:
     if: ${{ github.event_name != 'push' }}
