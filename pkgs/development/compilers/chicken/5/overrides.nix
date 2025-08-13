@@ -89,7 +89,8 @@ in
   glls = addPkgConfig;
   glut =
     old:
-    (addToCscOptions [
+    (brokenOnDarwin old)
+    // (addToCscOptions [
       "-I${(lib.getDev pkgs.libglut)}/include"
       "-I${(lib.getDev pkgs.libGL)}/include"
       "-I${(lib.getDev pkgs.libGLU)}/include"
