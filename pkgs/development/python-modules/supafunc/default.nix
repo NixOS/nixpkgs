@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  httpx,
   poetry-core,
   strenum,
-  httpx,
-  h2,
 }:
 
 buildPythonPackage rec {
@@ -18,23 +17,24 @@ buildPythonPackage rec {
     hash = "sha256-ReTVAIVBZ8JhUVxD96NjMg4KkoEYGC/okyre/d7dtUU=";
   };
 
+  build-system = [ poetry-core ];
+
   dependencies = [
     strenum
     httpx
-    h2
-  ];
+  ]
+  ++ httpx.optional-dependencies.http2;
 
-  build-system = [ poetry-core ];
+  # Tests are not in PyPI package and source is not tagged
+  doCheck = false;
 
   pythonImportsCheck = [ "supafunc" ];
 
-  # tests are not in pypi package
-  doCheck = false;
-
   meta = {
-    homepage = "https://github.com/supabase/functions-py";
-    license = lib.licenses.mit;
     description = "Library for Supabase Functions";
+    homepage = "https://github.com/supabase/functions-py";
+    changelog = "https://github.com/supabase/functions-py/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siegema ];
   };
 }
