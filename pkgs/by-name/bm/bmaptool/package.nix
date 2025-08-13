@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.hatchling
   ];
 
-  propagatedBuildInputs = with python3Packages; [ six ];
+  dependencies = with python3Packages; [ six ];
 
   # tests fail only on hydra.
   doCheck = false;
