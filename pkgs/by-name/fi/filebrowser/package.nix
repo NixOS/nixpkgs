@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
   nodejs_22,
   pnpm_9,
 
@@ -54,7 +54,7 @@ let
   });
 
 in
-buildGo123Module {
+buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
