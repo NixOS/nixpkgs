@@ -21,7 +21,6 @@
   expat,
   libffi,
   libuuid,
-  withLibxcrypt ? !withMinimalDeps,
   libxcrypt,
   withMpdecimal ? !withMinimalDeps,
   mpdecimal,
@@ -145,11 +144,16 @@ let
     optionals
     optionalString
     replaceStrings
-    versionOlder
     ;
 
-  # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
-  libxcrypt = if stdenv.hostPlatform.isFreeBSD && withMinimalDeps then null else inputs.libxcrypt;
+  withLibxcrypt =
+    (!withMinimalDeps)
+    &&
+      # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
+      (!stdenv.hostPlatform.isFreeBSD)
+    &&
+      # crypt module was removed in 3.13
+      passthru.pythonOlder "3.13";
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
