@@ -8,12 +8,92 @@
 let
   cfg = config.services.lldap;
   format = pkgs.formats.toml { };
+
+  inherit (lib) mkOption types;
+
+  ensureFormat = pkgs.formats.json { };
+  ensureGenerate =
+    let
+      filterNulls = lib.filterAttrsRecursive (n: v: v != null);
+
+      filteredSource =
+        source: if builtins.isList source then map filterNulls source else filterNulls source;
+    in
+    name: source: ensureFormat.generate name (filteredSource source);
+
+  ensureFieldsOptions = name: {
+    name = mkOption {
+      type = types.str;
+      description = "Name of the field.";
+      default = name;
+    };
+
+    attributeType = mkOption {
+      type = types.enum [
+        "STRING"
+        "INTEGER"
+        "JPEG"
+        "DATE_TIME"
+      ];
+      description = "Attribute type.";
+    };
+
+    isEditable = mkOption {
+      type = types.bool;
+      description = "Is field editable.";
+      default = true;
+    };
+
+    isList = mkOption {
+      type = types.bool;
+      description = "Is field a list.";
+      default = false;
+    };
+
+    isVisible = mkOption {
+      type = types.bool;
+      description = "Is field visible in UI.";
+      default = true;
+    };
+  };
+
+  allUserGroups = lib.flatten (lib.mapAttrsToList (n: u: u.groups) cfg.ensureUsers);
+  # The three hardcoded groups are always created when the service starts.
+  allGroups = lib.mapAttrsToList (n: g: g.name) cfg.ensureGroups ++ [
+    "lldap_admin"
+    "lldap_password_manager"
+    "lldap_strict_readonly"
+  ];
+  userGroupNotInEnsuredGroup = lib.sortOn lib.id (
+    lib.unique (lib.subtractLists allGroups allUserGroups)
+  );
+  someUsersBelongToNonEnsuredGroup = (lib.lists.length userGroupNotInEnsuredGroup) > 0;
+
+  generateEnsureConfigDir =
+    name: source:
+    let
+      genOne =
+        name: sourceOne:
+        pkgs.writeTextDir "configs/${name}.json" (
+          builtins.readFile (ensureGenerate "configs/${name}.json" sourceOne)
+        );
+    in
+    "${
+      pkgs.symlinkJoin {
+        inherit name;
+        paths = lib.mapAttrsToList genOne source;
+      }
+    }/configs";
+
+  quoteVariable = x: "\"${x}\"";
 in
 {
   options.services.lldap = with lib; {
     enable = mkEnableOption "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
 
     package = mkPackageOption pkgs "lldap" { };
+
+    bootstrap-package = mkPackageOption pkgs "lldap-bootstrap" { };
 
     environment = mkOption {
       type = with types; attrsOf str;
@@ -169,6 +249,198 @@ in
         If that is okay for you and you want to silence the warning, set this option to `true`.
       '';
     };
+
+    ensureUsers = mkOption {
+      description = ''
+        Create the users defined here on service startup.
+
+        If `enforceEnsure` option is `true`, the groups
+        users belong to must be present in the `ensureGroups` option.
+
+        Non-default options must be added to the `ensureGroupFields` option.
+      '';
+      default = { };
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            freeformType = ensureFormat.type;
+
+            options = {
+              id = mkOption {
+                type = types.str;
+                description = "Username.";
+                default = name;
+              };
+
+              email = mkOption {
+                type = types.str;
+                description = "Email.";
+              };
+
+              password_file = mkOption {
+                type = types.str;
+                description = "File containing the password.";
+              };
+
+              displayName = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Display name.";
+              };
+
+              firstName = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "First name.";
+              };
+
+              lastName = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Last name.";
+              };
+
+              avatar_file = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Avatar file. Must be a valid path to jpeg file (ignored if avatar_url specified)";
+              };
+
+              avatar_url = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Avatar url. must be a valid URL to jpeg file (ignored if gravatar_avatar specified)";
+              };
+
+              gravatar_avatar = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Get avatar from Gravatar using the email.";
+              };
+
+              weser_avatar = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Convert avatar retrieved by gravatar or the URL.";
+              };
+
+              groups = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "Groups the user would be a member of (all the groups must be specified in group config files).";
+              };
+            };
+          }
+        )
+      );
+    };
+
+    ensureGroups = mkOption {
+      description = ''
+        Create the groups defined here on service startup.
+
+        Non-default options must be added to the `ensureGroupFields` option.
+      '';
+      default = { };
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            freeformType = ensureFormat.type;
+
+            options = {
+              name = mkOption {
+                type = types.str;
+                description = "Name of the group.";
+                default = name;
+              };
+            };
+          }
+        )
+      );
+    };
+
+    ensureUserFields = mkOption {
+      description = "Extra fields for users";
+      default = { };
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            options = ensureFieldsOptions name;
+          }
+        )
+      );
+    };
+
+    ensureGroupFields = mkOption {
+      description = "Extra fields for groups";
+      default = { };
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            options = ensureFieldsOptions name;
+          }
+        )
+      );
+    };
+
+    ensureAdminUsername = mkOption {
+      type = types.str;
+      default = "admin";
+      description = ''
+        Username of the default admin user with which to connect to the LLDAP service.
+
+        By default, it is `"admin"`.
+        Extra admin users can be added using the `services.lldap.ensureUsers` option and adding them to the correct groups.
+      '';
+    };
+
+    ensureAdminPassword = mkOption {
+      type = types.nullOr types.str;
+      defaultText = "config.services.lldap.settings.ldap_user_pass";
+      default = cfg.settings.ldap_user_pass or null;
+      description = ''
+        Password of an admin user with which to connect to the LLDAP service.
+
+        By default, it is the same as the password for the default admin user 'admin'.
+        If using a password from another user, it must be managed manually.
+
+        Unsecure. Use `services.lldap.ensureAdminPasswordFile` option instead.
+      '';
+    };
+
+    ensureAdminPasswordFile = mkOption {
+      type = types.nullOr types.str;
+      defaultText = "config.services.lldap.settings.ldap_user_pass_file";
+      default = cfg.settings.ldap_user_pass_file or null;
+      description = ''
+        Path to the file containing the password of an admin user with which to connect to the LLDAP service.
+
+        By default, it is the same as the password for the default admin user 'admin'.
+        If using a password from another user, it must be managed manually.
+      '';
+    };
+
+    enforceUsers = mkOption {
+      description = "Delete users not managed declaratively.";
+      type = types.bool;
+      default = false;
+    };
+
+    enforceUserMemberships = mkOption {
+      description = "Remove users from groups they do not belong to declaratively.";
+      type = types.bool;
+      default = false;
+    };
+
+    enforceGroups = mkOption {
+      description = "Delete groups not managed declaratively.";
+      type = types.bool;
+      default = false;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -185,25 +457,77 @@ in
           (cfg.settings.ldap_user_pass_file or null) == null || (cfg.settings.ldap_user_pass or null) == null;
         message = "lldap: Both `ldap_user_pass` and `ldap_user_pass_file` settings should not be set at the same time. Set one to `null`.";
       }
+      {
+        assertion =
+          cfg.ensureUsers != { }
+          || cfg.ensureGroups != { }
+          || cfg.ensureUserFields != { }
+          || cfg.ensureGroupFields != { }
+          || cfg.enforceUsers
+          || cfg.enforceUserMemberships
+          || cfg.enforceGroups
+          -> cfg.ensureAdminPassword != null || cfg.ensureAdminPasswordFile != null;
+        message = ''
+          lldap: Some ensure options are set but no admin user password is set.
+          Add a default password to the `ldap_user_pass` or `ldap_user_pass_file` setting and set `force_ldap_user_pass_reset` to `true` to manage the admin user declaratively
+          or create an admin user manually and set its password in `ensureAdminPasswordFile` option.
+        '';
+      }
+      {
+        assertion = cfg.enforceUserMemberships -> !someUsersBelongToNonEnsuredGroup;
+        message = ''
+          lldap: Some users belong to groups not present in the ensureGroups attr,
+          add the following groups or remove them from the groups a user belong to:
+            ${lib.concatMapStringsSep quoteVariable ", " userGroupNotInEnsuredGroup}
+        '';
+      }
+      (
+        let
+          getNames = source: lib.flatten (lib.mapAttrsToList (x: v: v.name) source);
+          allNames = getNames cfg.ensureUserFields ++ getNames cfg.ensureGroupFields;
+          validFieldName = name: lib.match "[a-zA-Z0-9-]+" name != null;
+        in
+        {
+          assertion = lib.all validFieldName allNames;
+          message = ''
+            lldap: The following custom user or group fields have invalid names. Valid characters are: a-z, A-Z, 0-9, and dash (-).
+            The offending fields are: ${
+              lib.concatMapStringsSep quoteVariable ", " (lib.filter (x: !(validFieldName x)) allNames)
+            }
+          '';
+        }
+      )
     ];
 
     warnings =
-      lib.optionals (cfg.settings.ldap_user_pass or null != null) [
+      (lib.optionals (cfg.ensureAdminPassword != null) [
+        ''
+          lldap: Unsecure option `ensureAdminPassword` is used. Prefer `ensureAdminPasswordFile` instead.
+        ''
+      ])
+      ++ (lib.optionals (cfg.settings.ldap_user_pass or null != null) [
         ''
           lldap: Unsecure `ldap_user_pass` setting is used. Prefer `ldap_user_pass_file` instead.
         ''
-      ]
-      ++
-        lib.optionals
-          (cfg.settings.force_ldap_user_pass_reset == false && cfg.silenceForceUserPassResetWarning == false)
-          [
-            ''
-              lldap: The `force_ldap_user_pass_reset` setting is set to `false` which means
-              the admin password can be changed through the UI and will drift from the one defined in your nix config.
-              It also means changing the setting `ldap_user_pass` or `ldap_user_pass_file` will have no effect on the admin password.
-              Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
-            ''
-          ];
+      ])
+      ++ (lib.optionals
+        (cfg.settings.force_ldap_user_pass_reset == false && cfg.silenceForceUserPassResetWarning == false)
+        [
+          ''
+            lldap: The `force_ldap_user_pass_reset` setting is set to `false` which means
+            the admin password can be changed through the UI and will drift from the one defined in your nix config.
+            It also means changing the setting `ldap_user_pass` or `ldap_user_pass_file` will have no effect on the admin password.
+            Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
+          ''
+        ]
+      )
+      ++ (lib.optionals (!cfg.enforceUserMemberships && someUsersBelongToNonEnsuredGroup) [
+        ''
+          Some users belong to groups not managed by the configuration here,
+          make sure the following groups exist or the service will not start properly:
+            ${lib.concatStringsSep ", " (map (x: "\"${x}\"") userGroupNotInEnsuredGroup)}
+        ''
+      ]);
 
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
@@ -226,6 +550,28 @@ in
         + ''
           ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
         '';
+      postStart = ''
+        export LLDAP_URL=http://127.0.0.1:${toString cfg.settings.http_port}
+        export LLDAP_ADMIN_USERNAME=${cfg.ensureAdminUsername}
+        export LLDAP_ADMIN_PASSWORD=${
+          if cfg.ensureAdminPassword != null then cfg.ensureAdminPassword else ""
+        }
+        export LLDAP_ADMIN_PASSWORD_FILE=${
+          if cfg.ensureAdminPasswordFile != null then cfg.ensureAdminPasswordFile else ""
+        }
+        export USER_CONFIGS_DIR=${lib.traceVal (generateEnsureConfigDir "users" cfg.ensureUsers)}
+        export GROUP_CONFIGS_DIR=${generateEnsureConfigDir "groups" cfg.ensureGroups}
+        export USER_SCHEMAS_DIR=${
+          generateEnsureConfigDir "userFields" (lib.mapAttrs (n: v: [ v ]) cfg.ensureUserFields)
+        }
+        export GROUP_SCHEMAS_DIR=${
+          generateEnsureConfigDir "groupFields" (lib.mapAttrs (n: v: [ v ]) cfg.ensureGroupFields)
+        }
+        export DO_CLEANUP_USERS=${if cfg.enforceUsers then "true" else "false"}
+        export DO_CLEANUP_USER_MEMBERSHIPS=${if cfg.enforceUserMemberships then "true" else "false"}
+        export DO_CLEANUP_GROUPS=${if cfg.enforceGroups then "true" else "false"}
+        ${lib.getExe cfg.bootstrap-package}
+      '';
       serviceConfig = {
         StateDirectory = "lldap";
         StateDirectoryMode = "0750";
