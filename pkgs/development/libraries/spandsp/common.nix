@@ -25,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  propagatedBuildInputs = [
-    audiofile
+  buildInputs = [
     libtiff
   ];
 
@@ -39,11 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
-
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
-  ];
 
   strictDeps = true;
 
