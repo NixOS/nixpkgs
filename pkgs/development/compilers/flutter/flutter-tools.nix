@@ -4,6 +4,7 @@
   systemPlatform,
   buildDartApplication,
   runCommand,
+  writeTextFile,
   git,
   which,
   dart,
@@ -11,8 +12,22 @@
   flutterSrc,
   patches ? [ ],
   pubspecLock,
+  engineVersion,
 }:
 
+let
+  # https://github.com/flutter/flutter/blob/17c92b7ba68ea609f4eb3405211d019c9dbc4d27/engine/src/flutter/tools/engine_tool/test/commands/stamp_command_test.dart#L125
+  engine_stamp = writeTextFile {
+    name = "engine_stamp";
+    text = builtins.toJSON {
+      build_date = "2025-06-27T12:30:00.000Z";
+      build_time_ms = 1751027400000;
+      git_revision = engineVersion;
+      git_revision_date = "2025-06-27T17:11:53-07:00";
+      content_hash = "1111111111111111111111111111111111111111";
+    };
+  };
+in
 buildDartApplication.override { inherit dart; } rec {
   pname = "flutter-tools";
   inherit version;
@@ -32,6 +47,12 @@ buildDartApplication.override { inherit dart; } rec {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace lib/src/ios/xcodeproj.dart \
       --replace-fail arm64e arm64
+  ''
+  # need network
+  + lib.optionalString (lib.versionAtLeast version "3.35.0") ''
+    cp ${engine_stamp} ../../bin/cache/engine_stamp.json
+    substituteInPlace lib/src/flutter_cache.dart \
+      --replace-fail "registerArtifact(FlutterEngineStamp(this, logger));" ""
   '';
 
   # When the JIT snapshot is being built, the application needs to run.

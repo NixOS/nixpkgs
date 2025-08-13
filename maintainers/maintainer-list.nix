@@ -9020,6 +9020,12 @@
     githubId = 2430469;
     name = "Gavin Rogers";
   };
+  gavink97 = {
+    email = "gavin@gav.ink";
+    github = "gavink97";
+    githubId = 78187175;
+    name = "Gavin Kondrath";
+  };
   gaykitty = {
     email = "sasha@noraa.gay";
     github = "gaykitty";
@@ -26675,6 +26681,11 @@
     github = "vifino";
     githubId = 5837359;
     name = "Adrian Pistol";
+  };
+  viitorags = {
+    name = "Vitor Gabriel";
+    github = "viitorags";
+    githubId = 152658654;
   };
   vikanezrimaya = {
     email = "vika@fireburn.ru";
