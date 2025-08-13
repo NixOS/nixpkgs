@@ -20,7 +20,7 @@ buildGoModule rec {
     hash = "sha256-IFfhcirUGbp/pKFN/5aEpuIuhSR3ZS4K7TatBtaX5zg=";
   };
 
-  passthru.tests = { inherit (nixosTests) dnscrypt-proxy2; };
+  passthru.tests = { inherit (nixosTests) dnscrypt-proxy; };
 
   meta = with lib; {
     description = "Tool that provides secure DNS resolution";

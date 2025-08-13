@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;
 
     # these tests use dnsmasq incidentally
-    inherit (nixosTests) dnscrypt-proxy2;
+    inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
   };

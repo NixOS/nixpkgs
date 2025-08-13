@@ -1123,7 +1123,7 @@
   ./services/networking/deconz.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
-  ./services/networking/dnscrypt-proxy2.nix
+  ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/dnsproxy.nix
