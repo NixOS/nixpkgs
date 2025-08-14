@@ -21,7 +21,6 @@
   which,
   dbus,
   net-tools,
-  git,
   doxygen,
   xmlto,
   docbook_xml_dtd_45,
@@ -99,7 +98,6 @@ stdenv.mkDerivation rec {
     librsvg
     dbus
     gdk-pixbuf
-    git
     luaEnv
     libpthreadstubs
     libstartup_notification
