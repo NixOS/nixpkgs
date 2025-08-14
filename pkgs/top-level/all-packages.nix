@@ -11520,10 +11520,6 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis { };
 
-  spatialite-gui = callPackage ../by-name/sp/spatialite-gui/package.nix {
-    wxGTK = wxGTK32;
-  };
-
   zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
 
   ### APPLICATIONS
