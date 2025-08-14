@@ -7,6 +7,9 @@ mkDerivation:
 
 args:
 
+let
+# Common validation and processing logic
+processArgs = args:
 # Check if it's supposed to not get built for the current gnuradio version
 if (builtins.hasAttr "disabled" args) && args.disabled then
   let
@@ -35,4 +38,12 @@ else
       ];
     };
   in
-  mkDerivation (args // args_)
+  args // args_;
+
+in
+if builtins.isFunction args then
+  # Function form: args is (finalAttrs -> attrset)
+  mkDerivation (finalAttrs: processArgs (args finalAttrs))
+else
+  # Attrset form: args is attrset
+  mkDerivation (processArgs args)
