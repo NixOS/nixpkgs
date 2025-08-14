@@ -16,6 +16,7 @@
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 
   # passthru
   tox,
@@ -64,11 +65,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "nox" ];
 
