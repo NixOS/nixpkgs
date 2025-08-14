@@ -8029,6 +8029,8 @@ self: super: with self; {
 
   ledgerwallet = callPackage ../development/python-modules/ledgerwallet { };
 
+  legacy-api-wrap = callPackage ../development/python-modules/legacy-api-wrap { };
+
   legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
 
   leidenalg = callPackage ../development/python-modules/leidenalg { igraph-c = pkgs.igraph; };
@@ -19902,6 +19904,8 @@ self: super: with self; {
   xapian = callPackage ../development/python-modules/xapian { inherit (pkgs) xapian; };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xarray-dataclass = callPackage ../development/python-modules/xarray-dataclass { };
 
   xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
 

@@ -12,6 +12,7 @@
   hatchling,
   joblib,
   lib,
+  legacy-api-wrap,
   natsort,
   numba,
   numpy,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "anndata";
-  version = "0.11.4";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "anndata";
     tag = version;
-    hash = "sha256-9RDR0veZ8n2sq0kUbAkS2nP57u47cQxmubzuWWYBKBY=";
+    hash = "sha256-uGkeSlYcphRnIFfe9UcLvnupKeMzAIm5wT8fp3gmPKw=";
   };
 
   build-system = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   dependencies = [
     array-api-compat
     h5py
+    legacy-api-wrap
     natsort
     numpy
     pandas
@@ -92,18 +94,24 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # requires data from a previous test execution:
+    "test_no_diff"
+
     # doctests that require scanpy, creating a circular dependency chain. These
     # do not work in disabledTestPaths for some reason.
     "anndata._core.anndata.AnnData.concatenate"
     "anndata._core.anndata.AnnData.obs_names_make_unique"
     "anndata._core.anndata.AnnData.var_names_make_unique"
+    "anndata._core.extensions.register_anndata_namespac"
     "anndata._core.merge.concat"
     "anndata._core.merge.gen_reindexer"
     "anndata._core.sparse_dataset.sparse_dataset"
     "anndata._io.specs.registry.read_elem_as_dask"
+    "anndata._io.specs.registry.read_elem_lazy"
     "anndata._io.utils.report_read_key_on_error"
     "anndata._io.utils.report_write_key_on_error"
     "anndata._warnings.ImplicitModificationWarning"
+    "anndata.experimental.backed._io.read_lazy"
     "anndata.experimental.merge.concat_on_disk"
     "anndata.experimental.multi_files._anncollection.AnnCollection"
     "anndata.utils.make_index_unique"
