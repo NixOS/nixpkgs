@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-conduit";
-  version = "0.10.7";
+  version = "0.10.8";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UI/xrdM4ztH9vhEwSOwl4jTF5jU3FBwgXY7h+0prIOI=";
+    hash = "sha256-wSh1RPJt0gXp1U4aCBUASSVmvmroTPyhxpH1Exik4ds=";
   };
 
-  cargoHash = "sha256-Capftx1mpo7xWb4w1pBgM7rBsRj1YqUrQCia9MkIOX0=";
+  cargoHash = "sha256-3wQGKeLfBeASj82xqAXRhcuESX3CEgkf9P4K/AvquvQ=";
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
   preBuild = ''
