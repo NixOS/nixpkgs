@@ -339,11 +339,14 @@ with haskellLib;
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
 
-  # Out of date test data: https://github.com/ocharles/weeder/issues/176
-  weeder = appendPatch (pkgs.fetchpatch {
-    name = "weeder-2.9.0-test-fix-expected.patch";
-    url = "https://github.com/ocharles/weeder/commit/56028d0c80fe89d4f2ae25275aedb72714fec7da.patch";
-    sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
+  # Expected failures are fixed as of GHC-9.10,
+  # but the tests haven't been updated yet.
+  # https://github.com/ocharles/weeder/issues/198
+  weeder = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/wrong/"
+    ];
   }) super.weeder;
 
   # Test suite doesn't find necessary test files when compiling
