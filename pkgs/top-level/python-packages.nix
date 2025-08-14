@@ -6800,6 +6800,8 @@ self: super: with self; {
 
   hypchat = callPackage ../development/python-modules/hypchat { };
 
+  hyper-connections = callPackage ../development/python-modules/hyper-connections { };
+
   hypercorn = callPackage ../development/python-modules/hypercorn { };
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
@@ -8650,6 +8652,8 @@ self: super: with self; {
   lnkparse3 = callPackage ../development/python-modules/lnkparse3 { };
 
   loca = callPackage ../development/python-modules/loca { };
+
+  local-attention = callPackage ../development/python-modules/local-attention { };
 
   localimport = callPackage ../development/python-modules/localimport { };
 
