@@ -18,7 +18,6 @@
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
   {
     buildInputs = [
-      (import ./check-eval.nix)
       (import ./fetchers.nix)
       (import ../path/tests {
         inherit pkgs;
