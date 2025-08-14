@@ -297,6 +297,8 @@ let
         };
       };
 
+      anthropic.claude-code = callPackage ./anthropic.claude-code { };
+
       antyos.openscad = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "openscad";
