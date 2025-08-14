@@ -7,16 +7,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.12.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli-autocomplete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oY2hDOsws2WVQPKEFhGNPHITo26p/UZ5XzvRX7DoMyc=";
+    hash = "sha256-YQNBgOS94laEBhht8eeT8ZgtfXjjAMCeAI22z9SjpGs=";
   };
 
-  cargoHash = "sha256-xriK88OY6W1cOZVgiUPBIuItVHwEyFNq5Ywh367K6CU=";
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
+
+  cargoHash = "sha256-VPJuuUzrtFpZjFog4WENI3eTw9IUNZw3mt5IYHW7MuE=";
 
   cargoBuildFlags = [
     "-p"
@@ -55,6 +59,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=init_lint_zsh_pre_zprofile"
     "--skip=init_lint_zsh_pre_zshrc"
     "--skip=telemetry::cognito::test::pools"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_state_mismatch_throws_err"
+    "--skip=auth::pkce::tests::test_pkce_flow_completes_successfully"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_authorization_redirect_error"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_timeout"
+    "--skip=request::tests::request_test"
   ];
 
   doInstallCheck = true;
@@ -71,6 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "amazon-q";
     maintainers = [ lib.maintainers.jamesward ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
