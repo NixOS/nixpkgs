@@ -13,6 +13,8 @@
   libXext,
   libXmu,
   libXi,
+  vtk,
+  withVtk ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,10 +51,17 @@ stdenv.mkDerivation rec {
     libXmu
     libXi
     rapidjson
-  ];
+  ]
+  ++ lib.optional withVtk vtk;
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
-  cmakeFlags = [ "-DUSE_RAPIDJSON=ON" ];
+  cmakeFlags = [
+    "-DUSE_RAPIDJSON=ON"
+  ]
+  ++ lib.optionals withVtk [
+    (lib.cmakeBool "USE_VTK" true)
+    (lib.cmakeFeature "3RDPARTY_VTK_INCLUDE_DIR" "${lib.getDev vtk}/include/vtk")
+  ];
 
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
