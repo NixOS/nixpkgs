@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  scmpuff,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -25,10 +24,9 @@ buildGoModule rec {
     "-X main.VERSION=${version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = scmpuff;
-    command = "scmpuff version";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Add numbered shortcuts to common git commands";
