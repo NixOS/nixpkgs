@@ -19,15 +19,18 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+let
+  version = "7.13.8";
+in
+buildDotnetModule {
   pname = "v2rayn";
-  version = "7.13.2";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-go0XhZF3rEZ11MmHSx+dKqOT6IyiTqtn6hNHLwTyHOM=";
+    hash = "sha256-ygQh3fB2G0FA187Nmmb6lG2FaduN2zOZIStuMWvqEGk=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +44,7 @@ buildDotnetModule rec {
     substituteInPlace v2rayN/ServiceLib/Global.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/CoreAdminHandler.cs \
-      --replace-fail "/bin/sh" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
@@ -100,13 +103,13 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-    install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
+    install -D --mode 0644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/icons/hicolor/256x256/apps/v2rayn.png
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";
+    description = "GUI client support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
     license = with lib.licenses; [ gpl3Plus ];

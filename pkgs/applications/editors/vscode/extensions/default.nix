@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.37.2";
-          hash = "sha256-XUD5lXybUdUavbiqCqv561NAPAbZ0Q9oLsQkrSRUmsU=";
+          version = "4.38.0";
+          hash = "sha256-J9hZhPrHkJEFkiyD8eACiJwbsPfYGMK42FkcwkTQ0RE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
@@ -4853,8 +4853,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.82.0";
-          hash = "sha256-JpqHwQksZ/NsgiZ7EqHxT1FG9DLeInhDg6B+UWOFkeM=";
+          version = "0.88.10";
+          hash = "sha256-Umfe+V3BzHsEow6nOvtvg9EN1T0O6SbVwt5g2YHkaSU=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";

@@ -3313,6 +3313,8 @@ self: super: with self; {
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
 
+  dataclass-csv = callPackage ../development/python-modules/dataclass-csv { };
+
   dataclass-factory = callPackage ../development/python-modules/dataclass-factory { };
 
   dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
@@ -8019,6 +8021,8 @@ self: super: with self; {
 
   ledgerwallet = callPackage ../development/python-modules/ledgerwallet { };
 
+  legacy-api-wrap = callPackage ../development/python-modules/legacy-api-wrap { };
+
   legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
 
   leidenalg = callPackage ../development/python-modules/leidenalg { igraph-c = pkgs.igraph; };
@@ -8133,6 +8137,8 @@ self: super: with self; {
   libknot = callPackage ../development/python-modules/libknot { };
 
   liblarch = callPackage ../development/python-modules/liblarch { };
+
+  liblp = callPackage ../development/python-modules/liblp { };
 
   liblzfse = callPackage ../development/python-modules/liblzfse { inherit (pkgs) lzfse; };
 
@@ -14589,6 +14595,8 @@ self: super: with self; {
 
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
+  python-etherscan-api = callPackage ../development/python-modules/python-etherscan-api { };
+
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
   python-family-hub-local = callPackage ../development/python-modules/python-family-hub-local { };
@@ -15978,6 +15986,8 @@ self: super: with self; {
   rtfde = callPackage ../development/python-modules/rtfde { };
 
   rtfunicode = callPackage ../development/python-modules/rtfunicode { };
+
+  rtmapi = callPackage ../development/python-modules/rtmapi { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
@@ -18176,6 +18186,8 @@ self: super: with self; {
 
   tmb = callPackage ../development/python-modules/tmb { };
 
+  tmdbsimple = callPackage ../development/python-modules/tmdbsimple { };
+
   tnefparse = callPackage ../development/python-modules/tnefparse { };
 
   todoist = callPackage ../development/python-modules/todoist { };
@@ -19896,6 +19908,8 @@ self: super: with self; {
   xapian = callPackage ../development/python-modules/xapian { inherit (pkgs) xapian; };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xarray-dataclass = callPackage ../development/python-modules/xarray-dataclass { };
 
   xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
 
