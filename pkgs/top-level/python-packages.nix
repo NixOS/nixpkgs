@@ -16407,6 +16407,8 @@ self: super: with self; {
 
   service-identity = callPackage ../development/python-modules/service-identity { };
 
+  session-info2 = callPackage ../development/python-modules/session-info2 { };
+
   setproctitle = callPackage ../development/python-modules/setproctitle { };
 
   setupmeta = callPackage ../development/python-modules/setupmeta { };
