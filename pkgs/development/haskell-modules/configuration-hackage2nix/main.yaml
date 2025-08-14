@@ -31,6 +31,8 @@ default-package-overrides:
   - hiedb < 0.7
   # 2025-08-03: need to match stackage version of hosc
   - hsc3 >= 0.21 && < 0.22
+  # 2025-08-14: has to match the GHC version (currently 9.8.2)
+  - liquid-fixpoint == 0.9.6.3.3
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -189,6 +191,10 @@ package-maintainers:
     - BNFC-meta
     - alex-meta
     - happy-meta
+    - liquid-fixpoint
+    - smtlib-backends
+    - smtlib-backends-process
+    - smtlib-backends-tests
     - vector-hashtables
   arturcygan:
     - hevm

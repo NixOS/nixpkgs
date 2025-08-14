@@ -3196,6 +3196,25 @@ with haskellLib;
       }
       + "/libssh2";
   } super.libssh2;
+
+  # 2025-8-13: Too strict bound on tasty <1.15; relaxed on Hackage as of today
+  smtlib-backends-tests = doJailbreak super.smtlib-backends-tests;
+
+  # 2025-8-13: the test suite depends on Z3 being available at run time
+  smtlib-backends-process = overrideCabal (drv: {
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.z3 ];
+  }) super.smtlib-backends-process;
+
+  # 2025-8-13: the test suite depends on CVC5 and Z3 being available at run time
+  liquid-fixpoint = overrideCabal (drv: {
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [
+      pkgs.cvc5
+      pkgs.z3
+    ];
+  }) super.liquid-fixpoint;
+
+  # 2025-8-13: Too strict bound on QuickCheck <2.15; relaxed on Hackage as of today
+  rest-rewrite = doJailbreak super.rest-rewrite;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
