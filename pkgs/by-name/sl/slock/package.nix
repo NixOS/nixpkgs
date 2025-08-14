@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slock";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchzip {
     url = "https://dl.suckless.org/tools/slock-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nAAbyH4jixmwes9esrWRnHFw3mythKfqWu2+DRdlmx0=";
+    hash = "sha256-EIzLEIGd631dwYoAe7PXNoki9iaQPP3Y0S5H80aY+l8=";
   };
 
   buildInputs = [

@@ -5,6 +5,8 @@
   pappl,
   cups,
   pkg-config,
+  # Enables support for untested printers. It makes sense to default this to true, as it's unlikely to result in any issues
+  enableExperimental ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
     cups
   ];
 
+  configureFlags = lib.optional enableExperimental "--enable-experimental";
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/lprint --help
@@ -45,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/michaelrsweet/lprint";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }
