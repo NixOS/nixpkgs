@@ -22,7 +22,7 @@
   withMinecraftPatch ? false,
 }:
 let
-  version = "3.4";
+  version = "3.5.0";
 in
 stdenv.mkDerivation {
   pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    hash = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
+    hash = "sha256-sOXq0UtsrYgclLHjsJbmgsVvEIp5WYvyd+Ds0vNt9y4=";
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
