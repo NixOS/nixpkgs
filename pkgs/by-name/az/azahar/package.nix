@@ -43,6 +43,7 @@
   enableSSE42 ? true, # Disable if your hardware doesn't support SSE 4.2 (mainly CPUs before 2011)
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
+  nix-update-script,
 }:
 let
   inherit (lib)
@@ -148,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source 3DS emulator project based on Citra";
