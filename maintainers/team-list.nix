@@ -1252,6 +1252,16 @@ with lib.maintainers;
     shortName = "coqui-ai TTS";
   };
 
+  uzinfocom = {
+    members = [
+      orzklv
+      bahrom04
+      bemeritus
+    ];
+    scope = "Maintain Uzbek Linux state & community packages and modules.";
+    shortName = "Uzinfocom Open Source";
+  };
+
   windows = {
     members = [
       RossSmyth
