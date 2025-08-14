@@ -3040,6 +3040,12 @@
     githubId = 32039602;
     keys = [ { fingerprint = "2B46 58FF 887A 8366 F88B  BE92 CF83 0BB3 B973 9A6A"; } ];
   };
+  bemeritus = {
+    name = "Shohrux Rasulov";
+    email = "bemerituss@gmail.com";
+    github = "bemeritus";
+    githubId = 175357618;
+  };
   ben9986 = {
     name = "Ben Carmichael";
     email = "ben9986.unvmn@passinbox.com";
