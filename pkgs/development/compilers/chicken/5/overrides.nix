@@ -96,6 +96,7 @@ in
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
+  magic-pipes = addToBuildInputs pkgs.chickenPackages_5.chickenEggs.regex;
   mdh =
     old:
     (addToBuildInputs pkgs.pcre old)
