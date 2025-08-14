@@ -13520,6 +13520,8 @@ self: super: with self; {
 
   pyoppleio-legacy = callPackage ../development/python-modules/pyoppleio-legacy { };
 
+  pyoprf = callPackage ../development/python-modules/pyoprf { };
+
   pyorc = callPackage ../development/python-modules/pyorc { };
 
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
@@ -14077,6 +14079,8 @@ self: super: with self; {
   pysnow = callPackage ../development/python-modules/pysnow { };
 
   pysocks = callPackage ../development/python-modules/pysocks { };
+
+  pysodium = callPackage ../development/python-modules/pysodium { };
 
   pysol-cards = callPackage ../development/python-modules/pysol-cards { };
 
@@ -16306,6 +16310,8 @@ self: super: with self; {
   sectxt = callPackage ../development/python-modules/sectxt { };
 
   secure = callPackage ../development/python-modules/secure { };
+
+  securestring = callPackage ../development/python-modules/securestring { };
 
   securesystemslib = callPackage ../development/python-modules/securesystemslib { };
 
