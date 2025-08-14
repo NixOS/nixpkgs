@@ -28,26 +28,6 @@ let
   };
 in
 {
-  allegro =
-    old:
-    (
-      (addToBuildInputsWithPkgConfig (
-        [
-          pkgs.allegro5
-          pkgs.libglvnd
-          pkgs.libGLU
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ pkgs.xorg.libX11 ]
-      ))
-      old
-    )
-    // {
-      # depends on 'chicken' egg, which doesn't exist,
-      # so we specify all the deps here
-      propagatedBuildInputs = [
-        chickenEggs.foreigners
-      ];
-    };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
@@ -265,6 +245,17 @@ in
   };
 
   # mark broken
+  allegro =
+    old:
+    (broken old)
+    // {
+      # depends on 'chicken' egg, which doesn't exist, so we specify all the deps here (needs to be
+      # kept around even when marked as broken so that evaluation doesn't break due to the missing
+      # attribute).
+      propagatedBuildInputs = [
+        chickenEggs.foreigners
+      ];
+    };
   ephem = broken;
   canvas-draw = broken;
   coops-utils = broken;
