@@ -29,6 +29,15 @@ python3Packages.buildPythonApplication {
     hash = "sha256-adSXq+DFw3IQxNuUkP1FcKlIh9h4Zb0tJKswYs3S92E=";
   };
 
+  # Prevent the app from copying the RO flag of files from /nix/store
+  postPatch = ''
+    substituteInPlace src/interface_to_shell_theme.py \
+      --replace-fail 'shutil.copy2' 'shutil.copyfile'
+
+    substituteInPlace src/window.py \
+      --replace-fail 'shutil.copy' 'shutil.copyfile'
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
