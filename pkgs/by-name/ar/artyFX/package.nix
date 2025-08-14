@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-ArtyFX";
-    rev = "release-${version}";
+    tag = "release-${version}";
     hash = "sha256-GD9nwXdXSJX5OvAMxEAnngkvRW+E1jrNfWXK122bsTM=";
   };
 

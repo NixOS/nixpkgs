@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
-    rev = "cvc5-${version}";
+    tag = "cvc5-${version}";
     hash = "sha256-w8rIGPG9BTEPV9HG2U40A4DYYnC6HaWbzqDKCRhaT00=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "SP800-90B_EntropyAssessment";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qGJqL77IOuVx8jKDdOk4YkLPbggfn+TQtpdcYEu4hC8=";
   };
 

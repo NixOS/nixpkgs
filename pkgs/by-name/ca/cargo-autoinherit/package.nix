@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "cargo-autoinherit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-A4Ooqt/Cb8yyc4Y9DKZuFEVUux1ot+IVkPsSDylM6G4=";
   };
 

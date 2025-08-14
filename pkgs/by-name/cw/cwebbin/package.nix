@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ascherer";
     repo = "cwebbin";
-    rev = "2016-05-20-22p";
+    tag = "2016-05-20-22p";
     sha256 = "0zf93016hm9i74i2v384rwzcw16y3hg5vc2mibzkx1rzvqa50yfr";
   };
 

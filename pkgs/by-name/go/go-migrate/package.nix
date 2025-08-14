@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "golang-migrate";
     repo = "migrate";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-aM8okSrLj2oIb3Ey2KkHu3UQY7mSnPjMfwNsdL2Fz28=";
   };
 

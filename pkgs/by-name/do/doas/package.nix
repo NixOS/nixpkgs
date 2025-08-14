@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "9uOQ2Ta5HzEpbCz2vbqZEEksPuIjL8lvmfmynfqxMeM=";
   };
 

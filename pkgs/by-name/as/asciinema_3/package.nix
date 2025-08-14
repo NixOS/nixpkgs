@@ -15,7 +15,7 @@ let
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
-      rev = "v${self.version}";
+      tag = "v${self.version}";
       hash = "sha256-CxssC3ftnXgxdvRO7CrVgBSVkh7DPjXRNRet4fB2BKc=";
     };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "NotBalds";
     repo = "cwe-client-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3ehzERWV0/hV0Suy9LtCcp+xmaD13Chgu4a0gPT7cHs=";
   };
   nativeBuildInputs = [ pkg-config ];

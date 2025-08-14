@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "akuukis";
     repo = "beancount_share";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BW2KEC0pmervT71FBixPcQciEuGcElCd2wW7BZL1xUg=";
   };
 

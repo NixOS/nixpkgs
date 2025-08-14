@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ncPL76HCC9n4wTciGeqb+YAUcCE9EeOpWGM5DRYUCYg=";
   };
 

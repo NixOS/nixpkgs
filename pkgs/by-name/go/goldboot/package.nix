@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "goldboot";
-    rev = "goldboot-v${finalAttrs.version}";
+    tag = "goldboot-v${finalAttrs.version}";
     hash = "sha256-O9yhyJZpjQxC0HP43RsOgPMOKp6d23SNhMLiGtmwXzs=";
   };
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation (
     src = fetchFromGitHub {
       owner = "element-hq";
       repo = "element-web";
-      rev = "v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = webSrcHash;
     };
 

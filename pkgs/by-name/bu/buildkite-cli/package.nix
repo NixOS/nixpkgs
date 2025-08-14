@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-zRACKFs4AZkWg2OqFIyiLuM1V6GyIPmtyxSOjfHkL6U=";
   };
 

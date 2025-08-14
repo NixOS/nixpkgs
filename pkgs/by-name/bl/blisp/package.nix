@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pine64";
     repo = "blisp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qjZ5BNQR57J78Y6MT9I388OCLOiYTevPJ2btgmtkpJw=";
   };
 

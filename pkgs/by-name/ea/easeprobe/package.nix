@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "megaease";
     repo = "easeprobe";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LrfUQxxoC20pJXdBWa8wMuxbTbD3DRnsOlIDdBarNMY=";
   };
 

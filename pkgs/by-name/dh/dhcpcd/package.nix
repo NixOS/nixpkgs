@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ysaKgF4Cu/S6yhSn/4glA0+Ey54KNp3/1Oh82yE0/PY=";
   };
 

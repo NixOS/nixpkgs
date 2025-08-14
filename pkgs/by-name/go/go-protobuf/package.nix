@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "golang";
     repo = "protobuf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-AfyZ6xlqmrsVqtoKV1XMEo/Vba9Kpu1EgwfF6pPSZ64=";
   };
 

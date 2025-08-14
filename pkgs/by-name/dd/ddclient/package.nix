@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "ddclient";
     repo = "ddclient";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-RCE24RKcW4EhicOTwgz5UE/gzqLxw+UNNk960vFx5Gs=";
   };
 

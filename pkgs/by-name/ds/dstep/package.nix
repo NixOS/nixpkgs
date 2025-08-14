@@ -13,7 +13,7 @@ buildDubPackage rec {
   src = fetchFromGitHub {
     owner = "jacob-carlborg";
     repo = "dstep";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZFz2+GtBk3StqXo/9x47xrDFdz5XujHR62hj0p3AjcY=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2+Ya5i6V2QDzHsYR+Ro14u0VWR3wrQJHZRXBatGC8BA=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-h9APkOtH7s31r89hqqH12zYqkVMrR2ZxMyc+Zwq21+A=";
   };

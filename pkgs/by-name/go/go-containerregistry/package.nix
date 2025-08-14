@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-containerregistry";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-fmn2SPmYecyKY7HMPjPKvovRS/Ez+SwDe+1maccq4Hc=";
   };
   vendorHash = null;

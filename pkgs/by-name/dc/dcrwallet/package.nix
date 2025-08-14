@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
-    rev = "release-v${version}";
+    tag = "release-v${version}";
     hash = "sha256-MrQrDip8vE0l5XHkx/zIegSZd/AkWq1aFZLUVPdMy50=";
   };
 

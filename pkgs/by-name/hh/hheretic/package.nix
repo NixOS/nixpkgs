@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sezero";
     repo = "hheretic";
-    rev = "hheretic-${finalAttrs.version}";
+    tag = "hheretic-${finalAttrs.version}";
     hash = "sha256-49eQeh0suU+7QLB25cvrqirZRaBgZp438H6NW0pWsPI=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Qucs";
     repo = "adms";
-    rev = "release-${version}";
+    tag = "release-${version}";
     sha256 = "0i37c9k6q1iglmzp9736rrgsnx7sw8xn3djqbbjw29zsyl3pf62c";
   };
 

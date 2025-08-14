@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7YExvmuliTL9oagXNUtZ7ZOPyELcS+igK1tXdhG0kQk=";
   };
 

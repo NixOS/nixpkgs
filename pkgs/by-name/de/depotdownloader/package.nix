@@ -12,7 +12,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
-    rev = "DepotDownloader_${version}";
+    tag = "DepotDownloader_${version}";
     hash = "sha256-zduNWIQi+ItNSh9RfRfY0giIw/tMQIMRh9woUzQ5pJw=";
   };
 

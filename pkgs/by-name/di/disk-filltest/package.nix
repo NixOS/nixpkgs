@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bingmann";
     repo = "disk-filltest";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cppofTzzJHrvG5SsafKgvCIiHc6E5740NyQdWWZxrGI=";
   };
 

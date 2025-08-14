@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "toy";
     repo = "blueutil";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JwX3NHXbGgEj+ZCyu9gWp2TCihokaAw5oHCrlmpy6HA=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "alex-sector";
     repo = "dns2tcp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oBKkuQGVQNVzx8pds3qkZkZpwg8b44g1ovonrq2nqKw=";
   };
 

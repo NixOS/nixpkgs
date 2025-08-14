@@ -15,7 +15,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ah8g1mU2etQ/zoXcGbS+xRkTb4DjPmofe2ubZSNRhNU=";
   };
 

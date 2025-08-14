@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-cross";
     repo = "cargo-xwin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qWHpExVt/a20GrP2uVvGbubF+Nr71Ob6abGLcnlpKJc=";
   };
 

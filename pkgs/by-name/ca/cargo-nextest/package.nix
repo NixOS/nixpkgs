@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
-    rev = "cargo-nextest-${version}";
+    tag = "cargo-nextest-${version}";
     hash = "sha256-NaWEJEmE8LW1qankVu2Z8eU2yj4/P4DKDLrCEDXPfOc=";
   };
 

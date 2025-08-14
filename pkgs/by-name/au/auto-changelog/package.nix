@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cookpete";
     repo = "auto-changelog";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ticQpDOQieLaWXfavDKIH0jSenRimp5QYeJy42BjpKw=";
   };
 

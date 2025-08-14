@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kimci86";
     repo = "bkcrack";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-88zAR1XE+C5UNmvY/ph1I1tL2nVGbywqh6zHRGbImXU=";
   };
 

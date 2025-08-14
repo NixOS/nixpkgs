@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-AUXuH7YjC/yG5Ocs+kAOF8bAR4UVgfx96VDSHEqmqgg=";
   };
 

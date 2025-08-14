@@ -50,7 +50,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "LogicReinc";
     repo = "LogicReinc.BlendFarm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2w2tdl5n0IFTuthY97NYMeyRe2r72jaKFfoNSjWQMM4=";
   };
 

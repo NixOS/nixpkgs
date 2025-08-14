@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-8dV+NNtU4HFerrgRyc1kO+MSsMTJJItTtJylEIN014g=";
   };
 

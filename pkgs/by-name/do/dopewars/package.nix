@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "benmwebb";
     repo = "dopewars";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CpgqRYmrfOFxhC7yAS2OqRBi4r3Vesq3+7a0q5rc3vM=";
   };
 

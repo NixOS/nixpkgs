@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fzipp";
     repo = "gocyclo";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-1IwtGUqshpLDyxH5NNkGUads1TKLs48eslNnFylGUPA=";
   };
 

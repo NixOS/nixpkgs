@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qT7uIZU6DoEQqqhaHEPzPUAFF+KCT4Ybtl8zk495Jko=";
   };
 

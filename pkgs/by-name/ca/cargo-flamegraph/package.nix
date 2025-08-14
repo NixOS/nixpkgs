@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-JGUABNCZhDyTTrjFCRsT+wkuAeZn9mCHCI6XgGYEl7Y=";
   };
 

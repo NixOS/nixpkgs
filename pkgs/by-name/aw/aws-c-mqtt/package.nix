@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-mqtt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gIoC3OG6VFzNH9/DjuC42eCIuN+w1AikaGAbx6ao8qQ=";
   };
 

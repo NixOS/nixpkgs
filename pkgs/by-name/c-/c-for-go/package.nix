@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xlab";
     repo = "c-for-go";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XU+gmQBhQjoiKINfgPQ6bVvslPEFOvF3ZbRaWZE/ZzA=";
   };
 

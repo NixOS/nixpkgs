@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c3NyYDz+Ha5jHTpXLw9xsY+h0NjW9Uvpyn2PStmahKA=";
   };
 

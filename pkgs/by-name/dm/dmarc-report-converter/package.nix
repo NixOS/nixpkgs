@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tierpod";
     repo = "dmarc-report-converter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-j1uFPCyxLqO3BMxl/02wILj5HGag9qjxCTB8ZxZHEGo=";
   };
 

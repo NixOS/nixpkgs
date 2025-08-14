@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deniskropp";
     repo = "DirectFB";
-    rev = "DIRECTFB_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "DIRECTFB_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
   };
 

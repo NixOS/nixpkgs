@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Rirusha";
     repo = "Cassette";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DXCOrCntOgUPYMVRqC4jDNTFgUjShCBoYQgLtSnuz6U=";
   };
 

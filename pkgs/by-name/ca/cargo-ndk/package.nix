@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "cargo-ndk";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-tzjiq1jjluWqTl+8MhzFs47VRp3jIRJ7EOLhUP8ydbM=";
   };
 

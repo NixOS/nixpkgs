@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "nikeee";
     repo = "dot-language-server";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NGkobMZrvWlW/jteFowZgGUVQiNm3bS5gv5tN2485VA=";
   };
 

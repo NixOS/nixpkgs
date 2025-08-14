@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "15v4sk1l43pgd5jxr5lxnh0ks6vb3xk5253n66s7vvsnph48j14q";
   };
 

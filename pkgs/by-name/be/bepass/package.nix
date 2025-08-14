@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "bepass";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ruOhPWNs1WWM3r6X+6ch0HoDCu/a+IkBQiCr0Wh6yS8=";
   };
 

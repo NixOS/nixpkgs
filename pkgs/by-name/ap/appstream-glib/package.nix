@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    rev = "${lib.replaceStrings [ "-" ] [ "_" ] pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "${lib.replaceStrings [ "-" ] [ "_" ] pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-3QFiOJ38talA0GGL++n+DaA/AN7l4LOZQ7BJV6o8ius=";
   };
 

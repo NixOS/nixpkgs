@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "odeke-em";
     repo = "drive";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mNOeOB0Tn5eqULFJZuE18PvLoHtnspv4AElmgEQKXcU=";
   };
 

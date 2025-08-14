@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
-    rev = "ATARI800_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    tag = "ATARI800_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-D66YRRTqdoV9TqDFonJ9XNpfP52AicuYgdiW27RCIuQ=";
   };
 

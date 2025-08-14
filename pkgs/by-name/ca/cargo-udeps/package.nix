@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "est31";
     repo = "cargo-udeps";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-08IUMw/fCVrmsSL4a86dAbeG+DsS2d7jiVBNKfebVqk=";
   };
 

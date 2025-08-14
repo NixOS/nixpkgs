@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "shufo";
     repo = "blade-formatter";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FrP+D7SYUPSn82TIRGh9mo/ZpbYxmiTOKagbl/9D7Hk=";
   };
 

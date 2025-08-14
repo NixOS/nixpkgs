@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bradharding";
     repo = "doomretro";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yBc7TLY0wAPMXeUo0u6EcidoJpdkw5XijyWDB6FsTgg=";
   };
 

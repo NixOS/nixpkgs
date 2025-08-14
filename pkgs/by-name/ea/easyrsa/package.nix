@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TAJAwvcIkAB4YShK9NItw14UTvuxtNd/OxLDkO8p0d0=";
   };
 

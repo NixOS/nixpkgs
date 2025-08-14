@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "goresym";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OvdARJwz/ijduil3JIpoR15+F3QNQyqQKeOmiAV7h2A=";
   };
 

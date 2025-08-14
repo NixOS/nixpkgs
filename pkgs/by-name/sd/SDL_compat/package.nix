@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
-    rev = "release-" + finalAttrs.version;
+    tag = "release-" + finalAttrs.version;
     hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 

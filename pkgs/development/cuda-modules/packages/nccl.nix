@@ -36,7 +36,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = hash;
   };
 

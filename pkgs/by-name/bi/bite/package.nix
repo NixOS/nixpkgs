@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "WINSDK";
     repo = "bite";
-    rev = "V${version}";
+    tag = "V${version}";
     hash = "sha256-gio4J+V8achSuR2vQa2dnvOR/u4Zbb5z0UE0xP0gGCU=";
   };
 

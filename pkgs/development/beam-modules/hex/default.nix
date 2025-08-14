@@ -23,7 +23,7 @@ let
       src = fetchFromGitHub {
         owner = "hexpm";
         repo = "hex";
-        rev = "v${version}";
+        tag = "v${version}";
         sha256 = "sha256-Qih10OeI7KsnAthAW0yuH+YL8uoeLy7tOVn9rdkGA4M=";
       };
 

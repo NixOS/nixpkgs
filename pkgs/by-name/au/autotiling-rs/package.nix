@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ammgws";
     repo = "autotiling-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-S/6LRQTHdPGZkmbTAb0ufNoXE1nD+rIQ2ASJ8jjFS3E=";
   };
 

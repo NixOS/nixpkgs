@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Praqma";
     repo = "helmsman";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-As0YjqMdPCgIzYWB1Wf3R11mwj6CglWZdvCRzlHDvkw=";
   };
 

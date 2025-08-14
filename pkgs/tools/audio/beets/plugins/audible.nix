@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Neurrone";
     repo = "beets-audible";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6rf8U63SW+gwfT7ZdN/ymYKHRs0HSMDTP2ZBfULLsJs=";
   };
 

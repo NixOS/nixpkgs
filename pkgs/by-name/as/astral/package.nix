@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "smirarab";
     repo = "ASTRAL";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VhcsX9BxiZ0nISN6Xe4N+kq0iBMCtNhyxDrm9cwXfBA=";
   };
 

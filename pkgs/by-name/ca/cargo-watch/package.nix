@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "cargo-watch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-agwK20MkvnhqSVAWMy3HLkUJbraINn12i6VAg8mTzBk=";
   };
 

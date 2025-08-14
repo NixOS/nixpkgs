@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "KarsMulder";
     repo = "evsieve";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UV5m8DmFtkCU/DoBJNBCdvhU/jYtU5+WnnhKwxZNl9g=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "entropitor";
     repo = "dotenv-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-prSGIEHf6wRqOFVsn3Ws25yG7Ga2YEbiU/IMP3QeLXU=";
   };
 

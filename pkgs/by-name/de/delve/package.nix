@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-I7GGpLGhOp29+2V3CSSGnItSwhyrM+2yZxQsGRN812U=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bacnet-stack";
     repo = "bacnet-stack";
-    rev = "bacnet-stack-${version}";
+    tag = "bacnet-stack-${version}";
     sha256 = "sha256-Iwo0bNulKdFNwNU2xj6Uin+5hQt1I3N6+zso5BHrIOU=";
   };
 

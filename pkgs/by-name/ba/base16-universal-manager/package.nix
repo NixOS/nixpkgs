@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pinpox";
     repo = "base16-universal-manager";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9KflJ863j0VeOyu6j6O28VafetRrM8FW818qCvqhaoY=";
   };
 

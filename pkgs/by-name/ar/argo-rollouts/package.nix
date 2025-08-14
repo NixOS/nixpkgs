@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-rollouts";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OCFbnBSFSXcbXHT48sS8REAt6CtNFPCNTIfKRBj19DM=";
   };
 

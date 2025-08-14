@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-P6i2RvosI36rrg52kUcdrb5y4Fg0ms/mH5hcOWNgSik=";
   };
 

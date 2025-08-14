@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
-    rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "Release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-gbYG55LfVhjJJFJu0L8AWIAnFDViHIW2N1qtS8xOFAc=";
   };
 

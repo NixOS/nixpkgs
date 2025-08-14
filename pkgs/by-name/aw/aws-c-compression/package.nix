@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-compression";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-EjvOf2UMju6pycPdYckVxqQ34VOhrIIyvK+O3AVRED4=";
   };
 

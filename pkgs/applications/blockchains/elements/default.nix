@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
-    rev = "elements-${version}";
+    tag = "elements-${version}";
     sha256 = "sha256-UNjYkEZBjGuhkwBxSkNXjBBcLQqoan/afCLhoR2lOY4=";
   };
 

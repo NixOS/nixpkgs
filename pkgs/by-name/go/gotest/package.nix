@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "gotest";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1v11ccrjghq7nsz0f91r17di14yixsw28vs0m3dwzwqkh1a20img";
   };
 

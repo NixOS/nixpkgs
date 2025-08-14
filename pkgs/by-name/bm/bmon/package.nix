@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tgraf";
     repo = "bmon";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1ilba872c09mnlvylslv4hqv6c9cz36l76q74rr99jvis1dg69gf";
   };
 

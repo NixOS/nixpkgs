@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "cloud-sql-proxy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XisVCgxPZ8NsxrC3RFqBzaZP7YcueIx6vJmn6XBH9bk=";
   };
 

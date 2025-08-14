@@ -12,7 +12,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-GQuQxzYSQxAIVSJ1vf0blRC0juoxAqD1AHW66H/6NSk=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "health-check";
-    rev = "V${version}";
+    tag = "V${version}";
     hash = "sha256-sBhFH9BNRQ684ydqh8p4TtFwO+Aygu4Ke4+/nNMlZ/E=";
   };
 

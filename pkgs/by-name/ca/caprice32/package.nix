@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     repo = "caprice32";
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "ColinPitrat";
     sha256 = "0hng5krwgc1h9bz1xlkp2hwnvas965nd7sb3z9mb2m6x9ghxlacz";
   };

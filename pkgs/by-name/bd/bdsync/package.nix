@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rolffokkens";
     repo = "bdsync";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-uvP26gdyIPC+IHxO5CYVuabfT4mnoWDOyaLTplYCW0I=";
   };
 

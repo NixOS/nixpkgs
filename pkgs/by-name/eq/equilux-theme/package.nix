@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ddnexus";
     repo = "equilux-theme";
-    rev = "equilux-v${version}";
+    tag = "equilux-v${version}";
     sha256 = "0lv2yyxhnmnkwxp576wnb01id4fp734b5z5n0l67sg5z7vc2h8fc";
   };
 

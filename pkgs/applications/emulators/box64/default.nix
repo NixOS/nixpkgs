@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z8r7aonVj7VSifgLKx/L7VRdGNnQtTvS4mjI+2+uPxY=";
   };
 

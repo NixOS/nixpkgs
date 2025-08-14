@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DwDlGTFdqAAsEWrhnieuaeYQ0N8COB/7b49xPJackJQ=";
   };
 

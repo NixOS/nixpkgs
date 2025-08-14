@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "ashpd";
-    rev = "${finalAttrs.version}-demo";
+    tag = "${finalAttrs.version}-demo";
     hash = "sha256-0IGqA8PM6I2p4/MrptkdSWIZThMoeaMsdMc6tVTI2MU=";
   };
 

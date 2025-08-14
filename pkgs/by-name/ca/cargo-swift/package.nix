@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "antoniusnaumann";
     repo = "cargo-swift";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D6s25pOMdVZXBtBce/KEvqwn/9owrmxDOev3E59qrQ8=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "GoMapEnum";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-a0JpHk5pUe+MkcmJl871JwkOfFDg3S4yOzFIeXCReLE=";
   };
 

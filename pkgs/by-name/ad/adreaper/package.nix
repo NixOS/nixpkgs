@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "AidenPearce369";
     repo = "ADReaper";
-    rev = "ADReaperv${version}";
+    tag = "ADReaperv${version}";
     sha256 = "sha256-+FCb5TV9MUcRyex2M4rn2RhcIsXQFbtm1T4r7MpcRQs=";
   };
 

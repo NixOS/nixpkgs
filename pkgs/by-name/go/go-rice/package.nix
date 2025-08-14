@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GeertJohan";
     repo = "go.rice";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-nJt2t6iTZn8B990SZwEC23pivZke1OKVwTI2GDN6m0o=";
   };
 

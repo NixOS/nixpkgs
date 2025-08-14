@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     inherit owner;
     repo = "cargo-llvm-cov";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0Dgcl1r+j86WVhkyJNJxUnk85vrtD1fBBxfJkV0mcAI=";
   };
 

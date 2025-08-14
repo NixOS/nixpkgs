@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-z/SteW3jYR/VR+HffvTetdGs5oz4qWBNkaqLYiP1V8c=";
   };
 

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GPlates";
     repo = "GPlates";
-    rev = "GPlates-${finalAttrs.version}";
+    tag = "GPlates-${finalAttrs.version}";
     hash = "sha256-3fEwm5EKK9RcRbnyUejgwfjdsXaujjZjoMbq/BbVMeM=";
   };
 

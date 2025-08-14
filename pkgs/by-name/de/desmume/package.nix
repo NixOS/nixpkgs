@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TASVideos";
     repo = "desmume";
-    rev = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
   };
 

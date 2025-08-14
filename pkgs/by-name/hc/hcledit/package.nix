@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "hcledit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4PBEcOK16YXQhrQ6Yrtcb6vTE6h6sSY3Ymuxi+mEUt8=";
   };
 

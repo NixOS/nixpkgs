@@ -47,7 +47,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "hneemann";
     repo = "Digital";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6XaM3U1x/yvoCrkJ2nMtBmj972gCFlWn3F4DM7TLWgw=";
   };
 

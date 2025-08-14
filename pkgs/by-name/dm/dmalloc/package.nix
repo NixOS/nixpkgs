@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "j256";
     repo = "dmalloc";
-    rev = "dmalloc_release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "dmalloc_release_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-P63I9s32C3v1q+Sy9joK0HKYb0ebBu9g72tTTwxvkz8=";
   };
 

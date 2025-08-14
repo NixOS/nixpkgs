@@ -13,7 +13,7 @@ stdenv.mkDerivation (attrs: {
   src = fetchFromGitHub {
     owner = "mono";
     repo = "linux-packaging-nuget";
-    rev = "upstream/${attrs.version}.bin";
+    tag = "upstream/${attrs.version}.bin";
     hash = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
   };
 

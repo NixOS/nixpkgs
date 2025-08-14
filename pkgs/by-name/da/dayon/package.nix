@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YGp27LYtiEHUkkHvAxm6M9ORPqOdpPcyDoRMqKGS8To=";
   };
 

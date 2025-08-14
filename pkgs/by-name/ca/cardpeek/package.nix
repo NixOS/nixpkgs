@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "L1L1";
     repo = "cardpeek";
-    rev = "cardpeek-${version}";
+    tag = "cardpeek-${version}";
     sha256 = "1ighpl7nvcvwnsd6r5h5n9p95kclwrq99hq7bry7s53yr57l6588";
   };
 

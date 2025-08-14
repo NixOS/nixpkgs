@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "cargo-mobile2";
-    rev = "cargo-mobile2-v${version}";
+    tag = "cargo-mobile2-v${version}";
     hash = "sha256-qd7UrbAZOl1seVVfO/qzvXq/+mfOwX3Xq+s4XuzxYiM=";
   };
 

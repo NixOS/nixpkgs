@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bAHO+2urgbL2LXiP0UZpvszX73PYtKbTOeLDyFwOYlw=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ofabry";
     repo = "go-callvis";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gCQjxJH03QAg6MZx5NJUJR6tKP02ThIa5BGN6A/0ejM=";
   };
 

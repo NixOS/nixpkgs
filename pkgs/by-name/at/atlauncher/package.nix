@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
   };
 

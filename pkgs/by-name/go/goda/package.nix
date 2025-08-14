@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "loov";
     repo = "goda";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-byRficALfYADK2lXskAvYeLxwrzOQXACTLlDRrMoHrw=";
   };
 

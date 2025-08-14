@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "dwarf2json";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-M5KKtn5kly23TwbjD5MVLzIum58exXqCFs6jxsg6oGM=";
   };
 

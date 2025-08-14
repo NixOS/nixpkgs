@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "esp-generate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rvgmmG0LhRb+eRdqmlCf514lzV0QGWPaJ8pnlTnxfvo=";
   };
 

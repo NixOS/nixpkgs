@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (rec {
   src = fetchFromGitHub {
     owner = "george-norton";
     repo = "headphones-toolbox";
-    rev = "${tag}";
+    tag = "${tag}";
     hash = "sha256-X2HTEPxvBzbhfN1vqQVk81Qk1Z+EV+7/SpjZrDHv+fM=";
   };
 

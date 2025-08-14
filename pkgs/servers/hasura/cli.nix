@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphql-engine";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Bj9gaQc7zCy4M8apXdVJhEDClB2n75rzBiVq+PmNP4k=";
   };
   modRoot = "./cli";

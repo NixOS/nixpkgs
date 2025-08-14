@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gojuno";
     repo = "minimock";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D5U1KfWXe9qtcFQKDoISC6Hq5axMO37WsyFjpPOyyo4=";
   };
 

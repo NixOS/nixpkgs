@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bcampbell";
     repo = "evilpixie";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-+DdAN+xDOYxLgLHUlr75piTEPrWpuOyXvxckhBEl7yU=";
   };
 

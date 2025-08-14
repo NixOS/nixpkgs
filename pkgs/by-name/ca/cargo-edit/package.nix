@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "killercup";
     repo = "cargo-edit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-doNQzXB+tW+5UI3PCuZo8aZErsXeafL6lldi/yXyBhs=";
   };
 

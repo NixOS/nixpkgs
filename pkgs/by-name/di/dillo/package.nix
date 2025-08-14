@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dillo-browser";
     repo = "dillo";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
   };
 

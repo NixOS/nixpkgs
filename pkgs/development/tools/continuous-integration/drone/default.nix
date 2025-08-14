@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "harness";
     repo = "drone";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-rTMu3wd/drxALAZB0O5bAJuWdYsHSwwOD4nbAFIhXbg=";
   };
 

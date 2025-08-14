@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1p6fh6ah5v3qz7dxhcsixx38bxg44ypbim4m03bxk3ls5i9xslmn";
   };
 

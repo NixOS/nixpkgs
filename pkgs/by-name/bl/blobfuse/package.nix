@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-fuse";
-    rev = "blobfuse2-${version}";
+    tag = "blobfuse2-${version}";
     sha256 = "sha256-BRLORwEY8PeD9hFkpm3Gup+eXzdFkW1Rkr73ncyKrso=";
   };
 in

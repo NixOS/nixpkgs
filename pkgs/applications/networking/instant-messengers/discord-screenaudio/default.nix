@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maltejur";
     repo = "discord-screenaudio";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+F+XRBQn4AVDVARdM2XtBDE7c6tMPZTR3cntDL8aenw=";
     fetchSubmodules = true;
   };

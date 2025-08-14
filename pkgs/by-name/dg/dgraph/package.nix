@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-d6HKhA07l6rT+8TktEWaOFw4YTfDz8O5ZhgEQkVcE/M=";
   };
 

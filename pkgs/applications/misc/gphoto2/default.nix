@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "gphoto2";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-t5EnM4WaDbOTPM+rJW+hQxBgNErnnZEN9lZvxTKoDhA=";
   };
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Shtf4PSXxUV0Bd7ORYyP06lbWf3LE6BQi7WfTIGDOfk=";
   };
 

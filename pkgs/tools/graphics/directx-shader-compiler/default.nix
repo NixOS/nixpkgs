@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "DirectXShaderCompiler";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d8qJ9crS5CStbsGOe/OSHtUEV4vr3sLCQp+6KsEq/A4=";
     fetchSubmodules = true;
   };

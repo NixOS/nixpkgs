@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "btrfs-list";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K6/xFR4Qmr6ynH5rZfOTN8nkl99iqcJPmKPwtp9FYyc=";
   };
 

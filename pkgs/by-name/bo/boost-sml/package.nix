@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "boost-ext";
     repo = "sml";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IvZwkhZe9pcyJhZdn4VkWMRUN6Ow8qs3zB6JtWb5pKk=";
   };
 

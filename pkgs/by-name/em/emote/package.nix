@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-c5EY1Cc3oD8EG1oTChbl10jJlNeAETQbAFGoA9Lw5PY=";
   };
 

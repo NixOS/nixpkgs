@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
-    rev = "Audacity-${finalAttrs.version}";
+    tag = "Audacity-${finalAttrs.version}";
     hash = "sha256-gTky+wORQ6n3EepOUA8Y2zc8AocqjGP42N42G6FXRS8=";
   };
 

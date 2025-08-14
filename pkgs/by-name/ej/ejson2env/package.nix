@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson2env";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0DKKdu1b/gjwtKycdXrV3hzAeGmvK41MlZbltcEzj/g=";
   };
 

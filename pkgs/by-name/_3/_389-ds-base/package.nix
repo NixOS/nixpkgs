@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "389ds";
     repo = "389-ds-base";
-    rev = "389-ds-base-${finalAttrs.version}";
+    tag = "389-ds-base-${finalAttrs.version}";
     hash = "sha256-hRTK9xBu8v8+SGa/3IB8Alh/aGUiRRn2LmYOvXy0Yd4=";
   };
 

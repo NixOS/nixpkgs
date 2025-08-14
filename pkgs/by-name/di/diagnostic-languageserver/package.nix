@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "iamcco";
     repo = "diagnostic-languageserver";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EFkvxMvtA5L6ZiDxrZxGnNAphNn/P3ra6ZrslplScZg=";
   };
 

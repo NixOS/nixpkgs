@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jpbarrette";
     repo = "curlpp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1b0ylnnrhdax4kwjq64r1fk0i24n5ss6zfzf4hxwgslny01xiwrk";
   };
 

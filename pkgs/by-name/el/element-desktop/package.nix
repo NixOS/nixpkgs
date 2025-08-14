@@ -37,7 +37,7 @@ stdenv.mkDerivation (
     src = fetchFromGitHub {
       owner = "element-hq";
       repo = "element-desktop";
-      rev = "v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = desktopSrcHash;
     };
 

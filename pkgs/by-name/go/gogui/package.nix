@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Remi-Coulom";
     repo = "gogui";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pJGZpSFdOvMkeetdX3+wB+8sk3LO6znJ0dUNvjOmiB8=";
   };
 

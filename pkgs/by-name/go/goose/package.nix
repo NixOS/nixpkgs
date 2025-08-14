@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pressly";
     repo = "goose";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GfHhjpg/fMuctAEZFWnUnpnBUFOeGn2L3BSlfI9cOuE=";
   };
 

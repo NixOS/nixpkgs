@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "keeferrourke";
     repo = "capitaine-cursors";
-    rev = "r${version}";
+    tag = "r${version}";
     sha256 = "0652ydy73x29z7wc6ccyqihmfg4bk0ksl7yryycln6c7i0iqfmc9";
   };
 

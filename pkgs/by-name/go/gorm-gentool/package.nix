@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "go-gorm";
     repo = "gen";
-    rev = "tools/gentool/v${version}";
+    tag = "tools/gentool/v${version}";
     hash = "sha256-JOecNYEIL8vbc7znkKbaSrTkGyAva3ZzKzxducDtTx0=";
   };
 

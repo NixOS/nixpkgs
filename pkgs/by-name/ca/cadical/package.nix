@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "cadical";
-    rev = "rel-${version}";
+    tag = "rel-${version}";
     hash =
       {
         "2.1.3" = "sha256-W3kO+6nVzkmJXyHJU+NZWP0oatK3gon4EWF1/03rgL4=";

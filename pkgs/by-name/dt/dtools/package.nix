@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "tools";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xMEHnrstL5hAkhp8+/z1I2KZWZ7eztWZnUGLTKCfbBI=";
     name = "dtools";
   };

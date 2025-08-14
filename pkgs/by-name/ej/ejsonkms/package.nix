@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "envato";
     repo = "ejsonkms";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-G2rUcAjFSXnkRaQiu3WK5WRwNeQ0vyxj1Ql+vaRUUeM=";
   };
 

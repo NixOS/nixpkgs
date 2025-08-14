@@ -29,7 +29,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "heaptrack";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pP+s60ERnmOctYTe/vezCg0VYzziApNY0QaF3aTccZU=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "mail-receiver";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
   };
 

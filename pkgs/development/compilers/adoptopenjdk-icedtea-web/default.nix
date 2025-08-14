@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = "icedtea-web-${version}";
+    tag = "icedtea-web-${version}";
     sha256 = "sha256-hpEVWG9ltNDL/0EFJjgQRRce+BLcCO4ZERULYZxyC1o=";
   };
 

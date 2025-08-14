@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Nordix";
     repo = "assign-lb-ip";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Sfi58wcX61HNCmlDoparTqnfsuxu6barSnV0uYlC+ng=";
   };
 

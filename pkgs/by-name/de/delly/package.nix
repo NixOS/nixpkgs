@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e1dGiJeOLMFJ9oO7iMvKZHpg4XtrLJBpy8lECx5/iDE=";
   };
 

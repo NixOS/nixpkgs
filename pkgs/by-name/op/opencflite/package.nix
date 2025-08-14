@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gerickson";
     repo = "opencflite";
-    rev = "opencflite-${version}";
+    tag = "opencflite-${version}";
     hash = "sha256-ijyj4SFYQ0wZAFM2ehNnR9+yu5yDTSVW3VBycBT9l+A=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "aws-azure-login";
     repo = "aws-azure-login";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PvPnqaKD98h3dCjEOwF+Uc86xCJzn2b9XNHHn13h/2Y=";
   };
 

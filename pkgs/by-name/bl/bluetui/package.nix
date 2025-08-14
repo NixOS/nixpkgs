@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "bluetui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JgxzpFpz/fyFZwyxTtAkG9XB5qkxj46lUnZ3mM44dHk=";
   };
 

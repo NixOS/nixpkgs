@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "1.97.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "aws";
     repo = "amazon-ecs-agent";
     hash = "sha256-QdEmV78bQDw3YaJCPCFlLpo1rLsRu4Hn8e/JrZVkGQc=";

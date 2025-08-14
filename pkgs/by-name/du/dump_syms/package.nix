@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "dump_syms";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zxYGxqnh6urXDC/ZQf3aFzBqOj5QNulyDpTsZ47BDkU=";
   };
 

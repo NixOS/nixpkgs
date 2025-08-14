@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "MightyCreak";
     repo = "diffuse";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "Svt+llBwJKGXRJZ96dzzdzpL/5jrzXXM/FPZwA7Es8s=";
   };
 

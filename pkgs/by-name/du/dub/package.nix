@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "dub";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-73b15A9+hClD6IbuxTy9QZKpTKjUFYBuqGOclUyhrnM=";
   };
 

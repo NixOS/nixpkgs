@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "netsampler";
     repo = "goflow2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nLsl3v4pvFa0d4AejjlUY9y92yKCU3jM5ui2Y+qZ3JY=";
   };
 

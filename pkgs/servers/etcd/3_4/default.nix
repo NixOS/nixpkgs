@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PZ+8hlxSwayR1yvjHmStMDur9e1uc2s+YB8qdz+42mA=";
   };
 

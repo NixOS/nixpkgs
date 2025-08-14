@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = "libvdpau-va-gl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0asndybfv8xb0fx73sjjw5kydqrahqkm6n04lh589pbf18s5qlld";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LASzip";
     repo = "LASzip";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TXzse4oLjNX5R2xDR721iV+gW/rP5z3Zciv4OgxfeqA=";
   };
 

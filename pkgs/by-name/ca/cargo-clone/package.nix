@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "janlikar";
     repo = "cargo-clone";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-tAY4MUytFVa7kXLeOg4xak8XKGgApnEGWiK51W/7uDg=";
   };
 

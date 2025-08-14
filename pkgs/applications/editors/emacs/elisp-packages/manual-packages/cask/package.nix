@@ -23,7 +23,7 @@ melpaBuild (finalAttrs: {
     name = "cask-source-${finalAttrs.version}";
     owner = "cask";
     repo = "cask";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-91rJFsp2SLk/JY+v6G5JmXH5bg9QnT+qhI8ccNJlI4A=";
   };
 

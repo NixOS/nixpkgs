@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-caGzjv7XhIst3JZA0ri97XqQOO3mI+hwS8WJmLk9f7g=";
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Bonmin";
-    rev = "releases/${version}";
+    tag = "releases/${version}";
     sha256 = "sha256-nqjAQ1NdNJ/T4p8YljEWRt/uy2aDwyBeAsag0TmRc5Q=";
   };
 

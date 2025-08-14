@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ConAcademy";
     repo = "buttplug-mcp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C4ZPTO+Gh6g19BrqHugSCF74aAZ888XRTk1AzNpEBok=";
   };
 

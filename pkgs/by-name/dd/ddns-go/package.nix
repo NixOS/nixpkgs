@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jeessy2";
     repo = "ddns-go";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7NDuC7MshPXEekEPo4DL2ww6HfWPdHhPa4a979a4NJY=";
   };
 

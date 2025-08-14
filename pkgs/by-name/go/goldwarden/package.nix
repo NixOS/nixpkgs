@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "quexten";
     repo = "goldwarden";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wAQFx0DKLLKztETAz1eM+eBFiAkSCgd8qqRtLV1Kz9g=";
   };
 

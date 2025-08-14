@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cHayMBhqiLY//t/ljjwJm4qMuVn531z7x2cqJE4z6hQ=";
   };
 

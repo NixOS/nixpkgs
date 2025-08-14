@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "buchgr";
     repo = "bazel-remote";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qsNIfl3Y+2MaflTCL+uKV1T6tMe1AFIt+fOz/bB3EEQ=";
   };
 

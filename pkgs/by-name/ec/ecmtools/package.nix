@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "alucryd";
     repo = "ecm-tools";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DCxrSTUO+e350zI10D8vpIswxqdfAyQfnY4iz17pfuc=";
   };
 

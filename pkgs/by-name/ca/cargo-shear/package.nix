@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "Boshen";
     repo = "cargo-shear";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UZOSdCErZ7dT1KiuyupD2KMf8JgPfBOZn1GFWNJFtFU=";
   };
 

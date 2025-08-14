@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-JuofC4TpbZ56qiUrHeoK607YHVbwqwLGMIdUpsTm9Ic=";
   };
 

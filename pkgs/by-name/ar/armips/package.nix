@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Kingcom";
     repo = "armips";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-L+Uxww/WtvDJn1xZqoqA6Pkzq/98sy1qTxZbv6eEjbA=";
   };
 

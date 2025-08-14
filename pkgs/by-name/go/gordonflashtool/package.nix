@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "marmolak";
     repo = "GordonFlashTool";
-    rev = "release-${version}";
+    tag = "release-${version}";
     hash = "sha256-/zpw7kVdQeR7QcRsP1+qcu8+hlEQTGwOKClJkwVcBPg=";
   };
 

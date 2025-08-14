@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "dapper";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
   vendorHash = null;

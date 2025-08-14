@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jakcron";
     repo = "Project_CTR";
-    rev = "ctrtool-v${version}";
+    tag = "ctrtool-v${version}";
     sha256 = "HqqeQCEUof4EBUhuUAdTruMFgYIoXhtAN3yuWW6tD+Y=";
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WFXVQ2CNrEEy4R6xGiwWkAZmbvXK44FtO5w6s1ZUZpA=";
   };
 

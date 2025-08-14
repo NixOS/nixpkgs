@@ -12,7 +12,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "effectfully";
     repo = "Generic";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "05igsd2gaj6h9bkqwp8llhvn4qvc5gmi03x4fnz096ba8m6x8s3n";
   };
 

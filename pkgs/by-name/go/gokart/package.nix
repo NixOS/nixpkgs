@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gokart";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-G1IjlJ/rmviFWy6RFfLtP+bhfYcDuB97leimU39YCoQ=";
   };
 

@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AVFQ3GP4YDQ6d9NSeol3Eobxzmoa9bRyCAKTsDbyZyQ=";
   };
 

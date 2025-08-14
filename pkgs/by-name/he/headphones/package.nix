@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rembo10";
     repo = "headphones";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0gv7rasjbm4rf9izghibgf5fbjykvzv0ibqc2in1naagjivqrpq4";
   };
 

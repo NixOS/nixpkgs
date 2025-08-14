@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gpsbabel";
     repo = "gpsbabel";
-    rev = "gpsbabel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "gpsbabel_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-0w8LsO+HwqZF8SQmwd8bCKma9PCM0hAzXhzWR4DgAHs=";
   };
 

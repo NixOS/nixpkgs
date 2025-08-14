@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fx/RKnUhXhaWVd/KYPVxr19/Q8o1ovm2TgMTcTYjE3Q=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "samlane-ma";
     repo = "analogue-clock-applet";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8kqDEzcUqg/TvwpazYQt1oQDVC00fOxFLVsKYMDuV9I=";
   };
 

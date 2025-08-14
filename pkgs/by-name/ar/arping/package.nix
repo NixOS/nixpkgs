@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "arping";
-    rev = "arping-${version}";
+    tag = "arping-${version}";
     hash = "sha256-uZsUo12ez6sz95fmOg5cmVBJNRH3eEhio8V2efQ29BU=";
   };
 

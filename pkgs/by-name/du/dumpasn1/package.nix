@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "katexochen";
     repo = "dumpasn1";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-r40czSLdjCYbt73zK7exCoP/kMq6+pyJfz9LKJLLaXM=";
   };
 

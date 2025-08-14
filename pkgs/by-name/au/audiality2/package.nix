@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "olofson";
     repo = "audiality2";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0ipqna7a9mxqm0fl9ggwhbc7i9yxz3jfyi0w3dymjp40v7jw1n20";
   };
 

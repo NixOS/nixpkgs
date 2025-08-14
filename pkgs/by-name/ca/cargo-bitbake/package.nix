@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "meta-rust";
     repo = "cargo-bitbake";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+ovC4nZwHzf9hjfv2LcnTztM2m++tpC3mUSS/I0l6Ck=";
   };
 

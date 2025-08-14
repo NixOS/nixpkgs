@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "maxwellainatchi";
     repo = "gnome-randr-rust";
-    rev = "v" + version;
+    tag = "v" + version;
     sha256 = "sha256-mciHgBEOCFjRA4MSoEdP7bIag0KE+zRbk4wOkB2PAn0=";
   };
 

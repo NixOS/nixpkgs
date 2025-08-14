@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DeepSourceCorp";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kmP3U6SRvolmi7QA0rFNTg+w+DJEQUHOmbSE4sdEBK4=";
   };
 

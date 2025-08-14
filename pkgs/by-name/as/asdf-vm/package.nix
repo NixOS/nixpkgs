@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-quDgoYi+3hZUEAzXWTHuL5UK1T+4o7+G67w0UzZOjJA=";
   };
 

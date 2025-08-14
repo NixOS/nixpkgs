@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "eweOS";
     repo = "catnest";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/t1clnxBNU5lfTjtUbt5eOl5KPeAfG8Hq6jBVMqkkWY=";
   };
 

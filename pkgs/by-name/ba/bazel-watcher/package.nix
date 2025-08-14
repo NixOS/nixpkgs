@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OrOJ24XdYASOgO8170M0huVGYubH8MJ0tbp0hvqmN/w=";
   };
 

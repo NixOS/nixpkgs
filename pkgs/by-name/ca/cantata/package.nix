@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nullobsi";
     repo = "cantata";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4lkfY+87lEE2A863JogG5PtO5SyGn7Hb8shQljSqq3Q=";
   };
 

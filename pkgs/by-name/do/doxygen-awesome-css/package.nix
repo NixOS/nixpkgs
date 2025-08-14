@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jothepro";
     repo = "doxygen-awesome-css";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g4Smy7BJ//4wQigAnx5fJQe5QxoLc6Aopm8O7S2lVkY=";
   };
 

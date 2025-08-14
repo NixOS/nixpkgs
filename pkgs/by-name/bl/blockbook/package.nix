@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8/tyqmZE9NJWGg7zYcdei0f1lpXfehy6LM6k5VHW33g=";
   };
 

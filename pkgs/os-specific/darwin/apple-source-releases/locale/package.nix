@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "adv_cmds";
-    rev = "adv_cmds-118";
+    tag = "adv_cmds-118";
     hash = "sha256-KzaAlqXqfJW2s31qmA0D7qteaZY57Va2o86aZrwyR74=";
   };
 

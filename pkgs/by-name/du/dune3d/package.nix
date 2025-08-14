@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dune3d";
     repo = "dune3d";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9lBaenBxMoJgG5tMM+EZ87xcJ4HhFTA9RUNZt2Jx34Q=";
   };
 

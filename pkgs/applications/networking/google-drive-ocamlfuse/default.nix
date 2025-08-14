@@ -18,7 +18,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AWr1tcium70rXFKMTv6xcWxndOJua3UXG8Q04TN1Siw=";
   };
 

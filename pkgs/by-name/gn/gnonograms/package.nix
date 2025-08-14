@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jeremypw";
     repo = "gnonograms";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-TkEVjrwlr4Q5FsfcdY+9fxwaMq+DFs0RwGI2E+GT5Mk=";
   };
 

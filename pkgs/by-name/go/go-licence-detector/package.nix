@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "go-licence-detector";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Mo4eBBP9UueLEMVnxndatizDaxVyZuHACvFoV38dRVI=";
   };
 

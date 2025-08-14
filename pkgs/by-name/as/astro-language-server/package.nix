@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "language-tools";
-    rev = "@astrojs/language-server@${finalAttrs.version}";
+    tag = "@astrojs/language-server@${finalAttrs.version}";
     hash = "sha256-NBLUeg1WqxTXtu8eg1fihQSfm8koYAEWhfXAj/fIdC8=";
   };
 

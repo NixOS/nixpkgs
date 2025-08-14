@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BUStools";
     repo = "bustools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-G+ZMoUmhINp18XKmXpdb5GT7YMsiK/XX2zrjt56CbLg=";
   };
 

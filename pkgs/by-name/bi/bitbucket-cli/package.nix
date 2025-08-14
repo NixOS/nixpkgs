@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "swisscom";
     repo = "bitbucket-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8Qvlv/S5IkRk+2D/Pnb0+FP7ryHh1kSRJCiUjSO0OtI=";
   };
 

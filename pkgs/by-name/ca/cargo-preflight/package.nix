@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "supinie";
     repo = "cargo-preflight";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SL8c0eLsmBfUcmhC8uuUbupDTFLQWdeqRG3ImE1smvI=";
   };
 

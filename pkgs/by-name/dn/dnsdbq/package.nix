@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dnsdb";
     repo = "dnsdbq";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5Pi8xFZXnU3abIsH9m6xqrQ6NnEtAbhMU6HXsOYP0gg=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-speakup";
     repo = "espeakup";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Qjdg1kParsnpb8Lv51wXLdrLufxtbBTsP8B3t53islI=";
   };
 

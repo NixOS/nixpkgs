@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Z/VqQKmfzqd1htMlXU8sDkOSw2xczb3tG53LVC0MZhM=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "asoul-sig";
     repo = "asouldocs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ctRE7aF3Qj+fI/m0CuLA6x7E+mY6s1+UfBJI5YFea4g=";
   };
 

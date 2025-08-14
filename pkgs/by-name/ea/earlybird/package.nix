@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "americanexpress";
     repo = "earlybird";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-guSm/ha4ICaOcoynvAwFeojE6ikaCykMcdfskD/ehTw=";
   };
 

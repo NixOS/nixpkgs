@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
-    rev = "dosbox-x-v${finalAttrs.version}";
+    tag = "dosbox-x-v${finalAttrs.version}";
     hash = "sha256-VYJn1ddDkSHpWVsE7NunwRvuAVRqbvCNw/TzkWe8TLQ=";
   };
 
