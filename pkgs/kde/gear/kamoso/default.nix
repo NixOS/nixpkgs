@@ -15,7 +15,4 @@ mkKdeDerivation {
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
-
-  # requires newer GStreamer
-  meta.broken = true;
 }
