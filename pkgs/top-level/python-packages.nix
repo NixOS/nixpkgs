@@ -15213,6 +15213,8 @@ self: super: with self; {
 
   pyworld = callPackage ../development/python-modules/pyworld { };
 
+  pyworxcloud = callPackage ../development/python-modules/pyworxcloud { };
+
   pyws66i = callPackage ../development/python-modules/pyws66i { };
 
   pyx = callPackage ../development/python-modules/pyx { };
