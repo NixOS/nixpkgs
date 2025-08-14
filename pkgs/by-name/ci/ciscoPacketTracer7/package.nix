@@ -95,6 +95,7 @@ stdenv.mkDerivation {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
     license = lib.licenses.unfree;
+    mainProgram = "packettracer7";
     maintainers = with lib.maintainers; [
       gepbird
     ];
