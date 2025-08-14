@@ -30,8 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-spnkDzkPAjf/4vG7bB4d9RBc3tES+Va4wzmFJFA2/NI=";
   };
 
-  pythonRelaxDeps = [ "httpx-sse" ];
-
   build-system = [ poetry-core ];
 
   dependencies = [
