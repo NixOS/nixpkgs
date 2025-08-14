@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
 gem 'hiera-eyaml'
+gem 'base64' # Needed with ruby >= 3.4.0 since it got removed from stdlib
