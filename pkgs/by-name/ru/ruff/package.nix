@@ -25,27 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-F6THHweMVJqmqKeexZIWW7iHCPc0I6Ttr8RzXWSdww8=";
   };
 
-  # Patch out test that fails due to ANSI escape codes being written as-is,
-  # causing a snapshot test to fail. The output itself is correct.
-  #
-  # This is the relevant test's output as of 0.12.5
-  # >     0       │-/home/ferris/project/code.py:1:1: E902 Permission denied (os error 13)
-  # >     1       │-/home/ferris/project/notebook.ipynb:1:1: E902 Permission denied (os error 13)
-  # >     2       │-/home/ferris/project/pyproject.toml:1:1: E902 Permission denied (os error 13)
-  # >           0 │+␛[1m/home/ferris/project/code.py␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
-  # >           1 │+␛[1m/home/ferris/project/notebook.ipynb␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
-  # >           2 │+␛[1m/home/ferris/project/pyproject.toml␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
-  # > ────────────┴───────────────────────────────────────────────────────────────────
-  postPatch = ''
-    substituteInPlace crates/ruff/src/commands/check.rs --replace-fail '
-        #[test]
-        fn unreadable_files() -> Result<()> {' \
-    '
-        #[test]
-        #[ignore = "ANSI Escape Codes trigger snapshot diff"]
-        fn unreadable_files() -> Result<()> {'
-  '';
-
   cargoBuildFlags = [ "--package=ruff" ];
 
   cargoHash = "sha256-gXuRcb1Gk5t2R44/xeE+x3AXccnRyt9SukYYXE0JPQU=";
