@@ -1,10 +1,12 @@
 {
   lib,
-  # Build functions
   buildPythonPackage,
-  setuptools,
   fetchFromGitHub,
-  pythonAtLeast,
+  pythonRelaxDepsHook,
+
+  # build-system
+  setuptools,
+
   # Python deps
   requests,
   urllib3,
@@ -14,13 +16,22 @@
   pystac,
   deprecated,
   xarray,
+
+  # Tests
+  pytest,
+  httpretty,
+  geopandas,
+  dirty-equals,
+  mock,
+  time-machine,
+  requests-mock,
+  pystac-client
 }:
 
 buildPythonPackage rec {
   pname = "openeo";
   version = "0.43.0";
   pyproject = true;
-  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "Open-EO";
@@ -29,6 +40,8 @@ buildPythonPackage rec {
     hash = "sha256-zeUASaj1XbcH8NE2+AalH8Jc0tocwotKwJ5QAtrf0kE=";
   };
 
+  # pythonRelaxDeps = [
+  # ];
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
@@ -42,6 +55,29 @@ buildPythonPackage rec {
     pystac
     deprecated
     xarray
+  ];
+
+  nativeCheckInputs = [
+    pytest
+    httpretty
+    geopandas
+    dirty-equals
+    mock
+    time-machine
+    requests-mock
+  pystac-client
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pytest
+
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [
+    "openeo"
   ];
 
   meta = {
