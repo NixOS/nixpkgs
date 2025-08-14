@@ -79,7 +79,7 @@ You can donate to the NixOS foundation through [SEPA bank transfers](https://nix
 
 Nixpkgs is licensed under the [MIT License](COPYING).
 
-Note:
-MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
+> [!Note]
+> MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
 It also might not apply to patches included in Nixpkgs, which may be derivative works of the packages to which they apply.
 The aforementioned artifacts are all covered by the licenses of the respective packages.
