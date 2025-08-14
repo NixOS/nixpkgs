@@ -14593,6 +14593,8 @@ self: super: with self; {
 
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
+  python-etherscan-api = callPackage ../development/python-modules/python-etherscan-api { };
+
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
   python-family-hub-local = callPackage ../development/python-modules/python-family-hub-local { };
