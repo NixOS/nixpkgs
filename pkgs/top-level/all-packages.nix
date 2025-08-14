@@ -9000,16 +9000,6 @@ with pkgs;
     openssl_3_5
     ;
 
-  openwebrx = callPackage ../applications/radio/openwebrx {
-    inherit (python3Packages)
-      buildPythonPackage
-      buildPythonApplication
-      setuptools
-      pycsdr
-      pydigiham
-      ;
-  };
-
   pcre = callPackage ../development/libraries/pcre { };
   # pcre32 seems unused
   pcre-cpp = res.pcre.override { variant = "cpp"; };
@@ -15615,16 +15605,6 @@ with pkgs;
 
   nix = nixVersions.stable;
 
-  # Overlays for CppNix nightly, Lix, or Tvix want to change the default Nix
-  # implementation in Nixpkgs by overriding `pkgs.nix`. However, some packages
-  # link against the internal/unstable CppNix APIs directly, and these packages
-  # will break if built with different versions or implementations of Nix.
-  #
-  # If you want to swap out the Nix implementation in your package set, you
-  # don't want these packages to break. Therefore, some packages will refer to
-  # `nixForLinking` explicitly, at least until these dependencies can be sorted out.
-  nixForLinking = nixVersions.stable;
-
   nixStatic = pkgsStatic.nix;
 
   lixPackageSets = recurseIntoAttrs (
@@ -15751,7 +15731,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_30;
+    nixComponents = nixVersions.nixComponents_2_30;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

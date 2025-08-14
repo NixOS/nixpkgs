@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "app2unit";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
     tag = "v${version}";
-    sha256 = "sha256-xHqPCA9ycPcImmyMrJZEfnfrFZ3sKfP/mhJ86CHLTQ8=";
+    sha256 = "sha256-7eEVjgs+8k+/NLteSBKgn4gPaPLHC+3Uzlmz6XB0930=";
   };
 
   nativeBuildInputs = [ scdoc ];

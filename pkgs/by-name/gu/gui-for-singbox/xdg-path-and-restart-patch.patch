@@ -1,5 +1,5 @@
---- a/bridge/bridge.go	2024-12-25 20:53:45.504021585 +0000
-+++ b/bridge/bridge.go	2024-12-25 21:02:20.318422528 +0000
+--- a/bridge/bridge.go
++++ b/bridge/bridge.go
 @@ -41,13 +41,13 @@
  }
 
@@ -7,7 +7,7 @@
 -	exePath, err := os.Executable()
 -	if err != nil {
 -		panic(err)
-+	Env.AppName = "GUI.for.Clash"
++	Env.AppName = "GUI.for.SingBox"
 +	xdgDataHome := os.Getenv("XDG_DATA_HOME")
 +	if xdgDataHome == "" {
 +		homeDir, _ := os.UserHomeDir()
