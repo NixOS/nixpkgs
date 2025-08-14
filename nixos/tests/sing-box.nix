@@ -450,6 +450,12 @@ in
                   tag = "dns:fakeip";
                   inet4_range = "198.18.0.0/16";
                 }
+                {
+                  type = "resolved";
+                  tag = "dns:resolved";
+                  service = "service:resolved";
+                  accept_default_resolvers = true;
+                }
               ];
               rules = [
                 {
@@ -488,6 +494,12 @@ in
                 }
               ];
             };
+            services = [
+              {
+                type = "resolved";
+                tag = "service:resolved";
+              }
+            ];
           };
         };
       };
