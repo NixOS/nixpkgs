@@ -27,13 +27,13 @@
   soapysdr-with-plugins,
 }:
 
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "gr-osmosdr";
   version = "0.2.6";
 
   src = fetchgit {
     url = "https://gitea.osmocom.org/sdr/gr-osmosdr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jCUzBY1pYiEtcRQ97t9F6uEMVYw2NU0eoB5Xc2H6pGQ=";
   };
 
@@ -90,4 +90,4 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.unix;
   };
-}
+})
