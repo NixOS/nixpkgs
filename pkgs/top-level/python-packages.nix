@@ -9526,6 +9526,8 @@ self: super: with self; {
 
   mopeka-iot-ble = callPackage ../development/python-modules/mopeka-iot-ble { };
 
+  mopidyapi = callPackage ../development/python-modules/mopidyapi { };
+
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   more-properties = callPackage ../development/python-modules/more-properties { };
