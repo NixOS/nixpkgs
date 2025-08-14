@@ -15,6 +15,7 @@
   deprecated,
   xarray,
 }:
+
 buildPythonPackage rec {
   pname = "openeo";
   version = "0.43.0";
