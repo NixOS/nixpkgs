@@ -1114,7 +1114,7 @@ in
     fromHexString "FF"
     => 255
 
-    fromHexString (builtins.hashString "sha256" "test")
+    fromHexString "0x7fffffffffffffff"
     => 9223372036854775807
     ```
   */
