@@ -1,12 +1,16 @@
 {
   lib,
-  stdenv,
   mkDerivation,
+  gnuradioAtLeast,
   fetchgit,
   fetchpatch,
   gnuradio,
+
+  # native
   cmake,
   pkg-config,
+
+  # buildInputs
   logLib,
   libsndfile,
   mpir,
@@ -22,7 +26,6 @@
   libbladeRF,
   rtl-sdr,
   soapysdr-with-plugins,
-  gnuradioAtLeast,
 }:
 
 mkDerivation rec {
