@@ -54,7 +54,9 @@ buildPythonPackage rec {
     uv = [ uv ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
