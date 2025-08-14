@@ -98,7 +98,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ rvl ];
+    maintainers = with lib.maintainers; [
+      rvl
+      armelclo
+    ];
     platforms = lib.platforms.linux;
   };
 }

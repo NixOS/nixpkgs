@@ -164,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       masipcat
       zhaofengli
+      armelclo
     ];
     platforms = platforms.linux;
     mainProgram = "phosh-session";
