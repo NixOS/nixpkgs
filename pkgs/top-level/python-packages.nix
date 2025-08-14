@@ -8645,6 +8645,8 @@ self: super: with self; {
 
   loca = callPackage ../development/python-modules/loca { };
 
+  local-attention = callPackage ../development/python-modules/local-attention { };
+
   localimport = callPackage ../development/python-modules/localimport { };
 
   localstack-client = callPackage ../development/python-modules/localstack-client { };
