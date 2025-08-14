@@ -41,7 +41,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
     homepage = "https://github.com/continuedev/continue";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = with lib.maintainers; [
+      raroh73
+      flacks
+    ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
