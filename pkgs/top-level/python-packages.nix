@@ -10467,6 +10467,8 @@ self: super: with self; {
 
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
+  noisereduce = callPackage ../development/python-modules/noisereduce { };
+
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   nominal = callPackage ../development/python-modules/nominal { };
