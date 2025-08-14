@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
   cmakeFlags = [
-    "-DUSE_RAPIDJSON=ON"
+    (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
     (lib.cmakeBool "BUILD_RELEASE_DISABLE_EXCEPTIONS" false)
   ]
