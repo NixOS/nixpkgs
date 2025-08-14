@@ -8,13 +8,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.18";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vO70olSAG6NaZjyERU22lc8MbVivyJFieGcy0xOErrc=";
+    hash = "sha256-eS83Uwp6LzyQuIx2jirXnJ6Xb2XEaAKLnS9PMKTIvyI=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ buildNpmPackage (finalAttrs: {
     })
   ];
 
-  npmDepsHash = "sha256-8dn0i2laR4LFZk/sFDdvblvrHSnraGcLl3WAthCOKc0=";
+  npmDepsHash = "sha256-5pFnxZFhVNxYLPJClYq+pe4wAX5623Y3hFj8lIq00+E=";
 
   preConfigure = ''
     mkdir -p packages/generated
