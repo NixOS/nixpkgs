@@ -1,15 +1,23 @@
 {
   lib,
-  argcomplete,
   buildPythonPackage,
-  colorlog,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
   hatchling,
+
+  # dependencies
+  argcomplete,
+  colorlog,
   jinja2,
   packaging,
-  pytestCheckHook,
-  pythonOlder,
   tomli,
+
+  # tests
+  pytestCheckHook,
+
+  # passthru
   tox,
   uv,
   virtualenv,
