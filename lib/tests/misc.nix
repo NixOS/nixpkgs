@@ -390,6 +390,30 @@ runTests {
     expected = 15;
   };
 
+  # FIXME: This might be bad and should potentially be deprecated.
+  testFromHexStringQuestionableMixedCase = {
+    expr = fromHexString "eEeEe";
+    expected = 978670;
+  };
+
+  # FIXME: This is probably bad and should potentially be deprecated.
+  testFromHexStringQuestionableUnderscore = {
+    expr = fromHexString "F_f";
+    expected = 255;
+  };
+
+  # FIXME: This is definitely bad and should be deprecated.
+  testFromHexStringBadComment = {
+    expr = fromHexString "0 # oops";
+    expected = 0;
+  };
+
+  # FIXME: Oh my god.
+  testFromHexStringAwfulInjection = {
+    expr = fromHexString "1\nwhoops = {}";
+    expected = 1;
+  };
+
   testToBaseDigits = {
     expr = toBaseDigits 2 6;
     expected = [
