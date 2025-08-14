@@ -41,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # fail with various assertions around numbers
     "test_fetch__create_consent_cookie_if_needed"
     "test_fetch__with_generic_proxy_reraise_when_blocked"
     "test_fetch__with_proxy_retry_when_blocked"
