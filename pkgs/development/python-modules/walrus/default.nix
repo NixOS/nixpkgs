@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "walrus";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = "walrus";
     tag = version;
-    hash = "sha256-cvoRiaGGTpZWfSE6DDT6GwDmc/TC/Z/E76Qy9Zzkpsw=";
+    hash = "sha256-iZe0jqIzbGKjkhlVwJQXPz9UTBzLcnnO2IuKa3sHaMw=";
   };
 
   build-system = [ setuptools ];
