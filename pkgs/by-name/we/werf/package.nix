@@ -10,17 +10,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.45.0";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tTWhGaKEYrZAQnIkuRcTMLlYooexhRIc0rJ4wzqJCWM=";
+    hash = "sha256-FrFo/RJuwNQps6Fqr/B+xwgYvL9wbVyEkvh91ujf3gU=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-5OSt0oMFb0MjJDXTFJKtaintOhnCShBOHfjllWbwb6Y=";
+  vendorHash = "sha256-/0snKYzNJMbXGikMq81XIwn7ip53bV7MT31VmeA668g=";
 
   subPackages = [ "cmd/werf" ];
 
