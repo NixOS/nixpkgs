@@ -2042,8 +2042,6 @@ dont-distribute-packages:
  - liquid-platform
  - liquid-prelude
  - liquid-vector
- - liquidhaskell
- - liquidhaskell-boot
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser

@@ -3196,6 +3196,24 @@ with haskellLib;
       }
       + "/libssh2";
   } super.libssh2;
+
+  # 2025-8-13: Too strict bound on tasty <1.15; relaxed on Hackage as of today
+  smtlib-backends-tests = doJailbreak super.smtlib-backends-tests;
+
+  # 2025-8-19: dontCheck because of: https://github.com/ucsd-progsys/liquid-fixpoint/issues/760
+  # i.e. tests assume existence of .git and also fail for some versions of CVC5,
+  # including the current one in nixpkgs.
+  liquid-fixpoint = dontCheck super.liquid-fixpoint;
+
+  # 2025-8-18: Too strict bound on Diff <0.6; relaxed on Hackage as of today
+  liquidhaskell-boot = doJailbreak super.liquidhaskell-boot;
+
+  # 2025-8-19: jailbreak because of the restrictive bytestring ==0.12.1.0,
+  # but we have 0.12.2.0. This was relaxed on Hackage to allow 0.12.2.0 on 2025-08-17.
+  liquidhaskell = doJailbreak super.liquidhaskell;
+
+  # 2025-8-13: Too strict bound on QuickCheck <2.15; relaxed on Hackage as of today
+  rest-rewrite = doJailbreak super.rest-rewrite;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

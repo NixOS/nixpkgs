@@ -31,6 +31,11 @@ default-package-overrides:
   - hiedb < 0.7
   # 2025-08-03: need to match stackage version of hosc
   - hsc3 >= 0.21 && < 0.22
+  # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
+  - liquid-fixpoint == 0.9.6.3.2
+  # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
+  - liquidhaskell == 0.9.10.*
+  - liquidhaskell-boot == 0.9.10.*
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -189,6 +194,12 @@ package-maintainers:
     - BNFC-meta
     - alex-meta
     - happy-meta
+    - liquid-fixpoint
+    - liquidhaskell
+    - liquidhaskell-boot
+    - smtlib-backends
+    - smtlib-backends-process
+    - smtlib-backends-tests
     - vector-hashtables
   arturcygan:
     - hevm
