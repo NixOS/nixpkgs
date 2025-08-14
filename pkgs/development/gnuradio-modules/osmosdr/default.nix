@@ -25,6 +25,7 @@
   libbladeRF,
   rtl-sdr,
   soapysdr-with-plugins,
+  features ? { },
 }:
 
 mkDerivation (finalAttrs: {
@@ -51,12 +52,8 @@ mkDerivation (finalAttrs: {
     fftwFloat
     gmp
     icu
-    airspy
-    hackrf
-    libbladeRF
-    rtl-sdr
-    soapysdr-with-plugins
   ]
+  ++ finalAttrs.finalPackage.passthru.enabledFeaturesDeps
   ++ lib.optionals (gnuradio.hasFeature "gr-blocks") [
     libsndfile
   ]
@@ -73,7 +70,8 @@ mkDerivation (finalAttrs: {
   ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then "-DENABLE_PYTHON=ON" else "-DENABLE_PYTHON=OFF")
-  ];
+  ]
+  ++ finalAttrs.finalPackage.passthru.enabledFeaturesCmakeFlags;
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -82,6 +80,25 @@ mkDerivation (finalAttrs: {
     python.pkgs.mako
     python
   ];
+  passthru = {
+    featuresDeps = {
+      # Other features don't have dependencies but can still be disabled in the
+      # `features` argument.
+      airspy = [ airspy ];
+      bladerf = [ libbladeRF ];
+      hackrf = [ hackrf ];
+      rtl = [ rtl-sdr ];
+      soapy = [ soapysdr-with-plugins ];
+    };
+    enabledFeaturesDeps = lib.pipe finalAttrs.finalPackage.passthru.featuresDeps [
+      (lib.filterAttrs (name: deps: features.${name} or true))
+      lib.attrValues
+      lib.flatten
+    ];
+    enabledFeaturesCmakeFlags = lib.mapAttrsToList (
+      feat: val: lib.cmakeBool "ENABLE_${lib.toUpper feat}" val
+    ) features;
+  };
 
   meta = {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
