@@ -5,11 +5,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-city-lite";
-  version = "2025-07";
+  version = "2025-08";
 
   src = fetchurl {
     url = "https://download.db-ip.com/free/dbip-city-lite-${finalAttrs.version}.mmdb.gz";
-    hash = "sha256-1xKZZ8ZKg6UFbJ+WcjjQudsW7T7MhhxdG1wDWKtrD7w=";
+    hash = "sha256-iwAosu4Z6PfLnB2f+/zZYm/fwappfGRq1yBF3jCBj6Q=";
   };
 
   dontUnpack = true;
