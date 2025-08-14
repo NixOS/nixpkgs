@@ -3,21 +3,23 @@
   stdenv,
   fetchFromGitHub,
   testers,
-  zig_0_12,
+  zig_0_14,
 }:
-
+let
+  zig = zig_0_14;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dt";
-  version = "1.3.1-unstable-2024-07-16";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "so-dang-cool";
     repo = "dt";
-    rev = "0d16ca2867131e99a93a412231465cf68f2e594f";
-    hash = "sha256-pfTlOMJpOPbXZaJJvOKDUyCZxFHNLRRUteJFWT9IKOU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D80Ld5nBrTM8PLUz3SFWMiWTXvbd4EnpzNVRft59r2M=";
   };
 
-  nativeBuildInputs = [ zig_0_12.hook ];
+  nativeBuildInputs = [ zig.hook ];
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
@@ -37,8 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       In short, dt is intended to be generally useful, with zero pretense of
       elegance.
     '';
-    # TODO: uncomment when dt pushes a new release
-    # changelog = "https://github.com/so-dang-cool/dt/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/so-dang-cool/dt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ booniepepper ];
     platforms = lib.platforms.unix;
