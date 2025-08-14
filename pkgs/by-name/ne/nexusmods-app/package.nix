@@ -9,7 +9,6 @@
   imagemagick,
   lib,
   xdg-utils,
-  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -192,7 +191,7 @@ buildDotnetModule (finalAttrs: {
     };
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "NexusMods.App";
