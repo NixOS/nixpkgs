@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-I0LSUzMH6tyn6/Y74FApEdo0/m+6fa8UK0hzVBxA7F8=";
 
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
     ncurses
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+  setuptools-scm,
+  setuptools,
   sse-starlette,
 }:
 
@@ -22,11 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-bSozSZmbRU5sc3jvVUOAXQWVBA8GhzM2R26uPdabS+w=";
   };
 
-  # pytest-cov configuration is not necessary for packaging
-  postPatch = ''
-    rm setup.cfg
-  '';
-
   build-system = [
     setuptools
     setuptools-scm
@@ -38,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     sse-starlette
   ];
@@ -45,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Consume Server-Sent Event (SSE) messages with HTTPX";
     homepage = "https://github.com/florimondmanca/httpx-sse";
-    changelog = "https://github.com/florimondmanca/httpx-sse/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/florimondmanca/httpx-sse/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

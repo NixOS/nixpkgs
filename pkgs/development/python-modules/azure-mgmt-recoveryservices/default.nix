@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  pythonOlder,
   setuptools,
 }:
 
@@ -12,6 +13,8 @@ buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
   version = "3.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "azure_mgmt_recoveryservices";

@@ -17,13 +17,14 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "azure_monitor_ingestion";
+    inherit version;
     hash = "sha256-l6/ueA2a4waRKM3ncCfUzGL6gk/mTVusiArEpksKDE4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-core
     isodate
     typing-extensions

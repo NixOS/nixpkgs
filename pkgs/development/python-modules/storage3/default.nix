@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonImportCheck = [ "storage3" ];
+  pythonImportsCheck = [ "storage3" ];
 
   # tests fail due to mock server not starting
 
