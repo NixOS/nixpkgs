@@ -762,12 +762,8 @@ runTests {
   };
 
   testSplitStringsDerivation = {
-    expr = take 3 (strings.splitString "/" dummyDerivation);
-    expected = [
-      ""
-      "nix"
-      "store"
-    ];
+    expr = lib.dropEnd 1 (strings.splitString "/" dummyDerivation);
+    expected = strings.splitString "/" builtins.storeDir;
   };
 
   testSplitVersionSingle = {
