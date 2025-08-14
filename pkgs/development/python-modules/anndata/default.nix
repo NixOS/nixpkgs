@@ -1,4 +1,5 @@
 {
+  anndata,
   array-api-compat,
   awkward,
   boltons,
@@ -17,17 +18,15 @@
   numba,
   numpy,
   openpyxl,
-  packaging,
   pandas,
   pyarrow,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
+  scanpy,
   scikit-learn,
   scipy,
   stdenv,
-  typing-extensions,
   zarr,
 }:
 
@@ -56,6 +55,7 @@ buildPythonPackage rec {
     numpy
     pandas
     scipy
+    zarr
   ];
 
   nativeCheckInputs = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     scikit-learn
-    zarr
+    scanpy
   ];
 
   # Optionally disable pytest-xdist to make it easier to debug the test suite.
@@ -80,43 +80,22 @@ buildPythonPackage rec {
   # fail when running without pytest-xdist ("worker_id not found").
   # pytestFlags = [ "-oaddopts=" ];
 
-  disabledTestPaths = [
-    # Tests that require scanpy, creating a circular dependency chain
-    "src/anndata/_core/anndata.py"
-    "src/anndata/_core/merge.py"
-    "src/anndata/_core/sparse_dataset.py"
-    "src/anndata/_io/specs/registry.py"
-    "src/anndata/_io/utils.py"
-    "src/anndata/_warnings.py"
-    "src/anndata/experimental/merge.py"
-    "src/anndata/experimental/multi_files/_anncollection.py"
-    "src/anndata/utils.py"
-  ];
+  preCheck = ''
+    export NUMBA_CACHE_DIR=$(mktemp -d);
+  '';
+
+  doCheck = false; # use passthru.tests instead to prevent circularity with `scanpy`
+
+  passthru.tests = anndata.overridePythonAttrs { doCheck = true; };
 
   disabledTests = [
     # requires data from a previous test execution:
     "test_no_diff"
 
-    # doctests that require scanpy, creating a circular dependency chain. These
-    # do not work in disabledTestPaths for some reason.
-    "anndata._core.anndata.AnnData.concatenate"
-    "anndata._core.anndata.AnnData.obs_names_make_unique"
-    "anndata._core.anndata.AnnData.var_names_make_unique"
-    "anndata._core.extensions.register_anndata_namespac"
-    "anndata._core.merge.concat"
-    "anndata._core.merge.gen_reindexer"
-    "anndata._core.sparse_dataset.sparse_dataset"
-    "anndata._io.specs.registry.read_elem_as_dask"
+    # try to download data:
     "anndata._io.specs.registry.read_elem_lazy"
-    "anndata._io.utils.report_read_key_on_error"
-    "anndata._io.utils.report_write_key_on_error"
-    "anndata._warnings.ImplicitModificationWarning"
-    "anndata.experimental.backed._io.read_lazy"
     "anndata.experimental.merge.concat_on_disk"
     "anndata.experimental.multi_files._anncollection.AnnCollection"
-    "anndata.utils.make_index_unique"
-    "ci.scripts.min-deps.min_dep"
-    "concatenation.rst"
 
     # Tests that require cupy and GPU access. Introducing cupy as a dependency
     # would make this package unfree and GPU access is not possible within the
