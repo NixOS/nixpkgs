@@ -1007,6 +1007,8 @@ self: super: with self; {
 
   astunparse = callPackage ../development/python-modules/astunparse { };
 
+  asusrouter = callPackage ../development/python-modules/asusrouter { };
+
   asyauth = callPackage ../development/python-modules/asyauth { };
 
   asyauth-bad = callPackage ../development/python-modules/asyauth-bad { };
