@@ -22,7 +22,7 @@ module.exports = async function ({ github, context, core, dry }) {
         '?pr=' +
         pull_number
 
-    async function handle({ sha, commit }) {
+    async function extract({ sha, commit }) {
       // Using the last line with "cherry" + hash, because a chained backport
       // can result in multiple of those lines. Only the last one counts.
       const match = Array.from(
@@ -68,6 +68,14 @@ module.exports = async function ({ github, context, core, dry }) {
           message: `${original_sha} given in ${sha} not found in any pickable branch.`,
         }
 
+      return {
+        sha,
+        commit,
+        original_sha,
+      }
+    }
+
+    function diff({ sha, commit, original_sha }) {
       const diff = execFileSync('git', [
         '-C',
         __dirname,
@@ -121,7 +129,26 @@ module.exports = async function ({ github, context, core, dry }) {
       pull_number,
     })
 
-    const results = await Promise.all(commits.map(handle))
+    const extracted = await Promise.all(commits.map(extract))
+
+    const fetch = extracted
+      .filter(({ severity }) => !severity)
+      .map(({ sha, original_sha }) => [ sha, original_sha ])
+      .flat()
+
+    if (fetch.length > 0) {
+      // Fetching all commits we need for diff at once is much faster than any other method.
+      execFileSync('git', [
+        '-C',
+        __dirname,
+        'fetch',
+        '--depth=2',
+        'origin',
+        ...fetch,
+      ])
+    }
+
+    const results = extracted.map(result => result.severity ? result : diff(result))
 
     // Log all results without truncation, with better highlighting and all whitespace changes to the job log.
     results.forEach(({ sha, commit, severity, message, colored_diff }) => {
