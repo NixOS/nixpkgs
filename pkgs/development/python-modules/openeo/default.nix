@@ -29,7 +29,9 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = true;
+
   build-system = [ setuptools ];
+
   dependencies = [
     requests
     urllib3
