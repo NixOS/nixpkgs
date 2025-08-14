@@ -15985,6 +15985,8 @@ self: super: with self; {
 
   rtfunicode = callPackage ../development/python-modules/rtfunicode { };
 
+  rtmapi = callPackage ../development/python-modules/rtmapi { };
+
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   rtmixer = callPackage ../development/python-modules/rtmixer { };
