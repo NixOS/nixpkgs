@@ -1,0 +1,42 @@
+From 019b2c78b4d768cd9c383943c1b3a29c6d8e4709 Mon Sep 17 00:00:00 2001
+From: Matt Sturgeon <matt@sturgeon.me.uk>
+Date: Thu, 14 Aug 2025 13:09:57 +0100
+Subject: [PATCH] Remove games.json build dependency
+
+---
+ .../NexusMods.Networking.NexusWebApi.csproj   | 20 -------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj b/src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
+index 6f0369589..19a07fbea 100644
+--- a/src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
++++ b/src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
+@@ -24,26 +24,6 @@
+         <ProjectReference Include="..\NexusMods.Networking.ModUpdates\NexusMods.Networking.ModUpdates.csproj" />
+     </ItemGroup>
+ 
+-    <PropertyGroup>
+-        <GamesJsonInput>https://data.nexusmods.com/file/nexus-data/games.json</GamesJsonInput>
+-        <GamesJsonOutput>$(BaseIntermediateOutputPath)games.json</GamesJsonOutput>
+-    </PropertyGroup>
+-
+-    <!-- NOTE(erri120): Downloading the games.json file at build time if it doesn't exist -->
+-    <Target Name="DownloadGamesJson" BeforeTargets="BeforeBuild" Condition="!Exists('$(GamesJsonOutput)')">
+-        <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+-        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="curl -sSL -o $(GamesJsonOutput) $(GamesJsonInput)"  />
+-        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;Invoke-WebRequest -Uri '$(GamesJsonInput)' -OutFile '$(GamesJsonOutput)'&quot;" />
+-    </Target>
+-
+-    <Target Name="EmbedOutput" AfterTargets="DownloadGamesJson">
+-        <Error Condition="!Exists('$(GamesJsonOutput)')" Text="Failed to embed file $(GamesJsonOutput)" />
+-
+-        <ItemGroup>
+-            <EmbeddedResource Include="$(GamesJsonOutput)" LogicalName="games.json" />
+-        </ItemGroup>
+-    </Target>
+-
+     <ItemGroup>
+       <Compile Update="V1Interop\GameMetadata.cs">
+         <DependentUpon>LocalMappingCache.cs</DependentUpon>
+-- 
+2.50.1
