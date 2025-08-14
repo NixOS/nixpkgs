@@ -54,7 +54,7 @@ let
     in
     lib.concatStringsSep "\n" (
       lib.mapAttrsToList mkEntry (lib.filterAttrsRecursive (_: value: value != null) cfg.settings.main)
-    );
+    ) + "\n" + cfg.extraConfig;
 
   masterCfOptions =
     {
@@ -511,6 +511,14 @@ in
         default = "hash";
         example = "regexp";
         description = "The format the alias map should have. Use regexp if you want to use regular expressions.";
+      };
+
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = ''
+          Extra lines to be added verbatim to the main.cf configuration file.
+        '';
       };
 
       settings = {
@@ -1242,9 +1250,6 @@ in
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "relayPort" ]
       "services.postfix.relayPort was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host:port."
-    )
-    (lib.mkRemovedOptionModule [ "services" "postfix" "extraConfig" ]
-      "services.postfix.extraConfig was replaced by the structured freeform services.postfix.settings.main option."
     )
     (lib.mkRenamedOptionModule
       [ "services" "postfix" "networks" ]
