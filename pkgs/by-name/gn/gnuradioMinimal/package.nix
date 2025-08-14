@@ -2,11 +2,13 @@
   gnuradio,
   volk,
   uhdMinimal,
+  packageOverrides ? (self: super: { }),
 }:
 # A build without gui components and other utilities not needed for end user
 # libraries
 gnuradio.override {
   doWrap = false;
+  inherit packageOverrides;
   unwrapped = gnuradio.unwrapped.override {
     volk = volk.override {
       # So it will not reference python
