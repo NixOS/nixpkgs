@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "nclib";
-  version = "1.0.5";
+  version = "1.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sKbISlL5hOBu1j6zWSib2HjJCvEoMrqdwzgG2keMqDE=";
+    hash = "sha256-40Bdkhmd3LiZAR1v36puV9l4tgtDb6T8k9j02JTR4Jo=";
   };
 
   # Project has no tests
