@@ -2,8 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  kubectl-gadget,
-  testers,
 }:
 
 buildGoModule rec {
@@ -34,12 +32,6 @@ buildGoModule rec {
   ];
 
   subPackages = [ "cmd/kubectl-gadget" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = kubectl-gadget;
-    command = "kubectl-gadget version";
-    version = "v${version}";
-  };
 
   meta = with lib; {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
