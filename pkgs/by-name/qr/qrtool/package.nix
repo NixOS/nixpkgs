@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qrtool";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I/LyDHV3pbRj+utzJBLvkgstEOodLkvfQT6uMLnOEgM=";
   };
 
@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/qrtool completion zsh)
   '';
 
-  meta = with lib; {
-    maintainers = with maintainers; [ philiptaron ];
+  meta = {
     description = "Utility for encoding and decoding QR code images";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://sorairolake.github.io/qrtool/book/index.html";
     changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";
     mainProgram = "qrtool";
+    maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})
