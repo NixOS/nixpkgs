@@ -85,7 +85,7 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible test automation for Python";
     homepage = "https://nox.thea.codes/";
-    changelog = "https://github.com/wntrblm/nox/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/wntrblm/nox/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       doronbehar
