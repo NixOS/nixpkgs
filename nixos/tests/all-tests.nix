@@ -712,6 +712,7 @@ in
   };
   oku = runTest ./oku.nix;
   oncall = runTest ./web-apps/oncall.nix;
+  overseerr = runTest ./overseerr.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
@@ -1624,14 +1625,7 @@ in
   zenohd = runTest ./zenohd.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
   zfs = handleTest ./zfs.nix { };
-  zigbee2mqtt_1 = runTest {
-    imports = [ ./zigbee2mqtt.nix ];
-    _module.args.package = pkgs.zigbee2mqtt_1;
-  };
-  zigbee2mqtt_2 = runTest {
-    imports = [ ./zigbee2mqtt.nix ];
-    _module.args.package = pkgs.zigbee2mqtt_2;
-  };
+  zigbee2mqtt = runTest ./zigbee2mqtt.nix;
   zipline = runTest ./zipline.nix;
   zoneminder = runTest ./zoneminder.nix;
   zookeeper = runTest ./zookeeper.nix;

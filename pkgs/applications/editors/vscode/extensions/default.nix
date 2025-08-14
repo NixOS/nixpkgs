@@ -260,8 +260,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "20.1.1";
-          hash = "sha256-fcJXyuGow39uep6Giexft+3a/nnoJSsKdwjtAQKTMj0=";
+          version = "20.2.1";
+          hash = "sha256-oemc2lJDPsWWG+tcJAk8u5lSGUpIoI6K/fE/TZC5bWw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
@@ -3920,8 +3920,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "25.7.2";
-          hash = "sha256-xQjoCkCLpvbHTSu0WqJO22Z1rzqB9p8dwiNTpI/K5V8=";
+          version = "25.8.1";
+          hash = "sha256-TXXOuayVohQPp+yQAHbsZDr/UYtyHmUkaLU+lADpjDU=";
         };
         meta = {
           description = "Ansible language support";
