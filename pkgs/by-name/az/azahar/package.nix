@@ -7,7 +7,6 @@
   doxygen,
   dynarmic,
   enet,
-  fetchpatch,
   fetchzip,
   fmt,
   ffmpeg_6-headless,
@@ -25,15 +24,15 @@
   pipewire,
   pkg-config,
   portaudio,
+  python3,
   robin-map,
   SDL2,
-  spirv-tools,
+  spirv-headers,
   soundtouch,
   stdenv,
   vulkan-headers,
   xbyak,
   xorg,
-  zstd,
   enableQtTranslations ? true,
   qt6,
   enableCubeb ? true,
@@ -55,16 +54,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2122.1";
+  version = "2123";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RQ8dgD09cWyVWGSLzHz1oJOKia1OKr2jHqYwKaVGfxE=";
+    hash = "sha256-GBgKZPyv8M50gQnQxCYU579e9Ap374odCjVsKtO589I=";
   };
 
+  patches = [
+    # https://github.com/azahar-emu/azahar/pull/1305
+    ./fix-zstd-seekable-include.patch
+  ];
+
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     doxygen
+    python3
     pkg-config
     qt6.wrapQtAppsHook
   ];
@@ -94,10 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     soundtouch
     SDL2
-    spirv-tools
+    spirv-headers
     vulkan-headers
     xbyak
-    zstd
+
+    # https://github.com/azahar-emu/azahar/pull/1281
+    # spirv-tools
+
+    # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
+    # zstd
   ]
   ++ optionals enableQtTranslations [ qt6.qttools ]
   ++ optionals enableCubeb [ cubeb ]
@@ -110,23 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
-  ];
-
-  patches = [
-    # Fix boost errors
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/Tatsh/tatsh-overlay/fa2f92b888f8c0aab70414ca560b823ffb33b122/games-emulation/lime3ds/files/lime3ds-0002-boost-fix.patch";
-      hash = "sha256-XJogqvQE7I5lVHtvQja0woVlO40blhFOqnoYftIQwJs=";
-    })
-
-    # Fix boost 1.87
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/Tatsh/tatsh-overlay/5c4497d9b67fa6f2fa327b2f2ce4cb5be8c9f2f7/games-emulation/lime3ds/files/lime3ds-0003-boost-1.87-fixes.patch";
-      hash = "sha256-mwfI7fTx9aWF/EjMW3bxoz++A+6ONbNA70tT5nkhDUU=";
-    })
-
-    # https://github.com/azahar-emu/azahar/pull/1165
-    ./update-cmake-lists.patch
   ];
 
   postPatch = ''
@@ -144,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "USE_SYSTEM_LIBS" true)
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
+    (cmakeBool "DISABLE_SYSTEM_ZSTD" true)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
