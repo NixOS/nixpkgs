@@ -4838,6 +4838,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  fine-cmdline-nvim = buildVimPlugin {
+    pname = "fine-cmdline.nvim";
+    version = "2025-06-15";
+    src = fetchFromGitHub {
+      owner = "VonHeikemen";
+      repo = "fine-cmdline.nvim";
+      rev = "7db181d1cb294581b12a036eadffffde762a118f";
+      sha256 = "0991l33f37vpc5plw3c5rwm92sn08gfrlzqy8y1cn06f4p6ll78b";
+    };
+    meta.homepage = "https://github.com/VonHeikemen/fine-cmdline.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   firenvim = buildVimPlugin {
     pname = "firenvim";
     version = "2025-03-22";
