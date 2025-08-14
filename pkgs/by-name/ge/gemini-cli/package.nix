@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
 }:
 
@@ -18,11 +17,8 @@ buildNpmPackage (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/google-gemini/gemini-cli/pull/5336/commits/c1aef417d559237bf4d147c584449b74d6fbc1f8.patch";
-      name = "restore-missing-dependencies-fields.patch";
-      hash = "sha256-euRoLpbv075KIpYF9QPMba5FxG4+h/kxwLRetaay33s=";
-    })
+    # FIXME: remove once https://github.com/google-gemini/gemini-cli/pull/5336 is merged
+    ./restore-missing-dependencies-fields.patch
   ];
 
   npmDepsHash = "sha256-5pFnxZFhVNxYLPJClYq+pe4wAX5623Y3hFj8lIq00+E=";
