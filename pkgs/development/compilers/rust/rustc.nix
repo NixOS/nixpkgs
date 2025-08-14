@@ -301,6 +301,7 @@ stdenv.mkDerivation (finalAttrs: {
         python ./x.py --keep-stage=0 --stage=1 install library/std
         mkdir -v $out/bin $doc $man
         ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+        ln -s ${rustc.unwrapped}/libexec $out
         rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
         ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
         echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
