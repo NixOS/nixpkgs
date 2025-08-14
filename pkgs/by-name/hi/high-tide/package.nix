@@ -13,6 +13,7 @@
   gst_all_1,
   libsecret,
   libportal,
+  pipewire,
   nix-update-script,
 }:
 
@@ -41,6 +42,7 @@ python313Packages.buildPythonApplication rec {
     glib-networking
     libadwaita
     libportal
+    pipewire # provides a gstreamer plugin for pipewiresink
   ]
   ++ (with gst_all_1; [
     gstreamer

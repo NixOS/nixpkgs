@@ -295,8 +295,7 @@ in
                     name = "${cfg.package.name}-wrapper-${client.name}";
                     meta.mainProgram = mkBin "netbird";
                     nativeBuildInputs = with pkgs; [ makeWrapper ];
-                    phases = [ "installPhase" ];
-                    installPhase = concatStringsSep "\n" [
+                    buildCommand = concatStringsSep "\n" [
                       ''
                         mkdir -p "$out/bin"
                         makeWrapper ${lib.getExe cfg.package} "$out/bin/${mkBin "netbird"}" \
