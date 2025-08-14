@@ -4911,7 +4911,8 @@
     "remember_the_milk" =
       ps: with ps; [
         httplib2
-      ]; # missing inputs: RtmAPI
+        rtmapi
+      ];
     "remote" =
       ps: with ps; [
       ];
@@ -7560,6 +7561,7 @@
     "reddit"
     "refoss"
     "rehlko"
+    "remember_the_milk"
     "remote"
     "remote_calendar"
     "renault"
