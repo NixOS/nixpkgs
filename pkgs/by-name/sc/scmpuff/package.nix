@@ -40,7 +40,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mroth/scmpuff";
     changelog = "https://github.com/mroth/scmpuff/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      christoph-heiss
+    ];
     mainProgram = "scmpuff";
   };
 })
