@@ -1,0 +1,41 @@
+From faf5a90109574a10bc857896fc57269ccf1b5f49 Mon Sep 17 00:00:00 2001
+From: Matt Sturgeon <matt@sturgeon.me.uk>
+Date: Fri, 15 Aug 2025 16:02:31 +0100
+Subject: [PATCH] Remove game_hashes_db build dependency
+
+---
+ .../NexusMods.Games.FileHashes.csproj         | 20 -------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj b/src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
+index 033a46626..abd9e0a42 100644
+--- a/src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
++++ b/src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
+@@ -19,24 +19,4 @@
+       <ProjectReference Include="..\NexusMods.Networking.EpicGameStore\NexusMods.Networking.EpicGameStore.csproj" />
+     </ItemGroup>
+ 
+-    <PropertyGroup>
+-        <HashesDatabaseInput>https://github.com/Nexus-Mods/game-hashes/releases/latest/download/game_hashes_db.zip</HashesDatabaseInput>
+-        <HashesDatabaseOutput>$(BaseIntermediateOutputPath)games_hashes_db.zip</HashesDatabaseOutput>
+-    </PropertyGroup>
+-
+-    <!-- NOTE(erri120): Downloading the games hashes database at build time if it doesn't exist -->
+-    <Target Name="DownloadHashesDatabase" BeforeTargets="BeforeBuild" Condition="!Exists('$(HashesDatabaseOutput)')">
+-        <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+-        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="curl -sSL -o $(HashesDatabaseOutput) $(HashesDatabaseInput)"  />
+-        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;Invoke-WebRequest -Uri '$(HashesDatabaseInput)' -OutFile '$(HashesDatabaseOutput)'&quot;" />
+-    </Target>
+-
+-    <Target Name="EmbedOutput" AfterTargets="DownloadHashesDatabase">
+-        <Error Condition="!Exists('$(HashesDatabaseOutput)')" Text="Failed to embed file $(HashesDatabaseOutput)" />
+-
+-        <ItemGroup>
+-            <EmbeddedResource Include="$(HashesDatabaseOutput)" LogicalName="games_hashes_db.zip" />
+-        </ItemGroup>
+-    </Target>
+-
+ </Project>
+-- 
+2.50.1
+

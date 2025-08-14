@@ -9,6 +9,7 @@
   lib,
   xdg-utils,
   nix-update-script,
+  dos2unix,
   pname ? "nexusmods-app",
 }:
 let
@@ -23,12 +24,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.14.3";
+  version = "0.15.2";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-B2gIRVeaTwYEnESMovwEJgdmLwRNA7/nJs7opNhiyyA=";
+    hash = "sha256-WI6ulYDPOBGGt3snimCHswuIaII1aWNT/TZqvJxrQRQ=";
     fetchSubmodules = true;
   };
 
@@ -50,6 +51,7 @@ buildDotnetModule (finalAttrs: {
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
+    dos2unix # for patching
     imagemagick # For resizing SVG icon in postInstall
   ];
 
@@ -59,13 +61,22 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
+  patches = [
+    ./patches/no-game-hashes-db.patch
+    ./patches/no-games-json.patch
+  ];
+
+  prePatch = ''
+    dos2unix src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
+    dos2unix src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
+  '';
+
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
 
-    # Assertion assumes version is set to 0.0.1
-    substituteInPlace tests/NexusMods.Telemetry.Tests/TrackingDataSenderTests.cs \
-      --replace-fail 'cra_ct=v0.0.1' 'cra_ct=v${finalAttrs.version}'
+    unix2dos src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
+    unix2dos src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
   '';
 
   makeWrapperArgs = [
@@ -127,6 +138,7 @@ buildDotnetModule (finalAttrs: {
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
+    "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
