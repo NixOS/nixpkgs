@@ -58,23 +58,28 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   enabledTestPaths = [ "tests" ];
-  disabledTests =
-    lib.optionals (pythonOlder "3.12") [
-      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
-      "test_fts_dynamo_enforce_p0"
-      "test_fts_dynamo_resume"
-      "test_fts_dynamo_intrafit"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeError: Dynamo is not supported on Python 3.13+
-      "test_fts_dynamo_enforce_p0"
-      "test_fts_dynamo_resume"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-      # slightly exceeds numerical tolerance on aarch64-linux:
-      "test_fts_frozen_bn_track_running_stats"
-    ];
+  disabledTests = [
+    # Fails since pytorch-lightning was bumped to 2.5.3
+    # IndexError: list index out of range
+    # https://github.com/speediedan/finetuning-scheduler/issues/19
+    "test_fts_misconfiguration"
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
+    "test_fts_dynamo_enforce_p0"
+    "test_fts_dynamo_resume"
+    "test_fts_dynamo_intrafit"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Dynamo is not supported on Python 3.13+
+    "test_fts_dynamo_enforce_p0"
+    "test_fts_dynamo_resume"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # slightly exceeds numerical tolerance on aarch64-linux:
+    "test_fts_frozen_bn_track_running_stats"
+  ];
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
 
