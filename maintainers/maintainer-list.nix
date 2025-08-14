@@ -21623,6 +21623,12 @@
       { fingerprint = "C0A7 A9BB 115B C857 4D75  EA99 BBB7 A680 1DF1 E03F"; }
     ];
   };
+  ritascarlet = {
+    email = "sashasafonov080@gmail.com";
+    github = "ritascarlet";
+    githubId = 137996547;
+    name = "Alex Safonov";
+  };
   ritiek = {
     name = "Ritiek Malhotra";
     email = "ritiekmalhotra123@gmail.com";
