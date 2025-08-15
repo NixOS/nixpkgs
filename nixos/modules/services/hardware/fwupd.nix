@@ -155,6 +155,15 @@ in
           UEFI capsule configurations for the fwupd daemon.
         '';
       };
+
+      refreshTimer.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Enable fwupd-refresh.timer to automatically refresh fwupd metadata.
+          This is on by default, if you disable this, you must manually call "fwupdmgr refresh".
+        '';
+      };
     };
   };
 
@@ -181,46 +190,50 @@ in
   ];
 
   ###### implementation
-  config = lib.mkIf cfg.enable {
-    # Disable test related plug-ins implicitly so that users do not have to care about them.
-    services.fwupd.daemonSettings = {
-      EspLocation = config.boot.loader.efi.efiSysMountPoint;
-    };
-
-    environment.systemPackages = [ cfg.package ];
-
-    # customEtc overrides some files from the package
-    environment.etc = originalEtc // customEtc // extraTrustedKeys // remotes;
-
-    services.dbus.packages = [ cfg.package ];
-
-    services.udev.packages = [ cfg.package ];
-
-    # required to update the firmware of disks
-    services.udisks2.enable = true;
-
-    systemd = {
-      packages = [ cfg.package ];
-
-      # fwupd-refresh expects a user that we do not create, so just run with DynamicUser
-      # instead and ensure we take ownership of /var/lib/fwupd
-      services.fwupd-refresh.serviceConfig = {
-        StateDirectory = "fwupd";
-        # Better for debugging, upstream sets stderr to null for some reason..
-        StandardError = "inherit";
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.enable) {
+      # Disable test related plug-ins implicitly so that users do not have to care about them.
+      services.fwupd.daemonSettings = {
+        EspLocation = config.boot.loader.efi.efiSysMountPoint;
       };
 
-      timers.fwupd-refresh.wantedBy = [ "timers.target" ];
-    };
+      environment.systemPackages = [ cfg.package ];
 
-    users.users.fwupd-refresh = {
-      isSystemUser = true;
-      group = "fwupd-refresh";
-    };
-    users.groups.fwupd-refresh = { };
+      # customEtc overrides some files from the package
+      environment.etc = originalEtc // customEtc // extraTrustedKeys // remotes;
 
-    security.polkit.enable = true;
-  };
+      services.dbus.packages = [ cfg.package ];
+
+      services.udev.packages = [ cfg.package ];
+
+      # required to update the firmware of disks
+      services.udisks2.enable = true;
+
+      security.polkit.enable = true;
+    })
+
+    (lib.mkIf (cfg.enable && cfg.refreshTimer.enable) {
+      systemd = {
+        packages = [ cfg.package ];
+
+        # fwupd-refresh expects a user that we do not create, so just run with DynamicUser
+        # instead and ensure we take ownership of /var/lib/fwupd
+        services.fwupd-refresh.serviceConfig = {
+          StateDirectory = "fwupd";
+          # Better for debugging, upstream sets stderr to null for some reason..
+          StandardError = "inherit";
+        };
+
+        timers.fwupd-refresh.wantedBy = [ "timers.target" ];
+      };
+
+      users.users.fwupd-refresh = {
+        isSystemUser = true;
+        group = "fwupd-refresh";
+      };
+      users.groups.fwupd-refresh = { };
+    })
+  ];
 
   meta = {
     maintainers = pkgs.fwupd.meta.maintainers;
