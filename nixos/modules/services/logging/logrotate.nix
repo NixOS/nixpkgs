@@ -125,24 +125,6 @@ let
   )) "--mail=${pkgs.mailutils}/bin/mail";
 in
 {
-  imports = [
-    (lib.mkRemovedOptionModule [
-      "services"
-      "logrotate"
-      "config"
-    ] "Modify services.logrotate.settings.header instead")
-    (lib.mkRemovedOptionModule [
-      "services"
-      "logrotate"
-      "extraConfig"
-    ] "Modify services.logrotate.settings.header instead")
-    (lib.mkRemovedOptionModule [
-      "services"
-      "logrotate"
-      "paths"
-    ] "Add attributes to services.logrotate.settings instead")
-  ];
-
   options = {
     services.logrotate = {
       enable = lib.mkEnableOption "the logrotate systemd service" // {
