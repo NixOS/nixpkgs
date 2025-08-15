@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication {
     mainProgram = "gallery-dl";
     maintainers = with lib.maintainers; [
       dawidsowa
+      donteatoreo
       lucasew
     ];
   };
