@@ -10,7 +10,6 @@
   version,
   url,
   hash,
-  ...
 }:
 
 stdenvNoCC.mkDerivation (final: {
