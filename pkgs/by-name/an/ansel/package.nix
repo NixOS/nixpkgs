@@ -1,83 +1,81 @@
 {
-  libsepol,
-  libavif,
   bash,
-  curl,
-  librsvg,
-  libselinux,
-  util-linux,
-  libwebp,
-  libheif,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libxslt,
-  libxml2,
   cmake,
-  exiftool,
-  openexr,
-  glib,
-  python3Packages,
-  perlPackages,
-  lensfun,
-  intltool,
-  pkg-config,
-  desktop-file-utils,
-  libffi,
-  gtk3,
-  libjpeg,
-  pugixml,
-  pcre,
-  pcre2,
-  lcms,
-  sqlite,
-  json-glib,
-  jasper,
-  libsecret,
-  gmic,
-  icu,
   colord,
   colord-gtk,
-  libaom,
-  libdatrie,
-  libsysprof-capture,
-  libde265,
-  isocodes,
-  libpsl,
-  libepoxy,
-  libsoup_2_4,
-  exiv2,
-  libXtst,
-  libthai,
-  x265,
-  libXdmcp,
-  openjpeg,
-  libgpg-error,
-  libxkbcommon,
-  osm-gps-map,
-  wrapGAppsHook3,
-  rav1e,
+  curl,
   dav1d,
-  libgcrypt,
+  desktop-file-utils,
+  exiftool,
+  exiv2,
+  fetchFromGitHub,
+  glib,
+  gmic,
   graphicsmagick,
+  gtk3,
+  icu,
+  intltool,
+  isocodes,
+  jasper,
+  json-glib,
+  lcms,
+  lensfun,
+  lerc,
+  lib,
+  libaom,
+  libavif,
+  libdatrie,
+  libde265,
+  libepoxy,
+  libffi,
+  libgcrypt,
+  libgpg-error,
+  libheif,
+  libjpeg,
+  libpsl,
+  librsvg,
+  libsecret,
+  libselinux,
+  libsepol,
+  libsoup_3,
+  libsysprof-capture,
+  libthai,
+  libwebp,
+  libXdmcp,
+  libxkbcommon,
+  libxml2,
+  libXtst,
+  llvmPackages,
+  openexr,
+  openjpeg,
+  osm-gps-map,
+  pcre2,
+  perlPackages,
+  pkg-config,
+  pugixml,
+  python3Packages,
+  rav1e,
+  runCommand,
+  saxon,
+  sqlite,
+  stdenv,
   unstableGitUpdater,
+  util-linux,
+  wrapGAppsHook3,
+  x265,
 }:
 
 let
-  # requires libavif 0.x, see https://github.com/aurelienpierreeng/ansel/blob/e2c4a0a60cd80f741dd3d3c6ab72be9ac11234fb/src/CMakeLists.txt#L356
-  libavif_0_11 = libavif.overrideAttrs rec {
-    version = "0.11.1";
-
-    src = fetchFromGitHub {
-      owner = "AOMediaCodec";
-      repo = "libavif";
-      tag = "v${version}";
-      hash = "sha256-mUi0DU99XV3FzUZ8/9uJZU+W3fc6Bk6+y6Z78IRZ9Qs=";
-    };
-
-    patches = [ ];
-    doCheck = false;
-  };
+  # Code taken from pkgs/by-name/da/darktable/package.nix
+  # Create a wrapper for saxon to provide saxon-xslt command
+  saxon-xslt = runCommand "saxon-xslt" { } ''
+    mkdir -p $out/bin
+    cat > $out/bin/saxon-xslt << 'EOF'
+    #!/bin/sh
+    exec ${saxon}/bin/saxon "$@"
+    EOF
+    chmod +x $out/bin/saxon-xslt
+  '';
 in
 stdenv.mkDerivation {
   pname = "ansel";
@@ -103,11 +101,12 @@ stdenv.mkDerivation {
     desktop-file-utils
     exiftool
     intltool
-    libxml2
+    llvmPackages.llvm
     pkg-config
     perlPackages.perl
     python3Packages.jsonschema
     wrapGAppsHook3
+    saxon-xslt
   ];
 
   buildInputs = [
@@ -127,8 +126,9 @@ stdenv.mkDerivation {
     jasper
     lcms
     lensfun
+    lerc
     libaom
-    libavif_0_11
+    libavif
     libdatrie
     libde265
     libepoxy
@@ -142,18 +142,17 @@ stdenv.mkDerivation {
     libsecret
     libselinux
     libsepol
-    libsoup_2_4
+    libsoup_3
     libsysprof-capture
     libthai
     libwebp
     libXdmcp
     libxkbcommon
-    libxslt
+    libxml2
     libXtst
     openexr
     openjpeg
     osm-gps-map
-    pcre
     pcre2
     perlPackages.Po4a
     pugixml
@@ -168,22 +167,20 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" "$out/lib/ansel"
     )
   '';
+  cmakeFlags = [
+    "-DBINARY_PACKAGE_BUILD=1"
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     # Tags inherited from Darktable, + a "nightly" 0.0.0 tag that new artefacts get attached to
     hardcodeZeroVersion = true;
   };
 
-  # cmake can't find the binary itself
-  cmakeFlags = [
-    (lib.cmakeFeature "Xsltproc_BIN" (lib.getExe' libxslt "xsltproc"))
-  ];
-
   meta = {
     description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ mBornand ];
     mainProgram = "ansel";
     platforms = lib.platforms.linux;
   };
