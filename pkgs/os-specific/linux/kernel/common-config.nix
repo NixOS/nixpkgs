@@ -329,7 +329,7 @@ let
       BONDING = module;
       NET_L3_MASTER_DEV = option yes;
       NET_FOU_IP_TUNNELS = option yes;
-      IP_NF_TARGET_REDIRECT = module;
+      IP_NF_TARGET_REDIRECT = whenOlder "6.17" module;
       NETKIT = whenAtLeast "6.7" yes;
 
       PPP_MULTILINK = yes; # PPP multilink support
