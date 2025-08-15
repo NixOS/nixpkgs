@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-05-19";
+  version = "2025-07-21";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-st9VLiuvKHKkokUToxw4KQ4aekGMqx8rfVBmmeddgVk=";
+    hash = "sha256-Q2CLqlHItNr4H4xFcuGd0BqootxsInZQ3unTZ7vtz8E=";
   };
 
   nativeBuildInputs = [
@@ -176,20 +176,24 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
 
-  passthru.tests = {
-    testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
-      export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
-      export VCPKG_ROOT=.
-      vcpkg --x-packages-root="test" --x-install-root="test2" contact > "$out"
+  passthru.tests =
+    if doWrap then
+      {
+        testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
+          export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
+          export VCPKG_ROOT=.
+          vcpkg --x-packages-root="test" --x-install-root="test2" contact > "$out"
 
-      cat "$out" | head -n 4 | diff - ${writeText "vcpkg-tool-test-wrapper-expected" ''
-        NIX_VCPKG_DOWNLOADS_ROOT = /homeless-shelter/.vcpkg/root/downloads
-        NIX_VCPKG_BUILDTREES_ROOT = /homeless-shelter/.vcpkg/root/buildtrees
-        NIX_VCPKG_PACKAGES_ROOT = test
-        NIX_VCPKG_INSTALL_ROOT = test2
-      ''}
-    '';
-  };
+          cat "$out" | head -n 4 | diff - ${writeText "vcpkg-tool-test-wrapper-expected" ''
+            NIX_VCPKG_DOWNLOADS_ROOT = /homeless-shelter/.vcpkg/root/downloads
+            NIX_VCPKG_BUILDTREES_ROOT = /homeless-shelter/.vcpkg/root/buildtrees
+            NIX_VCPKG_PACKAGES_ROOT = test
+            NIX_VCPKG_INSTALL_ROOT = test2
+          ''}
+        '';
+      }
+    else
+      { };
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
