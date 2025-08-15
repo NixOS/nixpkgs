@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.7.2";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pyvisa";
     repo = "pyvisa-py";
     tag = version;
-    hash = "sha256-UFAKLrZ1ZrTmFXwVuyTCPVo3Y1YIDOvkx5krpsz71BM=";
+    hash = "sha256-bYxl7zJ36uorEasAKvPiVWLaG2ISQGBHrQZJcnkbfzU=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyvisa/pyvisa-py";
     changelog = "https://github.com/pyvisa/pyvisa-py/blob/${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [
+      mvnetbiz
+      xeniagda
+    ];
   };
 }
