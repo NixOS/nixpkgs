@@ -23,11 +23,6 @@ buildPythonPackage rec {
     ./tag-date.patch
   ];
 
-  # Drop dependency on coherent.license, which in turn requires coherent.build
-  postPatch = ''
-    sed -i "/coherent.licensed/d" pyproject.toml
-  '';
-
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
