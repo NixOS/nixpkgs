@@ -13,7 +13,7 @@ let
     map (x: lib.nameValuePair "fabric-${escapeVersion x.version}" x) versions
   );
 
-  packages = lib.mapAttrs (_: args: callPackage ./derivation.nix args) versions';
+  packages = lib.mapAttrs (_: callPackage ./derivation.nix) versions';
 in
 lib.recurseIntoAttrs (
   packages
