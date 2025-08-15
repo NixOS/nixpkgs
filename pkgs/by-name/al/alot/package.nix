@@ -96,6 +96,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
+    changelog = "https://github.com/pazz/alot/releases/tag/${src.tag}";
     mainProgram = "alot";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
