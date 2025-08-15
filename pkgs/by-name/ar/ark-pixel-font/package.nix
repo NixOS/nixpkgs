@@ -7,14 +7,14 @@
 
 python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2025.07.21";
+  version = "2025.08.11";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "ark-pixel-font";
     tag = version;
-    hash = "sha256-NnkXKe4qlWl4lDHNcO5aVJWwyeSrHoHxqlla+RMgtQw=";
+    hash = "sha256-Rcn2zlZyMoziYd1b3wjjh1tYpm6A0qYGiKEg+Wd+0m8=";
   };
 
   dependencies = with python312Packages; [
