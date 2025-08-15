@@ -4,7 +4,7 @@
   fetchurl,
   makeDesktopItem,
   imagemagick,
-  p7zip,
+  _7zz,
   wine,
   writeShellScriptBin,
   symlinkJoin,
@@ -31,14 +31,14 @@ let
 
     nativeBuildInputs = [
       imagemagick
-      p7zip
+      _7zz
     ];
 
     buildCommand = ''
       mkdir -p $out
       _tmp=$(mktemp -d)
       cd $_tmp
-      7z x -aoa ${eac_exe}
+      7zz x -aoa ${eac_exe}
       chmod -R 755 .
       cp ${cygwin} cygwin1.tar.xz
       tar xf cygwin1.tar.xz
@@ -46,7 +46,7 @@ let
       rm -rf usr
       rm cygwin1.tar.xz
       cp -r * $out
-      7z x EAC.exe
+      7zz x EAC.exe
       convert .rsrc/1033/ICON/29.ico -thumbnail 128x128 -alpha on -background none -flatten "$out/eac.ico.128.png"
     '';
   };
