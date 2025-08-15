@@ -8,6 +8,7 @@
   coreutils,
   cvs,
   findutils,
+  fossil,
   gawk,
   git,
   git-lfs,
@@ -61,6 +62,11 @@ rec {
     breezy
   ];
   nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [ cvs ];
+  nix-prefetch-fossil =
+    mkPrefetchScript "fossil" ../../../build-support/fetchfossil/nix-prefetch-fossil
+      [
+        fossil
+      ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
@@ -80,6 +86,7 @@ rec {
     paths = [
       nix-prefetch-bzr
       nix-prefetch-cvs
+      nix-prefetch-fossil
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn
