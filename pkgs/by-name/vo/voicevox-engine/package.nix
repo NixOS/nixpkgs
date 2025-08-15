@@ -26,15 +26,13 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  dependencies = [
-    passthru.pyopenjtalk
-  ]
-  ++ (with python3Packages; [
+  dependencies = with python3Packages; [
     fastapi
     jinja2
     kanalizer
     numpy
     platformdirs
+    pyopenjtalk
     pydantic
     python-multipart
     pyworld
@@ -45,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     soxr
     starlette
     uvicorn
-  ]);
+  ];
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
@@ -101,7 +99,8 @@ python3Packages.buildPythonApplication rec {
       hash = "sha256-4D9b5MjJQq+oCqSv8t7CILgFcotbNBH3m2F/up12pPE=";
     };
 
-    pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };
+    # todo add a deprecation notice
+    pyopenjtalk = python3Packages.pyopenjtalk;
   };
 
   meta = {
