@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
-  version = "2.5.1";
+  version = "2.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${version}";
-    hash = "sha256-+jt+if9aAbEd2XDMC7RpZmJpm4VUEZMt5xoLOP/esMg=";
+    hash = "sha256-6WRKDYug7eVaTSY2R2jBcj9o/984mqKZZi36XRT7KyI=";
   };
 
   patches = [
@@ -58,28 +58,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   enabledTestPaths = [ "tests" ];
-  disabledTests = [
-    # Fails since pytorch-lightning was bumped to 2.5.3
-    # IndexError: list index out of range
-    # https://github.com/speediedan/finetuning-scheduler/issues/19
-    "test_fts_misconfiguration"
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
-    "test_fts_dynamo_enforce_p0"
-    "test_fts_dynamo_resume"
-    "test_fts_dynamo_intrafit"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # RuntimeError: Dynamo is not supported on Python 3.13+
-    "test_fts_dynamo_enforce_p0"
-    "test_fts_dynamo_resume"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-    # slightly exceeds numerical tolerance on aarch64-linux:
-    "test_fts_frozen_bn_track_running_stats"
-  ];
+  disabledTests =
+    lib.optionals (pythonOlder "3.12") [
+      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
+      "test_fts_dynamo_enforce_p0"
+      "test_fts_dynamo_resume"
+      "test_fts_dynamo_intrafit"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_fts_dynamo_enforce_p0"
+      "test_fts_dynamo_resume"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+      # slightly exceeds numerical tolerance on aarch64-linux:
+      "test_fts_frozen_bn_track_running_stats"
+    ];
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
 
