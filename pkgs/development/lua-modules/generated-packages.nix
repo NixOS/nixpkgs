@@ -4651,15 +4651,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "6.6.0-1";
+      version = "6.7.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-6.6.0-1.rockspec";
-          sha256 = "02nm7wddffhg53w4cpsf19a5gvgrhm617k3md406q0wyja7hqysn";
+          url = "mirror://luarocks/rustaceanvim-6.7.0-1.rockspec";
+          sha256 = "0f6rwnf7n7gq9kbpgn0g221fif910wcfsl4bx4qabj9wcyjdvss4";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/v6.6.0.zip";
-        sha256 = "005xvdl21yya7v4cr0svnyq9mlf3p7v0lzidgggwhlslc7yw3bg1";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/v6.7.0.zip";
+        sha256 = "00hni3yyj7xvcx0swkv7dqgrpsihiwiivvgd6ir7f3kh01za6m02";
       };
 
       disabled = luaOlder "5.1";
