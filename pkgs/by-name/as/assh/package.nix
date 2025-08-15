@@ -15,8 +15,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
-    rev = "v${version}";
-    sha256 = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
+    tag = "v${version}";
+    hash = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
   };
 
   vendorHash = "sha256-L2Uo/jsMtxQClF1UDa7NIUbOm7BflvncNsjqGnCsPKo=";
