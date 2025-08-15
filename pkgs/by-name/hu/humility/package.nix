@@ -30,6 +30,8 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-GZkHPoDKiqTVwRAWXXbELXC1I/KRO+9sshY8/rGbA4A=";
 
+  cargoBuildFlags = [ "-p humility" ];
+
   meta = with lib; {
     description = "Debugger for Hubris";
     mainProgram = "humility";
