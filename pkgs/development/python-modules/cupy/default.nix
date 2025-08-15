@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython_0,
+  cython_3_1,
   fastrlock,
   numpy,
   wheel,
@@ -58,7 +58,7 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.3.0";
+  version = "13.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     owner = "cupy";
     repo = "cupy";
     tag = "v${version}";
-    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
+    hash = "sha256-8RgyvsU3lnt6nO0J1tiLBOdYsX0jJkjPH/SpKQz4o7s=";
     fetchSubmodules = true;
   };
 
@@ -87,7 +87,7 @@ buildPythonPackage rec {
     setuptools
     wheel
     addDriverRunpath
-    cython_0
+    cython_3_1
     cudaPackages.cuda_nvcc
   ];
 
