@@ -7,6 +7,7 @@
   fetchFromGitHub,
   lib,
   replaceVars,
+  php83,
 
   ncVersion,
 }:
@@ -73,8 +74,9 @@ stdenv.mkDerivation rec {
     rm appinfo/signature.json
     rm -rf bin-ext/
 
+    sed -i 's/EXIFTOOL_VER = .*/EXIFTOOL_VER = @;/' lib/Service/BinExt.php
     substituteInPlace lib/Service/BinExt.php \
-      --replace-fail "EXIFTOOL_VER = '12.70'" "EXIFTOOL_VER = '${exiftool.version}'"
+      --replace-fail "EXIFTOOL_VER = @" "EXIFTOOL_VER = '${exiftool.version}'"
   '';
 
   installPhase = ''
