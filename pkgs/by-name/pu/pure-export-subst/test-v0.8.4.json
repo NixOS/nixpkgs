@@ -1,0 +1,35 @@
+{
+  "sha": "c94fb80f4be7df16b93e41d98ff310e801b368c9",
+  "node_id": "MDY6Q29tbWl0MTU1NjU4NTU2OmM5NGZiODBmNGJlN2RmMTZiOTNlNDFkOThmZjMxMGU4MDFiMzY4Yzk=",
+  "url": "https://api.github.com/repos/smallstep/certificates/git/commits/c94fb80f4be7df16b93e41d98ff310e801b368c9",
+  "html_url": "https://github.com/smallstep/certificates/commit/c94fb80f4be7df16b93e41d98ff310e801b368c9",
+  "author": {
+    "name": "max furman",
+    "email": "mx.furman@gmail.com",
+    "date": "2019-02-12T20:56:58Z"
+  },
+  "committer": {
+    "name": "max furman",
+    "email": "mx.furman@gmail.com",
+    "date": "2019-02-12T20:56:58Z"
+  },
+  "tree": {
+    "sha": "6bddc4ce69d89d5e0126d9920b52d1496dc5f915",
+    "url": "https://api.github.com/repos/smallstep/certificates/git/trees/6bddc4ce69d89d5e0126d9920b52d1496dc5f915"
+  },
+  "message": "dep update cli",
+  "parents": [
+    {
+      "sha": "ef99dd28e53380af8e6564eaaf0577d9465ac988",
+      "url": "https://api.github.com/repos/smallstep/certificates/git/commits/ef99dd28e53380af8e6564eaaf0577d9465ac988",
+      "html_url": "https://github.com/smallstep/certificates/commit/ef99dd28e53380af8e6564eaaf0577d9465ac988"
+    }
+  ],
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null,
+    "verified_at": null
+  }
+}
