@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "docker-language-server";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-language-server";
     tag = "v${version}";
-    hash = "sha256-cxLg0fLUC4dj3QUax+vIsJENRXNifbXMoRkldM44i+0=";
+    hash = "sha256-P3DwlCjQllFtf05ssXYNraQFGEEzChSE5eJvcODdF6Q=";
   };
 
   vendorHash = "sha256-xvRHxi7aem88mrmdAmSyRNtBUSZD4rjUut2VjPeoejg=";
