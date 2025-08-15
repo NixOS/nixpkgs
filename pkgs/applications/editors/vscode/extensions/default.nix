@@ -2556,8 +2556,8 @@ let
         mktplcRef = {
           publisher = "jeff-hykin";
           name = "better-nix-syntax";
-          version = "1.1.5";
-          hash = "sha256-9V+ziWk9V4LyQiVNSC6DniJDun+EvcK30ykPjyNsvp0=";
+          version = "2.2.0";
+          hash = "sha256-MmmRKq/7uTCywnEceKukJW/jIc0oIx0GIz55ugh4gQg=";
         };
         meta = {
           description = "Visual Studio Code extension providing Nix Syntax highlighting";
