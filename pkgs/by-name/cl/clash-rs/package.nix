@@ -4,22 +4,30 @@
   rustPlatform,
   protobuf,
   versionCheckHook,
+  cmake,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.7.7";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x89sFBQ6bAIHvaRTCxqKKgFKo7PpquVze0R6VicwrJw=";
+    hash = "sha256-HkIsflsLTQdvetgamLt6LbYxOpv1+FQ/e/PzJjKOfq4=";
   };
 
-  cargoHash = "sha256-jfc0Rmt9eEN3ds5Rakj+IcJcUa28CbhiSu4AfqHurf0=";
+  cargoHash = "sha256-Qh/YxNO/DtVBj6Eiloc3+Fs+dQqvAXSe+5lCer0F2zs=";
 
   patches = [
     ./unbounded-shifts.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
   ];
 
   nativeInstallCheckInputs = [

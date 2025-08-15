@@ -1,40 +1,36 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
   gitUpdater,
-  wrapQtAppsHook,
   cmake,
-  marble,
   libsForQt5,
 }:
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zombietrackergps";
   version = "1.15";
 
   src = fetchFromGitLab {
     owner = "ldutils-projects";
-    repo = pname;
+    repo = "zombietrackergps";
     # latest revision is not tagged upstream, use commit sha in the meantime
     #rev = "v_${version}";
     rev = "cc75d5744965cc6973323f5bb77f00b0b0153dce";
     hash = "sha256-z/LFNRFdQQFxEWyAjcuGezRbTsv8z6Q6fK8NLjP4HNM=";
   };
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     marble.dev
-  ]
-  ++ (with libsForQt5; [
     qtbase
     qtcharts
     qtsvg
     qtwebengine
     ldutils
-  ]);
+  ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   preConfigure = ''
@@ -49,12 +45,12 @@ mkDerivation rec {
     rev-prefix = "v_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GPS track manager for Qt using KDE Marble maps";
     homepage = "https://www.zombietrackergps.net/ztgps/";
     changelog = "https://www.zombietrackergps.net/ztgps/history.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sohalt ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sohalt ];
+    platforms = lib.platforms.linux;
   };
 }
