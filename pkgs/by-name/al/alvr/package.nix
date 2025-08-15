@@ -77,6 +77,11 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
+  cargoBuildFlags = [
+    "--exclude alvr_xtask"
+    "--workspace"
+  ];
+
   nativeBuildInputs = [
     rust-cbindgen
     pkg-config
