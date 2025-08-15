@@ -40,6 +40,7 @@ buildLinux (
       in
       [ rt-patch ] ++ kernelPatches;
 
+    isLTS = true;
     structuredExtraConfig =
       with lib.kernel;
       {
