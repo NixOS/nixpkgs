@@ -8,7 +8,7 @@
   par2cmdline-turbo,
   unzip,
   unrar,
-  p7zip,
+  _7zz,
   util-linux,
   makeWrapper,
   nixosTests,
@@ -68,7 +68,7 @@ let
     par2cmdline-turbo
     unrar
     unzip
-    p7zip
+    _7zz
     util-linux
   ];
 in
