@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-MkZsLRQE5Swdyp9l/cvPvznWxRfKuYecj+TTgb3ufKU=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/rust";
+  sourceRoot = "source/rust";
 
   cargoHash = "sha256-BxV8oZlN+6cVb3GwhY7TKWxHEpY3WVEhN6A6+5NMOyU=";
 

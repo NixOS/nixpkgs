@@ -5,34 +5,34 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bully";
   version = "1.4-00";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "bully";
-    rev = version;
-    sha256 = "1n2754a5z44g414a0hj3cmi9q5lwnzyvmvzskrj2nci8c8m2kgnf";
+    tag = finalAttrs.version;
+    hash = "sha256-zr4pKmIoMitknvrvuv23nBacYmVDQqBIII+QXxQpR9g=";
   };
 
   buildInputs = [ libpcap ];
 
   enableParallelBuilding = true;
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "source/src";
 
   installPhase = ''
     install -Dm555 -t $out/bin bully
-    install -Dm444 -t $out/share/doc/${pname} ../*.md
+    install -Dm444 -t $out/share/doc/bully ../*.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
     homepage = "https://github.com/kimocoder/bully";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.linux;
     mainProgram = "bully";
   };
-}
+})

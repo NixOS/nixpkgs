@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-44F4CdsDHuN2FuijnpfmoFy4a/eAbYOoBYijl9mOctg=";
   };
 
-  sourceRoot = "${src.name}/config-editor";
+  sourceRoot = "source/config-editor";
 
   nativeBuildInputs = [
     npmHooks.npmConfigHook
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/jersou/mouse-actions/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jersou/mouse-actions/blob/v${version}/CHANGELOG.md";
     description = "Mouse event based command executor, a mix between Easystroke and Comiz edge commands";
     homepage = "https://github.com/jersou/mouse-actions";
     license = lib.licenses.mit;

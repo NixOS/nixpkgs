@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-O7Rzx62O0h3kK6+lMag+5totijJoobOKi8DNWT9sDjg=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
+  sourceRoot = "source/src";
 
   vendorHash = "sha256-Bl3FI8lodSV5kzHvM8GHbQsep0W8s2BG8IbGf2AahZc=";
 
@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://zoraxy.arozos.com/";
     changelog = "https://github.com/tobychui/zoraxy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "zoraxy";
     platforms = lib.platforms.linux;
   };
