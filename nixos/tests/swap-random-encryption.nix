@@ -16,6 +16,9 @@
 
       virtualisation.rootDevice = "/dev/vda1";
 
+      # TODO: Switch to systemd initrd
+      # Blocked by: https://github.com/systemd/systemd/issues/38672
+      boot.initrd.systemd.enable = false;
       boot.initrd.postDeviceCommands = ''
         if ! test -b /dev/vda1; then
           ${pkgs.parted}/bin/parted --script /dev/vda -- mklabel msdos
