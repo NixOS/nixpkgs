@@ -12,6 +12,10 @@
 
 let
   source = import ./source.nix;
+  supported = removeAttrs source [ "version" ];
+
+  platform = supported.${stdenvNoCC.system} or (throw "unsupported platform ${stdenvNoCC.system}");
+
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nrfutil";
