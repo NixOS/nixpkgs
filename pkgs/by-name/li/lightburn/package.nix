@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  p7zip,
+  _7zz,
   nss,
   nspr,
   libusb1,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    p7zip
+    _7zz
     autoPatchelfHook
     copyDesktopItems
     makeWrapper
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     fontconfig
   ];
 
-  unpackPhase = ''
-    7z x $src
-  '';
+  # preserve same behavior as previous manual unpack to the current dir
+  # and avoid automatic move to extracted subdir
+  sourceRoot = ".";
 
   desktopItems = [
     (makeDesktopItem {
