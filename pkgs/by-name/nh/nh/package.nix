@@ -6,12 +6,14 @@
   makeBinaryWrapper,
   fetchFromGitHub,
   nix-update-script,
+  gitMinimal,
   nvd,
   nix-output-monitor,
   buildPackages,
 }:
 let
   runtimeDeps = [
+    gitMinimal
     nvd
     nix-output-monitor
   ];
