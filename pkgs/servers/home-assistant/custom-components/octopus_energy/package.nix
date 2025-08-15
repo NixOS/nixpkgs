@@ -42,9 +42,8 @@ buildHomeAssistantComponent rec {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      "--version-regex"
       # Ignore pre-release versions ("beta")
-      "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+      "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
     ];
   };
 
