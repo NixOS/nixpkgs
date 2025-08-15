@@ -75,6 +75,11 @@ buildDotnetModule (finalAttrs: {
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
 
+    # Specify a fixed date to improve build reproducibility
+    echo "1970-01-01T00:00:00Z" >buildDate.txt
+    substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)buildDate.txt' "$(realpath buildDate.txt)"
+
     unix2dos src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj
     unix2dos src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
   '';
