@@ -35,12 +35,12 @@ buildPythonApplication rec {
       --replace-fail /usr/share "$out/share"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ]
   ++ lib.optional withManpage sphinx;
 
-  propagatedBuildInputs = [
+  dependencies = [
     configobj
     file
     gpgme
