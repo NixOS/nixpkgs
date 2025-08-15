@@ -116,7 +116,7 @@ in
 
         LoadCredential = lib.optionalString (
           cfg.passwordFile != null
-        ) "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
+        ) "PHOTOPRISM_ADMIN_PASSWORD_FILE:${cfg.passwordFile}";
 
         LockPersonality = true;
         PrivateDevices = true;
@@ -144,22 +144,18 @@ in
       };
 
       wantedBy = [ "multi-user.target" ];
-      environment = env;
+      environment =
+        env
+        // lib.optionalAttrs (cfg.passwordFile != null) {
+          PHOTOPRISM_ADMIN_PASSWORD_FILE = "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD_FILE";
+        };
 
-      # reminder: easier password configuration will come in https://github.com/photoprism/photoprism/pull/2302
       preStart = ''
         ln -sf ${manage} photoprism-manage
-
-        ${lib.optionalString (cfg.passwordFile != null) ''
-          export PHOTOPRISM_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD")
-        ''}
         exec ${cfg.package}/bin/photoprism migrations run -f
       '';
 
       script = ''
-        ${lib.optionalString (cfg.passwordFile != null) ''
-          export PHOTOPRISM_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD")
-        ''}
         exec ${cfg.package}/bin/photoprism start
       '';
     };
