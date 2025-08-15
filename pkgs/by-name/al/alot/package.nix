@@ -23,8 +23,6 @@ buildPythonApplication rec {
     "man"
   ];
 
-  disabled = !isPy3k;
-
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
