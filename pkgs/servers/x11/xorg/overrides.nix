@@ -1213,7 +1213,6 @@ self: super:
   xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
-  xprop = addMainProgram super.xprop { };
 
   xrdb = super.xrdb.overrideAttrs (attrs: {
     configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
@@ -1231,7 +1230,6 @@ self: super:
     };
   });
 
-  xrefresh = addMainProgram super.xrefresh { };
   xset = addMainProgram super.xset { };
   xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };
