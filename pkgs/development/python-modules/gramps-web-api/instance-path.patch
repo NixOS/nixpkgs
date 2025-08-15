@@ -1,0 +1,15 @@
+diff --git a/gramps_webapi/app.py b/gramps_webapi/app.py
+index 2debc8d..50c6415 100644
+--- a/gramps_webapi/app.py
++++ b/gramps_webapi/app.py
+@@ -78,7 +78,9 @@ def deprecated_config_from_env(app):
+ 
+ def create_app(config: Optional[Dict[str, Any]] = None):
+     """Flask application factory."""
+-    app = Flask(__name__)
++
++    instance_path = os.getenv("GRAMPS_FLASK_INSTANCE_PATH")
++    app = Flask(__name__, instance_path=instance_path, instance_relative_config=True)
+ 
+     app.logger.setLevel(logging.INFO)
+ 
