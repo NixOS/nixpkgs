@@ -10,12 +10,12 @@
   versionSuffix,
 }:
 
-pkgs.releaseTools.makeSourceTarball {
+pkgs.releaseTools.sourceTarball {
   name = "nixos-channel";
 
   src = nixpkgs;
 
-  officialRelease = false; # FIXME: fix this in makeSourceTarball
+  officialRelease = false; # FIXME: fix this in sourceTarball
   inherit version versionSuffix;
 
   buildInputs = [ pkgs.nix ];
