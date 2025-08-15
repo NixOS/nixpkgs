@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   google-auth,
   google-cloud-core,
   google-cloud-iam,
@@ -21,12 +21,11 @@ buildPythonPackage rec {
   version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_storage";
-    inherit version;
-    hash = "sha256-3syoQwdgNvRWMxmMEl0YYf+/R+v1wOO5jcubLbFViWw=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-storage";
+    tag = "v${version}";
+    hash = "sha256-05jPtpsEQYqReDaeLj/Vzkz761jZfLQXC20WjTIPVc8=";
   };
 
   pythonRelaxDeps = [ "google-auth" ];
@@ -52,6 +51,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  enabledTestPaths = [
+    "tests/unit/"
+    "tests/system/"
+  ];
+
   disabledTests = [
     # Disable tests which require credentials and network access
     "create"
@@ -72,6 +76,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    "samples/"
     "tests/unit/test_bucket.py"
     "tests/system/test_blob.py"
     "tests/system/test_bucket.py"
@@ -90,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.storage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
     changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
   };
 }
