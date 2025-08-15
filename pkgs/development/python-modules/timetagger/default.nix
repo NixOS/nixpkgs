@@ -51,12 +51,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with TimeTagger";
-    mainProgram = "timetagger";
     homepage = "https://github.com/almarklein/timetagger";
     changelog = "https://github.com/almarklein/timetagger/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    mainProgram = "timetagger";
   };
 }
