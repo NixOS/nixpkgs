@@ -24,7 +24,9 @@
   diskcache,
   fastapi,
   google-generativeai,
+  google-genai,
   pytest-asyncio,
+  pytest-examples,
   pytestCheckHook,
   python-dotenv,
   redis,
@@ -32,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.9";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +43,7 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
-    hash = "sha256-3IwvbepDrylOIlL+IteyFChqYc/ZIu6IieIkbAPL+mw=";
+    hash = "sha256-vknPfRHyLoLo2838p/fbjrqyaBORZzLp9+fN98yVDz0=";
   };
 
   build-system = [ hatchling ];
@@ -66,7 +68,9 @@ buildPythonPackage rec {
     diskcache
     fastapi
     google-generativeai
+    google-genai
     pytest-asyncio
+    pytest-examples
     pytestCheckHook
     python-dotenv
     redis
@@ -86,6 +90,8 @@ buildPythonPackage rec {
     # Checks magic values and this fails on Python 3.13
     "test_raw_base64_autodetect_jpeg"
     "test_raw_base64_autodetect_png"
+    "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
+    "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
 
     # Performance benchmarks that sometimes fail when running many parallel builds
     "test_combine_system_messages_benchmark"
@@ -94,8 +100,15 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests require OpenAI API key
-    "tests/test_distil.py"
     "tests/llm/"
+    "tests/docs/"
+    "tests/test_auto_client.py"
+
+    # Requires SQL Server
+    "examples/sqlmodel/"
+
+    # Does not parse on Python 3.13
+    "examples/batch_api/"
   ];
 
   meta = {
