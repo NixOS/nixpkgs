@@ -35,9 +35,17 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
+  longDoubleName =
+    {
+      "binary64" = "DOUBLE";
+      "binary128" = "QUAD";
+      "x87_extended" = "EXTENDED";
+    }
+    .${stdenv.hostPlatform.IEEE_format};
+  endianness = if stdenv.hostPlatform.isLittleEndian then "LE" else "BE";
   cfg = writeTextFile {
     name = "site.cfg";
-    text = lib.generators.toINI { } {
+    text = lib.generators.toINI { } ({
       ${blas.implementation} = {
         include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
@@ -54,7 +62,11 @@ let
         library_dirs = "${blas}/lib";
         runtime_library_dirs = "${blas}/lib";
       };
-    };
+    } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+      properties = {
+        longdouble_format = "IEEE_${longDoubleName}_${endianness}";
+      };
+    });
   };
 in
 buildPythonPackage rec {
