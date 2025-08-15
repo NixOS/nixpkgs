@@ -11,13 +11,13 @@
   testers,
   writableTmpDirAsHomeHook,
 }:
-
 let
   opencode-node-modules-hash = {
     "aarch64-darwin" = "sha256-/s6eAI1VJ0kXrxP5yTi+jwNqHBCRcoltJC86AT7nVdI=";
     "aarch64-linux" = "sha256-aG5e5HMcxO9P7ciZ9cg8uY1rxDpTOKdR31z0L2d9dxY=";
     "x86_64-darwin" = "sha256-jkAFmTb+cTO/B7a7MgaKqOzZI3QPkM3uW2RULnBcxSI=";
     "x86_64-linux" = "sha256-ql4qcMtuaRwSVVma3OeKkc9tXhe21PWMMko3W3JgpB0=";
+
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -28,7 +28,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.4.26";
+  version = "0.5.4";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
