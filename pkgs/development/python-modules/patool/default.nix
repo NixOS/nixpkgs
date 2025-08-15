@@ -7,7 +7,7 @@
   installShellFiles,
   argcomplete,
   pytestCheckHook,
-  p7zip,
+  _7zz,
   cabextract,
   zip,
   lzip,
@@ -24,7 +24,7 @@
 
 let
   compression-utilities = [
-    p7zip
+    _7zz
     gnutar
     unar
     cabextract
