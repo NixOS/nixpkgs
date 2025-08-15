@@ -4,25 +4,15 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
-  isPyPy,
-
-  # build-system
-  poetry-core,
-  rustPlatform,
-
-  # native dependencies
   iconv,
-
-  # dependencies
-  importlib-resources,
+  isPyPy,
+  poetry-core,
+  pytestCheckHook,
   python-dateutil,
+  pytz,
+  rustPlatform,
   time-machine,
   tzdata,
-
-  # tests
-  pytestCheckHook,
-  pytz,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-F5bCuvI8DcyeUTS7UyYBixCjuGFKGOXPw8HLVlYKuxA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     rustPlatform.maturinBuildHook
     rustPlatform.cargoSetupHook
@@ -52,13 +42,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     tzdata
-  ]
-  ++ lib.optional (!isPyPy) [ time-machine ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   pythonImportsCheck = [ "pendulum" ];
@@ -66,7 +52,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytz
-  ];
+  ]
+  ++ lib.optional (!isPyPy) [ time-machine ];
 
   disabledTestPaths = [
     "tests/benchmarks"
@@ -77,9 +64,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python datetimes made easy";
+    description = "Drop-in replacement for the standard datetime";
     homepage = "https://github.com/sdispater/pendulum";
-    changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/sdispater/pendulum/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
   };
