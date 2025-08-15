@@ -5605,6 +5605,22 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      zxwy9.evenbettercomments = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "evenbettercomments";
+          publisher = "Tion";
+          version = "5.0.7";
+          hash = "sha256-DiII4jFoaBkyQRt7BCAWgCMfYZt4GicRAdo8F4+g0bo=";
+        };
+        meta = {
+          description = "Improve your code commenting by using stylised comments for Alerts, Infos, Warnings, TODOs, and more!";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Tion.evenbettercomments";
+          homepage = "";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
     };
 
   aliases = super: {
