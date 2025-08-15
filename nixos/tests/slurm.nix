@@ -119,12 +119,6 @@ import ./make-test-python.nix (
                   name = "slurm";
                 }
               ];
-              settings.mysqld = {
-                # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
-                innodb_buffer_pool_size = "1024M";
-                innodb_log_file_size = "64M";
-                innodb_lock_wait_timeout = 900;
-              };
             };
           };
 
