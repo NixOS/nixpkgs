@@ -43,6 +43,10 @@ rustPlatform.buildRustPackage rec {
   '';
   doInstallCheck = true;
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 src/extra/jellyfin-tui.desktop $out/share/applications/jellyfin-tui.desktop
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

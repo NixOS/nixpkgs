@@ -1,17 +1,26 @@
 {
   lib,
-  argcomplete,
-  attrs,
   buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  attrs,
+  argcomplete,
   colorlog,
   dependency-groups,
-  fetchFromGitHub,
-  hatchling,
   jinja2,
   packaging,
-  pytestCheckHook,
-  pythonOlder,
   tomli,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+
+  # passthru
   tox,
   uv,
   virtualenv,
@@ -22,7 +31,7 @@ buildPythonPackage rec {
   version = "2025.05.01";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "wntrblm";
@@ -40,8 +49,7 @@ buildPythonPackage rec {
     dependency-groups
     packaging
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
@@ -53,22 +61,20 @@ buildPythonPackage rec {
     uv = [ uv ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "nox" ];
 
   disabledTests = [
-    # our conda is not available on 3.11
-    "test__create_venv_options"
     # Assertion errors
     "test_uv"
-    # calls to naked python
-    "test_noxfile_script_mode"
+    # Test requires network access
     "test_noxfile_script_mode_url_req"
+    # Don't test CLi mode
+    "test_noxfile_script_mode"
   ];
 
   disabledTestPaths = [
@@ -76,12 +82,12 @@ buildPythonPackage rec {
     "tests/test_tox_to_nox.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible test automation for Python";
     homepage = "https://nox.thea.codes/";
     changelog = "https://github.com/wntrblm/nox/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       doronbehar
       fab
     ];
