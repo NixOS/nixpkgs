@@ -7,17 +7,17 @@ buildGoModule rec {
   pname = "ocb";
   # Also update `pkgs/tools/misc/opentelemetry-collector/releases.nix`
   # whenever that version changes.
-  version = "0.131.0";
+  version = "0.132.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "cmd/builder/v${version}";
-    hash = "sha256-T4Ffa3csQaxoRxSobNpoHqyOw6PrKdPj1XUmdrSK5d8=";
+    hash = "sha256-qswMrvunoUBjYtdvtrrvFv4qfpVKveb8QMYHHX2ngvE=";
   };
 
   sourceRoot = "${src.name}/cmd/builder";
-  vendorHash = "sha256-1240ZKF6/MqspTXd5rznE4/bZ2QWmXS0KgPwuCdm/lA=";
+  vendorHash = "sha256-z5KUyWBmlEqbitS6e846jquBlNaYCGRCvM0tTIciAWs=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
