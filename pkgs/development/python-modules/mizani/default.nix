@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Scales for Python";
     homepage = "https://github.com/has2k1/mizani";
-    changelog = "https://github.com/has2k1/mizani/releases/tag/v${version}";
+    changelog = "https://github.com/has2k1/mizani/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ samuela ];
   };
