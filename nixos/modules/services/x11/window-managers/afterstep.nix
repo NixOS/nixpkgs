@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.afterstep;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.afterstep.enable = mkEnableOption "afterstep";
+  options.services.xserver.windowManager.afterstep = {
+    enable = lib.mkEnableOption "afterstep";
+    package = lib.mkPackageOption pkgs "afterstep" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "afterstep";
       start = ''
-        ${pkgs.afterstep}/bin/afterstep &
+        ${cfg.package}/bin/afterstep &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.afterstep ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
