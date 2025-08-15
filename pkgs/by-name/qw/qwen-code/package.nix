@@ -50,6 +50,9 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "qwen";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lonerOrz ];
+    maintainers = with lib.maintainers; [
+      lonerOrz
+      taranarmo
+    ];
   };
 })
