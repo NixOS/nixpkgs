@@ -12529,10 +12529,6 @@ with pkgs;
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
-  kbdCompressed = callPackage ../by-name/kb/kbd/package.nix {
-    compress = true;
-  };
-
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
