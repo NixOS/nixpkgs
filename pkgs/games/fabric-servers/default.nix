@@ -18,6 +18,6 @@ in
 lib.recurseIntoAttrs (
   packages
   // {
-    fabric = builtins.getAttr "fabric-${escapeVersion latest.version}" packages;
+    fabric = packages."fabric-${escapeVersion latest.version}";
   }
 )
