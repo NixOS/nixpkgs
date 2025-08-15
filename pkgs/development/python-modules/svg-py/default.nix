@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "svg-py";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "orsinium-labs";
     repo = "svg.py";
     tag = version;
-    hash = "sha256-WRPHNgaKjim91pLdM8iQ1/1DBm7+lU7hFH0vXTguG1s=";
+    hash = "sha256-wHbAsmFkJ3VGBuaKElB+qT8OaKleJ2DgGKr0LvojWws=";
   };
 
   build-system = [ flit-core ];
