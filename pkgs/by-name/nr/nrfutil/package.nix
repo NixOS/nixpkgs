@@ -3,16 +3,15 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
+  zlib,
   libusb1,
   segger-jlink-headless,
+  gcc,
+  autoPatchelfHook,
 }:
 
 let
   source = import ./source.nix;
-  supported = removeAttrs source [ "version" ];
-
-  platform = supported.${stdenvNoCC.system} or (throw "unsupported platform ${stdenvNoCC.system}");
-
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nrfutil";
@@ -23,7 +22,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (platform) hash;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    zlib
+    libusb1
+    gcc.cc.lib
+    segger-jlink-headless
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -38,6 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           segger-jlink-headless
+          zlib
           libusb1
         ]
       }"
@@ -52,8 +62,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.nordicsemi.com/Products/Development-tools/nRF-Util";
     changelog = "https://docs.nordicsemi.com/bundle/nrfutil/page/guides/revision_history.html";
     license = licenses.unfree;
-    platforms = attrNames supported;
-    maintainers = with maintainers; [ h7x4 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      h7x4
+      ezrizhu
+    ];
     mainProgram = "nrfutil";
   };
 })
