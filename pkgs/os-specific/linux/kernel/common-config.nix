@@ -322,7 +322,7 @@ let
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
       NET_SCHED = yes;
-      NET_SCH_BPF = whenAtLeast "6.16" yes;
+      NET_SCH_BPF = whenAtLeast "6.16" (whenPlatformHasEBPFJit yes);
       L2TP_V3 = yes;
       L2TP_IP = module;
       L2TP_ETH = module;
