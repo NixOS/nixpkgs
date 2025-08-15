@@ -12,8 +12,8 @@
   pscript,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
   uvicorn,
   writableTmpDirAsHomeHook,
 }:
@@ -21,9 +21,7 @@
 buildPythonPackage rec {
   pname = "timetagger";
   version = "25.06.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
@@ -32,7 +30,9 @@ buildPythonPackage rec {
     hash = "sha256-fuZj4DoqtgIcRd/u7l0GsWqmuLEgF3BW5gN5wY8FdK0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asgineer
     bcrypt
     iptools
@@ -50,6 +50,8 @@ buildPythonPackage rec {
     requests
     writableTmpDirAsHomeHook
   ];
+
+  pythonImportsCheck = [ "timetagger" ];
 
   meta = {
     description = "Library to interact with TimeTagger";
