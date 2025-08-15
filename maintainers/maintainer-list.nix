@@ -12619,6 +12619,12 @@
     githubId = 5352661;
     name = "James Cleverley-Prance";
   };
+  jpwilliams = {
+    email = "jpwilliamsphotography@gmail.com";
+    github = "jpwilliams";
+    githubId = 1736957;
+    name = "Jack Williams";
+  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";
@@ -26817,6 +26823,12 @@
     github = "virusdave";
     githubId = 6148271;
     name = "Dave Nicponski";
+  };
+  vivan = {
+    email = "vivan.waghela23@gmail.com";
+    github = "highjeans";
+    githubId = 77588045;
+    name = "Vivan Waghela";
   };
   vizanto = {
     email = "danny@prime.vc";
