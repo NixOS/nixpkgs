@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
     "--disable-rpath"
     "--enable-repro-build"
     "--enable-webrequest"
+    "--disable-glcanvasegl"
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
   ]
