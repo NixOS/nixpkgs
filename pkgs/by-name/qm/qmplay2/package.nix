@@ -43,8 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -va ${sources.qmvk.src}/* qmvk/
     chmod --recursive 744 qmvk
     popd
-    substituteInPlace src/qmplay2/vulkan/VulkanWindow.cpp \
-      --replace-fail "getSubmitInfo()" "getSubmitInfo(0)"
   '';
 
   nativeBuildInputs = [
