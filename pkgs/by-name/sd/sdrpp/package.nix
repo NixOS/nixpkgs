@@ -69,15 +69,16 @@ stdenv.mkDerivation rec {
   # SDR++ uses a rolling release model.
   # Choose a git hash from head and use the date from that commit as
   # version qualifier
-  git_hash = "27ab5bf3c194169ddf60ca312723fce96149cc8e";
-  git_date = "2024-01-22";
-  version = "1.1.0-unstable-" + git_date;
+  git_hash = "981f53aa4ed3408018cc7e32eb0b639d80ed9aa6";
+  git_date = "2025-09-05";
+  version_number = "1.2.1";
+  version = "${version_number}-unstable-" + git_date;
 
   src = fetchFromGitHub {
     owner = "AlexandreRouma";
     repo = "SDRPlusPlus";
     rev = git_hash;
-    hash = "sha256-R4xWeqdHEAaje37VQaGlg+L2iYIOH4tXMHvZkZq4SDU=";
+    hash = "sha256-zO3p8vdkjGQe9yrJzOdpjWoQJrwd7Vsss62J0jK4p7E=";
   };
 
   patches = [ ./runtime-prefix.patch ];
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
       --replace "codec2.h" "codec2/codec2.h"
     # Since the __TIME_ and __DATE__ is canonicalized in the build,
     # use our qualified version shown in the programs window title.
-    substituteInPlace core/src/version.h --replace "1.1.0" "$version"
+    substituteInPlace core/src/version.h --replace-fail "${version_number}" "$version"
   '';
 
   nativeBuildInputs = [
@@ -167,10 +168,6 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OPT_BUILD_SCANNER" scanner)
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
-
-  hardeningDisable = lib.optional stdenv.cc.isClang "format";
-
   meta = with lib; {
     description = "Cross-Platform SDR Software";
     homepage = "https://github.com/AlexandreRouma/SDRPlusPlus";
@@ -178,5 +175,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
     mainProgram = "sdrpp";
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }
