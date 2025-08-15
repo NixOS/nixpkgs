@@ -15,7 +15,7 @@
   gzip,
   bzip2,
   gnutar,
-  p7zip,
+  _7zz,
   xz,
   withTTYX ? true,
   libX11,
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   runtimeDeps = [
     unzip
     zip
-    p7zip
+    _7zz
     xz
     gzip
     bzip2
