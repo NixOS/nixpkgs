@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -11,40 +11,28 @@
   libX11,
   libdrm,
   libgbm,
-  nativeContextSupport ? stdenv.hostPlatform.isLinux,
-  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
   vulkan-headers,
   vulkan-loader,
-  gitUpdater,
+  nix-update-script,
+  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  nativeContextSupport ? stdenv.hostPlatform.isLinux,
+  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
   version = "1.1.1";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/${version}/virglrenderer-${version}.tar.bz2";
-    hash = "sha256-D+SJqBL76z1nGBmcJ7Dzb41RvFxU2Ak6rVOwDRB94rM=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "virgl";
+    repo = "virglrenderer";
+    tag = finalAttrs.version;
+    hash = "sha256-ah6+AAf7B15rPMb4uO873wieT3+gf/5iGH+ZFoZKAAI=";
   };
 
   separateDebugInfo = true;
-
-  buildInputs = [
-    libepoxy
-  ]
-  ++ lib.optionals vaapiSupport [ libva ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-headers
-    vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGLU
-    libX11
-    libdrm
-    libgbm
-  ];
 
   nativeBuildInputs = [
     meson
@@ -55,27 +43,48 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
+  buildInputs = [
+    libepoxy
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libX11
+    libdrm
+    libgbm
+  ]
+  ++ lib.optionals vaapiSupport [
+    libva
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ];
+
   mesonFlags = [
     (lib.mesonBool "video" vaapiSupport)
     (lib.mesonBool "venus" vulkanSupport)
-  ]
-  ++ lib.optionals nativeContextSupport [
-    (lib.mesonOption "drm-renderers" "amdgpu-experimental,msm")
+    (lib.mesonOption "drm-renderers" (
+      lib.optionalString nativeContextSupport (
+        lib.concatStringsSep "," [
+          "amdgpu-experimental"
+          "msm"
+        ]
+      )
+    ))
   ];
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://gitlab.freedesktop.org/virgl/virglrenderer.git";
-      rev-prefix = "virglrenderer-";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "Virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
+  meta = {
+    description = "Virtual 3D GPU for use inside QEMU virtual machines";
+    homepage = "https://docs.mesa3d.org/drivers/virgl";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      normalcea
+    ];
     mainProgram = "virgl_test_server";
-    homepage = "https://virgil3d.github.io/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.xeji ];
+    platforms = lib.platforms.unix;
   };
-}
+})
