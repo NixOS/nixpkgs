@@ -1,8 +1,33 @@
 diff --git a/hotdoc/extensions/c/c_extension.py b/hotdoc/extensions/c/c_extension.py
-index 1cfd5b3..cff20c8 100644
+index 1cfd5b3..2ea7dc0 100644
 --- a/hotdoc/extensions/c/c_extension.py
 +++ b/hotdoc/extensions/c/c_extension.py
-@@ -89,7 +89,7 @@ def get_clang_headers():
+@@ -44,14 +44,6 @@ from hotdoc.utils.loggable import (info as core_info, warn, Logger,
+                                    debug as core_debug)
+ 
+ 
+-LLVM_CONFIG = os.environ.get("LLVM_CONFIG")
+-if LLVM_CONFIG is None:
+-    LLVM_CONFIG = shutil.which('llvm-config')
+-
+-if LLVM_CONFIG is None:
+-    raise ImportError()
+-
+-
+ def ast_node_is_function_pointer(ast_node):
+     if ast_node.kind == cindex.TypeKind.POINTER and \
+             ast_node.get_pointee().get_result().kind != \
+@@ -80,33 +72,20 @@ Logger.register_warning_code('clang-headers-not-found', HotdocException,
+                              'c-extension')
+ 
+ 
+-CLANG_HEADERS_WARNING = (
+-    'Did not find clang headers. Please report a bug with the output of the'
+-    '\'llvm-config --version\' and \'llvm-config --prefix\' commands')
++CLANG_HEADERS_WARNING = ('Did not find clang headers. Make sure you\'re using Clang 5.0+')
+ 
+ 
+ def get_clang_headers():
      try:
          # Clang 5.0+ can tell us directly
          resource_dir = subprocess.check_output(
@@ -11,42 +36,42 @@ index 1cfd5b3..cff20c8 100644
          if len(resource_dir) > 0:
              include_dir = os.path.join(resource_dir, 'include')
              if os.path.exists(include_dir):
+                 return include_dir
+     except subprocess.CalledProcessError:
+         pass
+-    version = subprocess.check_output(
+-        [LLVM_CONFIG, '--version']).strip().decode()
+-    prefix = subprocess.check_output(
+-        [LLVM_CONFIG, '--prefix']).strip().decode()
+-    versions = (version, version.split('.').pop(0))
+-    for (ver, lib) in itertools.product(
+-            versions,
+-            ['lib', 'lib64']):
+-        p = os.path.join(prefix, lib, 'clang', ver, 'include')
+-        if os.path.exists(p):
+-            return p
+ 
+     warn('clang-headers-not-found', CLANG_HEADERS_WARNING)
+ 
+@@ -115,7 +94,7 @@ CLANG_HEADERS = get_clang_headers()
+ 
+ 
+ def get_clang_libdir():
+-    return subprocess.check_output([LLVM_CONFIG, '--libdir']).strip().decode()
++    return '@libclang_lib_dir@'
+ 
+ 
+ class ClangScanner(object):
 diff --git a/hotdoc/extensions/c/clang/cindex.py b/hotdoc/extensions/c/clang/cindex.py
-index fc93fda..2eb8eaf 100644
+index fc93fda..0a16651 100644
 --- a/hotdoc/extensions/c/clang/cindex.py
 +++ b/hotdoc/extensions/c/clang/cindex.py
-@@ -3937,20 +3937,23 @@ class Config:
-         if Config.library_file:
-             return Config.library_file
+@@ -3949,6 +3949,8 @@ class Config:
  
--        import platform
--        name = platform.system()
-+        if Config.library_path:
-+            import platform
-+            name = platform.system()
+         if Config.library_path:
+             file = Config.library_path + '/' + file
++        else:
++            file = "@libclang_lib_dir@" + '/' + file
  
--        if name == 'Darwin':
--            file = 'libclang.dylib'
--        elif name == 'Windows':
--            file = 'libclang.dll'
--        else:
--            file = 'libclang.so'
-+            if name == 'Darwin':
-+                file = 'libclang.dylib'
-+            elif name == 'Windows':
-+                file = 'libclang.dll'
-+            else:
-+                file = 'libclang.so'
+         return file
  
--        if Config.library_path:
--            file = Config.library_path + '/' + file
-+            if Config.library_path:
-+                file = Config.library_path + '/' + file
-+
-+            return file
- 
--        return file
-+        return "@libclang@"
- 
-     def get_cindex_library(self):
-         try:
