@@ -17,6 +17,8 @@
   nixpkgs-review,
   nix-direnv,
   nix-fast-build,
+  haskell,
+  nix-serve-ng,
   colmena,
 
   storeDir ? "/nix/store",
@@ -109,6 +111,15 @@ let
           nix-fast-build = nix-fast-build.override {
             inherit (self) nix-eval-jobs;
           };
+
+          nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
+            (haskell.lib.compose.enableCabalFlag "lix")
+            (haskell.lib.compose.overrideCabal (drv: {
+              # https://github.com/aristanetworks/nix-serve-ng/issues/46
+              # Resetting (previous) broken flag since it may be related to C++ Nix
+              broken = lib.versionAtLeast self.lix.version "2.93";
+            }))
+          ];
 
           colmena = colmena.override {
             nix = self.lix;
