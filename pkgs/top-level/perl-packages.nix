@@ -21486,10 +21486,10 @@ with self;
 
   Minion = buildPerlPackage {
     pname = "Minion";
-    version = "10.30";
+    version = "10.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.30.tar.gz";
-      hash = "sha256-twS9ZuxK8cAzlGifAsCsBIDr0GzpzKFykVAbkgLG7Rw=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.31.tar.gz";
+      hash = "sha256-MGj5kDPmnfCBRbWEqR7iJPTpfcYkLhAiIegiCj8oUDs=";
     };
     propagatedBuildInputs = [
       Mojolicious
@@ -22446,10 +22446,10 @@ with self;
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.36";
+    version = "9.39";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.36.tar.gz";
-      hash = "sha256-UX7Pb9hqC3xhadVRAiOL+YUWGNt2L7ANTPDZTGJSAV8=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.39.tar.gz";
+      hash = "sha256-EwpJDXfXYTn3NM4biU1Fm64DgF+x89/dWPxE/oKvPP0=";
     };
     meta = {
       description = "Real-time web framework";

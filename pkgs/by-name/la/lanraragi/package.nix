@@ -11,13 +11,13 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.21";
+  version = "0.9.41";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
-    rev = "v.${version}";
-    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
+    tag = "v.${version}";
+    hash = "sha256-HF2g8rrcV6f6ZTKmveS/yjil/mBxpvRUFyauv5f+qQ8=";
   };
 
   patches = [
@@ -67,6 +67,9 @@ buildNpmPackage rec {
       TimeLocal
       YAMLPP
       StringSimilarity
+      CHI
+      CacheFastMmap
+      LocaleMaketextLexicon
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
 
@@ -123,7 +126,7 @@ buildNpmPackage rec {
   passthru.tests.module = nixosTests.lanraragi;
 
   meta = {
-    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.rev}";
+    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.tag}";
     description = "Web application for archival and reading of manga/doujinshi";
     homepage = "https://github.com/Difegue/LANraragi";
     license = lib.licenses.mit;
