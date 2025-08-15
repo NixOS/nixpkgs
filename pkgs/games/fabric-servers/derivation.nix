@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (final: {
     homepage = "https://fabricmc.net";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    platforms = jre.meta.platforms;
+    inherit (jre.meta) platforms;
     maintainers = with lib.maintainers; [
       threadexio
     ];
