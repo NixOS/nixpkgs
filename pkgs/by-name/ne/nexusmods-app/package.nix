@@ -77,7 +77,7 @@ buildDotnetModule (finalAttrs: {
 
     # Use a vendored version of the nexus API's games.json data
     substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
-      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./games.json}
+      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
   '';
 
   makeWrapperArgs = [
