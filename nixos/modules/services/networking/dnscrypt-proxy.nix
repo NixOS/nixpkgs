@@ -7,13 +7,17 @@
 
 let
 
-  cfg = config.services.dnscrypt-proxy2;
+  cfg = config.services.dnscrypt-proxy;
 
 in
 
 {
-  options.services.dnscrypt-proxy2 = {
-    enable = lib.mkEnableOption "dnscrypt-proxy2";
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "dnscrypt-proxy2" ] [ "services" "dnscrypt-proxy" ])
+  ];
+
+  options.services.dnscrypt-proxy = {
+    enable = lib.mkEnableOption "dnscrypt-proxy";
 
     package = lib.mkPackageOption pkgs "dnscrypt-proxy" { };
 
@@ -38,7 +42,7 @@ in
 
     upstreamDefaults = lib.mkOption {
       description = ''
-        Whether to base the config declared in {option}`services.dnscrypt-proxy2.settings` on the upstream example config (<https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>)
+        Whether to base the config declared in {option}`services.dnscrypt-proxy.settings` on the upstream example config (<https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>)
 
         Disable this if you want to declare your dnscrypt config from scratch.
       '';
@@ -49,7 +53,7 @@ in
     configFile = lib.mkOption {
       description = ''
         Path to TOML config file. See: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>
-        If this option is set, it will override any configuration done in options.services.dnscrypt-proxy2.settings.
+        If this option is set, it will override any configuration done in options.services.dnscrypt-proxy.settings.
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
       type = lib.types.path;
@@ -73,7 +77,7 @@ in
             }
             ${pkgs.buildPackages.remarshal}/bin/json2toml < config.json > $out
           '';
-      defaultText = lib.literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
+      defaultText = lib.literalMD "TOML file generated from {option}`services.dnscrypt-proxy.settings`";
     };
   };
 
@@ -81,7 +85,7 @@ in
 
     networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
 
-    systemd.services.dnscrypt-proxy2 = {
+    systemd.services.dnscrypt-proxy = {
       description = "DNSCrypt-proxy client";
       wants = [
         "network-online.target"
@@ -93,6 +97,7 @@ in
       wantedBy = [
         "multi-user.target"
       ];
+      aliases = [ "dnscrypt-proxy2.service" ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
