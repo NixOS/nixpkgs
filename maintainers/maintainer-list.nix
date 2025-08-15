@@ -25183,6 +25183,17 @@
     github = "tpwrules";
     githubId = 208010;
   };
+  transcaffeine = {
+    name = "transcaffeine";
+    email = "transcaffeine@finally.coffee";
+    github = "transcaffeine";
+    githubId = 139544537;
+    keys = [
+      {
+        fingerprint = "5E0A 9CB3 9806 57CB 9AB9  4AE6 790E AEC8 F99A B41F";
+      }
+    ];
+  };
   traverseda = {
     email = "traverse.da@gmail.com";
     github = "traverseda";
