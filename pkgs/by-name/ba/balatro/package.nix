@@ -3,7 +3,7 @@
   lib,
   love,
   lovely-injector,
-  p7zip,
+  _7zz,
   copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    p7zip
+    _7zz
     copyDesktopItems
     makeWrapper
   ];
@@ -42,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     tmpdir=$(mktemp -d)
-    7z x ${finalAttrs.src} -o$tmpdir -y
+    7zz x ${finalAttrs.src} -o$tmpdir -y
     ${if withLinuxPatch then "patch $tmpdir/globals.lua -i ${./globals.patch}" else ""}
     patchedExe=$(mktemp -u).zip
-    7z a $patchedExe $tmpdir/*
+    7zz a $patchedExe $tmpdir/*
     runHook postBuild
   '';
 
