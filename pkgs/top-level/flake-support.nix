@@ -11,19 +11,19 @@ in
 {
   inherit jobs;
 
-  legacyPackages = lib.genAttrs lib.systems.flakeExposed (
-    system:
-    import ../.. {
-      inherit system;
-      overlays = import ./impure-overlays.nix ++ [
-        (final: prev: {
-          lib = prev.lib.extend (import ../../lib/flake-version-info.nix self);
-        })
-      ];
-    }
-  );
-
   outputs = {
+    legacyPackages = lib.genAttrs lib.systems.flakeExposed (
+      system:
+      import ../.. {
+        inherit system;
+        overlays = import ./impure-overlays.nix ++ [
+          (final: prev: {
+            lib = prev.lib.extend (import ../../lib/flake-version-info.nix self);
+          })
+        ];
+      }
+    );
+
     checks =
       lib.genAttrs
         (lib.filter (
