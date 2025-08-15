@@ -12,7 +12,7 @@
   lib,
   makeWrapper,
   netcat,
-  p7zip,
+  _7zz,
   perl,
   stdenv,
   timetrap,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     bbe
     makeWrapper
-    p7zip
+    _7zz
     perl
     undmg
   ];
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     undmg $src
     export sourceRoot=prl-tools-build
-    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm"}.iso" -o$sourceRoot
+    7zz x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm"}.iso" -o$sourceRoot
     runHook postUnpack
   '';
 
