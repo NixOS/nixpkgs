@@ -118,6 +118,12 @@ freecad-utils.makeCustomizable (
         url = "https://github.com/FreeCAD/FreeCAD/commit/3d2b7dc9c7ac898b30fe469b7cbd424ed1bca0a2.patch?full_index=1";
         hash = "sha256-XCQdv/+dYdJ/ptA2VKrD63qYILyaP276ISMkmWLtT30=";
       })
+      # Inform Coin to use EGL when on Wayland
+      # https://github.com/FreeCAD/FreeCAD/pull/21917
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
+        hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
+      })
     ];
 
     cmakeFlags = [
