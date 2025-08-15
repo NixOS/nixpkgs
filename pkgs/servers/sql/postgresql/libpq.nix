@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.5";
+  version = "17.6";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_5";
-    hash = "sha256-jWV7hglu7IPMZbqHrZVZHLbZYjVuDeut7nH50aSQIBc=";
+    rev = "refs/tags/REL_17_6";
+    hash = "sha256-/7C+bjmiJ0/CvoAc8vzTC50vP7OsrM6o0w+lmmHvKvU=";
   };
 
   __structuredAttrs = true;
