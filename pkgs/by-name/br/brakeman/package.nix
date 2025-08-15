@@ -5,6 +5,10 @@
   bundlerUpdateScript,
 }:
 
+let
+  gems = import ./gemset.nix;
+  version = gems.brakeman.version;
+in
 bundlerApp {
   pname = "brakeman";
   exes = [ "brakeman" ];
@@ -12,11 +16,11 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "brakeman";
 
-  meta = with lib; {
+  meta = {
     description = "Static analysis security scanner for Ruby on Rails";
     homepage = "https://brakemanscanner.org/";
     changelog = "https://github.com/presidentbeef/brakeman/blob/v${version}/CHANGES.md";
-    license = [ licenses.unfreeRedistributable ];
+    license = lib.licenses.unfreeRedistributable;
     platforms = ruby.meta.platforms;
     maintainers = [ ];
     mainProgram = "brakeman";
