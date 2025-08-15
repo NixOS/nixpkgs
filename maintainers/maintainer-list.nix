@@ -6583,6 +6583,12 @@
     githubId = 875324;
     name = "David Johnson";
   };
+  dmkhitaryan = {
+    name = "David Mkhitaryan";
+    email = "d.mkhitaryan@mailbox.org";
+    github = "dmkhitaryan";
+    githubId = 63636798;
+  };
   dmvianna = {
     email = "dmlvianna@gmail.com";
     github = "dmvianna";
