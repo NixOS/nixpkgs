@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cyipopt";
-  version = "1.5.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mechmotum";
     repo = "cyipopt";
     tag = "v${version}";
-    hash = "sha256-ddiSCVzywlCeeVbRJg2wxKIlAVlZw9Js95IbEDqhh5Q=";
+    hash = "sha256-feGGAwhNw+xZrSsag2W5nruQWAC6NP9k4F0X9EjaRTg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cython interface for the interior point optimzer IPOPT";
     homepage = "https://github.com/mechmotum/cyipopt";
-    changelog = "https://github.com/mechmotum/cyipopt/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/mechmotum/cyipopt/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
