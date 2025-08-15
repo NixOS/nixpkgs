@@ -8,12 +8,13 @@
   openssl,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oscrypto";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -35,14 +36,16 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    for file in oscrypto/_openssl/_lib{crypto,ssl}_c{ffi,types}.py; do
-      substituteInPlace $file \
-        --replace "get_library('crypto', 'libcrypto.dylib', '42')" "'${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}'" \
-        --replace "get_library('ssl', 'libssl', '44')" "'${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
-    done
+    substituteInPlace oscrypto/_openssl/_libcrypto_c{ffi,types}.py \
+      --replace-fail "get_library('crypto', 'libcrypto.dylib', '42')" "'${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}'"
+
+    substituteInPlace oscrypto/_openssl/_libssl_c{ffi,types}.py \
+      --replace-fail "get_library('ssl', 'libssl', '44')" "'${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  propagatedBuildInputs = [ asn1crypto ];
+  build-system = [ setuptools ];
+
+  dependencies = [ asn1crypto ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
