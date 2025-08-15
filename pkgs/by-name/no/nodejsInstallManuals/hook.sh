@@ -3,7 +3,7 @@
 nodejsInstallManuals() {
     local -r packageJson="${1-./package.json}"
 
-    local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
+    local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' "$packageJson")"
 
     while IFS= read -r man; do
         installManPage "$packageOut/$man"
