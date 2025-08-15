@@ -14,6 +14,7 @@
   bash,
   bindfs,
   dbus,
+  android-tools,
   e2fsprogs,
   fakeroot,
   fuse,
@@ -83,6 +84,7 @@ python3Packages.buildPythonApplication {
     httpx
     pygobject3
     pyyaml
+    pywayland
   ];
 
   strictDeps = true;
@@ -93,6 +95,7 @@ python3Packages.buildPythonApplication {
     "\${gappsWrapperArgs[@]}"
     "--prefix PATH : ${
       lib.makeBinPath [
+        android-tools
         bindfs
         e2fsprogs
         fakeroot
