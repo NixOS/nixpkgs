@@ -11594,6 +11594,8 @@ self: super: with self; {
 
   pick = callPackage ../development/python-modules/pick { };
 
+  pickledb = callPackage ../development/python-modules/pickledb { };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
   pickpack = callPackage ../development/python-modules/pickpack { };
