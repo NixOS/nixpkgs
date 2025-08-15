@@ -26,6 +26,7 @@ let
     sdkVersions.${darwinSdkMajorVersion}
       or (lib.throw "Unsupported SDK major version: ${darwinSdkMajorVersion}");
   sdkVersion = sdkInfo.version;
+  src = fetchSDK sdkInfo;
 
   fetchSDK = callPackage ./common/fetch-sdk.nix { };
 
@@ -37,6 +38,9 @@ let
       (callPackage ./common/passthru-source-release-files.nix { inherit sdkVersion; })
       (callPackage ./common/remove-disallowed-packages.nix { })
       (callPackage ./common/process-stubs.nix { })
+    ]
+    ++ lib.optionals (src.passthru.includeMan) [
+      (callPackage ./common/split-man-pages-output.nix { })
     ]
     # Avoid infinite recursions by not propagating certain packages, so they can themselves build with the SDK.
     ++ lib.optionals (!enableBootstrap) [
@@ -53,8 +57,7 @@ stdenvNoCC.mkDerivation (
   lib.extends phases (finalAttrs: {
     pname = "apple-sdk";
     inherit (sdkInfo) version;
-
-    src = fetchSDK sdkInfo;
+    inherit src;
 
     dontConfigure = true;
 
