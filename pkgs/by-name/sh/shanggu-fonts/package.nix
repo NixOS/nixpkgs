@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  p7zip,
+  _7zz,
 }:
 let
   version = "1.028";
@@ -32,14 +32,16 @@ stdenvNoCC.mkDerivation {
 
   outputs = [ "out" ] ++ extraOutputs;
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [
+    _7zz
+  ];
 
   unpackPhase = ''
     runHook preUnpack
   ''
   + lib.strings.concatLines (
     lib.attrsets.mapAttrsToList (name: value: ''
-      7z x ${value} -o${name}
+      7zz x ${value} -o${name}
     '') source
   )
   + ''
