@@ -34,6 +34,10 @@ rustPlatform.buildRustPackage rec {
     # requires internet access
     "--skip=detects_target_dependencies"
     "--skip=query::tests_lints::feature_missing"
+    # platform specific snapshots
+    "--skip=query::tests_lints::trait_method_target_feature_removed"
+    "--skip=query::tests_lints::unsafe_trait_method_requires_more_target_features"
+    "--skip=query::tests_lints::unsafe_trait_method_target_feature_added"
   ];
 
   preCheck = ''
