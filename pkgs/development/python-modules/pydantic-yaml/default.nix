@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pydantic,
   ruamel-yaml,
   typing-extensions,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    importlib-metadata
     pydantic
     ruamel-yaml
     typing-extensions
