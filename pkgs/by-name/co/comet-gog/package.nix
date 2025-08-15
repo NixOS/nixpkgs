@@ -6,6 +6,10 @@
   rustPlatform,
   fetchFromGitHub,
   buildPackages,
+
+  meson,
+  ninja,
+  pkgsCross,
 }:
 
 let
@@ -44,6 +48,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # TECHNICALLY, we could remove this, but then we'd be using the vendored precompiled protoc binary...
   env.PROTOC = lib.getExe' buildPackages.protobuf "protoc";
+
+  passthru.dummy-service = stdenv.mkDerivation {
+    pname = "galaxy-dummy-service";
+    inherit (finalAttrs) version src;
+
+    sourceRoot = "${finalAttrs.src.name}/dummy-service";
+
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkgsCross.mingwW64.buildPackages.gcc
+    ];
+
+    mesonFlags = [
+      "--cross-file meson/x86_64-w64-mingw32.ini"
+    ];
+
+    installPhase = ''
+      runHook preInstall
+      install -D GalaxyCommunication.exe -t "$out"/
+      runHook postInstall
+    '';
+  };
 
   meta = {
     changelog = "https://github.com/imLinguin/comet/releases/tag/${finalAttrs.src.tag}";
