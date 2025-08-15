@@ -7,6 +7,25 @@
 let
   configFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
+
+  # Validate temperature string format and range
+  isValidTemperatureString =
+    s:
+    builtins.match "^[0-9]+(\\.[0-9]{1,2})?$" s != null
+    && (builtins.fromJSON s) >= 0
+    && (builtins.fromJSON s) <= 100;
+
+  # Temperature type that accepts integers or strings with up to 2 decimal places
+  # Strings are automatically converted to numbers using coercedTo
+  temperatureType =
+    lib.types.either (lib.types.ints.between 0 100) (
+      lib.types.coercedTo (lib.types.addCheck lib.types.str isValidTemperatureString) (
+        s: builtins.fromJSON s
+      ) lib.types.number
+    )
+    // {
+      description = "temperature in °C between 0 and 100 (integer or decimal string like \"34.56\")";
+    };
 in
 {
   options.hardware.fw-fanctrl = {
@@ -71,9 +90,9 @@ in
                       lib.types.submodule {
                         options = {
                           temp = lib.mkOption {
-                            type = lib.types.int;
+                            type = temperatureType;
                             default = 0;
-                            description = "Temperature in °C at which the fan speed should be changed";
+                            description = "Temperature in °C between 0-100 (integer or string with up to 2 decimal places, e.g., 35 or \"34.56\")";
                           };
 
                           speed = lib.mkOption {
