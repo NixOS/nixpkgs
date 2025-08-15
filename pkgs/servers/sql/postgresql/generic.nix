@@ -425,15 +425,16 @@ let
         substituteInPlace "src/Makefile.global.in" --subst-var out
         substituteInPlace "src/common/config_info.c" --subst-var dev
         cat ${./pg_config.env.mk} >> src/common/Makefile
-
-        # This test always fails on hardware with >1 NUMA node: the sysfs
-        # dirs providing information about the topology are hidden in the sandbox,
-        # so postgres assumes there's only a single node `0`. However,
-        # the test checks on which NUMA nodes the allocated pages are which is >1
-        # on such hardware. This in turn triggers a safeguard in the view
-        # which breaks the test.
-        # Manual tests confirm that the testcase behaves properly outside of the
-        # Nix sandbox.
+      ''
+      # This test always fails on hardware with >1 NUMA node: the sysfs
+      # dirs providing information about the topology are hidden in the sandbox,
+      # so postgres assumes there's only a single node `0`. However,
+      # the test checks on which NUMA nodes the allocated pages are which is >1
+      # on such hardware. This in turn triggers a safeguard in the view
+      # which breaks the test.
+      # Manual tests confirm that the testcase behaves properly outside of the
+      # Nix sandbox.
+      + lib.optionalString (atLeast "18") ''
         substituteInPlace src/test/regress/parallel_schedule \
           --replace-fail numa ""
       ''
