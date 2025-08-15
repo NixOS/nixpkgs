@@ -4,6 +4,14 @@
   buildPythonPackage,
   pythonOlder,
   setuptools,
+  meson,
+  meson-python,
+  ninja,
+  cython,
+  numpy,
+  scipy,
+  ase,
+  packaging,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-mVN+9PTwEMD24KV3Eyp0Jq4vgA1Zs+jThdEbVcfs6pw=";
   };
 
-  dependencies = with pkgs.python312Packages; [
+  dependencies = [
     numpy #>=1.16.0, <2.0.0
     scipy #>+1.2.3
     ase #>=3.23.0
