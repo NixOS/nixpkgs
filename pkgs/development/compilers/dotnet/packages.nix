@@ -54,7 +54,7 @@ let
 
         mkdir -p "$out"
 
-        pushd "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}
+        pushd "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}
         pushd ${pname}.${version}.nupkg
 
         xmlstarlet \
@@ -136,13 +136,13 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src"/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
+      cp -r "$src"/lib/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       mkdir -p "$artifacts"
-      cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
+      cp -r "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
       chmod +w -R "$artifacts"
 
       local package
@@ -193,7 +193,7 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
@@ -221,12 +221,12 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet/shared
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
+      cp -Tr "$src/lib/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall

@@ -1353,6 +1353,8 @@ let
 
         nottui-pretty = callPackage ../development/ocaml-modules/lwd/nottui-pretty.nix { };
 
+        nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
+
         notty = callPackage ../development/ocaml-modules/notty { };
 
         npy = callPackage ../development/ocaml-modules/npy {
