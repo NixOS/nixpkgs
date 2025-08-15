@@ -6595,6 +6595,12 @@
     githubId = 699961;
     name = "Dmytro Kyrychuk";
   };
+  dreamingcodes = {
+    email = "me@dreaming.codes";
+    github = "Dreaming-Codes";
+    githubId = 10401566;
+    name = "Lorenzo Rizzotti";
+  };
   dnr = {
     email = "dnr@dnr.im";
     github = "dnr";
