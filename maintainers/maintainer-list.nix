@@ -15763,6 +15763,12 @@
     githubId = 952712;
     name = "Matt Christ";
   };
+  mattdef = {
+    email = "mattdef@gmail.com";
+    github = "mattdef";
+    githubId = 5595001;
+    name = "Matt Cast";
+  };
   matteobongio = {
     github = "matteobongio";
     githubId = 155063357;
