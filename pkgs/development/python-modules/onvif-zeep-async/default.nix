@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "4.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "openvideolibs";
