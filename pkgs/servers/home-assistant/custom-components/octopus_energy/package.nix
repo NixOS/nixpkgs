@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "BottlecapDave";
   domain = "octopus_energy";
-  version = "16.0.2";
+  version = "16.1.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "HomeAssistant-OctopusEnergy";
     tag = "v${version}";
-    hash = "sha256-/lhM00CNVPoZ8oohPuJ5j0pf0Dmxym3eycdkknlaAug=";
+    hash = "sha256-QQyDQQpVghapBUxUSlHjnrpi3tBEYLOdJiARnL4mYbc=";
   };
 
   dependencies = [ pydantic ];
@@ -42,9 +42,8 @@ buildHomeAssistantComponent rec {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      "--version-regex"
       # Ignore pre-release versions ("beta")
-      "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+      "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
     ];
   };
 

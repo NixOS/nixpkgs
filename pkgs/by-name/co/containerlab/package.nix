@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.69.2";
+  version = "0.69.3";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wB51Q7spVe4H6ANIt+ug7s2r3sqFLTRsdMH3bgPNCKg=";
+    hash = "sha256-RJNJ5LUCGaARn5NOSepTL/0Owr/ozFUYAvlynDTyqfY=";
   };
 
   vendorHash = "sha256-28Q1R6P2rpER5RxagnsKy9W3b4FUeRRbkPPovzag//U=";

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  uv-dynamic-versioning,
   pythonOlder,
   reflex,
   pytestCheckHook,
@@ -22,8 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-DugZRZpGP90EFkBjpAS1XkjrNPG6WWwCQPUcEZJ0ff8=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "uv-dynamic-versioning"' "" \
+      --replace-fail 'source = "uv-dynamic-versioning"' 'source = "env"${"\n"}variable = "version"'
+  '';
 
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
   dependencies = [ reflex ];
 
   pythonImportsCheck = [ "reflex_chakra" ];

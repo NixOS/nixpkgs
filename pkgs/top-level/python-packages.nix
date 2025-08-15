@@ -2064,6 +2064,8 @@ self: super: with self; {
 
   bot-safe-agents = callPackage ../development/python-modules/bot-safe-agents { };
 
+  botan3 = callPackage ../development/python-modules/botan3 { inherit (pkgs) botan3; };
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto3-stubs = callPackage ../development/python-modules/boto3-stubs { };
@@ -19561,7 +19563,12 @@ self: super: with self; {
 
   vtjp = callPackage ../development/python-modules/vtjp { };
 
-  vtk = toPythonModule (pkgs.vtk-full.override { python3Packages = self; });
+  vtk = toPythonModule (
+    pkgs.vtk.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
 
   vttlib = callPackage ../development/python-modules/vttlib { };
 
