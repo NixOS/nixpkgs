@@ -12097,8 +12097,6 @@ with pkgs;
     freeoffice
     ;
 
-  inherit (xorg) xlsfonts;
-
   gimp3 = callPackage ../applications/graphics/gimp {
     lcms = lcms2;
   };
