@@ -49,7 +49,7 @@
   libxcb-keysyms,
   libxcb-render-util,
   libxcb-wm,
-  p7zip,
+  _7zz,
   onetbb,
   wayland,
   libxscrnsaver,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    p7zip
+    _7zz
   ];
 
   buildInputs = [
@@ -121,11 +121,6 @@ stdenv.mkDerivation rec {
   ];
 
   libPath = "$out/opt/Webex/lib:$out/opt/Webex/bin:${lib.makeLibraryPath buildInputs}";
-
-  unpackPhase = ''
-    7z x $src
-    mv Webex_ubuntu/opt .
-  '';
 
   postPatch = ''
     substituteInPlace opt/Webex/bin/webex.desktop --replace /opt $out/opt
