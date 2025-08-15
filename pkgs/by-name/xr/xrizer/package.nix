@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
     tag = "v${version}";
-    hash = "sha256-0RICNxF8RBHthve69Z9msTg2+jegg5K4aHYRF0YZ8a4=";
+    hash = "sha256-o6/uGbczYp5t6trjFIltZAMSM61adn+BvNb1fBhBSsk=";
   };
 
-  cargoHash = "sha256-87JcULH1tAA487VwKVBmXhYTXCdMoYM3gOQTkM53ehE=";
+  cargoHash = "sha256-kXcnD98ZaqRAA3jQvIoWSRC37Uq8l5PUYEzubxfMuUI=";
 
   nativeBuildInputs = [
     pkg-config
