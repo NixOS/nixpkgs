@@ -6,7 +6,7 @@
   autoreconfHook,
   bison,
   flex,
-  p7zip,
+  _7zz,
   rsync,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     flex
     bison
-    p7zip
+    _7zz
     rsync
   ];
 
@@ -38,8 +38,9 @@ stdenv.mkDerivation rec {
       chmod -R a+w linux-${kernel.version}
     else
       # ply wants to install header files to its build directory
-      # use 7z to handle multiple archive formats transparently
-      7z x ${kernel.src} -so | 7z x -aoa -si -ttar
+      # use 7zz to handle multiple archive formats transparently
+      # ! allow "Dangerous symbolic link path"s with `-snld` !
+      7zz x ${kernel.src} -so | 7zz x -snld -aoa -si -ttar
     fi
 
     configureFlagsArray+=(--with-kerneldir=$(echo $(pwd)/linux-*))
