@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  nix-update-script,
 
   # build dependencies
   poetry-core,
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   version = "0.2.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
@@ -51,8 +50,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "trakit" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Guess additional information from track titles";

@@ -54,7 +54,7 @@ def test_build(mock_run: Mock) -> None:
 )
 def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
     monkeypatch.chdir(tmpdir)
-    flake = m.Flake.parse(".#hostname")
+    flake = m.Flake.parse("/flake.nix#hostname")
 
     assert n.build_flake(
         "config.system.build.toplevel",
@@ -68,7 +68,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
             "nix-command flakes",
             "build",
             "--print-out-paths",
-            '.#nixosConfigurations."hostname".config.system.build.toplevel',
+            '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel',
             "--no-link",
             "--nix-flag",
             "foo",
@@ -173,7 +173,7 @@ def test_build_remote_flake(
     mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
 ) -> None:
     monkeypatch.chdir(tmpdir)
-    flake = m.Flake.parse(".#hostname")
+    flake = m.Flake.parse("/flake.nix#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
@@ -194,7 +194,7 @@ def test_build_remote_flake(
                     "nix-command flakes",
                     "eval",
                     "--raw",
-                    '.#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+                    '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
                     "--flake",
                 ],
                 stdout=PIPE,
@@ -291,7 +291,7 @@ def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit_flake(mock_run: Mock) -> None:
-    flake = m.Flake.parse(".#attr")
+    flake = m.Flake.parse("/flake.nix#attr")
     n.edit_flake(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
@@ -301,7 +301,7 @@ def test_edit_flake(mock_run: Mock) -> None:
             "edit",
             "--commit-lock-file",
             "--",
-            '.#nixosConfigurations."attr"',
+            '/flake.nix#nixosConfigurations."attr"',
         ],
         check=False,
     )
@@ -385,7 +385,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
     ),
 )
 def test_get_build_image_variants_flake(mock_run: Mock) -> None:
-    flake = m.Flake(Path("flake.nix"), "myAttr")
+    flake = m.Flake(Path("/flake.nix"), "myAttr")
     assert n.get_build_image_variants_flake(flake, {"eval_flag": True}) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
@@ -395,7 +395,7 @@ def test_get_build_image_variants_flake(mock_run: Mock) -> None:
             "nix",
             "eval",
             "--json",
-            "flake.nix#myAttr.config.system.build.images",
+            "/flake.nix#myAttr.config.system.build.images",
             "--apply",
             "builtins.attrNames",
             "--eval-flag",
