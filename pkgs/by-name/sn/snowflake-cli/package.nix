@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snowflake-cli";
-  version = "3.9.1";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${version}";
-    hash = "sha256-2g3EiJ4mgqbyfF9brCvIWJGblWUtaBAO8qor2AeN8mU=";
+    hash = "sha256-tiDXcocNKV8av7fciFz0kyS4F66heaLuREJtjwwF2m4=";
   };
 
   build-system = with python3Packages; [
@@ -27,6 +27,11 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies = with python3Packages; [
+    cfgv
+    identify
+    keyring
+    nodeenv
+    virtualenv
     jinja2
     pluggy
     pyyaml
