@@ -16,35 +16,87 @@
 #
 # See comments on each function for more details.
 
-# installManPage <path> [...<path>]
+# installManPage [--name <path>] <path> [...<path>]
 #
 # Each argument is checked for its man section suffix and installed into the appropriate
 # share/man/man<n>/ directory. The function returns an error if any paths don't have the man
 # section suffix (with optional .gz compression).
+#
+# Optionally accepts pipes as input, which when provided require the `--name` argument to
+# name the output file.
+#
+# installManPage --name foobar.1 <($out/bin/foobar --manpage)
 installManPage() {
-    local path
-    for path in "$@"; do
-        if test -z "$path"; then
+    local arg name='' continueParsing=1
+    while { arg=$1; shift; }; do
+        if (( continueParsing )); then
+            case "$arg" in
+              --name)
+                  name=$1
+                  shift || {
+                      nixErrorLog "${FUNCNAME[0]}: --name flag expected an argument"
+                      return 1
+                  }
+                  continue;;
+              --name=*)
+                  # Treat `--name=foo` that same as `--name foo`
+                  name=${arg#--name=}
+                  continue;;
+              --)
+                  continueParsing=0
+                  continue;;
+            esac
+        fi
+
+        nixInfoLog "${FUNCNAME[0]}: installing $arg${name:+ as $name}"
+        local basename
+
+        # Check if path is empty
+        if test -z "$arg"; then
+            # It is an empty string
             nixErrorLog "${FUNCNAME[0]}: path cannot be empty"
             return 1
         fi
-        nixInfoLog "${FUNCNAME[0]}: installing $path"
-        local basename
-        basename=$(stripHash "$path") # use stripHash in case it's a nix store path
+
+        if test -n "$name"; then
+          # Provided name. Required for pipes, optional for paths
+          basename=$name
+        elif test -p "$arg"; then
+            # Named pipe requires a file name
+            nixErrorLog "${FUNCNAME[0]}: named pipe requires --name argument"
+        else
+            # Normal file without a name
+            basename=$(stripHash "$arg") # use stripHash in case it's a nix store path
+        fi
+
+        # Check that it is well-formed
         local trimmed=${basename%.gz} # don't get fooled by compressed manpages
         local suffix=${trimmed##*.}
         if test -z "$suffix" -o "$suffix" = "$trimmed"; then
-            nixErrorLog "${FUNCNAME[0]}: path missing manpage section suffix: $path"
+            nixErrorLog "${FUNCNAME[0]}: path missing manpage section suffix: $arg"
             return 1
         fi
+
+        # Create the out-path
         local outRoot
         if test "$suffix" = 3; then
             outRoot=${!outputDevman:?}
         else
             outRoot=${!outputMan:?}
         fi
-        local outPath="${outRoot}/share/man/man$suffix/$basename"
-        install -D --mode=644 --no-target-directory "$path" "$outPath"
+        local outPath="${outRoot}/share/man/man$suffix/"
+        nixInfoLog "${FUNCNAME[0]}: installing to $outPath"
+
+        # Install
+        if test -p "$arg"; then
+          # install doesn't work with pipes on Darwin
+          mkdir -p "$outPath" && cat "$arg" > "$outPath/$basename"
+        else
+          install -D --mode=644 --no-target-directory -- "$arg" "$outPath/$basename"
+        fi
+
+        # Reset the name for the next page
+        name=
     done
 }
 
