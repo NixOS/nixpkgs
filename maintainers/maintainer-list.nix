@@ -11392,6 +11392,11 @@
     githubId = 56727311;
     keys = [ { fingerprint = "B1B2 2BA0 FC39 D4B4 2240  5F55 D86C D68E 8DB2 E368"; } ];
   };
+  jamalhabash = {
+    name = "Jamal Habash";
+    github = "jamalhabash";
+    githubId = 19367263;
+  };
   james-atkins = {
     name = "James Atkins";
     github = "james-atkins";
