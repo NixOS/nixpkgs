@@ -10,7 +10,6 @@
   lib,
   xdg-utils,
   nix-update-script,
-  dos2unix,
   pname ? "nexusmods-app",
 }:
 let
@@ -54,7 +53,6 @@ buildDotnetModule (finalAttrs: {
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
-    dos2unix # for patching
     imagemagick # For resizing SVG icon in postInstall
   ];
 
@@ -63,14 +61,6 @@ buildDotnetModule (finalAttrs: {
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
-
-  patches = [
-    ./patches/no-games-json.patch
-  ];
-
-  prePatch = ''
-    dos2unix src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
-  '';
 
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
@@ -85,7 +75,9 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
 
-    unix2dos src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj
+    # Use a vendored version of the nexus API's games.json data
+    substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
   '';
 
   makeWrapperArgs = [
@@ -161,9 +153,6 @@ buildDotnetModule (finalAttrs: {
     # Fails attempting to fetch SMAPI version data from github:
     # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
     "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
-
-    # Fails attempting to fetch game info from NexusMods API
-    "NexusMods.Networking.NexusWebApi.Tests.LocalMappingCacheTests.Test_Parse"
   ]
   ++ lib.optionals (!_7zz.meta.unfree) [
     "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
