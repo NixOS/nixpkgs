@@ -8,6 +8,7 @@
     { ... }:
     {
       imports = [ ../modules/profiles/minimal.nix ];
+      boot.initrd.systemd.enable = false;
       boot.initrd.network.enable = true;
       boot.initrd.network.postCommands = ''
         ip addr show
