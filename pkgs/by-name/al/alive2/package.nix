@@ -13,13 +13,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "alive2";
-  version = "20.0";
+  version = "21.0";
 
   src = fetchFromGitHub {
     owner = "AliveToolkit";
     repo = "alive2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4QNrBRGH+rxXwb7zTRYAixxipN3ybcXuWCmO+BLU9r4=";
+    hash = "sha256-LL6/Epn6iHQJGKb8PX+U6zvXK/WTlvOIJPr6JuGRsSU=";
   };
 
   nativeBuildInputs = [
