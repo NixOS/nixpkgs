@@ -44,6 +44,7 @@ let
       "--cache-lru-schedule-timezone='${cfg.cache.lru.scheduleTimeZone}'"
     ])
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
+    ++ (lib.optional (!cfg.cache.signNarinfo) "--cache-sign-narinfo='false'")
     ++ (lib.forEach cfg.upstream.caches (url: "--upstream-cache='${url}'"))
     ++ (lib.forEach cfg.upstream.publicKeys (pk: "--upstream-public-key='${pk}'"))
   );
@@ -163,6 +164,15 @@ in
           description = ''
             The path to load the secretKey for signing narinfos. Leave this
             empty to automatically generate a private/public key.
+          '';
+        };
+
+        signNarinfo = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          example = "false";
+          description = ''
+            Whether to sign narInfo files or passthru as-is from upstream
           '';
         };
       };
