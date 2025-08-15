@@ -24995,6 +24995,12 @@
     matrix = "@tensor5:matrix.org";
     name = "Nicola Squartini";
   };
+  teohz = {
+    email = "gitstuff@teohz.com";
+    github = "teohz";
+    githubId = 77596774;
+    name = "Teohz";
+  };
   teozkr = {
     email = "teo@nullable.se";
     github = "nightkr";
