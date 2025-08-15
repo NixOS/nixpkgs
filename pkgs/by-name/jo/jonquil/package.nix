@@ -8,8 +8,8 @@
   ninja,
   cmake,
   pkg-config,
-  python3,
-  mctc-lib,
+  test-drive,
+  toml-f,
 }:
 
 assert (
@@ -20,25 +20,24 @@ assert (
 );
 
 stdenv.mkDerivation rec {
-  pname = "mstore";
+  pname = "jonquil";
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "grimme-lab";
-    repo = "mstore";
+    owner = "toml-f";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-zfrxdrZ1Um52qTRNGJoqZNQuHhK3xM/mKfk0aBLrcjw=";
+    hash = "sha256-2JCTHA0nyA7xE0IA+LNrEAulHU2eIbNRvFGQ7YSQMRE=";
   };
 
   patches = [
     # Fix wrong generation of package config include paths
-    ./pkgconfig.patch
+    ./cmake.patch
   ];
 
   nativeBuildInputs = [
     gfortran
     pkg-config
-    python3
   ]
   ++ lib.optionals (buildType == "meson") [
     meson
@@ -46,21 +45,26 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (buildType == "cmake") cmake;
 
-  buildInputs = [ mctc-lib ];
+  buildInputs = [
+    test-drive
+  ];
+
+  propagatedBuildInputs = [
+    toml-f
+  ];
 
   outputs = [
     "out"
     "dev"
   ];
 
-  postPatch = ''
-    patchShebangs --build config/install-mod.py
-  '';
-
   meta = with lib; {
-    description = "Molecular structure store for testing";
-    license = licenses.asl20;
-    homepage = "https://github.com/grimme-lab/mstore";
+    description = "JSON parser on top of TOML implementation";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    homepage = "https://github.com/toml-f/jonquil";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
