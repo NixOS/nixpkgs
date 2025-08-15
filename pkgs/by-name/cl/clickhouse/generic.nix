@@ -24,6 +24,7 @@
   rustc,
   cargo,
   rustPlatform,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -150,6 +151,13 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   checkPhase = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $NIX_BUILD_TOP/$sourceRoot/build/programs/clickhouse local --query 'SELECT 1' | grep 1
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/clickhouse";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
