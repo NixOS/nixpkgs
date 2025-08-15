@@ -19565,7 +19565,12 @@ self: super: with self; {
 
   vtjp = callPackage ../development/python-modules/vtjp { };
 
-  vtk = toPythonModule (pkgs.vtk-full.override { python3Packages = self; });
+  vtk = toPythonModule (
+    pkgs.vtk.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
 
   vttlib = callPackage ../development/python-modules/vttlib { };
 
