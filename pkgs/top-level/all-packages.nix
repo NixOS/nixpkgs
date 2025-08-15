@@ -13928,6 +13928,8 @@ with pkgs;
     electron = electron_36;
   };
 
+  wikiman-sources = wikiman.sources;
+
   inherit (windowmaker) dockapps;
 
   wofi-pass = callPackage ../../pkgs/tools/security/pass/wofi-pass.nix { };
