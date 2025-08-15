@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   plugincode,
-  p7zip,
+  _7zz,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +23,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ plugincode ];
 
   preBuild = ''
-    pushd src/extractcode_7z/bin
-
-    rm 7z 7z.so
-    ln -s ${p7zip}/bin/7z 7z
-    ln -s ${lib.getLib p7zip}/lib/p7zip/7z.so 7z.so
-
-    popd
+    rm src/extractcode_7z/bin/7z{,.so}
+    ln -s ${_7zz}/bin/7zz src/extractcode_7z/bin/7z
   '';
 
   # no tests
