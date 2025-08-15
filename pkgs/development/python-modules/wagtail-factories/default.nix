@@ -1,25 +1,28 @@
 {
+  lib,
   buildPythonPackage,
   callPackage,
   factory-boy,
   fetchFromGitHub,
-  lib,
+  setuptools,
   wagtail,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
   version = "4.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "wagtail-factories";
     owner = "wagtail";
     tag = "v${version}";
-    sha256 = "sha256-Rbu8D0vmUyF76YzF1QSQC5c0s12GxRrHNuUhMxcZdQY=";
+    hash = "sha256-Rbu8D0vmUyF76YzF1QSQC5c0s12GxRrHNuUhMxcZdQY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     factory-boy
     wagtail
   ];
