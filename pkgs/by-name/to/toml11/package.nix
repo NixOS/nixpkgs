@@ -7,17 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
-  version = "3.7.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "ToruNiina";
     repo = "toml11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HnhXBvIjo1JXhp+hUQvjs83t5IBVbNN6o3ZGhB4WESQ=";
+    hash = "sha256-sgWKYxNT22nw376ttGsTdg0AMzOwp8QH3E8mx0BZJTQ=";
   };
 
   nativeBuildInputs = [
     cmake
+  ];
+  cmakeFlags = [
+    "TOML11_PRECOMPILE=ON"
+    "CMAKE_CXX_STANDARD=11/14/17/20"
   ];
 
   meta = with lib; {
@@ -41,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
         and Windows.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix ++ platforms.windows;
   };
 })
