@@ -10,6 +10,11 @@
       ...
     }:
     {
+      # This tests that stage-1-init.sh allows certain processes to
+      # survive the transition to stage 2. This is a fairly different
+      # mechanism than the one for systemd stage 1.
+      boot.initrd.systemd.enable = false;
+
       boot.extraModulePackages =
         let
           compileKernelModule =
