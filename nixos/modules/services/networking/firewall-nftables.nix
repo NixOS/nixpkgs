@@ -35,6 +35,20 @@ in
         '';
       };
 
+      extraInputRulesEarly = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = "ip saddr { 69.171.224.0/19, 173.252.64.0/18 } counter drop";
+        description = ''
+          Additional nftables rules to be added at the beginning of
+          input-allow chain. This precedes all the rules produced by
+          `networking.firewall.allowed{TCP,UDP}Port{s,Ranges}` so you can use it
+          to drop packets which would be allowed by those options.
+
+          This option only works with the nftables based firewall.
+        '';
+      };
+
       extraForwardRules = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -147,6 +161,8 @@ in
       }
 
       chain input-allow {
+
+        ${cfg.extraInputRulesEarly}
 
         ${lib.concatStrings (
           lib.mapAttrsToList (
