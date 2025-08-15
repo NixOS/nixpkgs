@@ -19,7 +19,6 @@
   gtk4,
   shared-mime-info,
   glib,
-  wrapGAppsHook,
   hicolor-icon-theme,
   pango,
   gdk-pixbuf,
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     shared-mime-info
     glib
-    wrapGAppsHook
     hicolor-icon-theme
   ];
 
