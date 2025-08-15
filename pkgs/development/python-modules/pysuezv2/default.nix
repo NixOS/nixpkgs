@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for dealing with water consumption data from Suez";
     homepage = "https://github.com/jb101010-2/pySuez";
-    changelog = "https://github.com/jb101010-2/pySuez/releases/tag/${version}";
+    changelog = "https://github.com/jb101010-2/pySuez/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ];
   };
