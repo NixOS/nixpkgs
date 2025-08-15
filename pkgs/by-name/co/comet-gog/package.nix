@@ -78,6 +78,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/imLinguin/comet";
     license = lib.licenses.gpl3Plus;
     mainProgram = "comet";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      aidalgol
+    ];
   };
 })
