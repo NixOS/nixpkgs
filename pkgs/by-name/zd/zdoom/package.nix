@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  p7zip,
+  _7zz,
   cmake,
   SDL2,
   openal,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    p7zip
+    _7zz
     cmake
   ];
   buildInputs = [
