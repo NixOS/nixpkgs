@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # set it to use compression programs from $PATH
-    substituteInPlace dev/peach.pas --replace "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
+    substituteInPlace dev/peach.pas --replace-fail "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
   '';
 
   nativeBuildInputs = [
