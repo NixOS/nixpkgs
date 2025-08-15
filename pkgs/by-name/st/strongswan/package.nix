@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
     "--enable-eap-aka-3gpp2"
     "--enable-eap-mschapv2"
     "--enable-eap-radius"
+    "--enable-eap-peap"
     "--enable-xauth-eap"
     "--enable-ext-auth"
     "--enable-acert"
