@@ -1202,9 +1202,9 @@ with pkgs;
 
   # The full-featured Git.
   gitFull = git.override {
-    svnSupport = true;
+    svnSupport = stdenv.buildPlatform == stdenv.hostPlatform;
     guiSupport = true;
-    sendEmailSupport = true;
+    sendEmailSupport = stdenv.buildPlatform == stdenv.hostPlatform;
     withSsh = true;
     withLibsecret = !stdenv.hostPlatform.isDarwin;
   };

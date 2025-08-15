@@ -120,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+    substituteInPlace contrib/credential/libsecret/Makefile \
+        --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
   + lib.optionalString doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
