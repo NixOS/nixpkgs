@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "krb5";
-  version = "1.21.3";
+  version = "1.22";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    hash = "sha256-t6TNXq1n+wi5gLIavRUP9yF+heoyDJ7QxtrdMEhArTU=";
+    hash = "sha256-ZSvmF7RkfzxdysIVR9R8cJcQGq1OMG8XePtI4XsiC6M=";
   };
 
   outputs = [
