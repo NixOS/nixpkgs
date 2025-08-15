@@ -2643,6 +2643,8 @@ with pkgs;
 
   cocoapods-beta = lowPrio (callPackage ../development/tools/cocoapods { beta = true; });
 
+  comet-gog_heroic = callPackage ../by-name/co/comet-gog/package.nix { comet-gog_kind = "heroic"; };
+
   compass = callPackage ../development/tools/compass { };
 
   cone = callPackage ../development/compilers/cone {
