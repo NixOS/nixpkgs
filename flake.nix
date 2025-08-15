@@ -1,5 +1,12 @@
 # Experimental flake interface to Nixpkgs.
 # See https://github.com/NixOS/rfcs/pull/49 for details.
+
+# In lieu of performance considerations, the implementation in this file would
+# likely have been more concise and expressive. Unfortunately, an implication
+# of that would be that in order for some attributes to evaluate, some files
+# that are in essence unnecessary for that evaluation would be nonetheless
+# evaluated to some extent. So in the trade-off between expressivity and
+# performance, performance was chosen and therefore this file is quite literal.
 {
   description = "A collection of packages for the Nix package manager";
 
@@ -8,40 +15,30 @@
     let
       lib = import ./lib;
 
-      imports = lib.mapAttrs (name: path_: import path_ { inherit imports lib self; }) {
-        lib = ./lib/flake-support.nix;
-        pkgs = ./pkgs/top-level/flake-support.nix;
-        nixos = ./nixos/flake-support.nix;
-        doc = ./doc/flake-support.nix;
-        devShell = ./flake/dev-shell.nix;
-        formatter = ./flake/formatter.nix;
+      args = { inherit imports lib self; };
+
+      imports = {
+        lib = import ./lib/flake-support.nix args;
+        pkgs = import ./pkgs/top-level/flake-support.nix args;
+        nixos = import ./nixos/flake-support.nix args;
+        doc = import ./doc/flake-support.nix args;
+        devShell = import ./flake/dev-shell.nix args;
+        formatter = import ./flake/formatter.nix args;
       };
-
-      outputs = lib.foldl lib.recursiveUpdate { } (
-        lib.mapAttrsToList (name: lib.getAttr "outputs") imports
-      );
     in
-    # In lieu of performance considerations, the following attribute set would
-    # have been, more simply, the expression for the above `outputs` binding.
-    # Unfortunately, an implication of that would be, that in order for any
-    # attribute to evaluate, all of the above files would need to be evaluated
-    # to some extent. Instead, the following expression is a literal attribute
-    # set, where each attribute name is provided literally. And specifically,
-    # the expression for the `legacyPackages` attribute value avoids extraneous
-    # imports. This sacrifice of expressivity for the benefit of performance
-    # was deemed appropriate in light of the ubiquity of `legacyPackages`.
-    # The access performance for the rest of the attributes seems less
-    # important. Also, some are inter-dependent, so expressivity was preferred.
     {
-      inherit (imports.pkgs) legacyPackages;
-
-      inherit (outputs)
-        checks
-        devShells
-        formatter
-        htmlDocs
-        lib
-        nixosModules
-        ;
+      inherit (imports.lib.outputs) lib;
+      inherit (imports.pkgs.outputs) legacyPackages;
+      checks = lib.zipAttrsWith (name: lib.foldl lib.mergeAttrs { }) [
+        imports.pkgs.outputs.checks
+        imports.nixos.outputs.checks
+      ];
+      htmlDocs = {
+        inherit (imports.nixos.outputs.htmlDocs) nixosManual;
+        inherit (imports.doc.outputs.htmlDocs) nixpkgsManual;
+      };
+      inherit (imports.nixos.outputs) nixosModules;
+      inherit (imports.devShell.outputs) devShells;
+      inherit (imports.formatter.outputs) formatter;
     };
 }
