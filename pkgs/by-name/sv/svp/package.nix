@@ -14,7 +14,7 @@
   libsForQt5,
   libusb1,
   ocl-icd,
-  p7zip,
+  _7zz,
   patchelf,
   socat,
   vapoursynth,
@@ -68,7 +68,7 @@ let
     };
 
     nativeBuildInputs = [
-      p7zip
+      _7zz
       patchelf
     ];
     dontFixup = true;
@@ -87,7 +87,7 @@ let
     installPhase = ''
       mkdir -p $out/opt
       for f in "installer/"*.7z; do
-        7z -bd -bb0 -y x -o"$out/opt/" "$f" || true
+        7zz -bd -bb0 -y x -o"$out/opt/" "$f" || true
       done
 
       for SIZE in 32 48 64 128; do
