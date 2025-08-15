@@ -10024,6 +10024,8 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
+  firejail-disable-sandbox-check = callPackage ../by-name/fi/firejail/disable-sandbox-check.nix { };
+
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];
     withExtraLuaPackages = _: [ ];
