@@ -131,6 +131,17 @@ in
         '';
       };
 
+      pgdumpAllOptions = lib.mkOption {
+        type = lib.types.separatedString " ";
+        default = "";
+        description = ''
+          Command line options for pg_dumpall. This options is only used
+          if `config.services.postgresqlBackup.backupAll` is enabled.
+          Note that config.services.postgresqlBackup.backupAll is also active,
+          when no databases where specified.
+        '';
+      };
+
       compression = lib.mkOption {
         type = lib.types.enum [
           "none"
@@ -177,7 +188,7 @@ in
       ];
     })
     (lib.mkIf (cfg.enable && cfg.backupAll) {
-      systemd.services.postgresqlBackup = postgresqlBackupService "all" "pg_dumpall";
+      systemd.services.postgresqlBackup = postgresqlBackupService "all" "pg_dumpall ${cfg.pgdumpAllOptions}";
     })
     (lib.mkIf (cfg.enable && !cfg.backupAll) {
       systemd.services = lib.listToAttrs (
