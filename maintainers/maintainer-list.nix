@@ -23121,6 +23121,12 @@
     githubId = 1588288;
     name = "Shahrukh Khan";
   };
+  shakhzodkudratov = {
+    email = "shakhzodkudratov@gmail.com";
+    github = "shakhzodkudratov";
+    githubId = 37299109;
+    name = "Shakhzod Kudratov";
+  };
   shamilton = {
     email = "sgn.hamilton@protonmail.com";
     github = "SCOTT-HAMILTON";
