@@ -20,7 +20,7 @@
   libarchive,
   libzip,
   # Archive tools
-  p7zip,
+  _7zz,
   lrzip,
   unar,
   # Unfree tools
@@ -30,7 +30,7 @@
 
 let
   extraTools = [
-    p7zip
+    _7zz
     lrzip
     unar
   ]
