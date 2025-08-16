@@ -64,11 +64,9 @@ in
         # Abuse this unavoidable "iteration" to set this flag which we want as
         # well - it means: Don't turn on features just because their deps are
         # satisfied, let only our cmakeFlags decide.
-        "-DENABLE_DEFAULT=OFF"
-      else if hasFeature feat then
-        "-DENABLE_${info.cmakeEnableFlag}=ON"
+        (lib.cmakeBool "ENABLE_DEFAULT" false)
       else
-        "-DENABLE_${info.cmakeEnableFlag}=OFF"
+        (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
     )
   ) featuresInfo;
   disallowedReferences = [
