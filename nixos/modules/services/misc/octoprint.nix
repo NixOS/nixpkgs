@@ -6,17 +6,22 @@
 }:
 let
 
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkOption
+    mkRenamedOptionModule
+    optional
+    types
+    versionOlder
+    ;
+
   cfg = config.services.octoprint;
 
-  baseConfig = lib.recursiveUpdate {
-    plugins.curalegacy.cura_engine = "${pkgs.curaengine_stable}/bin/CuraEngine";
-    server.port = cfg.port;
-    webcam.ffmpeg = "${pkgs.ffmpeg.bin}/bin/ffmpeg";
-  } (lib.optionalAttrs (cfg.host != null) { server.host = cfg.host; });
+  formatType = pkgs.formats.json { };
 
-  fullConfig = lib.recursiveUpdate cfg.extraConfig baseConfig;
-
-  cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
+  configFile = formatType.generate "octoprint-config.yaml" cfg.settings;
 
   pluginsEnv = cfg.package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
@@ -72,18 +77,32 @@ in
         description = "State directory of the daemon.";
       };
 
-      plugins = lib.mkOption {
-        type = lib.types.functionTo (lib.types.listOf lib.types.package);
-        default = plugins: [ ];
-        defaultText = lib.literalExpression "plugins: []";
-        example = lib.literalExpression "plugins: with plugins; [ themeify stlviewer ]";
+      plugins = mkOption {
+        type = types.functionTo (types.listOf types.package);
+        default = _plugins: [ ];
+        defaultText = literalExpression "plugins: []";
+        example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
         description = "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.attrs;
+      settings = mkOption {
         default = { };
-        description = "Extra options which are added to OctoPrint's YAML configuration file.";
+        description = ''
+          The octoprint settings, for definitions see the upstream [documentation](https://docs.octoprint.org).
+          Will override any existing settings.
+        '';
+        type = types.submodule {
+          freeformType = formatType.type;
+          config = {
+            plugins.curalegacy.cura_engine = mkDefault "${pkgs.curaengine_stable}/bin/CuraEngine";
+            server.host = cfg.host;
+            server.port = cfg.port;
+            webcam.ffmpeg = mkDefault "${pkgs.ffmpeg.bin}/bin/ffmpeg";
+          };
+        };
+      };
+      enableRaspberryPi = mkEnableOption "RaspberryPi specific hardware access rules" // {
+        default = versionOlder config.system.stateVersion "25.05";
       };
 
     };
@@ -91,6 +110,20 @@ in
   };
 
   ##### implementation
+  imports = [
+    (mkRenamedOptionModule
+      [
+        "services"
+        "octoprint"
+        "extraConfig"
+      ]
+      [
+        "services"
+        "octoprint"
+        "settings"
+      ]
+    )
+  ];
 
   config = lib.mkIf cfg.enable {
 
@@ -105,12 +138,13 @@ in
       octoprint.gid = config.ids.gids.octoprint;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-      # this will allow octoprint access to raspberry specific hardware to check for throttling
-      # read-only will not work: "VCHI initialization failed" error
-      "a /dev/vchiq - - - - u:octoprint:rw"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -" ]
+      ++ optional cfg.enableRaspberryPi
+        # this will allow octoprint access to raspberry specific hardware to check for throttling
+        # read-only will not work: "VCHI initialization failed" error
+        # FIXME: this should probably be a udev rule
+        "a /dev/vchiq - - - - u:octoprint:rw";
 
     systemd.services.octoprint = {
       description = "OctoPrint, web interface for 3D printers";
@@ -120,10 +154,10 @@ in
 
       preStart = ''
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
-          ${pkgs.yaml-merge}/bin/yaml-merge "${cfg.stateDir}/config.yaml" "${cfgUpdate}" > "${cfg.stateDir}/config.yaml.tmp"
+          ${pkgs.yaml-merge}/bin/yaml-merge "${cfg.stateDir}/config.yaml" "${configFile}" > "${cfg.stateDir}/config.yaml.tmp"
           mv "${cfg.stateDir}/config.yaml.tmp" "${cfg.stateDir}/config.yaml"
         else
-          cp "${cfgUpdate}" "${cfg.stateDir}/config.yaml"
+          cp "${configFile}" "${cfg.stateDir}/config.yaml"
           chmod 600 "${cfg.stateDir}/config.yaml"
         fi
       '';
@@ -135,9 +169,41 @@ in
         SupplementaryGroups = [
           "dialout"
         ];
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectSystem = "strict";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@pkey"
+        ];
+        ReadWritePaths = [ cfg.stateDir ];
+        UMask = "0077";
+
       };
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
   };
+  meta.maintainers = with lib.maintainers; [ patrickdag ];
 }
