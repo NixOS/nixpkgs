@@ -9,8 +9,8 @@
   libkrun-efi,
   rustPlatform,
   lib,
+  withGpu ? false,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunkit";
   version = "0.2.1";
@@ -38,22 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libepoxy
-    libkrun-efi
+    (libkrun-efi.override { inherit withGpu; })
   ];
 
-  makeFlags = [
-    "LIBKRUN_EFI=${libkrun-efi}/lib/libkrun-efi.dylib"
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   dontStrip = true;
-
-  postFixup = ''
-    install_name_tool -change libkrun-efi.dylib ${libkrun-efi}/lib/libkrun-efi.dylib \
-      $out/bin/krunkit
-    codesign --force --sign - --entitlements ${finalAttrs.src}/krunkit.entitlements \
-      $out/bin/krunkit
-  '';
 
   meta = {
     description = "Launch configurable virtual machines with libkrun";

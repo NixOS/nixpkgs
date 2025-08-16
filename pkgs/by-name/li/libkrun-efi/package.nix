@@ -2,6 +2,7 @@
   cargo,
   fetchFromGitHub,
   fetchurl,
+  fixDarwinDylibNames,
   lib,
   libepoxy,
   moltenvk,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
+    fixDarwinDylibNames
     pkg-config
     rustc
     rustPlatform.bindgenHook
@@ -46,29 +48,32 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libepoxy
     rutabaga_gfx
-    (virglrenderer.overrideAttrs {
-      version = "0.10.4d";
-      src = fetchurl {
-        url = "https://gitlab.freedesktop.org/slp/virglrenderer/-/archive/0.10.4d-krunkit/virglrenderer-0.10.4d-krunkit.tar.bz2";
-        hash = "sha256-M/buj97QUeY6CYeW0VICD5F6FBPi9ATPGHpNA48xL3o=";
-      };
-      buildInputs = [
-        libepoxy
-        moltenvk.dev
-        vulkan-headers
-      ];
-      mesonFlags = [
-        (lib.mesonBool "venus" true)
-        (lib.mesonBool "render-server" false)
-        (lib.mesonEnable "drm" false)
-      ];
-    })
+    (virglrenderer.overrideAttrs (
+      finalAttrs: _: {
+        version = "0.10.4d";
+        src = fetchurl {
+          url = "https://gitlab.freedesktop.org/slp/virglrenderer/-/archive/${finalAttrs.version}-krunkit/virglrenderer-${finalAttrs.version}-krunkit.tar.bz2";
+          hash = "sha256-M/buj97QUeY6CYeW0VICD5F6FBPi9ATPGHpNA48xL3o=";
+        };
+        buildInputs = [
+          libepoxy
+          moltenvk.dev
+          vulkan-headers
+        ];
+        mesonFlags = [
+          (lib.mesonBool "venus" true)
+          (lib.mesonBool "render-server" false)
+          (lib.mesonEnable "drm" false)
+        ];
+      }
+    ))
   ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "EFI=1"
-  ] ++ lib.optional withGpu "GPU=1";
+  ]
+  ++ lib.optional withGpu "GPU=1";
 
   postInstall = ''
     mkdir -p $dev/lib
