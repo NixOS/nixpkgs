@@ -24,14 +24,15 @@ with open(desired_packages_path, "r") as f:
 
 uuid_to_versions = defaultdict(list)
 for pkg in desired_packages:
-    uuid_to_versions[pkg["uuid"]].append(pkg["version"])
+  uuid_to_versions[pkg["uuid"]].append(pkg["version"])
 
 with open(dependencies_path, "r") as f:
   uuid_to_store_path = yaml.safe_load(f)
 
 os.makedirs(out_path)
 
-registry = toml.load(registry_path / "Registry.toml")
+full_registry = toml.load(registry_path / "Registry.toml")
+registry = full_registry.copy()
 registry["packages"] = {k: v for k, v in registry["packages"].items() if k in uuid_to_versions}
 
 for (uuid, versions) in uuid_to_versions.items():
@@ -80,20 +81,48 @@ for (uuid, versions) in uuid_to_versions.items():
       if (registry_path / path / f).exists():
         shutil.copy2(registry_path / path / f, out_path / path)
 
-    # Copy the Versions.toml file, trimming down to the versions we care about
+    # Copy the Versions.toml file, trimming down to the versions we care about.
+    # In the case where versions=None, this is a weak dep, and we keep all versions.
     all_versions = toml.load(registry_path / path / "Versions.toml")
-    versions_to_keep = {k: v for k, v in all_versions.items() if k in versions}
+    versions_to_keep = {k: v for k, v in all_versions.items() if k in versions} if versions != None else all_versions
     for k, v in versions_to_keep.items():
       del v["nix-sha256"]
     with open(out_path / path / "Versions.toml", "w") as f:
       toml.dump(versions_to_keep, f)
 
-    # Fill in the local store path for the repo
-    if not uuid in uuid_to_store_path: continue
-    package_toml = toml.load(registry_path / path / "Package.toml")
-    package_toml["repo"] = "file://" + uuid_to_store_path[uuid]
-    with open(out_path / path / "Package.toml", "w") as f:
-      toml.dump(package_toml, f)
+    if versions is None:
+      # This is a weak dep; just grab the whole Package.toml
+      shutil.copy2(registry_path / path / "Package.toml", out_path / path / "Package.toml")
+    elif uuid in uuid_to_store_path:
+      # Fill in the local store path for the repo
+      package_toml = toml.load(registry_path / path / "Package.toml")
+      package_toml["repo"] = "file://" + uuid_to_store_path[uuid]
+      with open(out_path / path / "Package.toml", "w") as f:
+        toml.dump(package_toml, f)
 
+# Look for missing weak deps and include them. This can happen when our initial
+# resolve step finds dependencies, but we fail to resolve them at the project.py
+# stage. Usually this happens because the package that depends on them does so
+# as a weak dep, but doesn't have a Package.toml in its repo making this clear.
+for pkg in desired_packages:
+  for dep in (pkg.get("deps", []) or []):
+    uuid = dep["uuid"]
+    if not uuid in uuid_to_versions:
+      entry = full_registry["packages"].get(uuid)
+      if not entry:
+        print(f"""WARNING: found missing UUID but couldn't resolve it: {uuid}""")
+        continue
+
+      # Add this entry back to the minimal Registry.toml
+      registry["packages"][uuid] = entry
+
+      # Bring over the Package.toml
+      path = Path(entry["path"])
+      if (out_path / path / "Package.toml").exists():
+        continue
+      Path(out_path / path).mkdir(parents=True, exist_ok=True)
+      shutil.copy2(registry_path / path / "Package.toml", out_path / path / "Package.toml")
+
+# Finally, dump the Registry.toml
 with open(out_path / "Registry.toml", "w") as f:
     toml.dump(registry, f)
