@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   rustPlatform,
   fetchFromGitHub,
   fetchpatch,
@@ -121,7 +121,7 @@ let
     '';
   };
 in
-buildGo123Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   inherit pname src version;
   inherit vendorHash;
   proxyVendor = true;
