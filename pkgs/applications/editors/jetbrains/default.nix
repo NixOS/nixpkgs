@@ -324,7 +324,9 @@ rec {
         lttng-ust_2_12
         musl
       ]
-      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        xorg.xcbutilkeysyms
+      ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
         expat
         libxml2
         xz
