@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    llvmPackages.clang-unwrapped
     llvmPackages.libllvm
     llvmPackages.lld
   ]
@@ -79,13 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    )
-    ++ [
-      "TOOLCHAIN_FOR_TARGET=llvm"
-      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
-      # still needs to be available
-      "CC=${lib.getExe stdenv.cc}"
-    ];
+    );
 
   passthru.tests = nixosTests.limine;
 
