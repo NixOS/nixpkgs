@@ -2,8 +2,11 @@
   lib,
   stdenv,
   fetchzip,
+  fetchurl,
   autoPatchelfHook,
   makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 
   alsa-lib,
   libjack2,
@@ -14,6 +17,12 @@
   zenity,
 }:
 
+let
+  iconPng = fetchurl {
+    url = "https://vital.audio/images/vital_full_no_background.png";
+    sha256 = "sha256-Qvt1v+9DVfrTFSZvi/zRf8iXZsej6Sq7KZhOjOYKpvo=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vital";
   version = "1.5.5";
@@ -28,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     makeBinaryWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -65,19 +75,38 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
 
+    ln -s $out/bin/Vital $out/bin/vital
+
+    install -D ${iconPng} $out/share/icons/hicolor/256x256/apps/vital.png
+
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      exec = finalAttrs.meta.mainProgram;
+      name = "vital";
+      icon = "vital";
+      comment = finalAttrs.meta.description;
+      desktopName = "Vital";
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "Music"
+      ];
+    })
+  ];
 
   meta = with lib; {
     description = "Spectral warping wavetable synth";
     homepage = "https://vital.audio/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [
-      unfree
-      gpl3Plus
-    ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ PowerUser64 ];
+    maintainers = with maintainers; [
+      PowerUser64
+      lortane
+    ];
     mainProgram = "Vital";
   };
 })
