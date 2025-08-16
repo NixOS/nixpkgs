@@ -57,13 +57,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.1";
+    version = "1.0.2";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       tag = finalAttrs.version;
-      hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
+      hash = "sha256-J//O/ABMFa3TFYwR0wc8d1UTA5iSFnEP2thOjuCN+uE=";
       fetchSubmodules = true;
     };
 
@@ -112,11 +112,6 @@ freecad-utils.makeCustomizable (
       (fetchpatch {
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
-      })
-      # https://github.com/FreeCAD/FreeCAD/pull/22221
-      (fetchpatch {
-        url = "https://github.com/FreeCAD/FreeCAD/commit/3d2b7dc9c7ac898b30fe469b7cbd424ed1bca0a2.patch?full_index=1";
-        hash = "sha256-XCQdv/+dYdJ/ptA2VKrD63qYILyaP276ISMkmWLtT30=";
       })
       # Inform Coin to use EGL when on Wayland
       # https://github.com/FreeCAD/FreeCAD/pull/21917
