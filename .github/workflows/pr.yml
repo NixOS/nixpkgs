@@ -34,6 +34,7 @@ jobs:
         with:
           sparse-checkout: |
             .github/actions
+            ci/github-script
             ci/supportedBranches.js
             ci/supportedSystems.json
       - name: Check if the PR can be merged and get the test merge commit
