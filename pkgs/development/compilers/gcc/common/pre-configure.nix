@@ -54,6 +54,18 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export STRIP='strip -x'
 ''
 
+# We need to reconfigure the build system when `withoutTargetLibc` is
+# set. This is because libstdcxx tries to run link tests, which we
+# can't do without a libc.
++ lib.optionalString withoutTargetLibc ''
+  for i in */configure.ac; do
+    pushd "$(dirname "$i")"
+    echo "Running autoreconf in $PWD"
+    autoconf -f
+    popd
+  done
+''
+
 # HACK: if host and target config are the same, but the platforms are
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.
