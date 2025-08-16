@@ -10,19 +10,32 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.22.4";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     tag = "v${version}";
-    hash = "sha256-9MZcxpRyr0YMLHKTgxqJnm72rAYLkTdrn7Egky8mM48=";
+    hash = "sha256-mDVq8wUkCvXHTqW4niYB1JIZIQQNpHTmhPu3Ydy6IyQ=";
   };
 
   nativeBuildInputs = [
     cmake
     addDriverRunpath
   ];
+
+  postInstall = ''
+    mkdir -p $out/nix-support
+    cat > $out/nix-support/setup-hook <<EOF
+    # Setup-hook to add Intel OpenGL driver libs to LD_LIBRARY_PATH if available
+    if [ -d /run/opengl-driver/lib ]; then
+      export LD_LIBRARY_PATH="/run/opengl-driver/lib:$LD_LIBRARY_PATH"
+    fi
+    if [ -d /run/opengl-driver-32/lib ]; then
+      export LD_LIBRARY_PATH="/run/opengl-driver-32/lib:$LD_LIBRARY_PATH"
+    fi
+    EOF
+  '';
 
   postFixup = ''
     addDriverRunpath $out/lib/libze_loader.so
