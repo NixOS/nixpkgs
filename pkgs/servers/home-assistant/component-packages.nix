@@ -1971,7 +1971,8 @@
       ];
     "gc100" =
       ps: with ps; [
-      ]; # missing inputs: python-gc100
+        python-gc100
+      ];
     "gdacs" =
       ps: with ps; [
         aio-georss-gdacs
