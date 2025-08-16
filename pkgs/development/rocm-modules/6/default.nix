@@ -3,6 +3,7 @@
   config,
   callPackage,
   newScope,
+  stdenv,
   recurseIntoAttrs,
   symlinkJoin,
   fetchFromGitHub,
@@ -13,7 +14,6 @@
   python3Packages,
   triton-llvm,
   openmpi,
-  rocmGpuArches ? [ ],
 }:
 
 let
@@ -23,9 +23,9 @@ let
       inherit (self) llvm;
       pyPackages = python3Packages;
       openmpi-orig = openmpi;
+      origStdenv = stdenv;
     in
     {
-      inherit rocmGpuArches;
       buildTests = false;
       buildBenchmarks = false;
       stdenv = llvm.rocmClangStdenv;
@@ -66,8 +66,7 @@ let
 
       rocminfo = self.callPackage ./rocminfo { };
 
-      # Unfree
-      hsa-amd-aqlprofile-bin = self.callPackage ./hsa-amd-aqlprofile-bin { };
+      aqlprofile = self.callPackage ./aqlprofile { };
 
       rdc = self.callPackage ./rdc { };
 
@@ -83,7 +82,13 @@ let
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
 
-      aotriton = self.callPackage ./aotriton { };
+      aotriton = self.callPackage ./aotriton {
+        # aotriton's so segfaults on import inside std::__detail::_Prime_rehash_policy::_M_next_bkt
+        # for yet to be diagnosed reasons when using rocm toolchain
+        # this is going to be a problem for next release because it uses ROCm/aiter and will
+        # need amdclang but we can bodge for now and stay on gcc
+        stdenv = origStdenv;
+      };
 
       hipify = self.callPackage ./hipify {
         inherit (llvm)
@@ -269,12 +274,11 @@ let
           owner = "llvm";
           repo = "llvm-project";
           # make sure this matches triton llvm rel branch hash for now
-          # https://github.com/triton-lang/triton/blob/release/3.2.x/cmake/llvm-hash.txt
-          rev = "86b69c31642e98f8357df62c09d118ad1da4e16a";
-          hash = "sha256-W/mQwaLGx6/rIBjdzUTIbWrvGjdh7m4s15f70fQ1/hE=";
+          # https://github.com/triton-lang/triton/blob/release/3.3.x/cmake/llvm-hash.txt
+          rev = "a66376b0dc3b2ea8a84fda26faca287980986f78";
+          hash = "sha256-7xUPozRerxt38UeJxA8kYYxOQ4+WzDREndD2+K0BYkU=";
         };
         pname = "triton-llvm-rocm";
-        patches = [ ]; # FIXME: https://github.com/llvm/llvm-project//commit/84837e3cc1cf17ed71580e3ea38299ed2bfaa5f6.patch doesn't apply, may need to rebase
       };
 
       triton = pyPackages.callPackage ./triton { rocmPackages = self; };
@@ -289,7 +293,7 @@ let
         rocm-developer-tools = symlinkJoin {
           name = "rocm-developer-tools-meta";
           paths = [
-            hsa-amd-aqlprofile-bin
+            aqlprofile
             rocm-core
             rocr-debug-agent
             roctracer
@@ -312,7 +316,6 @@ let
           name = "rocm-ml-libraries-meta";
           paths = [
             llvm.clang
-            llvm.mlir
             llvm.openmp
             rocm-core
             miopen-hip
@@ -371,7 +374,6 @@ let
           paths = [
             rocm-core
             llvm.clang
-            llvm.mlir
             llvm.openmp # openmp-extras-devel (https://github.com/ROCm/aomp)
             rocm-language-runtime
           ];
@@ -403,7 +405,6 @@ let
             hipify
             rocm-cmake
             llvm.clang
-            llvm.mlir
             llvm.openmp
             rocm-runtime
             rocm-hip-runtime

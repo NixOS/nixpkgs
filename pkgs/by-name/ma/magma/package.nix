@@ -142,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lists.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lists.optionals rocmSupport [
+    rocmPackages.clr
   ];
 
   buildInputs = [
@@ -172,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
       clr
       hipblas
       hipsparse
+      llvm.rocmcxx
       llvm.openmp
     ]
   );
