@@ -39,47 +39,6 @@ makeScopeWithSplicing' {
         in
         (lib.makeOverridable mkFrameworks attrs);
 
-      plasma5 =
-        let
-          mkPlasma5 = import ../desktops/plasma-5;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) config lib fetchurl;
-            inherit (pkgs) gsettings-desktop-schemas;
-          };
-        in
-        (lib.makeOverridable mkPlasma5 attrs);
-
-      kdeGear =
-        let
-          mkGear = import ../applications/kde;
-          attrs = {
-            inherit config libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkGear attrs);
-
-      plasmaMobileGear =
-        let
-          mkPlamoGear = import ../applications/plasma-mobile;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkPlamoGear attrs);
-
-      mauiPackages =
-        let
-          mkMaui = import ../applications/maui;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkMaui attrs);
-
       noExtraAttrs =
         set:
         lib.attrsets.removeAttrs set [
@@ -92,37 +51,19 @@ makeScopeWithSplicing' {
     in
     (noExtraAttrs (
       kdeFrameworks
-      // plasmaMobileGear
-      // plasma5
-      // plasma5.thirdParty
-      // kdeGear
-      // mauiPackages
       // qt5
       // {
 
         inherit
           kdeFrameworks
-          plasmaMobileGear
-          plasma5
-          kdeGear
-          mauiPackages
           qt5
           ;
-
-        # Alias for backwards compatibility. Added 2021-05-07.
-        kdeApplications = kdeGear;
 
         ### LIBRARIES
 
         accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
 
         accounts-qt = callPackage ../development/libraries/accounts-qt { };
-
-        alkimia = callPackage ../development/libraries/alkimia { };
-
-        applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
-
-        applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
 
         appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
@@ -154,8 +95,6 @@ makeScopeWithSplicing' {
 
         kdb = callPackage ../development/libraries/kdb { };
 
-        kde2-decoration = callPackage ../data/themes/kde2 { };
-
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
         kdiagram = callPackage ../development/libraries/kdiagram { };
@@ -171,8 +110,6 @@ makeScopeWithSplicing' {
         kproperty = callPackage ../development/libraries/kproperty { };
 
         kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
-
-        kreport = callPackage ../development/libraries/kreport { };
 
         kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
@@ -299,10 +236,6 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced {
-          useQt5 = true;
-        };
-
         soqt = callPackage ../development/libraries/soqt { };
 
         telepathy = callPackage ../development/libraries/telepathy/qt { };
@@ -315,13 +248,9 @@ makeScopeWithSplicing' {
 
         signond = callPackage ../development/libraries/signond { };
 
-        soundkonverter = callPackage ../applications/audio/soundkonverter { };
-
         timed = callPackage ../applications/system/timed { };
 
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
-
-        xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
       }
     ))
   );

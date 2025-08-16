@@ -431,12 +431,9 @@
       - changed-files:
           - any-glob-to-any-file:
               - doc/languages-frameworks/qt.section.md
-              - nixos/modules/services/x11/desktop-managers/plasma5.nix
-              - nixos/tests/plasma5.nix
-              - pkgs/applications/kde/**/*
-              - pkgs/desktops/plasma-5/**/*
-              - pkgs/development/libraries/kde-frameworks/**/*
-              - pkgs/development/libraries/qt-5/**/*
+              - nixos/modules/services/desktop-managers/plasma6.nix
+              - nixos/tests/plasma6.nix
+              - pkgs/kde/**/*
 
 "6.topic: R":
   - any:

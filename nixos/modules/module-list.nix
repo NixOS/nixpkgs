@@ -543,10 +543,6 @@
   ./services/desktops/blueman.nix
   ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
-  ./services/desktops/deepin/app-services.nix
-  ./services/desktops/deepin/dde-api.nix
-  ./services/desktops/deepin/dde-daemon.nix
-  ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/dleyna.nix
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
