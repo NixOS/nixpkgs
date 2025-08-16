@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Radicle TUI";
+    description = "Radicle terminal user interface";
     homepage = "https://radicle.xyz";
     license = with lib.licenses; [
       asl20 # or
