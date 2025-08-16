@@ -1,12 +1,16 @@
 {
   crystal,
+  crystal2nix,
+  _experimental-update-script-combinators,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
   gitUpdater,
   lib,
   lz4,
+  runCommand,
   versionCheckHook,
+  writeShellScript,
 }:
 let
   # https://github.com/cloudamqp/lavinmq/blob/0dd2d59dae7f8e1cf921955fb7c8246f385592a1/Makefile#L64-L83
@@ -16,8 +20,9 @@ let
   };
 
   luxonjs = fetchurl {
-    url = "https://moment.github.io/luxon/es6/luxon.js";
-    hash = "sha256-uDdIFz4ijeBl+uMlYELYjOZW1sq/bE7tqkcDqM8JpzA=";
+    # Upstream utilizes non-reproducible URL.
+    url = "https://cdn.jsdelivr.net/npm/luxon@3.7.1/build/es6/luxon.js";
+    hash = "sha256-Empw8npRVYV9yVccXPw9lLu/B2IozEjnBiDEtmYR3PI=";
   };
 
   chartjs-adapter-luxon = fetchurl {
@@ -37,13 +42,13 @@ let
 in
 crystal.buildCrystalPackage rec {
   pname = "lavinmq";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "lavinmq";
     tag = "v${version}";
-    hash = "sha256-eUTs0Ijub4KD5ZOVrpzRHwr4+Mw0s4EL81Si/vjpeeI=";
+    hash = "sha256-yIoc4egajF0AJUUIgDSCPddLncFPhHUa71i9GK7AJq0=";
   };
 
   buildInputs = [ lz4 ];
@@ -95,14 +100,40 @@ crystal.buildCrystalPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater {
+        rev-prefix = "v";
+        ignoredVersions = "-";
+      })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "lavinmq.shardLock" "./shard.lock")
+      {
+        command = [
+          (writeShellScript "update-lock" "${lib.getExe crystal2nix}; mv shards.nix $1")
+          ./.
+        ];
+        supportedFeatures = [ "silent" ];
+      }
+      {
+        command = [
+          "rm"
+          "./shard.lock"
+        ];
+        supportedFeatures = [ "silent" ];
+      }
+    ];
 
-  meta = with lib; {
+    shardLock = runCommand "shard.lock" { } ''
+      cp ${src}/shard.lock $out
+    '';
+  };
+
+  meta = {
     description = "Ultra quick message queue and streaming server";
     homepage = "https://github.com/cloudamqp/lavinmq";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.ivan770 ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.ivan770 ];
     mainProgram = "lavinmq";
   };
 }

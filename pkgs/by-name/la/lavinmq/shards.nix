@@ -6,8 +6,8 @@
   };
   amq-protocol = {
     url = "https://github.com/cloudamqp/amq-protocol.cr.git";
-    rev = "v1.1.14";
-    sha256 = "1pr5h3lxfhjmarfqpvfldn8d6425g3i56k4p4szk2jkffa0z38nz";
+    rev = "v1.1.15";
+    sha256 = "0zjwhgr1rz1kwrh8qpawqspv8qnyk3khqprhgr4h6gqgckqxkkli";
   };
   amqp-client = {
     url = "https://github.com/cloudamqp/amqp-client.cr.git";
@@ -21,8 +21,8 @@
   };
   mqtt-protocol = {
     url = "https://github.com/84codes/mqtt-protocol.cr.git";
-    rev = "e63d91bf3bdadf96cc1a88fc67908ae3e7f1aa49";
-    sha256 = "1g1yfpy5w6knqcqp90pihz23qqni05q24b7h61gs3v1ldvn41qgc";
+    rev = "36ff248ff8e9aaa749cfff3d251103e0e5f661bc";
+    sha256 = "15m0q8hxral8a37yxhh59b64fkgxkcnl95id35phj6psid6bydpm";
   };
   systemd = {
     url = "https://github.com/84codes/systemd.cr.git";
