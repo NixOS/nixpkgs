@@ -15,11 +15,11 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-FZXLJbximJWrDyuRril6whlOYWppGLns3k8sDNRmOuI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3.pkgs.setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     gitpython
     matplotlib
     numpy
