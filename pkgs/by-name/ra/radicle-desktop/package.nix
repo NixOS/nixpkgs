@@ -1,5 +1,5 @@
 {
-  pkgs,
+  fetchFromGitHub,
   cargo-tauri,
   fetchgit,
   git,
@@ -20,10 +20,10 @@
 }:
 
 let
-  twemoji-assets = pkgs.fetchFromGitHub {
+  twemoji-assets = fetchFromGitHub {
     owner = "twitter";
     repo = "twemoji";
-    rev = "v14.0.2";
+    tag = "v14.0.2";
     hash = "sha256-YoOnZ5uVukzi/6bLi22Y8U5TpplPzB7ji42l+/ys5xI=";
   };
 in
