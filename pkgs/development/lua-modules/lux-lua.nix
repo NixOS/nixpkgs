@@ -62,8 +62,8 @@ rustPlatform.buildRustPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -D -v target/dist/${luaVersionDir}/* -t $out/${luaVersionDir}
-    install -D -v target/dist/lib/pkgconfig/* -t $out/lib/pkgconfig
+    cp -r target/dist/share $out
+    cp -r target/dist/lib $out
     runHook postInstall
   '';
 
