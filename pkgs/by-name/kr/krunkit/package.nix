@@ -54,5 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ quinneden ];
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.withGpu = libkrun-efi.override { withGpu = false; };
+    updateScript = nix-update-script { };
+  };
 })

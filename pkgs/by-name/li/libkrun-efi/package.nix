@@ -5,6 +5,7 @@
   fixDarwinDylibNames,
   lib,
   libepoxy,
+  libkrun-efi,
   moltenvk,
   pkg-config,
   rustc,
@@ -90,5 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "aarch64-darwin" ];
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.withGpu = libkrun-efi.override { withGpu = true; };
+    updateScript = nix-update-script { };
+  };
 })
