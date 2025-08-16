@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Radicle desktop app";
     homepage = "https://radicle.xyz";
     mainProgram = "radicle-desktop";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       matthiasbeyer
