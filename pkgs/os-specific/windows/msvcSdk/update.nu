@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i nu -p nushell xwin
+#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/f2edb71fbfb1dae0546873c9798551a71bc3e78b.tar.gz
 
 use std/log
 use std/dirs
@@ -25,13 +26,13 @@ def main [] {
       log info "Current Windows SDK manifest matches the newest version, exiting..."
       exit 0
   } else {
-    log info $"Previous version (current_version)\nNew version (new_version)"
+    log info $"Previous version ($current_version)\nNew version ($new_version)"
   }
 
   $new_manifest | to json | append "\n" | str join | save -f ($PATH | path join manifest.json)
 
   # TODO: Add arm once it isn't broken
-  let hashes = ["x86_64", "x86"] | par-each {
+  let hashes = ["x86_64", "x86", "aarch64"] | par-each {
     |arch|
     let dir = mktemp -d
 
