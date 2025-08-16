@@ -79,6 +79,11 @@ in
   ormolu = doDistribute self.ormolu_0_7_7_0;
   stylish-haskell = doDistribute self.stylish-haskell_0_15_0_1;
 
+  # 2025-08-10: Tests fail, but fix is not released yet https://github.com/clash-lang/ghc-typelits-natnormalise/issues/89
+  ghc-typelits-natnormalise = warnAfterVersion "0.7.11" (
+    doJailbreak (dontCheck super.ghc-typelits-natnormalise)
+  );
+
   #
   # Jailbreaks
   #
