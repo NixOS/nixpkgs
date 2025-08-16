@@ -77,6 +77,8 @@ let
           "${nginxPort}/tcp" = { };
         };
       };
+
+      meta.description = "Basic nginx docker image example";
     };
 
 in
@@ -91,6 +93,8 @@ rec {
       paths = [ pkgs.bashInteractive ];
       pathsToLink = [ "/bin" ];
     };
+
+    meta.description = "Basic example image";
   };
 
   # 2. service example, layered on another image
@@ -138,6 +142,8 @@ rec {
         Retries = 3;
       };
     };
+
+    meta.description = "Service example, layered on another image";
   };
 
   # 3. another service example
@@ -204,6 +210,8 @@ rec {
         "USER=nobody"
       ];
     };
+
+    meta.description = "nix example to play with the container nix store";
   };
 
   # 7. example of adding something on top of an image pull by our
