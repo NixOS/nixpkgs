@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation {
   pname = "kmscon";
-  version = "9.0.0-unstable-2025-01-09";
+  version = "9.0.0-unstable-2025-05-16";
 
   src = fetchFromGitHub {
     owner = "Aetf";
     repo = "kmscon";
-    rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
-    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
+    rev = "f4d9b6bbe3e176bbaf908bf25f40335283227f99";
+    sha256 = "sha256-TY2kJfUU2DGWqqcVr2l5fETw69cmxZ5sNs/GSa8IccY=";
   };
 
   strictDeps = true;
