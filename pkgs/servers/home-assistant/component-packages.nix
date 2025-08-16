@@ -4458,7 +4458,8 @@
       ];
     "pilight" =
       ps: with ps; [
-      ]; # missing inputs: pilight
+        pilight
+      ];
     "pinecil" =
       ps: with ps; [
       ];
@@ -7509,6 +7510,7 @@
     "philips_js"
     "pi_hole"
     "picnic"
+    "pilight"
     "ping"
     "pjlink"
     "plaato"
