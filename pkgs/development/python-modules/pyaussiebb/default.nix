@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  loguru,
   pdm-backend,
   pydantic,
   requests,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     requests
-    loguru
     pydantic
   ];
 
@@ -35,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aussiebb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with the Aussie Broadband APIs";
     homepage = "https://github.com/yaleman/aussiebb";
     changelog = "https://github.com/yaleman/pyaussiebb/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
