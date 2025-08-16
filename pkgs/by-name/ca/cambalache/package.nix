@@ -19,11 +19,13 @@
   webkitgtk_6_0,
   nix-update-script,
   casilda,
+  libxml2,
+  fetchurl,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cambalache";
-  version = "0.94.1";
+  version = "0.96.1";
   pyproject = false;
 
   # Did not fetch submodule since it is only for tests we don't run.
@@ -32,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "jpu";
     repo = "cambalache";
     tag = version;
-    hash = "sha256-dX9YiBCBG/ALWX0W1CjvdUlOCQ6UulnQCiYUscRMKWk=";
+    hash = "sha256-mgXnsE4oUu74nSi5NUuJGLOsSYh8pRnys1fQLJokrbc=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +48,19 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonPath = with python3.pkgs; [
-    pygobject3
+    (pygobject3.overrideAttrs (
+      oldAttr:
+      let
+        version = "3.52.3";
+      in
+      {
+        inherit version;
+        src = fetchurl {
+          url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
+          hash = "sha256-AOQn0pHpV0Yqj61lmp+ci+d2/4Kot2vfQC8eruwIbYI=";
+        };
+      }
+    ))
     lxml
   ];
 
@@ -57,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     gtksourceview5
     webkitgtk_4_1
     webkitgtk_6_0
+    libxml2
     # For extra widgets support.
     libadwaita
     libhandy
