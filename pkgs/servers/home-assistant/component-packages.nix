@@ -5468,7 +5468,8 @@
       ];
     "smarty" =
       ps: with ps; [
-      ]; # missing inputs: pysmarty2
+        pysmarty2
+      ];
     "smhi" =
       ps: with ps; [
         pysmhi
@@ -7641,6 +7642,7 @@
     "smart_meter_texas"
     "smartthings"
     "smarttub"
+    "smarty"
     "smhi"
     "smlight"
     "sms"

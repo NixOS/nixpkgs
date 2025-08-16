@@ -14052,6 +14052,8 @@ self: super: with self; {
 
   pysmartthings = callPackage ../development/python-modules/pysmartthings { };
 
+  pysmarty2 = callPackage ../development/python-modules/pysmarty2 { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
