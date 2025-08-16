@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.29.0";
+    packageVersion = "12.0.16";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
