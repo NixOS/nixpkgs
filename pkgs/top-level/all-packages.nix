@@ -11119,9 +11119,10 @@ with pkgs;
     withoutInitTools = true;
   };
 
+  buildUBoot = callPackage ../misc/uboot/build-uboot.nix { };
+
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot { })
-    buildUBoot
     ubootTools
     ubootA20OlinuxinoLime
     ubootA20OlinuxinoLime2EMMC
