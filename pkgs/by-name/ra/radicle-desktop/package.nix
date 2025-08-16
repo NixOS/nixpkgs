@@ -29,7 +29,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "unstable-2025-08-15";
+  version = "0.8.0-unstable-2025-08-15";
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z4D5UCArafTzTQpDZNQRuqswh3ury.git";
