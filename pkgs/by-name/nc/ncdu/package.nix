@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.8.2";
+  version = "2.9";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ai+nZdNaeXl6zcgMgxcH30PJo7pg0a4+bqTMG3osAT0=";
+    hash = "sha256-dfCsO85PwBLoGYtyUY21F56QMHmFjvzgi5EtXcxwlNM=";
   };
 
   nativeBuildInputs = [
