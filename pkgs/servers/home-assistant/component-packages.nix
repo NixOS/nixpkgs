@@ -6466,7 +6466,8 @@
       ];
     "w800rf32" =
       ps: with ps; [
-      ]; # missing inputs: pyW800rf32
+        pyw800rf32
+      ];
     "wake_on_lan" =
       ps: with ps; [
         wakeonlan
