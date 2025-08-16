@@ -143,7 +143,7 @@ if [ "$numGenerations" -gt 0 ]; then
     # Add up to $numGenerations generations of the system profile to the menu,
     # in reverse (most recent to least recent) order.
     for generation in $(
-            (cd /nix/var/nix/profiles && ls -d system-*-link) \
+            (test -d /nix/var/nix/profiles && cd /nix/var/nix/profiles && ls -d system-*-link) \
             | sed 's/system-\([0-9]\+\)-link/\1/' \
             | sort -n -r \
             | head -n $numGenerations); do
