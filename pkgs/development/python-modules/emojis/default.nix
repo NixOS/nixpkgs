@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.7.0";
   pyproject = true;
 
-  build-system = [ setuptools ];
-
   src = fetchFromGitHub {
     owner = "alexandrevicenzi";
     repo = "emojis";
@@ -21,9 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-rr/BM39U1j8EL8b/YojclI4h0NnOCdoMlecR/1f9ISg=";
   };
 
-  nativeBuildInputs = [
-    pkgs.pandoc
-  ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pkgs.pandoc ];
 
   preBuild = ''
     make pandoc
