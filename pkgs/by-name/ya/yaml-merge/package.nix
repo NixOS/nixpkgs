@@ -17,7 +17,11 @@ stdenv.mkDerivation {
   };
 
   pythonPath = with python3Packages; [ pyyaml ];
-  nativeBuildInputs = with python3Packages; [ wrapPython ];
+  nativeBuildInputs = [
+    # Not `python3Packages.wrapPython` to workaround `python3Packages.wrapPython.__spliced.buildHost` having the wrong `pythonHost`
+    # See https://github.com/NixOS/nixpkgs/issues/434307
+    (python3Packages.wrapPython.__spliced.hostTarget or python3Packages.wrapPython)
+  ];
 
   installPhase = ''
     install -Dm755 yaml-merge.py $out/bin/yaml-merge
