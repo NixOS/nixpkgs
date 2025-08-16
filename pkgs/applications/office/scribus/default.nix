@@ -4,6 +4,7 @@
   cmake,
   cups,
   fetchurl,
+  fetchpatch,
   fontconfig,
   freetype,
   harfbuzzFull,
@@ -67,16 +68,27 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
   ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [
-      arthsmn
-    ];
+  patches = [
+    (fetchpatch {
+      name = "fix-build-poppler-25.06.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/8dcf8d777bd85a0741c455961f2de382e3ed47ec.patch";
+      hash = "sha256-JBHCgvEJnYrUdtLnFSXTfr1FFin4uUNUnddYwfRbn7k=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.07.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/ff6c6abfa8683028e548a269dee6a859b6f63335.patch";
+      hash = "sha256-N4jve5feehsX5H0RXdxR4ableKL+c/rTyqCwkEf37Dk=";
+    })
+  ];
+
+  meta = {
+    maintainers = with lib.maintainers; [ arthsmn ];
     description = "Desktop Publishing (DTP) and Layout program";
     mainProgram = "scribus";
     homepage = "https://www.scribus.net";
     # There are a lot of licenses...
     # https://github.com/scribusproject/scribus/blob/20508d69ca4fc7030477db8dee79fd1e012b52d2/COPYING#L15-L19
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
       mit
