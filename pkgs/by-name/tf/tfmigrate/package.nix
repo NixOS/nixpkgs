@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tfmigrate";
-  version = "0.4.3";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "tfmigrate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tuLbcxJj8TsG3I/o3cHO2DtQm9ql3wlhYBtYiMbRW7o=";
+    hash = "sha256-+5nw+EgFTor8XL4cibxkpJL4fdEQ6UuEj5wyOjpaANA=";
   };
 
-  vendorHash = "sha256-TqZi5NZ+4eSzq98/ZM4Gab7Sud7bz1DNHrp5nGaGHDE=";
+  vendorHash = "sha256-mm34U4nLow4lCz/AgfqYZJRb71GpQjR14+tm0hfmdDc=";
 
   checkFlags = [
     "-skip TestExecutorDir" # assumes /usr/bin to be present

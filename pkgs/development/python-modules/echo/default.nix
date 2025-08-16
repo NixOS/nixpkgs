@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "echo";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "glue-viz";
     repo = "echo";
     tag = "v${version}";
-    sha256 = "sha256-RlTscoStJQ0vjrrk14xHRsMZOJt8eJSqinc4rY/lW4k=";
+    sha256 = "sha256-Uikzn9vbLctiZ6W0uA6hNvr7IB/FhCcHk+JxBW7yrA4=";
   };
 
   nativeBuildInputs = [

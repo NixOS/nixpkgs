@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.70.0";
+  version = "3.31.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    rev = "googleapis-common-protos-v${version}";
-    hash = "sha256-E1LISOLQcXqUMTTPLR+lwkR6gF1fuGGB44j38cIK/Z4=";
+    tag = "google-cloud-build-v${version}";
+    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
 
   sourceRoot = "${src.name}/packages/googleapis-common-protos";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Common protobufs used in Google APIs";
     homepage = "https://github.com/googleapis/python-api-common-protos";
-    changelog = "https://github.com/googleapis/python-api-common-protos/releases/tag/v${version}";
+    changelog = "https://github.com/googleapis/python-api-common-protos/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

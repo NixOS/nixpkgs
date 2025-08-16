@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.42";
+  version = "0.0.46";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "strictdoc-project";
     repo = "reqif";
     tag = version;
-    hash = "sha256-cQhis7jrcly3cw2LRv7hpPBFAB0Uag69czf+wJvbh/Q=";
+    hash = "sha256-QI+OhhV+jKw3g2erSCdTj10JW+XFQQyXuAC0LAnts7c=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Python library for ReqIF format";
     mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
-    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
+    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ yuu ];
   };

@@ -46,6 +46,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Failed: async def functions are not natively supported.
+    "test_power_sensors"
+    "test_device_factory"
+  ];
+
   pythonImportsCheck = [ "pydaikin" ];
 
   meta = with lib; {

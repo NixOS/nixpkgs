@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "3.1.2";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "python-cachier";
     repo = "cachier";
     tag = "v${version}";
-    hash = "sha256-siighT6hMicN+F/LIXfUAPQ2kkRiyk7CtjqmyC/qCFg=";
+    hash = "sha256-FmrwH5Ksmgt0HA5eUN5LU36P5sY4PymRKsUWVkQlvBo=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
@@ -80,7 +80,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/python-cachier/cachier";
-    changelog = "https://github.com/python-cachier/cachier/releases/tag/v${version}";
+    changelog = "https://github.com/python-cachier/cachier/releases/tag/${src.tag}";
     description = "Persistent, stale-free, local and cross-machine caching for functions";
     mainProgram = "cachier";
     maintainers = with lib.maintainers; [ pbsds ];

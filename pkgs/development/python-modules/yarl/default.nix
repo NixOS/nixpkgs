@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cython_3_1,
+  cython,
   expandvars,
   setuptools,
   idna,
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    cython_3_1
+    cython
     expandvars
     setuptools
   ];

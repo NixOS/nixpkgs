@@ -524,7 +524,6 @@ rec {
           # Stupid misc. symlinks.
           ln -s ${cfg.defaultUnit} $out/default.target
           ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
-          ln -s rescue.target $out/kbrequest.target
 
           ln -s ../remote-fs.target $out/multi-user.target.wants/
         ''}

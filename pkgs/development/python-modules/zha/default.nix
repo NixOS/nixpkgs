@@ -8,7 +8,7 @@
   pyserial,
   pyserial-asyncio,
   pyserial-asyncio-fast,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytest-xdist
     pytestCheckHook

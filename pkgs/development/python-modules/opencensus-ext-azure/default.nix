@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "opencensus-ext-azure";
-  version = "1.1.14";
+  version = "1.1.15";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ycbrrVQq62GBMyLmJ9WImlY+e4xOAkv1hGnQbbc6sUg=";
+    hash = "sha256-jRCK8Vh16jxSI4ZG+6kkw7qfv6rx/Q01BwfcW3iArec=";
   };
 
   build-system = [ setuptools ];

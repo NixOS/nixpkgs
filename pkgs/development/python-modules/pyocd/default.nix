@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pyocd";
-  version = "0.36.0";
+  version = "0.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "pyOCD";
     tag = "v${version}";
-    hash = "sha256-CSdVWDiSe+xd0MzD9tsKs3DklNjnhchYFuI3Udi0O20=";
+    hash = "sha256-4fdVcTNH125e74S3mA/quuDun17ntGCazX6CV+obUGc=";
   };
 
   patches = [
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    changelog = "https://github.com/pyocd/pyOCD/releases/tag/v${version}";
+    changelog = "https://github.com/pyocd/pyOCD/releases/tag/${src.tag}";
     description = "Python library for programming and debugging Arm Cortex-M microcontrollers";
     downloadPage = "https://github.com/pyocd/pyOCD";
     homepage = "https://pyocd.io";

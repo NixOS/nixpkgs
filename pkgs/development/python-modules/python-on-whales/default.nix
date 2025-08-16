@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "python-on-whales";
-  version = "0.75.1";
+  version = "0.78.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gabrieldemarmiesse";
     repo = "python-on-whales";
     tag = "v${version}";
-    hash = "sha256-JjzBFVgPNnU0q5hL+RZJMs3WxbeZbBKyvsV6clUFjpE=";
+    hash = "sha256-mpCBqFxxFxljhoTveLmk4XfqngiQPsufqr927hSwNfA=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Docker client for Python, designed to be fun and intuitive";
     homepage = "https://github.com/gabrieldemarmiesse/python-on-whales";
-    changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/v${version}";
+    changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

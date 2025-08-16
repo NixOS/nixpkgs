@@ -13,14 +13,8 @@
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
-  nodePlatform = hostPlatform.parsed.kernel.name; # nodejs's `process.platform`
-  nodeArch = # nodejs's `process.arch`
-    {
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${hostPlatform.parsed.cpu.name}
-      or (throw "affine-bin(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
+  nodePlatform = hostPlatform.node.platform;
+  nodeArch = hostPlatform.node.arch;
 in
 stdenvNoCC.mkDerivation (
   finalAttrs:

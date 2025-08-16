@@ -91,6 +91,8 @@ buildPythonPackage rec {
     "test_input_is_dir"
     # Racy, e.g. Address already in use
     "test_logger_vhosts"
+    # Event loop is closed
+    "test_create_server_trigger_events"
   ];
 
   disabledTestPaths = [
@@ -100,6 +102,8 @@ buildPythonPackage rec {
     "typing/test_typing.py"
     # occasionally hangs
     "test_multiprocessing.py"
+    # Failed: async def functions are not natively supported.
+    "test_touchup.py"
   ];
 
   # Avoid usage of nixpkgs-review in darwin since tests will compete usage

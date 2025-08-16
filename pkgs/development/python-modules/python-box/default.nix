@@ -49,6 +49,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
+  disabledTests = [
+    # ruamel 8.18.13 update changed white space rules
+    "test_to_yaml_ruamel"
+  ];
+
   pythonImportsCheck = [ "box" ];
 
   meta = with lib; {

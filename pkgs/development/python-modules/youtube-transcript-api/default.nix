@@ -40,13 +40,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
   disabledTests = [
-    # fail with various assertions around numbers
+    # network access
     "test_fetch__create_consent_cookie_if_needed"
     "test_fetch__with_generic_proxy_reraise_when_blocked"
     "test_fetch__with_proxy_retry_when_blocked"
     "test_fetch__with_webshare_proxy_reraise_when_blocked"
-    "test_version_matches_metadata"
   ];
 
   pythonImportsCheck = [ "youtube_transcript_api" ];

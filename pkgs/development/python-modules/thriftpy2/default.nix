@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "thriftpy2";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Thriftpy";
     repo = "thriftpy2";
     tag = "v${version}";
-    hash = "sha256-GBJL+IqZpT1/msJLiwiS5YDyB4hIe/e3pYPWx0A+lWY=";
+    hash = "sha256-idUKqpyRj8lq9Aq6vEEeYEawzRPOdNsySnkgfhwPtMc=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Apache Thrift";
     homepage = "https://github.com/Thriftpy/thriftpy2";
-    changelog = "https://github.com/Thriftpy/thriftpy2/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/Thriftpy/thriftpy2/blob/${src.tag}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

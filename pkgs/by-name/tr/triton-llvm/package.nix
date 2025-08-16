@@ -6,7 +6,6 @@
   pkg-config,
   cmake,
   ninja,
-  git,
   libxml2,
   libxcrypt,
   libedit,
@@ -89,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
     ninja
-    git
     python
   ]
   ++ lib.optionals (buildDocs || buildMan) [

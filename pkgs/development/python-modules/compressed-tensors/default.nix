@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "compressed-tensors";
-  version = "0.9.2";
+  version = "0.10.2";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "neuralmagic";
     repo = "compressed-tensors";
     tag = version;
-    hash = "sha256-PxW8zseDUF0EOh7E/N8swwgFTfvkoTpp+d3ngAUpFNU=";
+    hash = "sha256-BJsMyCs+rupt5+i5JlO7oY08Udc8hI3ZnMiN+8ja0mc=";
   };
 
   build-system = [ setuptools ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Safetensors extension to efficiently store sparse quantized tensors on disk";
     homepage = "https://github.com/neuralmagic/compressed-tensors";
-    changelog = "https://github.com/neuralmagic/compressed-tensors/releases/tag/${version}";
+    changelog = "https://github.com/neuralmagic/compressed-tensors/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

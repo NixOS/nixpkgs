@@ -26,7 +26,7 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,13 +34,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
+    hash = "sha256-JLPx6XakZlqnTuD8qsK4/Mxq53yOB6sl2jum0ykrmAI=";
   };
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2,<2.3.0" numpy \
+      --replace-fail "scipy>=1.8.0,<1.16.0" scipy
   '';
 
   buildInputs = [
@@ -66,6 +69,11 @@ buildPythonPackage rec {
     numpy
     scipy
     threadpoolctl
+  ];
+
+  pythonRelaxDeps = [
+    "numpy"
+    "scipy"
   ];
 
   nativeCheckInputs = [

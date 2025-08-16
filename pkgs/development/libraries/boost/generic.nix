@@ -10,7 +10,6 @@
   fixDarwinDylibNames,
   libiconv,
   libxcrypt,
-  sanitiseHeaderPathsHook,
   makePkgconfigItem,
   copyPkgconfigItems,
   boost-build,
@@ -348,7 +347,6 @@ stdenv.mkDerivation {
     which
     boost-build
     copyPkgconfigItems
-    sanitiseHeaderPathsHook
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [
@@ -394,12 +392,6 @@ stdenv.mkDerivation {
     b2 ${b2Args} install
 
     runHook postInstall
-  '';
-
-  preFixup = ''
-    # Strip UTF‐8 BOMs for `sanitiseHeaderPathsHook`.
-    cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-      -exec sed '1s/^\xef\xbb\xbf//' -i '{}' \;
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''

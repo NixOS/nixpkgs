@@ -3,23 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   cython,
+  poetry-core,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "rencode";
-  version = "unstable-2021-08-10";
-
-  format = "setuptools";
+  version = "1.0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aresch";
     repo = "rencode";
-    rev = "572ff74586d9b1daab904c6f7f7009ce0143bb75";
-    hash = "sha256-cL1hV3RMDuSdcjpPXXDYIEbzQrxiPeRs82PU8HTEQYk=";
+    tag = "v${version}";
+    hash = "sha256-k2b6DoKwNeQBkmqSRXqaRTjK7CVX6IKuXCLG9lBdLLY=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
+    cython
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

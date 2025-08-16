@@ -61,7 +61,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.46" "wheel"
   '';
 
   # Remove esptool and platformio from requirements

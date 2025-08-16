@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "fontmake";
-  version = "3.10.0";
+  version = "3.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontmake";
     tag = "v${version}";
-    hash = "sha256-ZlK8QyZ5cIEphFiZXMV/Z5pL9H62X2UwLBtpwLGpUMQ=";
+    hash = "sha256-cHFxb7lWUj/7ATynoMGQkhArKWCHHLYvQG5IoaXwVBs=";
   };
 
   patches = [

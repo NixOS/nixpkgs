@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.19";
+  version = "0.1.22";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-0b2tJx1D/2X/uosbthHfevUpTCBtuSKNlxOKyidTotA=";
+    hash = "sha256-mz6eabETkAzDoPjXE5VJvgrR1vnXXmx3JO4xZRH4TRQ=";
   };
 
   patches = [
@@ -92,7 +92,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/v${version}";
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
   };
 }

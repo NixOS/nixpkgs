@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyside6-fluent-widgets";
-  version = "1.8.4";
+  version = "1.8.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyside6_fluent_widgets";
     inherit version;
-    hash = "sha256-DtyldvNqdjca0Os2au1WSqyH9gLkQt8ryNrunZuUEus=";
+    hash = "sha256-JuqZSYAGnmO/0GMIojpP3XB0mx4k/GecOkl/xsafOu8=";
   };
 
   build-system = [ setuptools ];

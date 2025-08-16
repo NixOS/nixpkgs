@@ -40,6 +40,8 @@ buildPythonPackage rec {
     viewstate
   ];
 
+  pythonRelaxDeps = [ "viewstate" ];
+
   pythonImportsCheck = [ "badsecrets" ];
 
   meta = {

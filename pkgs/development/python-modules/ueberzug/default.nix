@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ueberzug";
-  version = "18.1.9";
+  version = "18.3.1";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ce49f351132c7d1b0f8097f6e4c5635376151ca59318540da3e296e5b21adc3";
+    sha256 = "sha256-1Lk4E5YwEq2mUnYbIWDhzz9/CCwfXMJ11/TtJ44ugOk=";
   };
 
   buildInputs = [

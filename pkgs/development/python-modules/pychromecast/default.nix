@@ -25,7 +25,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-       --replace-fail "setuptools>=65.6,<78.0" setuptools
+       --replace-fail "setuptools>=65.6,<78.0" setuptools \
+       --replace-fail "wheel>=0.37.1,<0.46.0" wheel
   '';
 
   build-system = [ setuptools ];

@@ -8,6 +8,7 @@
   libgeotiff,
   libtiff,
   laszip_2,
+  zlib,
   fixDarwinDylibNames,
 }:
 
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     libgeotiff
     libtiff
     laszip_2
+    zlib
   ];
 
   cmakeFlags = [

@@ -4,33 +4,27 @@
   fetchPypi,
   installShellFiles,
   libnitrokey,
-  flit-core,
-  certifi,
+  poetry-core,
   cffi,
   click,
   cryptography,
-  ecdsa,
   fido2,
+  hidapi,
   intelhex,
   nkdfu,
-  python-dateutil,
   pyusb,
   requests,
   tqdm,
   tlv8,
-  typing-extensions,
-  click-aliases,
   semver,
   nethsm,
-  importlib-metadata,
   nitrokey,
   pyscard,
-  asn1crypto,
 }:
 
 let
   pname = "pynitrokey";
-  version = "0.8.5";
+  version = "0.10.0";
   mainProgram = "nitropy";
 in
 
@@ -40,48 +34,41 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mPhH4IdpKKA9d8sJOGMWpGerzki5qZHFHe4u4ao2RgE=";
+    hash = "sha256-Kr6VtBADLvXUva7csbsHujGzBfRG1atJLF7qbIWmToM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [ flit-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [
-    certifi
     cffi
     click
     cryptography
-    ecdsa
     fido2
+    hidapi
     intelhex
     nkdfu
-    python-dateutil
+    nitrokey
     pyusb
     requests
     tqdm
     tlv8
-    typing-extensions
-    click-aliases
     semver
     nethsm
-    importlib-metadata
-    nitrokey
-    pyscard
-    asn1crypto
   ];
 
-  pythonRelaxDeps = true;
+  optional-dependencies = {
+    pcsc = [
+      pyscard
+    ];
+  };
 
-  # pythonRelaxDepsHook runs in postBuild so cannot be used
-  pypaBuildFlags = [ "--skip-dependency-check" ];
+  pythonRelaxDeps = true;
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
   makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
-
-  # no tests
-  doCheck = false;
 
   pythonImportsCheck = [ "pynitrokey" ];
 

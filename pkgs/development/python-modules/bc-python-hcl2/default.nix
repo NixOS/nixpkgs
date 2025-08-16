@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rI/1n7m9Q36im4mn18UH/QoelXhFuumurGnyiSuNaB4=";
+    hash = "sha256-+uYrKkGmda0zDRNNgldlJtt1X3K70OWoUN49hfwkxA4=";
   };
 
   build-system = [ setuptools ];

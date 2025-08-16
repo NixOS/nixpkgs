@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   setuptools,
   azure-core,
@@ -12,6 +13,8 @@ buildPythonPackage rec {
   pname = "azure-monitor-ingestion";
   version = "1.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "azure_monitor_ingestion";

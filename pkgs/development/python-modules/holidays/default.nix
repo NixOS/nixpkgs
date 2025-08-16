@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
-    changelog = "https://github.com/vacanza/python-holidays/releases/tag/v${version}";
+    changelog = "https://github.com/vacanza/python-holidays/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [
       fab

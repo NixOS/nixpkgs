@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "deepface";
-  version = "0.0.93";
+  version = "0.0.94";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "serengil";
     repo = "deepface";
     tag = "v${version}";
-    hash = "sha256-G/e0tvf4GbXPjqJCTMgWDe59701fxfrtAf+bioEn8io=";
+    hash = "sha256-jtDj1j2STjoEW6MdQai6ZuRYVmLo0Ga+VPJ01105Byc=";
   };
 
   postPatch = ''

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "jiwer";
-  version = "3.04";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jitsi";
     repo = "jiwer";
     tag = "v${version}";
-    hash = "sha256-2LzAOgABK00Pz3v5WWYUAcZOYcTbRKfgw7U5DOohB/Q=";
+    hash = "sha256-iyFcxZGYMeQXSZBHJg7kBWyOciZyEV7gSzSy4SvBGzw=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Simple and fast python package to evaluate an automatic speech recognition system";
     mainProgram = "jiwer";
     homepage = "https://github.com/jitsi/jiwer";
-    changelog = "https://github.com/jitsi/jiwer/releases/tag/v${version}";
+    changelog = "https://github.com/jitsi/jiwer/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ GaetanLepage ];
   };

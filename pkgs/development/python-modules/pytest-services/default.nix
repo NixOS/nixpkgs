@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   psutil,
   pylibmc,
   pytest,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-services";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,18 +24,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-services";
-    tag = version;
-    hash = "sha256-E/VcKcAb1ekypm5jP4lsSz1LYJTcTSed6i5OY5ihP30=";
+    tag = "v${version}";
+    hash = "sha256-kWgqb7+3/hZKUz7B3PnfxHZq6yU3JUeJ+mruqrMD/NE=";
   };
-
-  patches = [
-    # Replace distutils.spawn.find_executable with shutil.which, https://github.com/pytest-dev/pytest-services/pull/46
-    (fetchpatch {
-      name = "replace-distutils.patch";
-      url = "https://github.com/pytest-dev/pytest-services/commit/e0e2a85434a2dcbcc0584299c5b2b751efe0b6db.patch";
-      hash = "sha256-hvr7EedfjfonHDn6v2slwUBqz1xQoF7Ez/kqAhZRXEc=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools-scm
@@ -72,7 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
-    changelog = "https://github.com/pytest-dev/pytest-services/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-services/blob/${src.tag}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

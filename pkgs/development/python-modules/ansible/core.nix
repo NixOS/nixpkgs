@@ -47,9 +47,6 @@ buildPythonPackage rec {
   # the python interpreter again, as it would break execution of
   # connection plugins.
   postPatch = ''
-    substituteInPlace lib/ansible/executor/task_executor.py \
-      --replace "[python," "["
-
     patchShebangs --build packaging/cli-doc/build.py
 
     SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
@@ -60,6 +57,9 @@ buildPythonPackage rec {
     else
       exit 2
     fi
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "wheel == 0.45.1" wheel
   '';
 
   nativeBuildInputs = [

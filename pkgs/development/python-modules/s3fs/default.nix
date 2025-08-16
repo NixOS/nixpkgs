@@ -15,6 +15,7 @@
   flask,
   flask-cors,
   moto,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     flask
     flask-cors
     moto
+    pytest-asyncio
     pytestCheckHook
   ];
 

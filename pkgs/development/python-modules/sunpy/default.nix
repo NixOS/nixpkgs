@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "6.1.1";
+  version = "7.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xgmmsbC7KGvUJ4mUD1T8t9aQDfz+IX31T4Wf9gguE9s=";
+    hash = "sha256-9ZCG9CtTpgGGlqtXcl2epRBzFcbVvIMzZcXk5CQ5/+A=";
   };
 
   nativeBuildInputs = [

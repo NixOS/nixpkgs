@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "python-codon-tables";
-  version = "0.1.15";
+  version = "0.1.18";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "python_codon_tables";
     inherit version;
-    hash = "sha256-bK0Y8y5W6xmtGeRUtLDGsg1voVKp1uU37tBqi0/raLY=";
+    hash = "sha256-c/VSmArSkq+46LzW3r+CQEG1mwp87ACbZ7EWkMOGOQc=";
   };
 
   # no tests in tarball

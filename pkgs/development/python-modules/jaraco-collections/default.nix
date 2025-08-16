@@ -10,18 +10,17 @@
 
 buildPythonPackage rec {
   pname = "jaraco-collections";
-  version = "5.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_collections";
     inherit version;
-    hash = "sha256-DkgpQJ05rRikCqZ1T+4nZ/TZcwxLpm3J34nx0nVplMI=";
+    hash = "sha256-2rgZcLrW8KtTsgdF8bAdo3km5MD81CUEaqReDY76GO0=";
   };
 
   postPatch = ''
-    # break dependency cycle
-    sed -i "/'jaraco.text',/d" setup.cfg
+    sed -i "/coherent\.licensed/d" pyproject.toml
   '';
 
   build-system = [

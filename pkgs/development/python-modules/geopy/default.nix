@@ -4,7 +4,7 @@
   docutils,
   fetchFromGitHub,
   geographiclib,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonAtLeast,
   pythonOlder,
   pytz,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     docutils
-    pytestCheckHook
+    pytest7CheckHook
     pytz
   ];
 

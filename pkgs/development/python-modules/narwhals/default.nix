@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.40.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
+    hash = "sha256-NptQHnv0PoAbD0RIghBrtDPsYidq1k4LN/mUfz4n6G0=";
   };
 
   build-system = [ hatchling ];

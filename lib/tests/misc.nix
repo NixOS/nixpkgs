@@ -113,7 +113,6 @@ let
     toIntBase10
     toShellVars
     types
-    uniqueStrings
     updateManyAttrsByPath
     versions
     xor
@@ -1953,69 +1952,6 @@ runTests {
       4
     ];
     expected = false;
-  };
-
-  testUniqueStrings_empty = {
-    expr = uniqueStrings [ ];
-    expected = [ ];
-  };
-  testUniqueStrings_singles = {
-    expr = uniqueStrings [
-      "all"
-      "unique"
-      "already"
-    ];
-    expected = [
-      "all"
-      "already"
-      "unique"
-    ];
-  };
-  testUniqueStrings_allDuplicates = {
-    expr = uniqueStrings [
-      "dup"
-      "dup"
-      "dup"
-    ];
-    expected = [ "dup" ];
-  };
-  testUniqueStrings_some_duplicates = {
-    expr = uniqueStrings [
-      "foo"
-      "foo"
-      "bar"
-      "bar"
-      "baz"
-    ];
-    expected = [
-      "bar"
-      "baz"
-      "foo"
-    ];
-  };
-  testUniqueStrings_unicode = {
-    expr = uniqueStrings [
-      "café"
-      "@"
-      "#"
-      "@"
-      "#"
-      "$"
-      "😎"
-      "😎"
-      "🙃"
-      ""
-      ""
-    ];
-    expected = [
-      ""
-      "#"
-      "$"
-      "@"
-      "café"
-      "😎"
-      "🙃"
-    ];
   };
 
   # ATTRSETS

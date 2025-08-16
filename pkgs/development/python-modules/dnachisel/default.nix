@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.13";
+  version = "3.2.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
     tag = "v${version}";
-    hash = "sha256-XmaUkmRGD1py5+8gfRe/6WegX1bOQtbTDDUT6RO2rBk=";
+    hash = "sha256-F+G7dwehUCHYKSGsLQR4OZg2NQ4677XMlN6jOcmz8No=";
   };
 
   propagatedBuildInputs = [

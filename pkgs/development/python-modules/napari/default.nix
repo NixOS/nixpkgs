@@ -45,14 +45,14 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${version}";
-    hash = "sha256-p6deNHnlvgZXV3Ym3OADC44j5bOkMDjlmM2N3yE5GxE=";
+    hash = "sha256-OPbjq9jXA5onLBCVvCx4g935y7GNvf4GA5s5sfNjIKY=";
   };
 
   postPatch = ''

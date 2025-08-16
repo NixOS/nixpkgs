@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "uart-devices";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "uart-devices";
     tag = "v${version}";
-    hash = "sha256-rmOWyTdOwnlr8Rwsvd2oeZq79LuGVJDAkIW2/9gGrKQ=";
+    hash = "sha256-vBwQXeXw9y7eETtlC4dcqGytIgrAm7iomnvoaxhl6JI=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "UART Devices for Linux";
     homepage = "https://github.com/bdraco/uart-devices";
-    changelog = "https://github.com/bdraco/uart-devices/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/uart-devices/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

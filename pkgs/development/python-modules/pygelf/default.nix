@@ -9,13 +9,13 @@
 }:
 buildPythonPackage rec {
   pname = "pygelf";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pygelf";
     inherit version;
-    hash = "sha256-0LuPRf9kipoYdxP0oFwJ9oX8uK3XsEu3Rx8gBxvRGq0=";
+    hash = "sha256-jtlyVjvjyPFoSD8B2/UitrxpeVnJej9IgTJLP3ljiRE=";
   };
 
   build-system = [ setuptools ];

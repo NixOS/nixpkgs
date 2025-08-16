@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPypi,
+  fetchpatch,
   node-gyp,
   nodejs_20,
   nixosTests,
@@ -40,15 +42,16 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5_1;
 
-      # TODO remove when paperless-ngx is updated past 2.17.1
-      imap-tools = prev.imap-tools.overridePythonAttrs {
-        version = "1.10.0";
-        src = fetchFromGitHub {
-          owner = "ikvk";
-          repo = "imap_tools";
-          tag = "v1.10.0";
-          hash = "sha256-lan12cHkoxCKadgyFey4ShcnwFg3Gl/VqKWlYAkvF3Y=";
+      fido2 = prev.fido2.overridePythonAttrs {
+        version = "1.2.0";
+
+        src = fetchPypi {
+          pname = "fido2";
+          version = "1.2.0";
+          hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
         };
+
+        pytestFlags = [ ];
       };
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
@@ -142,6 +145,15 @@ python.pkgs.buildPythonApplication rec {
 
   inherit version src;
 
+  # Manual partial backport of:
+  # - https://github.com/paperless-ngx/paperless-ngx/commit/9889c59d3daa8f4ac8ec2400c00ddc36a7ca63c9
+  # - https://github.com/paperless-ngx/paperless-ngx/pull/10538
+  # Fixes build with latest dependency versions.
+  # FIXME: remove in next update
+  patches = [
+    ./dep-updates.patch
+  ];
+
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
     if (( $NIX_BUILD_CORES > 3)); then
@@ -160,7 +172,14 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "django-auditlog"
+    "django-guardian"
+    "django-multiselectfield"
+    "imap-tools"
+    "pathvalidate"
     "redis"
+    "scikit-learn"
+    "tika-client"
   ];
 
   dependencies =
@@ -181,6 +200,7 @@ python.pkgs.buildPythonApplication rec {
             tag = version;
             hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
           };
+          patches = [ ];
         }
       ))
       django-auditlog
