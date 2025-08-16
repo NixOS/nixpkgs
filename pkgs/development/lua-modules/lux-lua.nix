@@ -56,8 +56,11 @@ rustPlatform.buildRustPackage rec {
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
     cargo xtask-${luaFeature} dist
+    mkdir -p $out
+    runHook postBuild
   '';
 
   installPhase = ''
