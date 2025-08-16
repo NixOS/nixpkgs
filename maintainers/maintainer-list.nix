@@ -16233,6 +16233,12 @@
     githubId = 1788114;
     name = "Meghea Iulian";
   };
+  mehrdad = {
+    email = "mehrdad.tahernia@gmail.com";
+    github = "mtahernia";
+    githubId = 2920608;
+    name = "Mehrdad Tahernia";
+  };
   meisternu = {
     email = "meister@krutt.org";
     github = "meisternu";
