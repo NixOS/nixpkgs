@@ -2767,6 +2767,8 @@ in
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "menu";
     checkInputs = with self; [
       # Optional integrations
       nvim-tree-lua
@@ -2779,11 +2781,20 @@ in
   };
 
   nvzone-minty = super.nvzone-minty.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "minty";
     dependencies = [ self.nvzone-volt ];
   };
 
   nvzone-typr = super.nvzone-typr.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "typr";
     dependencies = [ self.nvzone-volt ];
+  };
+
+  nvzone-volt = super.nvzone-volt.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "volt";
   };
 
   obsidian-nvim = super.obsidian-nvim.overrideAttrs {
