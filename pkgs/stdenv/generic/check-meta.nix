@@ -534,7 +534,7 @@ let
         reason = "unsupported";
         errormsg = ''
           is not available on the requested hostPlatform:
-            hostPlatform.config = "${hostPlatform.config}"
+            hostPlatform.system = "${hostPlatform.system}"
             package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
             package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
         '';
