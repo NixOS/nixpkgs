@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   google-cloud-access-context-manager,
   google-cloud-org-policy,
@@ -15,7 +16,6 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -66,11 +66,8 @@ buildPythonPackage rec {
     "google.cloud.asset_v1p5beta1"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-cloud-asset-v([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-cloud-asset-v";
   };
 
   meta = {
