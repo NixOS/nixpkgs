@@ -15,18 +15,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.0.9-1";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NyEhvW5NMqvESdbauxur7xWAzQiQdTVklGMYhckNAnw=";
+    hash = "sha256-OZiqEef4jE1H47mweVCzhaRCSsFdpgUdCSuhWRz2n2M=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-xB4kWpPQbA1OkXNr5sozPIP96dLJhwoDUpesE6DORzg=";
+    hash = "sha256-N9P2mmqAfbg/Kpqx+vZbb+fhaD1I/3UjiJaEqFPJyO0=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doDist = false;
 
-  passthru.updateScript = nix-update-script { };
+  # fish-lsp adds tags for all its pre-release versions, which leads to
+  # incorrect r-ryantm bumps. This regex allows a dash at the end followed by a
+  # number (like `v1.0.9-1`). but it prevents matches with a dash followed by
+  # text (like `v1.0.11-pre.10`). or, of course, no dash at all
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v\\d+\\.\\d+\\.\\d+(?:-\\d+)?$"
+    ];
+  };
 
   meta = {
     description = "LSP implementation for the fish shell language";

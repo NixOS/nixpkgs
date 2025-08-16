@@ -2,6 +2,7 @@
   lib,
   appimageTools,
   fetchurl,
+  makeWrapper,
   gitUpdater,
 }:
 
@@ -16,6 +17,8 @@ appimageTools.wrapType2 rec {
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
     let
       appimageContents = appimageTools.extract { inherit pname version src; };
@@ -26,6 +29,9 @@ appimageTools.wrapType2 rec {
 
       substituteInPlace $out/share/applications/tutanota-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}'
+
+      wrapProgram $out/bin/tutanota-desktop \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     '';
 
   passthru.updateScript = gitUpdater {
@@ -40,7 +46,7 @@ appimageTools.wrapType2 rec {
     changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ lib.maintainers.awwpotato ];
     mainProgram = "tutanota-desktop";
     platforms = [ "x86_64-linux" ];
   };

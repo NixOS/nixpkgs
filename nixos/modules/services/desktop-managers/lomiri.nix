@@ -148,11 +148,11 @@ in
         lomiri-download-manager
       ];
 
-      # Copy-pasted basic stuff
-      hardware.graphics.enable = lib.mkDefault true;
-      fonts.enableDefaultPackages = lib.mkDefault true;
-
       services.accounts-daemon.enable = true;
+      services.udisks2.enable = true;
+      services.upower.enable = true;
+      services.geoclue2.enable = true;
+      services.telepathy.enable = true;
 
       services.ayatana-indicators = {
         enable = true;
@@ -176,18 +176,12 @@ in
           );
       };
 
-      services.udisks2.enable = true;
-      services.upower.enable = true;
-      services.geoclue2.enable = true;
-
       services.gnome.evolution-data-server = {
         enable = true;
         plugins = with pkgs; [
           # TODO: lomiri.address-book-service
         ];
       };
-
-      services.telepathy.enable = true;
 
       services.displayManager = {
         defaultSession = lib.mkDefault "lomiri";

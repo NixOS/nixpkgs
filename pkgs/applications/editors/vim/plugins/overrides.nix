@@ -3009,6 +3009,13 @@ in
     ];
   };
 
+  project-nvim = super.project-nvim.overrideAttrs {
+    checkInputs = [
+      # Optional telescope integration
+      self.telescope-nvim
+    ];
+  };
+
   python-mode = super.python-mode.overrideAttrs {
     postPatch = ''
       # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/

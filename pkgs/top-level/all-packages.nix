@@ -1585,8 +1585,6 @@ with pkgs;
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
-  brakeman = callPackage ../development/tools/analysis/brakeman { };
-
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
@@ -3356,7 +3354,7 @@ with pkgs;
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
-  kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
+  kdiskmark = kdePackages.callPackage ../tools/filesystems/kdiskmark { };
 
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
@@ -11507,8 +11505,6 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
-
   ### APPLICATIONS
 
   _2bwm = callPackage ../applications/window-managers/2bwm {
@@ -12526,8 +12522,6 @@ with pkgs;
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };
 
-  ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
-
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
@@ -13362,10 +13356,6 @@ with pkgs;
   sommelier = callPackage ../applications/window-managers/sommelier { };
 
   spotify-qt = qt6Packages.callPackage ../applications/audio/spotify-qt { };
-
-  squishyball = callPackage ../applications/audio/squishyball {
-    ncurses = ncurses5;
-  };
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 

@@ -1103,12 +1103,12 @@ in
   tmux-toggle-popup = mkTmuxPlugin rec {
     pluginName = "tmux-toggle-popup";
     rtpFilePath = "toggle-popup.tmux";
-    version = "0.4.2";
+    version = "0.4.3";
     src = fetchFromGitHub {
       owner = "loichyan";
       repo = "tmux-toggle-popup";
       tag = "v${version}";
-      hash = "sha256-dlCUK+yrBkY0DnKoj/s9dJ6yITBMfWMgw3wnwzuxim4=";
+      hash = "sha256-uQihpmQTJbjx5euXSGOFlekFgCTYXGu7SQYqyZjKLM8=";
     };
     meta = with lib; {
       homepage = "https://github.com/loichyan/tmux-toggle-popup";
