@@ -76,7 +76,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle terminal user interface";
-    homepage = "https://radicle.xyz";
+    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z39mP9rQAaGmERfUMPULfPUi473tY";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z39mP9rQAaGmERfUMPULfPUi473tY/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
