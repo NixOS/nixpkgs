@@ -1580,6 +1580,12 @@
     githubId = 587021;
     name = "André V L Matos";
   };
+  andrewbastin = {
+    email = "andrewbastin.k@gmail.com";
+    github = "AndrewBastin";
+    githubId = 9131943;
+    name = "Andrew Bastin";
+  };
   andrewchambers = {
     email = "ac@acha.ninja";
     github = "andrewchambers";
