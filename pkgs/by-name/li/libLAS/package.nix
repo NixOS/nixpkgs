@@ -52,8 +52,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
   buildInputs = [
     boost
+  ];
+
+  propagatedBuildInputs = [
     libgeotiff
     libtiff
     laszip_2
