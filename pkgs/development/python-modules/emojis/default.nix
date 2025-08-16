@@ -1,10 +1,10 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  lib,
+  pkgs,
   setuptools,
   unittestCheckHook,
-  pkgs,
-  lib,
 }:
 
 buildPythonPackage rec {
