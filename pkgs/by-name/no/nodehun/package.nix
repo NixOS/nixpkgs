@@ -43,8 +43,12 @@ buildNpmPackage {
     cp -r build_old/Release build/
     rm -rf build_old
     rm -rf build/Release/.deps
+
     # Remove a development script to eliminate runtime dependency on node
     rm node_modules/node-addon-api/tools/conversion.js
+
+    # Remove dangling symlinks
+    rm -rf $out/lib/node_modules/nodehun/node_modules/.bin
   '';
 
   doInstallCheck = true;
