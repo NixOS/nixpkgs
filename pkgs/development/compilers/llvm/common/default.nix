@@ -29,6 +29,7 @@
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  overrideAttrsFn ? lib.const (lib.const { }), # overlay function applied to /every/ package in the llvm set.
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -114,7 +115,8 @@ let
   tools = lib.makeExtensible (
     tools:
     let
-      callPackage = newScope (tools // args // metadata);
+      callPackage0 = newScope (tools // args // metadata);
+      callPackage = p: a: (callPackage0 p a).overrideAttrs overrideAttrsFn;
       clangVersion =
         if (lib.versionOlder metadata.release_version "16") then
           metadata.release_version
@@ -237,7 +239,8 @@ let
       lldbPlugins = lib.makeExtensible (
         lldbPlugins:
         let
-          callPackage = newScope (lldbPlugins // tools // args // metadata);
+          callPackage0 = newScope (lldbPlugins // tools // args // metadata);
+          callPackage = p: a: (callPackage0 p a).overrideAttrs overrideAttrsFn;
         in
         lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
       );
@@ -493,7 +496,7 @@ let
   libraries = lib.makeExtensible (
     libraries:
     let
-      callPackage = newScope (
+      callPackage0 = newScope (
         libraries
         // buildLlvmTools
         // args
@@ -501,6 +504,7 @@ let
         # Previously monorepoSrc was erroneously not being passed through.
         // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
       );
+      callPackage = p: a: (callPackage0 p a).overrideAttrs overrideAttrsFn;
     in
     (
       {
