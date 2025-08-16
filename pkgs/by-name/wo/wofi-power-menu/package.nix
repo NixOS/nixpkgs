@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   wofi,
   versionCheckHook,
   nix-update-script,
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-PWPMBYmB1lyCJFhodNSCicYJy29vEUx6k9ScQTPbZdg=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/wofi-power-menu \
