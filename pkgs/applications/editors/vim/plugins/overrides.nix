@@ -2781,11 +2781,13 @@ in
   };
 
   nvzone-minty = super.nvzone-minty.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "minty";
     dependencies = [ self.nvzone-volt ];
   };
 
   nvzone-typr = super.nvzone-typr.overrideAttrs {
-    # Plugin managers like Lazy.nvim expect pname to maych the name of the git repository
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
     pname = "typr";
     dependencies = [ self.nvzone-volt ];
   };
