@@ -323,6 +323,7 @@ mapAliases ({
   guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
+  hahomematic = throw "hahomematic has been superseded by aiohomematic"; # added 2025-08-16
   hangups = throw "hangups was removed because Google Hangouts has been shut down"; # added 2023-02-13
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hcs_utils = hcs-utils; # added 2024-01-06

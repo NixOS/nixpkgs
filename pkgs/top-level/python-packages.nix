@@ -290,6 +290,8 @@ self: super: with self; {
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
+  aiohomematic = callPackage ../development/python-modules/aiohomematic { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
@@ -6412,8 +6414,6 @@ self: super: with self; {
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hacking = callPackage ../development/python-modules/hacking { };
-
-  hahomematic = callPackage ../development/python-modules/hahomematic { };
 
   hakuin = callPackage ../development/python-modules/hakuin { };
 
