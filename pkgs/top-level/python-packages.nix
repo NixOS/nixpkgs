@@ -6427,8 +6427,6 @@ self: super: with self; {
 
   hacking = callPackage ../development/python-modules/hacking { };
 
-  hahomematic = callPackage ../development/python-modules/hahomematic { };
-
   hakuin = callPackage ../development/python-modules/hakuin { };
 
   halide =
