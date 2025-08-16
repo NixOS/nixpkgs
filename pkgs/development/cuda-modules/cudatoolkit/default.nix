@@ -21,7 +21,7 @@
   libxcrypt-legacy,
   libxkbcommon,
   libkrb5,
-  libxml2,
+  libxml2_13,
   krb5,
   makeWrapper,
   markForCudatoolkitRootHook,
@@ -157,14 +157,7 @@ backendStdenv.mkDerivation {
     python311
   ]
   ++ lib.optionals (cudaAtLeast "12.9") [
-    # Replace once https://github.com/NixOS/nixpkgs/pull/421740 is merged.
-    (libxml2.overrideAttrs rec {
-      version = "2.13.8";
-      src = fetchurl {
-        url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-        hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
-      };
-    })
+    libxml2_13
     python312
   ];
 
