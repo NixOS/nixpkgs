@@ -18,7 +18,7 @@
   uuid ? "44444444-4444-4444-8888-888888888888",
   btrfs-progs,
   libfaketime,
-  fakeroot,
+  proot,
 }:
 
 let
@@ -30,7 +30,7 @@ pkgs.stdenv.mkDerivation {
   nativeBuildInputs = [
     btrfs-progs
     libfaketime
-    fakeroot
+    proot
   ]
   ++ lib.optional compressImage zstd;
 
@@ -58,7 +58,17 @@ pkgs.stdenv.mkDerivation {
     cp ${sdClosureInfo}/registration ./rootImage/nix-path-registration
 
     touch $img
-    faketime -f "1970-01-01 00:00:01" fakeroot mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./rootImage --shrink $img
+    proot -0 \
+      -r ./ \
+      -b /nix/store \
+      -b ${btrfs-progs}\bin\mkfs.btrfs \
+      -b /proc \
+      -w / \
+      bash -c "
+        export LD_PRELOAD=${libfaketime}/lib/libfaketime.so.1
+        export FAKETIME='1970-01-01 00:00:01'
+        mkfs.btrfs -f -L ${volumeLabel} -U ${uuid} -r rootImage --shrink $img
+      "
 
     if ! btrfs check $img; then
       echo "--- 'btrfs check' failed for BTRFS image ---"
