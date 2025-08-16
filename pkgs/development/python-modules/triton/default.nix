@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${version}";
-    hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
+    hash = "sha256-78s9ke6UV7Tnx3yCr0QZcVDqQELR4XoGgJY7olNJmjk=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Use our `cmakeFlags` instead and avoid downloading dependencies
     # remove any downloads
-    substituteInPlace python/setup.py \
+    substituteInPlace setup.py \
       --replace-fail "[get_json_package_info()]" "[]"\
       --replace-fail "[get_llvm_package_info()]" "[]"\
       --replace-fail 'packages += ["triton/profiler"]' "pass"\
