@@ -294,8 +294,12 @@ lib.makeOverridable (
           unset src
         '';
 
+        preConfigure = lib.concatStringsSep "\n" (map (flag: "makeFlagsArray+=(${flag})") extraMakeFlags);
+
         configurePhase = ''
           runHook preConfigure
+
+          # makeFlagsArray+=($extraMakeFlags)
 
           mkdir build
           export buildRoot="$(pwd)/build"
@@ -325,6 +329,8 @@ lib.makeOverridable (
           cd $buildRoot
         '';
 
+        preBuild = lib.concatStringsSep "\n" (map (flag: "buildFlagsArray+=(${flag})") extraMakeFlags);
+
         buildFlags = [
           "KBUILD_BUILD_VERSION=1-NixOS"
           kernelConf.target
@@ -334,8 +340,7 @@ lib.makeOverridable (
         ++ optionals buildDTBs [
           "dtbs"
           "DTC_FLAGS=-@"
-        ]
-        ++ extraMakeFlags;
+        ];
 
         installFlags = [
           "INSTALL_PATH=${placeholder "out"}"
@@ -545,8 +550,7 @@ lib.makeOverridable (
       # https://github.com/NixOS/nixpkgs/issues/321667
       "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
     ]
-    ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
-    ++ extraMakeFlags;
+    ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ]);
   in
 
   stdenv.mkDerivation (
