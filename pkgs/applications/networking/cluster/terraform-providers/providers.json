@@ -180,11 +180,11 @@
     "vendorHash": null
   },
   "bigip": {
-    "hash": "sha256-lhN9YPufx6JITEhwLfqUMudXKTJqFdRCPkS+lTZpmH8=",
+    "hash": "sha256-oJIIhIBQXx5u2OwYcyMo4uRdzWdWLz2PlO9r9ZSRIzo=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.23.1",
+    "rev": "v1.24.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
