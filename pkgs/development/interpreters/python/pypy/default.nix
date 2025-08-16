@@ -140,8 +140,22 @@ stdenv.mkDerivation rec {
       tcl_libprefix = tcl.libPrefix;
     })
 
-    (replaceVars ./sqlite_paths.patch {
+    # Python ctypes.util uses three different strategies to find a library (on Linux):
+    # 1. /sbin/ldconfig
+    # 2. cc -Wl,-t -l"$libname"; objdump -p
+    # 3. ld -t (where it attaches the values in $LD_LIBRARY_PATH as -L arguments)
+    # The first is disabled in Nix (and wouldn't work in the build sandbox or on NixOS anyway), and
+    # the third was only introduced in Python 3.6 (see bugs.python.org/issue9998), so is not
+    # available when buliding PyPy (which is built using Python/PyPy 2.7).
+    # The second requires SONAME to be set for the dynamic library for the second part not to fail.
+    # As libsqlite3 stopped shipping with SONAME after the switch to autosetup (>= 3.50 in Nixpkgs;
+    # see https://www.sqlite.org/src/forumpost/5a3b44f510df8ded). This makes the Python CFFI module
+    # unable to find the SQLite library.
+    # To circumvent these issues, we hardcode the path during build.
+    # For more information, see https://github.com/NixOS/nixpkgs/issues/419942.
+    (replaceVars (if isPy3k then ./sqlite_paths.patch else ./sqlite_paths_2_7.patch) {
       inherit (sqlite) out dev;
+      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
