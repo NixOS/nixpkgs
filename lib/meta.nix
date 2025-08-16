@@ -15,6 +15,7 @@ let
     assertMsg
     ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
+  inherit (lib.meta.platform) evalConstraints;
   inherit (builtins) isString match typeOf;
 
 in
@@ -259,12 +260,17 @@ rec {
   /**
     Check if a package is available on a given platform.
 
-    A package is available on a platform if both
+    A package is available on a platform its platform constraints are met. See
+    the documentation of `lib.meta.platform.constraints` for more information.
+
+    Alternatively, if `meta.platformConstraints` are not used it is available if:
 
     1. One of `meta.platforms` pattern matches the given
         platform, or `meta.platforms` is not present.
 
     2. None of `meta.badPlatforms` pattern matches the given platform.
+
+    Should no constraints be declared, a package is always considered available.
 
     # Inputs
 
@@ -289,8 +295,16 @@ rec {
   */
   availableOn =
     platform: pkg:
-    ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
-    && all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
+    if pkg ? meta.platformConstraints then
+      evalConstraints platform pkg.meta.platformConstraints
+    else if pkg ? meta.platforms then
+      # Legacy platform declarations
+      any (platformMatch platform) pkg.meta.platforms
+      && all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ])
+    else
+      # If no constraints are declared, we are available on all platforms.
+      # This is necessary for runCommand and friends.
+      true;
 
   /**
     Mapping of SPDX ID to the attributes in lib.licenses.
