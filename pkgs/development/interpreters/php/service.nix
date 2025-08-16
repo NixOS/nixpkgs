@@ -155,6 +155,7 @@ in
     php-fpm.settings = {
       error_log = "syslog";
       daemonize = false;
+      systemd_interval = lib.mkDefault 10;
     };
 
     process.argv = [
@@ -170,7 +171,7 @@ in
       documentation = [ "man:php-fpm(8)" ];
 
       serviceConfig = {
-        Type = "notify";
+        Type = if cfg.settings.systemd_interval != 0 then "notify-reload" else "notify";
         ExecReload = "${coreutils}/bin/kill -USR2 $MAINPID";
         RuntimeDirectory = "php-fpm";
         RuntimeDirectoryPreserve = true;
@@ -185,6 +186,7 @@ in
       conditions = [ "service/syslogd/ready" ];
       reload = "${coreutils}/bin/kill -USR2 $MAINPID";
       notify = "systemd";
+      nohup = cfg.settings.systemd_interval == 0;
     };
   };
 
