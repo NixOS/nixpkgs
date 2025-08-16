@@ -10,6 +10,8 @@
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
+  excludeDrvArgNames = [ "gitDepsLockfiles" ];
+
   extendDrvArgs =
     finalAttrs:
     {
@@ -32,6 +34,12 @@ lib.extendMkDerivation {
       # Whether to force allow an empty dependency cache.
       # This can be enabled if there are truly no remote dependencies, but generally an empty cache indicates something is wrong.
       forceEmptyCache ? false,
+      # Lock files to be added to Git dependencies.
+      # Git dependencies that have install scripts but no `package-lock.json` file are not reproducible. This attribute set is
+      # used to inject a `package-lock.json` file into a Git dependency. Keys are the `resolved` strings of the dependencies
+      # (they can be found in the `package-lock.json` file of the main package) and values are paths to the `package-lock.json`
+      # files to inject.
+      gitDepsLockfiles ? { },
       # Whether to make the cache writable prior to installing dependencies.
       # Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
       makeCacheWritable ? false,
@@ -56,6 +64,7 @@ lib.extendMkDerivation {
         inherit
           forceGitDeps
           forceEmptyCache
+          gitDepsLockfiles
           src
           srcs
           sourceRoot
