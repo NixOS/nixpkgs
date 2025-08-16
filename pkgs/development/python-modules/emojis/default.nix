@@ -4,7 +4,7 @@
   setuptools,
   pythonOlder,
   unittestCheckHook,
-  pandoc,
+  pkgs,
   lib,
 }:
 let
@@ -27,7 +27,7 @@ buildPythonPackage {
   };
 
   nativeBuildInputs = [
-    pandoc
+    pkgs.pandoc
   ];
 
   preBuild = ''
