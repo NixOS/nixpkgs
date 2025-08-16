@@ -122,7 +122,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
+  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -150,6 +150,8 @@ let
         "10.1a"
         "12.0"
         "12.0a"
+        "12.1"
+        "12.1a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -269,7 +271,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
 
   stdenv = stdenv';
@@ -308,11 +310,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # Prevent NCCL from being cloned during the configure phase
-    # TODO: remove when updating to the next release as it will not be needed anymore
-    substituteInPlace tools/build_pytorch_libs.py \
-      --replace-fail "  checkout_nccl()" "  "
-
     substituteInPlace cmake/public/cuda.cmake \
       --replace-fail \
         'message(FATAL_ERROR "Found two conflicting CUDA' \
