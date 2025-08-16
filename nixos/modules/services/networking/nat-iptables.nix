@@ -55,7 +55,7 @@ let
       # mark packets coming from the internal interfaces.
       ${concatMapStrings (iface: ''
         ${iptables} -w -t nat -A nixos-nat-pre \
-          -i '${iface}' -j MARK --set-mark 1
+          -i '${iface}' -j MARK --or-mark 1
         ${iptables} -w -t filter -A nixos-filter-forward \
           -i '${iface}' ${
             optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
@@ -64,7 +64,7 @@ let
 
       # NAT the marked packets.
       ${optionalString (cfg.internalInterfaces != [ ]) ''
-        ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1 \
+        ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1/1 \
           ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
       ''}
 
