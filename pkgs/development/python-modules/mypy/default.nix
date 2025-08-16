@@ -10,10 +10,10 @@
   isPyPy,
 
   # build-system
+  pathspec,
   setuptools,
   types-psutil,
   types-setuptools,
-  wheel,
 
   # propagates
   mypy-extensions,
@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.15.0";
+  version = "1.17.1";
   pyproject = true;
 
   # relies on several CPython internals
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
+    hash = "sha256-FfONUCCMU1bJXHx3GHH46Tu+wYU5FLPOqeCSCi1bRSs=";
   };
 
   patches = [
@@ -62,13 +62,12 @@ buildPythonPackage rec {
 
   build-system = [
     mypy-extensions
+    pathspec
     setuptools
     types-psutil
     types-setuptools
     typing-extensions
-    wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   dependencies = [
     mypy-extensions
