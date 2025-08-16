@@ -34,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
   };
 
+  patches = [
+    # Fix the tests on Darwin when the build directory is outside of
+    # `/tmp`, as on Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
+    # <https://github.com/libuv/libuv/pull/4850>
+    ./fix-tests-in-darwin-sandbox.patch
+  ];
+
   outputs = [
     "out"
     "dev"
