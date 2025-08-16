@@ -17131,6 +17131,12 @@
     githubId = 68156310;
     name = "Benjamin Strachan";
   };
+  mrbjarksen = {
+    email = "bjarki@harksen.is";
+    github = "mrbjarksen";
+    githubId = 62466569;
+    name = "Bjarki B. Harksen";
+  };
   mrcjkb = {
     email = "marc@jakobi.dev";
     matrix = "@mrcjk:matrix.org";
