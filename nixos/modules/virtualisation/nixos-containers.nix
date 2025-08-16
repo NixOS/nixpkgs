@@ -518,10 +518,10 @@ in
 
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = true;
+      default = config.containers != { };
+      defaultText = lib.literalExpression "config.containers != { }";
       description = ''
-        Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used).
+        Whether to enable support for NixOS containers.
       '';
     };
 
@@ -940,7 +940,16 @@ in
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
               "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
         in
-        mkMerge (mapAttrsToList mapper config.containers);
+        [
+          (mkMerge (mapAttrsToList mapper config.containers))
+          {
+            assertion =
+              (lib.filterAttrs (
+                n: v: (lib.strings.hasPrefix "container@" n) && v.wantedBy != [ ] && !config.boot.enableContainers
+              ) config.systemd.services) == { };
+            message = "Service depends on `container@` service is defined, but `boot.enableContainers` is set to false.";
+          }
+        ];
     }
 
     (mkIf (config.boot.enableContainers) (
