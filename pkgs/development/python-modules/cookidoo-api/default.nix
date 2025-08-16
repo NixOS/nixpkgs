@@ -4,6 +4,7 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  isodate,
   lib,
   pytest-asyncio,
   pytestCheckHook,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cookidoo-api";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "cookidoo-api";
     tag = version;
-    hash = "sha256-QFOGue5VzM1mrgw+WWBvb5dreDUlmBoYv/vEzQta+LA=";
+    hash = "sha256-EWAD33ZF1k76FujQdgBaIzx06zmqh0CfdpknWrs0YLU=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   dependencies = [
     aiofiles
     aiohttp
+    isodate
   ];
 
   pythonImportsCheck = [ "cookidoo_api" ];
