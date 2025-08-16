@@ -51,6 +51,7 @@ buildGo123Module (finalAttrs: {
     vulkan-headers
     libGL
     xorg.libX11
+    xorg.libxcb
     xorg.libXcursor
     xorg.libXfixes
   ];
