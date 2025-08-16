@@ -7,12 +7,10 @@
   pkgs,
   lib,
 }:
-let
-  version = "0.7.0";
-in
-buildPythonPackage {
+
+buildPythonPackage rec {
   pname = "emojis";
-  inherit version;
+  version = "0.7.0";
   pyproject = true;
 
   build-system = [ setuptools ];
