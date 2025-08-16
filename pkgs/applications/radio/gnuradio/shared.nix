@@ -72,7 +72,6 @@ in
     )
   ) featuresInfo;
   disallowedReferences = [
-    # TODO: Should this be conditional?
     stdenv.cc
     stdenv.cc.cc
   ]
