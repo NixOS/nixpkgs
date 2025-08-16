@@ -243,7 +243,8 @@ lib.makeOverridable (
         KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
 
         patches =
-          map (p: p.patch) kernelPatches
+          # kernelPatches can contain config changes and no actual patch
+          lib.filter (p: p != null) (map (p: p.patch) kernelPatches)
           # Required for deterministic builds along with some postPatch magic.
           ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
           ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
