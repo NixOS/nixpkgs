@@ -11,15 +11,23 @@
   # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
   electron_36,
   vulkan-helper,
-  gogdl,
-  legendary-heroic,
-  nile,
-  comet-gog,
+  gogdl_1_1_2,
+  legendary-heroic_0_20_37,
+  nile_1_1_2,
+  comet-gog_0_2_0,
+  galaxy-dummy-service_0_2_0,
+  heroic-epic-integration_0_3,
   umu-launcher,
 }:
 
 let
   electron = electron_36;
+  gogdl = gogdl_1_1_2;
+  legendary = legendary-heroic_0_20_37;
+  nile = nile_1_1_2;
+  comet = comet-gog_0_2_0;
+  galaxy-dummy-service = galaxy-dummy-service_0_2_0;
+  epic-integration = heroic-epic-integration_0_3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
@@ -79,14 +87,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
     rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
-    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    mkdir -p \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary-heroic}" \
+      "${lib.getExe legendary}" \
       "${lib.getExe nile}" \
-      "${lib.getExe comet-gog}" \
+      "${lib.getExe comet}" \
       "${lib.getExe vulkan-helper}" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
+    cp \
+      "${galaxy-dummy-service}/GalaxyCommunication.exe" \
+      "${epic-integration}/EpicGamesLauncher.exe" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
@@ -112,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
-    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.

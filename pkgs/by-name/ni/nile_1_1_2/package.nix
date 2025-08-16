@@ -1,6 +1,5 @@
 {
   lib,
-  gitUpdater,
   python3Packages,
   fetchFromGitHub,
 }:
@@ -49,9 +48,5 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/imLinguin/nile";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ aidalgol ];
-  };
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
   };
 }
