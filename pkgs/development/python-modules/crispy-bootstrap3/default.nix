@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "django-crispy-bootstrap3";
+  pname = "crispy-bootstrap3";
   version = "2024.1";
   pyproject = true;
 

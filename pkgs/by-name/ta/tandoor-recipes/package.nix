@@ -36,12 +36,12 @@ python.pkgs.buildPythonPackage {
     django-annoying
     django-cleanup
     django-crispy-forms
-    django-crispy-bootstrap4
     django-tables2
     djangorestframework
     drf-writable-nested
     django-oauth-toolkit
     bleach
+    crispy-bootstrap4
     gunicorn
     lxml
     markdown
