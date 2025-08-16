@@ -70,6 +70,9 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace src/hhd/plugins/plugin.py \
       --replace-fail '"id"' '"${lib.getExe' coreutils "id"}"'
+
+    substituteInPlace usr/lib/udev/rules.d/83-hhd.rules \
+      --replace-fail '/bin/chmod' '${lib.getExe' coreutils "chmod"}'
   '';
 
   build-system = with python3Packages; [
@@ -89,8 +92,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   postInstall = ''
-    install -Dm644 $src/usr/lib/udev/rules.d/83-hhd.rules -t $out/lib/udev/rules.d/
-    install -Dm644 $src/usr/lib/udev/hwdb.d/83-hhd.hwdb -t $out/lib/udev/hwdb.d/
+    install -Dm644 usr/lib/udev/rules.d/83-hhd.rules -t $out/lib/udev/rules.d/
+    install -Dm644 usr/lib/udev/hwdb.d/83-hhd.hwdb -t $out/lib/udev/hwdb.d/
   '';
 
   meta = {
