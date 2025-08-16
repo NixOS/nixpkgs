@@ -106,7 +106,7 @@ lib.makeOverridable (
           buildInputs
           ;
         pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
+        extraPathsFrom = lib.optionalString includeClosures (writeClosure pathsForClosure);
         preferLocalBuild = true;
         allowSubstitutes = false;
         # XXX: The size is somewhat arbitrary
