@@ -4,18 +4,19 @@
   fetchFromGitHub,
   libcap,
   libseccomp,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ruri";
-  version = "3.8";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
-    owner = "Moe-hacker";
+    owner = "RuriOSS";
     repo = "ruri";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    sha256 = "sha256-gf+WJPGeLbMntBk8ryTSsV9L4J3N4Goh9eWBIBj5FA4=";
+    sha256 = "sha256-stM4hSLdSqmYUZ/XBD3Y1GylrrGRISlcy8LN07HREpQ=";
   };
 
   buildInputs = [
@@ -23,11 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 ruri $out/bin/ruri
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Self-contained Linux container implementation";
