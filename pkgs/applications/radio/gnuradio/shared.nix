@@ -24,6 +24,7 @@ let
     minor = builtins.elemAt (lib.splitVersion version) 2;
     patch = builtins.elemAt (lib.splitVersion version) 3;
   };
+  cross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 {
   src =
@@ -57,7 +58,12 @@ in
       ))
     ) featuresInfo
   );
-  cmakeFlags = lib.mapAttrsToList (
+  cmakeFlags = [
+    # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
+    (lib.cmakeBool "PYBIND11_USE_CROSSCOMPILING" (cross && hasFeature "gnuradio-runtime"))
+  ]
+  ++ lib.mapAttrsToList (
     feat: info:
     (
       if feat == "basic" then
