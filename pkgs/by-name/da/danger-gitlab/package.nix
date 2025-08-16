@@ -1,15 +1,21 @@
-{ lib, bundlerApp }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "danger-gitlab";
   gemdir = ./.;
   exes = [ "danger" ];
 
-  meta = with lib; {
+  passthru.updateScript = bundlerUpdateScript "danger-gitlab";
+
+  meta = {
     description = "Gem that exists to ensure all dependencies are set up for Danger with GitLab";
     homepage = "https://github.com/danger/danger-gitlab-gem";
-    license = licenses.mit;
-    teams = [ teams.serokell ];
+    license = lib.licenses.mit;
+    teams = with lib.teams; [ serokell ];
     mainProgram = "danger";
   };
 }

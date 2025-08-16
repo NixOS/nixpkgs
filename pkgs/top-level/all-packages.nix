@@ -3152,8 +3152,6 @@ with pkgs;
 
   hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
 
-  homesick = callPackage ../tools/misc/homesick { };
-
   host = bind.host;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
@@ -3378,8 +3376,6 @@ with pkgs;
   lagrange-tui = lagrange.override { enableTUI = true; };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
-
-  mailcatcher = callPackage ../development/web/mailcatcher { };
 
   maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
 
