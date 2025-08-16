@@ -2783,6 +2783,8 @@ in
   };
 
   nvzone-typr = super.nvzone-typr.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to maych the name of the git repository
+    pname = "typr";
     dependencies = [ self.nvzone-volt ];
   };
 
