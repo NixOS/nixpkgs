@@ -2,7 +2,6 @@
   lib,
   config,
   stdenv,
-  gcc12Stdenv,
   fetchFromGitHub,
   fetchurl,
   cmake,
@@ -56,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Override environment to force nvcc to use the correct host compiler
   preBuild = lib.optionalString cudaSupport ''
-    export NVCC_APPEND_FLAGS="--compiler-bindir ${gcc12Stdenv.cc}/bin"
+    export NVCC_APPEND_FLAGS="--compiler-bindir ${cudaPackages.backendStdenv.cc}/bin"
   '';
 
   buildInputs = [
@@ -93,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLMODEL_KOMPUTE" false)
   ]
   ++ lib.optionals cudaSupport [
-    "-DCUDA_HOST_COMPILER=${gcc12Stdenv.cc}/bin/c++"
-    "-DCMAKE_CUDA_HOST_COMPILER=${gcc12Stdenv.cc}/bin/c++"
+    "-DCUDA_HOST_COMPILER=${cudaPackages.backendStdenv.cc}/bin/c++"
+    "-DCMAKE_CUDA_HOST_COMPILER=${cudaPackages.backendStdenv.cc}/bin/c++"
   ]
   ++ lib.optionals (!cudaSupport) [
     (lib.cmakeBool "LLMODEL_CUDA" false)
