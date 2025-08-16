@@ -87,9 +87,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace res/lactd.service \
       --replace-fail ExecStart={lact,$out/bin/lact}
 
-    substituteInPlace res/io.github.ilya_zlobintsev.LACT.desktop \
-      --replace-fail Exec={lact,$out/bin/lact}
-
     # read() looks for the database in /usr/share so we use read_from_file() instead
     substituteInPlace lact-daemon/src/server/handler.rs \
       --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
