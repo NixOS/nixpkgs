@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "h2o";
     repo = "h2o";
     rev = "ffab9c49c33b1f0e9aec9804028156aae9db8ef0";
-    sha256 = "sha256-kdU2p9oUhxGnw8JU9qGjV4mn2jMeSUL0rLgveMs6NiI=";
+    hash = "sha256-kdU2p9oUhxGnw8JU9qGjV4mn2jMeSUL0rLgveMs6NiI=";
   };
 
   patches = [
