@@ -671,6 +671,8 @@ in
   };
 
   config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
+    warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+
     assertions =
       let
         entityList =
