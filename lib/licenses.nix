@@ -152,6 +152,11 @@ lib.mapAttrs mkLicense (
       fullName = "Artistic License 2.0";
     };
 
+    asl = {
+      fullName = "Academic Software License";
+      url = "https://github.com/ACEsuit/ACE.jl/blob/main/ASL.md";
+    };
+
     asl20 = {
       spdxId = "Apache-2.0";
       fullName = "Apache License 2.0";
