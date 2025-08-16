@@ -14,18 +14,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-9hwDAkrMW0llcYJdkrUCSdh3guRcUCmx8MDkHLyY6v0=";
+    hash = "sha256-JTwtydW8LLBH/55+8a/BbqlZtkXsFKbT8dGoDEAjk1c=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-ykG3howLyA4kA7cjP8Gx+usRcgQoVHW0ECQzTUigG8A=";
+  cargoHash = "sha256-3PljlyPfDsnjGmR/0iM7Fu1TnyDj31pKVcOU/izsL30=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,27 +50,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Wants to access /bin/zsh
     "--skip=shell::tests::test_run_with_profile_escaping_and_execution"
+    # Wants to access unix sockets
+    "--skip=allow_unix_socketpair_recvfrom"
     # Fails with 'stream ended unexpectedly: InternalAgentDied'
     "--skip=includes_base_instructions_override_in_request"
-    # Fails with 'stream ended unexpectedly: InternalAgentDied'
     "--skip=includes_user_instructions_message_in_request"
-    # Fails with 'stream ended unexpectedly: InternalAgentDied'
     "--skip=originator_config_override_is_used"
-    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
-    "--skip=azure_overrides_assign_properties_used_for_responses_url"
-    # Fails with 'stream ended unexpectedly: InternalAgentDied'
     "--skip=prefixes_context_and_instructions_once_and_consistently_across_requests"
     # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
+    "--skip=azure_overrides_assign_properties_used_for_responses_url"
     "--skip=env_var_overrides_loaded_auth"
     # Version 0.0.0 hardcoded
     "--skip=test_conversation_create_and_send_message_ok"
-    # Version 0.0.0 hardcoded
     "--skip=test_send_message_session_not_found"
-    # Version 0.0.0 hardcoded
     "--skip=test_send_message_success"
     # Assertion fails
     "--skip=diff_render::tests::ui_snapshot_add_details"
     "--skip=diff_render::tests::ui_snapshot_update_details_with_rename"
+    # Attempted to creat a NULL object
+    "--skip=test_apply_patch_tool"
+    # Needs access to python3. However, adding python3 to nativeCHeckInputs doesn't resolve the issue
+    "--skip=python_multiprocessing_lock_works_under_sandbox"
   ];
 
   postInstall = lib.optionalString installShellCompletions ''
