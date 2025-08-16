@@ -59,6 +59,7 @@ let
   # 1. export BAZEL_SELF=$(nix-build -A bazel_6)
   # 2. update version and hash for sources above
   # 3. `eval $(nix-build -A bazel_6.updater)`
+  #    If it complains about incompatible version, try export USE_BAZEL_VERSION=<version of BAZEL_SELF>
   # 4. add new dependencies from the dict in ./src-deps.json if required by failing build
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
