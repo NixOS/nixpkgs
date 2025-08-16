@@ -1,28 +1,48 @@
 {
   "game": {
     "latest": {
-      "linux": "51.11",
+      "linux": "52.03",
       "darwin": "0.47.05"
     },
     "versions": {
-      "51.11": {
+      "52.03": {
         "df": {
-          "version": "51.11",
+          "version": "52.03",
           "urls": {
             "linux": {
-              "url": "https://www.bay12games.com/dwarves/df_51_11_linux.tar.bz2",
-              "outputHash": "sha256-51cwIFMm5cwSaXjjhpz4pS3D8B5/Mt5+k1ALu1F+JWc="
+              "url": "https://www.bay12games.com/dwarves/df_52_03_linux.tar.bz2",
+              "outputHash": "sha256-GzYubRukJhGND/xL3rzDpmhLVRmIWGBgP56llGtkRI4="
             }
           }
         },
         "hack": {
-          "version": "51.11-r1.2",
+          "version": "52.03-r1.1",
           "git": {
             "url": "https://github.com/DFHack/dfhack.git",
-            "revision": "51.11-r1.2",
-            "outputHash": "sha256-x8zY8IGDhnyoeNz24Mt00o+2XLzSHZG165MXQHXW+YA="
+            "revision": "52.03-r1.1",
+            "outputHash": "sha256-/lzMaoWgZgk0ec1Vc/wXAekLSc63C1foEjhwRYgSLbc="
           },
-          "xmlRev": "6502bdefd1796315365a7bb58e30e0ce34359bea"
+          "xmlRev": "fc6dcd5aa077a0d96d81bd2dfe89e24bed375472"
+        }
+      },
+      "51.13": {
+        "df": {
+          "version": "51.13",
+          "urls": {
+            "linux": {
+              "url": "https://www.bay12games.com/dwarves/df_51_13_linux.tar.bz2",
+              "outputHash": "sha256-Fdb3QS+P0xL4/U0z6nZyMh78KVHDiu9TI3fF6saAw3I="
+            }
+          }
+        },
+        "hack": {
+          "version": "51.13-r1",
+          "git": {
+            "url": "https://github.com/DFHack/dfhack.git",
+            "revision": "51.13-r1",
+            "outputHash": "sha256-Z6ZmXl4BmSg9jRwPpYKMIw3fW6DYxBJEv8oboh+PbZQ="
+          },
+          "xmlRev": "ae7424d3f40bf60b3906b5b9b472cb9a7209a3a8"
         }
       },
       "50.15": {
@@ -96,12 +116,12 @@
     }
   },
   "therapist": {
-    "version": "42.1.13",
-    "maxDfVersion": "51.11",
+    "version": "42.1.17",
+    "maxDfVersion": "52.02",
     "git": {
       "url": "https://github.com/Dwarf-Therapist/Dwarf-Therapist.git",
-      "revision": "v42.1.13",
-      "outputHash": "sha256-y/kUur/BTArznrEzw54FZBrxnD2KXHcwfrHE4WvoemA="
+      "revision": "v42.1.17",
+      "outputHash": "sha256-V8PETf8XTExDx2DtJTQPNSGnO0oCVx8o/1ML2ekJXOs="
     }
   }
 }
