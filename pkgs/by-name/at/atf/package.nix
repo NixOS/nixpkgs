@@ -53,6 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     kyua
   ];
 
+  # Don’t install the test programs for ATF itself; they’re useless
+  # other than as part of the `installCheckPhase`, and they contain
+  # non‐reproducible references to the build directory.
+  postInstall = ''
+    rm -r $out/tests
+  '';
+
   installCheckPhase = ''
     runHook preInstallCheck
     HOME=$TMPDIR PATH=$out/bin:$PATH kyua test
