@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  p7zip,
+  _7zz,
   virtio-win,
 }:
 
@@ -41,19 +41,23 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
+  nativeBuildInputs = [
+    _7zz
+  ];
+
   buildPhase = ''
     runHook preBuild
 
     mkdir -p usbdk/x86 usbdk/amd64
-    (cd usbdk/x86; ${p7zip}/bin/7z x -y ${src_usbdk_x86})
-    (cd usbdk/amd64; ${p7zip}/bin/7z x -y ${src_usbdk_amd64})
+    (cd usbdk/x86; 7zz x -y ${src_usbdk_x86})
+    (cd usbdk/amd64; 7zz x -y ${src_usbdk_amd64})
 
     mkdir -p vdagent/x86 vdagent/amd64
-    (cd vdagent/x86; ${p7zip}/bin/7z x -y ${src_vdagent_x86}; mv vdagent-win-${version_vdagent}-x86/* .; rm -r vdagent-win-${version_vdagent}-x86)
-    (cd vdagent/amd64; ${p7zip}/bin/7z x -y ${src_vdagent_amd64}; mv vdagent-win-${version_vdagent}-x64/* .; rm -r vdagent-win-${version_vdagent}-x64)
+    (cd vdagent/x86; 7zz x -y ${src_vdagent_x86}; mv vdagent-win-${version_vdagent}-x86/* .; rm -r vdagent-win-${version_vdagent}-x86)
+    (cd vdagent/amd64; 7zz x -y ${src_vdagent_amd64}; mv vdagent-win-${version_vdagent}-x64/* .; rm -r vdagent-win-${version_vdagent}-x64)
 
     mkdir -p qxlwddm
-    (cd qxlwddm; ${p7zip}/bin/7z x -y ${src_qxlwddm}; cd w10)
+    (cd qxlwddm; 7zz x -y ${src_qxlwddm}; cd w10)
 
     runHook postBuild
   '';

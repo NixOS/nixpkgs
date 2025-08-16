@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  p7zip,
+  _7zz,
   pname,
   version,
   hash,
@@ -17,11 +17,13 @@ stdenvNoCC.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [
+    _7zz
+  ];
 
   unpackPhase = ''
     runHook preUnpack
-    7z x "$src" -o"$sourceRoot"
+    7zz x "$src" -o"$sourceRoot"
     runHook postUnpack
   '';
 

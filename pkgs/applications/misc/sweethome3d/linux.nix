@@ -9,7 +9,7 @@
   stripJavaArchivesHook,
   gtk3,
   gsettings-desktop-schemas,
-  p7zip,
+  _7zz,
   autoPatchelfHook,
   libXxf86vm,
   libGL,
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
   buildInputs = [
     ant
     jdk
-    p7zip
+    _7zz
     gtk3
     gsettings-desktop-schemas
     libXxf86vm
