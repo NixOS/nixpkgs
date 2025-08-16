@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   unittestCheckHook,
   pkgs,
   lib,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "alexandrevicenzi";
