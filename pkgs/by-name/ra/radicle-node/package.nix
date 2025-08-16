@@ -19,13 +19,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.2.0";
+  version = "1.3.0";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
-    hash = "sha256-AWgLhL6GslE3r2FcZu2imV5ZtEKlUD+a4C5waRGO2lM=";
+    hash = "sha256-0gK+fM/YGGpxlcR1HQixbLK0/sv+HH29h6ajEP2w2pI=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
+  cargoHash = "sha256-qLRFZXbVbsgMyXiljsb8lOBCDZKa17LcxWuPaUYSG70=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -47,6 +47,14 @@ rustPlatform.buildRustPackage rec {
     export GIT_HEAD=$(<$src/.git_head)
     export SOURCE_DATE_EPOCH=$(<$src/.git_time)
   '';
+
+  cargoBuildFlags = [
+    "--package=radicle-node"
+    "--package=radicle-cli"
+    "--package=radicle-remote-helper"
+  ];
+
+  cargoTestFlags = cargoBuildFlags;
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
