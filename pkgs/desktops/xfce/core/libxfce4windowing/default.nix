@@ -23,9 +23,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4windowing";
-  version = "4.20.3";
+  version = "4.20.4";
 
-  sha256 = "sha256-l58cTz28UPSVfoIpjBCoSwcqdUJfG9e4UlhVYPyEeAs=";
+  sha256 = "sha256-8iLkljuGyJ4giVN5yuOFuTZsrdr8U3avTS/1aRSpaxc=";
 
   nativeBuildInputs = [
     python3
