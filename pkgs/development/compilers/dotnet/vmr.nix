@@ -141,9 +141,8 @@ stdenv.mkDerivation rec {
       ./vmr-compiler-opt-v8.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "10") [
-      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: The "AddSourceToNuGetConfig" task failed unexpectedly.
-      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: System.Xml.XmlException->Microsoft.Build.Framework.BuildException.GenericBuildTransferredException: There are multiple root elements. Line 9, position 2.
-      ./source-build-externals-overwrite-rather-than-append-.patch
+      ./mscordac-fix-missing-libunwind-symbols-on-linux.patch
+      ./bundler-fix-file-size-estimation-when-bundling-symli.patch
     ];
 
   postPatch = ''
@@ -178,11 +177,15 @@ stdenv.mkDerivation rec {
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
       src/source-build-reference-packages/src/referencePackages/Directory.Build.props
 
+  ''
+  + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
     xmlstarlet ed \
       --inplace \
       -u //_:Project/_:PropertyGroup/_:BuildNumber -v 0 \
-      src/source-build-externals/src/${lib.optionalString (lib.versionAtLeast version "10") "repos/src/"}application-insights/.props/_GlobalStaticVersion.props
+      src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
+  ''
+  + ''
 
     # this fixes compile errors with clang 15 (e.g. darwin)
     substituteInPlace \
