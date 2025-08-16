@@ -328,7 +328,6 @@ stdenv.mkDerivation (
     ];
 
     buildInputs = [
-      libxml2
       libffi
     ]
     ++ optional enablePFM libpfm; # exegesis
@@ -337,7 +336,10 @@ stdenv.mkDerivation (
       (lib.optional (
         lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform
       ) ncurses)
-      ++ [ zlib ];
+      ++ [
+        zlib
+        libxml2
+      ];
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -627,10 +629,6 @@ stdenv.mkDerivation (
         (lib.cmakeBool "LLVM_ENABLE_PIC" false)
         (lib.cmakeBool "CMAKE_SKIP_INSTALL_RPATH" true)
         (lib.cmakeBool "LLVM_BUILD_STATIC" true)
-        # libxml2 needs to be disabled because the LLVM build system ignores its .la
-        # file and doesn't link zlib as well.
-        # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
-        (lib.cmakeBool "LLVM_ENABLE_LIBXML2" false)
       ]
       ++ optionals enableManpages [
         (lib.cmakeBool "LLVM_BUILD_DOCS" true)
