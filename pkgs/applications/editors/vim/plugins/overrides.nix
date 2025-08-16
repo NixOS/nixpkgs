@@ -2767,6 +2767,8 @@ in
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "menu";
     checkInputs = with self; [
       # Optional integrations
       nvim-tree-lua
