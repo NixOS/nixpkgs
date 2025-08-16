@@ -14643,6 +14643,8 @@ self: super: with self; {
 
   python-gammu = callPackage ../development/python-modules/python-gammu { };
 
+  python-gc100 = callPackage ../development/python-modules/python-gc100 { };
+
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
