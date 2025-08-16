@@ -7,7 +7,7 @@
   fetchFromGitHub,
   installShellFiles,
   multidict,
-  pandoc,
+  pkgs,
   pip,
   pygments,
   pytest-httpbin,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-    pandoc
+    pkgs.pandoc
   ];
 
   dependencies = [
