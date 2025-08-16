@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildFHSEnv,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   go-task,
 }:
 
@@ -21,7 +22,10 @@ let
       hash = "sha256-xRo38yyGW2k37JS2rZzbqR1fEUCQQJ1bm45brgtQ4bk=";
     };
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      writableTmpDirAsHomeHook
+    ];
 
     nativeCheckInputs = [ go-task ];
 
@@ -64,12 +68,10 @@ let
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME="$(mktemp -d)"
       installShellCompletion --cmd arduino-cli \
         --bash <($out/bin/arduino-cli completion bash) \
         --zsh <($out/bin/arduino-cli completion zsh) \
         --fish <($out/bin/arduino-cli completion fish)
-      unset HOME
     '';
 
     meta = {
