@@ -103,10 +103,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     npm run build:http
     npm run test:unit
     scripts/check-js
     scripts/check-rs
+
+    runHook postCheck
   '';
 
   passthru.env = finalAttrs.env;
