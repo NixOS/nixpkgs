@@ -117,7 +117,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle desktop app";
-    homepage = "https://radicle.xyz";
+    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/${finalAttrs.src.rev}/CHANGELOG.md";
     mainProgram = "radicle-desktop";
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.unix;
