@@ -790,11 +790,11 @@ in
       # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
       assert isString msg;
       if mustAbort then
-        builtins.trace "[1;31mevaluation warning:[0m ${msg}" (
+        builtins.trace "${lib.ansi.stylizeError "evaluation warning:"} ${msg}" (
           abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors."
         )
       else
-        builtins.trace "[1;35mevaluation warning:[0m ${msg}" v
+        builtins.trace "${lib.ansi.stylizeError "evaluation warning:"} ${msg}" v
     );
 
   /**
