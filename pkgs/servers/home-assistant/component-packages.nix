@@ -5046,7 +5046,8 @@
       ];
     "russound_rnet" =
       ps: with ps; [
-      ]; # missing inputs: russound
+        russound
+      ];
     "ruuvi_gateway" =
       ps: with ps; [
         aioruuvigateway
