@@ -75,21 +75,24 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.3";
+  version = "0.21.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-8z1jgH0Nj7D+joN42AA2ORNSLvcfWiYHn4dpTq1HWB0=";
+    hash = "sha256-HJUycrNDpy2FOYi6aZ76orLewZCuLC1MoJ57peYJqvI=";
   };
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-0olujhOOO/BAH4JvnmXd1kE7T/sp5Vr3Z3P2X2jhZKs=";
   };
 
   sourceRoot = "${src.name}/bindings/python";

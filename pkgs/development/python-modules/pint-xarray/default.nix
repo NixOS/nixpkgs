@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pint-xarray";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "pint-xarray";
     tag = "v${version}";
-    hash = "sha256-fvVIQagrL1QvIcN/mePx6cT8mbsvx08vu6tGc4tuLwc=";
+    hash = "sha256-bPvLTtaROCYr8yWI6vQK7pYbBYUlsMzy7ALnufAT7Xo=";
   };
 
   build-system = [

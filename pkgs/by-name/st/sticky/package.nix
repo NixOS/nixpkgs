@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Sticky notes app for the linux desktop";
+    description = "Sticky notes app for the Linux desktop";
     mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;

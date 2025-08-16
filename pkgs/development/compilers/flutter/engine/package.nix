@@ -165,7 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_CFLAGS_COMPILE = [
     "-I${finalAttrs.toolchain}/include"
   ]
-  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
+  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE"
+  ++ lib.optionals (lib.versionAtLeast flutterVersion "3.35") [
+    "-Wno-macro-redefined"
+    "-Wno-error=macro-redefined"
+  ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
@@ -254,6 +258,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     popd
+  ''
+  # error: 'close_range' is missing exception specification 'noexcept(true)'
+  + lib.optionalString (lib.versionAtLeast flutterVersion "3.35") ''
+    substituteInPlace src/flutter/third_party/dart/runtime/bin/process_linux.cc \
+      --replace-fail "(unsigned int first, unsigned int last, int flags)" "(unsigned int first, unsigned int last, int flags) noexcept(true)"
+  ''
+  + ''
     popd
   '';
 
@@ -336,21 +347,19 @@ stdenv.mkDerivation (finalAttrs: {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta =
-    with lib;
-    {
-      # Very broken on Darwin
-      broken = stdenv.hostPlatform.isDarwin;
-      description = "Flutter engine";
-      homepage = "https://flutter.dev";
-      maintainers = with maintainers; [ RossComputerGuy ];
-      license = licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    }
-    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta = {
+    # Very broken on Darwin
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Flutter engine";
+    homepage = "https://flutter.dev";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = lib.licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  }
+  // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

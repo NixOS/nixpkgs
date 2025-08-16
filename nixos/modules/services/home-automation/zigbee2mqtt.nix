@@ -41,7 +41,7 @@ in
       default = { };
       example = lib.literalExpression ''
         {
-          homeassistant = config.services.home-assistant.enable;
+          homeassistant.enabled = config.services.home-assistant.enable;
           permit_join = true;
           serial = {
             port = "/dev/ttyACM1";
@@ -60,7 +60,7 @@ in
 
     # preset config values
     services.zigbee2mqtt.settings = {
-      homeassistant = lib.mkDefault config.services.home-assistant.enable;
+      homeassistant.enabled = lib.mkDefault config.services.home-assistant.enable;
       permit_join = lib.mkDefault false;
       mqtt = {
         base_topic = lib.mkDefault "zigbee2mqtt";

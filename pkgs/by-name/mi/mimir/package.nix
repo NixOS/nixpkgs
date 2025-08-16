@@ -30,6 +30,8 @@ buildGoModule rec {
     "list-deduplicated-blocks"
     "listblocks"
     "mark-blocks"
+    "splitblocks"
+    "tenant-injector"
     "undelete-blocks"
   ]);
 

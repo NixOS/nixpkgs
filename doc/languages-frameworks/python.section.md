@@ -2123,12 +2123,8 @@ The following rules are desired to be respected:
   It does not need to be set explicitly unless the package requires a specific platform.
 * The file is formatted with `nixfmt-rfc-style`.
 * Commit names of Python libraries must reflect that they are Python
-  libraries (e.g. `python313Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
-* The current default version of python should be included
-  in commit messages to enable automatic builds by ofborg.
-  For example `python313Packages.numpy: 1.11 -> 1.12` should be used rather
-  than `python3Packages.numpy: 1.11 -> 1.12`.
-  Note that `pythonPackages` is an alias for `python27Packages`.
+  libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
+  See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means

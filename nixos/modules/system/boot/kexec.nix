@@ -1,7 +1,22 @@
-{ pkgs, lib, ... }:
-
 {
-  config = lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools) {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+
+let
+  cfg = config.boot.kexec;
+in
+{
+  options.boot.kexec = {
+    enable = lib.mkEnableOption "kexec" // {
+      default = lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools;
+      defaultText = lib.literalExpression ''lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools'';
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kexec-tools ];
 
     systemd.services.prepare-kexec = {

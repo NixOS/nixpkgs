@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "olrtg";
     repo = "emmet-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lojy7y7RnPZPV9x0Mb4Rjm18RHwx6ejEpCo8wmXIOMw=";
+    hash = "sha256-EY/xfrf6sGnZPbkbf9msauOoZ0h0EjLSwQC0aiS/Kco=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {

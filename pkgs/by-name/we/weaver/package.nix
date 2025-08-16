@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   testers,
-  weaver,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru.tests.version = testers.testVersion {
-    package = weaver;
+    package = finalAttrs.finalPackage;
   };
 
   meta = {

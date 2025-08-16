@@ -40,6 +40,17 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5_1;
 
+      # TODO remove when paperless-ngx is updated past 2.17.1
+      imap-tools = prev.imap-tools.overridePythonAttrs {
+        version = "1.10.0";
+        src = fetchFromGitHub {
+          owner = "ikvk";
+          repo = "imap_tools";
+          tag = "v1.10.0";
+          hash = "sha256-lan12cHkoxCKadgyFey4ShcnwFg3Gl/VqKWlYAkvF3Y=";
+        };
+      };
+
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
     };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "RDF database";
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };

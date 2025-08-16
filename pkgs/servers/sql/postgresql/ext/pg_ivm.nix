@@ -23,6 +23,14 @@ postgresqlBuildExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ ivan ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
-    broken = lib.versionOlder postgresql.version "13";
+    broken =
+      lib.versionOlder postgresql.version "13"
+      ||
+        # PostgreSQL 18 support issue upstream: https://github.com/sraoss/pg_ivm/issues/133
+        # Note: already fixed on `main` branch.
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "1.11") "Is postgresql18Packages.pg_ivm still broken?" (
+          lib.versionAtLeast postgresql.version "18"
+        );
   };
 })

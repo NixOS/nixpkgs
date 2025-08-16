@@ -27,6 +27,9 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [ papirus-icon-theme ];
 
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
+
   dontDropIconThemeCache = true;
 
   # Remove broken symbolic link(https://github.com/linuxdeepin/developer-center/issues/11245)

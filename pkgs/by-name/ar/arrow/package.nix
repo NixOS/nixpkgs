@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "mhgolkar";
     repo = "Arrow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oodW6XvesBWic0yK1Se/tycjqblE4qUSuAk+3MY3x8I=";
+    hash = "sha256-+Tlqh0Xn2xnF2AWv9u5xIWo6Mvg/uEsqqxWx70kd3+k=";
   };
 
   desktopItems = [

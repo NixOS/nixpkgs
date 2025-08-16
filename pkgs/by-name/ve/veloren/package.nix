@@ -61,7 +61,6 @@ rustPlatform.buildRustPackage {
   env = {
     # Enable unstable features, see https://gitlab.com/veloren/veloren/-/issues/264
     RUSTC_BOOTSTRAP = true;
-    RUSTC_BREAK_ON_ICE = true;
 
     # Set version info, required by veloren-common
     NIX_GIT_TAG = "v${version}";
@@ -94,8 +93,8 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     # Icons
     install -Dm644 assets/voxygen/net.veloren.veloren.desktop -t "$out/share/applications"
-    install -Dm644 assets/voxygen/net.veloren.veloren.png "$out/share/pixmaps"
-    install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml "$out/share/metainfo"
+    install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/pixmaps"
+    install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';

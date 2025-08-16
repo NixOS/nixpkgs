@@ -7,7 +7,6 @@
   steam-run,
   fetchpatch2,
   setuptools-scm,
-  setuptools,
   vdf,
   pillow,
   winetricks,
@@ -19,14 +18,14 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.12.1";
-  format = "setuptools";
+  version = "1.13.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
     tag = version;
-    hash = "sha256-xNy7quksnZ6BnZk5Rz9kwwoC4xitmfnSe5Zj6gZO8S4=";
+    hash = "sha256-6z6J31EBXf0FU3fWjjg3dX7OAOiN9Z3ONdKIweJiZBY=";
   };
 
   patches = [
@@ -46,10 +45,9 @@ buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    setuptools # implicit dependency, used to find data/icon_placeholder.png
+  dependencies = [
     vdf
     pillow
   ];

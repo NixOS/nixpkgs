@@ -17,20 +17,19 @@
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "3.1.2";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
     tag = "v${version}";
-    hash = "sha256-/atuMJVgvY4kgvrB+LuQZmJuSK4O8TJdguC7NCiRS2Y=";
+    hash = "sha256-8AM2wbPX54UaMO4MzLOV0TljLTAPOqR9gUbtT2McNjs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=61,<72" "setuptools" \
-      --replace-fail "numpy<2" "numpy"
+      --replace-fail "setuptools>=61,<72" "setuptools"
   '';
 
   build-system = [
@@ -38,10 +37,6 @@ buildPythonPackage rec {
     pip
     pkgconfig
     setuptools
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
   ];
 
   dependencies = [

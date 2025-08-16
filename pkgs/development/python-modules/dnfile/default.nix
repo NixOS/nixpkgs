@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dnfile";
-  version = "0.15.1";
+  version = "0.16.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "malwarefrank";
     repo = "dnfile";
     tag = "v${version}";
-    hash = "sha256-AdGXcdoBNWZ4f8NBP50Fp3in1FTVPFDifGhjeAfp46M=";
+    hash = "sha256-xizjWY+ByGDOI7HyzT5U4vqmPT2woU7z/3eV0KXDb8Y=";
     fetchSubmodules = true;
   };
 

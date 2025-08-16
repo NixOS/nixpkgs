@@ -12,17 +12,16 @@
   pscript,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
   uvicorn,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "timetagger";
   version = "25.06.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
@@ -31,7 +30,9 @@ buildPythonPackage rec {
     hash = "sha256-fuZj4DoqtgIcRd/u7l0GsWqmuLEgF3BW5gN5wY8FdK0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asgineer
     bcrypt
     iptools
@@ -43,22 +44,21 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     nodejs
     pytestCheckHook
     requests
+    writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "timetagger" ];
+
+  meta = {
     description = "Library to interact with TimeTagger";
-    mainProgram = "timetagger";
     homepage = "https://github.com/almarklein/timetagger";
     changelog = "https://github.com/almarklein/timetagger/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    mainProgram = "timetagger";
   };
 }

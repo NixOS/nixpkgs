@@ -14,7 +14,7 @@
   makeWrapper,
   napi-rs-cli,
   nix-update-script,
-  nodejs_20,
+  nodejs_22,
   pkg-config,
   rustc,
   rustPlatform,
@@ -34,20 +34,18 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.6.1";
+  version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-dYeq0YkQwmRve++RcMWnAuJyslaTZ4VIV4V/lMgSauQ=";
+    hash = "sha256-i1osaSK2Nnjnt2j/bS6VEMi4j5UvEEHf+RVt0901DvA=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
-    # The nixpkgs tooling trips over upstreams inconsistent lock files, so we fixed them by running npm install open@10.2.1 and cargo b
-    ./fix-lock-files.diff
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
     ./set-exe-path.patch
@@ -67,9 +65,12 @@ buildNpmPackage' rec {
     # will open releases page instead of trying to update files
     substituteInPlace apps/desktop/src/main/updater.main.ts \
       --replace-fail 'this.canUpdate =' 'this.canUpdate = false; let _dummy ='
+
+    # unneeded for desktop, and causes errors
+    rm -r apps/cli
   '';
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
   makeCacheWritable = true;
   npmFlags = [
@@ -82,7 +83,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-yzOz1X75Wz/NwjlGHL439bEek082vJBL/9imnla3SyU=";
+  npmDepsHash = "sha256-NnkT+NO3zUI71w9dSinnPeJbOlWBA4IHAxnMlYUmOT4=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -92,7 +93,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-mt7zWKgH21khAIrfpBFzb+aS2V2mV56zMqCSLzDhGfQ=";
+    hash = "sha256-nhQUUj7Hz21fnbhqrQL4eYInPNlNLVgbkWylWMRJkAk=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

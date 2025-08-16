@@ -9,20 +9,20 @@
 
 let
   models-dev-node-modules-hash = {
-    "aarch64-darwin" = "sha256-099Y+7cLtSQ0s71vxUGEochQSpCv1hbkwYbWx/eOvhY=";
-    "aarch64-linux" = "sha256-fOmp7UyszqpR04f5TW0pU96IO7euaxX9fBMtwoqIMY4=";
-    "x86_64-darwin" = "sha256-OsJDPCsEAAcXzgI/QrtfXXb2jc82pp6ldHuA4Ps8OpM=";
-    "x86_64-linux" = "sha256-Enx27ag7D0Qeb/ss/7zTQ1XSukyPzOMMK7pTYHqQUMs=";
+    "aarch64-darwin" = "sha256-VkqxZF2LkNBoIkbQGz98O+y7LgLqQ+FofV2WyMOOUEs=";
+    "aarch64-linux" = "sha256-P7Dik1bXWdipzs4orPff53bDwEXYFHSC05RV789mrTI=";
+    "x86_64-darwin" = "sha256-/VdwzrV+srDrexvXHLKtN2Od24XlXVDWu6pEk1zLtjM=";
+    "x86_64-linux" = "sha256-hMiCOMskK9kwGKaixsvodUVsOuuageiUAwxp/AvzR44=";
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-08-01";
+  version = "0-unstable-2025-08-08";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "2e3f718c40e8868c2487b7275131b2e054feb462";
-    hash = "sha256-P7Q03I68ih2eKNfPkpzkIuvKcHLsrk8yxWbFCw74Pjg=";
+    rev = "429b76581cd3b63ba5e51be8fd543d4a0ca98f6a";
+    hash = "sha256-0A+BGq6+NR78bbCtPDqeG227phLm7/tuompUkdt2+6U=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {

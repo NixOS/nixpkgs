@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8H1eJQYQn1DsVsJ0OpJAOJSWD/0iSn1SQLzg1elyEmM=";
+    hash = "sha256-KmAJEEU1aTKwleGBllSxlrsO4jVSTKnSTQQZyJ50loY=";
   };
 
   patches = [

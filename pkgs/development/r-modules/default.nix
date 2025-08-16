@@ -2200,6 +2200,17 @@ let
       LIBAPPARMOR_HOME = pkgs.libapparmor;
     });
 
+    # Append cargo path to path variable
+    # This will provide cargo in case it's not set by the user
+    rextendr = old.rextendr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace R/zzz.R --replace-fail \
+          ".onLoad <- function(...) {" \
+          '.onLoad <- function(...) {
+           Sys.setenv(PATH = paste0(Sys.getenv("PATH"), ":${lib.getBin pkgs.cargo}/bin"))'
+      '';
+    });
+
     RMySQL = old.RMySQL.overrideAttrs (attrs: {
       MYSQL_DIR = "${pkgs.libmysqlclient}";
       PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";

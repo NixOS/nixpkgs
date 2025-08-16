@@ -309,6 +309,7 @@ with lib.maintainers;
       raphaelr
       jamiemagee
       anpin
+      meenzen
     ];
     scope = "Maintainers of the .NET build tools and packages";
     shortName = "dotnet";
@@ -450,8 +451,9 @@ with lib.maintainers;
   fslabs = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      greaka
       lpostula
+      mockersf
+      NthTensor
     ];
     scope = "Group registration for packages maintained by Foresight Spatial Labs.";
     shortName = "Foresight Spatial Labs employees";
@@ -1144,7 +1146,6 @@ with lib.maintainers;
   sage = {
     members = [
       timokau
-      omasanori
       raskin
       collares
     ];
@@ -1249,6 +1250,16 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
+  };
+
+  uzinfocom = {
+    members = [
+      orzklv
+      bahrom04
+      bemeritus
+    ];
+    scope = "Maintain Uzbek Linux state & community packages and modules.";
+    shortName = "Uzinfocom Open Source";
   };
 
   windows = {

@@ -37,7 +37,7 @@ let
   whenPlatformHasEBPFJit = lib.mkIf (
     stdenv.hostPlatform.isAarch32
     || stdenv.hostPlatform.isAarch64
-    || stdenv.hostPlatform.isx86_64
+    || stdenv.hostPlatform.isx86
     || (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit)
     || (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit)
   );
@@ -111,6 +111,7 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -329,7 +330,7 @@ let
       BONDING = module;
       NET_L3_MASTER_DEV = option yes;
       NET_FOU_IP_TUNNELS = option yes;
-      IP_NF_TARGET_REDIRECT = module;
+      IP_NF_TARGET_REDIRECT = whenOlder "6.17" module;
       NETKIT = whenAtLeast "6.7" yes;
 
       PPP_MULTILINK = yes; # PPP multilink support

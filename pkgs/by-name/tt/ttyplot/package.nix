@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
     rev = version;
-    hash = "sha256-zTbcl8hM/XYdkV8V/BCQ94fuFXWOMGdQZeowKRhvYNo=";
+    hash = "sha256-IWOdl9tMGaX1C92zh/p/BWkXJxuUZbSOnazHHiD7Gzg=";
   };
 
   nativeBuildInputs = [

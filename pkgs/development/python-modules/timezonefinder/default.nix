@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "7.0.1";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
     tag = version;
-    hash = "sha256-Pp4VHCaYH4yZh25Z8ETTpPW8YHeBro+st/5MM4XDwxk=";
+    hash = "sha256-AvuNsIpJBZymlJe4HLPEmHfxN1jhqPmrEgRPb3W+B3E=";
   };
 
   build-system = [

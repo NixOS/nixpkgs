@@ -393,6 +393,13 @@ in
     ];
   };
 
+  checkmate-nvim = super.checkmate-nvim.overrideAttrs {
+    checkInputs = with self; [
+      # checkmate.snippets
+      luasnip
+    ];
+  };
+
   clang_complete = super.clang_complete.overrideAttrs {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
@@ -997,6 +1004,13 @@ in
 
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = [ self.nvim-yarp ];
+  };
+
+  demicolon-nvim = super.demicolon-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      nvim-treesitter-textobjects
+    ];
   };
 
   denops-vim = super.denops-vim.overrideAttrs {
@@ -2594,6 +2608,12 @@ in
     checkInputs = [
       self.fzf-lua
     ];
+
+    nvimSkipModules = lib.optionals stdenv.hostPlatform.isDarwin [
+      #FIXME: https://github.com/NixOS/nixpkgs/issues/431458
+      # fzf-lua throws `address already in use` on darwin
+      "notify.integrations.fzf"
+    ];
   };
 
   nvim-nu = super.nvim-nu.overrideAttrs {
@@ -2732,7 +2752,13 @@ in
 
   nvim-unception = super.nvim-unception.overrideAttrs {
     # Attempt rpc socket connection
-    nvimSkipModules = "client.client";
+    nvimSkipModules = [
+      "client.client"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "server.server"
+      "unception"
+    ];
   };
 
   nvim-vtsls = super.nvim-vtsls.overrideAttrs {
@@ -2980,6 +3006,13 @@ in
       (replaceVars ./patches/preview-nvim/hardcode-mdt-binary-path.patch {
         mdt = lib.getExe md-tui;
       })
+    ];
+  };
+
+  project-nvim = super.project-nvim.overrideAttrs {
+    checkInputs = [
+      # Optional telescope integration
+      self.telescope-nvim
     ];
   };
 

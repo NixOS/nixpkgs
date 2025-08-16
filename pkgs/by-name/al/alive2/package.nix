@@ -5,7 +5,7 @@
   re2c,
   z3,
   hiredis,
-  llvm_18,
+  llvm,
   cmake,
   ninja,
   nix-update-script,
@@ -13,13 +13,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "alive2";
-  version = "20.0";
+  version = "21.0";
 
   src = fetchFromGitHub {
     owner = "AliveToolkit";
     repo = "alive2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4QNrBRGH+rxXwb7zTRYAixxipN3ybcXuWCmO+BLU9r4=";
+    hash = "sha256-LL6/Epn6iHQJGKb8PX+U6zvXK/WTlvOIJPr6JuGRsSU=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     z3
     hiredis
-    llvm_18
+    llvm
   ];
   strictDeps = true;
 
@@ -42,7 +42,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   env = {
     ALIVE2_HOME = "$PWD";
-    LLVM2_HOME = "${llvm_18}";
+    LLVM2_HOME = "${llvm}";
     LLVM2_BUILD = "$LLVM2_HOME/build";
   };
 

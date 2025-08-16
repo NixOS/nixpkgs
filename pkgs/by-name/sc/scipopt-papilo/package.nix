@@ -12,16 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-papilo";
-  version = "2.4.2";
+  version = "2.4.3";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.2";
+  scipVersion = "9.2.3";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${version}";
-    hash = "sha256-/1AsAesUh/5YXeCU2OYopoG3SXAwAecPD88QvGkb2bY=";
+    hash = "sha256-SsRAwidqvisoDODBLRatVWFw7wGeLUavmPXSlPmD7d8=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NikitaIvanovV";
     repo = "ictree";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-77Wo6jN8VUGTXBuGL0a9kvSIixdyEQoxqqNsHq9jcWw=";
     fetchSubmodules = true;
   };

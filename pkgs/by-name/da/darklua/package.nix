@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "darklua";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "seaofvoices";
     repo = "darklua";
     rev = "v${version}";
-    hash = "sha256-D83cLJ6voLvgZ51qLoCUzBG83VFB3Y7HxuaZHpaiOn4=";
+    hash = "sha256-Ql3BHItFvfc2C3+/M7gxFJwValxNaBVVftm6+T5N4S8=";
   };
 
-  cargoHash = "sha256-DQkj4t+l6FJnJQ+g96CXypssbRzHbS6X9AOG0LGDclg=";
+  cargoHash = "sha256-eJObrfhZMfgWUAqeTgOSic4u5fG5Eopqmvojiq+b54o=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

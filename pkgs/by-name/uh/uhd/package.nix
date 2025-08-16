@@ -27,6 +27,7 @@
   enableUsrp1 ? true,
   enableUsrp2 ? true,
   enableX300 ? true,
+  enableX400 ? true,
   enableN300 ? true,
   enableN320 ? true,
   enableE300 ? true,
@@ -138,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_USRP1" enableUsrp1)
     (cmakeBool "ENABLE_USRP2" enableUsrp2)
     (cmakeBool "ENABLE_X300" enableX300)
+    (cmakeBool "ENABLE_X400" enableX400)
     (cmakeBool "ENABLE_N300" enableN300)
     (cmakeBool "ENABLE_N320" enableN320)
     (cmakeBool "ENABLE_E300" enableE300)

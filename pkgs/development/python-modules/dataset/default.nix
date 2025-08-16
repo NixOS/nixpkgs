@@ -1,9 +1,10 @@
 {
   lib,
+  setuptools,
   alembic,
   banal,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   sqlalchemy_1_4,
 }:
@@ -11,16 +12,22 @@
 buildPythonPackage rec {
   pname = "dataset";
   version = "1.6.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d9NiEY9nqMu0hI29MKs2K5+nz+vb+vQmycUAyziWmpk=";
+  src = fetchFromGitHub {
+    owner = "pudo";
+    repo = "dataset";
+    tag = version;
+    hash = "sha256-hu1Qa5r3eT+xHFrCuYyJ9ZWvyoJBsisO34zvkch65Tc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     (alembic.override { sqlalchemy = sqlalchemy_1_4; })
     banal
     # SQLAlchemy >= 2.0.0 is unsupported

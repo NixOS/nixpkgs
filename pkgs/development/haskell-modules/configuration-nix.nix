@@ -339,25 +339,23 @@ builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  nix-serve-ng =
-    (overrideCabal (old: {
+  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.nixVersions.nix_2_28; }) [
+    # nix-serve-ng isn't regularly released to Hackage
+    (overrideSrc {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "6e8d82a451fccbaa4714da8f7a3db5907bdfa96d";
-        hash = "sha256-Ht5wD/n2I/tQWNgYIdmi3UQbm1FNwp9m9JmDjZEd6ng=";
+        rev = "1d21f73a2d563ffbb924a4244c29b35e898caefe";
+        hash = "sha256-N6c3NozYqAGwmjf+k5GHOZzlcquDntrJwsZQ7O2sqtQ=";
       };
-      version = "1.0.0-unstable-2024-12-02";
-      #editedCabalFile = null;
+      version = "1.0.1-unstable-2025-05-28";
+    })
+
+    (overrideCabal (old: {
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
-      # error: output '/nix/store/hv6lzj1nlshn8q5lirzgys8f4vgym4hg-nix-serve-ng-1.0.0-unstable-2024-12-02' is not allowed to refer to the following paths:
-      #    /nix/store/qza2y18fwkq1wzi02qywf691r42r5jfy-ghc-9.6.6
-      broken = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
-    }) super.nix-serve-ng).override
-      {
-        nix = pkgs.nixVersions.nix_2_24;
-      };
+    }))
+  ];
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;

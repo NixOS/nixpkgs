@@ -2,7 +2,7 @@
 
 {
   name = "sonarr";
-  meta.maintainers = with lib.maintainers; [ etu ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   nodes.machine =
     { pkgs, ... }:

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "py-evm";
-  version = "0.10.1-beta.2";
+  version = "0.12.1-beta.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py-evm";
     tag = "v${version}";
-    hash = "sha256-2BWMen/6ZcL1/SgGP0XcrTC63+LEjZO7Ogb3anhavsE=";
+    hash = "sha256-n2F0ApdmIED0wrGuNN45lyb7cGu8pRn8mLDehT7Ru9E=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +45,7 @@ buildPythonPackage rec {
     eth-typing
     eth-utils
     lru-dict
+    pydantic
     py-ecc
     rlp
     trie

@@ -39,7 +39,7 @@ let
   ++ flutterFlags;
 
   builderArgs =
-    rec {
+    let
       universal = args // {
         inherit flutterMode flutterFlags flutterBuildFlags;
 
@@ -125,6 +125,9 @@ let
           fi
         '';
       };
+    in
+    {
+      inherit universal;
 
       linux = universal // {
         outputs = universal.outputs or [ ] ++ [ "debug" ];

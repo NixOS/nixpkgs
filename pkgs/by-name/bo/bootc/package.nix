@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bootc";
-  version = "1.5.1";
+  version = "1.6.0";
 
-  cargoHash = "sha256-+FxydTK0Dmcj+doHMSoTgiues7Rrwxv/D+BOq4siKCk=";
+  cargoHash = "sha256-KGwXQ6+/w3uHuPqSADsqJSip+SMdC104dfW7tNxGwnc=";
   doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "bootc-dev";
     repo = "bootc";
     rev = "v${version}";
-    hash = "sha256-LmhgCiVFbhrePV/A/FaNjD7VytUZqSm9VDU+1z0O98U=";
+    hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
 
   nativeBuildInputs = [ pkg-config ];

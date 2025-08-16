@@ -44,6 +44,7 @@ buildNpmPackage {
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
     npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js

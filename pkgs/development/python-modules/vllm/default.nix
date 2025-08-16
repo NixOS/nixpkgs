@@ -476,5 +476,8 @@ buildPythonPackage rec {
       # find_isa
       "x86_64-darwin"
     ];
+    # ValueError: 'aimv2' is already used by a Transformers config, pick another name.
+    # Version bump ongoing in https://github.com/NixOS/nixpkgs/pull/429117
+    broken = true;
   };
 }

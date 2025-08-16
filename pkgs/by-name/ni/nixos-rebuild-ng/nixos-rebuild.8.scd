@@ -251,10 +251,10 @@ It must be one of the following:
 
 *--use-substitutes*
 	When set, nixos-rebuild will add *--use-substitutes* to each invocation
-	of _nix-copy-closure_/_nix copy_. This will only affect the behavior of
-	nixos-rebuild if *--target-host* or *--build-host* is also set. This is
-	useful when the target-host connection to cache.nixos.org is faster than
-	the connection between hosts.
+	of _nix copy_. This will only affect the behavior of nixos-rebuild if
+	*--target-host* or *--build-host* is also set. This is useful when the
+	target-host connection to cache.nixos.org is faster than the connection
+	between hosts.
 
 *--sudo*
 	When set, *nixos-rebuild* prefixes activation commands with sudo.

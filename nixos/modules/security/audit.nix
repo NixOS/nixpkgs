@@ -53,7 +53,9 @@ in
 
       backlogLimit = lib.mkOption {
         type = lib.types.int;
-        default = 64; # Apparently the kernel default
+        # Significantly increase from the kernel default of 64 because a
+        # normal systems generates way more logs.
+        default = 1024;
         description = ''
           The maximum number of outstanding audit buffers allowed; exceeding this is
           considered a failure and handled in a manner specified by failureMode.
@@ -81,6 +83,18 @@ in
   };
 
   config = lib.mkIf (cfg.enable == "lock" || cfg.enable) {
+    boot.kernelParams = [
+      # A lot of audit events happen before the systemd service starts. Thus
+      # enable it via the kernel commandline to have the audit subsystem ready
+      # as soon as the kernel starts.
+      "audit=1"
+      # Also set the backlog limit because the kernel default is too small to
+      # capture all of them before the service starts.
+      "audit_backlog_limit=${toString cfg.backlogLimit}"
+    ];
+
+    environment.systemPackages = [ pkgs.audit ];
+
     systemd.services.audit-rules = {
       description = "Load Audit Rules";
       wantedBy = [ "sysinit.target" ];

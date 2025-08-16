@@ -262,6 +262,8 @@ let
 
         coin = callPackage ../development/ocaml-modules/coin { };
 
+        colombe = callPackage ../development/ocaml-modules/colombe { };
+
         color = callPackage ../development/ocaml-modules/color { };
 
         colors = callPackage ../development/ocaml-modules/colors { };
@@ -1042,6 +1044,8 @@ let
 
         letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
 
+        letters = callPackage ../development/ocaml-modules/letters { };
+
         libc = callPackage ../development/ocaml-modules/libc { };
 
         lilv = callPackage ../development/ocaml-modules/lilv {
@@ -1065,6 +1069,8 @@ let
         lo = callPackage ../development/ocaml-modules/lo { };
 
         logs = callPackage ../development/ocaml-modules/logs { };
+
+        logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
 
         lru = callPackage ../development/ocaml-modules/lru { };
 
@@ -1347,6 +1353,8 @@ let
 
         nottui-pretty = callPackage ../development/ocaml-modules/lwd/nottui-pretty.nix { };
 
+        nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
+
         notty = callPackage ../development/ocaml-modules/notty { };
 
         npy = callPackage ../development/ocaml-modules/npy {
@@ -1513,7 +1521,15 @@ let
 
         ocsipersist-pgsql = callPackage ../development/ocaml-modules/ocsipersist/pgsql.nix { };
 
+        ocsipersist-pgsql-config =
+          callPackage ../development/ocaml-modules/ocsipersist/pgsql-config.nix
+            { };
+
         ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
+
+        ocsipersist-sqlite-config =
+          callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix
+            { };
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
@@ -1882,6 +1898,8 @@ let
         semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
         semver = callPackage ../development/ocaml-modules/semver { };
+
+        sendmail = callPackage ../development/ocaml-modules/colombe/sendmail.nix { };
 
         seq = callPackage ../development/ocaml-modules/seq { };
 

@@ -57,6 +57,7 @@ buildDotnetModule rec {
 
     # Build translations
     dotnet build Pinta \
+      --no-restore \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
       -target:CompileTranslations,PublishTranslations \

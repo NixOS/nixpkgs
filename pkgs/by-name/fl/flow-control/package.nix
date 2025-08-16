@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "neurocyte";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I7wty82zyuwZjzhfUBPd+7sx20cmRpQt1V6eCK7o0oQ=";
+    hash = "sha256-jt7KJEg5300IuO7m7FiC8zejmymqMqdT7FtoVhTR05M=";
   };
   postPatch = ''
     ln -s ${

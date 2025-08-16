@@ -16,6 +16,9 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-Latdxph1Ura8yKEokEjalJ+/GY+pAKOT3GXjuLprj6c=";
   };
 
+  # https://github.com/citusdata/postgresql-hll/issues/166#issuecomment-3165489050
+  NIX_CFLAGS_COMPILE = "-Wno-error=missing-variable-declarations";
+
   meta = {
     description = "HyperLogLog for PostgreSQL";
     homepage = "https://github.com/citusdata/postgresql-hll";

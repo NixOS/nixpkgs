@@ -3,10 +3,10 @@
   makeDesktopItem,
   copyDesktopItems,
   lib,
-  flutter,
+  flutter332,
   quickemu,
 }:
-flutter.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "quickgui";
   version = "1.2.10";
   src = fetchFromGitHub {

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     tag = "v${version}";
-    hash = "sha256-XCv2oOkGq8c2gTo+8UcZbuBYXyhhQstWLyddk3db38s=";
+    hash = "sha256-oKa/LT7tTBLp47t6CQFCEmzBu8b6NQzFCSfi6Ii3NTI=";
   };
 
   build-system = [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
-    changelog = "https://github.com/hardbyte/python-can/releases/tag/v${version}";
+    changelog = "https://github.com/hardbyte/python-can/releases/tag/${src.tag}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
       fab

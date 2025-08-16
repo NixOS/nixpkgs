@@ -113,6 +113,7 @@ let
     toIntBase10
     toShellVars
     types
+    uniqueStrings
     updateManyAttrsByPath
     versions
     xor
@@ -145,6 +146,11 @@ let
       inherit expected;
     };
 
+  dummyDerivation = derivation {
+    name = "name";
+    builder = "builder";
+    system = "system";
+  };
 in
 
 runTests {
@@ -757,18 +763,8 @@ runTests {
   };
 
   testSplitStringsDerivation = {
-    expr = take 3 (
-      strings.splitString "/" (derivation {
-        name = "name";
-        builder = "builder";
-        system = "system";
-      })
-    );
-    expected = [
-      ""
-      "nix"
-      "store"
-    ];
+    expr = lib.dropEnd 1 (strings.splitString "/" dummyDerivation);
+    expected = strings.splitString "/" builtins.storeDir;
   };
 
   testSplitVersionSingle = {
@@ -816,7 +812,7 @@ runTests {
       in
       {
         storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
+        storePathDerivation = isStorePath dummyDerivation;
         storePathAppendix = isStorePath "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
         asPath = isStorePath (/. + goodPath);
@@ -901,7 +897,7 @@ runTests {
   };
 
   testHasInfixDerivation = {
-    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expr = hasInfix "name" dummyDerivation;
     expected = true;
   };
 
@@ -1932,6 +1928,69 @@ runTests {
       4
     ];
     expected = false;
+  };
+
+  testUniqueStrings_empty = {
+    expr = uniqueStrings [ ];
+    expected = [ ];
+  };
+  testUniqueStrings_singles = {
+    expr = uniqueStrings [
+      "all"
+      "unique"
+      "already"
+    ];
+    expected = [
+      "all"
+      "already"
+      "unique"
+    ];
+  };
+  testUniqueStrings_allDuplicates = {
+    expr = uniqueStrings [
+      "dup"
+      "dup"
+      "dup"
+    ];
+    expected = [ "dup" ];
+  };
+  testUniqueStrings_some_duplicates = {
+    expr = uniqueStrings [
+      "foo"
+      "foo"
+      "bar"
+      "bar"
+      "baz"
+    ];
+    expected = [
+      "bar"
+      "baz"
+      "foo"
+    ];
+  };
+  testUniqueStrings_unicode = {
+    expr = uniqueStrings [
+      "café"
+      "@"
+      "#"
+      "@"
+      "#"
+      "$"
+      "😎"
+      "😎"
+      "🙃"
+      ""
+      ""
+    ];
+    expected = [
+      ""
+      "#"
+      "$"
+      "@"
+      "café"
+      "😎"
+      "🙃"
+    ];
   };
 
   # ATTRSETS

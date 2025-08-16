@@ -11,7 +11,7 @@
   log4cpp,
   openldap,
   sqlite,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,9 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hD1nTyv/t7MQdopqivfSE0o4Qk1ymG8zQVg56lY+t9o=";
   };
 
-  # src/common/logger.h:254:63: error: 'uint8_t' does not name a type
+  patches = [
+    # https://gitlab.com/arpa2/steamworks/-/merge_requests/13
+    ./1001-Add-missing-logger-methods.patch
+  ];
+
   postPatch = ''
-    sed -i "38i #include <cstdint>" src/common/logger.h
+    # src/common/logger.h:254:63: error: 'uint8_t' does not name a type
+    # https://gitlab.com/arpa2/steamworks/-/merge_requests/11
+    sed -i "40i #include <cstdint>" src/common/logger.h
+
+    # ld: cannot find -lLog4cpp: No such file or directory
+    # https://gitlab.com/arpa2/steamworks/-/merge_requests/12
+    substituteInPlace src/common/CMakeLists.txt \
+      --replace-fail 'Catch2::Catch2 Log4cpp' 'Catch2::Catch2 Log4cpp::Log4cpp'
   '';
 
   strictDeps = true;
@@ -47,11 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ];
 
-  # Currently doesn't build in `Release` since a macro is messing with some code
-  # when building in `Release`.
-  cmakeBuildType = "Debug";
+  checkInputs = [
+    catch2
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Configuration information distributed over LDAP in near realtime";

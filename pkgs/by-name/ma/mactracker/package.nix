@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    description = "Mactracker provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
+    description = "Provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
     homepage = "https://mactracker.ca";
     changelog = "https://mactracker.ca/releasenotes-mac.html";
     license = lib.licenses.unfree;

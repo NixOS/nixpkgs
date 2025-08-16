@@ -126,6 +126,8 @@ in
   preCheck = ''
     export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen
+  ''
+  + lib.optionalString (hasFeature "gr-qtgui") ''
     export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
   '';
 

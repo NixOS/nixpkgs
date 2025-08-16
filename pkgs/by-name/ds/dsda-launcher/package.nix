@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/Pedro-Beirao/dsda-launcher";
-    description = "This is a launcher GUI for the dsda-doom source port";
+    description = "Launcher GUI for the dsda-doom source port";
     mainProgram = "dsda-launcher";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

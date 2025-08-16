@@ -37,13 +37,13 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = builtins.throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.8.0";
+  version = "1.8.1";
 
   libmathdx = effectiveStdenv.mkDerivation (finalAttrs: {
     # NOTE: The version used should match the version Warp requires:
     # https://github.com/NVIDIA/warp/blob/${version}/deps/libmathdx-deps.packman.xml
     pname = "libmathdx";
-    version = "0.2.1";
+    version = "0.2.2";
 
     outputs = [
       "out"
@@ -62,8 +62,8 @@ let
 
         # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
         hashes = {
-          aarch64-linux = "sha256-smB13xev2TG1xUx4+06KRgYEnPMczpjBOOX7uC1APbE=";
-          x86_64-linux = "sha256-+3TbLuL5Y2flLRicQgPVLs8KZQBqNYJYJ8P3etgX7g0=";
+          aarch64-linux = "sha256-uadBl2HTWIzpYyUxHqnLZtqq42v13KYXSOJXz0Wgtrk=";
+          x86_64-linux = "sha256-YU26l3q+HH1fyBD96oMrl+e96gmiC/krzJv6VJss3mY=";
         };
       in
       lib.mapNullable (
@@ -139,7 +139,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-zCRB92acxOiIFGjfRh2Cr1qq8pbhm+Rd011quMP/D88=";
+    hash = "sha256-cSG8uncJMl4rbQ48L8XJY1Illr6usVX8no0jDhECwbo=";
   };
 
   patches =

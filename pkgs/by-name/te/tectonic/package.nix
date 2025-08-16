@@ -53,7 +53,7 @@ symlinkJoin {
   '';
 
   meta = tectonic-unwrapped.meta // {
-    description = "Tectonic TeX/LaTeX engine, wrapped with a compatible biber";
+    description = "TeX/LaTeX engine, wrapped with a compatible biber";
     maintainers = with lib.maintainers; [
       doronbehar
       bryango

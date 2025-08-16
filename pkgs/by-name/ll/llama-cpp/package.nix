@@ -72,19 +72,21 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "5985";
+  version = "6134";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-OoV/p4Es/X/xQW7PpDLq5YLVYjieIE5+1itvtJECH54=";
+    hash = "sha256-J/Z6xrCfdSkf504AGiOmgRqgrOUXXTpqq5BpXwgOI4g=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
+  patches = lib.optionals vulkanSupport [ ./disable_bfloat16.patch ];
 
   postPatch = ''
     # Workaround for local-ai package which overrides this package to an older llama-cpp
@@ -97,10 +99,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       substituteInPlace ./ggml/src/ggml-metal/ggml-metal.m \
         --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
     fi
-
-    substituteInPlace ./scripts/build-info.sh \
-      --replace-fail 'build_number="0"' 'build_number="${finalAttrs.version}"' \
-      --replace-fail 'build_commit="unknown"' "build_commit=\"$(cat COMMIT)\""
   '';
 
   nativeBuildInputs = [
@@ -122,10 +120,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ curl ];
 
+  preConfigure = ''
+    prependToVar cmakeFlags "-DLLAMA_BUILD_COMMIT:STRING=$(cat COMMIT)"
+  '';
+
   cmakeFlags = [
     # -march=native is non-deterministic; override with platform-specific flags if needed
     (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
     (cmakeBool "LLAMA_BUILD_SERVER" true)
+    (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
     (cmakeBool "LLAMA_CURL" true)
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "GGML_BLAS" blasSupport)
@@ -135,15 +139,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_METAL" metalSupport)
     (cmakeBool "GGML_RPC" rpcSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
+    (cmakeFeature "LLAMA_BUILD_NUMBER" finalAttrs.version)
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
-  ++ optionals rocmSupport ([
+  ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
     # TODO: this should become `clr.gpuTargets` in the future.
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
-  ])
+  ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
@@ -151,7 +156,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals rpcSupport [
     # This is done so we can move rpc-server out of bin because llama.cpp doesn't
     # install rpc-server in their install target.
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
@@ -164,6 +169,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cp $src/include/llama.h $out/include/
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+
+  # the tests are failing as of 2025-08
+  doCheck = false;
 
   passthru.updateScript = nix-update-script {
     attrPath = "llama-cpp";
@@ -186,6 +194,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
+    broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })

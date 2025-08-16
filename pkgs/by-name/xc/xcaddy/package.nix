@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "xcaddy";
-  version = "0.4.4";
+  version = "0.4.5";
 
   subPackages = [ "cmd/xcaddy" ];
 
@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = "xcaddy";
     rev = "v${version}";
-    hash = "sha256-vpaweUU++3ZHj7KT5WNUCw3X93sQBTgjKlB8rJwrHlM=";
+    hash = "sha256-2cP0bkG16bRdLycLx7gpnQuALgO8hDowp/4cRBO4KuM=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ buildGoModule rec {
     "-X github.com/caddyserver/xcaddy/cmd.customVersion=v${version}"
   ];
 
-  vendorHash = "sha256-vU/ptOzBjMpRG2Do6ODC+blcCNl15D9mSsEV8QgNN3Y=";
+  vendorHash = "sha256-2OZoSOUCkt94uG+54Dx/1di/RZxZ2UOsmTC6YDA5cKo=";
 
   meta = with lib; {
     homepage = "https://github.com/caddyserver/xcaddy";

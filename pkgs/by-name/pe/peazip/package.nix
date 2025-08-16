@@ -12,19 +12,27 @@
   upx,
   zpaq,
   zstd,
+  writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation rec {
+let
+  # peazip looks for the "7z", not "7zz"
+  _7z = runCommand "7z" { } ''
+    mkdir -p $out/bin
+    ln -s ${_7zz}/bin/7zz $out/bin/7z
+  '';
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
-  version = "10.5.0";
+  version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
-    rev = version;
-    hash = "sha256-tEx0ZSvv+byn8OPSFprFJwMFxuEQzyrkvk4FbvGtH2A=";
+    rev = finalAttrs.version;
+    hash = "sha256-oRgsT2j5P6jbaBAgLMGArJ+pCVSgC/CJcHM45mRw6Bs=";
   };
-  sourceRoot = "${src.name}/peazip-sources";
+  sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
   postPatch = ''
     # set it to use compression programs from $PATH
@@ -35,6 +43,8 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
     lazarus
     fpc
+    # lazarus tries to create files in $HOME/.lazarus
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -45,11 +55,9 @@ stdenv.mkDerivation rec {
     libqtpas
   ]);
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   buildPhase = ''
-    # lazarus tries to create files in $HOME/.lazarus
-    export HOME=$(mktemp -d)
     pushd dev
     lazbuild --lazarusdir=${lazarus}/share/lazarus --add-package metadarkstyle/metadarkstyle.lpk
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
@@ -57,29 +65,26 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  # peazip looks for the "7z", not "7zz"
-  _7z = runCommand "7z" { } ''
-    mkdir -p $out/bin
-    ln -s ${_7zz}/bin/7zz $out/bin/7z
-  '';
-
   installPhase = ''
     runHook preInstall
 
     install -D dev/{pea,peazip} -t $out/lib/peazip
-    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
-      lib.makeBinPath [
-        _7z
-        brotli
-        upx
-        zpaq
-        zstd
-      ]
-    }
     mkdir -p $out/bin
-    ln -s $out/lib/peazip/{pea,peazip} $out/bin/
+    makeWrapper $out/lib/peazip/peazip $out/bin/peazip \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          _7z
+          brotli
+          upx
+          zpaq
+          zstd
+        ]
+      } \
+      ''${qtWrapperArgs[@]} # putting this here as to not have double wrapping
+    makeWrapper $out/lib/peazip/pea $out/bin/pea \
+      ''${qtWrapperArgs[@]} # putting this here as to not have double wrapping
 
-    mkdir -p $out/share/peazip $out/lib/peazip/res/share
+    mkdir -p $out/share/peazip $out/lib/peazip/res
     ln -s $out/share/peazip $out/lib/peazip/res/share
     cp -r res/share/{icons,lang,themes,presets} $out/share/peazip/
     # Install desktop entries
@@ -101,19 +106,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Cross-platform file and archive manager";
+  dontWrapQtApps = true;
+
+  meta = {
+    description = "File and archive manager";
     longDescription = ''
-      Free Zip / Unzip software and Rar file extractor. Cross-platform file and archive manager.
+      Free Zip / Unzip software and Rar file extractor. File and archive manager.
 
       Features volume spanning, compression, authenticated encryption.
 
       Supports 7Z, 7-Zip sfx, ACE, ARJ, Brotli, BZ2, CAB, CHM, CPIO, DEB, GZ, ISO, JAR, LHA/LZH, NSIS, OOo, PEA, RAR, RPM, split, TAR, Z, ZIP, ZIPX, Zstandard.
     '';
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     homepage = "https://peazip.github.io";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ annaaurora ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "peazip";
   };
-}
+})

@@ -56,6 +56,8 @@ buildPythonPackage rec {
     # Fails with small numerical errors on GDAL 3.11
     "test_rasterio_vrt_gcps"
     "test_reproject__gcps"
+    # https://github.com/corteva/rioxarray/issues/862
+    "test_merge_datasets__mask_and_scale"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # numerical errors

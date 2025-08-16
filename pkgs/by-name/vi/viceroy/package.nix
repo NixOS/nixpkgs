@@ -6,23 +6,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "viceroy";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";
     rev = "v${version}";
-    hash = "sha256-DeViAqL+7mta/wH7rLyltOCtHCTFXZczn2vAL1k+R2Y=";
+    hash = "sha256-DHA0nfTDq40qoNnD9ZgLtouKEzi9jFUCowMCoBdnqNU=";
   };
 
-  cargoHash = "sha256-LBJD1w8/jLw5xYdHxR+EM2Cb4eVFpRw+M/K7K4Z0OUw=";
+  cargoHash = "sha256-f4F6MNJaLJiwY7ZkqrbrDXGufrb/aO3WgMmE7gRGvdQ=";
 
   cargoTestFlags = [
     "--package viceroy-lib"
   ];
 
   meta = with lib; {
-    description = "Viceroy provides local testing for developers working with Compute@Edge";
+    description = "Provides local testing for developers working with Compute@Edge";
     mainProgram = "viceroy";
     homepage = "https://github.com/fastly/Viceroy";
     license = licenses.asl20;

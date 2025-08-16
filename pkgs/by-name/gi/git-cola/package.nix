@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.13.0";
+  version = "4.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-FoCU10EKeNltYh7AEOR+98ryVA6rFVfCDMg5QUSpF0w=";
+    hash = "sha256-l/W9BtBFvYrLA971XibZIKnP0abx1fQZbfseirTT7Sg=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];

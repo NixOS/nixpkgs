@@ -15,6 +15,10 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  eaf-browser = callPackage ./manual-packages/eaf-browser {
+    inherit (pkgs) aria2;
+  };
+
   elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
 
   emacs-application-framework = callPackage ./manual-packages/emacs-application-framework {

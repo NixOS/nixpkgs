@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytouchlinesl";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";

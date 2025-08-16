@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "artichoke";
-  version = "0-unstable-2025-07-28";
+  version = "0-unstable-2025-08-03";
 
   src = fetchFromGitHub {
     owner = "artichoke";
     repo = "artichoke";
-    rev = "148d3bf4bc361fa3214c02219e50e22e4cf2a3cf";
-    hash = "sha256-CKCRFSg8ROMhKwiIDU9iAYY/HfGtYlW1zrtn7thxIzY=";
+    rev = "ff0b17820a5f64ea9e8b744cef4a9111df3ed252";
+    hash = "sha256-0SUU/1gp7A0gjluc8ZyF9C4ZxAgNsM6jwuT3E8GxFQY=";
   };
 
-  cargoHash = "sha256-a43awTdhOlu+KO3B6XQ7Vdv4NbZ3iffq4rpmBBgUcZ8=";
+  cargoHash = "sha256-JD+qt0pu5wxIuLa3Bd9eadQFE7dyKzqxsAKPebG7+Zg=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

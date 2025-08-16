@@ -178,9 +178,12 @@ lib.makeOverridable (
         outputs = [
           "out"
           "dev"
+          "modules"
         ];
       })
       // {
+        __structuredAttrs = true;
+
         passthru = rec {
           inherit
             version
@@ -306,17 +309,17 @@ lib.makeOverridable (
 
           # reads the existing .config file and prompts the user for options in
           # the current kernel source that are not found in the file.
-          make $makeFlags "''${makeFlagsArray[@]}" oldconfig
+          make "''${makeFlags[@]}" oldconfig
           runHook postConfigure
 
-          make $makeFlags "''${makeFlagsArray[@]}" prepare
+          make "''${makeFlags[@]}" prepare
           actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
           if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
             echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
             exit 1
           fi
 
-          buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
+          buildFlags+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
 
           cd $buildRoot
         '';
@@ -334,12 +337,12 @@ lib.makeOverridable (
         ++ extraMakeFlags;
 
         installFlags = [
-          "INSTALL_PATH=$(out)"
+          "INSTALL_PATH=${placeholder "out"}"
         ]
-        ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+        ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "modules"}")
         ++ optionals buildDTBs [
           "dtbs_install"
-          "INSTALL_DTBS_PATH=$(out)/dtbs"
+          "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
         ];
 
         preInstall =
@@ -396,7 +399,7 @@ lib.makeOverridable (
             '';
           in
           ''
-            installFlagsArray+=("-j$NIX_BUILD_CORES")
+            installFlags+=("-j$NIX_BUILD_CORES")
             export HOME=${installkernel}
           '';
 
@@ -433,12 +436,10 @@ lib.makeOverridable (
           mkdir -p $dev
           cp vmlinux $dev/
           if [ -z "''${dontStrip-}" ]; then
-            installFlagsArray+=("INSTALL_MOD_STRIP=1")
+            installFlags+=("INSTALL_MOD_STRIP=1")
           fi
-          make modules_install $makeFlags "''${makeFlagsArray[@]}" \
-            $installFlags "''${installFlagsArray[@]}"
-          unlink $out/lib/modules/${modDirVersion}/build
-          rm -f $out/lib/modules/${modDirVersion}/source
+          make modules_install "''${makeFlags[@]}" "''${installFlags[@]}"
+          unlink $modules/lib/modules/${modDirVersion}/build
 
           mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
@@ -450,7 +451,7 @@ lib.makeOverridable (
           cd $dev/lib/modules/${modDirVersion}/source
 
           cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
-          make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
+          make modules_prepare "''${makeFlags[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
           # For reproducibility, removes accidental leftovers from a `cc1` call
           # from a `try-run` call from the Makefile
@@ -566,6 +567,20 @@ lib.makeOverridable (
 
         makeFlags = [
           "O=$(buildRoot)"
+
+          # We have a `modules` variable in the environment for our
+          # split output, but the kernel Makefiles also define their
+          # own `modules` variable. Their definition wins, but Make
+          # remembers that the variable was originally from the
+          # environment and exports it to all the build recipes. This
+          # breaks the build with an “Argument list too long” error due
+          # to passing the huge list of every module object file in the
+          # environment of every process invoked by every build recipe.
+          #
+          # We use `--eval` here to undefine the inherited environment
+          # variable before any Makefiles are read, ensuring that the
+          # kernel’s definition creates a new, unexported variable.
+          "--eval=undefine modules"
         ]
         ++ commonMakeFlags;
 

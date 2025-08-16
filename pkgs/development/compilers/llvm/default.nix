@@ -32,11 +32,11 @@ let
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
     "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
     "20.1.6".officialRelease.sha256 = "sha256-PfCzECiCM+k0hHqEUSr1TSpnII5nqIxg+Z8ICjmMj0Y=";
-    "21.1.0-rc2".officialRelease.sha256 = "sha256-7qE5MAYuB+gr5NmQm+7jJWCarIjoDUtyd8SDiJwvITw=";
+    "21.1.0-rc3".officialRelease.sha256 = "sha256-quZuqDIm8OrkDJqu7vJKUP8MF1xCuQNFwW9SnKMFoS8=";
     "22.0.0-git".gitRelease = {
-      rev = "90de4a4ac96ef314e3af9c43c516d5aaf105777a";
-      rev-version = "22.0.0-unstable-2025-07-28";
-      sha256 = "sha256-zTxqMegoqoXHFLXZijWsTXny5y2WLdXTwMtiPnY9KLs=";
+      rev = "144cd87088dc82263b25e816c77fc03f29fd1288";
+      rev-version = "22.0.0-unstable-2025-08-03";
+      sha256 = "sha256-DtY1OcpquPQ+dXTyuVggrK5gO7H5xgoZajf/ZONCQ7o=";
     };
   }
   // llvmVersions;
@@ -94,4 +94,4 @@ let
 
   llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
 in
-llvmPackages // { inherit mkPackage; }
+llvmPackages // { inherit mkPackage versions; }

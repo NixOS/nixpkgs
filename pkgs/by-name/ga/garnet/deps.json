@@ -31,8 +31,8 @@
   },
   {
     "pname": "KeraLua",
-    "version": "1.4.4",
-    "hash": "sha256-MF7DBdc8xNiEcauNer7YFRgjbUU4ANmc2uQKrzVDRDs="
+    "version": "1.4.6",
+    "hash": "sha256-7lXJhhQlEuRoaF18XiZYJDyhA8RIWpYWNB9kr4aARQc="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",

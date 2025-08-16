@@ -235,7 +235,7 @@ in
 
       # required for muc_breakout_rooms
       package = lib.mkDefault (
-        config.services.prosody.package.override {
+        pkgs.prosody.override {
           withExtraLuaPackages = p: with p; [ cjson ];
         }
       );

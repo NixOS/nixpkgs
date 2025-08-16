@@ -27,10 +27,10 @@ php.buildComposerProject2 (finalAttrs: {
     };
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts xmlstarlet
+      #!nix-shell -i bash -p nix-update xmlstarlet
       set -eu -o pipefail
       version=$(curl -k --silent --globoff "https://updates.drupal.org/release-history/drupal/current" | xmlstarlet sel -t -v "project/releases/release[1]/tag")
-      update-source-version drupal $version --file=./pkgs/by-name/dr/drupal/package.nix
+      nix-update drupal --version $version
     '';
   };
 

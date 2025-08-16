@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://typesense.org";
-    description = "Typesense is a fast, typo-tolerant search engine for building delightful search experiences";
+    description = "Fast, typo-tolerant search engine for building delightful search experiences";
     mainProgram = "typesense-server";
     license = licenses.gpl3;
     # There has been an attempt at building this from source, which were deemed

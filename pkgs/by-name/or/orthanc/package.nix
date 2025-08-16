@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Orthanc is a lightweight, RESTful DICOM server for healthcare and medical research";
+    description = "Lightweight, RESTful DICOM server for healthcare and medical research";
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Orthanc";

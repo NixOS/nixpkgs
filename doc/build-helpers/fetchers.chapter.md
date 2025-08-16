@@ -829,6 +829,10 @@ Additionally, the following optional arguments can be given:
 
   See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
 
+*`rootDir`* (String)
+
+: When not empty, copy only contents of the subdirectory of the repository to the result. Automatically sets `sparseCheckout` and `nonConeMode` to avoid checking out any extra pieces. Incompatible with `leaveDotGit`.
+
 Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
 Future parameters additions might also happen without immediately being documented here.
 

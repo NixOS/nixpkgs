@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "habitat";
-  version = "1.6.1243";
+  version = "1.6.1244";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
     rev = version;
-    hash = "sha256-+5If4veDOGTTIhYxhAiq1cC4Sy6vAmjX5hrmUmpGlFU=";
+    hash = "sha256-BNrBhDNR8sIafC9mgfL+1Q8c6BbjpFgLBElusydY/2o=";
   };
 
-  cargoHash = "sha256-AI7Ij9F/K/chjxQUC0SnBsQQPLlVS6esa5LJAGRS9YI=";
+  cargoHash = "sha256-U4m3KzlU7XambNdwsdFuI5QPv2Fkm7Dwe264SRdHLak=";
 
   nativeBuildInputs = [
     pkg-config

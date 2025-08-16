@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-motd";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "rust-motd";
     repo = "rust-motd";
     rev = "v${version}";
-    hash = "sha256-NgNMTsm9C+0Lt6r1zYA486oSQpGIMxLsPozdDw7lILs=";
+    hash = "sha256-06iWk0VobdHP94eNaEyQnIBx5YkoW0/IQQtUFWTkEe0=";
   };
 
-  cargoHash = "sha256-pm/N00H840WzuP/BcvyqgZ/9zbNsHKm/UZ0O88giasY=";
+  cargoHash = "sha256-f+441tEy1+AWXsz2Byrg0+Tz8jHcC1SD9WNZlkgWGZ4=";
 
   nativeBuildInputs = [
     pkg-config

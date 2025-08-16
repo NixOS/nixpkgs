@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.274.2";
+  version = "0.277.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     tag = "v${version}";
-    hash = "sha256-ZktRFFgPvIfbsAY3C6g3s3zqX3wES+QShu811m183cA=";
+    hash = "sha256-wFOhxYEMN2mEzmCjCJhDcDM3b6CmW1kKheEjpVqUhLA=";
   };
 
   makeFlags = [ "FLOW_RELEASE=1" ];

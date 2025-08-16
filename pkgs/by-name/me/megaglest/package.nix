@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "MegaGlest";
     repo = "megaglest-source";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };

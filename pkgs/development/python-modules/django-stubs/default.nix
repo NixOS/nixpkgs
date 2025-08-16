@@ -1,38 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  django,
   django-stubs-ext,
-  fetchPypi,
+  django,
+  fetchFromGitHub,
+  hatchling,
   mypy,
+  oracledb,
   pytestCheckHook,
+  pytest-mypy-plugins,
   pythonOlder,
-  setuptools,
+  redis,
   tomli,
   types-pytz,
   types-pyyaml,
+  types-redis,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "5.2.0";
+  version = "5.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    pname = "django_stubs";
-    inherit version;
-    hash = "sha256-B+JcLTy/9b5UAif/N3GcyJ8hXfqqpesDinWwG7+7JyI=";
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "django-stubs";
+    tag = version;
+    hash = "sha256-kF5g0/rkMQxYTfSrTqzZ6BuqGlE42K/AVhc1/ARc+/c=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<79.0.0" setuptools
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     django
@@ -45,14 +45,30 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];
+    oracle = [ oracledb ];
+    redis = [
+      redis
+      types-redis
+    ];
   };
 
   nativeCheckInputs = [
+    pytest-mypy-plugins
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "django-stubs" ];
+
+  disabledTests = [
+    # AttributeError: module 'django.contrib.auth.forms' has no attribute
+    "test_find_classes_inheriting_from_generic"
+  ];
+
+  disabledTestPaths = [
+    # Skip type checking
+    "tests/typecheck/"
+  ];
 
   meta = with lib; {
     description = "PEP-484 stubs for Django";

@@ -47,6 +47,6 @@ callPackage ../generic.nix rec {
   meta = {
     homepage = "https://github.com/TrashboxBobylev/Summoning-Pixel-Dungeon";
     downloadPage = "https://github.com/TrashboxBobylev/Summoning-Pixel-Dungeon/releases";
-    description = "A fork of the Shattered Pixel Dungeon roguelike with added summoning mechanics";
+    description = "Fork of the Shattered Pixel Dungeon roguelike with added summoning mechanics";
   };
 }

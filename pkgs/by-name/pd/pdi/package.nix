@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "PDI supports loose coupling of simulation codes with data handling libraries";
+    description = "Library that aims todecouple high-performance simulation codes from I/O concerns";
     homepage = "https://pdi.dev/master/";
     changelog = "https://github.com/pdidev/pdi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;

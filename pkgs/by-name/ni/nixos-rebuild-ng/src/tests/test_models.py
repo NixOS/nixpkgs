@@ -71,6 +71,14 @@ def test_flake_to_attr() -> None:
     )
 
 
+def test_flake__str__(monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+    assert str(m.Flake("github:nixos/nixpkgs", "attr")) == "github:nixos/nixpkgs#attr"
+    assert str(m.Flake(Path("/etc/nixos"), "attr")) == "/etc/nixos#attr"
+    with monkeypatch.context() as patch_context:
+        patch_context.chdir(tmpdir)
+        assert str(m.Flake(Path("."), "attr")) == f"{tmpdir}#attr"
+
+
 @patch("platform.node", autospec=True)
 def test_flake_from_arg(
     mock_node: Mock, monkeypatch: MonkeyPatch, tmpdir: Path

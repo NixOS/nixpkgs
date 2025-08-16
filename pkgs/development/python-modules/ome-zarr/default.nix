@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.11.1";
+  version = "0.12rc1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     tag = "v${version}";
-    hash = "sha256-3RXkz+UQvLixfYYhm5y/5vu9r0ga6s3xKx1azbmKFgg=";
+    hash = "sha256-uwAcICrFHZYYULfacWII5C3Y+Rs2Bf8ZLQEijfkldn8=";
   };
 
   build-system = [
@@ -78,6 +78,9 @@ buildPythonPackage rec {
     "tests/test_starting_points.py::TestStartingPoints::test_label"
     "tests/test_starting_points.py::TestStartingPoints::test_labels"
     "tests/test_starting_points.py::TestStartingPoints::test_top_level"
+
+    # tries to access network:
+    "ome_zarr/io.py"
   ];
 
   pythonImportsCheck = [

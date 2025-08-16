@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "svgdigitizer";
-  version = "0.12.6";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
     repo = "svgdigitizer";
     tag = version;
-    hash = "sha256-aodPjms92+/6bbheIs/8w+M4T+mfw5PWf1dsxFuojwA=";
+    hash = "sha256-UlcvCfNoEijIKoqSbufEZ6988rqwT2xDEy4P/9fdgVM=";
   };
 
   build-system = [
@@ -75,9 +75,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "(x,y) Data Points from SVG files";
+    description = "Extract numerical data points from SVG files";
     homepage = "https://github.com/echemdb/svgdigitizer";
-    changelog = "https://github.com/echemdb/svgdigitizer/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/echemdb/svgdigitizer/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

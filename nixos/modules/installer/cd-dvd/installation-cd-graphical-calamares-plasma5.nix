@@ -45,8 +45,8 @@
       ln -sfT ${pkgs.plasma5Packages.konsole}/share/applications/org.kde.konsole.desktop ${
         desktopDir + "org.kde.konsole.desktop"
       }
-      ln -sfT ${pkgs.calamares-nixos}/share/applications/io.calamares.calamares.desktop ${
-        desktopDir + "io.calamares.calamares.desktop"
+      ln -sfT ${pkgs.calamares-nixos}/share/applications/calamares.desktop ${
+        desktopDir + "calamares.desktop"
       }
     '';
 

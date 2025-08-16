@@ -4,20 +4,13 @@
   click,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-asyncio,
-  pytest-mock,
-  pythonAtLeast,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyzerproc";
   version = "0.4.12";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emlove";
@@ -26,22 +19,16 @@ buildPythonPackage rec {
     hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 
-  propagatedBuildInputs = [
+  patches = [ ./bleak-compat.patch ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     bleak
     click
   ];
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytest-mock
-    pytest-cov-stub
-    pytestCheckHook
-  ];
-
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
-    # unittest.mock.InvalidSpecError: Cannot spec a Mock object.
-    "tests/test_light.py"
-  ];
+  doCheck = false; # tries to access dbus, which leads to FileNotFoundError
 
   pythonImportsCheck = [ "pyzerproc" ];
 

@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
-    rev = "photos-v${version}";
+    tag = "photos-v${version}";
     hash = "sha256-801wTTxruhZc18+TAPSYrBRtCPNZXwSKs2Hkvc/6BjM=";
   };
 

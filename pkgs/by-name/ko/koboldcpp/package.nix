@@ -41,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.96";
+  version = "1.97.4";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/kHx2v9g0o5eh38d9hlhc724vQNTXVpaX1GeQouJPhk=";
+    hash = "sha256-z9F3q+1iq6HQV37yRjBOlJRChhnQ/cPP5sAZl5rFDUs=";
   };
 
   enableParallelBuilding = true;
@@ -88,12 +88,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_METAL" metalSupport)
     (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
-
-  env = {
-    # Fixes an issue where "fprintf" is being called with a format string that isn't a string literal
-    NIX_CFLAGS_COMPILE = lib.optionalString vulkanSupport "-Wno-error=format-security";
-    NIX_CXXFLAGS_COMPILE = lib.optionalString vulkanSupport "-Wno-error=format-security";
-  };
 
   installPhase = ''
     runHook preInstall

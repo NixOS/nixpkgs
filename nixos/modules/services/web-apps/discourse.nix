@@ -733,14 +733,14 @@ in
       after = [
         "redis-discourse.service"
         "postgresql.target"
-        "discourse-postgresql.target"
+        "discourse-postgresql.service"
       ];
       bindsTo = [
         "redis-discourse.service"
       ]
       ++ lib.optionals (cfg.database.host == null) [
         "postgresql.target"
-        "discourse-postgresql.target"
+        "discourse-postgresql.service"
       ];
       path = cfg.package.runtimeDeps ++ [
         postgresqlPackage

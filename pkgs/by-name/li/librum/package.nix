@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Librum-Reader";
     repo = "Librum";
-    rev = "v.${version}";
+    tag = "v.${version}";
     fetchSubmodules = true;
     hash = "sha256-Iwcbcz8LrznFP8rfW6mg9p7klAtTx4daFxylTeFKrH0=";
   };

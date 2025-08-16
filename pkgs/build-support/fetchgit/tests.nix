@@ -97,4 +97,12 @@
       rm -rf .git
     '';
   };
+
+  rootDir = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "fetchgit-with-rootdir";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    rootDir = "misc/systemd";
+    sha256 = "sha256-UhxHk4SrXYq7ZDMtXLig5SigpbITrVgkpFTmryuvpcM=";
+  };
 }

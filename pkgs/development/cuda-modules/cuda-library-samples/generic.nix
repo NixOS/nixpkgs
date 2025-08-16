@@ -100,8 +100,6 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/cuSPARSELt/matmul";
 
-      buildInputs = prevAttrs.buildInputs or [ ] ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ];
-
       nativeBuildInputs =
         prevAttrs.nativeBuildInputs or [ ]
         ++ [
@@ -109,9 +107,6 @@ in
           addDriverRunpath
           (lib.getDev cusparselt)
           (lib.getDev libcusparse)
-        ]
-        ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-        ++ lib.optionals (cudaAtLeast "11.4") [
           cuda_nvcc
           (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
         ]

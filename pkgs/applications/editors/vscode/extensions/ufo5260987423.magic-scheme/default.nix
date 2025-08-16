@@ -26,6 +26,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ufo5260987423.magic-scheme";
     homepage = "https://github.com/ufo5260987423/magic-scheme";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tuynia ];
   };
 }

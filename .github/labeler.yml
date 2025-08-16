@@ -28,6 +28,7 @@
               - nixos/modules/services/x11/desktop-managers/cinnamon.nix
               - nixos/tests/cinnamon.nix
               - nixos/tests/cinnamon-wayland.nix
+              - pkgs/by-name/ci/cinnamon/**/*
               - pkgs/by-name/ci/cinnamon-*/**/*
               - pkgs/by-name/cj/cjs/**/*
               - pkgs/by-name/mu/muffin/**/*
