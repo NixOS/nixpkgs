@@ -1,0 +1,78 @@
+diff --git a/src/PixiEditor.AnimationRenderer.FFmpeg/FFMpegRenderer.cs b/src/PixiEditor.AnimationRenderer.FFmpeg/FFMpegRenderer.cs
+index 9d611f148..fae42cdd7 100644
+--- a/src/PixiEditor.AnimationRenderer.FFmpeg/FFMpegRenderer.cs
++++ b/src/PixiEditor.AnimationRenderer.FFmpeg/FFMpegRenderer.cs
+@@ -26,12 +26,7 @@ public class FFMpegRenderer : IAnimationRenderer
+ 
+         string binaryPath = Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), path);
+ 
+-        GlobalFFOptions.Configure(new FFOptions() { BinaryFolder = binaryPath });
+-
+-        if (IOperatingSystem.Current.IsUnix)
+-        {
+-            MakeExecutableIfNeeded(binaryPath);
+-        }
++        GlobalFFOptions.Configure(new FFOptions() { BinaryFolder = "@binaryPath@" });
+ 
+         string paletteTempPath = Path.Combine(Path.GetDirectoryName(outputPath), "RenderTemp", "palette.png");
+ 
+@@ -91,12 +86,7 @@ public class FFMpegRenderer : IAnimationRenderer
+ 
+         string binaryPath = Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), path);
+ 
+-        GlobalFFOptions.Configure(new FFOptions() { BinaryFolder = binaryPath });
+-
+-        if (IOperatingSystem.Current.IsUnix)
+-        {
+-            MakeExecutableIfNeeded(binaryPath);
+-        }
++        GlobalFFOptions.Configure(new FFOptions() { BinaryFolder = "@binaryPath@" });
+ 
+         string paletteTempPath = Path.Combine(Path.GetDirectoryName(outputPath), "RenderTemp", "palette.png");
+ 
+diff --git a/src/PixiEditor.AnimationRenderer.FFmpeg/PixiEditor.AnimationRenderer.FFmpeg.csproj b/src/PixiEditor.AnimationRenderer.FFmpeg/PixiEditor.AnimationRenderer.FFmpeg.csproj
+index 9888b4e2f..3fc9838bf 100644
+--- a/src/PixiEditor.AnimationRenderer.FFmpeg/PixiEditor.AnimationRenderer.FFmpeg.csproj
++++ b/src/PixiEditor.AnimationRenderer.FFmpeg/PixiEditor.AnimationRenderer.FFmpeg.csproj
+@@ -18,41 +18,5 @@
+   <ItemGroup>
+     <PackageReference Include="FFMpegCore" Version="5.1.0"/>
+   </ItemGroup>
+-
+-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+-    <Content Include="ThirdParty\Windows\ffmpeg\**">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </Content>
+-  </ItemGroup>
+-
+-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-arm64'">
+-    <Content Include="ThirdParty\Windows\ffmpeg\**">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </Content>
+-  </ItemGroup>
+-
+-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
+-    <Content Include="ThirdParty\MacOS\ffmpeg\**">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </Content>
+-  </ItemGroup>
+-
+-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
+-    <Content Include="ThirdParty\MacOS\ffmpeg\**">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </Content>
+-  </ItemGroup>
+-  
+-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+-    <Content Include="ThirdParty/Linux/ffmpeg/**">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </Content>
+-  </ItemGroup>
+   
+-  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+-    <Content Include="ThirdParty/Linux/ffmpeg/**">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </Content>
+-  </ItemGroup>
+-
+ </Project>
