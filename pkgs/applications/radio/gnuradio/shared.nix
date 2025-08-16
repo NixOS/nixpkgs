@@ -54,7 +54,9 @@ in
       feat: info:
       (lib.optionals (hasFeature feat) (
         (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
-        ++ (lib.optionals (builtins.hasAttr "pythonRuntime" info) info.pythonRuntime)
+        ++ (lib.optionals (
+          builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
+        ) info.pythonRuntime)
       ))
     ) featuresInfo
   );
