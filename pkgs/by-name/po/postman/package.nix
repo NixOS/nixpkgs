@@ -7,7 +7,7 @@
 
 let
   pname = "postman";
-  version = "11.56.4";
+  version = "11.58.4";
 
   src =
     let
@@ -29,7 +29,7 @@ let
         aarch64-darwin = "sha256-DNhTzTul3SZSsqc3g1oOSSl1sGQ3t6FD5bbL4dMHzEk=";
         aarch64-linux = "sha256-8CaqyMuZEcdgKfE2OxHCEAVsTFBtFDOfdHfTWASJAU4=";
         x86_64-darwin = "sha256-cRHyqNBW/1l2VsK89ue2K+X/Uszpzu9wXg4O91Adfy4=";
-        x86_64-linux = "sha256-bwvNmcSBbwLt3kNbd05Yy2IgNHUJx7qTvDMKrGmOOi0=";
+        x86_64-linux = "sha256-qoEShs3JJ51UOEdhDcFWd2qiMgd1RPdsMql1HqK7Q3s=";
       };
     };
 
