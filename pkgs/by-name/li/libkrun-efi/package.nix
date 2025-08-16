@@ -10,6 +10,7 @@
   rustc,
   rustPlatform,
   rutabaga_gfx,
+  nix-update-script,
   stdenv,
   virglrenderer,
   vulkan-headers,
@@ -88,4 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ quinneden ];
     platforms = [ "aarch64-darwin" ];
   };
+
+  passthru.updateScript = nix-update-script { };
 })

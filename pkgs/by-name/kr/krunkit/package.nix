@@ -9,6 +9,7 @@
   libkrun-efi,
   rustPlatform,
   lib,
+  nix-update-script,
   withGpu ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -52,4 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [ quinneden ];
   };
+
+  passthru.updateScript = nix-update-script { };
 })
