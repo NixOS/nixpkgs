@@ -17,13 +17,13 @@
   openssl,
   pango,
   pkg-config,
-  pnpm_9,
+  bun,
+  typescript,
   rustc,
   rustPlatform,
   stdenv,
   webkitgtk_4_1,
 }:
-
 let
   esbuild_21-5 =
     let
@@ -46,28 +46,48 @@ let
           }
         );
     };
-
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "surrealist";
-  version = "3.2.4";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-FWNGC0QoEUu1h3e3sfgWmbvqcNNvfWXU7PEjTXxu9Qo=";
+    hash = "sha256-KVPKXbdVcNZf0MWnV0tvNG2F1mxkyfXcY/9pMWZVEAw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-Su9ZOPIskV5poeS8pgtri+sZANBpdgnuCsQqE4WKFdA=";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-NhgSfiBb4FGEnirpDFWI3MIMElen8frKDFKmCBJlSBY=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-oreeV9g16/F7JGLApi0Uq+vTqNhIg7Lg1Z4k00RUOYI=";
+  node_modules = stdenv.mkDerivation {
+    inherit (finalAttrs) src version;
+    pname = "surrealist-node_modules";
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+    nativeBuildInputs = [ bun ];
+    dontConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+      ls
+      bun install --no-progress --frozen-lockfile
+      ls
+      runHook postBuild
+    '';
+    installPhase = ''
+      mkdir -p $out/node_modules
+
+      cp -R ./node_modules $out
+    '';
+    outputHash = "sha256-jBPhR5hdr/i7jiKF9y+sgmsgLsZUxi6v6zj01Amo2qE=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
@@ -79,9 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    bun
+    typescript
     rustc
     rustPlatform.cargoSetupHook
+    node_modules
   ];
 
   buildInputs = [
@@ -114,6 +136,22 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/surrealist" \
       --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${node_modules}/node_modules .
+
+    # Bun takes executables from this folder
+    chmod -R u+rw node_modules
+    chmod -R u+x node_modules/.bin
+    patchShebangs node_modules
+
+    export HOME=$TMPDIR
+    export PATH="$PWD/node_modules/.bin:$PATH"
+
+    runHook postConfigure
   '';
 
   meta = with lib; {
