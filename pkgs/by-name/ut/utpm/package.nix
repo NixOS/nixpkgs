@@ -5,18 +5,19 @@
   openssl,
   pkg-config,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "utpm";
-  version = "0-unstable-2024-12-17";
-
-  cargoHash = "sha256-fqGxor2PgsQemnPNoZkgNUNc7yRg2eqHTLzJAVpt6+8=";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "Thumuss";
     repo = "utpm";
-    rev = "6c2cabc8e7e696ea129f55aa7732a6be63bc2319";
-    hash = "sha256-uuET0BG2kBFEEWSSZ35h6+tnqTTjEHOP50GR3IkL+CE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aXIHeYPY11vE6ALHfccv8DLnTTCXVjlmaeeA5YRzdzc=";
+    postFetch = ''sed -i 's/^version = "0.2.0"$/version = "${finalAttrs.version}"/' $out/Cargo.toml'';
   };
+
+  cargoHash = "sha256-mztWRNCONfcokkKhU4FKArtiL3u7Oxk6UStKld6fZuE=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -26,8 +27,6 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
   ];
-
-  doCheck = false; # no tests
 
   meta = {
     description = "Package manager for typst";
@@ -41,4 +40,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "utpm";
     maintainers = with lib.maintainers; [ louis-thevenet ];
   };
-}
+})
