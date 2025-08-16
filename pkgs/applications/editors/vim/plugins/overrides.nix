@@ -2786,6 +2786,11 @@ in
     dependencies = [ self.nvzone-volt ];
   };
 
+  nvzone-volt = super.nvzone-volt.overrideAttrs {
+    # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
+    pname = "volt";
+  };
+
   obsidian-nvim = super.obsidian-nvim.overrideAttrs {
     checkInputs = with self; [
       # Optional pickers
