@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/Suppress-unknown-key-warnings.patch
     # Don't pipe stdout / stderr of processes launched by xcrun
     ./patches/fix-interactive-apps.patch
+    # Fallback to $HOME and correctly handle missing home directories
+    ./patches/fix-no-home-directory-crash.patch
   ];
 
   prePatch = ''
