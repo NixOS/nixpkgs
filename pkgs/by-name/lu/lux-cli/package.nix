@@ -6,7 +6,7 @@
   lib,
   libgit2,
   libgpg-error,
-  luajit,
+  lua5_4,
   makeWrapper,
   nix,
   openssl,
@@ -17,18 +17,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.13.3";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RmdxqpmqOs/1a9KmakWAHJUkiQ6I2t4VROiSocRnx84=";
+    hash = "sha256-1u0zDGUytuMhqe7NOJeXd1DKch8P7FT02MYgMkX3eMc=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-vin86rAmUbHJJuhChZi3ndj57wTCv945sVF6+by6Dlc=";
+  cargoHash = "sha256-C84VZfpMua1RrFhTFhWfY2xZAPDtNllkAbdHljlYdZs=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gpgme
     libgit2
     libgpg-error
-    luajit
+    lua5_4
     openssl
   ];
 
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = "--lib"; # Disable impure integration tests
 
   nativeCheckInputs = [
-    luajit
+    lua5_4
     nix
   ];
 
