@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Convert emoji names to emoji characters";
     homepage = "https://github.com/alexandrevicenzi/emojis";
-    changelog = "https://github.com/alexandrevicenzi/emojis/releases/tag/v${version}";
+    changelog = "https://github.com/alexandrevicenzi/emojis/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amadaluzia ];
   };
