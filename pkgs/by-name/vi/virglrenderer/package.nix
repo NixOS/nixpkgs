@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   meson,
   ninja,
   pkg-config,
@@ -14,20 +14,30 @@
   nativeContextSupport ? stdenv.hostPlatform.isLinux,
   vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  vulkanSupport ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin,
   vulkan-headers,
   vulkan-loader,
   gitUpdater,
+  moltenvk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "virglrenderer";
   version = "1.1.1";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/${version}/virglrenderer-${version}.tar.bz2";
-    hash = "sha256-D+SJqBL76z1nGBmcJ7Dzb41RvFxU2Ak6rVOwDRB94rM=";
+  src = fetchgit {
+    url = "https://gitlab.freedesktop.org/slp/virglrenderer.git";
+    rev = "d9752dd5fd4172e8a5694bbfb72be0e0a51f9ef3";
+    hash = "sha256-ANGduHj+QYf8fVTLiT82qlPpFBA6fhukYtWa2gvZg6E=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace-fail "libdrm_dep = dependency('libdrm', version : '>=2.4.50', required: get_option('drm').enabled())" "" \
+      --replace-fail "libdrm_dep.found()" "0"
+    substituteInPlace src/meson.build \
+      --replace-fail "libdrm_dep," ""
+  '';
 
   separateDebugInfo = true;
 
@@ -44,7 +54,8 @@ stdenv.mkDerivation rec {
     libX11
     libdrm
     libgbm
-  ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && vulkanSupport) [ moltenvk ];
 
   nativeBuildInputs = [
     meson

@@ -1,0 +1,34 @@
+diff --git a/Makefile b/Makefile
+index e0fe676..505207c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,11 +25,11 @@ ifeq ($(ARCH),)
+ 	STRIP := strip
+ else ifeq ($(ARCH),arm64)
+ 	GUESTARCH := aarch64
+-	CC := $(CROSS_COMPILE)gcc
++	CC := $(CROSS_COMPILE)cc
+ 	STRIP := $(CROSS_COMPILE)strip
+ else
+ 	GUESTARCH := $(ARCH)
+-	CC := $(CROSS_COMPILE)gcc
++	CC := $(CROSS_COMPILE)cc
+ 	STRIP := $(CROSS_COMPILE)strip
+ endif
+ 
+@@ -80,15 +80,9 @@ $(KERNEL_SOURCES): $(KERNEL_TARBALL)
+ $(KERNEL_BINARY_$(GUESTARCH)): $(KERNEL_SOURCES)
+ 	cd $(KERNEL_SOURCES) ; rm -f .version ; $(MAKE) $(MAKEFLAGS) $(KERNEL_FLAGS)
+ 
+-ifeq ($(OS),Darwin)
+-$(KERNEL_C_BUNDLE):
+-	@echo "Building on macOS, using ./build_on_krunvm.sh"
+-	./build_on_krunvm.sh
+-else
+ $(KERNEL_C_BUNDLE): $(KERNEL_BINARY_$(GUESTARCH))
+ 	@echo "Generating $(KERNEL_C_BUNDLE) from $(KERNEL_BINARY_$(GUESTARCH))..."
+ 	@python3 bin2cbundle.py -t $(KBUNDLE_TYPE_$(GUESTARCH)) $(KERNEL_BINARY_$(GUESTARCH)) kernel.c
+-endif
+ 
+ ifeq ($(SEV),1)
+ $(QBOOT_C_BUNDLE): $(QBOOT_BINARY)
