@@ -26,6 +26,7 @@ assert lib.assertMsg (
   boehmgc,
   boost,
   brotli,
+  busybox,
   busybox-sandbox-shell,
   bzip2,
   callPackage,
@@ -286,7 +287,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-  ];
+  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
+      [
+        (lib.mesonOption "build-test-shell" "${busybox}/bin")
+      ];
 
   ninjaFlags = [ "-v" ];
 
