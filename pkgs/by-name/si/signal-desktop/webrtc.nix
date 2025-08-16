@@ -38,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
   ];
 
+  patches = [
+    ./webrtc-fix-gcc-build.patch
+  ];
+
   postPatch = ''
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
@@ -59,8 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     "use_sysroot=false"
     "is_clang=false"
     "treat_warnings_as_errors=false"
+    "use_llvm_libatomic=false"
 
-    # https://github.com/signalapp/ringrtc/blob/main/bin/build-electron
+    # https://github.com/signalapp/ringrtc/blob/main/bin/build-desktop
     "rtc_build_examples=false"
     "rtc_build_tools=false"
     "rtc_use_x11=false"
