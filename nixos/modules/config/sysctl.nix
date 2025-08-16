@@ -87,6 +87,28 @@ in
       # the value below is used by default on several other distros.
       "fs.inotify.max_user_instances" = lib.mkDefault 524288;
       "fs.inotify.max_user_watches" = lib.mkDefault 524288;
+
+      # Mitigate some TOCTOU vulnerabilites
+      # cf. https://www.kernel.org/doc/Documentation/admin-guide/sysctl/fs.rst
+      #
+      # Don’t allow O_CREAT open on FIFOs not owned by the user in world‐ or
+      # group‐writable sticky directories (e.g. /tmp), unless owned by the
+      # directory owner
+      "fs.protected_fifos" = lib.mkDefault 2;
+
+      # Don’t allow users to create hardlinks unless they own the source
+      # file or have read/write access to it
+      "fs.protected_hardlinks" = lib.mkDefault 1;
+
+      # Don’t allow O_CREAT open on regular files not owned by user in world‐
+      # or group‐writable sticky directories (e.g. /tmp), unless owned by the
+      # directory owner
+      "fs.protected_regular" = lib.mkDefault 2;
+
+      # Don’t follow symlinks in sticky world‐writable directories (e.g. /tmp),
+      # unless the user ID of the follower matches the symlink, or the
+      # directory owner matches the symlink
+      "fs.protected_symlinks" = lib.mkDefault 1;
     };
   };
 }
