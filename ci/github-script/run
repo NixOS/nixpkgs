@@ -46,9 +46,10 @@ program
   .argument('<owner>', 'Owner of the GitHub repository to check (Example: NixOS)')
   .argument('<repo>', 'Name of the GitHub repository to check (Example: nixpkgs)')
   .argument('<pr>', 'Number of the Pull Request to check')
-  .action(async (owner, repo, pr) => {
+  .option('--no-dry', 'Make actual modifications')
+  .action(async (owner, repo, pr, options) => {
     const prepare = (await import('./prepare.js')).default
-    run(prepare, owner, repo, pr)
+    run(prepare, owner, repo, pr, options)
   })
 
 program
