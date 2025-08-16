@@ -3638,7 +3638,6 @@ broken-packages:
   - lio-simple # failure in job https://hydra.nixos.org/build/233200711 at 2023-09-02
   - lipsum-gen # failure in job https://hydra.nixos.org/build/233233734 at 2023-09-02
   - liquid # failure in job https://hydra.nixos.org/build/233255883 at 2023-09-02
-  - liquid-fixpoint # failure in job https://hydra.nixos.org/build/233213637 at 2023-09-02
   - liquidhaskell-cabal # failure in job https://hydra.nixos.org/build/233249946 at 2023-09-02
   - Liquorice # failure in job https://hydra.nixos.org/build/233193923 at 2023-09-02
   - list-mux # failure in job https://hydra.nixos.org/build/233206407 at 2023-09-02
@@ -5632,8 +5631,6 @@ broken-packages:
   - smsaero # failure in job https://hydra.nixos.org/build/233215880 at 2023-09-02
   - smt-lib # failure in job https://hydra.nixos.org/build/233208443 at 2023-09-02
   - SmtLib # failure in job https://hydra.nixos.org/build/233213271 at 2023-09-02
-  - smtlib-backends-process # failure in job https://hydra.nixos.org/build/233209223 at 2023-09-02
-  - smtlib-backends-tests # failure in job https://hydra.nixos.org/build/295097081 at 2025-04-22
   - smtlib2 # failure in job https://hydra.nixos.org/build/233251831 at 2023-09-02
   - smtp-mail-ng # failure in job https://hydra.nixos.org/build/233220094 at 2023-09-02
   - SMTPClient # failure in job https://hydra.nixos.org/build/233247599 at 2023-09-02

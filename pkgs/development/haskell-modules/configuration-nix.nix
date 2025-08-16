@@ -791,11 +791,17 @@ builtins.intersectAttrs super {
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
-  # The test suites try to run the "fixpoint" and "liquid" executables built just
-  # before and fail because the library search paths aren't configured properly.
-  # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
-  liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
-  liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
+  # overrideCabal because the tests need to execute the built executables ("fixpoint" and "liquid").
+  # dontCheck because of: https://github.com/ucsd-progsys/liquid-fixpoint/issues/760
+  liquid-fixpoint = dontCheck (
+    overrideCabal (drv: {
+      preCheck = ''
+        export PATH=$PWD/dist/build/fixpoint:$PATH
+      ''
+      + (drv.preCheck or "");
+    }) super.liquid-fixpoint
+  );
+  liquidhaskell = dontCheck super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
