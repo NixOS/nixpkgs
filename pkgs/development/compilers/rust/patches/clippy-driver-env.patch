@@ -1,0 +1,24 @@
+diff --git a/src/main.rs b/src/main.rs
+index 3c2eec1f0..f3c80f375 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -5,7 +5,7 @@
+ #![warn(rust_2018_idioms, unused_lifetimes)]
+ 
+ use std::env;
+-use std::path::PathBuf;
++use std::path::{Path, PathBuf};
+ use std::process::{self, Command};
+ 
+ use anstream::println;
+@@ -95,6 +95,10 @@ impl ClippyCmd {
+     }
+ 
+     fn path() -> PathBuf {
++        if let Ok(driver) = env::var("CLIPPY_DRIVER") {
++            return PathBuf::from(driver);
++        }
++
+         let mut path = env::current_exe()
+             .expect("current executable path invalid")
+             .with_file_name("clippy-driver");
