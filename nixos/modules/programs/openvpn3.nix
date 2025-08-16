@@ -18,7 +18,11 @@ let
     options
     lists
     ;
-  inherit (lib.types) bool submodule ints;
+  inherit (lib.types)
+    bool
+    submodule
+    ints
+    ;
 in
 {
   options.programs.openvpn3 = {
@@ -109,7 +113,12 @@ in
     environment = {
       systemPackages = [ cfg.package ];
       etc = {
-        "openvpn3/netcfg.json".source = json.generate "netcfg.json" cfg.netcfg.settings;
+        "openvpn3/netcfg.json".source = json.generate "netcfg.json" (
+          let
+            netcfg = cfg.netcfg.settings;
+          in
+          builtins.removeAttrs netcfg (lib.optional (!netcfg.systemd_resolved) "systemd_resolved")
+        );
         "openvpn3/log-service.json".source = json.generate "log-service.json" cfg.log-service.settings;
       };
     };

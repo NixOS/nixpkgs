@@ -23,6 +23,7 @@
   cmake,
   git,
   nix-update-script,
+  nixosTests,
   enableSystemdResolved ? true,
 }:
 
@@ -115,7 +116,10 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lpthread";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.openvpn3 = nixosTests.openvpn3;
+  };
 
   meta = {
     description = "OpenVPN 3 Linux client";
