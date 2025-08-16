@@ -846,9 +846,18 @@ in
       environment.systemPackages = mkIf (grub != null) [ grub ];
 
       boot.loader.grub.extraPrepareConfig = concatStrings (
-        mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
-        '') config.boot.loader.grub.extraFiles
+        mapAttrsToList (
+          fileName: sourcePath:
+          flip concatMapStrings cfg.mirroredBoots (
+            args:
+            let
+              efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+            in
+            ''
+              ${pkgs.coreutils}/bin/install -Dp ${escapeShellArg sourcePath} ${escapeShellArg efiSysMountPoint}/${escapeShellArg fileName}
+            ''
+          )
+        ) config.boot.loader.grub.extraFiles
       );
 
       assertions = [

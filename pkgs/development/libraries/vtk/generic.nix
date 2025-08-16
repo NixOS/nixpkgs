@@ -140,7 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config # required for finding MySQl
   ]
-  ++ lib.optional pythonSupport python3Packages.python
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonRecompileBytecodeHook
+  ]
   ++ lib.optional (
     pythonSupport && stdenv.buildPlatform == stdenv.hostPlatform
   ) python3Packages.pythonImportsCheckHook;
@@ -287,11 +290,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "VTK_USE_MPI" mpiSupport)
     (vtkBool "VTK_GROUP_ENABLE_MPI" mpiSupport)
   ];
-
-  # byte-compile python modules since the CMake build does not do it
-  postInstall = lib.optionalString pythonSupport ''
-    python -m compileall -s $out $out/${python3Packages.python.sitePackages}
-  '';
 
   pythonImportsCheck = [ "vtk" ];
 
