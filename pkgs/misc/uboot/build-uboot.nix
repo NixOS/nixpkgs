@@ -145,6 +145,7 @@ lib.extendMkDerivation {
         maintainers = with lib.maintainers; [
           dezgeg
           lopsided98
+          jmbaur
         ];
       }
       // (args.meta or { })
