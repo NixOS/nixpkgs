@@ -5374,6 +5374,12 @@
     githubId = 176372446;
     name = "Katja Kwast";
   };
+  cupcakearmy = {
+    name = "Niccolo Borgioli";
+    email = "nix@nicco.io";
+    github = "cupcakearmy";
+    githubId = 14948823;
+  };
   curious = {
     email = "curious@curious.host";
     matrix = "@curious:curious.host";
