@@ -303,6 +303,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path =
         (with pkgs; [
+          cfg.package
           curl
           gawk
           iproute2
@@ -334,8 +335,16 @@ in
         config.environment.etc."netdata/netdata.conf".source
         config.environment.etc."netdata/conf.d".source
       ];
+      script = lib.concatLines [
+        (lib.optionalString (cfg.claimTokenFile != null) ''
+          set -euo pipefail
+          export NETDATA_CLAIM_TOKEN
+          NETDATA_CLAIM_TOKEN="$(cat "$CREDENTIALS_DIRECTORY/token")"
+          echo "Loaded NETDATA_CLAIM_TOKEN into env"
+        '')
+        "exec netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf"
+      ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
           while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
@@ -392,23 +401,7 @@ in
         PrivateMounts = true;
       }
       // (lib.optionalAttrs (cfg.claimTokenFile != null) {
-        LoadCredential = [
-          "netdata_claim_token:${cfg.claimTokenFile}"
-        ];
-
-        ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
-          set -euo pipefail
-
-          if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
-            # Already registered
-            exit
-          fi
-
-          exec ${cfg.package}/bin/netdata-claim.sh \
-            -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
-            -url=https://app.netdata.cloud \
-            -daemon-not-running
-        '';
+        LoadCredential = [ "token:${cfg.claimTokenFile}" ];
       });
     };
 
