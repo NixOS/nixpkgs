@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pkgs,
   pytestCheckHook,
   setuptools,
   wcwidth,
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pkgs.pandoc ];
 
   dependencies = [ wcwidth ];
 
