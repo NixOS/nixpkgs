@@ -5039,6 +5039,16 @@
     };
     version = "2.6.18";
   };
+  zlib = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-9huwMTm74lbDa6me+f7OH7Ij6QNO2eX6PdsViNmavHE=";
+      type = "gem";
+    };
+    version = "3.1.1";
+  };
   zookeeper = {
     groups = [ "default" ];
     platforms = [ ];
