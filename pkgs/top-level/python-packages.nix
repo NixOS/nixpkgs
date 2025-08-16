@@ -16053,6 +16053,8 @@ self: super: with self; {
 
   runstats = callPackage ../development/python-modules/runstats { };
 
+  russound = callPackage ../development/python-modules/russound { };
+
   rustworkx = callPackage ../development/python-modules/rustworkx { };
 
   ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
