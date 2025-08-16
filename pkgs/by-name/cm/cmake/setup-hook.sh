@@ -105,8 +105,12 @@ cmakeConfigurePhase() {
         prependToVar cmakeFlags "-DBUILD_TESTING=OFF"
     fi
 
-    # Always build Release, to ensure optimisation flags
-    prependToVar cmakeFlags "-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release}"
+    # Always use a release build type to ensure optimizations are enabled.
+    if [[ -n "${separateDebugInfo-}" ]]; then
+        prependToVar cmakeFlags "-DCMAKE_BUILD_TYPE=${cmakeBuildType:-RelWithDebInfo}"
+    else
+        prependToVar cmakeFlags "-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release}"
+    fi
 
     # Disable user package registry to avoid potential side effects
     # and unecessary attempts to access non-existent home folder
