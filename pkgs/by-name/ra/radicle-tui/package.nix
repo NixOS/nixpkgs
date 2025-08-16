@@ -5,7 +5,7 @@
   stdenv,
   libiconv,
   radicle-node,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
