@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
     # so this removes 1) the popup about it when you first start the program, 2) the option in the settings
     # and makes the program always know that it is set up
     ./remove-urlscheme-settings.patch
+
+    # Upstream requested that sentry is only to be used with official builds, remove it so it doesn't complain about the lack of DSN
+    ./remove-sentry.patch
   ];
   postPatch = ''
     # oslib doesn't seem to do releases and hasn't had a change since 2021, so always use commit d6ee6549bb
@@ -70,11 +73,6 @@ stdenv.mkDerivation rec {
   ];
 
   gradleBuildTask = "application:jpackage";
-
-  env = {
-    # The source no longer contains this, so this has been extracted from the binary releases
-    SENTRY_DSN = "https://1aacf97280717f749dfc93a1713f9551@o4507814449774592.ingest.de.sentry.io/4507814504759376";
-  };
 
   installPhase = ''
     runHook preInstall
