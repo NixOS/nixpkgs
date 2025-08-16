@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -19,6 +20,10 @@ buildGoModule rec {
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
   ldflags = [ "-X github.com/oauth2-proxy/oauth2-proxy/v7/pkg/version.VERSION=v${version}" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Reverse proxy that provides authentication with Google, Github, or other providers";
