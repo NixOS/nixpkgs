@@ -122,8 +122,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "radicle-desktop";
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      matthiasbeyer
-    ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 })
