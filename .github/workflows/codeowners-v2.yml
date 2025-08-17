@@ -39,11 +39,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  OWNERS_FILE: ci/OWNERS
-  # Don't do anything on draft PRs
-  DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
-
 jobs:
   # Check that code owners is valid
   check:
@@ -91,7 +86,7 @@ jobs:
       - name: Validate codeowners
         if: steps.app-token.outputs.token
         env:
-          OWNERS_FILE: untrusted/${{ env.OWNERS_FILE }}
+          OWNERS_FILE: untrusted/ci/OWNERS
           GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY_PATH: untrusted
           OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
@@ -142,7 +137,9 @@ jobs:
         if: steps.app-token.outputs.token
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+          # Don't do anything on draft PRs
+          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
+        run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} ci/OWNERS
 
       - name: Log current API rate limits
         if: steps.app-token.outputs.token
