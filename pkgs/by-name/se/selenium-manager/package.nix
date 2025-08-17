@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "selenium-manager";
-  version = "4.29.0";
+  version = "4.35.0";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
     tag = "selenium-${version}";
-    hash = "sha256-IyMXgYl/TPTpe/Y0pFyJVKj4Mp0xbkg1LSCNHzFL3bE=";
+    hash = "sha256-2X7tFeqZoPC3k2/Koa1GlpuJg8AKJl4uWYD00j7qKMA=";
   };
 
   sourceRoot = "${src.name}/rust";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     ./disable-telemetry.patch
   ];
 
-  cargoHash = "sha256-MgnmEJif4Z4CcmBFkC5BJR67DMGm1ttObtl4LhAFw4g=";
+  cargoHash = "sha256-D40rC7CMe5YKpePgWYThik+PzvaxcsIzaGjfSe9jPhI=";
 
   # TODO: enable tests
   # The test suite depends on a number of browsers and network requests,
