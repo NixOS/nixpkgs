@@ -165,5 +165,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ sumnerevans ];
     teams = [ lib.teams.matrix ];
+    platforms = lib.platforms.linux;
   };
 }
