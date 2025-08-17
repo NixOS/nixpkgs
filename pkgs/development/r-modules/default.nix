@@ -2454,6 +2454,22 @@ let
       };
     });
 
+    RcppPlanc =
+      let
+        hwlocSrc = fetchurl {
+          url = "https://download.open-mpi.org/release/hwloc/v2.12/hwloc-2.12.1.tar.gz";
+          sha256 = "sha256-/6AsOjCCdakzn76SrdBU+sjpoAy4/oxTNACUASy3xjM=";
+        };
+      in
+      old.RcppPlanc.overrideAttrs (attrs: {
+        preConfigure = ''
+          mkdir -p src/build/hwloc-prefix/src
+          ln -s ${hwlocSrc} src/build/hwloc-prefix/src/hwloc-2.12.1.tar.gz
+        '';
+        nativeBuildInputs = attrs.nativeBuildInputs ++ [ pkgs.cmake pkgs.which ];
+        buildInputs = attrs.buildInputs ++ [ pkgs.hdf5.dev ];
+      });
+
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
