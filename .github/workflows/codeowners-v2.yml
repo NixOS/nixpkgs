@@ -1,25 +1,3 @@
-# This workflow depends on two GitHub Apps with the following permissions:
-# - For checking code owners:
-#   - Permissions:
-#     - Repository > Administration: read-only
-#     - Organization > Members: read-only
-#   - Install App on this repository, setting these variables:
-#     - OWNER_RO_APP_ID (variable)
-#     - OWNER_RO_APP_PRIVATE_KEY (secret)
-# - For requesting code owners:
-#   - Permissions:
-#     - Repository > Administration: read-only
-#     - Organization > Members: read-only
-#     - Repository > Pull Requests: read-write
-#   - Install App on this repository, setting these variables:
-#     - OWNER_APP_ID (variable)
-#     - OWNER_APP_PRIVATE_KEY (secret)
-#
-# This split is done because checking code owners requires handling untrusted PR input,
-# while requesting code owners requires PR write access, and those shouldn't be mixed.
-#
-# Note that the latter is also used for ./eval.yml requesting reviewers.
-
 name: Codeowners v2
 
 on:
@@ -40,7 +18,16 @@ defaults:
     shell: bash
 
 jobs:
-  # Check that code owners is valid
+  # For checking code owners, this job depends on a GitHub App with the following permissions:
+  # - Permissions:
+  #   - Repository > Administration: read-only
+  #   - Organization > Members: read-only
+  # - Install App on this repository, setting these variables:
+  #   - OWNER_RO_APP_ID (variable)
+  #   - OWNER_RO_APP_PRIVATE_KEY (secret)
+  #
+  # This should not use the same app as the job to request reviewers, because this job requires
+  # handling untrusted PR input.
   check:
     name: Check
     runs-on: ubuntu-24.04-arm
@@ -101,6 +88,16 @@ jobs:
         run: gh api /rate_limit | jq
 
   # Request reviews from code owners
+  # For requesting code owners, this job depends on a GitHub App with the following permissions:
+  # - Permissions:
+  #   - Repository > Administration: read-only
+  #   - Organization > Members: read-only
+  #   - Repository > Pull Requests: read-write
+  # - Install App on this repository, setting these variables:
+  #   - OWNER_APP_ID (variable)
+  #   - OWNER_APP_PRIVATE_KEY (secret)
+  #
+  # Note that this app is also used for ./eval.yml requesting reviewers.
   request:
     name: Request
     runs-on: ubuntu-24.04-arm
