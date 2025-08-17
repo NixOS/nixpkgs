@@ -11476,6 +11476,8 @@ with pkgs;
   emacs-nox = emacs30-nox;
   emacs-pgtk = emacs30-pgtk;
 
+  emacsPackages = dontRecurseIntoAttrs emacs.pkgs;
+
   emacsPackagesFor =
     emacs:
     import ./emacs-packages.nix {
