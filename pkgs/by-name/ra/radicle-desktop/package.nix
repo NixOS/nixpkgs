@@ -48,6 +48,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pname = finalAttrs.pname + "-npm-deps";
     npmRoot = finalAttrs.src;
   };
+  
+  npmConfigHook = importNpmLock.npmConfigHook;
 
   cargoHash = "sha256-z5fnwc7EjSvkyu4zTUyAvVfs6quwH2p9VFDK/TdzZJE=";
 
