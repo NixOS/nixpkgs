@@ -86,6 +86,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
   };
 }
