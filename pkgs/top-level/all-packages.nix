@@ -2740,15 +2740,6 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
-  dmd = callPackage ../by-name/dm/dmd/package.nix (
-    {
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      # https://github.com/NixOS/nixpkgs/pull/206907#issuecomment-1527034123
-      stdenv = gcc11Stdenv;
-    }
-  );
-
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
@@ -5466,9 +5457,7 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
-  falcon = callPackage ../development/interpreters/falcon {
-    stdenv = gcc10Stdenv;
-  };
+  falcon = callPackage ../development/interpreters/falcon { };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
@@ -6796,13 +6785,7 @@ with pkgs;
     inherit (darwin) sigtool;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
-    stdenv =
-      if stdenv.cc.isClang then
-        llvmPackages_17.stdenv
-      else if stdenv.cc.isGNU then
-        gcc12Stdenv
-      else
-        stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
     bazel_self = bazel_6;
   };
 
@@ -10006,10 +9989,7 @@ with pkgs;
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
-  directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler {
-    # https://github.com/NixOS/nixpkgs/issues/216294
-    stdenv = if stdenv.cc.isGNU && stdenv.hostPlatform.isi686 then gcc11Stdenv else stdenv;
-  };
+  directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler { };
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
