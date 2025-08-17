@@ -94,6 +94,23 @@ lib.makeOverridable (
           // lib.optionalAttrs (args ? buildInputs) {
             inherit buildInputs;
           };
+      in
+      compatArgs
+      // derivationArgs
+      // {
+        __structuredAttrs = true;
+
+        inherit
+          extraOutputsToInstall
+          manifest
+          ignoreCollisions
+          checkCollisionContents
+          ignoreSingleFileOutputs
+          includeClosures
+          pathsToLink
+          extraPrefix
+          postBuild
+          ;
 
         chosenOutputs = map (drv: {
           paths =
@@ -117,37 +134,22 @@ lib.makeOverridable (
           # Silently use the original `paths` if `passthru.paths` is missing.
         }) finalAttrs.passthru.paths or paths;
 
-        pathsForClosure = lib.pipe chosenOutputs [
-          (map (p: p.paths))
-          lib.flatten
-          (lib.remove null)
-        ];
-      in
-      compatArgs
-      // derivationArgs
-      // {
-        inherit
-          extraOutputsToInstall
-          manifest
-          ignoreCollisions
-          checkCollisionContents
-          ignoreSingleFileOutputs
-          includeClosures
-          pathsToLink
-          extraPrefix
-          postBuild
-          ;
-        pathsToLinkJSON = builtins.toJSON pathsToLink;
-        pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (writeClosure pathsForClosure);
+        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (
+          let
+            pathsForClosure = lib.pipe finalAttrs.chosenOutputs [
+              (map (p: p.paths))
+              lib.flatten
+              (lib.remove null)
+            ];
+          in
+          writeClosure pathsForClosure
+        );
 
         preferLocalBuild = derivationArgs.preferLocalBuild or true;
         allowSubstitutes = derivationArgs.allowSubstitutes or false;
         passAsFile = [
           "buildCommand"
         ]
-        # XXX: The size is somewhat arbitrary
-        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs"
         ++ derivationArgs.passAsFile or [ ];
 
         buildCommand = ''
