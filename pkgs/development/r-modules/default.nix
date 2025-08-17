@@ -1106,7 +1106,10 @@ let
       fftw.dev
     ];
     specklestar = [ pkgs.fftw.dev ];
-    cartogramR = [ pkgs.fftw.dev ];
+    cartogramR = with pkgs; [
+      fftw.dev
+      pkg-config
+    ];
     jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [
@@ -1750,6 +1753,10 @@ let
     });
 
     arcpbf = old.arcpbf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    cartogramR = old.cartogramR.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
