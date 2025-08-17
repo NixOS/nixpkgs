@@ -58,7 +58,6 @@ buildGoModule rec {
     license = licenses.bsl11;
     maintainers = with maintainers; [
       adamcstephens
-      pradeepchhetri
       vdemeester
       nh2
       techknowlogick
