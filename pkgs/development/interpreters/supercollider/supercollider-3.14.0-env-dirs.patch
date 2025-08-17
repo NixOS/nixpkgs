@@ -25,10 +25,10 @@ index 52dc1fd2d..aae09ed9c 100644
      return Path(SC_DATA_DIR);
  #    else
 diff --git a/server/scsynth/SC_Lib_Cintf.cpp b/server/scsynth/SC_Lib_Cintf.cpp
-index f6219307e..28e13eb98 100644
+index 9866c4503..35410b4a7 100644
 --- a/server/scsynth/SC_Lib_Cintf.cpp
 +++ b/server/scsynth/SC_Lib_Cintf.cpp
-@@ -178,9 +178,13 @@ void initialize_library(const char* uGensPluginPath) {
+@@ -189,9 +189,13 @@ void initialize_library(const char* uGensPluginPath) {
      using DirName = SC_Filesystem::DirName;
  
      if (loadUGensExtDirs) {
@@ -38,16 +38,16 @@ index f6219307e..28e13eb98 100644
 +        }
  #ifdef SC_PLUGIN_DIR
          // load globally installed plugins
--        if (bfs::is_directory(SC_PLUGIN_DIR)) {
-+        else if (bfs::is_directory(SC_PLUGIN_DIR)) {
+-        if (fs::is_directory(SC_PLUGIN_DIR)) {
++        else if (fs::is_directory(SC_PLUGIN_DIR)) {
              PlugIn_LoadDir(SC_PLUGIN_DIR, true);
          }
  #endif // SC_PLUGIN_DIR
 diff --git a/server/supernova/server/main.cpp b/server/supernova/server/main.cpp
-index b2b5adf4e..6cb8c411c 100644
+index cdd1fe2f5..e57233ddc 100644
 --- a/server/supernova/server/main.cpp
 +++ b/server/supernova/server/main.cpp
-@@ -224,8 +224,14 @@ void set_plugin_paths(server_arguments const& args, nova::sc_ugen_factory* facto
+@@ -228,8 +228,14 @@ void set_plugin_paths(server_arguments const& args, nova::sc_ugen_factory* facto
              }
          }
      } else {

@@ -11,13 +11,13 @@
   fftw,
   curl,
   gcc,
-  libsForQt5,
   libXt,
   qtbase,
   qttools,
   qtwebengine,
   readline,
   qtwebsockets,
+  wrapQtAppsHook,
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -29,20 +29,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "supercollider";
-  version = "3.13.1";
+  version = "3.14.0";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${finalAttrs.version}/SuperCollider-${finalAttrs.version}-Source.tar.bz2";
-    sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
+    hash = "sha256-q3EOhDdvXAgskvzqdGW4XTdZNPPafe7Vg0V6CkiwqRg=";
   };
 
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
-    ./supercollider-3.12.0-env-dirs.patch
+    ./supercollider-3.14.0-env-dirs.patch
   ];
 
   postPatch = ''
-    substituteInPlace common/sc_popen.cpp --replace '/bin/sh' '${runtimeShell}'
+    substituteInPlace common/sc_popen.cpp --replace-fail '/bin/sh' '${runtimeShell}'
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=(--prefix PATH : $out/bin)
   '';
 
   strictDeps = true;
@@ -51,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qttools
-    libsForQt5.wrapQtAppsHook
+    qtwebengine
+    wrapQtAppsHook
   ]
   ++ lib.optionals useSCEL [ emacs ];
 
