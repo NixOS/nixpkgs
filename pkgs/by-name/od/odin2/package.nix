@@ -20,20 +20,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin2";
-  version = "2.3.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "TheWaveWarden";
     repo = "odin2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-N96Nb7G6hqfh8DyMtHbttl/fRZUkS8f2KfPSqeMAhHY=";
+    hash = "sha256-j/rZvBNBTDo2vwESXbGIXR89PHOI1HK8hvzV7y6dJHI=";
   };
-
-  postPatch = ''
-    sed '1i#include <utility>' -i \
-      libs/JUCELV2/modules/juce_gui_basics/windows/juce_ComponentPeer.h # gcc12
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -63,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-lXrandr"
     ]
   );
+
+  # JUCE wants to write to $HOME/.{lv2,vst3}
+  preConfigure = ''
+    export HOME="$TMPDIR"
+  '';
 
   cmakeFlags = [
     "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
