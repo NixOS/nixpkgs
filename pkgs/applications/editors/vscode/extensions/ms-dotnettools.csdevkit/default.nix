@@ -7,7 +7,7 @@
   openssl,
   libz,
   glibc,
-  libxml2,
+  libxml2_13,
   libkrb5,
   patchelf,
 }:
@@ -51,7 +51,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     (lib.getLib glibc) # libgcc_s.so.1
     (lib.getLib icu) # libicui18n.so libicuuc.so
     (lib.getLib libkrb5) # libgssapi_krb5.so
-    (lib.getLib libxml2) # libxml2.so.2
+    (lib.getLib libxml2_13) # libxml2.so.2
     (lib.getLib libz) # libz.so.1
     (lib.getLib openssl) # libopenssl.so.3
     (lib.getLib stdenv.cc.cc) # libstdc++.so.6
@@ -121,10 +121,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
             --add-needed libssl.so \
             "$file"
         done
-
-        # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-        mkdir -p "$out/lib"
-        ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
       ''}
     )
   '';
