@@ -4,33 +4,29 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.hayabusa;
-
 in
 {
-  meta.maintainers = with maintainers; [ crinklywrappr ];
+  meta.maintainers = with lib.maintainers; [ crinklywrappr ];
 
   options.services.hayabusa = {
-    enable = mkEnableOption "Hayabusa, a configurable sysfetch that uses a daemon to cache sysinfo and run fast!";
+    enable = lib.mkEnableOption "Hayabusa, a configurable sysfetch that uses a daemon to cache sysinfo and run fast!";
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.hayabusa;
       description = "The package to use for hayabusa";
     };
 
-    flags = mkOption {
-      type = types.str;
+    flags = lib.mkOption {
+      type = lib.types.str;
       default = "-d";
       description = "Flags for the hayabusa daemon";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd = {
       services.hayabusa = {
@@ -41,10 +37,9 @@ in
         serviceConfig = {
           Restart = "always";
           Type = "simple";
-          ExecStart = "${cfg.package}/bin/hayabusa ${cfg.flags}";
+          ExecStart = "${lib.getExe cfg.package} ${cfg.flags}";
         };
       };
     };
   };
-
 }
