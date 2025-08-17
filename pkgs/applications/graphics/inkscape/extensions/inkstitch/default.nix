@@ -10,7 +10,7 @@ let
   version = "3.2.2";
 
   # remove and use nixpkgs version is recent enough
-  inkex-updated = python3.pkgs.inkex.overrideAttrs (old: rec {
+  inkex' = python3.pkgs.inkex.overrideAttrs (old: rec {
     # this is no special commit, just the most recent as of writing
     version = "3150a5b3b06f7e4c2104d9e8eb6dc448982bb2b0";
     src = fetchFromGitLab {
@@ -32,7 +32,7 @@ let
       pyembroidery
       # inkex upstream release & nixpkgs is too old
       # use nixpkgs inkex once up to date
-      inkex-updated
+      inkex'
       wxpython
       networkx
       platformdirs
