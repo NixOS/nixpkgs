@@ -541,6 +541,7 @@ python.pkgs.buildPythonApplication rec {
 
   preCheck = ''
     export HOME="$TEMPDIR"
+    export PYTHONASYNCIODEBUG=1
 
     # the tests require the existance of a media dir
     mkdir "$NIX_BUILD_TOP"/media
