@@ -9,6 +9,7 @@
   python3Packages,
   sqlite,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -78,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set NODE_ENV production
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit (nixosTests) jellyseerr;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fork of overseerr for jellyfin support";
