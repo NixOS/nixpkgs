@@ -15,6 +15,7 @@
   programs = {
     dconf.enable = lib.mkDefault true;
     xwayland.enable = lib.mkIf enableXWayland (lib.mkDefault true);
+    obs-studio.plugins = lib.mkAfter (with pkgs.obs-studio-plugins; [ wlrobs ]);
   };
 
   services.graphical-desktop.enable = true;
