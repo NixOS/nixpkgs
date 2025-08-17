@@ -2,30 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.18";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vO70olSAG6NaZjyERU22lc8MbVivyJFieGcy0xOErrc=";
+    hash = "sha256-eS83Uwp6LzyQuIx2jirXnJ6Xb2XEaAKLnS9PMKTIvyI=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/google-gemini/gemini-cli/pull/5336/commits/c1aef417d559237bf4d147c584449b74d6fbc1f8.patch";
-      name = "restore-missing-dependencies-fields.patch";
-      hash = "sha256-euRoLpbv075KIpYF9QPMba5FxG4+h/kxwLRetaay33s=";
-    })
+    # FIXME: remove once https://github.com/google-gemini/gemini-cli/pull/5336 is merged
+    ./restore-missing-dependencies-fields.patch
   ];
 
-  npmDepsHash = "sha256-8dn0i2laR4LFZk/sFDdvblvrHSnraGcLl3WAthCOKc0=";
+  npmDepsHash = "sha256-5pFnxZFhVNxYLPJClYq+pe4wAX5623Y3hFj8lIq00+E=";
 
   preConfigure = ''
     mkdir -p packages/generated
@@ -59,7 +55,10 @@ buildNpmPackage (finalAttrs: {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      taranarmo
+    ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";
   };
