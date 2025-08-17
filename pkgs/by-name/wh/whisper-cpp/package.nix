@@ -86,7 +86,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # directory of the script, which is not writable due to being
   # inside the nix store. This patch changes the script to download
   # the models to the current directory of where it is being run from.
-  patches = [ ./download-models.patch ];
+  patches = [
+    ./download-models.patch
+  ]
+  # whisper-cpp's copy of the ggml library needs the same bfloat16 patch
+  # as llama-cpp's to build correctly with Vulkan enabled.
+  ++ lib.optionals vulkanSupport [ ../../ll/llama-cpp/disable_bfloat16.patch ];
 
   postPatch = ''
     for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
