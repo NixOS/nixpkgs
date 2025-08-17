@@ -1114,7 +1114,10 @@ let
       libxml2.dev
       glpk
     ];
-    interpolation = [ pkgs.gmp ];
+    interpolation = with pkgs; [
+      gmp
+      mpfr
+    ];
     image_textlinedetector = with pkgs; [
       pkg-config
       opencv
