@@ -5,6 +5,7 @@
   makeWrapper,
   nodejs-slim,
   pnpm_9,
+  versionCheckHook,
   runCommand,
   textlint,
   textlint-plugin-latex2e,
@@ -97,6 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   passthru = {
     withPackages =
