@@ -10,26 +10,6 @@
     super:
     with super;
     lib.mapAttrs (_: set: recurseIntoAttrs set) {
-      inherit (super)
-        fusePackages
-        gns3Packages
-        haskellPackages
-        nodePackages
-        nodePackages_latest
-        platformioPackages
-        rPackages
-        roundcubePlugins
-        sourceHanPackages
-        windows
-        ;
-
-      # Make sure haskell.compiler is included, so alternative GHC versions show up,
-      # but don't add haskell.packages.* since they contain the same packages (at
-      # least by name) as haskellPackages.
-      haskell = super.haskell // {
-        compiler = recurseIntoAttrs super.haskell.compiler;
-      };
-
       # emacsPackages is an alias for emacs.pkgs
       # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
       emacsPackages = emacs.pkgs;
