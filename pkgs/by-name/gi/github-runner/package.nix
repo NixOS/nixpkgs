@@ -16,12 +16,22 @@
   buildPackages,
   runtimeShell,
   # List of Node.js runtimes the package should support
-  nodeRuntimes ? [ "node20" ],
+  nodeRuntimes ? [
+    "node20"
+    "node24"
+  ],
   nodejs_20,
+  nodejs_24,
 }:
 
 # Node.js runtimes supported by upstream
-assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
+assert builtins.all (
+  x:
+  builtins.elem x [
+    "node20"
+    "node24"
+  ]
+) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
@@ -226,6 +236,9 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} _layout/externals/node20
+  ''
+  + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
+    ln -s ${nodejs_24} _layout/externals/node24
   '';
 
   postInstall = ''
@@ -267,6 +280,9 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} $out/lib/externals/node20
+  ''
+  + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
+    ln -s ${nodejs_24} $out/lib/externals/node24
   ''
   + ''
     # Install Nodejs scripts called from workflows
