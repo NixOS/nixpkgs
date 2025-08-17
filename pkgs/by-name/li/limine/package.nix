@@ -42,20 +42,19 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "9.5.4";
+  version = "9.6.1";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-X0dStbsBJyFDUG25G4PUZInp+yVG3+p3bfhwQL280ig=";
+    hash = "sha256-/GAeZx2ShtC+VoqNO/SB8H4kLLgdLAc/RAGVxF6Imbc=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    llvmPackages.clang-unwrapped
     llvmPackages.libllvm
     llvmPackages.lld
   ]
@@ -79,13 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    )
-    ++ [
-      "TOOLCHAIN_FOR_TARGET=llvm"
-      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
-      # still needs to be available
-      "CC=${lib.getExe stdenv.cc}"
-    ];
+    );
 
   passthru.tests = nixosTests.limine;
 

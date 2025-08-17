@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.8.1";
+  version = "2025.8.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1971,7 +1971,8 @@
       ];
     "gc100" =
       ps: with ps; [
-      ]; # missing inputs: python-gc100
+        python-gc100
+      ];
     "gdacs" =
       ps: with ps; [
         aio-georss-gdacs
@@ -3942,7 +3943,8 @@
       ];
     "neurio_energy" =
       ps: with ps; [
-      ]; # missing inputs: neurio
+        neurio
+      ];
     "nexia" =
       ps: with ps; [
         nexia
@@ -4456,7 +4458,8 @@
       ];
     "pilight" =
       ps: with ps; [
-      ]; # missing inputs: pilight
+        pilight
+      ];
     "pinecil" =
       ps: with ps; [
       ];
@@ -5046,7 +5049,8 @@
       ];
     "russound_rnet" =
       ps: with ps; [
-      ]; # missing inputs: russound
+        russound
+      ];
     "ruuvi_gateway" =
       ps: with ps; [
         aioruuvigateway
@@ -5466,7 +5470,8 @@
       ];
     "smarty" =
       ps: with ps; [
-      ]; # missing inputs: pysmarty2
+        pysmarty2
+      ];
     "smhi" =
       ps: with ps; [
         pysmhi
@@ -6466,7 +6471,8 @@
       ];
     "w800rf32" =
       ps: with ps; [
-      ]; # missing inputs: pyW800rf32
+        pyw800rf32
+      ];
     "wake_on_lan" =
       ps: with ps; [
         wakeonlan
@@ -7505,6 +7511,7 @@
     "philips_js"
     "pi_hole"
     "picnic"
+    "pilight"
     "ping"
     "pjlink"
     "plaato"
@@ -7639,6 +7646,7 @@
     "smart_meter_texas"
     "smartthings"
     "smarttub"
+    "smarty"
     "smhi"
     "smlight"
     "sms"

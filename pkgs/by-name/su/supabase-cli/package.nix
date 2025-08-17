@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "2.23.7";
+  version = "2.33.9";
 
   src = fetchFromGitHub {
     owner = "supabase";
