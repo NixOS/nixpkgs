@@ -4947,8 +4947,8 @@ let
         mktplcRef = {
           name = "vscode-mdx";
           publisher = "unifiedjs";
-          version = "1.8.15";
-          hash = "sha256-n2aWgvhSaU7TU45yeIUU8OmIMOAVYYB500jxrChPeA4=";
+          version = "1.8.16";
+          hash = "sha256-OTlWvbym109IG6Fqkte5jbFMDVbQMn0CXVI3bnnFa+o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/unifiedjs.vscode-mdx/changelog";
