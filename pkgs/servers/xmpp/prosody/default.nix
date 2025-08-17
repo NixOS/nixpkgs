@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     communityModules = withCommunityModules;
+    hasMucNotifications = lib.elem "muc_notifications" withCommunityModules;
     tests = { inherit (nixosTests) prosody prosody-mysql; };
   };
 
