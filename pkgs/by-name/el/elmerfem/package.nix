@@ -11,9 +11,9 @@
   libGL,
   libGLU,
   opencascade-occt,
-  libsForQt5,
+  qt6Packages,
   tbb,
-  vtkWithQt5,
+  vtkWithQt6,
   llvmPackages,
 }:
 stdenv.mkDerivation rec {
@@ -33,21 +33,20 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     mpi
     blas
     liblapack
-    libsForQt5.qtbase
-    libsForQt5.qtscript
-    libsForQt5.qwt
+    qt6Packages.qtbase
+    qt6Packages.qwt
     libGL
     libGLU
     opencascade-occt
     tbb
-    vtkWithQt5
+    vtkWithQt6
   ]
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
@@ -68,7 +67,10 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_OpenGL_GL_PREFERENCE" "GLVND")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "USE_MACOS_PACKAGE_MANAGER" false)
+    (lib.cmakeFeature "QWT_INCLUDE_DIR" "${qt6Packages.qwt}/lib/qwt.framework/Headers")
   ];
 
   meta = with lib; {
