@@ -228,8 +228,6 @@ in
         inherit assertions;
         # needed for systemd-remount-fs
         system.fsPackages = [ pkgs.bcachefs-tools ];
-        # FIXME: Remove this line when the LTS (default) kernel is at least version 6.7
-        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
         services.udev.packages = [ pkgs.bcachefs-tools ];
 
         systemd = {
