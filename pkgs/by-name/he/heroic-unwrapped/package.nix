@@ -13,13 +13,14 @@
   vulkan-helper,
   gogdl,
   nile,
-  comet-gog,
+  comet-gog_heroic,
   umu-launcher,
 }:
 
 let
   legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
+  comet-gog = comet-gog_heroic;
   electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
