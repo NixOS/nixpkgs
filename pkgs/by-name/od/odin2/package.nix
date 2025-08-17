@@ -18,14 +18,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odin2";
   version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "TheWaveWarden";
     repo = "odin2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-N96Nb7G6hqfh8DyMtHbttl/fRZUkS8f2KfPSqeMAhHY=";
   };
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ magnetophon ];
     mainProgram = "Odin2";
   };
-}
+})
