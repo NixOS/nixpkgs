@@ -181,8 +181,8 @@ let
       inherit mbuffer;
       # gnu64-bash = pkgs.pkgsCross.gnu64.bash; # https://github.com/NixOS/nixpkgs/issues/243164
       gcc_multi-cc = pkgs.gcc_multi.cc;
-      musl-stdenv = pkgs.pkgsMusl.stdenv;
-      llvm-stdenv = pkgs.pkgsLLVM.stdenv;
+      # musl-stdenv = pkgs.pkgsMusl.stdenv;
+      # llvm-stdenv = pkgs.pkgsLLVM.stdenv;
       static-bash = pkgs.pkgsStatic.bash;
       # gnu64_simplekernel-bash = pkgs.pkgsCross.gnu64_simplekernel.bash;   # https://github.com/NixOS/nixpkgs/issues/264989
       arm-embedded-stdenv = pkgs.pkgsCross.arm-embedded.stdenv;
@@ -203,7 +203,7 @@ let
       # Musl-to-glibc cross on the same architecture tends to turn up
       # lots of interesting corner cases.  Only expected to work for
       # x86_64-linux buildPlatform.
-      musl-gnu64-hello = pkgs.pkgsMusl.pkgsCross.gnu64.hello;
+      # musl-gnu64-hello = pkgs.pkgsMusl.pkgsCross.gnu64.hello;
 
       # Two web browsers -- exercises almost the entire packageset
       aarch64-multiplatform-qutebrowser-qt5 = pkgs.pkgsCross.aarch64-multiplatform.qutebrowser-qt5;
