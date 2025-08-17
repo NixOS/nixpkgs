@@ -6229,6 +6229,8 @@ self: super: with self; {
 
   gpgme = callPackage ../development/python-modules/gpgme { inherit (pkgs) gpgme; };
 
+  gpgmepy = toPythonModule (callPackage ../development/python-modules/gpgmepy { });
+
   gphoto2 = callPackage ../development/python-modules/gphoto2 { };
 
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
