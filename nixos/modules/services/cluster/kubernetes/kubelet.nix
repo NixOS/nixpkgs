@@ -377,7 +377,7 @@ in
                         --pod-infra-container-image=pause \
                         ${optionalString (cfg.manifests != { }) "--pod-manifest-path=/etc/${manifestPath}"} \
                         ${optionalString (taints != "") "--register-with-taints=${taints}"} \
-                        --root-dir=${top.dataDir} \
+                        --root-dir=/var/lib/kubelet \
                         ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
                         ${cfg.extraOpts}
           '';
