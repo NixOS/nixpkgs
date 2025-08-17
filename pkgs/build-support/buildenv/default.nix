@@ -18,8 +18,9 @@ let
     names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 in
 
-# We currently still rely on this custom overrider `<env-pkg>.override`,
-# as fixing the structured attribute support would change the `<pkg>.overrideAttrs` interface.
+# TODO(@ShamrockLee):
+# Deprecate and remove custom overrider <env-pkg>.override
+# after tree-wide transition to <env-pkg>.overrideAttrs
 lib.makeOverridable (
   lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
@@ -94,6 +95,23 @@ lib.makeOverridable (
           "buildInputs"
           "meta"
         ] args;
+      in
+      compatArgs
+      // derivationArgs
+      // {
+        __structuredAttrs = true;
+
+        inherit
+          extraOutputsToInstall
+          manifest
+          ignoreCollisions
+          checkCollisionContents
+          ignoreSingleFileOutputs
+          includeClosures
+          pathsToLink
+          extraPrefix
+          postBuild
+          ;
 
         chosenOutputs = map (drv: {
           paths =
@@ -117,36 +135,22 @@ lib.makeOverridable (
           # Silently use the original `paths` if `passthru.paths` is missing.
         }) finalAttrs.passthru.paths or paths;
 
-        pathsForClosure = lib.pipe chosenOutputs [
-          (map (p: p.paths))
-          lib.flatten
-          (lib.remove null)
-        ];
-      in
-      compatArgs
-      // derivationArgs
-      // {
-        inherit
-          extraOutputsToInstall
-          manifest
-          ignoreCollisions
-          checkCollisionContents
-          ignoreSingleFileOutputs
-          includeClosures
-          pathsToLink
-          extraPrefix
-          postBuild
-          ;
-        pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (writeClosure pathsForClosure);
+        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (
+          let
+            pathsForClosure = lib.pipe finalAttrs.chosenOutputs [
+              (map (p: p.paths))
+              lib.flatten
+              (lib.remove null)
+            ];
+          in
+          writeClosure pathsForClosure
+        );
 
         preferLocalBuild = derivationArgs.preferLocalBuild or true;
         allowSubstitutes = derivationArgs.allowSubstitutes or false;
         passAsFile = [
           "buildCommand"
         ]
-        # XXX: The size is somewhat arbitrary
-        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs"
         ++ derivationArgs.passAsFile or [ ];
 
         buildCommand = ''
