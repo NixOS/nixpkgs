@@ -1790,6 +1790,10 @@ let
       '';
     });
 
+    fcl = old.fcl.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     fio = old.fio.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
