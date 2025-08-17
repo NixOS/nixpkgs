@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     gtksourceview5
     openssl
-    gtksourceview5
     pango
     gdk-pixbuf
     openssl_3
