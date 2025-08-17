@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   cmake,
   runtimeShell,
@@ -28,12 +27,12 @@
   runCommand,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supercollider";
   version = "3.13.1";
 
   src = fetchurl {
-    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
+    url = "https://github.com/supercollider/supercollider/releases/download/Version-${finalAttrs.version}/SuperCollider-${finalAttrs.version}-Source.tar.bz2";
     sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
   };
 
@@ -110,9 +109,9 @@ mkDerivation rec {
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
-    changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
+    changelog = "https://github.com/supercollider/supercollider/blob/Version-${finalAttrs.version}/CHANGELOG.md";
     maintainers = [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})
