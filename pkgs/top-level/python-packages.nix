@@ -10341,6 +10341,8 @@ self: super: with self; {
 
   neuralfoil = callPackage ../development/python-modules/neuralfoil { };
 
+  neurio = callPackage ../development/python-modules/neurio { };
+
   neurokit2 = callPackage ../development/python-modules/neurokit2 { };
 
   neuron-full = pkgs.neuron-full.override { python3 = python; };
@@ -11615,6 +11617,8 @@ self: super: with self; {
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
   pikepdf = callPackage ../development/python-modules/pikepdf { };
+
+  pilight = callPackage ../development/python-modules/pilight { };
 
   pilkit = callPackage ../development/python-modules/pilkit { };
 
@@ -14038,6 +14042,8 @@ self: super: with self; {
 
   pysmartthings = callPackage ../development/python-modules/pysmartthings { };
 
+  pysmarty2 = callPackage ../development/python-modules/pysmarty2 { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
@@ -14637,6 +14643,8 @@ self: super: with self; {
 
   python-gammu = callPackage ../development/python-modules/python-gammu { };
 
+  python-gc100 = callPackage ../development/python-modules/python-gc100 { };
+
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
@@ -15178,6 +15186,8 @@ self: super: with self; {
   pyvows = callPackage ../development/python-modules/pyvows { };
 
   pyw215 = callPackage ../development/python-modules/pyw215 { };
+
+  pyw800rf32 = callPackage ../development/python-modules/pyw800rf32 { };
 
   pywal = callPackage ../development/python-modules/pywal { };
 
@@ -16050,6 +16060,8 @@ self: super: with self; {
   runs = callPackage ../development/python-modules/runs { };
 
   runstats = callPackage ../development/python-modules/runstats { };
+
+  russound = callPackage ../development/python-modules/russound { };
 
   rustworkx = callPackage ../development/python-modules/rustworkx { };
 
