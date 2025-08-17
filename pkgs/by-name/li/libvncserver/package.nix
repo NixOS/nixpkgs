@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  doCheck = enableShared;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && enableShared;
 
   meta = with lib; {
     description = "VNC server library";

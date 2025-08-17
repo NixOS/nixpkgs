@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = optionalString finalAttrs.doCheck ''
     moveToOutput "bin/legacy_samples" "$legacy_samples"
