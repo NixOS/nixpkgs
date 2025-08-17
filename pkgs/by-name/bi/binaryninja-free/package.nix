@@ -16,7 +16,7 @@
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
-  libxml2,
+  libxml2_13,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGLU
     libxkbcommon
+    libxml2_13
     stdenv.cc.cc.lib
     wayland
     xcbutilimage
@@ -66,12 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilrenderutil
     xcbutilwm
   ];
-
-  preFixup = ''
-    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-    mkdir -p "$out/lib"
-    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
-  '';
 
   installPhase = ''
     runHook preInstall
