@@ -12,7 +12,7 @@
   readline,
   xxd,
   iproute2,
-  ...
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,7 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.settingsTemplate = ./pihole.toml;
+  passthru = {
+    settingsTemplate = ./pihole.toml;
+
+    tests.pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
+  };
 
   meta = {
     description = "Pi-hole FTL engine";
