@@ -114,6 +114,7 @@ extra-packages:
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
   - tar == 0.6.0.0                      # 2025-02-08: last version to not require os-string (which can't be built with GHC < 9.2)
+  - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
   - text == 2.0.2                       # 2023-09-14: Needed for elm (which is currently on ghc-8.10)
   - text-metrics < 0.3.3                # 2025-02-08: >= 0.3.3 uses GHC2021
   - versions < 6                        # 2024-04-22: required by spago-0.21
