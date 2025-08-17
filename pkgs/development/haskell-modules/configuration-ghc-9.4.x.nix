@@ -118,6 +118,10 @@ self: super: {
     }
   );
 
+  # Last version to not depend on file-io and directory-ospath-streaming,
+  # which both need unix >= 2.8.
+  tar = self.tar_0_6_3_0;
+
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_6_1_3;
 
