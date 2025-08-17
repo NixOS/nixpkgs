@@ -3,13 +3,9 @@
   # Ensures no aliases are in the results.
   allowAliases = false;
 
-  # Enable recursion into attribute sets that nix-env normally doesn't look into
-  # so that we can get a more complete picture of the available packages for the
-  # purposes of the index.
+  # Remove Packages sets that we don't want to have appear on search.nixos.org and the index.
   packageOverrides =
-    super:
-    with super;
-    lib.mapAttrs (_: set: recurseIntoAttrs set) {
+    super: with super; {
       # minimal-bootstrap packages aren't used for anything but bootstrapping our
       # stdenv. They should not be used for any other purpose and therefore not
       # show up in search results or repository tracking services that consume our
