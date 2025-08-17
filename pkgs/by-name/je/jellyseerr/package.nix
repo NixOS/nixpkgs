@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MaLmdG98WewnNJt7z6OP9xv6zlNwwu/+YnPM0Iebxj4=";
+    hash = "sha256-a3lhQ33Zb+vSu1sQjuqO3bITiQEIOVyFTecmJAhJROU=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
