@@ -202,7 +202,10 @@ lib.extendMkDerivation {
             outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
             # in case an overlay clears passthru by accident, don't fail evaluation
           }).overrideAttrs
-            (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
+            (
+              finalAttrs.passthru.overrideModAttrs
+                or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: Expect `passthru.overrideModAttrs`. Don't strip it from `passthru`." overrideModAttrs)
+            );
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
