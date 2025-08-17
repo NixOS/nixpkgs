@@ -2001,7 +2001,11 @@ let
     });
 
     zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      nativeBuildInputs = [
+        pkgs.cargo
+        pkgs.rustc
+      ]
+      ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
