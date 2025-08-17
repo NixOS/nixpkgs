@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
-    importNpmLock.npmConfigHook
     pkg-config
     wrapGAppsHook4
   ];
