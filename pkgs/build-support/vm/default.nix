@@ -42,7 +42,8 @@ rec {
   qemu = buildPackages.qemu_kvm;
 
   modulesClosure = pkgs.makeModulesClosure {
-    inherit kernel rootModules;
+    kernel = lib.getOutput "modules" kernel;
+    inherit rootModules;
     firmware = kernel;
   };
 
