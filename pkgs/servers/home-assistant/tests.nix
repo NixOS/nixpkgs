@@ -95,6 +95,13 @@ let
       # aioserial mock produces wrong state
       "tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
+    nzbget = [
+      # type assertion fails due to introduction of parameterized type
+      "tests/components/nzbget/test_config_flow.py::test_user_form"
+      "tests/components/nzbget/test_config_flow.py::test_user_form_show_advanced_options"
+      "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
+      "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
+    ];
     openai_conversation = [
       # outdated snapshot
       "tests/components/openai_conversation/test_conversation.py::test_function_call"
