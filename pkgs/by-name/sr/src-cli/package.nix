@@ -2,10 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
-  xorg,
-  testers,
-  src-cli,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
@@ -21,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-bpfDnVqJoJi9WhlA6TDWAhBRkbbQn1BHfnLJ8BTmhGM=";
 
-  subPackages = [
-    "cmd/src"
-  ];
+  subPackages = [ "cmd/src" ];
 
   ldflags = [
     "-s"
@@ -31,12 +27,13 @@ buildGoModule rec {
     "-X=github.com/sourcegraph/src-cli/internal/version.BuildTag=${version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = src-cli;
-      command = "src version -client-only";
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckScript = "${placeholder "out"}/bin/src version -client-only";
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Sourcegraph CLI";
