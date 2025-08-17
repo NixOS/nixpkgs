@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   rev = "v4";
 
   src = fetchurl {
-    url = "https://www.hopperapp.com/downloader/hopperv4/Hopper-${finalAttrs.rev}-${finalAttrs.version}-Linux-demo.pkg.tar.xz";
+    url = "https://www.hopperapp.com/downloader/public/Hopper-${finalAttrs.rev}-${finalAttrs.version}-Linux-demo.pkg.tar.xz";
     curlOptsList = [
       "--user-agent"
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
