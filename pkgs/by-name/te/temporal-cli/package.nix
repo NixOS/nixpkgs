@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.4.1";
+  version = "1.4.1-cloud-v1-29-0-139-2.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fbaqRjYFDeGuCheg3EIUVh/QMhFzLNUb6MUoc/J51Ko=";
+    hash = "sha256-+rXx77KoLeiKRRlxIoywHZSxQInYAUgHN1IK8p85wRk=";
   };
 
-  vendorHash = "sha256-dWcf4X8/Wy/TULdT6PbiMaOd1d+haBlnII+6VKazrD4=";
+  vendorHash = "sha256-ZZgXX3/8xeEQzIr34cVi+WUp2U8ssMy3KCac3ayq0eo=";
 
   overrideModAttrs = old: {
     # https://gitlab.com/cznic/libc/-/merge_requests/10
