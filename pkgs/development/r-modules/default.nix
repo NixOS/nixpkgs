@@ -451,7 +451,10 @@ let
       libjpeg
     ];
     bnpmr = [ pkgs.gsl ];
-    caviarpd = [ pkgs.cargo ];
+    caviarpd = with pkgs; [
+      cargo
+      rustc
+    ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [
       libtiff
