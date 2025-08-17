@@ -586,7 +586,10 @@ let
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
-    heck = [ pkgs.cargo ];
+    heck = with pkgs; [
+      cargo
+      rustc
+    ];
     LOMAR = [ pkgs.gmp.dev ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
