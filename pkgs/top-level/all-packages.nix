@@ -13836,10 +13836,6 @@ with pkgs;
           ;
       };
 
-  gxneur = callPackage ../applications/misc/gxneur {
-    inherit (gnome2) libglade GConf;
-  };
-
   xournalpp = callPackage ../applications/graphics/xournalpp {
     lua = lua5_3;
   };
