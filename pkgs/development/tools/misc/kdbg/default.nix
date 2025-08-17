@@ -16,10 +16,10 @@
 
 stdenv.mkDerivation rec {
   pname = "kdbg";
-  version = "3.1.0";
+  version = "3.2.0";
   src = fetchurl {
     url = "mirror://sourceforge/kdbg/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aLX/0GXof77NqQj7I7FUCZjyDtF1P8MJ4/NHJNm4Yr0=";
+    sha256 = "sha256-GoWLKWD/nWXBTiTbDLxeNArDMyPI/gSzADqyOgxrNHE=";
   };
 
   nativeBuildInputs = [
