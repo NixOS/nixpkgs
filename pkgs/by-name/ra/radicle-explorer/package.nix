@@ -77,7 +77,7 @@ lib.fix (
       # separate hash.
       src = fetchgit {
         inherit (radicle-httpd.src) url rev;
-        hash = "sha256-HRSrLdiDETTWNF+Rzvlg1XQerXcCE2xaY+6Xbq5pItI=";
+        hash = "sha256-1OhZ0x21NlZIiTPCRpvdUsx5UmeLecTjVzH8DWllPr8=";
       };
 
       postPatch = ''
