@@ -11,19 +11,15 @@
     with super;
     lib.mapAttrs (_: set: recurseIntoAttrs set) {
       inherit (super)
-        agdaPackages
-        apacheHttpdPackages
         fusePackages
         gns3Packages
         haskellPackages
-        idrisPackages
         nodePackages
         nodePackages_latest
         platformioPackages
         rPackages
         roundcubePlugins
         sourceHanPackages
-        zabbix60
         ;
 
       # Make sure haskell.compiler is included, so alternative GHC versions show up,
