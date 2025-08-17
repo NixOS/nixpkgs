@@ -316,7 +316,7 @@ in
             scrubTimer =
               fs:
               let
-                fs' = utils.escapeSystemdPath fs;
+                fs' = if fs == "/" then "root" else utils.escapeSystemdPath fs;
               in
               lib.nameValuePair "bcachefs-scrub-${fs'}" {
                 description = "regular bcachefs scrub timer on ${fs}";
@@ -336,7 +336,7 @@ in
             scrubService =
               fs:
               let
-                fs' = utils.escapeSystemdPath fs;
+                fs' = if fs == "/" then "root" else utils.escapeSystemdPath fs;
               in
               lib.nameValuePair "bcachefs-scrub-${fs'}" {
                 description = "bcachefs scrub on ${fs}";
