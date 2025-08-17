@@ -84,6 +84,13 @@ let
       # outdated snapshot in eve_weather_sensor variant
       "tests/components/matter/test_number.py::test_numbers"
     ];
+    minecraft_server = [
+      # FileNotFoundError: [Errno 2] No such file or directory: '/etc/resolv.conf'
+      "tests/components/minecraft_server/test_binary_sensor.py"
+      "tests/components/minecraft_server/test_diagnostics.py"
+      "tests/components/minecraft_server/test_init.py"
+      "tests/components/minecraft_server/test_sensor.py"
+    ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "tests/components/modem_callerid/test_init.py::test_setup_entry"
