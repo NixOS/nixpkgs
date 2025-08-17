@@ -12,13 +12,13 @@
   electron_36,
   vulkan-helper,
   gogdl,
-  legendary-heroic,
   nile,
   comet-gog,
   umu-launcher,
 }:
 
 let
+  legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
   electron = electron_36;
 in
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary-heroic}" \
+      "${lib.getExe legendary}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
@@ -112,7 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.epic-integration = epic-integration;
+  passthru = {
+    inherit epic-integration legendary;
+  };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
