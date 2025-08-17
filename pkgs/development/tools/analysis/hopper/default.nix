@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hopper";
-  version = "5.18.0";
+  version = "5.19.4";
   rev = "v4";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--referer"
       "https://www.hopperapp.com"
     ];
-    hash = "sha256-Z/Y+il5DTdssa2T0RDkDyco098o4JHKeLuwFUpJjgZ0=";
+    hash = "sha256-NYnMJK9F3YxspjriyiLM+vV1HpEunGvznOesQ/FpTl4=";
   };
 
   sourceRoot = ".";
