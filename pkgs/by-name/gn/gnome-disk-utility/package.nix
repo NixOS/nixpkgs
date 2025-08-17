@@ -26,6 +26,7 @@
   systemd,
   udisks2,
   wrapGAppsHook3,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     libsecret
     systemd
     udisks2
+    xz
   ];
 
   passthru = {
