@@ -15,6 +15,7 @@
   qtbase,
   qttools,
   qtwebengine,
+  qtwayland,
   readline,
   qtwebsockets,
   wrapQtAppsHook,
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebsockets
     readline
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    alsa-lib
+    qtwayland
+  ];
 
   hardeningDisable = [ "stackprotector" ];
 
