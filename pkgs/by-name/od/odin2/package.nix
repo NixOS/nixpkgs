@@ -15,6 +15,7 @@
   libXrandr,
   libGL,
   gcc-unwrapped,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -77,6 +78,8 @@ stdenv.mkDerivation rec {
     cp -r LV2/Odin2.lv2 $out/lib/lv2
     cp -r CLAP/Odin2.clap $out/lib/clap
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Odin 2 Synthesizer Plugin";
