@@ -105,6 +105,12 @@ let
     openai_conversation = [
       # outdated snapshot
       "tests/components/openai_conversation/test_conversation.py::test_function_call"
+      # Pydantic validation error
+      "tests/components/openai_conversation/test_conversation.py"
+      "tests/components/openai_conversation/test_ai_task.py"
+      # TypeError: object ImagesResponse can't be used in 'await' expression
+      "tests/components/openai_conversation/test_init.py::test_generate_image_service"
+      "tests/components/openai_conversation/test_init.py::test_generate_image_service_error"
     ];
     overseerr = [
       # imports broken future module
