@@ -1,6 +1,6 @@
 {
   asciidoctor,
-  fetchgit,
+  fetchFromRadicle,
   git,
   installShellFiles,
   lib,
@@ -16,11 +16,13 @@ rustPlatform.buildRustPackage rec {
   env.RADICLE_VERSION = version;
 
   # You must update the radicle-explorer source hash when changing this.
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z4V1sjrXqjvFdnCUbxPFqd5p4DtH5.git";
-    rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
-    hash = "sha256-9rJH4ECqOJ9wnYxCbEFHXo3PlhbPdeOnF+Pf1MzX25c=";
+  src = fetchFromRadicle {
+    seed = "seed.radicle.xyz";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    node = "z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM";
+    tag = "v${version}";
     sparseCheckout = [ "radicle-httpd" ];
+    hash = "sha256-9rJH4ECqOJ9wnYxCbEFHXo3PlhbPdeOnF+Pf1MzX25c=";
   };
 
   sourceRoot = "${src.name}/radicle-httpd";
