@@ -572,6 +572,11 @@ let
     ];
     Rigraphlib = [ pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
+    hypergeo2 = with pkgs; [
+      gmp.dev
+      mpfr.dev
+      pkg-config
+    ];
     imager = [ pkgs.xorg.libX11.dev ];
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [
