@@ -92,6 +92,25 @@ lib.makeOverridable (
           // lib.optionalAttrs (args ? buildInputs) {
             inherit buildInputs;
           };
+      in
+      compatArgs
+      // derivationArgs
+      // {
+        # Explicitly opt in: builder.pl reads all configuration from file $ENV["NIX_ATTRS_JSON_FILE"].
+        __structuredAttrs = true;
+
+        inherit
+          extraOutputsToInstall
+          manifest
+          ignoreCollisions
+          checkCollisionContents
+          ignoreSingleFileOutputs
+          includeClosures
+          meta
+          pathsToLink
+          extraPrefix
+          postBuild
+          ;
 
         chosenOutputs = map (drv: {
           paths =
@@ -115,43 +134,19 @@ lib.makeOverridable (
           # Silently use the original `paths` if `passthru.paths` is missing.
         }) finalAttrs.passthru.paths or paths;
 
-        pathsForClosure = lib.pipe chosenOutputs [
-          (map (p: p.paths))
-          lib.flatten
-          (lib.remove null)
-        ];
-      in
-      compatArgs
-      // derivationArgs
-      // {
-        inherit
-          extraOutputsToInstall
-          manifest
-          ignoreCollisions
-          checkCollisionContents
-          ignoreSingleFileOutputs
-          includeClosures
-          meta
-          pathsToLink
-          extraPrefix
-          postBuild
-          ;
-        pathsToLinkJSON = builtins.toJSON pathsToLink;
-        pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (writeClosure pathsForClosure);
-
-        # Explicitly opt out: builder.pl reads all configuration from %ENV,
-        # which is fundamentally incompatible with __structuredAttrs = true.
-        __structuredAttrs = false;
+        extraPathsFrom = lib.optionalString finalAttrs.includeClosures (
+          let
+            pathsForClosure = lib.pipe finalAttrs.chosenOutputs [
+              (map (p: p.paths))
+              lib.flatten
+              (lib.remove null)
+            ];
+          in
+          writeClosure pathsForClosure
+        );
 
         preferLocalBuild = derivationArgs.preferLocalBuild or true;
         allowSubstitutes = derivationArgs.allowSubstitutes or false;
-        passAsFile = [
-          "buildCommand"
-        ]
-        # XXX: The size is somewhat arbitrary
-        ++ lib.optional (lib.stringLength finalAttrs.pkgs >= 128 * 1024) "pkgs"
-        ++ derivationArgs.passAsFile or [ ];
 
         buildCommand = ''
           ${buildPackages.perl}/bin/perl -w ${builder}

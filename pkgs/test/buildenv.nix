@@ -275,16 +275,16 @@ let
           touch $out
         '';
 
-    # buildEnv explicitly sets __structuredAttrs = false because builder.pl
-    # reads all inputs from environment variables. Verify the build succeeds
-    # even when derivationArgs tries to enable structuredAttrs.
+    # buildEnv explicitly sets __structuredAttrs = true because builder.pl
+    # reads all inputs from `$NIX_ATTRS_JSON_FILE`.
+    # Verify the build succeeds even when derivationArgs tries to disable structuredAttrs.
     structuredAttrs-overridden =
       pkgs.runCommand "test-buildenv-structuredAttrs-overridden"
         {
           testEnv = buildEnv {
             name = "test-env-structuredAttrs";
             paths = [ pkgs.hello ];
-            derivationArgs.__structuredAttrs = true;
+            derivationArgs.__structuredAttrs = false;
           };
         }
         ''
@@ -313,9 +313,9 @@ let
         '';
   };
 
-  # buildEnv's builder.pl reads all inputs from %ENV, which is
-  # fundamentally incompatible with __structuredAttrs = true.
-  # buildEnv explicitly forces __structuredAttrs = false.
+  # buildEnv's builder.pl reads all inputs from `$NIX_ATTRS_JSON_FILE`,
+  # which requires __structuredAttrs = true.
+  # buildEnv explicitly forces __structuredAttrs = true.
   tests-structuredAttrs = {
     testStructuredAttrsExplicitlyFalse = {
       expr =
@@ -323,7 +323,7 @@ let
           name = "test-env";
           paths = [ ];
         }).__structuredAttrs;
-      expected = false;
+      expected = true;
     };
 
     testStructuredAttrsCantBeOverriddenViaDerivationArgs = {
@@ -331,9 +331,9 @@ let
         (buildEnv {
           name = "test-env";
           paths = [ ];
-          derivationArgs.__structuredAttrs = true;
+          derivationArgs.__structuredAttrs = false;
         }).__structuredAttrs;
-      expected = false;
+      expected = true;
     };
   };
 
