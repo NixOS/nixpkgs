@@ -74,7 +74,7 @@ in
       path = [ cfg.package ];
       serviceConfig = {
         Type = "oneshot";
-        DynamicUser = lib.mkDefault true;
+        DynamicUser = true;
         StateDirectory = "urlwatch";
         StateDirectoryMode = "0700";
       };
