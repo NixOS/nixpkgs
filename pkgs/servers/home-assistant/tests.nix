@@ -60,6 +60,12 @@ let
       # outdated snapshot
       "tests/components/backup/test_sensors.py::test_sensors"
     ];
+    bosch_alarm = [
+      # outdated snapshots
+      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-solution_3000]"
+      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-amax_3000]"
+      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-b5512]"
+    ];
     bmw_connected_drive = [
       # outdated snapshot
       "tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
