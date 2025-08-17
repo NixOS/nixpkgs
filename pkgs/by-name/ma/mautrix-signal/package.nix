@@ -68,6 +68,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       pentane
       ma27
+      SchweGELBin
     ];
     mainProgram = "mautrix-signal";
   };
