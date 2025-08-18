@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/var";
 
   meta = with lib; {
-    homepage = "https://www.opendnssec.org/softhsm";
+    homepage = "https://www.softhsm.org/";
     description = "Cryptographic store accessible through a PKCS #11 interface";
     longDescription = "
       SoftHSM provides a software implementation of a generic
