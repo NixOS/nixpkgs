@@ -334,16 +334,6 @@ self: super:
 
   xcalc = addMainProgram super.xcalc { };
 
-  xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    meta = attrs.meta // {
-      maintainers = [ lib.maintainers.lovek323 ];
-    };
-  });
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"
