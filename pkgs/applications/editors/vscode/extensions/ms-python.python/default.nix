@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   vscode-utils,
   icu,
@@ -11,12 +12,36 @@
   vscode-extension-update-script,
 }:
 
+let
+  supported = {
+    x86_64-linux = {
+      hash = "sha256-5hhzI6m5TY6tk75Qv80yCuOTgspxyUwqJM5gPnQOs94=";
+      arch = "linux-x64";
+    };
+    x86_64-darwin = {
+      hash = "sha256-4Ff4FxEosD0osMf3SKlghHBPnwI5pGRgjM2Yst1rSog=";
+      arch = "darwin-x64";
+    };
+    aarch64-linux = {
+      hash = "sha256-8eNuhzHIg4sK8/xyWPnZ2IZ7rZ9Fs9uTqtVNoO1T0Ds=";
+      arch = "linux-arm64";
+    };
+    aarch64-darwin = {
+      hash = "sha256-ZvIE1e+sg7m2baWjc455LcJuT5M2Pe1v4FbPtbpulN8=";
+      arch = "darwin-arm64";
+    };
+  };
+
+  base =
+    supported.${stdenv.hostPlatform.system}
+      or (throw "unsupported platform ${stdenv.hostPlatform.system}");
+
+in
 vscode-utils.buildVscodeMarketplaceExtension rec {
-  mktplcRef = {
+  mktplcRef = base // {
     name = "python";
     publisher = "ms-python";
     version = "2025.10.1";
-    hash = "sha256-3hd940mfxnvqoblIrx/S0A8KwHtYLFuonu52/HGGfak=";
   };
 
   buildInputs = [ icu ];
@@ -52,12 +77,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     homepage = "https://github.com/Microsoft/vscode-python";
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
+    platforms = builtins.attrNames supported;
     maintainers = [
       lib.maintainers.jraygauthier
       lib.maintainers.jfchevrette
