@@ -6031,7 +6031,8 @@
       ];
     "tikteck" =
       ps: with ps; [
-      ]; # missing inputs: tikteck
+        tikteck
+      ];
     "tile" =
       ps: with ps; [
         pytile
