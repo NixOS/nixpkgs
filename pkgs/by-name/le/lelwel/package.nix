@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/0x2a-42/lelwel";
     mainProgram = "llw";
-    license = [
-      lib.licenses.mit
-      lib.licenses.asl20
+    maintainers = with lib.maintainers; [ kpbaks ];
+    license = with lib.licenses; [
+      asl20 # OR
+      mit
     ];
-    maintainers = [ lib.maintainers.kpbaks ];
   };
 })
