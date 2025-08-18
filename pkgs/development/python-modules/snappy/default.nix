@@ -57,9 +57,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "/usr/include/GL" "${libGL.dev}/include/GL"
-    substituteInPlace python/app_menus.py \
-      --replace-fail "os.path.join(os.path.dirname(snappy_dir), 'doc')" \
-                     "os.path.join('${placeholder "doc"}', 'share', 'doc', '$name', 'html')"
     substituteInPlace freedesktop/share/applications/snappy.desktop \
       --replace-fail "Exec=/usr/bin/env python3 -m snappy.app" "Exec=SnapPy"
   '';
@@ -73,8 +70,6 @@ buildPythonPackage rec {
     sphinxHook
     sphinx-rtd-theme
   ];
-
-  sphinxRoot = "doc_src";
 
   buildInputs = [
     libGL
@@ -101,6 +96,12 @@ buildPythonPackage rec {
 
   postInstall = ''
     cp -r freedesktop/share $out/
+  '';
+
+  sphinxRoot = "doc_src";
+
+  postInstallSphinx = ''
+    ln -s ''${!outputDoc}/share/doc/$name/html $out/${python.sitePackages}/snappy/doc
   '';
 
   pythonImportsCheck = [ "snappy" ];
