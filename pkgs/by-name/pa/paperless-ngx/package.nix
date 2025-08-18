@@ -149,8 +149,7 @@ python.pkgs.buildPythonApplication rec {
     fi
     substituteInPlace pyproject.toml \
       --replace-fail '"--numprocesses=auto",' "" \
-      --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES" \
-      --replace-fail "djangorestframework-guardian~=0.3.0" "djangorestframework-guardian2"
+      --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
@@ -194,7 +193,7 @@ python.pkgs.buildPythonApplication rec {
       django-multiselectfield
       django-soft-delete
       djangorestframework
-      djangorestframework-guardian2
+      djangorestframework-guardian
       drf-spectacular
       drf-spectacular-sidecar
       drf-writable-nested
