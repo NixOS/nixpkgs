@@ -39,6 +39,10 @@ buildDotnetModule rec {
     # Embedded base64-encoded app icon in resx fails to parse. Delete it
     sed -zi 's|<data name="$this.Icon".*</data>||g' NetworkMiner/NamedPipeForm.resx
     sed -zi 's|<data name="$this.Icon".*</data>||g' NetworkMiner/UpdateCheck.resx
+
+    # Remove the first three (corrupted) bytes for the desktop file.
+    tail --bytes +4 NetworkMiner/NetworkMiner.desktop > tmp
+    mv tmp NetworkMiner/NetworkMiner.desktop
   '';
 
   nugetDeps = ./deps.json;
