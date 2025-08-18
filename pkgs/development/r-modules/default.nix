@@ -1661,6 +1661,7 @@ let
     "minired" # deprecated on CRAN
 
     # Impure network access during build
+    "BulkSignalR"
     "waddR"
     "tiledb"
     "switchr"
