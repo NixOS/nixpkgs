@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "2.2.5";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${version}";
-    hash = "sha256-kPkKgjze3ohaIaDax3h66JWw5tY+3S0N+lPqXSFFcRY=";
+    hash = "sha256-fHNy8x7C2GXH94ITiaSMNkl142BiaGHDrdJvwnZNQAI=";
   };
 
   postPatch = ''
