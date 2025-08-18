@@ -1040,6 +1040,7 @@
   ./services/monitoring/prometheus/pushgateway.nix
   ./services/monitoring/prometheus/sachet.nix
   ./services/monitoring/prometheus/xmpp-alerts.nix
+  ./services/monitoring/pyroscope.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/riemann.nix
