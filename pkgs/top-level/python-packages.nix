@@ -12811,6 +12811,8 @@ self: super: with self; {
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
+  pyequihash = callPackage ../development/python-modules/pyequihash { };
+
   pyerfa = callPackage ../development/python-modules/pyerfa { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
@@ -15352,6 +15354,8 @@ self: super: with self; {
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qrcode-terminal = callPackage ../development/python-modules/qrcode-terminal { };
+
+  qrcodegen = callPackage ../development/python-modules/qrcodegen { qrcodegen = pkgs.qrcodegen; };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
