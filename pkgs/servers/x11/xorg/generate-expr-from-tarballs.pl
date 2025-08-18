@@ -48,6 +48,7 @@ $pcMap{"xau"} = "libXau";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-atom"} = "xcbutil";
 $pcMap{"xcb-aux"} = "xcbutil";
+$pcMap{"xcb-errors"} = "xcbutilerrors";
 $pcMap{"xcb-event"} = "xcbutil";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-util"} = "xcbutil";
@@ -313,6 +314,7 @@ print OUT <<EOF;
   libx11,
   libxau,
   libxcb,
+  libxcb-errors,
   libxcb-util,
   libxcvt,
   libxcursor,
@@ -399,6 +401,7 @@ self: with self; {
   libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilerrors = libxcb-errors;
   xcbutil = libxcb-util;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
