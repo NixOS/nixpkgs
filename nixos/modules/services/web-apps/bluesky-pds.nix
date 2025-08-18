@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.services.pds;
+  cfg = config.services.bluesky-pds;
 
   inherit (lib)
     getExe
@@ -21,7 +21,7 @@ let
 
   pdsadminWrapper =
     let
-      cfgSystemd = config.systemd.services.pds.serviceConfig;
+      cfgSystemd = config.systemd.services.bluesky-pds.serviceConfig;
     in
     pkgs.writeShellScriptBin "pdsadmin" ''
       DUMMY_PDS_ENV_FILE="$(mktemp)"
@@ -29,15 +29,26 @@ let
       env "PDS_ENV_FILE=$DUMMY_PDS_ENV_FILE"                                                   \
           ${escapeShellArgs cfgSystemd.Environment}                                            \
           ${concatMapStringsSep " " (envFile: "$(cat ${envFile})") cfgSystemd.EnvironmentFile} \
-          ${getExe pkgs.pdsadmin} "$@"
+          ${getExe pkgs.bluesky-pdsadmin} "$@"
     '';
 in
 # All defaults are from https://github.com/bluesky-social/pds/blob/8b9fc24cec5f30066b0d0b86d2b0ba3d66c2b532/installer.sh
 {
-  options.services.pds = {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "pds" "enable" ] [ "services" "bluesky-pds" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "pds" "package" ] [ "services" "bluesky-pds" "package" ])
+    (lib.mkRenamedOptionModule [ "services" "pds" "settings" ] [ "services" "bluesky-pds" "settings" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "pds" "environmentFiles" ]
+      [ "services" "bluesky-pds" "environmentFiles" ]
+    )
+    (lib.mkRenamedOptionModule [ "services" "pds" "pdsadmin" ] [ "services" "bluesky-pds" "pdsadmin" ])
+  ];
+
+  options.services.bluesky-pds = {
     enable = mkEnableOption "pds";
 
-    package = mkPackageOption pkgs "pds" { };
+    package = mkPackageOption pkgs "bluesky-pds" { };
 
     settings = mkOption {
       type = types.submodule {
@@ -154,7 +165,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = cfg.enable;
-        defaultText = literalExpression "config.services.pds.enable";
+        defaultText = literalExpression "config.services.bluesky-pds.enable";
         description = "Add pdsadmin script to PATH";
       };
     };
@@ -165,8 +176,8 @@ in
       systemPackages = [ pdsadminWrapper ];
     };
 
-    systemd.services.pds = {
-      description = "pds";
+    systemd.services.bluesky-pds = {
+      description = "bluesky pds";
 
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
