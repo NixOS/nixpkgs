@@ -57,6 +57,7 @@ $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
 $pcMap{"xvmc"} = "libXvMC";
 $pcMap{"xvmc-wrapper"} = "libXvMC";
+$pcMap{"xxf86dga"} = "libXxf86dga";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -320,6 +321,7 @@ print OUT <<EOF;
   libxrender,
   libxv,
   libxvmc,
+  libxxf86dga,
   lndir,
   luit,
   makedepend,
@@ -396,6 +398,7 @@ self: with self; {
   libXrender = libxrender;
   libXv = libxv;
   libXvMC = libxvmc;
+  libXxf86dga = libxxf86dga;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
