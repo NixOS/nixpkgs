@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   botan2,
   sqlite,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +12,16 @@ stdenv.mkDerivation rec {
   pname = "softhsm";
   version = "2.6.1";
 
-  src = fetchurl {
-    url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
-    hash = "sha256-YSSUcwVLzRgRUZ75qYmogKe9zDbTF8nCVFf8YU30dfI=";
+  src = fetchFromGitHub {
+    owner = "softhsm";
+    repo = "SoftHSMv2";
+    rev = "${version}";
+    hash = "sha256-sx0ceVY795JbtKbQGAVFllB9UJfTdgd242d6c+s1tBw=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   configureFlags = [
     "--with-crypto-backend=botan"
