@@ -17,6 +17,7 @@
   libxau,
   libxcb,
   libxcb-errors,
+  libxcb-image,
   libxcb-util,
   libxcvt,
   libxcursor,
@@ -104,6 +105,7 @@ self: with self; {
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
+  xcbutilimage = libxcb-image;
   xcbutil = libxcb-util;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
@@ -3237,50 +3239,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xcb-cursor" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilimage = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xcbutil,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-image";
-      version = "0.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-image-0.4.1.tar.xz";
-        sha256 = "0g8dwknrlz96k176qxh8ar84x9kpppci9b978zyp24nvvbjqxbfc";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xcbutil
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-image" ];
         platforms = lib.platforms.unix;
       };
     })
