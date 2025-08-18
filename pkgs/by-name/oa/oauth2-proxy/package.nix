@@ -2,27 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "oauth2-proxy";
-  version = "7.8.2";
+  version = "7.11.0";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "oauth2-proxy";
-    sha256 = "sha256-RT0uoNRFFZ3BNSwukGZ0P70jtDYAwUI1m+pzFyHnNjU=";
+    sha256 = "sha256-rZoD1H4YeVs9q8406gpYnWOyOEi2me/KkvSenzL/rA8=";
     rev = "v${version}";
   };
 
-  patches = [
-    ./fix-tests-go-1.24.diff
-  ];
-
-  vendorHash = "sha256-5wkwXHLFEhr5H1vpw4T659456KqgBeMZ8OAnYYU5Ln0=";
+  vendorHash = "sha256-6Asydomg4Xz0JciRnODJSqVBtFAmpfMjDnr1JKr222o=";
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
-  ldflags = [ "-X main.VERSION=${version}" ];
+  ldflags = [ "-X github.com/oauth2-proxy/oauth2-proxy/v7/pkg/version.VERSION=v${version}" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Reverse proxy that provides authentication with Google, Github, or other providers";
