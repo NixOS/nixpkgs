@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     IPCRun
     FileDirList
     FileTouch
+    IOString
   ]);
 
   preConfigure = ''
