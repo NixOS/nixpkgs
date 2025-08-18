@@ -28,7 +28,7 @@ jobs:
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
-      touched: ${{ steps.files.outputs.touched }}
+      touched: ${{ steps.prepare.outputs.touched }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -43,20 +43,6 @@ jobs:
               context,
               core,
             })
-
-      - name: Determine changed files
-        id: files
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const files = (await github.paginate(github.rest.pulls.listFiles, {
-              ...context.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            })).map(file => file.filename)
-
-            if (files.includes('ci/pinned.json')) core.setOutput('touched', ['pinned'])
-            else core.setOutput('touched', [])
 
   check:
     name: Check
