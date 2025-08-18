@@ -457,6 +457,7 @@ mapAliases {
   clang-sierraHack = throw "clang-sierraHack has been removed because it solves a problem that no longer seems to exist. Hey, what were you even doing with that thing anyway?"; # Added 2024-10-05
   clang-sierraHack-stdenv = clang-sierraHack; # Added 2024-10-05
   cli-visualizer = throw "'cli-visualizer' has been removed as the upstream repository is gone"; # Added 2025-06-05
+  clipbuzz = throw "clipbuzz has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   inherit (libsForQt5.mauiPackages) clip; # added 2022-05-17
   cloudlogoffline = throw "cloudlogoffline has been removed"; # added 2025-05-18
   clwrapperFunction = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
@@ -501,6 +502,7 @@ mapAliases {
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
   cutemarked-ng = throw "'cutemarked-ng' has been removed due to lack of maintenance upstream. Consider using 'kdePackages.ghostwriter' instead"; # Added 2024-12-27
   cvs_fast_export = throw "'cvs_fast_export' has been renamed to/replaced by 'cvs-fast-export'"; # Converted to throw 2024-10-17
+  cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
 
   # these are for convenience, not for backward compat and shouldn't expire
   clang9Stdenv = throw "clang9Stdenv has been removed from nixpkgs"; # Added 2024-04-08
@@ -2265,6 +2267,7 @@ mapAliases {
   zig_0_9 = throw "zig 0.9 has been removed, upgrade to a newer version instead"; # Added 2025-01-24
   zig_0_10 = throw "zig 0.10 has been removed, upgrade to a newer version instead"; # Added 2025-01-24
   zig_0_11 = throw "zig 0.11 has been removed, upgrade to a newer version instead"; # Added 2025-04-09
+  zig_0_12 = throw "zig 0.12 has been removed, upgrade to a newer version instead"; # Added 2025-08-18
   zigbee2mqtt_1 = throw "Zigbee2MQTT 1.x has been removed, upgrade to the unversioned attribute."; # Added 2025-08-11
   zigbee2mqtt_2 = zigbee2mqtt; # Added 2025-08-11
   zimlib = throw "'zimlib' has been removed because it was an outdated and unused version of 'libzim'"; # Added 2025-03-07
