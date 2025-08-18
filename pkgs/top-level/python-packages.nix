@@ -18126,6 +18126,8 @@ self: super: with self; {
 
   tika-client = callPackage ../development/python-modules/tika-client { };
 
+  tikteck = callPackage ../development/python-modules/tikteck { };
+
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
   tikzplotlib = callPackage ../development/python-modules/tikzplotlib { };
