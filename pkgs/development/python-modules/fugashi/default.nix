@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-rkQskRz7lgVBrqBeyj9kWO2/7POrZ0TaM+Z7mhpZLvM=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython~=3.0.11" "Cython"
+  '';
+
   nativeBuildInputs = [
     cython
     mecab
