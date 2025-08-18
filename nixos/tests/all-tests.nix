@@ -276,6 +276,7 @@ in
   blint = runTest ./blint.nix;
   blockbook-frontend = runTest ./blockbook-frontend.nix;
   blocky = runTest ./blocky.nix;
+  bluesky-pds = runTest ./bluesky-pds.nix;
   bookstack = runTest ./bookstack.nix;
   boot = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./boot.nix { };
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
@@ -1150,7 +1151,6 @@ in
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   pdns-recursor = runTest ./pdns-recursor.nix;
-  pds = runTest ./pds.nix;
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
