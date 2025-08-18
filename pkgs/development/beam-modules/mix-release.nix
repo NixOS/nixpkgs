@@ -190,7 +190,7 @@ stdenv.mkDerivation (
         # Symlink deps to build root. Similar to above, but allows for mixFodDeps
         # Phoenix projects to find javascript assets.
         ${lib.optionalString (mixFodDeps != null) ''
-          ln -s ../deps ./
+          ln -s "$MIX_DEPS_PATH" ./deps
         ''}
 
         runHook postConfigure
