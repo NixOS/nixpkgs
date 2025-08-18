@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    # Fixes incorrect path to GalaxyCommunication.exe
+    ./pr-4885.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
