@@ -38,7 +38,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/googleapis/genai-toolbox";
     changelog = "https://github.com/googleapis/genai-toolbox/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pilz ];
     mainProgram = "genai-toolbox";
   };
