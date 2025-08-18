@@ -3,7 +3,7 @@
   name = "PDS";
 
   nodes.machine = {
-    services.pds = {
+    services.bluesky-pds = {
       enable = true;
       settings = {
         PDS_PORT = 3000;
@@ -18,7 +18,7 @@
   };
 
   testScript = ''
-    machine.wait_for_unit("pds.service")
+    machine.wait_for_unit("bluesky-pds.service")
     machine.wait_for_open_port(3000)
     machine.succeed("curl --fail http://localhost:3000")
   '';
