@@ -19,6 +19,10 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) aria2;
   };
 
+  eaf-git = callPackage ./manual-packages/eaf-git {
+    inherit (pkgs) ripgrep;
+  };
+
   elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
 
   emacs-application-framework = callPackage ./manual-packages/emacs-application-framework {
