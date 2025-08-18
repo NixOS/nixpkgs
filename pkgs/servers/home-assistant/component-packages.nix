@@ -4857,7 +4857,8 @@
       ];
     "raspyrfm" =
       ps: with ps; [
-      ]; # missing inputs: raspyrfm-client
+        raspyrfm-client
+      ];
     "raven_rock_mfg" =
       ps: with ps; [
       ];
