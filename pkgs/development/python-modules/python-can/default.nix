@@ -24,7 +24,7 @@ buildPythonPackage rec {
   version = "4.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hardbyte";
