@@ -68,6 +68,17 @@ module.exports = async ({ github, context, core }) => {
     core.setOutput('head', headClassification)
     core.info('head classification:', headClassification)
 
+    const files = (
+      await github.paginate(github.rest.pulls.listFiles, {
+        ...context.repo,
+        pull_number: context.payload.pull_request.number,
+        per_page: 100,
+      })
+    ).map((file) => file.filename)
+
+    if (files.includes('ci/pinned.json')) core.setOutput('touched', ['pinned'])
+    else core.setOutput('touched', [])
+
     return
   }
   throw new Error(
