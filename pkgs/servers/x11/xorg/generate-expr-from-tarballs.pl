@@ -39,6 +39,7 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"dmx"} = "libdmx";
 $pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
+$pcMap{"ice"} = "libICE";
 $pcMap{"libfs"} = "libFS";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
@@ -304,6 +305,7 @@ print OUT <<EOF;
   libdmx,
   libfontenc,
   libfs,
+  libice,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -382,6 +384,7 @@ self: with self; {
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
+  libICE = libice;
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
