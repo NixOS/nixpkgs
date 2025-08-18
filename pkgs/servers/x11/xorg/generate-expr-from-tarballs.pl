@@ -47,6 +47,8 @@ $pcMap{"sm"} = "libSM";
 $pcMap{"x11"} = "libX11";
 $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
+$pcMap{"xaw6"} = "libXaw";
+$pcMap{"xaw7"} = "libXaw";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcursor"} = "libXcursor";
@@ -316,6 +318,7 @@ print OUT <<EOF;
   libsm,
   libx11,
   libxau,
+  libxaw,
   libxcb,
   libxcvt,
   libxcursor,
@@ -398,6 +401,7 @@ self: with self; {
   libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
+  libXaw = libxaw;
   libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
