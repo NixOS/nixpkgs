@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPackages,
-  runCommand,
   bc,
   bison,
   flex,
@@ -33,16 +32,24 @@ let
 
   readConfig =
     configfile:
-    import
-      (runCommand "config.nix" { } ''
-        echo "{" > "$out"
-        while IFS='=' read key val; do
-          [ "x''${key#CONFIG_}" != "x$key" ] || continue
-          no_firstquote="''${val#\"}";
-          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-        done < "${configfile}"
-        echo "}" >> $out
-      '').outPath;
+    lib.listToAttrs (
+      map
+        (
+          line:
+          let
+            match = lib.match "(.*)=\"?(.*)\"?" line;
+          in
+          {
+            name = lib.elemAt match 0;
+            value = lib.elemAt match 1;
+          }
+        )
+        (
+          lib.filter (line: !(lib.hasPrefix "#" line || line == "")) (
+            lib.splitString "\n" (builtins.readFile configfile)
+          )
+        )
+    );
 in
 lib.makeOverridable (
   {
@@ -65,7 +72,9 @@ lib.makeOverridable (
     configfile,
     # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
-    config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+    config ? lib.optionalAttrs (builtins.isPath configfile || allowImportFromDerivation) (
+      readConfig configfile
+    ),
     # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
     # automatically extended with extra per-version and per-config values.
     randstructSeed ? "",

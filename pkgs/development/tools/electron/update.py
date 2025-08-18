@@ -100,7 +100,7 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
         .split(")]}'\n")[1]
     )
 
-    gn_commit_date = datetime.strptime(gn_commit_info["commiter"]["time"], "%a %b %d %H:%M:%S %Y %z")
+    gn_commit_date = datetime.strptime(gn_commit_info["committer"]["time"], "%a %b %d %H:%M:%S %Y %z")
     gn_date = gn_commit_date.astimezone(UTC).date().isoformat()
     gn_version = f"0-unstable-{gn_date}"
 
