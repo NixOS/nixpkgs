@@ -24,6 +24,7 @@
   libxext,
   libxfixes,
   libxmu,
+  libxpm,
   libxrandr,
   libxrender,
   libxt,
@@ -103,6 +104,7 @@ self: with self; {
   libXext = libxext;
   libXfixes = libxfixes;
   libXmu = libxmu;
+  libXpm = libxpm;
   libXrandr = libxrandr;
   libXrender = libxrender;
   libXt = libxt;
@@ -2227,50 +2229,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xp" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXpm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      libXt,
-      gettext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXpm";
-      version = "3.5.17";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXpm-3.5.17.tar.xz";
-        sha256 = "0hvf49qy55gwldpwpw7ihcmn5i2iinpjh2rbha63hzcy060izcv4";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        gettext
-      ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xpm" ];
         platforms = lib.platforms.unix;
       };
     })
