@@ -16085,6 +16085,12 @@
     githubId = 51356;
     name = "Mathieu Boespflug";
   };
+  mBornand = {
+    email = "dev.mbornand@systemb.ch";
+    github = "mBornand";
+    githubId = 63592189;
+    name = "Marc Bornand";
+  };
   mbprtpmnr = {
     name = "mbprtpmnr";
     email = "mbprtpmnr@pm.me";
@@ -26312,6 +26318,13 @@
     github = "tymscar";
     githubId = 3742502;
     name = "Oscar Molnar";
+  };
+  typedrat = {
+    name = "Alexis Williams";
+    email = "alexis@typedr.at";
+    github = "typedrat";
+    githubId = 1057789;
+    matrix = "@typedrat:thisratis.gay";
   };
   typetetris = {
     email = "ericwolf42@mail.com";

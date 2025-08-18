@@ -1472,11 +1472,6 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  contour = callPackage ../by-name/co/contour/package.nix {
-    inherit (darwin) libutil sigtool;
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
-  };
-
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   kitty = callPackage ../by-name/ki/kitty/package.nix {
@@ -5319,7 +5314,7 @@ with pkgs;
 
   ghdl-llvm = callPackage ../by-name/gh/ghdl/package.nix {
     backend = "llvm";
-    inherit (llvmPackages_15) llvm;
+    inherit (llvmPackages) llvm;
   };
 
   gcc-arm-embedded = gcc-arm-embedded-14;
@@ -8633,10 +8628,6 @@ with pkgs;
 
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix { };
 
-  libunicode = callPackage ../by-name/li/libunicode/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
-  };
-
   libunwind =
     # Use the system unwinder in the SDK but provide a compatibility package to:
     # 1. avoid evaluation errors with setting `unwind` to `null`; and
@@ -9107,8 +9098,7 @@ with pkgs;
         perl
         gtk3
         python3
-        llvmPackages_15
-        overrideLibcxx
+        llvmPackages_19
         darwin
         ;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
@@ -9390,7 +9380,6 @@ with pkgs;
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
   termbench-pro = callPackage ../by-name/te/termbench-pro/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
     fmt = fmt_11;
   };
 
@@ -10233,7 +10222,7 @@ with pkgs;
   outline = callPackage ../servers/web-apps/outline (
     lib.fix (super: {
       yarn = yarn.override { inherit (super) nodejs; };
-      nodejs = nodejs_20;
+      nodejs = nodejs_22;
     })
   );
 
