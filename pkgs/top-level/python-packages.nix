@@ -11084,6 +11084,8 @@ self: super: with self; {
 
   ortools = (toPythonModule (pkgs.or-tools.override { python3 = self.python; })).python;
 
+  oru = callPackage ../development/python-modules/oru { };
+
   orvibo = callPackage ../development/python-modules/orvibo { };
 
   oryx = callPackage ../development/python-modules/oryx { };
