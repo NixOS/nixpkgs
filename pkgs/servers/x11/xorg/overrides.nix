@@ -147,19 +147,8 @@ self: super:
   });
 
   iceauth = addMainProgram super.iceauth { };
-  ico = addMainProgram super.ico { };
 
   mkfontdir = xorg.mkfontscale;
-
-  libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      autoreconfHook
-      xorg.utilmacros
-    ];
-    meta = attrs.meta // {
-      platforms = lib.platforms.darwin;
-    };
-  });
 
   libXtst = super.libXtst.overrideAttrs (attrs: {
     meta = attrs.meta // {
@@ -188,12 +177,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
   libXxf86misc = super.libXxf86misc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libdmx = super.libdmx.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libFS = super.libFS.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {

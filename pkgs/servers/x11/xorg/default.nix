@@ -5,7 +5,12 @@
   font-alias,
   font-util,
   gccmakedep,
+  ico,
   imake,
+  libapplewm,
+  libdmx,
+  libfontenc,
+  libfs,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -35,7 +40,10 @@ self: with self; {
   inherit
     bdftopcf
     gccmakedep
+    ico
     imake
+    libdmx
+    libfontenc
     libpciaccess
     libxcb
     libxcvt
@@ -50,6 +58,8 @@ self: with self; {
     ;
   fontalias = font-alias;
   fontutil = font-util;
+  libAppleWM = libapplewm;
+  libFS = libfs;
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
@@ -1698,116 +1708,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  ico = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "ico";
-      version = "1.0.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/ico-1.0.6.tar.xz";
-        sha256 = "01a4kykayckxzi4jzggaz3wh9qjcr6f4iykhvq7jhlz767a6kwrq";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libAppleWM = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libAppleWM";
-      version = "be972ebc3a97292e7d2b2350eff55ae12df99a42";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libAppleWM/-/archive/be972ebc3a97292e7d2b2350eff55ae12df99a42/libAppleWM-be972ebc3a97292e7d2b2350eff55ae12df99a42.tar.bz2";
-        sha256 = "1hrq03pahmrbb05r6a7j7m1nxl65wlfi6d2lwm1kvra63q91f9ph";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "applewm" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libFS = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xtrans,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libFS";
-      version = "1.0.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libFS-1.0.10.tar.xz";
-        sha256 = "0xrv9x5v6km7ib3d5k9xr704xkhfvigh8i507mb9i706hqybvawv";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xtrans
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "libfs" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libICE = callPackage (
     {
       stdenv,
@@ -2953,80 +2853,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xxf86vm" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libdmx = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libdmx";
-      version = "1.1.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libdmx-1.1.5.tar.xz";
-        sha256 = "0kzprd1ak3m3042m5hra50nsagswciis9p21ckilyaqbidmf591m";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "dmx" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libfontenc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      zlib,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libfontenc";
-      version = "1.1.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libfontenc-1.1.8.tar.xz";
-        sha256 = "1ihlznj4m49jn1887cr86qqhrrlghvbfj7bbh230svi30pac60kv";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        zlib
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "fontenc" ];
         platforms = lib.platforms.unix;
       };
     })
