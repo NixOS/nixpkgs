@@ -410,7 +410,6 @@ lib.fix (
     updmapLines = { pname, fontMaps, ... }: [ "# from ${pname}:" ] ++ fontMaps;
 
   in
-  # no indent for git diff purpose
   buildEnv {
 
     inherit name;
