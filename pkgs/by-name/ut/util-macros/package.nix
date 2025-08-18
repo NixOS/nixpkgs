@@ -3,9 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  automake,
-  autoconf,
-  libtool,
   testers,
   writeScript,
 }:
@@ -21,13 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [ pkg-config ];
-
-  # not needed for releases, we propagate the needed tools
-  propagatedNativeBuildInputs = [
-    automake
-    autoconf
-    libtool
-  ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
