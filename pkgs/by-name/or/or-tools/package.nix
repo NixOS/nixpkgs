@@ -7,6 +7,8 @@
   ensureNewerSourcesForZipFilesHook,
   fetchFromGitHub,
   fetchpatch,
+  gtest,
+  gbenchmark,
   glpk,
   highs,
   lib,
@@ -54,6 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch";
       url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch?rev=19";
       hash = "sha256-r38ZbRkEW1ZvJb0Uf56c0+HcnfouZZJeEYlIK7quSjQ=";
+    })
+    (fetchpatch {
+      name = "math_opt-only-run-SCIP-tests-if-enabled.patch";
+      url = "https://github.com/google/or-tools/commit/b5a2f8ac40dd4bfa4359c35570733171454ec72b.patch";
+      hash = "sha256-h96zJkqTtwfBd+m7Lm9r/ks/n8uvY4iSPgxMZe8vtXI=";
     })
   ];
 
@@ -108,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     cbc
     eigen
     glpk
+    gbenchmark
+    gtest
     highs
     python3.pkgs.absl-py
     python3.pkgs.pybind11
@@ -131,11 +140,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeCheckInputs = [
     python3.pkgs.matplotlib
+    python3.pkgs.pandas
+    python3.pkgs.pytest
+    python3.pkgs.scipy
+    python3.pkgs.svgwrite
     python3.pkgs.virtualenv
   ];
 
-  # some tests fail on linux and hang on darwin
-  doCheck = false;
+  # some tests fail on aarch64-linux and hang on darwin
+  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
