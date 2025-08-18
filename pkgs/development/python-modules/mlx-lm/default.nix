@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   jinja2,
+  lm-eval,
   mlx,
   numpy,
   protobuf,
@@ -40,9 +41,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    writableTmpDirAsHomeHook
+    lm-eval
     pytestCheckHook
     sentencepiece
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [
@@ -61,7 +63,9 @@ buildPythonPackage rec {
     "tests/test_prompt_cache.py::TestPromptCache::test_cache_to_quantized"
     "tests/test_prompt_cache.py::TestPromptCache::test_cache_with_generate"
     "tests/test_prompt_cache.py::TestPromptCache::test_trim_cache_with_generate"
+
     # RuntimeError: [metal_kernel] No GPU back-end.
+    "tests/test_losses.py"
     "tests/test_models.py::TestModels::test_bitnet"
   ];
 
