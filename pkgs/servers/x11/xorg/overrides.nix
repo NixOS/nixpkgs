@@ -319,18 +319,6 @@ self: super:
     buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
   });
 
-  libSM = super.libSM.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libICE
-      xorg.xtrans
-    ];
-  });
-
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [
       "out"

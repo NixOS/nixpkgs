@@ -43,6 +43,7 @@ $pcMap{"ice"} = "libICE";
 $pcMap{"libfs"} = "libFS";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"sm"} = "libSM";
 $pcMap{"x11"} = "libX11";
 $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
@@ -308,6 +309,7 @@ print OUT <<EOF;
   libice,
   libpciaccess,
   libpthread-stubs,
+  libsm,
   libx11,
   libxau,
   libxcb,
@@ -386,6 +388,7 @@ self: with self; {
   libFS = libfs;
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
   libXcursor = libxcursor;

@@ -14,6 +14,7 @@
   libice,
   libpciaccess,
   libpthread-stubs,
+  libsm,
   libx11,
   libxau,
   libxcb,
@@ -92,6 +93,7 @@ self: with self; {
   libFS = libfs;
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
   libXcursor = libxcursor;
@@ -1738,44 +1740,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libSM = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      libuuid,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libSM";
-      version = "1.2.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libSM-1.2.6.tar.xz";
-        sha256 = "1gimv11iwzd9gqg345dd8x09szw75v4c2wr5qsdd5gswn6yhlz5y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        libuuid
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "sm" ];
         platforms = lib.platforms.unix;
       };
     })
