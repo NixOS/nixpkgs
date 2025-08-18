@@ -63,6 +63,7 @@ $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
 $pcMap{"xcomposite"} = "libXcomposite";
 $pcMap{"xcursor"} = "libXcursor";
+$pcMap{"xdamage"} = "libXdamage";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
@@ -349,6 +350,7 @@ print OUT <<EOF;
   libxcomposite,
   libxcursor,
   libxcvt,
+  libxdamage,
   libxdmcp,
   libxext,
   libxfixes,
@@ -450,6 +452,7 @@ self: with self; {
   libXaw = libxaw;
   libXcomposite = libxcomposite;
   libXcursor = libxcursor;
+  libXdamage = libxdamage;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
