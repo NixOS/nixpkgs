@@ -217,28 +217,6 @@ self: super:
     };
   });
 
-  # Propagate some build inputs because of header file dependencies.
-  # Note: most of these are in Requires.private, so maybe builder.sh
-  # should propagate them automatically.
-  libXt = super.libXt.overrideAttrs (attrs: {
-    preConfigure = ''
-      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
-    '';
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ malloc0ReturnsNullCrossFlag
-      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libSM ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
-    outputDoc = "devdoc";
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-  });
-
   libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
     outputs = [
       "out"
