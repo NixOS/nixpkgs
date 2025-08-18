@@ -30,6 +30,7 @@
   libxrender,
   libxt,
   libxv,
+  libxvmc,
   lndir,
   luit,
   makedepend,
@@ -111,6 +112,7 @@ self: with self; {
   libXrender = libxrender;
   libXt = libxt;
   libXv = libxv;
+  libXvMC = libxvmc;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
@@ -2304,49 +2306,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtst" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXvMC = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXv,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXvMC";
-      version = "1.0.14";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXvMC-1.0.14.tar.xz";
-        sha256 = "1nayf8qck0b1xb88dirdbvj7clr18wq1dxs73zwbpzdsnsv9xgp4";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXv
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xvmc"
-          "xvmc-wrapper"
-        ];
         platforms = lib.platforms.unix;
       };
     })
