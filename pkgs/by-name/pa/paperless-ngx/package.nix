@@ -22,34 +22,24 @@
   xcbuild,
   pango,
   pkg-config,
+  symlinkJoin,
   nltk-data,
   xorg,
 }:
 let
-  version = "2.17.1";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
+    hash = "sha256-POHF00cV8pl6i1rcwxtZ+Q1AlLybDj6gSlL0lPwSSCo=";
   };
 
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_1;
-
-      # TODO remove when paperless-ngx is updated past 2.17.1
-      imap-tools = prev.imap-tools.overridePythonAttrs {
-        version = "1.10.0";
-        src = fetchFromGitHub {
-          owner = "ikvk";
-          repo = "imap_tools";
-          tag = "v1.10.0";
-          hash = "sha256-lan12cHkoxCKadgyFey4ShcnwFg3Gl/VqKWlYAkvF3Y=";
-        };
-      };
+      django = prev.django_5_2;
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -77,7 +67,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 1;
-      hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
+      hash = "sha256-bx/jXlG3lRiwKyz1M0dU00Xn5xaeALSIxIAGzo8gAgo=";
     };
 
     nativeBuildInputs = [
@@ -108,7 +98,8 @@ let
       node-gyp rebuild
       popd
 
-      pnpm run build --configuration production
+      # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
+      pnpm run build --configuration production | cat
 
       runHook postBuild
     '';
@@ -117,7 +108,7 @@ let
     checkPhase = ''
       runHook preCheck
 
-      pnpm run test
+      pnpm run test | cat
 
       runHook postCheck
     '';
@@ -131,6 +122,15 @@ let
       runHook postInstall
     '';
   });
+
+  nltkDataDir = symlinkJoin {
+    name = "paperless_ngx_nltk_data";
+    paths = with nltk-data; [
+      punkt-tab
+      snowball-data
+      stopwords
+    ];
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
@@ -154,14 +154,17 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "django-allauth"
-    "pathvalidate"
+    # https://github.com/NixOS/nixpkgs/pull/432489
+    "django"
+    "scikit-learn"
+
     "redis"
   ];
 
   dependencies =
     with python.pkgs;
     [
+      babel
       bleach
       channels
       channels-redis
@@ -180,6 +183,7 @@ python.pkgs.buildPythonApplication rec {
         }
       ))
       django-auditlog
+      django-cachalot
       django-celery-results
       django-compression-middleware
       django-cors-headers
@@ -208,6 +212,7 @@ python.pkgs.buildPythonApplication rec {
       pathvalidate
       pdf2image
       psycopg
+      psycopg-pool
       python-dateutil
       python-dotenv
       python-gnupg
@@ -296,6 +301,7 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
+    export PAPERLESS_NLTK_DIR=${passthru.nltkDataDir}
   '';
 
   disabledTests = [
@@ -313,6 +319,10 @@ python.pkgs.buildPythonApplication rec {
     # Favicon tests fail due to static file handling in the test environment
     "test_favicon_view"
     "test_favicon_view_missing_file"
+    # Requires DNS
+    "test_send_webhook_data_or_json"
+    "test_workflow_webhook_send_webhook_retry"
+    "test_workflow_webhook_send_webhook_task"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -320,15 +330,11 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     inherit
       frontend
+      nltkDataDir
       path
       python
       tesseract5
       ;
-    nltkData = with nltk-data; [
-      punkt-tab
-      snowball-data
-      stopwords
-    ];
     tests = { inherit (nixosTests) paperless; };
   };
 
