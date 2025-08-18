@@ -288,15 +288,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXmu = super.libXmu.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
-  });
-
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [
       "out"

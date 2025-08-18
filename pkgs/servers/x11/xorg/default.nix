@@ -23,6 +23,7 @@
   libxdmcp,
   libxext,
   libxfixes,
+  libxmu,
   libxrandr,
   libxrender,
   libxt,
@@ -101,6 +102,7 @@ self: with self; {
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXmu = libxmu;
   libXrandr = libxrandr;
   libXrender = libxrender;
   libXt = libxt;
@@ -2185,49 +2187,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xinerama" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXmu = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXmu";
-      version = "1.2.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXmu-1.2.1.tar.xz";
-        sha256 = "1cp82iz7yki63iykvb3alwy4nwy01k2axi5rqpyfafca4j9pgcpw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xmu"
-          "xmuu"
-        ];
         platforms = lib.platforms.unix;
       };
     })
