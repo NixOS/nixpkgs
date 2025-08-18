@@ -82,11 +82,11 @@ stdenv.mkDerivation (finalPackage: rec {
     patchShebangs tests/run.sh tools/all_syscalls tools/all_errnos
 
     substituteInPlace sys-utils/eject.c \
-      --replace "/bin/umount" "$bin/bin/umount"
+      --replace-fail "/bin/umount" "$bin/bin/umount"
   ''
   + lib.optionalString shadowSupport ''
     substituteInPlace include/pathnames.h \
-      --replace "/bin/login" "${shadow}/bin/login"
+      --replace-fail "/bin/login" "${shadow}/bin/login"
   ''
   + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace lib/c_strtod.c --replace-fail __APPLE__ __FreeBSD__
