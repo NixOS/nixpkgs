@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "urserver";
-  version = "3.13.0.2505";
+  version = "3.14.0.2574";
 
   src = fetchurl {
     url = "https://www.unifiedremote.com/static/builds/server/linux-x64/${builtins.elemAt (builtins.splitVersion finalAttrs.version) 3}/urserver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-rklv6Ppha1HhEPunbL8ELYdQ9Z1FN4FrVsNwny3/gA4=";
+    hash = "sha256-4wA2VPb5QN30TWa72pUVTYfvsxlGTO8Vngh7wDHXhDE=";
   };
 
   nativeBuildInputs = [
