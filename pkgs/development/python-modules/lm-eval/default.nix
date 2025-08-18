@@ -23,6 +23,7 @@
   pandas,
   peft,
   pybind11,
+  pythonAtLeast,
   pytablewriter,
   pytestCheckHook,
   requests,
@@ -46,15 +47,19 @@
 
 buildPythonPackage rec {
   pname = "lm-eval";
-  version = "0.4.8";
+  version = "0.4.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${version}";
-    hash = "sha256-F8oy6XTovqiU7FQyuubRsiblSdvfZg9RPIyzRw2GH18=";
+    hash = "sha256-N5NRRabjWxPchwOIkjqYTCKInCmVSY6T5cAmdxNbCkU=";
   };
+
+  # Uses __future__
+  # https://github.com/EleutherAI/lm-evaluation-harness/issues/3245
+  disabled = pythonAtLeast "3.13";
 
   build-system = [
     setuptools-scm
@@ -136,15 +141,14 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # attempts to download models
-    "tests/models/test_huggingface.py"
+    "tests/models"
+    "tests/scripts/test_zeno_visualize.py"
     "tests/test_evaluator.py"
     "tests/test_include_path.py"
     "tests/test_prompt.py"
     "tests/test_task_manager.py"
     "tests/test_tasks.py"
-
-    # optimum-intel is not available
-    "tests/models/test_openvino.py"
+    "tests/test_unitxt_tasks.py"
   ];
 
   meta = {
