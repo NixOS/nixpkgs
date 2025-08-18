@@ -36,7 +36,7 @@
   glib,
   gtk3,
   videoSupport ? true,
-  libmpeg2,
+  mpeg2dec,
 }:
 
 stdenv.mkDerivation rec {
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
   ]
-  ++ lib.optionals videoSupport [ libmpeg2 ];
+  ++ lib.optionals videoSupport [ mpeg2dec ];
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
   installCheckPhase = "make check";
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for keyword extraction";
     mainProgram = "extract";
 
@@ -123,9 +123,8 @@ stdenv.mkDerivation rec {
       additional MIME types are detected.
     '';
 
-    license = licenses.gpl3Plus;
-
-    maintainers = [ maintainers.jorsn ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jorsn ];
+    platforms = lib.platforms.unix;
   };
 }
