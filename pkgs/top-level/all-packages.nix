@@ -12437,7 +12437,9 @@ with pkgs;
     lcms = lcms2;
   };
 
-  inkscape-with-extensions = callPackage ../applications/graphics/inkscape/with-extensions.nix { };
+  inkscape-with-extensions = callPackage ../applications/graphics/inkscape/with-extensions.nix {
+    inkscapeExtensions = null; # All packaged extensions enabled, if not explicit extension list supplied
+  };
 
   inkscape-extensions = recurseIntoAttrs (
     callPackages ../applications/graphics/inkscape/extensions.nix { }
