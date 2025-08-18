@@ -166,13 +166,6 @@ self: super:
     configureFlags = lib.optional isDarwin "CFLAGS=-O0";
   });
 
-  libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
