@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "mlx-lm";
-  version = "0.26.0";
+  version = "0.26.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx-lm";
     tag = "v${version}";
-    hash = "sha256-J69XIqsjQ4sQqhx+EkjKcVXVlQ4A4PGJvICSiCfoSOA=";
+    hash = "sha256-O4wW7wvIqSeBv01LoUCHm0/CgcRc5RfFHjvwyccp6UM=";
   };
 
   build-system = [
@@ -68,6 +68,7 @@ buildPythonPackage rec {
   meta = {
     description = "Run LLMs with MLX";
     homepage = "https://github.com/ml-explore/mlx-lm";
+    changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = [
       "aarch64-darwin"
