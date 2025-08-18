@@ -447,13 +447,6 @@ self: super:
     };
   });
 
-  xcbutilrenderutil = super.xcbutilrenderutil.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
   xcbutilwm = super.xcbutilwm.overrideAttrs (attrs: {
     outputs = [
       "out"

@@ -19,6 +19,7 @@
   libxcb-errors,
   libxcb-image,
   libxcb-keysyms,
+  libxcb-render-util,
   libxcb-util,
   libxcvt,
   libxcursor,
@@ -109,6 +110,7 @@ self: with self; {
   xcbutilimage = libxcb-image;
   xcbutilkeysyms = libxcb-keysyms;
   xcbutil = libxcb-util;
+  xcbutilrenderutil = libxcb-render-util;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -3241,48 +3243,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xcb-cursor" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilrenderutil = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-renderutil";
-      version = "0.3.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz";
-        sha256 = "1fh4dnlwlqyccrhmmwlv082a7mxc7ss7vmzmp7xxp39dwbqd859y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-renderutil" ];
         platforms = lib.platforms.unix;
       };
     })
