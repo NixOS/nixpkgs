@@ -2042,13 +2042,6 @@ let
       postPatch = "patchShebangs configure";
     });
 
-    graper = old.graper.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace "src/Makevars" \
-          --replace-fail "CXX_STD=CXX11" "CXX_STD=CXX14"
-      '';
-    });
-
     ocf = old.ocf.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
