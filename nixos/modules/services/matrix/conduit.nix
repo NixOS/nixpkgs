@@ -34,11 +34,11 @@ in
       default = null;
       example = "/run/secrets/matrix-conduit.env";
       description = ''
-        Path to file containing sensitive environment variables.
+        Path to a file containing sensitive environment as described in {manpage}`systemd.exec(5).
         Some variables that can be considered secrets are:
 
         - CONDUIT_JWT_SECRET:
-          The secret used in the JWT to enable JWT login without it a 400 error will be returned
+          The secret used to enable JWT login. Without it a 400 error will be returned.
 
         - CONDUIT_TURN_SECRET:
           The TURN secret
@@ -131,7 +131,7 @@ in
         <https://docs.conduit.rs/configuration.html>
         for details on supported values.
         Note that database_path can not be edited because the service's reliance on systemd StateDir.
-        For secrets use secretFile option instead.
+        For secrets use the `secretFile` option instead.
       '';
     };
   };
