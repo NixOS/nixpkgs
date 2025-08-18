@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Incorrectly references the dev output, libjansson.so is in out
     substituteInPlace $dev/lib/cmake/jansson/janssonTargets-release.cmake \
-      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
   '';
 
   passthru = {
