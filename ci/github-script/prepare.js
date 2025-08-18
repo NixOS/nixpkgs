@@ -49,6 +49,9 @@ module.exports = async ({ github, context, core }) => {
     )
     core.setOutput('mergedSha', mergedSha)
     core.setOutput('targetSha', targetSha)
+
+    core.setOutput('systems', require('../supportedSystems.json'))
+
     return
   }
   throw new Error(
