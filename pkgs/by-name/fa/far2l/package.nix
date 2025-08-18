@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
       [
         python
         cffi
-        pcpp
       ]
     );
 
