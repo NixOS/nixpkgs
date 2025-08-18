@@ -27,7 +27,7 @@ jobs:
       headBranch: ${{ steps.branches.outputs.head }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
-      systems: ${{ steps.systems.outputs.systems }}
+      systems: ${{ steps.prepare.outputs.systems }}
       touched: ${{ steps.files.outputs.touched }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -43,11 +43,6 @@ jobs:
               context,
               core,
             })
-
-      - name: Load supported systems
-        id: systems
-        run: |
-          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
 
       - name: Determine branch type
         id: branches
