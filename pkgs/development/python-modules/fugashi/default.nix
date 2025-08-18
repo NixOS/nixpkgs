@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   buildPythonPackage,
   cython,
@@ -15,8 +14,7 @@
 buildPythonPackage rec {
   pname = "fugashi";
   version = "1.5.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "polm";
@@ -30,7 +28,7 @@ buildPythonPackage rec {
       --replace-fail "Cython~=3.0.11" "Cython"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     mecab
     setuptools-scm
@@ -56,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
     homepage = "https://github.com/polm/fugashi";
-    changelog = "https://github.com/polm/fugashi/releases/tag/${version}";
+    changelog = "https://github.com/polm/fugashi/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ laurent-f1z1 ];
   };
