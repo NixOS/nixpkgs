@@ -5304,7 +5304,8 @@
       ];
     "sesame" =
       ps: with ps; [
-      ]; # missing inputs: pysesame2
+        pysesame2
+      ];
     "seven_segments" =
       ps: with ps; [
         pillow
