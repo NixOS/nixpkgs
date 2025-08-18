@@ -112,6 +112,9 @@ buildPythonPackage rec {
     "test_cleanup"
     "test_with_autoscaler_file_descriptor_safety"
     "test_with_file_descriptor_safety"
+
+    # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
+    "test_check_privileges_without_c_force_root_and_no_group_entry"
   ];
 
   pythonImportsCheck = [ "celery" ];
