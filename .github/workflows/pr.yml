@@ -23,8 +23,8 @@ jobs:
   prepare:
     runs-on: ubuntu-24.04-arm
     outputs:
-      baseBranch: ${{ steps.branches.outputs.base }}
-      headBranch: ${{ steps.branches.outputs.head }}
+      baseBranch: ${{ steps.prepare.outputs.base }}
+      headBranch: ${{ steps.prepare.outputs.head }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
@@ -43,26 +43,6 @@ jobs:
               context,
               core,
             })
-
-      - name: Determine branch type
-        id: branches
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const { classify } = require('./ci/supportedBranches.js')
-            const { base, head } = context.payload.pull_request
-
-            const baseClassification = classify(base.ref)
-            core.setOutput('base', baseClassification)
-            core.info('base classification:', baseClassification)
-
-            const headClassification =
-              (base.repo.full_name == head.repo.full_name) ?
-              classify(head.ref) :
-              // PRs from forks are always considered WIP.
-              { type: ['wip'] }
-            core.setOutput('head', headClassification)
-            core.info('head classification:', headClassification)
 
       - name: Determine changed files
         id: files
