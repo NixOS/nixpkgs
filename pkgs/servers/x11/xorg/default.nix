@@ -18,6 +18,7 @@
   libxcb,
   libxcb-errors,
   libxcb-image,
+  libxcb-keysyms,
   libxcb-util,
   libxcvt,
   libxcursor,
@@ -106,6 +107,7 @@ self: with self; {
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
   xcbutilimage = libxcb-image;
+  xcbutilkeysyms = libxcb-keysyms;
   xcbutil = libxcb-util;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
@@ -3239,48 +3241,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xcb-cursor" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilkeysyms = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-keysyms";
-      version = "0.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz";
-        sha256 = "0f66snk179hmp8ppgv1zp9y7pl1vzn52znpikm1fsaj1ji90l9kw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-keysyms" ];
         platforms = lib.platforms.unix;
       };
     })
