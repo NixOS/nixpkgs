@@ -25,6 +25,7 @@
   libxfixes,
   libxrandr,
   libxrender,
+  libxt,
   libxv,
   lndir,
   luit,
@@ -102,6 +103,7 @@ self: with self; {
   libXfixes = libxfixes;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXt = libxt;
   libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
@@ -2390,46 +2392,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xres" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXt = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      xorgproto,
-      libSM,
-      libX11,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXt";
-      version = "1.3.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXt-1.3.1.tar.xz";
-        sha256 = "120jjd6l7fjdxy5myrc1dmc0cwpqa18a97hrbg0d9x146frp99z0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        xorgproto
-        libSM
-        libX11
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xt" ];
         platforms = lib.platforms.unix;
       };
     })
