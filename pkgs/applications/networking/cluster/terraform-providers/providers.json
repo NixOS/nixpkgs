@@ -36,13 +36,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "aiven": {
-    "hash": "sha256-36gEDXAZgeniGe6zCmfLkVj0yxYfSk11tmk61cWly04=",
+    "hash": "sha256-9VyYG1wtYJf/eOvHhNWKgs439uSbHmsz7caoq0odZXM=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.43.0",
+    "rev": "v4.44.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-jZ950/nPFt3+t3CHsNEkYo7POabRCHVvcfu04Iq3cJc="
+    "vendorHash": "sha256-HABnNXDWP1s8Gcv1ZW/fNr+dOyUnJ4nTMujjRXsVxu4="
   },
   "akamai": {
     "hash": "sha256-pXBQikG5yjCPj/Nv6+qJBv3+BpRx04CbDQo9Q9nU0o4=",
@@ -180,11 +180,11 @@
     "vendorHash": null
   },
   "bigip": {
-    "hash": "sha256-lhN9YPufx6JITEhwLfqUMudXKTJqFdRCPkS+lTZpmH8=",
+    "hash": "sha256-oJIIhIBQXx5u2OwYcyMo4uRdzWdWLz2PlO9r9ZSRIzo=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.23.1",
+    "rev": "v1.24.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -435,13 +435,13 @@
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw="
   },
   "equinix": {
-    "hash": "sha256-xa8u2qaaCZVOE5pRpPNHGGwG1LiP2CBtQmjeefkUQIU=",
+    "hash": "sha256-h/KqxQJVXBszpAxY8zYO8iQxwowtmRbDMdsHeOasjwQ=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v4.0.0",
+    "rev": "v4.1.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-sAzGv+g1y2y4InpUE2HyT5ibfWWkxW9q29bNGSiDyn8="
+    "vendorHash": "sha256-65gJeUzeWB4BA76Mbw4eBScByyYyUqOl2/jwRVMJOVM="
   },
   "exoscale": {
     "hash": "sha256-TA8mMMeelnkvGcvRy9+QLiRegQYf8xo6vRZ+kb+DY5A=",
@@ -1255,22 +1255,22 @@
     "vendorHash": "sha256-4gtM8U//RXpYc4klCgpZS/3ZRzAHfcbOPTnNqlX4H7M="
   },
   "spacelift": {
-    "hash": "sha256-ovKmGAJ2uLWaVVdwApzCK9RI/tgPS5SoxVmBM8kclxI=",
+    "hash": "sha256-3YjA+x2pL0qzo2ucb8oK5+X+Zb5ewNQkDbizKKop6e0=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.28.1",
+    "rev": "v1.29.0",
     "spdx": "MIT",
     "vendorHash": "sha256-D8VG9CWP4wo+cxb/ewP+b6qAeaBCu6lNwH2leoiBMAc="
   },
   "spotinst": {
-    "hash": "sha256-0SuXvbGms5JM05YqRFZ1RpzI/qy6VO5tSXFP43C2bhw=",
+    "hash": "sha256-uLIm4j7rCPvA8xVZwdd7xHrL8KNLbZypGLVNzUuhVjw=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.224.1",
+    "rev": "v1.225.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vY8ii9HtItuNmbX1ij/orH7RmVV6OhIbKV0VEjQpaig="
+    "vendorHash": "sha256-tfANShbNhWcMZvnJUIbErukbGZyPABVS4l0VKWcLqZA="
   },
   "ssh": {
     "hash": "sha256-1UN5QJyjCuxs2vQYlSuz2jsu/HgGTxOoWWRcv4qcwow=",

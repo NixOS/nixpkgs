@@ -15,17 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
   version = "16.0";
 
-  src =
-    if stdenv.hostPlatform.isLinux then
-      fetchzip {
-        url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-        hash = "sha256-DK+AIk90AC/KjZR0yBMHaRF7ajuX+UvT8rqDVdL678M=";
-      }
-    else
-      fetchurl {
-        url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-        hash = "sha256-TWatSVqm9a+bVLXtJjiWAtkcB7qZqoeJ7Gmr62XUVz4=";
-      };
+  src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
   sourceRoot = ".";
 
@@ -94,6 +84,23 @@ stdenv.mkDerivation (finalAttrs: {
       "text/x-c++src"
       "text/xml"
     ];
+  };
+
+  passthru.srcs = {
+    x86_64-linux = fetchzip {
+      url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
+      hash = "sha256-DK+AIk90AC/KjZR0yBMHaRF7ajuX+UvT8rqDVdL678M=";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
+      hash = "sha256-TWatSVqm9a+bVLXtJjiWAtkcB7qZqoeJ7Gmr62XUVz4=";
+    };
+
+    aarch64-darwin = fetchurl {
+      url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
+      hash = "sha256-CtExBuu6EL8ilq3+gtwjNwnMxXkKgPdrk34tYvjN2ps=";
+    };
   };
 
   meta = {

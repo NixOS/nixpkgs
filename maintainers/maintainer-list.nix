@@ -4589,6 +4589,11 @@
     githubId = 399718;
     name = "Chris Martin";
   };
+  chrisheib = {
+    github = "chrisheib";
+    githubId = 6112968;
+    name = "Christoph Heibutzki";
+  };
   chrisjefferson = {
     email = "chris@bubblescope.net";
     github = "ChrisJefferson";
@@ -22598,6 +22603,12 @@
     github = "sargon";
     githubId = 178904;
     name = "Daniel Ehlers";
+  };
+  sarunint = {
+    email = "nixpkgs@sarunint.com";
+    github = "sarunint";
+    githubId = 3850197;
+    name = "Sarun Intaralawan";
   };
   sascha8a = {
     email = "sascha@localhost.systems";
