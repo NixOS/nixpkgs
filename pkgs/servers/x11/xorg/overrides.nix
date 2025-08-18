@@ -349,13 +349,6 @@ self: super:
     };
   });
 
-  xcbutilimage = super.xcbutilimage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
   xcbutilkeysyms = super.xcbutilkeysyms.overrideAttrs (attrs: {
     outputs = [
       "out"
