@@ -1373,6 +1373,28 @@ with self;
     };
   };
 
+  AppXMLDocBookBuilder = buildPerlPackage {
+    pname = "docmake";
+    version = "0.1101";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/App-XML-DocBook-Builder-0.1101.tar.gz";
+      hash = "sha256-oa8C24OsbeaNdLIssSz/KH3MNFr0WuQJ67govyhxmqQ=";
+    };
+
+    buildInputs = [
+      ClassXSAccessor
+      TestTrap
+      FileShouldUpdate
+    ];
+
+    meta = {
+      description = "automated builder from DocBook/XML to its output formats (e.g XHTML5 or PDF)";
+      homepage = "https://github.com/shlomif/docmake";
+      license = lib.licenses.mit;
+    };
+  };
+
   ArchiveAnyLite = buildPerlPackage {
     pname = "Archive-Any-Lite";
     version = "0.11";
