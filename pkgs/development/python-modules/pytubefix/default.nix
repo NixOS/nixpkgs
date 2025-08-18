@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -19,6 +20,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
