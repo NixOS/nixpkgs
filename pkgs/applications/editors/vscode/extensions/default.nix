@@ -493,8 +493,8 @@ let
         mktplcRef = {
           publisher = "banacorn";
           name = "agda-mode";
-          version = "0.6.3";
-          hash = "sha256-ZyFY3pzNUUpdAB3lqys/z0NOUrQA/qmPquRPNFw/JAI=";
+          version = "0.6.4";
+          hash = "sha256-KBOVVVDw+72QSYv4jynqeVBdIfYz+T5hD2//royVJpw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
@@ -3560,8 +3560,8 @@ let
         mktplcRef = {
           name = "veriloghdl";
           publisher = "mshr-h";
-          version = "1.16.0";
-          hash = "sha256-5C9SggdZ3gtYdQhpPFG4wme98b3VgKicXUpPn84gYb4=";
+          version = "1.16.1";
+          hash = "sha256-GsUNvBUlGZ5gRk6GnAfT0eUKHK+D+cPtdAhuYtxe3w8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
@@ -4270,8 +4270,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.18";
-          hash = "sha256-BHLFlhcIXm3mvmjDPu3fuzpJIGHQvT/RDBEE/QFoRvU=";
+          version = "0.8.19";
+          hash = "sha256-F87YInLUkPUpB2oifCCq1xWD41LUdqg8cusGw2wEYg0=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -4909,8 +4909,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.64";
-          hash = "sha256-mASTMZhXsM8IzaMmHsWRmf+pf1EjXyWsBMFXTcq7Acw=";
+          version = "0.0.65";
+          hash = "sha256-qmjXKuNVYkzaJUUvW/apXzPVE3XuZjxTl3EYNoKHVNc=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

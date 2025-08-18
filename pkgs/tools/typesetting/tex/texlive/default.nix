@@ -5,8 +5,7 @@
 */
 {
   lib,
-  #, stdenv
-  gcc12Stdenv,
+  stdenv,
   fetchpatch,
   fetchurl,
   runCommand,
@@ -45,9 +44,6 @@
   recurseIntoAttrs,
   nixfmt,
 }:
-let
-  stdenv = gcc12Stdenv;
-in
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
