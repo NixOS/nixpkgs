@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   bash,
-  pds,
+  bluesky-pds,
   makeBinaryWrapper,
   jq,
   curl,
@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pdsadmin";
-  inherit (pds) version src;
+  inherit (bluesky-pds) version src;
 
   patches = [ ./pdsadmin-offline.patch ];
 
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Admin scripts for Bluesky Personal Data Server (PDS)";
-    inherit (pds.meta) homepage license;
+    inherit (bluesky-pds.meta) homepage license;
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.unix;
     mainProgram = "pdsadmin";
