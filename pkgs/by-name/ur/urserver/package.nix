@@ -23,16 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    bluez
-    libX11
-    libXtst
-  ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   installPhase = ''
     install -m755 -D urserver $out/bin/urserver
-    wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [
+        libX11
+        libXtst
+        bluez
+      ]
+    }"
     cp -r remotes $out/bin/remotes
     cp -r manager $out/bin/manager
   '';
