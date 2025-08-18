@@ -115,7 +115,7 @@ let
   drivesCmdLine = drives: concatStringsSep "\\\n    " (imap1 driveCmdline drives);
 
   # Shell script to start the VM.
-  startVM = ''
+  runner = hostPkgs.writeScript "run-nixos-vm" ''
     #! ${hostPkgs.runtimeShell}
 
     export PATH=${makeBinPath [ hostPkgs.coreutils ]}''${PATH:+:}$PATH
@@ -1101,6 +1101,17 @@ in
       '';
     };
 
+    virtualisation.runner = mkOption {
+      type = types.package;
+      default = runner;
+      description = ''
+        Shell script that `system.build.vm` executes to start the VM.
+        Exposed read-only to allow i.e. wrapping it in a customized
+        `system.build.vm`.
+      '';
+      readOnly = true;
+    };
+
   };
 
   config = {
@@ -1422,7 +1433,7 @@ in
         ''
           mkdir -p $out/bin
           ln -s ${config.system.build.toplevel} $out/system
-          ln -s ${hostPkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+          ln -s ${cfg.runner} $out/bin/run-${config.system.name}-vm
         '';
 
     # When building a regular system configuration, override whatever
