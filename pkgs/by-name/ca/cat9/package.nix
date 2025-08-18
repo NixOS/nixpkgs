@@ -1,18 +1,17 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchfossil,
   stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
-  version = "0-unstable-2024-06-17";
+  version = "0-unstable-2025-08-17";
 
-  src = fetchFromGitHub {
-    owner = "letoram";
-    repo = "cat9";
-    rev = "f00e8791c1826065d4a93ace12e55ab5732d17a7";
-    hash = "sha256-xFw6r7SQK0T5j7hVK3U39U2Q/qZow6Ad/R0Cl6nqUQw=";
+  src = fetchfossil {
+    url = "https://chiselapp.com/user/letoram/repository/cat9";
+    rev = "459b0141c2e0f2b0d085952f618accb3a9cf455e8714be39f144b1c9dfa1b8b6";
+    hash = "sha256-w+EOl49Cc6I+/i3TSNpbKjT9a2gXbop0YEu/eRckV+M=";
   };
 
   dontConfigure = true;
