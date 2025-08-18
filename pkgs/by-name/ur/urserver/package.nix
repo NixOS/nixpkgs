@@ -7,6 +7,7 @@
   libX11,
   libXtst,
   makeWrapper,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r manager $out/bin/manager
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://www.unifiedremote.com/";
     description = "One-and-only remote for your computer";
@@ -45,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ sfrijters ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "urserver";
   };
 })
