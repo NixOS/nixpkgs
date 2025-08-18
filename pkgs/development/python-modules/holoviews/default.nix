@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -76,6 +77,10 @@ buildPythonPackage rec {
 
     # ModuleNotFoundError: No module named 'param'
     "test_no_blocklist_imports"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails due to font rendering differences
+    "test_categorical_axis_fontsize_both"
   ];
 
   pythonImportsCheck = [ "holoviews" ];
