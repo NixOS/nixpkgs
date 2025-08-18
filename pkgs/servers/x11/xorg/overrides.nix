@@ -202,13 +202,6 @@ self: super:
     };
   });
 
-  libXdamage = super.libXdamage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
   libXft = super.libXft.overrideAttrs (attrs: {
     outputs = [
       "out"
