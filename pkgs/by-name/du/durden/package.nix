@@ -1,18 +1,17 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchfossil,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
-  version = "0-unstable-2024-06-23";
+  version = "0-unstable-2025-08-22";
 
-  src = fetchFromGitHub {
-    owner = "letoram";
-    repo = "durden";
-    rev = "dffb94b69355ffa9cda074c1d0a48af74b78c220";
-    hash = "sha256-sBhlBk4vAYwedw4VerUfY80SXbVoEDid54si6qwDeXs=";
+  src = fetchfossil {
+    url = "https://chiselapp.com/user/letoram/repository/durden";
+    rev = "b880edb269c99ece8ae6dd5713d459036676359d8fe6c3626acaf87aa56e4793";
+    hash = "sha256-GwYMgw8NjnoJcXs35UUW8cTI6Zfies+5Q6i+NHIHYPQ=";
   };
 
   dontConfigure = true;
