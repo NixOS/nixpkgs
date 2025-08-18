@@ -33,10 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Resilient LL(1) parser generator for Rust";
     longDescription = ''
-      Lelwel (Language for Extended LL(1) parsing With Error resilience and Lossless syntax trees)
-      generates recursive descent parsers for Rust using LL(1) grammars
-      with extensions for direct left recursion, operator precedence,
-      semantic predicates, semantic actions, and a restricted ordered choice.
+      Lelwel (Language for Extended LL(1) parsing With Error
+      resilience and Lossless syntax trees) generates recursive
+      descent parsers for Rust using LL(1) grammars with extensions
+      for direct left recursion, operator precedence, semantic
+      predicates, semantic actions, and a restricted ordered choice.
     '';
     homepage = "https://github.com/0x2a-42/lelwel";
     mainProgram = "llw";
