@@ -225,15 +225,6 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
   });
 
-  libXaw = super.libXaw.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
-  });
-
   libXdamage = super.libXdamage.overrideAttrs (attrs: {
     outputs = [
       "out"

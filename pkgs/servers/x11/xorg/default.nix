@@ -17,6 +17,7 @@
   libsm,
   libx11,
   libxau,
+  libxaw,
   libxcb,
   libxcvt,
   libxcursor,
@@ -99,6 +100,7 @@ self: with self; {
   libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
+  libXaw = libxaw;
   libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
@@ -1862,53 +1864,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXaw = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      libXmu,
-      libXpm,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXaw";
-      version = "1.0.16";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXaw-1.0.16.tar.xz";
-        sha256 = "13wwqfwaahm6dh35w0nkvw32x3li2s0glsks34ggh267ahmmf7bk";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-        libXmu
-        libXpm
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xaw6"
-          "xaw7"
-        ];
         platforms = lib.platforms.unix;
       };
     })
