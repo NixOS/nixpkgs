@@ -3,7 +3,7 @@ name: PR
 on:
   pull_request:
     paths:
-      - .github/actions/get-merge-commit/action.yml
+      - .github/actions/checkout/action.yml
       - .github/workflows/build.yml
       - .github/workflows/check.yml
       - .github/workflows/eval.yml
@@ -25,21 +25,24 @@ jobs:
     outputs:
       baseBranch: ${{ steps.branches.outputs.base }}
       headBranch: ${{ steps.branches.outputs.head }}
-      mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
-      targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
+      mergedSha: ${{ steps.prepare.outputs.mergedSha }}
+      targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.systems.outputs.systems }}
       touched: ${{ steps.files.outputs.touched }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: |
-            .github/actions
             ci/github-script
-            ci/supportedBranches.js
-            ci/supportedSystems.json
-      - name: Check if the PR can be merged and get the test merge commit
-        uses: ./.github/actions/get-merge-commit
-        id: get-merge-commit
+      - id: prepare
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            require('./ci/github-script/prepare.js')({
+              github,
+              context,
+              core,
+            })
 
       - name: Load supported systems
         id: systems
