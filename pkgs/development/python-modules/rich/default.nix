@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "14.0.0";
+  version = "14.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "rich";
     tag = "v${version}";
-    hash = "sha256-gnKzb4lw4zgepTfJahHnpw2/vcg8o1kv8KfeVDSHcQI=";
+    hash = "sha256-44L3eVf/gI0FlOlxzJ7/+A1jN6ILkeVEelaru1Io20U=";
   };
 
   build-system = [ poetry-core ];
