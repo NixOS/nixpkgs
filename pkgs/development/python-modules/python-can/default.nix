@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "4.6.0";
+  version = "4.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     tag = "v${version}";
-    hash = "sha256-oKa/LT7tTBLp47t6CQFCEmzBu8b6NQzFCSfi6Ii3NTI=";
+    hash = "sha256-yF/Ir9FUf9Q8GINeT0H4SixzZGetqumU5N6O3GT3M6A=";
   };
 
   build-system = [
