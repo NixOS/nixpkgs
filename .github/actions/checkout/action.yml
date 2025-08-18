@@ -6,7 +6,7 @@ inputs:
   merged-as-untrusted-at:
     description: "Whether and which SHA to checkout for the merge commit in the ./untrusted folder."
     type: boolean
-  pinnedFrom:
+  pinned-from:
     description: "Whether to checkout the pinned nixpkgs for CI and from where (trusted, untrusted)."
     type: string
   target-as-trusted-at:
@@ -31,21 +31,21 @@ runs:
         ref: ${{ inputs.target-as-trusted-at }}
         path: trusted
 
-    - if: inputs.pinnedFrom
+    - if: inputs.pinned-from
       id: pinned
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       env:
-        PINNED_FROM: ${{ inputs.pinnedFrom }}
+        PINNED_FROM: ${{ inputs.pinned-from }}
       with:
         script: |
           const path = require('node:path')
           const pinned = require(path.resolve(path.join(process.env.PINNED_FROM, 'ci', 'pinned.json')))
-          core.setOutput('pinnedSha', pinned.pins.nixpkgs.revision)
+          core.setOutput('pinned-at', pinned.pins.nixpkgs.revision)
 
-    - if: steps.pinned.outputs.pinnedSha
+    - if: steps.pinned.outputs.pinned-at
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
-        ref: ${{ steps.pinned.outputs.pinnedSha }}
+        ref: ${{ steps.pinned.outputs.pinned-at }}
         path: pinned
         sparse-checkout: |
           lib

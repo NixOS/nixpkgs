@@ -91,7 +91,7 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          pinnedFrom: untrusted
+          pinned-from: untrusted
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
@@ -208,7 +208,7 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           target-as-trusted-at: ${{ inputs.targetSha }}
-          pinnedFrom: trusted
+          pinned-from: trusted
 
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
