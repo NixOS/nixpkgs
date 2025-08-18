@@ -316,7 +316,7 @@ let
         })
       ]
       ++ overlays;
-      crossSystem = {
+      crossSystem = stdenv.hostPlatform // {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
           if stdenv.hostPlatform.isLinux then
