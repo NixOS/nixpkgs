@@ -437,13 +437,6 @@ self: super:
 
   xcalc = addMainProgram super.xcalc { };
 
-  xcbutil = super.xcbutil.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
   xcbutilerrors = super.xcbutilerrors.overrideAttrs (attrs: {
     outputs = [
       "out"
