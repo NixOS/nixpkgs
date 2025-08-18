@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,6 +20,8 @@ buildGoModule (finalAttrs: {
 
   # no test file in upstream
   doCheck = false;
+
+  passthru.tests.nixos = nixosTests.local-content-share;
 
   meta = {
     description = "Storing/sharing text/files in your local network with no setup on client devices";

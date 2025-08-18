@@ -849,6 +849,7 @@ in
   litestream = runTest ./litestream.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   lldap = runTest ./lldap.nix;
+  local-content-share = runTest ./local-content-share.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
