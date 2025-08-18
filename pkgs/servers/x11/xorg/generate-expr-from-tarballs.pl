@@ -47,9 +47,14 @@ $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
+$pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xrandr"} = "libXrandr";
+$pcMap{"xrender"} = "libXrender";
 $pcMap{"xtrans"} = "xtrans";
+$pcMap{"xv"} = "libXv";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -305,8 +310,13 @@ print OUT <<EOF;
   libxau,
   libxcb,
   libxcvt,
+  libxcursor,
   libxdmcp,
   libxext,
+  libxfixes,
+  libxrandr,
+  libxrender,
+  libxv,
   lndir,
   luit,
   makedepend,
@@ -353,8 +363,13 @@ self: with self; {
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
+  libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
+  libXfixes = libxfixes;
+  libXrandr = libxrandr;
+  libXrender = libxrender;
+  libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;

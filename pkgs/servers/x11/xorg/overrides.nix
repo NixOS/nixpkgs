@@ -264,13 +264,6 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
   });
 
-  libXcursor = super.libXcursor.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
   libXdamage = super.libXdamage.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -297,13 +290,6 @@ self: super:
     passthru = attrs.passthru // {
       inherit freetype fontconfig;
     };
-  });
-
-  libXfixes = super.libXfixes.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
   });
 
   libXi = super.libXi.overrideAttrs (attrs: {
@@ -341,15 +327,6 @@ self: super:
     buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
   });
 
-  libXrandr = super.libXrandr.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXrender ];
-  });
-
   libSM = super.libSM.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -360,16 +337,6 @@ self: super:
       xorg.libICE
       xorg.xtrans
     ];
-  });
-
-  libXrender = super.libXrender.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
   });
 
   libXres = super.libXres.overrideAttrs (attrs: {
@@ -384,15 +351,6 @@ self: super:
 
   libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXv = super.libXv.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
