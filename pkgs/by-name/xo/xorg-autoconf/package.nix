@@ -8,15 +8,15 @@
 
 stdenv.mkDerivation rec {
   pname = "xorg-autoconf";
-  version = "1.19.3";
+  version = "1.20.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     group = "xorg";
     owner = "util";
     repo = "macros";
-    rev = "util-macros-${version}";
-    sha256 = "sha256-+yEMCjLztdY5LKTNjfhudDS0fdaOj4LKZ3YL5witFR4=";
+    tag = "util-macros-${version}";
+    hash = "sha256-COIWe7GMfbk76/QUIRsN5yvjd6MEarI0j0M+Xa0WoKQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
