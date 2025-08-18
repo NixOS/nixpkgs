@@ -320,21 +320,6 @@ self: super:
     ];
   });
 
-  libXpm = super.libXpm.overrideAttrs (attrs: {
-    outputs = [
-      "bin"
-      "dev"
-      "out"
-    ]; # tiny man in $bin
-    patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
-    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
-    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
-    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
-    meta = attrs.meta // {
-      mainProgram = "sxpm";
-    };
-  });
-
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [
       xorg.libXext
