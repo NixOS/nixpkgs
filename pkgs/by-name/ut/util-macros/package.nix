@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  pkg-config,
   testers,
   writeScript,
 }:
@@ -16,8 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-
-  nativeBuildInputs = [ pkg-config ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
