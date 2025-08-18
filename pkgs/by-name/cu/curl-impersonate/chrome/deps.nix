@@ -2,9 +2,9 @@
 { fetchurl }:
 
 {
-  "curl-8_7_1.tar.gz" = fetchurl {
-    url = "https://github.com/curl/curl/archive/curl-8_7_1.tar.gz";
-    hash = "sha256-DkbIVvUXYCw0e7X+W3MXT47nmLyH8alyNclXYfdfzCg=";
+  "curl-8_15_0.tar.gz" = fetchurl {
+    url = "https://github.com/curl/curl/archive/curl-8_15_0.tar.gz";
+    hash = "sha256-KTfK3eAHqjpSoXwhrJFT6gVHAPN5JtHZZgK/B+iIyEc=";
   };
 
   "brotli-1.1.0.tar.gz" = fetchurl {
@@ -12,13 +12,23 @@
     hash = "sha256-5yCmyilCi4A/StFlNxdx9TmPq6OX7fZ3iDehhZnqE/8=";
   };
 
-  "boringssl.zip" = fetchurl {
-    url = "https://github.com/google/boringssl/archive/d24a38200fef19150eef00cad35b138936c08767.zip";
-    hash = "sha256-tzAAwL70VAyUEOZZ86ql+RgXsw4DZhkvW5l0d1eVVHU=";
+  "boringssl-673e61fc215b178a90c0e67858bbf162c8158993.zip" = fetchurl {
+    url = "https://github.com/google/boringssl/archive/673e61fc215b178a90c0e67858bbf162c8158993.zip";
+    hash = "sha256-7bfWHo3j95EHAXJyPuQfvFUPtVCAzbGHu0oF5g4FmiI=";
   };
 
   "nghttp2-1.63.0.tar.bz2" = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v1.63.0/nghttp2-1.63.0.tar.bz2";
     hash = "sha256-YHsXRVTSKoKLxTLR1zT+D3KbXV7SB/LxLpamLoPynFU=";
+  };
+
+  "ngtcp2-1.11.0.tar.bz2" = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v1.11.0/ngtcp2-1.11.0.tar.bz2";
+    hash = "sha256-122s6G/Docj84codTLsf3pu6k81fKGEdVbypukPjF7w=";
+  };
+
+  "nghttp3-1.9.0.tar.bz2" = fetchurl {
+    url = "https://github.com/ngtcp2/nghttp3/releases/download/v1.9.0/nghttp3-1.9.0.tar.bz2";
+    hash = "sha256-TTCmjxfnKhOStghdr6qfxzLaHX0m7sVUuyFnCDMvzxo=";
   };
 }
