@@ -3,6 +3,7 @@
   stdenv,
   autoreconfHook,
   fetchFromGitLab,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "util-macros-";
+      ignoredVersions = "1_0_2";
+    };
+  };
 
   meta = with lib; {
     description = "GNU autoconf macros shared across X.Org projects";
