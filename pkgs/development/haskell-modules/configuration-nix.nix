@@ -184,7 +184,7 @@ builtins.intersectAttrs super {
 
   # Doesn't declare LLVM dependency, needs llvm-config
   llvm-codegen = addBuildTools [
-    pkgs.llvmPackages_17.llvm.dev # for native llvm-config
+    pkgs.llvmPackages.llvm.dev # for native llvm-config
   ] super.llvm-codegen;
 
   # hledger* overrides

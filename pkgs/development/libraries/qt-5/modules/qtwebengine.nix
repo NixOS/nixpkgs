@@ -217,6 +217,9 @@ qtModule (
         hash = "sha256-DcAYOV9b30ogPCiedvQimEmiZpUJquk5j6WLjJxR54U=";
         extraPrefix = "";
       })
+
+      # Fix the build with gperf ≥ 3.2 and Clang 19.
+      ./qtwebengine-gperf-3.2.patch
     ];
 
     postPatch = ''
