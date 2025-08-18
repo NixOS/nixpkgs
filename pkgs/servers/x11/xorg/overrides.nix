@@ -173,9 +173,6 @@ self: super:
     ];
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
-  libXxf86misc = super.libXxf86misc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
