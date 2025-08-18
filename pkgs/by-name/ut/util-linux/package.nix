@@ -83,6 +83,10 @@ stdenv.mkDerivation (finalPackage: rec {
 
     substituteInPlace sys-utils/eject.c \
       --replace-fail "/bin/umount" "$bin/bin/umount"
+
+    # fix `mount -t` tab completion
+    substituteInPlace bash-completion/{blkid,mount,umount} \
+      --replace-fail "/lib/modules" "/run/booted-system/kernel-modules/lib/modules"
   ''
   + lib.optionalString shadowSupport ''
     substituteInPlace include/pathnames.h \
