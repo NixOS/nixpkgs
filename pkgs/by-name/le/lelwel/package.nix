@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "0x2a-42";
     repo = "lelwel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RGmLKIU8DYy+b3dLVNrRlfJTlylDpoJZnc/7nGJ63rE=";
+    hash = "sha256-mgGRVu7S6fD9kQSlkMPjcHZ0faRsoPvCzrXmKc2dMmo=";
   };
 
   cargoHash = "sha256-n7WiCRhDo6/O6Gx6N81Tg2ScspmI3ivfKAroB7REyPA=";
