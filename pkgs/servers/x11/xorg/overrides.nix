@@ -354,16 +354,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXvMC = super.libXvMC.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-  });
-
   libXp = super.libXp.overrideAttrs (attrs: {
     outputs = [
       "out"
