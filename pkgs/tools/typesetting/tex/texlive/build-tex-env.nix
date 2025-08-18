@@ -396,80 +396,82 @@ lib.fix (
     updmapLines = { pname, fontMaps, ... }: [ "# from ${pname}:" ] ++ fontMaps;
 
   in
-      # no indent for git diff purpose
-      buildEnv {
+  # no indent for git diff purpose
+  buildEnv {
 
-        inherit name;
+    inherit name;
 
-        # remove fake derivations (without 'outPath') to avoid undesired build dependencies
-        paths =
-          builtins.catAttrs "outPath" pkgList.bin
-          ++ lib.optionals (!__combine && __formatsOf == null) pkgList.formats
-          ++ lib.optional __combine doc;
-        pathsToLink = [
-          "/"
-          "/share/texmf-var/scripts"
-          "/share/texmf-var/tex/generic/config"
-          "/share/texmf-var/web2c"
-          "/share/texmf-config"
-          "/bin" # ensure these are writeable directories
-        ];
+    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+    paths =
+      builtins.catAttrs "outPath" pkgList.bin
+      ++ lib.optionals (!__combine && __formatsOf == null) pkgList.formats
+      ++ lib.optional __combine doc;
+    pathsToLink = [
+      "/"
+      "/share/texmf-var/scripts"
+      "/share/texmf-var/tex/generic/config"
+      "/share/texmf-var/web2c"
+      "/share/texmf-config"
+      "/bin" # ensure these are writeable directories
+    ];
 
-        postBuild = ''
-          . "${./build-tex-env.sh}"
-        '';
+    postBuild = ''
+      . "${./build-tex-env.sh}"
+    '';
 
-        derivationArgs = {
-          # use attrNames, attrValues to ensure the two lists are sorted in the same way
-          outputs = [
-            "out"
-          ]
-          ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
-          otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
-            builtins.attrValues nonEnvOutputs
-          );
+    derivationArgs = {
+      # use attrNames, attrValues to ensure the two lists are sorted in the same way
+      outputs = [
+        "out"
+      ]
+      ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
+      otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
+        builtins.attrValues nonEnvOutputs
+      );
 
-          nativeBuildInputs = [
-            makeWrapper
-            libfaketime
-            tl."texlive.infra" # mktexlsr
-            tl.texlive-scripts # fmtutil, updmap
-            tl.texlive-scripts-extra # texlinks
-            perl
-          ];
+      nativeBuildInputs = [
+        makeWrapper
+        libfaketime
+        tl."texlive.infra" # mktexlsr
+        tl.texlive-scripts # fmtutil, updmap
+        tl.texlive-scripts-extra # texlinks
+        perl
+      ];
 
-          buildInputs = [
-            coreutils
-            gawk
-            gnugrep
-            gnused
-          ]
-          ++ lib.optional needsGhostscript ghostscript;
+      buildInputs = [
+        coreutils
+        gawk
+        gnugrep
+        gnused
+      ]
+      ++ lib.optional needsGhostscript ghostscript;
 
-          inherit __combine;
-          __formatsOf = __formatsOf.pname or null;
+      inherit __combine;
+      __formatsOf = __formatsOf.pname or null;
 
-          inherit texmfdist texmfroot;
+      inherit texmfdist texmfroot;
 
-          fontconfigFile = makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; };
+      fontconfigFile = makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; };
 
-          fmtutilCnf = assembleConfigLines fmtutilLines pkgList.sortedFormatPkgs;
-          updmapCfg = assembleConfigLines updmapLines pkgList.sortedFontMaps;
+      fmtutilCnf = assembleConfigLines fmtutilLines pkgList.sortedFormatPkgs;
+      updmapCfg = assembleConfigLines updmapLines pkgList.sortedFontMaps;
 
-          languageDat = assembleConfigLines langDatLines pkgList.sortedHyphenPatterns;
-          languageDef = assembleConfigLines langDefLines pkgList.sortedHyphenPatterns;
-          languageLua = assembleConfigLines langLuaLines pkgList.sortedHyphenPatterns;
+      languageDat = assembleConfigLines langDatLines pkgList.sortedHyphenPatterns;
+      languageDef = assembleConfigLines langDefLines pkgList.sortedHyphenPatterns;
+      languageLua = assembleConfigLines langLuaLines pkgList.sortedHyphenPatterns;
 
-          postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
+      postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
 
-          allowSubstitutes = true;
-          preferLocalBuild = false;
-        };
+      allowSubstitutes = true;
+      preferLocalBuild = false;
+    };
 
-        inherit passthru;
+    inherit passthru;
 
-        meta = meta // lib.optionalAttrs (!__combine && __formatsOf == null) {
-          inherit (pkgList) outputsToInstall;
-        };
-      }
+    meta =
+      meta
+      // lib.optionalAttrs (!__combine && __formatsOf == null) {
+        inherit (pkgList) outputsToInstall;
+      };
+  }
 )
