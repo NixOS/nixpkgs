@@ -39,6 +39,8 @@
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xprop,
+  xrefresh,
   xtrans,
   xwininfo,
   xwud,
@@ -65,6 +67,8 @@ self: with self; {
     transset
     xbitmaps
     xorgproto
+    xprop
+    xrefresh
     xtrans
     xwininfo
     xwud
@@ -6883,42 +6887,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xprop = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xprop";
-      version = "1.2.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xprop-1.2.8.tar.xz";
-        sha256 = "1vk7kl10ykgqp2iw4m1q4j1zrbkxibd1rdb9cjgl6yzgnyny52fn";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrandr = callPackage (
     {
       stdenv,
@@ -6986,42 +6954,6 @@ self: with self; {
       buildInputs = [
         libX11
         libXmu
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xrefresh = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xrefresh";
-      version = "1.1.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xrefresh-1.1.0.tar.xz";
-        sha256 = "0pwb5c9g3xxs70gc35hahxq2ky8261pw9n04j01a6dffbqnmkv99";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
         xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

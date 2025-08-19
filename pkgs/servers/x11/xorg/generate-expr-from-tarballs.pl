@@ -332,6 +332,8 @@ print OUT <<EOF;
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xprop,
+  xrefresh,
   xtrans,
   xwininfo,
   xwud,
@@ -358,6 +360,8 @@ self: with self; {
     transset
     xbitmaps
     xorgproto
+    xprop
+    xrefresh
     xtrans
     xwininfo
     xwud
