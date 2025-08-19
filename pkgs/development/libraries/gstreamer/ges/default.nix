@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   postPatch = ''

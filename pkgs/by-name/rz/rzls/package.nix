@@ -25,11 +25,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "razor";
-    rev = "ce522dd7670dc8e5885b8d078ff5be2877ee33ed";
-    hash = "sha256-FabK93NBoabQPuUr+yaXOxd2acrN3OMqeeCIT6nvAtw=";
+    rev = "9ab78c78721106dcf827e397ff71b07114577712";
+    hash = "sha256-ank/7cg5qubP9oAbj14WZtJ81nNKDh6g8FRVbkdUQAQ=";
   };
 
-  version = "10.0.0-preview.25403.1";
+  version = "10.0.0-preview.25411.5";
   projectFile = "src/Razor/src/rzls/rzls.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;

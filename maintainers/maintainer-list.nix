@@ -13217,7 +13217,7 @@
   };
   kevincox = {
     email = "kevincox@kevincox.ca";
-    matrix = "@kevincox:matrix.org";
+    matrix = "@kevincox:kevincox.ca";
     github = "kevincox";
     githubId = 494012;
     name = "Kevin Cox";
@@ -27097,6 +27097,12 @@
     github = "VuiMuich";
     githubId = 4779365;
     name = "Johannes Mayrhofer";
+  };
+  vuks = {
+    email = "vuks@allthingslinux.org";
+    github = "Vuks69";
+    githubId = 51289041;
+    name = "Vuks";
   };
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";
