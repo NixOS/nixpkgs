@@ -2867,6 +2867,8 @@ self: super: with self; {
 
   compressed-tensors = callPackage ../development/python-modules/compressed-tensors { };
 
+  concord232 = callPackage ../development/python-modules/concord232 { };
+
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
