@@ -77,5 +77,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ doronbehar ];
+  meta.maintainers = with lib.maintainers; [
+    bmrips
+    doronbehar
+  ];
 }
