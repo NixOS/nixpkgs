@@ -56,14 +56,14 @@
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.10.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
     tag = "v${version}";
-    hash = "sha256-IQ0EAjj8kYUwzvMsAiNnvRm/twC40r9JWXUocaETjC8=";
+    hash = "sha256-VG2rhkiwPFN3JYSBbqrwCdqhdGE8GY6oEatMSCydhw8=";
   };
 
   patches = [
@@ -177,12 +177,8 @@ buildPythonPackage rec {
     # AssertionError: 2.1376906810000946 not less than 2.0
     "test_recursive_pad"
 
-    # Since updated onnx to 1.18.0:
-    # onnxruntime.capi.onnxruntime_pybind11_state.Fail: [ONNXRuntimeError] : 1 : FAIL : Load model from ...
-    # Unsupported model IR version: 11, max supported IR version: 10
-    "test_quant_128"
-
     # Require internet access
+    "testCopySHMtoDefault"
     "test_benchmark_openpilot_model"
     "test_bn_alone"
     "test_bn_linear"
@@ -191,13 +187,21 @@ buildPythonPackage rec {
     "test_chicken"
     "test_chicken_bigbatch"
     "test_conv_mnist"
-    "testCopySHMtoDefault"
     "test_data_parallel_resnet"
+    "test_dataset_is_realized"
     "test_e2e_big"
     "test_fetch_small"
     "test_huggingface_enet_safetensors"
     "test_index_mnist"
     "test_linear_mnist"
+    "test_llama_basic"
+    "test_llama_bytes"
+    "test_llama_control_char"
+    "test_llama_early_tokenize"
+    "test_llama_pat"
+    "test_llama_repeat"
+    "test_llama_special1"
+    "test_llama_special2"
     "test_load_convnext"
     "test_load_enet"
     "test_load_enet_alt"
