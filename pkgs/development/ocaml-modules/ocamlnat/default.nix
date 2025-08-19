@@ -7,9 +7,6 @@
   ounit,
 }:
 
-# https://github.com/bmeurer/ocamlnat/issues/3
-assert lib.versionOlder ocaml.version "4";
-
 stdenv.mkDerivation rec {
   pname = "ocamlnat";
   version = "0.1.1";
@@ -53,5 +50,6 @@ stdenv.mkDerivation rec {
     maintainers = [
       lib.maintainers.maggesi
     ];
+    broken = !(lib.versionOlder ocaml.version "4");
   };
 }

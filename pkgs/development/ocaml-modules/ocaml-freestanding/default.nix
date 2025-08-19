@@ -15,79 +15,74 @@
 let
   pname = "ocaml-freestanding";
 in
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  inherit pname;
+  version = "0.6.5";
 
-if lib.versionOlder ocaml.version "4.08" then
-  builtins.throw "${pname} is not available for OCaml ${ocaml.version}"
-else
+  src = fetchFromGitHub {
+    owner = "mirage";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256:1mbyjzwcs64n7i3xkkyaxgl3r46drbl0gkqf3fqgm2kh3q03638l";
+  };
 
-  stdenv.mkDerivation rec {
-    name = "ocaml${ocaml.version}-${pname}-${version}";
-    inherit pname;
-    version = "0.6.5";
+  postUnpack = ''
+    # get ocaml-src from the ocaml drv instead of via ocamlfind
+    mkdir -p "${src.name}/ocaml"
+    tar --strip-components=1 -xf ${ocaml.src} -C "${src.name}/ocaml"
+  '';
 
-    src = fetchFromGitHub {
-      owner = "mirage";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256:1mbyjzwcs64n7i3xkkyaxgl3r46drbl0gkqf3fqgm2kh3q03638l";
-    };
+  patches = [
+    ./no-opam.patch
+    ./configurable-binding.patch
+  ];
 
-    postUnpack = ''
-      # get ocaml-src from the ocaml drv instead of via ocamlfind
-      mkdir -p "${src.name}/ocaml"
-      tar --strip-components=1 -xf ${ocaml.src} -C "${src.name}/ocaml"
-    '';
+  strictDeps = true;
 
-    patches = [
-      ./no-opam.patch
-      ./configurable-binding.patch
-    ];
+  nativeBuildInputs = [
+    ocaml
+    pkg-config
+  ];
 
-    strictDeps = true;
+  propagatedBuildInputs = [ solo5 ];
 
-    nativeBuildInputs = [
-      ocaml
-      pkg-config
-    ];
+  configurePhase = ''
+    runHook preConfigure
+    env PKG_CONFIG_DEPS=solo5-bindings-${target} sh configure.sh
+    runHook postConfigure
+  '';
 
-    propagatedBuildInputs = [ solo5 ];
+  installPhase = ''
+    runHook preInstall
+    ./install.sh "$out"
+    runHook postInstall
+  '';
 
-    configurePhase = ''
-      runHook preConfigure
-      env PKG_CONFIG_DEPS=solo5-bindings-${target} sh configure.sh
-      runHook postConfigure
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      ./install.sh "$out"
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      broken = true; # Not compatible with solo5 ≥ 0.7
-      description = "Freestanding OCaml runtime";
-      license = licenses.mit;
-      maintainers = [ maintainers.sternenseemann ];
-      homepage = "https://github.com/mirage/ocaml-freestanding";
-      platforms = builtins.map ({ arch, os }: "${arch}-${os}") (
-        cartesianProduct {
-          arch = [
-            "aarch64"
-            "x86_64"
-          ];
-          os = [ "linux" ];
+  meta = with lib; {
+    broken = lib.versionOlder ocaml.version "4.08" || true; # Not compatible with solo5 ≥ 0.7
+    description = "Freestanding OCaml runtime";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+    homepage = "https://github.com/mirage/ocaml-freestanding";
+    platforms = builtins.map ({ arch, os }: "${arch}-${os}") (
+      cartesianProduct {
+        arch = [
+          "aarch64"
+          "x86_64"
+        ];
+        os = [ "linux" ];
+      }
+      ++ [
+        {
+          arch = "x86_64";
+          os = "freebsd";
         }
-        ++ [
-          {
-            arch = "x86_64";
-            os = "freebsd";
-          }
-          {
-            arch = "x86_64";
-            os = "openbsd";
-          }
-        ]
-      );
-    };
-  }
+        {
+          arch = "x86_64";
+          os = "openbsd";
+        }
+      ]
+    );
+  };
+}
