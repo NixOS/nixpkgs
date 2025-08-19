@@ -7,7 +7,10 @@
 
 let
   sources = {
-    # For v18, see https://github.com/ossc-db/pg_hint_plan/issues/224
+    "18" = {
+      version = "1.8.0";
+      hash = "sha256-QsDppGN5TE7CSii3mNmwqT/riNNjyRTJk6d6Xcf0JMw=";
+    };
     "17" = {
       version = "1.7.1";
       hash = "sha256-9GKqyrNpi80I4WWIiRN8zeXBm5bkRuzOWrZVfpYOzag=";
