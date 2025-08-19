@@ -16,7 +16,7 @@
   pango,
   pixman,
   pkg-config,
-  python3,
+  python312,
   rustfmt,
   stdenv,
   perl,
@@ -27,6 +27,7 @@
       inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
     }
   ),
+  ui_builder ? (callPackage ./ui_builder.nix { }),
   libxml2,
   xmlsec,
   libxslt,
@@ -40,6 +41,7 @@
   cargo,
   coreutils,
   withEnterpriseFeatures ? false,
+  withClosedSourceFeatures ? false,
 }:
 
 let
@@ -66,41 +68,61 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-6htM6p09mPUQmS+QVBDO7Y/tuwweHgA+W/E3XTNunB8=";
 
   buildFeatures = [
-    "embedding"
-    "parquet"
-    "prometheus"
-    "openidconnect"
+    "agent_worker_server"
+    # "benchmark" # DO NOT ACTIVATE, this is for benchmark testing
+    #"bigquery"
     "cloud"
-    "jemalloc"
-    "deno_core"
-    "license"
-    "http_trigger"
-    "zip"
-    "oauth2"
-    "kafka"
-    "otel"
-    "dind"
-    "php"
-    "mysql"
-    "mssql"
-    "bigquery"
-    "websocket"
-    "python"
-    "smtp"
     "csharp"
+    "default"
+    "deno_core"
+    "dind"
+    #"duckdb"
+    "embedding"
+    "flow_testing"
+    "gcp_trigger"
+    "http_trigger"
+    #"java"
+    "jemalloc"
+    "kafka"
+    "license"
+    "loki"
+    "mcp"
+    "mqtt_trigger"
+    #"mssql"
+    #"mysql"
+    "nats"
+    #"nu"
+    "oauth2"
+    "openidconnect"
+    #"oracledb"
+    "parquet"
+    "php"
+    "postgres_trigger"
+    "python"
+    #"ruby"
+    #"rust" # compiler environment is incomplete
+    "scoped_cache"
+    "smtp"
+    "sqlx"
+    "sqs_trigger"
     "static_frontend"
-    # "rust" # compiler environment is incomplete
+    "websocket"
+    "zip"
   ]
   ++ (lib.optionals withEnterpriseFeatures [
-    "enterprise"
     "enterprise_saml"
-    "tantivy"
+    "enterprise"
+    "otel"
+    "prometheus"
     "stripe"
-  ]);
+    "tantivy"
+  ])
+  ++ (lib.optionals withClosedSourceFeatures [ "private" ]);
 
   patches = [
     ./download.py.config.proto.patch
     ./python_executor.patch
+    ./python_versions.patch
     ./run.ansible.config.proto.patch
     ./run.bash.config.proto.patch
     ./run.bun.config.proto.patch
@@ -111,15 +133,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./run.python3.config.proto.patch
     ./run.rust.config.proto.patch
     ./rust_executor.patch
-    ./swagger-cli.patch
   ];
 
   postPatch = ''
     substituteInPlace windmill-common/src/utils.rs \
       --replace-fail 'unknown-version' 'v${version}'
-
-    substituteInPlace windmill-worker/src/python_executor.rs \
-      --replace-fail 'unknown_system_python_version' '${python3.version}'
   '';
 
   buildInputs = [
@@ -142,19 +160,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # needs a postgres database running
   doCheck = false;
 
-  # TODO; Check if the rpath is still required
-  # patchelf --set-rpath ${lib.makeLibraryPath [ openssl ]} $out/bin/windmill
   postFixup = ''
     wrapProgram "$out/bin/windmill" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]} \
       --prefix PATH : ${
         lib.makeBinPath [
-          python3 # uv searches PATH for system python
+          # uv searches for python on path as well!
+          python312
+
           procps # bash_executor
           coreutils # bash_executor
         ]
       } \
-      --set PYTHON_PATH "${python3}/bin/python3" \
+      --set PYTHON_PATH "${python312}/bin/python3" \
       --set GO_PATH "${go}/bin/go" \
       --set DENO_PATH "${deno}/bin/deno" \
       --set NSJAIL_PATH "${nsjail}/bin/nsjail" \
@@ -186,6 +204,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       cp ${src}/openflow.openapi.yaml .
     '';
 
+    # WORKS
+    npmFlags = [
+      # Skip "postinstall" script that attempts to download and unpack ui-builder (patching out the url with nix-store path doesn't work)
+      "--ignore-scripts"
+    ];
+
     preBuild = ''
       npm run generate-backend-client
     '';
@@ -202,6 +226,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installPhase = ''
       mkdir -p $out/share
       mv build $out/share/windmill-frontend
+
+      mkdir -p $out/share/windmill-frontend/static
+      ln -s ${ui_builder} $out/share/windmill-frontend/static/ui_builder
     '';
   };
 
@@ -213,6 +240,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     })
     (./update-librusty.sh)
+    (./update-ui_builder.sh)
   ];
 
   meta = {
