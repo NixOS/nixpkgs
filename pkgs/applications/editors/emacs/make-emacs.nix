@@ -96,10 +96,9 @@
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
   withXinput2 ? withX,
   withXwidgets ?
-    !stdenv.hostPlatform.isDarwin
-    && !noGui
-    && (withGTK3 || withPgtk)
-    && (lib.versionOlder version "30"), # XXX: upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
+    !noGui && (withGTK3 || withPgtk) && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
+  # XXX: upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
+  # XXX: webkit of apple-sdk is complatible with emacs
   withSmallJaDic ? false,
   withCompressInstall ? true,
 
@@ -348,9 +347,16 @@ mkDerivation (finalAttrs: {
   ++ lib.optionals withXinput2 [
     libXi
   ]
-  ++ lib.optionals withXwidgets [
-    webkitgtk_4_0
-  ]
+  ++ lib.optionals withXwidgets (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        apple-sdk # apple-sdk includes webkit for --with-xwidgets
+      ]
+    else
+      [
+        webkitgtk_4_0
+      ]
+  )
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
   ]
