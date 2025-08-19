@@ -212,7 +212,7 @@ rec {
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${kernel}/lib/modules/
+    export MODULE_DIR=${lib.getOutput "modules" kernel}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
