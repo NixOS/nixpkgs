@@ -349,13 +349,6 @@ self: super:
     };
   });
 
-  xcbutilwm = super.xcbutilwm.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"
