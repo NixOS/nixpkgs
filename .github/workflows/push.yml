@@ -39,8 +39,6 @@ jobs:
     # Those are not actually used on push, but will throw an error if not set.
     permissions:
       # compare
-      issues: write
-      pull-requests: write
       statuses: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
