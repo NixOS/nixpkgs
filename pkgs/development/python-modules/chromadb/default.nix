@@ -88,11 +88,6 @@ buildPythonPackage rec {
     hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
   };
 
-  patches = [
-    # The fastapi servers can't set up their networking in the test environment, so disable for testing
-    ./disable-fastapi-fixtures.patch
-  ];
-
   postPatch = ''
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
     substituteInPlace pyproject.toml \
@@ -188,9 +183,12 @@ buildPythonPackage rec {
     "-Wignore:PytestCollectionWarning"
   ];
 
+  # Skip the distributed and integration tests
+  # See https://github.com/chroma-core/chroma/issues/5315
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
     export HOME=$(mktemp -d)
+    export CHROMA_RUST_BINDINGS_TEST_ONLY=1
   '';
 
   disabledTests = [
@@ -209,8 +207,6 @@ buildPythonPackage rec {
     "test_collection_query_with_invalid_collection_throws"
     "test_collection_update_with_invalid_collection_throws"
     "test_default_embedding"
-    "test_invalid_index_params"
-    "test_peek"
     "test_persist_index_loading"
     "test_query_id_filtering_e2e"
     "test_query_id_filtering_medium_dataset"
