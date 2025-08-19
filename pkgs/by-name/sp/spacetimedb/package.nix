@@ -19,7 +19,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KslKsTVhc4xz1XMkkk40tqVZnLoL9UuSPvFHvdZ5vrI=";
+    hash = "sha256-3wuHR/dibB/JdDBxNLdch5Mlqbq/xnm3nWojyaTY9wE=";
+    # required for build.rs to set GIT_HASH for compile time
+    leaveDotGit = true;
   };
 
   cargoHash = "sha256-DpGKSWCXSp7fvA1OdZ4YZnanvmKlnxBGsyhEThNwkGo=";
