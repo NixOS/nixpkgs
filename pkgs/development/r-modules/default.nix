@@ -1780,6 +1780,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     cartogramR = old.cartogramR.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
