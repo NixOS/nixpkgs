@@ -918,6 +918,7 @@ in
   modularService = pkgs.callPackage ../modules/system/service/systemd/test.nix {
     inherit evalSystem;
   };
+  modular-service-etc = runTest ./modular-service-etc/test.nix;
   molly-brown = runTest ./molly-brown.nix;
   mollysocket = runTest ./mollysocket.nix;
   monado = runTest ./monado.nix;
