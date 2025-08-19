@@ -6290,6 +6290,8 @@ self: super: with self; {
 
   google-search-results = callPackage ../development/python-modules/google-search-results { };
 
+  google-vizier = callPackage ../development/python-modules/google-vizier { };
+
   googleapis-common-protos = callPackage ../development/python-modules/googleapis-common-protos { };
 
   googlemaps = callPackage ../development/python-modules/googlemaps { };
@@ -18423,6 +18425,10 @@ self: super: with self; {
   tensorflow-estimator-bin =
     callPackage ../development/python-modules/tensorflow-estimator/bin.nix
       { };
+
+  tensorflow-gnn = callPackage ../development/python-modules/tensorflow-gnn {
+    protobufc = pkgs.protobuf;
+  };
 
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
