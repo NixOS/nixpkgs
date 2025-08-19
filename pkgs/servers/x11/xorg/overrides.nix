@@ -1177,8 +1177,6 @@ self: super:
   xsm = addMainProgram super.xsm { };
   xstdcmap = addMainProgram super.xstdcmap { };
   xwd = addMainProgram super.xwd { };
-  xwininfo = addMainProgram super.xwininfo { };
-  xwud = addMainProgram super.xwud { };
 
   # convert Type1 vector fonts to OpenType fonts
   fontbitstreamtype1 = super.fontbitstreamtype1.overrideAttrs (attrs: {

@@ -332,6 +332,8 @@ print OUT <<EOF;
   xorgproto,
   xorg-sgml-doctools,
   xtrans,
+  xwininfo,
+  xwud,
 }:
 
 self: with self; {
@@ -355,6 +357,8 @@ self: with self; {
     xbitmaps
     xorgproto
     xtrans
+    xwininfo
+    xwud
     ;
   fontalias = font-alias;
   fontutil = font-util;
