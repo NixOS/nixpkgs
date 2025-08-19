@@ -33,7 +33,8 @@ let
     "${configFile}"
     "-u"
     "ntp:ntp"
-  ] ++ cfg.extraFlags;
+  ]
+  ++ cfg.extraFlags;
 
 in
 

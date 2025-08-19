@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vNeOJOyQsjDUzScA1a/W+SI1Z67HTLiHjwWZZpr1Paw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mMoYJ3dLpb1Y3Ocdyxg1brE7xYeZBbtUg0J/2HTK0hE=";
 
   nativeBuildInputs = [
@@ -49,16 +48,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    [
-      "use_zlib"
-      "use_zstd_thin"
-      # "bzip3" will be optional in the next version
-      "zstd/pkg-config"
-    ]
-    ++ lib.optionals enableUnfree [
-      "unrar"
-    ];
+  buildFeatures = [
+    "use_zlib"
+    "use_zstd_thin"
+    # "bzip3" will be optional in the next version
+    "zstd/pkg-config"
+  ]
+  ++ lib.optionals enableUnfree [
+    "unrar"
+  ];
 
   postInstall = ''
     installManPage artifacts/*.1

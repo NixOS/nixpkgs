@@ -67,62 +67,60 @@ buildPythonApplication rec {
       vendorHash = "sha256-q5LMyogAqgUFfln7LVkhuXzYSMuYmOif5sj15KkOjB4=";
     }).goModules;
 
-  buildInputs =
-    [
-      harfbuzz
-      ncurses
-      simde
-      lcms2
-      librsync
-      matplotlib
-      openssl.dev
-      xxHash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpng
-      python3
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fontconfig
-      libunistring
-      libcanberra
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libxkbcommon
-      libXi
-      libXext
-      wayland-protocols
-      wayland
-      dbus
-      libGL
-      cairo
-    ];
+  buildInputs = [
+    harfbuzz
+    ncurses
+    simde
+    lcms2
+    librsync
+    matplotlib
+    openssl.dev
+    xxHash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng
+    python3
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    libunistring
+    libcanberra
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libxkbcommon
+    libXi
+    libXext
+    wayland-protocols
+    wayland
+    dbus
+    libGL
+    cairo
+  ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      ncurses
-      pkg-config
-      sphinx
-      furo
-      sphinx-copybutton
-      sphinxext-opengraph
-      sphinx-inline-tabs
-      go_1_24
-      fontconfig
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns # For the png2icns tool.
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    ncurses
+    pkg-config
+    sphinx
+    furo
+    sphinx-copybutton
+    sphinxext-opengraph
+    sphinx-inline-tabs
+    go_1_24
+    fontconfig
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns # For the png2icns tool.
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
   depsBuildBuild = [ pkg-config ];
 
@@ -200,19 +198,18 @@ buildPythonApplication rec {
       runHook postBuild
     '';
 
-  nativeCheckInputs =
-    [
-      pillow
+  nativeCheckInputs = [
+    pillow
 
-      # Shells needed for shell integration tests
-      bashInteractive
-      zsh
-      fish
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # integration tests need sudo
-      sudo
-    ];
+    # Shells needed for shell integration tests
+    bashInteractive
+    zsh
+    fish
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # integration tests need sudo
+    sudo
+  ];
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -24,13 +24,12 @@
       inherit (rust.envVars) setEnv;
 
     };
-    passthru.tests =
-      {
-        test = tests.rust-hooks.cargoBuildHook;
-      }
-      // lib.optionalAttrs (stdenv.isLinux) {
-        testCross = pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
-      };
+    passthru.tests = {
+      test = tests.rust-hooks.cargoBuildHook;
+    }
+    // lib.optionalAttrs (stdenv.isLinux) {
+      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
+    };
   } ./cargo-build-hook.sh;
 
   cargoCheckHook = makeSetupHook {
@@ -39,13 +38,12 @@
       inherit (stdenv.targetPlatform.rust) rustcTarget;
       inherit (rust.envVars) setEnv;
     };
-    passthru.tests =
-      {
-        test = tests.rust-hooks.cargoCheckHook;
-      }
-      // lib.optionalAttrs (stdenv.isLinux) {
-        testCross = pkgsCross.riscv64.tests.rust-hooks.cargoCheckHook;
-      };
+    passthru.tests = {
+      test = tests.rust-hooks.cargoCheckHook;
+    }
+    // lib.optionalAttrs (stdenv.isLinux) {
+      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoCheckHook;
+    };
   } ./cargo-check-hook.sh;
 
   cargoInstallHook = makeSetupHook {
@@ -53,13 +51,12 @@
     substitutions = {
       targetSubdirectory = target;
     };
-    passthru.tests =
-      {
-        test = tests.rust-hooks.cargoInstallHook;
-      }
-      // lib.optionalAttrs (stdenv.isLinux) {
-        testCross = pkgsCross.riscv64.tests.rust-hooks.cargoInstallHook;
-      };
+    passthru.tests = {
+      test = tests.rust-hooks.cargoInstallHook;
+    }
+    // lib.optionalAttrs (stdenv.isLinux) {
+      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoInstallHook;
+    };
   } ./cargo-install-hook.sh;
 
   cargoNextestHook = makeSetupHook {
@@ -68,13 +65,12 @@
     substitutions = {
       inherit (stdenv.targetPlatform.rust) rustcTarget;
     };
-    passthru.tests =
-      {
-        test = tests.rust-hooks.cargoNextestHook;
-      }
-      // lib.optionalAttrs (stdenv.isLinux) {
-        testCross = pkgsCross.riscv64.tests.rust-hooks.cargoNextestHook;
-      };
+    passthru.tests = {
+      test = tests.rust-hooks.cargoNextestHook;
+    }
+    // lib.optionalAttrs (stdenv.isLinux) {
+      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoNextestHook;
+    };
   } ./cargo-nextest-hook.sh;
 
   cargoSetupHook = makeSetupHook {
@@ -109,13 +105,12 @@
         '';
     };
 
-    passthru.tests =
-      {
-        test = tests.rust-hooks.cargoSetupHook;
-      }
-      // lib.optionalAttrs (stdenv.isLinux) {
-        testCross = pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
-      };
+    passthru.tests = {
+      test = tests.rust-hooks.cargoSetupHook;
+    }
+    // lib.optionalAttrs (stdenv.isLinux) {
+      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
+    };
   } ./cargo-setup-hook.sh;
 
   maturinBuildHook = makeSetupHook {

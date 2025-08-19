@@ -80,7 +80,7 @@ added to Grafana as well.
   # Not required, but recommended for full functionality
   services.geoipupdate = {
     settings = {
-      AccountID = 000000;
+      AccountID = 0;
       LicenseKey = "/path/to/license_key_file";
     };
   };
@@ -104,7 +104,7 @@ added to Grafana as well.
     recommendedOptimisation = true;
     recommendedGzipSettings = true;
     recommendedProxySettings = true;
-    upstreams.grafana.servers."unix:/${config.services.grafana.socket}" = {};
+    upstreams.grafana.servers."unix:/${config.services.grafana.socket}" = { };
     virtualHosts.${url} = {
       root = config.services.grafana.staticRootPath;
       enableACME = true;

@@ -118,13 +118,8 @@ buildPythonPackage rec {
     joblib
     pyarrow
     pyarrow-hotfix
-  ] ++ optional-dependencies.all;
-
-  pytestFlagsArray = [
-    # KeyError: 'dask'
-    "--deselect=tests/dask/test_dask.py::test_series_schema"
-    "--deselect=tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
-  ];
+  ]
+  ++ optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
@@ -132,6 +127,10 @@ buildPythonPackage rec {
     "tests/modin" # requires modin, not in nixpkgs
     "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
     "tests/pyspark" # requires spark
+
+    # KeyError: 'dask'
+    "tests/dask/test_dask.py::test_series_schema"
+    "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
   ];
 
   disabledTests =

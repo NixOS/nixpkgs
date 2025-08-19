@@ -56,13 +56,15 @@ let
     configureFlags = [
       "--sysconfdir=/etc"
       "--with-libgsasl"
-    ] ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
 
     buildInputs = [
       gnutls
       gsasl
       libidn2
-    ] ++ optionals withKeyring [ libsecret ];
+    ]
+    ++ optionals withKeyring [ libsecret ];
 
     nativeBuildInputs = [
       autoreconfHook
@@ -115,33 +117,32 @@ let
       msmtpq = {
         scripts = [ "bin/msmtpq" ];
         interpreter = getExe bash;
-        inputs =
-          [
-            binaries
-            coreutils
-            gnugrep
-            gnused
-            netcat-gnu
-            which
-          ]
-          ++ optionals withSystemd [ systemd ]
-          ++ optionals withLibnotify [ libnotify ];
-        execer =
-          [
-            "cannot:${getBin binaries}/bin/msmtp"
-            "cannot:${getBin netcat-gnu}/bin/nc"
-          ]
-          ++ optionals withSystemd [
-            "cannot:${getBin systemd}/bin/systemd-cat"
-          ]
-          ++ optionals withLibnotify [
-            "cannot:${getBin libnotify}/bin/notify-send"
-          ];
+        inputs = [
+          binaries
+          coreutils
+          gnugrep
+          gnused
+          netcat-gnu
+          which
+        ]
+        ++ optionals withSystemd [ systemd ]
+        ++ optionals withLibnotify [ libnotify ];
+        execer = [
+          "cannot:${getBin binaries}/bin/msmtp"
+          "cannot:${getBin netcat-gnu}/bin/nc"
+        ]
+        ++ optionals withSystemd [
+          "cannot:${getBin systemd}/bin/systemd-cat"
+        ]
+        ++ optionals withLibnotify [
+          "cannot:${getBin libnotify}/bin/notify-send"
+        ];
         fix."$MSMTP" = [ "msmtp" ];
-        fake.external =
-          [ "ping" ]
-          ++ optionals (!withSystemd) [ "systemd-cat" ]
-          ++ optionals (!withLibnotify) [ "notify-send" ];
+        fake.external = [
+          "ping"
+        ]
+        ++ optionals (!withSystemd) [ "systemd-cat" ]
+        ++ optionals (!withLibnotify) [ "notify-send" ];
         keep.source = [ "~/.msmtpqrc" ];
       };
 

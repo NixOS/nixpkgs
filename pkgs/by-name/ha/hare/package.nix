@@ -133,7 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"
-  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
+  ]
+  ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 

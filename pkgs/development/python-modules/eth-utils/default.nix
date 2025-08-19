@@ -9,6 +9,7 @@
   eth-typing,
   cytoolz,
   toolz,
+  pydantic,
   # nativeCheckInputs
   hypothesis,
   mypy,
@@ -17,31 +18,32 @@
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "5.1.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-utils";
     tag = "v${version}";
-    hash = "sha256-uPzg1gUEsulQL2u22R/REHWx1ZtbMxvcXf6UgWqkDF4=";
+    hash = "sha256-VWNQyLfOEQTusdNHO/8/fWyGVFVwr1Cg1IfyNMSsfGQ=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs =
-    [
-      eth-hash
-      eth-typing
-    ]
-    ++ lib.optional (!isPyPy) cytoolz
-    ++ lib.optional isPyPy toolz;
+  propagatedBuildInputs = [
+    eth-hash
+    eth-typing
+  ]
+  ++ lib.optional (!isPyPy) cytoolz
+  ++ lib.optional isPyPy toolz;
 
   nativeCheckInputs = [
     hypothesis
     mypy
     pytestCheckHook
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+    pydantic
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_utils" ];
 

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  python,
   pythonOlder,
   installShellFiles,
   docutils,
@@ -25,6 +26,8 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
@@ -87,7 +90,9 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ]
+  ++ extraPackages python.pkgs;
 
   pythonRelaxDeps = [ "resolvelib" ];
 

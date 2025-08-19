@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2025.7.0";
+  version = "2025.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pyschlage";
     tag = version;
-    hash = "sha256-XfYoui3xo8l3wi8nqvyzfYhsHsY8T1t/iYS4ZHNjGUE=";
+    hash = "sha256-6IY+rCz/tMaj+c2ME8g9KzdYcakW2rcgM9DFHJSF3Jc=";
   };
 
   build-system = [

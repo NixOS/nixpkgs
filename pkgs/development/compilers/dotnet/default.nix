@@ -121,13 +121,12 @@ let
           (old: {
             name = overlay.unwrapped.name;
             # resolve symlinks so DOTNET_ROOT is self-contained
-            postBuild =
-              ''
-                mv "$out"/share/dotnet{,~}
-                cp -Lr "$out"/share/dotnet{~,}
-                rm -r "$out"/share/dotnet~
-              ''
-              + old.postBuild;
+            postBuild = ''
+              mv "$out"/share/dotnet{,~}
+              cp -Lr "$out"/share/dotnet{~,}
+              rm -r "$out"/share/dotnet~
+            ''
+            + old.postBuild;
             passthru =
               old.passthru
               // (

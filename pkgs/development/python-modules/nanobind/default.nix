@@ -58,18 +58,17 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      numpy
-      scipy
-      torch
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
-      tensorflow-bin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+    torch
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
+    tensorflow-bin
+    jax
+    jaxlib
+  ];
 
   passthru.tests = {
     pytest = nanobind.overridePythonAttrs { doCheck = true; };

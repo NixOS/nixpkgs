@@ -113,17 +113,16 @@ stdenv.mkDerivation rec {
   '';
 
   installCheckTarget = "integration";
-  nativeInstallCheckInputs =
-    [
-      cmocka
-      expect
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      tcpdump
-      hostapd
-      wpa_supplicant
-      screen
-    ];
+  nativeInstallCheckInputs = [
+    cmocka
+    expect
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    tcpdump
+    hostapd
+    wpa_supplicant
+    screen
+  ];
 
   meta = {
     description = "WiFi security auditing tools suite";

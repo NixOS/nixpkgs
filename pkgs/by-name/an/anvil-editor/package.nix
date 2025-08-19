@@ -37,14 +37,13 @@ buildGo123Module (finalAttrs: {
     modRoot = "anvil-extras";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     wayland

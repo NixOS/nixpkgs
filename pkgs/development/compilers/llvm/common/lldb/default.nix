@@ -132,103 +132,99 @@ stdenv.mkDerivation (
       )
       ++ lib.optional (lib.versionAtLeast release_version "14") ./gnu-install-dirs.patch;
 
-    nativeBuildInputs =
-      [
-        cmake
-        python3
-        which
-        swig
-        lit
-        makeWrapper
-        lua5_3
-      ]
-      ++ lib.optionals enableManpages [
-        python3.pkgs.sphinx
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "18" && enableManpages) [
-        python3.pkgs.recommonmark
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "18" && enableManpages) [
-        python3.pkgs.myst-parser
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "14") [
-        ninja
-      ];
+    nativeBuildInputs = [
+      cmake
+      python3
+      which
+      swig
+      lit
+      makeWrapper
+      lua5_3
+    ]
+    ++ lib.optionals enableManpages [
+      python3.pkgs.sphinx
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "18" && enableManpages) [
+      python3.pkgs.recommonmark
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "18" && enableManpages) [
+      python3.pkgs.myst-parser
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "14") [
+      ninja
+    ];
 
-    buildInputs =
-      [
-        ncurses
-        zlib
-        libedit
-        libxml2
-        libllvm
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "16") [
-        # Starting with LLVM 16, the resource dir patch is no longer enough to get
-        # libclang into the rpath of the lldb executables. By putting it into
-        # buildInputs cc-wrapper will set up rpath correctly for us.
-        (lib.getLib libclang)
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.bootstrap_cmds
-      ];
+    buildInputs = [
+      ncurses
+      zlib
+      libedit
+      libxml2
+      libllvm
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "16") [
+      # Starting with LLVM 16, the resource dir patch is no longer enough to get
+      # libclang into the rpath of the lldb executables. By putting it into
+      # buildInputs cc-wrapper will set up rpath correctly for us.
+      (lib.getLib libclang)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.bootstrap_cmds
+    ];
 
     hardeningDisable = [ "format" ];
 
-    cmakeFlags =
+    cmakeFlags = [
+      (lib.cmakeBool "LLDB_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
+      (lib.cmakeBool "LLVM_ENABLE_RTTI" false)
+      (lib.cmakeFeature "Clang_DIR" "${lib.getDev libclang}/lib/cmake")
+      (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/lit")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeBool "LLDB_USE_SYSTEM_DEBUGSERVER" true)
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "17") [
+      (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
+    ]
+    ++ lib.optionals enableManpages (
       [
-        (lib.cmakeBool "LLDB_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
-        (lib.cmakeBool "LLVM_ENABLE_RTTI" false)
-        (lib.cmakeFeature "Clang_DIR" "${lib.getDev libclang}/lib/cmake")
-        (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/lit")
+        (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
+        (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
+        (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        (lib.cmakeBool "LLDB_USE_SYSTEM_DEBUGSERVER" true)
+      ++ lib.optionals (lib.versionAtLeast release_version "15") [
+        # docs reference `automodapi` but it's not added to the extensions list when
+        # only building the manpages:
+        # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
+        #
+        # so, we just ignore the resulting errors
+        (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
       ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "17") [
-        (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
-      ]
-      ++ lib.optionals enableManpages (
-        [
-          (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
-          (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
-          (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
-        ]
-        ++ lib.optionals (lib.versionAtLeast release_version "15") [
-          # docs reference `automodapi` but it's not added to the extensions list when
-          # only building the manpages:
-          # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
-          #
-          # so, we just ignore the resulting errors
-          (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
-        ]
-      )
-      ++ lib.optionals finalAttrs.finalPackage.doCheck [
-        (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
-        (lib.cmakeFeature "-DLLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
-      ]
-      ++ devExtraCmakeFlags;
+    )
+    ++ lib.optionals finalAttrs.finalPackage.doCheck [
+      (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
+      (lib.cmakeFeature "-DLLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
+    ]
+    ++ devExtraCmakeFlags;
 
     doCheck = false;
     doInstallCheck = lib.versionOlder release_version "15";
 
     # TODO: cleanup with mass-rebuild
-    installCheckPhase =
-      ''
-        if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
-            echo "ERROR: python files not installed where expected!";
-            return 1;
-        fi
-      '' # Something lua is built on older versions but this file doesn't exist.
-      + lib.optionalString (lib.versionAtLeast release_version "14") ''
-        if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
-            echo "ERROR: lua files not installed where expected!";
-            return 1;
-        fi
-      '';
+    installCheckPhase = ''
+      if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+          echo "ERROR: python files not installed where expected!";
+          return 1;
+      fi
+    '' # Something lua is built on older versions but this file doesn't exist.
+    + lib.optionalString (lib.versionAtLeast release_version "14") ''
+      if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+          echo "ERROR: lua files not installed where expected!";
+          return 1;
+      fi
+    '';
 
     postInstall = ''
       wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/

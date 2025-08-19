@@ -120,48 +120,47 @@ let
         "bin"
       ];
 
-      postPatch =
-        ''
-          export TMP=$(mktemp -d)
-          export HOME=$TMP
-          export TMPDIR=$TMP
-          mkdir -p $HOME/test
+      postPatch = ''
+        export TMP=$(mktemp -d)
+        export HOME=$TMP
+        export TMPDIR=$TMP
+        mkdir -p $HOME/test
 
-          # Add dependency of crystal to docs to avoid issue on flag changes between releases
-          # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
-          substituteInPlace Makefile \
-            --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
+        # Add dependency of crystal to docs to avoid issue on flag changes between releases
+        # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
+        substituteInPlace Makefile \
+          --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
 
-          mkdir -p $TMP/crystal
+        mkdir -p $TMP/crystal
 
-          substituteInPlace spec/std/file_spec.cr \
-            --replace '/bin/ls' '${coreutils}/bin/ls' \
-            --replace '/usr/share' "$TMP/crystal" \
-            --replace '/usr' "$TMP" \
-            --replace '/tmp' "$TMP"
+        substituteInPlace spec/std/file_spec.cr \
+          --replace '/bin/ls' '${coreutils}/bin/ls' \
+          --replace '/usr/share' "$TMP/crystal" \
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
-          substituteInPlace spec/std/process_spec.cr \
-            --replace '/bin/cat' '${coreutils}/bin/cat' \
-            --replace '/bin/ls' '${coreutils}/bin/ls' \
-            --replace '/usr/bin/env' '${coreutils}/bin/env' \
-            --replace '"env"' '"${coreutils}/bin/env"' \
-            --replace '/usr' "$TMP" \
-            --replace '/tmp' "$TMP"
+        substituteInPlace spec/std/process_spec.cr \
+          --replace '/bin/cat' '${coreutils}/bin/cat' \
+          --replace '/bin/ls' '${coreutils}/bin/ls' \
+          --replace '/usr/bin/env' '${coreutils}/bin/env' \
+          --replace '"env"' '"${coreutils}/bin/env"' \
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
-          substituteInPlace spec/std/system_spec.cr \
-            --replace '`hostname`' '`${hostname}/bin/hostname`'
+        substituteInPlace spec/std/system_spec.cr \
+          --replace '`hostname`' '`${hostname}/bin/hostname`'
 
-          # See https://github.com/crystal-lang/crystal/issues/8629
-          substituteInPlace spec/std/socket/udp_socket_spec.cr \
-            --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+        # See https://github.com/crystal-lang/crystal/issues/8629
+        substituteInPlace spec/std/socket/udp_socket_spec.cr \
+          --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-        ''
-        + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
-          # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
-          # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
-          substituteInPlace src/llvm/lib_llvm.cr \
-            --replace '@[Link("stdc++")]' '@[Link("c++")]'
-        '';
+      ''
+      + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
+        # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
+        # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
+        substituteInPlace src/llvm/lib_llvm.cr \
+          --replace '@[Link("stdc++")]' '@[Link("c++")]'
+      '';
 
       # Defaults are 4
       preBuild = ''
@@ -185,18 +184,17 @@ let
         llvmPackages.llvm
         installShellFiles
       ];
-      buildInputs =
-        [
-          boehmgc
-          pcre2
-          libevent
-          libyaml
-          zlib
-          libxml2
-          openssl
-        ]
-        ++ extraBuildInputs
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+      buildInputs = [
+        boehmgc
+        pcre2
+        libevent
+        libyaml
+        zlib
+        libxml2
+        openssl
+      ]
+      ++ extraBuildInputs
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"

@@ -65,39 +65,38 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kaleido" ];
 
-  postInstall =
-    ''
-      # Expose kaleido binary
-      mkdir -p $out/bin
-      ln -s $out/${python.sitePackages}/kaleido/executable/bin/kaleido $out/bin/kaleido
+  postInstall = ''
+    # Expose kaleido binary
+    mkdir -p $out/bin
+    ln -s $out/${python.sitePackages}/kaleido/executable/bin/kaleido $out/bin/kaleido
 
-      # Relace bundled libraries with nixpkgs-packaged libraries
-      rm -rf $out/${python.sitePackages}/kaleido/executable/lib
-      mkdir -p $out/${python.sitePackages}/kaleido/executable/lib
-      ln -s ${expat}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
-      ln -s ${nspr}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
-      ln -s ${nss}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
-      ln -s ${sqlite}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
+    # Relace bundled libraries with nixpkgs-packaged libraries
+    rm -rf $out/${python.sitePackages}/kaleido/executable/lib
+    mkdir -p $out/${python.sitePackages}/kaleido/executable/lib
+    ln -s ${expat}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
+    ln -s ${nspr}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
+    ln -s ${nss}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
+    ln -s ${sqlite}/lib/* $out/${python.sitePackages}/kaleido/executable/lib/
 
-      # Replace bundled font configuration with nixpkgs-packaged font configuration
-      rm -rf $out/${python.sitePackages}/kaleido/executable/etc/fonts
-      mkdir -p $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d
-      ln -s ${fontconfig.out}/etc/fonts/fonts.conf $out/${python.sitePackages}/kaleido/executable/etc/fonts/
-      ls -s ${fontconfig.out}/etc/fonts/conf.d/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
-      ln -s ${sbclPackages.cl-dejavu}/dejavu-fonts-ttf-2.37/fontconfig/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
+    # Replace bundled font configuration with nixpkgs-packaged font configuration
+    rm -rf $out/${python.sitePackages}/kaleido/executable/etc/fonts
+    mkdir -p $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d
+    ln -s ${fontconfig.out}/etc/fonts/fonts.conf $out/${python.sitePackages}/kaleido/executable/etc/fonts/
+    ls -s ${fontconfig.out}/etc/fonts/conf.d/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
+    ln -s ${sbclPackages.cl-dejavu}/dejavu-fonts-ttf-2.37/fontconfig/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
 
-      # Replace bundled fonts with nixpkgs-packaged fonts
-      # Currently this causes an issue where the fonts aren't found. I'm not sure why, so I'm leaving this commented out for now.
-      #rm -rf $out/${python.sitePackages}/kaleido/executable/xdg/fonts
-      #mkdir -p $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato
-      #ln -s ${dejavu_fonts}/share/fonts/truetype/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu/
-      #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      # Replace bundled swiftshader with libGL
-      rm -rf $out/${python.sitePackages}/kaleido/executable/bin/swiftshader
-      ln -s ${libGL}/lib $out/${python.sitePackages}/kaleido/executable/bin/swiftshader
-    '';
+    # Replace bundled fonts with nixpkgs-packaged fonts
+    # Currently this causes an issue where the fonts aren't found. I'm not sure why, so I'm leaving this commented out for now.
+    #rm -rf $out/${python.sitePackages}/kaleido/executable/xdg/fonts
+    #mkdir -p $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato
+    #ln -s ${dejavu_fonts}/share/fonts/truetype/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu/
+    #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # Replace bundled swiftshader with libGL
+    rm -rf $out/${python.sitePackages}/kaleido/executable/bin/swiftshader
+    ln -s ${libGL}/lib $out/${python.sitePackages}/kaleido/executable/bin/swiftshader
+  '';
 
   passthru.tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
     kaleido = callPackage ./tests.nix { };

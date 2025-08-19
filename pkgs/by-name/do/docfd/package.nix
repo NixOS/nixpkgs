@@ -25,6 +25,9 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-uRC2QBn4gAfS9u85YaNH2Mm2C0reP8FnDHbyloY+OC8=";
   };
 
+  # Compatibility with nottui ≥ 0.4
+  patches = [ ./nottui-unix.patch ];
+
   nativeBuildInputs = [
     python3
     dune_3
@@ -40,6 +43,7 @@ ocamlPackages.buildDunePackage rec {
     eio_main
     lwd
     nottui
+    nottui-unix
     notty
     ocaml_sqlite3
     ocolor

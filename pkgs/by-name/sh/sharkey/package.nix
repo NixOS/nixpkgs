@@ -38,18 +38,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-S8LxawbtguFOEZyYbS1FQWw/TcRm4Z6mG7dUhfXbf1c=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      nodejs
-      pkg-config
-      pnpm_9.configHook
-      python3
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ]);
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pkg-config
+    pnpm_9.configHook
+    python3
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ]);
 
   buildInputs = [
     cairo

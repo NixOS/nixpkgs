@@ -2,27 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   wofi,
   versionCheckHook,
   nix-update-script,
+  yq,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wofi-power-menu";
-  version = "0.2.9";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "szaffarano";
     repo = "wofi-power-menu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xio/Gt37PJ/0Di22na4USmfah2GV+xM2eV4NnGBeVfY=";
+    hash = "sha256-3m4zTmjYn1WGdW5dY4tzYxOxdw0spwYxZFRhdBwWf2I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-diDLKP7JGzrXgdZMwSmg70dbFlMLLWp4Ad/ejjiOSlc=";
+  postPatch = ''
+    tomlq -ti '.package.version = "0.3.1"' Cargo.toml
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  cargoHash = "sha256-5txhSjCXlGqTmeG9EO1AUbt4syrTD62g4LtfO6nhAes=";
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    yq # for `tomlq`
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/wofi-power-menu \

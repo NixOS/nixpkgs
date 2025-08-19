@@ -54,31 +54,30 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.sphinx
   ];
 
-  makeFlags =
-    [
-      "CARGO=${lib.getExe cargo}"
-      "PREFIX=${placeholder "out"}"
-      "PROFILE=release"
-      "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
-      "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-      # Explicitly enable acl, and if requested selinux.
-      # We cannot rely on SELINUX_ENABLED here since our explicit assignment
-      # overrides its effect in the makefile.
-      "BUILD_SPEC_FEATURE=${
-        lib.concatStringsSep "," (
-          # We can always enable acl, on non-Linux, libc provides the headers,
-          # only in Linux we need to add the acl lib to buildInputs.
-          [
-            "feat_acl"
-          ]
-          ++ (lib.optionals selinuxSupport [
-            "feat_selinux"
-          ])
-        )
-      }"
-    ]
-    ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  makeFlags = [
+    "CARGO=${lib.getExe cargo}"
+    "PREFIX=${placeholder "out"}"
+    "PROFILE=release"
+    "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
+    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+    # Explicitly enable acl, and if requested selinux.
+    # We cannot rely on SELINUX_ENABLED here since our explicit assignment
+    # overrides its effect in the makefile.
+    "BUILD_SPEC_FEATURE=${
+      lib.concatStringsSep "," (
+        # We can always enable acl, on non-Linux, libc provides the headers,
+        # only in Linux we need to add the acl lib to buildInputs.
+        [
+          "feat_acl"
+        ]
+        ++ (lib.optionals selinuxSupport [
+          "feat_selinux"
+        ])
+      )
+    }"
+  ]
+  ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   env = lib.optionalAttrs selinuxSupport {
     SELINUX_INCLUDE_DIR = ''${libselinux.dev}/include'';

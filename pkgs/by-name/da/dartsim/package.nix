@@ -85,43 +85,41 @@ stdenv.mkDerivation (finalAttrs: {
       >> python/dartpy/CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pybind11
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pybind11
+  ];
 
-  propagatedBuildInputs =
-    [
-      blas
-      boost
-      assimp
-      bullet
-      eigen
-      fcl
-      fmt
-      libglut
-      gbenchmark
-      nlopt
-      # requires imgui_impl_opengl2.h
-      (imgui.override { IMGUI_BUILD_OPENGL2_BINDING = true; })
-      ipopt
-      lapack
-      libGL
-      libGLU
-      ode
-      openscenegraph
-      pagmo2
-      tinyxml-2
-      urdfdom
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-    ];
+  propagatedBuildInputs = [
+    blas
+    boost
+    assimp
+    bullet
+    eigen
+    fcl
+    fmt
+    libglut
+    gbenchmark
+    nlopt
+    # requires imgui_impl_opengl2.h
+    (imgui.override { IMGUI_BUILD_OPENGL2_BINDING = true; })
+    ipopt
+    lapack
+    libGL
+    libGLU
+    ode
+    openscenegraph
+    pagmo2
+    tinyxml-2
+    urdfdom
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+  ];
 
   checkInputs = [
     gbenchmark

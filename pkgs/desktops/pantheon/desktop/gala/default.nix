@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   desktop-file-utils,
   gettext,
   libxml2,
@@ -42,6 +43,13 @@ stdenv.mkDerivation rec {
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
+
+    # Fix gtk3 daemon menu location with x2 scaling
+    # https://github.com/elementary/gala/pull/2493
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/33bc3ebe7f175c61845feaf2d06083f1e3b64ddc.patch";
+      hash = "sha256-hjjiKcO5o/OABKD8vUsVyqtNKN4ffEOGZntLceLr2+k=";
+    })
   ];
 
   depsBuildBuild = [ pkg-config ];

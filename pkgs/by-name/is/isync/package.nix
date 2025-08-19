@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     perl
-  ] ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
+  ]
+  ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
   buildInputs = [
     perl538Packages.TimeDate
     openssl

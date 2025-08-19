@@ -80,41 +80,39 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
   ];
 
-  buildInputs =
-    [
-      gtk3
-      glib
-      gsettings-desktop-schemas
-      modemmanager
-      networkmanager
-      libnotify
-      libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
-      gnome-desktop
-      libpulseaudio
-      alsa-lib
-      libcanberra-gtk3
-      upower
-      colord
-      libgweather
-      polkit
-      geocode-glib_2
-      geoclue2
-      libgudev
-      libwacom
-      gcr_4
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    modemmanager
+    networkmanager
+    libnotify
+    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+    gnome-desktop
+    libpulseaudio
+    alsa-lib
+    libcanberra-gtk3
+    upower
+    colord
+    libgweather
+    polkit
+    geocode-glib_2
+    geoclue2
+    libgudev
+    libwacom
+    gcr_4
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
-  mesonFlags =
-    [
-      "-Dudev_dir=${placeholder "out"}/lib/udev"
-      (lib.mesonBool "systemd" withSystemd)
-    ]
-    ++ lib.optionals withSystemd [
-      "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
-    ];
+  mesonFlags = [
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    (lib.mesonBool "systemd" withSystemd)
+  ]
+  ++ lib.optionals withSystemd [
+    "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
+  ];
 
   # Default for release buildtype but passed manually because
   # we're using plain

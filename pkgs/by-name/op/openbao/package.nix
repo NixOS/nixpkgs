@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   buildGoModule,
   installShellFiles,
   versionCheckHook,
@@ -14,18 +15,29 @@
 
 buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X0O3JwJS49yReTEIjRfk0GGzgGDUZjNadKMZXUuor/I=";
+    hash = "sha256-r3ZopogeRqsgaM/HEKlS6B0ipaDG/5mKUyzGET3P1e0=";
   };
 
-  vendorHash = "sha256-uOWLCyLCSGMTjRpPbOWlJJYKbZmkkOWnzr5o3zvRLU0=";
+  vendorHash = "sha256-D4uZmQKe4VuSpuW8JD5NOOq7Nvx8HRXzyvgzkBhsKLQ=";
 
   proxyVendor = true;
+
+  patches = [
+    (fetchpatch2 {
+      # Temporarily revert upstream raising the min go version to 1.24.6
+      # until that go version lands from staging in master.
+      name = "revert-Bump-to-Go-1.24.6.patch";
+      url = "https://github.com/openbao/openbao/commit/85504045ecf2d343b74be2c1cda6c2c0b0d6acff.patch?full_index=1";
+      revert = true;
+      hash = "sha256-tXSnnqrNxgnJ2ya4HjLSh4e+6hdyPgKRsFsmkMNfNRU=";
+    })
+  ];
 
   subPackages = [ "." ];
 
@@ -33,7 +45,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/openbao/openbao/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/openbao/openbao/version.fullVersion=${finalAttrs.version}"
     "-X github.com/openbao/openbao/version.buildDate=1970-01-01T00:00:00Z"

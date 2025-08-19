@@ -207,82 +207,81 @@ stdenv.mkDerivation rec {
   # N.B. For new versions, manually synchronize the following
   # definitions with jb/tools/common/create_modules.sh to include
   # newly added modules
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      export JCEF_ROOT_DIR=$(realpath ..)
-      export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
-      export JB_TOOLS_DIR=$(realpath ../jb/tools)
-      export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
-      export OUT_CLS_DIR=$(realpath ../out/${platform})
-      export TARGET_ARCH=${targetArch} DEPS_ARCH=${depsArch}
-      export OS=linux
-      export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
+    export JCEF_ROOT_DIR=$(realpath ..)
+    export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
+    export JB_TOOLS_DIR=$(realpath ../jb/tools)
+    export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
+    export OUT_CLS_DIR=$(realpath ../out/${platform})
+    export TARGET_ARCH=${targetArch} DEPS_ARCH=${depsArch}
+    export OS=linux
+    export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 
-      mkdir -p $unpacked/{jogl,gluegen,jcef}
+    mkdir -p $unpacked/{jogl,gluegen,jcef}
 
-      function extract_jar {
-        __jar=$1
-        __dst_dir=$2
-        __content_dir="''${3:-.}"
-        __tmp=.tmp_extract_jar
-        rm -rf "$__tmp" && mkdir "$__tmp"
-        (
-          cd "$__tmp" || exit 1
-          jar -xf "$__jar"
-        )
-        rm -rf "$__tmp/META-INF"
-        rm -rf "$__dst_dir" && mkdir "$__dst_dir"
-        if [ -z "$__content_dir" ]
-        then
-            cp -R "$__tmp"/* "$__dst_dir"
-        else
-            cp -R "$__tmp"/"$__content_dir"/* "$__dst_dir"
-        fi
-        rm -rf $__tmp
-      }
+    function extract_jar {
+      __jar=$1
+      __dst_dir=$2
+      __content_dir="''${3:-.}"
+      __tmp=.tmp_extract_jar
+      rm -rf "$__tmp" && mkdir "$__tmp"
+      (
+        cd "$__tmp" || exit 1
+        jar -xf "$__jar"
+      )
+      rm -rf "$__tmp/META-INF"
+      rm -rf "$__dst_dir" && mkdir "$__dst_dir"
+      if [ -z "$__content_dir" ]
+      then
+          cp -R "$__tmp"/* "$__dst_dir"
+      else
+          cp -R "$__tmp"/"$__content_dir"/* "$__dst_dir"
+      fi
+      rm -rf $__tmp
+    }
 
-      cd $unpacked/gluegen
-      cp "$JOGAMP_DIR"/gluegen-rt.jar .
-      cp "$JB_TOOLS_DIR"/common/gluegen-module-info.java module-info.java
-      javac --patch-module gluegen.rt=gluegen-rt.jar module-info.java
-      jar uf gluegen-rt.jar module-info.class
-      rm module-info.class module-info.java
-      mkdir lib
-    ''
-    # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
-    + lib.optionalString (platform != "linuxarm64") ''
-      extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
-    ''
-    + ''
+    cd $unpacked/gluegen
+    cp "$JOGAMP_DIR"/gluegen-rt.jar .
+    cp "$JB_TOOLS_DIR"/common/gluegen-module-info.java module-info.java
+    javac --patch-module gluegen.rt=gluegen-rt.jar module-info.java
+    jar uf gluegen-rt.jar module-info.class
+    rm module-info.class module-info.java
+    mkdir lib
+  ''
+  # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
+  + lib.optionalString (platform != "linuxarm64") ''
+    extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+  ''
+  + ''
 
-      cd ../jogl
-      cp "$JOGAMP_DIR"/gluegen-rt.jar .
-      cp "$JOGAMP_DIR"/jogl-all.jar .
-      cp "$JB_TOOLS_OS_DIR"/jogl-module-info.java module-info.java
-      javac --module-path . --patch-module jogl.all=jogl-all.jar module-info.java
-      jar uf jogl-all.jar module-info.class
-      rm module-info.class module-info.java
-      mkdir lib
-    ''
-    # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
-    + lib.optionalString (platform != "linuxarm64") ''
-      extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
-    ''
-    + ''
+    cd ../jogl
+    cp "$JOGAMP_DIR"/gluegen-rt.jar .
+    cp "$JOGAMP_DIR"/jogl-all.jar .
+    cp "$JB_TOOLS_OS_DIR"/jogl-module-info.java module-info.java
+    javac --module-path . --patch-module jogl.all=jogl-all.jar module-info.java
+    jar uf jogl-all.jar module-info.class
+    rm module-info.class module-info.java
+    mkdir lib
+  ''
+  # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
+  + lib.optionalString (platform != "linuxarm64") ''
+    extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
+  ''
+  + ''
 
-      cd ../jcef
-      cp "$OUT_CLS_DIR"/jcef.jar .
-      mkdir lib
-      cp -R "$OUT_NATIVE_DIR"/* lib
+    cd ../jcef
+    cp "$OUT_CLS_DIR"/jcef.jar .
+    mkdir lib
+    cp -R "$OUT_NATIVE_DIR"/* lib
 
-      mkdir -p $out/jmods
+    mkdir -p $out/jmods
 
-      bash "$JB_TOOLS_DIR"/common/create_version_file.sh $out
+    bash "$JB_TOOLS_DIR"/common/create_version_file.sh $out
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   dontStrip = debugBuild;
 

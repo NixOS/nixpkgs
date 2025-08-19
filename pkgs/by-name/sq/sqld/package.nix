@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoHash = "sha256-4Ma/17t+EmmjiYICBLhJifQez0dnwtjhlkmoQrAIG+s";
-  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     cmake

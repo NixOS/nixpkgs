@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/kclvm";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eJ3Gh2l6T2DxJRQRHamPOr/ILtzsqFB497DdXVJ90RE=";
 
   buildInputs = [ rustc ];

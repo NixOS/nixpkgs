@@ -148,11 +148,11 @@ def main() -> None:
         args.global_timeout,
         debug=debugger,
     ) as driver:
+        if offset := args.dump_vsocks:
+            driver.dump_machine_ssh(offset)
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
-            if offset := args.dump_vsocks:
-                driver.dump_machine_ssh(offset)
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,

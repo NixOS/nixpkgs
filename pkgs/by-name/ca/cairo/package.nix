@@ -64,49 +64,47 @@ stdenv.mkDerivation (
       lzo
     ];
 
-    propagatedBuildInputs =
-      [
-        fontconfig
-        freetype
-        pixman
-        libpng
-        zlib
-      ]
-      ++ optionals x11Support [
-        libXext
-        libXrender
-      ]
-      ++ optionals xcbSupport [ libxcb ]
-      ++ optional gobjectSupport glib; # TODO: maybe liblzo but what would it be for here?
+    propagatedBuildInputs = [
+      fontconfig
+      freetype
+      pixman
+      libpng
+      zlib
+    ]
+    ++ optionals x11Support [
+      libXext
+      libXrender
+    ]
+    ++ optionals xcbSupport [ libxcb ]
+    ++ optional gobjectSupport glib; # TODO: maybe liblzo but what would it be for here?
 
-    mesonFlags =
-      [
-        "-Dgtk_doc=true"
+    mesonFlags = [
+      "-Dgtk_doc=true"
 
-        # error: #error config.h must be included before this header
-        "-Dsymbol-lookup=disabled"
+      # error: #error config.h must be included before this header
+      "-Dsymbol-lookup=disabled"
 
-        # Only used in tests, causes a dependency cycle
-        "-Dspectre=disabled"
+      # Only used in tests, causes a dependency cycle
+      "-Dspectre=disabled"
 
-        (lib.mesonEnable "glib" gobjectSupport)
-        (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
-        (lib.mesonEnable "xlib" x11Support)
-        (lib.mesonEnable "xcb" xcbSupport)
-      ]
-      ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-        "--cross-file=${builtins.toFile "cross-file.conf" ''
-          [properties]
-          ipc_rmid_deferred_release = ${
-            {
-              linux = "true";
-              freebsd = "true";
-              netbsd = "false";
-            }
-            .${stdenv.hostPlatform.parsed.kernel.name} or (throw "Unknown value for ipc_rmid_deferred_release")
+      (lib.mesonEnable "glib" gobjectSupport)
+      (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+      (lib.mesonEnable "xlib" x11Support)
+      (lib.mesonEnable "xcb" xcbSupport)
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "--cross-file=${builtins.toFile "cross-file.conf" ''
+        [properties]
+        ipc_rmid_deferred_release = ${
+          {
+            linux = "true";
+            freebsd = "true";
+            netbsd = "false";
           }
-        ''}"
-      ];
+          .${stdenv.hostPlatform.parsed.kernel.name} or (throw "Unknown value for ipc_rmid_deferred_release")
+        }
+      ''}"
+    ];
 
     preConfigure = ''
       patchShebangs version.py
@@ -147,7 +145,8 @@ stdenv.mkDerivation (
         "cairo-pdf"
         "cairo-ps"
         "cairo-svg"
-      ] ++ lib.optional gobjectSupport "cairo-gobject";
+      ]
+      ++ lib.optional gobjectSupport "cairo-gobject";
       platforms = platforms.all;
     };
   }

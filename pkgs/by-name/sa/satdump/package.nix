@@ -62,36 +62,35 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftwFloat
-      libpng
-      libtiff
-      jemalloc
-      volk
-      nng
-      curl
-    ]
-    ++ lib.optionals withZIQRecordingCompression [ zstd ]
-    ++ lib.optionals withGUI [
-      glfw
-      zenity
-    ]
-    ++ lib.optionals withAudio [ portaudio ]
-    ++ lib.optionals withOfficialProductSupport [ hdf5 ]
-    ++ lib.optionals withOpenCL [
-      opencl-headers
-      ocl-icd
-    ]
-    ++ lib.optionals withSourceRtlsdr [ rtl-sdr-librtlsdr ]
-    ++ lib.optionals withSourceHackRF [ hackrf ]
-    ++ lib.optionals withSourceAirspy [ airspy ]
-    ++ lib.optionals withSourceAirspyHF [ airspyhf ]
-    ++ lib.optionals withSourceAD9361 [
-      libad9361
-      libiio
-    ]
-    ++ lib.optionals withSourceBladeRF [ libbladeRF ];
+  buildInputs = [
+    fftwFloat
+    libpng
+    libtiff
+    jemalloc
+    volk
+    nng
+    curl
+  ]
+  ++ lib.optionals withZIQRecordingCompression [ zstd ]
+  ++ lib.optionals withGUI [
+    glfw
+    zenity
+  ]
+  ++ lib.optionals withAudio [ portaudio ]
+  ++ lib.optionals withOfficialProductSupport [ hdf5 ]
+  ++ lib.optionals withOpenCL [
+    opencl-headers
+    ocl-icd
+  ]
+  ++ lib.optionals withSourceRtlsdr [ rtl-sdr-librtlsdr ]
+  ++ lib.optionals withSourceHackRF [ hackrf ]
+  ++ lib.optionals withSourceAirspy [ airspy ]
+  ++ lib.optionals withSourceAirspyHF [ airspyhf ]
+  ++ lib.optionals withSourceAD9361 [
+    libad9361
+    libiio
+  ]
+  ++ lib.optionals withSourceBladeRF [ libbladeRF ];
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_GUI" withGUI) ];
 

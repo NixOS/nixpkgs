@@ -79,7 +79,8 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-  ] ++ lib.optionals withOptDeps optional-dependencies.complete;
+  ]
+  ++ lib.optionals withOptDeps optional-dependencies.complete;
 
   optional-dependencies = {
     complete = [

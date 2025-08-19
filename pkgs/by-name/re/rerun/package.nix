@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8XmOtB1U2SAOBchrpKMAv5I8mFvJniVVcmFPugtD4RI=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
@@ -107,7 +106,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.getDev openssl)
     libxkbcommon
     vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [

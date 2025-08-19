@@ -16,9 +16,7 @@ The hook runs in `installCheckPhase`, requiring `doInstallCheck` is enabled for 
 stdenv.mkDerivation (finalAttrs: {
   # ...
 
-  nativeInstallCheckInputs = [
-    udevCheckHook
-  ];
+  nativeInstallCheckInputs = [ udevCheckHook ];
   doInstallCheck = true;
 
   # ...

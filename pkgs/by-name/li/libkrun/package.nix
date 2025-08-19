@@ -56,31 +56,30 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     cargo
     rustc
-  ] ++ lib.optional (sevVariant || withGpu) pkg-config;
+  ]
+  ++ lib.optional (sevVariant || withGpu) pkg-config;
 
-  buildInputs =
-    [
-      (libkrunfw.override { inherit sevVariant; })
-      glibc
-      glibc.static
-    ]
-    ++ lib.optionals withGpu [
-      libepoxy
-      libdrm
-      virglrenderer
-    ]
-    ++ lib.optional withSound pipewire
-    ++ lib.optional sevVariant openssl;
+  buildInputs = [
+    (libkrunfw.override { inherit sevVariant; })
+    glibc
+    glibc.static
+  ]
+  ++ lib.optionals withGpu [
+    libepoxy
+    libdrm
+    virglrenderer
+  ]
+  ++ lib.optional withSound pipewire
+  ++ lib.optional sevVariant openssl;
 
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-    ]
-    ++ lib.optional withBlk "BLK=1"
-    ++ lib.optional withGpu "GPU=1"
-    ++ lib.optional withSound "SND=1"
-    ++ lib.optional withNet "NET=1"
-    ++ lib.optional sevVariant "SEV=1";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optional withBlk "BLK=1"
+  ++ lib.optional withGpu "GPU=1"
+  ++ lib.optional withSound "SND=1"
+  ++ lib.optional withNet "NET=1"
+  ++ lib.optional sevVariant "SEV=1";
 
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig

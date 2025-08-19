@@ -9,7 +9,6 @@ rustPlatform.buildRustPackage {
   pname = "utpm";
   version = "0-unstable-2024-12-17";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fqGxor2PgsQemnPNoZkgNUNc7yRg2eqHTLzJAVpt6+8=";
 
   src = fetchFromGitHub {

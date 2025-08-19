@@ -52,13 +52,12 @@ let
       ))
     ];
 
-  fullConfig =
-    {
-      global = normalize (cfg.settings // flattenWithIndex cfg.repos "repo");
-    }
-    // lib.mapAttrs (
-      _: cfg': normalize (cfg'.settings // flattenWithIndex cfg'.instances "pg")
-    ) cfg.stanzas;
+  fullConfig = {
+    global = normalize (cfg.settings // flattenWithIndex cfg.repos "repo");
+  }
+  // lib.mapAttrs (
+    _: cfg': normalize (cfg'.settings // flattenWithIndex cfg'.instances "pg")
+  ) cfg.stanzas;
 
   namedJobs = lib.listToAttrs (
     lib.flatten (

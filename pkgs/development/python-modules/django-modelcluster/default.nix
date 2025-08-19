@@ -39,7 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-  ] ++ optional-dependencies.taggit;
+  ]
+  ++ optional-dependencies.taggit;
 
   pythonImportsCheck = [ "modelcluster" ];
 

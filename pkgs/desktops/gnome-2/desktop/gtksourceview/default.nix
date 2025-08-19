@@ -49,31 +49,29 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix build with gcc 14
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      intltool
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      autoreconfHook
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    autoreconfHook
+    gtk-doc
+  ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      glib
-      gtk2
-      pango
-      libxml2Python
-      perl
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gnome-common
-      gtk-mac-integration-gtk2
-    ];
+  buildInputs = [
+    atk
+    cairo
+    glib
+    gtk2
+    pango
+    libxml2Python
+    perl
+    gettext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gnome-common
+    gtk-mac-integration-gtk2
+  ];
 
   doCheck = false; # requires X11 daemon
 

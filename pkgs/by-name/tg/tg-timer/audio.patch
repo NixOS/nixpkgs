@@ -1,0 +1,18 @@
+diff --git a/src/audio.c b/src/audio.c
+index d1b9762..cb544dd 100644
+
+This package assumes that there will always be an audio device while testing.
+If there is not an audio device, it segfaults. So in the Nix sandbox, it
+unconditionally segfaults without this patch. This patch allows the tests
+to flow through the normal error handling logic.
+
+--- a/src/audio.c
++++ b/src/audio.c
+@@ -637,7 +637,6 @@ int start_portaudio(int device, int *nominal_sample_rate, double *real_sample_ra
+ 	if(testing) {
+ 		*nominal_sample_rate = PA_SAMPLE_RATE;
+ 		*real_sample_rate = PA_SAMPLE_RATE;
+-		goto end;
+ 	}
+ #endif
+ 

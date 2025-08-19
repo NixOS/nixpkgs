@@ -35,31 +35,30 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
-  propagatedBuildInputs =
-    [
-      gettext
-      gobject-introspection
-      gtk3
-      xdg-utils
-    ]
-    ++ lib.optionals waylandSupport [
-      # wayland deps
-      grim
-      slurp
-      wl-clipboard
-    ]
-    ++ lib.optionals x11Support [
-      # X11 deps
-      scrot
-      slop
-      xclip
-      python3Packages.xlib
-    ]
-    ++ (with python3Packages; [
-      pillow
-      pygobject3
-      setuptools
-    ]);
+  propagatedBuildInputs = [
+    gettext
+    gobject-introspection
+    gtk3
+    xdg-utils
+  ]
+  ++ lib.optionals waylandSupport [
+    # wayland deps
+    grim
+    slurp
+    wl-clipboard
+  ]
+  ++ lib.optionals x11Support [
+    # X11 deps
+    scrot
+    slop
+    xclip
+    python3Packages.xlib
+  ]
+  ++ (with python3Packages; [
+    pillow
+    pygobject3
+    setuptools
+  ]);
 
   patches = [ ./0001-Changing-paths-to-be-nix-compatible.patch ];
 

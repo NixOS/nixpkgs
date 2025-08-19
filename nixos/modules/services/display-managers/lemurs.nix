@@ -9,6 +9,15 @@ let
   settingsFormat = pkgs.formats.toml { };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "displayManager"
+      "lemurs"
+      "vt"
+    ] "The VT is now fixed to VT1.")
+  ];
+
   options.services.displayManager.lemurs = {
     enable = lib.mkEnableOption "" // {
       description = ''
@@ -34,14 +43,6 @@ in
         Configuration for lemurs, provided as a Nix attribute set and automatically
         serialized to TOML.
         See [lemurs configuration documentation](https://github.com/coastalwhite/lemurs/blob/main/extra/config.toml) for available options.
-      '';
-    };
-
-    vt = lib.mkOption {
-      type = lib.types.ints.positive;
-      default = 2;
-      description = ''
-        The virtual console (tty) that lemurs should use.
       '';
     };
   };
@@ -70,8 +71,7 @@ in
       # Required for wayland with setLoginUid = false;
       seatd.enable = true;
       xserver = {
-        # To enable user switching, allow lemurs to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow lemurs to allocate displays dynamically.
         display = null;
       };
       displayManager = {
@@ -83,7 +83,7 @@ in
             desktops = config.services.displayManager.sessionData.desktops;
           in
           {
-            tty = lib.mkDefault cfg.vt;
+            tty = 1;
             system_shell = lib.mkDefault "${pkgs.bash}/bin/bash";
             initial_path = lib.mkDefault "/run/current-system/sw/bin";
             x11 = {
@@ -102,18 +102,18 @@ in
         Wants = [ "systemd-user-sessions.service" ];
         After = [
           "systemd-user-sessions.service"
-          "getty@tty${toString cfg.vt}.service"
           "plymouth-quit-wait.service"
         ];
-        Conflicts = [ "getty@tty${toString cfg.vt}.service" ];
       };
       serviceConfig = {
         Type = "idle";
         # Defaults from lemurs upstream configuration
         StandardInput = "tty";
-        TTYPath = "/dev/tty${toString cfg.vt}";
+        TTYPath = "/dev/tty1";
         TTYReset = "yes";
         TTYVHangup = "yes";
+        # Clear the console before starting
+        TTYVTDisallocate = true;
       };
       # Don't kill a user session when using nixos-rebuild
       restartIfChanged = false;

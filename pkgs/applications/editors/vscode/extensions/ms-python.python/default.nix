@@ -28,22 +28,21 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     jedi-language-server
   ];
 
-  postPatch =
-    ''
-      # remove bundled python deps and use libs from nixpkgs
-      rm -r python_files/lib
-      mkdir -p python_files/lib/python/
-      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
-      buildPythonPath "$propagatedBuildInputs"
-      for i in python_files/*.py; do
-        patchPythonScript "$i"
-      done
-    ''
-    + lib.optionalString pythonUseFixed ''
-      # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
-      substituteInPlace "./package.json" \
-        --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
-    '';
+  postPatch = ''
+    # remove bundled python deps and use libs from nixpkgs
+    rm -r python_files/lib
+    mkdir -p python_files/lib/python/
+    ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
+    buildPythonPath "$propagatedBuildInputs"
+    for i in python_files/*.py; do
+      patchPythonScript "$i"
+    done
+  ''
+  + lib.optionalString pythonUseFixed ''
+    # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
+    substituteInPlace "./package.json" \
+      --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
+  '';
 
   passthru.updateScript = vscode-extension-update-script { };
 

@@ -348,10 +348,11 @@ in
   config = mkIf cfg.enable {
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.target")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.target")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
         (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
@@ -391,15 +392,17 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-celery = {
       description = "Docs Celery broker from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.target")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.target")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
         (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
@@ -420,7 +423,8 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-collaboration-server = {
@@ -432,7 +436,8 @@ in
 
       serviceConfig = {
         ExecStart = getExe cfg.collaborationServer.package;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     services.postgresql = mkIf cfg.postgresql.createLocally {

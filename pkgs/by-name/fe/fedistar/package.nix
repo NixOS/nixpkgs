@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
 
   pnpmDeps = pnpm.fetchDeps {
@@ -53,12 +52,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      glib-networking
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   doCheck = false; # This version's tests do not pass
 

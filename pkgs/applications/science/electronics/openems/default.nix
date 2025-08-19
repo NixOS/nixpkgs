@@ -36,20 +36,19 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals withMPI [ "-DWITH_MPI=ON" ];
 
-  buildInputs =
-    [
-      fparser
-      tinyxml
-      hdf5
-      vtk
-      boost
-      zlib
-      csxcad
-      (octave.override { inherit hdf5; })
-    ]
-    ++ lib.optionals withQcsxcad [ qcsxcad ]
-    ++ lib.optionals withMPI [ mpi ]
-    ++ lib.optionals withHyp2mat [ hyp2mat ];
+  buildInputs = [
+    fparser
+    tinyxml
+    hdf5
+    vtk
+    boost
+    zlib
+    csxcad
+    (octave.override { inherit hdf5; })
+  ]
+  ++ lib.optionals withQcsxcad [ qcsxcad ]
+  ++ lib.optionals withMPI [ mpi ]
+  ++ lib.optionals withHyp2mat [ hyp2mat ];
 
   postFixup = ''
     substituteInPlace $out/share/openEMS/matlab/setup.m \

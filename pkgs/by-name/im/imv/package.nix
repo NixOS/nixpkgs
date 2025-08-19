@@ -92,7 +92,8 @@ stdenv.mkDerivation rec {
     "-Dwindows=${withWindowSystem}"
     "-Dtest=enabled"
     "-Dman=enabled"
-  ] ++ backendFlags;
+  ]
+  ++ backendFlags;
 
   strictDeps = true;
 
@@ -105,16 +106,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cmocka
-      icu75
-      libxkbcommon
-      pango
-      inih
-    ]
-    ++ windowSystems."${withWindowSystem}"
-    ++ builtins.map (b: backends."${b}") withBackends;
+  buildInputs = [
+    cmocka
+    icu75
+    libxkbcommon
+    pango
+    inih
+  ]
+  ++ windowSystems."${withWindowSystem}"
+  ++ builtins.map (b: backends."${b}") withBackends;
 
   patches = [
     (fetchpatch {

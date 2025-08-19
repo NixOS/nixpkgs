@@ -587,6 +587,63 @@ let
       '';
     };
 
+    kafka = {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeTextFile {
+          name = "/tmp/prometheus-kafka-exporter.env";
+          text = ''
+            KAFKA_BROKERS="localhost:9092"
+          '';
+        };
+      };
+      metricProvider = {
+        services.apache-kafka = {
+          enable = true;
+
+          clusterId = "pHG8aWuXSfWAibHFDCnsCQ";
+
+          formatLogDirs = true;
+
+          settings = {
+            "node.id" = 1;
+            "process.roles" = [
+              "broker"
+              "controller"
+            ];
+            "listeners" = [
+              "PLAINTEXT://:9092"
+              "CONTROLLER://:9093"
+            ];
+            "listener.security.protocol.map" = [
+              "PLAINTEXT:PLAINTEXT"
+              "CONTROLLER:PLAINTEXT"
+            ];
+            "controller.quorum.voters" = [
+              "1@localhost:9093"
+            ];
+            "controller.listener.names" = [ "CONTROLLER" ];
+            "log.dirs" = [ "/var/lib/apache-kafka" ];
+          };
+        };
+
+        systemd.services.apache-kafka.serviceConfig.StateDirectory = "apache-kafka";
+      };
+      exporterTest = ''
+        wait_for_unit("apache-kafka")
+        wait_for_open_port(9092)
+        wait_for_open_port(9093)
+        wait_for_unit("prometheus-kafka-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+          "journalctl -o cat -u prometheus-kafka-exporter.service | grep '\"version\":\"${pkgs.kminion.version}\"'"
+        )
+        succeed(
+            "curl -sSf http://localhost:8080/metrics | grep 'kminion_exporter_up'"
+        )
+      '';
+    };
+
     knot = {
       exporterConfig = {
         enable = true;

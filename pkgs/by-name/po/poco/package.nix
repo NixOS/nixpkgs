@@ -76,24 +76,23 @@ stdenv.mkDerivation rec {
       (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
     ];
 
-  patches =
-    [
-      # Remove on next release
-      (fetchpatch {
-        name = "disable-included-pcre-if-pcre-is-linked-staticly";
-        # this happens when building pkgsStatic.poco
-        url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
-        hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
-      })
-      # https://github.com/pocoproject/poco/issues/4977
-      ./disable-flaky-tests.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./disable-broken-tests-darwin.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      ./disable-broken-tests-linux.patch
-    ];
+  patches = [
+    # Remove on next release
+    (fetchpatch {
+      name = "disable-included-pcre-if-pcre-is-linked-staticly";
+      # this happens when building pkgsStatic.poco
+      url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
+      hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
+    })
+    # https://github.com/pocoproject/poco/issues/4977
+    ./disable-flaky-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./disable-broken-tests-darwin.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ./disable-broken-tests-linux.patch
+  ];
 
   doCheck = true;
   nativeCheckInputs = [

@@ -25,17 +25,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
-    ]
-    ++ lib.optionals withUdev [
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      freebsd.libcapsicum
-      freebsd.libcasper
-    ];
+  buildInputs = [
+    runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
+  ]
+  ++ lib.optionals withUdev [
+    udev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libcapsicum
+    freebsd.libcasper
+  ];
 
   postPatch = ''
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
     "--dbdir=/var/lib/dhcpcd"
     "--with-default-hostname=nixos"
     (lib.enableFeature enablePrivSep "privsep")
-  ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
+  ]
+  ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

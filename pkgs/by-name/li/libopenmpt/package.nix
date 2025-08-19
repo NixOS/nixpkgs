@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      mpg123
-      libogg
-      libvorbis
-      portaudio
-      libsndfile
-      flac
-    ]
-    ++ lib.optionals usePulseAudio [
-      libpulseaudio
-    ];
+  buildInputs = [
+    zlib
+    mpg123
+    libogg
+    libvorbis
+    portaudio
+    libsndfile
+    flac
+  ]
+  ++ lib.optionals usePulseAudio [
+    libpulseaudio
+  ];
 
   configureFlags = [
     (lib.strings.withFeature usePulseAudio "pulseaudio")

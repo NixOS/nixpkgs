@@ -43,7 +43,8 @@ python3.pkgs.buildPythonApplication rec {
     "TestNoResponseFailure"
     "TestProcessMonitor"
     "TestSocketConnection"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_time_repeater" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_time_repeater" ];
 
   pythonImportsCheck = [ "boofuzz" ];
 

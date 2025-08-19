@@ -64,54 +64,53 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [ ./constants.patch ];
 
-  postPatch =
-    ''
-      echo 'VERSION = "${version}"' > frigate/version.py
+  postPatch = ''
+    echo 'VERSION = "${version}"' > frigate/version.py
 
-      substituteInPlace \
-        frigate/app.py \
-        frigate/test/test_{http,storage}.py \
-        frigate/test/http_api/base_http_test.py \
-        --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
+    substituteInPlace \
+      frigate/app.py \
+      frigate/test/test_{http,storage}.py \
+      frigate/test/http_api/base_http_test.py \
+      --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
-      substituteInPlace frigate/const.py \
-        --replace-fail "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
-        --replace-fail "/media/frigate" "/var/lib/frigate" \
-        --replace-fail "/tmp/cache" "/var/cache/frigate" \
-        --replace-fail "/config" "/var/lib/frigate" \
-        --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
+    substituteInPlace frigate/const.py \
+      --replace-fail "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
+      --replace-fail "/media/frigate" "/var/lib/frigate" \
+      --replace-fail "/tmp/cache" "/var/cache/frigate" \
+      --replace-fail "/config" "/var/lib/frigate" \
+      --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-      substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
-        --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
+    substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
+      --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
 
-      substituteInPlace frigate/db/sqlitevecq.py \
-        --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
+    substituteInPlace frigate/db/sqlitevecq.py \
+      --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
-    ''
-    # clang-rocm, provided by `rocmPackages.clr`, only works on x86_64-linux specifically
-    + lib.optionalString (with stdenv.hostPlatform; isx86_64 && isLinux) ''
-      substituteInPlace frigate/detectors/plugins/rocm.py \
-        --replace-fail "/opt/rocm/bin/rocminfo" "rocminfo" \
-        --replace-fail "/opt/rocm/lib" "${rocmPackages.clr}/lib"
+  ''
+  # clang-rocm, provided by `rocmPackages.clr`, only works on x86_64-linux specifically
+  + lib.optionalString (with stdenv.hostPlatform; isx86_64 && isLinux) ''
+    substituteInPlace frigate/detectors/plugins/rocm.py \
+      --replace-fail "/opt/rocm/bin/rocminfo" "rocminfo" \
+      --replace-fail "/opt/rocm/lib" "${rocmPackages.clr}/lib"
 
-    ''
-    + ''
-      # provide default paths for models and maps that are shipped with frigate
-      substituteInPlace frigate/config/config.py \
-        --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
-        --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+  ''
+  + ''
+    # provide default paths for models and maps that are shipped with frigate
+    substituteInPlace frigate/config/config.py \
+      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
+      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
-      substituteInPlace frigate/detectors/detector_config.py \
-        --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
+    substituteInPlace frigate/detectors/detector_config.py \
+      --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
-      substituteInPlace frigate/events/audio.py \
-        --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
-        --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
+    substituteInPlace frigate/events/audio.py \
+      --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
+      --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
 
-      # work around onvif-zeep idiosyncrasy
-      substituteInPlace frigate/ptz/onvif.py \
-        --replace-fail dist-packages site-packages
-    '';
+    # work around onvif-zeep idiosyncrasy
+    substituteInPlace frigate/ptz/onvif.py \
+      --replace-fail dist-packages site-packages
+  '';
 
   dontBuild = true;
 

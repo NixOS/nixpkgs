@@ -50,7 +50,8 @@ buildPythonPackage rec {
   dependencies = [
     black
     python-lsp-server
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "pylsp_black" ];
 

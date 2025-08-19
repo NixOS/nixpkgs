@@ -55,12 +55,14 @@ stdenv.mkDerivation rec {
     flex
     autoreconfHook269
     pkg-config-unwrapped
-  ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
+  ]
+  ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [
     db4
     libxcrypt
-  ] ++ lib.optional stdenv.buildPlatform.isLinux audit;
+  ]
+  ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
   enableParallelBuilding = true;
 

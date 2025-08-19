@@ -70,14 +70,13 @@ rec {
 
       dontBuild = true;
 
-      nativeBuildInputs =
-        [
-          makeWrapper
-          unzip
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          autoPatchelfHook
-        ];
+      nativeBuildInputs = [
+        makeWrapper
+        unzip
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        autoPatchelfHook
+      ];
 
       buildInputs = [
         stdenv.cc.cc
@@ -274,54 +273,54 @@ rec {
           mitm-cache
         ];
 
-        passthru =
-          {
-            fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
-            inherit (gradle) jdk;
-            unwrapped = gradle;
-            tests = {
-              toolchains =
-                let
-                  javaVersion = lib.getVersion jdk23;
-                  javaMajorVersion = lib.versions.major javaVersion;
-                in
-                runCommand "detects-toolchains-from-nix-env"
-                  {
-                    # Use JDKs that are not the default for any of the gradle versions
-                    nativeBuildInputs = [
-                      (gradle.override {
-                        javaToolchains = [
-                          jdk23
-                        ];
-                      })
-                    ];
-                    src = ./tests/toolchains;
-                  }
-                  ''
-                    cp -a $src/* .
-                    substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
-                    env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
-                    gradle run --no-daemon --quiet --console plain > $out
-                    actual="$(<$out)"
-                    if [[ "${javaVersion}" != "$actual"* ]]; then
-                      echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
-                      exit 1
-                    fi
-                  '';
-            } // gradle.tests;
+        passthru = {
+          fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
+          inherit (gradle) jdk;
+          unwrapped = gradle;
+          tests = {
+            toolchains =
+              let
+                javaVersion = lib.getVersion jdk23;
+                javaMajorVersion = lib.versions.major javaVersion;
+              in
+              runCommand "detects-toolchains-from-nix-env"
+                {
+                  # Use JDKs that are not the default for any of the gradle versions
+                  nativeBuildInputs = [
+                    (gradle.override {
+                      javaToolchains = [
+                        jdk23
+                      ];
+                    })
+                  ];
+                  src = ./tests/toolchains;
+                }
+                ''
+                  cp -a $src/* .
+                  substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
+                  env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+                  gradle run --no-daemon --quiet --console plain > $out
+                  actual="$(<$out)"
+                  if [[ "${javaVersion}" != "$actual"* ]]; then
+                    echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
+                    exit 1
+                  fi
+                '';
           }
-          // lib.optionalAttrs (updateAttrPath != null) {
-            updateScript = nix-update-script {
-              attrPath = updateAttrPath;
-              extraArgs = [
-                "--url=https://github.com/gradle/gradle"
-                # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
-                # release version omits the `.0`, so we’ll wanto to only capture
-                # the version up but not including the the trailing `.0`.
-                "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
-              ];
-            };
+          // gradle.tests;
+        }
+        // lib.optionalAttrs (updateAttrPath != null) {
+          updateScript = nix-update-script {
+            attrPath = updateAttrPath;
+            extraArgs = [
+              "--url=https://github.com/gradle/gradle"
+              # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
+              # release version omits the `.0`, so we’ll wanto to only capture
+              # the version up but not including the the trailing `.0`.
+              "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
+            ];
           };
+        };
 
         meta = gradle.meta // {
           # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook

@@ -25,7 +25,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 

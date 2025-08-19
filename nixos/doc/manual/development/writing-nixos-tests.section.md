@@ -6,18 +6,23 @@ A NixOS test is a module that has the following structure:
 {
 
   # One or more machines:
-  nodes =
-    { machine =
-        { config, pkgs, ... }: { /* ... */ };
-      machine2 =
-        { config, pkgs, ... }: { /* ... */ };
-      # …
-    };
+  nodes = {
+    machine =
+      { config, pkgs, ... }:
+      {
+        # ...
+      };
+    machine2 =
+      { config, pkgs, ... }:
+      {
+        # ...
+      };
+    # …
+  };
 
-  testScript =
-    ''
-      Python code…
-    '';
+  testScript = ''
+    Python code…
+  '';
 }
 ```
 
@@ -46,9 +51,7 @@ Tests are invoked differently depending on whether the test is part of NixOS or 
 Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
 
 ```nix
-{
-  hostname = runTest ./hostname.nix;
-}
+{ hostname = runTest ./hostname.nix; }
 ```
 
 Overrides can be added by defining an anonymous module in `all-tests.nix`.
@@ -75,9 +78,10 @@ Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
 `pkgs.testers`:
 
 ```nix
-let pkgs = import <nixpkgs> {};
-in
+let
+  pkgs = import <nixpkgs> { };
 
+in
 pkgs.testers.runNixOSTest {
   imports = [ ./test.nix ];
   defaults.services.foo.package = mypkg;
@@ -166,13 +170,13 @@ For faster dev cycles it's also possible to disable the code-linters
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
-    { # configuration…
+    {
+      # configuration…
     };
 
-  testScript =
-    ''
-      Python code…
-    '';
+  testScript = ''
+    Python code…
+  '';
 }
 ```
 
@@ -183,12 +187,11 @@ repository):
 
 ```nix
 {
-  testScript =
-    ''
-      # fmt: off
-      Python code…
-      # fmt: on
-    '';
+  testScript = ''
+    # fmt: off
+    Python code…
+    # fmt: on
+  '';
 }
 ```
 
@@ -200,7 +203,8 @@ way:
   skipTypeCheck = true;
   nodes.machine =
     { config, pkgs, ... }:
-    { # configuration…
+    {
+      # configuration…
     };
 }
 ```
@@ -360,7 +364,7 @@ This can be done when something in the test fails, e.g.
 
 ```nix
 {
-  nodes.machine = {};
+  nodes.machine = { };
 
   sshBackdoor.enable = true;
   enableDebugHook = true;

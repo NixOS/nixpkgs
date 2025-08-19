@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1CSt9dPVHdOqfQXio7/eXiDLWt+iOe6Qj+VtWblwSDE=";
 
   cargoBuildFlags = [ "--example formatjson5" ];

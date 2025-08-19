@@ -50,26 +50,25 @@ stdenv.mkDerivation {
     pkg-config
     intltool
   ];
-  buildInputs =
-    [
-      which
-      gnome-common
-      glib
-      libtool
-      cairo
-      gtk3
-      xorg.xwininfo
-      xorg.libXdamage
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-ugly
-      gst-libav
-      wrapGAppsHook3
-    ]);
+  buildInputs = [
+    which
+    gnome-common
+    glib
+    libtool
+    cairo
+    gtk3
+    xorg.xwininfo
+    xorg.libXdamage
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-libav
+    wrapGAppsHook3
+  ]);
 
   meta = {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";

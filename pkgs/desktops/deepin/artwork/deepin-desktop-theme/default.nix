@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     deepin-icon-theme
   ];
 
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
+
   dontDropIconThemeCache = true;
 
   preFixup = ''

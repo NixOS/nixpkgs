@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ] ++ optional-dependencies.plot;
+  ]
+  ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 

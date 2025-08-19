@@ -39,8 +39,8 @@ in
     ''
       start_all()
 
-      machine.wait_until_tty_matches("2", "password:")
-      machine.send_key("ctrl-alt-f2")
+      machine.wait_until_tty_matches("1", "password:")
+      machine.send_key("ctrl-alt-f1")
       machine.sleep(1)
       machine.screenshot("ly")
       machine.send_chars("alice")
@@ -52,8 +52,8 @@ in
       machine.wait_for_window("^IceWM ")
       machine.screenshot("icewm")
 
-      machineNoX11.wait_until_tty_matches("2", "password:")
-      machineNoX11.send_key("ctrl-alt-f2")
+      machineNoX11.wait_until_tty_matches("1", "password:")
+      machineNoX11.send_key("ctrl-alt-f1")
       machineNoX11.sleep(1)
       machineNoX11.screenshot("ly-no-x11")
       machineNoX11.send_chars("alice")

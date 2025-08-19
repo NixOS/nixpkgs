@@ -67,54 +67,51 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all =
-      [
-        fastapi-cli
-        httpx
-        jinja2
-        python-multipart
-        itsdangerous
-        pyyaml
-        ujson
-        orjson
-        email-validator
-        uvicorn
-      ]
-      ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
-        pydantic-settings
-        pydantic-extra-types
-      ]
-      ++ fastapi-cli.optional-dependencies.standard
-      ++ uvicorn.optional-dependencies.standard;
-    standard =
-      [
-        fastapi-cli
-        httpx
-        jinja2
-        python-multipart
-        email-validator
-        uvicorn
-      ]
-      ++ fastapi-cli.optional-dependencies.standard
-      ++ uvicorn.optional-dependencies.standard;
+    all = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      itsdangerous
+      pyyaml
+      ujson
+      orjson
+      email-validator
+      uvicorn
+    ]
+    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+      pydantic-settings
+      pydantic-extra-types
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
+    standard = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      email-validator
+      uvicorn
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
   };
 
-  nativeCheckInputs =
-    [
-      anyio
-      dirty-equals
-      flask
-      inline-snapshot
-      passlib
-      pyjwt
-      pytestCheckHook
-      pytest-asyncio
-      trio
-      sqlalchemy
-    ]
-    ++ anyio.optional-dependencies.trio
-    ++ passlib.optional-dependencies.bcrypt
-    ++ optional-dependencies.all;
+  nativeCheckInputs = [
+    anyio
+    dirty-equals
+    flask
+    inline-snapshot
+    passlib
+    pyjwt
+    pytestCheckHook
+    pytest-asyncio
+    trio
+    sqlalchemy
+  ]
+  ++ anyio.optional-dependencies.trio
+  ++ passlib.optional-dependencies.bcrypt
+  ++ optional-dependencies.all;
 
   pytestFlags = [
     # ignoring deprecation warnings to avoid test failure from

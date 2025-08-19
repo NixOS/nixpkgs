@@ -55,7 +55,8 @@ let
     paths = [
       plymouth
       plymouthLogos
-    ] ++ cfg.themePackages;
+    ]
+    ++ cfg.themePackages;
   };
 
   configFile = pkgs.writeText "plymouthd.conf" ''

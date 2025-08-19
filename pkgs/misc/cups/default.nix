@@ -39,46 +39,44 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace cups/testfile.c \
-        --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
+  postPatch = ''
+    substituteInPlace cups/testfile.c \
+      --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
 
-        # The cups.socket unit shouldn't be part of cups.service: stopping the
-        # service would stop the socket and break subsequent socket activations.
-        # See https://github.com/apple/cups/issues/6005
-        sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12")
-        ''
-          substituteInPlace backend/usb-darwin.c \
-            --replace "kIOMainPortDefault" "kIOMasterPortDefault"
-        '';
+      # The cups.socket unit shouldn't be part of cups.service: stopping the
+      # service would stop the socket and break subsequent socket activations.
+      # See https://github.com/apple/cups/issues/6005
+      sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12")
+      ''
+        substituteInPlace backend/usb-darwin.c \
+          --replace "kIOMainPortDefault" "kIOMasterPortDefault"
+      '';
 
   nativeBuildInputs = [
     pkg-config
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      zlib
-      libjpeg
-      libpng
-      libtiff
-      libusb1
-      gnutls
-      libpaper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      avahi
-      pam
-      dbus
-      acl
-    ]
-    ++ lib.optional enableSystemd systemd;
+  buildInputs = [
+    zlib
+    libjpeg
+    libpng
+    libtiff
+    libusb1
+    gnutls
+    libpaper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    avahi
+    pam
+    dbus
+    acl
+  ]
+  ++ lib.optional enableSystemd systemd;
 
   propagatedBuildInputs = [ gmp ];
 
@@ -86,22 +84,21 @@ stdenv.mkDerivation rec {
     "build"
     "host"
   ];
-  configureFlags =
-    [
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--enable-raw-printing"
-      "--enable-threads"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-dbus"
-      "--enable-pam"
-      "--with-dbusdir=${placeholder "out"}/share/dbus-1"
-    ]
-    ++ lib.optional (libusb1 != null) "--enable-libusb"
-    ++ lib.optional (gnutls != null) "--enable-ssl"
-    ++ lib.optional (avahi != null) "--enable-avahi"
-    ++ lib.optional (libpaper != null) "--enable-libpaper";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--enable-raw-printing"
+    "--enable-threads"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-dbus"
+    "--enable-pam"
+    "--with-dbusdir=${placeholder "out"}/share/dbus-1"
+  ]
+  ++ lib.optional (libusb1 != null) "--enable-libusb"
+  ++ lib.optional (gnutls != null) "--enable-ssl"
+  ++ lib.optional (avahi != null) "--enable-avahi"
+  ++ lib.optional (libpaper != null) "--enable-libpaper";
 
   # AR has to be an absolute path
   preConfigure = ''
@@ -142,33 +139,32 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall =
-    ''
-      libexec=${if stdenv.hostPlatform.isDarwin then "libexec/cups" else "lib/cups"}
-      moveToOutput $libexec "$out"
+  postInstall = ''
+    libexec=${if stdenv.hostPlatform.isDarwin then "libexec/cups" else "lib/cups"}
+    moveToOutput $libexec "$out"
 
-      # $lib contains references to $out/share/cups.
-      # CUPS is working without them, so they are not vital.
-      find "$lib" -type f -exec grep -q "$out" {} \; \
-           -printf "removing references from %p\n" \
-           -exec remove-references-to -t "$out" {} +
+    # $lib contains references to $out/share/cups.
+    # CUPS is working without them, so they are not vital.
+    find "$lib" -type f -exec grep -q "$out" {} \; \
+         -printf "removing references from %p\n" \
+         -exec remove-references-to -t "$out" {} +
 
-      # Delete obsolete stuff that conflicts with cups-filters.
-      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+    # Delete obsolete stuff that conflicts with cups-filters.
+    rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
-      moveToOutput bin/cups-config "$dev"
-      sed -e "/^cups_serverbin=/s|$lib|$out|" \
-          -i "$dev/bin/cups-config"
+    moveToOutput bin/cups-config "$dev"
+    sed -e "/^cups_serverbin=/s|$lib|$out|" \
+        -i "$dev/bin/cups-config"
 
-      for f in "$out"/lib/systemd/system/*; do
-        substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Use xdg-open when on Linux
-      substituteInPlace "$out"/share/applications/cups.desktop \
-        --replace "Exec=htmlview" "Exec=xdg-open"
-    '';
+    for f in "$out"/lib/systemd/system/*; do
+      substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Use xdg-open when on Linux
+    substituteInPlace "$out"/share/applications/cups.desktop \
+      --replace "Exec=htmlview" "Exec=xdg-open"
+  '';
 
   passthru.tests = {
     inherit (nixosTests)

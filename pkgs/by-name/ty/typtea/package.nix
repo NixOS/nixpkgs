@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "typtea";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "ashish0kumar";
     repo = "typtea";
     tag = "v${version}";
-    hash = "sha256-JIb7MkqHHlKLTI+SY007RQS4DpmQS1y8SNUsYVevEEk=";
+    hash = "sha256-syN35y4oCm0P6N+UmbPrcfmGgJNuEjZ8wzW98xhM5NM=";
   };
 
   vendorHash = "sha256-LWY1Tnh4iyNAV7dNjlKdT9IwPJRN25HkEAGSkQIRe9I=";

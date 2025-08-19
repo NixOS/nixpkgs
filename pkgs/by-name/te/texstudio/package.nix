@@ -26,20 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
     pkg-config
   ];
-  buildInputs =
-    [
-      hunspell
-      qt6.qt5compat
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-      qt6Packages.poppler
-      qt6Packages.quazip
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    hunspell
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6Packages.poppler
+    qt6Packages.quazip
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"

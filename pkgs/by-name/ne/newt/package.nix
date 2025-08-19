@@ -34,14 +34,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python3 ];
-  buildInputs =
-    [
-      slang
-      popt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gettext # for darwin with clang
-    ];
+  buildInputs = [
+    slang
+    popt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gettext # for darwin with clang
+  ];
 
   NIX_LDFLAGS =
     "-lncurses"
@@ -78,11 +77,9 @@ stdenv.mkDerivation rec {
           ... which is implemented by `runCommand`,
           ... which has a custom builder and does not run $preDistPhases
       */
-      postBuild =
-        postBuild
-        + ''
-          runPhase pythonImportsCheckPhase
-        '';
+      postBuild = postBuild + ''
+        runPhase pythonImportsCheckPhase
+      '';
     }
   );
 

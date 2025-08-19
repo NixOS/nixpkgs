@@ -36,21 +36,20 @@ python3.pkgs.buildPythonApplication rec {
     platformdirs
   ];
 
-  nativeCheckInputs =
-    [
-      devpi-server
-      git
-    ]
-    ++ (with python3.pkgs; [
-      mercurial
-      mock
-      pypitoken
-      pytestCheckHook
-      sphinx
-      virtualenv
-      webtest
-      wheel
-    ]);
+  nativeCheckInputs = [
+    devpi-server
+    git
+  ]
+  ++ (with python3.pkgs; [
+    mercurial
+    mock
+    pypitoken
+    pytestCheckHook
+    sphinx
+    virtualenv
+    webtest
+    wheel
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);

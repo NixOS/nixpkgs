@@ -36,24 +36,24 @@ buildPythonPackage rec {
     colorama
     freezegun
     pytest-mypy-plugins
-  ] ++ lib.optional (pythonOlder "3.10") exceptiongroup;
+  ]
+  ++ lib.optional (pythonOlder "3.10") exceptiongroup;
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_multiprocessing.py" ];
 
-  disabledTests =
-    [
-      # fails on some machine configurations
-      # AssertionError: assert '' != ''
-      "test_file_buffering"
-      # Slow test
-      "test_time_rotation"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_rotation_and_retention"
-      "test_rotation_and_retention_timed_file"
-      "test_renaming"
-      "test_await_complete_inheritance"
-    ];
+  disabledTests = [
+    # fails on some machine configurations
+    # AssertionError: assert '' != ''
+    "test_file_buffering"
+    # Slow test
+    "test_time_rotation"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_rotation_and_retention"
+    "test_rotation_and_retention_timed_file"
+    "test_renaming"
+    "test_await_complete_inheritance"
+  ];
 
   pythonImportsCheck = [ "loguru" ];
 

@@ -34,7 +34,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipadic
     pytestCheckHook
-  ] ++ optional-dependencies.unidic-lite;
+  ]
+  ++ optional-dependencies.unidic-lite;
 
   optional-dependencies = {
     unidic-lite = [ unidic-lite ];

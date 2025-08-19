@@ -26,18 +26,17 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-    [
-      fftw
-      readline
-    ]
-    ++ lib.optionals (!withNgshared) [
-      libXaw
-      libXext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    fftw
+    readline
+  ]
+  ++ lib.optionals (!withNgshared) [
+    libXaw
+    libXext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   configureFlags =
     lib.optionals withNgshared [

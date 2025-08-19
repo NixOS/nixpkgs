@@ -138,14 +138,13 @@ stdenv.mkDerivation (finalAttrs: {
       relative = "compiler-rt";
     });
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-      libllvm.dev
-    ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    libllvm.dev
+  ]
+  ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
@@ -169,84 +168,83 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_LINK = lib.optionalString (stdenv.hostPlatform.isDarwin) "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
   };
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "COMPILER_RT_DEFAULT_TARGET_ONLY" true)
-      (lib.cmakeFeature "CMAKE_C_COMPILER_TARGET" stdenv.hostPlatform.config)
-      (lib.cmakeFeature "CMAKE_ASM_COMPILER_TARGET" stdenv.hostPlatform.config)
-    ]
-    ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
-      (lib.cmakeFeature "SANITIZER_COMMON_CFLAGS" "-I${libxcrypt}/include")
-    ]
-    ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
-      (lib.cmakeFeature "SANITIZER_CXX_ABI" "libcxxabi")
-      (lib.cmakeFeature "SANITIZER_CXX_ABI_LIBNAME" "libcxxabi")
-      (lib.cmakeBool "COMPILER_RT_USE_BUILTINS_LIBRARY" true)
-    ]
-    ++
-      lib.optionals
-        ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13"))
-        [
-          (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
-        ]
-    ++ lib.optionals (useLLVM && haveLibc) [
-      (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
-      (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
-    ]
-    ++ lib.optionals (noSanitizers) [
-      (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
-    ]
-    ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
-      (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
-      (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
-      (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
-      (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
-    ]
-    ++ lib.optionals (!haveLibc || bareMetal) [
-      (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
-      (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
-      (lib.cmakeBool "COMPILER_RT_BAREMETAL_BUILD" true)
-      (lib.cmakeFeature "CMAKE_SIZEOF_VOID_P" (toString (stdenv.hostPlatform.parsed.cpu.bits / 8)))
-    ]
-    ++ lib.optionals (!haveLibc || bareMetal || isDarwinStatic) [
-      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
-    ]
-    ++ lib.optionals (!haveLibc) [
-      (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
-    ]
-    ++ lib.optionals (useLLVM) [
-      (lib.cmakeBool "COMPILER_RT_BUILD_BUILTINS" true)
-      #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
-      (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
-    ]
-    ++ lib.optionals (bareMetal) [
-      (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) (
-      lib.optionals (lib.versionAtLeast release_version "16") [
-        (lib.cmakeFeature "CMAKE_LIPO" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo")
+  cmakeFlags = [
+    (lib.cmakeBool "COMPILER_RT_DEFAULT_TARGET_ONLY" true)
+    (lib.cmakeFeature "CMAKE_C_COMPILER_TARGET" stdenv.hostPlatform.config)
+    (lib.cmakeFeature "CMAKE_ASM_COMPILER_TARGET" stdenv.hostPlatform.config)
+  ]
+  ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
+    (lib.cmakeFeature "SANITIZER_COMMON_CFLAGS" "-I${libxcrypt}/include")
+  ]
+  ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
+    (lib.cmakeFeature "SANITIZER_CXX_ABI" "libcxxabi")
+    (lib.cmakeFeature "SANITIZER_CXX_ABI_LIBNAME" "libcxxabi")
+    (lib.cmakeBool "COMPILER_RT_USE_BUILTINS_LIBRARY" true)
+  ]
+  ++
+    lib.optionals
+      ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13"))
+      [
+        (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
       ]
-      ++ lib.optionals (!haveLibcxx) [
-        # Darwin fails to detect that the compiler supports the `-g` flag when there is no libc++ during the
-        # compiler-rt bootstrap, which prevents compiler-rt from building. The `-g` flag is required by the
-        # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
-        (lib.cmakeBool "COMPILER_RT_HAS_G_FLAG" true)
-      ]
-      ++ [
-        (lib.cmakeFeature "DARWIN_osx_ARCHS" stdenv.hostPlatform.darwinArch)
-        (lib.cmakeFeature "DARWIN_osx_BUILTIN_ARCHS" stdenv.hostPlatform.darwinArch)
-        (lib.cmakeFeature "SANITIZER_MIN_OSX_VERSION" stdenv.hostPlatform.darwinMinVersion)
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
-        # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
-        # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
-        (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" false)
-      ]
-    )
-    ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
-      (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
+  ++ lib.optionals (useLLVM && haveLibc) [
+    (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
+    (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
+  ]
+  ++ lib.optionals (noSanitizers) [
+    (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
+  ]
+  ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
+    (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
+  ]
+  ++ lib.optionals (!haveLibc || bareMetal) [
+    (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
+    (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (lib.cmakeBool "COMPILER_RT_BAREMETAL_BUILD" true)
+    (lib.cmakeFeature "CMAKE_SIZEOF_VOID_P" (toString (stdenv.hostPlatform.parsed.cpu.bits / 8)))
+  ]
+  ++ lib.optionals (!haveLibc || bareMetal || isDarwinStatic) [
+    (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+  ]
+  ++ lib.optionals (!haveLibc) [
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
+  ]
+  ++ lib.optionals (useLLVM) [
+    (lib.cmakeBool "COMPILER_RT_BUILD_BUILTINS" true)
+    #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
+    (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
+  ]
+  ++ lib.optionals (bareMetal) [
+    (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) (
+    lib.optionals (lib.versionAtLeast release_version "16") [
+      (lib.cmakeFeature "CMAKE_LIPO" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo")
     ]
-    ++ devExtraCmakeFlags;
+    ++ lib.optionals (!haveLibcxx) [
+      # Darwin fails to detect that the compiler supports the `-g` flag when there is no libc++ during the
+      # compiler-rt bootstrap, which prevents compiler-rt from building. The `-g` flag is required by the
+      # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
+      (lib.cmakeBool "COMPILER_RT_HAS_G_FLAG" true)
+    ]
+    ++ [
+      (lib.cmakeFeature "DARWIN_osx_ARCHS" stdenv.hostPlatform.darwinArch)
+      (lib.cmakeFeature "DARWIN_osx_BUILTIN_ARCHS" stdenv.hostPlatform.darwinArch)
+      (lib.cmakeFeature "SANITIZER_MIN_OSX_VERSION" stdenv.hostPlatform.darwinMinVersion)
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
+      # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
+      (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" false)
+    ]
+  )
+  ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+    (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
+  ]
+  ++ devExtraCmakeFlags;
 
   outputs = [
     "out"

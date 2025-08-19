@@ -380,40 +380,39 @@ in
       group = "root";
       mode = "0600";
       # password will be added from password file in systemd oneshot
-      text =
-        ''
-          users.host=${cfg.host}
-          users.db_user=${cfg.user}
-          users.database=${cfg.database}
-          users.table=${cfg.pam.table}
-          users.user_column=${cfg.pam.userColumn}
-          users.password_column=${cfg.pam.passwordColumn}
-          users.password_crypt=${cfg.pam.passwordCrypt}
-          users.disconnect_every_operation=${if cfg.pam.disconnectEveryOperation then "1" else "0"}
-          verbose=${if cfg.pam.verbose then "1" else "0"}
-        ''
-        + lib.optionalString (cfg.pam.cryptDefault != null) ''
-          users.use_${cfg.pam.cryptDefault}=1
-        ''
-        + lib.optionalString (cfg.pam.where != null) ''
-          users.where_clause=${cfg.pam.where}
-        ''
-        + lib.optionalString (cfg.pam.statusColumn != null) ''
-          users.status_column=${cfg.pam.statusColumn}
-        ''
-        + lib.optionalString (cfg.pam.updateTable != null) ''
-          users.update_table=${cfg.pam.updateTable}
-        ''
-        + lib.optionalString cfg.pam.logging.enable ''
-          log.enabled=true
-          log.table=${cfg.pam.logging.table}
-          log.message_column=${cfg.pam.logging.msgColumn}
-          log.pid_column=${cfg.pam.logging.pidColumn}
-          log.user_column=${cfg.pam.logging.userColumn}
-          log.host_column=${cfg.pam.logging.hostColumn}
-          log.rhost_column=${cfg.pam.logging.rHostColumn}
-          log.time_column=${cfg.pam.logging.timeColumn}
-        '';
+      text = ''
+        users.host=${cfg.host}
+        users.db_user=${cfg.user}
+        users.database=${cfg.database}
+        users.table=${cfg.pam.table}
+        users.user_column=${cfg.pam.userColumn}
+        users.password_column=${cfg.pam.passwordColumn}
+        users.password_crypt=${cfg.pam.passwordCrypt}
+        users.disconnect_every_operation=${if cfg.pam.disconnectEveryOperation then "1" else "0"}
+        verbose=${if cfg.pam.verbose then "1" else "0"}
+      ''
+      + lib.optionalString (cfg.pam.cryptDefault != null) ''
+        users.use_${cfg.pam.cryptDefault}=1
+      ''
+      + lib.optionalString (cfg.pam.where != null) ''
+        users.where_clause=${cfg.pam.where}
+      ''
+      + lib.optionalString (cfg.pam.statusColumn != null) ''
+        users.status_column=${cfg.pam.statusColumn}
+      ''
+      + lib.optionalString (cfg.pam.updateTable != null) ''
+        users.update_table=${cfg.pam.updateTable}
+      ''
+      + lib.optionalString cfg.pam.logging.enable ''
+        log.enabled=true
+        log.table=${cfg.pam.logging.table}
+        log.message_column=${cfg.pam.logging.msgColumn}
+        log.pid_column=${cfg.pam.logging.pidColumn}
+        log.user_column=${cfg.pam.logging.userColumn}
+        log.host_column=${cfg.pam.logging.hostColumn}
+        log.rhost_column=${cfg.pam.logging.rHostColumn}
+        log.time_column=${cfg.pam.logging.timeColumn}
+      '';
     };
 
     environment.etc."libnss-mysql.cfg" = {

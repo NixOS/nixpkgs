@@ -57,17 +57,16 @@ stdenv.mkDerivation rec {
     openssh
   ];
 
-  buildInputs =
-    [
-      libgcrypt
-      libtasn1
-      pango
-      libsecret
-      openssh
-    ]
-    ++ lib.optionals (systemdSupport) [
-      systemd
-    ];
+  buildInputs = [
+    libgcrypt
+    libtasn1
+    pango
+    libsecret
+    openssh
+  ]
+  ++ lib.optionals (systemdSupport) [
+    systemd
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -79,16 +78,15 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  mesonFlags =
-    [
-      # We are still using ssh-agent from gnome-keyring.
-      # https://github.com/NixOS/nixpkgs/issues/140824
-      "-Dssh_agent=false"
-      "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
-    ]
-    ++ lib.optionals (!systemdSupport) [
-      "-Dsystemd=disabled"
-    ];
+  mesonFlags = [
+    # We are still using ssh-agent from gnome-keyring.
+    # https://github.com/NixOS/nixpkgs/issues/140824
+    "-Dssh_agent=false"
+    "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
+  ]
+  ++ lib.optionals (!systemdSupport) [
+    "-Dsystemd=disabled"
+  ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 

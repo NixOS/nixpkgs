@@ -116,34 +116,33 @@ buildPythonPackage rec {
     "docs"
   ];
 
-  disabledTests =
-    [
-      # Requires network access
-      "AnonymousFTPTestCase"
-      "FTPFeedStorageTest"
-      "FeedExportTest"
-      "test_custom_asyncio_loop_enabled_true"
-      "test_custom_loop_asyncio"
-      "test_custom_loop_asyncio_deferred_signal"
-      "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
-      "test_persist"
-      "test_timeout_download_from_spider_nodata_rcvd"
-      "test_timeout_download_from_spider_server_hangs"
-      "test_unbounded_response"
-      "CookiesMiddlewareTest"
-      # Test fails on Hydra
-      "test_start_requests_laziness"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_xmliter_encoding"
-      "test_download"
-      "test_reactor_default_twisted_reactor_select"
-      "URIParamsSettingTest"
-      "URIParamsFeedOptionTest"
-      # flaky on darwin-aarch64
-      "test_fixed_delay"
-      "test_start_requests_laziness"
-    ];
+  disabledTests = [
+    # Requires network access
+    "AnonymousFTPTestCase"
+    "FTPFeedStorageTest"
+    "FeedExportTest"
+    "test_custom_asyncio_loop_enabled_true"
+    "test_custom_loop_asyncio"
+    "test_custom_loop_asyncio_deferred_signal"
+    "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
+    "test_persist"
+    "test_timeout_download_from_spider_nodata_rcvd"
+    "test_timeout_download_from_spider_server_hangs"
+    "test_unbounded_response"
+    "CookiesMiddlewareTest"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_xmliter_encoding"
+    "test_download"
+    "test_reactor_default_twisted_reactor_select"
+    "URIParamsSettingTest"
+    "URIParamsFeedOptionTest"
+    # flaky on darwin-aarch64
+    "test_fixed_delay"
+    "test_start_requests_laziness"
+  ];
 
   postInstall = ''
     installManPage extras/scrapy.1

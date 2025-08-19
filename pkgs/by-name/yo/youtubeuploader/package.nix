@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "youtubeuploader";
-  version = "1.25.1";
+  version = "1.25.3";
 
   src = fetchFromGitHub {
     owner = "porjo";
     repo = "youtubeuploader";
     tag = "v${version}";
-    hash = "sha256-hffi1/+j5u8/7kOaEGcE0iSMWt3nPmNaE2lg0WBu/BM=";
+    hash = "sha256-89vVorUPgutIp+k2YmUrQXs8tF4eLQt5zupKu1BArkw=";
   };
 
   vendorHash = "sha256-wVfJnN9QgF7c2aI3OghfJW9Z6McZ+irgMRSkWvVi1DM=";

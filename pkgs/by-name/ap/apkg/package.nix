@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apkg";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "pyproject";
 
   src = fetchFromGitLab {
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "packaging";
     repo = "apkg";
     tag = "v${version}";
-    hash = "sha256-VQNUzbWIDo/cbCdtx8JxN5UUMBW3mQ2B42In4b3AA+A=";
+    hash = "sha256-rFcHgNaZBTKO0tU7O8fz2eOD731sLHWxhh0x5mMo9uw=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -35,7 +35,9 @@ python3Packages.buildPythonApplication rec {
     toml # config files
   ];
 
-  nativeBuildInputs = with python3Packages; [ hatchling ];
+  nativeBuildInputs = with python3Packages; [
+    setuptools # required for build
+  ];
 
   makeWrapperArgs = [
     # deps for `srcpkg` operation for other distros; could be optional
@@ -52,7 +54,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytest
-    dunamai
   ];
   checkPhase = ''
     runHook preCheck

@@ -33,7 +33,8 @@ let
     xorg.xdpyinfo
     xorg.xrandr
     xorg.xset
-  ] ++ lib.optionals withDunst [ dunst ];
+  ]
+  ++ lib.optionals withDunst [ dunst ];
 in
 
 stdenv.mkDerivation rec {

@@ -12,6 +12,7 @@
   esdm,
   tpm2-tss,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
+  windows,
 
   # build ESDM RNG plugin
   withEsdm ? false,
@@ -66,59 +67,64 @@ let
         docutils
       ];
 
-      buildInputs =
-        [
-          bzip2
-          zlib
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
-          tpm2-tss
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
-          jitterentropy
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
-          esdm
-        ];
+      buildInputs = [
+        bzip2
+        zlib
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
+        tpm2-tss
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.6.0" && !stdenv.hostPlatform.isMinGW) [
+        jitterentropy
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm && !stdenv.hostPlatform.isMinGW) [
+        esdm
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+        windows.pthreads
+      ];
 
-      buildTargets =
-        [ "cli" ]
-        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
-        ++ lib.optionals static [ "static" ]
-        ++ lib.optionals (!static) [ "shared" ];
+      buildTargets = [
+        "cli"
+      ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
+      ++ lib.optionals static [ "static" ]
+      ++ lib.optionals (!static) [ "shared" ];
 
-      botanConfigureFlags =
-        [
-          "--prefix=${placeholder "out"}"
-          "--bindir=${placeholder "bin"}/bin"
-          "--docdir=${placeholder "doc"}/share/doc"
-          "--mandir=${placeholder "man"}/share/man"
-          "--no-install-python-module"
-          "--build-targets=${lib.concatStringsSep "," finalAttrs.buildTargets}"
-          "--with-bzip2"
-          "--with-zlib"
-          "--with-rst2man"
-          "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
-        ]
-        ++ lib.optionals stdenv.cc.isClang [
-          "--cc=clang"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
-          "--with-tpm2"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
-          "--enable-modules=jitter_rng"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
-          "--enable-modules=esdm_rng"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
-          "--module-policy=${policy}"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
-          "--enable-module=ffi"
-          "--enable-module=shake"
-        ];
+      botanConfigureFlags = [
+        "--prefix=${placeholder "out"}"
+        "--bindir=${placeholder "bin"}/bin"
+        "--docdir=${placeholder "doc"}/share/doc"
+        "--mandir=${placeholder "man"}/share/man"
+        "--no-install-python-module"
+        "--build-targets=${lib.concatStringsSep "," finalAttrs.buildTargets}"
+        "--with-bzip2"
+        "--with-zlib"
+        "--with-rst2man"
+        "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "--cc=clang"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
+        "--with-tpm2"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.6.0" && !stdenv.hostPlatform.isMinGW) [
+        "--enable-modules=jitter_rng"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm && !stdenv.hostPlatform.isMinGW) [
+        "--enable-modules=esdm_rng"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
+        "--module-policy=${policy}"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
+        "--enable-module=ffi"
+        "--enable-module=shake"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+        "--os=mingw"
+      ];
 
       configurePhase = ''
         runHook preConfigure
@@ -152,15 +158,15 @@ let
           thillux
           nikstur
         ];
-        platforms = platforms.unix;
+        platforms = platforms.unix ++ lib.optionals (lib.versionAtLeast version "3.0") platforms.windows;
         license = licenses.bsd2;
       };
     });
 in
 {
   botan3 = common {
-    version = "3.8.1";
-    hash = "sha256-sDloHUuGGi9YU3Rti6gG9VPiOGntctie2/o8Pb+hfmg=";
+    version = "3.9.0";
+    hash = "sha256-jD8oS1jd1C6OQ+n6hqcSnYfqfD93aoDT2mPsIHIrCIM=";
   };
 
   botan2 = common {

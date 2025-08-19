@@ -11,6 +11,24 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
+  "modular-service-options-systemd": [
+    "index.html#modular-service-options-systemd"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-services": [
+    "index.html#modular-services"
+  ],
   "module-services-anubis": [
     "index.html#module-services-anubis"
   ],
@@ -1188,6 +1206,15 @@
   "module-services-mautrix-signal-migrate-configuration": [
     "index.html#module-services-mautrix-signal-migrate-configuration"
   ],
+  "module-services-mautrix-whatsapp": [
+    "index.html#module-services-mautrix-whatsapp"
+  ],
+  "module-services-mautrix-whatsapp-configuration": [
+    "index.html#module-services-mautrix-whatsapp-configuration"
+  ],
+  "module-services-mautrix-whatsapp-migrate-configuration": [
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
+  ],
   "module-services-maubot": [
     "index.html#module-services-maubot"
   ],
@@ -1440,6 +1467,9 @@
   ],
   "module-security-acme-fix-jws": [
     "index.html#module-security-acme-fix-jws"
+  ],
+  "module-security-acme-reload-dependencies": [
+    "index.html#module-security-acme-reload-dependencies"
   ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"

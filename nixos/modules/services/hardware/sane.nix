@@ -34,13 +34,12 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends =
-    [
-      pkg
-      netConf
-    ]
-    ++ lib.optional config.services.saned.enable sanedConf
-    ++ config.hardware.sane.extraBackends;
+  backends = [
+    pkg
+    netConf
+  ]
+  ++ lib.optional config.services.saned.enable sanedConf
+  ++ config.hardware.sane.extraBackends;
   saneConfig = pkgs.mkSaneConfig {
     paths = backends;
     inherit (config.hardware.sane) disabledDefaultBackends;

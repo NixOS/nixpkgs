@@ -194,120 +194,123 @@ let
 
       __structuredAttrs = true;
 
-      outputs =
-        [
-          "out"
-          "dev"
-          "doc"
-          "lib"
-          "man"
-        ]
-        ++ lib.optionals jitSupport [ "jit" ]
-        ++ lib.optionals perlSupport [ "plperl" ]
-        ++ lib.optionals pythonSupport [ "plpython3" ]
-        ++ lib.optionals tclSupport [ "pltcl" ];
+      outputs = [
+        "out"
+        "dev"
+        "doc"
+        "lib"
+        "man"
+      ]
+      ++ lib.optionals jitSupport [ "jit" ]
+      ++ lib.optionals perlSupport [ "plperl" ]
+      ++ lib.optionals pythonSupport [ "plpython3" ]
+      ++ lib.optionals tclSupport [ "pltcl" ];
 
-      outputChecks =
-        {
-          out = {
-            disallowedReferences = [
-              "dev"
-              "doc"
-              "man"
-            ] ++ lib.optionals jitSupport [ "jit" ];
-            disallowedRequisites = [
-              stdenv'.cc
-              llvmPackages.llvm.out
-              llvmPackages.llvm.lib
-            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-          };
-
-          lib = {
-            disallowedReferences = [
-              "out"
-              "dev"
-              "doc"
-              "man"
-            ] ++ lib.optionals jitSupport [ "jit" ];
-            disallowedRequisites = [
-              stdenv'.cc
-              llvmPackages.llvm.out
-              llvmPackages.llvm.lib
-            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-          };
-
-          doc = {
-            disallowedReferences = [
-              "out"
-              "dev"
-              "man"
-            ] ++ lib.optionals jitSupport [ "jit" ];
-          };
-
-          man = {
-            disallowedReferences = [
-              "out"
-              "dev"
-              "doc"
-            ] ++ lib.optionals jitSupport [ "jit" ];
-          };
-        }
-        // lib.optionalAttrs jitSupport {
-          jit = {
-            disallowedReferences = [
-              "dev"
-              "doc"
-              "man"
-            ];
-            disallowedRequisites = [
-              stdenv'.cc
-              llvmPackages.llvm.out
-            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-          };
+      outputChecks = {
+        out = {
+          disallowedReferences = [
+            "dev"
+            "doc"
+            "man"
+          ]
+          ++ lib.optionals jitSupport [ "jit" ];
+          disallowedRequisites = [
+            stdenv'.cc
+            llvmPackages.llvm.out
+            llvmPackages.llvm.lib
+          ]
+          ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
         };
+
+        lib = {
+          disallowedReferences = [
+            "out"
+            "dev"
+            "doc"
+            "man"
+          ]
+          ++ lib.optionals jitSupport [ "jit" ];
+          disallowedRequisites = [
+            stdenv'.cc
+            llvmPackages.llvm.out
+            llvmPackages.llvm.lib
+          ]
+          ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+        };
+
+        doc = {
+          disallowedReferences = [
+            "out"
+            "dev"
+            "man"
+          ]
+          ++ lib.optionals jitSupport [ "jit" ];
+        };
+
+        man = {
+          disallowedReferences = [
+            "out"
+            "dev"
+            "doc"
+          ]
+          ++ lib.optionals jitSupport [ "jit" ];
+        };
+      }
+      // lib.optionalAttrs jitSupport {
+        jit = {
+          disallowedReferences = [
+            "dev"
+            "doc"
+            "man"
+          ];
+          disallowedRequisites = [
+            stdenv'.cc
+            llvmPackages.llvm.out
+          ]
+          ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+        };
+      };
 
       strictDeps = true;
 
-      buildInputs =
-        [
-          zlib
-          readline
-          openssl
-          libxml2
-          libuuid
-        ]
-        ++ lib.optionals icuSupport [ icu ]
-        ++ lib.optionals jitSupport [ llvmPackages.llvm ]
-        ++ lib.optionals lz4Enabled [ lz4 ]
-        ++ lib.optionals zstdEnabled [ zstd ]
-        ++ lib.optionals systemdSupport [ systemdLibs ]
-        ++ lib.optionals uringSupport [ liburing ]
-        ++ lib.optionals curlSupport [ curl ]
-        ++ lib.optionals numaSupport [ numactl ]
-        ++ lib.optionals gssSupport [ libkrb5 ]
-        ++ lib.optionals pamSupport [ linux-pam ]
-        ++ lib.optionals perlSupport [ perl ]
-        ++ lib.optionals ldapSupport [ openldap ]
-        ++ lib.optionals selinuxSupport [ libselinux ]
-        ++ lib.optionals nlsSupport [ gettext ];
+      buildInputs = [
+        zlib
+        readline
+        openssl
+        libxml2
+        libuuid
+      ]
+      ++ lib.optionals icuSupport [ icu ]
+      ++ lib.optionals jitSupport [ llvmPackages.llvm ]
+      ++ lib.optionals lz4Enabled [ lz4 ]
+      ++ lib.optionals zstdEnabled [ zstd ]
+      ++ lib.optionals systemdSupport [ systemdLibs ]
+      ++ lib.optionals uringSupport [ liburing ]
+      ++ lib.optionals curlSupport [ curl ]
+      ++ lib.optionals numaSupport [ numactl ]
+      ++ lib.optionals gssSupport [ libkrb5 ]
+      ++ lib.optionals pamSupport [ linux-pam ]
+      ++ lib.optionals perlSupport [ perl ]
+      ++ lib.optionals ldapSupport [ openldap ]
+      ++ lib.optionals selinuxSupport [ libselinux ]
+      ++ lib.optionals nlsSupport [ gettext ];
 
-      nativeBuildInputs =
-        [
-          bison
-          docbook-xsl-nons
-          docbook_xml_dtd_45
-          flex
-          libxml2
-          libxslt
-          makeBinaryWrapper
-          perl
-          pkg-config
-          removeReferencesTo
-        ]
-        ++ lib.optionals jitSupport [
-          llvmPackages.llvm.dev
-          nukeReferences
-        ];
+      nativeBuildInputs = [
+        bison
+        docbook-xsl-nons
+        docbook_xml_dtd_45
+        flex
+        libxml2
+        libxslt
+        makeBinaryWrapper
+        perl
+        pkg-config
+        removeReferencesTo
+      ]
+      ++ lib.optionals jitSupport [
+        llvmPackages.llvm.dev
+        nukeReferences
+      ];
 
       enableParallelBuilding = true;
 
@@ -315,27 +318,26 @@ let
 
       buildFlags = [ "world" ];
 
-      env =
-        {
-          # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
-          # into all binaries. However, almost no binaries actually use those paths. The following
-          # flags will remove unused sections from all shared libraries and binaries - including
-          # those paths. This avoids a lot of circular dependency problems with different outputs,
-          # and allows splitting them cleanly.
-          CFLAGS = "-fdata-sections -ffunction-sections -flto";
+      env = {
+        # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
+        # into all binaries. However, almost no binaries actually use those paths. The following
+        # flags will remove unused sections from all shared libraries and binaries - including
+        # those paths. This avoids a lot of circular dependency problems with different outputs,
+        # and allows splitting them cleanly.
+        CFLAGS = "-fdata-sections -ffunction-sections -flto";
 
-          # This flag was introduced upstream in:
-          # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
-          # It causes errors when linking against libpq.a in pkgsStatic:
-          #   undefined reference to `pg_encoding_to_char'
-          # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
-          # to have initdb load a libpq.so from a different major version and how to avoid that.
-          # This doesn't apply to us with Nix.
-          NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
-        }
-        // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
-        // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
-        // lib.optionalAttrs tclSupport { TCLSH = "${lib.getBin tcl}/bin/tclsh"; };
+        # This flag was introduced upstream in:
+        # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
+        # It causes errors when linking against libpq.a in pkgsStatic:
+        #   undefined reference to `pg_encoding_to_char'
+        # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
+        # to have initdb load a libpq.so from a different major version and how to avoid that.
+        # This doesn't apply to us with Nix.
+        NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
+      }
+      // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
+      // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
+      // lib.optionalAttrs tclSupport { TCLSH = "${lib.getBin tcl}/bin/tclsh"; };
 
       configureFlags =
         let
@@ -385,136 +387,133 @@ let
         ++ lib.optionals nlsSupport [ "--enable-nls" ]
         ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
 
-      patches =
-        [
-          (
-            if atLeast "16" then
-              ./patches/relative-to-symlinks-16+.patch
-            else
-              ./patches/relative-to-symlinks.patch
-          )
-          (
-            if atLeast "15" then
-              ./patches/empty-pg-config-view-15+.patch
-            else
-              ./patches/empty-pg-config-view.patch
-          )
-          ./patches/less-is-more.patch
-          ./patches/paths-for-split-outputs.patch
-          ./patches/paths-with-postgresql-suffix.patch
-
-          (replaceVars ./patches/locale-binary-path.patch {
-            locale = "${
-              if stdenv.hostPlatform.isDarwin then
-                darwin.adv_cmds
-              else if stdenv.hostPlatform.isFreeBSD then
-                freebsd.locale
-              else
-                lib.getBin stdenv.cc.libc
-            }/bin/locale";
-          })
-        ]
-        ++ lib.optionals stdenv'.hostPlatform.isMusl (
-          # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
-          map fetchurl (lib.attrValues muslPatches)
+      patches = [
+        (
+          if atLeast "16" then
+            ./patches/relative-to-symlinks-16+.patch
+          else
+            ./patches/relative-to-symlinks.patch
         )
-        ++ lib.optionals stdenv'.hostPlatform.isLinux [
-          ./patches/socketdir-in-run-13+.patch
-        ]
-        ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
-          ./patches/export-dynamic-darwin-15-.patch
-        ];
+        (
+          if atLeast "15" then
+            ./patches/empty-pg-config-view-15+.patch
+          else
+            ./patches/empty-pg-config-view.patch
+        )
+        ./patches/less-is-more.patch
+        ./patches/paths-for-split-outputs.patch
+        ./patches/paths-with-postgresql-suffix.patch
+
+        (replaceVars ./patches/locale-binary-path.patch {
+          locale = "${
+            if stdenv.hostPlatform.isDarwin then
+              darwin.adv_cmds
+            else if stdenv.hostPlatform.isFreeBSD then
+              freebsd.locale
+            else
+              lib.getBin stdenv.cc.libc
+          }/bin/locale";
+        })
+      ]
+      ++ lib.optionals stdenv'.hostPlatform.isMusl (
+        # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
+        map fetchurl (lib.attrValues muslPatches)
+      )
+      ++ lib.optionals stdenv'.hostPlatform.isLinux [
+        ./patches/socketdir-in-run-13+.patch
+      ]
+      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
+        ./patches/export-dynamic-darwin-15-.patch
+      ];
 
       installTargets = [ "install-world" ];
 
-      postPatch =
-        ''
-          substituteInPlace "src/Makefile.global.in" --subst-var out
-          substituteInPlace "src/common/config_info.c" --subst-var dev
-          cat ${./pg_config.env.mk} >> src/common/Makefile
-        ''
-        # This check was introduced upstream to prevent calls to "exit" inside libpq.
-        # However, this doesn't work reliably with static linking, see this and following:
-        # https://postgr.es/m/flat/20210703001639.GB2374652%40rfd.leadboat.com#52584ca4bd3cb9dac376f3158c419f97
-        # Thus, disable the check entirely, as it would currently fail with this:
-        # > libpq.so.5.17:                  U atexit
-        # > libpq.so.5.17:                  U pthread_exit
-        # > libpq must not be calling any function which invokes exit
-        # Don't mind the fact that this checks libpq.**so** in pkgsStatic - that's correct, since PostgreSQL
-        # still needs a shared library internally.
-        + lib.optionalString (atLeast "15" && stdenv'.hostPlatform.isStatic) ''
-          substituteInPlace src/interfaces/libpq/Makefile \
-            --replace-fail "echo 'libpq must not be calling any function which invokes exit'; exit 1;" "echo;"
-        '';
+      postPatch = ''
+        substituteInPlace "src/Makefile.global.in" --subst-var out
+        substituteInPlace "src/common/config_info.c" --subst-var dev
+        cat ${./pg_config.env.mk} >> src/common/Makefile
+      ''
+      # This check was introduced upstream to prevent calls to "exit" inside libpq.
+      # However, this doesn't work reliably with static linking, see this and following:
+      # https://postgr.es/m/flat/20210703001639.GB2374652%40rfd.leadboat.com#52584ca4bd3cb9dac376f3158c419f97
+      # Thus, disable the check entirely, as it would currently fail with this:
+      # > libpq.so.5.17:                  U atexit
+      # > libpq.so.5.17:                  U pthread_exit
+      # > libpq must not be calling any function which invokes exit
+      # Don't mind the fact that this checks libpq.**so** in pkgsStatic - that's correct, since PostgreSQL
+      # still needs a shared library internally.
+      + lib.optionalString (atLeast "15" && stdenv'.hostPlatform.isStatic) ''
+        substituteInPlace src/interfaces/libpq/Makefile \
+          --replace-fail "echo 'libpq must not be calling any function which invokes exit'; exit 1;" "echo;"
+      '';
 
-      postInstall =
-        ''
-          moveToOutput "bin/ecpg" "$dev"
-          moveToOutput "lib/pgxs" "$dev"
-        ''
-        + lib.optionalString (stdenv'.buildPlatform.canExecute stdenv'.hostPlatform) ''
-          mkdir -p "$dev/nix-support"
-          "$out/bin/pg_config" > "$dev/nix-support/pg_config.expected"
-        ''
-        + ''
-          rm "$out/bin/pg_config"
-          make -C src/common pg_config.env
-          install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
+      postInstall = ''
+        moveToOutput "bin/ecpg" "$dev"
+        moveToOutput "lib/pgxs" "$dev"
+      ''
+      + lib.optionalString (stdenv'.buildPlatform.canExecute stdenv'.hostPlatform) ''
+        mkdir -p "$dev/nix-support"
+        "$out/bin/pg_config" > "$dev/nix-support/pg_config.expected"
+      ''
+      + ''
+        rm "$out/bin/pg_config"
+        make -C src/common pg_config.env
+        install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
 
-          # postgres exposes external symbols get_pkginclude_path and similar. Those
-          # can't be stripped away by --gc-sections/LTO, because they could theoretically
-          # be used by dynamically loaded modules / extensions. To avoid circular dependencies,
-          # references to -dev, -doc and -man are removed here. References to -lib must be kept,
-          # because there is a realistic use-case for extensions to locate the /lib directory to
-          # load other shared modules.
-          remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
-        ''
-        + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
-          if [ -z "''${dontDisableStatic:-}" ]; then
-            # Remove static libraries in case dynamic are available.
-            for i in $lib/lib/*.a; do
-              name="$(basename "$i")"
-              ext="${stdenv'.hostPlatform.extensions.sharedLibrary}"
-              if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
-                rm "$i"
-              fi
-            done
-          fi
-        ''
-        + ''
-          # The remaining static libraries are libpgcommon.a, libpgport.a and related.
-          # Those are only used when building e.g. extensions, so go to $dev.
-          moveToOutput "lib/*.a" "$dev"
-        ''
-        + lib.optionalString jitSupport ''
-          # In the case of JIT support, prevent useless dependencies on header files
-          find "$out/lib" -iname '*.bc' -type f -exec nuke-refs '{}' +
+        # postgres exposes external symbols get_pkginclude_path and similar. Those
+        # can't be stripped away by --gc-sections/LTO, because they could theoretically
+        # be used by dynamically loaded modules / extensions. To avoid circular dependencies,
+        # references to -dev, -doc and -man are removed here. References to -lib must be kept,
+        # because there is a realistic use-case for extensions to locate the /lib directory to
+        # load other shared modules.
+        remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
+      ''
+      + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
+        if [ -z "''${dontDisableStatic:-}" ]; then
+          # Remove static libraries in case dynamic are available.
+          for i in $lib/lib/*.a; do
+            name="$(basename "$i")"
+            ext="${stdenv'.hostPlatform.extensions.sharedLibrary}"
+            if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
+              rm "$i"
+            fi
+          done
+        fi
+      ''
+      + ''
+        # The remaining static libraries are libpgcommon.a, libpgport.a and related.
+        # Those are only used when building e.g. extensions, so go to $dev.
+        moveToOutput "lib/*.a" "$dev"
+      ''
+      + lib.optionalString jitSupport ''
+        # In the case of JIT support, prevent useless dependencies on header files
+        find "$out/lib" -iname '*.bc' -type f -exec nuke-refs '{}' +
 
-          # Stop lib depending on the -dev output of llvm
-          remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
+        # Stop lib depending on the -dev output of llvm
+        remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
 
-          moveToOutput "lib/bitcode" "$jit"
-          moveToOutput "lib/llvmjit*" "$jit"
-        ''
-        + lib.optionalString stdenv'.hostPlatform.isDarwin ''
-          # The darwin specific Makefile for PGXS contains a reference to the postgres
-          # binary. Some extensions (here: postgis), which are able to set bindir correctly
-          # to their own output for installation, will then fail to find "postgres" during linking.
-          substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
-            --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
-        ''
-        + lib.optionalString perlSupport ''
-          moveToOutput "lib/*plperl*" "$plperl"
-          moveToOutput "share/postgresql/extension/*plperl*" "$plperl"
-        ''
-        + lib.optionalString pythonSupport ''
-          moveToOutput "lib/*plpython3*" "$plpython3"
-          moveToOutput "share/postgresql/extension/*plpython3*" "$plpython3"
-        ''
-        + lib.optionalString tclSupport ''
-          moveToOutput "lib/*pltcl*" "$pltcl"
-          moveToOutput "share/postgresql/extension/*pltcl*" "$pltcl"
-        '';
+        moveToOutput "lib/bitcode" "$jit"
+        moveToOutput "lib/llvmjit*" "$jit"
+      ''
+      + lib.optionalString stdenv'.hostPlatform.isDarwin ''
+        # The darwin specific Makefile for PGXS contains a reference to the postgres
+        # binary. Some extensions (here: postgis), which are able to set bindir correctly
+        # to their own output for installation, will then fail to find "postgres" during linking.
+        substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
+          --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
+      ''
+      + lib.optionalString perlSupport ''
+        moveToOutput "lib/*plperl*" "$plperl"
+        moveToOutput "share/postgresql/extension/*plperl*" "$plperl"
+      ''
+      + lib.optionalString pythonSupport ''
+        moveToOutput "lib/*plpython3*" "$plpython3"
+        moveToOutput "share/postgresql/extension/*plpython3*" "$plpython3"
+      ''
+      + lib.optionalString tclSupport ''
+        moveToOutput "lib/*pltcl*" "$pltcl"
+        moveToOutput "share/postgresql/extension/*pltcl*" "$pltcl"
+      '';
 
       postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
         # initdb needs access to "locale" command from glibc.
@@ -588,16 +587,15 @@ let
 
           pg_config = buildPackages.callPackage ./pg_config.nix { inherit (finalAttrs) finalPackage; };
 
-          tests =
-            {
-              postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
-              postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
-              postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
-              pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-            }
-            // lib.optionalAttrs jitSupport {
-              postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
-            };
+          tests = {
+            postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+            postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+            postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
+            pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+          }
+          // lib.optionalAttrs jitSupport {
+            postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
+          };
         };
 
       meta = with lib; {

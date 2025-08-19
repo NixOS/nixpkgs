@@ -41,26 +41,25 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      freetype
-      glfw
-      lunasvg
-      plutovg
-      nlohmann_json
-      libpng
-      zlib
-      libGL
-    ]
-    ++ lib.optionals (enableNFD && nativeFileDialog != null) [
-      nativeFileDialog
-    ]
-    ++ lib.optionals (enableNFD && stdenv.isLinux) [
-      gtk3
-    ]
-    ++ lib.optionals enablePython [
-      python3Packages.pybind11
-    ];
+  buildInputs = [
+    freetype
+    glfw
+    lunasvg
+    plutovg
+    nlohmann_json
+    libpng
+    zlib
+    libGL
+  ]
+  ++ lib.optionals (enableNFD && nativeFileDialog != null) [
+    nativeFileDialog
+  ]
+  ++ lib.optionals (enableNFD && stdenv.isLinux) [
+    gtk3
+  ]
+  ++ lib.optionals enablePython [
+    python3Packages.pybind11
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")

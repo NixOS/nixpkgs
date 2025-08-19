@@ -83,26 +83,25 @@ stdenv.mkDerivation (finalAttrs: {
     xxHash
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-      (lib.cmakeBool "thriftpy" false)
+    (lib.cmakeBool "thriftpy" false)
 
-      # TODO: Can’t figure out where the C++ tests are wired up in the
-      # CMake build, if anywhere, and this requires Python.
-      #(lib.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
+    # TODO: Can’t figure out where the C++ tests are wired up in the
+    # CMake build, if anywhere, and this requires Python.
+    #(lib.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
 
-      (lib.cmakeFeature "BIN_INSTALL_DIR" "${placeholder "out"}/bin")
-      (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "out"}/include")
-      (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "lib"}/lib")
-      (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "out"}/lib/cmake/fbthrift")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Homebrew sets this, and the shared library build fails without
-      # it. I don’t know, either. It scares me.
-      (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
-    ];
+    (lib.cmakeFeature "BIN_INSTALL_DIR" "${placeholder "out"}/bin")
+    (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "out"}/include")
+    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "lib"}/lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "out"}/lib/cmake/fbthrift")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Homebrew sets this, and the shared library build fails without
+    # it. I don’t know, either. It scares me.
+    (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
+  ];
 
   passthru.updateScript = nix-update-script { };
 

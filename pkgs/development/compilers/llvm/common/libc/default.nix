@@ -34,13 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-    ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ (lib.optional isFullBuild python3Packages.pyyaml);
+  nativeBuildInputs = [
+    cmake
+    python3
+  ]
+  ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
+  ++ (lib.optional isFullBuild python3Packages.pyyaml);
 
   buildInputs = lib.optional isFullBuild linuxHeaders;
 
@@ -73,20 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   libc = if (!isFullBuild) then stdenv.cc.libc else null;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
-      (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc;compiler-rt")
-      # Tests requires the host to have a libc.
-      (lib.cmakeBool "LLVM_INCLUDE_TESTS" (stdenv.cc.libc != null))
-    ]
-    ++ lib.optionals (isFullBuild && stdenv.cc.libc == null) [
-      # CMake runs a check to see if the compiler works.
-      # This includes including headers which requires a libc.
-      # Skip these checks because a libc cannot be used when one doesn't exist.
-      (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
-      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc;compiler-rt")
+    # Tests requires the host to have a libc.
+    (lib.cmakeBool "LLVM_INCLUDE_TESTS" (stdenv.cc.libc != null))
+  ]
+  ++ lib.optionals (isFullBuild && stdenv.cc.libc == null) [
+    # CMake runs a check to see if the compiler works.
+    # This includes including headers which requires a libc.
+    # Skip these checks because a libc cannot be used when one doesn't exist.
+    (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+  ];
 
   # For the update script:
   passthru = {

@@ -22,17 +22,16 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase =
-    ''
-      install -Dm755 discocss $out/bin/discocss
-    ''
-    + lib.optionalString discordAlias ''
-      wrapProgram $out/bin/discocss --set DISCOCSS_DISCORD_BIN ${discord}/bin/Discord
-      ln -s $out/bin/discocss $out/bin/Discord
-      ln -s $out/bin/discocss $out/bin/discord
-      mkdir -p $out/share
-      ln -s ${discord}/share/* $out/share
-    '';
+  installPhase = ''
+    install -Dm755 discocss $out/bin/discocss
+  ''
+  + lib.optionalString discordAlias ''
+    wrapProgram $out/bin/discocss --set DISCOCSS_DISCORD_BIN ${discord}/bin/Discord
+    ln -s $out/bin/discocss $out/bin/Discord
+    ln -s $out/bin/discocss $out/bin/discord
+    mkdir -p $out/share
+    ln -s ${discord}/share/* $out/share
+  '';
 
   meta = {
     description = "Tiny Discord css-injector";

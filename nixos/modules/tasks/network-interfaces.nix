@@ -1733,31 +1733,30 @@ in
       # from being created.
       optionalString hasBonds "options bonding max_bonds=0";
 
-    boot.kernel.sysctl =
-      {
-        "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
-        "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
-        "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
-        # allow all users to do ICMP echo requests (ping)
-        "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
-        # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
-        "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
-      }
-      // listToAttrs (
-        forEach interfaces (
-          i: nameValuePair "net.ipv4.conf.${replaceStrings [ "." ] [ "/" ] i.name}.proxy_arp" i.proxyARP
-        )
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
+      "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      # allow all users to do ICMP echo requests (ping)
+      "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
+      # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
+      "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
+    }
+    // listToAttrs (
+      forEach interfaces (
+        i: nameValuePair "net.ipv4.conf.${replaceStrings [ "." ] [ "/" ] i.name}.proxy_arp" i.proxyARP
       )
-      // listToAttrs (
-        forEach interfaces (
-          i:
-          let
-            opt = i.tempAddress;
-            val = tempaddrValues.${opt}.sysctl;
-          in
-          nameValuePair "net.ipv6.conf.${replaceStrings [ "." ] [ "/" ] i.name}.use_tempaddr" val
-        )
-      );
+    )
+    // listToAttrs (
+      forEach interfaces (
+        i:
+        let
+          opt = i.tempAddress;
+          val = tempaddrValues.${opt}.sysctl;
+        in
+        nameValuePair "net.ipv6.conf.${replaceStrings [ "." ] [ "/" ] i.name}.use_tempaddr" val
+      )
+    );
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };
@@ -1768,18 +1767,17 @@ in
       text = cfg.hostName + "\n";
     };
 
-    environment.systemPackages =
-      [
-        pkgs.host
-        pkgs.hostname-debian
-        pkgs.iproute2
-        pkgs.iputils
-      ]
-      ++ optionals config.networking.wireless.enable [
-        pkgs.wirelesstools # FIXME: obsolete?
-        pkgs.iw
-      ]
-      ++ bridgeStp;
+    environment.corePackages = [
+      pkgs.host
+      pkgs.hostname-debian
+      pkgs.iproute2
+      pkgs.iputils
+    ]
+    ++ optionals config.networking.wireless.enable [
+      pkgs.wirelesstools # FIXME: obsolete?
+      pkgs.iw
+    ]
+    ++ bridgeStp;
 
     # Wake-on-LAN configuration is shared by the scripted and networkd backends.
     systemd.network.links = pipe interfaces [
@@ -1816,7 +1814,7 @@ in
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
 
     services.udev.packages =
-      [
+      lib.optionals (!config.systemd.network.enable) [
         (pkgs.writeTextFile rec {
           name = "ipv6-privacy-extensions.rules";
           destination = "/etc/udev/rules.d/98-${name}";

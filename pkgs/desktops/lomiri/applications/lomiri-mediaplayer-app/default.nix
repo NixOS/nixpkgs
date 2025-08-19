@@ -49,24 +49,23 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
+  buildInputs = [
+    qtbase
+    qtmultimedia
 
-      # QML
-      lomiri-action-api
-      lomiri-content-hub
-      lomiri-ui-toolkit
-      qtxmlpatterns
-    ]
-    # QtMultimedia playback support
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # QML
+    lomiri-action-api
+    lomiri-content-hub
+    lomiri-ui-toolkit
+    qtxmlpatterns
+  ]
+  # QtMultimedia playback support
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   nativeCheckInputs = [
     qtdeclarative # qmltestrunner

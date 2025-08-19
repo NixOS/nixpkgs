@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.opensmtpd.org/";
-    description = "passwd tables for the OpenSMTPD mail server";
+    description = "Passwd tables for the OpenSMTPD mail server";
     changelog = "https://github.com/OpenSMTPD/table-passwd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;

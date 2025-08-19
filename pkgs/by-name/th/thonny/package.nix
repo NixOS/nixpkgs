@@ -22,7 +22,8 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   desktopItems = [
     (makeDesktopItem {

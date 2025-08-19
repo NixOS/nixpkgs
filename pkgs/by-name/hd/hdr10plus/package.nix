@@ -73,10 +73,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
 
   configurePhase = ''
+    runHook preConfigure
+
     # let stdenv handle stripping
     export "CARGO_PROFILE_''${cargoBuildType@U}_STRIP"=false
 
     prependToVar cargoCFlags -j "$NIX_BUILD_CORES"
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

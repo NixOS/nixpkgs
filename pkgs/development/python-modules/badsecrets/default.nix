@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "badsecrets";
-  version = "0.10.35";
+  version = "0.11.118";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "badsecrets";
     tag = "v${version}";
-    hash = "sha256-i80f4qPX695HFdNefIT2sqcKsdMTEiYXUltF2Gj6aAI=";
+    hash = "sha256-7jKhXFrtZI+Xzs7R8E3zJNN3wTEkuTuhc3PGn6JOzTU=";
   };
 
   build-system = [

@@ -135,7 +135,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
       # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
-      services.postfix.config = {
+      services.postfix.settings.main = {
         smtp_dns_support_level = "dnssec";
         smtp_tls_security_level = "dane";
         smtp_tls_policy_maps =
@@ -218,14 +218,13 @@ in
           ProtectSystem = "strict";
           ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
           RemoveIPC = true;
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-            ]
-            ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-              "AF_UNIX"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ]
+          ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
+            "AF_UNIX"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

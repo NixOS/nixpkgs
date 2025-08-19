@@ -72,7 +72,8 @@ lib.makeOverridable (
         install
         tsort
         lorder
-      ] ++ (attrs.extraNativeBuildInputs or [ ]);
+      ]
+      ++ (attrs.extraNativeBuildInputs or [ ]);
 
       HOST_SH = stdenv'.shell;
 

@@ -45,7 +45,8 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 

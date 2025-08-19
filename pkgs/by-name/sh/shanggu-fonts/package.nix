@@ -34,34 +34,32 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ p7zip ];
 
-  unpackPhase =
-    ''
-      runHook preUnpack
-    ''
-    + lib.strings.concatLines (
-      lib.attrsets.mapAttrsToList (name: value: ''
-        7z x ${value} -o${name}
-      '') source
-    )
-    + ''
-      runHook postUnpack
-    '';
+  unpackPhase = ''
+    runHook preUnpack
+  ''
+  + lib.strings.concatLines (
+    lib.attrsets.mapAttrsToList (name: value: ''
+      7z x ${value} -o${name}
+    '') source
+  )
+  + ''
+    runHook postUnpack
+  '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/share/fonts/truetype
-    ''
-    + lib.strings.concatLines (
-      lib.lists.forEach extraOutputs (name: ''
-        install -Dm444 ${name}/*.ttc -t ${placeholder name}/share/fonts/truetype
-        ln -s "${placeholder name}" /share/fonts/truetype/*.ttc $out/share/fonts/truetype
-      '')
-    )
-    + ''
-      runHook postInstall
-    '';
+    mkdir -p $out/share/fonts/truetype
+  ''
+  + lib.strings.concatLines (
+    lib.lists.forEach extraOutputs (name: ''
+      install -Dm444 ${name}/*.ttc -t ${placeholder name}/share/fonts/truetype
+      ln -s "${placeholder name}" /share/fonts/truetype/*.ttc $out/share/fonts/truetype
+    '')
+  )
+  + ''
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/GuiWonder/Shanggu";

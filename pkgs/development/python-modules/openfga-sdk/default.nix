@@ -43,7 +43,8 @@ buildPythonPackage rec {
     mock
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # These fail due to a race condition in the test mocks

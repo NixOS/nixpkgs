@@ -87,7 +87,8 @@ stdenv.mkDerivation rec {
     protobuf
     tinyxml-2
     gdbuspp
-  ] ++ lib.optionals enableSystemdResolved [ systemd.dev ];
+  ]
+  ++ lib.optionals enableSystemdResolved [ systemd.dev ];
 
   mesonFlags = [
     (lib.mesonOption "selinux" "disabled")

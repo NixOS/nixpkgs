@@ -8,7 +8,7 @@
 }:
 buildGoModule {
   pname = "dcs";
-  version = "unstable-2021-04-07";
+  version = "0-unstable-2021-04-07";
 
   src = fetchFromGitHub {
     owner = "Debian";

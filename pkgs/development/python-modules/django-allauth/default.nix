@@ -71,7 +71,8 @@ buildPythonPackage rec {
     idp-oidc = [
       oauthlib
       pyjwt
-    ] ++ pyjwt.optional-dependencies.crypto;
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     mfa = [
       fido2
       qrcode
@@ -82,7 +83,8 @@ buildPythonPackage rec {
       requests
       requests-oauthlib
       pyjwt
-    ] ++ pyjwt.optional-dependencies.crypto;
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     steam = [ python3-openid ];
   };
 
@@ -97,7 +99,8 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
     pyyaml
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests require network access

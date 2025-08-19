@@ -35,23 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
     "examples"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace doc/CMakeLists.txt \
-        --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+  postPatch = ''
+    substituteInPlace doc/CMakeLists.txt \
+      --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
 
-      # Warning on aarch64-linux breaks build due to -Werror
-      substituteInPlace CMakeLists.txt \
-        --replace-fail '-Werror' ""
+    # Warning on aarch64-linux breaks build due to -Werror
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '-Werror' ""
 
-      # pkg-config output patching hook expects prefix variable here
-      substituteInPlace data/dbus-cpp.pc.in \
-        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
-    '';
+    # pkg-config output patching hook expects prefix variable here
+    substituteInPlace data/dbus-cpp.pc.in \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
+  '';
 
   strictDeps = true;
 

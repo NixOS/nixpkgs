@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.opensmtpd.org/";
-    description = "socketmap tables the OpenSMTPD mail server";
+    description = "Socketmap tables the OpenSMTPD mail server";
     changelog = "https://github.com/OpenSMTPD/table-socketmap/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;

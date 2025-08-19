@@ -51,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     linuxHeaders
     xz
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
   buildInputs = [
     dbus
     libxslt

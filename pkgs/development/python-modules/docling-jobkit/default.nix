@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "docling-jobkit";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${version}";
-    hash = "sha256-Q4RCA/gJxyfOfzuRnuCmndVEeV0JUCTU389KSEv7vVk=";
+    hash = "sha256-bLLcMbN6GNpZ8U5Fhyq/XaHawOFcrFrobY7Jtpdm8Qo=";
   };
 
   build-system = [
@@ -51,20 +51,19 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  dependencies =
-    [
-      docling
-      pydantic-settings
-      typer
-      boto3
-      pandas
-      fastparquet
-      pyarrow
-      httpx
-    ]
-    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-    ++ lib.optionals withRay optional-dependencies.ray;
+  dependencies = [
+    docling
+    pydantic-settings
+    typer
+    boto3
+    pandas
+    fastparquet
+    pyarrow
+    httpx
+  ]
+  ++ lib.optionals withTesserocr optional-dependencies.tesserocr
+  ++ lib.optionals withRapidocr optional-dependencies.rapidocr
+  ++ lib.optionals withRay optional-dependencies.ray;
 
   optional-dependencies = {
     tesserocr = [ tesserocr ];
@@ -96,6 +95,10 @@ buildPythonPackage rec {
     "test_convert_url"
     "test_convert_file"
     "test_convert_warmup"
+
+    # Flaky due to comparison with magic object
+    # https://github.com/docling-project/docling-jobkit/issues/45
+    "test_options_validator"
   ];
 
   meta = {

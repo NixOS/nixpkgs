@@ -104,16 +104,15 @@ else
       inherit (param) sha256;
     };
 
-    propagatedBuildInputs =
-      [
-        ocaml-compiler-libs
-      ]
-      ++ (param.OMP or [ ])
-      ++ [
-        ppx_derivers
-        stdio
-        stdlib-shims
-      ];
+    propagatedBuildInputs = [
+      ocaml-compiler-libs
+    ]
+    ++ (param.OMP or [ ])
+    ++ [
+      ppx_derivers
+      stdio
+      stdlib-shims
+    ];
 
     meta = {
       description = "Comprehensive ppx tool set";

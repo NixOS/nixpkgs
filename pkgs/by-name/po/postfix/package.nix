@@ -82,20 +82,19 @@ stdenv.mkDerivation rec {
     makeWrapper
     m4
   ];
-  buildInputs =
-    [
-      db
-      openssl
-      cyrus_sasl
-      icu
-      libnsl
-      pcre2
-    ]
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withLDAP openldap
-    ++ lib.optional withTLSRPT libtlsrpt;
+  buildInputs = [
+    db
+    openssl
+    cyrus_sasl
+    icu
+    libnsl
+    pcre2
+  ]
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optional withMySQL libmysqlclient
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withLDAP openldap
+  ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];

@@ -29,35 +29,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
-  propagatedBuildInputs =
-    [ jrl-cmakemodules ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.eigenpy
-      python3Packages.pinocchio
-    ]
-    ++ lib.optional (!pythonSupport) pinocchio;
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
+  propagatedBuildInputs = [
+    jrl-cmakemodules
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.eigenpy
+    python3Packages.pinocchio
+  ]
+  ++ lib.optional (!pythonSupport) pinocchio;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-      (lib.cmakeBool "CURVES_WITH_PINOCCHIO_SUPPORT" true)
-    ]
-    ++ lib.optional stdenv.hostPlatform.isAarch64 (
-      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests|python-curves'"
-    )
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) (
-      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test-so3-smooth'"
-    );
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "CURVES_WITH_PINOCCHIO_SUPPORT" true)
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 (
+    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests|python-curves'"
+  )
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) (
+    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test-so3-smooth'"
+  );
 
   doCheck = true;
 

@@ -79,16 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
-  propagatedBuildInputs =
-    [
-      # `folly-config.cmake` pulls these in.
-      boost
-      fmt_11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # jemalloc headers are required in include/folly/portability/Malloc.h
-      jemalloc
-    ];
+  propagatedBuildInputs = [
+    # `folly-config.cmake` pulls these in.
+    boost
+    fmt_11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # jemalloc headers are required in include/folly/portability/Malloc.h
+    jemalloc
+  ];
 
   checkInputs = [
     gtest

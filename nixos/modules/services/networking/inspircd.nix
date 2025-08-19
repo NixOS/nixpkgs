@@ -53,14 +53,22 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.inspircd = {
       description = "InspIRCd - the stable, high-performance and modular Internet Relay Chat Daemon";
+      unitConfig.Documentation = "https://docs.inspircd.org";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "network.target" ];
+
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${lib.getBin cfg.package}/bin/inspircd start --config ${configFile} --nofork --nopid
+          ${lib.getBin cfg.package}/bin/inspircd --config ${configFile} --nofork --nopid
         '';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Restart = "on-failure";
         DynamicUser = true;
       };
     };

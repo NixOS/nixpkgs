@@ -21,7 +21,7 @@ configure this in the module, but you can e.g. use systemd to give the unit
 access to the command at runtime.
 
 ```nix
-systemd.services.paisa.path = [ pkgs.hledger ];
+{ systemd.services.paisa.path = [ pkgs.hledger ]; }
 ```
 
 ::: {.note}

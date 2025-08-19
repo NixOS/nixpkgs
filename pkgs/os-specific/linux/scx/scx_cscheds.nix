@@ -73,18 +73,17 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       --replace-fail '#define __builtin_preserve_enum_value(x,y,z) 1' '#define __builtin_preserve_enum_value(x,y) 1'
   '';
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      jq
-      pkg-config
-      zstd
-      protobuf
-      llvmPackages.libllvm
-    ]
-    ++ bpftools.buildInputs
-    ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs = [
+    meson
+    ninja
+    jq
+    pkg-config
+    zstd
+    protobuf
+    llvmPackages.libllvm
+  ]
+  ++ bpftools.buildInputs
+  ++ bpftools.nativeBuildInputs;
 
   buildInputs = [
     elfutils

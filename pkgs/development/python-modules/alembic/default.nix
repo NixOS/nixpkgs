@@ -34,16 +34,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      mako
-      sqlalchemy
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-      importlib-metadata
-    ];
+  dependencies = [
+    mako
+    sqlalchemy
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+    importlib-metadata
+  ];
 
   pythonImportsCheck = [ "alembic" ];
 

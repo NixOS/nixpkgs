@@ -46,24 +46,23 @@ mkDerivation rec {
     extra-cmake-modules
     makeBinaryWrapper
   ];
-  buildInputs =
-    [
-      zlib
-      boost
-      libunwind
-      sparsehash
-      zstd
-      qtbase
-      kio
-      kitemmodels
-      threadweaver
-      kconfigwidgets
-      kcoreaddons
-      kdiagram
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      elfutils
-    ];
+  buildInputs = [
+    zlib
+    boost
+    libunwind
+    sparsehash
+    zstd
+    qtbase
+    kio
+    kitemmodels
+    threadweaver
+    kconfigwidgets
+    kcoreaddons
+    kdiagram
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    elfutils
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper \

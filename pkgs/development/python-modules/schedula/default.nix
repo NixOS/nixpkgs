@@ -51,7 +51,8 @@ buildPythonPackage rec {
     sphinx = [
       sphinx
       sphinx-click
-    ] ++ plot;
+    ]
+    ++ plot;
     web = [
       requests
       regex
@@ -59,16 +60,15 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      cryptography # doctests
-      ddt
-      sphinx
-      pytestCheckHook
-    ]
-    ++ schedula.optional-dependencies.io
-    ++ schedula.optional-dependencies.parallel
-    ++ schedula.optional-dependencies.plot;
+  nativeCheckInputs = [
+    cryptography # doctests
+    ddt
+    sphinx
+    pytestCheckHook
+  ]
+  ++ schedula.optional-dependencies.io
+  ++ schedula.optional-dependencies.parallel
+  ++ schedula.optional-dependencies.plot;
 
   disabledTests = [
     # FAILED tests/test_setup.py::TestSetup::test_long_description - ModuleNotFoundError: No module named 'sphinxcontrib.writers'

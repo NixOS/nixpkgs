@@ -35,36 +35,34 @@ stdenv.mkDerivation rec {
   pname = "nextcloud-app-recognize";
   inherit (currentVersionInfo) version;
 
-  srcs =
-    [
-      (fetchurl {
-        url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
-        hash = currentVersionInfo.appHash;
-      })
+  srcs = [
+    (fetchurl {
+      url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
+      hash = currentVersionInfo.appHash;
+    })
 
-      (fetchurl {
-        url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
-        hash = currentVersionInfo.modelHash;
-      })
-    ]
-    ++ lib.optionals useLibTensorflow [
-      (fetchurl {
-        # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
-        url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
-        hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
-      })
-    ];
+    (fetchurl {
+      url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
+      hash = currentVersionInfo.modelHash;
+    })
+  ]
+  ++ lib.optionals useLibTensorflow [
+    (fetchurl {
+      # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
+      url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
+      hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
+    })
+  ];
 
-  unpackPhase =
-    ''
-      # Merge the app and the models from github
-      tar -xzpf "${builtins.elemAt srcs 0}" recognize
-      tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
-    ''
-    + lib.optionalString useLibTensorflow ''
-      # Place the tensorflow lib at the right place for building
-      tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
-    '';
+  unpackPhase = ''
+    # Merge the app and the models from github
+    tar -xzpf "${builtins.elemAt srcs 0}" recognize
+    tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
+  ''
+  + lib.optionalString useLibTensorflow ''
+    # Place the tensorflow lib at the right place for building
+    tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
+  '';
 
   postPatch = ''
     # Make it clear we are not reading the node in settings

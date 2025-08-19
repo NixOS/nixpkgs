@@ -68,7 +68,8 @@ else
     patches = [
       ./fix-rebar-config.patch
       ./dedup-ebins.patch
-    ] ++ patches;
+    ]
+    ++ patches;
     doCheck = true;
     checkTarget = "travis";
 

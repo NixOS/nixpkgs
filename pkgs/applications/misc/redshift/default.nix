@@ -66,33 +66,32 @@ let
         wrapPython
         gobject-introspection
         python
-      ] ++ lib.optionals (pname == "gammastep") [ wayland-scanner ];
+      ]
+      ++ lib.optionals (pname == "gammastep") [ wayland-scanner ];
 
-      configureFlags =
-        [
-          "--enable-randr=${if withRandr then "yes" else "no"}"
-          "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
-          "--enable-drm=${if withDrm then "yes" else "no"}"
-          "--enable-vidmode=${if withVidmode then "yes" else "no"}"
-          "--enable-quartz=${if withQuartz then "yes" else "no"}"
-          "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
-        ]
-        ++ lib.optionals (pname == "gammastep") [
-          "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
-          "--enable-apparmor"
-        ];
+      configureFlags = [
+        "--enable-randr=${if withRandr then "yes" else "no"}"
+        "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
+        "--enable-drm=${if withDrm then "yes" else "no"}"
+        "--enable-vidmode=${if withVidmode then "yes" else "no"}"
+        "--enable-quartz=${if withQuartz then "yes" else "no"}"
+        "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+      ]
+      ++ lib.optionals (pname == "gammastep") [
+        "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
+        "--enable-apparmor"
+      ];
 
-      buildInputs =
-        [
-          gtk3
-        ]
-        ++ lib.optional withRandr libxcb
-        ++ lib.optional withGeoclue geoclue
-        ++ lib.optional withDrm libdrm
-        ++ lib.optional withVidmode libXxf86vm
-        ++ lib.optional withAppIndicator (
-          if (pname != "gammastep") then libappindicator else libayatana-appindicator
-        );
+      buildInputs = [
+        gtk3
+      ]
+      ++ lib.optional withRandr libxcb
+      ++ lib.optional withGeoclue geoclue
+      ++ lib.optional withDrm libdrm
+      ++ lib.optional withVidmode libXxf86vm
+      ++ lib.optional withAppIndicator (
+        if (pname != "gammastep") then libappindicator else libayatana-appindicator
+      );
 
       pythonPath = [
         pygobject3

@@ -170,7 +170,8 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [
         "kres-cache-gc.service"
-      ] ++ map (i: "kresd@${toString i}.service") (lib.range 1 cfg.instances);
+      ]
+      ++ map (i: "kresd@${toString i}.service") (lib.range 1 cfg.instances);
     };
     systemd.services."kresd@".serviceConfig = {
       ExecStart =

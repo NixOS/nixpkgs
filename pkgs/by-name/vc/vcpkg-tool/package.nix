@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
         unzip
         zip
         zstd
-      ] ++ extraRuntimeDeps;
+      ]
+      ++ extraRuntimeDeps;
 
       # Apart from adding the runtime dependencies to $PATH,
       # the wrapper will also override these arguments by default.

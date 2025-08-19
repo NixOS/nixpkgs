@@ -29,17 +29,16 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ hass-web-proxy-lib ];
 
-  nativeCheckInputs =
-    [
-      homeassistant
-      pytest-aiohttp
-      pytest-cov-stub
-      pytest-homeassistant-custom-component
-      pytest-timeout
-      pytestCheckHook
-    ]
-    ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
-    ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+  nativeCheckInputs = [
+    homeassistant
+    pytest-aiohttp
+    pytest-cov-stub
+    pytest-homeassistant-custom-component
+    pytest-timeout
+    pytestCheckHook
+  ]
+  ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
+  ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
 
   disabledTests = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/922

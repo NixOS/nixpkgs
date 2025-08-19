@@ -46,7 +46,8 @@ buildPythonPackage rec {
     moto
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.optional;
+  ]
+  ++ optional-dependencies.optional;
 
   disabledTests = [
     # Requires internet access (to slack API)

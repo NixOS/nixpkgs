@@ -10,7 +10,7 @@ A minimal configuration looks like this:
 {
   services.atalkd = {
     enable = true;
-    interfaces.wlan0.config = "-router -phase 2 -net 1 -addr 1.48 -zone \"Default\"";
+    interfaces.wlan0.config = ''-router -phase 2 -net 1 -addr 1.48 -zone "Default"'';
   };
 }
 ```

@@ -41,14 +41,13 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies =
-    [
-      jschon
-      jinja2
-      pyvcd
-    ]
-    ++ lib.optional (pythonOlder "3.9") importlib-resources
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  dependencies = [
+    jschon
+    jinja2
+    pyvcd
+  ]
+  ++ lib.optional (pythonOlder "3.9") importlib-resources
+  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook

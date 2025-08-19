@@ -35,14 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WlLQb4O4rGhXp+bQrJA12CvrwcIS6vzO4W6bX04vKMM=";
   };
 
-  patches =
-    [
-      ./glog-0.7.patch
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
-      ./increase-test-discovery-timeout.patch
-    ];
+  patches = [
+    ./glog-0.7.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
+    ./increase-test-discovery-timeout.patch
+  ];
 
   nativeBuildInputs = [
     cmake

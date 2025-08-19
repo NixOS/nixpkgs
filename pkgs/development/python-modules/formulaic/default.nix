@@ -55,12 +55,11 @@ buildPythonPackage rec {
     calculus = [ sympy ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.arrow
-    ++ optional-dependencies.calculus;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.arrow
+  ++ optional-dependencies.calculus;
 
   pythonImportsCheck = [ "formulaic" ];
 

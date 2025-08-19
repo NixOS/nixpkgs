@@ -34,6 +34,8 @@ localPython.pkgs.buildPythonApplication rec {
     hash = "sha256-gORrscY+Bgmz2FrKdSBd56jP0yuEklytMeA3wr8tTZU=";
   };
 
+  pythonRelaxDeps = [ "aws-encryption-sdk" ];
+
   build-system = with localPython.pkgs; [
     setuptools
   ];

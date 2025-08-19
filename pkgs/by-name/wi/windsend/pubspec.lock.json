@@ -4,21 +4,21 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "e55636ed79578b9abca5fecf9437947798f5ef7456308b5cb85720b793eac92f",
+        "sha256": "da0d9209ca76bde579f2da330aeb9df62b6319c834fa7baae052021b0462401f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "82.0.0"
+      "version": "85.0.0"
     },
     "analyzer": {
       "dependency": "transitive",
       "description": {
         "name": "analyzer",
-        "sha256": "904ae5bb474d32c38fb9482e2d925d5454cda04ddd0e55d2e6826bc72f6ba8c0",
+        "sha256": "974859dc0ff5f37bc4313244b3218c791810d03ab3470a579580279ba971a48d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "7.4.5"
+      "version": "7.7.1"
     },
     "args": {
       "dependency": "transitive",
@@ -34,11 +34,11 @@
       "dependency": "transitive",
       "description": {
         "name": "async",
-        "sha256": "d2872f9c19731c2e5f10444b14686eb7cc85c76274bd6c16e1816bff9a3bab63",
+        "sha256": "758e6d74e971c3e5aceb4110bfd6698efc7f501675bcfe0c775459a8140750eb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.12.0"
+      "version": "2.13.0"
     },
     "boolean_selector": {
       "dependency": "transitive",
@@ -114,11 +114,11 @@
       "dependency": "transitive",
       "description": {
         "name": "coverage",
-        "sha256": "802bd084fb82e55df091ec8ad1553a7331b61c08251eef19a508b6f3f3a9858d",
+        "sha256": "5da775aa218eaf2151c721b16c01c7676fbfdd99cebba2bf64e8b807a28ff94d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.13.1"
+      "version": "1.15.0"
     },
     "cross_file": {
       "dependency": "transitive",
@@ -204,11 +204,11 @@
       "dependency": "transitive",
       "description": {
         "name": "device_info_plus_platform_interface",
-        "sha256": "0b04e02b30791224b31969eb1b50d723498f402971bff3630bca2ba839bd1ed2",
+        "sha256": "e1ea89119e34903dca74b883d0dd78eb762814f97fb6c76f35e9ff74d261a18f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "7.0.2"
+      "version": "7.0.3"
     },
     "dio": {
       "dependency": "direct main",
@@ -244,11 +244,11 @@
       "dependency": "transitive",
       "description": {
         "name": "fake_async",
-        "sha256": "6a95e56b2449df2273fd8c45a662d6947ce1ebb7aafe80e550a3f68297f3cacc",
+        "sha256": "5368f224a74523e8d2e7399ea1638b37aecfca824a3cc4dfdf77bf1fa905ac44",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     "ffi": {
       "dependency": "transitive",
@@ -274,11 +274,11 @@
       "dependency": "direct main",
       "description": {
         "name": "file_picker",
-        "sha256": "dd51fd20fdc45e073529c102376d54deba3e120603fe711c848ce44575b838e6",
+        "sha256": "ef9908739bdd9c476353d6adff72e88fd00c625f5b959ae23f7567bd5137db0a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.1.8"
+      "version": "10.2.0"
     },
     "fixnum": {
       "dependency": "transitive",
@@ -310,11 +310,11 @@
       "dependency": "direct main",
       "description": {
         "name": "flutter_localization",
-        "sha256": "972eb337dcc27480e575accf9eadcdd80f52755ba05efcfdb585b869f29ad3d6",
+        "sha256": "578a73455a0deffc4169ef9372ba0562a3e2cff563e5c524ea87bc96daa519c0",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.3"
+      "version": "0.3.3"
     },
     "flutter_localizations": {
       "dependency": "transitive",
@@ -398,11 +398,11 @@
       "dependency": "direct main",
       "description": {
         "name": "intl",
-        "sha256": "d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf",
+        "sha256": "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.19.0"
+      "version": "0.20.2"
     },
     "io": {
       "dependency": "transitive",
@@ -418,11 +418,11 @@
       "dependency": "transitive",
       "description": {
         "name": "irondash_engine_context",
-        "sha256": "cd7b769db11a2b5243b037c8a9b1ecaef02e1ae27a2d909ffa78c1dad747bb10",
+        "sha256": "2bb0bc13dfda9f5aaef8dde06ecc5feb1379f5bb387d59716d799554f3f305d7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.4"
+      "version": "0.5.5"
     },
     "irondash_message_channel": {
       "dependency": "transitive",
@@ -448,11 +448,11 @@
       "dependency": "transitive",
       "description": {
         "name": "leak_tracker",
-        "sha256": "c35baad643ba394b40aac41080300150a4f08fd0fd6a10378f8f7c6bc161acec",
+        "sha256": "6bb818ecbdffe216e81182c2f0714a2e62b593f4a4f13098713ff1685dfb6ab0",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.0.8"
+      "version": "10.0.9"
     },
     "leak_tracker_flutter_testing": {
       "dependency": "transitive",
@@ -498,11 +498,11 @@
       "dependency": "direct main",
       "description": {
         "name": "logger",
-        "sha256": "be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1",
+        "sha256": "55d6c23a6c15db14920e037fe7e0dc32e7cdaf3b64b4b25df2d541b5b6b81c0c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.5.0"
+      "version": "2.6.1"
     },
     "logging": {
       "dependency": "transitive",
@@ -610,8 +610,8 @@
       "description": {
         "path": ".",
         "ref": "master",
-        "resolved-ref": "b4277d266207ef17b141d740cdfa59982a008c0f",
-        "url": "https://github.com/mufassalhussain/open_filex"
+        "resolved-ref": "5047adf42a8b468e5032f28f76925cd282866b2e",
+        "url": "https://github.com/javaherisaber/open_filex"
       },
       "source": "git",
       "version": "4.7.0"
@@ -700,21 +700,21 @@
       "dependency": "direct main",
       "description": {
         "name": "permission_handler",
-        "sha256": "59adad729136f01ea9e35a48f5d1395e25cba6cea552249ddbe9cf950f5d7849",
+        "sha256": "bc917da36261b00137bbc8896bf1482169cd76f866282368948f032c8c1caae1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "11.4.0"
+      "version": "12.0.1"
     },
     "permission_handler_android": {
       "dependency": "transitive",
       "description": {
         "name": "permission_handler_android",
-        "sha256": "d3971dcdd76182a0c198c096b5db2f0884b0d4196723d21a866fc4cdea057ebc",
+        "sha256": "1e3bc410ca1bf84662104b100eb126e066cb55791b7451307f9708d4007350e6",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "12.1.0"
+      "version": "13.0.1"
     },
     "permission_handler_apple": {
       "dependency": "transitive",
@@ -796,16 +796,6 @@
       "source": "hosted",
       "version": "2.1.8"
     },
-    "pointycastle": {
-      "dependency": "direct main",
-      "description": {
-        "name": "pointycastle",
-        "sha256": "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "4.0.0"
-    },
     "pool": {
       "dependency": "transitive",
       "description": {
@@ -826,17 +816,6 @@
       "source": "hosted",
       "version": "2.2.0"
     },
-    "receive_sharing_intent": {
-      "dependency": "direct main",
-      "description": {
-        "path": ".",
-        "ref": "7880e3e28bcf1ec50c100f1d19b349fc9506768e",
-        "resolved-ref": "7880e3e28bcf1ec50c100f1d19b349fc9506768e",
-        "url": "https://github.com/Strime/receive_sharing_intent"
-      },
-      "source": "git",
-      "version": "1.8.1"
-    },
     "settings_ui": {
       "dependency": "direct main",
       "description": {
@@ -846,6 +825,46 @@
       },
       "source": "hosted",
       "version": "2.0.2"
+    },
+    "share_handler": {
+      "dependency": "direct main",
+      "description": {
+        "name": "share_handler",
+        "sha256": "ea0c706810bb03fe60939568f00bd9458ebb745b194a0cc6ecdbef1b23f4b9cc",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.23"
+    },
+    "share_handler_android": {
+      "dependency": "transitive",
+      "description": {
+        "name": "share_handler_android",
+        "sha256": "298e3307bca595301694e81b9e9940b3dd188e333151109fc1cd4213aa282890",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.10"
+    },
+    "share_handler_ios": {
+      "dependency": "transitive",
+      "description": {
+        "name": "share_handler_ios",
+        "sha256": "cdc21f88f336a944157a8e9ceb191525cee3b082d6eb6c2082488e4f09dc3ece",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.15"
+    },
+    "share_handler_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "share_handler_platform_interface",
+        "sha256": "7a4df95a87b326b2f07458d937f2281874567c364b7b7ebe4e7d50efaae5f106",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.6"
     },
     "share_plus": {
       "dependency": "direct main",
@@ -1057,21 +1076,21 @@
       "dependency": "direct main",
       "description": {
         "name": "super_clipboard",
-        "sha256": "4a6ae6dfaa282ec1f2bff750976f535517ed8ca842d5deae13985eb11c00ac1f",
+        "sha256": "e73f3bb7e66cc9260efa1dc507f979138e7e106c3521e2dda2d0311f6d728a16",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.8.24"
+      "version": "0.9.1"
     },
     "super_native_extensions": {
       "dependency": "transitive",
       "description": {
         "name": "super_native_extensions",
-        "sha256": "a433bba8186cd6b707560c42535bf284804665231c00bca86faf1aa4968b7637",
+        "sha256": "b9611dcb68f1047d6f3ef11af25e4e68a21b1a705bbcc3eb8cb4e9f5c3148569",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.8.24"
+      "version": "0.9.1"
     },
     "term_glyph": {
       "dependency": "transitive",
@@ -1137,11 +1156,11 @@
       "dependency": "direct main",
       "description": {
         "name": "url_launcher",
-        "sha256": "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603",
+        "sha256": "f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.3.1"
+      "version": "6.3.2"
     },
     "url_launcher_android": {
       "dependency": "transitive",
@@ -1237,21 +1256,21 @@
       "dependency": "transitive",
       "description": {
         "name": "vm_service",
-        "sha256": "0968250880a6c5fe7edc067ed0a13d4bae1577fe2771dcf3010d52c4a9d3ca14",
+        "sha256": "ddfa8d30d89985b96407efce8acbdd124701f96741f2d981ca860662f1c0dc02",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "14.3.1"
+      "version": "15.0.0"
     },
     "watcher": {
       "dependency": "transitive",
       "description": {
         "name": "watcher",
-        "sha256": "69da27e49efa56a15f8afe8f4438c4ec02eff0a117df1b22ea4aad194fe1c104",
+        "sha256": "0b7fd4a0bbc4b92641dbf20adfd7e3fd1398fe17102d94b674234563e110088a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.1"
+      "version": "1.1.2"
     },
     "web": {
       "dependency": "transitive",
@@ -1297,11 +1316,11 @@
       "dependency": "transitive",
       "description": {
         "name": "win32",
-        "sha256": "329edf97fdd893e0f1e3b9e88d6a0e627128cc17cc316a8d67fda8f1451178ba",
+        "sha256": "66814138c3562338d05613a6e368ed8cfb237ad6d64a9e9334be3f309acfca03",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.13.0"
+      "version": "5.14.0"
     },
     "win32_registry": {
       "dependency": "transitive",
@@ -1345,7 +1364,7 @@
     }
   },
   "sdks": {
-    "dart": ">=3.7.0 <4.0.0",
-    "flutter": ">=3.27.0"
+    "dart": ">=3.8.1 <4.0.0",
+    "flutter": ">=3.29.0"
   }
 }

@@ -57,11 +57,9 @@ prevAttrs: {
   # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs.
   propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [ setupCudaHook ];
 
-  postInstall =
-    prevAttrs.postInstall or ""
-    + ''
-      moveToOutput "nvvm" "''${!outputBin}"
-    '';
+  postInstall = prevAttrs.postInstall or "" + ''
+    moveToOutput "nvvm" "''${!outputBin}"
+  '';
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
   allowFHSReferences = true;

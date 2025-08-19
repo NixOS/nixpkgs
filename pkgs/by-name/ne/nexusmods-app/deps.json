@@ -361,58 +361,58 @@
   },
   {
     "pname": "GameFinder",
-    "version": "4.7.3",
-    "hash": "sha256-tUUvWC8/HTFvESqSPN2HMnGkf6OroDBpHCbqo1ThD/8="
+    "version": "4.9.0",
+    "hash": "sha256-cuoMMfh5adQgVh9ZNqZ3mF9bLoArXRuzzZ6TIdFkh+M="
   },
   {
     "pname": "GameFinder.Common",
-    "version": "4.7.3",
-    "hash": "sha256-lPTPiywObx6SEaBKuL25+eLdfVHuWb1x14Q7aMpXLMQ="
+    "version": "4.9.0",
+    "hash": "sha256-1PXCCLN+TjDtnMZo8NnxE3MKJb1CUkRNYiD1SeWkdTE="
   },
   {
     "pname": "GameFinder.Launcher.Heroic",
-    "version": "4.7.3",
-    "hash": "sha256-Rp9I0XfW4KhyOSgyPzhR9aHYVcLDwUnpmvTjowviWC8="
+    "version": "4.9.0",
+    "hash": "sha256-g0suL5aVnDXFltlKzuds8PQxVCEtNsNdl52owlSg0jg="
   },
   {
     "pname": "GameFinder.RegistryUtils",
-    "version": "4.7.3",
-    "hash": "sha256-Z4IbxyMx6apZt9SYfDFvWD8I/qSP2S4kEz8hXym96KY="
+    "version": "4.9.0",
+    "hash": "sha256-mjGWEwpbxNdiljl7x+kWjnVysNBwcHC/zv9Z92HN5CM="
   },
   {
     "pname": "GameFinder.StoreHandlers.EADesktop",
-    "version": "4.7.3",
-    "hash": "sha256-RbPZayuG9OJXI1aSL2d5vfjfXlEAWFz9aZrXDXX6jhM="
+    "version": "4.9.0",
+    "hash": "sha256-HqkyZh+eys58KZOz8bik4CGtCui9V1aIyQQ6mLhsGgw="
   },
   {
     "pname": "GameFinder.StoreHandlers.EGS",
-    "version": "4.7.3",
-    "hash": "sha256-99DbRfzESJZAUDd3yREb8M6Mgn8dztNQqBPyR1bsST4="
+    "version": "4.9.0",
+    "hash": "sha256-Dp2EUsWbjXKOfZF8nzWWLESgt7VadvF65iqXE8LZ45g="
   },
   {
     "pname": "GameFinder.StoreHandlers.GOG",
-    "version": "4.7.3",
-    "hash": "sha256-u0Vm9k8XAkzOdW2U6nzuRPWgMxj3QwkvFc5S4c8A/u4="
+    "version": "4.9.0",
+    "hash": "sha256-F+sAOeSdIV/85mkhWfuszSPnNEOdJB+Wul601rAVaoQ="
   },
   {
     "pname": "GameFinder.StoreHandlers.Origin",
-    "version": "4.7.3",
-    "hash": "sha256-f/saANmx8zYrZ+G3xbsy2w7mQwC0Jmb5WpUSlZNyzJU="
+    "version": "4.9.0",
+    "hash": "sha256-l1WIlBYoA04eK0k1EU8C46MdEeNXix5MIWCo67Dzhlo="
   },
   {
     "pname": "GameFinder.StoreHandlers.Steam",
-    "version": "4.7.3",
-    "hash": "sha256-5WtdyR1/xX+Ra5ldlvM0leIgc8gTGaPKAFOC/KTHGk8="
+    "version": "4.9.0",
+    "hash": "sha256-Cw7eMevnbyJz3N4jUfWZ9SsQvMEbtFKHgc6HPnDD3+Y="
   },
   {
     "pname": "GameFinder.StoreHandlers.Xbox",
-    "version": "4.7.3",
-    "hash": "sha256-Z9RpXomR53mLhD0WH7pCYxmnQIAsGiBVqUgs4I0ZO4w="
+    "version": "4.9.0",
+    "hash": "sha256-/lkl+POQgiwlYxNJ4h4Dtp7w+hI5YUDv1sizAk8FCzc="
   },
   {
     "pname": "GameFinder.Wine",
-    "version": "4.7.3",
-    "hash": "sha256-PO8aXHEvCxBQq92GyPl3b//s4MTCU7T8mvryS4p0Hsg="
+    "version": "4.9.0",
+    "hash": "sha256-ER82DUiTnm85m65rIK7XbbIiiD2cvuu7cjF133g6yic="
   },
   {
     "pname": "Gee.External.Capstone",

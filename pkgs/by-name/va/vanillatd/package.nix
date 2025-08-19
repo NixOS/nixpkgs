@@ -51,19 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
     openal
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_VANILLATD" (appName == "vanillatd"))
@@ -142,8 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
           buildInputs = [ dataDerivation ] ++ finalAttrs.buildInputs;
           nativeBuildInputs = [ rsync ];
 
-          phases = [ "buildPhase" ];
-          buildPhase =
+          buildCommand =
             let
               Default_Data_Path =
                 if stdenv.hostPlatform.isDarwin then

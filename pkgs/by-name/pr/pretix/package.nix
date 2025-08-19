@@ -83,6 +83,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "celery"
+    "css-inline"
     "django-bootstrap3"
     "django-localflavor"
     "django-phonenumber-field"

@@ -49,7 +49,8 @@ lib.checkListOfEnum "${pname}: platform"
       # autoPatchelfHook is needed for appendRunpaths
       nativeBuildInputs = [
         cmake
-      ] ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
+      ]
+      ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
 
       buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
 
@@ -59,14 +60,13 @@ lib.checkListOfEnum "${pname}: platform"
       ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
-      cmakeFlags =
-        [
-          "-DCUSTOMIZE_BUILD=ON"
-          "-DPLATFORM=${platform}"
-        ]
-        ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
-        ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-        ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+      cmakeFlags = [
+        "-DCUSTOMIZE_BUILD=ON"
+        "-DPLATFORM=${platform}"
+      ]
+      ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
+      ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
+      ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
       appendRunpaths = optional stdenv.hostPlatform.isLinux (
         lib.makeLibraryPath (optional alsaSupport alsa-lib ++ optional pulseSupport libpulseaudio)

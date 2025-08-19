@@ -37,27 +37,25 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
   ];
-  buildInputs =
-    [
-      util-linux
-      xxHash
-      lz4
-      zlib
-      xz
-      zstd
-      libdeflate
-    ]
-    ++ lib.optionals fuseSupport [ fuse ]
-    ++ lib.optionals selinuxSupport [ libselinux ];
+  buildInputs = [
+    util-linux
+    xxHash
+    lz4
+    zlib
+    xz
+    zstd
+    libdeflate
+  ]
+  ++ lib.optionals fuseSupport [ fuse ]
+  ++ lib.optionals selinuxSupport [ libselinux ];
 
-  configureFlags =
-    [
-      "MAX_BLOCK_SIZE=4096"
-      "--enable-multithreading"
-      "--with-libdeflate"
-    ]
-    ++ lib.optional fuseSupport "--enable-fuse"
-    ++ lib.optional selinuxSupport "--with-selinux";
+  configureFlags = [
+    "MAX_BLOCK_SIZE=4096"
+    "--enable-multithreading"
+    "--with-libdeflate"
+  ]
+  ++ lib.optional fuseSupport "--enable-fuse"
+  ++ lib.optional selinuxSupport "--with-selinux";
 
   meta = {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";

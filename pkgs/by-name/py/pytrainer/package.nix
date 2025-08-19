@@ -76,16 +76,15 @@ python.pkgs.buildPythonApplication rec {
     ])
   ];
 
-  nativeCheckInputs =
-    [
-      glibcLocales
-      perl
-      xvfb-run
-    ]
-    ++ (with python.pkgs; [
-      mysqlclient
-      psycopg2
-    ]);
+  nativeCheckInputs = [
+    glibcLocales
+    perl
+    xvfb-run
+  ]
+  ++ (with python.pkgs; [
+    mysqlclient
+    psycopg2
+  ]);
 
   postPatch = ''
     substituteInPlace pytrainer/platform.py \

@@ -13,6 +13,7 @@ let
     elem
     filterAttrsRecursive
     hasPrefix
+    literalExpression
     makeLibraryPath
     mkDefault
     mkEnableOption
@@ -29,6 +30,32 @@ let
   format = pkgs.formats.yaml { };
 
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) cfg.settings;
+
+  configFileUnchecked = format.generate "frigate.yaml" filteredConfig;
+  configFileChecked =
+    pkgs.runCommand "frigate-config"
+      {
+        preferLocalBuilds = true;
+      }
+      ''
+        function error() {
+          cat << 'HEREDOC'
+
+        Note that not all configurations can be reliably checked in the
+        build sandbox.
+
+        This check can be disabled using `services.frigate.checkConfig`.
+        HEREDOC
+
+          exit 1
+        }
+
+        cp ${configFileUnchecked} $out
+        export CONFIG_FILE=$out
+        export PYTHONPATH=${cfg.package.pythonPath}
+        ${cfg.package.python.interpreter} -m frigate --validate-config || error
+      '';
+  configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
 
   cameraFormat =
     with types;
@@ -166,6 +193,17 @@ in
       '';
     };
 
+    checkConfig = mkOption {
+      type = bool;
+      default = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
+      defaultText = literalExpression ''
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform
+      '';
+      description = ''
+        Whether to check the configuration at build time.
+      '';
+    };
+
     settings = mkOption {
       type = submodule {
         freeformType = format.type;
@@ -294,51 +332,45 @@ in
             '';
           };
           "/vod/" = {
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                aio threads;
-                vod hls;
+            extraConfig = nginxAuthRequest + ''
+              aio threads;
+              vod hls;
 
-                secure_token $args;
-                secure_token_types application/vnd.apple.mpegurl;
+              secure_token $args;
+              secure_token_types application/vnd.apple.mpegurl;
 
-                add_header Cache-Control "no-store";
-                expires off;
+              add_header Cache-Control "no-store";
+              expires off;
 
-                keepalive_disable safari;
-              '';
+              keepalive_disable safari;
+            '';
           };
           "/stream/" = {
             alias = "/var/cache/frigate/stream/";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                add_header Cache-Control "no-store";
-                expires off;
+            extraConfig = nginxAuthRequest + ''
+              add_header Cache-Control "no-store";
+              expires off;
 
-                types {
-                    application/dash+xml mpd;
-                    application/vnd.apple.mpegurl m3u8;
-                    video/mp2t ts;
-                    image/jpeg jpg;
-                }
-              '';
+              types {
+                  application/dash+xml mpd;
+                  application/vnd.apple.mpegurl m3u8;
+                  video/mp2t ts;
+                  image/jpeg jpg;
+              }
+            '';
           };
           "/clips/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                    video/mp4 mp4;
-                    image/jpeg jpg;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                  video/mp4 mp4;
+                  image/jpeg jpg;
+              }
 
-                expires 7d;
-                add_header Cache-Control "public";
-                autoindex on;
-              '';
+              expires 7d;
+              add_header Cache-Control "public";
+              autoindex on;
+            '';
           };
           "/cache/" = {
             alias = "/var/cache/frigate/";
@@ -348,29 +380,25 @@ in
           };
           "/recordings/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                    video/mp4 mp4;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                  video/mp4 mp4;
+              }
 
-                autoindex on;
-                autoindex_format json;
-              '';
+              autoindex on;
+              autoindex_format json;
+            '';
           };
           "/exports/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                  video/mp4 mp4;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                video/mp4 mp4;
+              }
 
-                autoindex on;
-                autoindex_format json;
-              '';
+              autoindex on;
+              autoindex_format json;
+            '';
           };
           "/ws" = {
             proxyPass = "http://frigate-mqtt-ws/";
@@ -613,18 +641,17 @@ in
       wantedBy = [
         "multi-user.target"
       ];
-      environment =
-        {
-          CONFIG_FILE = "/run/frigate/frigate.yml";
-          HOME = "/var/lib/frigate";
-          PYTHONPATH = cfg.package.pythonPath;
-        }
-        // optionalAttrs (cfg.vaapiDriver != null) {
-          LIBVA_DRIVER_NAME = cfg.vaapiDriver;
-        }
-        // optionalAttrs withCoral {
-          LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
-        };
+      environment = {
+        CONFIG_FILE = "/run/frigate/frigate.yml";
+        HOME = "/var/lib/frigate";
+        PYTHONPATH = cfg.package.pythonPath;
+      }
+      // optionalAttrs (cfg.vaapiDriver != null) {
+        LIBVA_DRIVER_NAME = cfg.vaapiDriver;
+      }
+      // optionalAttrs withCoral {
+        LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
+      };
       path =
         with pkgs;
         [
@@ -643,10 +670,11 @@ in
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            rm --recursive --force /var/cache/frigate/*
+            shopt -s extglob
+            rm --recursive --force /var/cache/frigate/!(model_cache)
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
-            cp --no-preserve=mode "${format.generate "frigate.yml" filteredConfig}" /run/frigate/frigate.yml
+            cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
         ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";

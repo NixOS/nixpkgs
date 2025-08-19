@@ -25,29 +25,27 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-    ]
-    ++ lib.optionals cupsSupport [
-      cups
-      perl
-    ]; # for cups-config
-  buildInputs =
-    [
-      ijs
-      zlib
-    ]
-    ++ lib.optionals gimp2Support [
-      gimp.gtk
-      gimp
-    ]
-    ++ lib.optionals cupsSupport [
-      cups
-      libusb1
-      perl
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ]
+  ++ lib.optionals cupsSupport [
+    cups
+    perl
+  ]; # for cups-config
+  buildInputs = [
+    ijs
+    zlib
+  ]
+  ++ lib.optionals gimp2Support [
+    gimp.gtk
+    gimp
+  ]
+  ++ lib.optionals cupsSupport [
+    cups
+    libusb1
+    perl
+  ];
 
   configureFlags = lib.optionals cupsSupport [
     "--disable-static-genppd" # should be harmless on NixOS

@@ -1,6 +1,6 @@
-diff --git i/scripts/launch.sh w/scripts/launch.sh
-index 21afbb1e..975cbdf0 100755
---- i/scripts/launch.sh
+diff --git c/scripts/launch.sh w/scripts/launch.sh
+index 21afbb1e..8bc5c382 100755
+--- c/scripts/launch.sh
 +++ w/scripts/launch.sh
 @@ -1,125 +1,4 @@
 -#!/bin/sh
@@ -129,7 +129,7 @@ index 21afbb1e..975cbdf0 100755
  
  # In case that people want to tweak the path, which Elixir to use, or
  # whatever prior to launching the language server or the debug adapter, we
-@@ -138,29 +17,18 @@ fi
+@@ -138,29 +17,22 @@ fi
  # script so we can correctly configure the Erlang library path to
  # include the local .ez files, and then do what we were asked to do.
  
@@ -140,7 +140,7 @@ index 21afbb1e..975cbdf0 100755
 -  SCRIPTPATH=${ELS_INSTALL_PREFIX}
 -fi
 +SCRIPT=$(readlink -f "$0")
-+SCRIPTPATH=$(dirname "$SCRIPT")/../libexec
++SCRIPTPATH=$(dirname "$SCRIPT")/../scripts
  
  export MIX_ENV=prod
  # Mix.install prints to stdout and reads from stdin
@@ -165,5 +165,9 @@ index 21afbb1e..975cbdf0 100755
 +# ensure elixir stdlib can be found
 +ELX_STDLIB_PATH=${ELX_STDLIB_PATH:-@elixir@/lib/elixir}
 +export ELX_STDLIB_PATH
++
++# ensure our elixir is in the path
++PATH="@elixir@/bin:$PATH"
++export PATH
 +
 +source "$SCRIPTPATH/exec.bash"

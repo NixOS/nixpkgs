@@ -266,8 +266,6 @@ in
       in
       {
         # These are mount related wrappers that require the +s permission.
-        fusermount = mkSetuidRoot "${lib.getBin pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${lib.getBin pkgs.fuse3}/bin/fusermount3";
         mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
@@ -318,6 +316,7 @@ in
         "/nix/store"
         "/run/wrappers"
       ];
+      serviceConfig.RestrictSUIDSGID = false;
       serviceConfig.Type = "oneshot";
       script = ''
         chmod 755 "${parentWrapperDir}"

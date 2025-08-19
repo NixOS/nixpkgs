@@ -48,23 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      flac
-      freetype
-      glew
-      libjpeg
-      libvorbis
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXi
-      libXcursor
-      libXrandr
-      libXrender
-      xcbutilimage
-    ];
+  buildInputs = [
+    flac
+    freetype
+    glew
+    libjpeg
+    libvorbis
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXi
+    libXcursor
+    libXrandr
+    libXrender
+    xcbutilimage
+  ];
 
   # We rely on RUNPATH
   dontPatchELF = true;

@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-WTg1o2iF5/UOVIqKFqGbC28B4HrKJWM0+XCHgaA1lc4=";
 
   # Compilation during tests fails if this env var is not set.

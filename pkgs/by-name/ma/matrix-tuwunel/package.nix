@@ -85,30 +85,28 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YiZuCdSs3f4Hlfdzhz/B/u8GLf8VPgaLN8KMPLjFoVk=";
+    hash = "sha256-RuvGoXe/O48mQ4/rN+fh2N1NZ4uhvdtI1q4tRM/bRSE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-y3JXG/5a9x/KM1PxGW1qmpCeRFvWXWHHplCi+MdjhQ8=";
+  cargoHash = "sha256-LwVJe9EqBT7x7eBTzvo4Lu1geNI7CWpsIDNWL8AAg+U=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      zstd
-    ]
-    ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing;
+  buildInputs = [
+    bzip2
+    zstd
+  ]
+  ++ lib.optional enableJemalloc rust-jemalloc-sys'
+  ++ lib.optional enableLiburing liburing;
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -121,38 +119,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # for available features.
   # We enable all default features except jemalloc, blurhashing, and io_uring, which
   # we guard behind our own (default-enabled) flags.
-  buildFeatures =
-    [
-      "brotli_compression"
-      "direct_tls"
-      "element_hacks"
-      "gzip_compression"
-      "media_thumbnail"
-      "release_max_log_level"
-      "systemd"
-      "url_preview"
-      "zstd_compression"
-    ]
-    ++ lib.optional enableBlurhashing "blurhashing"
-    ++ lib.optional enableJemalloc [
-      "jemalloc"
-      "jemalloc_conf"
-    ]
-    ++ lib.optional enableLiburing "io_uring";
+  buildFeatures = [
+    "brotli_compression"
+    "direct_tls"
+    "element_hacks"
+    "gzip_compression"
+    "media_thumbnail"
+    "release_max_log_level"
+    "systemd"
+    "url_preview"
+    "zstd_compression"
+  ]
+  ++ lib.optional enableBlurhashing "blurhashing"
+  ++ lib.optional enableJemalloc [
+    "jemalloc"
+    "jemalloc_conf"
+  ]
+  ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
-    tests =
-      {
-        version = testers.testVersion {
-          inherit (finalAttrs) version;
-          package = matrix-tuwunel;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) matrix-tuwunel;
+    tests = {
+      version = testers.testVersion {
+        inherit (finalAttrs) version;
+        package = matrix-tuwunel;
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) matrix-tuwunel;
+    };
   };
 
   meta = {

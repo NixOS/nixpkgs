@@ -80,30 +80,29 @@ stdenv.mkDerivation (finalAttrs: {
     "-I${libxml2.dev}/include/libxml2"
   ];
 
-  preConfigure =
-    ''
-      export SGML_CATALOG_FILES="${docbookFiles}"
-      export PATH=$PATH:${openldap}/libexec
+  preConfigure = ''
+    export SGML_CATALOG_FILES="${docbookFiles}"
+    export PATH=$PATH:${openldap}/libexec
 
-      configureFlagsArray=(
-        --prefix=$out
-        --sysconfdir=/etc
-        --localstatedir=/var
-        --enable-pammoddir=$out/lib/security
-        --with-os=fedora
-        --with-pid-path=/run
-        --with-python3-bindings
-        --with-syslog=journald
-        --without-selinux
-        --without-semanage
-        --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
-        --with-ldb-lib-dir=$out/modules/ldb
-        --with-nscd=${glibc.bin}/sbin/nscd
-      )
-    ''
-    + lib.optionalString withSudo ''
-      configureFlagsArray+=("--with-sudo")
-    '';
+    configureFlagsArray=(
+      --prefix=$out
+      --sysconfdir=/etc
+      --localstatedir=/var
+      --enable-pammoddir=$out/lib/security
+      --with-os=fedora
+      --with-pid-path=/run
+      --with-python3-bindings
+      --with-syslog=journald
+      --without-selinux
+      --without-semanage
+      --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
+      --with-ldb-lib-dir=$out/modules/ldb
+      --with-nscd=${glibc.bin}/sbin/nscd
+    )
+  ''
+  + lib.optionalString withSudo ''
+    configureFlagsArray+=("--with-sudo")
+  '';
 
   enableParallelBuilding = true;
   # Disable parallel install due to missing depends:

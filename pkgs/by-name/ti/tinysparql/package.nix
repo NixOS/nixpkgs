@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch2,
   gettext,
   meson,
   mesonEmulatorHook,
@@ -55,24 +56,23 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      asciidoc
-      gettext
-      glib
-      wrapGAppsNoGuiHook
-      (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    gettext
+    glib
+    wrapGAppsNoGuiHook
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -91,27 +91,34 @@ stdenv.mkDerivation (finalAttrs: {
     man-db
   ];
 
-  mesonFlags =
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
+  ]
+  ++ (
+    let
+      # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
+      crossFile = writeText "cross-file.conf" ''
+        [properties]
+        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+      '';
+    in
     [
-      "-Ddocs=true"
-      "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
-      (lib.mesonEnable "introspection" withIntrospection)
-      (lib.mesonEnable "vapi" withIntrospection)
+      "--cross-file=${crossFile}"
     ]
-    ++ (
-      let
-        # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
-        crossFile = writeText "cross-file.conf" ''
-          [properties]
-          sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
-        '';
-      in
-      [
-        "--cross-file=${crossFile}"
-      ]
-    );
+  );
 
   doCheck = true;
+
+  patches = [
+    (fetchpatch2 {
+      name = "make-dbus-dep-optional.patch";
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/31b5a793cd40cdce032e0f7d7c3ef7841c6e3691.patch?full_index=1";
+      hash = "sha256-YoWJEa2bFIjZdPW9pJ3iHTxi0dvveYDjKaDokcIvnj8=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs \

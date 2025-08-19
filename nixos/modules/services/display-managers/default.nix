@@ -273,6 +273,10 @@ in
         "acpid.service"
         "systemd-logind.service"
         "systemd-user-sessions.service"
+        "autovt@tty1.service"
+      ];
+      conflicts = [
+        "autovt@tty1.service"
       ];
       restartIfChanged = false;
 

@@ -10,9 +10,7 @@ with import <nixpkgs> { };
 
 mkShell {
   name = "dotnet-env";
-  packages = [
-    dotnet-sdk
-  ];
+  packages = [ dotnet-sdk ];
 }
 ```
 
@@ -161,7 +159,9 @@ buildDotnetModule rec {
   projectFile = "src/project.sln";
   nugetDeps = ./deps.json; # see "Generating and updating NuGet dependencies" section for details
 
-  buildInputs = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
+  buildInputs = [
+    referencedProject
+  ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;

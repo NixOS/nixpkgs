@@ -26,27 +26,26 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      passthru.pyopenjtalk
-    ]
-    ++ (with python3Packages; [
-      fastapi
-      jinja2
-      kanalizer
-      numpy
-      platformdirs
-      pydantic
-      python-multipart
-      pyworld
-      pyyaml
-      semver
-      setuptools
-      soundfile
-      soxr
-      starlette
-      uvicorn
-    ]);
+  dependencies = [
+    passthru.pyopenjtalk
+  ]
+  ++ (with python3Packages; [
+    fastapi
+    jinja2
+    kanalizer
+    numpy
+    platformdirs
+    pydantic
+    python-multipart
+    pyworld
+    pyyaml
+    semver
+    setuptools
+    soundfile
+    soxr
+    starlette
+    uvicorn
+  ]);
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead

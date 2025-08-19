@@ -53,7 +53,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.freshrss.org/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
-      etu
       stunkymonkey
     ];
   };

@@ -68,14 +68,13 @@ stdenv.mkDerivation rec {
   ];
 
   # They use 'install -s', that calls the native strip instead of the cross
-  postConfigure =
-    ''
-      sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace config.mk \
-        --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
-    '';
+  postConfigure = ''
+    sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace config.mk \
+      --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
+  '';
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 

@@ -30,15 +30,14 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
-  buildInputs =
-    [
-      enchant
-      qtbase
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      glib
-      llvmPackages.clang
-    ];
+  buildInputs = [
+    enchant
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    glib
+    llvmPackages.clang
+  ];
 
   cmakeFlags = [ "-DQT_VER=6" ];
 

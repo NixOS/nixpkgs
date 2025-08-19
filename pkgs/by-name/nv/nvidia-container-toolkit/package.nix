@@ -4,8 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   buildGoModule,
-  formats,
-  libnvidia-container,
   autoAddDriverRunpath,
 }:
 
@@ -93,6 +91,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
     description = "NVIDIA Container Toolkit";
+    mainProgram = "nvidia-ctk";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

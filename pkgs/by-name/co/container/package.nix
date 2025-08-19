@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "container";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://github.com/apple/container/releases/download/${finalAttrs.version}/container-${finalAttrs.version}-installer-signed.pkg";
-    hash = "sha256-aJEIy6IknBDvM7IOhnl/C4xnr7KJVggJJjmajqoHdsU=";
+    hash = "sha256-D3oAhATmZhGA6mehw6UEAY5Xwu8jjvTNqNcPKBUWxuY=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Creating and running Linux containers using lightweight virtual machines on a Mac";
+    description = "Create and run Linux containers using lightweight virtual machines on a Mac";
     homepage = "https://github.com/apple/container";
     changelog = "https://github.com/apple/container/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;

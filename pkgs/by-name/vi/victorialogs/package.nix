@@ -4,29 +4,33 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
+  withServer ? true,
+  withVlAgent ? false,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.25.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KhXB+37uK08dDYXtnaPDS7gP/gBGZ0gqyR0u572QOx8=";
+    hash = "sha256-PnXpu2Dna5grozKOGRHi/Gic7djszYh7wJ96EiEYP8U=";
   };
 
   vendorHash = null;
 
-  subPackages = [
-    "app/victoria-logs"
-    "app/vlinsert"
-    "app/vlselect"
-    "app/vlstorage"
-    "app/vlogsgenerator"
-    "app/vlogscli"
-  ];
+  subPackages =
+    lib.optionals withServer [
+      "app/victoria-logs"
+      "app/vlinsert"
+      "app/vlselect"
+      "app/vlstorage"
+      "app/vlogsgenerator"
+      "app/vlogscli"
+    ]
+    ++ lib.optionals withVlAgent [ "app/vlagent" ];
 
   ldflags = [
     "-s"
@@ -49,7 +53,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.victoriametrics.com/victorialogs/";
     description = "User friendly log database from VictoriaMetrics";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = with lib.maintainers; [
+      marie
+      shawn8901
+    ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaLogs/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "victoria-logs";
   };

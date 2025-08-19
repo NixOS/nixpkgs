@@ -68,18 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
   };
 
-  nativeBuildInputs =
-    [
-      dart-sass
-      jq
-      makeWrapper
-      moreutils
-      nodejs
-      pnpm.configHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    dart-sass
+    jq
+    makeWrapper
+    moreutils
+    nodejs
+    pnpm.configHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

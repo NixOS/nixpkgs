@@ -40,7 +40,8 @@ in
       ];
     })
 
-  ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
+  ]
+  ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   options.openstackImage = {
     ramMB = mkOption {

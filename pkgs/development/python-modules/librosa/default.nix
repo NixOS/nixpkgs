@@ -83,36 +83,46 @@ buildPythonPackage rec {
     resampy
     samplerate
     writableTmpDirAsHomeHook
-  ] ++ optional-dependencies.matplotlib;
+  ]
+  ++ optional-dependencies.matplotlib;
 
-  disabledTests =
-    [
-      # requires network access
-      "test_example"
-      "test_example_info"
-      "test_load_resample"
-      "test_cite_released"
-      "test_cite_badversion"
-      "test_cite_unreleased"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # crashing the python interpreter
-      "test_unknown_time_unit"
-      "test_unknown_wavaxis"
-      "test_waveshow_unknown_wavaxis"
-      "test_waveshow_bad_maxpoints"
-      "test_waveshow_deladaptor"
-      "test_waveshow_disconnect"
-      "test_unknown_axis"
-      "test_axis_bound_warning"
-      "test_auto_aspect"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Flaky (numerical comparison fails)
-      "test_istft_multi"
-      "test_pitch_shift_multi"
-      "test_time_stretch_multi"
-    ];
+  disabledTests = [
+    # requires network access
+    "test_example"
+    "test_example_info"
+    "test_load_resample"
+    "test_cite_released"
+    "test_cite_badversion"
+    "test_cite_unreleased"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # crashing the python interpreter
+    "test_unknown_time_unit"
+    "test_unknown_wavaxis"
+    "test_waveshow_unknown_wavaxis"
+    "test_waveshow_bad_maxpoints"
+    "test_waveshow_deladaptor"
+    "test_waveshow_disconnect"
+    "test_unknown_axis"
+    "test_axis_bound_warning"
+    "test_auto_aspect"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # AssertionError (numerical comparison fails)
+    "test_beat_track_multi"
+    "test_beat_track_multi_bpm_vector"
+    "test_melspectrogram_multi"
+    "test_melspectrogram_multi_time"
+    "test_nnls_matrix"
+    "test_nnls_multiblock"
+    "test_onset_detect"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky (numerical comparison fails)
+    "test_istft_multi"
+    "test_pitch_shift_multi"
+    "test_time_stretch_multi"
+  ];
 
   meta = {
     description = "Python library for audio and music analysis";

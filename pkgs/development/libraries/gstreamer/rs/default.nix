@@ -203,37 +203,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      rustPlatform.cargoSetupHook
-      meson
-      ninja
-      python3
-      python3.pkgs.tomli
-      pkg-config
-      rustc
-      cargo
-      cargo-c'
-      nasm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      lld
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    meson
+    ninja
+    python3
+    python3.pkgs.tomli
+    pkg-config
+    rustc
+    cargo
+    cargo-c'
+    nasm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lld
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
-  buildInputs =
-    [
-      gstreamer
-      gst-plugins-base
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ]
-    ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
+  buildInputs = [
+    gstreamer
+    gst-plugins-base
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ]
+  ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
 
   checkInputs = [
     gst-plugins-good
@@ -252,15 +250,14 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # csound lib dir must be manually specified for it to build
-  preConfigure =
-    ''
-      export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
+  preConfigure = ''
+    export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
 
-      patchShebangs dependencies.py
-    ''
-    + lib.optionalString (lib.elem "csound" selectedPlugins) ''
-      export CSOUND_LIB_DIR=${lib.getLib csound}/lib
-    '';
+    patchShebangs dependencies.py
+  ''
+  + lib.optionalString (lib.elem "csound" selectedPlugins) ''
+    export CSOUND_LIB_DIR=${lib.getLib csound}/lib
+  '';
 
   mesonCheckFlags = [ "--verbose" ];
 

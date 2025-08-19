@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
   # Checks use `debug_assert_eq!`
   checkType = "debug";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rAq3Ghg7zpiycQ8hNzn4Jz7cUCfwQ4aqtWxoVCg8MrE=";
 
   separateDebugInfo = true;

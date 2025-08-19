@@ -85,7 +85,8 @@ buildPythonPackage rec {
     tokenizers
     torch
     writableTmpDirAsHomeHook
-  ] ++ optional-dependencies.schemas;
+  ]
+  ++ optional-dependencies.schemas;
 
   enabledTestPaths = [ "tests/unit" ];
 

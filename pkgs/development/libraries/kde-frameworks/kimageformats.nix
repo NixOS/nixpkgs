@@ -23,8 +23,7 @@ mkDerivation {
   buildInputs = [
     karchive
     openexr
-    # FIXME: cmake files are broken, disabled for now
-    # libavif
+    libavif
     libheif
     libjxl
     libraw

@@ -16,6 +16,7 @@
 
   # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
   aacgain,
+  chromaprint,
   essentia-extractor,
   ffmpeg,
   flac,
@@ -82,7 +83,8 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   patches = [
-  ] ++ extraPatches;
+  ]
+  ++ extraPatches;
 
   build-system = [
     python3Packages.poetry-core
@@ -109,16 +111,16 @@ python3Packages.buildPythonApplication {
     gobject-introspection
     sphinxHook
     python3Packages.pydata-sphinx-theme
-  ] ++ extraNativeBuildInputs;
+  ]
+  ++ extraNativeBuildInputs;
 
-  buildInputs =
-    [
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+  ]);
 
   outputs = [
     "out"

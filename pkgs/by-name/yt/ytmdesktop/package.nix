@@ -92,34 +92,33 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
 
-      mkdir -p "$out"/share/ytmdesktop
-      cp -r out/*/{locales,resources{,.pak}} "$out"/share/ytmdesktop
+    mkdir -p "$out"/share/ytmdesktop
+    cp -r out/*/{locales,resources{,.pak}} "$out"/share/ytmdesktop
 
-      install -Dm644 src/assets/icons/ytmd.png "$out"/share/pixmaps/ytmdesktop.png
+    install -Dm644 src/assets/icons/ytmd.png "$out"/share/pixmaps/ytmdesktop.png
 
-      makeWrapper ${lib.getExe electron} "$out"/bin/ytmdesktop \
-        --add-flags "$out"/share/ytmdesktop/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r out/*/"YouTube Music Desktop App".app "$out"/Applications
+    makeWrapper ${lib.getExe electron} "$out"/bin/ytmdesktop \
+      --add-flags "$out"/share/ytmdesktop/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r out/*/"YouTube Music Desktop App".app "$out"/Applications
 
-      wrapProgram "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+    wrapProgram "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
-      makeWrapper "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app "$out"/bin/ytmdesktop
-    ''
-    + ''
-      runHook postInstall
-    '';
+    makeWrapper "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app "$out"/bin/ytmdesktop
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

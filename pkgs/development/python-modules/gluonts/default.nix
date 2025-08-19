@@ -84,7 +84,8 @@ buildPythonPackage rec {
     pyarrow
     statsmodels
     which
-  ] ++ optional-dependencies.torch;
+  ]
+  ++ optional-dependencies.torch;
 
   preCheck = ''export HOME=$(mktemp -d)'';
 
@@ -93,15 +94,14 @@ buildPythonPackage rec {
     "test/torch/model"
   ];
 
-  disabledTests =
-    [
-      # tries to access network
-      "test_against_former_evaluator"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
-      "test_forecast"
-    ];
+  disabledTests = [
+    # tries to access network
+    "test_against_former_evaluator"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+    "test_forecast"
+  ];
 
   meta = {
     description = "Probabilistic time series modeling in Python";

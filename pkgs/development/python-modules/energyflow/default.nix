@@ -64,22 +64,22 @@ buildPythonPackage rec {
     pot
     pytestCheckHook
     tf-keras
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  disabledTests =
-    [
-      # Issues with array
-      "test_emd_equivalence"
-      "test_gdim"
-      "test_n_jobs"
-      "test_periodic_phi"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # RuntimeError: EMDStatus - Infeasible
-      "test_emd_byhand_1_1"
-      "test_emd_return_flow"
-      "test_emde"
-    ];
+  disabledTests = [
+    # Issues with array
+    "test_emd_equivalence"
+    "test_gdim"
+    "test_n_jobs"
+    "test_periodic_phi"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: EMDStatus - Infeasible
+    "test_emd_byhand_1_1"
+    "test_emd_return_flow"
+    "test_emde"
+  ];
 
   pythonImportsCheck = [ "energyflow" ];
 

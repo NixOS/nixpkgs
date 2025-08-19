@@ -83,13 +83,12 @@ let
       };
     */
 
-    includeExtras =
-      [
-        "extras;google;gcm"
-      ]
-      ++ pkgs.lib.optionals includeAuto [
-        "extras;google;auto"
-      ];
+    includeExtras = [
+      "extras;google;gcm"
+    ]
+    ++ pkgs.lib.optionals includeAuto [
+      "extras;google;auto"
+    ];
 
     # Accepting more licenses declaratively:
     extraLicenses = [

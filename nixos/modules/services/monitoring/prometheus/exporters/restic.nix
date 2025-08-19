@@ -144,7 +144,8 @@ in
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
       LoadCredential = [
         "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
-      ] ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
+      ]
+      ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
     };
     environment =
       let

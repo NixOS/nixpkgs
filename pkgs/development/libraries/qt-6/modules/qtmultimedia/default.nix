@@ -30,37 +30,37 @@
 qtModule {
   pname = "qtmultimedia";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ ffmpeg ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      libunwind
-      orc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      pipewire
-      alsa-lib
-      wayland
-      libXrandr
-      libva
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];
-  propagatedBuildInputs =
-    [
-      qtbase
-      qtdeclarative
-      qtsvg
-      qtshadertools
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ qtquick3d ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gstreamer
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-libav
-      gst-vaapi
-    ];
+  buildInputs = [
+    ffmpeg
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    libunwind
+    orc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    pipewire
+    alsa-lib
+    wayland
+    libXrandr
+    libva
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    qtsvg
+    qtshadertools
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ qtquick3d ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-libav
+    gst-vaapi
+  ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./windows-no-uppercase-libs.patch

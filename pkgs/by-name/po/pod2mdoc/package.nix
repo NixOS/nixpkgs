@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://mandoc.bsd.lv/pod2mdoc/";
-    description = "converter from POD into mdoc";
+    description = "Converter from POD into mdoc";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ramkromberg ];

@@ -111,11 +111,10 @@ in
 
     systemd = lib.mkMerge [
       {
-        tmpfiles.rules =
-          [
-            "d '${cfg.configDir}' - minio minio - -"
-          ]
-          ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
+        tmpfiles.rules = [
+          "d '${cfg.configDir}' - minio minio - -"
+        ]
+        ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
 
         services.minio = {
           description = "Minio Object Storage";

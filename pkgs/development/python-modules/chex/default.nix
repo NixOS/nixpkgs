@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.89";
+  version = "0.1.90";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
     tag = "v${version}";
-    hash = "sha256-eTEfmbpmwtCuphtOq0iHUT8zGfyQ4/aUorL4FQwcKBw=";
+    hash = "sha256-nZYfkK73p3HpUOMPyqkV4YR3BDGrpdZrl36dmfZt7Bk=";
   };
 
   build-system = [ setuptools ];

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydrogen";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = "hydrogen";
     tag = finalAttrs.version;
-    hash = "sha256-OMd8t043JVfMEfRjLdcE/R/4ymGp2yennkCjyX75r8Q=";
+    hash = "sha256-JK4AAGMby2S2fh9bmgb2mSHBgKfUQ481GDjAvOdSnjs=";
   };
 
   nativeBuildInputs = [
@@ -32,23 +32,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt5.wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      alsa-lib
-      ladspa-sdk
-      lash
-      libarchive
-      libjack2
-      liblo
-      libpulseaudio
-      libsndfile
-      lrdf
-    ]
-    ++ (with qt5; [
-      qtbase
-      qttools
-      qtxmlpatterns
-    ]);
+  buildInputs = [
+    alsa-lib
+    ladspa-sdk
+    lash
+    libarchive
+    libjack2
+    liblo
+    libpulseaudio
+    libsndfile
+    lrdf
+  ]
+  ++ (with qt5; [
+    qtbase
+    qttools
+    qtxmlpatterns
+  ]);
 
   cmakeFlags = [
     "-DWANT_DEBUG=OFF"

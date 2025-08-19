@@ -201,19 +201,18 @@ let
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
-  runtimeDeps =
-    [
-      targetPackages.stdenv.cc
-      targetPackages.stdenv.cc.bintools
-      coreutils # for cat
-    ]
-    ++ lib.optionals useLLVM [
-      (lib.getBin llvmPackages.llvm)
-    ]
-    # On darwin, we need unwrapped bintools as well (for otool)
-    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-      targetPackages.stdenv.cc.bintools.bintools
-    ];
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
@@ -341,21 +340,20 @@ stdenv.mkDerivation {
   makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
-  postInstall =
-    ''
-      for i in "$out/bin/"*; do
-        test ! -h "$i" || continue
-        isScript "$i" || continue
-        sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
-      done
-    ''
-    + lib.optionalString stdenv.targetPlatform.isDarwin ''
-      # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
-      # detects `llvm-ar` even though the resulting archives are not supported by ld64.
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
-      # https://github.com/haskell/cabal/issues/8882
-      sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
-    '';
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  ''
+  + lib.optionalString stdenv.targetPlatform.isDarwin ''
+    # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
+    # detects `llvm-ar` even though the resulting archives are not supported by ld64.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
+  '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the

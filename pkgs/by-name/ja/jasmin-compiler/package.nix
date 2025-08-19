@@ -25,15 +25,14 @@ stdenv.mkDerivation rec {
     cmdliner
   ];
 
-  buildInputs =
-    [
-      mpfr
-      ppl
-    ]
-    ++ (with ocamlPackages; [
-      apron
-      yojson
-    ]);
+  buildInputs = [
+    mpfr
+    ppl
+  ]
+  ++ (with ocamlPackages; [
+    apron
+    yojson
+  ]);
 
   propagatedBuildInputs = with ocamlPackages; [
     angstrom

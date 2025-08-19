@@ -33,35 +33,33 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      fftw
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      portmidi
-      portaudio
-    ];
+  buildInputs = [
+    fftw
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    portmidi
+    portaudio
+  ];
 
-  configureFlags =
-    [
-      "--enable-fftw"
-      "--enable-jack"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-alsa"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--enable-portaudio"
-      "--enable-portmidi"
-      "--without-local-portaudio"
-      "--without-local-portmidi"
-      "--disable-jack-framework"
-      "--with-wish=${tk}/bin/wish8.6"
-    ];
+  configureFlags = [
+    "--enable-fftw"
+    "--enable-jack"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-alsa"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--enable-portaudio"
+    "--enable-portmidi"
+    "--without-local-portaudio"
+    "--without-local-portmidi"
+    "--disable-jack-framework"
+    "--with-wish=${tk}/bin/wish8.6"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/pd --prefix PATH : ${lib.makeBinPath [ tk ]}

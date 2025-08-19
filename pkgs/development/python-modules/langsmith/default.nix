@@ -21,6 +21,7 @@
   fastapi,
   freezegun,
   instructor,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.45";
+  version = "0.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-uR3Uukt8LwoBKBcgyX2srK0C6O04IEECe/cFhBQFO2s=";
+    hash = "sha256-7XV85/IN1hG9hYBSg73pymIwIWYAay/18NAsV6Jz4Ik=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -61,11 +62,13 @@ buildPythonPackage rec {
     fastapi
     freezegun
     instructor
+    opentelemetry-sdk
     pytest-asyncio
     pytest-vcr
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access

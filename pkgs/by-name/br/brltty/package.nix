@@ -36,14 +36,13 @@ stdenv.mkDerivation rec {
     tcl # One of build scripts require tclsh
     udevCheckHook
   ];
-  buildInputs =
-    [
-      bluez
-      ncurses.dev
-      tcl # For TCL bindings
-    ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional systemdSupport systemd;
+  buildInputs = [
+    bluez
+    ncurses.dev
+    tcl # For TCL bindings
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional systemdSupport systemd;
 
   doInstallCheck = true;
 
@@ -89,27 +88,26 @@ stdenv.mkDerivation rec {
     CC_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   };
 
-  preConfigure =
-    ''
-      substituteInPlace configure --replace-fail "/sbin/ldconfig -n" "true"
+  preConfigure = ''
+    substituteInPlace configure --replace-fail "/sbin/ldconfig -n" "true"
 
-      # Some script needs a working tclsh shebang
-      patchShebangs .
+    # Some script needs a working tclsh shebang
+    patchShebangs .
 
-      # Skip impure operations
-      substituteInPlace Programs/Makefile.in    \
-        --replace-fail install-apisoc-directory ""   \
-        --replace-fail install-api-key ""
-    ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      # ./configure call itself second time for build platform, if it fail -- it fails silently, make it visible
-      # (this is not mandatory changing, but make further maintaining easier)
-      substituteInPlace mk4build \
-        --replace-fail "--quiet" ""
-      # Respect targetPrefix when invoking ar
-      substituteInPlace Programs/Makefile.in \
-        --replace-fail "ar " "$AR "
-    '';
+    # Skip impure operations
+    substituteInPlace Programs/Makefile.in    \
+      --replace-fail install-apisoc-directory ""   \
+      --replace-fail install-api-key ""
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    # ./configure call itself second time for build platform, if it fail -- it fails silently, make it visible
+    # (this is not mandatory changing, but make further maintaining easier)
+    substituteInPlace mk4build \
+      --replace-fail "--quiet" ""
+    # Respect targetPrefix when invoking ar
+    substituteInPlace Programs/Makefile.in \
+      --replace-fail "ar " "$AR "
+  '';
 
   postInstall = ''
     # Rewrite absolute paths

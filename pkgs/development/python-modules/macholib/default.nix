@@ -25,13 +25,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      altgraph
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      typing-extensions
-    ];
+  dependencies = [
+    altgraph
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
   # Checks assume to find darwin specific libraries
   doCheck = stdenv.buildPlatform.isDarwin;

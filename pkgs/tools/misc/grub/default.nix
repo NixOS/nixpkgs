@@ -60,12 +60,12 @@ let
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) efiSystemsBuild
-  );
-  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (
-    lib.mapAttrsToList (name: _: name) pcSystems
-  );
+  xenSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+  };
+
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
   gnulib = fetchFromSavannah {
     repo = "gnulib";
@@ -88,6 +88,10 @@ let
     hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
   };
 in
+
+assert zfsSupport -> zfs != null;
+assert !(efiSupport && xenSupport);
+
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
@@ -520,18 +524,17 @@ stdenv.mkDerivation rec {
     automake
     help2man
   ];
-  buildInputs =
-    [
-      ncurses
-      libusb-compat-0_1
-      freetype
-      lvm2
-      fuse
-      libtool
-      bash
-    ]
-    ++ lib.optional doCheck qemu
-    ++ lib.optional zfsSupport zfs;
+  buildInputs = [
+    ncurses
+    libusb-compat-0_1
+    freetype
+    lvm2
+    fuse
+    libtool
+    bash
+  ]
+  ++ lib.optional doCheck qemu
+  ++ lib.optional zfsSupport zfs;
 
   strictDeps = true;
 
@@ -583,32 +586,31 @@ stdenv.mkDerivation rec {
     make dist
   '';
 
-  configureFlags =
-    [
-      "--enable-grub-mount" # dep of os-prober
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # grub doesn't do cross-compilation as usual and tries to use unprefixed
-      # tools to target the host. Provide toolchain information explicitly for
-      # cross builds.
-      #
-      # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
-      "TARGET_CC=${stdenv.cc.targetPrefix}cc"
-      "TARGET_NM=${stdenv.cc.targetPrefix}nm"
-      "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-      "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
-      "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
-    ]
-    ++ lib.optional zfsSupport "--enable-libzfs"
-    ++ lib.optionals efiSupport [
-      "--with-platform=efi"
-      "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
-      "--program-prefix="
-    ]
-    ++ lib.optionals xenSupport [
-      "--with-platform=xen"
-      "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
-    ];
+  configureFlags = [
+    "--enable-grub-mount" # dep of os-prober
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # grub doesn't do cross-compilation as usual and tries to use unprefixed
+    # tools to target the host. Provide toolchain information explicitly for
+    # cross builds.
+    #
+    # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
+    "TARGET_CC=${stdenv.cc.targetPrefix}cc"
+    "TARGET_NM=${stdenv.cc.targetPrefix}nm"
+    "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+    "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
+  ]
+  ++ lib.optional zfsSupport "--enable-libzfs"
+  ++ lib.optionals efiSupport [
+    "--with-platform=efi"
+    "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+    "--program-prefix="
+  ]
+  ++ lib.optionals xenSupport [
+    "--with-platform=xen"
+    "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ];
 
   # save target that grub is compiled for
   grubTarget =
@@ -655,16 +657,13 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms =
-      if xenSupport then
-        [
-          "x86_64-linux"
-          "i686-linux"
-        ]
+      if efiSupport then
+        lib.attrNames efiSystemsBuild
+      else if xenSupport then
+        lib.attrNames xenSystemsBuild
       else
         platforms.gnu ++ platforms.linux;
 
     maintainers = [ ];
-
-    broken = !(efiSupport -> canEfi) || !(zfsSupport -> zfs != null) || (efiSupport && xenSupport);
   };
 }

@@ -52,7 +52,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pkgs.graphviz
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # Error: invalid value 'x' for farg: loading 'x' as float

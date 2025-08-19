@@ -26,15 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ (with libsForQt5; [
-      extra-cmake-modules
-      wrapQtAppsHook
-      qttools
-    ]);
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ (with libsForQt5; [
+    extra-cmake-modules
+    wrapQtAppsHook
+    qttools
+  ]);
 
   buildInputs = with libsForQt5; [
     kcolorpicker

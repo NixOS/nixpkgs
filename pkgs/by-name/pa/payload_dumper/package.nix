@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "payload_dumper";
-  version = "unstable-2022-04-11";
+  version = "0-unstable-2022-04-11";
 
   src = fetchFromGitHub {
     owner = "vm03";

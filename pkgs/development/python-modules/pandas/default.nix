@@ -110,7 +110,8 @@ let
       pkg-config
       versioneer
       wheel
-    ] ++ versioneer.optional-dependencies.toml;
+    ]
+    ++ versioneer.optional-dependencies.toml;
 
     enableParallelBuilding = true;
 
@@ -188,70 +189,72 @@ let
       doCheck = true;
     });
 
-    nativeCheckInputs =
-      [
-        hypothesis
-        pytest-asyncio
-        pytest-xdist
-        pytestCheckHook
-      ]
-      ++ lib.flatten (lib.attrValues optional-dependencies)
-      ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-        # for locale executable
-        glibc
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-        # for locale executable
-        adv_cmds
-      ];
+    nativeCheckInputs = [
+      hypothesis
+      pytest-asyncio
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      # for locale executable
+      glibc
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # for locale executable
+      adv_cmds
+    ];
 
     # don't max out build cores, it breaks tests
     dontUsePytestXdist = true;
 
     __darwinAllowLocalNetworking = true;
 
-    pytestFlagsArray = [
-      # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
-      "-m"
-      "'not single_cpu and not slow and not network and not db and not slow_arm'"
+    pytestFlags = [
       # https://github.com/pandas-dev/pandas/issues/54907
       "--no-strict-data-files"
-      "--numprocesses"
-      "4"
+      "--numprocesses=4"
     ];
 
-    disabledTests =
-      [
-        # AssertionError: Did not see expected warning of class 'FutureWarning'
-        "test_parsing_tzlocal_deprecated"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-        # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
-        "test_binops"
-        # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
-        "test_rolling"
-      ]
-      ++ lib.optional stdenv.hostPlatform.is32bit [
-        # https://github.com/pandas-dev/pandas/issues/37398
-        "test_rolling_var_numerical_issues"
-      ];
+    disabledTestMarks = [
+      # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
+      "single_cpu"
+      "slow"
+      "network"
+      "db"
+      "slow_arm"
+    ];
+
+    disabledTests = [
+      # AssertionError: Did not see expected warning of class 'FutureWarning'
+      "test_parsing_tzlocal_deprecated"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
+      "test_binops"
+      # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
+      "test_rolling"
+    ]
+    ++ lib.optional stdenv.hostPlatform.is32bit [
+      # https://github.com/pandas-dev/pandas/issues/37398
+      "test_rolling_var_numerical_issues"
+    ];
 
     # Tests have relative paths, and need to reference compiled C extensions
     # so change directory where `import .test` is able to be resolved
-    preCheck =
-      ''
-        export HOME=$TMPDIR
-        cd $out/${python.sitePackages}/pandas
-      ''
-      # TODO: Get locale and clipboard support working on darwin.
-      #       Until then we disable the tests.
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # Fake the impure dependencies pbpaste and pbcopy
-        echo "#!${runtimeShell}" > pbcopy
-        echo "#!${runtimeShell}" > pbpaste
-        chmod a+x pbcopy pbpaste
-        export PATH=$(pwd):$PATH
-      '';
+    preCheck = ''
+      export HOME=$TMPDIR
+      cd $out/${python.sitePackages}/pandas
+    ''
+    # TODO: Get locale and clipboard support working on darwin.
+    #       Until then we disable the tests.
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Fake the impure dependencies pbpaste and pbcopy
+      echo "#!${runtimeShell}" > pbcopy
+      echo "#!${runtimeShell}" > pbpaste
+      chmod a+x pbcopy pbpaste
+      export PATH=$(pwd):$PATH
+    '';
 
     pythonImportsCheck = [ "pandas" ];
 

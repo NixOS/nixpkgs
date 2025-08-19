@@ -31,9 +31,6 @@ buildGoModule rec {
     description = "Lightning Pool Client";
     homepage = "https://github.com/lightninglabs/pool";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      proofofkeags
-      prusnak
-    ];
+    maintainers = with maintainers; [ proofofkeags ];
   };
 }

@@ -3,6 +3,7 @@ name: PR
 on:
   pull_request:
     paths:
+      - .github/actions/get-merge-commit/action.yml
       - .github/workflows/build.yml
       - .github/workflows/check.yml
       - .github/workflows/eval.yml
@@ -27,8 +28,9 @@ jobs:
       mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
       targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
       systems: ${{ steps.systems.outputs.systems }}
+      touched: ${{ steps.files.outputs.touched }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: |
             .github/actions
@@ -63,6 +65,20 @@ jobs:
             core.setOutput('head', headClassification)
             core.info('head classification:', headClassification)
 
+      - name: Determine changed files
+        id: files
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const files = (await github.paginate(github.rest.pulls.listFiles, {
+              ...context.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            })).map(file => file.filename)
+
+            if (files.includes('ci/pinned.json')) core.setOutput('touched', ['pinned'])
+            else core.setOutput('touched', [])
+
   check:
     name: Check
     needs: [prepare]
@@ -95,6 +111,7 @@ jobs:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
       systems: ${{ needs.prepare.outputs.systems }}
+      testVersions: ${{ contains(fromJSON(needs.prepare.outputs.touched), 'pinned') && !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development') }}
 
   labels:
     name: Labels
@@ -143,7 +160,11 @@ jobs:
     # Do NOT change the name of this job, otherwise the rule will not catch it anymore.
     # This would prevent all PRs from merging.
     name: no PR failures
-    if: ${{ failure() }}
+    # A single job is "cancelled" when it hits its timeout. This is not the same
+    # as "skipped", which happens when the `if` condition doesn't apply.
+    # The "cancelled()" function only checks the whole workflow, but not individual
+    # jobs.
+    if: ${{ failure() || contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-24.04-arm
     steps:
       - run: exit 1

@@ -53,7 +53,8 @@ let
       libcupsfilters
       cups-filters
       pkgs.ghostscript
-    ] ++ cfg.drivers;
+    ]
+    ++ cfg.drivers;
     pathsToLink = [
       "/lib"
       "/share/cups"
@@ -116,15 +117,14 @@ let
 
   rootdir = pkgs.buildEnv {
     name = "cups-progs";
-    paths =
-      [
-        cupsFilesFile
-        cupsdFile
-        (writeConf "client.conf" cfg.clientConf)
-        (writeConf "snmp.conf" cfg.snmpConf)
-      ]
-      ++ optional cfg.browsed.enable browsedFile
-      ++ cfg.drivers;
+    paths = [
+      cupsFilesFile
+      cupsdFile
+      (writeConf "client.conf" cfg.clientConf)
+      (writeConf "snmp.conf" cfg.snmpConf)
+    ]
+    ++ optional cfg.browsed.enable browsedFile
+    ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
     ignoreCollisions = true;
   };
@@ -377,7 +377,8 @@ in
     environment.systemPackages = [
       cups.out
       xdg-utils
-    ] ++ optional polkitEnabled cups-pk-helper;
+    ]
+    ++ optional polkitEnabled cups-pk-helper;
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
@@ -406,14 +407,13 @@ in
 
     systemd.sockets.cups = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
-      listenStreams =
-        [
-          ""
-          "/run/cups/cups.sock"
-        ]
-        ++ map (
-          x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)
-        ) cfg.listenAddresses;
+      listenStreams = [
+        ""
+        "/run/cups/cups.sock"
+      ]
+      ++ map (
+        x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)
+      ) cfg.listenAddresses;
     };
 
     systemd.services.cups = {

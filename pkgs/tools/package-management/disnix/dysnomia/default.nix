@@ -77,28 +77,28 @@ stdenv.mkDerivation rec {
     (if enableS6RCService then "--with-s6-rc" else "--without-s6-rc")
     (if stdenv.hostPlatform.isDarwin then "--with-launchd" else "--without-launchd")
     "--with-job-template=${jobTemplate}"
-  ] ++ lib.optional enableLegacy "--enable-legacy";
+  ]
+  ++ lib.optional enableLegacy "--enable-legacy";
 
-  buildInputs =
-    [
-      getopt
-      netcat
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux systemd
-    ++ lib.optional enableEjabberdDump ejabberd
-    ++ lib.optional enableMySQLDatabase mariadb.out
-    ++ lib.optional enablePostgreSQLDatabase libpq
-    ++ lib.optional enableSubversionRepository subversion
-    ++ lib.optionals enableMongoDatabase [
-      mongodb
-      mongodb-tools
-    ]
-    ++ lib.optional enableInfluxDatabase influxdb
-    ++ lib.optional enableSupervisordProgram supervisor
-    ++ lib.optional enableDockerContainer docker
-    ++ lib.optional enableNginxWebApplication nginx
-    ++ lib.optional enableS6RCService s6-rc
-    ++ lib.optional enableXinetdService xinetd;
+  buildInputs = [
+    getopt
+    netcat
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux systemd
+  ++ lib.optional enableEjabberdDump ejabberd
+  ++ lib.optional enableMySQLDatabase mariadb.out
+  ++ lib.optional enablePostgreSQLDatabase libpq
+  ++ lib.optional enableSubversionRepository subversion
+  ++ lib.optionals enableMongoDatabase [
+    mongodb
+    mongodb-tools
+  ]
+  ++ lib.optional enableInfluxDatabase influxdb
+  ++ lib.optional enableSupervisordProgram supervisor
+  ++ lib.optional enableDockerContainer docker
+  ++ lib.optional enableNginxWebApplication nginx
+  ++ lib.optional enableS6RCService s6-rc
+  ++ lib.optional enableXinetdService xinetd;
 
   meta = {
     description = "Automated deployment of mutable components and services for Disnix";

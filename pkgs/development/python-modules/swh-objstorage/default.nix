@@ -101,7 +101,8 @@ buildPythonPackage rec {
     types-pyyaml
     types-requests
     util-linux
-  ] ++ psycopg.optional-dependencies.pool;
+  ]
+  ++ psycopg.optional-dependencies.pool;
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # FAILED swh/objstorage/tests/test_objstorage_winery.py::test_winery_leaky_bucket_tick - assert 1 == 0

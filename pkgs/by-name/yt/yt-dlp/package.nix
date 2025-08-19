@@ -19,15 +19,20 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.07.21";
+  version = "2025.08.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-VNUkCdrzbOwD+iD9BZUQFJlWXRc0tWJAvLnVKNZNPhQ=";
+    hash = "sha256-j7x844MPPFdXYTJiiMnru3CE79A/6JdfJDdh8it9KsU=";
   };
+
+  postPatch = ''
+    substituteInPlace yt_dlp/version.py \
+      --replace-fail "UPDATE_HINT = None" 'UPDATE_HINT = "Nixpkgs/NixOS likely already contain an updated version.\n       To get it run nix-channel --update or nix flake update in your config directory."'
+  '';
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -92,20 +97,19 @@ python3Packages.buildPythonApplication rec {
   # Requires network
   doCheck = false;
 
-  postInstall =
-    ''
-      installManPage yt-dlp.1
+  postInstall = ''
+    installManPage yt-dlp.1
 
-      installShellCompletion \
-        --bash completions/bash/yt-dlp \
-        --fish completions/fish/yt-dlp.fish \
-        --zsh completions/zsh/_yt-dlp
+    installShellCompletion \
+      --bash completions/bash/yt-dlp \
+      --fish completions/fish/yt-dlp.fish \
+      --zsh completions/zsh/_yt-dlp
 
-      install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
-    ''
-    + lib.optionalString withAlias ''
-      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
-    '';
+    install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+  ''
+  + lib.optionalString withAlias ''
+    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

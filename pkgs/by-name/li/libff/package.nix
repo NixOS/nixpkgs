@@ -16,17 +16,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scipr-lab";
     repo = "libff";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0dczi829497vqlmn6n4fgi89bc2h9f13gx30av5z2h6ikik7crgn";
     fetchSubmodules = true;
   };
 
-  cmakeFlags =
-    [ "-DWITH_PROCPS=Off" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      "-DCURVE=ALT_BN128"
-      "-DUSE_ASM=OFF"
-    ];
+  cmakeFlags = [
+    "-DWITH_PROCPS=Off"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-DCURVE=ALT_BN128"
+    "-DUSE_ASM=OFF"
+  ];
 
   postPatch = lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"

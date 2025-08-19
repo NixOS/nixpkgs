@@ -52,27 +52,25 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withBpf [
-      bpftools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withBpf [
+    bpftools
+  ];
 
-  buildInputs =
-    [
-      pcre2
-      spdlog
-      nlohmann_json
-      systemd
-      zlib
-    ]
-    ++ lib.optionals withBpf [
-      libbpf
-      elfutils
-    ];
+  buildInputs = [
+    pcre2
+    spdlog
+    nlohmann_json
+    systemd
+    zlib
+  ]
+  ++ lib.optionals withBpf [
+    libbpf
+    elfutils
+  ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
   hardeningDisable = [

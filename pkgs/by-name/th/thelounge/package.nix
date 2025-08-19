@@ -46,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     python3.pkgs.distutils
     npmHooks.npmInstallHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''

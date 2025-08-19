@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  ghostunnel,
   apple-sdk_12,
   darwinMinVersionHook,
 }:
@@ -37,6 +38,11 @@ buildGoModule rec {
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
     podman = nixosTests.podman-tls-ghostunnel;
+  };
+
+  passthru.services.default = {
+    imports = [ ./service.nix ];
+    ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
   };
 
   meta = {

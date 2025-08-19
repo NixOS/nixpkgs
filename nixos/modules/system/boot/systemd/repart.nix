@@ -148,7 +148,8 @@ in
           'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
         '';
       }
-    ] ++ partitionAssertions;
+    ]
+    ++ partitionAssertions;
 
     # systemd-repart uses loopback devices for partition creation
     boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";

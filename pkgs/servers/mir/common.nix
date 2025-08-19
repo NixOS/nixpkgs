@@ -60,31 +60,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  postPatch =
-    ''
-      # Fix scripts that get run in tests
-      patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
+  postPatch = ''
+    # Fix scripts that get run in tests
+    patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
 
-      # Fix LD_PRELOADing in tests
-      substituteInPlace \
-        cmake/MirCommon.cmake \
-        tests/umock-acceptance-tests/CMakeLists.txt \
-        tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
-        tests/unit-tests/CMakeLists.txt \
-        --replace-warn 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
-        --replace-warn 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
+    # Fix LD_PRELOADing in tests
+    substituteInPlace \
+      cmake/MirCommon.cmake \
+      tests/umock-acceptance-tests/CMakeLists.txt \
+      tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
+      tests/unit-tests/CMakeLists.txt \
+      --replace-warn 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
+      --replace-warn 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
 
-      # Fix Xwayland default
-      substituteInPlace src/miral/x11_support.cpp \
-        --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
-    ''
-    + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
+    # Fix Xwayland default
+    substituteInPlace src/miral/x11_support.cpp \
+      --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+  ''
+  + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
 
-      # Fix paths for generating drm-formats
-      substituteInPlace src/platform/graphics/CMakeLists.txt \
-        --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
-        --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-    '';
+    # Fix paths for generating drm-formats
+    substituteInPlace src/platform/graphics/CMakeLists.txt \
+      --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
+      --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
+  '';
 
   strictDeps = true;
 
@@ -106,39 +105,38 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      boost
-      egl-wayland
-      freetype
-      glib
-      glm
-      libdrm
-      libepoxy
-      libevdev
-      libglvnd
-      libinput
-      libuuid
-      libxcb
-      libxkbcommon
-      libxmlxx
-      yaml-cpp
-      lttng-ust
-      libgbm
-      nettle
-      udev
-      wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.xorgproto
-      xwayland
-    ]
-    ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [
-      libapparmor
-    ]
-    ++ lib.optionals (lib.strings.versionAtLeast version "2.21.0") [
-      pixman
-    ];
+  buildInputs = [
+    boost
+    egl-wayland
+    freetype
+    glib
+    glm
+    libdrm
+    libepoxy
+    libevdev
+    libglvnd
+    libinput
+    libuuid
+    libxcb
+    libxkbcommon
+    libxmlxx
+    yaml-cpp
+    lttng-ust
+    libgbm
+    nettle
+    udev
+    wayland
+    xorg.libX11
+    xorg.libXcursor
+    xorg.xorgproto
+    xwayland
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [
+    libapparmor
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.21.0") [
+    pixman
+  ];
 
   nativeCheckInputs = [
     dbus
@@ -199,7 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    } // lib.optionalAttrs (!pinned) { inherit (nixosTests) miriway miracle-wm; };
+    }
+    // lib.optionalAttrs (!pinned) { inherit (nixosTests) miriway miracle-wm; };
     providedSessions = lib.optionals (lib.strings.versionOlder version "2.16.0") [
       # More of an example than a fully functioning shell, some notes for the adventurous:
       # - ~/.config/miral-shell.config is one possible user config location,
@@ -210,7 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
       #   does not know about preferred terminal
       "mir-shell"
     ];
-  } // lib.optionalAttrs (!pinned) { updateScript = ./update.sh; };
+  }
+  // lib.optionalAttrs (!pinned) { updateScript = ./update.sh; };
 
   meta = {
     description = "Display server and Wayland compositor developed by Canonical";
@@ -222,23 +222,22 @@ stdenv.mkDerivation (finalAttrs: {
       OPNA2608
     ];
     platforms = lib.platforms.linux;
-    pkgConfigModules =
-      [
-        "miral"
-        "mircommon"
-        "mircore"
-        "miroil"
-        "mirplatform"
-        "mir-renderer-gl-dev"
-        "mirrenderer"
-        "mirserver"
-        "mirtest"
-        "mirwayland"
-      ]
-      ++ lib.optionals (lib.strings.versionOlder version "2.17.0") [ "mircookie" ]
-      ++ lib.optionals (lib.strings.versionAtLeast version "2.17.0") [
-        "mircommon-internal"
-        "mirserver-internal"
-      ];
+    pkgConfigModules = [
+      "miral"
+      "mircommon"
+      "mircore"
+      "miroil"
+      "mirplatform"
+      "mir-renderer-gl-dev"
+      "mirrenderer"
+      "mirserver"
+      "mirtest"
+      "mirwayland"
+    ]
+    ++ lib.optionals (lib.strings.versionOlder version "2.17.0") [ "mircookie" ]
+    ++ lib.optionals (lib.strings.versionAtLeast version "2.17.0") [
+      "mircommon-internal"
+      "mirserver-internal"
+    ];
   };
 })

@@ -35,22 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional mpiSupport mpi;
+  ]
+  ++ lib.optional mpiSupport mpi;
 
   propagatedBuildInputs = [
     zlib
     jansson
   ];
 
-  configureFlags =
-    [
-      "LDFLAGS=-lm"
-    ]
-    ++ lib.optionals mpiSupport [
-      "--enable-mpi"
-      "CC=mpicc"
-    ]
-    ++ lib.optional debug "--enable-debug";
+  configureFlags = [
+    "LDFLAGS=-lm"
+  ]
+  ++ lib.optionals mpiSupport [
+    "--enable-mpi"
+    "CC=mpicc"
+  ]
+  ++ lib.optional debug "--enable-debug";
 
   __darwinAllowLocalNetworking = mpiSupport;
 

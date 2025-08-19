@@ -287,7 +287,6 @@ in
               ]
             )) "s"
           }://${cfg.domain}/";
-          ui.static_use_hash = true;
           valkey.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
         };
       };
@@ -296,26 +295,25 @@ in
         enable = true;
         plugins = [ "python3" ];
         instance.type = "emperor";
-        instance.vassals.searx =
-          {
-            type = "normal";
-            strict = true;
-            immediate-uid = "searx";
-            immediate-gid = "searx";
-            lazy-apps = true;
-            enable-threads = true;
-            module = "searx.webapp";
-            env = [
-              "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
-            ];
-            buffer-size = 32768;
-            pythonPackages = _: [ cfg.package ];
-          }
-          // lib.optionalAttrs cfg.configureNginx {
-            socket = "/run/searx/uwsgi.sock";
-            chmod-socket = "660";
-          }
-          // cfg.uwsgiConfig;
+        instance.vassals.searx = {
+          type = "normal";
+          strict = true;
+          immediate-uid = "searx";
+          immediate-gid = "searx";
+          lazy-apps = true;
+          enable-threads = true;
+          module = "searx.webapp";
+          env = [
+            "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+          ];
+          buffer-size = 32768;
+          pythonPackages = _: [ cfg.package ];
+        }
+        // lib.optionalAttrs cfg.configureNginx {
+          socket = "/run/searx/uwsgi.sock";
+          chmod-socket = "660";
+        }
+        // cfg.uwsgiConfig;
       };
     };
 
@@ -326,18 +324,17 @@ in
 
       searx-init = {
         description = "Initialise Searx settings";
-        serviceConfig =
-          {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            User = "searx";
-            RuntimeDirectory = "searx";
-            RuntimeDirectoryMode = "750";
-            RuntimeDirectoryPreserve = "yes";
-          }
-          // optionalAttrs (cfg.environmentFile != null) {
-            EnvironmentFile = cfg.environmentFile;
-          };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "searx";
+          RuntimeDirectory = "searx";
+          RuntimeDirectoryMode = "750";
+          RuntimeDirectoryPreserve = "yes";
+        }
+        // optionalAttrs (cfg.environmentFile != null) {
+          EnvironmentFile = cfg.environmentFile;
+        };
         script = generateConfig;
       };
 
@@ -349,15 +346,14 @@ in
           "searx-init.service"
           "network.target"
         ];
-        serviceConfig =
-          {
-            User = "searx";
-            Group = "searx";
-            ExecStart = lib.getExe cfg.package;
-          }
-          // optionalAttrs (cfg.environmentFile != null) {
-            EnvironmentFile = cfg.environmentFile;
-          };
+        serviceConfig = {
+          User = "searx";
+          Group = "searx";
+          ExecStart = lib.getExe cfg.package;
+        }
+        // optionalAttrs (cfg.environmentFile != null) {
+          EnvironmentFile = cfg.environmentFile;
+        };
         environment = {
           SEARXNG_SETTINGS_PATH = cfg.settingsFile;
         };
@@ -369,7 +365,8 @@ in
         restartTriggers = [
           cfg.package
           cfg.settingsFile
-        ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        ]
+        ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };
     };
 

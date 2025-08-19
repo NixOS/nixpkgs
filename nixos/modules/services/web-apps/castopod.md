@@ -9,7 +9,10 @@ Use the following configuration to start a public instance of Castopod on `casto
 
 ```nix
 {
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
   services.castopod = {
     enable = true;
     database.createLocally = true;

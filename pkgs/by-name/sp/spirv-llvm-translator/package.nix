@@ -76,26 +76,27 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ] ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
+  ]
+  ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
 
   buildInputs = [
     spirv-headers
     spirv-tools
-  ] ++ lib.optionals (!isROCm) [ llvm ];
+  ]
+  ++ lib.optionals (!isROCm) [ llvm ];
 
   nativeCheckInputs = [ lit ];
 
-  cmakeFlags =
-    [
-      "-DLLVM_INCLUDE_TESTS=ON"
-      "-DLLVM_DIR=${(if isROCm then llvm else llvm.dev)}"
-      "-DBUILD_SHARED_LIBS=YES"
-      "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
-      # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
-      "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
-    ]
-    ++ lib.optional (llvmMajor == "19") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
+  cmakeFlags = [
+    "-DLLVM_INCLUDE_TESTS=ON"
+    "-DLLVM_DIR=${(if isROCm then llvm else llvm.dev)}"
+    "-DBUILD_SHARED_LIBS=YES"
+    "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
+    # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
+  ]
+  ++ lib.optional (llvmMajor == "19") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
@@ -105,14 +106,13 @@ stdenv.mkDerivation {
     "llvm-spirv"
   ];
 
-  postInstall =
-    ''
-      install -D tools/llvm-spirv/llvm-spirv $out/bin/llvm-spirv
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool $out/bin/llvm-spirv \
-        -change @rpath/libLLVMSPIRVLib.dylib $out/lib/libLLVMSPIRVLib.dylib
-    '';
+  postInstall = ''
+    install -D tools/llvm-spirv/llvm-spirv $out/bin/llvm-spirv
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool $out/bin/llvm-spirv \
+      -change @rpath/libLLVMSPIRVLib.dylib $out/lib/libLLVMSPIRVLib.dylib
+  '';
 
   passthru.tests = lib.genAttrs (lib.attrNames versions) (
     version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvm_${version}"; }

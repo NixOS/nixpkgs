@@ -40,6 +40,17 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5_1;
 
+      # TODO remove when paperless-ngx is updated past 2.17.1
+      imap-tools = prev.imap-tools.overridePythonAttrs {
+        version = "1.10.0";
+        src = fetchFromGitHub {
+          owner = "ikvk";
+          repo = "imap_tools";
+          tag = "v1.10.0";
+          hash = "sha256-lan12cHkoxCKadgyFey4ShcnwFg3Gl/VqKWlYAkvF3Y=";
+        };
+      };
+
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
     };
@@ -73,25 +84,23 @@ let
         hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
-      nativeBuildInputs =
-        [
-          node-gyp
-          nodejs_20
-          pkg-config
-          pnpm.configHook
-          python3
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          xcbuild
-        ];
+      nativeBuildInputs = [
+        node-gyp
+        nodejs_20
+        pkg-config
+        pnpm.configHook
+        python3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
-      buildInputs =
-        [
-          pango
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          giflib
-        ];
+      buildInputs = [
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        giflib
+      ];
 
       CYPRESS_INSTALL_BINARY = "0";
       NG_CLI_ANALYTICS = "false";
@@ -151,6 +160,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "pathvalidate"
     "redis"
   ];
 

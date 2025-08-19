@@ -13,13 +13,13 @@
 
 let
   # Use unstable because it has improvements for finding python
-  version = "0.12-unstable-2025-03-08";
+  version = "0.12-unstable-2025-08-03";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "46d39da2613aa2f55a068b50e7ac45a8f270005d";
-    hash = "sha256-UNRNJubM9ePjXhqZ9RiZQIxGBMM3nOye83S7J8wCHMg=";
+    rev = "4497a9aa0ae02950c4396a8d7083b07d46271855";
+    hash = "sha256-QV/ulq/SIN6Ph7BXq0XGSivCg+Ej0VaPafZgEhOhtnI=";
   };
 
   collection = fetchurl {
@@ -51,7 +51,7 @@ in
 buildNpmPackage rec {
   pname = "icestudio";
   inherit version src;
-  npmDepsHash = "sha256-ZHvXC0hpAcPMsHhxQWELFC2b+WBNoEvbtLLNJsDhMso=";
+  npmDepsHash = "sha256-QHd4d0BQXqAs/4WnnawCW/tJvSbWOz++RwomNG4XBuU=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
     # requirements for transative dependencies

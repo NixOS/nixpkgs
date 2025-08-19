@@ -40,7 +40,8 @@ buildPythonPackage rec {
   dependencies = [
     absl-py
     etils
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "array_record" ];
 

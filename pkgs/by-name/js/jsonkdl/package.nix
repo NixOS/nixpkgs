@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonkdl";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-4k6gwThkS9OfdM412Mi/Scv+4wIKIXuCA5lVuJ7IRiY=";
+    hash = "sha256-2oDHEq2VSMmlhyfxp01R1sSyHf7Q5MvFV1Iz8rsF9Hc=";
   };
 
-  cargoHash = "sha256-9dHS41ZyI9vna0w8N6/PXsmObKPHUi25JPFLsEaxG/A=";
+  cargoHash = "sha256-s0SGqkTAbuAr/SJAHKsR1oowcqYh8RdAHryfIdEzRgU=";
 
   meta = {
     description = "JSON to KDL converter";

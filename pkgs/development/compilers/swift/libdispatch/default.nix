@@ -23,12 +23,13 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals useSwift [
-      ninja
-      swift
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals useSwift [
+    ninja
+    swift
+  ];
 
   patches = [ ./disable-swift-overlay.patch ];
 

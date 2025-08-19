@@ -109,7 +109,7 @@ let
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
-    windows.mingw_w64_pthreads = nativePlatforms;
+    windows.pthreads = nativePlatforms;
   };
 
   wasiCommon = {

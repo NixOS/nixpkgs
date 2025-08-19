@@ -74,19 +74,19 @@ buildPythonPackage rec {
     msgpack
     mujson
     ujson
-  ] ++ lib.optionals (pythonOlder "3.10") [ testtools ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ testtools ];
 
   enabledTestPaths = [ "tests" ];
 
-  disabledTestPaths =
-    [
-      # needs a running server
-      "tests/asgi/test_asgi_servers.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # ModuleNotFoundError: No module named 'distutils'
-      "tests/asgi/test_cythonized_asgi.py"
-    ];
+  disabledTestPaths = [
+    # needs a running server
+    "tests/asgi/test_asgi_servers.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # ModuleNotFoundError: No module named 'distutils'
+    "tests/asgi/test_cythonized_asgi.py"
+  ];
 
   meta = with lib; {
     changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";

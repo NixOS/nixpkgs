@@ -58,7 +58,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     tomli
-  ] ++ optional-dependencies.extra;
+  ]
+  ++ optional-dependencies.extra;
 
   disabledTestPaths = [
     # tries to download data:

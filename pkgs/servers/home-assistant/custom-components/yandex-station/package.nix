@@ -23,14 +23,15 @@ buildHomeAssistantComponent rec {
     zeroconf
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # this test seems to be broken
-    "--deselect=tests/test_local.py::test_track"
+    "tests/test_local.py::test_track"
   ];
   nativeCheckInputs = [
     home-assistant
     pytestCheckHook
-  ] ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
+  ]
+  ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
 
   meta = {
     description = "Controlling Yandex.Station and other smart home devices with Alice from Home Assistant";

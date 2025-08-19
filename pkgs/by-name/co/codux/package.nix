@@ -20,17 +20,17 @@ appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
+    install -m 444 -D ${appimageContents}/codux.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
-    substituteInPlace $out/share/applications/${pname}.desktop  --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/codux.desktop  --replace 'Exec=AppRun' 'Exec=codux'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual IDE for React";
     homepage = "https://www.codux.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dit7ya
       kashw2
     ];

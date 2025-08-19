@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "bump";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = "bump";
     rev = "v${version}";
-    sha256 = "sha256-a+vmpmWb/jICNdErkvCQKNIdaKtSrIJZ3BApLvKG/hg=";
+    sha256 = "sha256-OD/ZAVLhezhmFSaWyka5kKwEU5FXH3KuzS91eAteR8Y=";
   };
 
-  vendorHash = "sha256-VHVChqQXmCcw2ymTJbQLDtzBycTeXkuHPz52vuKen0w=";
+  vendorHash = "sha256-mEeuTyNjyuCdRlvJkMPVSplbNL9KXPgX+F1FNdKTvQU=";
 
   doCheck = false;
 

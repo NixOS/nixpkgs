@@ -55,7 +55,8 @@ buildPythonPackage rec {
     transformers = [
       accelerate
       transformers
-    ] ++ transformers.optional-dependencies.torch;
+    ]
+    ++ transformers.optional-dependencies.torch;
   };
 
   # Tests of llmx try to access openai, google, etc.

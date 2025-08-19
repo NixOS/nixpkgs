@@ -33,15 +33,14 @@ python3.pkgs.buildPythonApplication rec {
     nbformat
   ];
 
-  nativeCheckInputs =
-    [
-      coreutils
-      gitMinimal
-      mercurial
-    ]
-    ++ (with python3.pkgs; [
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    coreutils
+    gitMinimal
+    mercurial
+  ]
+  ++ (with python3.pkgs; [
+    pytestCheckHook
+  ]);
 
   checkInputs = [
     testAssets

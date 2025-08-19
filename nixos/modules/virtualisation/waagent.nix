@@ -329,7 +329,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals config.services.cloud-init.enable [ "cloud-init.service" ];
+      ]
+      ++ lib.optionals config.services.cloud-init.enable [ "cloud-init.service" ];
       wants = [
         "network-online.target"
         "sshd.service"

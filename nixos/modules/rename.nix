@@ -190,6 +190,10 @@ in
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]
       "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver"
     )
+    (mkRemovedOptionModule [
+      "services"
+      "mx-puppet-discord"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
@@ -344,7 +348,9 @@ in
       The signald project is unmaintained and has long been incompatible with the
       official Signal servers.
     '')
-
+    (mkRemovedOptionModule [ "services" "private-gpt" ] ''
+      The private-gpt package and the corresponding module have been removed due to being broken and unmaintained.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

@@ -106,53 +106,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      gperf
-    ]
-    ++ lib.optional docsSupport pandoc
-    ++ lib.optional (docsSupport || extrasSupport) (
-      # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
-      buildPackages.python3.withPackages (ps: [
-        ps.jinja2
-        ps.pyyaml
-      ])
-    )
-    ++ lib.optional luaImlib2Support toluapp
-    ++ lib.optional luaCairoSupport toluapp;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gperf
+  ]
+  ++ lib.optional docsSupport pandoc
+  ++ lib.optional (docsSupport || extrasSupport) (
+    # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
+    buildPackages.python3.withPackages (ps: [
+      ps.jinja2
+      ps.pyyaml
+    ])
+  )
+  ++ lib.optional luaImlib2Support toluapp
+  ++ lib.optional luaCairoSupport toluapp;
 
-  buildInputs =
-    [
-      glib
-      libXinerama
-    ]
-    ++ lib.optional ncursesSupport ncurses
-    ++ lib.optionals x11Support [
-      freetype
-      xorg.libICE
-      xorg.libX11
-      xorg.libXext
-      xorg.libXft
-      xorg.libSM
-    ]
-    ++ lib.optionals waylandSupport [
-      pango
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional xdamageSupport libXdamage
-    ++ lib.optional imlib2Support imlib2
-    ++ lib.optional luaSupport lua
-    ++ lib.optional luaImlib2Support imlib2
-    ++ lib.optional luaCairoSupport cairo
-    ++ lib.optional wirelessSupport wirelesstools
-    ++ lib.optional curlSupport curl
-    ++ lib.optional rssSupport libxml2
-    ++ lib.optional nvidiaSupport libXNVCtrl
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional journalSupport systemd;
+  buildInputs = [
+    glib
+    libXinerama
+  ]
+  ++ lib.optional ncursesSupport ncurses
+  ++ lib.optionals x11Support [
+    freetype
+    xorg.libICE
+    xorg.libX11
+    xorg.libXext
+    xorg.libXft
+    xorg.libSM
+  ]
+  ++ lib.optionals waylandSupport [
+    pango
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional xdamageSupport libXdamage
+  ++ lib.optional imlib2Support imlib2
+  ++ lib.optional luaSupport lua
+  ++ lib.optional luaImlib2Support imlib2
+  ++ lib.optional luaCairoSupport cairo
+  ++ lib.optional wirelessSupport wirelesstools
+  ++ lib.optional curlSupport curl
+  ++ lib.optional rssSupport libxml2
+  ++ lib.optional nvidiaSupport libXNVCtrl
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional journalSupport systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "REPRODUCIBLE_BUILD" true)

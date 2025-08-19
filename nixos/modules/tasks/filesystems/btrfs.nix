@@ -75,14 +75,15 @@ in
 
     (mkIf inInitrd {
       boot.initrd.kernelModules = [ "btrfs" ];
-      boot.initrd.availableKernelModules =
-        [ "crc32c" ]
-        ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
-          # Needed for mounting filesystems with new checksums
-          "xxhash_generic"
-          "blake2b_generic"
-          "sha256_generic" # Should be baked into our kernel, just to be sure
-        ];
+      boot.initrd.availableKernelModules = [
+        "crc32c"
+      ]
+      ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
+        # Needed for mounting filesystems with new checksums
+        "xxhash_generic"
+        "blake2b_generic"
+        "sha256_generic" # Should be baked into our kernel, just to be sure
+      ];
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs

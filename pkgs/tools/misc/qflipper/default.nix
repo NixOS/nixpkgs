@@ -50,24 +50,23 @@ mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      zlib
-      libusb1
-      libGL
+  buildInputs = [
+    zlib
+    libusb1
+    libGL
 
-      qtbase
-      qt3d
-      qtsvg
-      qtserialport
-      qtdeclarative
-      qtquickcontrols
-      qtquickcontrols2
-      qtgraphicaleffects
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      qtwayland
-    ];
+    qtbase
+    qt3d
+    qtsvg
+    qtserialport
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+    qtgraphicaleffects
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    qtwayland
+  ];
 
   qmakeFlags = [
     "DEFINES+=DISABLE_APPLICATION_UPDATES"

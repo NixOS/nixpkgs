@@ -53,31 +53,30 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      removeReferencesTo
-      cdrkit
-      cpio
-      getopt
-      gperf
-      makeWrapper
-      pkg-config
-      python3
-      python3.pkgs.pycodestyle
-      qemu
-      zstd
-    ]
-    ++ (with perlPackages; [
-      perl
-      libintl-perl
-      GetoptLong
-      ModuleBuild
-    ])
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-    ]);
+  nativeBuildInputs = [
+    autoreconfHook
+    removeReferencesTo
+    cdrkit
+    cpio
+    getopt
+    gperf
+    makeWrapper
+    pkg-config
+    python3
+    python3.pkgs.pycodestyle
+    qemu
+    zstd
+  ]
+  ++ (with perlPackages; [
+    perl
+    libintl-perl
+    GetoptLong
+    ModuleBuild
+  ])
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+  ]);
   buildInputs = [
     libxcrypt
     ncurses
@@ -107,7 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     ocamlPackages.ocaml_libvirt
     ocamlPackages.augeas
     ocamlPackages.ocamlbuild
-  ] ++ lib.optional javaSupport jdk;
+  ]
+  ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     patchShebangs .
@@ -122,7 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CPPFLAGS=-I${lib.getDev libxml2}/include/libxml2"
     "INSTALL_OCAMLLIB=${placeholder "out"}/lib/ocaml"
     "--with-guestfs-path=${placeholder "out"}/lib/guestfs"
-  ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
+  ]
+  ++ lib.optionals (!javaSupport) [ "--without-java" ];
 
   patches = [
     ./libguestfs-syms.patch

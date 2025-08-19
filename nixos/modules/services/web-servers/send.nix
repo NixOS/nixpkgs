@@ -188,31 +188,29 @@ in
         SystemCallArchitectures = "native";
         UMask = "0077";
       };
-      environment =
-        {
-          IP_ADDRESS = cfg.host;
-          PORT = toString cfg.port;
-          BASE_URL = if (cfg.baseUrl == null) then "http://${cfg.host}:${toString cfg.port}" else cfg.baseUrl;
-          FILE_DIR = cfg.dataDir + "/uploads";
-          REDIS_HOST = cfg.redis.host;
-          REDIS_PORT = toString cfg.redis.port;
-        }
-        // (lib.mapAttrs (
-          name: value:
-          if lib.isList value then
-            "[" + lib.concatStringsSep ", " (map (x: toString x) value) + "]"
-          else if lib.isBool value then
-            lib.boolToString value
-          else
-            toString value
-        ) cfg.environment);
-      after =
-        [
-          "network.target"
-        ]
-        ++ lib.optionals cfg.redis.createLocally [
-          "redis-${cfg.redis.name}.service"
-        ];
+      environment = {
+        IP_ADDRESS = cfg.host;
+        PORT = toString cfg.port;
+        BASE_URL = if (cfg.baseUrl == null) then "http://${cfg.host}:${toString cfg.port}" else cfg.baseUrl;
+        FILE_DIR = cfg.dataDir + "/uploads";
+        REDIS_HOST = cfg.redis.host;
+        REDIS_PORT = toString cfg.redis.port;
+      }
+      // (lib.mapAttrs (
+        name: value:
+        if lib.isList value then
+          "[" + lib.concatStringsSep ", " (map (x: toString x) value) + "]"
+        else if lib.isBool value then
+          lib.boolToString value
+        else
+          toString value
+      ) cfg.environment);
+      after = [
+        "network.target"
+      ]
+      ++ lib.optionals cfg.redis.createLocally [
+        "redis-${cfg.redis.name}.service"
+      ];
       description = "Send web service";
       wantedBy = [ "multi-user.target" ];
       script = ''

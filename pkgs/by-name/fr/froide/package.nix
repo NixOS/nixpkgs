@@ -177,17 +177,16 @@ python.pkgs.buildPythonApplication rec {
     "test_make_request_logged_out_with_existing_account"
   ];
 
-  preCheck =
-    ''
-      export PGUSER="froide"
-      export postgresqlEnableTCP=1
-      export postgresqlTestUserOptions="LOGIN SUPERUSER"
-      export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
-      export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export PGUSER="froide"
+    export postgresqlEnableTCP=1
+    export postgresqlTestUserOptions="LOGIN SUPERUSER"
+    export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
+    export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   # Playwright tests not supported on RiscV yet
   doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;

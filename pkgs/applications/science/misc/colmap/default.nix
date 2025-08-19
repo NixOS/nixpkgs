@@ -50,35 +50,33 @@ stdenv'.mkDerivation rec {
     ))
   ];
 
-  buildInputs =
-    [
-      boost_static
-      ceres-solver
-      eigen
-      freeimage
-      glog
-      libGLU
-      glew
-      qtbase
-      flann
-      cgal
-      gmp
-      mpfr
-      xorg.libSM
-    ]
-    ++ lib.optionals cudaSupport [
-      cudatoolkit
-      cudaPackages.cuda_cudart.static
-    ];
+  buildInputs = [
+    boost_static
+    ceres-solver
+    eigen
+    freeimage
+    glog
+    libGLU
+    glew
+    qtbase
+    flann
+    cgal
+    gmp
+    mpfr
+    xorg.libSM
+  ]
+  ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+  ];
 
   meta = with lib; {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";

@@ -27,14 +27,13 @@ mkXfceDerivation {
 
   sha256 = "sha256-0yDZI82ePjZSSd0aKlfjr2IVPyNkvSWqa4l6Dse98w8=";
 
-  nativeBuildInputs =
-    [
-      docbook_xsl
-      libxslt
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    docbook_xsl
+    libxslt
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
   buildInputs = [
     exo

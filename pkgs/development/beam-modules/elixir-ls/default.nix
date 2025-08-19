@@ -3,13 +3,12 @@
   elixir,
   fetchpatch,
   fetchFromGitHub,
-  fetchMixDeps,
   makeWrapper,
-  mixRelease,
+  stdenv,
   nix-update-script,
 }:
 
-mixRelease rec {
+stdenv.mkDerivation rec {
   pname = "elixir-ls";
   version = "0.28.1";
 
@@ -18,16 +17,6 @@ mixRelease rec {
     repo = "elixir-ls";
     rev = "v${version}";
     hash = "sha256-r4P+3MPniDNdF3SG2jfBbzHsoxn826eYd2tsv6bJBoI=";
-  };
-
-  inherit elixir;
-
-  stripDebug = true;
-
-  mixFodDeps = fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version elixir;
-    hash = "sha256-8zs+99jwf+YX5SwD65FCPmfrYhTCx4AQGCGsDeCKxKc=";
   };
 
   patches = [
@@ -46,28 +35,25 @@ mixRelease rec {
     makeWrapper
   ];
 
-  # elixir-ls require a special step for release
-  # compile and release need to be performed together because
-  # of the no-deps-check requirement
-  buildPhase = ''
-    runHook preBuild
+  # for substitution
+  env.elixir = elixir;
 
-    mix do compile --no-deps-check, elixir_ls.release${lib.optionalString (lib.versionAtLeast elixir.version "1.16.0") "2"}
-
-    runHook postBuild
-  '';
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
+    cp -R . $out
+    ln -s $out/VERSION $out/scripts/VERSION
+
+    substituteAllInPlace $out/scripts/launch.sh
+
     mkdir -p $out/bin
-    cp -Rv release $out/libexec
 
-    substituteAllInPlace $out/libexec/launch.sh
+    makeWrapper $out/scripts/language_server.sh $out/bin/elixir-ls \
+      --set ELS_LOCAL "1"
 
-    makeWrapper $out/libexec/language_server.sh $out/bin/elixir-ls \
-      --set ELS_INSTALL_PREFIX "$out/libexec"
-
-    makeWrapper $out/libexec/debug_adapter.sh $out/bin/elixir-debug-adapter \
-      --set ELS_INSTALL_PREFIX "$out/libexec"
+    makeWrapper $out/scripts/debug_adapter.sh $out/bin/elixir-debug-adapter \
+      --set ELS_LOCAL "1"
 
     runHook postInstall
   '';

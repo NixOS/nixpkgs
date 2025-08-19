@@ -66,9 +66,10 @@ buildPythonPackage rec {
     distributed
     pystac-client
     pytestCheckHook
-  ] ++ optional-dependencies.botocore;
+  ]
+  ++ optional-dependencies.botocore;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # pystac href error (possible related to network)

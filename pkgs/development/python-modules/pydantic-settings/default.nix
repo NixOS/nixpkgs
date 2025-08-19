@@ -14,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.9.1";
+    version = "2.10.1";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ let
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
-      tag = "v${version}";
-      hash = "sha256-KcpDOdp8qDAgTI/+r6rb21UrjkeOFfCFnON1kMSKKSE=";
+      tag = version;
+      hash = "sha256-Bi5MIXB9fVE5hoyk8QxxaGa9+puAlW+YGdi/WMNf/RQ=";
     };
 
     build-system = [ hatchling ];

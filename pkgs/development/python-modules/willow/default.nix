@@ -45,7 +45,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pillow
     wand
-  ] ++ optional-dependencies.heif;
+  ]
+  ++ optional-dependencies.heif;
 
   meta = {
     description = "Python image library that sits on top of Pillow, Wand and OpenCV";

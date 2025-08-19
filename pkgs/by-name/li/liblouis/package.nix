@@ -16,15 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "liblouis";
   version = "3.33.0";
 
-  outputs =
-    [
-      "out"
-      "dev"
-      "info"
-      "doc"
-    ]
-    # configure: WARNING: cannot generate manual pages while cross compiling
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+    "doc"
+  ]
+  # configure: WARNING: cannot generate manual pages while cross compiling
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "man" ];
 
   src = fetchFromGitHub {
     owner = "liblouis";

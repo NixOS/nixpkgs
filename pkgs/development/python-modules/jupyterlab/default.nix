@@ -60,24 +60,23 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      async-lru
-      httpx
-      ipykernel
-      jinja2
-      jupyter-core
-      jupyter-lsp
-      jupyter-server
-      jupyterlab-server
-      notebook-shim
-      packaging
-      setuptools
-      tornado
-      traitlets
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    async-lru
+    httpx
+    ipykernel
+    jinja2
+    jupyter-core
+    jupyter-lsp
+    jupyter-server
+    jupyterlab-server
+    notebook-shim
+    packaging
+    setuptools
+    tornado
+    traitlets
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   makeWrapperArgs = [
     "--set"

@@ -51,46 +51,45 @@ import ./versions.nix (
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
-    ] ++ optional postgresqlSupport libpq.pg_config;
-    buildInputs =
-      [
-        curl
-        libevent
-        libiconv
-        libxml2
-        openssl
-        (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
-        zlib
-      ]
-      ++ optional odbcSupport unixODBC
-      ++ optional jabberSupport iksemel
-      ++ optional ldapSupport openldap
-      ++ optional snmpSupport net-snmp
-      ++ optional sshSupport libssh2
-      ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport libpq
-      ++ optional ipmiSupport openipmi;
+    ]
+    ++ optional postgresqlSupport libpq.pg_config;
+    buildInputs = [
+      curl
+      libevent
+      libiconv
+      libxml2
+      openssl
+      (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
+      zlib
+    ]
+    ++ optional odbcSupport unixODBC
+    ++ optional jabberSupport iksemel
+    ++ optional ldapSupport openldap
+    ++ optional snmpSupport net-snmp
+    ++ optional sshSupport libssh2
+    ++ optional mysqlSupport libmysqlclient
+    ++ optional postgresqlSupport libpq
+    ++ optional ipmiSupport openipmi;
 
-    configureFlags =
-      [
-        "--enable-ipv6"
-        "--enable-server"
-        "--with-iconv"
-        "--with-libcurl"
-        "--with-libevent"
-        "--with-libpcre"
-        "--with-libxml2"
-        "--with-openssl=${openssl.dev}"
-        "--with-zlib=${zlib}"
-      ]
-      ++ optional odbcSupport "--with-unixodbc"
-      ++ optional jabberSupport "--with-jabber"
-      ++ optional ldapSupport "--with-ldap=${openldap.dev}"
-      ++ optional snmpSupport "--with-net-snmp"
-      ++ optional sshSupport "--with-ssh2=${libssh2.dev}"
-      ++ optional mysqlSupport "--with-mysql"
-      ++ optional postgresqlSupport "--with-postgresql"
-      ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
+    configureFlags = [
+      "--enable-ipv6"
+      "--enable-server"
+      "--with-iconv"
+      "--with-libcurl"
+      "--with-libevent"
+      "--with-libpcre"
+      "--with-libxml2"
+      "--with-openssl=${openssl.dev}"
+      "--with-zlib=${zlib}"
+    ]
+    ++ optional odbcSupport "--with-unixodbc"
+    ++ optional jabberSupport "--with-jabber"
+    ++ optional ldapSupport "--with-ldap=${openldap.dev}"
+    ++ optional snmpSupport "--with-net-snmp"
+    ++ optional sshSupport "--with-ssh2=${libssh2.dev}"
+    ++ optional mysqlSupport "--with-mysql"
+    ++ optional postgresqlSupport "--with-postgresql"
+    ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
 
     prePatch = ''
       find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
@@ -103,19 +102,18 @@ import ./versions.nix (
       done
     '';
 
-    postInstall =
-      ''
-        mkdir -p $out/share/zabbix/database/
-        cp -r include $out/
-      ''
-      + optionalString mysqlSupport ''
-        mkdir -p $out/share/zabbix/database/mysql
-        cp -prvd database/mysql/*.sql $out/share/zabbix/database/mysql/
-      ''
-      + optionalString postgresqlSupport ''
-        mkdir -p $out/share/zabbix/database/postgresql
-        cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
-      '';
+    postInstall = ''
+      mkdir -p $out/share/zabbix/database/
+      cp -r include $out/
+    ''
+    + optionalString mysqlSupport ''
+      mkdir -p $out/share/zabbix/database/mysql
+      cp -prvd database/mysql/*.sql $out/share/zabbix/database/mysql/
+    ''
+    + optionalString postgresqlSupport ''
+      mkdir -p $out/share/zabbix/database/postgresql
+      cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
+    '';
 
     meta = {
       description = "Enterprise-class open source distributed monitoring solution";

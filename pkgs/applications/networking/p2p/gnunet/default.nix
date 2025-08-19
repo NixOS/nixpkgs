@@ -78,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     sqlite
     zlib
-  ] ++ lib.optional postgresqlSupport libpq;
+  ]
+  ++ lib.optional postgresqlSupport libpq;
 
   strictDeps = true;
 

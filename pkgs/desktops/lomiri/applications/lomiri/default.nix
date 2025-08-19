@@ -117,38 +117,37 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch =
-    ''
-      # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'qt5mir2server' 'qtmirserver'
+  postPatch = ''
+    # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'qt5mir2server' 'qtmirserver'
 
-      # Need to replace prefix
-      substituteInPlace data/systemd-user/CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+    # Need to replace prefix
+    substituteInPlace data/systemd-user/CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
-      # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
-      substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
+    # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
+    substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
 
-      # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
-      # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
-      substituteInPlace tests/mocks/CMakeLists.txt \
-        --replace-fail 'add_subdirectory(QtMir/Application)' ""
+    # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
+    # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
+    substituteInPlace tests/mocks/CMakeLists.txt \
+      --replace-fail 'add_subdirectory(QtMir/Application)' ""
 
-      # Seems like the Debian patch that added this didn't read the lightdm greeter entry properly, so everything gets passed twice
-      substituteInPlace data/lomiri-greeter.desktop.in.in \
-        --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
-      substituteInPlace data/lomiri-greeter-wrapper \
-        --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
+    # Seems like the Debian patch that added this didn't read the lightdm greeter entry properly, so everything gets passed twice
+    substituteInPlace data/lomiri-greeter.desktop.in.in \
+      --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
+    substituteInPlace data/lomiri-greeter-wrapper \
+      --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
 
-      # Look up default wallpaper in current system
-      substituteInPlace plugins/Utils/constants.cpp \
-        --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/whitespace/check_whitespace.py
-    '';
+    # Look up default wallpaper in current system
+    substituteInPlace plugins/Utils/constants.cpp \
+      --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/whitespace/check_whitespace.py
+  '';
 
   nativeBuildInputs = [
     cmake

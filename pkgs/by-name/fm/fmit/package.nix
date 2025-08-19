@@ -33,33 +33,31 @@ stdenv.mkDerivation (finalAttrs: {
     itstool
     libsForQt5.wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      fftw
-      libsForQt5.qtbase
-      libsForQt5.qtmultimedia
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals portaudioSupport [ portaudio ];
+  buildInputs = [
+    fftw
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals jackSupport [ libjack2 ]
+  ++ lib.optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${finalAttrs.version}'
   '';
 
-  qmakeFlags =
-    [
-      "PREFIXSHORTCUT=${placeholder "out"}"
-    ]
-    ++ lib.optionals alsaSupport [
-      "CONFIG+=acs_alsa"
-    ]
-    ++ lib.optionals jackSupport [
-      "CONFIG+=acs_jack"
-    ]
-    ++ lib.optionals portaudioSupport [
-      "CONFIG+=acs_portaudio"
-    ];
+  qmakeFlags = [
+    "PREFIXSHORTCUT=${placeholder "out"}"
+  ]
+  ++ lib.optionals alsaSupport [
+    "CONFIG+=acs_alsa"
+  ]
+  ++ lib.optionals jackSupport [
+    "CONFIG+=acs_jack"
+  ]
+  ++ lib.optionals portaudioSupport [
+    "CONFIG+=acs_portaudio"
+  ];
 
   meta = {
     description = "Free Musical Instrument Tuner";

@@ -25,7 +25,7 @@
 
 let
   pname = "faiss";
-  version = "1.11.0";
+  version = "1.12.0";
 
   inherit (cudaPackages) flags backendStdenv;
 
@@ -50,39 +50,38 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${version}";
-    hash = "sha256-N8UkL+KS9Da6RtaHI9pY5gAzFtTSMJ9R5h4RSX9b1Ro=";
+    hash = "sha256-VYryu70qu3JA0euPSD2xp2oJcACr7gXvssyZs1VBnSU=";
   };
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.setuptools
-      python3Packages.pip
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.setuptools
+    python3Packages.pip
+  ];
 
-  buildInputs =
-    [
-      blas
-      swig
-    ]
-    ++ lib.optionals pythonSupport [ python3Packages.numpy ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport cudaComponents;
+  buildInputs = [
+    blas
+    swig
+  ]
+  ++ lib.optionals pythonSupport [ python3Packages.numpy ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+  ++ lib.optionals cudaSupport cudaComponents;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
-      (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
-      (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
+    (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
+    (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
+  ];
 
   buildFlags = [ "faiss" ] ++ lib.optionals pythonSupport [ "swigfaiss" ];
 

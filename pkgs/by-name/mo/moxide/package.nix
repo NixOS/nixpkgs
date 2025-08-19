@@ -7,7 +7,6 @@ rustPlatform.buildRustPackage rec {
   pname = "moxide";
   version = "0.3.0";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-j4yV86Hr6QZTZ/0Dy9y+2egxGqf1Z930Zg6dsKs5bxg=";
   src = fetchFromGitHub {
     owner = "dlurak";

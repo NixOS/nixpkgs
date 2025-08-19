@@ -35,16 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      wgpu-native
-      glfw
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      xorg.libX11
-      xorg.libXrandr
-    ];
+  buildInputs = [
+    wgpu-native
+    glfw
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    xorg.libX11
+    xorg.libXrandr
+  ];
 
   runtimeInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # Without wayland in library path, this warning is raised:

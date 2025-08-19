@@ -38,14 +38,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.17.0";
+    version = "0.19.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-RlWJcxSCKTbj6MNeQwweu20rPBQGzumEk42MtTAhGRU=";
+      hash = "sha256-0ROwETpIa0j7gRhvLMFI9Sz2HEsAuUkQGg0jZef6o/g=";
     };
 
     nativeBuildInputs = [
@@ -66,15 +66,14 @@ let
       jdk17
     ];
 
-    cmakeFlags =
-      [
-        "-D CMAKE_BUILD_TYPE=Release"
-        "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-        "-G Ninja"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
-        (lib.cmakeFeature "PROJECT_ARCH" "arm64")
-      ];
+    cmakeFlags = [
+      "-D CMAKE_BUILD_TYPE=Release"
+      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
+      "-G Ninja"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+      (lib.cmakeFeature "PROJECT_ARCH" "arm64")
+    ];
 
     preConfigure = ''
       mkdir -p cef
@@ -115,6 +114,7 @@ buildFHSEnv {
       xorg.libSM
       xorg.libXxf86vm
       xorg.libX11
+      xorg.libXi
       xorg.libXext
       glib
       pango

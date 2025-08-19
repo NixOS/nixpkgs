@@ -32,7 +32,8 @@ buildPythonPackage {
   dependencies = [
     aiohttp
     audioop-lts
-  ] ++ lib.optionals withVoice [ pynacl ];
+  ]
+  ++ lib.optionals withVoice [ pynacl ];
 
   patchPhase = lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \

@@ -63,21 +63,20 @@ buildGo124Module {
 
   proxyVendor = true;
 
-  prePatch =
-    ''
-      rm -rf cmd/dashboard/*-dist
+  prePatch = ''
+    rm -rf cmd/dashboard/*-dist
 
-      cp ${frontend-templates} service/singleton/frontend-templates.yaml
-    ''
-    + lib.concatStringsSep "\n" (
-      map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
-        [
-          nezha-theme-admin
-          nezha-theme-user
-        ]
-        ++ withThemes
-      )
-    );
+    cp ${frontend-templates} service/singleton/frontend-templates.yaml
+  ''
+  + lib.concatStringsSep "\n" (
+    map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
+      [
+        nezha-theme-admin
+        nezha-theme-user
+      ]
+      ++ withThemes
+    )
+  );
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.

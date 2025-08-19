@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
       ps.setuptools
       ps.psycopg2
     ]))
-  ] ++ runtimeProgDeps;
+  ]
+  ++ runtimeProgDeps;
 
   installPhase = ''
     runHook preInstall

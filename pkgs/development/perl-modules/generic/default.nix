@@ -70,7 +70,8 @@ lib.throwIf (attrs ? name)
           env = {
             inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
             fullperl = perl.__spliced.buildHost or perl;
-          } // env;
+          }
+          // env;
 
           meta = defaultMeta // (attrs.meta or { });
         }

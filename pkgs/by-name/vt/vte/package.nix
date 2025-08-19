@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional (gtkVersion != null) "devdoc";
+  ]
+  ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
@@ -72,20 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs =
-    [
-      cairo
-      fribidi
-      gnutls
-      pango # duplicated with propagatedBuildInputs to support gtkVersion == null
-      pcre2
-      lz4
-      icu
-      fast-float
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ];
+  buildInputs = [
+    cairo
+    fribidi
+    gnutls
+    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
+    pcre2
+    lz4
+    icu
+    fast-float
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ];
 
   # Required by vte-2.91.pc.
   propagatedBuildInputs = lib.optionals (gtkVersion != null) [
@@ -97,19 +97,18 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ];
 
-  mesonFlags =
-    [
-      "-Ddocs=true"
-      (lib.mesonBool "gtk3" (gtkVersion == "3"))
-      (lib.mesonBool "gtk4" (gtkVersion == "4"))
-    ]
-    ++ lib.optionals (!systemdSupport) [
-      "-D_systemd=false"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # -Bsymbolic-functions is not supported on darwin
-      "-D_b_symbolic_functions=false"
-    ];
+  mesonFlags = [
+    "-Ddocs=true"
+    (lib.mesonBool "gtk3" (gtkVersion == "3"))
+    (lib.mesonBool "gtk4" (gtkVersion == "4"))
+  ]
+  ++ lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # -Bsymbolic-functions is not supported on darwin
+    "-D_b_symbolic_functions=false"
+  ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
   env.NIX_CFLAGS_COMPILE = toString (

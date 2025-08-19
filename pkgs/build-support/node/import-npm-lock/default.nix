@@ -205,26 +205,25 @@ lib.fix (self: {
       }
       // derivationArgs
       // {
-        nativeBuildInputs =
-          [
-            nodejs
-            nodejs.passthru.python
-            hooks.npmConfigHook
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
-          ++ derivationArgs.nativeBuildInputs or [ ];
+        nativeBuildInputs = [
+          nodejs
+          nodejs.passthru.python
+          hooks.npmConfigHook
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+        ++ derivationArgs.nativeBuildInputs or [ ];
 
         passAsFile = [
           "package"
           "packageLock"
-        ] ++ derivationArgs.passAsFile or [ ];
+        ]
+        ++ derivationArgs.passAsFile or [ ];
 
-        postPatch =
-          ''
-            cp --no-preserve=mode "$packagePath" package.json
-            cp --no-preserve=mode "$packageLockPath" package-lock.json
-          ''
-          + derivationArgs.postPatch or "";
+        postPatch = ''
+          cp --no-preserve=mode "$packagePath" package.json
+          cp --no-preserve=mode "$packageLockPath" package-lock.json
+        ''
+        + derivationArgs.postPatch or "";
       }
     );
 

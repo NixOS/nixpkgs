@@ -286,8 +286,11 @@ in
           ];
         };
 
-        path =
-          [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") config.boot.zfs.package ++ cfg.extraPackages;
+        path = [
+          pkgs.kmod
+        ]
+        ++ optional (cfg.storageDriver == "zfs") config.boot.zfs.package
+        ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {

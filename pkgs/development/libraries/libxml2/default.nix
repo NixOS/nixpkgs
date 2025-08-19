@@ -35,15 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
   version = "2.14.4-unstable-2025-06-20";
 
-  outputs =
-    [
-      "bin"
-      "dev"
-      "out"
-      "devdoc"
-    ]
-    ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "devdoc"
+  ]
+  ++ lib.optional pythonSupport "py"
+  ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
   src = fetchFromGitLab {
@@ -87,29 +86,27 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ];
 
-  propagatedBuildInputs =
-    [
-      findXMLCatalogs
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
-      libiconv
-    ]
-    ++ lib.optionals icuSupport [
-      icu
-    ];
+  propagatedBuildInputs = [
+    findXMLCatalogs
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
+    libiconv
+  ]
+  ++ lib.optionals icuSupport [
+    icu
+  ];
 
-  configureFlags =
-    [
-      "--exec-prefix=${placeholder "dev"}"
-      (lib.enableFeature enableStatic "static")
-      (lib.enableFeature enableShared "shared")
-      (lib.withFeature icuSupport "icu")
-      (lib.withFeature pythonSupport "python")
-      (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-    ]
-    # avoid rebuilds, can be merged into list in version bumps
-    ++ lib.optional enableHttp "--with-http"
-    ++ lib.optional zlibSupport "--with-zlib";
+  configureFlags = [
+    "--exec-prefix=${placeholder "dev"}"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+    (lib.withFeature icuSupport "icu")
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+  ]
+  # avoid rebuilds, can be merged into list in version bumps
+  ++ lib.optional enableHttp "--with-http"
+  ++ lib.optional zlibSupport "--with-zlib";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
@@ -131,14 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
-  postFixup =
-    ''
-      moveToOutput bin/xml2-config "$dev"
-      moveToOutput lib/xml2Conf.sh "$dev"
-    ''
-    + lib.optionalString (enableStatic && enableShared) ''
-      moveToOutput lib/libxml2.a "$static"
-    '';
+  postFixup = ''
+    moveToOutput bin/xml2-config "$dev"
+    moveToOutput lib/xml2Conf.sh "$dev"
+  ''
+  + lib.optionalString (enableStatic && enableShared) ''
+    moveToOutput lib/libxml2.a "$static"
+  '';
 
   passthru = {
     inherit pythonSupport;

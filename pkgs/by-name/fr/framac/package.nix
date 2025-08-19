@@ -62,14 +62,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ wrapGAppsHook3 ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      dune_3
-      menhir
-    ]);
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    dune_3
+    menhir
+  ]);
 
   buildInputs = with ocamlPackages; [
     dune-site

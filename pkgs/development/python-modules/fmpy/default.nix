@@ -113,27 +113,26 @@ buildPythonPackage rec {
   # cvode is already built, so we only need to build native binaries.
   # We run these cmake builds and then run the standard
   # buildPythonPackage phases.
-  preBuild =
-    ''
-      cmakeFlags="-S native/src -B native/src/build -D CVODE_INSTALL_DIR=${passthru.cvode}"
-      cmakeConfigurePhase
-      cmake --build native/src/build --config Release
-    ''
-    + lib.optionalString (enableRemoting && stdenv.hostPlatform.isLinux) ''
-      # reimplementation of native/build_remoting.py
-      cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib}"
-      cmakeConfigurePhase
-      cmake --build remoting/linux64 --config Release
-    ''
-    # C.f. upstream build-wheel CI job
-    + ''
-      python native/copy_sources.py
+  preBuild = ''
+    cmakeFlags="-S native/src -B native/src/build -D CVODE_INSTALL_DIR=${passthru.cvode}"
+    cmakeConfigurePhase
+    cmake --build native/src/build --config Release
+  ''
+  + lib.optionalString (enableRemoting && stdenv.hostPlatform.isLinux) ''
+    # reimplementation of native/build_remoting.py
+    cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib}"
+    cmakeConfigurePhase
+    cmake --build remoting/linux64 --config Release
+  ''
+  # C.f. upstream build-wheel CI job
+  + ''
+    python native/copy_sources.py
 
-      # reimplementation of native/compile_resources.py
-      pushd src/
-      python -c "from fmpy.gui import compile_resources; compile_resources()"
-      popd
-    '';
+    # reimplementation of native/compile_resources.py
+    pushd src/
+    python -c "from fmpy.gui import compile_resources; compile_resources()"
+    popd
+  '';
 
   pythonImportsCheck = [
     "fmpy"

@@ -25,23 +25,23 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ eprover ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-    ]);
-  buildInputs =
-    [
-      zlib
-      ocamlPackages.z3
-      z3
-    ]
-    ++ (with ocamlPackages; [
-      ocamlgraph
-      yojson
-      zarith
-    ]);
+  nativeBuildInputs = [
+    eprover
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+  ]);
+  buildInputs = [
+    zlib
+    ocamlPackages.z3
+    z3
+  ]
+  ++ (with ocamlPackages; [
+    ocamlgraph
+    yojson
+    zarith
+  ]);
 
   preConfigure = "patchShebangs .";
 

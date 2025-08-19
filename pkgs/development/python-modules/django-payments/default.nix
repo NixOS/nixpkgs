@@ -39,7 +39,8 @@ buildPythonPackage rec {
     django
     django-phonenumber-field
     requests
-  ] ++ django-phonenumber-field.optional-dependencies.phonenumberslite;
+  ]
+  ++ django-phonenumber-field.optional-dependencies.phonenumberslite;
 
   # require internet connection
   doCheck = false;

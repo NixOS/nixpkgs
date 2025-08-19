@@ -45,29 +45,28 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      nss
-      cairo
-      alsa-lib
-      at-spi2-core
-      pango
-      libdrm
-      libxkbcommon
-      gtk3
-      vivaldi-ffmpeg-codecs
-      libgbm
-      libGL
-      libglvnd
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXrandr
-      libXfixes
-      libXcursor
-    ]);
+  buildInputs = [
+    nss
+    cairo
+    alsa-lib
+    at-spi2-core
+    pango
+    libdrm
+    libxkbcommon
+    gtk3
+    vivaldi-ffmpeg-codecs
+    libgbm
+    libGL
+    libglvnd
+  ]
+  ++ (with xorg; [
+    libX11
+    libXcomposite
+    libXdamage
+    libXrandr
+    libXfixes
+    libXcursor
+  ]);
 
   # Required to launch the application and proceed past the zygote_linux fork() process
   # Fixes `Zygote could not fork`

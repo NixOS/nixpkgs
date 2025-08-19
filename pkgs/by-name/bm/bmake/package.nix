@@ -4,7 +4,7 @@
   fetchurl,
   getopt,
   ksh,
-  pkgsMusl,
+  pkgsMusl ? { },
   stdenv,
   tzdata,
 }:
@@ -36,14 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     getopt
   ];
 
-  nativeCheckInputs =
-    [
-      bc
-      tzdata
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-      ksh
-    ];
+  nativeCheckInputs = [
+    bc
+    tzdata
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+    ksh
+  ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a
   # given op. On a case-insensitive filesystem this generated makefile clobbers
@@ -108,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      bmakeMusl = pkgsMusl.bmake;
+      bmakeMusl = pkgsMusl.bmake or null;
     };
   };
 

@@ -236,7 +236,8 @@ pipe
         "out"
         "man"
         "info"
-      ] ++ optional (!langJit) "lib";
+      ]
+      ++ optional (!langJit) "lib";
 
       setOutputFlags = false;
 
@@ -246,68 +247,68 @@ pipe
         "format"
         "pie"
         "stackclashprotection"
-      ] ++ optionals (is11 && langAda) [ "fortify3" ];
+      ]
+      ++ optionals (is11 && langAda) [ "fortify3" ];
 
-      postPatch =
-        ''
-          configureScripts=$(find . -name configure)
-          for configureScript in $configureScripts; do
-            patchShebangs $configureScript
-          done
+      postPatch = ''
+        configureScripts=$(find . -name configure)
+        for configureScript in $configureScripts; do
+          patchShebangs $configureScript
+        done
 
-          # Make sure nixpkgs versioning match upstream one
-          # to ease version-based comparisons.
-          gcc_base_version=$(< gcc/BASE-VER)
-          if [[ ${baseVersion} != $gcc_base_version ]]; then
-            echo "Please update 'version' variable:"
-            echo "  Expected: '$gcc_base_version'"
-            echo "  Actual: '${version}'"
-            exit 1
-          fi
-        ''
-        # This should kill all the stdinc frameworks that gcc and friends like to
-        # insert into default search paths.
-        + optionalString hostPlatform.isDarwin ''
-          substituteInPlace gcc/config/darwin-c.c${optionalString atLeast12 "c"} \
-            --replace 'if (stdinc)' 'if (0)'
+        # Make sure nixpkgs versioning match upstream one
+        # to ease version-based comparisons.
+        gcc_base_version=$(< gcc/BASE-VER)
+        if [[ ${baseVersion} != $gcc_base_version ]]; then
+          echo "Please update 'version' variable:"
+          echo "  Expected: '$gcc_base_version'"
+          echo "  Actual: '${version}'"
+          exit 1
+        fi
+      ''
+      # This should kill all the stdinc frameworks that gcc and friends like to
+      # insert into default search paths.
+      + optionalString hostPlatform.isDarwin ''
+        substituteInPlace gcc/config/darwin-c.c${optionalString atLeast12 "c"} \
+          --replace 'if (stdinc)' 'if (0)'
 
-          substituteInPlace libgcc/config/t-slibgcc-darwin \
-            --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
+        substituteInPlace libgcc/config/t-slibgcc-darwin \
+          --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
-          substituteInPlace libgfortran/configure \
-            --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
-        ''
-        + (optionalString ((!lib.systems.equals targetPlatform hostPlatform) || stdenv.cc.libc != null)
-          # On NixOS, use the right path to the dynamic linker instead of
-          # `/lib/ld*.so'.
+        substituteInPlace libgfortran/configure \
+          --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
+      ''
+      + (optionalString ((!lib.systems.equals targetPlatform hostPlatform) || stdenv.cc.libc != null)
+        # On NixOS, use the right path to the dynamic linker instead of
+        # `/lib/ld*.so'.
+        (
+          let
+            libc = if libcCross != null then libcCross else stdenv.cc.libc;
+          in
           (
-            let
-              libc = if libcCross != null then libcCross else stdenv.cc.libc;
-            in
-            (
-              ''
-                echo "fixing the {GLIBC,UCLIBC,MUSL}_DYNAMIC_LINKER macros..."
-                for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
-                do
-                  grep -q _DYNAMIC_LINKER "$header" || continue
-                  echo "  fixing $header..."
-                  sed -i "$header" \
-                      -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
-                      -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
-                  done
-              ''
-              + optionalString (targetPlatform.libc == "musl") ''
-                sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
-              ''
-            )
+            ''
+              echo "fixing the {GLIBC,UCLIBC,MUSL}_DYNAMIC_LINKER macros..."
+              for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
+              do
+                grep -q _DYNAMIC_LINKER "$header" || continue
+                echo "  fixing $header..."
+                sed -i "$header" \
+                    -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
+                    -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
+                done
+            ''
+            + optionalString (targetPlatform.libc == "musl") ''
+              sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
+            ''
           )
         )
-        + optionalString targetPlatform.isAvr (''
-          makeFlagsArray+=(
-             '-s' # workaround for hitting hydra log limit
-             'LIMITS_H_TEST=false'
-          )
-        '');
+      )
+      + optionalString targetPlatform.isAvr (''
+        makeFlagsArray+=(
+           '-s' # workaround for hitting hydra log limit
+           'LIMITS_H_TEST=false'
+        )
+      '');
 
       inherit
         noSysDirs
@@ -447,24 +448,23 @@ pipe
       enableParallelBuilding = true;
       inherit enableShared enableMultilib;
 
-      meta =
-        {
-          inherit (callFile ./common/meta.nix { })
-            homepage
-            license
-            description
-            longDescription
-            platforms
-            teams
-            ;
-        }
-        // optionalAttrs (!atLeast11) {
-          badPlatforms = [ "aarch64-darwin" ];
-        }
-        // optionalAttrs is10 {
-          badPlatforms =
-            if (!lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
-        };
+      meta = {
+        inherit (callFile ./common/meta.nix { })
+          homepage
+          license
+          description
+          longDescription
+          platforms
+          teams
+          ;
+      }
+      // optionalAttrs (!atLeast11) {
+        badPlatforms = [ "aarch64-darwin" ];
+      }
+      // optionalAttrs is10 {
+        badPlatforms =
+          if (!lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
+      };
     }
     // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
       # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.

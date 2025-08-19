@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      sqlite
-      libsecret
-      qt6Packages.qtbase
-      qt6Packages.qtsvg # Needed for the systray icon
-      qt6Packages.qtkeychain
-      libre-graph-api-cpp-qt-client
-      kdsingleapplication
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libinotify-kqueue
-    ];
+  buildInputs = [
+    sqlite
+    libsecret
+    qt6Packages.qtbase
+    qt6Packages.qtsvg # Needed for the systray icon
+    qt6Packages.qtkeychain
+    libre-graph-api-cpp-qt-client
+    kdsingleapplication
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libinotify-kqueue
+  ];
 
   passthru.updateScript = nix-update-script { };
 

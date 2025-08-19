@@ -88,12 +88,15 @@ makeScopeWithSplicing' {
       qcoro = callPackage ../development/libraries/qcoro { };
       qcustomplot = callPackage ../development/libraries/qcustomplot { };
       qgpgme = callPackage ../development/libraries/gpgme { };
+      qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
       qt6ct = callPackage ../tools/misc/qt6ct { };
 
       qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
+
+      qt-color-widgets = callPackage ../development/libraries/qt-color-widgets { };
 
       qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
