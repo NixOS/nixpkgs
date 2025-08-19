@@ -11,7 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "tinymist";
     publisher = "myriad-dreamin";
     inherit (tinymist) version;
-    hash = "sha256-fI+HzioLDxACH0anSkYOw47jpocVQp7m9xHh6APehis=";
+    hash = "sha256-Y+LvS9mrKiPVyd8VGpRvyNDadXtR6KnpCQud+IoxmD4=";
   };
 
   nativeBuildInputs = [
