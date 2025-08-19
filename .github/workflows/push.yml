@@ -1,10 +1,6 @@
 name: Push
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/push.yml
-      # eval is tested via pr.yml
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
@@ -13,6 +9,10 @@ on:
       - release-*
       - staging-*
       - haskell-updates
+  workflow_call:
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
