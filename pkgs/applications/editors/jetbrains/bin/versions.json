@@ -43,10 +43,10 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
-      "version": "2025.2",
-      "sha256": "d285c10055af9002db8c913557535ba46e3158c5733b236add3d71f93873e85a",
-      "url": "https://download.jetbrains.com/go/goland-2025.2.tar.gz",
-      "build_number": "252.23892.449"
+      "version": "2025.2.0.1",
+      "sha256": "6a835b97bfa86938b45c902f3aad8b3c9c5265840473404c1d664149b0bd7434",
+      "url": "https://download.jetbrains.com/go/goland-2025.2.0.1.tar.gz",
+      "build_number": "252.23892.530"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
