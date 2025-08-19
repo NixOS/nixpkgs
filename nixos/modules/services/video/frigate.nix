@@ -197,9 +197,11 @@ in
 
     checkConfig = mkOption {
       type = bool;
-      default = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
-      defaultText = literalExpression ''
+      default =
         pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform
+        && (!pkgs.stdenv.hostPlatform.isAarch64);
+      defaultText = literalExpression ''
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform && !(pkgs.stdenv.hostPlaform.isAarch64)
       '';
       description = ''
         Whether to check the configuration at build time.
