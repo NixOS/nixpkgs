@@ -4,6 +4,7 @@
   installShellFiles,
   writableTmpDirAsHomeHook,
   lib,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "nvs";
@@ -36,6 +37,10 @@ buildGoModule (finalAttrs: {
   '';
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     mainProgram = "nvs";
