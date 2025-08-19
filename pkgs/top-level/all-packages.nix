@@ -4281,7 +4281,7 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
+  qdigidoc = callPackage ../tools/security/qdigidoc { };
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
 
