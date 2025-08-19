@@ -7,11 +7,11 @@
 
   # build inputs
   cargo,
+  openssl,
   pkg-config,
   protobuf,
   rustc,
   rustPlatform,
-  openssl,
   zstd-c,
 
   # dependencies
@@ -33,6 +33,7 @@
   orjson,
   overrides,
   posthog,
+  pybase64,
   pydantic,
   pypika,
   pyyaml,
@@ -66,20 +67,20 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.0.12";
+  version = "1.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-Q4PhJTRNzJeVx6DIPWirnI9KksNb8vfOtqb/q9tSK3c=";
+    hash = "sha256-jwgm1IXAyctLzUi9GZfgRMiqAuq1BwpcZp/UMlV2t7g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}-vendor";
-    hash = "sha256-+Ea2aRrsBGfVCLdOF41jeMehJhMurc8d0UKrpR6ndag=";
+    hash = "sha256-A4I0xAGmwF9Th+g8bWEmhCRTAp4Q6GYkejHKDqoczY4=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -96,6 +97,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "fastapi"
+    "posthog"
   ];
 
   build-system = [
@@ -134,6 +136,7 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
+    pybase64
     pydantic
     pypika
     pyyaml
@@ -187,9 +190,12 @@ buildPythonPackage rec {
   # See https://github.com/chroma-core/chroma/issues/5315
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export HOME=$(mktemp -d)
     export CHROMA_RUST_BINDINGS_TEST_ONLY=1
   '';
+
+  enabledTestPaths = [
+    "chromadb/test"
+  ];
 
   disabledTests = [
     # Tests are flaky / timing sensitive
@@ -211,6 +217,11 @@ buildPythonPackage rec {
     "test_query_id_filtering_e2e"
     "test_query_id_filtering_medium_dataset"
     "test_query_id_filtering_small_dataset"
+    # Deadlocks intermittently
+    "test_app"
+    # Depends on specific floating-point precision
+    "test_base64_conversion_is_identity_f16"
+    # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
 
@@ -227,6 +238,8 @@ buildPythonPackage rec {
     "chromadb/test/ef/test_onnx_mini_lm_l6_v2.py"
     "chromadb/test/ef/test_voyageai_ef.py"
     "chromadb/test/property/"
+    "chromadb/test/distributed"
+    "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress/"
     "chromadb/test/test_api.py"
