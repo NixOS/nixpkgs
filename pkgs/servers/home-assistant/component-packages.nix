@@ -3488,12 +3488,13 @@
         hassil
         home-assistant-intents
         ifaddr
+        medcom-ble
         mutagen
         pymicro-vad
         pyserial
         pyspeex-noise
         zeroconf
-      ]; # missing inputs: medcom-ble
+      ];
     "media_extractor" =
       ps:
       with ps;
@@ -7367,6 +7368,7 @@
     "mcp_server"
     "mealie"
     "meater"
+    "medcom_ble"
     "media_extractor"
     "media_player"
     "media_source"
