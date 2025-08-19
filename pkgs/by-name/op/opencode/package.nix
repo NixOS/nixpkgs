@@ -14,10 +14,10 @@
 
 let
   opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-/s6eAI1VJ0kXrxP5yTi+jwNqHBCRcoltJC86AT7nVdI=";
-    "aarch64-linux" = "sha256-aG5e5HMcxO9P7ciZ9cg8uY1rxDpTOKdR31z0L2d9dxY=";
-    "x86_64-darwin" = "sha256-jkAFmTb+cTO/B7a7MgaKqOzZI3QPkM3uW2RULnBcxSI=";
-    "x86_64-linux" = "sha256-ql4qcMtuaRwSVVma3OeKkc9tXhe21PWMMko3W3JgpB0=";
+    "aarch64-darwin" = "sha256-hznCg/7c9uNV7NXTkb6wtn3EhJDkGI7yZmSIA2SqX7g=";
+    "aarch64-linux" = "sha256-hznCg/7c9uNV7NXTkb6wtn3EhJDkGI7yZmSIA2SqX7g=";
+    "x86_64-darwin" = "sha256-hznCg/7c9uNV7NXTkb6wtn3EhJDkGI7yZmSIA2SqX7g=";
+    "x86_64-linux" = "sha256-hznCg/7c9uNV7NXTkb6wtn3EhJDkGI7yZmSIA2SqX7g=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -28,12 +28,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.4.26";
+  version = "0.5.6";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQ1le6/OJb22Kehjj4glUsavHE08u0e2I7h8lW9MO9E=";
+    hash = "sha256-dzhthgkAPjvPOxWBnf67OkTwbZ3Htdl68+UDlz45xwI=";
   };
 
   tui = buildGoModule {
@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     modRoot = "packages/tui";
 
-    vendorHash = "sha256-jINbGug/SPGBjsXNsC9X2r5TwvrOl5PJDL+lrOQP69Q=";
+    vendorHash = "sha256-acDXCL7ZQYW5LnEqbMgDwpTbSgtf4wXnMMVtQI1Dv9s=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -83,11 +83,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
+       # Disable post-install scripts to avoid shebang issues
        bun install \
          --filter=opencode \
          --force \
          --frozen-lockfile \
-         --no-progress
+         --ignore-scripts \
+         --no-progress \
+         --production
 
       runHook postBuild
     '';

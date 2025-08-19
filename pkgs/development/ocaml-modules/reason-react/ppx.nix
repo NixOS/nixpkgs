@@ -23,5 +23,6 @@ buildDunePackage {
     homepage = "https://github.com/reasonml/reason-react";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vog ];
+    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

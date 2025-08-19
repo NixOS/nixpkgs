@@ -133,6 +133,7 @@ with self;
       js_of_ocaml
       uri-sexp
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
   async_kernel = janePackage {
@@ -297,18 +298,31 @@ with self;
     ];
   };
 
-  base_quickcheck = janePackage {
-    pname = "base_quickcheck";
-    hash = "sha256-jDxO+/9Qnntt6ZNX1xvaWvoJ0JpnPqeq8X8nsYpeqsY=";
-    meta.description = "Randomized testing framework, designed for compatibility with Base";
-    propagatedBuildInputs = [
-      ppx_base
-      ppx_fields_conv
-      ppx_let
-      ppx_sexp_value
-      splittable_random
-    ];
-  };
+  base_quickcheck = janePackage (
+    {
+      pname = "base_quickcheck";
+      meta.description = "Randomized testing framework, designed for compatibility with Base";
+      propagatedBuildInputs = [
+        ppx_base
+        ppx_fields_conv
+        ppx_let
+        ppx_sexp_value
+        splittable_random
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-0s40sGu2FvaUjvC5JSvHlRhbyQV1bVPrVTTWdHtTQ+k=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-jDxO+/9Qnntt6ZNX1xvaWvoJ0JpnPqeq8X8nsYpeqsY=";
+        }
+    )
+  );
 
   bidirectional_map = janePackage {
     pname = "bidirectional_map";
@@ -818,6 +832,7 @@ with self;
       js_of_ocaml-ppx
     ];
     patches = [ ./js_of_ocaml_patches.patch ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
   jsonaf = janePackage {
@@ -1083,23 +1098,49 @@ with self;
     ];
   };
 
-  ppx_bench = janePackage {
-    pname = "ppx_bench";
-    hash = "sha256-y4nL/wwjJUL2Fa7Ne0f7SR5flCjT1ra9M1uBHOUZWCg=";
-    meta.description = "Syntax extension for writing in-line benchmarks in ocaml code";
-    propagatedBuildInputs = [ ppx_inline_test ];
-  };
+  ppx_bench = janePackage (
+    {
+      pname = "ppx_bench";
+      meta.description = "Syntax extension for writing in-line benchmarks in ocaml code";
+      propagatedBuildInputs = [ ppx_inline_test ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-nHqZSyJ5mZ86SGu9WtoVNfYTnd5kslyI8Zm/LJ7b/Fo=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-y4nL/wwjJUL2Fa7Ne0f7SR5flCjT1ra9M1uBHOUZWCg=";
+        }
+    )
+  );
 
-  ppx_bin_prot = janePackage {
-    pname = "ppx_bin_prot";
-    hash = "sha256-nQps/+Csx3+6H6KBzIm/dLCGWJ9fcRD7JxB4P2lky0o=";
-    meta.description = "Generation of bin_prot readers and writers from types";
-    propagatedBuildInputs = [
-      bin_prot
-      ppx_here
-    ];
-    doCheck = false; # circular dependency with ppx_jane
-  };
+  ppx_bin_prot = janePackage (
+    {
+      pname = "ppx_bin_prot";
+      meta.description = "Generation of bin_prot readers and writers from types";
+      propagatedBuildInputs = [
+        bin_prot
+        ppx_here
+      ];
+      doCheck = false; # circular dependency with ppx_jane
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-9TNtRwieITJMZs+7RT7tOf1GwVlxuGeKZktVon9B7g4=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-nQps/+Csx3+6H6KBzIm/dLCGWJ9fcRD7JxB4P2lky0o=";
+        }
+    )
+  );
 
   ppx_cold = janePackage {
     pname = "ppx_cold";
@@ -1186,20 +1227,34 @@ with self;
       ppx_jane
       ppxlib
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
-  ppx_diff = janePackage {
-    pname = "ppx_diff";
-    hash = "sha256-MAn+vcU6vLR8g16Wq1sORyLcLgWxLsazMQY1syY6HsA=";
-    meta.description = "Generation of diffs and update functions for ocaml types";
-    propagatedBuildInputs = [
-      base
-      gel
-      ppx_compare
-      ppx_enumerate
-      ppx_jane
-    ];
-  };
+  ppx_diff = janePackage (
+    {
+      pname = "ppx_diff";
+      meta.description = "Generation of diffs and update functions for ocaml types";
+      propagatedBuildInputs = [
+        base
+        gel
+        ppx_compare
+        ppx_enumerate
+        ppx_jane
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-eWzlEIPjNcxhz2Q5+y7fv9mJDJzauOpJ993CXoy8nh4=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-MAn+vcU6vLR8g16Wq1sORyLcLgWxLsazMQY1syY6HsA=";
+        }
+    )
+  );
 
   ppx_disable_unused_warnings = janePackage {
     pname = "ppx_disable_unused_warnings";
@@ -1230,18 +1285,30 @@ with self;
     ];
   };
 
-  ppx_expect = janePackage {
-    pname = "ppx_expect";
-    version = "0.17.2";
-    hash = "sha256-na9n/+shkiHIIUQ2ZitybQ6NNsSS9gWFNAFxij+JNVo=";
-    meta.description = "Cram like framework for OCaml";
-    propagatedBuildInputs = [
-      ppx_here
-      ppx_inline_test
-      re
-    ];
-    doCheck = false; # test build rules broken
-  };
+  ppx_expect = janePackage (
+    {
+      pname = "ppx_expect";
+      meta.description = "Cram like framework for OCaml";
+      propagatedBuildInputs = [
+        ppx_here
+        ppx_inline_test
+        re
+      ];
+      doCheck = false; # test build rules broken
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.3";
+          hash = "sha256-eYZ3p3FYjHd15pj79TKyHSHNKRSWj80iHJFxBZN40s4=";
+        }
+      else
+        {
+          version = "0.17.2";
+          hash = "sha256-na9n/+shkiHIIUQ2ZitybQ6NNsSS9gWFNAFxij+JNVo=";
+        }
+    )
+  );
 
   ppx_fields_conv = janePackage {
     pname = "ppx_fields_conv";
@@ -1260,16 +1327,29 @@ with self;
     propagatedBuildInputs = [ ppxlib ];
   };
 
-  ppx_globalize = janePackage {
-    pname = "ppx_globalize";
-    hash = "sha256-LKV5zfaf6AXn3NzOhN2ka8NtjItPTIsfmoJVBw5bYi8=";
-    meta.description = "PPX rewriter that generates functions to copy local values to the global heap";
-    propagatedBuildInputs = [
-      base
-      ppxlib
-      ppxlib_jane
-    ];
-  };
+  ppx_globalize = janePackage (
+    {
+      pname = "ppx_globalize";
+      meta.description = "PPX rewriter that generates functions to copy local values to the global heap";
+      propagatedBuildInputs = [
+        base
+        ppxlib
+        ppxlib_jane
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.2";
+          hash = "sha256-5pHqyv94DXpSG69TEATcnJwFh5YurxVCM5ZPtrlbXSo=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-LKV5zfaf6AXn3NzOhN2ka8NtjItPTIsfmoJVBw5bYi8=";
+        }
+    )
+  );
 
   ppx_hash = janePackage {
     pname = "ppx_hash";
@@ -1296,16 +1376,29 @@ with self;
     propagatedBuildInputs = [ ppxlib ];
   };
 
-  ppx_inline_test = janePackage {
-    pname = "ppx_inline_test";
-    hash = "sha256-pNdrmAlT3MUbuPUcMmCRcUIXv4fZ/o/IofJmnUKf8Cs=";
-    meta.description = "Syntax extension for writing in-line tests in ocaml code";
-    propagatedBuildInputs = [
-      ppxlib
-      time_now
-    ];
-    doCheck = false; # test build rules broken
-  };
+  ppx_inline_test = janePackage (
+    {
+      pname = "ppx_inline_test";
+      meta.description = "Syntax extension for writing in-line tests in ocaml code";
+      propagatedBuildInputs = [
+        ppxlib
+        time_now
+      ];
+      doCheck = false; # test build rules broken
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-wNDDdNUeWTW87HRKbRSuOXaCPQnDWx7/RXuCDISc9Pg=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-pNdrmAlT3MUbuPUcMmCRcUIXv4fZ/o/IofJmnUKf8Cs=";
+        }
+    )
+  );
 
   ppx_jane = janePackage {
     pname = "ppx_jane";
@@ -1342,6 +1435,7 @@ with self;
       ppx_jane
       ppxlib
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
   ppx_js_style = janePackage {
@@ -1352,17 +1446,31 @@ with self;
       octavius
       ppxlib
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
-  ppx_let = janePackage {
-    pname = "ppx_let";
-    hash = "sha256-JkNQgbPHVDH659m4Xy9ipcZ/iqGtj5q1qQn1P+O7TUY=";
-    meta.description = "Monadic let-bindings";
-    propagatedBuildInputs = [
-      ppxlib
-      ppx_here
-    ];
-  };
+  ppx_let = janePackage (
+    {
+      pname = "ppx_let";
+      meta.description = "Monadic let-bindings";
+      propagatedBuildInputs = [
+        ppxlib
+        ppx_here
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-41C60UcMpERZs2eAPprg63uPnmjj33n7cd5s5IFZBGE=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-JkNQgbPHVDH659m4Xy9ipcZ/iqGtj5q1qQn1P+O7TUY=";
+        }
+    )
+  );
 
   ppx_log = janePackage {
     pname = "ppx_log";
@@ -1393,12 +1501,25 @@ with self;
     propagatedBuildInputs = [ time_now ];
   };
 
-  ppx_optcomp = janePackage {
-    pname = "ppx_optcomp";
-    hash = "sha256-H9oTzhJx9IGRkcwY2YEvcvNgeJ8ETNO95qKcjTXJBwk=";
-    meta.description = "Optional compilation for OCaml";
-    propagatedBuildInputs = [ ppxlib ];
-  };
+  ppx_optcomp = janePackage (
+    {
+      pname = "ppx_optcomp";
+      meta.description = "Optional compilation for OCaml";
+      propagatedBuildInputs = [ ppxlib ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-mi9YM0WGkc4sI1GF2YGTFwmPdF+4s5Ou2l7i07ys9nw=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-H9oTzhJx9IGRkcwY2YEvcvNgeJ8ETNO95qKcjTXJBwk=";
+        }
+    )
+  );
 
   ppx_optional = janePackage {
     pname = "ppx_optional";
@@ -1415,6 +1536,7 @@ with self;
     hash = "sha256-IVDvFU9ERB2YFJOgP/glYcO4KhEH5VdQ7wCCfreboqA=";
     meta.description = "PPX for writing fast incremental bind nodes in a pattern match";
     propagatedBuildInputs = [ ppx_let ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
   ppx_pipebang = janePackage {
@@ -1454,19 +1576,33 @@ with self;
       ppx_sexp_conv
       ppx_sexp_message
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
-  ppx_sexp_conv = janePackage {
-    pname = "ppx_sexp_conv";
-    hash = "sha256-hUi0I50SODK1MpL86xy8eM8yn8f4q1Hv4LP9zFnnr70=";
-    meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
-    propagatedBuildInputs = [
-      ppxlib
-      ppxlib_jane
-      sexplib0
-      base
-    ];
-  };
+  ppx_sexp_conv = janePackage (
+    {
+      pname = "ppx_sexp_conv";
+      meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
+      propagatedBuildInputs = [
+        ppxlib
+        ppxlib_jane
+        sexplib0
+        base
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-yQJluA/NSzCAID/ydBgRuc1sFHyjbXare9vxen6f1iw=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-hUi0I50SODK1MpL86xy8eM8yn8f4q1Hv4LP9zFnnr70=";
+        }
+    )
+  );
 
   ppx_sexp_message = janePackage {
     pname = "ppx_sexp_message";
@@ -1488,12 +1624,25 @@ with self;
     ];
   };
 
-  ppx_stable = janePackage {
-    pname = "ppx_stable";
-    hash = "sha256-N5oPjjQcLgiO9liX8Z0vg0IbQXaGZ4BqOgwvuIKSKaA=";
-    meta.description = "Stable types conversions generator";
-    propagatedBuildInputs = [ ppxlib ];
-  };
+  ppx_stable = janePackage (
+    {
+      pname = "ppx_stable";
+      meta.description = "Stable types conversions generator";
+      propagatedBuildInputs = [ ppxlib ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-iVAgRVSOdLzajuUT8Yz+YMiMeChIx5DT8lBf104QMuE=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-N5oPjjQcLgiO9liX8Z0vg0IbQXaGZ4BqOgwvuIKSKaA=";
+        }
+    )
+  );
 
   ppx_stable_witness = janePackage {
     pname = "ppx_stable_witness";
@@ -1527,15 +1676,28 @@ with self;
     ];
   };
 
-  ppx_tydi = janePackage {
-    pname = "ppx_tydi";
-    hash = "sha256-PM89fP6Rb6M99HgEzQ7LfpW1W5adw6J/E1LFQJtdd0U=";
-    meta.description = "Let expressions, inferring pattern type from expression";
-    propagatedBuildInputs = [
-      base
-      ppxlib
-    ];
-  };
+  ppx_tydi = janePackage (
+    {
+      pname = "ppx_tydi";
+      meta.description = "Let expressions, inferring pattern type from expression";
+      propagatedBuildInputs = [
+        base
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-dkZwu4Ujj7GKb4qo76f/ef5dvGrYSkk9B3y+Rg72CAM=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-PM89fP6Rb6M99HgEzQ7LfpW1W5adw6J/E1LFQJtdd0U=";
+        }
+    )
+  );
 
   ppx_typed_fields = janePackage {
     pname = "ppx_typed_fields";
@@ -1546,27 +1708,54 @@ with self;
       ppx_jane
       ppxlib
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
-  ppx_typerep_conv = janePackage {
-    pname = "ppx_typerep_conv";
-    hash = "sha256-V9yOSy3cj5/bz9PvpO3J+aeFu1G+qGQ8AR3gSczUZbY=";
-    meta.description = "Generation of runtime types from type declarations";
-    propagatedBuildInputs = [
-      ppxlib
-      typerep
-    ];
-  };
+  ppx_typerep_conv = janePackage (
+    {
+      pname = "ppx_typerep_conv";
+      meta.description = "Generation of runtime types from type declarations";
+      propagatedBuildInputs = [
+        ppxlib
+        typerep
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-rxqL2v5vqjc7MgKUSkJEyIhm9GO5YqvxEYSM/uXdeBc=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-V9yOSy3cj5/bz9PvpO3J+aeFu1G+qGQ8AR3gSczUZbY=";
+        }
+    )
+  );
 
-  ppx_variants_conv = janePackage {
-    pname = "ppx_variants_conv";
-    hash = "sha256-Av2F699LzVCpwcdji6qG0jt5DVxCnIY4eBLaPK1JC10=";
-    meta.description = "Generation of accessor and iteration functions for ocaml variant types";
-    propagatedBuildInputs = [
-      variantslib
-      ppxlib
-    ];
-  };
+  ppx_variants_conv = janePackage (
+    {
+      pname = "ppx_variants_conv";
+      meta.description = "Generation of accessor and iteration functions for ocaml variant types";
+      propagatedBuildInputs = [
+        variantslib
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-4v9sXtu7rDM+W3phPloizeMczRbBhku5dsCG4NqhdfU=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-Av2F699LzVCpwcdji6qG0jt5DVxCnIY4eBLaPK1JC10=";
+        }
+    )
+  );
 
   ppxlib_jane = janePackage (
     {
@@ -1575,7 +1764,12 @@ with self;
       propagatedBuildInputs = [ ppxlib ];
     }
     // (
-      if lib.versionAtLeast ocaml.version "5.3" then
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.4";
+          hash = "sha256-cqF7aT0ubutRxsSTD5aHnHx4zvlPDkTzdBqONU6EgO0=";
+        }
+      else if lib.versionAtLeast ocaml.version "5.3" then
         {
           version = "0.17.2";
           hash = "sha256-AQJSdKtF6p/aG5Lx8VHVEOsisH8ep+iiml6DtW+Hdik=";
@@ -1847,6 +2041,7 @@ with self;
       ppx_jane
       ppxlib
     ];
+    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
   textutils = janePackage {

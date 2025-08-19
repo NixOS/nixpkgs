@@ -2867,6 +2867,8 @@ self: super: with self; {
 
   compressed-tensors = callPackage ../development/python-modules/compressed-tensors { };
 
+  concord232 = callPackage ../development/python-modules/concord232 { };
+
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
@@ -9068,6 +9070,8 @@ self: super: with self; {
 
   medallion = callPackage ../development/python-modules/medallion { };
 
+  medcom-ble = callPackage ../development/python-modules/medcom-ble { };
+
   mediafile = callPackage ../development/python-modules/mediafile { };
 
   mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
@@ -11071,6 +11075,8 @@ self: super: with self; {
   ormsgpack = callPackage ../development/python-modules/ormsgpack { };
 
   ortools = (toPythonModule (pkgs.or-tools.override { python3 = self.python; })).python;
+
+  oru = callPackage ../development/python-modules/oru { };
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
@@ -13947,6 +13953,8 @@ self: super: with self; {
   pyserial-asyncio-fast = callPackage ../development/python-modules/pyserial-asyncio-fast { };
 
   pyseries = callPackage ../development/python-modules/pyseries { };
+
+  pysesame2 = callPackage ../development/python-modules/pysesame2 { };
 
   pyseventeentrack = callPackage ../development/python-modules/pyseventeentrack { };
 
@@ -18127,6 +18135,8 @@ self: super: with self; {
   tika = callPackage ../development/python-modules/tika { };
 
   tika-client = callPackage ../development/python-modules/tika-client { };
+
+  tikteck = callPackage ../development/python-modules/tikteck { };
 
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
