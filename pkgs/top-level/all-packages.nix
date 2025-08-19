@@ -6587,7 +6587,7 @@ with pkgs;
 
   bandit = with python3Packages; toPythonApplication bandit;
 
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   bazel_6 = callPackage ../development/tools/build-managers/bazel/bazel_6 {
     inherit (darwin) sigtool;
