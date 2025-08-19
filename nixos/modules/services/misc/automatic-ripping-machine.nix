@@ -1,6 +1,5 @@
 { lib, config, pkgs, ... }:
 
-with lib;
 
 let 
   cfg = config.services.arm;
