@@ -28,21 +28,25 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qtgraphicaleffects
     glib
-  ];
+  ]
+  ++ (with libsForQt5; [
+    wrapQtAppsHook
+    qtgraphicaleffects
+  ]);
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtdeclarative
-    libsForQt5.qtquickcontrols2
-    libsForQt5.qtsvg
     fcitx5
-    libsForQt5.fcitx5-qt
-    libsForQt5.kwindowsystem
     gsettings-qt
-  ];
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtdeclarative
+    qtquickcontrols2
+    qtsvg
+    fcitx5-qt
+    kwindowsystem
+  ]);
 
   patchPhase = ''
     substituteInPlace CMakeLists.txt \
