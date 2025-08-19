@@ -347,16 +347,9 @@ mkDerivation (finalAttrs: {
   ++ lib.optionals withXinput2 [
     libXi
   ]
-  ++ lib.optionals withXwidgets (
-    if stdenv.hostPlatform.isDarwin then
-      [
-        apple-sdk # apple-sdk includes webkit for --with-xwidgets
-      ]
-    else
-      [
-        webkitgtk_4_0
-      ]
-  )
+  ++ lib.optionals (withXwidgets && !stdenv.hostPlatform.isDarwin) [
+    webkitgtk_4_0
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
   ]
