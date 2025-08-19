@@ -21,6 +21,7 @@
   libxcb-keysyms,
   libxcb-render-util,
   libxcb-util,
+  libxcb-wm,
   libxcvt,
   libxcursor,
   libxdmcp,
@@ -111,6 +112,7 @@ self: with self; {
   xcbutilkeysyms = libxcb-keysyms;
   xcbutil = libxcb-util;
   xcbutilrenderutil = libxcb-render-util;
+  xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -3243,51 +3245,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xcb-cursor" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilwm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-wm";
-      version = "0.4.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-wm-0.4.2.tar.xz";
-        sha256 = "02wai17mxfbvlnj4l4bjbvah97rccdivzvd7mrznhr32s0hlxhv2";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xcb-ewmh"
-          "xcb-icccm"
-        ];
         platforms = lib.platforms.unix;
       };
     })
