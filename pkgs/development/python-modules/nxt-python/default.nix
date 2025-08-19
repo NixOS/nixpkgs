@@ -5,16 +5,14 @@
   poetry-core,
   pybluez,
   pytestCheckHook,
-  pythonOlder,
   pyusb,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "nxt-python";
   version = "3.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "schodet";
@@ -25,7 +23,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ pyusb ];
+  dependencies = [
+    pyusb
+    pillow
+  ];
 
   optional-dependencies = {
     bluetooth = [ pybluez ];
@@ -35,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nxt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
     homepage = "https://github.com/schodet/nxt-python";
     changelog = "https://github.com/schodet/nxt-python/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ibizaman ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ibizaman ];
   };
 }
