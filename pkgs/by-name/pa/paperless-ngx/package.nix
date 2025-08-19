@@ -68,73 +68,69 @@ let
     poppler-utils
   ];
 
-  frontend =
-    let
-      frontendSrc = src + "/src-ui";
-    in
-    stdenv.mkDerivation rec {
-      pname = "paperless-ngx-frontend";
-      inherit version;
+  frontend = stdenv.mkDerivation (finalAttrs: {
+    pname = "paperless-ngx-frontend";
+    inherit version;
 
-      src = frontendSrc;
+    src = src + "/src-ui";
 
-      pnpmDeps = pnpm.fetchDeps {
-        inherit pname version src;
-        fetcherVersion = 1;
-        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
-      };
-
-      nativeBuildInputs = [
-        node-gyp
-        nodejs_20
-        pkg-config
-        pnpm.configHook
-        python3
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        xcbuild
-      ];
-
-      buildInputs = [
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        giflib
-      ];
-
-      CYPRESS_INSTALL_BINARY = "0";
-      NG_CLI_ANALYTICS = "false";
-
-      buildPhase = ''
-        runHook preBuild
-
-        pushd node_modules/canvas
-        node-gyp rebuild
-        popd
-
-        pnpm run build --configuration production
-
-        runHook postBuild
-      '';
-
-      doCheck = true;
-      checkPhase = ''
-        runHook preCheck
-
-        pnpm run test
-
-        runHook postCheck
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out/lib/paperless-ui
-        mv ../src/documents/static/frontend $out/lib/paperless-ui/
-
-        runHook postInstall
-      '';
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
+      hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
     };
+
+    nativeBuildInputs = [
+      node-gyp
+      nodejs_20
+      pkg-config
+      pnpm.configHook
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+    ];
+
+    buildInputs = [
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      giflib
+    ];
+
+    CYPRESS_INSTALL_BINARY = "0";
+    NG_CLI_ANALYTICS = "false";
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd node_modules/canvas
+      node-gyp rebuild
+      popd
+
+      pnpm run build --configuration production
+
+      runHook postBuild
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+
+      pnpm run test
+
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/lib/paperless-ui
+      mv ../src/documents/static/frontend $out/lib/paperless-ui/
+
+      runHook postInstall
+    '';
+  });
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
@@ -323,9 +319,9 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit
-      python
-      path
       frontend
+      path
+      python
       tesseract5
       ;
     nltkData = with nltk-data; [
