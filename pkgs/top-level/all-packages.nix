@@ -13619,8 +13619,6 @@ with pkgs;
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
-  tests-stdenv-gcc-stageCompare = callPackage ../test/stdenv/gcc-stageCompare.nix { };
-
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
