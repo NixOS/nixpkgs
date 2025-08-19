@@ -6,10 +6,12 @@
   buildPythonPackage,
   darwinMinVersionHook,
   fetchFromGitHub,
+  python,
 
   # nativeBuildInputs
   libpng,
   ninja,
+  removeReferencesTo,
   which,
 
   # buildInputs
@@ -37,6 +39,11 @@ buildPythonPackage {
 
   stdenv = torch.stdenv;
 
+  outputs = [
+    "out" # output standard python package
+    "lib" # output libtorchvision libraries
+  ];
+
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
@@ -47,6 +54,7 @@ buildPythonPackage {
   nativeBuildInputs = [
     libpng
     ninja
+    removeReferencesTo
     which
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
@@ -93,6 +101,14 @@ buildPythonPackage {
 
   checkPhase = ''
     py.test test --ignore=test/test_datasets_download.py
+  '';
+
+  postInstall = ''
+    find "$out/${python.sitePackages}/torchvision" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+
+    mkdir -p "''${!outputLib}/lib"
+    mv $out/${python.sitePackages}/torchvision/*.so $lib/lib/
+    ln -s $lib/lib/*.so $out/${python.sitePackages}/torchvision/
   '';
 
   meta = {
