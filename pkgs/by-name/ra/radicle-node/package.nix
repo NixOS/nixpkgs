@@ -1,7 +1,7 @@
 {
   asciidoctor,
   fetchFromRadicle,
-  git,
+  gitMinimal,
   installShellFiles,
   jq,
   lib,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     makeWrapper
   ];
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
@@ -90,7 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrapProgram "$program" \
         --prefix PATH : "${
           lib.makeBinPath [
-            git
+            gitMinimal
             man-db
             openssh
             xdg-utils
@@ -125,7 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             rad debug | jq -e '
                 (.sshVersion | contains("${openssh.version}"))
               and
-                (.gitVersion | contains("${git.version}"))
+                (.gitVersion | contains("${gitMinimal.version}"))
             '
 
             touch $out
