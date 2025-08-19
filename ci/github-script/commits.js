@@ -16,7 +16,7 @@ module.exports = async ({ github, context, core, dry }) => {
           run_id: context.runId,
           per_page: 100,
         })
-      ).find(({ name }) => name === 'Check / cherry-pick').html_url +
+      ).find(({ name }) => name.endsWith('Check / cherry-pick')).html_url +
         '?pr=' +
         pull_number
 
