@@ -30,6 +30,7 @@
   mkfontscale,
   pixman,
   sessreg,
+  transset,
   util-macros,
   xbitmaps,
   xcb-proto,
@@ -61,6 +62,7 @@ self: with self; {
     mkfontscale
     pixman
     sessreg
+    transset
     xbitmaps
     xorgproto
     xtrans
@@ -2907,42 +2909,6 @@ self: with self; {
         libSM
         libXmu
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  transset = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "transset";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/transset-1.0.4.tar.xz";
-        sha256 = "0f0bgi1jq9zzq2gqaszhgvz2d1clja17z8xnijm36xqkmxsapac1";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

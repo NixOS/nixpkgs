@@ -323,6 +323,7 @@ print OUT <<EOF;
   mkfontscale,
   pixman,
   sessreg,
+  transset,
   util-macros,
   xbitmaps,
   xcb-proto,
@@ -354,6 +355,7 @@ self: with self; {
     mkfontscale
     pixman
     sessreg
+    transset
     xbitmaps
     xorgproto
     xtrans
