@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   gst_all_1,
   libunwind,
@@ -8,6 +8,8 @@
   webkitgtk_4_1,
   autoPatchelfHook,
   xorg,
+  jdk,
+  zlib,
   runCommand,
   yq,
   saber,
@@ -15,15 +17,22 @@
   gitUpdater,
 }:
 
-flutter332.buildFlutterApplication rec {
+let
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
+  '';
+in
+flutter335.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.26.2";
+  version = "0.26.4";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-htSOzjmLijF1nSBluazJ80Jl041OtZKwnA1H39l63SQ=";
+    hash = "sha256-3QRcl/EenW3RJUvfpinWWUyG9fq6R6kZFnBGkqN7R7U=";
   };
 
   gitHashes = lib.importJSON ./gitHashes.json;
@@ -39,6 +48,7 @@ flutter332.buildFlutterApplication rec {
     orc
     webkitgtk_4_1
     xorg.libXmu
+    jdk
   ];
 
   postPatch = ''
@@ -47,6 +57,12 @@ flutter332.buildFlutterApplication rec {
   '';
 
   flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
+
+  env.ZLIB_ROOT = zlib-root;
+
+  preBuild = ''
+    cp ${./package_graph.json} .dart_tool/package_graph.json
+  '';
 
   postInstall = ''
     install -Dm0644 flatpak/com.adilhanney.saber.desktop $out/share/applications/saber.desktop
