@@ -16,6 +16,7 @@
   stdenv,
   testers,
   xdg-utils,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -84,6 +85,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/rad";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   postFixup = ''
     for program in $out/bin/* ;
     do
@@ -104,7 +110,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       package = radicle-node;
     in
     {
-      version = testers.testVersion { inherit package; };
       basic =
         runCommand "${package.name}-basic-test"
           {
