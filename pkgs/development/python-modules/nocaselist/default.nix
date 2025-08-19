@@ -5,6 +5,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   six,
 }:
 
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-+3MG9aPgRVNOc3q37L7uA5ul6br7xbXyMfYW1+khG2U=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ six ];
 

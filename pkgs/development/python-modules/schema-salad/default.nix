@@ -36,8 +36,11 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "mistune" ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<9"]' '["setuptools_scm"]'
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy[mypyc]==1.15.0" "mypy"
+      --replace-fail '"setuptools_scm[toml]>=8.0.4,<9"' '"setuptools_scm[toml]"' \
+      --replace-fail "mypy[mypyc]==1.17.0" "mypy"
     sed -i "/black>=/d" pyproject.toml
   '';
 

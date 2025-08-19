@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   requests,
   websocket-client,
 }:
@@ -19,13 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-qGp6i4fNmduTZfdxNvYJTAQV/Ovm3XFNOJ8uSj6Ipic=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-    --replace-fail poetry.masonry.api poetry.core.masonry.api \
-    --replace-fail "poetry>=" "poetry-core>="
-  '';
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     requests
