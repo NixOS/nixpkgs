@@ -54,9 +54,7 @@ stdenv.mkDerivation (
       lib.catAttrs "shellHook" (lib.reverseList inputsFrom ++ [ attrs ])
     );
 
-    phases = [ "buildPhase" ];
-
-    buildPhase = ''
+    buildCommand = ''
       { echo "------------------------------------------------------------";
         echo " WARNING: the existence of this path is not guaranteed.";
         echo " It is an internal implementation detail for pkgs.mkShell.";
