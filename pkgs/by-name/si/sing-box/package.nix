@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.11.15";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
