@@ -51,9 +51,25 @@ in
           class = "service";
           modules = [
             ./service.nix
+
+            # TODO: Consider removing pkgs. Service modules can provide their own
+            #       dependencies.
+            {
+              # Extend portable services option
+              options.services = lib.mkOption {
+                type = types.attrsOf (
+                  types.submoduleWith {
+                    specialArgs.pkgs = pkgs;
+                    modules = [ ];
+                  }
+                );
+              };
+            }
           ];
           specialArgs = {
             # perhaps: features."systemd" = { };
+            # TODO: Consider removing pkgs. Service modules can provide their own
+            #       dependencies.
             inherit pkgs;
             systemdPackage = config.systemd.package;
           };
