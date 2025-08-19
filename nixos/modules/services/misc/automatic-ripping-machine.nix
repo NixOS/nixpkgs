@@ -35,11 +35,7 @@ in {
         will be available for interaction
       '';
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.automatic-ripping-machine;
-      description = "Which ARM package to use (override for testing or different version).";
-    };
+    package = mkPackageOption pkgs "automatic-ripping-machine" { };
 
     extraPythonPackages = mkOption {
       type = types.listOf types.package;
