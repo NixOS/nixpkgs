@@ -131,6 +131,15 @@ in
         url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch";
         hash = "sha256-z/aQ1oQjFZnkUeRnrD6P/WDZiYAI1ncGhOUM+HmjMZA=";
       })
+    ]
+    # Fix build with Rust 1.89.0
+    ++ lib.optionals (lib.versionOlder info.version "38") [
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6624733
+      (fetchpatch {
+        name = "Define-rust-no-alloc-shim-is-unstable-v2.patch";
+        url = "https://github.com/chromium/chromium/commit/6aae0e2353c857d98980ff677bf304288d7c58de.patch";
+        hash = "sha256-Dd38c/0hiH+PbGPJhhEFuW6kUR45A36XZqOVExoxlhM=";
+      })
     ];
 
   npmRoot = "third_party/node";
