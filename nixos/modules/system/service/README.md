@@ -53,3 +53,93 @@ Many services implement automatic reloading or reloading on e.g. `SIGUSR1`, but 
 
 - **Simple attribute structure**: Unlike `environment.etc`, `configData` uses a simpler structure with just `enable`, `name`, `text`, `source`, and `path` attributes. Complex ownership options were omitted for simplicity and portability.
   Per-service user creation is still TBD.
+
+## No `pkgs` module argument
+
+The modular service infrastructure avoids exposing `pkgs` as a module argument to service modules. Instead, derivations and builder functions are provided through lexical closure, making dependency relationships explicit and avoiding uncertainty about where dependencies come from.
+
+### Benefits
+
+- **Explicit dependencies**: Services declare what they need rather than implicitly depending on `pkgs`
+- **No interference**: Service modules can be reused in different contexts without assuming a specific `pkgs` instance. An unexpected `pkgs` version is not a failure mode anymore.
+- **Clarity**: With fewer ways to do things, there's no ambiguity about where dependencies come from (from the module, not the OS or service manager)
+
+### Implementation
+
+- **Portable layer**: Service modules in `portable/` do not receive `pkgs` as a module argument. Any required derivations must be provided by the caller.
+
+- **Systemd integration**: The `systemd/system.nix` module imports `config-data.nix` as a function, providing `pkgs` in lexical closure:
+  ```nix
+  (import ../portable/config-data.nix { inherit pkgs; })
+  ```
+
+- **Service modules**:
+  1. Should explicitly declare their package dependencies as options rather than using `pkgs` defaults:
+    ```nix
+    {
+      # Bad: uses pkgs module argument
+      foo.package = mkOption {
+        default = pkgs.python3;
+        # ...
+      };
+    }
+    ```
+
+    ```nix
+    {
+      # Good: caller provides the package
+      foo.package = mkOption {
+        type = types.package;
+        description = "Python package to use";
+        defaultText = lib.literalMD "The package that provided this module.";
+      };
+    }
+    ```
+
+  2. `passthru.services` can still provide a complete module using the package's lexical scope, making the module truly self-contained:
+
+    **Package (`package.nix`):**
+    ```nix
+    {
+      lib,
+      writeScript,
+      runtimeShell,
+    # ... other dependencies
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      # ... package definition
+
+      passthru.services.default = {
+        imports = [
+          (lib.modules.importApply ./service.nix {
+            inherit writeScript runtimeShell;
+          })
+        ];
+        someService.package = finalAttrs.finalPackage;
+      };
+    })
+    ```
+
+    **Service module (`service.nix`):**
+    ```nix
+    # Non-module dependencies (importApply)
+    { writeScript, runtimeShell }:
+
+    # Service module
+    {
+      lib,
+      config,
+      options,
+      ...
+    }:
+    {
+      # Service definition using writeScript, runtimeShell from lexical scope
+      process.argv = [
+        (writeScript "wrapper" ''
+          #!${runtimeShell}
+          # ... wrapper logic
+        '')
+        # ... other args
+      ];
+    }
+    ```
