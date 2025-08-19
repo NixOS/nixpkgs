@@ -29,15 +29,11 @@ in {
 
   #### Module Options ####
   options.services.arm = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable the Automatic Ripping Machine (ARM) service.
+    enable = mkEnableOption ''
+        the Automatic Ripping Machine (ARM) service.
         When enabled, a service will run to monitor optical drives and a web UI 
-        will be available for interaction.
+        will be available for interaction
       '';
-    };
 
     package = mkOption {
       type = types.package;
