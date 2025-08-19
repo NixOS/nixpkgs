@@ -12,56 +12,30 @@
 # spirv-tools used by vulkan-loader. Exact revisions are taken from
 # the DEPS file in the shaderc repository.
 let
-  # this is the git tag of the google/shaderc repo
-  version = "2025.2";
-
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "shaderc";
-    rev = "v${version}";
-    hash = "sha256-u3gmH2lrkwBTZg9j4jInQceXK4MUWhKZPSPsN98mEkk=";
-  };
-
-  # Read the DEPS file
-  depsContent = builtins.readFile "${src}/DEPS";
-
-  # Function to extract a specific revision hash from DEPS file
-  getDepsRevision =
-    revisionKey:
-    let
-      lines = lib.splitString "\n" depsContent;
-      # Find the line containing the revision key
-      revisionLine = lib.findFirst (line: builtins.match ".*'${revisionKey}'.*" line != null) null lines;
-
-      # find the commit hash inside the DEPS file
-      match = builtins.match ".*'${revisionKey}':[[:space:]]*'([^']+)'.*" revisionLine;
-
-      revstring = builtins.elemAt match 0;
-    in
-    revstring;
-
+  # dependency revs taken from here:
+  # From https://github.com/google/shaderc/blob/v2025.2/DEPS:
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = getDepsRevision "glslang_revision";
+    rev = "697683e6b8871420d7d942b1a2fe233242ab5608";
     hash = "sha256-+iX5TOPFwAWrzRKd4gikzYIWfzSdmRCukY6WsKNJCzE=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = getDepsRevision "spirv_tools_revision";
+    rev = "a62abcb402009b9ca5975e6167c09f237f630e0e";
     hash = "sha256-nGyEOREua/W2mdb8DhmqXW0gDThnXnIlhnURAUhCO2g=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = getDepsRevision "spirv_headers_revision";
+    rev = "aa6cef192b8e693916eb713e7a9ccadf06062ceb";
     hash = "sha256-bUgt7m3vJYoozxgrA5hVTRcbPg3OAzht0e+MgTH7q9k=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaderc";
-  inherit version src;
+  version = "2025.2";
 
   outputs = [
     "out"
@@ -70,6 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "static"
   ];
+
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "shaderc";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-u3gmH2lrkwBTZg9j4jInQceXK4MUWhKZPSPsN98mEkk=";
+  };
 
   postPatch = ''
     cp -r --no-preserve=mode ${glslang} third_party/glslang
