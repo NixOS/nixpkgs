@@ -820,6 +820,13 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    hl2_1 = {
+      fullName = "Hippocratic License v2.1";
+      url = "https://firstdonoharm.dev/version/2/1/license/code_of_conduct.txt";
+      free = false;
+      redistributable = true;
+    };
+
     hl3 = {
       fullName = "Hippocratic License v3.0";
       url = "https://firstdonoharm.dev/version/3/0/core.txt";
