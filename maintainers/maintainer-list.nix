@@ -13035,6 +13035,11 @@
     githubId = 56224949;
     name = "Mia Kanashi";
   };
+  kaptcha0 = {
+    name = "J'C Kabunga";
+    github = "kaptcha0";
+    githubId = 50426223;
+  };
   karantan = {
     name = "Gasper Vozel";
     email = "karantan@gmail.com";
