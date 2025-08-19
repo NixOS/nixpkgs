@@ -27707,6 +27707,12 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  xavwe = {
+    email = "git@xavwe.dev";
+    github = "xavwe";
+    githubId = 125409009;
+    name = "Xaver Wenhart";
+  };
   XBagon = {
     name = "XBagon";
     email = "xbagon@outlook.de";
