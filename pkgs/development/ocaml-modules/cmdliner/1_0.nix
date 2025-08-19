@@ -5,8 +5,6 @@
   ocaml,
 }:
 
-assert (lib.versionAtLeast ocaml.version "4.03");
-
 stdenv.mkDerivation rec {
   pname = "cmdliner";
   version = "1.0.4";
@@ -34,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
+    broken = !(lib.versionAtLeast ocaml.version "4.03");
   };
 }
