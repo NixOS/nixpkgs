@@ -10761,6 +10761,8 @@ self: super: with self; {
 
   opencamlib = callPackage ../development/python-modules/opencamlib { };
 
+  opencc = callPackage ../development/python-modules/opencc { };
+
   opencensus = callPackage ../development/python-modules/opencensus { };
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
