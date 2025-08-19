@@ -78,6 +78,7 @@
   tree-sitter-pgn = lib.importJSON ./tree-sitter-pgn.json;
   tree-sitter-php = lib.importJSON ./tree-sitter-php.json;
   tree-sitter-pioasm = lib.importJSON ./tree-sitter-pioasm.json;
+  tree-sitter-powershell = lib.importJSON ./tree-sitter-powershell.json;
   tree-sitter-prisma = lib.importJSON ./tree-sitter-prisma.json;
   tree-sitter-proto = lib.importJSON ./tree-sitter-proto.json;
   tree-sitter-pug = lib.importJSON ./tree-sitter-pug.json;

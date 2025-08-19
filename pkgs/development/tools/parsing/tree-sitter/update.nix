@@ -496,6 +496,10 @@ let
       orga = "crystal-lang-tools";
       repo = "tree-sitter-crystal";
     };
+    "tree-sitter-powershell" = {
+      orga = "airbus-cert";
+      repo = "tree-sitter-powershell";
+    };
   };
 
   pinnedGrammars = [

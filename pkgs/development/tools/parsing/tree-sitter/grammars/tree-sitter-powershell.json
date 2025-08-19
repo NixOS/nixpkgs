@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/airbus-cert/tree-sitter-powershell",
+  "rev": "96ab1da05cfb55b52ee7000b4be8a4b6fad232f5",
+  "date": "2025-08-01T09:33:53+02:00",
+  "path": "/nix/store/bl9rp6h6jzxnvfh03bppcpngi45vd5zz-tree-sitter-powershell",
+  "sha256": "1nhy412x7l9p06kxihlnjvi6wca3xqb7m1zjkl6vrgn62k91wjwb",
+  "hash": "sha256-i0se0hTGvrwNnfKHehbuQzFu4paWwtinATfR00UgHto=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}
