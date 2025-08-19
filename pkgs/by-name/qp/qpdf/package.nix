@@ -6,6 +6,7 @@
   libjpeg,
   perl,
   zlib,
+  ctestCheckHook,
 
   # for passthru.tests
   cups-filters,
@@ -45,8 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
   ];
 
+  nativeCheckInputs = [ ctestCheckHook ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "SHOW_FAILED_TEST_OUTPUT" true)
+  ];
 
   preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
