@@ -121,6 +121,30 @@ let
     extraSetupCommands = extraPackageConfigSetup;
   };
 
+  packageGraph = pub2nix.generatePackageGraph {
+    name =
+      if (args.pname != null && args.version != null) then "${args.pname}-${args.version}" else null;
+
+    dependencies = builtins.concatLists (builtins.attrValues pubspecLockData.dependencies);
+
+    inherit (pubspecLockData) dependencySources;
+
+    pubspecFile = lib.concatStringsSep "/" (
+      lib.filter (s: s != "") [
+        src
+        (lib.removePrefix "/" (
+          if lib.hasPrefix src.name sourceRoot then
+            lib.removePrefix src.name sourceRoot
+          else if lib.hasPrefix "source" sourceRoot then
+            lib.removePrefix "source" sourceRoot
+          else
+            sourceRoot
+        ))
+        "pubspec.yaml"
+      ]
+    );
+  };
+
   inherit (dartHooks.override { inherit dart; })
     dartConfigHook
     dartBuildHook
@@ -140,6 +164,7 @@ let
       inherit
         pubspecLockFile
         packageConfig
+        packageGraph
         sdkSetupScript
         dartCompileCommand
         dartOutputType
