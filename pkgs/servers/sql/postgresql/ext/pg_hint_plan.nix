@@ -17,8 +17,8 @@ let
       hash = "sha256-lg7N0QblluTgtNo1tGZjirNJSyQXtcAEs9Jqd3zx0Sg=";
     };
     "15" = {
-      version = "1.5.1";
-      hash = "sha256-o8Hepf/Mc1ClRTLZ6PBdqU4jSdlz+ijVgl2vJKmIc6M=";
+      version = "1.5.3";
+      hash = "sha256-jkU0zt1waPTdFrBLAxYNvlo+RwdhCtKQq7iqAuxthNA=";
     };
     "14" = {
       version = "1.4.4";
