@@ -11,8 +11,8 @@
   protobuf,
   rustc,
   rustPlatform,
-  pkgs, # zstd hidden by python3Packages.zstd
   openssl,
+  zstd-c,
 
   # dependencies
   bcrypt,
@@ -117,7 +117,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-    pkgs.zstd
+    zstd-c
   ];
 
   dependencies = [
