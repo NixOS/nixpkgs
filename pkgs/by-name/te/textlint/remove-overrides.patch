@@ -1,0 +1,14 @@
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 1f0e8f8b..68a9c06a 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -4,9 +4,6 @@ settings:
+   autoInstallPeers: true
+   excludeLinksFromLockfile: false
+ 
+-overrides:
+-  '@textlint/ast-node-types': workspace:*
+-
+ importers:
+ 
+   .:

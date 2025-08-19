@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  name = "victorialogs";
+  name = "victorialogs-local-write";
   meta.maintainers = with lib.maintainers; [ marie ];
 
   nodes.machine =

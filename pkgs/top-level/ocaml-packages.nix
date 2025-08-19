@@ -89,7 +89,7 @@ let
         backoff = callPackage ../development/ocaml-modules/backoff { };
 
         bap = callPackage ../development/ocaml-modules/bap {
-          inherit (pkgs.llvmPackages_14) llvm;
+          inherit (pkgs.llvmPackages) llvm;
         };
 
         base64 = callPackage ../development/ocaml-modules/base64 { };
