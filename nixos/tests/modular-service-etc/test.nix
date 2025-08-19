@@ -147,8 +147,9 @@
     print(f"Before switch - webserver PID: {webserver_pid}, api PID: {api_pid}")
 
     # Switch to the specialisation with updated content
-    switch_output = server.succeed("/run/current-system/specialisation/updated/bin/switch-to-configuration test")
-    print(f"Switch output: {switch_output}")
+    # Capture both stdout and stderr, and show stderr in real-time for debugging
+    switch_output = server.succeed("/run/current-system/specialisation/updated/bin/switch-to-configuration test 2>&1 | tee /dev/stderr")
+    print(f"Switch output (stdout+stderr): {switch_output}")
 
     # Verify services are not mentioned in the switch output (indicating they weren't touched)
     assert "webserver.service" not in switch_output, f"webserver.service was mentioned in switch output: {switch_output}"
