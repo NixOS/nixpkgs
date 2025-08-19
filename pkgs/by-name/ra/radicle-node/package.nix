@@ -169,6 +169,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       amesgen
       lorenzleutgeb
+      defelo
     ];
     mainProgram = "rad";
   };
