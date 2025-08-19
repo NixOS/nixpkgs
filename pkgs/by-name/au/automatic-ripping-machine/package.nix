@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Automatic Ripping Machine – scripts for ripping and encoding optical discs";
     homepage    = "https://github.com/automatic-ripping-machine/automatic-ripping-machine";
     license     = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];  # (Add yourself or appropriate maintainer here)
+    maintainers = with lib.maintainers; [ adam248 ];
     platforms   = lib.platforms.linux;
   };
 })
