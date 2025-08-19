@@ -19713,6 +19713,24 @@ with self;
     };
   };
 
+  MCEShared = buildPerlPackage {
+    pname = "MCE-Shared";
+    version = "1.893";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-Shared-1.893.tar.gz";
+      hash = "sha256-+kxIet+w2zyPK2qidNM9j4J/ojTGMbs689lPpKPJRi8=";
+    };
+    propagatedBuildInputs = [ MCE ];
+    meta = {
+      description = "MCE extension for sharing data supporting threads and processes";
+      homepage = "https://github.com/marioroy/mce-shared";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   LogLog4perl = buildPerlPackage {
     pname = "Log-Log4perl";
     version = "1.57";
