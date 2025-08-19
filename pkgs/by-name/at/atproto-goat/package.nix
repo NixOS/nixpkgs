@@ -7,24 +7,22 @@
 
 buildGoModule rec {
   pname = "atproto-goat";
-  version = "0-unstable-2024-10-29";
+  version = "0-unstable-2025-02-01";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
-    repo = "indigo";
-    rev = "983ce4a481a32a3eb2944c4c76e885d0f6006f83";
-    hash = "sha256-Jo3pI4uRyKh3yV03ijOcg+Uyu75Spmy/VS116MVgleU=";
+    repo = "goat";
+    rev = "e79169f1d8fba9838274b1106d74751fc54eeb9c";
+    hash = "sha256-cLS44J6MlSSti7NRd9vSsdWXoYiMGwt3odg5p60W6ew=";
   };
 
   postPatch = ''
-    substituteInPlace cmd/goat/main.go \
+    substituteInPlace main.go \
       --replace-fail "versioninfo.Short()" '"${version}"' \
-      --replace-fail '"github.com/carlmjohnson/versioninfo"' ""
+      --replace-fail '"github.com/earthboundkid/versioninfo/v2"' ""
   '';
 
-  vendorHash = "sha256-T+jtxubVKskrLGTUa4RI24o/WTSFCBk60HhyCFujPOI=";
-
-  subPackages = [ "cmd/goat" ];
+  vendorHash = "sha256-l9oSdTAO1YxfrBjMWJDzlmhaZkbo90FGTk5LedjbZB8=";
 
   passthru.updateScript = unstableGitUpdater {
     hardcodeZeroVersion = true;
@@ -32,7 +30,7 @@ buildGoModule rec {
 
   meta = {
     description = "Go AT protocol CLI tool";
-    homepage = "https://github.com/bluesky-social/indigo/blob/main/cmd/goat/README.md";
+    homepage = "https://github.com/bluesky-social/goat/blob/main/README.md";
     license = with lib.licenses; [
       mit
       asl20

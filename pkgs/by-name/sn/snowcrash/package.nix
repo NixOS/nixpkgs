@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "snowcrash";
-  version = "unstable-2022-08-15";
+  version = "0-unstable-2022-08-15";
 
   src = fetchFromGitHub {
     owner = "redcode-labs";
@@ -28,7 +28,8 @@ buildGoModule rec {
     description = "Polyglot payload generator";
     homepage = "https://github.com/redcode-labs/SNOWCRASH";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    maintainers = with maintainers; [ fab ];
+    teams = [ teams.redcodelabs ];
     mainProgram = "SNOWCRASH";
   };
 }

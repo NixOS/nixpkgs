@@ -1,14 +1,20 @@
-{ lib, stdenvNoCC, ncurses, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  stdenvNoCC,
+  ncurses,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-you-should-use";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "MichaelAquilina";
     repo = "zsh-you-should-use";
     tag = finalAttrs.version;
-    hash = "sha256-+3iAmWXSsc4OhFZqAMTwOL7AAHBp5ZtGGtvqCnEOYc0=";
+    hash = "sha256-dG6E6cOKu2ZvtkwxMXx/op3rbevT1QSOQTgw//7GmSk=";
   };
 
   strictDeps = true;

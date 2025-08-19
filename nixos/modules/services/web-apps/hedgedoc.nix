@@ -283,7 +283,8 @@ in
         WorkingDirectory = "/run/${name}";
         ReadWritePaths = [
           "-${cfg.settings.uploadsPath}"
-        ] ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
+        ]
+        ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=/run/${name}/config.json"
@@ -327,6 +328,7 @@ in
           "@system-service"
           "~@privileged @obsolete"
           "@pkey"
+          "fchown" # needed for filesystem image backend
         ];
         UMask = "0007";
       };

@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "django-vite";
-  version = "3.0.6";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrBin99";
-    repo = pname;
+    repo = "django-vite";
     tag = version;
-    hash = "sha256-2Dv4TnSk5AX1L2ZUbWVDfIsh3M3Opv845SmnxYwFyGc=";
+    hash = "sha256-S5DpU0Sw0TOY1SNici6djeTrvg4gehH/a2UCzju1e/s=";
   };
 
   propagatedBuildInputs = [ django ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Integration of ViteJS in a Django project";
     homepage = "https://github.com/MrBin99/django-vite";
-    changelog = "https://github.com/MrBin99/django-vite/releases/tag/${version}";
+    changelog = "https://github.com/MrBin99/django-vite/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ sephi ];
   };

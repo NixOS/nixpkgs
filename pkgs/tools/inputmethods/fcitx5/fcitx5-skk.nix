@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-skk";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-wv5vX9eFlBUY7x4v9U+OuhKgX6V/b3iTaCvAIwJO10o=";
+    hash = "sha256-1gfR0wXBXM6Gttwldg2vm8DUUW4OciqKMQkpFQHqLoE=";
   };
 
   nativeBuildInputs = [
@@ -32,15 +32,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fcitx5
-      libskk
-    ]
-    ++ lib.optionals enableQt [
-      fcitx5-qt
-      qtbase
-    ];
+  buildInputs = [
+    fcitx5
+    libskk
+  ]
+  ++ lib.optionals enableQt [
+    fcitx5-qt
+    qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" enableQt)

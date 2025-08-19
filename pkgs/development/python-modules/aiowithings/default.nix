@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiowithings";
-  version = "3.1.4";
+  version = "3.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,13 +24,8 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-withings";
     tag = "v${version}";
-    hash = "sha256-0UWwiLSTXcNDS30NWsKI1f/kTczdYXwRZr+JREU0NCM=";
+    hash = "sha256-YC1rUyPXWbJ/xfUus5a7vw44gw7PIAdwhrUstXB/+nI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -41,13 +37,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
   pythonImportsCheck = [ "aiowithings" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   disabledTests = [
     # Tests require network access

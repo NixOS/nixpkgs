@@ -4,7 +4,6 @@
   lib,
   makeWrapper,
   fetchzip,
-  Cocoa,
   ocaml,
   findlib,
   tcl,
@@ -78,13 +77,17 @@ let
         version = "8.06.14";
         sha256 = "sha256-eVSQetk+i3KObjHfsvnD615cIsq3aZ7IxycX42cuPIU=";
       };
+      "5.3" = mkNewParam {
+        version = "8.06.15";
+        sha256 = "sha256-I/y5qr5sasCtlrwxL/Lex79rg0o4tzDMBmQY7MdpU2w=";
+      };
     };
   param =
     params.${lib.versions.majorMinor ocaml.version}
     or (throw "labltk is not available for OCaml ${ocaml.version}");
 in
 
-param.stdenv.mkDerivation rec {
+param.stdenv.mkDerivation {
   inherit (param) version src;
   pname = "ocaml${ocaml.version}-labltk";
 
@@ -98,7 +101,7 @@ param.stdenv.mkDerivation rec {
   buildInputs = [
     tcl
     tk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   configureFlags = [
     "--use-findlib"

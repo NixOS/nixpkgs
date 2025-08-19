@@ -14,7 +14,7 @@ let
   pname = "colloid-icon-theme";
 
 in
-lib.checkListOfEnum "${pname}: scheme variants"
+lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   [
     "default"
     "nord"
@@ -26,7 +26,7 @@ lib.checkListOfEnum "${pname}: scheme variants"
   ]
   schemeVariants
   lib.checkListOfEnum
-  "${pname}: color variants"
+  "colloid-icon-theme: color variants"
   [
     "default"
     "purple"
@@ -44,13 +44,13 @@ lib.checkListOfEnum "${pname}: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-10-18";
+    version = "2025-02-09";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "colloid-icon-theme";
       rev = version;
-      hash = "sha256-xpRgOt/FqZSbtOlZKlZS1ILQn6OAwqKAXX3hj41Wo+0=";
+      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 
     nativeBuildInputs = [

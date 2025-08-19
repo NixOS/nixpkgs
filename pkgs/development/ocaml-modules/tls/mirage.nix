@@ -3,11 +3,11 @@
   tls,
   fmt,
   lwt,
-  mirage-clock,
   mirage-crypto,
   mirage-crypto-pk,
   mirage-flow,
   mirage-kv,
+  mirage-ptime,
   ptime,
 }:
 
@@ -18,11 +18,11 @@ buildDunePackage {
   propagatedBuildInputs = [
     fmt
     lwt
-    mirage-clock
     mirage-crypto
     mirage-crypto-pk
     mirage-flow
     mirage-kv
+    mirage-ptime
     ptime
     tls
   ];

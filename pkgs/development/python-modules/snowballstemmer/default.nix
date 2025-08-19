@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "snowballstemmer";
-  version = "2.2.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1";
+    sha256 = "sha256-bV7u7I6fhNTVa4R2krrPebwsjpDH+AykRE/4tvLlKJU=";
   };
 
   # No tests included

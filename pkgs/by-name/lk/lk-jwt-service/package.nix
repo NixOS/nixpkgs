@@ -2,30 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0-unstable-2024-04-27";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
-    rev = "4a295044a4d0bd2af4474bf6a8a14fd0596ecf9e";
-    hash = "sha256-dN4iJ8P0u5dbZ93mp/FumcvByP7EpQhOvR+Oe4COWXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fA33LZkozPTng47kunXWkfUExVbMZsiL8Dtkm1hLV6U=";
   };
 
-  vendorHash = "sha256-9qOApmmOW+N1L/9hj9tVy0hLIUI36WL2TGWUcM3ajeM=";
+  vendorHash = "sha256-0A9pd+PAsGs4KS2BnCxc7PAaUAV3Z+XKNqSrmYvxNeM=";
 
-  postInstall = ''
-    mv $out/bin/ec-lms $out/bin/lk-jwt-service
-  '';
+  passthru.tests = nixosTests.lk-jwt-service;
 
   meta = with lib; {
-    description = "Minimal service to provide LiveKit JWTs using Matrix OpenID Connect";
+    changelog = "https://github.com/element-hq/lk-jwt-service/releases/tag/${finalAttrs.src.tag}";
+    description = "Minimal service to issue LiveKit JWTs for MatrixRTC";
     homepage = "https://github.com/element-hq/lk-jwt-service";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ kilimnik ];
     mainProgram = "lk-jwt-service";
   };
-}
+})

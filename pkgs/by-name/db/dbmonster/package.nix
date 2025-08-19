@@ -9,9 +9,9 @@
   wirelesstools,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "dbmonster";
-  version = "unstable-2022-09-17";
+  version = "0-unstable-2022-09-17";
   format = "other";
 
   src = fetchFromGitHub {
@@ -21,17 +21,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9RP3LmZF7P2c0+Jt/kMSVPb4cBtyH6P3FZ5UrQpBP0I=";
   };
 
-  propagatedBuildInputs =
-    [
-      aircrack-ng
-      iproute2
-      networkmanager
-      tshark
-      wirelesstools
-    ]
-    ++ (with python3.pkgs; [
-      matplotlib
-    ]);
+  propagatedBuildInputs = [
+    aircrack-ng
+    iproute2
+    networkmanager
+    tshark
+    wirelesstools
+  ]
+  ++ (with python3.pkgs; [
+    matplotlib
+  ]);
 
   dontBuild = true;
 

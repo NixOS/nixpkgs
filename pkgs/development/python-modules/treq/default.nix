@@ -7,7 +7,7 @@
   incremental,
   setuptools,
 
-  # dependenices
+  # dependencies
   attrs,
   hyperlink,
   requests,
@@ -38,7 +38,8 @@ buildPythonPackage rec {
     incremental
     requests
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     httpbin

@@ -22,19 +22,28 @@
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
-  # TODO: To this date, the latest release (2.4.1) is not compatible with numpy 2 and does not build
-  # successfully on nixpkgs
-  version = "2.4.1-unstable-2025-01-07";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    rev = "b7c64a1aa4dd2fd3efed96e7a9ddb4d1f5c96112";
-    hash = "sha256-oyTOBRZsKkhhGKwwBN9HCV0t8+MkJYpWsTRdS+upMeI=";
+    tag = "v${version}";
+    hash = "sha256-Ms2qoq1fokhUQ1/Wus786oYPT6C2lnHOZ+D7E7qUbjI=";
   };
 
+  postPatch =
+    # Environment version v0 for `CliffWalking` is deprecated
+    ''
+      substituteInPlace "tests/test_vec_normalize.py" \
+        --replace-fail "CliffWalking-v0" "CliffWalking-v1"
+    '';
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gymnasium"
+  ];
 
   dependencies = [
     cloudpickle
@@ -63,6 +72,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Flaky: Can fail if it takes too long, which happens when the system is under heavy load
+    "test_fps_logger"
+
     # Tests that attempt to access the filesystem
     "test_make_atari_env"
     "test_vec_env_monitor_kwargs"

@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.maurer ];
     platforms = platforms.unix;
     license = licenses.mit;
+    broken = true; # Not compatible with JaneStreet libraries 0.17
   };
 }

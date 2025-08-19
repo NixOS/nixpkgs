@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.31.0";
+  version = "1.32.0";
   pname = "azure-core";
   pyproject = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_core";
     inherit version;
-    hash = "sha256-ZWoN1h4YabFQa3xqOzHWLxWYSxpXPWMm9qovPkEjKEs=";
+    hash = "sha256-IrPDXWstrhSZD2wb4pEr8j/+ULIg5wiiirG7krHHMOU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -55,14 +55,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # test server needs to be available
   preCheck = ''
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   # disable tests which touch network
   disabledTests = [
@@ -76,7 +77,8 @@ buildPythonPackage rec {
     # disable 8 tests failing on some darwin machines with errors:
     # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
     # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "location_polling_fail" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "location_polling_fail" ];
 
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies

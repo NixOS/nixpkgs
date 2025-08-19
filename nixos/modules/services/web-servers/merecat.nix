@@ -30,7 +30,7 @@ in
       inherit (format) type;
       default = { };
       description = ''
-        Merecat configuration. Refer to merecat(8) for details on supported values.
+        Merecat configuration. Refer to {manpage}`merecat(8)` for details on supported values.
       '';
       example = {
         hostname = "localhost";

@@ -5,7 +5,7 @@
   fzf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fzf-zsh-unstable";
   version = "2019-09-09";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/wyntau/fzf-zsh";
-    description = "wrap fzf to use in oh-my-zsh";
+    description = "Wrap fzf to use in oh-my-zsh";
     license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.unix;

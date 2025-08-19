@@ -2,36 +2,44 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  ticker,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "ticker";
-  version = "4.8.0";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
-    repo = pname;
+    repo = "ticker";
     tag = "v${version}";
-    hash = "sha256-L7vqZVfj7Ns8xCFU0ruhosReM4RMhIbIHXrMbQ8YI6I=";
+    hash = "sha256-SwQkoviJCPJmz//EIBRqvaWtg65xgTo98VnoiciwKHY=";
   };
 
-  vendorHash = "sha256-o3hVRHyrJpmYgephoZ2JlVLGSqZtRQAp48OzoIMY3do=";
+  vendorHash = "sha256-XKl4bGWTz3AKl+hLFY0R0uT5ryOCHNzoeVHczMb32zo=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/achannarasappa/ticker/cmd.Version=v${version}"
+    "-X github.com/achannarasappa/ticker/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
   # Tests require internet
   doCheck = false;
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion {
+    package = ticker;
+    command = "ticker --version";
+    inherit version;
+  };
+
+  meta = {
     description = "Terminal stock ticker with live updates and position tracking";
     homepage = "https://github.com/achannarasappa/ticker";
     changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       siraben
       sarcasticadmin
     ];

@@ -1,53 +1,54 @@
-{ lib
-, stdenv
-, fetchurl
-, directoryListingUpdater
-, meson
-, ninja
-, pkg-config
-, python3
-, wayland-scanner
-, wrapGAppsHook4
-, libadwaita
-, libhandy
-, libxkbcommon
-, libgudev
-, callaudiod
-, pulseaudio
-, evince
-, glib
-, modemmanager
-, gtk4
-, gnome-bluetooth
-, gnome-control-center
-, gnome-desktop
-, gnome-session
-, gnome-shell
-, gcr
-, pam
-, systemd
-, upower
-, wayland
-, dbus
-, xvfb-run
-, phoc
-, feedbackd
-, networkmanager
-, polkit
-, libsecret
-, evolution-data-server
-, nixosTests
-, gmobile
+{
+  lib,
+  stdenv,
+  fetchurl,
+  directoryListingUpdater,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wayland-scanner,
+  wrapGAppsHook4,
+  libadwaita,
+  libhandy,
+  libxkbcommon,
+  libgudev,
+  callaudiod,
+  pulseaudio,
+  evince,
+  glib,
+  modemmanager,
+  gtk4,
+  gnome-bluetooth,
+  gnome-control-center,
+  gnome-desktop,
+  gnome-session,
+  gnome-shell,
+  gcr,
+  pam,
+  systemd,
+  upower,
+  wayland,
+  dbus,
+  xvfb-run,
+  phoc,
+  feedbackd,
+  networkmanager,
+  polkit,
+  libsecret,
+  evolution-data-server,
+  nixosTests,
+  gmobile,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.44.0";
+  version = "0.44.1";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-b4yrSC0TzTuh5kl93DeJNh06ZKjvNhTSjhDzmsEuK2g=";
+    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
   };
 
   nativeBuildInputs = [
@@ -130,7 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
+    maintainers = with maintainers; [
+      masipcat
+      zhaofengli
+    ];
     platforms = platforms.linux;
     mainProgram = "phosh-session";
   };

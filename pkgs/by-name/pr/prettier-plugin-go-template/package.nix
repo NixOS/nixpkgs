@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "prettier-plugin-go-template";
   version = "0.0.15-unstable-2023-07-26";
 
   src = fetchFromGitHub {
     owner = "NiklasPor";
-    repo = pname;
+    repo = "prettier-plugin-go-template";
     rev = "d91c82e1377b89592ea3365e7e5569688fbc7954";
     hash = "sha256-3Tvh+OzqDTtzoaTp5dZpgEQiNA2Y2dbyq4SV9Od499A=";
   };

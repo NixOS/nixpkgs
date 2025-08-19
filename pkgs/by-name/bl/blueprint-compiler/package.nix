@@ -7,25 +7,32 @@
   meson,
   ninja,
   python3,
+  runCommand,
   stdenv,
   testers,
+  wrapGAppsNoGuiHook,
   xvfb-run,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.14.0";
+  version = "0.18.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pkbTxCN7LagIbOtpiUCkh40aHw6uRtalQVFa47waXjU=";
+    hash = "sha256-3vAFkP/psM/IsFtzVOIVSU77Z+RV4d3N70U7ggrDqfo=";
   };
+
+  postPatch = ''
+    patchShebangs docs/collect-sections.py
+  '';
 
   nativeBuildInputs = [
     meson
     ninja
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -60,8 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    # regression test that `blueprint-compiler` can be used in a standalone
+    # context outside of nix builds, and doesn't rely on the setup hooks of
+    # its propagated inputs for basic functionality.
+    # see https://github.com/NixOS/nixpkgs/pull/400415
+    standalone = runCommand "blueprint-compiler-test-standalone" { } ''
+      ${lib.getExe finalAttrs.finalPackage} --help && touch $out
+    '';
   };
 
   meta = with lib; {

@@ -1,3 +1,5 @@
+{ ... }:
+
 let
   grpcPort = 19090;
   queryPort = 9090;
@@ -30,10 +32,9 @@ let
       };
     };
   };
-
 in
-import ./make-test-python.nix {
-  name = "prometheus";
+{
+  name = "thanos";
 
   nodes = {
     prometheus =
@@ -234,7 +235,7 @@ import ./make-test-python.nix {
       s3.wait_for_unit("minio.service")
       s3.wait_for_open_port(${toString minioPort})
       s3.succeed(
-          "mc config host add minio "
+          "mc alias set minio "
           + "http://localhost:${toString minioPort} "
           + "${s3.accessKey} ${s3.secretKey} --api s3v4",
           "mc mb minio/thanos-bucket",

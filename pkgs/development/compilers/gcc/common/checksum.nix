@@ -9,7 +9,10 @@
 
 let
   enableChecksum =
-    (with stdenv; buildPlatform == hostPlatform && hostPlatform == targetPlatform)
+    (
+      with stdenv;
+      lib.systems.equals buildPlatform hostPlatform && lib.systems.equals hostPlatform targetPlatform
+    )
     && langC
     && langCC
     && !stdenv.hostPlatform.isDarwin;

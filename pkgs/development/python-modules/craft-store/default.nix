@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "craft-store";
-  version = "3.1.0";
+  version = "3.3.0";
 
   pyproject = true;
 
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-store";
     tag = version;
-    hash = "sha256-pTG0JJRoHjmcLg+lAgg53rvC+7d3TLlTLe+Rxhy8wqg=";
+    hash = "sha256-ige4R5nwlfeSDyhzw0TDQMMIcExIJQuFAFvbNEpreSs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.6.0" "setuptools"
+      --replace-fail "setuptools==75.8.0" "setuptools"
   '';
 
   build-system = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   passthru.updateScript = nix-update-script { };
 

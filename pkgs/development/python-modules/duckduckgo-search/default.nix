@@ -2,27 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   click,
   primp,
-
-  # Optional dependencies
   lxml,
 }:
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "6.3.4";
+  version = "8.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "deedy5";
-    repo = "duckduckgo_search";
+    repo = "ddgs";
     tag = "v${version}";
-    hash = "sha256-NvFoiyoXeNOrynGN+VHVfIA3+D9zfAWFeWEVU8/TkZQ=";
+    hash = "sha256-ikNGBkDRyhX8yO/7DYMh1w4q3LCN7A7jsuqFsNQGsy4=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +25,8 @@ buildPythonPackage rec {
   dependencies = [
     click
     primp
-  ] ++ optional-dependencies.lxml;
-
-  optional-dependencies = {
-    lxml = [ lxml ];
-  };
+    lxml
+  ];
 
   doCheck = false; # tests require network access
 
@@ -43,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";
     mainProgram = "ddgs";
-    homepage = "https://github.com/deedy5/duckduckgo_search";
-    changelog = "https://github.com/deedy5/duckduckgo_search/releases/tag/v${version}";
+    homepage = "https://github.com/deedy5/ddgs";
+    changelog = "https://github.com/deedy5/ddgs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drawbu ];
   };

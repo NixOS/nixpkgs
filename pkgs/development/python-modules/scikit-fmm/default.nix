@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-fmm";
-  version = "2024.9.16";
+  version = "2025.6.23";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_fmm";
     inherit version;
-    hash = "sha256-q6hqteXv600iH7xpCKHgRLkJYSpy9hIf/QnlsYI+jh4=";
+    hash = "sha256-oyCPXziB5At4eNESG6ObjVfxvDj7Tl8NnRxmqbAH5E8=";
   };
 
   build-system = [ meson-python ];

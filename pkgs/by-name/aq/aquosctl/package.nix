@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation {
   inherit pname;
-  version = "unstable-2014-04-06";
+  version = "0-unstable-2014-04-06";
 
   src = fetchFromGitHub {
     owner = "jdwhite";
-    repo = pname;
+    repo = "aquosctl";
     rev = "b5e48d9ef848188b97dfb24bfcc99d5196cab5f6";
     hash = "sha256-FA3LR58KMG5RzSxxnOkVw1+inM/gMGPtw5+JQwSHBYs=";
   };

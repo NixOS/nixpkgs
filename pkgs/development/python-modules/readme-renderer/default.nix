@@ -4,6 +4,7 @@
   cmarkgfm,
   docutils,
   fetchPypi,
+  fetchpatch2,
   nh3,
   pygments,
   pytestCheckHook,
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-hxIDTqu/poBcrPFAK07rKnMCj3LRFm1vXLf5wEfF0eE=";
   };
+
+  patches = [
+    # https://github.com/pypa/readme_renderer/pull/325
+    (fetchpatch2 {
+      name = "pygment-2_19-compatibility.patch";
+      url = "https://github.com/pypa/readme_renderer/commit/04d5cfe76850192364eff344be7fe27730af8484.patch";
+      hash = "sha256-QBU3zL3DB8gYYwtKrIC8+H8798pU9Sz3T9e/Q/dXksw=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   gitUpdater,
+  static ? false, # whether to build the static version of the font
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,14 +14,21 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    rev = "Serif${version}";
-    hash = "sha256-E+Ic7XhomI6cUa+q77gQvMlaLvy+vgTq4NJ58/nPZtk=";
-    sparseCheckout = [ "Serif/Variable/OTC" ];
+    tag = "Serif${version}";
+    hash = "sha256-Bwuu64TAnOnqUgLlBsUw/jnv9emngqFBmVn6zEqySlc=";
+    sparseCheckout = [
+      "Serif/OTC"
+      "Serif/Variable/OTC"
+    ];
   };
 
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/opentype/noto-cjk Serif/Variable/OTC/*.otf.ttc
-  '';
+  installPhase =
+    let
+      font-path = if static then "Serif/OTC/*.ttc" else "Serif/Variable/OTC/*.otf.ttc";
+    in
+    ''
+      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
+    '';
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
@@ -48,6 +56,7 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
       mathnerd314
       emily
+      leana8959
     ];
   };
 }

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "parca-debuginfo";
-  version = "0.11.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-debuginfo";
     tag = "v${version}";
-    hash = "sha256-gL1BgDtEf2Q7yxzpoiTJY+nsRlsWv3zYzLVvaVijMDM=";
+    hash = "sha256-tJ3Xc5b9XnTL460u11RkCmbIc41vHKql/oZ7enTaPgQ=";
   };
 
-  vendorHash = "sha256-xtKkKhKQmZcCIFTOH+oM5a2cPlAWlJPRNQWfrAl2948=";
+  vendorHash = "sha256-bH7Y1y9BDMQJGtYfEaSrq+sWVLnovvV/uGbutJUXV2w=";
 
   ldflags = [
     "-X=main.version=${version}"

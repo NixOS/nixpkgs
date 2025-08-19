@@ -17,6 +17,7 @@
   rarfile,
   requests,
   platformdirs,
+  setuptools,
   stevedore,
   tomli,
 
@@ -41,6 +42,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     babelfish
@@ -80,6 +83,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library to search and download subtitles";
+    mainProgram = "subliminal";
     homepage = "https://github.com/Diaoul/subliminal";
     changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
     license = lib.licenses.mit;

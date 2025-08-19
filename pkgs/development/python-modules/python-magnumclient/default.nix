@@ -24,12 +24,13 @@
   setuptools,
   sphinxHook,
   stestr,
+  stevedore,
   testtools,
 }:
 
 buildPythonPackage rec {
   pname = "python-magnumclient";
-  version = "4.7.0";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-magnumclient";
     tag = version;
-    hash = "sha256-2JHI3CB/DSZZ4LXzL3PCUSmubTciUXtZkc5jpeEc4kk=";
+    hash = "sha256-rXLJnvGc5VHkHghCoBLRhARwl3hhS/oI2VOsGWfESkM=";
   };
 
   env.PBR_VERSION = version;
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     oslo-utils
     prettytable
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [
@@ -92,6 +94,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Magnum API";
     license = lib.licenses.asl20;
     mainProgram = "magnum";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

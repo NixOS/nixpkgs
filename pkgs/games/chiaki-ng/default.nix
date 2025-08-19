@@ -23,6 +23,7 @@
   json_c,
   fftw,
   miniupnpc,
+  nanopb,
   speexdsp,
   libplacebo,
   vulkan-loader,
@@ -36,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki-ng";
-  version = "1.9.4";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
     rev = "v${version}";
-    hash = "sha256-IkmNl2zoC/1ZF3QuTFtfmqD+oq4HJfM5uRdhgQSNkcI=";
+    hash = "sha256-HQmXbi2diewA/+AMjlkyffvD73TkX6D+lMh+FL2Rcz4=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     json_c
     fftw
     miniupnpc
+    nanopb
     libevdev
     udev
     speexdsp

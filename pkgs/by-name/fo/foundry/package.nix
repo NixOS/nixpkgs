@@ -13,20 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "foundry";
-  version = "0.3.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${version}";
-    hash = "sha256-SdxcNbe8/dNZ4JcxKksWmDBAvQorpC8ePvQgnyeKgxU=";
+    hash = "sha256-YMeGTPx3kqQ9CKFiH7rUEYzK0BCPksC1XIGfOj5MVd0=";
   };
 
-  cargoHash = "sha256-PQbp9jZZB/dsyKAlckZwl8xOpXks3anqUm+Ld7IhMFI=";
+  cargoHash = "sha256-TZTnaPsnfRjtfFMw5vdz4wV0ddjJ63TKrDHUkKvOfDw=";
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = [ solc ] ++ lib.optionals stdenv.isDarwin [ libusb1 ];
+  buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.
@@ -36,14 +39,14 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/forge";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   env = {
     SVM_RELEASES_LIST_JSON =
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         # Confusingly, these are universal binaries, not amd64.
         # See: https://github.com/ethereum/solidity/issues/12291#issuecomment-1974771433
         "${./svm-lists/macosx-amd64.json}"
@@ -53,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/foundry-rs/foundry";
-    description = "Portable, modular toolkit for Ethereum application development written in Rust.";
+    description = "Portable, modular toolkit for Ethereum application development written in Rust";
     changelog = "https://github.com/foundry-rs/foundry/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20

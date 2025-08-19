@@ -30,14 +30,14 @@ let
       cups
       libusb-compat-0_1
     ]
-    + ":$out/lib:${lib.getLib stdenv.cc.cc}/lib${appendPath}";
+    + ":$out/lib:${lib.getLib stdenv.cc.cc}/lib";
 in
-stdenv.mkDerivation rec {
-  pname = "samsung-UnifiedLinuxDriver";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "samsung-unified-linux-driver";
   version = "4.01.17";
 
   src = fetchurl {
-    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
     sha256 = "1vv3pzvqpg1dq3xjr8161x2yp3v7ca75vil56ranhw5pkjwq66x0";
   };
 
@@ -92,12 +92,12 @@ stdenv.mkDerivation rec {
     "rastertospl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
     homepage = "http://www.samsung.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ joko ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ joko ];
   };
-}
+})

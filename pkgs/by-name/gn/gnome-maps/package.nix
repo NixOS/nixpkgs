@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "47.3";
+  version = "48.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HpAwe6/njiML1OrdCUcicakp+1FolCJFkG+fEdrhPLg=";
+    hash = "sha256-OtqaMVUXWlGdQV8Ll9D+129PS+uLYCEqAXaXoyy+gaY=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Maps/";
     description = "Map application for GNOME 3";
     mainProgram = "gnome-maps";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

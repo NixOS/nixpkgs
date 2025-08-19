@@ -1,5 +1,6 @@
 { callPackage }:
 {
+  aurorae = callPackage ./aurorae { };
   bluedevil = callPackage ./bluedevil { };
   breeze = callPackage ./breeze { };
   breeze-grub = callPackage ./breeze-grub { };
@@ -27,6 +28,7 @@
   kwayland = callPackage ./kwayland { };
   kwayland-integration = callPackage ./kwayland-integration { };
   kwin = callPackage ./kwin { };
+  kwin-x11 = callPackage ./kwin-x11 { };
   kwrited = callPackage ./kwrited { };
   layer-shell-qt = callPackage ./layer-shell-qt { };
   libkscreen = callPackage ./libkscreen { };
@@ -63,6 +65,7 @@
   qqc2-breeze-style = callPackage ./qqc2-breeze-style { };
   sddm-kcm = callPackage ./sddm-kcm { };
   spacebar = callPackage ./spacebar { };
+  spectacle = callPackage ./spectacle { };
   systemsettings = callPackage ./systemsettings { };
   wacomtablet = callPackage ./wacomtablet { };
   xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde { };

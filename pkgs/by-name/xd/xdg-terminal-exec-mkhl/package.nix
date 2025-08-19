@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iVp+tg+OujMMddKsQ/T9wyqh/Jk/j/jQgsl23uQA/iM=";
   };
 
-  cargoHash = "sha256-x2oEPFx2KRhnKPX3QjGBM16nkYGclxR5mELGYvxjtMA=";
+  cargoHash = "sha256-4GNdH+cfr3hhbK3BQXHntPr0sTSl6SS56wkdTWbv8/k=";
 
   meta = {
     description = "Alternative rust-based implementation of the proposed XDG Default Terminal Execution Specification";

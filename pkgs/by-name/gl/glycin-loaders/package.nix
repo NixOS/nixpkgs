@@ -6,6 +6,7 @@
   bubblewrap,
   cairo,
   cargo,
+  gettext,
   git,
   gnome,
   gtk4,
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.1.4";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-0bbVkLaZtmgaZ9ARmKWBp/cQ2Mp0UJNN1/XbJB+hJQA=";
+    hash = "sha256-OAqv4r+07KDEW0JmDr/0SWANAKQ7YJ1bHIP3lfXI+zw=";
   };
 
   patches = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
+    gettext # for msgfmt
     git
     meson
     ninja
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dvapi=false"
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "glycin-loaders";
@@ -77,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Glycin loaders for several formats";
-    homepage = "https://gitlab.gnome.org/sophie-h/glycin";
-    maintainers = teams.gnome.members;
+    homepage = "https://gitlab.gnome.org/GNOME/glycin";
+    teams = [ teams.gnome ];
     license = with licenses; [
       mpl20 # or
       lgpl21Plus

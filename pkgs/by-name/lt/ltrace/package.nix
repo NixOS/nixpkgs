@@ -8,7 +8,7 @@
   elfutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ltrace";
   version = "0.7.91";
 

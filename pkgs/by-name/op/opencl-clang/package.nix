@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   git,
-  llvmPackages_14,
+  llvmPackages_15,
   spirv-llvm-translator,
   buildWithPatches ? true,
 }:
@@ -14,16 +14,14 @@ let
   addPatches =
     component: pkg:
     pkg.overrideAttrs (oldAttrs: {
-      postPatch =
-        oldAttrs.postPatch or ""
-        + ''
-          for p in ${passthru.patchesOut}/${component}/*; do
-            patch -p1 -i "$p"
-          done
-        '';
+      postPatch = oldAttrs.postPatch or "" + ''
+        for p in ${passthru.patchesOut}/${component}/*; do
+          patch -p1 -i "$p"
+        done
+      '';
     });
 
-  llvmPkgs = llvmPackages_14;
+  llvmPkgs = llvmPackages_15;
   inherit (llvmPkgs) llvm;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
   libclang = if buildWithPatches then passthru.libclang else llvmPkgs.libclang;
@@ -46,8 +44,8 @@ let
       postPatch = ''
         for filename in patches/clang/*.patch; do
           substituteInPlace "$filename" \
-            --replace "a/clang/" "a/" \
-            --replace "b/clang/" "b/"
+            --replace-fail "a/clang/" "a/" \
+            --replace-fail "b/clang/" "b/"
         done
       '';
 
@@ -58,14 +56,13 @@ let
     };
   };
 
-  version = "14.0.0-unstable-2024-07-09";
+  version = "15.0.1";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "intel";
       repo = "opencl-clang";
-      # https://github.com/intel/opencl-clang/compare/ocl-open-140
-      rev = "470cf0018e1ef6fc92eda1356f5f31f7da452abc";
-      hash = "sha256-Ja+vJ317HI3Nh45kcAMhyLVTIqyy6pE5KAsKs4ou9J8=";
+      tag = "v${version}";
+      hash = "sha256-mUqxe3lZQdhz/CRE1+NU2q5g2Taxlh7nzPwUHOB6I0c=";
     };
 
     patches = [
@@ -74,18 +71,17 @@ let
       ./opencl-headers-dir.patch
     ];
 
-    postPatch =
-      ''
-        # fix not be able to find clang from PATH
-        substituteInPlace cl_headers/CMakeLists.txt \
-          --replace " NO_DEFAULT_PATH" ""
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # Uses linker flags that are not supported on Darwin.
-        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
-        substituteInPlace CMakeLists.txt \
-          --replace '-Wl,--no-undefined' ""
-      '';
+    postPatch = ''
+      # fix not be able to find clang from PATH
+      substituteInPlace cl_headers/CMakeLists.txt \
+        --replace-fail " NO_DEFAULT_PATH" ""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Uses linker flags that are not supported on Darwin.
+      sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+      substituteInPlace CMakeLists.txt \
+        --replace-fail '-Wl,--no-undefined' ""
+    '';
   };
 in
 

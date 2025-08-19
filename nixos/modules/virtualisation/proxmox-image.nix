@@ -71,7 +71,7 @@ with lib;
         type = types.ints.positive;
         default = 1024;
         description = ''
-          Guest memory in MB
+          Guest memory in MiB (1024×1024 bytes)
         '';
       };
       bios = mkOption {

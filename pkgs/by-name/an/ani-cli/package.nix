@@ -27,13 +27,13 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-cli";
-  version = "4.9";
+  version = "4.10";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-7zuepWTtrFp9RW3zTSjPzyJ9e+09PdKgwcnV+DqPEUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R/YQ02ctTcAEzrVyWlaCHi1YW82iPrMBbbMNP21r0p8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,7 +44,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fzf
     ffmpeg
     aria2
-  ] ++ lib.optional chromecastSupport catt ++ lib.optional syncSupport syncplay;
+  ]
+  ++ lib.optional chromecastSupport catt
+  ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cogmasters.github.io/concord/";
     changelog = "https://github.com/Cogmasters/concord/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emneo ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.unix;
   };
 })

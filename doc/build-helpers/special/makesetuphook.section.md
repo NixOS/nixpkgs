@@ -9,7 +9,7 @@ pkgs.makeSetupHook {
   name = "something-hook";
   propagatedBuildInputs = [ pkgs.commandsomething ];
   depsTargetTargetPropagated = [ pkgs.libsomething ];
-} ./script.sh;
+} ./script.sh
 ```
 
 ### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash {#sec-pkgs.makeSetupHook-usage-example}
@@ -42,7 +42,7 @@ pkgs.makeSetupHook
       }
       preConfigureHooks+=(_printHelloHook)
     ''
-  );
+  )
 ```
 
 ## Attributes {#sec-pkgs.makeSetupHook-attributes}

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxdoc-tools";
-  version = "0.9.85";
+  version = "0.9.86";
 
   src = fetchFromGitLab {
     owner = "agmartin";
     repo = "linuxdoc-tools";
     rev = version;
-    hash = "sha256-8nsCfcxqVt16br6Vhk8tW3cxJMJFSZYX2g3MjO7JoT4=";
+    hash = "sha256-AsTlrjTYuuLB2jF0zKPVrxOZ2ygUIyMJFV6qDd7ODwA=";
   };
 
   outputs = [
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     perl
     gnused
     coreutils
-  ] ++ lib.optionals withLatex [ texliveMedium ];
+  ]
+  ++ lib.optionals withLatex [ texliveMedium ];
 
   meta = with lib; {
     description = "Toolset for processing LinuxDoc DTD SGML files";

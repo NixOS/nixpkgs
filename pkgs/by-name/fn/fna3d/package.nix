@@ -7,14 +7,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "fna3d";
-  version = "25.01";
+  version = "25.02";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-0BD3aFIg3miBhGr6YuWJyrRxWsNnPNIFNiZSzPalJ/c=";
+    hash = "sha256-0rRwIbOciPepo+ApvJiK5IyhMdq/4jsMlCSv0UeDETs=";
   };
 
   buildInputs = [ SDL2 ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fna-xna.github.io/";
     license = lib.licenses.mspl;
     platforms = lib.platforms.linux;
-    mainProgram = pname;
+    mainProgram = "fna3d";
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
 }

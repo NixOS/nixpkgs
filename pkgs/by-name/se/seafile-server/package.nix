@@ -39,8 +39,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "seafile-server";
-  version = "11.0.12";
-
+  version = "11.0.12"; # Doc links match Seafile 11.0 in seafile.nix – update if version changes.
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
@@ -51,6 +50,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3
+    libsearpc # searpc-codegen.py
+    vala # valac
+    which
   ];
 
   buildInputs = [
@@ -64,8 +67,6 @@ stdenv.mkDerivation {
     fuse
     libarchive
     libjwt
-    which
-    vala
     libevhtp
     oniguruma
   ];
@@ -93,8 +94,6 @@ stdenv.mkDerivation {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      greizgh
-      schmittlauch
       melvyn2
     ];
     mainProgram = "seaf-server";

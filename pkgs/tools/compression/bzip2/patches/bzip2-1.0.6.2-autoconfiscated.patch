@@ -1,0 +1,370 @@
+--- /dev/null
++++ autogen.sh
+@@ -0,0 +1,8 @@
++mv LICENSE COPYING
++mv CHANGES NEWS
++touch AUTHORS
++touch ChangeLog
++libtoolize --force
++aclocal
++automake --add-missing --gnu
++autoconf
+--- /dev/null
++++ README.autotools
+@@ -0,0 +1,41 @@
++bzip2 autoconfiscated
++=====================
++
++Temporarily at http://ftp.suse.com/pub/people/sbrabec/bzip2/ expecting
++that it will become a new upstream version to prevent per-distribution
++shared library patching done by nearly each Linux vendor separately.
++
++Autoconfiscation brings standard ./configure ; make ; make install
++installation, seamless support of DESTDIR, automatic check for supported
++CFLAGS, standard shared library support, automatic large files CFLAGS
++check and all things that are supported by automake.
++
++It makes obsolete Makefile-libbz2_so and README.COMPILATION.PROBLEMS.
++Now configure should automatically detect correct build flags.
++
++In case of any problem or question with autotools support feel free to
++contact me: Stanislav Brabec <sbrabec@suse.cz>
++
++Autoconfiscated version binaries are exactly equal to
++bzip2-1.0.6.tar.gz. There are only few changes. See below.
++
++
++New features:
++
++Trivial link man pages for bzcat and bunzip2 added.
++
++bzip2.pc file for pkg-config. Packages can use it for checks.
++
++
++Incompatible changes:
++
++soname change. Libtool has no support for two parts soname suffix (e. g.
++libbz2.so.1.0). It must be a single number (e. g. libbz2.so.1). That is
++why soname must change. But I see not a big problem with it. Several
++distributions already use the new number instead of the non-standard
++number from Makefile-libbz2_so.
++
++Shared library exports only public symbols.
++
++To be super-safe, I incremented minor number of the library file, so
++both instances of the shared library can live together.
+--- /dev/null
++++ configure.ac
+@@ -0,0 +1,62 @@
++#                                               -*- Autoconf -*-
++# Process this file with autoconf to produce a configure script.
++
++AC_PREREQ([2.57])
++AC_INIT([bzip2], [1.0.6], [Julian Seward <jseward@bzip.org>])
++BZIP2_LT_CURRENT=1
++BZIP2_LT_REVISION=6
++BZIP2_LT_AGE=0
++AC_CONFIG_SRCDIR([bzlib.h])
++AC_CONFIG_MACRO_DIR([m4])
++
++AM_INIT_AUTOMAKE([foreign subdir-objects])
++AM_MAINTAINER_MODE
++
++# Checks for programs.
++AC_PROG_AWK
++AC_PROG_CC_STDC
++AC_PROG_CC_C_O
++AC_USE_SYSTEM_EXTENSIONS
++AC_PROG_INSTALL
++AC_PROG_LN_S
++AC_PROG_MAKE_SET
++LT_INIT([disable-static pic-only])
++PKG_PROG_PKG_CONFIG
++gl_VISIBILITY
++# Checks for libraries.
++
++# Checks for header files.
++
++# Checks for typedefs, structures, and compiler characteristics.
++
++# Check for system features.
++AC_SYS_LARGEFILE
++
++AC_MSG_CHECKING([whether compiler understands -Wall])
++save_CFLAGS="$CFLAGS"
++CFLAGS="$CFLAGS -Wall"
++AC_TRY_COMPILE([], [], [
++	AC_MSG_RESULT([yes])
++], [
++	AC_MSG_RESULT([no])
++	CFLAGS="$save_CFLAGS"
++])
++
++AC_MSG_CHECKING([whether compiler understands -Winline])
++save_CFLAGS="$CFLAGS"
++CFLAGS="$CFLAGS -Winline"
++AC_TRY_COMPILE([], [], [
++	AC_MSG_RESULT([yes])
++], [
++	AC_MSG_RESULT([no])
++	CFLAGS="$save_CFLAGS"
++])
++
++# Checks for library functions.
++
++# Write the output.
++AC_SUBST([BZIP2_LT_CURRENT])
++AC_SUBST([BZIP2_LT_REVISION])
++AC_SUBST([BZIP2_LT_AGE])
++AC_CONFIG_FILES([Makefile bzip2.pc])
++AC_OUTPUT
+--- /dev/null
++++ Makefile.am
+@@ -0,0 +1,137 @@
++ACLOCAL_AMFLAGS = -I m4
++lib_LTLIBRARIES = libbz2.la
++AM_CFLAGS = $(CFLAG_VISIBILITY)
++libbz2_la_SOURCES = \
++	blocksort.c \
++	huffman.c \
++	crctable.c \
++	randtable.c \
++	compress.c \
++	decompress.c \
++	bzlib.c
++
++libbz2_la_LDFLAGS = \
++	-version-info $(BZIP2_LT_CURRENT):$(BZIP2_LT_REVISION):$(BZIP2_LT_AGE) \
++	-no-undefined
++
++include_HEADERS = bzlib.h
++
++noinst_HEADERS = bzlib_private.h
++
++bin_PROGRAMS = bzip2 bzip2recover
++
++bzip2_SOURCES = bzip2.c
++bzip2_LDADD = libbz2.la
++
++bzip2recover_SOURCES = bzip2recover.c
++bzip2recover_LDADD = libbz2.la
++
++bin_SCRIPTS = bzgrep bzmore bzdiff
++
++man_MANS = bzip2.1 bzgrep.1 bzmore.1 bzdiff.1
++
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = bzip2.pc
++
++$(pkgconfig_DATA): $(srcdir)/bzip2.pc.in config.status
++
++install-exec-hook:
++	rm -f $(DESTDIR)$(bindir)/`echo "bunzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcat" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzegrep" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzfgrep" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzless" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcmp" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	$(LN_S) `echo "bzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'` $(DESTDIR)$(bindir)/`echo "bunzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	$(LN_S) `echo "bzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'` $(DESTDIR)$(bindir)/`echo "bzcat" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	$(LN_S) `echo "bzgrep" | sed 's,^.*/,,;$(transform)'` $(DESTDIR)$(bindir)/`echo "bzegrep" | sed 's,^.*/,,;$(transform)'`
++	$(LN_S) `echo "bzgrep" | sed 's,^.*/,,;$(transform)'` $(DESTDIR)$(bindir)/`echo "bzfgrep" | sed 's,^.*/,,;$(transform)'`
++	$(LN_S) `echo "bzmore" | sed 's,^.*/,,;$(transform)'` $(DESTDIR)$(bindir)/`echo "bzless" | sed 's,^.*/,,;$(transform)'`
++	$(LN_S) `echo "bzdiff" | sed 's,^.*/,,;$(transform)'` $(DESTDIR)$(bindir)/`echo "bzcmp" | sed 's,^.*/,,;$(transform)'`
++
++install-data-hook:
++	echo ".so man1/`echo "bzip2" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bunzip2" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzip2" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzcat" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzgrep" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzegrep" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzgrep" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzfgrep" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzmore" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzless" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzdiff" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzcmp" | sed 's,^.*/,,;$(transform)'`.1
++
++uninstall-hook:
++	rm -f $(DESTDIR)$(bindir)/`echo "bunzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcat" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzegrep" | sed 's,^.*/,,;$(transform)'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzfgrep" | sed 's,^.*/,,;$(transform)'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzless" | sed 's,^.*/,,;$(transform)'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcmp" | sed 's,^.*/,,;$(transform)'`
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bunzip2" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzcat" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzegrep" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzfgrep" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzless" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzcmp" | sed 's,^.*/,,;$(transform)'`.1
++
++test: bzip2
++	@cat $(srcdir)/words1
++	./bzip2 -1  <$(srcdir)/sample1.ref >sample1.rb2
++	./bzip2 -2  <$(srcdir)/sample2.ref >sample2.rb2
++	./bzip2 -3  <$(srcdir)/sample3.ref >sample3.rb2
++	./bzip2 -d  <$(srcdir)/sample1.bz2 >sample1.tst
++	./bzip2 -d  <$(srcdir)/sample2.bz2 >sample2.tst
++	./bzip2 -ds <$(srcdir)/sample3.bz2 >sample3.tst
++	cmp $(srcdir)/sample1.bz2 sample1.rb2
++	cmp $(srcdir)/sample2.bz2 sample2.rb2
++	cmp $(srcdir)/sample3.bz2 sample3.rb2
++	cmp sample1.tst $(srcdir)/sample1.ref
++	cmp sample2.tst $(srcdir)/sample2.ref
++	cmp sample3.tst $(srcdir)/sample3.ref
++	@cat $(srcdir)/words3
++
++manual: $(srcdir)/manual.html $(srcdir)/manual.ps $(srcdir)/manual.pdf
++
++manual.ps: $(MANUAL_SRCS)
++	cd $(srcdir); ./xmlproc.sh -ps manual.xml
++
++manual.pdf: $(MANUAL_SRCS)
++	cd $(srcdir); ./xmlproc.sh -pdf manual.xml
++
++manual.html: $(MANUAL_SRCS)
++	cd $(srcdir); ./xmlproc.sh -html manual.xml
++
++EXTRA_DIST = \
++	$(bin_SCRIPTS) \
++	$(man_MANS) \
++	README.autotools \
++	README.XML.STUFF \
++	bz-common.xsl \
++	bz-fo.xsl \
++	bz-html.xsl \
++	bzip.css \
++	bzip2.1.preformatted \
++	bzip2.pc.in \
++	bzip2.txt \
++	dlltest.c \
++	dlltest.dsp \
++	entities.xml \
++	format.pl \
++	libbz2.def \
++	libbz2.dsp \
++	makefile.msc \
++	manual.html \
++	manual.pdf \
++	manual.ps \
++	manual.xml \
++	mk251.c \
++	sample1.bz2 \
++	sample1.ref \
++	sample2.bz2 \
++	sample2.ref \
++	sample3.bz2 \
++	sample3.ref \
++	spewG.c \
++	unzcrash.c \
++	words0 \
++	words1 \
++	words2 \
++	words3 \
++	xmlproc.sh
+--- /dev/null
++++ bzip2.pc.in
+@@ -0,0 +1,11 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++bindir=@bindir@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: bzip2
++Description: Lossless, block-sorting data compression
++Version: @VERSION@
++Libs: -L${libdir} -lbz2
++Cflags: -I${includedir}
+--- /dev/null
++++ m4/visibility.m4
+@@ -0,0 +1,78 @@
++# visibility.m4 serial 4 (gettext-0.18.2)
++dnl Copyright (C) 2005, 2008, 2010-2011 Free Software Foundation, Inc.
++dnl This file is free software; the Free Software Foundation
++dnl gives unlimited permission to copy and/or distribute it,
++dnl with or without modifications, as long as this notice is preserved.
++
++dnl From Bruno Haible.
++
++dnl Tests whether the compiler supports the command-line option
++dnl -fvisibility=hidden and the function and variable attributes
++dnl __attribute__((__visibility__("hidden"))) and
++dnl __attribute__((__visibility__("default"))).
++dnl Does *not* test for __visibility__("protected") - which has tricky
++dnl semantics (see the 'vismain' test in glibc) and does not exist e.g. on
++dnl MacOS X.
++dnl Does *not* test for __visibility__("internal") - which has processor
++dnl dependent semantics.
++dnl Does *not* test for #pragma GCC visibility push(hidden) - which is
++dnl "really only recommended for legacy code".
++dnl Set the variable CFLAG_VISIBILITY.
++dnl Defines and sets the variable HAVE_VISIBILITY.
++
++AC_DEFUN([gl_VISIBILITY],
++[
++  AC_REQUIRE([AC_PROG_CC])
++  CFLAG_VISIBILITY=
++  HAVE_VISIBILITY=0
++  if test -n "$GCC"; then
++    dnl First, check whether -Werror can be added to the command line, or
++    dnl whether it leads to an error because of some other option that the
++    dnl user has put into $CC $CFLAGS $CPPFLAGS.
++    AC_MSG_CHECKING([whether the -Werror option is usable])
++    AC_CACHE_VAL([gl_cv_cc_vis_werror], [
++      gl_save_CFLAGS="$CFLAGS"
++      CFLAGS="$CFLAGS -Werror"
++      AC_COMPILE_IFELSE(
++        [AC_LANG_PROGRAM([[]], [[]])],
++        [gl_cv_cc_vis_werror=yes],
++        [gl_cv_cc_vis_werror=no])
++      CFLAGS="$gl_save_CFLAGS"])
++    AC_MSG_RESULT([$gl_cv_cc_vis_werror])
++    dnl Now check whether visibility declarations are supported.
++    AC_MSG_CHECKING([for simple visibility declarations])
++    AC_CACHE_VAL([gl_cv_cc_visibility], [
++      gl_save_CFLAGS="$CFLAGS"
++      CFLAGS="$CFLAGS -fvisibility=hidden"
++      dnl We use the option -Werror and a function dummyfunc, because on some
++      dnl platforms (Cygwin 1.7) the use of -fvisibility triggers a warning
++      dnl "visibility attribute not supported in this configuration; ignored"
++      dnl at the first function definition in every compilation unit, and we
++      dnl don't want to use the option in this case.
++      if test $gl_cv_cc_vis_werror = yes; then
++        CFLAGS="$CFLAGS -Werror"
++      fi
++      AC_COMPILE_IFELSE(
++        [AC_LANG_PROGRAM(
++           [[extern __attribute__((__visibility__("hidden"))) int hiddenvar;
++             extern __attribute__((__visibility__("default"))) int exportedvar;
++             extern __attribute__((__visibility__("hidden"))) int hiddenfunc (void);
++             extern __attribute__((__visibility__("default"))) int exportedfunc (void);
++             void dummyfunc (void) {}
++           ]],
++           [[]])],
++        [gl_cv_cc_visibility=yes],
++        [gl_cv_cc_visibility=no])
++      CFLAGS="$gl_save_CFLAGS"])
++    AC_MSG_RESULT([$gl_cv_cc_visibility])
++    if test $gl_cv_cc_visibility = yes; then
++      CFLAG_VISIBILITY="-fvisibility=hidden"
++      HAVE_VISIBILITY=1
++      AC_DEFINE([BZ_EXTERN], [__attribute__((__visibility__("default")))], [To make symbol visible])
++    fi
++  fi
++  AC_SUBST([CFLAG_VISIBILITY])
++  AC_SUBST([HAVE_VISIBILITY])
++  AC_DEFINE_UNQUOTED([HAVE_VISIBILITY], [$HAVE_VISIBILITY],
++    [Define to 1 or 0, depending whether the compiler supports simple visibility declarations.])
++])
+--- bzlib.h.orig
++++ bzlib.h
+@@ -91,9 +91,11 @@ typedef
+ #   endif
+ #else
+ #   define BZ_API(func) func
+-#   define BZ_EXTERN extern
+ #endif
+ 
++#ifndef BZ_EXTERN
++#define BZ_EXTERN extern
++#endif
+ 
+ /*-- Core (low-level) library functions --*/
+ 

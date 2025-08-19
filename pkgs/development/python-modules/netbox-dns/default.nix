@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-plugin-dns";
-  version = "1.1.7";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "peteeckel";
     repo = "netbox-plugin-dns";
     tag = version;
-    hash = "sha256-wrVTsVKjGPJCIoSo6uuWtorJBjn4Kh2kYkBXxM88kCo";
+    hash = "sha256-7Ej+YDpV/irXUujDsgNnhpFdKduT/ALXvjQjyb9PLOA=";
   };
 
   build-system = [ setuptools ];

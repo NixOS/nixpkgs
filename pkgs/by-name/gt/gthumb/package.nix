@@ -13,16 +13,13 @@
   libtiff,
   gst_all_1,
   libraw,
-  libsoup_2_4,
-  libsecret,
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  libchamplain,
+  libjxl,
   librsvg,
   libwebp,
   libX11,
-  json-glib,
   lcms2,
   bison,
   flex,
@@ -32,17 +29,15 @@
   python3,
   desktop-file-utils,
   itstool,
-  withWebservices ? true,
-  webkitgtk_4_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.6";
+  version = "3.12.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
+    url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
   };
 
   nativeBuildInputs = [
@@ -69,23 +64,23 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk3
-    json-glib
     lcms2
-    libchamplain
     libheif
     libjpeg
+    libjxl
     libraw
     librsvg
-    libsecret
-    libsoup_2_4
     libtiff
     libwebp
     libX11
-  ] ++ lib.optional withWebservices webkitgtk_4_0;
+  ];
 
   mesonFlags = [
-    "-Dlibchamplain=true"
-    (lib.mesonBool "webservices" withWebservices)
+    "-Dlibjxl=true"
+    # Depends on libsoup2.
+    # https://gitlab.gnome.org/GNOME/gthumb/-/issues/244
+    "-Dlibchamplain=false"
+    "-Dwebservices=false"
   ];
 
   postPatch = ''
@@ -104,7 +99,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gthumb";
       versionPolicy = "odd-unstable";
     };
   };
@@ -115,6 +110,9 @@ stdenv.mkDerivation rec {
     mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimame ];
+    maintainers = with maintainers; [
+      bobby285271
+      mimame
+    ];
   };
-}
+})

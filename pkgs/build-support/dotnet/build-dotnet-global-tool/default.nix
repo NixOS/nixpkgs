@@ -60,7 +60,7 @@ buildDotnetModule (
       installPhase = ''
         runHook preInstall
 
-        dotnet tool install --tool-path $out/lib/${pname} ${nugetName}
+        dotnet tool install --tool-path $out/lib/${pname} ${nugetName} --version ${version}
 
         # remove files that contain nix store paths to temp nuget sources we made
         find $out -name 'project.assets.json' -delete
@@ -72,7 +72,8 @@ buildDotnetModule (
       passthru = {
         updateScript = ./update.sh;
         nupkg = nupkg;
-      } // args.passthru or { };
+      }
+      // args.passthru or { };
     }
   )
     (if lib.isFunction fnOrAttrs then fnOrAttrs finalAttrs else fnOrAttrs)

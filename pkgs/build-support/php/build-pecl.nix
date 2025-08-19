@@ -46,7 +46,8 @@ stdenv.mkDerivation (
       php
       autoreconfHook
       re2c
-    ] ++ nativeBuildInputs;
+    ]
+    ++ nativeBuildInputs;
     buildInputs = [ php ] ++ peclDeps ++ buildInputs;
 
     makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
@@ -65,7 +66,7 @@ stdenv.mkDerivation (
       # PHP extensions correctly.
       # See the corresponding PR: https://github.com/Mic92/nix-update/pull/123
       isPhpExtension = true;
-      updateScript = nix-update-script { };
+      updateScript = passthru.updateScript or (nix-update-script { });
     };
   }
 )

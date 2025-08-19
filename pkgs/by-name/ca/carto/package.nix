@@ -19,6 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+  postInstall = ''
+    # Remove broken symlinks
+    find "$out/lib/node_modules" -xtype l -delete
+  '';
+
   meta = {
     changelog = "https://github.com/mapbox/carto/blob/${src.rev}/CHANGELOG.md";
     description = "Mapnik stylesheet compiler";

@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/im85288/service.upnext";
     description = "Up Next - Proposes to play the next episode automatically";
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -4,35 +4,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
-  # pyproject
+
+  # build-system
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
-  # runtime
-  setuptools,
+
+  # dependencies
   fsspec,
   httpx,
   huggingface-hub,
   packaging,
   typing-extensions,
   websockets,
-  # checkInputs
-  pytestCheckHook,
-  pytest-asyncio,
-  pydub,
-  rich,
-  tomlkit,
+
+  # tests
   gradio,
+  pydub,
+  pytest-asyncio,
+  pytestCheckHook,
+  rich,
   safehttpx,
+  tomlkit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.5.3";
+  version = "1.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # no tests on pypi
   src = fetchFromGitHub {
@@ -41,11 +41,10 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-u4GQYtCeAMDqRRbZGtjfqIHwuHyxUpw6kRE75SJMALg=";
+    hash = "sha256-dj8hJPXUBbFG9awP3o0vgyPt+gcCgzKKEQTEHkrEimA=";
   };
-  prePatch = ''
-    cd client/python
-  '';
+
+  sourceRoot = "${src.name}/client/python";
 
   # upstream adds upper constraints because they can, not because the need to
   # https://github.com/gradio-app/gradio/pull/4885
@@ -61,7 +60,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    setuptools # needed for 'pkg_resources'
     fsspec
     httpx
     huggingface-hub
@@ -71,27 +69,33 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pydub
-    rich
-    tomlkit
-    safehttpx
     gradio.sans-reverse-dependencies
+    pydub
+    pytest-asyncio
+    pytestCheckHook
+    rich
+    safehttpx
+    tomlkit
+    writableTmpDirAsHomeHook
   ];
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
-    export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
+    #"-x" "-Wignore" # uncomment for debugging help
+  ];
+
+  enabledTestPaths = [
     "test/"
-    "-m 'not flaky'"
-    #"-x" "-W" "ignore" # uncomment for debugging help
+  ];
+
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

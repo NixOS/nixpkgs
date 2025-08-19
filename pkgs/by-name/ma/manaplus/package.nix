@@ -13,6 +13,7 @@
   curl,
   libxml2,
   libpng,
+  libX11,
   pkg-config,
   libGL,
   autoreconfHook,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libGL
     libpng
+    libX11
     libxml2
     physfs
     zlib

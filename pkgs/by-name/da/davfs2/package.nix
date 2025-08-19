@@ -1,11 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, neon
-, procps
-, replaceVars
-, zlib
-, wrapperDir ? "/run/wrappers/bin"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  neon,
+  procps,
+  replaceVars,
+  zlib,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (replaceVars ./0002-Make-sure-that-the-setuid-wrapped-umount-is-invoked.patch {
       inherit wrapperDir;
+    })
+    (fetchpatch {
+      name = "neon-34.patch";
+      url = "https://github.com/alisarctl/davfs2/commit/2693a9a2656b70a64ee851d5c22a2945d840dcbb.diff";
+      hash = "sha256-KK+4cjrUrWcyY6F5otNgrZ4BojJ4NiMm/Y1zejCt4Tc=";
     })
   ];
 

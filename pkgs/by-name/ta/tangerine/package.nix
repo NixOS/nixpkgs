@@ -6,11 +6,13 @@
   cmake,
   ncurses,
   SDL2,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation {
   pname = "tangerine";
-  version = "unstable-2024-04-05";
+  version = "0-unstable-2024-04-05";
 
   src = fetchFromGitHub {
     owner = "Aeva";
@@ -31,6 +33,8 @@ stdenv.mkDerivation {
   buildInputs = [
     ncurses
     SDL2
+    libGL
+    libX11
   ];
 
   meta = with lib; {

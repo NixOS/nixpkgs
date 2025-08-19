@@ -1,6 +1,11 @@
-{ buildNpmPackage, lib, testers, shopify-cli }:
+{
+  buildNpmPackage,
+  lib,
+  testers,
+  shopify-cli,
+}:
 let
-  version = "3.69.3";
+  version = "3.83.3";
 in
 buildNpmPackage {
   pname = "shopify";
@@ -8,7 +13,7 @@ buildNpmPackage {
 
   src = ./manifests;
 
-  npmDepsHash = "sha256-QhbOKOs/0GEOeySG4uROzgtD4o7C+6tS/TAaPcmC3xk=";
+  npmDepsHash = "sha256-HUBdnxKVpEIT+PbKYC8ZUKzUR26rqLI9LJReFdfG2y8=";
   dontNpmBuild = true;
 
   passthru = {
@@ -26,6 +31,9 @@ buildNpmPackage {
     homepage = "https://github.com/Shopify/cli";
     changelog = "https://github.com/Shopify/cli/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fd onny ];
+    maintainers = with lib.maintainers; [
+      fd
+      onny
+    ];
   };
 }

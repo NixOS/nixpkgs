@@ -16,7 +16,7 @@
   llvmPackages,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (cppe)
     pname
     version

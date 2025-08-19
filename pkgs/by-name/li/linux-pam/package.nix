@@ -3,8 +3,8 @@
   stdenv,
   buildPackages,
   fetchurl,
+  fetchpatch,
   flex,
-  cracklib,
   db4,
   gettext,
   audit,
@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./suid-wrapper-path.patch
+    # required for fixing CVE-2025-6020
+    (fetchpatch {
+      url = "https://github.com/linux-pam/linux-pam/commit/10b80543807e3fc5af5f8bcfd8bb6e219bb3cecc.patch";
+      hash = "sha256-VS3D3wUbDxDXRriIuEvvgeZixzDA58EfiLygfFeisGg=";
+    })
+    # Manually cherry-picked from 475bd60c552b98c7eddb3270b0b4196847c0072e
+    ./CVE-2025-6020.patch
   ];
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
@@ -48,13 +55,14 @@ stdenv.mkDerivation rec {
     flex
     autoreconfHook269
     pkg-config-unwrapped
-  ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
+  ]
+  ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [
-    cracklib
     db4
     libxcrypt
-  ] ++ lib.optional stdenv.buildPlatform.isLinux audit;
+  ]
+  ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
   enableParallelBuilding = true;
 

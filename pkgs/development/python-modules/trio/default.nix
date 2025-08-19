@@ -23,19 +23,20 @@
   pytestCheckHook,
   pytest-trio,
   trustme,
-  yapf,
 }:
 
 let
   # escape infinite recursion with pytest-trio
   pytest-trio' = (pytest-trio.override { trio = null; }).overrideAttrs {
+    # `pythonRemoveDeps` is not working properly
+    dontCheckRuntimeDeps = true;
     doCheck = false;
     pythonImportsCheck = [ ];
   };
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.27.0";
+  version = "0.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-VJVGMhoLISCtNh56E7ssKXBPh4/WvUbFyKUbnWvqd0s=";
+    hash = "sha256-spYHwVq3iNhnZQf2z7aTyDuSCiSl3X5PD6siXqLC4EA=";
   };
 
   build-system = [ setuptools ];
@@ -55,7 +56,8 @@ buildPythonPackage rec {
     outcome
     sniffio
     sortedcontainers
-  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   # tests are failing on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -67,7 +69,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-trio'
     trustme
-    yapf
   ];
 
   preCheck = ''
@@ -76,9 +77,8 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
@@ -100,7 +100,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-trio/trio/blob/v${version}/docs/source/history.rst";
+    changelog = "https://github.com/python-trio/trio/blob/${src.tag}/docs/source/history.rst";
     description = "Async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [

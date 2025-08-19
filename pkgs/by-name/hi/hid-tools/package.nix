@@ -49,6 +49,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "Python scripts to manipulate HID data";
     homepage = "https://gitlab.freedesktop.org/libevdev/hid-tools";
     license = licenses.mit;
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
   };
 }

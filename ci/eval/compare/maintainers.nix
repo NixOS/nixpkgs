@@ -1,35 +1,40 @@
+{
+  lib,
+}:
 # Almost directly vendored from https://github.com/NixOS/ofborg/blob/5a4e743f192fb151915fcbe8789922fa401ecf48/ofborg/src/maintainers.nix
-{ changedattrs, changedpathsjson }:
+{
+  changedattrs,
+  changedpathsjson,
+  byName ? false,
+}:
 let
   pkgs = import ../../.. {
     system = "x86_64-linux";
     config = { };
     overlays = [ ];
   };
-  inherit (pkgs) lib;
 
   changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
 
   anyMatchingFile =
-    filename:
-    let
-      matching = builtins.filter (changed: lib.strings.hasSuffix changed filename) changedpaths;
-    in
-    (builtins.length matching) > 0;
+    filename: builtins.any (changed: lib.strings.hasSuffix changed filename) changedpaths;
 
-  anyMatchingFiles = files: (builtins.length (builtins.filter anyMatchingFile files)) > 0;
+  anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  enrichedAttrs = builtins.map (path: {
-    path = path;
-    name = builtins.concatStringsSep "." path;
+  enrichedAttrs = builtins.map (name: {
+    path = lib.splitString "." name;
+    name = name;
   }) changedattrs;
 
   validPackageAttributes = builtins.filter (
     pkg:
     if (lib.attrsets.hasAttrByPath pkg.path pkgs) then
       (
-        if (builtins.tryEval (lib.attrsets.attrByPath pkg.path null pkgs)).success then
-          true
+        let
+          value = lib.attrsets.attrByPath pkg.path null pkgs;
+        in
+        if (builtins.tryEval value).success then
+          if value != null then true else builtins.trace "${pkg.name} exists but is null" false
         else
           builtins.trace "Failed to access ${pkg.name} even though it exists" false
       )
@@ -42,23 +47,25 @@ let
   ) validPackageAttributes;
 
   attrsWithMaintainers = builtins.map (
-    pkg: pkg // { maintainers = (pkg.package.meta or { }).maintainers or [ ]; }
-  ) attrsWithPackages;
-
-  attrsWeCanPing = builtins.filter (
     pkg:
-    if (builtins.length pkg.maintainers) > 0 then
-      true
-    else
-      builtins.trace "Package has no maintainers: ${pkg.name}" false
-  ) attrsWithMaintainers;
+    let
+      meta = pkg.package.meta or { };
+    in
+    pkg
+    // {
+      # TODO: Refactor this so we can ping entire teams instead of the individual members.
+      # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
+      maintainers = meta.maintainers or [ ];
+    }
+  ) attrsWithPackages;
 
   relevantFilenames =
     drv:
     (lib.lists.unique (
       builtins.map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
         builtins.filter (x: x != null) [
-          (builtins.unsafeGetAttrPos "maintainers" (drv.meta or { }))
+          ((drv.meta or { }).maintainersPosition or null)
+          ((drv.meta or { }).teamsPosition or null)
           (builtins.unsafeGetAttrPos "src" drv)
           # broken because name is always set by stdenv:
           #    # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
@@ -88,33 +95,17 @@ let
 
   attrsWithModifiedFiles = builtins.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
-  listToPing = lib.lists.flatten (
-    builtins.map (
-      pkg:
-      builtins.map (maintainer: {
-        id = maintainer.githubId;
-        packageName = pkg.name;
-        dueToFiles = pkg.filenames;
-      }) pkg.maintainers
-    ) attrsWithModifiedFiles
-  );
+  listToPing = lib.concatMap (
+    pkg:
+    builtins.map (maintainer: {
+      id = maintainer.githubId;
+      inherit (maintainer) github;
+      packageName = pkg.name;
+      dueToFiles = pkg.filenames;
+    }) pkg.maintainers
+  ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.lists.foldr (
-    ping: collector:
-    collector
-    // {
-      "${toString ping.id}" = [
-        { inherit (ping) packageName dueToFiles; }
-      ] ++ (collector."${toString ping.id}" or [ ]);
-    }
-  ) { } listToPing;
-
-  textForPackages =
-    packages: lib.strings.concatStringsSep ", " (builtins.map (pkg: pkg.packageName) packages);
-
-  textPerMaintainer = lib.attrsets.mapAttrs (
-    maintainer: packages: "- @${maintainer} for ${textForPackages packages}"
-  ) byMaintainer;
+  byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: builtins.map (pkg: pkg.packageName) packages

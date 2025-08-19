@@ -34,20 +34,21 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.5.10";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
-    repo = "Meshtastic-python";
+    repo = "python";
     tag = version;
-    hash = "sha256-uXyHblcV5qm/NJ/zYsPIr12lqI914n6KYxl4gun7XdM=";
+    hash = "sha256-7VBT4W0TWAEyjAEOA0FPOECS1JxFEpNLkWNHVFiWL1E=";
   };
 
   pythonRelaxDeps = [
     "bleak"
+    "packaging"
     "protobuf"
   ];
 
@@ -92,7 +93,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -123,7 +125,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
-    homepage = "https://github.com/meshtastic/Meshtastic-python";
+    homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

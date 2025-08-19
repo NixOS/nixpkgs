@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -33,25 +32,15 @@
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
     tag = "v${version}";
-    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
+    hash = "sha256-KzVqBOLTxxkgvoGPYMeYb7zMuG8VwQwX6SYR/FUhfBw=";
   };
-
-  patches = [
-    # https://github.com/cleanlab/cleanlab/pull/1224 (merged)
-    # TODO: remove this patch when updating to the next release (2.8.0)
-    (fetchpatch {
-      name = "numpy2-compatibility";
-      url = "https://github.com/cleanlab/cleanlab/commit/bed10f5bdf538358e760ad98a0965f9b447b45ad.patch";
-      hash = "sha256-czSK05wrLfSpJF2j+YwcDeDIKspkcCEB2hKlX5H3Gns=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -90,23 +79,25 @@ buildPythonPackage rec {
     wget
   ];
 
-  disabledTests =
-    [
-      # Requires the datasets we prevent from downloading
-      "test_create_imagelab"
+  disabledTests = [
+    # Incorrect snapshots (AssertionError)
+    "test_color_sentence"
 
-      # Non-trivial numpy2 incompatibilities
-      # assert np.float64(0.492) == 0.491
-      "test_duplicate_points_have_similar_scores"
-      # AssertionError: assert 'Annotators [1] did not label any examples.'
-      "test_label_quality_scores_multiannotator"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # AttributeError: 'called_once_with' is not a valid assertion.
-      # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
-      # Did you mean: 'assert_called_once_with'?
-      "test_custom_issue_manager_not_registered"
-    ];
+    # Requires the datasets we prevent from downloading
+    "test_create_imagelab"
+
+    # Non-trivial numpy2 incompatibilities
+    # assert np.float64(0.492) == 0.491
+    "test_duplicate_points_have_similar_scores"
+    # AssertionError: assert 'Annotators [1] did not label any examples.'
+    "test_label_quality_scores_multiannotator"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'called_once_with' is not a valid assertion.
+    # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
+    # Did you mean: 'assert_called_once_with'?
+    "test_custom_issue_manager_not_registered"
+  ];
 
   disabledTestPaths = [
     # Requires internet

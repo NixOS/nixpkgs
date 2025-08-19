@@ -3,9 +3,8 @@
   stdenv,
   fetchurl,
   validatePkgConfig,
-  postgresql,
+  libpq,
   sqlite,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +18,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     validatePkgConfig
-    postgresql # for pg_config
+    libpq.pg_config
   ];
 
   buildInputs = [
-    postgresql
+    libpq
     sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
+  ];
 
   meta = with lib; {
     description = "Loadable dynamic extension to both SQLite and SpatiaLite";

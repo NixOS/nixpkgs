@@ -12,7 +12,7 @@
 
 assert tlsSupport -> openssl != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhub";
   version = "unstable-2019-12-13";
 
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sqlite
     systemd
-  ] ++ lib.optional tlsSupport openssl;
+  ]
+  ++ lib.optional tlsSupport openssl;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

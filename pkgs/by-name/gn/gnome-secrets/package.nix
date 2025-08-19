@@ -75,7 +75,8 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/World/secrets";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mvnetbiz ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ mvnetbiz ];
+    teams = [ teams.gnome-circle ];
     mainProgram = "secrets";
   };
 }

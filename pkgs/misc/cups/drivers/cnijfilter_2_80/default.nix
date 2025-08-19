@@ -51,6 +51,8 @@ stdenv.mkDerivation {
     ghostscript
   ];
 
+  env.NIX_CFLAGS_COMPILE = " -std=gnu90";
+
   patches = [
     ./patches/missing-include.patch
     ./patches/libpng15.patch

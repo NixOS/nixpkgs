@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
@@ -30,8 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beartype" ];
 
-  # this test is not run upstream, and broke in 3.13 (_nparams removed)
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+  disabledTests = [
+    # No warnings of type (<class 'beartype.roar._roarwarn.BeartypeValeLambdaWarning'>,) were emitted.
+    "test_is_hint_pep593_beartype"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # this test is not run upstream, and broke in 3.13 (_nparams removed)
     "test_door_is_subhint"
   ];
 

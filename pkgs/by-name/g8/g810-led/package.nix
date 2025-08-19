@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   hidapi,
+  udevCheckHook,
   profile ? "/etc/g810-led/profile",
 }:
 
@@ -29,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     hidapi
   ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

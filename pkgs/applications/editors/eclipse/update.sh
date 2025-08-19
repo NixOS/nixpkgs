@@ -38,36 +38,31 @@ case "$buildmonth" in
     '11'|'01') month='12' ;;
 esac
 
-cat <<EOF
+ECLIPSES_JSON=$(dirname $0)/eclipses.json;
 
-paste the following into the 'let' block near the top of pkgs/applications/editors/eclipse/default.nix:
-
-  platform_major = "${platform_major}";
-  platform_minor = "${platform_minor}";
-  year = "${year}";
-  month = "${month}"; #release month
-  buildmonth = "${buildmonth}"; #sometimes differs from release month
-  timestamp = "\${year}\${buildmonth}${builddaytime}";
-EOF
-
-# strip existing download hashes
-
-sed -i 's/64 = ".*";$/64 = "";/g' pkgs/applications/editors/eclipse/default.nix
+t=$(mktemp);
+# note: including platform_major, platform_minor, and version may seem redundant
+# the first two are needed for the derivation itself; the third is necessary so
+# that nixpkgs-update can see that the version changes as a result of this update
+# script.
+cat $ECLIPSES_JSON | jq ". + {platform_major: \"${platform_major}\",platform_minor: \"${platform_minor}\",version:\"${platform_major}.${platform_minor}\",year: \"${year}\",month: \"${month}\",buildmonth: \"${buildmonth}\",dayHourMinute: \"${builddaytime}\"}" > $t;
+mv $t $ECLIPSES_JSON;
 
 # prefetch new download hashes
 
-echo;
-echo "paste the following url + hash blocks into pkgs/applications/editors/eclipse/default.nix:";
-
-for url in $(grep 'url = ' pkgs/applications/editors/eclipse/default.nix | grep arch | cut -d '"' -f 2); do
-    u=$(echo "$url" | sed 's/&/\\&/g');
-    echo;
-    echo "        url = \"${url}\";";
-    echo "        hash = {";
+for id in $(cat $ECLIPSES_JSON | jq -r '.eclipses | keys | .[]'); do
     for arch in x86_64 aarch64; do
-        us=$(eval echo "$u");
-        h=$(nix store prefetch-file --json "$us" | jq -r .hash);
-        echo "          $arch = \"${h}\";";
+        if [ $(cat $ECLIPSES_JSON | jq -r ".eclipses.${id}.dropUrl") == "true" ]; then
+            url="https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-${id}-${platform_major}.${platform_minor}-linux-gtk-${arch}.tar.gz";
+        else
+            url="https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-${id}-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        fi
+
+        echo "prefetching ${id} ${arch}";
+        h=$(nix store prefetch-file --json "$url" | jq -r .hash);
+
+        t=$(mktemp);
+        cat $ECLIPSES_JSON | jq -r ".eclipses.${id}.hashes.${arch} = \"${h}\"" > $t;
+        mv $t $ECLIPSES_JSON;
     done
-    echo '        }.${arch};';
 done

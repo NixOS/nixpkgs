@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./cmake_disable_git_clone.patch ];
 
   meta = {
-    description = "A nice terminal nCurses (tui) internet radio player for Linux, browse and search from api.radio-browser.info";
-    homepage = " https://github.com/An7ar35/ctune";
+    description = "Nice terminal nCurses (tui) internet radio player for Linux, browse and search from api.radio-browser.info";
+    homepage = "https://github.com/An7ar35/ctune";
     changelog = "https://github.com/An7ar35/ctune/blob/master/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ theobori ];

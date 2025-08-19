@@ -2,7 +2,7 @@
   lib,
   qt5,
   stdenv,
-  git,
+  gitMinimal,
   fetchFromGitHub,
   cmake,
   alsa-lib,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    git
+    gitMinimal
     qt5.wrapQtAppsHook
   ];
 

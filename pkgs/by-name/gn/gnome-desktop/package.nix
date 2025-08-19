@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   libxslt,
   ninja,
@@ -28,9 +28,9 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-desktop";
-  version = "44.1";
+  version = "44.3";
 
   outputs = [
     "out"
@@ -39,13 +39,12 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rnylXcngiRSZl0FSOhfSnOIjkVYmvSRioSC/lvR6eas=";
+    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major finalAttrs.version}/gnome-desktop-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-QO+pqo1Q7/7ZIno9cGceMuncNeIPMxyrO1YpdZePT40=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
+    (replaceVars ./bubblewrap-paths.patch {
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
       inherit (builtins) storeDir;
     })
@@ -64,38 +63,36 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs =
-    [
-      xkeyboard_config
-      libxkbcommon # for xkbregistry
-      isocodes
-      gtk3
-      gtk4
-      glib
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      bubblewrap
-      wayland
-      libseccomp
-      udev
-    ];
+  buildInputs = [
+    xkeyboard_config
+    libxkbcommon # for xkbregistry
+    isocodes
+    gtk3
+    gtk4
+    glib
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    bubblewrap
+    wayland
+    libseccomp
+    udev
+  ];
 
   propagatedBuildInputs = [
     gsettings-desktop-schemas
   ];
 
-  mesonFlags =
-    [
-      "-Dgtk_doc=true"
-      "-Ddesktop_docs=false"
-      (lib.mesonEnable "systemd" withSystemd)
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dudev=disabled"
-    ];
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Ddesktop_docs=false"
+    (lib.mesonEnable "systemd" withSystemd)
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Dudev=disabled"
+  ];
 
   separateDebugInfo = stdenv.hostPlatform.isLinux;
 
@@ -113,6 +110,6 @@ stdenv.mkDerivation rec {
       lgpl2Plus
     ];
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
-}
+})

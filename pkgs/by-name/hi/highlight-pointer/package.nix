@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highlight-pointer";
-  version = "1.1.3";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "swillner";
     repo = "highlight-pointer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mz9gXAtrtSV0Lapx8xBOPljuF+HRgDaF2DKCDrHXQa8=";
+    hash = "sha256-Og09/RmLWtzVAMs79Z4eDuXWg4w2kZfXyX8K7CowFaU=";
   };
 
   buildInputs = [

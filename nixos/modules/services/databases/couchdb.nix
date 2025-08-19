@@ -40,7 +40,9 @@ let
   configFiles = [
     "${cfg.package}/etc/default.ini"
     optionsConfigFile
-  ] ++ cfg.extraConfigFiles ++ [ cfg.configFile ];
+  ]
+  ++ cfg.extraConfigFiles
+  ++ [ cfg.configFile ];
   executable = "${cfg.package}/bin/couchdb";
 in
 {

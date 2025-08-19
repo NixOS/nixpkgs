@@ -13,7 +13,7 @@
   perl,
   cryptopp,
   libupnp,
-  boost, # Not using boost leads to crashes with gtk3
+  boost186, # Not using boost leads to crashes with gtk3
   gettext,
   libpng,
   pkg-config,
@@ -53,17 +53,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      wxGTK32
-      perl
-      cryptopp.dev
-      libupnp
-      boost
-    ]
-    ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  buildInputs = [
+    zlib
+    wxGTK32
+    perl
+    cryptopp.dev
+    libupnp
+    boost186
+  ]
+  ++ lib.optional httpServer libpng
+  ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"

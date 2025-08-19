@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-bring-api";
   version = "3.0.0-unstable-2024-02-03";
   pyproject = true;

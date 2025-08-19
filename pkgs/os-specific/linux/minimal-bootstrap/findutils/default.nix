@@ -46,7 +46,7 @@ bash.runCommand "${pname}-${version}"
       description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
       homepage = "https://www.gnu.org/software/findutils";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

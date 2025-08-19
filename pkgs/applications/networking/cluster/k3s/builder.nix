@@ -41,6 +41,7 @@ lib:
   ethtool,
   fetchFromGitHub,
   fetchgit,
+  fetchpatch,
   fetchurl,
   fetchzip,
   findutils,
@@ -69,7 +70,7 @@ lib:
   sqlite,
   stdenv,
   systemd,
-  util-linux,
+  util-linuxMinimal,
   yq-go,
   zstd,
 }:
@@ -99,7 +100,7 @@ let
     description = "Lightweight Kubernetes distribution";
     license = lib.licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = lib.teams.k3s.members;
+    teams = [ lib.teams.k3s ];
     platforms = lib.platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
@@ -377,7 +378,7 @@ buildGoModule rec {
     ipset
     bridge-utils
     ethtool
-    util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
+    util-linuxMinimal # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
     bash
@@ -465,26 +466,25 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  passthru =
-    {
-      inherit airgapImages;
-      k3sCNIPlugins = k3sCNIPlugins;
-      k3sContainerd = k3sContainerd;
-      k3sRepo = k3sRepo;
-      k3sRoot = k3sRoot;
-      k3sBundle = k3sBundle;
-      mkTests =
-        version:
-        let
-          k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-        in
-        lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-      tests = passthru.mkTests k3sVersion;
-      updateScript = updateScript;
-    }
-    // (lib.mapAttrs' (
-      name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
-    ) imagesVersions);
+  passthru = {
+    inherit airgapImages;
+    k3sCNIPlugins = k3sCNIPlugins;
+    k3sContainerd = k3sContainerd;
+    k3sRepo = k3sRepo;
+    k3sRoot = k3sRoot;
+    k3sBundle = k3sBundle;
+    mkTests =
+      version:
+      let
+        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+      in
+      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+    tests = passthru.mkTests k3sVersion;
+    updateScript = updateScript;
+  }
+  // (lib.mapAttrs' (
+    name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
+  ) imagesVersions);
 
   meta = baseMeta;
 }

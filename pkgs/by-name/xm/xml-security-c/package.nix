@@ -7,12 +7,8 @@
   xalanc,
   xercesc,
   openssl,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices SystemConfiguration;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xml-security-c";
   version = "3.0.0";
@@ -34,17 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      xalanc
-      xercesc
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      CoreServices
-      SystemConfiguration
-    ];
+  buildInputs = [
+    xalanc
+    xercesc
+    openssl
+  ];
 
   meta = {
     homepage = "https://shibboleth.atlassian.net/wiki/spaces/DEV/pages/3726671873/Santuario";

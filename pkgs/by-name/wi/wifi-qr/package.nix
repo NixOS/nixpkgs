@@ -12,10 +12,14 @@
   stdenvNoCC,
   xdg-utils,
   zbar,
+  coreutils,
+  gnused,
+  gnugrep,
+  file,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttr: {
   pname = "wifi-qr";
-  version = "0.3-unstable-2023-09-30";
+  version = "0.4";
 
   outputs = [
     "out"
@@ -25,8 +29,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "kokoye2007";
     repo = "wifi-qr";
-    rev = "821892001f735dc250a549ea36329cdc767db9c9";
-    hash = "sha256-kv0qjO+wn4t//NmKkHB+tZB4eRNm+WRUa5rij+7Syuk=";
+    tag = "v${finalAttr.version}";
+    hash = "sha256-tE+9bFDgiFS1Jj+AAwTMKjMh5wS5/gkRSQaCBR/riYQ=";
   };
 
   buildInputs = [
@@ -37,6 +41,12 @@ stdenvNoCC.mkDerivation {
     qrencode
     xdg-utils
     zbar
+    # needed for cross
+    # TODO: somehow splice the packages in stdenvNoCC.initialPath and use that
+    coreutils
+    gnugrep
+    gnused
+    file
   ];
 
   nativeBuildInputs = [
@@ -50,22 +60,22 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
 
   postPatch = ''
-    substituteInPlace src/wifi-qr.desktop \
-      --replace "Icon=wifi-qr.svg" "Icon=wifi-qr"
-    substituteInPlace src/wifi-qr \
-      --replace "/usr/share/doc/wifi-qr/copyright" "$out/share/doc/wifi-qr/copyright"
+    substituteInPlace wifi-qr.desktop \
+      --replace-fail "Icon=wifi-qr.svg" "Icon=wifi-qr"
+    substituteInPlace wifi-qr \
+      --replace-fail "/usr/share/doc/wifi-qr/copyright" "$out/share/doc/wifi-qr/copyright"
   '';
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 src/wifi-qr $out/bin/wifi-qr
+    install -Dm755 wifi-qr $out/bin/wifi-qr
 
-    install -Dm644 src/wifi-qr.desktop $out/share/applications/wifi-qr.desktop
-    install -Dm644 src/wifi-qr.svg $out/share/icons/hicolor/scalable/apps/wifi-qr.svg
-    install -Dm644 src/LICENSE $out/share/doc/wifi-qr/copyright
+    install -Dm644 wifi-qr.desktop $out/share/applications/wifi-qr.desktop
+    install -Dm644 wifi-qr.svg $out/share/icons/hicolor/scalable/apps/wifi-qr.svg
+    install -Dm644 LICENSE $out/share/doc/wifi-qr/copyright
 
-    installManPage src/wifi-qr.1
+    installManPage wifi-qr.1
 
     runHook postInstall
   '';
@@ -74,17 +84,17 @@ stdenvNoCC.mkDerivation {
     runHook preFixup
 
     patchShebangs $out/bin/wifi-qr
-    patsh -f $out/bin/wifi-qr -s ${builtins.storeDir}
+    patsh -f $out/bin/wifi-qr -s ${builtins.storeDir} --path "$HOST_PATH"
 
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WiFi password sharing via QR codes";
     homepage = "https://github.com/kokoye2007/wifi-qr";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ ambroisie ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "wifi-qr";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

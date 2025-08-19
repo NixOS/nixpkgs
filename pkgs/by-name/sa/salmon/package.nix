@@ -7,12 +7,13 @@
   cmake,
   curl,
   fetchFromGitHub,
+  icu,
   jemalloc,
   libgff,
   libiconv,
   libstaden-read,
   pkg-config,
-  tbb_2021_11,
+  tbb_2021,
   xz,
   zlib,
 }:
@@ -50,13 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cereal_1_3_2
     curl
+    icu
     jemalloc
     libgff
     libstaden-read
-    tbb_2021_11
+    tbb_2021
     xz
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     cmake

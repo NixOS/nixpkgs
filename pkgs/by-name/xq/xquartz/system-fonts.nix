@@ -1,9 +1,14 @@
-{ stdenv, xorg, fontDirs }:
+{
+  stdenv,
+  xorg,
+  fontDirs,
+}:
 
 stdenv.mkDerivation {
   name = "xquartz-system-fonts";
   buildInputs = [
-    xorg.mkfontdir xorg.mkfontscale
+    xorg.mkfontdir
+    xorg.mkfontscale
   ];
   buildCommand = ''
     for i in ${toString fontDirs} ; do

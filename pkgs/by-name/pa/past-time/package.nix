@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
     "past_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to visualize the progress of the year based on the past days";
     homepage = "https://github.com/fabaff/past-time";
     changelog = "https://github.com/fabaff/past-time/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "past-time";
   };
 }

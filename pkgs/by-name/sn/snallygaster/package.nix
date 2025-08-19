@@ -26,9 +26,9 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # we are not interested in linting the project
-    "--ignore=tests/test_codingstyle.py"
+    "tests/test_codingstyle.py"
   ];
 
   meta = with lib; {

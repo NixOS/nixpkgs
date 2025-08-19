@@ -2,10 +2,13 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  stdenv,
+  buildPackages,
+  installShellFiles,
   nix-update-script,
 }:
 let
-  version = "0.8.1";
+  version = "0.13.0";
 in
 rustPlatform.buildRustPackage {
   pname = "vault-tasks";
@@ -14,11 +17,36 @@ rustPlatform.buildRustPackage {
     owner = "louis-thevenet";
     repo = "vault-tasks";
     rev = "v${version}";
-    hash = "sha256-4sg1v541NknaOClZAkYC6tGlpItBT6RzUK9Itniu7OQ=";
+    hash = "sha256-XWeY2l82n51O4/LKPOJZOXf7PCRPOUshFg832iDvmuA=";
   };
-  cargoHash = "sha256-7MSe2YpVV68nXXeMPy+AGO0hYPpsOaR2S82c/EBczwQ=";
 
-  postInstall = "install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications";
+  cargoHash = "sha256-znc2oKpovsXyrUhKvBVMorv7yWM39xNgaNDiq/5I6Dg=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications
+  ''
+  + (
+    let
+      vault-tasks =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.vault-tasks;
+    in
+    ''
+      # vault-tasks tries to load a config file from ~/.config/ before generating completions
+      export HOME="$(mktemp -d)"
+
+      installShellCompletion --cmd vault-tasks \
+        --bash <(${vault-tasks}/bin/vault-tasks generate-completions bash) \
+        --fish <(${vault-tasks}/bin/vault-tasks generate-completions fish) \
+        --zsh <(${vault-tasks}/bin/vault-tasks generate-completions zsh)
+    ''
+  );
 
   passthru.updateScript = nix-update-script { };
 

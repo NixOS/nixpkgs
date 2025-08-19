@@ -12,33 +12,43 @@
   ffmpeg-headless,
   writeShellScript,
   xcbuild,
-  ...
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-
-  version = "2024.11.0";
+  version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
-    hash = "sha256-uei5Ojx39kCbS8DCjHZ5PoEAsqJ5vC6SsFqIEIJ16n8=";
+    repo = "misskey";
+    tag = finalAttrs.version;
+    hash = "sha256-LtBggq60buNPnGPSbh+TcFODxCoqX+rFdX0P7dYMYI0=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./pnpm-lock.yaml.patch
+  ];
 
   nativeBuildInputs = [
     nodejs
     pnpm_9.configHook
     makeWrapper
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-YWZhm5eKjB6JGP45WC3UrIkr7vuBUI4Q3oiK8Lst3dI=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    fetcherVersion = 2;
+    hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
   };
 
   buildPhase = ''
@@ -113,13 +123,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "🌎 An interplanetary microblogging platform 🚀";
+    description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "misskey";
   };

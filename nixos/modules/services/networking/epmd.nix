@@ -25,7 +25,7 @@ in
       default = "[::]:4369";
       description = ''
         the listenStream used by the systemd socket.
-        see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
+        see <https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream=> for more information.
         use this to change the port epmd will run on.
         if not defined, epmd will use "[::]:4369"
       '';

@@ -35,37 +35,36 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.14.4";
+  version = "0.14.19";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${version}";
-    hash = "sha256-JeiiV7OXRI4xTTQp1dXqT1ozTrIc7cltvZ6yVOhcjGU=";
+    hash = "sha256-NopuZbgF2jdwuf/p/JzubS0IM5xBnlkh9Tj234auBnE=";
   };
 
-  # Deactivate the upstream updater, set the version, and merge Tauri's
-  # configuration files
+  # Let Tauri know what version we're building
   #
   # Remove references to non-existent workspaces in `gix` crates
+  #
+  # Deactivate the built-in updater
   postPatch = ''
-    jq --slurp \
-      '.[0] * .[1]
-      | .version = "${version}"
-      | .bundle.createUpdaterArtifacts = false
-      | .plugins.updater.endpoints = [ ]' \
-      crates/gitbutler-tauri/tauri.conf{,.release}.json \
-      | sponge crates/gitbutler-tauri/tauri.conf.json
+    tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
+    jq '.version = "${version}" | .bundle.createUpdaterArtifacts = false' "$tauriConfRelease" | sponge "$tauriConfRelease"
 
     tomlq -ti 'del(.lints) | del(.workspace.lints)' "$cargoDepsCopy"/gix*/Cargo.toml
+
+    substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
+      --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ooe9in3JfEPMbZSMjobVJpWZdqBTf2AsfEkcsQc0Fts=";
+  cargoHash = "sha256-wzSRUZeB5f9Z/D+Sa5Nl77jh7GDnnUehcmwanPcaSKM=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-bLuKG+7QncLwiwKDrlcHKaSrUmDaJUxdvpdv0Jc6UPo=";
+    fetcherVersion = 1;
+    hash = "sha256-5NtfstUuIYyntt09Mu9GAFAOImfO6VMmJ7g15kvGaLE=";
   };
 
   nativeBuildInputs = [
@@ -81,35 +80,45 @@ rustPlatform.buildRustPackage rec {
     turbo
     wrapGAppsHook4
     yq # For `tomlq`
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin curl
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin curl
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   tauriBuildFlags = [
     "--config"
-    "crates/gitbutler-tauri/tauri.conf.json"
+    "crates/gitbutler-tauri/tauri.conf.release.json"
   ];
 
   nativeCheckInputs = [ git ];
 
   # `gitbutler-git`'s checks do not support release mode
   checkType = "debug";
-  cargoTestFlags =
-    [
-      "--workspace"
-    ]
+  cargoTestFlags = [
+    "--workspace"
+  ]
+  ++ lib.concatMap excludeSpec [
+    # Requires Git directories
+    "but-core"
+    "but-rebase"
+    "but-workspace"
+    # Fails due to the issues above and below
+    "but-hunk-dependency"
     # Errors with "Lazy instance has previously been poisoned"
-    ++ excludeSpec "gitbutler-branch-actions"
-    ++ excludeSpec "gitbutler-stack";
+    "gitbutler-branch-actions"
+    "gitbutler-stack"
+    # `Expecting driver to be located at "../../target/debug/gitbutler-cli" - we also assume a certain crate location`
+    # We're not (usually) building in debug mode and always have a different target directory, so...
+    "gitbutler-edit-mode"
+  ];
 
   env = {
     # Make sure `crates/gitbutler-tauri/inject-git-binaries.sh` can find our

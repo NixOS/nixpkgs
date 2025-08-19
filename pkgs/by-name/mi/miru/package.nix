@@ -5,14 +5,13 @@
 }:
 let
   pname = "miru";
-  version = "5.5.9";
+  version = "5.5.10";
   meta = {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       d4ilyrun
-      matteopacini
     ];
     mainProgram = "miru";
 

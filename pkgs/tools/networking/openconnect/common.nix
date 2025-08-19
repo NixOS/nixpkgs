@@ -17,7 +17,6 @@
   zlib,
   pcsclite,
   vpnc-scripts,
-  PCSC,
   useDefaultExternalBrowser ?
     stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
   xdg-utils,
@@ -39,20 +38,18 @@ stdenv.mkDerivation {
     "--without-openssl-version-check"
   ];
 
-  buildInputs =
-    [
-      gmp
-      libxml2
-      stoken
-      zlib
-      (if useOpenSSL then openssl else gnutls)
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      p11-kit
-      pcsclite
-    ]
-    ++ lib.optional useDefaultExternalBrowser xdg-utils;
+  buildInputs = [
+    gmp
+    libxml2
+    stoken
+    zlib
+    (if useOpenSSL then openssl else gnutls)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    p11-kit
+    pcsclite
+  ]
+  ++ lib.optional useDefaultExternalBrowser xdg-utils;
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
@@ -65,7 +62,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       pradeepchhetri
       tricktron
-      alyaeanyx
+      pentane
     ];
     platforms = lib.platforms.unix;
     mainProgram = "openconnect";

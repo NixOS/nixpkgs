@@ -1,0 +1,12 @@
+--- a/posix-extras.scm	1970-01-01 01:00:01.000000000 +0100
++++ b/posix-extras.scm	1970-01-01 01:00:01.000000000 +0100
+@@ -110,6 +110,9 @@ static void *C_not_implemented_ptr(void)
+ #endif
+
++#if defined (__unix__) 
++#include <sys/sysmacros.h>
++#endif
+ #if defined (__unix__) || defined (C_XXXBSD)
+ #include <sys/types.h>
+ #define C_mknod(fn, m, d) C_fix(mknod(C_data_pointer(fn), C_unfix(m), C_unfix(d)))
+ #define C_mknod64(fn, m, maj, min) C_fix(mknod(C_data_pointer(fn), C_unfix(m), makedev(C_num_to_int(maj), C_num_to_int(min))))

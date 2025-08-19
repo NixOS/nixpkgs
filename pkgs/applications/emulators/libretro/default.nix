@@ -4,7 +4,7 @@
 }:
 
 lib.makeScope newScope (self: {
-  mkLibretroCore = self.callPackage ./mkLibretroCore.nix;
+  mkLibretroCore = self.callPackage ./mkLibretroCore.nix { };
 
   atari800 = self.callPackage ./cores/atari800.nix { };
 
@@ -188,6 +188,26 @@ lib.makeScope newScope (self: {
   vba-next = self.callPackage ./cores/vba-next.nix { };
 
   vecx = self.callPackage ./cores/vecx.nix { };
+
+  vice-x64 = self.callPackage ./cores/vice.nix { type = "x64"; };
+
+  vice-x128 = self.callPackage ./cores/vice.nix { type = "x128"; };
+
+  vice-x64dtv = self.callPackage ./cores/vice.nix { type = "x64dtv"; };
+
+  vice-x64sc = self.callPackage ./cores/vice.nix { type = "x64sc"; };
+
+  vice-xcbm2 = self.callPackage ./cores/vice.nix { type = "xcbm2"; };
+
+  vice-xcbm5x0 = self.callPackage ./cores/vice.nix { type = "xcbm5x0"; };
+
+  vice-xpet = self.callPackage ./cores/vice.nix { type = "xpet"; };
+
+  vice-xplus4 = self.callPackage ./cores/vice.nix { type = "xplus4"; };
+
+  vice-xscpu64 = self.callPackage ./cores/vice.nix { type = "xscpu64"; };
+
+  vice-xvic = self.callPackage ./cores/vice.nix { type = "xvic"; };
 
   virtualjaguar = self.callPackage ./cores/virtualjaguar.nix { };
 

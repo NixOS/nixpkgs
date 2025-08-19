@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     perl
     gmp
     mpfr
-  ] ++ lib.optional enableGist qtbase;
+  ]
+  ++ lib.optional enableGist qtbase;
 
   meta = with lib; {
     license = licenses.mit;

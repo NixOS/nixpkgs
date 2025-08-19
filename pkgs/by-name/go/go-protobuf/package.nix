@@ -19,7 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/golang/protobuf";
-    description = " Go bindings for protocol buffer";
+    description = "Go bindings for protocol buffer";
     maintainers = with maintainers; [ lewo ];
     license = licenses.bsd3;
   };

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.4.3";
+  version = "9.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     tag = version;
-    hash = "sha256-HgV6GEhtwk2smtzdOypucZBX+kj9lfqsY2sZ9Yl7fbM=";
+    hash = "sha256-QVrV6drHVZhjMnwlNYe6NaK8TzRImZfDWLMwDDBZolk=";
   };
 
   build-system = [ setuptools ];
@@ -59,23 +59,18 @@ buildPythonPackage rec {
     "test_set_user_agent_extensions"
   ];
 
-  disabledTestPaths =
-    [
-      # Tests require API token
-      "tests/cluster/test_webhook.py"
-      "tests/cluster/test_cluster.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # aiounittest is not supported on Python 3.12
-      "tests/unit/http/test_async_http_client.py"
-    ];
+  disabledTestPaths = [
+    # Tests require API token
+    "tests/cluster/test_webhook.py"
+    "tests/cluster/test_cluster.py"
+  ];
 
   pythonImportsCheck = [ "twilio" ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
-    changelog = "https://github.com/twilio/twilio-python/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/twilio/twilio-python/blob/${src.tag}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

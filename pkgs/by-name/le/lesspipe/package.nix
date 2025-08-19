@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.17";
+  version = "2.19";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-afJuTByGUMU6kFqGGa3pbPaFVdYGcJYiR0RfDNYNgDk=";
+    hash = "sha256-V+fB5KkbBRhVSDgB/e7oVEyMKQ7HbR82XQYlqxcLZyQ=";
   };
 
   nativeBuildInputs = [
@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
       };
       execer = [
         "cannot:${iconv}/bin/iconv"
+        "cannot:${file}/bin/file"
       ];
     }}
     ${resholve.phraseSolution "lesscomplete" {
@@ -216,6 +217,9 @@ stdenv.mkDerivation rec {
         ];
         builtin = [ "setopt" ];
       };
+      execer = [
+        "cannot:${file}/bin/file"
+      ];
     }}
   '';
 

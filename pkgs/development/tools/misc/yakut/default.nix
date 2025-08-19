@@ -18,12 +18,12 @@
 
 buildPythonApplication rec {
   pname = "yakut";
-  version = "0.13.0";
+  version = "0.14.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MBVSt01D36rBPW2bopujyu8Opwwavmm7S3tdaWp5ACw=";
+    hash = "sha256-wCchb0bSnwlEwgb/Oe0gHnkEU3F+cotlvv/WXAr72i8=";
   };
 
   buildInputs = [
@@ -55,6 +55,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://github.com/OpenCyphal/yakut/";
     license = licenses.mit;
-    maintainers = teams.ororatech.members;
+    teams = [ teams.ororatech ];
   };
 }

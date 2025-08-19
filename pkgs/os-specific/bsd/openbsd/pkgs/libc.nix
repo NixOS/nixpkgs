@@ -8,6 +8,7 @@
   librpcsvc,
   libutil,
   libexecinfo,
+  libkvm,
   rtld,
   version,
 }:
@@ -38,6 +39,7 @@ symlinkJoin rec {
           librpcsvc
           libutil
           libexecinfo
+          libkvm
         ]
         ++ (lib.optional (!stdenvNoLibc.hostPlatform.isStatic) rtld)
       );

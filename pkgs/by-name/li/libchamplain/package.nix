@@ -28,26 +28,26 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "qRXNFyoMUpRMVXn8tGg/ioeMVxv16SglS12v78cn5ac=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      vala
-    ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-      gtk-doc
-      docbook_xsl
-      docbook_xml_dtd_412
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
   buildInputs = [
     sqlite
@@ -88,7 +88,10 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    teams = [
+      teams.gnome
+      teams.pantheon
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre_headless,
+  makeWrapper,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "11.0.1";
+  version = "11.7.0";
   src = fetchurl {
-    url =
-      "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-7dyoDUx2iJWEiPNDUQiXtvmHOD3UollvELD23J5Sjt4=";
+    url = "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-Ajm4V+AAaC3NXvdTkxJ9uhk0QayZzoPYyU5RRrWxz/g=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -24,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
   meta = with lib; {
-    description =
-      "Evolve your Database Schema easily and reliably across all your instances";
+    description = "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''
       The Flyway command-line tool is a standalone Flyway distribution.
       It is primarily meant for users who wish to migrate their database from the command-line
@@ -36,8 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flyway";
     downloadPage = "https://github.com/flyway/flyway";
     homepage = "https://flywaydb.org/";
-    changelog =
-      "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
+    changelog = "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.unix;

@@ -1,38 +1,48 @@
-{ lib
-, stdenv
-, fetchurl
-, rdma-core
-, openssl
-, zlib
-, xz
-, expat
-, boost
-, curl
-, pkg-config
-, libxml2
-, pciutils
-, busybox
-, python3
-, automake
-, autoconf
-, libtool
-, git
-# use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
-, onlyFirmwareUpdater ? false
-# contains binary-only libraries
-, enableDPA ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  rdma-core,
+  openssl,
+  zlib,
+  xz,
+  expat,
+  boost,
+  curl,
+  pkg-config,
+  libxml2,
+  pciutils,
+  busybox,
+  python3,
+  automake,
+  autoconf,
+  libtool,
+  git,
+  # use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
+  onlyFirmwareUpdater ? false,
+  # contains binary-only libraries
+  enableDPA ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mstflint";
 
   # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.30.0-1";
+  version = "4.31.0-1";
 
   src = fetchurl {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-8v0aeVy1ZGbzNdL71V1qm6sgEy0e3eb2F1DP8L3m2ns=";
+    hash = "sha256-wBUkFOdYChiSXHcH6+LLZZ06Hte4ABWjW+pNcjtk+Oc=";
   };
+
+  patches = [
+    # fixes build errors due to missing declarations in headers
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Mellanox/mstflint/pull/1131.patch";
+      sha256 = "sha256-tn8EO9HkDrMroV6byUPgjclBIK8tq4xGyi4Kx/rIj+w=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -48,7 +58,8 @@ stdenv.mkDerivation rec {
     zlib
     libxml2
     openssl
-  ] ++ lib.optionals (!onlyFirmwareUpdater) [
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
     boost
     curl
     expat
@@ -73,34 +84,42 @@ stdenv.mkDerivation rec {
   # Remove patch for regex check, after https://github.com/Mellanox/mstflint/pull/871
   # got merged.
   prePatch = [
-  ''
-    patchShebangs eval_git_sha.sh
-    substituteInPlace configure.ac \
-        --replace "build_cpu" "host_cpu"
-    substituteInPlace common/compatibility.h \
-        --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
-    substituteInPlace configure.ac \
-        --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
-  ''
-  (lib.optionals (!onlyFirmwareUpdater) ''
-    substituteInPlace common/python_wrapper.sh \
-      --replace \
-      'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
-      'export PATH=$PATH:${lib.makeBinPath [ (placeholder "out") pciutils busybox]}; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
-  '')
+    ''
+      patchShebangs eval_git_sha.sh
+      substituteInPlace configure.ac \
+          --replace "build_cpu" "host_cpu"
+      substituteInPlace common/compatibility.h \
+          --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
+      substituteInPlace configure.ac \
+          --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
+    ''
+    (lib.optionals (!onlyFirmwareUpdater) ''
+      substituteInPlace common/python_wrapper.sh \
+        --replace \
+        'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
+        'export PATH=$PATH:${
+          lib.makeBinPath [
+            (placeholder "out")
+            pciutils
+            busybox
+          ]
+        }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
+    '')
   ];
 
   configureFlags = [
     "--enable-xml2"
     "--datarootdir=${placeholder "out"}/share"
-  ] ++ lib.optionals (!onlyFirmwareUpdater) [
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
     "--enable-adb-generic-tools"
     "--enable-cs"
     "--enable-dc"
     "--enable-fw-mgr"
     "--enable-inband"
     "--enable-rdmem"
-  ] ++ lib.optionals enableDPA [
+  ]
+  ++ lib.optionals enableDPA [
     "--enable-dpa"
   ];
 
@@ -108,12 +127,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
+  dontDisableStatic = true; # the build fails without this. should probably be reported upstream
 
   meta = with lib; {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = with licenses; [ gpl2Only bsd2 ];
+    license = with licenses; [
+      gpl2Only
+      bsd2
+    ];
     maintainers = with maintainers; [ thillux ];
     platforms = platforms.linux;
   };

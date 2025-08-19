@@ -29,18 +29,17 @@ stdenv.mkDerivation rec {
 
   # TODO: optional build inputs missing
 
-  nativeBuildInputs =
-    [
-      telepathy-glib # glib-genmarshal
-      pkg-config
-      python3
-      libxslt
-      makeWrapper
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoreconfHook
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    telepathy-glib # glib-genmarshal
+    pkg-config
+    python3
+    libxslt
+    makeWrapper
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoreconfHook
+    gtk-doc
+  ];
 
   propagatedBuildInputs = [
     telepathy-glib

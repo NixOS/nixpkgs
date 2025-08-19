@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -14,6 +15,12 @@ stdenv.mkDerivation {
     rev = "f474382e370c9fa2a2207e6e675b9b364441aed7";
     sha256 = "sha256-5jN9xy3+kk540PAyfsxIqck9hdI3t2CNpgqKxLbAsDg=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontBuild = true;
   dontConfigure = true;

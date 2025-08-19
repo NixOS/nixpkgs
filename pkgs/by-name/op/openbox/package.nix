@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     })
 
     # Fix crash with GLib 2.76. This is proposed on https://bugzilla.icculus.org/show_bug.cgi?id=6669
-    # and commited to a work branch in the upstream repo. See https://bugs.archlinux.org/task/77853.
+    # and committed to a work branch in the upstream repo. See https://bugs.archlinux.org/task/77853.
     (fetchpatch {
       url = "https://github.com/Mikachu/openbox/commit/d41128e5a1002af41c976c8860f8299cfcd3cd72.patch";
       sha256 = "sha256-4/aoI4y98JPybZ1MNI7egOhkroQgh/oeGnYrhNGX4t4=";

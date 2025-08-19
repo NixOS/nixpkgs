@@ -58,28 +58,27 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   dontInstall = true;
 
-  buildInputs = [ unrar-wrapper ];
+  nativeBuildInputs = [ unrar-wrapper ];
 
-  buildPhase =
-    ''
-      { printf '\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x00'
-        cat $src
-        printf '${gzFooter}'
-      } | zcat > AppleCamera64.exe
-      unrar x AppleCamera64.exe AppleCamera.sys
+  buildPhase = ''
+    { printf '\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x00'
+      cat $src
+      printf '${gzFooter}'
+    } | zcat > AppleCamera64.exe
+    unrar x AppleCamera64.exe AppleCamera.sys
 
-      mkdir -p $out/lib/firmware/facetimehd
+    mkdir -p $out/lib/firmware/facetimehd
+  ''
+  + lib.concatMapStrings (
+    {
+      file,
+      offset,
+      size,
+    }:
     ''
-    + lib.concatMapStrings (
-      {
-        file,
-        offset,
-        size,
-      }:
-      ''
-        dd bs=1 skip=${offset} count=${size} if=AppleCamera.sys of=$out/lib/firmware/facetimehd/${file}
-      ''
-    ) calibrationFiles;
+      dd bs=1 skip=${offset} count=${size} if=AppleCamera.sys of=$out/lib/firmware/facetimehd/${file}
+    ''
+  ) calibrationFiles;
 
   meta = with lib; {
     description = "facetimehd calibration";

@@ -41,31 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IxGzc1XDUfM/Fj/cOUh0oioKBoLDGUk9bYpuQgcRQV8=";
   };
 
-  nativeBuildInputs =
-    [
-      gettext
-      gobject-introspection
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      meson
-      ninja
-      pkg-config
-      vala
-    ]
-    ++ lib.optionals telepathySupport [
-      python3
-    ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    meson
+    ninja
+    pkg-config
+    vala
+  ]
+  ++ lib.optionals telepathySupport [
+    python3
+  ];
 
-  buildInputs =
-    [
-      dbus-glib
-      evolution-data-server-gtk4 # UI part not needed, using gtk4 version to reduce system closure.
-      readline
-    ]
-    ++ lib.optionals telepathySupport [
-      telepathy-glib
-    ];
+  buildInputs = [
+    dbus-glib
+    evolution-data-server-gtk4 # UI part not needed, using gtk4 version to reduce system closure.
+    readline
+  ]
+  ++ lib.optionals telepathySupport [
+    telepathy-glib
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -116,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://gitlab.gnome.org/GNOME/folks";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 })

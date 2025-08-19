@@ -37,24 +37,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gettext
+    glib
     pkg-config
     file
     libxml2
   ];
 
-  buildInputs =
-    [
-      openvpn
-      networkmanager
-      glib
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    openvpn
+    networkmanager
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -62,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "NetworkManager's OpenVPN plugin";
     homepage = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn";
     changelog = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/blob/main/NEWS";
-    inherit (networkmanager.meta) maintainers platforms;
+    inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
   };
 })

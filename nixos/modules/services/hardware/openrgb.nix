@@ -47,13 +47,16 @@ in
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    boot.kernelModules =
-      [ "i2c-dev" ]
-      ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
-      ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
+    boot.kernelModules = [
+      "i2c-dev"
+    ]
+    ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
+    ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 
     systemd.services.openrgb = {
       description = "OpenRGB server daemon";
+      after = [ "network.target" ];
+      wants = [ "dev-usb.device" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         StateDirectory = "OpenRGB";

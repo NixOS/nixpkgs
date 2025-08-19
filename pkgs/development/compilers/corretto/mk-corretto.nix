@@ -18,12 +18,13 @@
 # builds. However, Corretto uses `gradle` as build tool (which in turn will
 # invoke `make`). The configure/build phases are adapted as needed.
 
-let
-  pname = "corretto";
-in
 # The version scheme is different between OpenJDK & Corretto.
 # See https://github.com/corretto/corretto-17/blob/release-17.0.8.8.1/build.gradle#L40
 # "major.minor.security.build.revision"
+let
+  majorVersion = builtins.head (lib.strings.splitString "." version); # same as "featureVersion" for OpenJDK
+  pname = "corretto${majorVersion}";
+in
 jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
     inherit pname version src;
@@ -66,27 +67,24 @@ jdk.overrideAttrs (
       else
         ":installers:linux:universal:tar:packageBuildResults";
 
-    postBuild =
-      ''
-        # Prepare for the installPhase so that it looks like if a normal
-        # OpenJDK had been built.
-        dir=build/jdkImageName/images
-        mkdir -p $dir
-        file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
-        tar -xzf $file -C $dir
-        mv $dir/amazon-corretto-* $dir/jdk
-      ''
-      + oldAttrs.postBuild or "";
+    postBuild = ''
+      # Prepare for the installPhase so that it looks like if a normal
+      # OpenJDK had been built.
+      dir=build/jdkImageName/images
+      mkdir -p $dir
+      file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
+      tar -xzf $file -C $dir
+      mv $dir/amazon-corretto-* $dir/jdk
+    ''
+    + oldAttrs.postBuild or "";
 
-    installPhase =
-      oldAttrs.installPhase
-      + ''
-        # The installPhase will place everything in $out/lib/openjdk and
-        # reference through symlinks. We don't rewrite the installPhase but at
-        # least move the folder to convey that this is not OpenJDK anymore.
-        mv $out/lib/openjdk $out/lib/corretto
-        ln -s $out/lib/corretto $out/lib/openjdk
-      '';
+    installPhase = oldAttrs.installPhase + ''
+      # The installPhase will place everything in $out/lib/openjdk and
+      # reference through symlinks. We don't rewrite the installPhase but at
+      # least move the folder to convey that this is not OpenJDK anymore.
+      mv $out/lib/openjdk $out/lib/corretto
+      ln -s $out/lib/corretto $out/lib/openjdk
+    '';
 
     passthru =
       let
@@ -122,6 +120,7 @@ jdk.overrideAttrs (
       license = lib.licenses.gpl2Only;
       description = "Amazon's distribution of OpenJDK";
       maintainers = with lib.maintainers; [ rollf ];
+      teams = [ ];
     };
   }
 )

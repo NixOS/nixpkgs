@@ -10,7 +10,7 @@
   libxcrypt,
   openssl,
   coreutils,
-  poppler_utils,
+  poppler-utils,
   tesseract,
   iana-etc,
 }:
@@ -80,7 +80,7 @@ perlPackages.buildPerlPackage rec {
     ])
     ++ [
       coreutils # date, t/basic_meta.t
-      poppler_utils # pdftotext, t/extracttext.t
+      poppler-utils # pdftotext, t/extracttext.t
       tesseract # tesseract, t/extracttext.t
       iana-etc # t/dnsbl_subtests.t (/etc/protocols used by Net::DNS::Nameserver)
       re2c

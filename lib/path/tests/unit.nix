@@ -110,6 +110,12 @@ let
       expected = false;
     };
 
+    # Root path (empty path components list)
+    testHasStorePathPrefixRoot = {
+      expr = hasStorePathPrefix /.;
+      expected = false;
+    };
+
     testHasStorePathPrefixExample1 = {
       expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz");
       expected = true;
@@ -134,6 +140,16 @@ let
     };
     testHasStorePathPrefixExample6 = {
       expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv");
+      expected = true;
+    };
+
+    # Test paths for content‐addressed derivations
+    testHasStorePathPrefixExample7 = {
+      expr = hasStorePathPrefix (/. + "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab");
+      expected = true;
+    };
+    testHasStorePathPrefixExample8 = {
+      expr = hasStorePathPrefix (/. + "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab/foo/bar");
       expected = true;
     };
 

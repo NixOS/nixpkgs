@@ -22,24 +22,23 @@
 
 stdenv.mkDerivation rec {
   pname = "sirikali";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "sirikali";
     rev = version;
-    hash = "sha256-zEiX0eAsmfWDXehxetkqXbdXhB53DE5LDyglMBijckI=";
+    hash = "sha256-rfmWtbPYtkaGemeStMWwA6JllOkDiHMftSfmirtAOEQ=";
   };
 
-  buildInputs =
-    [
-      qt6.qtbase
-      libpwquality
-      hicolor-icon-theme
-      libgcrypt
-    ]
-    ++ lib.optionals withKWallet [ kdePackages.kwallet ]
-    ++ lib.optionals withLibsecret [ libsecret ];
+  buildInputs = [
+    qt6.qtbase
+    libpwquality
+    hicolor-icon-theme
+    libgcrypt
+  ]
+  ++ lib.optionals withKWallet [ kdePackages.kwallet ]
+  ++ lib.optionals withLibsecret [ libsecret ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook

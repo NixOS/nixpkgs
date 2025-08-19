@@ -9,6 +9,7 @@
   libjpeg,
   libGLU,
   libGL,
+  libX11,
   libsndfile,
   libXxf86vm,
   pcre,
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "QW-Group";
     repo = pname + "-source";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-ThrsJfj+eP7Lv2ZSNLO6/b98VHrL6/rhwf2p0qMvTF8=";
   };
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libsndfile
+    libX11
     libXxf86vm
     pcre
     SDL2

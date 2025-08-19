@@ -4,7 +4,7 @@
   fetchurl,
   shared ? !stdenv.hostPlatform.isStatic,
   static ? true,
-  # If true, a separate .static ouput is created and the .a is moved there.
+  # If true, a separate .static output is created and the .a is moved there.
   # In this case `pkg-config` auto detection does not currently work if the
   # .static output is given as `buildInputs` to another package (#66461), because
   # the `.pc` file lists only the main output's lib dir.
@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional splitStaticOutput "static";
+  ]
+  ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       NIX_CFLAGS_COMPILE = "-static-libgcc";
     }
     // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
-      # lld 16 enables --no-undefined-version by defualt
+      # lld 16 enables --no-undefined-version by default
       # This makes configure think it can't build dynamic libraries
       # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
       NIX_LDFLAGS = "--undefined-version";
@@ -134,19 +135,18 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
-  makeFlags =
-    [
-      "PREFIX=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      "-f"
-      "win32/Makefile.gcc"
-    ]
-    ++ lib.optionals shared [
-      # Note that as of writing (zlib 1.2.11), this flag only has an effect
-      # for Windows as it is specific to `win32/Makefile.gcc`.
-      "SHARED_MODE=1"
-    ];
+  makeFlags = [
+    "PREFIX=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "-f"
+    "win32/Makefile.gcc"
+  ]
+  ++ lib.optionals shared [
+    # Note that as of writing (zlib 1.2.11), this flag only has an effect
+    # for Windows as it is specific to `win32/Makefile.gcc`.
+    "SHARED_MODE=1"
+  ];
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

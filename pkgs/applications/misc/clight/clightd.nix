@@ -12,7 +12,6 @@
   libusb1,
   libjpeg,
   libmodule,
-  pcre,
   libXdmcp,
   util-linux,
   libpthreadstubs,
@@ -23,6 +22,7 @@
   enableGamma ? true,
   libdrm,
   libXrandr,
+  libiio,
   wayland,
   enableScreen ? true,
   enableYoctolight ? true,
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "5.8";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    hash = "sha256-Lmno/TJVCQVNzfpKNZzuDf2OM6w6rbz+zJTr3zVo/CM=";
+    hash = "sha256-LOhBBd7QL5kH4TzMFgrh70C37WsFdsiKArP+tIEiPWo=";
   };
 
   # dbus-1.pc has datadir=/etc
@@ -49,18 +49,17 @@ stdenv.mkDerivation rec {
     sed -i "s@pkg_get_variable(POLKIT_ACTION_DIR.*@set(POLKIT_ACTION_DIR $POLKIT_ACTION_DIR)@" CMakeLists.txt
   '';
 
-  cmakeFlags =
-    [
-      "-DSYSTEMD_SERVICE_DIR=${placeholder "out"}/lib/systemd/system"
-      "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
-      # systemd.pc has prefix=${systemd.out}
-      "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
-    ]
-    ++ lib.optional enableDdc "-DENABLE_DDC=1"
-    ++ lib.optional enableDpms "-DENABLE_DPMS=1"
-    ++ lib.optional enableGamma "-DENABLE_GAMMA=1"
-    ++ lib.optional enableScreen "-DENABLE_SCREEN=1"
-    ++ lib.optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
+  cmakeFlags = [
+    "-DSYSTEMD_SERVICE_DIR=${placeholder "out"}/lib/systemd/system"
+    "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
+    # systemd.pc has prefix=${systemd.out}
+    "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
+  ]
+  ++ lib.optional enableDdc "-DENABLE_DDC=1"
+  ++ lib.optional enableDpms "-DENABLE_DPMS=1"
+  ++ lib.optional enableGamma "-DENABLE_GAMMA=1"
+  ++ lib.optional enableScreen "-DENABLE_SCREEN=1"
+  ++ lib.optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
   depsBuildBuild = [
     pkg-config
@@ -72,28 +71,27 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      udev
-      polkit
-      libusb1
-      libjpeg
-      libmodule
+  buildInputs = [
+    dbus
+    glib
+    udev
+    polkit
+    libusb1
+    libjpeg
+    libmodule
+    libiio
 
-      pcre
-      libXdmcp
-      util-linux
-      libpthreadstubs
-    ]
-    ++ lib.optionals enableDdc [ ddcutil ]
-    ++ lib.optionals enableDpms [ libXext ]
-    ++ lib.optionals enableGamma [ libXrandr ]
-    ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
-      libdrm
-      wayland
-    ];
+    libXdmcp
+    util-linux
+    libpthreadstubs
+  ]
+  ++ lib.optionals enableDdc [ ddcutil ]
+  ++ lib.optionals enableDpms [ libXext ]
+  ++ lib.optionals enableGamma [ libXrandr ]
+  ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
+    libdrm
+    wayland
+  ];
 
   postInstall = ''
     mkdir -p $out/bin

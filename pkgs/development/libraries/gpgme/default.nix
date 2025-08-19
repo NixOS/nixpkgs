@@ -21,8 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.24.1";
-  pyproject = true;
+  version = "1.24.3";
 
   outputs = [
     "out"
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
-    hash = "sha256-6gXQJY5xBh1hcWWE7DTO9ZMwqRNAVx7cRreDdJc7qF8=";
+    hash = "sha256-v8F/W9GxeMhkn92RiVbSdwgPM98Aai3ECs3s3OaMUN0=";
   };
 
   patches = [
@@ -57,7 +56,8 @@ stdenv.mkDerivation rec {
     libassuan
     libgpg-error
     pth
-  ] ++ lib.optionals (qtbase != null) [ qtbase ];
+  ]
+  ++ lib.optionals (qtbase != null) [ qtbase ];
 
   nativeCheckInputs = [ which ];
 
@@ -65,17 +65,16 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  configureFlags =
-    [
-      "--enable-fixed-path=${gnupg}/bin"
-      "--with-libgpg-error-prefix=${libgpg-error.dev}"
-      "--with-libassuan-prefix=${libassuan.dev}"
-    ]
-    # Tests will try to communicate with gpg-agent instance via a UNIX socket
-    # which has a path length limit. Nix on darwin is using a build directory
-    # that already has quite a long path and the resulting socket path doesn't
-    # fit in the limit. https://github.com/NixOS/nix/pull/1085
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gpg-test" ];
+  configureFlags = [
+    "--enable-fixed-path=${gnupg}/bin"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ]
+  # Tests will try to communicate with gpg-agent instance via a UNIX socket
+  # which has a path length limit. Nix on darwin is using a build directory
+  # that already has quite a long path and the resulting socket path doesn't
+  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gpg-test" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -104,6 +103,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    # fatal error: 'QtCore/qcompare.h' file not found
+    broken = qtbase != null && stdenv.hostPlatform.isDarwin;
     homepage = "https://gnupg.org/software/gpgme/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";

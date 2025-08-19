@@ -35,10 +35,10 @@
    suspend fun downloadMavenTelemetryDependencies(communityRoot: BuildDependenciesCommunityRoot): Path =
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
-@@ -70,7 +70,7 @@
-                              version: String,
-                              classifier: String?,
-                              packaging: String): URI {
+@@ -68,7 +68,7 @@
+     classifier: String?,
+     packaging: String,
+   ): URI {
 -    val base = mavenRepository.trim('/')
 +    val base = mavenRepository.trimEnd('/')
      val groupStr = groupId.replace('.', '/')
@@ -46,11 +46,11 @@
      return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
-@@ -55,11 +55,7 @@
-     variation: String? = null,
+@@ -59,11 +59,7 @@
      infoLog: (String) -> Unit,
    ): Path {
--    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch, jdkBuildNumber = jdkBuildNumber, variation = variation)
+     val effectiveVariation = if (isMusl) null else variation
+-    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch, isMusl = isMusl, jdkBuildNumber = jdkBuildNumber, variation = effectiveVariation)
 -    val jdkArchive = downloadFileToCacheLocation(url = jdkUrl.toString(), communityRoot = communityRoot)
 -    val jdkExtracted = BuildDependenciesDownloader.extractFileToCacheLocation(communityRoot = communityRoot,
 -                                                                              archiveFile = jdkArchive,

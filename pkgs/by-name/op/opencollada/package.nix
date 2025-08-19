@@ -1,18 +1,16 @@
 {
-  lib,
-  stdenv,
+  cmake,
   fetchFromGitHub,
   fetchurl,
-  cmake,
-  pkg-config,
+  lib,
   libxml2,
   pcre,
-  darwin,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencollada";
-
   version = "1.6.68";
 
   src = fetchFromGitHub {
@@ -32,29 +30,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Drop blanket -Werror as it tends to fail on newer toolchain for
+    # minor warnings. In this case it was gcc-13 build failure.
+    substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
+      --replace math.h cmath
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ AGL ]
-  );
 
   propagatedBuildInputs = [
     libxml2
     pcre
   ];
-
-  postPatch =
-    ''
-      # Drop blanket -Werror as it tends to fail on newer toolchain for
-      # minor warnings. In this case it was gcc-13 build failure.
-      substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
-        --replace math.h cmath
-    '';
 
   meta = {
     description = "Library for handling the COLLADA file format";

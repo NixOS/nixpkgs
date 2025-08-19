@@ -43,19 +43,18 @@ let
       nativeBuildInputs = [ finalAttrs.passthru.lychee ];
       configFile = (formats.toml { }).generate "lychee.toml" finalAttrs.passthru.config;
 
-      # These can be overriden with overrideAttrs if needed.
+      # These can be overridden with overrideAttrs if needed.
       passthru = {
         inherit lychee remap;
-        config =
-          {
-            include_fragments = true;
-          }
-          // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
-            remap = mapAttrsToList (
-              name: value: withCheckedName name "${name} ${toURL value}"
-            ) finalAttrs.passthru.remap;
-          }
-          // extraConfig;
+        config = {
+          include_fragments = true;
+        }
+        // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
+          remap = mapAttrsToList (
+            name: value: withCheckedName name "${name} ${toURL value}"
+          ) finalAttrs.passthru.remap;
+        }
+        // extraConfig;
         online = writeShellApplication {
           name = "run-lychee-online";
           runtimeInputs = [ finalAttrs.passthru.lychee ];

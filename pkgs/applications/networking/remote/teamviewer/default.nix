@@ -30,7 +30,7 @@ mkDerivation rec {
     "out"
     "dev"
   ];
-  version = "15.54.3";
+  version = "15.68.5";
 
   src =
     let
@@ -39,11 +39,11 @@ mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-41zVX2svomcRKu2ow1A/EeKojBIpABO4o2EZxappzgo=";
+        hash = "sha256-+MTp2ArZTcGFr1YwHIRfBIpjkRm0i9C1Pt5TzDE1SNE=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-wuQYWeYgXW54/5dpiGzJxZ9JZDlUgFgCKq8Z4xV2HlI=";
+        hash = "sha256-3IVZya1WTGl2AtQ2F9jyX2sDLBa2L2/sfsszhyvzu4A=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -152,16 +152,22 @@ mkDerivation rec {
   dontWrapQtApps = true;
   preferLocalBuild = true;
 
+  passthru.updateScript = ./update-teamviewer.sh;
+
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [
       jagajaga
       jraygauthier
       gador
+      c4patino
     ];
   };
 }

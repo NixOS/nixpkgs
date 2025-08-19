@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "objsize";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "objsize";
     tag = version;
-    hash = "sha256-wy4Tj+Q+4zymRdoN8Z7wcazJTb2lQ+XHY1Kta02R3R0=";
+    hash = "sha256-l0l80dMVWZqWBK4z53NCU+rKOQl6jRZ1zb2SmMnhs1k=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objsize" ];
 
-  pytestFlagsArray = [ "test_objsize.py" ];
+  enabledTestPaths = [ "test_objsize.py" ];
 
   meta = with lib; {
     description = "Traversal over objects subtree and calculate the total size";

@@ -10,7 +10,6 @@
   fastavro,
   httpx,
   httpx-sse,
-  parameterized,
   pydantic,
   pydantic-core,
   requests,
@@ -21,15 +20,17 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.13.6";
+  version = "5.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     tag = version;
-    hash = "sha256-LfEHyZT/x8cIXN9eMpMTVoY22uPNaBCMfw5Y9rI7WGk=";
+    hash = "sha256-spnkDzkPAjf/4vG7bB4d9RBc3tES+Va4wzmFJFA2/NI=";
   };
+
+  pythonRelaxDeps = [ "httpx-sse" ];
 
   build-system = [ poetry-core ];
 
@@ -37,7 +38,6 @@ buildPythonPackage rec {
     fastavro
     httpx
     httpx-sse
-    parameterized
     pydantic
     pydantic-core
     requests
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simplify interfacing with the Cohere API";
     homepage = "https://docs.cohere.com/docs";
-    changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${version}";
+    changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

@@ -1,68 +1,9 @@
-diff --git a/3rd-party/CMakeLists.txt b/3rd-party/CMakeLists.txt
-index 73291f6c..c1a38198 100644
---- a/3rd-party/CMakeLists.txt
-+++ b/3rd-party/CMakeLists.txt
-@@ -4,6 +4,24 @@ if (MSVC)
-   add_compile_options(-wd5045) #Disable warning about Spectre mitigation
- endif()
- 
-+include(FetchContent)
-+set(FETCHCONTENT_QUIET FALSE)
-+
-+FetchContent_Declare(gRPC
-+  DOWNLOAD_COMMAND true
-+  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/grpc
-+)
-+
-+set(gRPC_SSL_PROVIDER "package" CACHE STRING "Provider of ssl library")
-+
-+FetchContent_MakeAvailable(gRPC)
-+
-+# Workaround for zlib placing its generated zconf.h file in the build dir,
-+# and protobuf not knowing so finding the system version instead
-+include_directories(${grpc_SOURCE_DIR}/third_party/zlib)
-+
-+set_property(DIRECTORY ${grpc_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
-+
- # Generates gRPC and protobuf C++ sources and headers from the given .proto files
- #
- # generate_grpc_cpp (<SRCS> <DEST> [<ARGN>...])
-@@ -34,9 +52,9 @@ function(generate_grpc_cpp SRCS DEST)
-       "${DEST}/${FIL_WE}.grpc.pb.h"
-       "${DEST}/${FIL_WE}.pb.cc"
-       "${DEST}/${FIL_WE}.pb.h"
--      COMMAND $<TARGET_FILE:protobuf::protoc>
--      ARGS --grpc_out=${DEST} --cpp_out=${DEST} --proto_path=${FIL_DIR} --proto_path=${grpc_SOURCE_DIR}/third_party/protobuf/src --plugin=protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin> ${ABS_FIL}
--      DEPENDS ${ABS_FIL}
-+      COMMAND $<TARGET_FILE:protoc>
-+      ARGS --grpc_out=${DEST} --cpp_out=${DEST} --proto_path=${FIL_DIR} --proto_path=${grpc_SOURCE_DIR}/third_party/protobuf/src --plugin=protoc-gen-grpc=$<TARGET_FILE:grpc_cpp_plugin> ${ABS_FIL}
-+      DEPENDS ${ABS_FIL} protoc grpc_cpp_plugin
-       COMMENT "Running gRPC C++ protocol buffer compiler on ${FIL}"
-       VERBATIM)
-   endforeach ()
-@@ -47,9 +65,14 @@ endfunction()
- 
- add_library(gRPC INTERFACE)
- 
-+target_include_directories(gRPC INTERFACE
-+  ${CMAKE_CURRENT_SOURCE_DIR}/grpc/include
-+  ${CMAKE_CURRENT_SOURCE_DIR}/grpc/third_party/protobuf/src)
-+
- target_link_libraries(gRPC INTERFACE
--  gRPC::grpc++
--  protobuf::libprotobuf)
-+  grpc++
-+  libprotobuf
-+  zlibstatic)
- 
- if (NOT MSVC)
-   target_compile_options(gRPC INTERFACE "-Wno-unused-parameter" "-Wno-non-virtual-dtor" "-Wno-pedantic")
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 18e47b74..d5bf5dea 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -49,9 +49,6 @@ if(NOT DEFINED VCPKG_BUILD_DEFAULT)
-   set(VCPKG_TARGET_TRIPLET "${VCPKG_HOST_ARCH}-${VCPKG_HOST_OS}-release")
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index fd8d446c8..870a2c19c 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -83,9 +83,6 @@ else()
+   message(STATUS "Bootstrapping vcpkg completed successfully.")
  endif()
  
 -set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/vcpkg/scripts/buildsystems/vcpkg.cmake"
@@ -71,13 +12,3 @@ index 18e47b74..d5bf5dea 100644
  project(Multipass)
  
  option(MULTIPASS_ENABLE_TESTS "Build tests" ON)
-@@ -125,9 +122,6 @@ endif()
- # OpenSSL config
- find_package(OpenSSL REQUIRED)
- 
--# gRPC config
--find_package(gRPC CONFIG REQUIRED)
--
- # Needs to be here before we set further compilation options
- add_subdirectory(3rd-party)
- 

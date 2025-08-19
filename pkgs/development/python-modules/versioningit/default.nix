@@ -31,10 +31,11 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [ packaging ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [
+    packaging
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # AttributeError: type object 'CaseDetails' has no attribute 'model_validate_json'
   doCheck = lib.versionAtLeast pydantic.version "2";
@@ -59,7 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "versioningit" ];
 
   meta = with lib; {
-    description = "setuptools plugin for determining package version from VCS";
+    description = "Setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";

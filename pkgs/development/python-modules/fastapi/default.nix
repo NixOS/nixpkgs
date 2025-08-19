@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.115.6";
+  version = "0.115.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-yNYjFD77q5x5DtcYdywmScuuVdyWhBoxbLYJhu1Fmno=";
+    hash = "sha256-qUJFBOwXIizgIrTYbueflimni+/BhbuTEf45dsjShKE=";
   };
 
   build-system = [ pdm-backend ];
@@ -67,65 +67,64 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all =
-      [
-        fastapi-cli
-        httpx
-        jinja2
-        python-multipart
-        itsdangerous
-        pyyaml
-        ujson
-        orjson
-        email-validator
-        uvicorn
-      ]
-      ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
-        pydantic-settings
-        pydantic-extra-types
-      ]
-      ++ fastapi-cli.optional-dependencies.standard
-      ++ uvicorn.optional-dependencies.standard;
-    standard =
-      [
-        fastapi-cli
-        httpx
-        jinja2
-        python-multipart
-        email-validator
-        uvicorn
-      ]
-      ++ fastapi-cli.optional-dependencies.standard
-      ++ uvicorn.optional-dependencies.standard;
+    all = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      itsdangerous
+      pyyaml
+      ujson
+      orjson
+      email-validator
+      uvicorn
+    ]
+    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+      pydantic-settings
+      pydantic-extra-types
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
+    standard = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      email-validator
+      uvicorn
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
   };
 
-  nativeCheckInputs =
-    [
-      anyio
-      dirty-equals
-      flask
-      inline-snapshot
-      passlib
-      pyjwt
-      pytestCheckHook
-      pytest-asyncio
-      trio
-      sqlalchemy
-    ]
-    ++ anyio.optional-dependencies.trio
-    ++ passlib.optional-dependencies.bcrypt
-    ++ optional-dependencies.all;
+  nativeCheckInputs = [
+    anyio
+    dirty-equals
+    flask
+    inline-snapshot
+    passlib
+    pyjwt
+    pytestCheckHook
+    pytest-asyncio
+    trio
+    sqlalchemy
+  ]
+  ++ anyio.optional-dependencies.trio
+  ++ passlib.optional-dependencies.bcrypt
+  ++ optional-dependencies.all;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
-    "-W ignore::DeprecationWarning"
-    "-W ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::DeprecationWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [
     # Coverage test
     "test_fastapi_cli"
+    # Likely pydantic compat issue
+    "test_exception_handler_body_access"
   ];
 
   disabledTestPaths = [

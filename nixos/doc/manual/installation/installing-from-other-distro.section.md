@@ -180,9 +180,7 @@ The first steps to all these are the same:
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
-    {
-      users.users.root.initialHashedPassword = "";
-    }
+    { users.users.root.initialHashedPassword = ""; }
     ```
 
 1.  Build the NixOS closure and install it in the `system` profile:

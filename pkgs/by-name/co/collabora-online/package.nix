@@ -3,6 +3,7 @@
   cairo,
   cppunit,
   fetchFromGitHub,
+  fetchpatch,
   fetchNpmDeps,
   lib,
   libcap,
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-online";
-  version = "24.04.6-1";
+  version = "24.04.13-2";
 
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
     repo = "online";
     tag = "cp-${finalAttrs.version}";
-    hash = "sha256-0IvymvXAozsjm+GXJK9AGWo79QMaIACrAfkYfX67fBc=";
+    hash = "sha256-d6i/aSmbim7UAKz9VX1ClbtIQravMq0r8beZC9FD6as=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--disable-setcap"
     "--disable-werror"
@@ -63,7 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lokit-path=${libreoffice-collabora.src}/include"
   ];
 
-  patches = [ ./fix-file-server-regex.patch ];
+  patches = [
+    ./fix-file-server-regex.patch
+    # https://github.com/CollaboraOnline/online/pull/11464/
+    (fetchpatch {
+      name = "fix-testPreProcessedFileSubstitution";
+      url = "https://github.com/CollaboraOnline/online/commit/76a4b64297d721d66603dc63f525324475036917.patch";
+      hash = "sha256-PGys1dpHLFsUKKA1YyxkJpbBbc2prySdGH/CZni90kI=";
+    })
+  ];
 
   postPatch = ''
     cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json
@@ -85,14 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-CUh+jwJnKtmzk8w6QwH1Nh92500dFj63ThkI4tN5FyQ=";
+    hash = "sha256-0RnGt9NLgyARgbh2GOcz7H3l4vtij8PD5jmcdUDB/5Y=";
   };
 
   npmRoot = "browser";
 
   passthru = {
     libreoffice = libreoffice-collabora; # Used by NixOS module.
-    updateScript = ./update.sh;
   };
 
   meta = {

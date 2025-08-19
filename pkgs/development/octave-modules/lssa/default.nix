@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "10h9lzsi7pqh93i7y50b618g05fnbw9n0i505bz5kz4avfa990zh";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/lssa/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/lssa/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Tools to compute spectral decompositions of irregularly-spaced time series";
     longDescription = ''
       A package implementing tools to compute spectral decompositions of

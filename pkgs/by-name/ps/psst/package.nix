@@ -1,52 +1,69 @@
-{ lib, fetchFromGitHub, rustPlatform, alsa-lib, atk, cairo, dbus, gdk-pixbuf, glib, gtk3, pango, pkg-config, makeDesktopItem }:
+{
+  alsa-lib,
+  atk,
+  cairo,
+  dbus,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libclang,
+  makeDesktopItem,
+  nix-update-script,
+  pango,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+}:
 
 let
   desktopItem = makeDesktopItem {
-    name = "Psst";
-    exec = "psst-gui";
-    comment = "Fast and multi-platform Spotify client with native GUI";
+    categories = [
+      "Audio"
+      "AudioVideo"
+    ];
+    comment = "Spotify client with native GUI written in Rust, without Electron";
     desktopName = "Psst";
-    type = "Application";
-    categories = [ "Audio" "AudioVideo" ];
+    exec = "psst-gui %U";
     icon = "psst";
-    terminal = false;
+    name = "Psst";
     startupWMClass = "psst-gui";
   };
-
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "psst";
-  version = "unstable-2024-10-24";
+  version = "0-unstable-2025-04-20";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
-    repo = pname;
-    rev = "02923198ba0e27b2b6271340cf57dd8ce109049b";
-    hash = "sha256-gEK0yf37eREsI6kCIYTBlkkM6Fnjy0KGnd0XqcawGjU=";
+    repo = "psst";
+    rev = "86169f8b05c1b3502261cfe1fae9af2487b8f1bb";
+    hash = "sha256-BkGoaYflCTiElTj47r2j/ngUrZ9wIe0q4pl+zhoattA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cubeb-0.13.0" = "sha256-l1JkKlq2qvvLwNLJ2DrIpAFYcRQyd6F8pAflmtnaXhU=";
-      "druid-0.8.3" = "sha256-hTB9PQf2TAhcLr64VjjQIr18mczwcNogDSRSN5dQULA=";
-      "druid-enums-0.1.0" = "sha256-KJvAgKxicx/g+4QRZq3iHt6MGVQbfOpyN+EhS6CyDZk=";
-    };
-  };
+  cargoHash = "sha256-gt2EDrZ+XXig5JUsmQksSLaFd7UArnttOT4UiTVASXw=";
+
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
+
+  env = {
+    LIBCLANG_PATH = "${lib.getLib libclang}/lib";
+  };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    alsa-lib
     atk
     cairo
-    dbus
     gdk-pixbuf
     glib
     gtk3
     pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    dbus
   ];
 
   patches = [
@@ -55,19 +72,21 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-    install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
+    install -Dm644 psst-gui/assets/logo_512.png -t $out/share/icons/hicolor/512x512/apps/psst.png
+    install -Dm644 ${desktopItem}/share/applications/* -t $out/share/applications
   '';
 
-  passthru = {
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
-    description = "Fast and multi-platform Spotify client with native GUI";
+  meta = {
+    description = "Spotify client with native GUI written in Rust, without Electron";
     homepage = "https://github.com/jpochyla/psst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbrandl peterhoeg ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      vbrandl
+      peterhoeg
+    ];
     mainProgram = "psst-gui";
   };
 }

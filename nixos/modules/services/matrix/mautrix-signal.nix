@@ -68,6 +68,8 @@ in
   options.services.mautrix-signal = {
     enable = lib.mkEnableOption "mautrix-signal, a Matrix-Signal puppeting bridge";
 
+    package = lib.mkPackageOption pkgs "mautrix-signal" { };
+
     settings = lib.mkOption {
       apply = lib.recursiveUpdate defaultConfig;
       type = settingsFormat.type;
@@ -206,7 +208,7 @@ in
 
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.mautrix-signal}/bin/mautrix-signal \
+          ${cfg.package}/bin/mautrix-signal \
             --generate-registration \
             --config='${settingsFile}' \
             --registration='${registrationFile}'
@@ -234,7 +236,7 @@ in
         StateDirectory = baseNameOf dataDir;
         WorkingDirectory = dataDir;
         ExecStart = ''
-          ${pkgs.mautrix-signal}/bin/mautrix-signal \
+          ${cfg.package}/bin/mautrix-signal \
           --config='${settingsFile}' \
           --registration='${registrationFile}'
         '';
@@ -268,7 +270,7 @@ in
     buildDocsInSandbox = false;
     doc = ./mautrix-signal.md;
     maintainers = with lib.maintainers; [
-      niklaskorz
+      pentane
       frederictobiasc
     ];
   };

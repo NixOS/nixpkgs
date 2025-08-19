@@ -1,0 +1,33 @@
+https://github.com/scheme/scsh/pull/50.patch
+
+From edced224436fa70cd7d885fe65996b9c3cfd33d7 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Mon, 28 Apr 2025 22:40:31 +0100
+Subject: [PATCH] c/syscalls.c: add missing `<time.h>` icnlude
+
+Without the change the build fails for me as:
+
+    c/syscalls.c: In function 'sleep_until':
+    c/syscalls.c:711:18: error: implicit declaration of function 'time' [-Wimplicit-function-declaration]
+      711 |     time_t now = time(0);
+          |                  ^~~~
+    c/syscalls.c:41:1: note: 'time' is defined in header '<time.h>'; this is probably fixable by adding '#include <time.h>'
+       40 | #include "syscalls.h"
+      +++ |+#include <time.h>
+       41 |
+---
+ c/syscalls.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/c/syscalls.c b/c/syscalls.c
+index fe11e81..2be25a8 100644
+--- a/c/syscalls.c
++++ b/c/syscalls.c
+@@ -5,6 +5,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <time.h> /* for time() */
+ #include <sys/signal.h>
+ #include <signal.h>
+ #include <sys/types.h>

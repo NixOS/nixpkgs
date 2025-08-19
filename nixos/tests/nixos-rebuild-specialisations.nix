@@ -1,4 +1,10 @@
-{ hostPkgs, lib, withNg, ... }: {
+{
+  hostPkgs,
+  lib,
+  withNg,
+  ...
+}:
+{
   name = "nixos-rebuild-specialisations";
 
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
@@ -6,82 +12,87 @@
   node.pkgsReadOnly = false;
 
   nodes = {
-    machine = { lib, pkgs, ... }: {
-      imports = [
-        ../modules/profiles/installation-device.nix
-        ../modules/profiles/base.nix
-      ];
+    machine =
+      { lib, pkgs, ... }:
+      {
+        imports = [
+          ../modules/profiles/installation-device.nix
+          ../modules/profiles/base.nix
+        ];
 
-      nix.settings = {
-        substituters = lib.mkForce [ ];
-        hashed-mirrors = null;
-        connect-timeout = 1;
+        nix.settings = {
+          substituters = lib.mkForce [ ];
+          hashed-mirrors = null;
+          connect-timeout = 1;
+        };
+
+        system.includeBuildDependencies = true;
+
+        system.extraDependencies = [
+          # Not part of the initial build apparently?
+          pkgs.grub2
+        ];
+
+        system.rebuild.enableNg = withNg;
+        system.switch.enable = true;
+
+        virtualisation = {
+          cores = 2;
+          memorySize = 4096;
+        };
       };
-
-      system.includeBuildDependencies = true;
-
-      system.extraDependencies = [
-        # Not part of the initial build apparently?
-        pkgs.grub2
-      ];
-
-      system.rebuild.enableNg = withNg;
-      system.switch.enable = true;
-
-      virtualisation = {
-        cores = 2;
-        memorySize = 4096;
-      };
-    };
   };
 
   testScript =
     let
-      configFile = hostPkgs.writeText "configuration.nix" /* nix */ ''
-        { lib, pkgs, ... }: {
-          imports = [
-            ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-          ];
-
-          boot.loader.grub = {
-            enable = true;
-            device = "/dev/vda";
-            forceInstall = true;
-          };
-
-          documentation.enable = false;
-
-          environment.systemPackages = [
-            (pkgs.writeShellScriptBin "parent" "")
-          ];
-
-          system.rebuild.enableNg = ${lib.boolToString withNg};
-
-          specialisation.foo = {
-            inheritParentConfig = true;
-
-            configuration = { ... }: {
-              environment.systemPackages = [
-                (pkgs.writeShellScriptBin "foo" "")
+      configFile =
+        hostPkgs.writeText "configuration.nix" # nix
+          ''
+            { lib, pkgs, ... }: {
+              imports = [
+                ./hardware-configuration.nix
+                <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
               ];
-            };
-          };
 
-          specialisation.bar = {
-            inheritParentConfig = true;
+              boot.loader.grub = {
+                enable = true;
+                device = "/dev/vda";
+                forceInstall = true;
+              };
 
-            configuration = { ... }: {
+              documentation.enable = false;
+
               environment.systemPackages = [
-                (pkgs.writeShellScriptBin "bar" "")
+                (pkgs.writeShellScriptBin "parent" "")
               ];
-            };
-          };
-        }
-      '';
+
+              system.rebuild.enableNg = ${lib.boolToString withNg};
+
+              specialisation.foo = {
+                inheritParentConfig = true;
+
+                configuration = { ... }: {
+                  environment.systemPackages = [
+                    (pkgs.writeShellScriptBin "foo" "")
+                  ];
+                };
+              };
+
+              specialisation.bar = {
+                inheritParentConfig = true;
+
+                configuration = { ... }: {
+                  environment.systemPackages = [
+                    (pkgs.writeShellScriptBin "bar" "")
+                  ];
+                };
+              };
+            }
+          '';
 
     in
-    /* python */ ''
+    # python
+    ''
       machine.start()
       machine.succeed("udevadm settle")
       machine.wait_for_unit("multi-user.target")

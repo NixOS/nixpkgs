@@ -37,6 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # GTest needs C++17
+    # Remove when https://gitlab.com/ubports/development/core/gmenuharness/-/merge_requests/5 merged & in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'std=c++14' 'std=c++17'
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -88,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to test GMenuModel structures";
     homepage = "https://gitlab.com/ubports/development/core/gmenuharness";
     license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.unix;
     pkgConfigModules = [
       "libgmenuharness"

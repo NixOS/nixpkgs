@@ -12,26 +12,31 @@
 
 stdenv.mkDerivation rec {
   pname = "gnupg-pkcs11-scd";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchurl {
-    url = "https://github.com/alonbl/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Kb8p53gPkhxtOhH2COKwSDwbtRDFr6hHMJAkndV8Ukk=";
+    url = "https://github.com/alonbl/gnupg-pkcs11-scd/releases/download/gnupg-pkcs11-scd-${version}/gnupg-pkcs11-scd-${version}.tar.bz2";
+    hash = "sha256-lUeH5WLys9kpQhLDLdDYGizTesolDmaFAC0ok7uVkIc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
+    libassuan
+    libgcrypt
+    libgpg-error
     pkcs11helper
     openssl
   ];
 
   configureFlags = [
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-    "--with-libassuan-prefix=${libassuan.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/alonbl/gnupg-pkcs11-scd/blob/gnupg-pkcs11-scd-${version}/ChangeLog";
     description = "Smart-card daemon to enable the use of PKCS#11 tokens with GnuPG";
     mainProgram = "gnupg-pkcs11-scd";
     longDescription = ''
@@ -39,11 +44,11 @@ stdenv.mkDerivation rec {
       daemon to enable the use of PKCS#11 tokens with GnuPG.
     '';
     homepage = "https://gnupg-pkcs11.sourceforge.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       philandstuff
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

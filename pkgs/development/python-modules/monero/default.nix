@@ -25,11 +25,8 @@ buildPythonPackage rec {
     hash = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'pynacl~=1.4' 'pynacl>=1.4' \
-      --replace 'ipaddress' ""
-  '';
+  pythonRelaxDeps = [ "pynacl" ];
+  pythonRemoveDeps = [ "ipaddress" ];
 
   pythonImportsCheck = [ "monero" ];
 

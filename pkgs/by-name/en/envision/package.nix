@@ -14,7 +14,7 @@ buildFHSEnv {
 
   strictDeps = true;
 
-  # TODO: I'm pretty suspicious of this list of additonal required dependencies. Are they all really needed?
+  # TODO: I'm pretty suspicious of this list of additional required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
     [ pkgs.envision-unwrapped ]
@@ -52,6 +52,7 @@ buildFHSEnv {
           xorg.xorgproto
           SDL2
           wayland
+          mesa-gl-headers
           # Additional dependencies required for Monado WMR support
           bc
           fmt
@@ -60,9 +61,11 @@ buildFHSEnv {
           gtest
           jq
           libepoxy
+          lz4
           lz4.dev
           tbb
           libxkbcommon
+          librealsense
           boost
           glew
         ])
@@ -146,28 +149,27 @@ buildFHSEnv {
       allProfilesPresent = testers.runCommand {
         name = "envision-all-profiles-present-test";
         # TODO: Is there a better way to escape ${}?
-        script =
-          ''
-            export ALL_PROFILES=(${lib.concatStringsSep " " (profiles ++ [ "UUID" ])})
-            export ENVISION_PROFILES=($(envision -l | grep -oP '^\w+(?=:)'))
+        script = ''
+          export ALL_PROFILES=(${lib.concatStringsSep " " (profiles ++ [ "UUID" ])})
+          export ENVISION_PROFILES=($(envision -l | grep -oP '^\w+(?=:)'))
 
-            # This is dark magic
-            missing_from_array=($(grep -vf <(printf "%s\n" "$''
-          + ''{ALL_PROFILES[@]}") <(printf "%s\n" "$''
-          + ''
-            {ENVISION_PROFILES[@]}") || true))
+          # This is dark magic
+          missing_from_array=($(grep -vf <(printf "%s\n" "$''
+        + ''{ALL_PROFILES[@]}") <(printf "%s\n" "$''
+        + ''
+          {ENVISION_PROFILES[@]}") || true))
 
-                      if [ $''
-          + ''
-            {#missing_from_array[@]} -gt 0 ]; then
-                        echo "Missing profiles: $''
-          + ''
-            {missing_from_array[@]}"
-                        exit 1
-                      fi
+                    if [ $''
+        + ''
+          {#missing_from_array[@]} -gt 0 ]; then
+                      echo "Missing profiles: $''
+        + ''
+          {missing_from_array[@]}"
+                      exit 1
+                    fi
 
-                      touch $out
-          '';
+                    touch $out
+        '';
         nativeBuildInputs = [ envision ];
       };
     }

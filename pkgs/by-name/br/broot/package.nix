@@ -4,51 +4,51 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   libgit2,
   zlib,
   buildPackages,
+  versionCheckHook,
   withClipboard ? true,
   withTrash ? !stdenv.hostPlatform.isDarwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.44.6";
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cvrWcfQj5Pc2tyaQjhhTK9Ko240Bz6dbUe+OFLTz/+M=";
+    repo = "broot";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BX54J43bUa73WCxCmYQ2VgXhURRiJG5Do1ofsFFY38Y=";
   };
 
-  cargoHash = "sha256-EhcaIkaFPisRKagN8xDMmGrcH9vfMZcj/w53sDQcOp8=";
+  cargoHash = "sha256-7F93oPDXHznwkZZVqdgEuIb5sxa7uElBkwUr/PDIsdo=";
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   postPatch = ''
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.
     substitute man/page man/broot.1 \
-      --replace "#version" "${version}"
+      --replace-fail "#version" "${finalAttrs.version}"
   '';
 
   postInstall =
@@ -83,16 +83,15 @@ rustPlatform.buildRustPackage rec {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/broot --version | grep "${version}"
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
+    changelog = "https://github.com/Canop/broot/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
     mainProgram = "broot";
   };
-}
+})

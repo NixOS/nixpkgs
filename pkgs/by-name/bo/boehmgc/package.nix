@@ -32,14 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  configureFlags =
-    [
-      "--enable-cplusplus"
-      "--with-libatomic-ops=none"
-    ]
-    ++ lib.optional enableStatic "--enable-static"
-    ++ lib.optional enableMmap "--enable-mmap"
-    ++ lib.optional enableLargeConfig "--enable-large-config";
+  configureFlags = [
+    "--enable-cplusplus"
+    "--with-libatomic-ops=none"
+  ]
+  ++ lib.optional enableStatic "--enable-static"
+  ++ lib.optional enableMmap "--enable-mmap"
+  ++ lib.optional enableLargeConfig "--enable-large-config";
 
   # This stanza can be dropped when a release fixes this issue:
   #   https://github.com/ivmai/bdwgc/issues/376
@@ -53,6 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
     "CFLAGS_EXTRA=-DNO_SOFT_VDB"
   ];
+
+  # OpenBSD patches lld (!!!!) to inject this symbol into every linker invocation.
+  # We are obviously not doing that.
+  postConfigure = lib.optionalString stdenv.hostPlatform.isOpenBSD ''
+    echo >$TMP/openbsd.ldscript "__data_start = ADDR(.data);"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -T $TMP/openbsd.ldscript"
+  '';
 
   # `gctest` fails under x86_64 emulation on aarch64-darwin
   # and also on aarch64-linux (qemu-user)

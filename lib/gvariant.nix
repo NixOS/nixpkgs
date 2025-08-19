@@ -18,7 +18,7 @@ let
     concatStrings
     escape
     head
-    replaceStrings
+    replaceString
     ;
 
   mkPrimitive = t: v: {
@@ -451,7 +451,7 @@ rec {
   mkString =
     v:
     let
-      sanitize = s: replaceStrings [ "\n" ] [ "\\n" ] (escape [ "'" "\\" ] s);
+      sanitize = s: replaceString "\n" "\\n" (escape [ "'" "\\" ] s);
     in
     mkPrimitive type.string v
     // {

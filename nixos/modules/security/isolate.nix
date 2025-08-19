@@ -128,6 +128,7 @@ in
     systemd.services.isolate = {
       description = "Isolate control group hierarchy daemon";
       wantedBy = [ "multi-user.target" ];
+      documentation = [ "man:isolate(1)" ];
       serviceConfig = {
         Type = "notify";
         ExecStart = "${isolate}/bin/isolate-cg-keeper";
@@ -139,7 +140,7 @@ in
     systemd.slices.isolate = {
       description = "Isolate Sandbox Slice";
     };
-
-    meta.maintainers = with maintainers; [ virchau13 ];
   };
+
+  meta.maintainers = with maintainers; [ virchau13 ];
 }

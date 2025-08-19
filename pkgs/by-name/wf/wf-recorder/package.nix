@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ammen99";
-    repo = pname;
+    repo = "wf-recorder";
     rev = "v${version}";
     hash = "sha256-7/fQOkfAw5v3irD5blJOdq88j0VBrPVQQufdt9wsACk=";
   };
@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
     libgbm
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility program for screen recording of wlroots-based compositors";
     inherit (src.meta) homepage;
     changelog = "https://github.com/ammen99/wf-recorder/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dywedir ];
+    platforms = lib.platforms.linux;
     mainProgram = "wf-recorder";
   };
 }

@@ -13,6 +13,7 @@
   zlib,
   version,
   hash,
+  replaceVars,
   versionCheckHook,
 
   # downstream dependencies
@@ -36,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
   patches = lib.optionals (lib.versionOlder version "22") [
@@ -50,15 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # protoc of the same version must be available for build. For non-cross builds, it's able to
-      # re-use the executable generated as part of the build
+  # hook to provide the path to protoc executable, used at build time
+  build_protobuf =
+    if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then
       buildPackages."protobuf_${lib.versions.major version}"
-    ];
+    else
+      (placeholder "out");
+  setupHook = ./setup-hook.sh;
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
     gtest
@@ -72,17 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
-  cmakeFlags =
-    [
-      "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
-      "-Dprotobuf_ABSL_PROVIDER=package"
-    ]
-    ++ lib.optionals enableShared [
-      "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dprotobuf_BUILD_TESTS=OFF"
-    ];
+  cmakeFlags = [
+    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
+    "-Dprotobuf_ABSL_PROVIDER=package"
+  ]
+  ++ lib.optionals enableShared [
+    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dprotobuf_BUILD_TESTS=OFF"
+  ];
 
   doCheck =
     # Tests fail to build on 32-bit platforms; fixed in 22.x
@@ -95,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

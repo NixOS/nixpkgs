@@ -2,20 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL2,
+  sdl3,
+  libGL,
   cmake,
   makeWrapper,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
-  version = "unstable-2023-11-13";
+  version = "4.0.1-unstable-2025-04-27";
 
   src = fetchFromGitHub {
     owner = "jorio";
-    repo = pname;
-    rev = "8a5411779762684066d3748fbf4d33747ca871a4";
-    hash = "sha256-cZ2gHNXmjMocfTgbA+0T2nwKs55ZMDoB+JTf0Qdqe8U=";
+    repo = "OttoMatic";
+    rev = "69f0111d1768abe56498bf8121f0f9cbc85aedd3";
+    hash = "sha256-7RpEVL3tNhEhkZYVjgsI6S+CQfyiz/ukroldrtohA4k=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2
+    sdl3
+    libGL
   ];
 
   installPhase = ''
@@ -38,15 +41,18 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/OttoMatic --chdir "$out/share/OttoMatic"
     install -Dm644 $src/packaging/io.jor.ottomatic.desktop $out/share/applications/io.jor.ottomatic.desktop
     install -Dm644 $src/packaging/io.jor.ottomatic.png $out/share/pixmaps/io.jor.ottomatic.png
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Port of Otto Matic, a 2001 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/OttoMatic";
-    license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ lux ];
-    platforms = platforms.linux;
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = with lib.maintainers; [ lux ];
+    platforms = lib.platforms.linux;
     mainProgram = "OttoMatic";
   };
 }

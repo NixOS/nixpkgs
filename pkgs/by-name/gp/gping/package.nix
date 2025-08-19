@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RTjYgsi3PmmPufdTcxZr+Laipa32Kkq1M1eHSAJVWZQ=";
   };
 
-  cargoHash = "sha256-c1GCF7Nztv7EpnPGPMRKdAQmeauy6OfI97e0nZWXe7E=";
+  cargoHash = "sha256-b7GsaAaCYz3ohE4BUHlvexJ41L0OhbcWkBo61X4FKzQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

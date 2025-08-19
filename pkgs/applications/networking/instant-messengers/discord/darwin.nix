@@ -17,7 +17,14 @@
   openasar,
   withVencord ? false,
   vencord,
+  withMoonlight ? false,
+  moonlight,
+  commandLineArgs ? "",
 }:
+
+assert lib.assertMsg (
+  !(withMoonlight && withVencord)
+) "discord: Moonlight and Vencord can not be enabled at the same time";
 
 let
   disableBreakingUpdates =
@@ -58,7 +65,8 @@ stdenv.mkDerivation {
     # wrap executable to $out/bin
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
-      --run ${lib.getExe disableBreakingUpdates}
+      --run ${lib.getExe disableBreakingUpdates} \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
@@ -72,6 +80,13 @@ stdenv.mkDerivation {
       mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
+    ''
+
+    + lib.strings.optionalString withMoonlight ''
+      mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
+      mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
+      echo '{"name":"discord","main":"injector.js","private": true}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
+      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/injector.js
     '';
 
   passthru = {

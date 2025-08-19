@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pypoolstation";
-  version = "0.5.6";
+  version = "0.5.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E5/Z7TgIZlbIDB9I+DJI812ce8ctidDAXGCHBFzk7F8=";
+    hash = "sha256-hSlEChNjoDToA0tgWQiusBEpL08SMuOeHRr9W7Qgh/U=";
   };
 
   nativeBuildInputs = [ poetry-core ];

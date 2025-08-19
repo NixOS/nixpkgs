@@ -28,7 +28,6 @@
   writeScript,
   # Apple dependencies
   cctools,
-  libcxx,
   sigtool,
   # Allow to independently override the jdks used to build and run respectively
   buildJdk,
@@ -38,7 +37,7 @@
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
   file,
-  substituteAll,
+  replaceVars,
   writeTextFile,
 }:
 
@@ -183,7 +182,8 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.asl20;
-    maintainers = lib.teams.bazel.members;
+    teams = [ lib.teams.bazel ];
+    mainProgram = "bazel";
     inherit platforms;
   };
 
@@ -203,8 +203,7 @@ stdenv.mkDerivation rec {
     # This patch removes using the -fobjc-arc compiler option and makes the code
     # compile without automatic reference counting. Caveat: this leaks memory, but
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
-    (substituteAll {
-      src = ./no-arc.patch;
+    (replaceVars ./no-arc.patch {
       multiBinPatch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "x86_64";
     })
 
@@ -214,27 +213,25 @@ stdenv.mkDerivation rec {
     # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
     # So we are replacing this bazel paths by defaultShellPath,
     # improving hermeticity and making it work in nixos.
-    (substituteAll {
-      src = ../strict_action_env.patch;
+    (replaceVars ../strict_action_env.patch {
       strictActionEnvPatch = defaultShellPath;
     })
 
-    (substituteAll {
-      src = ./actions_path.patch;
+    (replaceVars ./actions_path.patch {
       actionsPathPatch = defaultShellPath;
     })
 
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
-    (substituteAll {
-      src = ../bazel_rc.patch;
+    (replaceVars ../bazel_rc.patch {
       bazelSystemBazelRCPath = bazelRC;
     })
 
     # disable suspend detection during a build inside Nix as this is
     # not available inside the darwin sandbox
     ./bazel_darwin_sandbox.patch
-  ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
+  ]
+  ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
   # Additional tests that check bazel’s functionality. Execute
   #
@@ -403,7 +400,7 @@ stdenv.mkDerivation rec {
       };
     };
 
-  src_for_updater = stdenv.mkDerivation rec {
+  src_for_updater = stdenv.mkDerivation {
     name = "updater-sources";
     inherit src;
     nativeBuildInputs = [ unzip ];
@@ -454,7 +451,7 @@ stdenv.mkDerivation rec {
 
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
         # for CLang 16 compatibility in external/{absl,upb} dependencies and in execlog
         export NIX_CFLAGS_COMPILE+=" -Wno-deprecated-builtins -Wno-gnu-offsetof-extensions -Wno-implicit-function-declaration"
 
@@ -613,20 +610,18 @@ stdenv.mkDerivation rec {
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeWrapper
-      python3
-      unzip
-      which
-      zip
-      python3.pkgs.absl-py # Needed to build fish completion
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      cctools
-      libcxx
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    python3
+    unzip
+    which
+    zip
+    python3.pkgs.absl-py # Needed to build fish completion
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    cctools
+  ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -704,12 +699,16 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish \
       --name bazel.fish \
       ./bazel_src/output/bazel-complete.fish
+
+    runHook postInstall
   '';
 
   # Install check fails on `aarch64-darwin`
   # https://github.com/NixOS/nixpkgs/issues/145587
   doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
+    runHook preInstallCheck
+
     export TEST_TMPDIR=$(pwd)
 
     hello_test () {
@@ -742,23 +741,22 @@ stdenv.mkDerivation rec {
     # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
 
-    runHook postInstall
+    runHook postInstallCheck
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.
   # This is needed because the templates get tar’d up into a .jar.
-  postFixup =
-    ''
-      mkdir -p $out/nix-support
-      echo "${defaultShellPath}" >> $out/nix-support/depends
-      # The string literal specifying the path to the bazel-rc file is sometimes
-      # stored non-contiguously in the binary due to gcc optimisations, which leads
-      # Nix to miss the hash when scanning for dependencies
-      echo "${bazelRC}" >> $out/nix-support/depends
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      echo "${cctools}" >> $out/nix-support/depends
-    '';
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${defaultShellPath}" >> $out/nix-support/depends
+    # The string literal specifying the path to the bazel-rc file is sometimes
+    # stored non-contiguously in the binary due to gcc optimisations, which leads
+    # Nix to miss the hash when scanning for dependencies
+    echo "${bazelRC}" >> $out/nix-support/depends
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
+  '';
 
   dontStrip = true;
   dontPatchELF = true;

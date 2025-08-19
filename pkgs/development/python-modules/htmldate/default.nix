@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "adbar";
     repo = "htmldate";
     tag = "v${version}";
-    hash = "sha256-lTBLk8SlS2R4n5HORyt5mechKKEWRtMggOxUZ6kgQIc=";
+    hash = "sha256-9uFf/sx0AZdlvizU65H87hbtwDKf8Ykm67bKM9Oq//s=";
   };
 
   build-system = [ setuptools ];
@@ -39,20 +39,18 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    speed =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
-    all =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
+    speed = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
+    ++ urllib3.optional-dependencies.brotli;
+    all = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
+    ++ urllib3.optional-dependencies.brotli;
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -70,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
-    changelog = "https://github.com/adbar/htmldate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/adbar/htmldate/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jokatzke ];
     mainProgram = "htmldate";

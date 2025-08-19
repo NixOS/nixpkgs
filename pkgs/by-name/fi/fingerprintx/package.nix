@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "fingerprintx";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "fingerprintx";
     tag = "v${version}";
-    hash = "sha256-o0u6UOrdzORnTgfOlc0kSQ5diDtNHjjbwfuyvPoHHKs=";
+    hash = "sha256-kbSP/nSdCrcEYVvLVawjZ2RDvTGv5JsHEIXXcPLA1ng=";
   };
 
-  vendorHash = "sha256-TMy6FwAFlo+ARvm+RiRqly0xIk4lBCXuZrtdnNSMSxw=";
+  vendorHash = "sha256-1KSNvK2ylqWjfhxMY+NQFoDahPgqGb12nA4oGqqoFIA=";
 
   ldflags = [
     "-s"
@@ -25,12 +25,12 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone utility for service discovery on open ports";
     mainProgram = "fingerprintx";
     homepage = "https://github.com/praetorian-inc/fingerprintx";
     changelog = "https://github.com/praetorian-inc/fingerprintx/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

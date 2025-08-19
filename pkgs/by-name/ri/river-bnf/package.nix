@@ -7,13 +7,13 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "river-bnf";
   version = "0-unstable-2023-10-10";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
-    repo = pname;
+    repo = "river-bnf";
     rev = "bb8ded380ed5d539777533065b4fd33646ad5603";
     hash = "sha256-rm9Nt3WLgq9QOXzrkYBGp45EALNYFTQGInxfYIN0XcU=";
   };

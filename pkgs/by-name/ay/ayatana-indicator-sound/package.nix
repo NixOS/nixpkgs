@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-sound";
-  version = "24.5.1";
+  version = "24.5.2";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-sound";
     tag = finalAttrs.version;
-    hash = "sha256-icHX/uZQIkS08RByjvlcX7whXtUYc+osBMbqngKqmGU=";
+    hash = "sha256-qdvte+Mm64O/JhI0luJAGAWoCgukKCbPrp5k8SIDuwM=";
   };
 
   postPatch = ''
@@ -62,23 +62,22 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      accountsservice
-      glib
-      gobject-introspection
-      libayatana-common
-      libgee
-      libnotify
-      libpulseaudio
-      libxml2
-      systemd
-    ]
-    ++ (with lomiri; [
-      cmake-extras
-      lomiri-api
-      lomiri-schemas
-    ]);
+  buildInputs = [
+    accountsservice
+    glib
+    gobject-introspection
+    libayatana-common
+    libgee
+    libnotify
+    libpulseaudio
+    libxml2
+    systemd
+  ]
+  ++ (with lomiri; [
+    cmake-extras
+    lomiri-api
+    lomiri-schemas
+  ]);
 
   nativeCheckInputs = [
     dbus
@@ -115,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests.vm = nixosTests.ayatana-indicators;
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-sound;
+    };
     updateScript = gitUpdater { };
   };
 

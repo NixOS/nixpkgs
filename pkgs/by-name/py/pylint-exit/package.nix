@@ -8,10 +8,11 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "pylint-exit";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jongracecox";
-    repo = pname;
+    repo = "pylint-exit";
     rev = "v${version}";
     sha256 = "0hwfny48g394visa3xd15425fsw596r3lhkfhswpjrdk2mnk3cny";
   };

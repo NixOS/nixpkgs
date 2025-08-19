@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.7";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-vtIzm8ia5hC0JdsGNopIHdAd8RDVgrbtVvj1Jh+gE94=";
+    hash = "sha256-QO136EbUFxT7yA1Fs4DvV0CKpdCMw/s5s9sW3vRzGD8=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
     opencc
     qtwebengine
     fmt
-  ] ++ lib.optional luaSupport fcitx5-lua;
+  ]
+  ++ lib.optional luaSupport fcitx5-lua;
 
   cmakeFlags = [
     (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))

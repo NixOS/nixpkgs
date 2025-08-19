@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-archive";
-  version = "1.4";
+  version = "1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.archive";
     tag = version;
-    hash = "sha256-DhOpNllDL10Oh4CgmwHHgkU/lJbdV2vs4wCzAyLiDGU=";
+    hash = "sha256-TaNSgUL9Ia7Qz9qy+I+4vRFn5gGnsYxAgbsrI6iYrlo=";
   };
 
   build-system = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing parsers for various archive and backup formats";
     homepage = "https://github.com/fox-it/dissect.archive";
-    changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

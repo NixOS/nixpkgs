@@ -8,11 +8,6 @@
 let
   cfg = config.services.geoclue2;
 
-  defaultWhitelist = [
-    "gnome-shell"
-    "io.elementary.desktop.agent-geoclue2"
-  ];
-
   appConfigModule = lib.types.submodule (
     { name, ... }:
     {
@@ -85,6 +80,16 @@ in
           that provides location information for accessing.
         '';
       };
+      whitelistedAgents = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "gnome-shell"
+          "io.elementary.desktop.agent-geoclue2"
+        ];
+        description = ''
+          Desktop IDs (without the .desktop extension) of whitelisted agents.
+        '';
+      };
 
       enableDemoAgent = lib.mkOption {
         type = lib.types.bool;
@@ -136,9 +141,51 @@ in
         '';
       };
 
+      enableStatic = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to enable the static source. This source defines a fixed
+          location using the `staticLatitude`, `staticLongitude`,
+          `staticAltitude`, and `staticAccuracy` options.
+
+          Setting `enableStatic` to true will disable all other sources, to
+          prevent conflicts. Use `lib.mkForce true` when enabling other sources
+          if for some reason you want to override this.
+        '';
+      };
+
+      staticLatitude = lib.mkOption {
+        type = lib.types.numbers.between (-90) 90;
+        description = ''
+          Latitude to use for the static source. Defaults to `location.latitude`.
+        '';
+      };
+
+      staticLongitude = lib.mkOption {
+        type = lib.types.numbers.between (-180) 180;
+        description = ''
+          Longitude to use for the static source. Defaults to `location.longitude`.
+        '';
+      };
+
+      staticAltitude = lib.mkOption {
+        type = lib.types.number;
+        description = ''
+          Altitude in meters to use for the static source.
+        '';
+      };
+
+      staticAccuracy = lib.mkOption {
+        type = lib.types.numbers.positive;
+        description = ''
+          Accuracy radius in meters to use for the static source.
+        '';
+      };
+
       geoProviderUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
+        default = "https://api.beacondb.net/v1/geolocate";
         example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
         description = ''
           The url to the wifi GeoLocation Service.
@@ -168,7 +215,7 @@ in
 
       submissionUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://location.services.mozilla.com/v1/submit?key=geoclue";
+        default = "https://api.beacondb.net/v2/geosubmit";
         description = ''
           The url to submit data to a GeoLocation Service.
         '';
@@ -224,6 +271,16 @@ in
       groups.geoclue = { };
     };
 
+    services.geoclue2 = {
+      enable3G = lib.mkIf cfg.enableStatic false;
+      enableCDMA = lib.mkIf cfg.enableStatic false;
+      enableModemGPS = lib.mkIf cfg.enableStatic false;
+      enableNmea = lib.mkIf cfg.enableStatic false;
+      enableWifi = lib.mkIf cfg.enableStatic false;
+      staticLatitude = lib.mkDefault config.location.latitude;
+      staticLongitude = lib.mkDefault config.location.longitude;
+    };
+
     systemd.services.geoclue = {
       wants = lib.optionals cfg.enableWifi [ "network-online.target" ];
       after = lib.optionals cfg.enableWifi [ "network-online.target" ];
@@ -269,7 +326,10 @@ in
       {
         agent = {
           whitelist = lib.concatStringsSep ";" (
-            lib.optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist
+            lib.lists.unique (
+              cfg.whitelistedAgents
+              ++ lib.optionals config.services.geoclue2.enableDemoAgent [ "geoclue-demo-agent" ]
+            )
           );
         };
         network-nmea = {
@@ -286,14 +346,30 @@ in
         };
         wifi = {
           enable = cfg.enableWifi;
+        }
+        // lib.optionalAttrs cfg.enableWifi {
           url = cfg.geoProviderUrl;
           submit-data = lib.boolToString cfg.submitData;
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
         };
+        static-source = {
+          enable = cfg.enableStatic;
+        };
       }
       // lib.mapAttrs' appConfigToINICompatible cfg.appConfig
     );
+
+    environment.etc.geolocation = lib.mkIf cfg.enableStatic {
+      mode = "0440";
+      group = "geoclue";
+      text = ''
+        ${toString cfg.staticLatitude}
+        ${toString cfg.staticLongitude}
+        ${toString cfg.staticAltitude}
+        ${toString cfg.staticAccuracy}
+      '';
+    };
   };
 
   meta = with lib; {

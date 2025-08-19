@@ -1,11 +1,10 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  pkgs,
+  runTest,
+  ...
 }:
 
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib)
     concatStringsSep
     maintainers
@@ -74,13 +73,14 @@ let
 in
 mapAttrs (
   test: testConfig:
-  (makeTest (
+  (runTest (
     let
       nodeName = testConfig.nodeName or test;
       calibreConfig = {
         enable = true;
         libraries = [ "/var/lib/calibre-server" ];
-      } // testConfig.calibreConfig or { };
+      }
+      // testConfig.calibreConfig or { };
       librariesInitScript = path: ''
         ${nodeName}.execute("touch /tmp/test.epub")
         ${nodeName}.execute("zip -r /tmp/test.zip /tmp/test.epub")

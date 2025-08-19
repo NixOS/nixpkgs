@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libidn";
-  version = "1.42";
+  version = "1.43";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/libidn-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
+    sha256 = "sha256-vcZiwS0EGyU50OY486bnQRMM2zOmRO80lpY6RDSC0WQ=";
   };
 
   outputs = [

@@ -1,34 +1,34 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   pnpm_9,
   nodejs,
-  go_1_23,
+  go_1_24,
   git,
   cacert,
   nixosTests,
 }:
 let
   pname = "homebox";
-  version = "0.16.0";
+  version = "0.20.2";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
-    rev = "v${version}";
-    hash = "sha256-d8SQWj7S6G1ZemMH6QL9QZuPQfxNRcfCurPaTnS0Iyo=";
+    tag = "v${version}";
+    hash = "sha256-6AJYC5SIITLBgYOq8TdwxAvRcyg8MOoA7WUDar9jSxM=";
   };
 in
-buildGo123Module {
+buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-Ftm5tR3w8S3mjYLJG0+17nYP5kDbaAd8QkbZpNt7WuE=";
+  vendorHash = "sha256-GTSFpfql0ebXtZC3LeIZo8VbCZdsbemNK5EarDTRAf0=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
-  # Since we do pnpm thing in those it fails if we don't explicitely remove them
+  # Since we do pnpm thing in those it fails if we don't explicitly remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      go_1_23
+      go_1_24
       git
       cacert
     ];
@@ -38,7 +38,8 @@ buildGo123Module {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version;
     src = "${src}/frontend";
-    hash = "sha256-x7sWSH84UJEXNRLCgEgXc4NrTRsn6OplANi+XGtIN9Y=";
+    fetcherVersion = 1;
+    hash = "sha256-gHQ8Evo31SFmnBHtLDY5j5zZwwVS4fmkT+9VHZJWhfs=";
   };
   pnpmRoot = "../frontend";
 
@@ -64,13 +65,25 @@ buildGo123Module {
   env.CGO_ENABLED = 0;
   doCheck = false;
 
+  tags = [
+    "nodynamic"
+  ];
+
   ldflags = [
     "-s"
     "-w"
     "-extldflags=-static"
-    "-X main.version=${version}"
-    "-X main.commit=${version}"
+    "-X main.version=${src.tag}"
+    "-X main.commit=${src.tag}"
   ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp -r $GOPATH/bin/api $out/bin/
+
+    runHook postInstall
+  '';
 
   passthru = {
     tests = {
@@ -82,7 +95,10 @@ buildGo123Module {
     mainProgram = "api";
     homepage = "https://homebox.software/";
     description = "Inventory and organization system built for the Home User";
-    maintainers = with lib.maintainers; [ patrickdag ];
+    maintainers = with lib.maintainers; [
+      patrickdag
+      tebriel
+    ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
   };

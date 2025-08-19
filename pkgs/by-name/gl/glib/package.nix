@@ -31,8 +31,6 @@
   tzdata,
   desktop-file-utils,
   shared-mime-info,
-  darwin,
-  makeHardcodeGsettingsPatch,
   testers,
   gobject-introspection,
   libsystemtap,
@@ -65,7 +63,7 @@ let
     else
       "2.0-0.lib";
 
-  systemtap' = buildPackages.linuxPackages.systemtap.override { withStap = false; };
+  systemtap' = buildPackages.systemtap-sdt;
 
   withDtrace =
     lib.meta.availableOn stdenv.buildPlatform systemtap'
@@ -76,7 +74,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.82.4";
+  version = "2.84.3";
 
   outputs = [
     "bin"
@@ -89,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-N90Id/6WTNFemicQsEShgw+xvZNlKm0Mtriy3/GHxwk=";
+    hash = "sha256-qk+HwyJb9XyoXzIIiPdISQGheTTKNwI8O9hDWnLbhj4=";
   };
 
   patches =
@@ -155,69 +153,56 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  buildInputs =
-    [
-      finalAttrs.setupHook
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
-      libsysprof-capture
-    ]
-    ++ [
-      pcre2
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-      bash
-      gnum4 # install glib-gettextize and m4 macros for other apps to use
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ]
-    ++ lib.optionals withDtrace [
-      libsystemtap
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libselinux
-      util-linuxMinimal # for libmount
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        Carbon
-        Cocoa
-        CoreFoundation
-        CoreServices
-        Foundation
-      ]
-    );
+  buildInputs = [
+    finalAttrs.setupHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+    libsysprof-capture
+  ]
+  ++ [
+    pcre2
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+    bash
+    gnum4 # install glib-gettextize and m4 macros for other apps to use
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ]
+  ++ lib.optionals withDtrace [
+    libsystemtap
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libselinux
+    util-linuxMinimal # for libmount
+  ];
 
   depsBuildBuild = [
     pkg-config # required to find native gi-docgen
   ];
 
-  nativeBuildInputs =
-    [
-      docutils # for rst2man, rst2html5
-      meson
-      ninja
-      pkg-config
-      perl
-      python3
-      python3Packages.packaging # mostly used to make meson happy
-      python3Packages.wrapPython # for patchPythonScript
-      gettext
-      libxslt
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection'
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ]
-    ++ lib.optionals withDtrace [
-      systemtap' # for dtrace
-    ];
+  nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
+    meson
+    ninja
+    pkg-config
+    perl
+    python3
+    python3Packages.packaging # mostly used to make meson happy
+    python3Packages.wrapPython # for patchPythonScript
+    gettext
+    libxslt
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection'
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ]
+  ++ lib.optionals withDtrace [
+    systemtap' # for dtrace
+  ];
 
   propagatedBuildInputs = [
     zlib
@@ -232,27 +217,25 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  mesonFlags =
-    [
-      "-Dglib_debug=disabled" # https://gitlab.gnome.org/GNOME/glib/-/issues/3421#note_2206315
-      "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
-      (lib.mesonEnable "dtrace" withDtrace)
-      (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
-      "-Dnls=enabled"
-      "-Ddevbindir=${placeholder "dev"}/bin"
-      (lib.mesonEnable "introspection" withIntrospection)
-      # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
-      # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
-      "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
-    ]
-    ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      "-Dlibelf=disabled"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "-Db_lundef=false"
-      "-Dxattr=false"
-      "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
-    ];
+  mesonFlags = [
+    "-Dglib_debug=disabled" # https://gitlab.gnome.org/GNOME/glib/-/issues/3421#note_2206315
+    "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
+    (lib.mesonEnable "dtrace" withDtrace)
+    (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
+    "-Dnls=enabled"
+    "-Ddevbindir=${placeholder "dev"}/bin"
+    (lib.mesonEnable "introspection" withIntrospection)
+    # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
+    # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+    "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+  ]
+  ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    "-Dlibelf=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "-Dxattr=false"
+    "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
+  ];
 
   env = {
     NIX_CFLAGS_COMPILE = toString [
@@ -263,28 +246,27 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  postPatch =
-    ''
-      patchShebangs glib/gen-unicode-tables.pl
-      patchShebangs glib/tests/gen-casefold-txt.py
-      patchShebangs glib/tests/gen-casemap-txt.py
-      patchShebangs tools/gen-visibility-macros.py
-      patchShebangs tests
+  postPatch = ''
+    patchShebangs glib/gen-unicode-tables.pl
+    patchShebangs glib/tests/gen-casefold-txt.py
+    patchShebangs glib/tests/gen-casemap-txt.py
+    patchShebangs tools/gen-visibility-macros.py
+    patchShebangs tests
 
-      # Needs machine-id, comment the test
-      sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
-      sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-address-get-session.c
-      # All gschemas fail to pass the test, upstream bug?
-      sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
-      # Cannot reproduce the failing test_associations on hydra
-      sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
-      # Needed because of libtool wrappers
-      sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
-    ''
-    + lib.optionalString stdenv.hostPlatform.isWindows ''
-      substituteInPlace gio/win32/meson.build \
-        --replace "libintl, " ""
-    '';
+    # Needs machine-id, comment the test
+    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-address-get-session.c
+    # All gschemas fail to pass the test, upstream bug?
+    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+    # Cannot reproduce the failing test_associations on hydra
+    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
+    # Needed because of libtool wrappers
+    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
+  ''
+  + lib.optionalString stdenv.hostPlatform.isWindows ''
+    substituteInPlace gio/win32/meson.build \
+      --replace "libintl, " ""
+  '';
 
   postConfigure = ''
     patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
@@ -378,30 +360,17 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };
-
-    mkHardcodeGsettingsPatch =
-      {
-        src,
-        glib-schema-to-var,
-      }:
-      builtins.trace
-        "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"
-        (makeHardcodeGsettingsPatch {
-          inherit src;
-          schemaIdToVariableMapping = glib-schema-to-var;
-        });
   };
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage = "https://gitlab.gnome.org/GNOME/glib";
     license = licenses.lgpl21Plus;
-    maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
-        lovek323
-        raskin
-      ]);
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    teams = [ teams.gnome ];
     pkgConfigModules = [
       "gio-2.0"
       "gobject-2.0"

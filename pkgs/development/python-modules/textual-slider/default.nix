@@ -6,7 +6,7 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "textual-slider";
   version = "0.1.2";
 

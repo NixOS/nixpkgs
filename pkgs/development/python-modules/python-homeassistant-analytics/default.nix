@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "python-homeassistant-analytics";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-homeassistant-analytics";
     tag = "v${version}";
-    hash = "sha256-TfD1N4KoeIVoDp1YoOhBw8E7adow1nU1N6vj2j3W2No=";
+    hash = "sha256-Deh3pZKpqdrlgv6LQk3NHuATz3porWiM8dewjbdbR7M=";
   };
 
   build-system = [ poetry-core ];

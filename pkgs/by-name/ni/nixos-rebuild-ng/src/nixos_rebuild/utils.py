@@ -1,13 +1,13 @@
 import logging
 from collections.abc import Mapping, Sequence
-from typing import Any, assert_never, override
+from typing import Any, ClassVar, assert_never, override
 
 type Arg = bool | str | list[str] | list[list[str]] | int | None
 type Args = dict[str, Arg]
 
 
 class LogFormatter(logging.Formatter):
-    formatters = {
+    formatters: ClassVar = {
         logging.INFO: logging.Formatter("%(message)s"),
         logging.DEBUG: logging.Formatter("%(levelname)s: %(name)s: %(message)s"),
         "DEFAULT": logging.Formatter("%(levelname)s: %(message)s"),
@@ -37,7 +37,7 @@ def dict_to_flags(d: Args | None) -> list[str]:
             case int() if len(key) == 1:
                 flags.append(f"-{key * value}")
             case int():
-                for i in range(value):
+                for _ in range(value):
                     flags.append(flag)
             case str():
                 flags.append(flag)

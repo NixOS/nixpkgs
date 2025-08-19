@@ -137,13 +137,13 @@ let
   nixos-taskserver =
     with pkgs.python3.pkgs;
     buildPythonApplication {
+      format = "setuptools";
       name = "nixos-taskserver";
 
       src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
         mkdir -p "$out"
         cat "${
-          pkgs.substituteAll {
-            src = ./helper-tool.py;
+          pkgs.replaceVars ./helper-tool.py {
             inherit taskd certtool;
             inherit (cfg)
               dataDir
@@ -476,24 +476,23 @@ in
 
         # server
         trust = cfg.trust;
-        server =
-          {
-            listen = "${cfg.listenHost}:${toString cfg.listenPort}";
-          }
-          // (
-            if needToCreateCA then
-              {
-                cert = "${cfg.dataDir}/keys/server.cert";
-                key = "${cfg.dataDir}/keys/server.key";
-                crl = "${cfg.dataDir}/keys/server.crl";
-              }
-            else
-              {
-                cert = "${cfg.pki.manual.server.cert}";
-                key = "${cfg.pki.manual.server.key}";
-                ${lib.mapNullable (_: "crl") cfg.pki.manual.server.crl} = "${cfg.pki.manual.server.crl}";
-              }
-          );
+        server = {
+          listen = "${cfg.listenHost}:${toString cfg.listenPort}";
+        }
+        // (
+          if needToCreateCA then
+            {
+              cert = "${cfg.dataDir}/keys/server.cert";
+              key = "${cfg.dataDir}/keys/server.key";
+              crl = "${cfg.dataDir}/keys/server.crl";
+            }
+          else
+            {
+              cert = "${cfg.pki.manual.server.cert}";
+              key = "${cfg.pki.manual.server.key}";
+              ${lib.mapNullable (_: "crl") cfg.pki.manual.server.crl} = "${cfg.pki.manual.server.crl}";
+            }
+        );
 
         ca.cert = if needToCreateCA then "${cfg.dataDir}/keys/ca.cert" else "${cfg.pki.manual.ca.cert}";
       };

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.5.0";
+  version = "2024.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "fastparquet";
     tag = version;
-    hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
+    hash = "sha256-GJ6dr36hGjpfEKcA96RpEqY8I1vXooLDGwc0A57yFTY=";
   };
 
   build-system = [

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   fetchurl,
-  ocaml,
   buildDunePackage,
   gen,
   ppxlib,
@@ -14,8 +13,8 @@ let
   param =
     if lib.versionAtLeast ppxlib.version "0.26.0" then
       {
-        version = "3.3";
-        sha256 = "sha256-33eJKVdoR4mlWdPZUdjQ26w+kuQWoUN68+bxy2o+Pjs=";
+        version = "3.6";
+        sha256 = "sha256-NiNqur7sce6dxictVB+saOC1c4N/EO/3Ici/icsGkIA=";
       }
     else
       {
@@ -55,14 +54,13 @@ buildDunePackage rec {
     inherit (param) sha256;
   };
 
-  propagatedBuildInputs =
-    [
-      gen
-      ppxlib
-    ]
-    ++ lib.optionals (!atLeast31) [
-      uchar
-    ];
+  propagatedBuildInputs = [
+    gen
+    ppxlib
+  ]
+  ++ lib.optionals (!atLeast31) [
+    uchar
+  ];
 
   preBuild = ''
     rm src/generator/data/dune
@@ -75,7 +73,7 @@ buildDunePackage rec {
     ppx_expect
   ];
 
-  doCheck = !lib.versionAtLeast ocaml.version "5.3";
+  doCheck = true;
 
   dontStrip = true;
 

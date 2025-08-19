@@ -17,7 +17,7 @@ let
     pname = "LanguageClient-neovim-bin";
     inherit version src;
 
-    cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
+    cargoHash = "sha256-1tfeowqvjEjMXIfrhr388YhlZrk3ns+Y/2odQnkLw7k=";
   };
 in
 vimUtils.buildVimPlugin {
@@ -47,5 +47,7 @@ vimUtils.buildVimPlugin {
     homepage = "https://github.com/autozimu/LanguageClient-neovim/";
     changelog = "https://github.com/autozimu/LanguageClient-neovim/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    # Rust build error
+    broken = true;
   };
 }

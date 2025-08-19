@@ -21,6 +21,10 @@ buildNpmPackage rec {
     npm run bump
   '';
 
+  postInstall = ''
+    find $out/lib/node_modules -xtype l -delete
+  '';
+
   meta = with lib; {
     description = "Swagger 2.0 and OpenAPI 3.0 command-line tool";
     homepage = "https://apitools.dev/swagger-cli/";

@@ -2,12 +2,13 @@
   fetchFromGitLab,
   srcOnly,
   fetchpatch,
+  stdenv,
 }:
 rec {
   version = "2.2.5";
   src = srcOnly {
     pname = "paperwork-patched-src";
-    inherit version;
+    inherit version stdenv;
     src = fetchFromGitLab {
       domain = "gitlab.gnome.org";
       repo = "paperwork";

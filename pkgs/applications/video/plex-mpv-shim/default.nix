@@ -17,6 +17,7 @@
 buildPythonApplication rec {
   pname = "plex-mpv-shim";
   version = "1.11.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iwalton3";

@@ -12,8 +12,9 @@
   jax-cuda12-pjrt,
 }:
 let
-  inherit (cudaPackages) cudaVersion;
   inherit (jaxlib) version;
+  inherit (cudaPackages) cudaAtLeast;
+  inherit (jax-cuda12-pjrt) cudaLibPath;
 
   getSrcFromPypi =
     {
@@ -39,42 +40,42 @@ let
     "3.10-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp310";
-      hash = "sha256-nULpmc1k3VZ8FJ7Wj3k5K6iGRDZCGLtjbNzvoBl8kv4=";
+      hash = "sha256-F1H4iYkmmzzbDf5PewcqZEIUmBjJvJjDo5XIrK+RCnk=";
     };
     "3.10-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp310";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-vFw6ddBVGbTTJuRmnQ960P4PCs+HX5MT2RN0jMylqeo=";
     };
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-cEZUOG8OYAoCgdquqViCqmekfttoOTthsbFzx+jKdKg=";
+      hash = "sha256-CJbLswjZUpHiBc2J0lQCne46HfQ9ZumDEzGpr9LSeHA=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp311";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-LNjieaWaOLoMl4qDHhOt627p5Fcvujh8eXW6OtU13Tg=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-Ufas/3Ew63LrsCU039NYGg9eoGlx3lLX68Ia1Nh/5x4=";
+      hash = "sha256-/r0Jn5cNNQ64+losmi+0sOp7PWqJ3xSWZj7fp6/lkOU=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp312";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-bJsALROx/LlANxPu3Th2oietH/vfs4EbH5+Jr0wlpfc=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-CSKKTCtEO3aozZqOwikGAInEzINuBiSWh1ptb9xm0x8=";
+      hash = "sha256-20xhA8kS2M0a35TDTTE7tHYMp/AciXynzWLmXyeZQZk=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp313";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-dz76i1WoN0BsVh8O8CFE3akBkYEZN2DsVBnuyd0rmqw=";
     };
   };
 in
@@ -94,12 +95,34 @@ buildPythonPackage {
     wheelUnpackHook
   ];
 
+  # jax-cuda12-plugin looks for ptxas at runtime, e.g. with a triton kernel.
+  # Linking into $out is the least bad solution. See
+  # * https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621
+  # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
+  # * https://github.com/NixOS/nixpkgs/pull/375186
+  # for more info.
+  postInstall = ''
+    mkdir -p $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+  '';
+
+  # jax-cuda12-plugin contains shared libraries that open other shared libraries via dlopen
+  # and these implicit dependencies are not recognized by ldd or
+  # autoPatchelfHook. That means we need to sneak them into rpath. This step
+  # must be done after autoPatchelfHook and the automatic stripping of
+  # artifacts. autoPatchelfHook runs in postFixup and auto-stripping runs in the
+  # patchPhase.
+  preInstallCheck = ''
+    patchelf --add-rpath "${cudaLibPath}" $out/${python.sitePackages}/jax_cuda12_plugin/*.so
+  '';
+
   dependencies = [ jax-cuda12-pjrt ];
 
   pythonImportsCheck = [ "jax_cuda12_plugin" ];
 
-  # no tests
-  doCheck = false;
+  # FIXME: there are no tests, but we need to run preInstallCheck above
+  doCheck = true;
 
   meta = {
     description = "JAX Plugin for CUDA12";
@@ -110,7 +133,6 @@ buildPythonPackage {
     platforms = lib.platforms.linux;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken =
-      !(lib.versionAtLeast cudaVersion "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    broken = !(cudaAtLeast "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
 }

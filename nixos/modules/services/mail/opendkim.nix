@@ -10,23 +10,22 @@ let
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
-  args =
-    [
-      "-f"
-      "-l"
-      "-p"
-      cfg.socket
-      "-d"
-      cfg.domains
-      "-k"
-      "${cfg.keyPath}/${cfg.selector}.private"
-      "-s"
-      cfg.selector
-    ]
-    ++ lib.optionals (cfg.configFile != null) [
-      "-x"
-      cfg.configFile
-    ];
+  args = [
+    "-f"
+    "-l"
+    "-p"
+    cfg.socket
+    "-d"
+    cfg.domains
+    "-k"
+    "${cfg.keyPath}/${cfg.selector}.private"
+    "-s"
+    cfg.selector
+  ]
+  ++ lib.optionals (cfg.configFile != null) [
+    "-x"
+    cfg.configFile
+  ];
 
   configFile = pkgs.writeText "opendkim.conf" (
     lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.settings)
@@ -65,7 +64,7 @@ in
         defaultText = lib.literalExpression ''"csl:''${config.networking.hostName}"'';
         example = "csl:example.com,mydomain.net";
         description = ''
-          Local domains set (see `opendkim(8)` for more information on datasets).
+          Local domains set (see {manpage}`opendkim(8)` for more information on datasets).
           Messages from them are signed, not verified.
         '';
       };

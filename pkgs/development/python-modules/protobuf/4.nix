@@ -9,7 +9,7 @@
   protobuf,
   pytestCheckHook,
   pythonAtLeast,
-  substituteAll,
+  replaceVars,
   tzdata,
 }:
 
@@ -31,8 +31,7 @@ buildPythonPackage {
   patches =
     lib.optionals (lib.versionAtLeast protobuf.version "22") [
       # Replace the vendored abseil-cpp with nixpkgs'
-      (substituteAll {
-        src = ./use-nixpkgs-abseil-cpp.patch;
+      (replaceVars ./use-nixpkgs-abseil-cpp.patch {
         abseil_cpp_include_path = "${lib.getDev protobuf.abseil-cpp}/include";
       })
     ]
@@ -83,7 +82,8 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
+  ]
+  ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
 
   disabledTests =
     lib.optionals isPyPy [

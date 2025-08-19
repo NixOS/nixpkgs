@@ -24,19 +24,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.3.0";
+  version = "3.5.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-F2ZyATDKnUgEOAI++54fR6coJOr9rtyGm5TzsKzkDmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LtCfqBtgtayjCuBukfjDtZfaGM7I2rOImxD2yvRITVk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-H4x7D25UzDdAEad7QEsZZGLXhfiUupm3mTrNho+ShFo=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-chRsKBnl6QOJ4b1UZak5lnp4lQmXCyZXI/8iJs5lM/E=";
   };
 
   nativeBuildInputs = [
@@ -69,9 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Straight-forward and modern application to create bootable drives";
     homepage = "https://gitlab.com/adhami3310/Impression";
+    changelog = "https://gitlab.com/adhami3310/Impression/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "impression";
-    maintainers = with lib.maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

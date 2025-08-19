@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch2,
   aqbanking,
   boost,
   cmake,
   gettext,
   glib,
   glibcLocales,
+  gobject-introspection,
   gtest,
   guile,
   gwenhywfar,
@@ -24,52 +24,65 @@
   perlPackages,
   pkg-config,
   swig,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
+  python3,
 }:
-
+let
+  py = python3.withPackages (
+    ps: with ps; [
+      pygobject3.out
+    ]
+  );
+in
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.10";
+  version = "5.12";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-eJ2fNpjuW4ZyAnmjo+EOd0QhDhLFJa5/A9MvpwQHrZM=";
+    hash = "sha256-s1tHVr4SvP2+1URo8wRD+lPyOFIKnOrVveLmxHc/vzk=";
   };
 
   nativeBuildInputs = [
     cmake
     gettext
+    gobject-introspection
     makeWrapper
     wrapGAppsHook3
     pkg-config
   ];
 
-  buildInputs =
-    [
-      aqbanking
-      boost
-      glib
-      glibcLocales
-      gtest
-      guile
-      gwenhywfar
-      icu
-      libdbi
-      libdbiDrivers
-      libofx
-      libsecret
-      libxml2
-      libxslt
-      swig
-      webkitgtk_4_0
-    ]
-    ++ (with perlPackages; [
-      JSONParse
-      FinanceQuote
-      perl
-    ]);
+  cmakeFlags = [
+    "-DWITH_PYTHON=\"ON\""
+    "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
+  ];
+
+  buildInputs = [
+    aqbanking
+    boost
+    glib
+    glibcLocales
+    gtest
+    guile
+    gwenhywfar
+    icu
+    libdbi
+    libdbiDrivers
+    libofx
+    libsecret
+    libxml2
+    libxslt
+    swig
+    webkitgtk_4_1
+    py
+  ]
+  ++ (with perlPackages; [
+    JSONParse
+    FinanceQuote
+    perl
+  ]);
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -80,7 +93,15 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # this patch adds in env vars to the Python lib that makes it able to find required resource files
+    ./0005-python-env.patch
   ];
+
+  postPatch = ''
+    substituteInPlace bindings/python/__init__.py \
+      --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
+      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${version}"};
+  '';
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
@@ -105,7 +126,7 @@ stdenv.mkDerivation rec {
       owner = "Gnucash";
       repo = "gnucash-docs";
       rev = version;
-      hash = "sha256-uXpIAsucVUaAlqYTKfrfBg04Kb5Mza67l0ZU6fxkSUY=";
+      hash = "sha256-9hXOgHdNtTcPOf44L2RrfOTXAgJi2Xu6gWnjDU7gHjU=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -130,11 +151,16 @@ stdenv.mkDerivation rec {
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
+  # We could not find the python entrypoint and somehow it is used from PATH,
+  # so force to use the one with all dependencies
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
-    wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
-    wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash-cli \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
 
     wrapProgram $out/bin/finance-quote-wrapper \
       --prefix PERL5LIB : "${
@@ -144,6 +170,9 @@ stdenv.mkDerivation rec {
           FinanceQuote
         ]
       }"
+
+    chmod +x $out/share/gnucash/python/pycons/*.py
+    patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
 
   passthru.updateScript = ./update.sh;
@@ -173,9 +202,8 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      domenkozar
-      rski
       nevivurn
+      ryand56
     ];
     platforms = platforms.unix;
     mainProgram = "gnucash";

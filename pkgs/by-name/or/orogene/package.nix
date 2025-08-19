@@ -4,8 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,29 +14,38 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orogene";
     repo = "orogene";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GMWrlvZZ2xlcvcRG3u8jS8KiewHpyX0brNe4pmCpHbM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-I9uh8jV1hH5R/UHM3mz2/ZA7QY4O9gW5qXlVSfao0ZM=";
+  cargoPatches = [
+    # Workaround to avoid "error[E0282]"
+    # ref: https://github.com/orogene/orogene/pull/315
+    ./update-outdated-lockfile.patch
+  ];
+
+  cargoHash = "sha256-I08mqyogEuadp+V10svMmCm0i0zOZWiocOpM9E3lgag=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   preCheck = ''
     export CI=true
     export HOME=$(mktemp -d)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/oro";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Package manager for tools that use node_modules";

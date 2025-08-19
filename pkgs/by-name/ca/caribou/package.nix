@@ -6,6 +6,7 @@
   gnome,
   glib,
   gtk3,
+  gobject-introspection,
   clutter,
   dbus,
   python3,
@@ -57,13 +58,17 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/caribou/-/commit/d41c8e44b12222a290eaca16703406b113a630c6.patch";
       hash = "sha256-yIsEqSflpAdQPAB6eNr6fctxzyACu7N1HVfMIdCQou0=";
     })
+    # Fix build with gettext 0.25
+    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [
     pkg-config
+    gobject-introspection
     intltool
     libxslt
     libxml2
+    pythonEnv
     autoreconfHook
     wrapGAppsHook3
     vala
@@ -109,5 +114,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ ];
     platforms = platforms.linux;
+    # checking for a Python interpreter with version >= 2.4... none
+    # configure: error: no suitable Python interpreter found
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

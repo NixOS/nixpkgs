@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     deepin-icon-theme
   ];
 
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
+
   dontDropIconThemeCache = true;
 
   preFixup = ''
@@ -53,6 +56,6 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
     ];
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

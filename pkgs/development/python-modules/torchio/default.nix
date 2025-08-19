@@ -1,42 +1,56 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
+  uv-build,
+
+  # dependencies
   deprecated,
-  humanize,
+  einops,
   matplotlib,
   nibabel,
   numpy,
-  parameterized,
+  packaging,
+  rich,
   scipy,
   simpleitk,
   torch,
   tqdm,
   typer,
+
+  # tests
+  humanize,
+  parameterized,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.0";
+  version = "0.20.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "fepegar";
+    owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-Soew23+Skpc2IpVBMuOnC5LBW0vFL/9LszLijkJgQoQ=";
+    hash = "sha256-l2KQLZDxsP8Bjk/vPG2YbU+8Z6/lOvNvy9NYKTdW+cY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    uv-build
+  ];
+
+  dependencies = [
     deprecated
+    einops
     humanize
     nibabel
     numpy
+    packaging
+    rich
     scipy
     simpleitk
     torch
@@ -45,28 +59,30 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     matplotlib
     parameterized
+    pytestCheckHook
   ];
-  disabledTests =
-    [
-      # tries to download models:
-      "test_load_all"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-      "test_queue_multiprocessing"
-    ];
+
+  disabledTests = [
+    # tries to download models:
+    "test_load_all"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_queue_multiprocessing"
+  ];
+
   pythonImportsCheck = [
     "torchio"
     "torchio.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "https://torchio.readthedocs.io";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    homepage = "https://docs.torchio.org";
+    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

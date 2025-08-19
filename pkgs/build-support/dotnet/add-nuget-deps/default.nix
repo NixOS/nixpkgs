@@ -5,7 +5,7 @@
   lib,
   replaceVarsWith,
   nuget-to-nix,
-  nixfmt-rfc-style,
+  nixfmt,
   nuget-to-json,
   cacert,
   fetchNupkg,
@@ -90,7 +90,7 @@ attrs
             replacements = {
               binPath = lib.makeBinPath [
                 nuget-to-nix
-                nixfmt-rfc-style
+                nixfmt
                 nuget-to-json
               ];
             };

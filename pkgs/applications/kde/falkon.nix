@@ -20,7 +20,7 @@
   kio,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "falkon";
 
   preConfigure = ''
@@ -42,7 +42,8 @@ mkDerivation rec {
     kpurpose
     karchive
     kio
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   nativeBuildInputs = [
     cmake

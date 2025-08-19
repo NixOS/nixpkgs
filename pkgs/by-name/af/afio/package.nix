@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kholtman";
     repo = "afio";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1vbxl66r5rp5a1qssjrkfsjqjjgld1cq57c871gd0m4qiq9rmcfy";
   };
 

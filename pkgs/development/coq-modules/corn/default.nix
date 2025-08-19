@@ -8,12 +8,16 @@
   version ? null,
 }:
 
-(mkCoqDerivation rec {
+(mkCoqDerivation {
   pname = "corn";
   inherit version;
   defaultVersion =
     with lib.versions;
     lib.switch coq.coq-version [
+      {
+        case = (range "8.18" "8.20");
+        out = "8.20.0";
+      }
       {
         case = (range "8.17" "8.20");
         out = "8.19.0";
@@ -42,12 +46,13 @@
     "8.16.0".sha256 = "sha256-ZE/EEIndxHfo/9Me5NX4ZfcH0ZAQ4sRfZY7LRZfLXBQ=";
     "8.18.0".sha256 = "sha256-ow3mfarZ1PvBGf5WLnI8LdF3E+8A6fN7cOcXHrZJLo0=";
     "8.19.0".sha256 = "sha256-h5MlfRuv2hTbxGmpLUEGQO1YqQTwUNEHZzCfvdOU1TA=";
+    "8.20.0".sha256 = "sha256-tl68REU6xTbSOzhPucQPd9A3YnnaMNbSY8gl4Seyp10=";
   };
 
   configureScript = "./configure.sh";
   dontAddPrefix = true;
 
-  mlPlugin = true;  /* uses coq-bignums.plugin */
+  mlPlugin = true; # uses coq-bignums.plugin
 
   propagatedBuildInputs = [
     bignums

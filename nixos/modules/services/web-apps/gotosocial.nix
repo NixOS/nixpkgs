@@ -80,7 +80,7 @@ in
       type = lib.types.nullOr lib.types.path;
       description = ''
         File path containing environment variables for configuring the GoToSocial service
-        in the format of an EnvironmentFile as described by systemd.exec(5).
+        in the format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`.
 
         This option could be used to pass sensitive configuration to the GoToSocial daemon.
 
@@ -144,8 +144,8 @@ in
     systemd.services.gotosocial = {
       description = "ActivityPub social network server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
-      requires = lib.optional cfg.setupPostgresqlDB "postgresql.service";
+      after = [ "network.target" ] ++ lib.optional cfg.setupPostgresqlDB "postgresql.target";
+      requires = lib.optional cfg.setupPostgresqlDB "postgresql.target";
       restartTriggers = [ configFile ];
 
       serviceConfig = {

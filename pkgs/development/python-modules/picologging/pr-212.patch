@@ -1,0 +1,94 @@
+diff --git a/src/picologging/compat.hxx b/src/picologging/compat.hxx
+index d3356da..be7a1fc 100644
+--- a/src/picologging/compat.hxx
++++ b/src/picologging/compat.hxx
+@@ -88,4 +88,12 @@ static inline PyObject* _Py_XNewRef(PyObject *obj)
+ }
+ #endif
+ 
++// For Python 3.13 and above, PyTime_t is now part of the public API
++#if PY_VERSION_HEX >= 0x030d0000
++#define _PyTime_t PyTime_t
++#define _PyTime_AsSecondsDouble PyTime_AsSecondsDouble
++#define _PyTime_AsMilliseconds PyTime_AsMilliseconds
++#define _PyTime_ROUND_CEILING PyTime_ROUND_CEILING
++#endif
++
+ #endif // COMPAT_H
+\ No newline at end of file
+
+From fe313d8b3dcf0115e1be781e03b20673d3f51c3f Mon Sep 17 00:00:00 2001
+From: Anthony Shaw <anthony.p.shaw@gmail.com>
+Date: Sat, 14 Sep 2024 17:33:25 +1000
+Subject: [PATCH 2/2] Patch other changed APIs for pytime
+
+---
+ pyproject.toml                |  2 +-
+ src/picologging/compat.hxx    |  2 --
+ src/picologging/logrecord.cxx | 13 +++++++++++++
+ 3 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 33abe66..27628c9 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [build-system]
+ requires = [
+     "setuptools>=65.4.1",
+-    "scikit-build>=0.17.0",
++    "scikit-build>=0.18.0",
+     "cmake>=3.18",
+     "ninja",
+ ]
+diff --git a/src/picologging/compat.hxx b/src/picologging/compat.hxx
+index be7a1fc..7c6970d 100644
+--- a/src/picologging/compat.hxx
++++ b/src/picologging/compat.hxx
+@@ -92,8 +92,6 @@ static inline PyObject* _Py_XNewRef(PyObject *obj)
+ #if PY_VERSION_HEX >= 0x030d0000
+ #define _PyTime_t PyTime_t
+ #define _PyTime_AsSecondsDouble PyTime_AsSecondsDouble
+-#define _PyTime_AsMilliseconds PyTime_AsMilliseconds
+-#define _PyTime_ROUND_CEILING PyTime_ROUND_CEILING
+ #endif
+ 
+ #endif // COMPAT_H
+\ No newline at end of file
+diff --git a/src/picologging/logrecord.cxx b/src/picologging/logrecord.cxx
+index cec68c9..9f5cf86 100644
+--- a/src/picologging/logrecord.cxx
++++ b/src/picologging/logrecord.cxx
+@@ -16,11 +16,19 @@ _PyFloat_FromPyTime(_PyTime_t t)
+ 
+ _PyTime_t current_time()
+ {
++#if PY_VERSION_HEX >= 0x030d0000
++    _PyTime_t t;
++    if (PyTime_Time(&t) < 0) {
++        return -1;
++    }
++    return t;
++#else
+     _PyTime_t t;
+     if (_PyTime_GetSystemClockWithInfo(&t, NULL) < 0) {
+         return -1;
+     }
+     return t;
++#endif
+ }
+ 
+ PyObject* LogRecord_new(PyTypeObject* type, PyObject *initargs, PyObject *kwds)
+@@ -162,7 +170,12 @@ LogRecord* LogRecord_create(LogRecord* self, PyObject* name, PyObject* msg, PyOb
+     }
+ 
+     self->created = _PyTime_AsSecondsDouble(ctime);
++// msecs conversion isn't in 3.13 API
++#if PY_VERSION_HEX < 0x030d0000
+     self->msecs = _PyTime_AsMilliseconds(ctime, _PyTime_ROUND_CEILING);
++#else
++    self->msecs = 0;
++#endif
+     self->relativeCreated = _PyFloat_FromPyTime((ctime - startTime) * 1000);    
+     self->thread = PyThread_get_thread_ident(); // Only supported in Python 3.7+, if big demand for 3.6 patch this out for the old API.
+     // TODO #2 : See if there is a performant way to get the thread name.

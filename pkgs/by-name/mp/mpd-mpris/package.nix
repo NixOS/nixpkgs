@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "natsukagami";
-    repo = pname;
+    repo = "mpd-mpris";
     rev = "v${version}";
     sha256 = "sha256-QxPkGWpCWiyEbChH9SHeD+SiV8k0c/G7MG/azksP3xU=";
   };
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = [ "cmd/mpd-mpris" ];
 
   postInstall = ''
     install -Dm644 mpd-mpris.service $out/lib/systemd/user/mpd-mpris.service

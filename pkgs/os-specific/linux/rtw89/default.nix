@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 let
@@ -20,7 +21,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 
@@ -35,7 +38,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = " Driver for Realtek 8852AE, 8852BE, and 8853CE, 802.11ax devices";
+    description = "Driver for Realtek 8852AE, 8852BE, and 8853CE, 802.11ax devices";
     homepage = "https://github.com/lwfinger/rtw89";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ tvorog ];

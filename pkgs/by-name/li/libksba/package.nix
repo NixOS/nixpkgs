@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libgpg-error ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ];
 
   postInstall = ''

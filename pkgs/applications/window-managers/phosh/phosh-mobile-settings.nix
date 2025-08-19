@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, nixosTests
-, directoryListingUpdater
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wrapGAppsHook4
-, desktop-file-utils
-, feedbackd
-, gtk4
-, libadwaita
-, lm_sensors
-, phoc
-, phosh
-, wayland-protocols
-, json-glib
-, gsound
-, gmobile
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nixosTests,
+  directoryListingUpdater,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  feedbackd,
+  gtk4,
+  libadwaita,
+  lm_sensors,
+  phoc,
+  phosh,
+  wayland-protocols,
+  json-glib,
+  gsound,
+  gmobile,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,13 +73,13 @@ stdenv.mkDerivation rec {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Settings app for mobile specific things";
     mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rvl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rvl ];
+    platforms = lib.platforms.linux;
   };
 }

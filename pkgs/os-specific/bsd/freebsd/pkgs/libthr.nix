@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   libcMinimal,
   include,
@@ -13,7 +15,8 @@ mkDerivation {
     "lib/libthread_db"
     "lib/libc" # needs /include + arch-specific files
     "libexec/rtld-elf"
-  ] ++ extraSrc;
+  ]
+  ++ extraSrc;
 
   outputs = [
     "out"
@@ -31,6 +34,10 @@ mkDerivation {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isStatic ''
+    rm $out/lib/libpthread.so
   '';
 
   env.MK_TESTS = "no";

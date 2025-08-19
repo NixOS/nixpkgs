@@ -70,6 +70,7 @@ in
     };
 
     systemd.services.torque-server = {
+      documentation = [ "man:pbs_server(8)" ];
       path = [ torque ];
 
       wantedBy = [ "multi-user.target" ];
@@ -93,6 +94,7 @@ in
     };
 
     systemd.services.torque-scheduler = {
+      documentation = [ "man:pbs_sched(8)" ];
       path = [ torque ];
 
       requires = [ "torque-server-init.service" ];

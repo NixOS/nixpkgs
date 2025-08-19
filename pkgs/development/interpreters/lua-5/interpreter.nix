@@ -7,7 +7,7 @@
   makeWrapper,
   self,
   packageOverrides ? (final: prev: { }),
-  substituteAll,
+  replaceVars,
   pkgsBuildBuild,
   pkgsBuildHost,
   pkgsBuildTarget,
@@ -84,20 +84,24 @@ stdenv.mkDerivation (
 
     inherit patches;
 
-    postPatch =
-      ''
-        sed -i "s@#define LUA_ROOT[[:space:]]*\"/usr/local/\"@#define LUA_ROOT  \"$out/\"@g" src/luaconf.h
+    postPatch = ''
+      sed -i "s@#define LUA_ROOT[[:space:]]*\"/usr/local/\"@#define LUA_ROOT  \"$out/\"@g" src/luaconf.h
 
-        # abort if patching didn't work
-        grep $out src/luaconf.h
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin && !staticOnly) ''
-        # Add a target for a shared library to the Makefile.
-        sed -e '1s/^/LUA_SO = liblua.so/' \
-            -e 's/ALL_T *= */&$(LUA_SO) /' \
-            -i src/Makefile
-        cat ${./lua-dso.make} >> src/Makefile
-      '';
+      # abort if patching didn't work
+      grep $out src/luaconf.h
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin && !staticOnly) ''
+      # Add a target for a shared library to the Makefile.
+      sed -e '1s/^/LUA_SO = liblua.so/' \
+          -e 's/ALL_T *= */&$(LUA_SO) /' \
+          -i src/Makefile
+      cat ${./lua-dso.make} >> src/Makefile
+    '';
+
+    env = {
+      inherit luaversion;
+      pkgversion = version;
+    };
 
     # see configurePhase for additional flags (with space)
     makeFlags = [
@@ -109,7 +113,7 @@ stdenv.mkDerivation (
       "PLAT=${plat}"
       "CC=${stdenv.cc.targetPrefix}cc"
       "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-      # Lua links with readline wich depends on ncurses. For some reason when
+      # Lua links with readline which depends on ncurses. For some reason when
       # building pkgsStatic.lua it fails because symbols from ncurses are not
       # found. Adding ncurses here fixes the problem.
       "MYLIBS=-lncurses"
@@ -149,8 +153,7 @@ stdenv.mkDerivation (
     postInstall = ''
       mkdir -p "$out/nix-support" "$out/share/doc/lua" "$out/lib/pkgconfig"
       cp ${
-        substituteAll {
-          src = ./utils.sh;
+        replaceVars ./utils.sh {
           luapathsearchpaths = lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
           luacpathsearchpaths = lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
         }

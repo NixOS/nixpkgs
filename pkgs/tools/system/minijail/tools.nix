@@ -11,6 +11,7 @@ let
 in
 
 buildPythonApplication {
+  format = "setuptools";
   pname = "minijail-tools";
   inherit (minijail) version src;
 

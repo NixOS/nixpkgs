@@ -44,7 +44,7 @@ in
       maxMemory = lib.mkOption {
         type = lib.types.ints.unsigned;
         default = 64;
-        description = "The maximum amount of memory to use for storage, in megabytes.";
+        description = "The maximum amount of memory to use for storage, in MiB (1024×1024 bytes).";
       };
 
       maxConnections = lib.mkOption {

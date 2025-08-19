@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Coffee2CodeNL";
-    repo = pname;
-    rev = "v${version}";
+    repo = "gebaar-libinput";
+    tag = "v${version}";
     sha256 = "1kqcgwkia1p195xr082838dvj1gqif9d63i8a52jb0lc32zzizh6";
     fetchSubmodules = true;
   };
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      colemickens
       lovesegfault
     ];
   };

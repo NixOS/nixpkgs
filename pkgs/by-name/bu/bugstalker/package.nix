@@ -6,18 +6,18 @@
   libunwind,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bugstalker";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
-    rev = "v${version}";
-    hash = "sha256-JacRt+zNwL7hdpdh5h9Mxztqi47f5eUbcZyx6ct/5Bc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-c3NyYDz+Ha5jHTpXLw9xsY+h0NjW9Uvpyn2PStmahKA=";
   };
 
-  cargoHash = "sha256-ljT7Dl9553sfZBqTe6gT3iYPH+D1Jp9ZsyGVQGOekxw=";
+  cargoHash = "sha256-/FSV/avsg7kbgtinmKBb0+gemLFZdSE+A+tfLvtfNas=";
 
   buildInputs = [ libunwind ];
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bs";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

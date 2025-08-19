@@ -12,13 +12,18 @@ To open a shell able to build a typical OCaml project, put the dependencies in `
 For example:
 ```nix
 let
- pkgs = import <nixpkgs> {};
- # choose the ocaml version you want to use
- ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_12;
+  pkgs = import <nixpkgs> { };
+  # choose the ocaml version you want to use
+  ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_12;
 in
 pkgs.mkShell {
   # build tools
-  nativeBuildInputs = with ocamlPackages; [ ocaml findlib dune_2 ocaml-lsp ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    findlib
+    dune_2
+    ocaml-lsp
+  ];
   # dependencies
   buildInputs = with ocamlPackages; [ ocamlgraph ];
 }
@@ -38,12 +43,12 @@ Here is a simple package example.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- It also accept `duneVersion` parameter (valid value are `"1"`, `"2"`, and
-  `"3"`). The recommended practice it to set only if you don't want the default
+- It also accepts a `duneVersion` parameter (valid values are `"1"`, `"2"`, and
+  `"3"`). The recommended practice is to set it only if you don't want the default
   value and/or it depends on something else like package version. You might see
   a not-supported argument `useDune2`. The behavior was `useDune2 = true;` =>
   `duneVersion = "2";` and `useDune2 = false;` => `duneVersion = "1";`. It was
-  used at the time when dune3 didn't existed.
+  used at the time when dune3 didn't exist.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is
@@ -58,7 +63,8 @@ Here is a simple package example.
   generates.
 
 ```nix
-{ lib,
+{
+  lib,
   fetchFromGitHub,
   buildDunePackage,
   ocaml,
@@ -66,7 +72,8 @@ Here is a simple package example.
   alcotest,
   result,
   bigstringaf,
-  ppx_let }:
+  ppx_let,
+}:
 
 buildDunePackage rec {
   pname = "angstrom";
@@ -75,15 +82,21 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
-    owner  = "inhabitedtype";
-    repo   = pname;
-    rev    = version;
-    hash   = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
+    owner = "inhabitedtype";
+    repo = "angstrom";
+    tag = version;
+    hash = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
-  checkInputs = [ alcotest ppx_let ];
+  checkInputs = [
+    alcotest
+    ppx_let
+  ];
   buildInputs = [ ocaml-syntax-shims ];
-  propagatedBuildInputs = [ bigstringaf result ];
+  propagatedBuildInputs = [
+    bigstringaf
+    result
+  ];
   doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
@@ -98,7 +111,11 @@ buildDunePackage rec {
 Here is a second example, this time using a source archive generated with `dune-release`. It is a good idea to use this archive when it is available as it will usually contain substituted variables such as a `%%VERSION%%` field. This library does not depend on any other OCaml library and no tests are run after building it.
 
 ```nix
-{ lib, fetchurl, buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "wtf8";
@@ -107,7 +124,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${version}/wtf8-v${version}.tbz";
     hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 

@@ -4,7 +4,6 @@
   python,
   runCommand,
   fetchFromGitHub,
-  fetchpatch,
   configargparse,
   acme,
   configobj,
@@ -24,26 +23,17 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.11.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
+    hash = "sha256-GS4JLLXrX4+BQ4S6ySbOHUaUthCFYTCHWnOaMpfnIj8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CSR_support_in_pyOpenSSL_is_deprecated.patch";
-      url = "https://github.com/certbot/certbot/commit/f005045d87b25f1922774685646e57765aa202ad.patch";
-      includes = [ "pytest.ini" ];
-      hash = "sha256-YcQbZb7DLU+AXxNyqJRYZIC18DuT6X8kGbfdYtUrHiA=";
-    })
-  ];
-
-  postPatch = "cd ${pname}"; # using sourceRoot would interfere with patches
+  postPatch = "cd certbot"; # using sourceRoot would interfere with patches
 
   build-system = [ setuptools ];
 
@@ -71,10 +61,9 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
@@ -95,11 +84,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/certbot/certbot";
-    changelog = "https://github.com/certbot/certbot/blob/${src.rev}/certbot/CHANGELOG.md";
+    changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ asl20 ];
   };
 }

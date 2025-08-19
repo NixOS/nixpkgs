@@ -1,23 +1,38 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, wafHook
-, buildPackages
-, python3
-, readline
-, libxslt
-, libxcrypt
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wafHook,
+  buildPackages,
+  python3,
+  readline,
+  libxslt,
+  libxcrypt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
 }:
+
+let
+  needsAnswers =
+    stdenv.hostPlatform != stdenv.buildPlatform
+    && !(stdenv.hostPlatform.emulatorAvailable buildPackages);
+  answers =
+    {
+      # PYTHONHASHSEED=1 python3.9 ./buildtools/bin/waf configure --bundled-libraries=NONE --builtin-libraries=replace --cross-compile --cross-execute=' ' --cross-answers=answers
+      x86_64-freebsd = ./answers-x86_64-freebsd;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
+in
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.12";
+  version = "1.4.13";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-bOSydJiBLQkjfs5loNbfrAlBYQ5wmEjsuCKqJBCEzXo=";
+    hash = "sha256-XuJ252RNcT4Z5LatwAtECvtYUf8h5lgh/67YnhWl4Wc=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +55,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
     export PYTHONHASHSEED=1
+  ''
+  + lib.optionalString needsAnswers ''
+    cp ${answers} answers
+    chmod +w answers
   '';
 
   wafPath = "buildtools/bin/waf";
@@ -47,19 +66,32 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-compile"
-    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+    (
+      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+        "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+      else
+        "--cross-answers=answers"
+    )
   ];
 
-  postFixup = if stdenv.hostPlatform.isDarwin
-    then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
-    else null;
+  postFixup =
+    if stdenv.hostPlatform.isDarwin then
+      ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+    else
+      null;
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
+
+  # https://reviews.llvm.org/D135402
+  NIX_LDFLAGS = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
   meta = with lib; {
     description = "Trivial database";

@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -17,8 +17,6 @@ buildPythonPackage rec {
   pname = "pytest-postgresql";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
@@ -35,7 +33,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mirakuru
     port-for
     psycopg
@@ -47,9 +45,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ];
-  pytestFlagsArray = [
-    "-p"
-    "no:postgresql"
+  pytestFlags = [
+    "-pno:postgresql"
   ];
   disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ]; # requires Docker
   disabledTests = [
@@ -65,11 +62,15 @@ buildPythonPackage rec {
     "pytest_postgresql.executor"
   ];
 
-  meta = with lib; {
+  # Can't reliably run checkPhase on darwin because of nix bug, see:
+  #  https://github.com/NixOS/nixpkgs/issues/371242
+  doCheck = !stdenv.buildPlatform.isDarwin;
+
+  meta = {
     homepage = "https://pypi.python.org/pypi/pytest-postgresql";
     description = "Pytest plugin that enables you to test code on a temporary PostgreSQL database";
     changelog = "https://github.com/ClearcodeHQ/pytest-postgresql/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

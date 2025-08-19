@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "johanmalm";
-    repo = pname;
+    repo = "jgmenu";
     rev = "v${version}";
     sha256 = "sha256-vuSpiZZYe0l5va9dHM54gaoI9x8qXH1gJORUS5489jQ=";
   };
@@ -33,28 +33,26 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython
   ];
 
-  buildInputs =
-    [
-      pango
-      librsvg
-      libxml2
-      menu-cache
-      xorg.libXinerama
-      xorg.libXrandr
-      python3Packages.python
-    ]
-    ++ lib.optionals enableXfcePanelApplet [
-      gtk3
-      xfce.libxfce4util
-      xfce.xfce4-panel
-    ];
+  buildInputs = [
+    pango
+    librsvg
+    libxml2
+    menu-cache
+    xorg.libXinerama
+    xorg.libXrandr
+    python3Packages.python
+  ]
+  ++ lib.optionals enableXfcePanelApplet [
+    gtk3
+    xfce.libxfce4util
+    xfce.xfce4-panel
+  ];
 
-  configureFlags =
-    [
-    ]
-    ++ lib.optionals enableXfcePanelApplet [
-      "--with-xfce4-panel-applet"
-    ];
+  configureFlags = [
+  ]
+  ++ lib.optionals enableXfcePanelApplet [
+    "--with-xfce4-panel-applet"
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"

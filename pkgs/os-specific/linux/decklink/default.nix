@@ -3,6 +3,7 @@
   lib,
   blackmagic-desktop-video,
   kernel,
+  fetchpatch,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decklink";
@@ -11,6 +12,20 @@ stdenv.mkDerivation (finalAttrs: {
   # and desktop service, since the version of the two have to match anyways.
   # See pkgs/by-name/bl/blackmagic-desktop-video/package.nix for more.
   inherit (blackmagic-desktop-video) src version;
+
+  patches =
+    (lib.optionals (lib.versionAtLeast kernel.modDirVersion "6.13") [
+      # needed for version 14.4.x to build for kernel 6.13
+      (fetchpatch {
+        name = "01-update-makefiles";
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/01-update-makefiles.patch?h=decklink";
+        hash = "sha256-l3iu0fG/QJMdGI/WSlNn+qjF4nK25JxoiwhPrMGTqE4=";
+      })
+    ])
+    ++ (lib.optionals (lib.versionAtLeast kernel.modDirVersion "6.15") [
+      # needed for version 14.4.x to build for kernel 6.15
+      ./02-rename-timer-delete.patch
+    ]);
 
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = placeholder "out";

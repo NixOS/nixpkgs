@@ -33,7 +33,8 @@ let
     "${configFile}"
     "-u"
     "ntp:ntp"
-  ] ++ cfg.extraFlags;
+  ]
+  ++ cfg.extraFlags;
 
 in
 
@@ -126,9 +127,9 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.ntp.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
+  config = mkIf config.services.ntp.enable {
     # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;

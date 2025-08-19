@@ -31,6 +31,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/AFLplusplus/AFLplusplus";
     description = "strcmp & memcmp token capture library";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      ris
+      msanft
+    ];
   };
 }

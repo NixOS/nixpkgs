@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "harlequin-bigquery";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "harlequin_bigquery";
     inherit version;
-    hash = "sha256-uIPYhK4R6N7pqsKY2GozkG76WI+gru2unsK5BxO4+/Y=";
+    hash = "sha256-jdDwmfiU7x4zl4hg12evrPqLEzPB2M8/1HN4d0N1EJQ=";
   };
 
   build-system = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Harlequin adapter for Google BigQuery";
+    description = "Harlequin adapter for Google BigQuery";
     homepage = "https://pypi.org/project/harlequin-bigquery/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];

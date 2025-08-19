@@ -7,20 +7,34 @@
 `pkgs.nix-gitignore` exports a number of functions, but you'll most likely need either `gitignoreSource` or `gitignoreSourcePure`. As their first argument, they both accept either 1. a file with gitignore lines or 2. a string with gitignore lines, or 3. a list of either of the two. They will be concatenated into a single big string.
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }: {
+{
+  pkgs ? import <nixpkgs> { },
+}:
+{
 
- src = nix-gitignore.gitignoreSource [] ./source;
-     # Simplest version
+  src = nix-gitignore.gitignoreSource [ ] ./source;
+  # Simplest version
 
- src = nix-gitignore.gitignoreSource "supplemental-ignores\n" ./source;
-     # This one reads the ./source/.gitignore and concats the auxiliary ignores
+  src = nix-gitignore.gitignoreSource ''
+    supplemental-ignores
+  '' ./source;
+  # This one reads the ./source/.gitignore and concats the auxiliary ignores
 
- src = nix-gitignore.gitignoreSourcePure "ignore-this\nignore-that\n" ./source;
-     # Use this string as gitignore, don't read ./source/.gitignore.
+  src = nix-gitignore.gitignoreSourcePure ''
+    ignore-this
+    ignore-that
+  '' ./source;
+  # Use this string as gitignore, don't read ./source/.gitignore.
 
- src = nix-gitignore.gitignoreSourcePure ["ignore-this\nignore-that\n" ~/.gitignore] ./source;
-     # It also accepts a list (of strings and paths) that will be concatenated
-     # once the paths are turned to strings via readFile.
+  src = nix-gitignore.gitignoreSourcePure [
+    ''
+      ignore-this
+      ignore-that
+    ''
+    ~/.gitignore
+  ] ./source;
+  # It also accepts a list (of strings and paths) that will be concatenated
+  # once the paths are turned to strings via readFile.
 }
 ```
 
@@ -38,9 +52,7 @@ Those filter functions accept the same arguments the `builtins.filterSource` fun
 If you want to make your own filter from scratch, you may use
 
 ```nix
-{
-  gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root;
-}
+{ gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root; }
 ```
 
 ## gitignore files in subdirectories {#sec-pkgs-nix-gitignore-usage-recursive}

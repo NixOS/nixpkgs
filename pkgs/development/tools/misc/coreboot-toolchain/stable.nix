@@ -36,10 +36,10 @@
     };
   }
   {
-    name = "acpica-unix-20230628.tar.gz";
+    name = "acpica-unix-20241212.tar.gz";
     archive = fetchurl {
-      sha256 = "1kjwzyfrmw0fhawjvpqib3l5jxdlcpj3vv92sb7ls8ixbrs6m1w6";
-      url = "https://downloadmirror.intel.com/783534/acpica-unix-20230628.tar.gz";
+      sha256 = "0q8rqc9nxvyg4310rc93az04j01p91q7ipzvhl2722rrxv7q7jlx";
+      url = "https://github.com/acpica/acpica/releases/download/R2024_12_12/acpica-unix-20241212.tar.gz";
     };
   }
   {

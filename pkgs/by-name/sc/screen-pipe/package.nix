@@ -9,9 +9,9 @@
   openssl,
   sqlite,
   stdenv,
-  darwin,
   alsa-lib,
   xorg,
+  apple-sdk_12,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
@@ -41,34 +41,20 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      dbus
-      ffmpeg
-      oniguruma
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_12_3.frameworks;
-      [
-        CoreAudio
-        AudioUnit
-        CoreFoundation
-        CoreGraphics
-        CoreMedia
-        IOKit
-        Metal
-        MetalPerformanceShaders
-        Security
-        ScreenCaptureKit
-        SystemConfiguration
-      ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      xorg.libxcb
-    ];
+  buildInputs = [
+    dbus
+    ffmpeg
+    oniguruma
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_12
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    xorg.libxcb
+  ];
 
   buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";
 

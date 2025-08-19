@@ -17,7 +17,6 @@
   packaging,
   pandocfilters,
   pygments,
-  tinycss2,
   traitlets,
   importlib-metadata,
   flaky,
@@ -35,14 +34,14 @@ let
 in
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.16.4";
+  version = "7.16.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hsqRuiZrCkSNyW+mxbnZiv+r3ihns2MlhwNTaAf59/Q=";
+    hash = "sha256-V2p+N8ZIDae4Rl7vpmwXhEJDgWzhzMNyYzxrccPA9YI=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -56,9 +55,9 @@ buildPythonPackage rec {
     cp ${style-css} share/templates/classic/static/style.css
   '';
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     bleach
     defusedxml
@@ -71,9 +70,10 @@ buildPythonPackage rec {
     packaging
     pandocfilters
     pygments
-    tinycss2
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ bleach.optional-dependencies.css
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -86,9 +86,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -108,6 +107,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbconvert";
     changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

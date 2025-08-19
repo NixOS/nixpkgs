@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-bluetooth-daemon";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "bluetooth-daemon";
     rev = finalAttrs.version;
-    hash = "sha256-XRskwLtQKlG96fpIxNZKWG7kn3HR0ngjAUwyn7fnxdY=";
+    hash = "sha256-Qr4hg2OY7l/LpGB+/yfIXCnjCXsjQLFZX9f4CoYRtLo=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Send and receive files via bluetooth";
     homepage = "https://github.com/elementary/bluetooth-daemon";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
     mainProgram = "io.elementary.bluetooth";
   };

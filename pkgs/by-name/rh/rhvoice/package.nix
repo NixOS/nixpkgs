@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rhvoice";
-  version = "1.14.0";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "RHVoice";
     repo = "RHVoice";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-eduKnxSTIDTxcW3ExueNxVKf8SjmXkVeTfHvJ0eyBPY=";
+    hash = "sha256-4l4S4MUnVGN/El1BBuZvzPPcavUefjMyBk1hk0ux7zo=";
   };
 
   patches = [

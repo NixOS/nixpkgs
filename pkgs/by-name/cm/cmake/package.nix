@@ -1,58 +1,58 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, buildPackages
-, bzip2
-, curlMinimal
-, expat
-, libarchive
-, libuv
-, ncurses
-, openssl
-, pkg-config
-, ps
-, rhash
-, sphinx
-, texinfo
-, xz
-, zlib
-, isBootstrap ? null
-, isMinimalBuild ? (
-  if isBootstrap != null
-  then lib.warn
-    "isBootstrap argument is deprecated and will be removed; use isMinimalBuild instead"
-    isBootstrap
-  else false)
-, useOpenSSL ? !isMinimalBuild
-, useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin)
-, uiToolkits ? [] # can contain "ncurses" and/or "qt5"
-, buildDocs ? !(isMinimalBuild || (uiToolkits == []))
-, darwin
-, libsForQt5
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  replaceVars,
+  buildPackages,
+  bzip2,
+  curlMinimal,
+  expat,
+  libarchive,
+  libuv,
+  ncurses,
+  openssl,
+  pkg-config,
+  ps,
+  rhash,
+  sphinx,
+  texinfo,
+  xz,
+  zlib,
+  isBootstrap ? null,
+  isMinimalBuild ? (
+    if isBootstrap != null then
+      lib.warn "isBootstrap argument is deprecated and will be removed; use isMinimalBuild instead" isBootstrap
+    else
+      false
+  ),
+  useOpenSSL ? !isMinimalBuild,
+  useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin),
+  uiToolkits ? [ ], # can contain "ncurses" and/or "qt5"
+  buildDocs ? !(isMinimalBuild || (uiToolkits == [ ])),
+  libsForQt5,
+  gitUpdater,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
 in
 # Accepts only "ncurses" and "qt5" as possible uiToolkits
-assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
+assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [ ];
 # Minimal, bootstrap cmake does not have toolkits
-assert isMinimalBuild -> (uiToolkits == []);
+assert isMinimalBuild -> (uiToolkits == [ ]);
 stdenv.mkDerivation (finalAttrs: {
-  pname = "cmake"
+  pname =
+    "cmake"
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.31.3";
+  version = "3.31.7";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+sRbxtQQtJsxE6uGYHSIjWyencgaFBh0RG6yOaw4y4c=";
+    hash = "sha256-ptLrHr65kTDf5j71o0DD/bEUMczj18oUhSTBJZJM6mg=";
   };
 
   patches = [
@@ -61,31 +61,29 @@ stdenv.mkDerivation (finalAttrs: {
     ./000-nixpkgs-cmake-prefix-path.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # TODO: Remove these in `staging`.
-
-    # Don't depend on frameworks.
-    ./002-application-services.diff
-    # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
-    ./003-libuv-application-services.diff
   ]
   ++ lib.optional stdenv.hostPlatform.isCygwin ./004-cygwin.diff
-  # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
   ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
   ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
-    substituteAll {
-      src = ./007-darwin-bsd-ps-abspath.diff;
+    replaceVars ./007-darwin-bsd-ps-abspath.diff {
       ps = lib.getExe ps;
-    })
+    }
+  )
   ++ [
     # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
-    # Needed to corretly link curl in pkgsStatic.
+    # Needed to correctly link curl in pkgsStatic.
     ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
   ];
 
-  outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "man"
+    "info"
+  ];
   separateDebugInfo = true;
   setOutputFlags = false;
 
@@ -96,27 +94,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = finalAttrs.setupHooks ++ [
-    pkg-config
-  ]
-  ++ lib.optionals buildDocs [ texinfo ]
-  ++ lib.optionals qt5UI [ wrapQtAppsHook ];
+  nativeBuildInputs =
+    finalAttrs.setupHooks
+    ++ [
+      pkg-config
+    ]
+    ++ lib.optionals buildDocs [ texinfo ]
+    ++ lib.optionals qt5UI [ wrapQtAppsHook ];
 
-  buildInputs = lib.optionals useSharedLibraries [
-    bzip2
-    curlMinimal
-    expat
-    libarchive
-    xz
-    zlib
-    libuv
-    rhash
-  ]
-  ++ lib.optional useOpenSSL openssl
-  ++ lib.optional cursesUI ncurses
-  ++ lib.optional qt5UI qtbase
-  ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices
-  ++ lib.optional (stdenv.hostPlatform.isDarwin && !isMinimalBuild) SystemConfiguration;
+  buildInputs =
+    lib.optionals useSharedLibraries [
+      bzip2
+      curlMinimal
+      expat
+      libarchive
+      xz
+      zlib
+      libuv
+      rhash
+    ]
+    ++ lib.optional useOpenSSL openssl
+    ++ lib.optional cursesUI ncurses
+    ++ lib.optional qt5UI qtbase;
 
   preConfigure = ''
     fixCmakeFiles .
@@ -136,15 +135,19 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
-  ] ++ (if useSharedLibraries
-        then [
-          "--no-system-cppdap"
-          "--no-system-jsoncpp"
-          "--system-libs"
-        ]
-        else [
-          "--no-system-libs"
-        ]) # FIXME: cleanup
+  ]
+  ++ (
+    if useSharedLibraries then
+      [
+        "--no-system-cppdap"
+        "--no-system-jsoncpp"
+        "--system-libs"
+      ]
+    else
+      [
+        "--no-system-libs"
+      ]
+  ) # FIXME: cleanup
   ++ lib.optional qt5UI "--qt-gui"
   ++ lib.optionals buildDocs [
     "--sphinx-build=${sphinx}/bin/sphinx-build"
@@ -166,12 +169,9 @@ stdenv.mkDerivation (finalAttrs: {
     # package being built.
     (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${stdenv.cc.targetPrefix}c++")
     (lib.cmakeFeature "CMAKE_C_COMPILER" "${stdenv.cc.targetPrefix}cc")
-    (lib.cmakeFeature "CMAKE_AR"
-      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar")
-    (lib.cmakeFeature "CMAKE_RANLIB"
-      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib")
-    (lib.cmakeFeature "CMAKE_STRIP"
-      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip")
+    (lib.cmakeFeature "CMAKE_AR" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar")
+    (lib.cmakeFeature "CMAKE_RANLIB" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib")
+    (lib.cmakeFeature "CMAKE_STRIP" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip")
 
     (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
@@ -219,7 +219,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor finalAttrs.version}/release/${lib.versions.majorMinor finalAttrs.version}.html";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ttuegel lnl7 ];
+    maintainers = with lib.maintainers; [
+      ttuegel
+      lnl7
+    ];
     platforms = lib.platforms.all;
     mainProgram = "cmake";
     broken = (qt5UI && stdenv.hostPlatform.isDarwin);

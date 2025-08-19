@@ -1,55 +1,56 @@
-{ stdenv
-, lib
-, boehmgc
-, boost
-, cairo
-, callPackage
-, cmake
-, desktopToDarwinBundle
-, fetchpatch
-, fetchurl
-, fd
-, gettext
-, ghostscript
-, glib
-, glibmm
-, gobject-introspection
-, gsl
-, gspell
-, gtk-mac-integration
-, gtkmm3
-, gdk-pixbuf
-, imagemagick
-, lcms
-, lib2geom
-, libcdr
-, libexif
-, libpng
-, librevenge
-, librsvg
-, libsigcxx
-, libvisio
-, libwpg
-, libXft
-, libxml2
-, libxslt
-, ninja
-, perlPackages
-, pkg-config
-, poppler
-, popt
-, potrace
-, python3
-, runCommand
-, replaceVars
-, wrapGAppsHook3
-, libepoxy
-, zlib
-, yq
+{
+  stdenv,
+  lib,
+  boehmgc,
+  boost,
+  cairo,
+  callPackage,
+  cmake,
+  desktopToDarwinBundle,
+  fetchpatch,
+  fetchurl,
+  fd,
+  gettext,
+  ghostscript,
+  glib,
+  glibmm,
+  gobject-introspection,
+  gsl,
+  gspell,
+  gtk-mac-integration,
+  gtkmm3,
+  gdk-pixbuf,
+  imagemagick,
+  lcms,
+  lib2geom,
+  libcdr,
+  libexif,
+  libpng,
+  librevenge,
+  librsvg,
+  libsigcxx,
+  libvisio,
+  libwpg,
+  libXft,
+  libxml2,
+  libxslt,
+  ninja,
+  perlPackages,
+  pkg-config,
+  poppler,
+  popt,
+  potrace,
+  python3,
+  runCommand,
+  replaceVars,
+  wrapGAppsHook3,
+  libepoxy,
+  zlib,
+  yq,
 }:
 let
-  python3Env = python3.withPackages
-    (ps: with ps; [
+  python3Env = python3.withPackages (
+    ps: with ps; [
       # List taken almost verbatim from the output of nix-build -A inkscape.passthru.pythonDependencies
       appdirs
       beautifulsoup4
@@ -68,15 +69,16 @@ let
       scour
       tinycss2
       zstandard
-    ]);
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
-  version = "1.4";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://inkscape.org/release/inkscape-${finalAttrs.version}/source/archive/xz/dl/inkscape-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-xZqFRTtpmt3rzVHB3AdoTdlqEMiuxxaxlVHbUFYuE/U=";
+    sha256 = "sha256-IABTDHkX5SYMnoV1pxVP9pJmQ9IAZIfXFOMEqWPwx4I=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -86,12 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   patches = [
-    (fetchpatch {
-      # fix typo in gobjectptr member function. remove on update
-      name = "gobjectptr-fix-member-name.patch";
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/eb6dadcf1a5c660167ba43f3606c8e7cc6529787.patch";
-      hash = "sha256-FvbJV/YrBwhHg0kFdbhyd/Y9g7YV2nPIrRqZt7yJ50Q=";
-    })
     (replaceVars ./fix-python-paths.patch {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
@@ -100,6 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-ps2pdf-path.patch {
       # Fix path to ps2pdf binary
       inherit ghostscript;
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.06.0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/97bd8f29a61e691ceea98ca2444b974cf4256ae0.patch";
+      hash = "sha256-bYRd/KUh/7qFb7x0EuUgQYA9P8abcTf5XS67gzaAiXA=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.07.0.patch";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/ce52c5f96106ae5747171663a46831f21aa52d95.patch";
+      hash = "sha256-3Yj+neSRSSQPeeZkHJ0P6v3Sis/lg9xiygktI6Z+zDY=";
     })
   ];
 
@@ -129,10 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf # for setup hook
     wrapGAppsHook3
     gobject-introspection
-  ] ++ (with perlPackages; [
+  ]
+  ++ (with perlPackages; [
     perl
     XMLParser
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ])
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -165,9 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Env
     zlib
     libepoxy
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gspell
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cairo
     gtk-mac-integration
   ];
@@ -185,16 +195,19 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (python3.pkgs) inkex;
     };
 
-    pythonDependencies = runCommand "python-dependency-list" {
-      nativeBuildInputs = [
-        fd
-        yq
-      ];
-      inherit (finalAttrs) src;
-    } ''
-      unpackPhase
-      tomlq --slurp 'map(.tool.poetry.dependencies | to_entries | map(.key)) | flatten | map(ascii_downcase) | unique' $(fd pyproject.toml) > "$out"
-    '';
+    pythonDependencies =
+      runCommand "python-dependency-list"
+        {
+          nativeBuildInputs = [
+            fd
+            yq
+          ];
+          inherit (finalAttrs) src;
+        }
+        ''
+          unpackPhase
+          tomlq --slurp 'map(.tool.poetry.dependencies | to_entries | map(.key)) | flatten | map(ascii_downcase) | unique' $(fd pyproject.toml) > "$out"
+        '';
   };
 
   meta = {

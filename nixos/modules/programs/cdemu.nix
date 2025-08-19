@@ -71,13 +71,12 @@ in
       Restart = "no";
     };
 
-    environment.systemPackages =
-      [
-        pkgs.cdemu-daemon
-        pkgs.cdemu-client
-      ]
-      ++ lib.optional cfg.gui pkgs.gcdemu
-      ++ lib.optional cfg.image-analyzer pkgs.image-analyzer;
+    environment.systemPackages = [
+      pkgs.cdemu-daemon
+      pkgs.cdemu-client
+    ]
+    ++ lib.optional cfg.gui pkgs.gcdemu
+    ++ lib.optional cfg.image-analyzer pkgs.image-analyzer;
   };
 
 }

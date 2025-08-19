@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "habiticalib";
-  version = "0.3.3";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "habiticalib";
     tag = "v${version}";
-    hash = "sha256-F89ZMXEKpRWRwE0NGolSPfwvHHrP/61sm5ZSE0LSvHA=";
+    hash = "sha256-LSyFCietbdUTr/kEwNhROeK3eoriyNh2U8jO4Zk9QQc=";
   };
 
   build-system = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "habiticalib" ];
 
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Habitica API";
     homepage = "https://github.com/tr4nt0r/habiticalib";
-    changelog = "https://github.com/tr4nt0r/habiticalib/releases/tag/v${version}";
+    changelog = "https://github.com/tr4nt0r/habiticalib/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

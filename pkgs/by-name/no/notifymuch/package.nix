@@ -8,7 +8,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "notifymuch";
   version = "0.1";
   format = "setuptools";
@@ -21,15 +21,14 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1lssr7iv43mp5v6nzrfbqlfzx8jcc7m636wlfyhhnd8ydd39n6k4";
   };
 
-  propagatedBuildInputs =
-    [
-      libnotify
-      gtk3
-    ]
-    ++ (with python3.pkgs; [
-      notmuch
-      pygobject3
-    ]);
+  propagatedBuildInputs = [
+    libnotify
+    gtk3
+  ]
+  ++ (with python3.pkgs; [
+    notmuch
+    pygobject3
+  ]);
 
   nativeBuildInputs = [
     gobject-introspection

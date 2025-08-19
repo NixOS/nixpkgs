@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "regenkfs";
-  version = "unstable-2020-10-17";
+  version = "0-unstable-2020-10-17";
 
   src = fetchFromGitHub {
     owner = "siraben";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-zkwOpMNPGstn/y1l1s8blUKpBebY4Ta9hiPYxVLvG6Y=";
   };
 
-  cargoHash = "sha256-05VmQdop4vdzw2XEvVdp9+RNmyZvay1Q7gKN2n8rDEQ=";
+  cargoHash = "sha256-H8ORNdIVwmtNfuxbyyf5F35tGLNUXwrTFE2CVgkxr0M=";
 
   buildFeatures = [ "c-undef" ];
 

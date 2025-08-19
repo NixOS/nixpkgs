@@ -7,9 +7,9 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ipfetch";
-  version = "unstable-2024-02-02";
+  version = "0-unstable-2024-02-02";
 
   src = fetchFromGitHub {
     owner = "trakBan";

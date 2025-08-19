@@ -1,46 +1,58 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  gtk3,
+  fetchFromGitea,
   libdivsufsort,
   pkg-config,
+
+  withGTK3 ? !stdenv.hostPlatform.isDarwin,
+  gtk3,
+  llvmPackages,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "flips";
-  version = "unstable-2023-03-15";
+  version = "198";
 
-  src = fetchFromGitHub {
-    owner = "Alcaro";
+  src = fetchFromGitea {
+    domain = "git.disroot.org";
+    owner = "Sir_Walrus";
     repo = "Flips";
-    rev = "fdd5c6e34285beef5b9be759c9b91390df486c66";
-    hash = "sha256-uuHgpt7aWqiMTUILm5tAEGGeZrls3g/DdylYQgsfpTw=";
+    tag = "v${version}";
+    hash = "sha256-zYGDcUbtzstk1sTKgX2Mna0rzH7z6Dic+OvjZLI1umI=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook3
-  ];
+  ]
+  ++ lib.optional withGTK3 wrapGAppsHook3;
+
   buildInputs = [
-    gtk3
     libdivsufsort
-  ];
+  ]
+  ++ lib.optional withGTK3 gtk3
+  ++ lib.optional (withGTK3 && stdenv.hostPlatform.isDarwin) llvmPackages.openmp;
+
   patches = [ ./use-system-libdivsufsort.patch ];
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildPhase = ''
-    runHook preBuild
-    ./make.sh
-    runHook postBuild
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "TARGET=${if withGTK3 then "gtk" else "cli"}"
+  ];
+
+  installPhase = lib.optionalString (!withGTK3) ''
+    runHook preInstall
+    install -Dm755 flips -t $out/bin
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patcher for IPS and BPS files";
-    homepage = "https://github.com/Alcaro/Flips";
-    license = licenses.gpl3Plus;
+    homepage = "https://git.disroot.org/Sir_Walrus/Flips";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "flips";
   };
 }

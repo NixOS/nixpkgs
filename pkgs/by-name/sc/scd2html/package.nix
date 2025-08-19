@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
-    repo = pname;
+    repo = "scd2html";
     rev = "v${version}";
     hash = "sha256-oZSHv5n/WOrvy77tC94Z8pYugLpHkcv7U1PrzR+8fHM=";
   };
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "scd2html generates HTML from scdoc source files";
+    description = "Generates HTML from scdoc source files";
     homepage = "https://git.sr.ht/~bitfehler/scd2html";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

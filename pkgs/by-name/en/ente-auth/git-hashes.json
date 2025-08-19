@@ -1,0 +1,12 @@
+{
+  "ente_crypto_dart": "sha256-xBBK9BdXh4+OTj+Jkf3zh5sMZjXtvhyuE1R5LFE8iTY=",
+  "flutter_inappwebview": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_inappwebview_android": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_inappwebview_ios": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_inappwebview_macos": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_inappwebview_platform_interface": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_inappwebview_web": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_inappwebview_windows": "sha256-kskXtWxgp7/g1xThm5Wk3Akeaw3DHGN99PARLJyGL3A=",
+  "flutter_local_authentication": "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=",
+  "sqflite": "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA="
+}

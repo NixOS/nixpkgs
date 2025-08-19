@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "airspy";
     repo = "airspyone_host";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1v7sfkkxc6f8ny1p9xrax1agkl6q583mjx8k0lrrwdz31rf9qgw9";
   };
 
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
+  doInstallCheck = true;
   buildInputs = [ libusb1 ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];

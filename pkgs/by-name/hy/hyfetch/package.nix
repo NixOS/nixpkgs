@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "neofetch with pride flags <3";
+    description = "Neofetch with pride flags <3";
     longDescription = ''
       HyFetch is a command-line system information tool fork of neofetch.
       HyFetch displays information about your system next to your OS logo

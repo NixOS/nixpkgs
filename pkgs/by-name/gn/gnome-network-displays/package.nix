@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
-  version = "0.94.0";
+  version = "0.97.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-FzNaA2Our7gb8FgEmYjRtphGVcQt3pw+wQNyLHtKI4M=";
+    sha256 = "sha256-zexoyPmzJrqu5UU3Sowrk8qRnkj0uKQkYcsOsjmNqyc=";
   };
 
   nativeBuildInputs = [

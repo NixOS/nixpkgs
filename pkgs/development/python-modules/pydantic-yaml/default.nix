@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pydantic,
   ruamel-yaml,
   typing-extensions,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic-yaml";
-  version = "1.4.0";
+  version = "1.6.0";
 
   pyproject = true;
 
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "NowanIlfideme";
     repo = "pydantic-yaml";
     tag = "v${version}";
-    hash = "sha256-xlFSczMCEkSDhtzSl8qzZwwZd0IelPmjTEV+Jk9G0fI=";
+    hash = "sha256-n5QWVHgYAg+Ad7Iv6CBSRQcl8lv4ZtcFMiC2ZHyi414=";
   };
 
   postPatch = ''
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    importlib-metadata
     pydantic
     ruamel-yaml
     typing-extensions
@@ -48,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Small helper library that adds some YAML capabilities to pydantic";
     homepage = "https://github.com/NowanIlfideme/pydantic-yaml";
-    changelog = "https://github.com/NowanIlfideme/pydantic-yaml/releases/tag/v${version}";
+    changelog = "https://github.com/NowanIlfideme/pydantic-yaml/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];
   };

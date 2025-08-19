@@ -64,27 +64,26 @@ let
       pname = "root-fs-scaffold";
       inherit version;
 
-      buildCommand =
-        ''
-          # scaffold a file system layout
-          mkdir -p $out/etc/systemd/system $out/proc $out/sys $out/dev $out/run \
-                   $out/tmp $out/var/tmp $out/var/lib $out/var/cache $out/var/log
+      buildCommand = ''
+        # scaffold a file system layout
+        mkdir -p $out/etc/systemd/system $out/proc $out/sys $out/dev $out/run \
+                 $out/tmp $out/var/tmp $out/var/lib $out/var/cache $out/var/log
 
-          # empty files to mount over with host's version
-          touch $out/etc/resolv.conf $out/etc/machine-id
+        # empty files to mount over with host's version
+        touch $out/etc/resolv.conf $out/etc/machine-id
 
-          # required for portable services
-          cp ${os-release} $out/etc/os-release
+        # required for portable services
+        cp ${os-release} $out/etc/os-release
+      ''
+      # units **must** be copied to /etc/systemd/system/
+      + (lib.concatMapStringsSep "\n" (u: "cp ${u} $out/etc/systemd/system/${u.name};") units)
+      + (lib.concatMapStringsSep "\n" (
+        { object, symlink }:
         ''
-        # units **must** be copied to /etc/systemd/system/
-        + (lib.concatMapStringsSep "\n" (u: "cp ${u} $out/etc/systemd/system/${u.name};") units)
-        + (lib.concatMapStringsSep "\n" (
-          { object, symlink }:
-          ''
-            mkdir -p $(dirname $out/${symlink});
-            ln -s ${object} $out/${symlink};
-          ''
-        ) symlinks);
+          mkdir -p $(dirname $out/${symlink});
+          ln -s ${object} $out/${symlink};
+        ''
+      ) symlinks);
     };
 in
 
@@ -107,7 +106,8 @@ stdenv.mkDerivation {
 
     mkdir -p $out
     # the '.raw' suffix is mandatory by the portable service spec
-    mksquashfs nix ${rootFsScaffold}/* $out/"${pname}_${version}.raw" \
+    # We have to set SOURCE_DATE_EPOCH to 0 here for reproducibility (https://github.com/NixOS/nixpkgs/issues/390696)
+    SOURCE_DATE_EPOCH=0 mksquashfs nix ${rootFsScaffold}/* $out/"${pname}_${version}.raw" \
       -quiet -noappend \
       -exit-on-error \
       -keep-as-directory \

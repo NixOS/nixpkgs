@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-apQkxAUve7+2h9XACZZgroqBK1sCUYMNfsX/4nEnCPA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-2MG6xigiKdvQX8PR457d6AXswTRPRJBPERvZqemjv24=";
+    hash = "sha256-U3SOHZvgyPwv98wY41dnwSCUg+DTkb/LY6woffrAli8=";
   };
 
   # Replace autostart path
@@ -129,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   RUST_BACKTRACE = 1;
+  # https://github.com/Riey/kime/issues/688
+  RUSTFLAGS = "-Clink-args=-L./target/release";
 
   meta = {
     homepage = "https://github.com/Riey/kime";

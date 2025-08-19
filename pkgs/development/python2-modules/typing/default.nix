@@ -16,6 +16,7 @@ in
 buildPythonPackage rec {
   pname = "typing";
   version = "3.10.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

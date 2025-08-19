@@ -13,6 +13,8 @@
 }:
 
 buildPythonPackage rec {
+  __structuredAttrs = true;
+
   pname = "ipydatawidgets";
   version = "4.3.5";
   format = "setuptools";
@@ -38,6 +40,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     nbval
+  ];
+
+  # Tests bind ports
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = [
+    # https://github.com/vidartf/ipydatawidgets/issues/62
+    "ipydatawidgets/tests/test_ndarray_trait.py::test_dtype_coerce"
+
+    # https://github.com/vidartf/ipydatawidgets/issues/63
+    "examples/test.ipynb::Cell 3"
   ];
 
   meta = {

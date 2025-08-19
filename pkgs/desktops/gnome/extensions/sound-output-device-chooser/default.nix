@@ -7,7 +7,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-sound-output-device-chooser";
   # For gnome 42 support many commits not tagged yet are needed.
   version = "unstable-2022-03-29";

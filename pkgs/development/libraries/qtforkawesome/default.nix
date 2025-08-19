@@ -14,19 +14,19 @@ let
   fork_awesome_release = fetchFromGitHub {
     owner = "ForkAwesome";
     repo = "Fork-Awesome";
-    rev = "1.2.0";
-    sha256 = "sha256-zG6/0dWjU7/y/oDZuSEv+54Mchng64LVyV8bluskYzc=";
+    tag = "1.2.0";
+    hash = "sha256-zG6/0dWjU7/y/oDZuSEv+54Mchng64LVyV8bluskYzc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtforkawesome";
-  version = "0.1.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "qtforkawesome";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9e2TCg3itYtHZSvzCoaiIZmgsCMIoebh6C/XWtKz/2Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-djYgZt1mNmV5yLfQH/DPikfOPqtF11XZCTOfNXHur28=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cpp-utilities
     qtutilities
   ];
+
   cmakeFlags = [
     "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
     # Current freetype used by NixOS users doesn't support the `.woff2` font
@@ -52,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Martchus/qtforkawesome";
     description = "Library that bundles ForkAwesome for use within Qt applications";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

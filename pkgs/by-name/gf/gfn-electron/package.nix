@@ -2,12 +2,14 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron,
+  electron_35,
   nix-update-script,
   makeBinaryWrapper,
+  python3,
 }:
 let
-  version = "2.1.2";
+  electron = electron_35;
+  version = "2.2.0";
 in
 buildNpmPackage {
   pname = "gfn-electron";
@@ -17,12 +19,18 @@ buildNpmPackage {
     owner = "hmlendea";
     repo = "gfn-electron";
     tag = "v${version}";
-    hash = "sha256-kTnM4wSDqP2V8hb4mDhbQYpVYouSnUkjuuCfITb/xgY=";
+    hash = "sha256-DwrNCgBp0CD+HYXRMDsu0aKEKzG7k/tk7oATJc30DlE=";
   };
 
-  npmDepsHash = "sha256-27N0hWOfkLQGaGspm4aCoVF6PWiUOAKs+JzbdQV94lo=";
+  npmDepsHash = "sha256-2v5qTTGhdG1EEK8v50LLYz5jE/36lBm1PKQl6HfqhCU=";
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    # node_modules/node-gyp/gyp/pylib/gyp/input.py
+    #   from distutils.version import StrictVersion
+    # ModuleNotFoundError: No module named 'distutils'
+    (python3.withPackages (ps: with ps; [ setuptools ]))
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 

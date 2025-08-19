@@ -19,9 +19,10 @@ versions into the Python environment.
 **Example Boilerplate:**
 
 ```nix
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
 }:
 
 buildHomeAssistantComponent {
@@ -76,17 +77,14 @@ There shouldn't be a need to disable this hook, but you can set
 ### Too narrow version constraints
 
 Every once in a while a dependency constraint is more narrow than it
-needs to be. Instead of applying brittle substitions the version constraint
+needs to be. Instead of applying brittle substitutions the version constraint
 can be ignored on a per requirement basis.
 
 ```nix
-  dependencies = [
-    pyemvue
-  ];
+{
+  dependencies = [ pyemvue ];
 
   # don't check the version constraint of pyemvue
-  ignoreVersionRequirement = [
-    "pyemvue"
-  ];
+  ignoreVersionRequirement = [ "pyemvue" ];
+}
 ```
-`

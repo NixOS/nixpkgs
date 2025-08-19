@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   charset-normalizer,
   httpx,
   pipdeptree,
   platformdirs,
   pydantic,
   python-dateutil,
+  pyyaml,
   rich,
   tabulate,
   typer,
@@ -17,19 +18,23 @@
 
 buildPythonPackage rec {
   pname = "reflex-hosting-cli";
-  version = "0.1.13";
+  version = "0.1.54";
   pyproject = true;
 
   # source is not published https://github.com/reflex-dev/reflex/issues/3762
   src = fetchPypi {
     pname = "reflex_hosting_cli";
     inherit version;
-    hash = "sha256-xdav3P63TO4EajdN29WRFquO15fa5oj8x0TauuJNxXE=";
+    hash = "sha256-agfG9nKCvKqWUOfXZ54S25jMYPSg9oVItcu0PTbIoB4=";
   };
 
-  pythonRelaxDeps = [ "pipdeptree" ];
+  pythonRelaxDeps = [
+    "click"
+    "rich"
+    "pipdeptree"
+  ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     charset-normalizer
@@ -38,6 +43,7 @@ buildPythonPackage rec {
     platformdirs
     pydantic
     python-dateutil
+    pyyaml
     rich
     tabulate
     typer

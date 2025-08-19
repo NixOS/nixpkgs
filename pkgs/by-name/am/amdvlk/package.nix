@@ -27,49 +27,47 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdvlk";
-  version = "2024.Q4.3";
+  version = "2025.Q1.3";
 
   src = fetchRepoProject {
     name = "amdvlk-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${finalAttrs.version}";
-    hash = "sha256-PQxTRCSOk8E6y7pXyqxt1QKtRsqnrj/9dQZ8NjnUbhA=";
+    hash = "sha256-ZXou5g0emeK++NyV/hQllZAdZAMEY9TYs9c+umFdcfo=";
   };
 
-  buildInputs =
-    [
-      expat
-      libdrm
-      ncurses
-      openssl
-      wayland
-      zlib
-    ]
-    ++ (with xorg; [
-      libX11
-      libxcb
-      xcbproto
-      libXext
-      libXrandr
-      libXft
-      libxshmfence
-    ]);
+  buildInputs = [
+    expat
+    libdrm
+    ncurses
+    openssl
+    wayland
+    zlib
+  ]
+  ++ (with xorg; [
+    libX11
+    libxcb
+    xcbproto
+    libXext
+    libXrandr
+    libXft
+    libxshmfence
+  ]);
 
-  nativeBuildInputs =
-    [
-      cmake
-      directx-shader-compiler
-      glslang
-      ninja
-      patchelf
-      perl
-      pkg-config
-      python3
-    ]
-    ++ (with python3.pkgs; [
-      jinja2
-      ruamel-yaml
-    ]);
+  nativeBuildInputs = [
+    cmake
+    directx-shader-compiler
+    glslang
+    ninja
+    patchelf
+    perl
+    pkg-config
+    python3
+  ]
+  ++ (with python3.pkgs; [
+    jinja2
+    ruamel-yaml
+  ]);
 
   rpath = lib.makeLibraryPath (
     [
@@ -86,6 +84,20 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   cmakeDir = "../drivers/xgl";
+
+  cmakeFlags = [
+    # There is some incredibly cursed issue with
+    # `directx-shader-compiler` flagging up compiler errors only on
+    # `i686-linux` and only when it has been compiled with a recent
+    # GCC. Since few 32‐bit games are going to use ray tracing anyway,
+    # we just disable it for now. Arch has done this since 2022.
+    #
+    # See:
+    # * <https://github.com/NixOS/nixpkgs/issues/216294>
+    # * <https://github.com/GPUOpen-Drivers/gpurt/issues/5>
+    # * <https://gitlab.archlinux.org/archlinux/packaging/packages/lib32-amdvlk/-/commit/905d9bc2cf4a003b3d367537b5e120d9771cce16>
+    (lib.cmakeBool "VKI_RAY_TRACING" (!(stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit)))
+  ];
 
   installPhase = ''
     runHook preInstall

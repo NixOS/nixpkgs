@@ -26,7 +26,6 @@
   dulwich,
   tzlocal,
   pytest-xdist,
-  pytest-cov,
   pytest-lsp,
   pytest-asyncio,
   pytest-mock,
@@ -36,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "pygerber";
-  version = "2.4.2";
+  version = "2.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     owner = "Argmaster";
     repo = "pygerber";
     tag = "v${version}";
-    hash = "sha256-N+9I59WiWXSXr7RrPzb7GFSqfjrd0q51AzalNFV4xEQ=";
+    hash = "sha256-0AoRmIN1FNlummJSHdysO2IDBHtfNPhVnh9j0lyWNFI=";
   };
 
   build-system = [ poetry-core ];
@@ -77,7 +76,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
     pytest-xdist
     pytest-lsp
     pytest-mock
@@ -93,6 +91,8 @@ buildPythonPackage rec {
     "test/gerberx3/test_assets.py"
     "test/gerberx3/test_language_server/tests.py"
   ];
+
+  pytestFlags = [ "--override-ini=required_plugins=" ];
 
   pythonImportsCheck = [ "pygerber" ];
 

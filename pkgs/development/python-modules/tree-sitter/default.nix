@@ -1,9 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
+  fetchPypi,
   pythonOlder,
   setuptools,
   tree-sitter-python,
@@ -15,29 +14,24 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.23.2";
+  version = "0.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
-  src = fetchFromGitHub {
-    owner = "tree-sitter";
-    repo = "py-tree-sitter";
-    tag = "v${version}";
-    hash = "sha256-RWnt1g7WN5CDbgWY5YSTuPFZomoxtRgDaSLkG9y2B6w=";
-    fetchSubmodules = true;
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-q9la9lyi9Pfso1Y0M5HtZp52Tzd0i1NSlG8A9/x45zQ=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tree-sitter/py-tree-sitter/commit/a85342e16d28c78a1cf1e14c74f4598cd2a5f3e0.patch";
-      hash = "sha256-gm79KciA/KoDqrRfWuSB3GOD1jBx6Skd1olt4zoofaw=";
-    })
+
+  # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
+  patches = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    ./segfault-patch.diff
   ];
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     tree-sitter-python
     tree-sitter-rust
     tree-sitter-html
@@ -52,11 +46,16 @@ buildPythonPackage rec {
     rm -r tree_sitter
   '';
 
-  meta = with lib; {
+  disabledTests = [
+    # test fails in nix sandbox
+    "test_dot_graphs"
+  ];
+
+  meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
     changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

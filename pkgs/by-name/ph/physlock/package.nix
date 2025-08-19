@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "physlock";
   src = fetchFromGitHub {
     owner = "muennich";
-    repo = pname;
+    repo = "physlock";
     rev = "v${version}";
     sha256 = "1mz4xxjip5ldiw9jgfq9zvqb6w10bcjfx6939w1appqg8f521a7s";
   };

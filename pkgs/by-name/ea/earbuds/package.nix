@@ -4,11 +4,10 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
   pkg-config,
+  bluez,
   dbus,
   libpulseaudio,
-  bluez,
 }:
 rustPlatform.buildRustPackage {
   pname = "earbuds";
@@ -26,37 +25,21 @@ rustPlatform.buildRustPackage {
     ./fix-daemon.patch
   ];
 
-  # git dependencies are currently not supported in the fixed-output derivation fetcher.
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "galaxy_buds_rs-0.2.10" = "sha256-95PBmGwHJiXi72Rir8KK7as+i9yjs5nf45SaBhj1geg=";
-    };
-  };
+  cargoHash = "sha256-Y1pMmWxfXGcEFPj05/BpXQvd199O5l6hJmePNxMQc/Y=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
+    bluez
     dbus
     libpulseaudio
-    bluez
   ];
 
   # package does not contain any tests
   doCheck = false;
-
-  # nativeInstallCheckInputs = [
-  #   versionCheckHook
-  # ];
-  # versionCheckProgramArg = [ "--version" ];
-  # doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd earbuds \

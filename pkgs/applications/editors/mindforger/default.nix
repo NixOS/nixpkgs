@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, cmake
-, curl
-, fetchFromGitHub
-, hunspell
-, pkg-config
-, qmake
-, qtbase
-, qtwebengine
-, wrapGAppsHook3
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  hunspell,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtwebengine,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
 }:
 let
   version = "2.0.0";
@@ -33,14 +34,26 @@ let
       sha256 = "sha256-JGTP1He7G2Obmsav64Lf7BLHp8OTvPtg38VHsrEC36o=";
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mindforger";
   inherit version;
 
   src = srcs.mindforger;
 
-  nativeBuildInputs = [ cmake pkg-config qmake wrapGAppsHook3 wrapQtAppsHook ];
-  buildInputs = [ curl hunspell qtbase qtwebengine ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qmake
+    wrapGAppsHook3
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    curl
+    hunspell
+    qtbase
+    qtwebengine
+  ];
 
   # Disable the cmake hook (so we don't try to build MindForger with it), and
   # build MindForger's internal fork of cmark-gfm ahead of MindForger itself.
@@ -48,16 +61,18 @@ in stdenv.mkDerivation {
   # Moreover unpack the docs that are needed for the MacOS build.
   postUnpack = ''
     cp -TR ${srcs.cmark-gfm} $sourceRoot/deps/cmark-gfm
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp -TR ${srcs.mindforger-repository} $sourceRoot/doc
   '';
   dontUseCmakeConfigure = true;
-  preBuild = ''(
-      mkdir deps/cmark-gfm/build &&
-      cd deps/cmark-gfm/build &&
-      cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. &&
-      cmake --build . --parallel
-  )'';
+  preBuild = ''
+    (
+          mkdir deps/cmark-gfm/build &&
+          cd deps/cmark-gfm/build &&
+          cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. &&
+          cmake --build . --parallel
+      )'';
 
   doCheck = true;
 
@@ -88,12 +103,15 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Thinking Notebook & Markdown IDE";
     longDescription = ''
-     MindForger is actually more than an editor or IDE - it's human
-     mind inspired personal knowledge management tool
+      MindForger is actually more than an editor or IDE - it's human
+      mind inspired personal knowledge management tool
     '';
     homepage = "https://www.mindforger.com";
     license = licenses.gpl2Plus;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ cyplo ];
     mainProgram = "mindforger";
   };

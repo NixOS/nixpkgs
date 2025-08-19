@@ -31,7 +31,7 @@ let
 
   edk2ShellEspPath = "efi/edk2-uefi-shell/shell.efi";
 
-  systemdBootBuilder = pkgs.substituteAll rec {
+  systemdBootBuilder = pkgs.replaceVarsWith {
     name = "systemd-boot";
 
     dir = "bin";
@@ -40,68 +40,66 @@ let
 
     isExecutable = true;
 
-    inherit (builtins) storeDir;
+    replacements = rec {
+      inherit (builtins) storeDir;
 
-    inherit (pkgs) python3;
+      inherit (pkgs) python3;
 
-    systemd = config.systemd.package;
+      systemd = config.systemd.package;
 
-    bootspecTools = pkgs.bootspec;
+      bootspecTools = config.boot.bootspec.package;
 
-    nix = config.nix.package.out;
+      nix = config.nix.package.out;
 
-    timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
+      timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
 
-    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+      configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg)
-      consoleMode
-      graceful
-      editor
-      rebootForBitlocker
-      ;
+      inherit (cfg)
+        consoleMode
+        graceful
+        editor
+        rebootForBitlocker
+        ;
 
-    inherit (efi) efiSysMountPoint canTouchEfiVariables;
+      inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
-    bootMountPoint =
-      if cfg.xbootldrMountPoint != null then cfg.xbootldrMountPoint else efi.efiSysMountPoint;
+      bootMountPoint =
+        if cfg.xbootldrMountPoint != null then cfg.xbootldrMountPoint else efi.efiSysMountPoint;
 
-    nixosDir = "/EFI/nixos";
+      nixosDir = "/EFI/nixos";
 
-    inherit (config.system.nixos) distroName;
+      inherit (config.system.nixos) distroName;
 
-    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
+      checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
+        fail() {
+          echo "$1 = '$2' is not a mounted partition. Is the path configured correctly?" >&2
+          exit 1
+        }
+        ${pkgs.util-linuxMinimal}/bin/findmnt ${efiSysMountPoint} > /dev/null || fail efiSysMountPoint ${efiSysMountPoint}
+        ${lib.optionalString (cfg.xbootldrMountPoint != null)
+          "${pkgs.util-linuxMinimal}/bin/findmnt ${cfg.xbootldrMountPoint} > /dev/null || fail xbootldrMountPoint ${cfg.xbootldrMountPoint}"
+        }
+      '';
 
-    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
+      copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
+        empty_file=$(${pkgs.coreutils}/bin/mktemp)
 
-    checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
-      fail() {
-        echo "$1 = '$2' is not a mounted partition. Is the path configured correctly?" >&2
-        exit 1
-      }
-      ${pkgs.util-linuxMinimal}/bin/findmnt ${efiSysMountPoint} > /dev/null || fail efiSysMountPoint ${efiSysMountPoint}
-      ${lib.optionalString (cfg.xbootldrMountPoint != null)
-        "${pkgs.util-linuxMinimal}/bin/findmnt ${cfg.xbootldrMountPoint} > /dev/null || fail xbootldrMountPoint ${cfg.xbootldrMountPoint}"
-      }
-    '';
+        ${concatStrings (
+          mapAttrsToList (n: v: ''
+            ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+          '') cfg.extraFiles
+        )}
 
-    copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-      empty_file=$(${pkgs.coreutils}/bin/mktemp)
-
-      ${concatStrings (
-        mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-          ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
-        '') cfg.extraFiles
-      )}
-
-      ${concatStrings (
-        mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-          ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
-        '') cfg.extraEntries
-      )}
-    '';
+        ${concatStrings (
+          mapAttrsToList (n: v: ''
+            ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
+            ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+          '') cfg.extraEntries
+        )}
+      '';
+    };
   };
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
@@ -520,62 +518,61 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion = (hasPrefix "/" efi.efiSysMountPoint);
-          message = "The ESP mount point '${toString efi.efiSysMountPoint}' must be an absolute path";
-        }
-        {
-          assertion = cfg.xbootldrMountPoint == null || (hasPrefix "/" cfg.xbootldrMountPoint);
-          message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' must be an absolute path";
-        }
-        {
-          assertion = cfg.xbootldrMountPoint != efi.efiSysMountPoint;
-          message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' cannot be the same as the ESP mount point '${toString efi.efiSysMountPoint}'";
-        }
-        {
-          assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
-          message = "This kernel does not support the EFI boot stub";
-        }
-        {
-          assertion =
-            cfg.installDeviceTree
-            -> config.hardware.deviceTree.enable
-            -> config.hardware.deviceTree.name != null;
-          message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
-        }
-      ]
-      ++ concatMap (filename: [
-        {
-          assertion = !(hasInfix "/" filename);
-          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
-        }
-        {
-          assertion = hasSuffix ".conf" filename;
-          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
-        }
-      ]) (builtins.attrNames cfg.extraEntries)
-      ++ concatMap (filename: [
-        {
-          assertion = !(hasPrefix "/" filename);
-          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
-        }
-        {
-          assertion = !(hasInfix ".." filename);
-          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not reference the parent directory";
-        }
-        {
-          assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
-          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
-        }
-      ]) (builtins.attrNames cfg.extraFiles)
-      ++ concatMap (winVersion: [
-        {
-          assertion = lib.match "^[-_0-9A-Za-z]+$" winVersion != null;
-          message = "boot.loader.systemd-boot.windows.${winVersion} is invalid: key must only contain alphanumeric characters, hyphens, and underscores";
-        }
-      ]) (builtins.attrNames cfg.windows);
+    assertions = [
+      {
+        assertion = (hasPrefix "/" efi.efiSysMountPoint);
+        message = "The ESP mount point '${toString efi.efiSysMountPoint}' must be an absolute path";
+      }
+      {
+        assertion = cfg.xbootldrMountPoint == null || (hasPrefix "/" cfg.xbootldrMountPoint);
+        message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' must be an absolute path";
+      }
+      {
+        assertion = cfg.xbootldrMountPoint != efi.efiSysMountPoint;
+        message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' cannot be the same as the ESP mount point '${toString efi.efiSysMountPoint}'";
+      }
+      {
+        assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
+        message = "This kernel does not support the EFI boot stub";
+      }
+      {
+        assertion =
+          cfg.installDeviceTree
+          -> config.hardware.deviceTree.enable
+          -> config.hardware.deviceTree.name != null;
+        message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
+      }
+    ]
+    ++ concatMap (filename: [
+      {
+        assertion = !(hasInfix "/" filename);
+        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
+      }
+      {
+        assertion = hasSuffix ".conf" filename;
+        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
+      }
+    ]) (builtins.attrNames cfg.extraEntries)
+    ++ concatMap (filename: [
+      {
+        assertion = !(hasPrefix "/" filename);
+        message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
+      }
+      {
+        assertion = !(hasInfix ".." filename);
+        message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not reference the parent directory";
+      }
+      {
+        assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
+        message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
+      }
+    ]) (builtins.attrNames cfg.extraFiles)
+    ++ concatMap (winVersion: [
+      {
+        assertion = lib.match "^[-_0-9A-Za-z]+$" winVersion != null;
+        message = "boot.loader.systemd-boot.windows.${winVersion} is invalid: key must only contain alphanumeric characters, hyphens, and underscores";
+      }
+    ]) (builtins.attrNames cfg.windows);
 
     boot.loader.grub.enable = mkDefault false;
 

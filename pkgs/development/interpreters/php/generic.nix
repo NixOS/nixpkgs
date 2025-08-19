@@ -220,6 +220,7 @@ let
       };
     in
     stdenv.mkDerivation (
+      finalAttrs:
       let
         attrs = {
           pname = "php";
@@ -236,7 +237,8 @@ let
             libtool
             pkg-config
             re2c
-          ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+          ]
+          ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -386,6 +388,11 @@ let
               in
               php;
             inherit ztsSupport;
+
+            services.default = {
+              imports = [ ./service.nix ];
+              php-fpm.package = lib.mkDefault finalAttrs.finalPackage;
+            };
           };
 
           meta = with lib; {
@@ -393,7 +400,7 @@ let
             homepage = "https://www.php.net/";
             license = licenses.php301;
             mainProgram = "php";
-            maintainers = teams.php.members;
+            teams = [ teams.php ];
             platforms = platforms.all;
             outputsToInstall = [
               "out"

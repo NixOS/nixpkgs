@@ -16,31 +16,19 @@
   beartype,
   pytest,
   python,
-
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "lineax";
-  version = "0.0.7";
+  version = "0.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "lineax";
     tag = "v${version}";
-    hash = "sha256-HcFI55Ww/y7ZaUkawj7xWSb7VDTBec3u0ulWL8kTm2c=";
+    hash = "sha256-VMTDCExgxfCcd/3UZAglfAxAFaSjzFJJuvSWJAx2tJs=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Reported upstream: https://github.com/patrick-kidger/lineax/issues/118
-      # Fixed by https://github.com/patrick-kidger/lineax/pull/119
-      name = "fix-vmap-tests";
-      url = "https://github.com/patrick-kidger/lineax/pull/119/commits/d21552ac4c504d7b139ad8e4f15d5f102b54d705.patch";
-      hash = "sha256-pBejiqIVNjXi7dXuDBQdAy892wro1WxzwbI7v07N86c=";
-    })
-  ];
 
   build-system = [ hatchling ];
 
@@ -58,7 +46,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  # Intentionaly not using pytest directly as it leads to JAX out-of-memory'ing
+  # Intentionally not using pytest directly as it leads to JAX out-of-memory'ing
   # https://github.com/patrick-kidger/lineax/blob/1909d190c1963d5f2d991508c1b2714f2266048b/tests/README.md
   checkPhase = ''
     runHook preCheck

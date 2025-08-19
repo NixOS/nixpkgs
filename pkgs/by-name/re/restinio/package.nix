@@ -21,41 +21,48 @@ assert !with_boost_asio -> asio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "restinio";
-  version = "0.7.3";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "Stiffstream";
     repo = "restinio";
-    rev = "v.${finalAttrs.version}";
-    hash = "sha256-heVdo0MtsWi/r9yse+/FZ55lhiunyEdwB3UkOOY5Vj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bbiBz/WkQc3HiS7+x/qsRdHoravPX8LBKb+a2WeC81s=";
   };
+
+  # https://www.github.com/Stiffstream/restinio/issues/230
+  # > string sub-command JSON failed parsing json string: * Line 1, Column 1
+  # > Syntax error: value, object or array expected.
+  postPatch = ''
+    substituteInPlace dev/test/CMakeLists.txt \
+      --replace-fail "add_subdirectory(metaprogramming)" ""
+  '';
 
   strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs =
-    [
-      expected-lite
-      fmt
-      llhttp
-      openssl
-      pcre2
-      zlib
-    ]
-    ++ (
-      if with_boost_asio then
-        [
-          boost
-        ]
-      else
-        [
-          asio
-        ]
-    );
+  propagatedBuildInputs = [
+    expected-lite
+    fmt
+    openssl
+    pcre2
+    zlib
+  ]
+  ++ (
+    if with_boost_asio then
+      [
+        boost
+      ]
+    else
+      [
+        asio
+      ]
+  );
 
   buildInputs = [
     catch2_3
+    llhttp
   ];
 
   cmakeDir = "../dev";
@@ -68,12 +75,34 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRESTINIO_ASIO_SOURCE=${if with_boost_asio then "boost" else "standalone"}"
     "-DRESTINIO_DEP_EXPECTED_LITE=find"
     "-DRESTINIO_DEP_FMT=find"
-    "-DRESTINIO_DEP_LLHTTP=find"
+    "-DRESTINIO_DEP_LLHTTP=system"
     "-DRESTINIO_DEP_CATCH2=find"
   ];
 
   doCheck = true;
   enableParallelChecking = false;
+  __darwinAllowLocalNetworking = true;
+  preCheck =
+    let
+      disabledTests =
+        [ ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # Tests that fail with error: 'unable to write: Operation not permitted'
+          "HTTP echo server"
+          "single_thread_connection_limiter"
+          "simple sendfile"
+          "simple sendfile with std::filesystem::path"
+          "sendfile the same file several times"
+          "sendfile 2 files"
+          "sendfile offsets_and_size"
+          "sendfile chunks"
+          "sendfile with partially-read response"
+        ];
+      excludeRegex = "^(${builtins.concatStringsSep "|" disabledTests})";
+    in
+    lib.optionalString (builtins.length disabledTests != 0) ''
+      checkFlagsArray+=(ARGS="--exclude-regex '${excludeRegex}'")
+    '';
 
   meta = with lib; {
     description = "Cross-platform, efficient, customizable, and robust asynchronous HTTP(S)/WebSocket server C++ library";

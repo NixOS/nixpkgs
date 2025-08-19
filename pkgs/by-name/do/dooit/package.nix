@@ -2,24 +2,21 @@
   lib,
   fetchFromGitHub,
   dooit,
-  python311,
+  python3,
   testers,
   nix-update-script,
   extraPackages ? [ ],
 }:
-let
-  python3 = python311;
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "3.1.0";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
     tag = "v${version}";
-    hash = "sha256-tqSWDW3nj+nMt7t5vgSqWvtx7YA3y2GV29gI1MYFMhc=";
+    hash = "sha256-bI9X+2tTLnQwxfsnBmy2vBI3lJ4UX418zOy3oniVKWc=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -63,12 +60,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "TUI todo manager";
     homepage = "https://github.com/dooit-org/dooit";
     changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       khaneliman
       wesleyjrz
       kraanzu

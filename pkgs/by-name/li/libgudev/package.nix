@@ -46,17 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      glib # for glib-mkenums needed during the build
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    glib # for glib-mkenums needed during the build
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ];
 
   buildInputs = [
     udev
@@ -85,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Library that provides GObject bindings for libudev";
     homepage = "https://gitlab.gnome.org/GNOME/libgudev";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

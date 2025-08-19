@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "braintree" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/"
     "tests/fixtures"
     "tests/unit"

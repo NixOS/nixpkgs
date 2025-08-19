@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsid";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "tsid";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-id6OCOX01o41Z5kqzwvjYa5uoQZtzhRaFBuOBhbLcTA=";
+    hash = "sha256-SS6JhU4fuZtTzv/EY31ixwwLOzmO/dN3H5HEMh/URTA=";
   };
 
   cmakeFlags = [
@@ -36,25 +36,23 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs =
-    [
-      doxygen
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    doxygen
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  propagatedBuildInputs =
-    [
-      eiquadprog
-      osqp-eigen
-      proxsuite
-    ]
-    ++ lib.optional (!pythonSupport) pinocchio
-    ++ lib.optional pythonSupport python3Packages.pinocchio;
+  propagatedBuildInputs = [
+    eiquadprog
+    osqp-eigen
+    proxsuite
+  ]
+  ++ lib.optional (!pythonSupport) pinocchio
+  ++ lib.optional pythonSupport python3Packages.pinocchio;
 
   doCheck = true;
   pythonImportsCheck = [ "tsid" ];

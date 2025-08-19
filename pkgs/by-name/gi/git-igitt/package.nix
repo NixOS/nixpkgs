@@ -6,8 +6,6 @@
   libgit2,
   oniguruma,
   zlib,
-  stdenv,
-  darwin,
   nix-update-script,
 }:
 
@@ -20,12 +18,12 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "mlange-42";
-    repo = pname;
+    repo = "git-igitt";
     rev = version;
     hash = "sha256-JXEWnekL9Mtw0S3rI5aeO1HB9kJ7bRJDJ6EJ4ATlFeQ=";
   };
 
-  cargoHash = "sha256-5UgcgM/WuyApNFCd8YBodx9crJP3+Bygu9nSBJqPCaQ=";
+  cargoHash = "sha256-ndxxkYMFHAX6uourCyUpvJYcZCXQ5X2CMX4jTJmNRiQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -33,7 +31,7 @@ rustPlatform.buildRustPackage {
     libgit2
     oniguruma
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;

@@ -13,11 +13,12 @@
   libpng,
   SDL2,
   libGL,
+  libX11,
   openal,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "warsow-engine";
   version = "2.1.0";
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     libjpeg
     SDL2
     libGL
+    libX11
     openal
     zlib
     libpng
@@ -85,7 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      astsmtl
       abbradar
     ];
     platforms = platforms.linux;

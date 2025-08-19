@@ -1,31 +1,40 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
-  version = "2.5.4";
+  version = "2.5.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
-    rev = version;
-    sha256 = "sha256-fONQq/RboWHFuEFU7HP1ThUpSjOIlkg54c2WlMUKwuk=";
+    tag = version;
+    sha256 = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    babelfish
-    requests
-    appdirs
-    teletype
-    requests-cache
-    guessit
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
   ];
 
-  patches = [
-    # requires specific old versions of dependencies which have been updated in nixpkgs
-    ./remove_requirements.patch
+  dependencies = with python3Packages; [
+    appdirs
+    babelfish
+    guessit
+    requests
+    requests-cache
+    teletype
+  ];
 
-    # author reads a private property that changed between versions
-    ./update_hack.patch
+  pythonRelaxDeps = true;
+
+  patches = [
+    # https://github.com/jkwill87/mnamer/pull/291
+    ./cached_session_error.patch
   ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];

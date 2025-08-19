@@ -41,7 +41,7 @@ bash.runCommand "${pname}-${version}"
       description = "GNU implementation of the Unix grep command";
       homepage = "https://www.gnu.org/software/grep";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       mainProgram = "grep";
       platforms = platforms.unix;
     };

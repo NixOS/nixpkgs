@@ -14,16 +14,20 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trackballs";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "trackballs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
+    repo = "trackballs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
   };
+
+  postPatch = ''
+    substituteInPlace src/glHelp.h --replace-fail _TTF_Font TTF_Font
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -38,12 +42,12 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trackballs.github.io/";
     description = "3D Marble Madness clone";
     mainProgram = "trackballs";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # Music is licensed under Ethymonics Free Music License.
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

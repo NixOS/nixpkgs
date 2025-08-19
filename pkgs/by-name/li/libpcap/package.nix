@@ -32,30 +32,27 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-    ++ lib.optionals withRemote [ libxcrypt ];
+    lib.optionals stdenv.hostPlatform.isLinux [ libnl ] ++ lib.optionals withRemote [ libxcrypt ];
 
-  nativeBuildInputs =
-    [
-      flex
-      bison
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-    ++ lib.optionals withBluez [ bluez.dev ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
+  ++ lib.optionals withBluez [ bluez.dev ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
-  configureFlags =
-    [
-      "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--disable-universal"
-    ]
-    ++ lib.optionals withRemote [
-      "--enable-remote"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
+  configureFlags = [
+    "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-universal"
+  ]
+  ++ lib.optionals withRemote [
+    "--enable-remote"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
 
   postInstall = ''
     if [ "$dontDisableStatic" -ne "1" ]; then

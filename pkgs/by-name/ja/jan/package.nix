@@ -1,14 +1,15 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 
 let
-  pname = "jan";
-  version = "0.5.13";
+  pname = "Jan";
+  version = "0.6.6";
   src = fetchurl {
-    url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
-    hash = "sha256-QetnD+0SCzn5Zx5v1EJNjhx8U9ueHdp+zZu/Yf77AdY=";
+    url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
+    hash = "sha256-KTU7jSouFCv4ER6cOzNYQJxRpgGTV5AnLs4i0Ne4GYQ=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -17,19 +18,17 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/jan.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/jan.desktop \
-      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
+    install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
   meta = {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
-    description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
+    description = "Open source alternative to ChatGPT that runs 100% offline on your computer";
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64;
   };
 }

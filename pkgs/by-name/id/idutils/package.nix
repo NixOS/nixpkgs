@@ -12,7 +12,6 @@
   texinfo,
   perl,
   rsync,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,13 +30,9 @@ stdenv.mkDerivation rec {
     ./bootstrap --force --gnulib-srcdir=${gnulib} --skip-po --bootstrap-sync --no-git
   '';
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      emacs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    emacs
+  ];
 
   nativeBuildInputs = [
     gnulib

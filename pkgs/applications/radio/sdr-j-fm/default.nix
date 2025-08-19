@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     features = {
-      # All of these features don't require an external depencies, althought it
+      # All of these features don't require an external dependencies, although it
       # may be implied - upstraem bundles everything they need in their repo.
       AIRSPY = true;
       SDRPLAY = true;
@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
       PLUTO = true;
       # Some more cmake flags are mentioned in upstream's CMakeLists.txt file
       # but they don't actually make a difference.
-    } // featuresOverride;
+    }
+    // featuresOverride;
   };
 
   postInstall = ''

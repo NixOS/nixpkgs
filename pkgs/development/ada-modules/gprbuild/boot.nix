@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, which
-, xmlada # for src
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  which,
+  xmlada, # for src
 }:
 
 let
@@ -55,7 +56,8 @@ stdenv.mkDerivation {
   # were gprbuild is used to build something used at build time.
   setupHooks = [
     ./gpr-project-path-hook.sh
-  ] ++ lib.optionals stdenv.targetPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.targetPlatform.isDarwin [
     # This setupHook replaces the paths of shared libraries starting
     # with @rpath with the absolute paths on Darwin, so that the
     # binaries can be run without additional setup.

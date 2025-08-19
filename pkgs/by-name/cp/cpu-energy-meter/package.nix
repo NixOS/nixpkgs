@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libcap,
+  udevCheckHook,
 }:
 stdenv.mkDerivation rec {
   pname = "cpu-energy-meter";
@@ -22,6 +23,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libcap ];
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 

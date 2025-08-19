@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot-fts-xapian";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    hash = "sha256-WKUHy9/PpaDSgZYyydCm5odo3kAb2M/50oVdLjGRQ6I=";
+    hash = "sha256-jHXeCJVdRWGdLMooh5cq5ZeZPM5fDo1lO6U5VMcwf3g=";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
-    "--with-moduledir=$(out)/lib/dovecot"
+    "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
   ];
 
   meta = with lib; {

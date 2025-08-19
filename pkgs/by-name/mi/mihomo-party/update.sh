@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nixVersions.latest curl coreutils jq common-updater-scripts
+#!nix-shell -i bash -p bash nix curl coreutils jq common-updater-scripts
 
 latestTag=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sL https://api.github.com/repos/mihomo-party-org/mihomo-party/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr "$latestTag" : 'v\(.*\)')"
@@ -18,6 +18,6 @@ for i in \
     "aarch64-linux arm64"; do
     set -- $i
     prefetch=$(nix-prefetch-url "https://github.com/mihomo-party-org/mihomo-party/releases/download/v$latestVersion/mihomo-party-linux-$latestVersion-$2.deb")
-    hash=$(nix hash convert --hash-algo sha256 --to sri $prefetch)
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
     update-source-version mihomo-party $latestVersion $hash --system=$1 --ignore-same-version
 done

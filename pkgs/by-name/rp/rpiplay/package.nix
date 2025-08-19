@@ -13,9 +13,9 @@
   libplist,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rpiplay";
-  version = "unstable-2021-06-14";
+  version = "0-unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "FD-";

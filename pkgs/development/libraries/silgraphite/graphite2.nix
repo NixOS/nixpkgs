@@ -30,13 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
   ];
-  buildInputs =
-    [ freetype ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-      llvmPackages.compiler-rt.override {
-        doFakeLibgcc = true;
-      }
-    );
+  buildInputs = [
+    freetype
+  ]
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+    llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    }
+  );
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
@@ -48,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     # support cross-compilation by using target readelf binary:
     substituteInPlace Graphite.cmake \
       --replace 'readelf' "${stdenv.cc.targetPrefix}readelf"
+
+    # headers are located in the dev output:
+    substituteInPlace CMakeLists.txt \
+      --replace-fail ' ''${CMAKE_INSTALL_PREFIX}/include' " ${placeholder "dev"}/include"
   '';
 
   cmakeFlags = lib.optionals static [

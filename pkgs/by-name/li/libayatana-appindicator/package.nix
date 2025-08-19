@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_BINDINGS_MONO=False"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Application Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-appindicator";
     changelog = "https://github.com/AyatanaIndicators/libayatana-appindicator/blob/${version}/ChangeLog";
     license = [
-      licenses.lgpl3Plus
-      licenses.lgpl21Plus
+      lib.licenses.lgpl3Plus
+      lib.licenses.lgpl21Plus
     ];
-    maintainers = [ maintainers.nickhu ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.nickhu ];
+    platforms = lib.platforms.linux;
   };
 }

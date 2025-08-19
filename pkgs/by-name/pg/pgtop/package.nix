@@ -32,12 +32,12 @@ perlPackages.buildPerlPackage rec {
     shortenPerlShebang $out/bin/pgtop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL clone of `mytop', which in turn is a `top' clone for MySQL";
     mainProgram = "pgtop";
     homepage = "https://github.com/cosimo/pgtop";
     changelog = "https://github.com/cosimo/pgtop/releases/tag/v${version}";
-    maintainers = [ maintainers.hagl ];
-    license = [ licenses.gpl2Only ];
+    maintainers = [ lib.maintainers.hagl ];
+    license = [ lib.licenses.gpl2Only ];
   };
 }

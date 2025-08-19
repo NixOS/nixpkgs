@@ -65,6 +65,7 @@ let
 
   vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
+  useSendmail = configEnv.USE_SENDMAIL or null == "true";
 in
 {
   imports = [
@@ -223,7 +224,8 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;
@@ -236,10 +238,10 @@ in
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
+        NoNewPrivileges = !useSendmail;
+        PrivateDevices = !useSendmail;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = !useSendmail;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -264,6 +266,8 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
+        ]
+        ++ lib.optionals (!useSendmail) [
           "~@privileged"
         ];
         Restart = "always";

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwtk-sdl2";
-  version = "unstable-2023-02-28";
+  version = "0-unstable-2023-02-28";
 
   src = fetchFromGitHub {
     owner = "muesli4";
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
   ];
   # From some reason, this is needed as otherwise SDL.h is not found
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  NIX_CFLAGS_COMPILE = "-I${lib.getInclude SDL2}/include/SDL2";
 
   outputs = [
     "out"

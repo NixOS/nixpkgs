@@ -113,23 +113,22 @@ stdenv.mkDerivation rec {
   '';
 
   installCheckTarget = "integration";
-  nativeInstallCheckInputs =
-    [
-      cmocka
-      expect
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      tcpdump
-      hostapd
-      wpa_supplicant
-      screen
-    ];
+  nativeInstallCheckInputs = [
+    cmocka
+    expect
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    tcpdump
+    hostapd
+    wpa_supplicant
+    screen
+  ];
 
   meta = {
     description = "WiFi security auditing tools suite";
     homepage = "https://www.aircrack-ng.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ caralice ];
+    maintainers = with lib.maintainers; [ magistau ];
     platforms =
       with lib.platforms;
       builtins.concatLists [

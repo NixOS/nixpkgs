@@ -78,7 +78,7 @@ bash.runCommand "${pname}-${version}"
       description = "Tools for manipulating binaries (linker, assembler, etc.)";
       homepage = "https://www.gnu.org/software/binutils";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

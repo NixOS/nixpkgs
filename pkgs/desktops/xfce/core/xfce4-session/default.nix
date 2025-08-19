@@ -1,25 +1,26 @@
-{ lib
-, mkXfceDerivation
-, polkit
-, exo
-, libxfce4util
-, libxfce4ui
-, libxfce4windowing
-, xfconf
-, iceauth
-, gtk3
-, gtk-layer-shell
-, glib
-, libwnck
-, xfce4-session
+{
+  lib,
+  mkXfceDerivation,
+  polkit,
+  exo,
+  libxfce4util,
+  libxfce4ui,
+  libxfce4windowing,
+  xfconf,
+  iceauth,
+  gtk3,
+  gtk-layer-shell,
+  glib,
+  libwnck,
+  xfce4-session,
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-session";
-  version = "4.20.0";
+  version = "4.20.3";
 
-  sha256 = "sha256-mn3ky1NzrpQZRkhc605mj+GFhbFq26eW59YKUfnX9X8=";
+  sha256 = "sha256-HfVspmAkjuGgoI87VHNHFGZP17ZA0b31llY93gUtWxs=";
 
   buildInputs = [
     exo
@@ -44,6 +45,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Session manager for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

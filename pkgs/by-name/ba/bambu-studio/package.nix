@@ -7,7 +7,7 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost,
+  boost186,
   cereal,
   cgal,
   curl,
@@ -34,7 +34,7 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021_11,
+  tbb_2021,
   webkitgtk_4_0,
   wxGTK31,
   xorg,
@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.10.01.50";
+  version = "01.10.02.76";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-7mkrPl2CQSfc1lRjl1ilwxdYcK5iRU//QGKmdCicK30=";
+    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost
+    boost186
     cereal
     cgal
     curl
@@ -101,12 +101,14 @@ stdenv.mkDerivation rec {
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2021_11
+    tbb_2021
     webkitgtk_4_0
     wxGTK'
     xorg.libX11
-    opencv
-  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
+    opencv.cxxdev
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -186,16 +188,16 @@ stdenv.mkDerivation rec {
     mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
     changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
     ];
     mainProgram = "bambu-studio";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

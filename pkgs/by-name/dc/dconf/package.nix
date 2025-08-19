@@ -33,38 +33,37 @@ stdenv.mkDerivation rec {
     "out"
     "lib"
     "dev"
-  ] ++ lib.optional withDocs "devdoc";
+  ]
+  ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0cs5nayg080y8pb9b7qccm1ni8wkicdmqp1jsgc22110r6j24zyg";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      python3
-      libxslt
-      glib
-      docbook-xsl-nons
-      docbook_xml_dtd_42
-      gtk-doc
-    ]
-    ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook # gtkdoc invokes the host binary to produce documentation
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    libxslt
+    glib
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+    gtk-doc
+  ]
+  ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook # gtkdoc invokes the host binary to produce documentation
+  ];
 
-  buildInputs =
-    [
-      glib
-      bash-completion
-      dbus
-    ]
-    ++ lib.optionals withIntrospection [
-      vala
-    ];
+  buildInputs = [
+    glib
+    bash-completion
+    dbus
+  ]
+  ++ lib.optionals withIntrospection [
+    vala
+  ];
 
   mesonFlags = [
     "--sysconfdir=/etc"
@@ -97,7 +96,11 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/dconf";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    badPlatforms = [
+      # Mandatory libdconfsettings shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
+    teams = [ teams.gnome ];
     mainProgram = "dconf";
   };
 }

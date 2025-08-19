@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,22 +12,24 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "libcs50";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G6QayPGR4lkeFuUYsFszekLAzzpA3hhIRmqt/OB0cdY=";
   };
 
   installPhase = ''
     runHook preInstall
-    mkdir $out
+    mkdir -p $out
     cp -R build/lib $out/lib
     cp -R build/include $out/include
-    ln -sf $out/lib/libcs50.so.11.0.3 $out/lib/libcs50.so.11
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/cs50/libcs50";
     description = "CS50 Library for C";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.ethancedwards8 ];
   };
 })

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.23.0";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = "pylutron-caseta";
     tag = "v${version}";
-    hash = "sha256-p8c+WY+x5KcF7r6FXeF89JNtAwogRZELqXWgDc2iJek=";
+    hash = "sha256-67y/YaXWHklSppUxsJ44CDMsvBXLzKBGl00LXBWi4+g=";
   };
 
   build-system = [ hatchling ];
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     orjson
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   optional-dependencies = {
     cli = [
@@ -48,9 +49,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "pylutron_caseta" ];
 

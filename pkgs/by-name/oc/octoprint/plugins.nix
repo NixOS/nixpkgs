@@ -1,20 +1,26 @@
-{ lib
-, config
-, fetchFromGitHub
-, fetchFromGitLab
-, fetchpatch
-, marlin-calc
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  fetchpatch,
+  marlin-calc,
 }:
 
 self: super:
 let
-  buildPlugin = args: self.buildPythonPackage (args // {
-    pname = "octoprint-plugin-${args.pname}";
-    inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
-    # none of the following have tests
-    doCheck = false;
-  });
+  buildPlugin =
+    args:
+    self.buildPythonPackage (
+      args
+      // {
+        pname = "octoprint-plugin-${args.pname}";
+        inherit (args) version format;
+        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
+        # none of the following have tests
+        doCheck = false;
+      }
+    );
 in
 {
   inherit buildPlugin;
@@ -22,6 +28,7 @@ in
   m86motorsoff = buildPlugin rec {
     pname = "m84motorsoff";
     version = "0.1.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "ntoff";
@@ -41,6 +48,7 @@ in
   abl-expert = buildPlugin rec {
     pname = "abl-expert";
     version = "0.6";
+    format = "setuptools";
 
     src = fetchFromGitLab {
       domain = "framagit.org";
@@ -61,6 +69,7 @@ in
   bedlevelvisualizer = buildPlugin rec {
     pname = "bedlevelvisualizer";
     version = "1.1.1";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -80,6 +89,7 @@ in
   costestimation = buildPlugin rec {
     pname = "costestimation";
     version = "3.4.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
@@ -99,6 +109,7 @@ in
   curaenginelegacy = buildPlugin rec {
     pname = "curaenginelegacy";
     version = "1.1.2";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -111,13 +122,14 @@ in
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
   displayprogress = buildPlugin rec {
     pname = "displayprogress";
     version = "0.1.3";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -137,6 +149,7 @@ in
   displaylayerprogress = buildPlugin rec {
     pname = "displaylayerprogress";
     version = "1.26.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
@@ -156,6 +169,7 @@ in
   ender3v2tempfix = buildPlugin {
     pname = "ender3v2tempfix";
     version = "unstable-2021-04-27";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "SimplyPrint";
@@ -175,6 +189,7 @@ in
   firmwareupdater = buildPlugin rec {
     pname = "firmwareupdater";
     version = "1.14.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -183,7 +198,7 @@ in
       sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
     };
 
-    propagatedBuildInputs = with super; [ pyserial  ];
+    propagatedBuildInputs = with super; [ pyserial ];
 
     meta = with lib; {
       description = "Printer Firmware Updater";
@@ -196,6 +211,7 @@ in
   fullscreen = buildPlugin rec {
     pname = "fullscreen";
     version = "0.0.6";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "BillyBlaze";
@@ -215,6 +231,7 @@ in
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
     version = "0.2.12";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "ieatacid";
@@ -234,6 +251,7 @@ in
   marlingcodedocumentation = buildPlugin rec {
     pname = "marlingcodedocumentation";
     version = "0.13.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "costas-basdekis";
@@ -253,6 +271,7 @@ in
   mqtt = buildPlugin rec {
     pname = "mqtt";
     version = "0.8.16";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -271,9 +290,10 @@ in
     };
   };
 
-    mqttchambertemperature = buildPlugin rec {
+  mqttchambertemperature = buildPlugin rec {
     pname = "mqttchambertemperature";
     version = "0.0.3";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "synman";
@@ -295,6 +315,7 @@ in
   navbartemp = buildPlugin rec {
     pname = "navbartemp";
     version = "0.15";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "imrahil";
@@ -314,6 +335,7 @@ in
   obico = buildPlugin rec {
     pname = "obico";
     version = "2.5.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "TheSpaghettiDetective";
@@ -339,13 +361,14 @@ in
 
   octopod = buildPlugin rec {
     pname = "octopod";
-    version = "0.3.16";
+    version = "0.3.18";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "gdombiak";
       repo = "OctoPrint-OctoPod";
       rev = version;
-      sha256 = "sha256-9QKC1MsYO3XihOTAijJUv5i20iMSQHOHPfLiYPV5y8s=";
+      sha256 = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
@@ -360,13 +383,14 @@ in
 
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
-    version = "2.3.3";
+    version = "2.4.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-hqm8RShCNpsVbrVXquat5VXqcVc7q5tn5+7Ipqmaw4U=";
+      sha256 = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
     };
 
     propagatedBuildInputs = with super; [
@@ -384,13 +408,14 @@ in
       description = "Better print time estimation for OctoPrint";
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
   prusaslicerthumbnails = buildPlugin rec {
     pname = "prusaslicerthumbnails";
     version = "1.0.8";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -399,7 +424,7 @@ in
       sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
-    propagatedBuildInputs = with super; [ psutil  ];
+    propagatedBuildInputs = with super; [ psutil ];
 
     meta = with lib; {
       description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
@@ -412,6 +437,7 @@ in
   psucontrol = buildPlugin rec {
     pname = "psucontrol";
     version = "1.0.6";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "kantlivelong";
@@ -433,13 +459,14 @@ in
       description = "OctoPrint plugin to control ATX/AUX power supply";
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
   resource-monitor = buildPlugin rec {
     pname = "resource-monitor";
     version = "0.3.16";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "Renaud11232";
@@ -448,7 +475,7 @@ in
       sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
     };
 
-    propagatedBuildInputs = with super; [ psutil  ];
+    propagatedBuildInputs = with super; [ psutil ];
 
     meta = with lib; {
       description = "Plugin to view the current CPU and RAM usage on your system";
@@ -461,6 +488,7 @@ in
   simpleemergencystop = buildPlugin rec {
     pname = "simpleemergencystop";
     version = "1.0.5";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "Sebclem";
@@ -480,6 +508,7 @@ in
   stlviewer = buildPlugin rec {
     pname = "stlviewer";
     version = "0.4.2";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -499,6 +528,7 @@ in
   telegram = buildPlugin rec {
     pname = "telegram";
     version = "1.6.5";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "fabianonline";
@@ -520,6 +550,7 @@ in
   themeify = buildPlugin rec {
     pname = "themeify";
     version = "1.2.2";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "Birkbjo";
@@ -539,6 +570,7 @@ in
   timelapsepurger = buildPlugin rec {
     pname = "firmwareupdater";
     version = "0.1.4";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -558,6 +590,7 @@ in
   titlestatus = buildPlugin rec {
     pname = "titlestatus";
     version = "0.0.5";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "MoonshineSG";
@@ -577,6 +610,7 @@ in
   touchui = buildPlugin rec {
     pname = "touchui";
     version = "0.3.18";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "BillyBlaze";
@@ -589,13 +623,14 @@ in
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
       homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
   octoklipper = buildPlugin rec {
     pname = "octoklipper";
     version = "0.3.8.3";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "AliceGrey";
@@ -615,6 +650,7 @@ in
   octolapse = buildPlugin rec {
     pname = "octolapse";
     version = "0.4.2";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "FormerLurker";
@@ -635,13 +671,25 @@ in
     # Test fails due to code executed on import, see #136513
     #pythonImportsCheck = [ "octoprint_octolapse" ];
 
-    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six pillow psutil file-read-backwards ];
+    propagatedBuildInputs = with super; [
+      awesome-slugify
+      setuptools
+      pillow
+      sarge
+      six
+      pillow
+      psutil
+      file-read-backwards
+    ];
 
     meta = with lib; {
       description = "Stabilized timelapses for Octoprint";
       homepage = "https://github.com/FormerLurker/OctoLapse";
       license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ illustris j0hax ];
+      maintainers = with maintainers; [
+        illustris
+        j0hax
+      ];
       # requires pillow >=6.2.0,<7.0.0
       broken = true;
     };
@@ -650,6 +698,7 @@ in
   dashboard = buildPlugin rec {
     pname = "dashboard";
     version = "1.18.3";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "StefanCohen";
@@ -665,6 +714,7 @@ in
       maintainers = with maintainers; [ j0hax ];
     };
   };
-} // lib.optionalAttrs config.allowAliases {
+}
+// lib.optionalAttrs config.allowAliases {
   octoprint-dashboard = super.dashboard;
 }

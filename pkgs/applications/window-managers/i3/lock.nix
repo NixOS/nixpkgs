@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://i3wm.org/i3lock/";
     maintainers = with maintainers; [
       malyn
-      domenkozar
     ];
     mainProgram = "i3lock";
     license = licenses.bsd3;

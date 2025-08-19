@@ -49,7 +49,7 @@ let
         k: v:
         lib.optionalString (
           v.hostname != ""
-        ) "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}"
+        ) "echo $(${pkgs.cjdns}/bin/cjdnstool util key2ip6 ${v.publicKey}) ${v.hostname}"
       ) (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo)
     )}
   '';
@@ -268,7 +268,7 @@ in
 
         if [ -z "$CJDNS_PRIVATE_KEY" ]; then
             shopt -s lastpipe
-            ${pkg}/bin/makekeys | { read private ipv6 public; }
+            ${pkg}/bin/cjdnstool util keygen | { read private ipv6 public; }
 
             install -m 600 <(echo "CJDNS_PRIVATE_KEY=$private") /etc/cjdns.keys
             install -m 444 <(echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public") /etc/cjdns.public

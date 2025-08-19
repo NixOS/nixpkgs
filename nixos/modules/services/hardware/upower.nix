@@ -1,5 +1,10 @@
 # Upower daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.upower;
@@ -65,7 +70,7 @@ in
           on or off. We can't do much to fix these problems, but this is a way
           for users to make the laptop panel vanish, a state that might be used
           by a couple of user-space daemons. On Linux systems, see also
-          logind.conf(5).
+          {manpage}`logind.conf(5)`.
         '';
       };
 
@@ -242,7 +247,7 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = lib.generators.toINI {} {
+    environment.etc."UPower/UPower.conf".text = lib.generators.toINI { } {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
         NoPollBatteries = cfg.noPollBatteries;

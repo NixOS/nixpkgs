@@ -33,7 +33,8 @@ buildPythonPackage rec {
     cryptography
     grpcio
     pyyaml
-  ] ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
   buildInputs = [ grpcio-tools ];
 
   preBuild = ''
@@ -42,17 +43,16 @@ buildPythonPackage rec {
     ln -s ${skeinJar} skein/java/skein.jar
   '';
 
-  postPatch =
-    ''
-      substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
-        --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
-      # Remove vendorized versioneer
-      rm versioneer.py
-    ''
-    + lib.optionalString (!pythonOlder "3.12") ''
-      substituteInPlace skein/utils.py \
-        --replace-fail "distutils" "setuptools._distutils"
-    '';
+  postPatch = ''
+    substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
+      --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
+    # Remove vendorized versioneer
+    rm versioneer.py
+  ''
+  + lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace skein/utils.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
 
   build-system = [ versioneer ];
 

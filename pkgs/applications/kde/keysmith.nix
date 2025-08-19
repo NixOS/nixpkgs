@@ -14,7 +14,7 @@
   qtquickcontrols2,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "keysmith";
 
   nativeBuildInputs = [

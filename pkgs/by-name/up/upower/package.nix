@@ -1,34 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, makeWrapper
-, pkg-config
-, libxslt
-, meson
-, ninja
-, python3
-, dbus
-, umockdev
-, libeatmydata
-, gtk-doc
-, docbook-xsl-nons
-, udev
-, libgudev
-, libusb1
-, glib
-, gettext
-, polkit
-, nixosTests
-, useIMobileDevice ? true
-, libimobiledevice
-, withDocs ? withIntrospection
-, mesonEmulatorHook
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages
-, gobject-introspection
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  makeWrapper,
+  pkg-config,
+  libxslt,
+  meson,
+  ninja,
+  python3,
+  dbus,
+  umockdev,
+  libeatmydata,
+  gtk-doc,
+  docbook-xsl-nons,
+  udev,
+  libgudev,
+  libusb1,
+  glib,
+  gettext,
+  polkit,
+  nixosTests,
+  useIMobileDevice ? true,
+  libimobiledevice,
+  withDocs ? withIntrospection,
+  mesonEmulatorHook,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 assert withDocs -> withIntrospection;
@@ -37,9 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
   version = "1.90.6";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals withDocs [ "devdoc" ]
-    ++ lib.optionals withIntrospection [ "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocs [ "devdoc" ]
+  ++ lib.optionals withIntrospection [ "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -49,20 +55,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y3MIB6a11P00B/6E3UyoyjLLP8TIT3vM2FDO7zlBz/w=";
   };
 
-  patches = lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
-    # Remove when this is fixed upstream:
-    # https://gitlab.freedesktop.org/upower/upower/-/issues/214
-    ./i686-test-remove-battery-check.patch
-  ] ++ [
-    ./installed-tests-path.patch
+  patches =
+    lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+      # Remove when this is fixed upstream:
+      # https://gitlab.freedesktop.org/upower/upower/-/issues/214
+      ./i686-test-remove-battery-check.patch
+    ]
+    ++ [
+      ./installed-tests-path.patch
 
-    # Fix a race condition in test_sibling_priority_no_overwrite
-    # Remove when updating to > 1.90.6
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/upower/upower/-/commit/9ee76826bd41a5d3a377dfd6f5835f42ec50be9a.patch";
-      hash = "sha256-E56iz/iHn+VM7Opo0a13A5nhnB9nf6C7Y1kyWzk4ZnU=";
-    })
-  ];
+      # Fix a race condition in test_sibling_priority_no_overwrite
+      # Remove when updating to > 1.90.6
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/upower/upower/-/commit/9ee76826bd41a5d3a377dfd6f5835f42ec50be9a.patch";
+        hash = "sha256-E56iz/iHn+VM7Opo0a13A5nhnB9nf6C7Y1kyWzk4ZnU=";
+      })
+      # Fix style issues in the udev rules file
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/upower/upower/-/commit/6f9d84694da56b317989b8c34250b60d833a4b29.patch";
+        hash = "sha256-xBUbf4qz9Llmw7CuKKMp/uPk7JqwjB4+p7z9kMOVRuE=";
+      })
+    ];
 
   strictDeps = true;
 
@@ -80,11 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     glib
-  ] ++ lib.optionals withIntrospection [
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals withDocs [
+  ]
+  ++ lib.optionals withDocs [
     gtk-doc
-  ] ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -92,7 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     libusb1
     udev
-  ] ++ lib.optionals withIntrospection [
+  ]
+  ++ lib.optionals withIntrospection [
     # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
 
@@ -103,15 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
       pp.pygobject3
       pp.packaging
     ]))
-  ] ++ lib.optionals withSystemd [
+  ]
+  ++ lib.optionals withSystemd [
     systemd
-  ] ++ lib.optionals useIMobileDevice [
+  ]
+  ++ lib.optionals useIMobileDevice [
     libimobiledevice
   ];
 
   nativeCheckInputs = [
     libeatmydata
-  ] ++ lib.optionals withIntrospection [
+  ]
+  ++ lib.optionals withIntrospection [
     python3.pkgs.dbus-python
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3
@@ -138,13 +158,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs src/linux/integration-test.py
     patchShebangs src/linux/unittest_inspector.py
 
     substituteInPlace src/linux/integration-test.py \
-      --replace "/usr/share/dbus-1" "$out/share/dbus-1"
+      --replace-fail "/usr/share/dbus-1" "$out/share/dbus-1"
   '';
 
   preCheck = ''
@@ -197,13 +218,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.optionalString withIntrospection ''
     wrapProgram "$installedTests/libexec/upower/integration-test.py" \
-      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [
-        "$out"
-        umockdev.out
-      ]}" \
-      --prefix PATH : "${lib.makeBinPath [
-        umockdev
-      ]}"
+      --prefix GI_TYPELIB_PATH : "${
+        lib.makeSearchPath "lib/girepository-1.0" [
+          "$out"
+          umockdev.out
+        ]
+      }" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          umockdev
+        ]
+      }"
   '';
 
   env = {
@@ -227,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "D-Bus service for power management";
     mainProgram = "upower";
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

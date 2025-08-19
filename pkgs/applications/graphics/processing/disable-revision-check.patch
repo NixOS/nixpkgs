@@ -1,0 +1,13 @@
+diff --git a/build/build.xml b/build/build.xml
+index 8ad556c11..e61b6ae45 100644
+--- a/build/build.xml
++++ b/build/build.xml
+@@ -453,8 +453,6 @@
+ 
+     <!-- the revision.base property won't be set
+          if $revision wasn't found... -->
+-    <fail unless="revision.correct"
+-          message="Fix revision number in Base.java" />
+   </target>
+ 
+ 

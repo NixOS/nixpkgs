@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mobilinkd";
-    repo = pname;
+    repo = "m17-cxx-demod";
     rev = "v${version}";
     hash = "sha256-mvppkFBmmPVqvlqIqrbwGrOBih5zS5sZrV/usEhHiws=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mobilinkd/m17-cxx-demod";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = teams.c3d2.members;
+    teams = [ teams.c3d2 ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

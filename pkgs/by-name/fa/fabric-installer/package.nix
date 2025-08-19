@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fabric-installer";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-    sha256 = "sha256-Yu3xcL3MQe3qhdM6zz64VHQlhpmz1B+UGNKGyDbLCI0=";
+    sha256 = "sha256-wgxAfVyksRmq6XhH6y+7HTTJKWm2R/u7HeL9NsoAc44=";
   };
 
   dontUnpack = true;

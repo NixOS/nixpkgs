@@ -11,16 +11,16 @@
 
 maven.buildMavenPackage rec {
   pname = "sonar-scanner-cli";
-  version = "6.2.1.4610";
+  version = "7.2.0.5079";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonar-scanner-cli";
     tag = version;
-    hash = "sha256-k1gZO3h6ZGwxJNQ5QwUH96aDPGpJuEn6HYUsYOpqo+g=";
+    hash = "sha256-ndpOjFE7RvGoQ32iTupC0RORFeUMikjWnDdty5XRApE=";
   };
 
-  mvnHash = "sha256-RNWE9wjX2CP6G/Hoh/vJExUkTEsSh5D+1PAMZ9TuIh0=";
+  mvnHash = "sha256-fS5Hbt0p+DxFpB2x1ot/FGG1R0OdVIys+BbyDTtTLQQ=";
 
   mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
 

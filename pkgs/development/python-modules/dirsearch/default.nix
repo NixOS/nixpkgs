@@ -102,7 +102,7 @@ buildPythonPackage rec {
   ];
   pythonRemoveDeps = [
     # not available, see above
-    "ntlm-auth"
+    "ntlm_auth"
   ];
   pythonRelaxDeps = [
     # version checker doesn't recognize 0.8.0.rc2 as >=0.7.0
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     # probably not but we don't have old charset-normalizer versions in nixpkgs
     # and requests also depends on it so we can't just override it with an
     # older version due to package duplication
-    "charset-normalizer"
+    "charset_normalizer"
   ];
 
   meta = {

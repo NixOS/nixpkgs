@@ -1,7 +1,8 @@
 {
   config,
-  pkgs,
   lib,
+  pkgs,
+  utils,
   ...
 }:
 
@@ -12,6 +13,7 @@ let
   e = pkgs.enlightenment;
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.enlightenment;
+
   GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
@@ -41,11 +43,17 @@ in
       description = "Enable the Enlightenment desktop environment.";
     };
 
+    environment.enlightenment.excludePackages = mkOption {
+      default = [ ];
+      example = literalExpression "[ pkgs.enlightenment.ephoto ]";
+      type = types.listOf types.package;
+      description = "Which packages Enlightenment should exclude from the default environment";
+    };
   };
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = utils.removePackagesByName (with pkgs; [
       enlightenment.econnman
       enlightenment.efl
       enlightenment.enlightenment
@@ -54,7 +62,7 @@ in
       enlightenment.rage
       enlightenment.terminology
       xorg.xcursorthemes
-    ];
+    ]) config.environment.enlightenment.excludePackages;
 
     environment.pathsToLink = [
       "/etc/enlightenment"

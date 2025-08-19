@@ -3,23 +3,39 @@
   python3,
   fetchFromGitHub,
   nixosTests,
+  unstableGitUpdater,
 }:
-
-python3.pkgs.toPythonModule (
-  python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = final: prev: { };
+  };
+in
+python.pkgs.toPythonModule (
+  python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-01-10";
+    version = "0-unstable-2025-08-03";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "94a0b415ef587e013df9e7350667b752a3822e90";
-      hash = "sha256-ZeFHsoQXmG2sZXhPY7aRTsAXmFGHNT5ig0c2Hy344vw=";
+      rev = "2e62eb5d68d875c49e32229103a4fd75fe26c104";
+      hash = "sha256-UKGPkaG2agXZhEi2h8g2gXHHEDmDSzL/f9B+l5WZVvE=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRemoveDeps = [
+      "typer-slim" # we use typer instead
+    ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "httpx-socks"
+      "lxml"
+      "pygments"
+      "valkey"
+    ];
 
     preBuild =
       let
@@ -40,29 +56,33 @@ python3.pkgs.toPythonModule (
         EOF
       '';
 
+    build-system = with python.pkgs; [ setuptools ];
+
     dependencies =
-      with python3.pkgs;
+      with python.pkgs;
       [
         babel
         brotli
         certifi
+        cryptography
         fasttext-predict
         flask
         flask-babel
+        httpx
+        httpx-socks
         isodate
         jinja2
         lxml
+        markdown-it-py
         msgspec
         pygments
         python-dateutil
         pyyaml
-        redis
+        setproctitle
         typer
         uvloop
-        setproctitle
-        httpx
-        httpx-socks
-        markdown-it-py
+        valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;
@@ -73,16 +93,17 @@ python3.pkgs.toPythonModule (
     postInstall = ''
       # Create a symlink for easier access to static data
       mkdir -p $out/share
-      ln -s ../${python3.sitePackages}/searx/static $out/share/
+      ln -s ../${python.sitePackages}/searx/static $out/share/
 
       # copy config schema for the limiter
-      cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
+      cp searx/limiter.toml $out/${python.sitePackages}/searx/limiter.toml
     '';
 
     passthru = {
       tests = {
         searxng = nixosTests.searx;
       };
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
     meta = with lib; {

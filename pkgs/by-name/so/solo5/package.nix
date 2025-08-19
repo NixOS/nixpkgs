@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "0.9.0";
+  version = "0.9.2";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    hash = "sha256-w5ZEPxjplBTkedPN4yJN1A55HtItYjuwZA8UPFQBOw8=";
+    hash = "sha256-HiYi6VECDVZXJboTt6DwggyUyUhdlU4C7fwqYzvKWZs=";
   };
 
   hardeningEnable = [ "pie" ];

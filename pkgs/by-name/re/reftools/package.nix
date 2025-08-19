@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "reftools";
-  version = "unstable-2021-02-13";
+  version = "0-unstable-2021-02-13";
 
   src = fetchFromGitHub {
     owner = "davidrjenni";

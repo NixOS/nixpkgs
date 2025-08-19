@@ -8,7 +8,7 @@
   notmuch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "notmuch-mutt";
   version = notmuch.version;
 
@@ -17,20 +17,19 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs =
-    [
-      perl
-    ]
-    ++ (with perlPackages; [
-      FileRemove
-      DigestSHA1
-      Later
-      MailBox
-      MailMaildir
-      MailTools
-      StringShellQuote
-      TermReadLineGnu
-    ]);
+  buildInputs = [
+    perl
+  ]
+  ++ (with perlPackages; [
+    FileRemove
+    DigestSHA1
+    Later
+    MailBox
+    MailMaildir
+    MailTools
+    StringShellQuote
+    TermReadLineGnu
+  ]);
 
   src = notmuch.src;
 

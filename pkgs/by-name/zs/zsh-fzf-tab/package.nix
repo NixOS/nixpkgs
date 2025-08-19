@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
     rev = "v${version}";
-    hash = "sha256-Qv8zAiMtrr67CbLRrFjGaPzFZcOiMVEFLg1Z+N6VMhg=";
+    hash = "sha256-q26XVS/LcyZPRqDNwKKA9exgBByE0muyuNb0Bbar2lY=";
   };
 
   strictDeps = true;
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/Aloxaf/fzf-tab";
-    description = "Replace zsh's default completion selection menu with fzf!";
+    description = "Replace zsh's default completion selection menu with fzf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ diredocks ];
     platforms = lib.platforms.unix;

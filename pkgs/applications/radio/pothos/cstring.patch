@@ -1,0 +1,50 @@
+Submodule blocks contains modified content
+diff --git a/blocks/file/BinaryFileSink.cpp b/blocks/file/BinaryFileSink.cpp
+index 31c9a41..0083b0d 100644
+--- a/blocks/file/BinaryFileSink.cpp
++++ b/blocks/file/BinaryFileSink.cpp
+@@ -13,6 +13,7 @@
+ #endif //_MSC_VER
+ #include <stdio.h>
+ #include <cerrno>
++#include <cstring>
+
+ #ifndef O_BINARY
+ #define O_BINARY 0
+diff --git a/blocks/file/BinaryFileSource.cpp b/blocks/file/BinaryFileSource.cpp
+index 0151231..379d383 100644
+--- a/blocks/file/BinaryFileSource.cpp
++++ b/blocks/file/BinaryFileSource.cpp
+@@ -13,6 +13,7 @@
+ #endif //_MSC_VER
+ #include <stdio.h>
+ #include <cerrno>
++#include <cstring>
+
+ #ifndef O_BINARY
+ #define O_BINARY 0
+diff --git a/blocks/file/TextFileSink.cpp b/blocks/file/TextFileSink.cpp
+index b4b2f08..2be66e2 100644
+--- a/blocks/file/TextFileSink.cpp
++++ b/blocks/file/TextFileSink.cpp
+@@ -6,6 +6,7 @@
+ #include <complex>
+ #include <fstream>
+ #include <cerrno>
++#include <cstring>
+
+ /***********************************************************************
+  * |PothosDoc Text File Sink
+Submodule soapy contains modified content
+diff --git a/soapy/DemoController.cpp b/soapy/DemoController.cpp
+index 4ce8ead..9a4e742 100644
+--- a/soapy/DemoController.cpp
++++ b/soapy/DemoController.cpp
+@@ -6,6 +6,7 @@
+ #include <iostream>
+ #include <chrono>
+ #include <algorithm> //min/max
++#include <cstring>
+
+ /***********************************************************************
+  * |PothosDoc SDR Demo Controller

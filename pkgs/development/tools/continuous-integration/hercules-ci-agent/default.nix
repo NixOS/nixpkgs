@@ -20,7 +20,8 @@ let
     gzip
     git
     openssh
-  ] ++ lib.optional stdenv.hostPlatform.isLinux crun;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux crun;
 
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
@@ -43,50 +44,49 @@ pkg.overrideAttrs (
       position = toString ./default.nix + ":1";
     };
     passthru = o.passthru // {
-      tests =
-        {
-          version = testers.testVersion {
-            package = finalAttrs.finalPackage;
-            command = "hercules-ci-agent --help";
-          };
-        }
-        // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
-          # Does not test the package, but evaluation of the related NixOS module.
-          nixos-simple-config =
-            (nixos {
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "hercules-ci-agent --help";
+        };
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
+        # Does not test the package, but evaluation of the related NixOS module.
+        nixos-simple-config =
+          (nixos {
+            boot.loader.grub.enable = false;
+            fileSystems."/".device = "bogus";
+            services.hercules-ci-agent.enable = true;
+            # Dummy value for testing only.
+            system.stateVersion = lib.trivial.release; # TEST ONLY
+          }).config.system.build.toplevel;
+
+        nixos-many-options-config =
+          (nixos (
+            { pkgs, ... }:
+            {
               boot.loader.grub.enable = false;
               fileSystems."/".device = "bogus";
-              services.hercules-ci-agent.enable = true;
+              services.hercules-ci-agent = {
+                enable = true;
+                package = pkgs.hercules-ci-agent;
+                settings = {
+                  workDirectory = "/var/tmp/hci";
+                  binaryCachesPath = "/var/keys/binary-caches.json";
+                  labels.foo.bar.baz = "qux";
+                  labels.qux = [
+                    "q"
+                    "u"
+                  ];
+                  apiBaseUrl = "https://hci.dev.biz.example.com";
+                  concurrentTasks = 42;
+                };
+              };
               # Dummy value for testing only.
               system.stateVersion = lib.trivial.release; # TEST ONLY
-            }).config.system.build.toplevel;
-
-          nixos-many-options-config =
-            (nixos (
-              { pkgs, ... }:
-              {
-                boot.loader.grub.enable = false;
-                fileSystems."/".device = "bogus";
-                services.hercules-ci-agent = {
-                  enable = true;
-                  package = pkgs.hercules-ci-agent;
-                  settings = {
-                    workDirectory = "/var/tmp/hci";
-                    binaryCachesPath = "/var/keys/binary-caches.json";
-                    labels.foo.bar.baz = "qux";
-                    labels.qux = [
-                      "q"
-                      "u"
-                    ];
-                    apiBaseUrl = "https://hci.dev.biz.example.com";
-                    concurrentTasks = 42;
-                  };
-                };
-                # Dummy value for testing only.
-                system.stateVersion = lib.trivial.release; # TEST ONLY
-              }
-            )).config.system.build.toplevel;
-        };
+            }
+          )).config.system.build.toplevel;
+      };
     };
   }
 )

@@ -21,12 +21,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  dependencies = [
+    setuptools # needed for 'pkg_resources'
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "isbnlib/test/" ];
+  enabledTestPaths = [ "isbnlib/test/" ];
 
   # All disabled tests require a network connection
   disabledTests = [

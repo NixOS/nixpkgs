@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cmdstan,
   setuptools,
   pandas,
@@ -27,8 +27,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./use-nix-cmdstan-path.patch;
+    (replaceVars ./use-nix-cmdstan-path.patch {
       cmdstan = "${cmdstan}/opt/cmdstan";
     })
   ];
@@ -67,19 +66,18 @@ buildPythonPackage rec {
     "test/test_cxx_installation.py"
   ];
 
-  disabledTests =
-    [
-      "test_serialization" # Pickle class mismatch errors
-      # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
-      "test_multi_proc_threads"
-      "test_compile_force"
-      # These tests require a writeable cmdstan source directory
-      "test_pathfinder_threads"
-      "test_save_profile"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_init_types" # CmdStan error: error during processing Operation not permitted
-    ];
+  disabledTests = [
+    "test_serialization" # Pickle class mismatch errors
+    # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
+    "test_multi_proc_threads"
+    "test_compile_force"
+    # These tests require a writeable cmdstan source directory
+    "test_pathfinder_threads"
+    "test_save_profile"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_init_types" # CmdStan error: error during processing Operation not permitted
+  ];
 
   pythonImportsCheck = [ "cmdstanpy" ];
 

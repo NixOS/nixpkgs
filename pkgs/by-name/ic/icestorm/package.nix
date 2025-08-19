@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   pkg-config,
   libftdi1,
@@ -18,48 +19,50 @@
   usePyPy ? stdenv.hostPlatform.system == "x86_64-linux",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icestorm";
-  version = "2020.12.04";
+  version = "0-unstable-2025-06-03";
 
   passthru = rec {
     pythonPkg = if (false && usePyPy) then pypy3 else python3;
     pythonInterp = pythonPkg.interpreter;
+
+    tests.examples = callPackage ./tests.nix {
+      inherit (finalAttrs) pname src;
+      icestorm = finalAttrs.finalPackage;
+    };
   };
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "icestorm";
-    rev = "7afc64b480212c9ac2ce7cb1622731a69a7d212c";
-    sha256 = "0vxhqs2fampglg3xlfwb35229iv96kvlwp1gyxrdrmlpznhkqdrk";
+    rev = "f31c39cc2eadd0ab7f29f34becba1348ae9f8721";
+    hash = "sha256-SLSxqgVsYMUxv8YjY1iRLnVFiIAhk/GKmZr4Ido0A3o=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    passthru.pythonPkg
+    finalAttrs.passthru.pythonPkg
     libftdi1
   ];
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "PYTHON3=${finalAttrs.passthru.pythonInterp}"
+  ];
 
   enableParallelBuilding = true;
 
-  # fix icebox_vlog chipdb path. icestorm issue:
-  #   https://github.com/cliffordwolf/icestorm/issues/125
-  #
-  # also, fix up the path to the chosen Python interpreter. for pypy-compatible
+  # fix up the path to the chosen Python interpreter. for pypy-compatible
   # platforms, it offers significant performance improvements.
   patchPhase = ''
-    substituteInPlace ./icebox/icebox_vlog.py \
-      --replace /usr/local/share "$out/share"
-
-    for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
-      substituteInPlace "$x" --replace python3 "${passthru.pythonInterp}"
-    done
-
-    for x in $(find . -type f -iname '*.py'); do
+    for x in $(find . -type f -iname '*.py' -executable); do
       substituteInPlace "$x" \
-        --replace '/usr/bin/env python3' '${passthru.pythonInterp}'
+        --replace-fail '/usr/bin/env python3' '${finalAttrs.passthru.pythonInterp}'
     done
+
+    # We use GNU sed on Darwin, while icebox/Makefile assumed BSD sed (which
+    # requires a (potentially empty) argument for the -i flag).
+    substituteInPlace icebox/Makefile --replace-fail "sed -i '''" "sed -i"
   '';
 
   meta = {
@@ -78,4 +81,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

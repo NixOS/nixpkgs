@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
-    repo = pname;
+    repo = "lib3270";
     rev = version;
     hash = "sha256-w6Bg+TvSDAuZwtu/nyAIuq6pgheM5nXtfuryECfnKng=";
   };
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/PerryWerneck/lib3270";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.vifino ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

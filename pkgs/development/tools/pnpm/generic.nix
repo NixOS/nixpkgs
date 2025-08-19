@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  writeScript,
   callPackages,
   fetchurl,
   installShellFiles,
@@ -9,8 +10,11 @@
   withNode ? true,
   version,
   hash,
+  buildPackages,
 }:
-
+let
+  majorVersion = lib.versions.major version;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pnpm";
   inherit version;
@@ -67,14 +71,42 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      fetchDepsAttrs = callPackages ./fetch-deps { pnpm = finalAttrs.finalPackage; };
+      fetchDepsAttrs = callPackages ./fetch-deps {
+        pnpm = buildPackages."pnpm_${lib.versions.major version}";
+      };
     in
     {
       inherit (fetchDepsAttrs) fetchDeps configHook;
+      inherit majorVersion;
 
       tests.version = lib.optionalAttrs withNode (
         testers.testVersion { package = finalAttrs.finalPackage; }
       );
+      updateScript = writeScript "pnpm-update-script" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl jq common-updater-scripts
+        set -eou pipefail
+
+        curl_github() {
+            curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
+        }
+
+        latestTag=$(
+          curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | \
+          jq -r --arg major "v${majorVersion}" \
+            '[.[] | select(.tag_name | startswith($major)) | select(.prerelease == false)][0].tag_name'
+        )
+
+        # Exit if there is no tag with this major version
+        if [ "$latestTag" = "null" ]; then
+          echo "No releases starting with v${majorVersion}"
+          exit 0
+        fi
+
+        latestVersion="''${latestTag#v}"
+
+        update-source-version pnpm_${majorVersion} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
+      '';
     };
 
   meta = {

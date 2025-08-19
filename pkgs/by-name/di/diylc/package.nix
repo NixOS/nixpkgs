@@ -2,88 +2,71 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   unzip,
-  bash,
-  jre8,
+  jdk17,
+  makeBinaryWrapper,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "diylc";
-  version = "4.18.0";
-  files = {
-    app = fetchurl {
-      url = "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
-      sha256 = "09fpp3dn086clgnjz5yj4fh5bnjvj6mvxkx9n3zamcwszjmxr40d";
-    };
-    icon16 = fetchurl {
-      url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
-      sha256 = "1is50aidfwzwfzwqv57s2hwhx0r5c21cp77bkl93xkdqkh2wd8x4";
-    };
-    icon32 = fetchurl {
-      url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_medium.png";
-      sha256 = "0a45p18n84xz1nd3zv3y16jlimvqzhbzg3q3f4lawgx4rcrn2n3d";
-    };
-    icon48 = fetchurl {
-      url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_large.png";
-      sha256 = "06dkz0dcy8hfmnzr5ri5n1sh8r7mg83kzbvs3zy58wwhgzs1ddk6";
-    };
-  };
-  launcher = makeDesktopItem {
-    name = "diylc";
-    desktopName = "DIY Layout Creator";
-    comment = "Multi platform circuit layout and schematic drawing tool";
-    exec = "diylc";
-    icon = "diylc_icon";
-    categories = [
-      "Development"
-      "Electronics"
-    ];
-  };
-in
-stdenv.mkDerivation rec {
-  inherit pname version;
+  version = "5.6.0";
 
-  dontUnpack = true;
+  src = fetchurl {
+    url = "https://github.com/bancika/diy-layout-creator/releases/download/v${finalAttrs.version}/diylc-${finalAttrs.version}-universal.zip";
+    hash = "sha256-y47md9kaiqpmx+ZNTm5PCHiNMMR9zjsvjc2xpVD6FAk=";
+  };
 
-  buildInputs = [ jre8 ];
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    unzip
+    makeBinaryWrapper
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "diylc";
+      desktopName = "DIY Layout Creator";
+      comment = "Multi platform circuit layout and schematic drawing tool";
+      exec = "diylc";
+      icon = "diylc_icon";
+      categories = [
+        "Development"
+        "Electronics"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/diylc
-    unzip -UU ${files.app} -d $out/share/diylc
-    rm $out/share/diylc/diylc.exe
-    rm $out/share/diylc/run.sh
-
     # Nope, the icon cannot be named 'diylc' because KDE does not like it.
-    install -Dm644 ${files.icon16} $out/share/icons/hicolor/16x16/apps/diylc_icon.png
-    install -Dm644 ${files.icon32} $out/share/icons/hicolor/32x32/apps/diylc_icon.png
-    install -Dm644 ${files.icon48} $out/share/icons/hicolor/48x48/apps/diylc_icon.png
-
-    mkdir -p $out/share/applications
-    ln -s ${launcher}/share/applications/* $out/share/applications/
-
-    mkdir -p $out/bin
-    cat <<EOF > $out/bin/diylc
-    #!${bash}/bin/sh
-    cd $out/share/diylc
-    ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
-    EOF
-    chmod +x $out/bin/diylc
+    install -Dm644 icons/icon_16x16.png $out/share/icons/hicolor/16x16/apps/diylc_icon.png
+    install -Dm644 icons/icon_32x32.png $out/share/icons/hicolor/32x32/apps/diylc_icon.png
+    install -Dm644 icons/icon_48x48.png $out/share/icons/hicolor/48x48/apps/diylc_icon.png
+    install -Dm644 icons/icon_64x64.png $out/share/icons/hicolor/64x64/apps/diylc_icon.png
+    install -Dm644 icons/icon_512x512.png $out/share/icons/hicolor/512x512/apps/diylc_icon.png
+    install -Dm644 diylc.jar $out/app/diylc/diylc.jar
+    install -Dm755 run.sh $out/app/diylc/run.sh
+    patchShebangs $out/app/diylc/run.sh
+    substituteInPlace $out/app/diylc/run.sh \
+      --replace-fail '$(which java)' "${jdk17}/bin/java" \
+      --replace-fail "exec java" "exec ${jdk17}/bin/java"
+    mkdir $out/bin
+    makeWrapper $out/app/diylc/run.sh $out/bin/diylc
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi platform circuit layout and schematic drawing tool";
     mainProgram = "diylc";
-    homepage = "https://bancika.github.io/diy-layout-creator/";
+    homepage = "https://bancika.github.io/diy-layout-creator";
     changelog = "https://github.com/bancika/diy-layout-creator/releases";
-    license = licenses.gpl3Plus;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

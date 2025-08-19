@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "25.4.1";
+  version = "25.6.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "keyring";
     tag = "v${version}";
-    hash = "sha256-5MK7f6/e8ZJ7azm5WX8T2+/6R3P3Y8XaN7jze2MgiJA=";
+    hash = "sha256-qu9HAlZMLlIVs8c9ClzWUljezhrt88gu1kouklMNxMY=";
   };
 
   build-system = [ setuptools-scm ];
@@ -37,17 +37,16 @@ buildPythonPackage rec {
     shtab
   ];
 
-  dependencies =
-    [
-      jaraco-classes
-      jaraco-context
-      jaraco-functools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      jeepney
-      secretstorage
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    jaraco-classes
+    jaraco-context
+    jaraco-functools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    jeepney
+    secretstorage
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
 
   postInstall = ''
     installShellCompletion --cmd keyring \
@@ -65,15 +64,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths =
-    [ "tests/backends/test_macOS.py" ]
-    # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
-    ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
+  disabledTestPaths = [
+    "tests/backends/test_macOS.py"
+  ]
+  # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
+  ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
 
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage = "https://github.com/jaraco/keyring";
-    changelog = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/keyring/blob/${src.tag}/NEWS.rst";
     license = licenses.mit;
     mainProgram = "keyring";
     maintainers = with maintainers; [

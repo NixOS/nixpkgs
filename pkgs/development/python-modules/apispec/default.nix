@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.8.0";
+  version = "6.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hhzKgrvAZSyprOqJaSGyVJRFgDQv3oSfhvbawazGypY=";
+    hash = "sha256-zltpufzwJQy1a6DBpSp1/yLC98WGZU5XiEOZAYxRnyY=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     marshmallow = [ marshmallow ];
@@ -35,13 +35,15 @@ buildPythonPackage rec {
     validation = [
       openapi-spec-validator
       prance
-    ] ++ prance.optional-dependencies.osv;
+    ]
+    ++ prance.optional-dependencies.osv;
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apispec" ];
 

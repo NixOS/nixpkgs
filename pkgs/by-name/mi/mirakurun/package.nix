@@ -7,7 +7,7 @@
   installShellFiles,
   makeWrapper,
   nodejs,
-  substituteAll,
+  replaceVars,
   v4l-utils,
   which,
 }:
@@ -45,9 +45,9 @@ buildNpmPackage rec {
         bash
         nodejs
         which
-      ] ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
-      crc32Patch = substituteAll {
-        src = ./fix-musl-detection.patch;
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
+      crc32Patch = replaceVars ./fix-musl-detection.patch {
         isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";
       };
     in
@@ -72,7 +72,7 @@ buildNpmPackage rec {
     '';
 
   meta = with lib; {
-    description = "Resource manager for TV tuners.";
+    description = "Resource manager for TV tuners";
     license = licenses.asl20;
     maintainers = with maintainers; [ midchildan ];
   };

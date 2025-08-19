@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.38.10";
+  version = "1.39.3";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
+    hash = "sha256-ceVYD/dyb3SEEENoJZxjn94DGmUj6IYSNLjsJvmPM84=";
   };
 
   format = "other";
@@ -32,22 +32,22 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs =
-    [
-      openimageio
-      imath
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXt
-      libGL
-    ];
+  buildInputs = [
+    openimageio
+    imath
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXt
+    libGL
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
+    (lib.cmakeBool "MATERIALX_BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
     (lib.cmakeBool "MATERIALX_BUILD_GEN_MSL" (
       stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin

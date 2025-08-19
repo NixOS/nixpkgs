@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.4";
+  version = "4.5.2-unstable-2025-07-03";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/1kAgzmSbnuCqd6YxbaYW2+gE0Gvy373y5VfUK4OVzI=";
+    rev = "0ff2476af4e16286ee9f7cf2322715273a0117e0";
+    sha256 = "sha256-0ixQfAyAyRmuIrlPosCV/VucKJYYvxjL2o4pkVb5Sd8=";
   };
 
   cmakeFlags = [
@@ -65,21 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  qtWrapperArgs =
-    [
-      # MuseScore JACK backend loads libjack at runtime.
-      "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [ libjack2 ]
-      }"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # There are some issues with using the wayland backend, see:
-      # https://musescore.org/en/node/321936
-      "--set-default QT_QPA_PLATFORM xcb"
-    ];
+  qtWrapperArgs = [
+    # MuseScore JACK backend loads libjack at runtime.
+    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [ libjack2 ]
+    }"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # There are some issues with using the wayland backend, see:
+    # https://musescore.org/en/node/321936
+    "--set-default QT_QPA_PLATFORM xcb"
+  ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -87,58 +86,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
-  nativeBuildInputs =
-    [
-      wrapQtAppsHook
-      cmake
-      qttools
-      pkg-config
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
-      # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    cmake
+    qttools
+    pkg-config
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      libjack2
-      freetype
-      lame
-      libogg
-      libpulseaudio
-      libsndfile
-      libvorbis
-      portaudio
-      portmidi
-      flac
-      libopusenc
-      libopus
-      tinyxml-2
-      qtbase
-      qtdeclarative
-      qt5compat
-      qtsvg
-      qtscxml
-      qtnetworkauth
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      qtwayland
-    ];
+  buildInputs = [
+    libjack2
+    freetype
+    lame
+    libogg
+    libpulseaudio
+    libsndfile
+    libvorbis
+    portaudio
+    portmidi
+    flac
+    libopusenc
+    libopus
+    tinyxml-2
+    qtbase
+    qtdeclarative
+    qt5compat
+    qtsvg
+    qtscxml
+    qtnetworkauth
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    qtwayland
+  ];
 
-  postInstall =
-    ''
-      # Remove unneeded bundled libraries and headers
-      rm -r $out/{include,lib}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv "$out/mscore.app" "$out/Applications/mscore.app"
-      mkdir -p $out/bin
-      ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/mscore.app" "$out/Applications/mscore.app"
+    mkdir -p $out/bin
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
 
   # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
   # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".

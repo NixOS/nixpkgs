@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
   openssl,
 }:
 
@@ -17,18 +15,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ftTmYCkra3x/oDgGJ2WSf6yLeKXkwLJXhjuBdv7fVLY=";
   };
 
-  cargoHash = "sha256-kjHLc+qWo5dB4qbdlIWzk/pjpghRaDcX/7kkjEM219c=";
+  cargoHash = "sha256-bO37UYApe1CbwcfG8j/1UPu6DlYqlGPLsh0epxh8x3M=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        CoreFoundation
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   meta = {
     description = "Web-app pentesting suite written in rust";

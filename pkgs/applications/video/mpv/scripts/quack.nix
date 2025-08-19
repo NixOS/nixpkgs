@@ -5,7 +5,7 @@
   buildLua,
 }:
 
-buildLua rec {
+buildLua {
   pname = "mpv-quack";
 
   version = "0-unstable-2020-05-27";

@@ -50,6 +50,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # https://github.com/Azure/azure-iot-sdk-python/issues/1196
+    broken = lib.versionAtLeast paho-mqtt.version "2";
     description = "Microsoft Azure IoT Device Library for Python";
     homepage = "https://github.com/Azure/azure-iot-sdk-python";
     license = licenses.mit;

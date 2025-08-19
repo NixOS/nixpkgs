@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An easy rich text processor";
+    description = "Easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.
       Ted was developed as a standard easy light weight word processor, having

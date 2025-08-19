@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   aioquic,
+  cacert,
   h11,
   h2,
   httpx,
@@ -55,7 +56,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 

@@ -85,7 +85,6 @@ in
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
-          shelly = { };
           zha = { };
 
           # set up a wake-on-lan switch to test capset capability required
@@ -108,7 +107,7 @@ in
 
           # https://www.home-assistant.io/integrations/logger/
           logger = {
-            default = "info";
+            default = "debug";
           };
         };
 
@@ -131,6 +130,22 @@ in
         lovelaceConfigWritable = true;
       };
 
+      # Add blueprints next, because we want to test the installation of the default blueprints first
+      specialisation.addBlueprints = {
+        inheritParentConfig = true;
+        configuration.services.home-assistant = {
+          blueprints.automation = [
+            (pkgs.fetchurl {
+              url = "https://github.com/home-assistant/core/raw/2025.1.4/homeassistant/components/automation/blueprints/motion_light.yaml";
+              hash = "sha256-4HrDX65ycBMfEY2nZ7A25/d3ZnIHdpHZ+80Cblp+P5w=";
+            })
+          ];
+          blueprints.template = [
+            "${pkgs.home-assistant.src}/homeassistant/components/template/blueprints/inverted_binary_sensor.yaml"
+          ];
+        };
+      };
+
       # Cause a configuration change inside `configuration.yml` and verify that the process is being reloaded.
       specialisation.differentName = {
         inheritParentConfig = true;
@@ -148,6 +163,8 @@ in
         configuration.services.home-assistant = {
           customComponents = lib.mkForce [ ];
           customLovelaceModules = lib.mkForce [ ];
+          blueprints.automation = lib.mkForce [ ];
+          blueprints.template = lib.mkForce [ ];
         };
       };
     };
@@ -226,6 +243,19 @@ in
       with subtest("Check extra components are considered in systemd unit hardening"):
           hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
 
+      with subtest("Check that default blueprints are copied writable"):
+          hass.succeed("stat -c '%a' ${configDir}/blueprints/automation/homeassistant | grep 700")
+          hass.succeed("stat -c '%a' ${configDir}/blueprints/automation/homeassistant/motion_light.yaml | grep 600")
+          # Delete blueprints, so we can check the declarative setup next
+          hass.execute("rm -rf ${configDir}/blueprints")
+
+      with subtest("Check that configured blueprints are installed"):
+          cursor = get_journal_cursor()
+          hass.succeed("${system}/specialisation/addBlueprints/bin/switch-to-configuration test")
+          wait_for_homeassistant(cursor)
+          hass.succeed("test -L '${configDir}/blueprints/automation/motion_light.yaml'")
+          hass.succeed("test -L '${configDir}/blueprints/template/inverted_binary_sensor.yaml'")
+
       with subtest("Check service restart from SIGHUP"):
           pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
           cursor = get_journal_cursor()
@@ -247,12 +277,14 @@ in
           for domain in ["prometheus"]:
               assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
-      with subtest("Check custom components and custom lovelace modules get removed"):
+      with subtest("Check custom components, custom lovelace modules, and blueprints get removed"):
           cursor = get_journal_cursor()
           hass.succeed("${system}/specialisation/removeCustomThings/bin/switch-to-configuration test")
           hass.fail("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
           for integration in ("prometheus_sensor", "spook", "spook_inverse"):
               hass.fail(f"test -f ${configDir}/custom_components/{integration}/manifest.json")
+          hass.fail("test -e '${configDir}/blueprints/automation/motion_light.yaml'")
+          hass.fail("test -e '${configDir}/blueprints/template/inverted_binary_sensor.yaml'")
           wait_for_homeassistant(cursor)
 
       with subtest("Check that no errors were logged"):

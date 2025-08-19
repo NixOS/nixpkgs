@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace src/Makefile \
       --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
-      --replace "CFLAGS += -I/opt/local/include" "CFLAGS += -I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2"
+      --replace "CFLAGS += -I/opt/local/include" "CFLAGS += -I${lib.getInclude SDL2}/include/SDL2 -I${SDL2_image}/include/SDL2"
   '';
 
   # The prince binary expects two things of the working directory it is called from:
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source port of Prince of Persia";
     homepage = "https://github.com/NagyD/SDLPoP";
     changelog = "https://github.com/NagyD/SDLPoP/blob/v${version}/doc/ChangeLog.txt";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ iblech ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms = lib.platforms.unix;
     mainProgram = "prince";
   };
 }

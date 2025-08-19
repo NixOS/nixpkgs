@@ -38,7 +38,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.urwid;
+  ]
+  ++ optional-dependencies.urwid;
 
   disabledTestPaths = [
     # test_url needs online access

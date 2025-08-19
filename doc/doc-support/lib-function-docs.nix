@@ -102,6 +102,8 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
 
     export NIX_STATE_DIR=$(mktemp -d)
@@ -143,5 +145,7 @@ stdenvNoCC.mkDerivation {
     ) libsets}
 
     echo '```' >> "$out/index.md"
+
+    runHook postInstall
   '';
 }

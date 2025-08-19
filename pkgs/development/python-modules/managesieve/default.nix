@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "managesieve";
-  version = "0.8";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2CCb6h69H58YT1byj/fkrfzGsMUbr0GHpJLcMpsSE/M=";
+    hash = "sha256-LVwe0Pn6YPIAuoIaxXMfvCbOfS4NAjozkrdMNZDq+uU=";
   };
 
   nativeBuildInputs = [ setuptools ];

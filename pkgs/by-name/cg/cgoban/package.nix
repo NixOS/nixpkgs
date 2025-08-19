@@ -5,7 +5,7 @@
   fetchurl,
   makeWrapper,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cgoban";
   version = "3.5.144";
 

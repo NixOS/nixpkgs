@@ -1,10 +1,9 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
-  config,
 
   # build-system
   setuptools,
@@ -20,9 +19,11 @@
   tensorboard,
 
   # tests
-  cudaSupport ? config.cudaSupport,
   pytestCheckHook,
   torchvision,
+  writableTmpDirAsHomeHook,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +31,9 @@ buildPythonPackage rec {
   version = "2.8.1";
   pyproject = true;
 
-  disabled = isPy27;
-
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
-    repo = pname;
+    repo = "pytorch-metric-learning";
     tag = "v${version}";
     hash = "sha256-WO/gv8rKkxY3pR627WrEPVyvZnvUZIKMzOierIW8bJA=";
   };
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   };
 
   preCheck = ''
-    export HOME=$TMP
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
@@ -73,36 +71,39 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     torchvision
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests =
-    [
-      # network access
-      "test_tuplestoweights_sampler"
-      "test_metric_loss_only"
-      "test_add_to_indexer"
-      "test_get_nearest_neighbors"
-      "test_list_of_text"
-      "test_untrained_indexer"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
-      "test_single_proc"
-    ]
-    ++ lib.optionals cudaSupport [
-      # crashes with SIGBART
-      "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
-      "test_accuracy_calculator_large_k"
-      "test_custom_knn"
-      "test_global_embedding_space_tester"
-      "test_global_two_stream_embedding_space_tester"
-      "test_index_type"
-      "test_k_warning"
-      "test_many_tied_distances"
-      "test_query_within_reference"
-      "test_tied_distances"
-      "test_with_same_parent_label_tester"
-    ];
+  disabledTests = [
+    # network access
+    "test_tuplestoweights_sampler"
+    "test_metric_loss_only"
+    "test_add_to_indexer"
+    "test_get_nearest_neighbors"
+    "test_list_of_text"
+    "test_untrained_indexer"
+  ]
+  ++ lib.optionals cudaSupport [
+    # crashes with SIGBART
+    "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
+    "test_accuracy_calculator_large_k"
+    "test_custom_knn"
+    "test_global_embedding_space_tester"
+    "test_global_two_stream_embedding_space_tester"
+    "test_index_type"
+    "test_k_warning"
+    "test_many_tied_distances"
+    "test_query_within_reference"
+    "test_tied_distances"
+    "test_with_same_parent_label_tester"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Segmentation fault
+    "tests/testers/"
+    "tests/utils/"
+  ];
 
   meta = {
     description = "Metric learning library for PyTorch";

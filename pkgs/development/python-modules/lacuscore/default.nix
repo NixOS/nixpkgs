@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.12.7";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ail-project";
     repo = "LacusCore";
     tag = "v${version}";
-    hash = "sha256-bB9BeDhFlwdIgIv9VfvBkqxcfzpPe3jl6D/ChdP2FsM=";
+    hash = "sha256-szcvg4jfJ84kHYWjPBwecfvfsc258SS0OIuYle1lC1g=";
   };
 
   pythonRelaxDeps = [
@@ -37,21 +37,20 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      defang
-      dnspython
-      playwrightcapture
-      pydantic
-      redis
-      requests
-      ua-parser
-    ]
-    ++ playwrightcapture.optional-dependencies.recaptcha
-    ++ redis.optional-dependencies.hiredis
-    ++ ua-parser.optional-dependencies.regex
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
+  dependencies = [
+    defang
+    dnspython
+    playwrightcapture
+    pydantic
+    redis
+    requests
+    ua-parser
+  ]
+  ++ playwrightcapture.optional-dependencies.recaptcha
+  ++ redis.optional-dependencies.hiredis
+  ++ ua-parser.optional-dependencies.regex
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
+  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   # Module has no tests
   doCheck = false;

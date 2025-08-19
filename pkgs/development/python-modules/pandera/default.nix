@@ -1,58 +1,70 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  multimethod,
+  setuptools-scm,
+
+  # dependencies
   numpy,
   packaging,
   pandas,
   pydantic,
   typeguard,
+  typing-extensions,
   typing-inspect,
-  wrapt,
-  # test
-  joblib,
-  pyarrow,
-  pytestCheckHook,
-  pytest-asyncio,
-  # optional dependencies
+
+  # optional-dependencies
   black,
   dask,
   fastapi,
   geopandas,
   hypothesis,
+  ibis-framework,
   pandas-stubs,
   polars,
   pyyaml,
   scipy,
   shapely,
+
+  # tests
+  duckdb,
+  joblib,
+  pyarrow,
+  pyarrow-hotfix,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.20.4";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-VetLfZlBWok7Mr1jxlHHjDH/D5xEsPFWQtX/hrvobgQ=";
+    hash = "sha256-0YeLeGpunjHRWFvSvz0r2BokM4/eJKXuBajgcGquca4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [
-    multimethod
-    numpy
     packaging
-    pandas
     pydantic
     typeguard
+    typing-extensions
     typing-inspect
-    wrapt
   ];
 
   optional-dependencies =
@@ -87,6 +99,14 @@ buildPythonPackage rec {
           geopandas
           shapely
         ];
+        ibis = [
+          ibis-framework
+          duckdb
+        ];
+        pandas = [
+          numpy
+          pandas
+        ];
         polars = [ polars ];
       };
     in
@@ -97,22 +117,33 @@ buildPythonPackage rec {
     pytest-asyncio
     joblib
     pyarrow
-  ] ++ optional-dependencies.all;
+    pyarrow-hotfix
+  ]
+  ++ optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
-    "tests/core/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
+    "tests/pandas/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
     "tests/modin" # requires modin, not in nixpkgs
-    "tests/mypy/test_static_type_checking.py" # some typing failures
+    "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
     "tests/pyspark" # requires spark
+
+    # KeyError: 'dask'
+    "tests/dask/test_dask.py::test_series_schema"
+    "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # OOM error on ofborg:
-    "test_engine_geometry_coerce_crs"
-    # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
-    "test_schema_dtype_crs_with_coerce"
-  ];
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # OOM error on ofborg:
+      "test_engine_geometry_coerce_crs"
+      # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
+      "test_schema_dtype_crs_with_coerce"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # AssertionError: assert DataType(Sparse[float64, nan]) == DataType(Sparse[float64, nan])
+      "test_legacy_default_pandas_extension_dtype"
+    ];
 
   pythonImportsCheck = [
     "pandera"
@@ -125,7 +156,7 @@ buildPythonPackage rec {
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";
-    changelog = "https://github.com/unionai-oss/pandera/releases/tag/v${version}";
+    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

@@ -8,6 +8,7 @@
   pytestCheckHook,
   setuptools,
   starlette,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,16 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-vsYt1q8QEDmEXjd8dlzHr85Fz3YAjPowS+oBWYGbG1o=";
   };
+
+  patches = [
+    # Fix tests failing with httpx>=0.28
+    # https://github.com/abersheeran/baize/pull/74
+    # FIXME: Remove in next release
+    (fetchpatch {
+      url = "https://github.com/abersheeran/baize/commit/40dc83bc03b4e5acd5155917be3a481e6494530e.patch";
+      hash = "sha256-z4jb4iwo51WIPAAECiM4kPThpHcrzy3349gm/orgoq8=";
+    })
+  ];
 
   build-system = [
     pdm-pep517

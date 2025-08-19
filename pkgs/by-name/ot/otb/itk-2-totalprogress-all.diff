@@ -1,0 +1,9 @@
+diff -burN ITK-5.3.0.orig/Modules/Filtering/MathematicalMorphology/include/itkVanHerkGilWermanErodeDilateImageFilter.hxx ITK-5.3.0/Modules/Filtering/MathematicalMorphology/include/itkVanHerkGilWermanErodeDilateImageFilter.hxx
+--- ITK-5.3.0.orig/Modules/Filtering/MathematicalMorphology/include/itkVanHerkGilWermanErodeDilateImageFilter.hxx	2024-08-23 17:54:36.000000000 +0200
++++ ITK-5.3.0/Modules/Filtering/MathematicalMorphology/include/itkVanHerkGilWermanErodeDilateImageFilter.hxx	2024-08-23 16:45:46.316235664 +0200
+@@ -21,4 +21,4 @@
+#include "itkImageRegionIterator.h"
+
+#include "itkVanHerkGilWermanUtilities.h"
+-
++#include "itkTotalProgressReporter.h"

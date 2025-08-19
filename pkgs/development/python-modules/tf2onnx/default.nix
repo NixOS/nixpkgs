@@ -2,29 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  # runtime dependencies
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  flatbuffers,
   numpy,
   onnx,
+  onnxruntime,
+  protobuf,
   requests,
   six,
-  flatbuffers,
-  protobuf,
   tensorflow,
-  # check dependencies
-  pytestCheckHook,
-  graphviz,
-  parameterized,
-  pytest-cov-stub,
-  pyyaml,
-  timeout-decorator,
-  onnxruntime,
-  keras,
 }:
 
 buildPythonPackage rec {
   pname = "tf2onnx";
   version = "1.16.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
@@ -38,49 +34,36 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner'" ""
   '';
 
-  pythonRelaxDeps = [ "flatbuffers" ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
+    flatbuffers
     numpy
     onnx
+    onnxruntime
+    protobuf
     requests
     six
-    flatbuffers
-    protobuf
     tensorflow
-    onnxruntime
   ];
 
   pythonImportsCheck = [ "tf2onnx" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    graphviz
-    parameterized
-    pytest-cov-stub
-    pyyaml
-    timeout-decorator
-    keras
-  ];
+  # All tests fail at import with:
+  # AttributeError: `...` is not available with Keras 3.
+  doCheck = false;
 
-  # TODO investigate the failures
-  disabledTestPaths = [
-    "tests/test_backend.py"
-    "tests/test_einsum_helper.py"
-    "tests/test_einsum_optimizers.py"
-  ];
-
-  disabledTests = [ "test_profile_conversion_time" ];
-
-  meta = with lib; {
+  meta = {
     description = "Convert TensorFlow, Keras, Tensorflow.js and Tflite models to ONNX";
     homepage = "https://github.com/onnx/tensorflow-onnx";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    # Duplicated `protobuf` in the derivation:
-    # - version 4.24.4 (from onnx), the default version of protobuf in nixpkgs
-    # - version 4.21.12 (from tensorflow), pinned as such because tensorflow is outdated and does
-    #   not support more recent versions of protobuf
-    broken = true;
+    changelog = "https://github.com/onnx/tensorflow-onnx/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

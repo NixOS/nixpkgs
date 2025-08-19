@@ -73,7 +73,7 @@ let
       ])
       ++ lib.flatten (lib.attrValues optional-dependencies)
       ++ [ versionCheckHook ];
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
 
     disabledTests = [
       # Test data not found

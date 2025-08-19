@@ -6,20 +6,21 @@
   libxkbcommon,
   wayland,
   libGL,
+  dav1d,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wpaperd";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "danyspin97";
     repo = "wpaperd";
     rev = version;
-    hash = "sha256-eCD+eNdiVWLEmpkt0EaID534t6eE2OIVCgWMie5kbFE=";
+    hash = "sha256-mBdrOmS+e+Npei5+RmtbTkBCGR8L5O83hulNU1z0Akk=";
   };
 
-  cargoHash = "sha256-BlndjwvVYUaotCMKkArZ4EtFTLVcVhPDiY2QBnc5NUo=";
+  cargoHash = "sha256-d8jzoNCn9J36SE4tQZ1orgOfFGbhVtHaaO940b3JxmQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,6 +29,11 @@ rustPlatform.buildRustPackage rec {
     wayland
     libGL
     libxkbcommon
+    dav1d
+  ];
+
+  buildFeatures = [
+    "avif"
   ];
 
   meta = with lib; {

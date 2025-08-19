@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "protoc-gen-twirp_typescript";
-  version = "unstable-2022-08-14";
+  version = "0-unstable-2022-08-14";
 
   src = fetchFromGitHub {
     owner = "larrymyers";

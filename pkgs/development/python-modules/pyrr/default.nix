@@ -6,7 +6,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyrr";
   version = "unstable-2022-07-22";
   format = "setuptools";

@@ -58,23 +58,6 @@ let
                           Path to use for the pid file.
                         '';
                       };
-
-                      template = lib.mkOption {
-                        default = null;
-                        type = with types; nullOr (listOf (attrsOf anything));
-                        description =
-                          let
-                            upstreamDocs =
-                              if flavour == "vault-agent" then
-                                "https://developer.hashicorp.com/vault/docs/agent/template"
-                              else
-                                "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#templates";
-                          in
-                          ''
-                            Template section of ${flavour}.
-                            Refer to <${upstreamDocs}> for supported values.
-                          '';
-                      };
                     };
                   };
 
@@ -125,7 +108,7 @@ let
         Group = instance.group;
         RuntimeDirectory = flavour;
         ExecStart = "${lib.getExe instance.package} ${
-          lib.optionalString ((lib.getName instance.package) == "vault") "agent"
+          lib.optionalString (flavour == "vault-agent") "agent"
         } -config ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";

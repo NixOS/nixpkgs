@@ -13,6 +13,12 @@
   qt6Packages,
   qmqtt,
   xz,
+  sdbus-cpp_2,
+  plutovg,
+  lunasvg,
+  nanopb,
+  linalg,
+  stb,
 }:
 
 let
@@ -23,13 +29,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hyperhdr";
-  version = "20.0.0.0";
+  version = "21.0.0.0";
 
   src = fetchFromGitHub {
     owner = "awawa-dev";
     repo = "HyperHDR";
     tag = "v${version}";
-    hash = "sha256-agIWtDlMwjD0sGX2ntFwqROzUsl8tY3nRbmFvvOVh4o=";
+    hash = "sha256-CSggawgUPkpeADc8VXs5FA+ubZAtrtTu0qYgIWA0V/c=";
   };
 
   nativeBuildInputs = [
@@ -38,23 +44,44 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
+  patches = [
+    # Allow completely unvendoring hyperhdr
+    # This can be removed on the next hyperhdr release
+    ./unvendor.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace sources/sound-capture/linux/SoundCaptureLinux.cpp \
+      --replace-fail "libasound.so.2" "${lib.getLib alsa-lib}/lib/libasound.so.2"
+  '';
+
   cmakeFlags = [
     "-DPLATFORM=linux"
-    (cmakeBool "USE_SYSTEM_MQTT_LIBS" true)
     (cmakeBool "USE_SYSTEM_FLATBUFFERS_LIBS" true)
+    (cmakeBool "USE_SYSTEM_LUNASVG_LIBS" true)
     (cmakeBool "USE_SYSTEM_MBEDTLS_LIBS" true)
+    (cmakeBool "USE_SYSTEM_MQTT_LIBS" true)
+    (cmakeBool "USE_SYSTEM_NANOPB_LIBS" true)
+    (cmakeBool "USE_SYSTEM_SDBUS_CPP_LIBS" true)
+    (cmakeBool "USE_SYSTEM_STB_LIBS" true)
   ];
 
   buildInputs = [
     alsa-lib
     flatbuffers
     libjpeg_turbo
-    mdns
+    linalg
+    lunasvg
     mbedtls
+    mdns
+    nanopb
     pipewire
+    plutovg
     qmqtt
     qt6Packages.qtbase
     qt6Packages.qtserialport
+    sdbus-cpp_2
+    stb
     xz
   ];
 
@@ -63,7 +90,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awawa-dev/HyperHDR";
     changelog = "https://github.com/awawa-dev/HyperHDR/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [
+      hexa
+      eymeric
+    ];
     mainProgram = "hyperhdr";
     platforms = platforms.linux;
   };

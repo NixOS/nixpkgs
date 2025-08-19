@@ -8,18 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lianad";
-  version = "8.0"; # keep in sync with liana
+  version = "12.0"; # keep in sync with liana
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
     rev = "v${version}";
-    hash = "sha256-2aIaRZNIRgFdA+NVnzOkEE3kYA15CoNBrsNGBhIz0nU=";
+    hash = "sha256-TZUNYr7p4P/++eX9ZNU/d1IurPrkZn/PJmJOsB01VMY=";
   };
 
-  cargoHash = "sha256-/EkDAZPNka+vRWsAo4i/65lufUu8N/m8cfBsOInjaxQ=";
+  cargoHash = "sha256-Hb5icOKgQiDzFLWwUfkwXcr1vn80QcAr+fKwG37PkYc=";
 
   buildInputs = [ udev ];
+
+  buildAndTestSubdir = "lianad";
 
   postInstall = ''
     install -Dm0644 ./contrib/lianad_config_example.toml $out/etc/liana/config.toml

@@ -1,0 +1,28 @@
+From 57acb7c26d809cf864ec439b8bcd6364702022d5 Mon Sep 17 00:00:00 2001
+From: Nate Prewitt <nate.prewitt@gmail.com>
+Date: Wed, 25 Sep 2024 08:03:20 -0700
+Subject: [PATCH] Only use hostname to do netrc lookup instead of netloc
+
+---
+ src/requests/utils.py | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/src/requests/utils.py b/src/requests/utils.py
+index 699683e5d9..8a307ca8a0 100644
+--- a/src/requests/utils.py
++++ b/src/requests/utils.py
+@@ -236,13 +236,7 @@ def get_netrc_auth(url, raise_errors=False):
+             return
+ 
+         ri = urlparse(url)
+-
+-        # Strip port numbers from netloc. This weird `if...encode`` dance is
+-        # used for Python 3.2, which doesn't support unicode literals.
+-        splitstr = b":"
+-        if isinstance(url, str):
+-            splitstr = splitstr.decode("ascii")
+-        host = ri.netloc.split(splitstr)[0]
++        host = ri.hostname
+ 
+         try:
+             _netrc = netrc(netrc_path).authenticators(host)

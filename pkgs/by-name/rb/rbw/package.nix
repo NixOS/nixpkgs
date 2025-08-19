@@ -31,11 +31,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ebLbdIF+BybK7ssNtZacGWmAEwdNZh8b94QYgvcwzmM=";
   };
 
-  cargoHash = "sha256-230jJr2EQua9iI4jz+LxrTZn4TtVAsmPYB8JMLAylzc=";
+  cargoHash = "sha256-xDb4shDHCbd0yuTSAt80i1aqyuhpkfd/fYF98CfXdcM=";
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ bash ]; # for git-credential-rbw
 
@@ -44,40 +45,39 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
-  postInstall =
-    ''
-      install -Dm755 -t $out/bin bin/git-credential-rbw
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd rbw \
-        --bash <($out/bin/rbw gen-completions bash) \
-        --fish <($out/bin/rbw gen-completions fish) \
-        --zsh <($out/bin/rbw gen-completions zsh)
-    ''
-    + lib.optionalString withFzf ''
-      install -Dm755 -t $out/bin bin/rbw-fzf
-      substituteInPlace $out/bin/rbw-fzf \
-        --replace fzf ${fzf}/bin/fzf \
-        --replace perl ${perl}/bin/perl
-    ''
-    + lib.optionalString withRofi ''
-      install -Dm755 -t $out/bin bin/rbw-rofi
-      substituteInPlace $out/bin/rbw-rofi \
-        --replace rofi ${rofi}/bin/rofi \
-        --replace xclip ${xclip}/bin/xclip
-    ''
-    + lib.optionalString withPass ''
-      install -Dm755 -t $out/bin bin/pass-import
-      substituteInPlace $out/bin/pass-import \
-        --replace pass ${pass}/bin/pass
-    '';
+  postInstall = ''
+    install -Dm755 -t $out/bin bin/git-credential-rbw
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rbw \
+      --bash <($out/bin/rbw gen-completions bash) \
+      --fish <($out/bin/rbw gen-completions fish) \
+      --zsh <($out/bin/rbw gen-completions zsh)
+  ''
+  + lib.optionalString withFzf ''
+    install -Dm755 -t $out/bin bin/rbw-fzf
+    substituteInPlace $out/bin/rbw-fzf \
+      --replace fzf ${fzf}/bin/fzf \
+      --replace perl ${perl}/bin/perl
+  ''
+  + lib.optionalString withRofi ''
+    install -Dm755 -t $out/bin bin/rbw-rofi
+    substituteInPlace $out/bin/rbw-rofi \
+      --replace rofi ${rofi}/bin/rofi \
+      --replace xclip ${xclip}/bin/xclip
+  ''
+  + lib.optionalString withPass ''
+    install -Dm755 -t $out/bin bin/pass-import
+    substituteInPlace $out/bin/pass-import \
+      --replace pass ${pass}/bin/pass
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial command line client for Bitwarden";
     homepage = "https://crates.io/crates/rbw";
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
     mainProgram = "rbw";
   };
 }

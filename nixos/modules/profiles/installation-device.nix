@@ -1,23 +1,28 @@
 # Provide a basic configuration for installation devices like CDs.
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 {
-  imports =
-    [ # Enable devices which are usually scanned, because we don't know the
-      # target system.
-      ../installer/scan/detected.nix
-      ../installer/scan/not-detected.nix
+  imports = [
+    # Enable devices which are usually scanned, because we don't know the
+    # target system.
+    ../installer/scan/detected.nix
+    ../installer/scan/not-detected.nix
 
-      # Allow "nixos-rebuild" to work properly by providing
-      # /etc/nixos/configuration.nix.
-      ./clone-config.nix
+    # Allow "nixos-rebuild" to work properly by providing
+    # /etc/nixos/configuration.nix.
+    ./clone-config.nix
 
-      # Include a copy of Nixpkgs so that nixos-install works out of
-      # the box.
-      ../installer/cd-dvd/channel.nix
-    ];
+    # Include a copy of Nixpkgs so that nixos-install works out of
+    # the box.
+    ../installer/cd-dvd/channel.nix
+  ];
 
   config = {
     system.nixos.variant_id = lib.mkDefault "installer";
@@ -31,7 +36,11 @@ with lib;
     # Use less privileged nixos user
     users.users.nixos = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "video" ];
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        "video"
+      ];
       # Allow the graphical user to login without password
       initialHashedPassword = "";
     };
@@ -59,10 +68,9 @@ with lib;
       with `passwd` (prefix with `sudo` for "root"), or add your public key to
       /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
 
-      If you need a wireless connection, type
-      `sudo systemctl start wpa_supplicant` and configure a
-      network using `wpa_cli`. See the NixOS manual for details.
-    '' + optionalString config.services.xserver.enable ''
+      To set up a wireless connection, run `nmtui`.
+    ''
+    + optionalString config.services.xserver.enable ''
 
       Type `sudo systemctl start display-manager' to
       start the graphical user interface.
@@ -78,10 +86,8 @@ with lib;
       settings.PermitRootLogin = mkDefault "yes";
     };
 
-    # Enable wpa_supplicant, but don't start it by default.
-    networking.wireless.enable = mkDefault true;
-    networking.wireless.userControlled.enable = true;
-    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
+    # Provide networkmanager for easy network configuration.
+    networking.networkmanager.enable = true;
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
@@ -96,16 +102,16 @@ with lib;
     boot.kernel.sysctl."vm.overcommit_memory" = "1";
 
     # To speed up installation a little bit, include the complete
-    # stdenv in the Nix store on the CD.
-    system.extraDependencies = with pkgs;
+    # stdenvNoCC in the Nix store on the CD.
+    system.extraDependencies =
+      with pkgs;
       [
-        stdenv
         stdenvNoCC # for runCommand
         busybox
-        jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-      ];
+      ]
+      ++ jq.all; # for closureInfo
 
     boot.swraid.enable = true;
     # remove warning about unset mail

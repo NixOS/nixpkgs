@@ -1,0 +1,63 @@
+diff --git a/public/utils.js b/public/utils.js
+index c5963e41..30f72965 100644
+--- a/public/utils.js
++++ b/public/utils.js
+@@ -17,7 +17,7 @@ const osShortName = (function () {
+ 
+ export function iconsPath() {
+   if (!app.isPackaged) {
+-    return path.join(__dirname, "..", "resources", osShortName, "icons");
++    return path.join(__dirname, "..", "..", "icons");
+   }
+ 
+   return path.join(process.resourcesPath, "icons");
+@@ -25,47 +25,14 @@ export function iconsPath() {
+ 
+ export function publicPath() {
+   if (!app.isPackaged) {
+-    return path.join(__dirname, "..", "public");
++    return path.join(__dirname, "..", "..", "public");
+   }
+ 
+   return process.resourcesPath;
+ }
+ 
+ export function defaultServerBinary() {
+-  if (!app.isPackaged) {
+-    return {
+-      mac: path.join(
+-        __dirname,
+-        "..",
+-        "..",
+-        "dist",
+-        "kopia_darwin_amd64",
+-        "kopia",
+-      ),
+-      win: path.join(
+-        __dirname,
+-        "..",
+-        "..",
+-        "dist",
+-        "kopia_windows_amd64",
+-        "kopia.exe",
+-      ),
+-      linux: path.join(
+-        __dirname,
+-        "..",
+-        "..",
+-        "dist",
+-        "kopia_linux_amd64",
+-        "kopia",
+-      ),
+-    }[osShortName];
+-  }
+-
+-  return {
+-    mac: path.join(process.resourcesPath, "server", "kopia"),
+-    win: path.join(process.resourcesPath, "server", "kopia.exe"),
+-    linux: path.join(process.resourcesPath, "server", "kopia"),
+-  }[osShortName];
++  return "KOPIA";
+ }
+ export function selectByOS(x) {
+   return x[osShortName];

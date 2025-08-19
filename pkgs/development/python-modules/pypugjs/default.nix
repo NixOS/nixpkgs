@@ -6,6 +6,7 @@
   fetchFromGitHub,
   jinja2,
   mako,
+  poetry-core,
   pyramid,
   pyramid-mako,
   pytestCheckHook,
@@ -15,19 +16,27 @@
 
 buildPythonPackage rec {
   pname = "pypugjs";
-  version = "5.10.1";
-  format = "setuptools";
+  version = "5.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kakulukia";
     repo = "pypugjs";
     tag = "v${version}";
-    hash = "sha256-W+EVNxT2OimNENHe4lJDn6Wm1EbBysGuCD3/Wkdew/U=";
+    hash = "sha256-JHZzyEilCjpZFIrl5kk1oJ4C/vgQTfVoRRGBK+DuHAE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+  ];
+
+  dependencies = [
     six
     charset-normalizer
+  ];
+
+  pythonRelaxDeps = [
+    "charset-normalizer"
   ];
 
   nativeCheckInputs = [
@@ -41,6 +50,10 @@ buildPythonPackage rec {
   ];
 
   pytestCheckFlags = [ "pypugjs/testsuite" ];
+
+  pythonImportsCheck = [
+    "pypugjs"
+  ];
 
   meta = with lib; {
     description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates";

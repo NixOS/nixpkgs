@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.12.2";
+  version = "5.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "neogeny";
     repo = "TatSu";
     tag = "v${version}";
-    hash = "sha256-FRNQz3JtsFw1nch+ffGMzZF1+gq7XifPok9qsUiRPs8=";
+    hash = "sha256-iZtYqPvQxXl6SFG2An7dN3KxaxCTvAiAkeeuXUhLuF0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://tatsu.readthedocs.io/";
-    changelog = "https://github.com/neogeny/TatSu/releases/tag/v${version}";
+    changelog = "https://github.com/neogeny/TatSu/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = [ ];
   };

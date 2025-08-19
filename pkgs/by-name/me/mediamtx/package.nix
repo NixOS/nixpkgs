@@ -1,44 +1,46 @@
 {
   lib,
+  buildGoModule,
   fetchFromGitHub,
   fetchurl,
-  buildGoModule,
   nixosTests,
 }:
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.19/dist/hls.min.js";
-    hash = "sha256-KTlFB7LXpglQPzIzKajKy3DJRGDURwP4hcmRm7Oy/a8=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.6.9/dist/hls.min.js";
+    hash = "sha256-GObcOPuwxxMg0WOtl5BahSg9A3ds1IcCP+DPGZ8c27I=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.11.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8/RTdcq8r5yMu586iDNyC/Cfi0PydX7QkU52noQR18Y=";
+    repo = "mediamtx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I1oKzovSv6hf2/lr2E5pRSqHV/pVoskNwn+gHRz8yv8=";
   };
 
-  vendorHash = "sha256-Laos5sTQjtweC4GLuQuK2J/trObPlCmoHSUw4shVP4k=";
+  vendorHash = "sha256-5wSdbg7EAdvCUfIKxuX1aGihzHcwFM6Fiu/3eU1dMEY=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
-    echo "v${version}" > internal/core/VERSION
+    echo "v${finalAttrs.version}" > internal/core/VERSION
 
     # disable binary-only rpi camera support
-    substituteInPlace internal/staticsources/rpicamera/camera_disabled.go \
+    substituteInPlace internal/staticsources/rpicamera/camera_other.go \
       --replace-fail '!linux || (!arm && !arm64)' 'linux || !linux'
-    substituteInPlace internal/staticsources/rpicamera/{component,camera,params_serialize,pipe}.go \
+    substituteInPlace internal/staticsources/rpicamera/{params_serialize,pipe}.go \
       --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/component_32.go \
+    substituteInPlace internal/staticsources/rpicamera/camera_arm32_.go \
       --replace-fail 'linux && arm' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/component_64.go \
+    substituteInPlace internal/staticsources/rpicamera/camera_arm64_.go \
       --replace-fail 'linux && arm64' 'linux && !linux'
+    substituteInPlace internal/staticsources/rpicamera/camera_arm_.go \
+      --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
   '';
 
   subPackages = [ "." ];
@@ -50,11 +52,11 @@ buildGoModule rec {
     inherit (nixosTests) mediamtx;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SRT, WebRTC, RTSP, RTMP, LL-HLS media server and media proxy";
-    inherit (src.meta) homepage;
-    license = licenses.mit;
+    inherit (finalAttrs.src.meta) homepage;
+    license = lib.licenses.mit;
     mainProgram = "mediamtx";
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

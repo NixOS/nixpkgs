@@ -45,17 +45,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  propagatedBuildInputs =
-    [
-      libuv
-      speexdsp
-    ]
-    ++ lib.optional openfecSupport openfec
-    ++ lib.optional libunwindSupport libunwind
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional opensslSupport openssl
-    ++ lib.optional soxSupport sox
-    ++ lib.optional libsndfileSupport libsndfile;
+  propagatedBuildInputs = [
+    libuv
+    speexdsp
+  ]
+  ++ lib.optional openfecSupport openfec
+  ++ lib.optional libunwindSupport libunwind
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional opensslSupport openssl
+  ++ lib.optional soxSupport sox
+  ++ lib.optional libsndfileSupport libsndfile;
 
   sconsFlags =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -68,6 +67,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!libunwindSupport) "--disable-libunwind"
     ++ lib.optional (!pulseaudioSupport) "--disable-pulseaudio"
     ++ lib.optional (!libsndfileSupport) "--disable-sndfile"
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD "--platform=unix"
     ++ (
       if (!openfecSupport) then
         [ "--disable-openfec" ]
@@ -77,6 +77,11 @@ stdenv.mkDerivation rec {
           "--with-openfec-includes=${openfec.dev}/include"
         ]
     );
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700 -D__BSD_VISIBLE";
+    NIX_LDFLAGS = "-lpthread";
+  };
 
   meta = with lib; {
     description = "Roc is a toolkit for real-time audio streaming over the network";

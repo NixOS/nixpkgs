@@ -12,30 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unimap";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = "unimap";
     rev = version;
-    hash = "sha256-7UbzE5VXycjo7KNpPe2oqwyZDT4Vk8rQZ6HXT1q9Cw4=";
+    hash = "sha256-QQZNeZUB6aHnYz7B7uqL8I9gkk4JvQJ4TD9NxECd6JA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "trust-dns-proto-0.20.4" = "sha256-+oAjyyTXbKir8e5kn8CUmQy5qmzQ47ryvBBdZtzj1TY=";
-    };
-  };
+  cargoHash = "sha256-1haSdmhK14XvKunSbj9jPTuHJK5tWdzdFAqxhg2TI0s=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
+    pkg-config
+  ];
 
   # only depends on openssl on aarch/arm linux
   buildInputs = lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [

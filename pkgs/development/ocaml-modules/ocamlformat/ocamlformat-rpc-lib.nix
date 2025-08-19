@@ -16,7 +16,7 @@ let
   inherit (callPackage ./generic.nix (args // version_arg)) src version;
 
 in
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocamlformat-rpc-lib";
   inherit src version;
 

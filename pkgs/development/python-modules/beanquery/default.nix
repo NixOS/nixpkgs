@@ -7,18 +7,18 @@
   python-dateutil,
   pytestCheckHook,
   setuptools,
-  tatsu,
+  tatsu-lts,
 }:
 buildPythonPackage rec {
   pname = "beanquery";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beanquery";
     tag = "v${version}";
-    hash = "sha256-1+KTUvnqPceRbzY1OZwOSQdK7f78K9kSwtQfI1SUIa8=";
+    hash = "sha256-O7+WCF7s50G14oNTvJAOTvgSoNR9fWcn/m1jv7RHmK8=";
   };
 
   build-system = [ setuptools ];
@@ -27,15 +27,12 @@ buildPythonPackage rec {
     beancount
     click
     python-dateutil
-    tatsu
+    tatsu-lts
   ];
-
-  pythonRelaxDeps = [ "tatsu" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
-    "beancount"
     "beanquery"
   ];
 

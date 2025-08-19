@@ -45,13 +45,12 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      gtk3
-      pango
-    ]
-    ++ lib.optional notifySupport libnotify
-    ++ lib.optional networkSupport networkmanager;
+  buildInputs = [
+    gtk3
+    pango
+  ]
+  ++ lib.optional notifySupport libnotify
+  ++ lib.optional networkSupport networkmanager;
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -96,12 +95,12 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       albakham
       sumnerevans
     ];

@@ -2,42 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pkg-config,
   gsl,
   swig,
+  meson-python,
   numpy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
     tag = "v${version}";
-    hash = "sha256-ym7wCCaqY1y4Q7LDaNfGoao//DcG+H/6Fmg0YZUThOU=";
+    hash = "sha256-1aAc2qGVlClnsw70D1QqPbSsyij0JNgfIXsLzelYx3E=";
   };
 
-  # error: no member named 'n' in 'gsl_bspline_workspace'
-  postPatch = lib.optionalString (lib.versionAtLeast gsl.version "2.8") ''
-    substituteInPlace src/bspline/bspline.ic \
-      --replace-fail "self->w->n" "self->w->ncontrol"
-    substituteInPlace swig_src/bspline_wrap.c \
-      --replace-fail "self->w->n;" "self->w->ncontrol;"
-  '';
-
   nativeBuildInputs = [
-    gsl.dev
+    pkg-config
     swig
   ];
-  buildInputs = [ gsl ];
-  dependencies = [ numpy ];
+  buildInputs = [
+    gsl
+  ];
 
-  preBuild = ''
-    python setup.py build_ext --inplace
-  '';
+  build-system = [
+    meson-python
+    numpy
+  ];
+  dependencies = [
+    numpy
+  ];
 
   preCheck = ''
     cd tests
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for GNU Scientific Library";
     homepage = "https://github.com/pygsl/pygsl";
-    changelog = "https://github.com/pygsl/pygsl/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ amesgen ];
   };

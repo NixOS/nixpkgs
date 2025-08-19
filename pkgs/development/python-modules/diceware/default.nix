@@ -9,28 +9,25 @@
 
 buildPythonPackage rec {
   pname = "diceware";
-  version = "0.10";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srTMm1n1aNLvUb/fn34a+UHSX7j1wl8XAZHburzpZWk=";
+    hash = "sha256-VLaQgJ8MVqswhaGOFaDDgE1KDRJ/OK7wtc9fhZ0PZjk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest_runner'," ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ setuptools ];
+  dependencies = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
-    "-m 'not packaging'"
+    "packaging"
   ];
 
   pythonImportsCheck = [ "diceware" ];

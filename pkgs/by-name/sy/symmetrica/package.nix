@@ -3,10 +3,12 @@
   lib,
   fetchFromGitLab,
   autoreconfHook,
+  pkg-config,
 }:
+
 stdenv.mkDerivation rec {
   pname = "symmetrica";
-  version = "3.0.1";
+  version = "3.1.0";
 
   # Fork of the original symmetrica, which can be found here
   # http://www.algorithm.uni-bayreuth.de/en/research/SYMMETRICA/index.html
@@ -16,12 +18,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "symmetrica";
-    rev = version;
-    sha256 = "0wfmrzw82f5i91d7rf24mcdqcj2fmgrgy02pw4pliz7ncwaq14w3";
+    tag = version;
+    hash = "sha256-unaNQfmDcQFUKApka7eEkjceurMnX0FICQXGDbOAOXo=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
   ];
 
   # clang warning: passing arguments to '...' without a prototype is deprecated
@@ -30,11 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of routines for representation theory and combinatorics";
-    license = licenses.isc;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
     homepage = "https://gitlab.com/sagemath/symmetrica";
   };
 }

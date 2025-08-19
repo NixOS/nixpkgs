@@ -38,21 +38,21 @@ let
       );
 
   userUnitConfig = name: cfg': {
-    serviceConfig =
-      {
-        User = if cfg'.user == null then "vdirsyncer" else cfg'.user;
-        Group = if cfg'.group == null then "vdirsyncer" else cfg'.group;
-      }
-      // (optionalAttrs (cfg'.user == null) {
-        DynamicUser = true;
-      })
-      // (optionalAttrs (cfg'.additionalGroups != [ ]) {
-        SupplementaryGroups = cfg'.additionalGroups;
-      })
-      // (optionalAttrs (cfg'.config.statusPath == null) {
-        StateDirectory = "vdirsyncer/${name}";
-        StateDirectoryMode = "0700";
-      });
+    serviceConfig = {
+      User = if cfg'.user == null then "vdirsyncer" else cfg'.user;
+      Group = if cfg'.group == null then "vdirsyncer" else cfg'.group;
+    }
+    // (optionalAttrs (cfg'.user == null) {
+      DynamicUser = true;
+      ProtectHome = true;
+    })
+    // (optionalAttrs (cfg'.additionalGroups != [ ]) {
+      SupplementaryGroups = cfg'.additionalGroups;
+    })
+    // (optionalAttrs (cfg'.config.statusPath == null) {
+      StateDirectory = "vdirsyncer/${name}";
+      StateDirectoryMode = "0700";
+    });
   };
 
   commonUnitConfig = {
@@ -63,7 +63,6 @@ let
       PrivateTmp = true;
       NoNewPrivileges = true;
       ProtectSystem = "strict";
-      ProtectHome = true;
       ProtectKernelTunables = true;
       ProtectKernelModules = true;
       ProtectControlGroups = true;

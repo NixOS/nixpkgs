@@ -9,9 +9,9 @@ body:
         <p align="center">
           <a href="https://nixos.org">
             <picture>
-              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png">
-              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
-              <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="400px" alt="NixOS logo">
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
             </picture>
           </a>
         </p>
@@ -20,7 +20,9 @@ body:
 
         > [!TIP]
         > For instance, if you were filing a build failure against the [`hello`](https://search.nixos.org/packages?channel=unstable&from=0&size=1&buckets=%7B%22package_attr_set%22%3A%5B%22No%20package%20set%22%5D%2C%22package_license_set%22%3A%5B%22GNU%20General%20Public%20License%20v3.0%20or%20later%22%5D%2C%22package_maintainers_set%22%3A%5B%5D%2C%22package_platforms%22%3A%5B%5D%7D&sort=relevance&type=packages&query=hello) package, your title would be as follows:
-        > `Build failure: hello`
+        > ```
+        > Build failure: hello
+        > ```
 
         ---
   - type: "dropdown"
@@ -30,14 +32,13 @@ body:
       description: |
         In what version of Nixpkgs did the build failure occur?
 
-        > [!IMPORTANT]
-        > If you are using an older version, please update to the latest stable version and check if the build failure persists before continuing this report.
-        > If you are purposefully trying to build an ancient version of a package in an older Nixpkgs, please coordinate with the [NixOS Archivists](https://matrix.to/#/#archivists:nixos.org).
+        If you are using an older version, please update to the latest stable version and check if the build failure persists before continuing this report.
+
+        If you are purposefully trying to build an ancient version of a package in an older Nixpkgs, please coordinate with the [NixOS Archivists](https://matrix.to/#/#archivists:nixos.org).
       options:
         - "Please select a version."
-        - "- Unstable (25.05)"
-        - "- Stable (24.11)"
-        - "- Previous Stable (24.05)"
+        - "- Unstable (25.11)"
+        - "- Stable (25.05)"
       default: 0
     validations:
       required: true
@@ -61,12 +62,14 @@ body:
           You can still open a build failure report, but please say '**No, Hydra cannot reproduce this build failure.**' below.
         - If there's a <img src="https://raw.githubusercontent.com/NixOS/hydra/refs/heads/master/src/root/static/images/emojione-question-2754.svg" width="20px" align="top" alt="Gray Question Mark"> icon near the package entry, say '**Hydra is currently rebuilding this package.**'
         - If there's a <img src="https://raw.githubusercontent.com/NixOS/hydra/refs/heads/master/src/root/static/images/emojione-stopsign-1f6d1.svg" width="20px" align="top" alt="Red Stop Sign"> icon near the package entry, then the build job was stopped manually. If this occurs, please coordinate with the [Infrastructure Team](https://matrix.to/#/#infra:nixos.org), and say '**The last build job was manually cancelled.**'
+        - If Hydra isn't supposed to build the package at all, say '**Hydra doesn’t try to build the package.**'
       options:
         - "Please select the Hydra Status."
         - "Yes, Hydra can reproduce this build failure."
         - "No, Hydra cannot reproduce this build failure."
         - "Hydra is currently rebuilding this package."
         - "The last build job was manually cancelled."
+        - "Hydra doesn’t try to build the package."
       default: 0
     validations:
       required: true
@@ -107,7 +110,8 @@ body:
       label: "Notify maintainers"
       description: |
         Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
-      value: |
+      value: |2
+
 
         ---
 

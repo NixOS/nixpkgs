@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "traefik-certs-dumper";
-  version = "2.9.3";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "ldez";
-    repo = pname;
+    repo = "traefik-certs-dumper";
     rev = "v${version}";
-    sha256 = "sha256-krJ2oPz72mqlmJxQTZaFbyDtUaprRLJGZMSS7ZuvPfA=";
+    sha256 = "sha256-zXbtabh5ZziELZHzvYisXETPUmhHAVo6sMuF4O3crBY=";
   };
 
-  vendorHash = "sha256-CmqeIQk7lAENMDNWAG7XylnXRXvgyRN5GMt0ilwJX0U=";
+  vendorHash = "sha256-WpYxI+7qBYibojPtYlWmDrmJYlRlVwTaqCMI5Vzh1RI=";
   excludedPackages = "integrationtest";
 
   meta = with lib; {
-    description = "dump ACME data from traefik to certificates";
+    description = "Dump ACME data from traefik to certificates";
     homepage = "https://github.com/ldez/traefik-certs-dumper";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];

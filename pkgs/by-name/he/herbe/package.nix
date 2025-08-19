@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dudik";
-    repo = pname;
+    repo = "herbe";
     rev = version;
     sha256 = "0358i5jmmlsvy2j85ij7m1k4ar2jr5lsv7y1c58dlf9710h186cv";
   };
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     libX11
     libXft
     freetype
-  ] ++ extraLibs;
+  ]
+  ++ extraLibs;
 
   makeFlags = [ "PREFIX=$(out)" ];
 

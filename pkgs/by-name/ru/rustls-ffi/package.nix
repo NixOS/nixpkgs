@@ -8,7 +8,6 @@
   validatePkgConfig,
   rust,
   libiconv,
-  darwin,
   curl,
   apacheHttpd,
   testers,
@@ -16,24 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rustls-ffi";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "rustls-ffi";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZKAyKcKwhnPE6PrfBFjLJKkTlGbdLcmW1EP/xSv2cpM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m92kWH+J8wuGmI0msrp2aginY1K51iqgi3+u4ncmfts=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-IaOhQfDEgLhGmes0xzhLVym29aP691TY0EXdOIgXEMA=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-gqc6en59QQpD14hOgRuGEPWLvrkyGn9tPR9vQmRAxIg=";
   };
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeBuildInputs = [

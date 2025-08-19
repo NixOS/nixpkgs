@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  boost,
+  boost186,
   fetchFromGitHub,
   libpcap,
   ndn-cxx,
@@ -35,18 +35,18 @@ stdenv.mkDerivation rec {
     sphinx
     wafHook
   ];
-  buildInputs =
-    [
-      libpcap
-      ndn-cxx
-      openssl
-    ]
-    ++ lib.optional withWebSocket websocketpp
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [
+    libpcap
+    ndn-cxx
+    openssl
+  ]
+  ++ lib.optional withWebSocket websocketpp
+  ++ lib.optional withSystemd systemd;
   wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
-  ] ++ lib.optional (!withWebSocket) "--without-websocket";
+    "--boost-includes=${boost186.dev}/include"
+    "--boost-libs=${boost186.out}/lib"
+  ]
+  ++ lib.optional (!withWebSocket) "--without-websocket";
 
   meta = with lib; {
     homepage = "https://named-data.net/";

@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gcab";
     homepage = "https://gitlab.gnome.org/GNOME/gcab";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

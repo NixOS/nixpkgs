@@ -1,9 +1,9 @@
 {
   "invidious": {
-    "hash": "sha256-O5Uv5Qat7Is/0gk0HVi8Hr2UPMLXQw7AwYnjOFaaTP8=",
-    "version": "2.20241110.0",
-    "date": "2024.11.10",
-    "commit": "5d2dd40b"
+    "hash": "sha256-JXcj5mh0WEetTt91cA+/pgqxNwyIRF+bISOBoHHVZf0=",
+    "version": "2.20250504.0",
+    "date": "2025.05.04",
+    "commit": "aa7de1ed"
   },
   "videojs": {
     "hash": "sha256-jED3zsDkPN8i6GhBBJwnsHujbuwlHdsVpVqa1/pzSH4="

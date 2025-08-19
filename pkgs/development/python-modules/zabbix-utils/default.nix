@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "zabbix-utils";
-  version = "2.0.2";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zabbix";
     repo = "python-zabbix-utils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rRPen/FzWT0cCnXWiSdoybtXeP1pxYqnjq5b0QPVs1I=";
+    tag = "v${version}";
+    hash = "sha256-VEL7vAIodxFdw3XEjL0nSQL49RiaxfZdS+HcYUzxgho=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for zabbix";
     homepage = "https://github.com/zabbix/python-zabbix-utils";
-    changelog = "https://github.com/zabbix/python-zabbix-utils/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/zabbix/python-zabbix-utils/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -63,20 +63,20 @@ stdenv.mkDerivation {
 
   inherit (param) patches;
 
-  createFindlibDestdir = true;
-
-  postPatch =
-    param.postPatchInit
-    + ''
-      substituteInPlace Makefile \
-        --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
-        --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
-    '';
+  postPatch = param.postPatchInit + ''
+    substituteInPlace Makefile \
+      --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
+      --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
+  '';
 
   buildFlags = [
     "all"
     "allopt"
   ];
+
+  preInstall = ''
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
+  '';
 
   postInstall = ''
     ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "kubectl-linstor";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "piraeusdatastore";
     repo = "kubectl-linstor";
     tag = "v${version}";
-    hash = "sha256-1wXhrnQlOIg2mJi6DhHGcb+OxSblDq+V95pZ5bl72R4=";
+    hash = "sha256-Fmy925eGGmXGoIT3EXmZDnHyu6nN7Rkgl2vQOhesqD4=";
   };
 
   vendorHash = "sha256-3PnXB8AfZtgmYEPJuh0fwvG38dtngoS/lxyx3H+rvFs=";

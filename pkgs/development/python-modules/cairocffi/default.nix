@@ -5,7 +5,7 @@
   pythonOlder,
   fetchPypi,
   lib,
-  substituteAll,
+  replaceVars,
   pikepdf,
   pytestCheckHook,
   cairo,
@@ -32,8 +32,7 @@ buildPythonPackage rec {
 
   patches = [
     # OSError: dlopen() failed to load a library: gdk-pixbuf-2.0 / gdk-pixbuf-2.0-0
-    (substituteAll {
-      src = ./dlopen-paths.patch;
+    (replaceVars ./dlopen-paths.patch {
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
       cairo = cairo.out;
       glib = glib.out;
@@ -47,7 +46,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cairo
     cffi
-  ] ++ lib.optional withXcffib xcffib;
+  ]
+  ++ lib.optional withXcffib xcffib;
 
   nativeCheckInputs = [
     numpy
@@ -56,6 +56,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "cairocffi" ];
+
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
 
   meta = with lib; {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";

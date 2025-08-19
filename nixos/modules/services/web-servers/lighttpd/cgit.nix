@@ -57,7 +57,7 @@ in
       description = ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:
-        http://git.zx2c4.com/cgit/tree/cgitrc.5.txt
+        <http://git.zx2c4.com/cgit/tree/cgitrc.5.txt>
       '';
     };
 

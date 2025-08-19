@@ -3,19 +3,26 @@
   stdenv,
   fetchFromGitea,
   bash,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
-  version = "0.23";
+  version = "0.24";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "fabiscafe";
     repo = "game-devices-udev";
-    rev = finalAttrs.version;
-    hash = "sha256-dWWo3qXnxdLP68NuFKM4/Cw5yE6uAsWzj0vZa9UTT0U=";
+    tag = finalAttrs.version;
+    hash = "sha256-b2NBgGpRQ2pQZYQgiRSAt0loAxq1NEByRHVkQQRDOj0=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm444 -t "$out/lib/udev/rules.d" *.rules
@@ -23,17 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
     --replace-fail "/bin/sh" "${bash}/bin/bash"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Udev rules to make supported controllers available with user-grade permissions";
     homepage = "https://codeberg.org/fabiscafe/game-devices-udev";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     longDescription = ''
       These udev rules are intended to be used as a package under 'services.udev.packages'.
       They will not be activated if installed as 'environment.systemPackages' or 'users.user.<user>.packages'.
 
       Additionally, you may need to enable 'hardware.uinput'.
     '';
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keenanweaver ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ keenanweaver ];
   };
 })

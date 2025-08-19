@@ -2,31 +2,42 @@
   lib,
   stdenv,
   fetchzip,
+  makeWrapper,
   perl,
+  perlPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "convmv";
-  version = "2.05";
+  version = "2.06";
 
   outputs = [
-    "out"
+    "bin"
     "man"
+    "out"
   ];
 
   src = fetchzip {
     url = "https://www.j3e.de/linux/convmv/convmv-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ts9xAPRGUoS0XBRTmpb+BlGW1hmGyUs+rQLyUEgiZ54=";
+    hash = "sha256-36UPh+eZBT/J2rkvOcHeqkVKSl4yO9GJp/BxWGDrgGU=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
 
-  buildInputs = [ perl ];
+  buildInputs = [
+    perl
+    perlPackages.EncodeHanExtra
+    perlPackages.EncodeIMAPUTF7
+    perlPackages.EncodeJIS2K
+  ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
+    "PREFIX=${placeholder "bin"}"
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
@@ -37,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   prePatch =
-    lib.optionalString finalAttrs.doCheck ''
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
       tar -xf testsuite.tar
     ''
     + ''
@@ -45,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   dontPatchShebangs = true;
+
+  postFixup = ''
+    wrapProgram "$bin/bin/convmv" --prefix PERL5LIB : "$PERL5LIB"
+  '';
 
   meta = with lib; {
     description = "Converts filenames from one encoding to another";

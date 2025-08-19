@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "walaj";
-    repo = pname;
-    rev = version;
+    repo = "svaba";
+    tag = version;
     sha256 = "1vv5mc9z5d22kgdy7mm27ya5aahnqgkcrskdr2405058ikk9g8kp";
     fetchSubmodules = true;
   };

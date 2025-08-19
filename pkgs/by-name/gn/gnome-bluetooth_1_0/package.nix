@@ -6,6 +6,7 @@
   gnome,
   adwaita-icon-theme,
   meson,
+  mesonEmulatorHook,
   ninja,
   pkg-config,
   gtk3,
@@ -64,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
     python3
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -85,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {

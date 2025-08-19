@@ -1,0 +1,13 @@
+diff --git a/src/config.rs b/src/config.rs
+index f7cd4f32ec..ec454127be 100644
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -120,7 +120,7 @@ impl ManagerConfig {
+             avoid_browser_download: BooleanKey("avoid-browser-download", false).get_value(),
+             language_binding: StringKey(vec!["language-binding"], "").get_value(),
+             selenium_version: StringKey(vec!["selenium-version"], "").get_value(),
+-            avoid_stats: BooleanKey("avoid-stats", false).get_value(),
++            avoid_stats: BooleanKey("avoid-stats", true).get_value(),
+             skip_driver_in_path: BooleanKey("skip-driver-in-path", false).get_value(),
+             skip_browser_in_path: BooleanKey("skip-browser-in-path", false).get_value(),
+         }

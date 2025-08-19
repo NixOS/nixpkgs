@@ -9,15 +9,14 @@ let
   cfg = config.services.victoriametrics;
   settingsFormat = pkgs.formats.yaml { };
 
-  startCLIList =
-    [
-      "${cfg.package}/bin/victoria-metrics"
-      "-storageDataPath=/var/lib/${cfg.stateDir}"
-      "-httpListenAddr=${cfg.listenAddress}"
+  startCLIList = [
+    "${cfg.package}/bin/victoria-metrics"
+    "-storageDataPath=/var/lib/${cfg.stateDir}"
+    "-httpListenAddr=${cfg.listenAddress}"
 
-    ]
-    ++ lib.optionals (cfg.retentionPeriod != null) [ "-retentionPeriod=${cfg.retentionPeriod}" ]
-    ++ cfg.extraOptions;
+  ]
+  ++ lib.optionals (cfg.retentionPeriod != null) [ "-retentionPeriod=${cfg.retentionPeriod}" ]
+  ++ cfg.extraOptions;
   prometheusConfigYml = checkedConfig (
     settingsFormat.generate "prometheusConfig.yaml" cfg.prometheusConfig
   );

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-D2GEOM_BUILD_SHARED=ON"
     # For cross compilation.
-    (lib.cmakeBool "2GEOM_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "2GEOM_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -93,14 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    tests =
-      {
-        inherit inkscape;
-      }
-      # Make sure x86_64-linux -> aarch64-linux cross compilation works
-      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
-        aarch64-cross = pkgsCross.aarch64-multiplatform.lib2geom;
-      };
+    tests = {
+      inherit inkscape;
+    }
+    # Make sure x86_64-linux -> aarch64-linux cross compilation works
+    // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+      aarch64-cross = pkgsCross.aarch64-multiplatform.lib2geom;
+    };
   };
 
   meta = with lib; {

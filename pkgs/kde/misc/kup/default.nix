@@ -20,5 +20,6 @@ mkKdeDerivation rec {
   meta = with lib; {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.pwoelfel ];
+    teams = [ ];
   };
 }

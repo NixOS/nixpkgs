@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   version = "2.15";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
+    owner = "gperftools";
+    repo = "gperftools";
+    rev = "gperftools-${version}";
     sha256 = "sha256-3ibr8AHzo7txX1U+9oOWA60qeeJs/OGeevv+sgBwQa0=";
   };
 
@@ -31,11 +31,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM dynamically linked linux
-  buildInputs =
-    [ perl ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic)
-    ) libunwind;
+  buildInputs = [
+    perl
+  ]
+  ++ lib.optional (
+    stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic)
+  ) libunwind;
 
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558

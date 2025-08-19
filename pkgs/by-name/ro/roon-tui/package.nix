@@ -15,12 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ocPSqj9/xJ2metetn6OY+IEFWysbstPmh2N5Jd8NDPM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "roon-api-0.1.1" = "sha256-aFcS8esfgMxzzhWLeynTRFp1FZj2z6aHIivU/5p+uec=";
-    };
-  };
+  cargoHash = "sha256-+RIKnvMW56mbxLWvPFzT9IenTAFlQDhwrd6I+iFFBwI=";
 
   meta = {
     description = "Roon Remote for the terminal";

@@ -15,7 +15,7 @@ let
     "writer" = "jabcodeWriter";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jabcode-${subproject}";
   version = "unstable-2022-06-17";
   src = fetchFromGitHub {
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     zlib
     libpng
     libtiff
-  ] ++ lib.optionals (subproject != "library") [ jabcode ];
+  ]
+  ++ lib.optionals (subproject != "library") [ jabcode ];
 
   preConfigure = "cd src/${subdir}";
 

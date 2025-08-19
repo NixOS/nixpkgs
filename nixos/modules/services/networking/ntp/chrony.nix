@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -12,12 +17,13 @@ let
   rtcFile = "${stateDir}/chrony.rtc";
 
   configFile = pkgs.writeText "chrony.conf" ''
-    ${concatMapStringsSep "\n" (server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts") cfg.servers}
+    ${concatMapStringsSep "\n" (
+      server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts"
+    ) cfg.servers}
 
-    ${optionalString
-      (cfg.initstepslew.enabled && (cfg.servers != []))
-      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"
-    }
+    ${optionalString (
+      cfg.initstepslew.enabled && (cfg.servers != [ ])
+    ) "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"}
 
     driftfile ${driftFile}
     keyfile ${keyFile}
@@ -30,10 +36,15 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags =
-    [ "-n" "-u" "chrony" "-f" "${configFile}" ]
-    ++ optional cfg.enableMemoryLocking "-m"
-    ++ cfg.extraFlags;
+  chronyFlags = [
+    "-n"
+    "-u"
+    "chrony"
+    "-f"
+    "${configFile}"
+  ]
+  ++ optional cfg.enableMemoryLocking "-m"
+  ++ cfg.extraFlags;
 in
 {
   options = {
@@ -60,7 +71,10 @@ in
 
       serverOption = mkOption {
         default = "iburst";
-        type = types.enum [ "iburst" "offline" ];
+        type = types.enum [
+          "iburst"
+          "offline"
+        ];
         description = ''
           Set option for server directives.
 
@@ -74,8 +88,10 @@ in
 
       enableMemoryLocking = mkOption {
         type = types.bool;
-        default = config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light";
-        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
+        default =
+          config.environment.memoryAllocator.provider != "graphene-hardened"
+          && config.environment.memoryAllocator.provider != "graphene-hardened-light";
+        defaultText = lib.literalExpression ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
         description = ''
           Whether to add the `-m` flag to lock memory.
         '';
@@ -163,20 +179,22 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice vifino ];
+  meta.maintainers = with lib.maintainers; [
+    thoughtpolice
+    vifino
+  ];
 
+  config = mkIf cfg.enable {
     environment.systemPackages = [ chronyPkg ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
 
-    users.users.chrony =
-      {
-        uid = config.ids.uids.chrony;
-        group = "chrony";
-        description = "chrony daemon user";
-        home = stateDir;
-      };
+    users.users.chrony = {
+      uid = config.ids.uids.chrony;
+      group = "chrony";
+      description = "chrony daemon user";
+      home = stateDir;
+    };
 
     services.timesyncd.enable = mkForce false;
 
@@ -185,75 +203,111 @@ in
       enable = lib.mkForce false;
     };
 
-    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
+    systemd.services.systemd-timedated.environment = {
+      SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service";
+    };
 
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 chrony chrony - -"
       "f ${driftFile} 0640 chrony chrony - -"
       "f ${keyFile} 0640 chrony chrony - -"
-    ] ++ lib.optionals cfg.enableRTCTrimming [
+    ]
+    ++ lib.optionals cfg.enableRTCTrimming [
       "f ${rtcFile} 0640 chrony chrony - -"
     ];
 
-    systemd.services.chronyd =
-      {
-        description = "chrony NTP daemon";
+    systemd.services.chronyd = {
+      description = "chrony NTP daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
-        after = [ "network.target" "nss-lookup.target" ];
-        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "time-sync.target" ];
+      before = [ "time-sync.target" ];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
+      conflicts = [
+        "ntpd.service"
+        "systemd-timesyncd.service"
+      ];
 
-        path = [ chronyPkg ];
+      path = [ chronyPkg ];
 
-        unitConfig.ConditionCapability = "CAP_SYS_TIME";
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
+      unitConfig.ConditionCapability = "CAP_SYS_TIME";
+      serviceConfig = {
+        Type = "notify";
+        ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
-          # Proc filesystem
-          ProcSubset = "pid";
-          ProtectProc = "invisible";
-          # Access write directories
-          ReadWritePaths = [ "${stateDir}" ];
-          UMask = "0027";
-          # Capabilities
-          CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_DAC_OVERRIDE" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" "CAP_SYS_RESOURCE" "CAP_SYS_TIME" ];
-          # Device Access
-          DeviceAllow = [ "char-pps rw" "char-ptp rw" "char-rtc rw" ];
-          DevicePolicy = "closed";
-          # Security
-          NoNewPrivileges = true;
-          # Sandboxing
-          ProtectSystem = "full";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = false;
-          PrivateUsers = false;
-          ProtectHostname = true;
-          ProtectClock = false;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-          RestrictNamespaces = true;
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RemoveIPC = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "@clock" "@setuid" "capset" "@chown" ];
-        };
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
+        # Access write directories
+        ReadWritePaths = [ "${stateDir}" ];
+        UMask = "0027";
+        # Capabilities
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_NET_BIND_SERVICE"
+          "CAP_SETGID"
+          "CAP_SETUID"
+          "CAP_SYS_RESOURCE"
+          "CAP_SYS_TIME"
+        ];
+        # Device Access
+        DeviceAllow = [
+          "char-pps rw"
+          "char-ptp rw"
+          "char-rtc rw"
+        ];
+        DevicePolicy = "closed";
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "full";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = false;
+        PrivateUsers = false;
+        ProtectHostname = true;
+        ProtectClock = false;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources"
+          "@clock"
+          "@setuid"
+          "capset"
+          "@chown"
+        ];
       };
+    };
 
     assertions = [
       {
-        assertion = !(cfg.enableRTCTrimming && builtins.any (line: (builtins.match "^ *rtcsync" line) != null) (lib.strings.splitString "\n" cfg.extraConfig));
+        assertion =
+          !(
+            cfg.enableRTCTrimming
+            && builtins.any (line: (builtins.match "^ *rtcsync" line) != null) (
+              lib.strings.splitString "\n" cfg.extraConfig
+            )
+          );
         message = ''
           The chrony module now configures `rtcfile` and `rtcautotrim` for you.
           These options conflict with `rtcsync` and cause chrony to crash.

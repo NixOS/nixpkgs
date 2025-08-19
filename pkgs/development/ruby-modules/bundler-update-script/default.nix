@@ -7,6 +7,7 @@
   coreutils,
   git,
   nix,
+  nixfmt,
 }:
 
 attrPath:
@@ -21,6 +22,7 @@ let
         coreutils
         git
         nix
+        nixfmt
       ]
     }
     set -o errexit
@@ -39,6 +41,7 @@ let
     export BUNDLE_FORCE_RUBY_PLATFORM=1
     bundler lock --update
     bundix
+    nixfmt gemset.nix
   '';
 in
 [

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "carsonip";
     repo = "Penguin-Subtitle-Player";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AhdShg/eWqF44W1r+KmcHzbGKF2TNSD/wPKj+x4oQkM=";
     fetchSubmodules = true;
   };

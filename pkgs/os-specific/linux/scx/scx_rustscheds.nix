@@ -8,6 +8,8 @@
   zstd,
   scx-common,
   scx,
+  protobuf,
+  libseccomp,
 }:
 rustPlatform.buildRustPackage {
   pname = "scx_rustscheds";
@@ -17,19 +19,20 @@ rustPlatform.buildRustPackage {
 
   # Copy compiled headers and libs from scx.cscheds
   postPatch = ''
-    mkdir bpftool libbpf
-    cp -r ${scx.cscheds.dev}/bpftool/* bpftool/
+    mkdir libbpf
     cp -r ${scx.cscheds.dev}/libbpf/* libbpf/
   '';
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    protobuf
   ];
   buildInputs = [
     elfutils
     zlib
     zstd
+    libseccomp
   ];
 
   env = {
@@ -53,8 +56,14 @@ rustPlatform.buildRustPackage {
     "zerocallusedregs"
   ];
 
-  # Enable this when default kernel in nixpkgs is 6.12+
-  doCheck = false;
+  doCheck = true;
+  checkFlags = [
+    "--skip=compat::tests::test_ksym_exists"
+    "--skip=compat::tests::test_read_enum"
+    "--skip=compat::tests::test_struct_has_field"
+    "--skip=cpumask"
+    "--skip=topology"
+  ];
 
   meta = scx-common.meta // {
     description = "Sched-ext Rust userspace schedulers";

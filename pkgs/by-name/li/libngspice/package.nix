@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
-  version = "43";
+  version = "44.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    hash = "sha256-FN1qbwhTHyBRwTrmN5CkVwi9Q/PneIamqEiYwpexNpk=";
+    hash = "sha256-59rft71UdP0iQJweWmes3sGfd+WX32jhfFVJvBOQ1/0=";
   };
 
   nativeBuildInputs = [
@@ -26,18 +26,17 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-    [
-      fftw
-      readline
-    ]
-    ++ lib.optionals (!withNgshared) [
-      libXaw
-      libXext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    fftw
+    readline
+  ]
+  ++ lib.optionals (!withNgshared) [
+    libXaw
+    libXext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   configureFlags =
     lib.optionals withNgshared [

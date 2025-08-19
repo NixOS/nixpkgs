@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     tag = "v${version}";
-    hash = "sha256-PpNdbvtDAZDT43yyEkUvnhfUTAMM+mYImb3dVbAVPic=";
+    hash = "sha256-zZ9VYWVV+8G3gojj1m74syvsYM1mX0YT4hKnpkdMAQk=";
   };
 
   vendorHash = "sha256-JT0r/hs7ZRtsYh4aXy+v8BjwiLvRJ10e4yRirqmWVW0=";
@@ -81,21 +81,20 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ]
   );
 
-  postInstall =
-    ''
-      installManPage man/man*/*
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd git-lfs \
-        --bash <($out/bin/git-lfs completion bash) \
-        --fish <($out/bin/git-lfs completion fish) \
-        --zsh <($out/bin/git-lfs completion zsh)
-    '';
+  postInstall = ''
+    installManPage man/man*/*
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd git-lfs \
+      --bash <($out/bin/git-lfs completion bash) \
+      --fish <($out/bin/git-lfs completion fish) \
+      --zsh <($out/bin/git-lfs completion zsh)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

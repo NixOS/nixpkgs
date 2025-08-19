@@ -4,7 +4,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf-archive,
   autoreconfHook,
   cppunit,
   openssl,
@@ -13,19 +12,18 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-libtorrent";
-  version = "0.15.1";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-ejDne7vaV+GYP6M0n3VAEva4UHuxRGwfc2rgxf7U/EM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iFndmET8bQUg3iZ6c6WDCzSS2tx6sYJt+fEkPAaNm18=";
   };
 
   nativeBuildInputs = [
-    autoconf-archive
     autoreconfHook
     pkg-config
   ];
@@ -53,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

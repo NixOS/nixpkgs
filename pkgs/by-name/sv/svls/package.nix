@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-DuwH0qie8SctvOGntljOdTRMGKrNFPycdaFG3QZxihA=";
   };
 
-  cargoHash = "sha256-vDpuIWB5pbhYrFgQ1ogALMJpZvy8ETZtneX1fjpjl+0=";
+  cargoHash = "sha256-L+MTU92SUohhQ5Oy2ziU/1f4IxFcrW2JGUSx7iPxl/I=";
 
   meta = with lib; {
     description = "SystemVerilog language server";

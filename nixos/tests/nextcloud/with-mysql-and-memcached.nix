@@ -8,12 +8,11 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ eqyiel ];
-    };
+
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 
@@ -24,10 +23,10 @@ runTest (
           services.nextcloud = {
             caching = {
               apcu = true;
-              redis = false;
               memcached = true;
             };
             config.dbtype = "mysql";
+            configureRedis = false;
           };
 
           services.memcached.enable = true;

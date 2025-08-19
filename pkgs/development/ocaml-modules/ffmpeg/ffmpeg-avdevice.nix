@@ -1,21 +1,11 @@
 {
-  lib,
   buildDunePackage,
   dune-configurator,
   pkg-config,
   callPackage,
-  AppKit,
-  AudioToolbox,
-  AVFoundation,
-  Cocoa,
-  CoreImage,
-  ForceFeedback,
   ffmpeg-base ? callPackage ./base.nix { },
   ffmpeg-av,
   ffmpeg,
-  OpenGL,
-  stdenv,
-  VideoToolbox,
 }:
 
 buildDunePackage {
@@ -26,18 +16,7 @@ buildDunePackage {
   inherit (ffmpeg-base) version src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ dune-configurator ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      AudioToolbox
-      AVFoundation
-      Cocoa
-      CoreImage
-      ForceFeedback
-      OpenGL
-      VideoToolbox
-    ];
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     ffmpeg-av

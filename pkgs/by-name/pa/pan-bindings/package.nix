@@ -9,19 +9,19 @@
 }:
 
 let
-  version = "unstable-2024-03-03";
+  version = "unstable-2025-06-15";
   src = fetchFromGitHub {
     owner = "lschulz";
     repo = "pan-bindings";
-    rev = "4361d30f1c5145a70651c259f2d56369725b0d15";
-    hash = "sha256-0WxrgXTCM+BwGcjjWBBKiZawje2yxB5RRac6Sk5t3qc=";
+    rev = "708d7f36a0a32816b2b0d8e2e5a4d79f2144f406";
+    hash = "sha256-wGHa8NV8M+9dHvn8UqejderyA1UgYQUcTOKocRFhg6U=";
   };
   goDeps = (
     buildGoModule {
       name = "pan-bindings-goDeps";
       inherit src version;
       modRoot = "go";
-      vendorHash = "sha256-7EitdEJTRtiM29qmVnZUM6w68vCBI8mxZhCA7SnAxLA=";
+      vendorHash = "sha256-3MybV76pHDnKgN2ENRgsyAvynXQctv0fJcRGzesmlww=";
     }
   );
 in

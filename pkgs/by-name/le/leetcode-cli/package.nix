@@ -8,37 +8,31 @@
   dbus,
   sqlite,
   stdenv,
-  darwin,
   testers,
   leetcode-cli,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "leetcode-cli";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Jc0akHj2DHbkF7sjslOwdeI1piW2gnhoalBz18lpQdQ=";
+    hash = "sha256-AYBBW9VtdvqqqiouhkS3diPcOdaQOs8Htkw9DTRX2t4=";
   };
 
-  cargoHash = "sha256-t3u82bjO1Qv32TwpZNCaaEqOVajXIgM7VBNQ4UjMcl8=";
+  cargoHash = "sha256-o2RkhYsSQKwU+dsHQvlcxAVKUjOTqg424dqrM7JRoN8=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    dbus
+    sqlite
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetcode \
@@ -54,8 +48,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "May the code be with you 👻";
-    longDescription = "Use leetcode.com in command line";
+    description = "Leetcode CLI utility";
     homepage = "https://github.com/clearloop/leetcode-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ congee ];

@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lvc.github.io/abi-compliance-checker";
     description = "Tool for checking backward API/ABI compatibility of a C/C++ library";
     mainProgram = "abi-compliance-checker";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.bhipple ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ bhipple ];
+    platforms = lib.platforms.all;
   };
 }

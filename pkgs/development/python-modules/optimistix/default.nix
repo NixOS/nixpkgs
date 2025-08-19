@@ -13,7 +13,7 @@
   lineax,
   typing-extensions,
 
-  # checks
+  # tests
   beartype,
   jaxlib,
   optax,
@@ -51,6 +51,12 @@ buildPythonPackage rec {
     optax
     pytestCheckHook
     pytest-xdist
+  ];
+
+  pytestFlags = [
+    # Since jax 0.5.3:
+    # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

@@ -3,11 +3,9 @@
   buildPythonPackage,
   contextlib2,
   fetchFromGitHub,
-  fetchurl,
   lib,
   pyyaml,
   six,
-  setuptools,
   flit-core,
   pytestCheckHook,
   pytest-xdist,
@@ -15,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ml-collections";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
   build-system = [ flit-core ];
 
@@ -23,7 +21,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "ml_collections";
     tag = "v${version}";
-    hash = "sha256-QUhwkfffjA6gKd6lTmEgnnoUeJOu82mfFPBta9/iebg=";
+    hash = "sha256-G9+UBqHalzI3quR8T5NEgJs+ep60ffFw9vyTTZDeZ9M=";
   };
 
   dependencies = [
@@ -38,9 +36,12 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "ml_collections/"
-    "--ignore=ml_collections/config_dict/examples/examples_test.py" # From github workflows
+  ];
+
+  disabledTestPaths = [
+    "ml_collections/config_dict/examples/examples_test.py" # From github workflows
   ];
 
   pythonImportsCheck = [ "ml_collections" ];

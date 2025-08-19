@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   apfel,
   apfelgrid,
   applgrid,
@@ -21,14 +21,16 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xfitter";
   version = "2.2.0";
 
-  src = fetchurl {
-    name = "${pname}-${version}.tgz";
-    url = "https://www.xfitter.org/xFitter/xFitter/DownloadPage?action=AttachFile&do=get&target=${pname}-${version}.tgz";
-    sha256 = "sha256-ZHIQ5hOY+k0/wmpE0o4Po+RZ4MkVMk+bK1Rc6eqwwH0=";
+  src = fetchFromGitLab {
+    owner = "fitters";
+    repo = "xfitter";
+    rev = "refs/tags/2.2.0_Future_Freeze";
+    domain = "gitlab.cern.ch";
+    hash = "sha256-wanxgldvBEuAEOeVok3XgRVStcn9APd+Nj7vpRZUtGs=";
   };
 
   patches = [
@@ -41,25 +43,22 @@ stdenv.mkDerivation rec {
     gfortran
     pkg-config
   ];
-  buildInputs =
-    [
-      apfel
-      blas
-      ceres-solver
-      lhapdf
-      lapack
-      libyaml
-      root
-      qcdnum
-      gsl
-      yaml-cpp
-      zlib
-    ]
-    ++ lib.optionals ("5" == lib.versions.major root.version) [
-      apfelgrid
-      applgrid
-    ]
-    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
+  buildInputs = [
+    apfel
+    apfelgrid
+    applgrid
+    blas
+    ceres-solver
+    lhapdf
+    lapack
+    libyaml
+    root
+    qcdnum
+    gsl
+    yaml-cpp
+    zlib
+  ]
+  ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"
@@ -74,7 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
+    description = "Open source QCD fit framework designed to extract PDFs and assess the impact of new data";
     license = licenses.gpl3;
     homepage = "https://www.xfitter.org/xFitter";
     platforms = platforms.unix;

@@ -17,14 +17,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "alacarte";
-  version = "3.54.1";
+  version = "3.56.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "alacarte";
     rev = version;
-    hash = "sha256-nfSYbGZvx76UzHGf6Jxq8Ny5o9NX5nXG9Kc/gRNn6HM=";
+    hash = "sha256-sH/2ULI1QEqmgFIFFnOwsx2/+TMt+bPu0l0LUcnBgWg=";
   };
 
   format = "other";

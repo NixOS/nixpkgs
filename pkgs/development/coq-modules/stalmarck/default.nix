@@ -9,12 +9,12 @@
 let
   repo = "stalmarck";
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = isEq "8.20";
-        out = "8.20.0";
-      }
+      (case (isEq "8.20") "8.20.0")
     ] null;
   release = {
     "8.20.0".sha256 = "sha256-jITxQT1jLyZvWCGPnmK8i3IrwsZwMPOV0aBe9r22TIQ=";
