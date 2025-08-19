@@ -10,33 +10,58 @@
 # Like many google projects, shaderc doesn't gracefully support separately
 # compiled dependencies, so we can't easily use the versions of glslang and
 # spirv-tools used by vulkan-loader. Exact revisions are taken from
-# https://github.com/google/shaderc/blob/known-good/known_good.json
-
-# Future work: extract and fetch all revisions automatically based on a revision
-# of shaderc's known-good branch.
+# the DEPS file in the shaderc repository.
 let
+  # this is the git tag of the google/shaderc repo
+  version = "2025.2";
+
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "shaderc";
+    rev = "v${version}";
+    hash = "sha256-u3gmH2lrkwBTZg9j4jInQceXK4MUWhKZPSPsN98mEkk=";
+  };
+
+  # Read the DEPS file
+  depsContent = builtins.readFile "${src}/DEPS";
+
+  # Function to extract a specific revision hash from DEPS file
+  getDepsRevision =
+    revisionKey:
+    let
+      lines = lib.splitString "\n" depsContent;
+      # Find the line containing the revision key
+      revisionLine = lib.findFirst (line: builtins.match ".*'${revisionKey}'.*" line != null) null lines;
+
+      # find the commit hash inside the DEPS file
+      match = builtins.match ".*'${revisionKey}':[[:space:]]*'([^']+)'.*" revisionLine;
+
+      revstring = builtins.elemAt match 0;
+    in
+    revstring;
+
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "15.3.0";
-    hash = "sha256-HwFP4KJuA+BMQVvBWV0BCRj9U5I3CLEU+5bBtde2f6w=";
+    rev = getDepsRevision "glslang_revision";
+    hash = "sha256-+iX5TOPFwAWrzRKd4gikzYIWfzSdmRCukY6WsKNJCzE=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "v2025.1";
-    hash = "sha256-2Wv0dxVQ8NvuDRTcsXkH1GKmuA6lsIuwTl0j6kbTefo=";
+    rev = getDepsRevision "spirv_tools_revision";
+    hash = "sha256-nGyEOREua/W2mdb8DhmqXW0gDThnXnIlhnURAUhCO2g=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "vulkan-sdk-1.4.309.0";
-    hash = "sha256-Q1i6i5XimULuGufP6mimwDW674anAETUiIEvDQwvg5Y=";
+    rev = getDepsRevision "spirv_headers_revision";
+    hash = "sha256-bUgt7m3vJYoozxgrA5hVTRcbPg3OAzht0e+MgTH7q9k=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaderc";
-  version = "2025.2";
+  inherit version src;
 
   outputs = [
     "out"
@@ -45,13 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "static"
   ];
-
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "shaderc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-u3gmH2lrkwBTZg9j4jInQceXK4MUWhKZPSPsN98mEkk=";
-  };
 
   postPatch = ''
     cp -r --no-preserve=mode ${glslang} third_party/glslang
