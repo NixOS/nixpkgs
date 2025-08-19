@@ -19,16 +19,12 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat";
-  version = "7.0.0";
+  version = "7.1.1";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "sha256-hCtx0NNLAgAFiCR6rp/smg/BMnfyzTpqSSWw8Jszv3U=";
+    sha256 = "sha256-HN9tswWAiNfjiD9jUZtdNF29oBhOyOHhy5hOElXil/A=";
   };
-
-  patches = [
-    ./0001-python-shebangs.patch
-  ];
 
   postPatch = ''
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
