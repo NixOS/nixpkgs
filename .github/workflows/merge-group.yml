@@ -2,6 +2,17 @@ name: Merge Group
 
 on:
   merge_group:
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
@@ -12,8 +23,8 @@ jobs:
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
-      mergedSha: ${{ github.event.merge_group.head_sha }}
-      targetSha: ${{ github.event.merge_group.base_sha }}
+      mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
+      targetSha: ${{ inputs.targetSha || github.event.merge_group.base_sha }}
 
   # This job's only purpose is to serve as a target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block the Merge Queue.
