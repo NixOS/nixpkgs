@@ -1,0 +1,39 @@
+diff --git a/frigate/config/camera/ffmpeg.py b/frigate/config/camera/ffmpeg.py
+index 04bbfac7..4390a571 100644
+--- a/frigate/config/camera/ffmpeg.py
++++ b/frigate/config/camera/ffmpeg.py
+@@ -70,18 +70,14 @@ class FfmpegConfig(FrigateBaseModel):
+     @property
+     def ffmpeg_path(self) -> str:
+         if self.path == "default":
+-            return f"/usr/lib/ffmpeg/{DEFAULT_FFMPEG_VERSION}/bin/ffmpeg"
+-        elif self.path in INCLUDED_FFMPEG_VERSIONS:
+-            return f"/usr/lib/ffmpeg/{self.path}/bin/ffmpeg"
++            return "@ffmpeg@"
+         else:
+             return f"{self.path}/bin/ffmpeg"
+ 
+     @property
+     def ffprobe_path(self) -> str:
+         if self.path == "default":
+-            return f"/usr/lib/ffmpeg/{DEFAULT_FFMPEG_VERSION}/bin/ffprobe"
+-        elif self.path in INCLUDED_FFMPEG_VERSIONS:
+-            return f"/usr/lib/ffmpeg/{self.path}/bin/ffprobe"
++            return "@ffprobe@"
+         else:
+             return f"{self.path}/bin/ffprobe"
+ 
+diff --git a/frigate/record/export.py b/frigate/record/export.py
+index 0d3f96da..09cadbcd 100644
+--- a/frigate/record/export.py
++++ b/frigate/record/export.py
+@@ -126,7 +126,7 @@ class RecordingExporter(threading.Thread):
+             minutes = int(diff / 60)
+             seconds = int(diff % 60)
+             ffmpeg_cmd = [
+-                "/usr/lib/ffmpeg/7.0/bin/ffmpeg",  # hardcode path for exports thumbnail due to missing libwebp support
++                "@ffmpeg@",  # hardcode path for exports thumbnail due to missing libwebp support
+                 "-hide_banner",
+                 "-loglevel",
+                 "warning",
+~
