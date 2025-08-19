@@ -13,6 +13,8 @@
   pythonOlder,
   ufo2ft,
   ufolib2,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +30,11 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-UqL3l27Icu5DoVvFYctbOF7gvKvVV6hK1R5A1y9SYkU=";
   };
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 
