@@ -23,6 +23,14 @@ let
     );
 in
 self: super: {
+
+  # Full package set with unfree packages enabled.
+  pkgsUnfree = nixpkgsFun {
+    config = super.config // {
+      allowUnfree = true;
+    };
+  };
+
   pkgsLLVM = nixpkgsFun {
     overlays = [
       (self': super': {
