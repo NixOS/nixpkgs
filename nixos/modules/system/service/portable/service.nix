@@ -44,5 +44,9 @@ in
         '';
       };
     };
+    # TODO: use https://github.com/NixOS/nixpkgs/pull/431450
+    meta = lib.mkOption {
+      description = "The maintainers of this module. This is currently a placeholder option whose value may not evaluate to anything useful until https://github.com/NixOS/nixpkgs/pull/431450 is available and used here.";
+    };
   };
 }
