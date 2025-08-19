@@ -4,6 +4,9 @@
   fetchFromGitHub,
   go-md2man,
 
+  # TODO: switch to llama-cpp-vulkan when moltenvk is upgraded to 1.3.0:
+  # https://github.com/NixOS/nixpkgs/pull/434130
+  llama-cpp,
   podman,
   withPodman ? true,
 
@@ -43,7 +46,21 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = lib.optionalString withPodman ''
     wrapProgram $out/bin/ramalama \
-      --prefix PATH : ${lib.makeBinPath [ podman ]}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            llama-cpp
+            podman
+          ]
+          ++ (
+            with python3.pkgs;
+            [
+              huggingface-hub
+            ]
+            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
+          )
+        )
+      }
   '';
 
   pythonImportsCheck = [
