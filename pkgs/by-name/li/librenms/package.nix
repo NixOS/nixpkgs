@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   unixtools,
   php82,
   python3,
@@ -37,6 +38,15 @@ phpPackage.buildComposerProject2 rec {
   };
 
   vendorHash = "sha256-t/3wBSXJJHqbGR1iKF4zC2Ia99gXNlanabR/iPPlHqw=";
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/advisories/GHSA-gq96-8w38-hhj2
+      name = "CVE-2025-54138.patch";
+      url = "https://github.com/librenms/librenms/commit/ec89714d929ef0cf2321957ed9198b0f18396c81.patch";
+      hash = "sha256-UJy0AZXpvowvjSnJy7m4Z5JPoYWjydUg1R+jz/Pl1s0=";
+    })
+  ];
 
   php = phpPackage;
 
