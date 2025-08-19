@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   autoPatchelfHook,
   alsa-lib,
@@ -17,16 +17,16 @@
 }:
 
 let
-  version = "1.7.6";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-avZ0IxxJO9e0xWE58QYkTspDqgwu+nCwzzvV+4rCLOk=";
+    hash = "sha256-t+RhLzfQwiBa49BCZ0qeUijAylPWYR8UYZHKk6bVgZc=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   pname = "kazumi";
   inherit version src;
 
@@ -95,6 +95,10 @@ flutter332.buildFlutterApplication {
     mpv-unwrapped
     webkitgtk_4_1
   ];
+
+  preBuild = ''
+    cp ${./package_graph.json} .dart_tool/package_graph.json
+  '';
 
   postInstall = ''
     ln -snf ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/$pname/lib/libmpv.so.2
