@@ -461,6 +461,43 @@ qtModule (
 
       # This build takes a long time; particularly on slow architectures
       timeout = 24 * 3600;
+
+      knownVulnerabilities = [
+        ''
+          qt5 qtwebengine is unmaintained upstream since april 2025.
+          It is based on chromium 87.0.4280.144, and supposedly patched up to 135.0.7049.95 which is outdated.
+
+          Security issues are frequently discovered in chromium.
+          The following list of CVEs was fixed in the life cycle of chromium 138 and likely also affects qtwebengine:
+          - CVE-2025-8879
+          - CVE-2025-8880
+          - CVE-2025-8901
+          - CVE-2025-8881
+          - CVE-2025-8882
+          - CVE-2025-8576
+          - CVE-2025-8577
+          - CVE-2025-8578
+          - CVE-2025-8579
+          - CVE-2025-8580
+          - CVE-2025-8581
+          - CVE-2025-8582
+          - CVE-2025-8583
+          - CVE-2025-8292
+          - CVE-2025-8010
+          - CVE-2025-8011
+          - CVE-2025-7656
+          - CVE-2025-6558 (known to be exploited in the wild)
+          - CVE-2025-7657
+          - CVE-2025-6554
+          - CVE-2025-6555
+          - CVE-2025-6556
+          - CVE-2025-6557
+
+          The actual list of CVEs affecting qtwebengine is likely much longer,
+          as this list is missing issues fixed in chromium 136/137 and even more
+          issues are continuously discovered and lack upstream fixes in qtwebengine.
+        ''
+      ];
     };
 
   }
