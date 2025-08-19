@@ -5,7 +5,7 @@
   installShellFiles,
   jq,
   lib,
-  makeWrapper,
+  makeBinaryWrapper,
   man-db,
   nixos,
   nixosTests,
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     asciidoctor
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
   nativeCheckInputs = [ gitMinimal ];
 
