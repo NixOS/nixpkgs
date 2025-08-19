@@ -9457,10 +9457,12 @@ with pkgs;
 
       zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
+      zig_0_15 = zigPackages."0.15";
     })
     zigPackages
     zig_0_13
     zig_0_14
+    zig_0_15
     ;
 
   zig = zig_0_14;
