@@ -10,7 +10,7 @@
   rustPlatform,
   lib,
   nix-update-script,
-  withGpu ? false,
+  withGpu ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunkit";

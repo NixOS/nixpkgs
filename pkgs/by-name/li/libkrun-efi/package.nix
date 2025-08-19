@@ -15,7 +15,7 @@
   stdenv,
   virglrenderer,
   vulkan-headers,
-  withGpu ? false,
+  withGpu ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun-efi";
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
-    tests.withGpu = libkrun-efi.override { withGpu = true; };
+    tests.withGpu = libkrun-efi.override { withGpu = false; };
     updateScript = nix-update-script { };
   };
 })
