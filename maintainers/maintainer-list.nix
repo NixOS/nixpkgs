@@ -1335,12 +1335,6 @@
     githubId = 373;
     name = "Alexandre Girard Davila";
   };
-  alxsimon = {
-    email = "alexis.simon@normalesup.org";
-    github = "alxsimon";
-    githubId = 9567176;
-    name = "Alexis Simon";
-  };
   amadaluzia = {
     email = "amad@atl.tools";
     github = "amadaluzia";
@@ -3352,6 +3346,12 @@
     github = "birkb";
     githubId = 10164833;
     name = "Birk Bohne";
+  };
+  bizmyth = {
+    email = "andrew.p.council@gmail.com";
+    github = "bizmythy";
+    githubId = 45700916;
+    name = "Drew Council";
   };
   bjesus = {
     email = "nixpkgs@yoavmoshe.com";
@@ -5378,6 +5378,12 @@
     github = "katjakwast";
     githubId = 176372446;
     name = "Katja Kwast";
+  };
+  cupcakearmy = {
+    name = "Niccolo Borgioli";
+    email = "nix@nicco.io";
+    github = "cupcakearmy";
+    githubId = 14948823;
   };
   curious = {
     email = "curious@curious.host";
@@ -16695,6 +16701,12 @@
     github = "mindstorms6";
     githubId = 92937;
     name = "Breland Miley";
+  };
+  minegameYTB = {
+    name = "Minegame YTB";
+    github = "minegameYTB";
+    githubId = 53137994;
+    matrix = "@minegame2018:matrix.org";
   };
   minersebas = {
     email = "scherthan_sebastian@web.de";
