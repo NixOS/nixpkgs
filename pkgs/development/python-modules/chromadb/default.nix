@@ -180,7 +180,6 @@ buildPythonPackage rec {
   };
 
   pytestFlags = [
-    "-x" # these are slow tests, so stop on the first failure
     "-v"
     "-Wignore:DeprecationWarning"
     "-Wignore:PytestCollectionWarning"
@@ -198,61 +197,36 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Tests are flaky / timing sensitive
-    "test_fastapi_server_token_authn_allows_when_it_should_allow"
-    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
-
-    # Issue with event loop
-    "test_http_client_bw_compatibility"
-
-    # httpx ReadError
-    "test_not_existing_collection_delete"
-
-    # Tests launch a server and try to connect to it
-    # These either have https connection errors or name resolution errors
+    # Failure in name resolution
     "test_collection_query_with_invalid_collection_throws"
     "test_collection_update_with_invalid_collection_throws"
     "test_default_embedding"
     "test_persist_index_loading"
-    "test_query_id_filtering_e2e"
-    "test_query_id_filtering_medium_dataset"
-    "test_query_id_filtering_small_dataset"
+
     # Deadlocks intermittently
     "test_app"
+
     # Depends on specific floating-point precision
     "test_base64_conversion_is_identity_f16"
+
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
-
-    # Apparent race condition with sqlite
-    # See https://github.com/chroma-core/chroma/issues/4661
-    "test_multithreaded_get_or_create"
   ];
 
   disabledTestPaths = [
     # Tests require network access
-    "bin/rust_python_compat_test.py"
-    "chromadb/test/configurations/test_collection_configuration.py"
-    "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/ef/test_onnx_mini_lm_l6_v2.py"
-    "chromadb/test/ef/test_voyageai_ef.py"
-    "chromadb/test/property/"
     "chromadb/test/distributed"
     "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
-    "chromadb/test/stress/"
-    "chromadb/test/test_api.py"
+    "chromadb/test/stress"
 
-    # Tests time out (waiting for server)
-    "chromadb/test/test_cli.py"
-
-    # Cannot find protobuf file while loading test
-    "chromadb/test/distributed/test_log_failover.py"
+    # Excessively slow
+    "chromadb/test/property/test_add.py"
+    "chromadb/test/property/test_persist.py"
 
     # ValueError: An instance of Chroma already exists for ephemeral with different settings
     "chromadb/test/test_chroma.py"
-    "chromadb/test/ef/test_multimodal_ef.py"
   ];
 
   __darwinAllowLocalNetworking = true;
