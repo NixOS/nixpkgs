@@ -104,6 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
   passthru.tests =
     let
       package = radicle-node;
