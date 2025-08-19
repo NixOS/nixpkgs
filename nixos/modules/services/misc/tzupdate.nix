@@ -60,9 +60,16 @@ in
           timedatectl set-timezone "$timezone"
         fi
       '';
-
       serviceConfig = {
         Type = "oneshot";
+
+        # Wait for the network to become reachable by restarting it directly on
+        # failure and increasing the restart delay successively.
+        Restart = "on-failure";
+        RestartMode = "direct";
+        RestartSec = "1 second";
+        RestartMaxDelaySec = "1 minute";
+        RestartSteps = 10;
       };
     };
 
