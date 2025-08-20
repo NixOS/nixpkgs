@@ -2427,10 +2427,6 @@ with pkgs;
 
   bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
 
-  bzip3 = callPackage ../tools/compression/bzip3 {
-    stdenv = clangStdenv;
-  };
-
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
   cdist = python3Packages.callPackage ../tools/admin/cdist { };
