@@ -52,8 +52,8 @@ let
 
 in
 {
+  _class = "service";
   imports = [
-    ../portable/service.nix
     (lib.mkAliasOptionModule [ "systemd" "service" ] [ "systemd" "services" "" ])
     (lib.mkAliasOptionModule [ "systemd" "socket" ] [ "systemd" "sockets" "" ])
   ];
@@ -101,6 +101,8 @@ in
           };
         }
       );
+      # Rendered by the portable docs instead.
+      visible = false;
     };
   };
   config = {
