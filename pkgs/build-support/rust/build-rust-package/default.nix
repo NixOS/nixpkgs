@@ -155,11 +155,6 @@ lib.extendMkDerivation {
 
       patches = cargoPatches ++ patches;
 
-      postUnpack = ''
-        eval "$cargoDepsHook"
-      ''
-      + (args.postUnpack or "");
-
       configurePhase =
         args.configurePhase or ''
           runHook preConfigure
