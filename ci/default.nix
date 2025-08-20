@@ -54,7 +54,7 @@ let
           settings.json.formatter.enabled = false;
         };
         settings.formatter.biome.excludes = [
-          "doc/*"
+          "*.min.js"
           "pkgs/*"
         ];
 
