@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # relies on several CPython internals
-  disabled = pythonOlder "3.8" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "python";
@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   dependencies = [
     mypy-extensions
+    pathspec
     typing-extensions
   ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
@@ -144,6 +145,7 @@ buildPythonPackage rec {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     changelog = "https://github.com/python/mypy/blob/${src.rev}/CHANGELOG.md";
+    downloadPage = "https://github.com/python/mypy";
     license = lib.licenses.mit;
     mainProgram = "mypy";
     maintainers = with lib.maintainers; [ lnl7 ];
