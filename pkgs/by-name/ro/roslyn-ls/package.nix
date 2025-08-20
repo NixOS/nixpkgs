@@ -7,6 +7,7 @@
   testers,
   roslyn-ls,
   jq,
+  writeText,
 }:
 let
   pname = "roslyn-ls";
@@ -28,6 +29,24 @@ let
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
+
+  targets = writeText "versions.targets" ''
+    <Project>
+      <ItemGroup>
+        <KnownFrameworkReference Update="@(KnownFrameworkReference)">
+          <LatestRuntimeFrameworkVersion Condition="'%(TargetFramework)' == 'net8.0'">${dotnetCorePackages.sdk_8_0.runtime.version}</LatestRuntimeFrameworkVersion>
+          <LatestRuntimeFrameworkVersion Condition="'%(TargetFramework)' == 'net9.0'">${dotnetCorePackages.sdk_9_0.runtime.version}</LatestRuntimeFrameworkVersion>
+          <TargetingPackVersion Condition="'%(TargetFramework)' == 'net8.0'">${dotnetCorePackages.sdk_8_0.runtime.version}</TargetingPackVersion>
+          <TargetingPackVersion Condition="'%(TargetFramework)' == 'net9.0'">${dotnetCorePackages.sdk_9_0.runtime.version}</TargetingPackVersion>
+        </KnownFrameworkReference>
+        <KnownAppHostPack Update="@(KnownAppHostPack)">
+          <AppHostPackVersion Condition="'%(TargetFramework)' == 'net8.0'">${dotnetCorePackages.sdk_8_0.runtime.version}</AppHostPackVersion>
+          <AppHostPackVersion Condition="'%(TargetFramework)' == 'net9.0'">${dotnetCorePackages.sdk_9_0.runtime.version}</AppHostPackVersion>
+        </KnownAppHostPack>
+      </ItemGroup>
+    </Project>
+  '';
+
 in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
@@ -57,20 +76,23 @@ buildDotnetModule rec {
     # until made configurable/and or different location
     # https://github.com/dotnet/roslyn/issues/76892
     ./cachedirectory.patch
-    # Force download of apphost
-    ./runtimedownload.patch
   ];
 
   postPatch = ''
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
     jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
     mv global.json.tmp global.json
+
+    substituteInPlace Directory.Build.targets \
+      --replace-fail '</Project>' '<Import Project="${targets}" /></Project>'
   '';
 
   dotnetFlags = [
     "-p:TargetRid=${rid}"
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
+    # this is needed for the KnownAppHostPack changes to work
+    "-p:EnableAppHostPackDownload=true"
   ];
 
   # two problems solved here:
