@@ -260,12 +260,12 @@ in
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "0-unstable-2024-08-25";
+    version = "0-unstable-2025-07-27";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "bf9e666f2a6a8172ebe99fff61b574ba740cffc2";
-      hash = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
+      rev = "b04dcf14496ffda629d8aa3a2ac63e4e08d2fdc9";
+      hash = "sha256-lknfek9Fu/RDHbq5HMaiNqc24deni5phzExWOkYRS+o";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [ pkgs.python3 ];
@@ -292,6 +292,7 @@ in
       maintainers = with lib.maintainers; [
         kidd
         fnune
+        deejayem
       ];
     };
   };

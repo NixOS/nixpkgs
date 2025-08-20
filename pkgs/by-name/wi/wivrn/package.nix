@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -21,6 +22,7 @@
   glslang,
   harfbuzz,
   kdePackages,
+  libarchive,
   libdrm,
   libGL,
   libnotify,
@@ -51,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.6.1";
+  version = "25.8";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DqgayLXI+RPIb8tLzJoHi+Z12px4pdzU50C0UBSa2u4=";
+    hash = "sha256-x9nZyLk0A9eiZ9V700lc4To1cVJ875ZYR0GeqQ7qNpg=";
   };
 
   monado = applyPatches {
@@ -65,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "bb9bcee2a3be75592de819d9e3fb2c8ed27bb7dc";
-      hash = "sha256-+PiWxnvMXaSFc+67r17GBRXo7kbjikSElawNMJCydrk=";
+      rev = "5c137fe28b232fe460f9b03defa7749adc32ee48";
+      hash = "sha256-4P/ejRAitrYn8hXZPaDOcx27utfm+aVLjtqL6JxZYAg=";
     };
 
     postPatch = ''
@@ -87,6 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
       return 1
     fi
   '';
+
+  patches = [
+    # Needed to allow WiVRn in-stream GUI to launch Steam games
+    (fetchpatch {
+      name = "wivrn-allow-launching-steam-games.patch";
+      url = "https://github.com/WiVRn/WiVRn/commit/30ceab5b3082cbc545acf8bc8ca4a24279e6f738.diff";
+      hash = "sha256-BD6MhCET7hdjog8rkl7G2l7/zGfVATpNAhNie0efOlA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -117,10 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.kirigami
     kdePackages.qcoro
     kdePackages.qqc2-desktop-style
+    libarchive
     libdrm
     libGL
     libnotify
     libpulseaudio
+    librsvg
     libva
     libX11
     libXrandr

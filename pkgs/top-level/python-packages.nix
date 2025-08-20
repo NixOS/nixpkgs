@@ -9294,6 +9294,8 @@ self: super: with self; {
 
   mir-eval = callPackage ../development/python-modules/mir-eval { };
 
+  miraie-ac = callPackage ../development/python-modules/miraie-ac { };
+
   mirakuru = callPackage ../development/python-modules/mirakuru { };
 
   misaka = callPackage ../development/python-modules/misaka { };
