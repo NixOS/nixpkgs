@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
-}
+})
