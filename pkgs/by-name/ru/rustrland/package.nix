@@ -29,11 +29,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "--bins" ];
   cargoTestFlags = [ "--bins" ];
 
-  meta = with pkgs.lib; {
-    description = "A Rust-powered window management for Hyprland - Fast, reliable plugin system";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Rust-powered window management for Hyprland";
     homepage = "https://github.com/mattdef/rustrland";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ]; # FIXME: Add yourself as a maintainers
+    mainProgram = "rustrland";
   };
 })
