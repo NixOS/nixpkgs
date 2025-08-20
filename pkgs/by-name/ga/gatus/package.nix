@@ -4,19 +4,18 @@
   fetchFromGitHub,
   nixosTests,
 }:
-
 buildGoModule rec {
   pname = "gatus";
-  version = "5.17.0";
+  version = "5.18.1";
 
   src = fetchFromGitHub {
     owner = "TwiN";
     repo = "gatus";
     rev = "v${version}";
-    hash = "sha256-/YOC13ut1k48vx/LapcShNfi83LxbC62yxKuanlUI9k=";
+    hash = "sha256-pLl1rZhxsErZinbCFfXeDtj3gBSphPPznHq54XSR5M8=";
   };
 
-  vendorHash = "sha256-gr/GmZaaNwp/jQwnDiU/kfDWaciQloxP9vNlVTwMQjE=";
+  vendorHash = "sha256-5e4+U7nksU2Xkdw84M/GY+LvD5LrfCSKqzFHSQQUwY8=";
 
   subPackages = [ "." ];
 
