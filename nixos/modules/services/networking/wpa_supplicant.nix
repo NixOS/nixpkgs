@@ -193,7 +193,12 @@ let
       script = ''
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
         ${
-          if iface == null then
+          if iface != null then
+            ''
+              # add known interface to the daemon arguments
+              args="-i${iface} $iface_args"
+            ''
+          else if cfg.autoDetectInterfaces then
             ''
               # detect interfaces automatically
 
@@ -216,10 +221,7 @@ let
               done
             ''
           else
-            ''
-              # add known interface to the daemon arguments
-              args="-i${iface} $iface_args"
-            ''
+            "args=$iface_args"
         }
 
         # finally start daemon
@@ -243,13 +245,18 @@ in
           "wlan1"
         ];
         description = ''
-          The interfaces {command}`wpa_supplicant` will use. If empty, it will
+          The interfaces {command}`wpa_supplicant` will use. If empty and
+          [](#opt-networking.wireless.autoDetectInterfaces) is true it will
           automatically use all wireless interfaces.
 
           ::: {.note}
           A separate wpa_supplicant instance will be started for each interface.
           :::
         '';
+      };
+
+      autoDetectInterfaces = mkEnableOption "automatic detection of wireless interfaces" // {
+        default = true;
       };
 
       driver = mkOption {
