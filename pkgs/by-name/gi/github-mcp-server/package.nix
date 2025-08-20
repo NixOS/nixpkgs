@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -31,6 +32,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/github/github-mcp-server/releases/tag/v${finalAttrs.version}";
