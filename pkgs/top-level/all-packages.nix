@@ -15782,6 +15782,8 @@ with pkgs;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
+  wahjam = libsForQt5.callPackage ../applications/audio/wahjam { };
+
   wasmer = callPackage ../development/interpreters/wasmer {
     llvmPackages = llvmPackages_18;
   };
