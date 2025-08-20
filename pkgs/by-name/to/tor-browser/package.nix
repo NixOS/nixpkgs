@@ -364,10 +364,11 @@ lib.warnIf (useHardenedMalloc != null)
         changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
         platforms = lib.attrNames sources;
         maintainers = with lib.maintainers; [
+          c4patino
           felschr
-          panicgh
-          joachifm
           hax404
+          joachifm
+          panicgh
         ];
         # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
         # the compound is "libre" in a strict sense (some components place certain
