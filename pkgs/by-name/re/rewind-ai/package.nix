@@ -75,7 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Rewind is a personalized AI powered by everything you've seen, said, or heard";
     homepage = "https://www.rewind.ai/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

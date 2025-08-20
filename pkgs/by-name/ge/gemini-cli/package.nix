@@ -89,7 +89,7 @@ buildNpmPackage (finalAttrs: {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";
   };
