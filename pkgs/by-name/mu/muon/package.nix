@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  patches = [ ./darwin-clang.patch ];
+
   postPatch = ''
     find subprojects/meson-tests -name "*.py" -exec chmod +x {} \;
     patchShebangs .
@@ -133,6 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
+    ${lib.optionalString (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+    ) "NIX_BUILD_CORES=1"}
     ./stage-3/muon -C stage-3 test -d dots -S -j$NIX_BUILD_CORES
 
     runHook postCheck
@@ -152,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # typical `ar failure`
     mainProgram = "muon";
   };
 })
