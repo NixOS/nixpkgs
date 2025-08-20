@@ -5125,8 +5125,6 @@ self: super: with self; {
 
   files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
 
-  filesplit = callPackage ../development/python-modules/filesplit { };
-
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
@@ -13982,13 +13980,7 @@ self: super: with self; {
     callPackage ../development/python-modules/pyside6 { inherit (pkgs) cmake ninja; }
   );
 
-  pyside6-fluent-widgets = callPackage ../development/python-modules/pyside6-fluent-widgets { };
-
   pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
-
-  pysidesix-frameless-window =
-    callPackage ../development/python-modules/pysidesix-frameless-window
-      { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
