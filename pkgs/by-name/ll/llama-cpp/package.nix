@@ -72,21 +72,19 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6134";
+  version = "6202";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-J/Z6xrCfdSkf504AGiOmgRqgrOUXXTpqq5BpXwgOI4g=";
+    hash = "sha256-bssXy4fGndq4r1B1+veR30ewz2Tuan0bhXm0+QumFWU=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  patches = lib.optionals vulkanSupport [ ./disable_bfloat16.patch ];
 
   postPatch = ''
     # Workaround for local-ai package which overrides this package to an older llama-cpp
