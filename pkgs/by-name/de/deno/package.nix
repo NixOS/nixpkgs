@@ -30,6 +30,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
   version = "2.5.1";
 
+  outputs = [
+    "out"
+    # holds denort, used for standalone binaries produced with deno
+    # https://github.com/denoland/deno/blob/45d333a1c331926d7df80f63c533293be03b0070/cli/standalone/binary.rs#L1206
+    "rt"
+  ];
+
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
@@ -211,7 +218,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Remove non-essential binaries like denort and test_server
+    mkdir -p "$rt/bin"
+    mv "$out/bin/denort" "$rt/bin/"
+    # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
   ''
   + lib.optionalString canExecute ''
