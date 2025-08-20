@@ -1166,8 +1166,8 @@ rec {
       "sha256-maSifwTWL+CzEDLydPLhmIn6ZkJEE2F6lBaHPEhWfx0=";
 
   mypy-boto3-s3control =
-    buildMypyBoto3Package "s3control" "1.40.0"
-      "sha256-uxxfSEz5FqkZoDeXXGOpZE9BQYxMp9vku9MedXQv7F4=";
+    buildMypyBoto3Package "s3control" "1.40.12"
+      "sha256-lC5XVPtSUMab52QRqv6o9+2grzETdFjpscjDwvqGNvE=";
 
   mypy-boto3-s3outposts =
     buildMypyBoto3Package "s3outposts" "1.40.0"
