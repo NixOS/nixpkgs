@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust-powered window management for Hyprland";
     homepage = "https://github.com/mattdef/rustrland";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ]; # FIXME: Add yourself as a maintainers
+    maintainers = with lib.maintainers; [ "mattdef" ];
     mainProgram = "rustrland";
   };
 })
