@@ -3,7 +3,6 @@
   stdenv,
   fetchzip,
   openjdk,
-  gradle,
   makeWrapper,
   maven,
 }:
@@ -20,6 +19,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     mkdir -p $out/native
     mkdir -p $out/bin
@@ -28,15 +29,12 @@ stdenv.mkDerivation rec {
     chmod +x kotlin-lsp.sh
     cp "kotlin-lsp.sh" "$out/kotlin-lsp.sh"
     ln -s $out/kotlin-lsp.sh $out/bin/kotlin-lsp
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
-    gradle
     makeWrapper
-  ];
-  buildInputs = [
-    openjdk
-    gradle
   ];
 
   postFixup = ''
@@ -49,13 +47,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Kotlin LSP";
-    longDescription = ''
-      Official LSP implementation for Kotlin code completion, linting and more
-      for any editor/IDE'';
+    description = "LSP implementation for Kotlin code completion, linting";
     maintainers = with lib.maintainers; [ p-louis ];
     homepage = "https://github.com/Kotlin/kotlin-lsp";
-    changelog = "https://github.com/Kotlin/kotlin-lsp/blob/main/RELEASES.md";
+    changelog = "https://github.com/Kotlin/kotlin-lsp/blob/kotlin-lsp/v${version}/RELEASES.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
