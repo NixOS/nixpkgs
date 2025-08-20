@@ -1189,7 +1189,6 @@ self: super:
       "fontadobeutopia75dpi"
       "fontbhtype1"
       "fontibmtype1"
-      "fontbhttf"
       "fontbh100dpi"
       "fontbh75dpi"
 
