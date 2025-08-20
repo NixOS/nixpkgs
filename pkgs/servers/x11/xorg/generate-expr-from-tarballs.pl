@@ -299,6 +299,7 @@ print OUT <<EOF;
   font-bh-ttf,
   font-bh-type1,
   font-encodings,
+  font-mutt-misc,
   font-util,
   gccmakedep,
   ico,
@@ -385,6 +386,7 @@ self: with self; {
   fontalias = font-alias;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
