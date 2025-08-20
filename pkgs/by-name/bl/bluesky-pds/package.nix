@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) pds;
+    inherit (nixosTests) bluesky-pds;
   };
 
   meta = {
