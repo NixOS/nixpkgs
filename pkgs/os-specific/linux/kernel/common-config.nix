@@ -1093,7 +1093,9 @@ let
         HOLTEK_FF = yes;
         INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
+        LOGITECH_FF = yes;
         LOGIG940_FF = yes;
+        LOGIWHEELS_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
         NVIDIA_SHIELD_FF = whenAtLeast "6.5" yes;
         PLAYSTATION_FF = whenAtLeast "5.12" yes;
