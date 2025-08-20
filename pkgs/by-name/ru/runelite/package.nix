@@ -1,29 +1,26 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
-  maven,
+  gradle,
   jdk17,
   jre,
   xorg,
-  gitUpdater,
   libGL,
 }:
 
-maven.buildMavenPackage rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "runelite";
-  version = "2.7.2";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "runelite";
     repo = "launcher";
     rev = version;
-    hash = "sha256-ckeZ/7rACyZ5j+zzC5hv1NaXTi9q/KvOzMPTDd1crHQ=";
+    hash = "sha256-HZ4aV+7173EZrHHbsEFsrh3BHXsZuWS/MvDBS/AYANY=";
   };
-
-  mvnJdk = jdk17;
-  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";
@@ -36,15 +33,27 @@ maven.buildMavenPackage rec {
     categories = [ "Game" ];
   };
 
-  # tests require internet :(
-  mvnParameters = "-Dmaven.test.skip";
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
+
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
+
+  gradleBuildTask = "shadowJar";
 
   installPhase = ''
     mkdir -p $out/share/icons
     mkdir -p $out/share/applications
 
-    cp target/RuneLite.jar $out/share
+    cp build/libs/RuneLite.jar $out/share
     cp appimage/runelite.png $out/share/icons
 
     ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
@@ -59,7 +68,17 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/RuneLite.jar"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript =
+    let
+      pkg = finalAttrs.finalPackage;
+    in
+    gradle.fetchDeps
+      {
+        inherit (finalAttrs) pname;
+        inherit pkg;
+        data = ./deps.json;
+      }
+      .updateScript;
 
   meta = {
     description = "Open source Old School RuneScape client";
@@ -76,4 +95,4 @@ maven.buildMavenPackage rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "runelite";
   };
-}
+})
