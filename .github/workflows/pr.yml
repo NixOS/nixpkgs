@@ -34,6 +34,7 @@ jobs:
         with:
           sparse-checkout: |
             .github/actions
+            ci/github-script
             ci/supportedBranches.js
             ci/supportedSystems.json
       - name: Check if the PR can be merged and get the test merge commit
@@ -86,14 +87,21 @@ jobs:
     permissions:
       # cherry-picks
       pull-requests: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      OWNER_RO_APP_PRIVATE_KEY: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
 
   lint:
     name: Lint
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -106,6 +114,7 @@ jobs:
       # compare
       statuses: write
     secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
