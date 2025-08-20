@@ -116,6 +116,7 @@ jobs:
           name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
           extraPullNames: nixpkgs-ci
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
 
       - name: Build codeowners validator
         run: nix-build trusted/ci --arg nixpkgs ./pinned -A codeownersValidator
