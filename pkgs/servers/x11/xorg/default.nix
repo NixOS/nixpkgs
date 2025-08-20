@@ -4,6 +4,7 @@
   bdftopcf,
   font-alias,
   font-bh-ttf,
+  font-bh-type1,
   font-encodings,
   font-util,
   gccmakedep,
@@ -90,6 +91,7 @@ self: with self; {
   encodings = font-encodings;
   fontalias = font-alias;
   fontbhttf = font-bh-ttf;
+  fontbhtype1 = font-bh-type1;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
@@ -637,44 +639,6 @@ self: with self; {
         pkg-config
         bdftopcf
         fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbhtype1 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bh-type1";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bh-type1-1.0.4.tar.xz";
-        sha256 = "19kjdm0cx766yj9vwkyv7gyg1q4bjag5g500s7nnppmb0vnc7phr";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
         mkfontscale
       ];
       buildInputs = [ fontutil ];
