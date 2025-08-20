@@ -14,7 +14,6 @@
   scdoc,
   zlib,
   embedSamurai ? false,
-  buildDocs ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
@@ -24,14 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "./muon-src";
 
-  outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     pkgconf
     (python3.withPackages (ps: [ ps.pyyaml ]))
+    scdoc
   ]
-  ++ lib.optionals (!embedSamurai) [ samurai ]
-  ++ lib.optionals buildDocs [ scdoc ];
+  ++ lib.optionals (!embedSamurai) [ samurai ];
 
   buildInputs = [
     curl
@@ -43,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postUnpack = ''
-    for subproject in ${lib.optionalString buildDocs "meson-docs"} meson-tests; do
+    for subproject in meson-docs meson-tests; do
       cp -r "$subproject" "$sourceRoot/subprojects/$subproject"
       chmod +w -R "$sourceRoot/subprojects/$subproject"
       rm "$sourceRoot/subprojects/$subproject.wrap"
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       cmdlineForMuon = lib.concatStringsSep " " [
         (muonBool "static" stdenv.targetPlatform.isStatic)
-        (muonEnable "meson-docs" buildDocs)
+        (muonEnable "meson-docs" true)
         (muonEnable "samurai" embedSamurai)
         (muonEnable "tracy" false)
       ];
