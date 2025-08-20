@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = pkgs.fetchFromGitHub {
     owner = "mattdef";
     repo = "rustrland";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-sT4XSYrBxjVTd+xMcCqi24k/TbIRX4p8lEgrf/Wj1z8=";
   };
 
