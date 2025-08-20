@@ -1,4 +1,0 @@
-# TODO: Move to top-level via staging PR
-[*.js]
-indent_style = space
-indent_size = 2
