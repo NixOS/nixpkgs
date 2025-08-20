@@ -194,7 +194,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/v${finalAttrs.version}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0
