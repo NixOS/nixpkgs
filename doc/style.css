@@ -50,7 +50,7 @@ hr {
 }
 
 pre {
-  font-family: monospace, monospace;
+  font-family: monospace;
   font-size: 1em;
 }
 
@@ -63,7 +63,7 @@ strong {
 }
 
 code {
-  font-family: monospace, monospace;
+  font-family: monospace;
   font-size: 1em;
 }
 
@@ -293,7 +293,6 @@ div.appendix .caution > .title,
 div.appendix .important > .title {
   font-weight: 800;
   line-height: 110%;
-  margin-bottom: 1rem;
   color: inherit;
   margin-bottom: 0;
 }
