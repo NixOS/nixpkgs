@@ -5,13 +5,10 @@ description: 'Checkout into trusted / untrusted / pinned folders consistently.'
 inputs:
   merged-as-untrusted-at:
     description: "Whether and which SHA to checkout for the merge commit in the ./untrusted folder."
-    type: boolean
   pinned-from:
     description: "Whether to checkout the pinned nixpkgs for CI and from where (trusted, untrusted)."
-    type: string
   target-as-trusted-at:
     description: "Whether and which SHA to checkout for the target commit in the ./trusted folder."
-    type: boolean
 
 runs:
   using: composite
