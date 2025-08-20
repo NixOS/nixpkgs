@@ -80,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pds;
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) bluesky-pds;
   };
 
   meta = {
