@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "webexpythonsdk";
-  version = "2.0.4";
+  version = "2.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "WebexCommunity";
     repo = "WebexPythonSDK";
     tag = "v${version}";
-    hash = "sha256-8U3aAS+9dU5Zg4fS2t6zLvTEJ/6aIV/YEWte06GvKTo=";
+    hash = "sha256-iRhl/JCktS+6yJhvMZ6Vv7oOF5ZVrPQiI4Bstsub0bM=";
   };
 
   build-system = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/WebexCommunity/WebexPythonSDK";
-    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
+    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
