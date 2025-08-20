@@ -145,6 +145,11 @@ let
       inherit expected;
     };
 
+  dummyDerivation = derivation {
+    name = "name";
+    builder = "builder";
+    system = "system";
+  };
 in
 
 runTests {
@@ -782,18 +787,8 @@ runTests {
   };
 
   testSplitStringsDerivation = {
-    expr = take 3 (
-      strings.splitString "/" (derivation {
-        name = "name";
-        builder = "builder";
-        system = "system";
-      })
-    );
-    expected = [
-      ""
-      "nix"
-      "store"
-    ];
+    expr = lib.dropEnd 1 (strings.splitString "/" dummyDerivation);
+    expected = strings.splitString "/" builtins.storeDir;
   };
 
   testSplitVersionSingle = {
@@ -841,7 +836,7 @@ runTests {
       in
       {
         storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
+        storePathDerivation = isStorePath dummyDerivation;
         storePathAppendix = isStorePath "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
         asPath = isStorePath (/. + goodPath);
@@ -926,7 +921,7 @@ runTests {
   };
 
   testHasInfixDerivation = {
-    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expr = hasInfix "name" dummyDerivation;
     expected = true;
   };
 
