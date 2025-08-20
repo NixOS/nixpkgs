@@ -58,7 +58,7 @@ module.exports = async ({ github, context, core }) => {
 
     const baseClassification = classify(base.ref)
     core.setOutput('base', baseClassification)
-    core.info('base classification:', baseClassification)
+    console.log('base classification:', baseClassification)
 
     const headClassification =
       base.repo.full_name === head.repo.full_name
@@ -66,7 +66,7 @@ module.exports = async ({ github, context, core }) => {
         : // PRs from forks are always considered WIP.
           { type: ['wip'] }
     core.setOutput('head', headClassification)
-    core.info('head classification:', headClassification)
+    console.log('head classification:', headClassification)
 
     const files = (
       await github.paginate(github.rest.pulls.listFiles, {
