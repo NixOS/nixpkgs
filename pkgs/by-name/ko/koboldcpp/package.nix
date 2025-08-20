@@ -126,7 +126,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
-      donteatoreo
+      FlameFlag
     ];
     platforms = lib.platforms.unix;
   };
