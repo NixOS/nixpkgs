@@ -96,10 +96,8 @@
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
   withXinput2 ? withX,
   withXwidgets ?
-    !stdenv.hostPlatform.isDarwin
-    && !noGui
-    && (withGTK3 || withPgtk)
-    && (lib.versionOlder version "30"), # XXX: upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
+    (stdenv.hostPlatform.isDarwin && withNS)
+    || (!noGui && (withGTK3 || withPgtk) && (lib.versionOlder version "30")), # XXX: upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   withSmallJaDic ? false,
   withCompressInstall ? true,
 
@@ -129,7 +127,7 @@ assert withGpm -> stdenv.hostPlatform.isLinux;
 assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
-assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
+assert withXwidgets -> (stdenv.isDarwin && withNS) || (!noGui && (withGTK3 || withPgtk));
 
 let
   libGccJitLibraryPaths = [
@@ -348,7 +346,7 @@ mkDerivation (finalAttrs: {
   ++ lib.optionals withXinput2 [
     libXi
   ]
-  ++ lib.optionals withXwidgets [
+  ++ lib.optionals (withXwidgets && stdenv.isLinux) [
     webkitgtk_4_0
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
