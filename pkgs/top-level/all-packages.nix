@@ -1898,8 +1898,6 @@ with pkgs;
   cataract = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
 
-  catch2 = callPackage ../development/libraries/catch2 { };
-
   ceres-solver = callPackage ../development/libraries/ceres-solver {
     gflags = null; # only required for examples/tests
   };
