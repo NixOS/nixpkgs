@@ -5153,6 +5153,8 @@ self: super: with self; {
 
   finvizfinance = callPackage ../development/python-modules/finvizfinance { };
 
+  fio_plot = callPackage ../development/python-modules/fio_plot { };
+
   fiona = callPackage ../development/python-modules/fiona { };
 
   fipy = callPackage ../development/python-modules/fipy { };
