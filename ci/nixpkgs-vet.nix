@@ -13,7 +13,10 @@ let
     with lib.fileset;
     path:
     toSource {
-      fileset = (gitTracked path);
+      fileset = difference (gitTracked path) (unions [
+        (path + /.github)
+        (path + /ci)
+      ]);
       root = path;
     };
 
