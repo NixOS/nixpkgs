@@ -4,6 +4,7 @@
   fetchFromGitHub,
   jinja2,
   setuptools,
+  pytestCheckHook,
 }:
 
 let
@@ -28,7 +29,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "pyan" ];
 
   meta = {
-    description = "Static call graph generator. The official Python 3 version.";
+    description = "Static call graph generator for Python3";
     homepage = "https://github.com/Technologicat/pyan";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ johnrichardrinehart ];
