@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "add-trailing-comma";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = "add-trailing-comma";
     rev = "v${version}";
-    hash = "sha256-B+wjBy42RwabVz/6qEMGpB0JmwJ9hqSskwcNj4x/B/k=";
+    hash = "sha256-b9EHlx149NUAo9UHDZLE3BwSJY5WpxsUYi1mqz7rnHA=";
   };
 
   propagatedBuildInputs = [ tokenize-rt ];
