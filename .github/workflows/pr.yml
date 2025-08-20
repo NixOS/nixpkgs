@@ -100,6 +100,8 @@ jobs:
     name: Lint
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -112,6 +114,7 @@ jobs:
       # compare
       statuses: write
     secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
