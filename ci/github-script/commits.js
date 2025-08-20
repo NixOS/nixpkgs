@@ -1,7 +1,5 @@
 module.exports = async ({ github, context, core, dry }) => {
   const { execFileSync } = require('node:child_process')
-  const { readFile } = require('node:fs/promises')
-  const { join } = require('node:path')
   const { classify } = require('../supportedBranches.js')
   const withRateLimit = require('./withRateLimit.js')
 
@@ -18,7 +16,7 @@ module.exports = async ({ github, context, core, dry }) => {
           run_id: context.runId,
           per_page: 100,
         })
-      ).find(({ name }) => name == 'Check / cherry-pick').html_url +
+      ).find(({ name }) => name === 'Check / cherry-pick').html_url +
         '?pr=' +
         pull_number
 
@@ -178,7 +176,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // Only create step summary below in case of warnings or errors.
     // Also clean up older reviews, when all checks are good now.
-    if (results.every(({ severity }) => severity == 'info')) {
+    if (results.every(({ severity }) => severity === 'info')) {
       if (!dry) {
         await Promise.all(
           (
@@ -187,9 +185,9 @@ module.exports = async ({ github, context, core, dry }) => {
               pull_number,
             })
           )
-            .filter((review) => review.user.login == 'github-actions[bot]')
+            .filter((review) => review.user.login === 'github-actions[bot]')
             .map(async (review) => {
-              if (review.state == 'CHANGES_REQUESTED') {
+              if (review.state === 'CHANGES_REQUESTED') {
                 await github.rest.pulls.dismissReview({
                   ...context.repo,
                   pull_number,
@@ -215,7 +213,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // In the case of "error" severity, we also fail the job.
     // Those should be considered blocking and not be dismissable via review.
-    if (results.some(({ severity }) => severity == 'error'))
+    if (results.some(({ severity }) => severity === 'error'))
       process.exitCode = 1
 
     core.summary.addRaw(
@@ -272,7 +270,7 @@ module.exports = async ({ github, context, core, dry }) => {
     )
 
     results.forEach(({ severity, message, diff }) => {
-      if (severity == 'info') return
+      if (severity === 'info') return
 
       // The docs for markdown alerts only show examples with markdown blockquote syntax, like this:
       //   > [!WARNING]
@@ -336,18 +334,18 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     ).find(
       (review) =>
-        review.user.login == 'github-actions[bot]' &&
+        review.user.login === 'github-actions[bot]' &&
         // If a review is still pending, we can just update this instead
         // of posting a new one.
-        (review.state == 'CHANGES_REQUESTED' ||
+        (review.state === 'CHANGES_REQUESTED' ||
           // No need to post a new review, if an older one with the exact
           // same content had already been dismissed.
-          review.body == body),
+          review.body === body),
     )
 
     if (dry) {
       if (pendingReview)
-        core.info('pending review found: ' + pendingReview.html_url)
+        core.info(`pending review found: ${pendingReview.html_url}`)
       else core.info('no pending review found')
     } else {
       // Either of those two requests could fail for very long comments. This can only happen
