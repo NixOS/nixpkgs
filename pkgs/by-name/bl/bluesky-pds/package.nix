@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ t4ccer ];
+    maintainers = with lib.maintainers; [
+      t4ccer
+      isabelroses
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "pds";
   };
