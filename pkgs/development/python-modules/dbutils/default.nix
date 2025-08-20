@@ -1,10 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,15 +11,14 @@ buildPythonPackage rec {
   version = "3.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "DBUtils";
-    hash = "sha256-reefvFeG10ltQThyL7yiQ0DPfHO11m3wUpb2Vv8Ia78=";
+  src = fetchFromGitHub {
+    owner = "WebwareForPython";
+    repo = "DBUtils";
+    tag = "Release-${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-YyZKGN7oNuCR4lU7pxkY+vLOWGQzQjqvAIOZc7LlvUM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

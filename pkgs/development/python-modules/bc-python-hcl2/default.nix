@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lark,
   pythonOlder,
   setuptools,
@@ -14,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+uYrKkGmda0zDRNNgldlJtt1X3K70OWoUN49hfwkxA4=";
+  src = fetchFromGitHub {
+    owner = "bridgecrewio";
+    repo = "python-hcl2";
+    tag = version;
+    hash = "sha256-Auk5xDLw2UhMzWa7YMKzwUSjhD9s6xHt8RcXMzzL8M0=";
   };
 
   build-system = [ setuptools ];
@@ -34,9 +36,7 @@ buildPythonPackage rec {
       This parser only supports HCL2 and isn't backwards compatible with HCL v1.
       It can be used to parse any HCL2 config file such as Terraform.
     '';
-    # Although this is the main homepage from PyPi but it is also a homepage
-    # of another PyPi package (python-hcl2). But these two are different.
-    homepage = "https://github.com/amplify-education/python-hcl2";
+    homepage = "https://github.com/bridgecrewio/python-hcl2";
     license = licenses.mit;
     maintainers = with maintainers; [ anhdle14 ];
     mainProgram = "hcl2tojson";
