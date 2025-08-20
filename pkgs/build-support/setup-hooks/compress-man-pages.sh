@@ -11,7 +11,7 @@ compressManPages() {
     # Compress all uncompressed manpages.  Don't follow symlinks, etc.
     # gzip -f is needed to not error out on hard links.
     find "$dir"/share/man/ -type f -a '!' -regex '.*\.\(bz2\|gz\|xz\)$' -print0 \
-        | xargs -0 -n1 -P "$NIX_BUILD_CORES" gzip -f
+        | xargs -0 -n1 -P "$NIX_BUILD_CORES" gzip -n -f
 
     # Point symlinks to compressed manpages.
     find "$dir"/share/man/ -type l -a '!' -regex '.*\.\(bz2\|gz\|xz\)$' -print0 \
