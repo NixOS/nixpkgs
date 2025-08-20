@@ -114,7 +114,7 @@ let
     maintainers = with maintainers; [
       emilytrau
       imadnyc
-      donteatoreo
+      FlameFlag
       johnrtitor
     ];
     platforms = platforms.darwin ++ [
