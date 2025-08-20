@@ -1200,9 +1200,19 @@ let
       )
         (
           if type.merge ? v2 then
-            type.merge.v2 {
-              inherit loc;
-              defs = defsFinal;
+            let
+              r = type.merge.v2 {
+                inherit loc;
+                defs = defsFinal;
+              };
+            in
+            r
+            // {
+              valueMeta = r.valueMeta // {
+                _internal = {
+                  inherit type;
+                };
+              };
             }
           else
             {
@@ -1621,13 +1631,11 @@ let
         New option path as list of strings.
       */
       to,
-
       /**
         Release number of the first release that contains the rename, ignoring backports.
         Set it to the upcoming release, matching the nixpkgs/.version file.
       */
       sinceRelease,
-
     }:
     doRename {
       inherit from to;
