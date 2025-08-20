@@ -16,6 +16,9 @@
 }:
 
 let
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
+
   interpolateString =
     s:
     if lib.isList s then
@@ -39,16 +42,9 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
     {
-      name ? "${args.pname}-${args.version}",
-
       # Name for the vendored dependencies tarball
-      cargoDepsName ? name,
+      cargoDepsName ? null,
 
-      src ? null,
-      srcs ? null,
-      preUnpack ? null,
-      unpackPhase ? null,
-      postUnpack ? null,
       cargoPatches ? [ ],
       patches ? [ ],
       sourceRoot ? null,
@@ -112,17 +108,20 @@ lib.extendMkDerivation {
           throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
         else
           fetchCargoVendor (
-            {
-              inherit
-                src
-                srcs
-                sourceRoot
-                cargoRoot
-                preUnpack
-                unpackPhase
-                postUnpack
-                ;
-              name = cargoDepsName;
+            getOptionalAttrs [
+              "name"
+              "pname"
+              "version"
+              "src"
+              "srcs"
+              "sourceRoot"
+              "cargoRoot"
+              "preUnpack"
+              "unpackPhase"
+              "postUnpack"
+            ] finalAttrs
+            // {
+              ${if cargoDepsName != null then "name" else null} = cargoDepsName;
               patches = cargoPatches;
               hash = args.cargoHash;
             }
