@@ -66,7 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
         procps
       ]
     }"
-    wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
+    for program in $out/bin/*; do
+        wrapProgram "$program" --set-default ALSA_PLUGIN_DIR "${plugin-dir}"
+    done
   '';
 
   postInstall = ''
