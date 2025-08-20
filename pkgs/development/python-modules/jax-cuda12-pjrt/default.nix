@@ -44,14 +44,14 @@ buildPythonPackage rec {
     dist = "py3";
     platform =
       {
-        x86_64-linux = "manylinux2014_x86_64";
+        x86_64-linux = "manylinux_2_27_x86_64";
         aarch64-linux = "manylinux2014_aarch64";
       }
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-dCzCYNaXdxy4gwhDmHSKAH0jMoaqP+X8FSp0wHPVmiQ=";
-        aarch64-linux = "sha256-3Oaxz+f0R0lCW66iKpAnQjuvsaUmnhPzB4XP0bLimGI=";
+        x86_64-linux = "sha256-quPn80WASloSKaxxSMvRNEUMgWGYu7/4WnYiGC7H9ko=";
+        aarch64-linux = "sha256-f8QFBJYN5W4jL5MmMKJ1fs8/hzZlsTmDF9Jfa3RF1WA=";
       }
       .${stdenv.hostPlatform.system};
   };
