@@ -12433,6 +12433,8 @@ self: super: with self; {
 
   pyaml-env = callPackage ../development/python-modules/pyaml-env { };
 
+  pyan3 = callPackage ../development/python-modules/pyan3 { };
+
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
   pyannote-audio = callPackage ../development/python-modules/pyannote-audio { };
