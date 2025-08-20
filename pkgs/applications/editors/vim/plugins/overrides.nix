@@ -335,6 +335,10 @@ in
 
   blink-cmp-words = super.blink-cmp-words.overrideAttrs {
     dependencies = [ self.blink-cmp ];
+    meta = {
+      description = "Offline word and synonym completion provider for Neovim";
+      maintainers = with lib.maintainers; [ m3l6h ];
+    };
   };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
@@ -1011,6 +1015,11 @@ in
       nvim-treesitter
       nvim-treesitter-textobjects
     ];
+    meta = {
+      description = "Overloaded ; and , keys in Neovim";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ m3l6h ];
+    };
   };
 
   denops-vim = super.denops-vim.overrideAttrs {

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.16.1";
+  version = "3.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     tag = version;
-    hash = "sha256-TTv6v7G3LODrUDSYSNNa4+dujih7QElmvK3mMQg9EuQ=";
+    hash = "sha256-A6IyRJwuc0eqRtkCHtWN5C5yCMdgxfygqmpHV+/MJhE=";
   };
 
   postPatch = ''
