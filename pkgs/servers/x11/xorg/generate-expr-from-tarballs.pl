@@ -296,6 +296,7 @@ print OUT <<EOF;
   lib,
   bdftopcf,
   font-alias,
+  font-bh-ttf,
   font-encodings,
   font-util,
   gccmakedep,
@@ -381,6 +382,7 @@ self: with self; {
     ;
   encodings = font-encodings;
   fontalias = font-alias;
+  fontbhttf = font-bh-ttf;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
