@@ -114,6 +114,7 @@ jobs:
       # compare
       statuses: write
     secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
