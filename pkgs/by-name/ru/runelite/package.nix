@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     maintainers = with lib.maintainers; [
       kmeakin
       moody
+      iedame
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "runelite";
