@@ -157,10 +157,8 @@ lib.extendMkDerivation {
 
       patches = cargoPatches ++ patches;
 
-      postUnpack = ''
-        eval "$cargoDepsHook"
-      ''
-      + (args.postUnpack or "");
+      # For backward compatibility when backporting to Nixpkgs 25.05
+      postUnpack = args.postUnpack or "";
 
       configurePhase =
         args.configurePhase or ''
