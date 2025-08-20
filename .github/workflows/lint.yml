@@ -9,6 +9,9 @@ on:
       targetSha:
         required: true
         type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
@@ -32,6 +35,10 @@ jobs:
           pinnedFrom: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+
+      # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
+      # because the cache would be invalidated on every commit - treefmt checks every file.
+      # Maybe we can cache treefmt's eval-cache somehow.
 
       - name: Check that files are formatted
         run: |
@@ -65,6 +72,14 @@ jobs:
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
+
       - name: Parse all nix files
         run: |
           # Tests multiple versions at once, let's make sure all of them run, so keep-going.
@@ -87,6 +102,14 @@ jobs:
           target-as-trusted: true
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
 
       - name: Running nixpkgs-vet
         env:
