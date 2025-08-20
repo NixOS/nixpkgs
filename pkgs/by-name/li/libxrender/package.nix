@@ -32,7 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ];
 
-  propagatedBuildInputs = [ xorgproto ];
+  propagatedBuildInputs = [
+    xorgproto
+    libx11
+  ];
 
   configureFlags = lib.optional (
     stdenv.hostPlatform != stdenv.buildPlatform
