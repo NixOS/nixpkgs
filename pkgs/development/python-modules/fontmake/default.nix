@@ -27,16 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-cHFxb7lWUj/7ATynoMGQkhArKWCHHLYvQG5IoaXwVBs=";
   };
 
-  patches = [
-    # Update to FontTools 4.55 and glyphsLib 6.9.5
-    # https://github.com/googlefonts/fontmake/pull/1133
-    (fetchpatch2 {
-      url = "https://github.com/googlefonts/fontmake/commit/ca96d25faa67638930ddc7f9bd1ab218a76caf22.patch";
-      includes = [ "tests/test_main.py" ];
-      hash = "sha256-vz+KeWiGCpUdX5HaXDdyyUCbuMkIylB364j6cD7xR1E=";
-    })
-  ];
-
   build-system = [
     setuptools
     setuptools-scm
