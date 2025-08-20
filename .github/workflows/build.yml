@@ -65,6 +65,7 @@ jobs:
           name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
           extraPullNames: nixpkgs-ci
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
 
       - run: nix-env --install -f pinned -A nix-build-uncached
 
