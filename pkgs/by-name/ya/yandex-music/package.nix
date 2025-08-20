@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
     rev = "v${version}";
-    hash = "sha256-/PpIlje7wXHTEI/ymbPsX3k7uYNKMrcjHrmfnr6QNo4=";
+    hash = "sha256-R9RjbjxrBCEN3G9oSmg22SsxKEpzdPCwIRdfe3XrRzU=";
   };
 
   nativeBuildInputs = [
