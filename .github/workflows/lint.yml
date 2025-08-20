@@ -9,6 +9,9 @@ on:
       targetSha:
         required: true
         type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
@@ -24,14 +27,17 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
-      - name: Check if the PR can be merged and checkout the merge commit
-        uses: ./.github/actions/get-merge-commit
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
         with:
-          mergedSha: ${{ inputs.mergedSha }}
-          merged-as-untrusted: true
-          pinnedFrom: untrusted
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          pinned-from: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+
+      # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
+      # because the cache would be invalidated on every commit - treefmt checks every file.
+      # Maybe we can cache treefmt's eval-cache somehow.
 
       - name: Check that files are formatted
         run: |
@@ -56,14 +62,21 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
-      - name: Check if the PR can be merged and checkout the merge commit
-        uses: ./.github/actions/get-merge-commit
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
         with:
-          mergedSha: ${{ inputs.mergedSha }}
-          merged-as-untrusted: true
-          pinnedFrom: untrusted
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          pinned-from: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
 
       - name: Parse all nix files
         run: |
@@ -77,16 +90,22 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
-      - name: Check if the PR can be merged and checkout merged and target commits
-        uses: ./.github/actions/get-merge-commit
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
         with:
-          mergedSha: ${{ inputs.mergedSha }}
-          merged-as-untrusted: true
-          pinnedFrom: untrusted
-          targetSha: ${{ inputs.targetSha }}
-          target-as-trusted: true
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          pinned-from: untrusted
+          target-as-trusted-at: ${{ inputs.targetSha }}
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
 
       - name: Running nixpkgs-vet
         env:

@@ -42,6 +42,22 @@ let
 
         programs.actionlint.enable = true;
 
+        programs.biome = {
+          enable = true;
+          settings.formatter = {
+            useEditorconfig = true;
+          };
+          settings.javascript.formatter = {
+            quoteStyle = "single";
+            semicolons = "asNeeded";
+          };
+          settings.json.formatter.enabled = false;
+        };
+        settings.formatter.biome.excludes = [
+          "*.min.js"
+          "pkgs/*"
+        ];
+
         programs.keep-sorted.enable = true;
 
         # This uses nixfmt underneath,

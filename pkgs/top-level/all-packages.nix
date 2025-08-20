@@ -4295,6 +4295,8 @@ with pkgs;
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
+  buildTeleport = callPackage ../build-support/teleport { };
+
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
@@ -9456,10 +9458,12 @@ with pkgs;
 
       zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
+      zig_0_15 = zigPackages."0.15";
     })
     zigPackages
     zig_0_13
     zig_0_14
+    zig_0_15
     ;
 
   zig = zig_0_14;
@@ -9923,9 +9927,7 @@ with pkgs;
 
   etcd = etcd_3_5;
   etcd_3_4 = callPackage ../servers/etcd/3_4 { };
-  etcd_3_5 = callPackage ../servers/etcd/3_5 {
-    buildGoModule = buildGo123Module;
-  };
+  etcd_3_5 = callPackage ../servers/etcd/3_5 { };
 
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];

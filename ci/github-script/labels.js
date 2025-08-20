@@ -1,4 +1,4 @@
-module.exports = async function ({ github, context, core, dry }) {
+module.exports = async ({ github, context, core, dry }) => {
   const path = require('node:path')
   const { DefaultArtifactClient } = require('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
@@ -27,7 +27,7 @@ module.exports = async function ({ github, context, core, dry }) {
 
     const approvals = new Set(
       reviews
-        .filter((review) => review.state == 'APPROVED')
+        .filter((review) => review.state === 'APPROVED')
         .map((review) => review.user?.id),
     )
 
@@ -37,7 +37,7 @@ module.exports = async function ({ github, context, core, dry }) {
     // This is intentionally less than the time that Eval takes, so that the label job
     // running after Eval can indeed label the PR as conflicted if that is the case.
     const merge_commit_sha_valid =
-      new Date() - new Date(pull_request.created_at) > 3 * 60 * 1000
+      Date.now() - new Date(pull_request.created_at) > 3 * 60 * 1000
 
     const prLabels = {
       // We intentionally don't use the mergeable or mergeable_state attributes.
@@ -53,8 +53,8 @@ module.exports = async function ({ github, context, core, dry }) {
       // The second pass will then read the result from the first pass and set the label.
       '2.status: merge conflict':
         merge_commit_sha_valid && !pull_request.merge_commit_sha,
-      '12.approvals: 1': approvals.size == 1,
-      '12.approvals: 2': approvals.size == 2,
+      '12.approvals: 1': approvals.size === 1,
+      '12.approvals: 2': approvals.size === 2,
       '12.approvals: 3+': approvals.size >= 3,
       '12.first-time contribution': [
         'NONE',
@@ -104,8 +104,8 @@ module.exports = async function ({ github, context, core, dry }) {
         // existing reviews, too.
         '9.needs: reviewer':
           !pull_request.draft &&
-          pull_request.requested_reviewers.length == 0 &&
-          reviews.length == 0,
+          pull_request.requested_reviewers.length === 0 &&
+          reviews.length === 0,
       })
     }
 
@@ -125,8 +125,7 @@ module.exports = async function ({ github, context, core, dry }) {
     // called "comparison", yet, will skip the download.
     const expired =
       !artifact ||
-      new Date(artifact?.expires_at ?? 0) <
-        new Date(new Date().getTime() + 60 * 1000)
+      new Date(artifact?.expires_at ?? 0) < new Date(Date.now() + 60 * 1000)
     log('Artifact expires at', artifact?.expires_at ?? '<n/a>')
     if (!expired) {
       stats.artifacts++
@@ -175,7 +174,7 @@ module.exports = async function ({ github, context, core, dry }) {
   async function handle({ item, stats }) {
     try {
       const log = (k, v, skip) => {
-        core.info(`#${item.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
+        core.info(`#${item.number} - ${k}: ${v}${skip ? ' (skipped)' : ''}`)
         return skip
       }
 
@@ -257,7 +256,7 @@ module.exports = async function ({ github, context, core, dry }) {
 
       // No need for an API request, if all labels are the same.
       const hasChanges = Object.keys(after).some(
-        (name) => (before[name] ?? false) != after[name],
+        (name) => (before[name] ?? false) !== after[name],
       )
       if (log('Has changes', hasChanges, !hasChanges)) return
 
@@ -297,13 +296,15 @@ module.exports = async function ({ github, context, core, dry }) {
           // Go back as far as the last successful run of this workflow to make sure
           // we are not leaving anyone behind on GHA failures.
           // Defaults to go back 1 hour on the first run.
-          new Date(lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000).getTime(),
+          new Date(
+            lastRun?.created_at ?? Date.now() - 1 * 60 * 60 * 1000,
+          ).getTime(),
           // Go back max. 1 day to prevent hitting all API rate limits immediately,
           // when GH API returns a wrong workflow by accident.
-          new Date().getTime() - 24 * 60 * 60 * 1000,
+          Date.now() - 24 * 60 * 60 * 1000,
         ),
       )
-      core.info('cutoff timestamp: ' + cutoff.toISOString())
+      core.info(`cutoff timestamp: ${cutoff.toISOString()}`)
 
       const updatedItems = await github.paginate(
         github.rest.search.issuesAndPullRequests,
@@ -400,12 +401,12 @@ module.exports = async function ({ github, context, core, dry }) {
         .concat(updatedItems, allItems.data)
         .filter(
           (thisItem, idx, arr) =>
-            idx ==
-            arr.findIndex((firstItem) => firstItem.number == thisItem.number),
+            idx ===
+            arr.findIndex((firstItem) => firstItem.number === thisItem.number),
         )
 
       ;(await Promise.allSettled(items.map((item) => handle({ item, stats }))))
-        .filter(({ status }) => status == 'rejected')
+        .filter(({ status }) => status === 'rejected')
         .map(({ reason }) =>
           core.setFailed(`${reason.message}\n${reason.cause.stack}`),
         )

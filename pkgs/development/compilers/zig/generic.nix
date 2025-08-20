@@ -13,10 +13,10 @@
   callPackage,
   version,
   hash,
-  patches ? [ ],
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
+  ...
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {

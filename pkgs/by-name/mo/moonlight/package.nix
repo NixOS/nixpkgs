@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3;
     maintainers = with maintainers; [
       ilys
-      donteatoreo
+      FlameFlag
     ];
   };
 })
