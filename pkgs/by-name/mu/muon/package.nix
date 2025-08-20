@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  patches = lib.optionals stdenv.targetPlatform.isDarwin [ ./darwin-clang.patch ];
+
   postPatch = ''
     find subprojects/meson-tests -name "*.py" -exec chmod +x {} \;
     patchShebangs .
@@ -143,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # typical `ar failure`
     mainProgram = "muon";
   };
 })
