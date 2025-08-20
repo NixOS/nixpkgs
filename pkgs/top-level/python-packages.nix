@@ -12777,6 +12777,8 @@ self: super: with self; {
 
   pyeapi = callPackage ../development/python-modules/pyeapi { };
 
+  pyebox = callPackage ../development/python-modules/pyebox { };
+
   pyebus = callPackage ../development/python-modules/pyebus { };
 
   pyecharts = callPackage ../development/python-modules/pyecharts { };
