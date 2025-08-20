@@ -15639,6 +15639,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  typstwatch-nvim = buildVimPlugin {
+    pname = "typstwatch.nvim";
+    version = "2025-08-20";
+    src = fetchFromGitHub {
+      owner = "J0schu";
+      repo = "typstwatch.nvim";
+      rev = "570c71b11c7d7ddd969df257290c10d82bbe2861";
+      sha256 = "1fd9lyisj46byxr9gdcyqkydmpfzqfz07nihmij2p935w0fm9ndb";
+    };
+    meta.homepage = "https://github.com/J0schu/typstwatch.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   ultimate-autopair-nvim = buildVimPlugin {
     pname = "ultimate-autopair.nvim";
     version = "2025-02-14";
