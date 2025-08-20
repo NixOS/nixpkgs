@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromSourcehut,
   fetchFromGitHub,
+  fetchFromSourcehut,
+  callPackage,
   coreutils,
   curl,
   libarchive,
@@ -20,31 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
   version = "0.5.0";
 
-  srcs = [
-    (fetchFromSourcehut {
-      name = "muon-src";
-      owner = "~lattis";
-      repo = "muon";
-      tag = finalAttrs.version;
-      hash = "sha256-bWEYWUD+GK8R3yVnDTnzFWmm4KAuVPI+1yMfCXWcG/A=";
-    })
-    (fetchFromGitHub {
-      name = "meson-tests";
-      repo = "meson-tests";
-      owner = "muon-build";
-      rev = "db92588773a24f67cda2f331b945825ca3a63fa7";
-      hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
-    })
-  ]
-  ++ lib.optionals buildDocs [
-    (fetchFromGitHub {
-      name = "meson-docs";
-      repo = "meson-docs";
-      owner = "muon-build";
-      rev = "1017b3413601044fb41ad04977445e68a80e8181";
-      hash = "sha256-aFpyJFIqybLNKhm/kyfCjYylj7DE6muI1+OUh4Cq4WY=";
-    })
-  ];
+  srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
   sourceRoot = "./muon-src";
 
@@ -151,15 +128,39 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://muon.build/";
-    description = "Implementation of Meson build system in C99";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+  passthru.srcs = {
+    muon-src = fetchFromSourcehut {
+      name = "muon-src";
+      owner = "~lattis";
+      repo = "muon";
+      tag = finalAttrs.version;
+      hash = "sha256-bWEYWUD+GK8R3yVnDTnzFWmm4KAuVPI+1yMfCXWcG/A=";
+    };
+    meson-docs = fetchFromGitHub {
+      name = "meson-docs";
+      repo = "meson-docs";
+      owner = "muon-build";
+      rev = "1017b3413601044fb41ad04977445e68a80e8181";
+      hash = "sha256-aFpyJFIqybLNKhm/kyfCjYylj7DE6muI1+OUh4Cq4WY=";
+    };
+    meson-tests = fetchFromGitHub {
+      name = "meson-tests";
+      repo = "meson-tests";
+      owner = "muon-build";
+      rev = "db92588773a24f67cda2f331b945825ca3a63fa7";
+      hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
+    };
+  };
+  passthru.updateScript = callPackage ./update.nix { };
+
+  meta = {
+    homepage = "https://muon.build";
+    description = "Implementation of the meson build system in C99";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "muon";
   };
 })
 # TODO LIST:
-# 1. automate sources acquisition (especially wraps)
-# 2. setup hook
+# 1. setup hook
