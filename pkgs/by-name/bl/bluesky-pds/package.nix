@@ -11,6 +11,7 @@
   pkg-config,
   nixosTests,
   lib,
+  nix-update-script,
 }:
 
 let
@@ -80,8 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) bluesky-pds;
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit (nixosTests) bluesky-pds; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
