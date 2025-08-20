@@ -56,7 +56,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      donteatoreo
+      FlameFlag
       taranarmo
     ];
     platforms = lib.platforms.all;
