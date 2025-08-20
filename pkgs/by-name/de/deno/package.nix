@@ -21,7 +21,6 @@
   nodejs,
   git,
   python3,
-  esbuild,
 }:
 
 let
@@ -99,9 +98,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
 
   preCheck =
-    # Provide esbuild binary at `./third_party/prebuilt/` just like upstream:
-    # https://github.com/denoland/deno_third_party/tree/master/prebuilt
-    # https://github.com/denoland/deno/blob/main/tests/util/server/src/servers/npm_registry.rs#L402
+    # Provide placeholder file for esbuild.
+    # The version of esbuild needs to exactly match the version deno requires
+    # for currently one integration test.
+    # https://github.com/evanw/esbuild/blob/195e05c16f03a341390feef38b8ebf17d3075e14/cmd/esbuild/main.go#L206-L214
+    # Updating esbuild in lockstep with deno releases isn't ideal and neither is
+    # modifying the deno source and diverging from upstream.
+    # A placeholder must be provided or the code which mocks an npm registry
+    # will fail for over 260 tests which use it.
     let
       platform =
         if stdenv.hostPlatform.isLinux then
@@ -120,7 +124,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       mkdir -p ./third_party/prebuilt/${platform}
-      cp ${lib.getExe esbuild} ./third_party/prebuilt/${platform}/esbuild-${arch}
+      touch ./third_party/prebuilt/${platform}/esbuild-${arch}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Unset the env var defined by bintools-wrapper because it triggers Deno's sandbox protection in some tests.
@@ -169,6 +173,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use of VSOCK, might not be available on all platforms
     "--skip=js_unit_tests::serve_test"
     "--skip=js_unit_tests::fetch_test"
+
+    # Requires a specific release of esbuild.
+    "--skip=watcher::bundle_watch"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
