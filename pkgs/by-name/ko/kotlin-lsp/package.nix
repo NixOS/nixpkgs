@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ p-louis ];
     homepage = "https://github.com/Kotlin/kotlin-lsp";
     changelog = "https://github.com/Kotlin/kotlin-lsp/blob/main/RELEASES.md";
-    license = lib.licenses.als20;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     mainProgram = "kotlin-lsp";
